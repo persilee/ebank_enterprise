@@ -50,6 +50,12 @@ flutter:
 
   assets:
     - images/ic_launcher.png
+    #login_image
+    - images/login/login_bg_biological.png
+    - images/login/login_bg_password.png
+    - images/login/login_header_logo.png
+    - images/login/login_input_accout.png
+    - images/login/login_input_password.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
