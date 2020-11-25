@@ -37,7 +37,6 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     // 添加监听
     _accountTC.addListener(() {
-      print("addListener1() -- ${_accountTC.text}");
       _account = _accountTC.text.toLowerCase();
       _accountTC.value = _accountTC.value.copyWith(
         text: _account,
@@ -45,7 +44,6 @@ class _LoginPageState extends State<LoginPage> {
     });
     // 添加监听
     _passwordTC.addListener(() {
-      print("addListener2() -- ${_passwordTC.text}");
       _password = _passwordTC.text.toLowerCase();
       _passwordTC.value = _passwordTC.value.copyWith(
         text: _password,
@@ -174,8 +172,7 @@ class _LoginPageState extends State<LoginPage> {
         .then((value) {
       HSProgressHUD.showSuccess(status: '${value.actualName}');
       //Fluttertoast.showToast(msg: "Login Success. User: ${value.actualName}");
-      _showMainPage(context);
-      _saveUserConfig(value);
+      _saveUserConfig(context, value);
     }).catchError((e) {
       setState(() {
         _isLoading = false;
@@ -195,10 +192,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   ///保存数据
-  _saveUserConfig(LoginResp resp) async {
+  _saveUserConfig(BuildContext context, LoginResp resp) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(ConfigKey.USER_ACCOUNT, resp.userPhone);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
+
+    _showMainPage(context);
   }
 
   ///判断是否能点击登录按钮
