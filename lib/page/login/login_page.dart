@@ -5,12 +5,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../config/global_config.dart';
+import '../../widget/progressHUD.dart';
+import '../../util/encrypt_util.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
@@ -20,8 +23,43 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
-  var _loginText = 'LOGIN';
+  var _loginText = '登录';
   var _changeLangBtnTltle = '中文';
+
+  final TextEditingController _accountTC = TextEditingController();
+  final TextEditingController _passwordTC = TextEditingController();
+
+  var _account;
+  var _password;
+
+  @override
+  void initState() {
+    super.initState();
+    // 添加监听
+    _accountTC.addListener(() {
+      print("addListener1() -- ${_accountTC.text}");
+      _account = _accountTC.text.toLowerCase();
+      _accountTC.value = _accountTC.value.copyWith(
+        text: _account,
+      );
+    });
+    // 添加监听
+    _passwordTC.addListener(() {
+      print("addListener2() -- ${_passwordTC.text}");
+      _password = _passwordTC.text.toLowerCase();
+      _passwordTC.value = _passwordTC.value.copyWith(
+        text: _password,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    // 释放
+    _accountTC.dispose();
+    _passwordTC.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +99,8 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 margin: EdgeInsets.only(top: 36.5),
                 child: InputView(
-                  imgName: 'images/login/login_input_accout.png',
+                  _accountTC,
+                  imgName: 'images/login/login_input_account.png',
                   textFieldPlaceholder: '邮箱/手机号/用户ID',
                   isCiphertext: false,
                 ),
@@ -70,6 +109,7 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 margin: EdgeInsets.only(top: 16.0),
                 child: InputView(
+                  _passwordTC,
                   imgName: 'images/login/login_input_password.png',
                   textFieldPlaceholder: '请输入密码',
                   isCiphertext: true,
@@ -97,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
                 child: UnderButtonView(
-                  '登录',
+                  _loginText,
                   _isLoading ? null : () => _login(context),
                 ),
               )
@@ -119,15 +159,29 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录操作
   _login(BuildContext context) {
+    if (!_judgeCanLogin()) {
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
-    UserDataRepository().login(LoginReq(), 'login').then((value) {
-      Fluttertoast.showToast(msg: "Login Success. User: ${value.actualName}");
+    HSProgressHUD.show();
+
+    String password = EncryptUtil.aesEncode(_password);
+    UserDataRepository()
+        .login(LoginReq(userPhone: _account, password: password), 'login')
+        .then((value) {
+      HSProgressHUD.showSuccess(status: '${value.actualName}');
+      //Fluttertoast.showToast(msg: "Login Success. User: ${value.actualName}");
       _showMainPage(context);
       _saveUserConfig(value);
     }).catchError((e) {
-      Fluttertoast.showToast(msg: "Login Failed. Message: ${e.toString()}");
+      setState(() {
+        _isLoading = false;
+      });
+      HSProgressHUD.showError(status: '${e.toString()}');
+      //Fluttertoast.showToast(msg: "Login Failed. Message: ${e.toString()}");
     });
   }
 
@@ -145,6 +199,21 @@ class _LoginPageState extends State<LoginPage> {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(ConfigKey.USER_ACCOUNT, resp.userPhone);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
+  }
+
+  ///判断是否能点击登录按钮
+  bool _judgeCanLogin() {
+    if (_account.toString().length == 0 || _account == null) {
+      HSProgressHUD.showInfo(status: '请输入账号');
+      return false;
+    }
+
+    if (_password.toString().length == 0 || _password == null) {
+      HSProgressHUD.showInfo(status: '请输入密码');
+      return false;
+    }
+
+    return true;
   }
 }
 
@@ -220,11 +289,13 @@ class HeaderLogoView extends StatelessWidget {
 
 ///输入模块，带提示图标
 class InputView extends StatelessWidget {
-  InputView({this.imgName, this.textFieldPlaceholder, this.isCiphertext});
+  InputView(this.textEC,
+      {this.imgName, this.textFieldPlaceholder, this.isCiphertext});
 
   final String imgName;
   final String textFieldPlaceholder;
   final bool isCiphertext;
+  final TextEditingController textEC;
 
   @override
   Widget build(BuildContext context) {
@@ -248,6 +319,7 @@ class InputView extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.only(left: 10),
                 child: TextField(
+                  controller: textEC,
                   autofocus: true,
                   obscureText: this.isCiphertext,
                   style: TextStyle(
@@ -308,12 +380,17 @@ class ForgetButton extends StatelessWidget {
 }
 
 ///底部按钮
-class UnderButtonView extends StatelessWidget {
+class UnderButtonView extends StatefulWidget {
   final String title;
   final void Function() loginBtnClick;
 
   UnderButtonView(this.title, this.loginBtnClick);
 
+  @override
+  _UnderButtonViewState createState() => _UnderButtonViewState();
+}
+
+class _UnderButtonViewState extends State<UnderButtonView> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -331,12 +408,12 @@ class UnderButtonView extends StatelessWidget {
           ),
         ),
         child: new Text(
-          title,
+          widget.title,
           style: TextStyle(
             fontSize: 15,
           ),
         ),
-        onPressed: loginBtnClick,
+        onPressed: widget.loginBtnClick,
       ),
     );
   }

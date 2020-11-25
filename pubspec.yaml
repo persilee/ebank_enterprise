@@ -27,17 +27,19 @@ dependencies:
   cupertino_icons: ^1.0.0
   dio: ^3.0.10
   english_words: ^3.1.5
-  fluttertoast: ^7.1.1
-  http: ^0.12.2
-  json_annotation: ^3.1.0
-  provider: ^4.3.2+2
-  shared_preferences: ^0.5.12+4
+  fluttertoast: ^7.1.1 #吐丝
+  http: ^0.12.2 #HTTP工具
+  json_annotation: ^3.1.0 #json和模型互转
+  provider: ^4.3.2+2 #通知
+  shared_preferences: ^0.5.12+4 #包装特定于平台的持久性存储，以存储简单数据（iOS和macOS上为NSUserDefaults，Android上为SharedPreferences等）
+  flutter_svprogresshud: ^0.0.6 #加载提示框
+  encrypt: ^4.0.0 #AES加解密
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^1.10.4
-  json_serializable: ^3.5.0
+  json_serializable: ^3.5.0 #json和模型互转
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -54,7 +56,7 @@ flutter:
     - images/login/login_bg_biological.png
     - images/login/login_bg_password.png
     - images/login/login_header_logo.png
-    - images/login/login_input_accout.png
+    - images/login/login_input_account.png
     - images/login/login_input_password.png
   # To add assets to your application, add an assets section, like this:
   # assets:
