@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() => runApp(HSGBankApp());
 
@@ -15,6 +16,15 @@ class HSGBankApp extends StatelessWidget {
       initialRoute: pageHome,
       routes: appRoutes,
       onGenerateRoute: (settings) => onGenerateRoute(settings),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
+      supportedLocales: [
+        const Locale.fromSubtags(languageCode: 'zh'),
+        const Locale.fromSubtags(languageCode: 'en'),
+      ],
     );
   }
 }
