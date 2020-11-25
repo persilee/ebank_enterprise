@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'widget/progressHUD.dart';
 
-void main() => runApp(HSGBankApp());
+void main() => runApp(
+      HSGBankApp(),
+    );
 
 class HSGBankApp extends StatelessWidget {
   const HSGBankApp({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    ///初始化progressHUD配置
+    HSProgressHUD.progressHudConfig();
+
     return MaterialApp(
       title: 'HSGBank',
       theme: ThemeData(
