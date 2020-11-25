@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:ebank_mobile/util/small_data_store.dart';
-import 'package:ebank_mobile/widget/linear_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -97,9 +96,10 @@ class _LoginPageState extends State<LoginPage> {
               //登录按钮
               Container(
                 margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
-                child: UnderButtonView(() {
-                  _login(context);
-                }),
+                child: UnderButtonView(
+                  '登录',
+                  _isLoading ? null : () => _login(context),
+                ),
               )
             ],
           ),
@@ -115,24 +115,6 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
-    // return Scaffold(
-    // appBar: AppBar(
-    //   title: Text("Login"),
-    //   bottom: LinearLoading(
-    //     isLoading: _isLoading,
-    //   ),
-    // ),
-    // body: Center(
-    //   child: RaisedButton(
-    //     child: Text(
-    //       _loginText,
-    //       style: TextStyle(color: Colors.white),
-    //     ),
-    //     onPressed: _isLoading ? null : () => _login(context),
-    //     color: Colors.pinkAccent,
-    //   ),
-    // ),
-    // );
   }
 
   ///登录操作
@@ -327,9 +309,10 @@ class ForgetButton extends StatelessWidget {
 
 ///底部按钮
 class UnderButtonView extends StatelessWidget {
-  final Function loginBtnClick;
-  // const UnderButtonView({Key key, this.loginBtnClick}) : super(key: key);
-  UnderButtonView(this.loginBtnClick);
+  final String title;
+  final void Function() loginBtnClick;
+
+  UnderButtonView(this.title, this.loginBtnClick);
 
   @override
   Widget build(BuildContext context) {
@@ -338,7 +321,9 @@ class UnderButtonView extends StatelessWidget {
         minWidth: MediaQuery.of(context).size.width - 30.0,
         height: 44.0,
         color: kColorTheme,
+        disabledColor: kColor204,
         textColor: Colors.white,
+        disabledTextColor: Colors.white,
         shape: RoundedRectangleBorder(
           side: BorderSide.none,
           borderRadius: BorderRadius.all(
@@ -346,15 +331,12 @@ class UnderButtonView extends StatelessWidget {
           ),
         ),
         child: new Text(
-          '登录',
+          title,
           style: TextStyle(
             fontSize: 15,
           ),
         ),
-        onPressed: () {
-          print('登录');
-          loginBtnClick();
-        },
+        onPressed: loginBtnClick,
       ),
     );
   }
