@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -23,8 +25,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
-  var _loginText = '登录';
-  var _changeLangBtnTltle = '中文';
+  var _changeLangBtnTltle = S.current.simplifiedChinese;
 
   final TextEditingController _accountTC = TextEditingController();
   final TextEditingController _passwordTC = TextEditingController();
@@ -49,6 +50,7 @@ class _LoginPageState extends State<LoginPage> {
         text: _password,
       );
     });
+    // Intl.defaultLocale = 'en';
   }
 
   @override
@@ -135,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
                 child: UnderButtonView(
-                  _loginText,
+                  S.of(context).login,
                   _isLoading ? null : () => _login(context),
                 ),
               )
@@ -239,9 +241,7 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
       child: FlatButton(
         onPressed: () {
           print('LanguageChangeBtn.title == ${widget.title}');
-          setState(() {
-            title = 'English';
-          });
+          _selectLanguage();
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -267,10 +267,30 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
     );
   }
 
-  void changeTitle2(String titleString) {
+  _selectLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final oldLang = prefs.getString(ConfigKey.LANGUAGE) ?? '';
+    if (oldLang.isEmpty) {
+      prefs.setString(ConfigKey.LANGUAGE, 'zh');
+      return;
+    }
+
+    Locale locale;
+    if (oldLang == 'en') {
+      locale = Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN');
+    } else {
+      locale = Locale.fromSubtags(languageCode: 'en');
+    }
+
     setState(() {
-      title = titleString;
+      if (locale.languageCode == 'zh') {
+        title = S.current.simplifiedChinese;
+      } else {
+        title = S.current.english;
+      }
+      HSGBankApp.setLocale(context, locale);
     });
+    prefs.setString(ConfigKey.LANGUAGE, locale.languageCode);
   }
 }
 
