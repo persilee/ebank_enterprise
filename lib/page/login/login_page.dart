@@ -27,11 +27,13 @@ class _LoginPageState extends State<LoginPage> {
   var _loginText = '登录';
   var _changeLangBtnTltle = '中文';
 
-  final TextEditingController _accountTC = TextEditingController();
-  final TextEditingController _passwordTC = TextEditingController();
+  final TextEditingController _accountTC =
+      TextEditingController(text: '18033412021');
+  final TextEditingController _passwordTC =
+      TextEditingController(text: '123456');
 
-  var _account;
-  var _password;
+  var _account = '18033412021';
+  var _password = '123456';
 
   @override
   void initState() {
