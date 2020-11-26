@@ -64,6 +64,86 @@ class S {
       args: [],
     );
   }
+
+  /// `Email/Mobile Phone No./User ID`
+  String get login_account_placeholder {
+    return Intl.message(
+      'Email/Mobile Phone No./User ID',
+      name: 'login_account_placeholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Forget Password?`
+  String get fotget_password_q {
+    return Intl.message(
+      'Forget Password?',
+      name: 'fotget_password_q',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Operation Successfully`
+  String get operation_successful {
+    return Intl.message(
+      'Operation Successfully',
+      name: 'operation_successful',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please input account`
+  String get please_input_account {
+    return Intl.message(
+      'Please input account',
+      name: 'please_input_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please input password`
+  String get please_input_password {
+    return Intl.message(
+      'Please input password',
+      name: 'please_input_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Home`
+  String get home {
+    return Intl.message(
+      'Home',
+      name: 'home',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mine`
+  String get mine {
+    return Intl.message(
+      'Mine',
+      name: 'mine',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Approval`
+  String get approval {
+    return Intl.message(
+      'Approval',
+      name: 'approval',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
