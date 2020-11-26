@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
+import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -27,11 +28,13 @@ class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
   var _changeLangBtnTltle = S.current.simplifiedChinese;
 
-  final TextEditingController _accountTC = TextEditingController();
-  final TextEditingController _passwordTC = TextEditingController();
+  final TextEditingController _accountTC =
+      TextEditingController(text: '18033412021');
+  final TextEditingController _passwordTC =
+      TextEditingController(text: '123456');
 
-  var _account;
-  var _password;
+  var _account = '18033412021';
+  var _password = '123456';
 
   @override
   void initState() {
@@ -173,14 +176,12 @@ class _LoginPageState extends State<LoginPage> {
         .login(LoginReq(userPhone: _account, password: password), 'login')
         .then((value) {
       HSProgressHUD.showSuccess(status: '${value.actualName}');
-      //Fluttertoast.showToast(msg: "Login Success. User: ${value.actualName}");
       _saveUserConfig(context, value);
     }).catchError((e) {
       setState(() {
         _isLoading = false;
       });
       HSProgressHUD.showError(status: '${e.toString()}');
-      //Fluttertoast.showToast(msg: "Login Failed. Message: ${e.toString()}");
     });
   }
 
@@ -195,6 +196,9 @@ class _LoginPageState extends State<LoginPage> {
 
   ///保存数据
   _saveUserConfig(BuildContext context, LoginResp resp) async {
+    ///登录页面清空数据
+    HsgHttp().clearUserCache();
+
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(ConfigKey.USER_ACCOUNT, resp.userPhone);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
