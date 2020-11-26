@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -171,14 +172,12 @@ class _LoginPageState extends State<LoginPage> {
         .login(LoginReq(userPhone: _account, password: password), 'login')
         .then((value) {
       HSProgressHUD.showSuccess(status: '${value.actualName}');
-      //Fluttertoast.showToast(msg: "Login Success. User: ${value.actualName}");
       _saveUserConfig(context, value);
     }).catchError((e) {
       setState(() {
         _isLoading = false;
       });
       HSProgressHUD.showError(status: '${e.toString()}');
-      //Fluttertoast.showToast(msg: "Login Failed. Message: ${e.toString()}");
     });
   }
 
@@ -193,6 +192,9 @@ class _LoginPageState extends State<LoginPage> {
 
   ///保存数据
   _saveUserConfig(BuildContext context, LoginResp resp) async {
+    ///登录页面清空数据
+    HsgHttp().clearUserCache();
+
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(ConfigKey.USER_ACCOUNT, resp.userPhone);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
