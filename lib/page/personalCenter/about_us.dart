@@ -25,15 +25,14 @@ class FirstScreen extends StatelessWidget {
                 ),
               ),
               Container(
-                
-                margin: EdgeInsets.only(top: 41.0),
+                margin: EdgeInsets.only(top: 41.0,left: 24.0),
                 child: Text(
                   '全球银行业综合服务商',
                   style: TextStyle(fontSize: 24, color: Color(0xFFFEFEFE),),
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 76.0),
+              margin: EdgeInsets.only(top: 86.0,left: 24.0,right: 59.0),
                 child: Text(
                   '专业提供银行IT系统产品、解决方案及全面的开发实施服务',
                   style: TextStyle(fontSize: 14, color: Color.fromRGBO(254, 254, 254, 1),),
