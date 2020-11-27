@@ -1,0 +1,27 @@
+import 'package:ebank_mobile/config/global_config.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:flutter/material.dart';
+
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          S.of(context).home,
+          style: kNavTextFont,
+        ),
+        backgroundColor: kNavBgColor,
+        shadowColor: kNavShadowColor,
+      ),
+      body: Center(
+        child: Text(S.of(context).home),
+      ),
+    );
+  }
+}

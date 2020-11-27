@@ -74,9 +74,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
                   margin: EdgeInsets.only(top: 16),
                 ),
                 Container(
-                  child: Divider(
-                    color: Colors.grey,
-                  ),
+                  child: Divider(),
                   margin: EdgeInsets.only(top: 8),
                 ),
                 Container(
@@ -111,9 +109,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
                       ),
                     ),
                     Container(
-                      child: Divider(
-                        color: Colors.grey,
-                      ),
+                      child: Divider(),
                       margin: EdgeInsets.only(top: 8),
                     ),
                     Container(
@@ -129,9 +125,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
                       margin: EdgeInsets.only(top: 8),
                     ),
                     Container(
-                      child: Divider(
-                        color: Colors.grey,
-                      ),
+                      child: Divider(),
                       margin: EdgeInsets.only(top: 8),
                     ),
                     Container(

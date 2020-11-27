@@ -1,0 +1,13 @@
+{
+  "login": "登录",
+  "simplifiedChinese": "中文",
+  "english": "英文",
+  "login_account_placeholder": "邮箱/手机号/用户ID",
+  "fotget_password_q": "忘记密码？",
+  "operation_successful": "操作成功",
+  "please_input_account": "请输入账号",
+  "please_input_password": "请输入密码",
+  "home": "首页",
+  "mine": "我的",
+  "approval": "待办"
+}

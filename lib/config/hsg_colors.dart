@@ -1,0 +1,22 @@
+import 'package:flutter/material.dart';
+
+class HsgColors {
+  /// 主色调
+  static const Color primary = Color(0xff2f323e);
+  static const Color primaryDark = Color(0xff282b36);
+  static const Color accent = Color(0xff4871ff);
+  static const Color btnPrimary = accent;
+  static const Color btnAccent = Color(0xff3551b1);
+  static const Color btnDisabled = Color(0xffd1d1d1);
+  static const Color divider = Color(0xffe9e9e9);
+  static const Color itemClickColor = Color(0xffdfe4f4);
+  static const Color commonBackground = Color(0xffF7F7F7);
+  static const Color firstDegreeText = Color(0xff262626);
+  static const Color secondDegreeText = Color(0xff7a7a7a);
+  static const Color describeText = Color(0xff9c9c9c);
+  static const Color textHintColor = Color(0xffd9d9d9);
+  static const Color loginAgreementText = Color(0xff5fb1ff);
+  static const Color hintText = Color(0xffCCCCCC);
+  static const Color mainTabTextNormal = Color(0xffbcbcbc);
+  static const Color mainTabTextSelected = accent;
+}

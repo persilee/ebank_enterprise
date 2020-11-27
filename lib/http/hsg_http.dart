@@ -40,7 +40,7 @@ class HsgHttp {
       _dio.interceptors.add(InterceptorsWrapper(
         onRequest: (options) async {
           final prefs = await SharedPreferences.getInstance();
-          final locale = prefs.getString(ConfigKey.LANGUAGE) ?? 'en_US';
+          final locale = prefs.getString(ConfigKey.LANGUAGE) ?? 'en';
           final token = prefs.getString(ConfigKey.NET_TOKEN) ?? '';
 
           _dio.interceptors.requestLock.lock();
