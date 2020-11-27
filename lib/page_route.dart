@@ -3,6 +3,7 @@ import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:ebank_mobile/page/personalCenter/about_us.dart';
 
 var pageHome = '/';
 var pageLogin = pageHome;
@@ -10,12 +11,14 @@ var pageLogin = pageHome;
 var pageCardList = '/card_list';
 var pageCardDetail = '/card_detail';
 var pageCardLimit = '/card_limit_manager';
+var aboutUs = '/about_us';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
   pageCardList: (context) => CardListPage(),
   // pageCardDetail: (context) => CardDetailPage(),
   pageCardLimit: (context) => CardLimitManagerPage(),
+  aboutUs: (context) => FirstScreen(),
 };
 
 onGenerateRoute(RouteSettings settings) {
