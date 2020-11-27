@@ -192,7 +192,10 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = false;
     });
 <<<<<<< HEAD
+<<<<<<< HEAD
     // Navigator.pushNamed(context, pageAccountOverview);
+=======
+>>>>>>> f6f1052238cbd4d51833738ebc410cce6d5a3074
 =======
 >>>>>>> f6f1052238cbd4d51833738ebc410cce6d5a3074
     // Navigator.pushNamed(context, pageCardList);
