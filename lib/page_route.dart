@@ -12,13 +12,7 @@ var pageLogin = pageHome;
 var pageCardList = '/card_list';
 var pageCardDetail = '/card_detail';
 var pageCardLimit = '/card_limit_manager';
-<<<<<<< HEAD
-<<<<<<< HEAD
 var pageAccountOverview = '/account_overview';
-=======
->>>>>>> f6f1052238cbd4d51833738ebc410cce6d5a3074
-=======
->>>>>>> f6f1052238cbd4d51833738ebc410cce6d5a3074
 var pageIndex = new MaterialPageRoute(builder: (context) => new IndexPage());
 
 var appRoutes = {
