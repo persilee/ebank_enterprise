@@ -1,6 +1,7 @@
 import 'package:ebank_mobile/page/bankcard/card_detail_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
+import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,7 @@ var pageLogin = pageHome;
 var pageCardList = '/card_list';
 var pageCardDetail = '/card_detail';
 var pageCardLimit = '/card_limit_manager';
+var pageIndex = new MaterialPageRoute(builder: (context) => new IndexPage());
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),

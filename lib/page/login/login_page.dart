@@ -8,10 +8,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../config/global_config.dart';
@@ -26,7 +26,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
-  var _changeLangBtnTltle = S.current.simplifiedChinese;
+  var _changeLangBtnTltle = 'English'; // S.current.english;
 
   final TextEditingController _accountTC =
       TextEditingController(text: '18033412021');
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
         text: _password,
       );
     });
-    // Intl.defaultLocale = 'en';
+    Intl.defaultLocale = 'en';
   }
 
   @override
@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: InputView(
                   _accountTC,
                   imgName: 'images/login/login_input_account.png',
-                  textFieldPlaceholder: '邮箱/手机号/用户ID',
+                  textFieldPlaceholder: S.of(context).login_account_placeholder,
                   isCiphertext: false,
                 ),
               ),
@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: InputView(
                   _passwordTC,
                   imgName: 'images/login/login_input_password.png',
-                  textFieldPlaceholder: '请输入密码',
+                  textFieldPlaceholder: S.of(context).please_input_password,
                   isCiphertext: true,
                 ),
               ),
@@ -127,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                     //ForgetButton('忘记账户？'),
                     Container(
                       margin: EdgeInsets.only(left: 15),
-                      child: ForgetButton('忘记密码？', () {
+                      child: ForgetButton(S.of(context).fotget_password_q, () {
                         setState(() {
                           print('忘记密码');
                         });
@@ -175,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
     UserDataRepository()
         .login(LoginReq(userPhone: _account, password: password), 'login')
         .then((value) {
-      HSProgressHUD.showSuccess(status: '${value.actualName}');
+      HSProgressHUD.showSuccess(status: S.of(context).operation_successful);
       _saveUserConfig(context, value);
     }).catchError((e) {
       setState(() {
@@ -191,7 +191,8 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _isLoading = false;
     });
-    Navigator.pushNamed(context, pageCardList);
+    // Navigator.pushNamed(context, pageCardList);
+    Navigator.pushAndRemoveUntil(context, pageIndex, (route) => false);
   }
 
   ///保存数据
@@ -209,12 +210,12 @@ class _LoginPageState extends State<LoginPage> {
   ///判断是否能点击登录按钮
   bool _judgeCanLogin() {
     if (_account.toString().length == 0 || _account == null) {
-      HSProgressHUD.showInfo(status: '请输入账号');
+      HSProgressHUD.showInfo(status: S.of(context).please_input_account);
       return false;
     }
 
     if (_password.toString().length == 0 || _password == null) {
-      HSProgressHUD.showInfo(status: '请输入密码');
+      HSProgressHUD.showInfo(status: S.of(context).please_input_password);
       return false;
     }
 
@@ -274,27 +275,33 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
   _selectLanguage() async {
     final prefs = await SharedPreferences.getInstance();
     final oldLang = prefs.getString(ConfigKey.LANGUAGE) ?? '';
+    print('0_______________------------- $oldLang');
     if (oldLang.isEmpty) {
-      prefs.setString(ConfigKey.LANGUAGE, 'zh');
+      prefs.setString(ConfigKey.LANGUAGE, 'en');
       return;
     }
 
     Locale locale;
+    print('1_______________------------- $oldLang');
     if (oldLang == 'en') {
       locale = Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN');
     } else {
       locale = Locale.fromSubtags(languageCode: 'en');
     }
-
+    print('2_______________------------- $locale');
     setState(() {
-      if (locale.languageCode == 'zh') {
-        title = S.current.simplifiedChinese;
+      print('3_______________------------- ${locale.languageCode}');
+      // HSGBankApp.setLocale(context, locale);
+      if (locale.languageCode == 'en') {
+        title = 'English'; //S.current.english;
       } else {
-        title = S.current.english;
+        title = '中文'; //S.current.simplifiedChinese;
       }
       HSGBankApp.setLocale(context, locale);
     });
+    print('4_______________------------- ${locale.languageCode}');
     prefs.setString(ConfigKey.LANGUAGE, locale.languageCode);
+    print('5_______________------------- $locale');
   }
 }
 

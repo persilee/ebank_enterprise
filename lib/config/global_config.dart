@@ -43,5 +43,5 @@ final kNavSystemBtnColor = Color.fromRGBO(72, 113, 255, 1);
 final kNavTextFont = TextStyle(
   fontSize: 16,
   fontWeight: FontWeight.normal,
-  color: kNavSystemBtnColor,
+  color: Colors.white,
 );
