@@ -11,6 +11,7 @@ class HsgColors {
   static const Color divider = Color(0xffe9e9e9);
   static const Color itemClickColor = Color(0xffdfe4f4);
   static const Color commonBackground = Color(0xffF7F7F7);
+  static const Color backgroundColor = Color(0xFFF2F2F2);
   static const Color firstDegreeText = Color(0xff262626);
   static const Color secondDegreeText = Color(0xff7a7a7a);
   static const Color describeText = Color(0xff9c9c9c);
