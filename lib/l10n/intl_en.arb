@@ -1,0 +1,13 @@
+{
+  "login": "Login",
+  "simplifiedChinese": "Chinese",
+  "english": "English",
+  "login_account_placeholder": "Email/Mobile Phone No./User ID",
+  "fotget_password_q": "Forget Password?",
+  "operation_successful": "Operation Successfully",
+  "please_input_account": "Please input account",
+  "please_input_password": "Please input password",
+  "home": "Home",
+  "mine": "Mine",
+  "approval": "Approval"
+}
