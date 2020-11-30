@@ -55,14 +55,14 @@ class _DetailListPageState extends State<DetailListPage> {
                               child: Text(
                                 '12月15日',
                                 style: TextStyle(
-                                    fontSize: 16, color: Color(0xFF222121)),
+                                    fontSize: 14, color: Color(0xFF222121)),
                               ),
                             )
                           ],
                         ),
                         Container(
                           child: RaisedButton(
-                            padding: EdgeInsets.fromLTRB(18, 25, 14, 20),
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
                             color: Colors.white,
                             elevation: 0,
                             onPressed: () {
@@ -75,8 +75,8 @@ class _DetailListPageState extends State<DetailListPage> {
                                   child: ClipOval(
                                     child: Image.asset(
                                       'images/aboutus/aboutUs-bg.png',
-                                      height: 42,
-                                      width: 42,
+                                      height: 38,
+                                      width: 38,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -92,13 +92,13 @@ class _DetailListPageState extends State<DetailListPage> {
                                             Text(
                                               '财付通-微信零钱充值账户',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                             Text(
                                               '-￥1000.00',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                           ],
@@ -111,15 +111,15 @@ class _DetailListPageState extends State<DetailListPage> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '转账给自己 储蓄卡9342 18..',
+                                              '转账给自己 储蓄卡9338 18..',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                             Text(
                                               '余额 ￥10.00',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                           ],
@@ -139,7 +139,7 @@ class _DetailListPageState extends State<DetailListPage> {
                         ),
                         Container(
                           child: RaisedButton(
-                            padding: EdgeInsets.fromLTRB(18, 25, 14, 20),
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
                             color: Colors.white,
                             elevation: 0,
                             onPressed: () {
@@ -152,8 +152,8 @@ class _DetailListPageState extends State<DetailListPage> {
                                   child: ClipOval(
                                     child: Image.asset(
                                       'images/aboutus/aboutUs-bg.png',
-                                      height: 42,
-                                      width: 42,
+                                      height: 38,
+                                      width: 38,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -169,13 +169,13 @@ class _DetailListPageState extends State<DetailListPage> {
                                             Text(
                                               '财付通-微信零钱充值账户',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                             Text(
                                               '-￥1000.00',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                           ],
@@ -188,15 +188,15 @@ class _DetailListPageState extends State<DetailListPage> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '转账给自己 储蓄卡9342 18..',
+                                              '转账给自己 储蓄卡9338 18..',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                             Text(
                                               '余额 ￥10.00',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                           ],
@@ -216,7 +216,7 @@ class _DetailListPageState extends State<DetailListPage> {
                         ),
                         Container(
                           child: RaisedButton(
-                            padding: EdgeInsets.fromLTRB(18, 25, 14, 20),
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
                             color: Colors.white,
                             elevation: 0,
                             onPressed: () {
@@ -229,8 +229,8 @@ class _DetailListPageState extends State<DetailListPage> {
                                   child: ClipOval(
                                     child: Image.asset(
                                       'images/aboutus/aboutUs-bg.png',
-                                      height: 42,
-                                      width: 42,
+                                      height: 38,
+                                      width: 38,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -246,13 +246,13 @@ class _DetailListPageState extends State<DetailListPage> {
                                             Text(
                                               '财付通-微信零钱充值账户',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                             Text(
                                               '-￥1000.00',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                           ],
@@ -265,15 +265,15 @@ class _DetailListPageState extends State<DetailListPage> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '转账给自己 储蓄卡9342 18..',
+                                              '转账给自己 储蓄卡9338 18..',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                             Text(
                                               '余额 ￥10.00',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                           ],
@@ -293,7 +293,7 @@ class _DetailListPageState extends State<DetailListPage> {
                         ),
                         Container(
                           child: RaisedButton(
-                            padding: EdgeInsets.fromLTRB(18, 25, 14, 20),
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
                             color: Colors.white,
                             elevation: 0,
                             onPressed: () {
@@ -306,8 +306,8 @@ class _DetailListPageState extends State<DetailListPage> {
                                   child: ClipOval(
                                     child: Image.asset(
                                       'images/aboutus/aboutUs-bg.png',
-                                      height: 42,
-                                      width: 42,
+                                      height: 38,
+                                      width: 38,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -323,13 +323,13 @@ class _DetailListPageState extends State<DetailListPage> {
                                             Text(
                                               '财付通-微信零钱充值账户',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                             Text(
                                               '-￥1000.00',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                           ],
@@ -342,15 +342,15 @@ class _DetailListPageState extends State<DetailListPage> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '转账给自己 储蓄卡9342 18..',
+                                              '转账给自己 储蓄卡9338 18..',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                             Text(
                                               '余额 ￥10.00',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                           ],
@@ -370,7 +370,7 @@ class _DetailListPageState extends State<DetailListPage> {
                         ),
                         Container(
                           child: RaisedButton(
-                            padding: EdgeInsets.fromLTRB(18, 25, 14, 20),
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
                             color: Colors.white,
                             elevation: 0,
                             onPressed: () {
@@ -383,8 +383,8 @@ class _DetailListPageState extends State<DetailListPage> {
                                   child: ClipOval(
                                     child: Image.asset(
                                       'images/aboutus/aboutUs-bg.png',
-                                      height: 42,
-                                      width: 42,
+                                      height: 38,
+                                      width: 38,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -400,13 +400,13 @@ class _DetailListPageState extends State<DetailListPage> {
                                             Text(
                                               '财付通-微信零钱充值账户',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                             Text(
                                               '-￥1000.00',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                           ],
@@ -419,15 +419,15 @@ class _DetailListPageState extends State<DetailListPage> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '转账给自己 储蓄卡9342 18..',
+                                              '转账给自己 储蓄卡9338 18..',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                             Text(
                                               '余额 ￥10.00',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                           ],
@@ -447,7 +447,7 @@ class _DetailListPageState extends State<DetailListPage> {
                         ),
                         Container(
                           child: RaisedButton(
-                            padding: EdgeInsets.fromLTRB(18, 25, 14, 20),
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
                             color: Colors.white,
                             elevation: 0,
                             onPressed: () {
@@ -460,8 +460,8 @@ class _DetailListPageState extends State<DetailListPage> {
                                   child: ClipOval(
                                     child: Image.asset(
                                       'images/aboutus/aboutUs-bg.png',
-                                      height: 42,
-                                      width: 42,
+                                      height: 38,
+                                      width: 38,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -477,13 +477,13 @@ class _DetailListPageState extends State<DetailListPage> {
                                             Text(
                                               '财付通-微信零钱充值账户',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                             Text(
                                               '-￥1000.00',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                           ],
@@ -496,15 +496,15 @@ class _DetailListPageState extends State<DetailListPage> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '转账给自己 储蓄卡9342 18..',
+                                              '转账给自己 储蓄卡9338 18..',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                             Text(
                                               '余额 ￥10.00',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                           ],
@@ -532,14 +532,14 @@ class _DetailListPageState extends State<DetailListPage> {
                               child: Text(
                                 '12月14日',
                                 style: TextStyle(
-                                    fontSize: 16, color: Color(0xFF222121)),
+                                    fontSize: 14, color: Color(0xFF222121)),
                               ),
                             )
                           ],
                         ),
                         Container(
                           child: RaisedButton(
-                            padding: EdgeInsets.fromLTRB(18, 25, 14, 20),
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
                             color: Colors.white,
                             elevation: 0,
                             onPressed: () {
@@ -552,8 +552,8 @@ class _DetailListPageState extends State<DetailListPage> {
                                   child: ClipOval(
                                     child: Image.asset(
                                       'images/aboutus/aboutUs-bg.png',
-                                      height: 42,
-                                      width: 42,
+                                      height: 38,
+                                      width: 38,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -569,13 +569,13 @@ class _DetailListPageState extends State<DetailListPage> {
                                             Text(
                                               '财付通-微信零钱充值账户',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                             Text(
                                               '-￥1000.00',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                           ],
@@ -588,15 +588,15 @@ class _DetailListPageState extends State<DetailListPage> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '转账给自己 储蓄卡9342 18..',
+                                              '转账给自己 储蓄卡9338 18..',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                             Text(
                                               '余额 ￥10.00',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                           ],
@@ -616,7 +616,7 @@ class _DetailListPageState extends State<DetailListPage> {
                         ),
                         Container(
                           child: RaisedButton(
-                            padding: EdgeInsets.fromLTRB(18, 25, 14, 20),
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
                             color: Colors.white,
                             elevation: 0,
                             onPressed: () {
@@ -629,8 +629,8 @@ class _DetailListPageState extends State<DetailListPage> {
                                   child: ClipOval(
                                     child: Image.asset(
                                       'images/aboutus/aboutUs-bg.png',
-                                      height: 42,
-                                      width: 42,
+                                      height: 38,
+                                      width: 38,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -646,13 +646,13 @@ class _DetailListPageState extends State<DetailListPage> {
                                             Text(
                                               '财付通-微信零钱充值账户',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                             Text(
                                               '-￥1000.00',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                           ],
@@ -665,15 +665,15 @@ class _DetailListPageState extends State<DetailListPage> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '转账给自己 储蓄卡9342 18..',
+                                              '转账给自己 储蓄卡9338 18..',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                             Text(
                                               '余额 ￥10.00',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                           ],
@@ -693,7 +693,7 @@ class _DetailListPageState extends State<DetailListPage> {
                         ),
                         Container(
                           child: RaisedButton(
-                            padding: EdgeInsets.fromLTRB(18, 25, 14, 20),
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
                             color: Colors.white,
                             elevation: 0,
                             onPressed: () {
@@ -706,8 +706,8 @@ class _DetailListPageState extends State<DetailListPage> {
                                   child: ClipOval(
                                     child: Image.asset(
                                       'images/aboutus/aboutUs-bg.png',
-                                      height: 42,
-                                      width: 42,
+                                      height: 38,
+                                      width: 38,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -723,13 +723,13 @@ class _DetailListPageState extends State<DetailListPage> {
                                             Text(
                                               '财付通-微信零钱充值账户',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                             Text(
                                               '-￥1000.00',
                                               style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
                                           ],
@@ -742,15 +742,15 @@ class _DetailListPageState extends State<DetailListPage> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '转账给自己 储蓄卡9342 18..',
+                                              '转账给自己 储蓄卡9338 18..',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                             Text(
                                               '余额 ￥10.00',
                                               style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   color: Color(0xFFACACAC)),
                                             ),
                                           ],
