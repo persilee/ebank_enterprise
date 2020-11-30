@@ -82,50 +82,52 @@ class _DetailListPageState extends State<DetailListPage> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '财付通-微信零钱充值账户',
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '财付通-马化腾给我的微信零钱账户充值了一百万',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
-                                            Text(
-                                              '-￥1000.00',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Color(0xFF222121)),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 5)),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '转账给自己 储蓄卡9338 18..',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                            Text(
-                                              '余额 ￥10.00',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -159,50 +161,52 @@ class _DetailListPageState extends State<DetailListPage> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
                                               '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
-                                            Text(
-                                              '-￥1000.00',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Color(0xFF222121)),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 5)),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '转账给自己 储蓄卡9338 18..',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                            Text(
-                                              '余额 ￥10.00',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -236,50 +240,52 @@ class _DetailListPageState extends State<DetailListPage> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
                                               '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
-                                            Text(
-                                              '-￥1000.00',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Color(0xFF222121)),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 5)),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '转账给自己 储蓄卡9338 18..',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                            Text(
-                                              '余额 ￥10.00',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -313,50 +319,52 @@ class _DetailListPageState extends State<DetailListPage> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
                                               '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
-                                            Text(
-                                              '-￥1000.00',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Color(0xFF222121)),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 5)),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '转账给自己 储蓄卡9338 18..',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                            Text(
-                                              '余额 ￥10.00',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -390,50 +398,52 @@ class _DetailListPageState extends State<DetailListPage> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
                                               '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
-                                            Text(
-                                              '-￥1000.00',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Color(0xFF222121)),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 5)),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '转账给自己 储蓄卡9338 18..',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                            Text(
-                                              '余额 ￥10.00',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -467,50 +477,52 @@ class _DetailListPageState extends State<DetailListPage> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
                                               '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
-                                            Text(
-                                              '-￥1000.00',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Color(0xFF222121)),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 5)),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '转账给自己 储蓄卡9338 18..',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                            Text(
-                                              '余额 ￥10.00',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -559,50 +571,52 @@ class _DetailListPageState extends State<DetailListPage> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
                                               '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
-                                            Text(
-                                              '-￥1000.00',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Color(0xFF222121)),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 5)),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '转账给自己 储蓄卡9338 18..',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                            Text(
-                                              '余额 ￥10.00',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -636,50 +650,52 @@ class _DetailListPageState extends State<DetailListPage> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
                                               '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
-                                            Text(
-                                              '-￥1000.00',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Color(0xFF222121)),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 5)),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '转账给自己 储蓄卡9338 18..',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                            Text(
-                                              '余额 ￥10.00',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -713,50 +729,52 @@ class _DetailListPageState extends State<DetailListPage> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Container(
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
                                               '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: Color(0xFF222121)),
                                             ),
-                                            Text(
-                                              '-￥1000.00',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Color(0xFF222121)),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 5)),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '转账给自己 储蓄卡9338 18..',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                            Text(
-                                              '余额 ￥10.00',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(0xFFACACAC)),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
