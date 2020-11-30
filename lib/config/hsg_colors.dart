@@ -20,4 +20,8 @@ class HsgColors {
   static const Color hintText = Color(0xffCCCCCC);
   static const Color mainTabTextNormal = Color(0xffbcbcbc);
   static const Color mainTabTextSelected = accent;
+  static const Color aboutusText = Color(0xFFFEFEFE);
+  static const Color aboutusTextCon = Color(0xFF262626);
+  static const Color aboutusConBg = Color(0xFFF6F6F6);
+
 }
