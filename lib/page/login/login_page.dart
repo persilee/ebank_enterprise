@@ -162,6 +162,7 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录操作
   _login(BuildContext context) {
+     Navigator.pushNamed(context, aboutUs);
     if (!_judgeCanLogin()) {
       return;
     }
@@ -193,7 +194,8 @@ class _LoginPageState extends State<LoginPage> {
     });
     // Navigator.pushNamed(context, pageDetailList);
     // Navigator.pushNamed(context, pageCardList);
-    Navigator.pushAndRemoveUntil(context, pageIndex, (route) => false);
+   // Navigator.pushAndRemoveUntil(context, pageIndex, (route) => false);
+    Navigator.pushNamed(context, aboutUs);
   }
 
   ///保存数据
