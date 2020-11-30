@@ -72,6 +72,35 @@ flutter:
     - images/tabbar/tabbar_approval_select.png
     - images/tabbar/tabbar_mine_normal.png
     - images/tabbar/tabbar_mine_select.png
+    
+    #home
+    #home_nav
+    - images/home/navIcon/home_nav_message_has.png
+    - images/home/navIcon/home_nav_message.png
+    - images/home/navIcon/home_nav_service.png
+    #home_header
+    - images/home/heaerIcon/home_header_bg.png
+    - images/home/heaerIcon/home_header_overview.png
+    - images/home/heaerIcon/home_header_payment.png
+    #home_listIcon
+    - images/home/listIcon/home_list_card_bank.png
+    - images/home/listIcon/home_list_deposit_records.png
+    - images/home/listIcon/home_list_exchange.png
+    - images/home/listIcon/home_list_FOREX.png
+    - images/home/listIcon/home_list_loan_apply.png
+    - images/home/listIcon/home_list_loan_rate.png
+    - images/home/listIcon/home_list_loan_recoeds.png
+    - images/home/listIcon/home_list_more_arrow.png
+    - images/home/listIcon/home_list_overview.png
+    - images/home/listIcon/home_list_partner.png
+    - images/home/listIcon/home_list_payments.png
+    - images/home/listIcon/home_list_statement.png
+    - images/home/listIcon/home_list_time_deposit.png
+    - images/home/listIcon/home_list_deposit_rates.png
+    - images/home/listIcon/home_list_transfer_appointment.png
+    - images/home/listIcon/home_list_transfer_plan.png
+    - images/home/listIcon/home_list_transfer_record.png
+    - images/home/listIcon/home_list_transfer.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
