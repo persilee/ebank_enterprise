@@ -55,4 +55,9 @@ Future<LoginResp> login(LoginReq loginReq, String tag) {
 
 ### 资源文件
 
-图片文件存放目录：项目根目录下的`images`文件夹，并在`pubspec.yaml`文件的`assets`下声明
+图片文件存放目录：项目根目录下的`images`文件夹，并在`pubspec.yaml`文件的`assets`下声明。
+
+其他资源存放目录：lib/config，有：
+- `hsg_colors.dart`: 颜色定义
+- `hsg_dimens.dart`: 尺寸定义
+- `hsg_styles.dart`: 样式定义
