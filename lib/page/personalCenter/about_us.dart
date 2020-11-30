@@ -172,12 +172,24 @@ class FirstScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '企业优势',
-                        style: TextStyle(
-                            fontSize: 17,
-                            color: HsgColors.aboutusTextCon,
-                            fontWeight: FontWeight.bold),
+                      Row(
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            child: CircleAvatar(
+                              radius: 4.0,
+                              backgroundColor: HsgColors.aboutusCircle,
+                            ),
+                          ),
+                          Padding(  padding: EdgeInsets.only(left: 10),),
+                          Text(
+                            '企业优势',
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: HsgColors.aboutusTextCon,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 15, bottom: 25),
@@ -200,12 +212,24 @@ class FirstScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '技术优势',
-                        style: TextStyle(
-                            fontSize: 17,
-                            color: HsgColors.aboutusTextCon,
-                            fontWeight: FontWeight.bold),
+                       Row(
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            child: CircleAvatar(
+                              radius: 4.0,
+                              backgroundColor: HsgColors.aboutusCircle,
+                            ),
+                          ),
+                          Padding(  padding: EdgeInsets.only(left: 10),),
+                          Text(
+                            '技术优势',
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: HsgColors.aboutusTextCon,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 15, bottom: 25),
@@ -233,12 +257,24 @@ class FirstScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '团队优势',
-                        style: TextStyle(
-                            fontSize: 17,
-                            color: HsgColors.aboutusTextCon,
-                            fontWeight: FontWeight.bold),
+                       Row(
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            child: CircleAvatar(
+                              radius: 4.0,
+                              backgroundColor: HsgColors.aboutusCircle,
+                            ),
+                          ),
+                          Padding(  padding: EdgeInsets.only(left: 10),),
+                          Text(
+                            '团队优势',
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: HsgColors.aboutusTextCon,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 15, bottom: 25),
@@ -261,12 +297,24 @@ class FirstScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '服务优势',
-                        style: TextStyle(
-                            fontSize: 17,
-                            color: HsgColors.aboutusTextCon,
-                            fontWeight: FontWeight.bold),
+                       Row(
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            child: CircleAvatar(
+                              radius: 4.0,
+                              backgroundColor: HsgColors.aboutusCircle,
+                            ),
+                          ),
+                          Padding(  padding: EdgeInsets.only(left: 10),),
+                          Text(
+                            '服务优势',
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: HsgColors.aboutusTextCon,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 15, bottom: 25),
@@ -281,7 +329,8 @@ class FirstScreen extends StatelessWidget {
               ),
               //我们的价值
               Container(
-                margin: EdgeInsets.only(top: 20.0, left: 21.0, right: 21.0),
+                margin: EdgeInsets.only(
+                    top: 20.0, left: 21.0, right: 21.0, bottom: 20.0),
                 padding: EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
                 decoration: new BoxDecoration(
                     //背景颜色
@@ -290,7 +339,7 @@ class FirstScreen extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(5.0))),
                 child: SizedBox(
                     child: Padding(
-                  padding: EdgeInsets.fromLTRB(15, 0, 15,40.0),
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 40.0),
                   child: Column(
                     children: [
                       Row(
@@ -320,81 +369,106 @@ class FirstScreen extends StatelessWidget {
                       ),
                       Column(
                         children: [
-                           Padding(padding:  EdgeInsets.only(top: 30.0, left: 20.0,),
-                           child: Row(
-                            children: [
-                              Image(
-                                  image: AssetImage(
-                                      'images/aboutus/aboutUs-icon1.png'),
-                                  width: 22.0),
-                              Container(width: 20.0,),    
-                              Text(
-                                '即时响应式服务,全程为开发加速',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: HsgColors.aboutusTextCon,
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: 30.0,
+                              left: 20.0,
+                            ),
+                            child: Row(
+                              children: [
+                                Image(
+                                    image: AssetImage(
+                                        'images/aboutus/aboutUs-icon1.png'),
+                                    width: 22.0),
+                                Container(
+                                  width: 20.0,
                                 ),
-                              ),
-                            ],
-                          ),
-                          ),
-                           Divider(height: 50, color: HsgColors.textHintColor),
-                           Padding(padding:  EdgeInsets.only(top: 10.0, left: 20.0,),
-                           child: Row(
-                            children: [
-                              Image(
-                                  image: AssetImage(
-                                      'images/aboutus/aboutUs-icon2.png'),
-                                  width: 22.0),
-                              Container(width: 20.0,),    
-                              Text(
-                                '强大团队 高效实施',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: HsgColors.aboutusTextCon,
+                                Text(
+                                  '即时响应式服务,全程为开发加速',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: HsgColors.aboutusTextCon,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                          ),
-                           Divider(height: 50, color: HsgColors.textHintColor),
-                           Padding(padding:  EdgeInsets.only(top: 10.0, left: 20.0,),
-                           child: Row(
-                            children: [
-                              Image(
-                                  image: AssetImage(
-                                      'images/aboutus/aboutUs-icon3.png'),
-                                  width: 22.0),
-                              Container(width: 20.0,),    
-                              Text(
-                                '灵活配置 可扩充可维护',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: HsgColors.aboutusTextCon,
+                          Divider(height: 50, color: HsgColors.textHintColor),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: 10.0,
+                              left: 20.0,
+                            ),
+                            child: Row(
+                              children: [
+                                Image(
+                                    image: AssetImage(
+                                        'images/aboutus/aboutUs-icon2.png'),
+                                    width: 22.0),
+                                Container(
+                                  width: 20.0,
                                 ),
-                              ),
-                            ],
-                          ),
-                          ),
-                           Divider(height: 50, color: HsgColors.textHintColor),
-                           Padding(padding:  EdgeInsets.only(top: 10.0, left: 20.0,),
-                           child: Row(
-                            children: [
-                              Image(
-                                  image: AssetImage(
-                                      'images/aboutus/aboutUs-icon4.png'),
-                                  width: 22.0),
-                              Container(width: 20.0,),    
-                              Text(
-                                '7*24小时 技术支持',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: HsgColors.aboutusTextCon,
+                                Text(
+                                  '强大团队 高效实施',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: HsgColors.aboutusTextCon,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
+                          Divider(height: 50, color: HsgColors.textHintColor),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: 10.0,
+                              left: 20.0,
+                            ),
+                            child: Row(
+                              children: [
+                                Image(
+                                    image: AssetImage(
+                                        'images/aboutus/aboutUs-icon3.png'),
+                                    width: 22.0),
+                                Container(
+                                  width: 20.0,
+                                ),
+                                Text(
+                                  '灵活配置 可扩充可维护',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: HsgColors.aboutusTextCon,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
+                          Divider(height: 50, color: HsgColors.textHintColor),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: 10.0,
+                              left: 20.0,
+                            ),
+                            child: Row(
+                              children: [
+                                Image(
+                                    image: AssetImage(
+                                        'images/aboutus/aboutUs-icon4.png'),
+                                    width: 22.0),
+                                Container(
+                                  width: 20.0,
+                                ),
+                                Text(
+                                  '7*24小时 技术支持',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: HsgColors.aboutusTextCon,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Divider(height: 50, color: HsgColors.textHintColor)
                         ],
                       )
                     ],
