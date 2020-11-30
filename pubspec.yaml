@@ -63,6 +63,7 @@ flutter:
     - images/login/login_input_account.png
     - images/login/login_input_password.png
     - images/aboutus/aboutUs-bg.png
+    - images/aboutus/aboutUs-bg1.png
     
     #tabbar
     - images/tabbar/tabbar_home_normal.png
