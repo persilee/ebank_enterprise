@@ -54,9 +54,18 @@ class FirstScreen extends StatelessWidget {
                       //背景颜色
                       color: Colors.white,
                       //设置四周圆角 角度
-                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                       boxShadow: [
+                        BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(0.0, 15.0), //阴影xy轴偏移量
+                            blurRadius: 15.0, //阴影模糊程度
+                            spreadRadius: 1.0 //阴影扩散程度
+                            )
+                      ]
+                      ),
                   child: SizedBox(
-                      height: 125,
+                      height: 60,
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: Column(
@@ -105,13 +114,13 @@ class FirstScreen extends StatelessWidget {
               ],
             ),
           ),
+          //我们的优势
             Container(
-                  height: 218.0,
+                  height: 80.0,
                   margin: EdgeInsets.only(top: 30.0, left: 21.0, right: 21.0),
                   padding: EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
                   decoration: new BoxDecoration(
                       //背景颜色
-                      color: Colors.white,
                       //设置四周圆角 角度
                       borderRadius: BorderRadius.all(Radius.circular(5.0))),
                   child: SizedBox(
@@ -147,62 +156,29 @@ class FirstScreen extends StatelessWidget {
                                 )
                               ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 30, bottom: 42),
-                              child: Text(
-                                '有丰富的全球银行服务经验，熟悉全球法规、市场惯例和工作文化；100%项目实施成功率，在全球IT建设领域拥有丰富经验和良好口碑。',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: HsgColors.aboutusTextCon),
-                                maxLines: 4,
-                              ),
-                            )
                           ],
                         ),
                       )),
                 ),
                    Container(
-                  height: 218.0,
-                  margin: EdgeInsets.only(top: 30.0, left: 21.0, right: 21.0),
-                  padding: EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
+                  margin: EdgeInsets.only(top: 10.0, left: 21.0, right: 21.0),
+                  padding: EdgeInsets.only(top: 5.0, left: 20.0, right: 20.0),
                   decoration: new BoxDecoration(
                       //背景颜色
                       color: Colors.white,
                       //设置四周圆角 角度
                       borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                  child: SizedBox(
-                      height: 125,
-                      child: Padding(
+                  child:  Padding(
                         padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: Column(
                           children: [
-                            Row(
-                              children: [
-                                Text(
-                                  '我们的优势',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: HsgColors.aboutusTextCon,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  '/ ADVANTAGE',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: HsgColors.aboutusTextCon),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Image(
-                                  height: 10.0,
-                                  width: 53.0,
-                                  image: AssetImage(
-                                      'images/aboutus/aboutUs-bg1.png'),
-                                )
-                              ],
-                            ),
+                            Text(
+                                '企业优势',
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    color: HsgColors.aboutusTextCon),
+                                maxLines: 4,
+                              ),
                             Padding(
                               padding: EdgeInsets.only(top: 30, bottom: 42),
                               child: Text(
@@ -216,7 +192,7 @@ class FirstScreen extends StatelessWidget {
                           ],
                         ),
                       )),
-                ),
+                
                    Container(
                   height: 218.0,
                   margin: EdgeInsets.only(top: 30.0, left: 21.0, right: 21.0),
