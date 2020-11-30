@@ -6,6 +6,8 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../page_route.dart';
+
 var _features = [
   {
     'title': '转账收款',
@@ -221,6 +223,7 @@ class HomeHeaderView extends StatelessWidget {
                       'images/home/heaerIcon/home_header_payment.png',
                       40.0, () {
                     print('收支明细');
+                    Navigator.pushNamed(context, pageDetailList);
                   }),
                 ),
                 Container(
@@ -235,6 +238,7 @@ class HomeHeaderView extends StatelessWidget {
                       'images/home/heaerIcon/home_header_overview.png',
                       40.0, () {
                     print('账户总览');
+                    Navigator.pushNamed(context, pageAccountOverview);
                   }),
                 ),
               ],
