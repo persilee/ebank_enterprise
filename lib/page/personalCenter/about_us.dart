@@ -23,7 +23,7 @@ class FirstScreen extends StatelessWidget {
                     Container(
                       color: Colors.cyan,
                       child: Image(
-                        image: AssetImage('images/aboutus/aboutUs-bg.png'),
+                        image: AssetImage('images/mine/aboutUs-bg.png'),
                         width: MediaQuery.of(context).size.width,
                         //height: 196.0,
                       ),
@@ -95,7 +95,7 @@ class FirstScreen extends StatelessWidget {
                                   height: 10.0,
                                   width: 53.0,
                                   image: AssetImage(
-                                      'images/aboutus/aboutUs-bg1.png'),
+                                      'images/mine/aboutUs-bg1.png'),
                                 )
                               ],
                             ),
@@ -149,7 +149,7 @@ class FirstScreen extends StatelessWidget {
                           Image(
                             height: 10.0,
                             width: 53.0,
-                            image: AssetImage('images/aboutus/aboutUs-bg1.png'),
+                            image: AssetImage('images/mine/aboutUs-bg1.png'),
                           )
                         ],
                       ),
@@ -363,7 +363,7 @@ class FirstScreen extends StatelessWidget {
                           Image(
                             height: 10.0,
                             width: 53.0,
-                            image: AssetImage('images/aboutus/aboutUs-bg1.png'),
+                            image: AssetImage('images/mine/aboutUs-bg1.png'),
                           )
                         ],
                       ),
@@ -378,7 +378,7 @@ class FirstScreen extends StatelessWidget {
                               children: [
                                 Image(
                                     image: AssetImage(
-                                        'images/aboutus/aboutUs-icon1.png'),
+                                        'images/mine/aboutUs-icon1.png'),
                                     width: 22.0),
                                 Container(
                                   width: 20.0,
@@ -403,7 +403,7 @@ class FirstScreen extends StatelessWidget {
                               children: [
                                 Image(
                                     image: AssetImage(
-                                        'images/aboutus/aboutUs-icon2.png'),
+                                        'images/mine/aboutUs-icon2.png'),
                                     width: 22.0),
                                 Container(
                                   width: 20.0,
@@ -428,7 +428,7 @@ class FirstScreen extends StatelessWidget {
                               children: [
                                 Image(
                                     image: AssetImage(
-                                        'images/aboutus/aboutUs-icon3.png'),
+                                        'images/mine/aboutUs-icon3.png'),
                                     width: 22.0),
                                 Container(
                                   width: 20.0,
@@ -453,7 +453,7 @@ class FirstScreen extends StatelessWidget {
                               children: [
                                 Image(
                                     image: AssetImage(
-                                        'images/aboutus/aboutUs-icon4.png'),
+                                        'images/mine/aboutUs-icon4.png'),
                                     width: 22.0),
                                 Container(
                                   width: 20.0,

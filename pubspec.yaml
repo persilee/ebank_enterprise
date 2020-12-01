@@ -99,13 +99,13 @@ flutter:
     - images/home/listIcon/home_list_transfer_record.png
     - images/home/listIcon/home_list_transfer.png
 
-    #about us
-    - images/aboutus/aboutUs-bg.png
-    - images/aboutus/aboutUs-bg1.png
-    - images/aboutus/aboutUs-icon1.png
-    - images/aboutus/aboutUs-icon2.png
-    - images/aboutus/aboutUs-icon3.png
-    - images/aboutus/aboutUs-icon4.png
+    #mine 个人中心模块
+    - images/mine/aboutUs-bg.png
+    - images/mine/aboutUs-bg1.png
+    - images/mine/aboutUs-icon1.png
+    - images/mine/aboutUs-icon2.png
+    - images/mine/aboutUs-icon3.png
+    - images/mine/aboutUs-icon4.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
