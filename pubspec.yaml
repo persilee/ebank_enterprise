@@ -55,6 +55,9 @@ flutter:
 
   assets:
     - images/ic_launcher.png
+    #common
+    - images/common/check_btn_common_checked.png
+    - images/common/check_btn_common_no_check.png
     #login_image
     - images/login/login_bg_biological.png
     - images/login/login_bg_password.png

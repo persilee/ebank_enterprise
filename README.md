@@ -8,6 +8,19 @@
 - [Dart](https://dart.cn/guides)
 - [Flutter](https://flutter.cn/docs)
 
+如果遇到资源下载问题，可[配置Flutter镜像资源](https://flutter.cn/community/china)：
+
+```bash
+# MacOS or Linux
+ export PUB_HOSTED_URL=https://pub.flutter-io.cn
+ export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+ 
+# Windows则新增两个环境变量
+PUB_HOSTED_URL(值：https://pub.flutter-io.cn)
+FLUTTER_STORAGE_BASE_URL(值：https://storage.flutter-io.cn)
+```
+然后运行`flutter doctor`，则下次使用`flutter pub get`时，会从镜像地址下载资源。
+
 ### Json
 
 对于每个网络请求或者其他需要用到Json序列化/反序列化的类，按以下步骤进行编写。

@@ -1,4 +1,3 @@
-import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +11,8 @@ class DialogDemoPage extends StatefulWidget {
 class _DialogDemoPageState extends State<DialogDemoPage> {
   @override
   Widget build(BuildContext context) {
+    int _lastSelectedPosition = -1;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Dialog Demo'),
@@ -53,15 +54,17 @@ class _DialogDemoPageState extends State<DialogDemoPage> {
                       var child = Column(
                         children: <Widget>[
                           ListTile(title: Text("请选择")),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: 7,
-                            itemBuilder: (BuildContext context, int index) {
-                              return ListTile(
-                                title: Text("$index"),
-                                onTap: () => Navigator.of(context).pop(index),
-                              );
-                            },
+                          Expanded(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: 20,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ListTile(
+                                  title: Text("$index"),
+                                  onTap: () => Navigator.of(context).pop(index),
+                                );
+                              },
+                            ),
                           ),
                         ],
                       );
@@ -79,7 +82,7 @@ class _DialogDemoPageState extends State<DialogDemoPage> {
                     builder: (context) {
                       return HsgAlertDialog(
                         title: "删除还款卡号",
-                        message: _shortText,
+                        message: _longText,
                         positiveButton: '确定',
                         negativeButton: '取消',
                       );
@@ -87,6 +90,25 @@ class _DialogDemoPageState extends State<DialogDemoPage> {
                 print('dialog result:$result');
               },
               child: Text('Alert Dialog')),
+          RaisedButton(
+              onPressed: () async {
+                final result = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return HsgSingleChoiceDialog(
+                        title: "币种选择",
+                        items: _longItems,
+                        positiveButton: '确定',
+                        negativeButton: '取消',
+                        lastSelectedPosition: _lastSelectedPosition,
+                      );
+                    });
+                print('dialog result:$result');
+                if (result != null && result != false) {
+                  _lastSelectedPosition = result;
+                }
+              },
+              child: Text('Single Choice Dialog')),
         ],
       ),
     );
@@ -94,6 +116,52 @@ class _DialogDemoPageState extends State<DialogDemoPage> {
 }
 
 var _longText =
-    "删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？";
+    "删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？无法使用该卡号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？号快速还款，您确定要删除吗？删除后，将无法使用该卡号快速还款，您确定要删除吗？";
 
 var _shortText = '删除后，将无法使用该卡号快速还款，您确定要删除吗？';
+
+var _shortItems = [
+  '1',
+  '2',
+  '3',
+];
+
+var _longItems = [
+  '123456789876543212345678987654321',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11',
+  '12',
+  '13',
+  '14',
+  '15',
+  '16',
+  '17',
+  '18',
+  '19',
+  '20',
+  '21',
+  '22',
+  '23',
+  '24',
+  '25',
+  '26',
+  '27',
+  '28',
+  '29',
+  '30',
+  '31',
+  '32',
+  '33',
+  '34',
+  '35',
+  '36',
+  '37',
+];
