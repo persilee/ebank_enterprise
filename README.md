@@ -1,6 +1,6 @@
 # EBAK MOBILE ENTERPRISE
 
-企业手机银行
+企业手机银行开发文档。
 
 ## 开始
 
@@ -21,6 +21,10 @@
 2.定义完实体和属性，对类声明注解`@JsonSerializable()`，然后手动编写序列化与序列化代码，调用插件生成的方法，序列化调用`_$XXXToJson()`方法，反序列化调用`_$XXXFromJson()`方法。如：
 
 ```Dart
+import 'package:json_annotation/json_annotation.dart';
+/// 手动输入这行xxx(文件名).g.dart
+part 'login.g.dart';
+
 /// 对象实体定义
 @JsonSerializable()
 class LoginResp {
