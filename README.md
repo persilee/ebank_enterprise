@@ -28,7 +28,11 @@ FLUTTER_STORAGE_BASE_URL(值：https://storage.flutter-io.cn)
 1.进入项目根目录，在终端或命令行中运行：
 
 ```bash
- flutter packages pub run build_runner watch
+# 一次性生成
+flutter pub run build_runner build
+
+# 持续生成
+flutter packages pub run build_runner watch
 ```
 
 2.定义完实体和属性，对类声明注解`@JsonSerializable()`，然后手动编写序列化与序列化代码，调用插件生成的方法，序列化调用`_$XXXToJson()`方法，反序列化调用`_$XXXFromJson()`方法。如：
