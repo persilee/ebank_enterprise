@@ -23,5 +23,7 @@ class HsgColors {
   static const Color aboutusText = Color(0xFFFEFEFE);
   static const Color aboutusTextCon = Color(0xFF262626);
   static const Color aboutusConBg = Color(0xFFF6F6F6);
+  static const Color aboutusConTxtBg = Color(0xFFF6F6F6);
+  static const Color aboutusCircle = Color(0xFFFA9B1CE);
 
 }
