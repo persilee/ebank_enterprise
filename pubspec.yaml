@@ -52,7 +52,6 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  generate: true
 
   assets:
     - images/ic_launcher.png
@@ -77,6 +76,7 @@ flutter:
     - images/home/navIcon/home_nav_message_has.png
     - images/home/navIcon/home_nav_message.png
     - images/home/navIcon/home_nav_service.png
+    - images/home/heaerIcon/home_header_person.png
     #home_header
     - images/home/heaerIcon/home_header_bg.png
     - images/home/heaerIcon/home_header_overview.png

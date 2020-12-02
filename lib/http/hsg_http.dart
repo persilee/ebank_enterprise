@@ -33,7 +33,9 @@ class HsgHttp {
     if (_dio == null) {
       final options = BaseOptions(
           baseUrl: _baseUrl,
-          headers: {"x-kont-appkey": "6000000514984255"},
+          headers: {
+            "x-kont-appkey": "6000000514984257"
+          }, //企业手机银行 //{"x-kont-appkey": "6000000514984255"},//个人手机银行
           connectTimeout: _CONNECT_TIMTOUT,
           receiveTimeout: _RECEIVE_TIMTOUT);
       _dio = Dio(options);

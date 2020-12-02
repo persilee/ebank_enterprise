@@ -144,6 +144,196 @@ class S {
       args: [],
     );
   }
+
+  /// `Transfer`
+  String get transfer {
+    return Intl.message(
+      'Transfer',
+      name: 'transfer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transfer Record`
+  String get transfer_record {
+    return Intl.message(
+      'Transfer Record',
+      name: 'transfer_record',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transfer Template`
+  String get transfer_model {
+    return Intl.message(
+      'Transfer Template',
+      name: 'transfer_model',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Time Deposit Opening`
+  String get deposit_open {
+    return Intl.message(
+      'Time Deposit Opening',
+      name: 'deposit_open',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Time Deposits`
+  String get deposit_record {
+    return Intl.message(
+      'My Time Deposits',
+      name: 'deposit_record',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View Interest Rate`
+  String get deposit_rate {
+    return Intl.message(
+      'View Interest Rate',
+      name: 'deposit_rate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loan`
+  String get loan_apply {
+    return Intl.message(
+      'Loan',
+      name: 'loan_apply',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loan Record`
+  String get loan_record {
+    return Intl.message(
+      'Loan Record',
+      name: 'loan_record',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loan Interest Rate`
+  String get loan_rate {
+    return Intl.message(
+      'Loan Interest Rate',
+      name: 'loan_rate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Foreign Exchange`
+  String get foreign_exchange {
+    return Intl.message(
+      'Foreign Exchange',
+      name: 'foreign_exchange',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exchange Rate`
+  String get exchange_rate {
+    return Intl.message(
+      'Exchange Rate',
+      name: 'exchange_rate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Electronic Statement`
+  String get electronic_statement {
+    return Intl.message(
+      'Electronic Statement',
+      name: 'electronic_statement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transfer`
+  String get transfer_collection {
+    return Intl.message(
+      'Transfer',
+      name: 'transfer_collection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Time Deposit`
+  String get deposit_service {
+    return Intl.message(
+      'Time Deposit',
+      name: 'deposit_service',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loan`
+  String get loan_service {
+    return Intl.message(
+      'Loan',
+      name: 'loan_service',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Others`
+  String get other_service {
+    return Intl.message(
+      'Others',
+      name: 'other_service',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transaction Details`
+  String get transaction_details {
+    return Intl.message(
+      'Transaction Details',
+      name: 'transaction_details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account Summary`
+  String get account_summary {
+    return Intl.message(
+      'Account Summary',
+      name: 'account_summary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `More`
+  String get more {
+    return Intl.message(
+      'More',
+      name: 'more',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

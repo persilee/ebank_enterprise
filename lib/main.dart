@@ -2,12 +2,20 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'widget/progressHUD.dart';
 
-void main() => runApp(
-      HSGBankApp(),
-    );
+// void main() => runApp(
+//       HSGBankApp(),
+//     );
+void main(List<String> args) {
+  runApp(
+    HSGBankApp(),
+  );
+  //白色
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+}
 
 class HSGBankApp extends StatefulWidget {
   const HSGBankApp({Key key}) : super(key: key);

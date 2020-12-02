@@ -21,16 +21,35 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "account_summary" : MessageLookupByLibrary.simpleMessage("Account Summary"),
     "approval" : MessageLookupByLibrary.simpleMessage("Approval"),
+    "deposit_open" : MessageLookupByLibrary.simpleMessage("Time Deposit Opening"),
+    "deposit_rate" : MessageLookupByLibrary.simpleMessage("View Interest Rate"),
+    "deposit_record" : MessageLookupByLibrary.simpleMessage("My Time Deposits"),
+    "deposit_service" : MessageLookupByLibrary.simpleMessage("Time Deposit"),
+    "electronic_statement" : MessageLookupByLibrary.simpleMessage("Electronic Statement"),
     "english" : MessageLookupByLibrary.simpleMessage("English"),
+    "exchange_rate" : MessageLookupByLibrary.simpleMessage("Exchange Rate"),
+    "foreign_exchange" : MessageLookupByLibrary.simpleMessage("Foreign Exchange"),
     "fotget_password_q" : MessageLookupByLibrary.simpleMessage("Forget Password?"),
     "home" : MessageLookupByLibrary.simpleMessage("Home"),
+    "loan_apply" : MessageLookupByLibrary.simpleMessage("Loan"),
+    "loan_rate" : MessageLookupByLibrary.simpleMessage("Loan Interest Rate"),
+    "loan_record" : MessageLookupByLibrary.simpleMessage("Loan Record"),
+    "loan_service" : MessageLookupByLibrary.simpleMessage("Loan"),
     "login" : MessageLookupByLibrary.simpleMessage("Login"),
     "login_account_placeholder" : MessageLookupByLibrary.simpleMessage("Email/Mobile Phone No./User ID"),
     "mine" : MessageLookupByLibrary.simpleMessage("Mine"),
+    "more" : MessageLookupByLibrary.simpleMessage("More"),
     "operation_successful" : MessageLookupByLibrary.simpleMessage("Operation Successfully"),
+    "other_service" : MessageLookupByLibrary.simpleMessage("Others"),
     "please_input_account" : MessageLookupByLibrary.simpleMessage("Please input account"),
     "please_input_password" : MessageLookupByLibrary.simpleMessage("Please input password"),
-    "simplifiedChinese" : MessageLookupByLibrary.simpleMessage("Chinese")
+    "simplifiedChinese" : MessageLookupByLibrary.simpleMessage("Chinese"),
+    "transaction_details" : MessageLookupByLibrary.simpleMessage("Transaction Details"),
+    "transfer" : MessageLookupByLibrary.simpleMessage("Transfer"),
+    "transfer_collection" : MessageLookupByLibrary.simpleMessage("Transfer"),
+    "transfer_model" : MessageLookupByLibrary.simpleMessage("Transfer Template"),
+    "transfer_record" : MessageLookupByLibrary.simpleMessage("Transfer Record")
   };
 }

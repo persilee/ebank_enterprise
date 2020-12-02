@@ -11,8 +11,9 @@ LoginReq _$LoginReqFromJson(Map<String, dynamic> json) {
     password: json['password'] as String,
     signType: json['signType'] as String,
     userPhone: json['userPhone'] as String,
+    userAccount: json['userAccount'] as String,
+    platType: json['platType'] as String,
     userType: json['userType'] as String,
-    captcha: json['captcha'] as String,
   );
 }
 
@@ -20,8 +21,9 @@ Map<String, dynamic> _$LoginReqToJson(LoginReq instance) => <String, dynamic>{
       'password': instance.password,
       'signType': instance.signType,
       'userPhone': instance.userPhone,
+      'userAccount': instance.userAccount,
+      'platType': instance.platType,
       'userType': instance.userType,
-      'captcha': instance.captcha,
     };
 
 LoginResp _$LoginRespFromJson(Map<String, dynamic> json) {
