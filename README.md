@@ -74,6 +74,10 @@ Future<LoginResp> login(LoginReq loginReq, String tag) {
 
 - Flutter Intl：用于国际化开发，在lib/l10n目录下存放(编辑)语言文件
 
+调用方法：1. S.of(context)
+        2. S.current
+
+
 ### 资源文件
 
 图片文件存放目录：项目根目录下的`images`文件夹，并在`pubspec.yaml`文件的`assets`下声明。
