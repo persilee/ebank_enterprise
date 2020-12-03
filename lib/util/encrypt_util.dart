@@ -11,7 +11,7 @@ class EncryptUtil {
       final iv = IV.fromUtf8(kIVStringAES);
 
       final encrypter = Encrypter(AES(key, mode: AESMode.cbc));
-      final encrypted = encrypter.encrypt('123456', iv: iv);
+      final encrypted = encrypter.encrypt(content, iv: iv);
 
       return encrypted.base64;
     } catch (err) {

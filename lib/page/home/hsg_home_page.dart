@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 
+import '../../page_route.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -167,6 +169,7 @@ class _HomePageState extends State<HomePage> {
                       'images/home/heaerIcon/home_header_payment.png',
                       40.0, () {
                     print('收支明细');
+                    Navigator.pushNamed(context, pageDetailList);
                   }),
                 ),
                 Container(
@@ -181,6 +184,7 @@ class _HomePageState extends State<HomePage> {
                       'images/home/heaerIcon/home_header_overview.png',
                       40.0, () {
                     print('账户总览');
+                    Navigator.pushNamed(context, pageAccountOverview);
                   }),
                 ),
               ],
@@ -206,7 +210,7 @@ class _HomePageState extends State<HomePage> {
         child: ClipOval(
           child: FadeInImage.assetNetwork(
             fit: BoxFit.fitWidth,
-            image: _headPortraitUrl,
+            image: _headPortraitUrl == null ? '' : _headPortraitUrl,
             placeholder: 'images/home/heaerIcon/home_header_person.png',
           ),
         ),

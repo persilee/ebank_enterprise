@@ -138,7 +138,7 @@ class BaseRequest {
       {@required this.loginName, @required this.userId, @required this.body});
 
   Map<String, dynamic> toJson() => {
-        "loginName": loginName,
+        "loginname": loginName,
         "userId": userId,
         "body": body,
       };

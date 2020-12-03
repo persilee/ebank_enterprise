@@ -2,21 +2,29 @@ import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_detail_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
+import 'package:ebank_mobile/page/dialog_demo.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
 import 'package:flutter/material.dart';
-import 'package:ebank_mobile/page/personalCenter/about_us.dart';
+import 'package:ebank_mobile/page/mine/about_us_page.dart';
+import 'package:ebank_mobile/page/mine/feedback_page.dart';
+import 'package:ebank_mobile/page/mine/hsg_mine_page.dart';
+
 
 var pageHome = '/';
 var pageLogin = pageHome;
 // var pageCardList = pageHome;
 var pageCardList = '/card_list';
+var pageDialogDemo = '/dialog_demo';
 var pageCardDetail = '/card_detail';
 var pageCardLimit = '/card_limit_manager';
-var aboutUs = '/about_us';
+var minePage = '/hsg_mine_page';
+var aboutUs = '/about_us_page';
+var feedback = '/feedback_page';
 var pageAccountOverview = '/account_overview';
+var hsgMinePage ='hsg_mine_page';
 var pageDetailInfo = '/detail_info_page';
 var pageDetailList = '/detail_list_page';
 var pageIndex = new MaterialPageRoute(builder: (context) => new IndexPage());
@@ -24,9 +32,12 @@ var pageIndex = new MaterialPageRoute(builder: (context) => new IndexPage());
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
   pageCardList: (context) => CardListPage(),
+  pageDialogDemo: (context) => DialogDemoPage(),
   // pageCardDetail: (context) => CardDetailPage(),
   pageCardLimit: (context) => CardLimitManagerPage(),
-  aboutUs: (context) => FirstScreen(),
+  aboutUs: (context) => AboutUsPage(),
+  feedback: (context) => FeedbackPage(),
+  minePage: (context) => MinePage(),
   pageAccountOverview: (context) => AccountOverviewPage(),
   pageDetailList: (context) => DetailListPage(),
   pageDetailInfo: (context) => DetailInfoPage(),

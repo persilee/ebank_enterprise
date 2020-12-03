@@ -31,6 +31,9 @@
 .pub/
 /build/
 
+# 添加使用json_serializable工具生成的代码
+lib/data/source/model/*.g.dart
+
 # Web related
 lib/generated_plugin_registrant.dart
 
@@ -39,3 +42,5 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
+debug
+lib/node_modules

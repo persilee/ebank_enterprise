@@ -51,6 +51,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
               textTheme: TextTheme(
             headline6: TextStyle(fontStyle: FontStyle.normal, fontSize: 18),
           )),
+          splashColor: HsgColors.itemClickColor,
           primaryColor: HsgColors.primary,
           primaryColorDark: HsgColors.primaryDark,
           backgroundColor: HsgColors.commonBackground,

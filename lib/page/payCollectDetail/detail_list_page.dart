@@ -2,6 +2,8 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../page_route.dart';
+
 class DetailListPage extends StatefulWidget {
   @override
   _DetailListPageState createState() => _DetailListPageState();
@@ -21,7 +23,7 @@ class _DetailListPageState extends State<DetailListPage> {
         child: Column(
           children: [
             Container(
-              height: 40,
+              height: 50,
               color: HsgColors.backgroundColor,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
@@ -29,67 +31,762 @@ class _DetailListPageState extends State<DetailListPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     DropdownButton(
-                        hint: Text('2020年3月'), items: null, onChanged: null),
+                        hint: Text('2020年12月'), items: null, onChanged: null),
                     DropdownButton(
                         hint: Text('全部账户'), items: null, onChanged: null),
                   ],
                 ),
               ),
             ),
-            ListView(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                Container(
-                    height: 192,
+            Expanded(
+              child: ListView(
+                shrinkWrap: true,
+                // physics: NeverScrollableScrollPhysics(),
+                children: [
+                  Container(
                     color: Colors.white,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(19, 23, 16, 22),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                child: ClipOval(
-                                  child: Image.asset(
-                                    'images/aboutus/aboutUs-bg.png',
-                                    height: 42,
-                                    width: 42,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                    margin: EdgeInsets.only(bottom: 10),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 18, top: 12),
+                              child: Text(
+                                '12月15日',
+                                style: TextStyle(
+                                    fontSize: 14, color: Color(0xFF222121)),
                               ),
-                              Column(
-                                // crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Container(
-                                    color: Colors.red,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('财付通-微信零钱充值账户'),
-                                        Text('-￥1000.00'),
-                                      ],
+                            )
+                          ],
+                        ),
+                        Container(
+                          child: RaisedButton(
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
+                            color: Colors.white,
+                            elevation: 0,
+                            onPressed: () {
+                              Navigator.pushNamed(context, pageDetailInfo);
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: 13),
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      'images/aboutus/aboutUs-bg.png',
+                                      height: 38,
+                                      width: 38,
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                                  Row(
+                                ),
+                                Expanded(
+                                  child: Column(
                                     children: [
-                                      Text('转账给自己 储蓄卡9348 18..'),
-                                      Text('余额 ￥10.00'),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '财付通-马化腾给我的微信零钱账户充值了一百万',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xFF222121)),
+                                            ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
                                     ],
                                   ),
-                                ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 80),
+                          child: Divider(
+                              height: 0, color: HsgColors.textHintColor),
+                        ),
+                        Container(
+                          child: RaisedButton(
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
+                            color: Colors.white,
+                            elevation: 0,
+                            onPressed: () {
+                              Navigator.pushNamed(context, pageDetailInfo);
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: 13),
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      'images/aboutus/aboutUs-bg.png',
+                                      height: 38,
+                                      width: 38,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xFF222121)),
+                                            ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 80),
+                          child: Divider(
+                              height: 0, color: HsgColors.textHintColor),
+                        ),
+                        Container(
+                          child: RaisedButton(
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
+                            color: Colors.white,
+                            elevation: 0,
+                            onPressed: () {
+                              Navigator.pushNamed(context, pageDetailInfo);
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: 13),
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      'images/aboutus/aboutUs-bg.png',
+                                      height: 38,
+                                      width: 38,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xFF222121)),
+                                            ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 80),
+                          child: Divider(
+                              height: 0, color: HsgColors.textHintColor),
+                        ),
+                        Container(
+                          child: RaisedButton(
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
+                            color: Colors.white,
+                            elevation: 0,
+                            onPressed: () {
+                              Navigator.pushNamed(context, pageDetailInfo);
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: 13),
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      'images/aboutus/aboutUs-bg.png',
+                                      height: 38,
+                                      width: 38,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xFF222121)),
+                                            ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 80),
+                          child: Divider(
+                              height: 0, color: HsgColors.textHintColor),
+                        ),
+                        Container(
+                          child: RaisedButton(
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
+                            color: Colors.white,
+                            elevation: 0,
+                            onPressed: () {
+                              Navigator.pushNamed(context, pageDetailInfo);
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: 13),
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      'images/aboutus/aboutUs-bg.png',
+                                      height: 38,
+                                      width: 38,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xFF222121)),
+                                            ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 80),
+                          child: Divider(
+                              height: 0, color: HsgColors.textHintColor),
+                        ),
+                        Container(
+                          child: RaisedButton(
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
+                            color: Colors.white,
+                            elevation: 0,
+                            onPressed: () {
+                              Navigator.pushNamed(context, pageDetailInfo);
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: 13),
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      'images/aboutus/aboutUs-bg.png',
+                                      height: 38,
+                                      width: 38,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xFF222121)),
+                                            ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    color: Colors.white,
+                    margin: EdgeInsets.only(bottom: 10),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 18, top: 12),
+                              child: Text(
+                                '12月14日',
+                                style: TextStyle(
+                                    fontSize: 14, color: Color(0xFF222121)),
                               ),
-                            ],
-                          )
-                        ],
-                      ),
-                    )),
-              ],
-            ),
+                            )
+                          ],
+                        ),
+                        Container(
+                          child: RaisedButton(
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
+                            color: Colors.white,
+                            elevation: 0,
+                            onPressed: () {
+                              Navigator.pushNamed(context, pageDetailInfo);
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: 13),
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      'images/aboutus/aboutUs-bg.png',
+                                      height: 38,
+                                      width: 38,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xFF222121)),
+                                            ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 80),
+                          child: Divider(
+                              height: 0, color: HsgColors.textHintColor),
+                        ),
+                        Container(
+                          child: RaisedButton(
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
+                            color: Colors.white,
+                            elevation: 0,
+                            onPressed: () {
+                              Navigator.pushNamed(context, pageDetailInfo);
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: 13),
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      'images/aboutus/aboutUs-bg.png',
+                                      height: 38,
+                                      width: 38,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xFF222121)),
+                                            ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 80),
+                          child: Divider(
+                              height: 0, color: HsgColors.textHintColor),
+                        ),
+                        Container(
+                          child: RaisedButton(
+                            padding: EdgeInsets.fromLTRB(18, 25, 15, 20),
+                            color: Colors.white,
+                            elevation: 0,
+                            onPressed: () {
+                              Navigator.pushNamed(context, pageDetailInfo);
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: 13),
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      'images/aboutus/aboutUs-bg.png',
+                                      height: 38,
+                                      width: 38,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '财付通-微信零钱充值账户',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xFF222121)),
+                                            ),
+                                          ),
+                                          Text(
+                                            '-￥1000.00',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Color(0xFF222121)),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(bottom: 5)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '转账给自己 储蓄卡9338 18..',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                          Text(
+                                            '余额 ￥10.00',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFFACACAC)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),

@@ -173,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
 
     String password = EncryptUtil.aesEncode(_password);
     UserDataRepository()
-        .login(LoginReq(userAccount: _account, password: password), 'login')
+        .login(LoginReq(username: _account, password: password), 'login')
         .then((value) {
       HSProgressHUD.showSuccess(status: S.of(context).operation_successful);
       _saveUserConfig(context, value);
@@ -202,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
     HsgHttp().clearUserCache();
 
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(ConfigKey.USER_ACCOUNT, resp.userPhone);
+    prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
 
     _showMainPage(context);

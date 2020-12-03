@@ -7,7 +7,7 @@ class LoginReq {
   String password; //OkDOYrdBTBcq36OKApyAlA== //Qwe123456~
   String signType; // 密码P 验证码C 账号A
   String userPhone; //'18033410021'; //Smile04 //手机号 ,
-  String userAccount; //用户账号 ,
+  String username; //用户账号 ,
   String platType; //用户类型 1：手机 2：网银 ,
   String userType; //用户类型 1：个人用户 2：企业用户
 
@@ -15,7 +15,7 @@ class LoginReq {
     this.password,
     this.signType = 'A',
     this.userPhone,
-    this.userAccount,
+    this.username,
     this.platType = '1',
     this.userType = '2',
   });
