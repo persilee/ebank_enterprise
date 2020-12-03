@@ -4,18 +4,20 @@ part 'login.g.dart';
 
 @JsonSerializable()
 class LoginReq {
-  String password = 'OkDOYrdBTBcq36OKApyAlA==';
-  String signType = 'P';
-  String userPhone = '18033410021';
-  String userType = '1';
-  String captcha = '123456';
+  String password; //OkDOYrdBTBcq36OKApyAlA== //Qwe123456~
+  String signType; // 密码P 验证码C 账号A
+  String userPhone; //'18033410021'; //Smile04 //手机号 ,
+  String username; //用户账号 ,
+  String platType; //用户类型 1：手机 2：网银 ,
+  String userType; //用户类型 1：个人用户 2：企业用户
 
   LoginReq({
-    this.password = 'OkDOYrdBTBcq36OKApyAlA==',
-    this.signType = 'P',
-    this.userPhone = '18033410021',
-    this.userType = '1',
-    this.captcha = '123456',
+    this.password,
+    this.signType = 'A',
+    this.userPhone,
+    this.username,
+    this.platType = '1',
+    this.userType = '2',
   });
 
   factory LoginReq.fromJson(Map<String, dynamic> srcJson) =>

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
@@ -14,7 +15,6 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../config/global_config.dart';
 import '../../widget/progressHUD.dart';
 import '../../util/encrypt_util.dart';
 
@@ -29,12 +29,12 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
   final TextEditingController _accountTC =
-      TextEditingController(text: '18033412021');
+      TextEditingController(text: 'Smile04');
   final TextEditingController _passwordTC =
-      TextEditingController(text: '123456');
+      TextEditingController(text: 'Qwe123456~');
 
-  var _account = '18033412021';
-  var _password = '123456';
+  var _account = 'Smile04'; //'18033412021';
+  var _password = 'Qwe123456~'; //'123456';
 
   @override
   void initState() {
@@ -173,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
 
     String password = EncryptUtil.aesEncode(_password);
     UserDataRepository()
-        .login(LoginReq(userPhone: _account, password: password), 'login')
+        .login(LoginReq(username: _account, password: password), 'login')
         .then((value) {
       HSProgressHUD.showSuccess(status: S.of(context).operation_successful);
       _saveUserConfig(context, value);
@@ -202,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
     HsgHttp().clearUserCache();
 
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(ConfigKey.USER_ACCOUNT, resp.userPhone);
+    prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
 
     _showMainPage(context);
@@ -350,19 +350,22 @@ class InputView extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.only(left: 10),
                 child: TextField(
+                  //是否自动更正
+                  autocorrect: false,
+                  //是否自动获得焦点
+                  autofocus: false,
                   controller: textEC,
-                  autofocus: true,
                   obscureText: this.isCiphertext,
                   style: TextStyle(
                     fontSize: 15,
-                    color: kColor38,
+                    color: HsgColors.firstDegreeText,
                   ),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: this.textFieldPlaceholder,
                     hintStyle: TextStyle(
                       fontSize: 15,
-                      color: kColorPlaceholder,
+                      color: HsgColors.textHintColor,
                     ),
                   ),
                 ),
@@ -428,8 +431,8 @@ class _UnderButtonViewState extends State<UnderButtonView> {
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width - 30.0,
         height: 44.0,
-        color: kColorTheme,
-        disabledColor: kColor204,
+        color: HsgColors.accent,
+        disabledColor: HsgColors.hintText,
         textColor: Colors.white,
         disabledTextColor: Colors.white,
         shape: RoundedRectangleBorder(
