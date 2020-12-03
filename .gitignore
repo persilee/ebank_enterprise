@@ -31,7 +31,7 @@
 .pub/
 /build/
 
-# 添加使用json_serializable工具生成的代码
+# 忽略使用json_serializable工具生成的代码
 *.g.dart
 
 # Web related

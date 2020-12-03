@@ -17,10 +17,9 @@ class _DialogDemoPageState extends State<DialogDemoPage> {
       appBar: AppBar(
         title: Text('Dialog Demo'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+      body: ListView(
         children: [
-          FlatButton(
+          RaisedButton(
               onPressed: () async {
                 final result = await showDialog(
                     context: context,
@@ -45,8 +44,8 @@ class _DialogDemoPageState extends State<DialogDemoPage> {
                     });
                 print('dialog result:$result');
               },
-              child: Text('Normal')),
-          FlatButton(
+              child: Text('系统提示框')),
+          RaisedButton(
               onPressed: () async {
                 final result = await showDialog(
                     context: context,
@@ -74,7 +73,7 @@ class _DialogDemoPageState extends State<DialogDemoPage> {
                     });
                 print('dialog result:$result');
               },
-              child: Text('List')),
+              child: Text('系统列表')),
           RaisedButton(
               onPressed: () async {
                 final result = await showDialog(
@@ -109,6 +108,23 @@ class _DialogDemoPageState extends State<DialogDemoPage> {
                 }
               },
               child: Text('Single Choice Dialog')),
+          RaisedButton(
+              onPressed: () async {
+                final result = await showHsgBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return BottomMenu(
+                      title: '底部弹窗',
+                      items: _longItems,
+                    );
+                  },
+                );
+                print('dialog result:$result');
+                if (result != null && result != false) {
+                  _lastSelectedPosition = result;
+                }
+              },
+              child: Text('Bottom sheet list')),
         ],
       ),
     );
@@ -127,7 +143,7 @@ var _shortItems = [
 ];
 
 var _longItems = [
-  '123456789876543212345678987654321',
+  '123456789876543212345678987654321123456789876543212345678987654321',
   '2',
   '3',
   '4',
