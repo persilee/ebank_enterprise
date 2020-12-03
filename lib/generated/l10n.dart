@@ -334,6 +334,76 @@ class S {
       args: [],
     );
   }
+
+  /// `All Functions`
+  String get all_features {
+    return Intl.message(
+      'All Functions',
+      name: 'all_features',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Account`
+  String get my_account {
+    return Intl.message(
+      'My Account',
+      name: 'my_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pre-arranged Transfer`
+  String get transfer_appointment {
+    return Intl.message(
+      'Pre-arranged Transfer',
+      name: 'transfer_appointment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transfer Plan`
+  String get transfer_plan {
+    return Intl.message(
+      'Transfer Plan',
+      name: 'transfer_plan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Time Deposit`
+  String get time_deposit {
+    return Intl.message(
+      'Time Deposit',
+      name: 'time_deposit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loan`
+  String get loan {
+    return Intl.message(
+      'Loan',
+      name: 'loan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Other`
+  String get other {
+    return Intl.message(
+      'Other',
+      name: 'other',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

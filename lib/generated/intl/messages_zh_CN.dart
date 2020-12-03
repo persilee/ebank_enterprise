@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "account_summary" : MessageLookupByLibrary.simpleMessage("账户总览"),
+    "all_features" : MessageLookupByLibrary.simpleMessage("全部功能"),
     "approval" : MessageLookupByLibrary.simpleMessage("待办"),
     "deposit_open" : MessageLookupByLibrary.simpleMessage("定期开立"),
     "deposit_rate" : MessageLookupByLibrary.simpleMessage("利率查看"),
@@ -33,6 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "foreign_exchange" : MessageLookupByLibrary.simpleMessage("外汇买卖"),
     "fotget_password_q" : MessageLookupByLibrary.simpleMessage("忘记密码？"),
     "home" : MessageLookupByLibrary.simpleMessage("首页"),
+    "loan" : MessageLookupByLibrary.simpleMessage("贷款"),
     "loan_apply" : MessageLookupByLibrary.simpleMessage("贷款申请"),
     "loan_rate" : MessageLookupByLibrary.simpleMessage("贷款利率"),
     "loan_record" : MessageLookupByLibrary.simpleMessage("贷款记录"),
@@ -41,15 +43,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_account_placeholder" : MessageLookupByLibrary.simpleMessage("邮箱/手机号/用户ID"),
     "mine" : MessageLookupByLibrary.simpleMessage("我的"),
     "more" : MessageLookupByLibrary.simpleMessage("更多"),
+    "my_account" : MessageLookupByLibrary.simpleMessage("我的账户"),
     "operation_successful" : MessageLookupByLibrary.simpleMessage("操作成功"),
+    "other" : MessageLookupByLibrary.simpleMessage("其他"),
     "other_service" : MessageLookupByLibrary.simpleMessage("其他服务"),
     "please_input_account" : MessageLookupByLibrary.simpleMessage("请输入账号"),
     "please_input_password" : MessageLookupByLibrary.simpleMessage("请输入密码"),
     "simplifiedChinese" : MessageLookupByLibrary.simpleMessage("中文"),
+    "time_deposit" : MessageLookupByLibrary.simpleMessage("定期存款"),
     "transaction_details" : MessageLookupByLibrary.simpleMessage("收支明细"),
     "transfer" : MessageLookupByLibrary.simpleMessage("转账"),
+    "transfer_appointment" : MessageLookupByLibrary.simpleMessage("预约转账"),
     "transfer_collection" : MessageLookupByLibrary.simpleMessage("转账收款"),
     "transfer_model" : MessageLookupByLibrary.simpleMessage("收款范本"),
+    "transfer_plan" : MessageLookupByLibrary.simpleMessage("转账计划"),
     "transfer_record" : MessageLookupByLibrary.simpleMessage("转账记录")
   };
 }
