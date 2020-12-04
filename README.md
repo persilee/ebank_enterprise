@@ -70,9 +70,12 @@ Future<LoginResp> login(LoginReq loginReq, String tag) {
 
 ```
 
+3.另外，为了方便将json数据转换成实体类型，可以使用转换工具，比如：[点击这里](https://caijinglong.github.io/json2dart/index_ch.html)。
+
 ### 插件
 
 - Flutter Intl：用于国际化开发，在lib/l10n目录下存放(编辑)语言文件
+
 
 ### 资源文件
 
