@@ -1,4 +1,4 @@
-import 'dart:html';
+//import 'dart:html';
 
 import 'package:flutter/material.dart';
 
@@ -179,19 +179,21 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         ],
       ),
     );
-    body:
-    new ListView(
-      children: [
-        new Image.asset(
-          'images/time_depost/time_depost_product.png',
-          width: 600.0,
-          height: 240.0,
-          fit: BoxFit.cover,
-        ),
-        titleSectionOne,
-        titleSectionTwo,
-        titleSectionThree,
-      ],
+
+    return MaterialApp(
+      home: ListView(
+        children: [
+          new Image.asset(
+            'images/time_depost/time_depost_product.png',
+            width: 600.0,
+            height: 240.0,
+            fit: BoxFit.cover,
+          ),
+          titleSectionOne,
+          titleSectionTwo,
+          titleSectionThree,
+        ],
+      ),
     );
   }
 }
