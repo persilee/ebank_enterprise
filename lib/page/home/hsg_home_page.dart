@@ -486,6 +486,7 @@ class _HomePageState extends State<HomePage> {
                   String title = btnData['btnTitle'];
                   if (S.current.transfer == title) {
                     //转账
+                    Navigator.pushNamed(context, pageTransfer);
                   } else if (S.current.transfer_record == title) {
                     //转账记录
                   } else if (S.current.transfer_model == title) {

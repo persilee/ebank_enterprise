@@ -72,7 +72,7 @@ flutter:
     - images/tabbar/tabbar_approval_select.png
     - images/tabbar/tabbar_mine_normal.png
     - images/tabbar/tabbar_mine_select.png
-    
+
     #home
     #home_nav
     - images/home/navIcon/home_nav_message_has.png
@@ -111,6 +111,8 @@ flutter:
     - images/mine/aboutUs-icon3.png
     - images/mine/aboutUs-icon4.png
 
+    #time-depost
+    - images/time_depost/time_depost_product.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

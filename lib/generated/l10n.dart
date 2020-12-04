@@ -145,6 +145,26 @@ class S {
     );
   }
 
+  /// `Chang Login Password`
+  String get setChangLoginPasd {
+    return Intl.message(
+      'Chang Login Password',
+      name: 'setChangLoginPasd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please Set the Login Password`
+  String get plaseSetPsd {
+    return Intl.message(
+      'Please Set the Login Password',
+      name: 'plaseSetPsd',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Transfer`
   String get transfer {
     return Intl.message(
@@ -400,6 +420,118 @@ class S {
     return Intl.message(
       'Other',
       name: 'other',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account Overview`
+  String get account_overview {
+    return Intl.message(
+      'Account Overview',
+      name: 'account_overview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Assets`
+  String get total_assets {
+    return Intl.message(
+      'Total Assets',
+      name: 'total_assets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Net Assets`
+  String get net_assets {
+    return Intl.message(
+      'Net Assets',
+      name: 'net_assets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Liabilities`
+  String get total_liabilities {
+    return Intl.message(
+      'Total Liabilities',
+      name: 'total_liabilities',
+      desc: '',
+      args: [],
+    );
+  }
+
+  // skipped getter for the 'current' key
+
+  /// `Total`
+  String get total {
+    return Intl.message(
+      'Total',
+      name: 'total',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Card Number`
+  String get card_number {
+    return Intl.message(
+      'Card Number',
+      name: 'card_number',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tail Number`
+  String get tail_number {
+    return Intl.message(
+      'Tail Number',
+      name: 'tail_number',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Time Deposits`
+  String get time_deposits {
+    return Intl.message(
+      'Time Deposits',
+      name: 'time_deposits',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Credit Card`
+  String get credit_card {
+    return Intl.message(
+      'Credit Card',
+      name: 'credit_card',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rest Should Also`
+  String get rest_should_also {
+    return Intl.message(
+      'Rest Should Also',
+      name: 'rest_should_also',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remaining Available Amount`
+  String get remaining_available_amount {
+    return Intl.message(
+      'Remaining Available Amount',
+      name: 'remaining_available_amount',
       desc: '',
       args: [],
     );
