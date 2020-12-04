@@ -10,6 +10,8 @@
   "home": "Home",
   "mine": "Mine",
   "approval": "Approval",
+  "setChangLoginPasd": "Chang Login Password",
+  "plaseSetPsd": "Please Set the Login Password",
   "transfer": "Transfer",
   "transfer_record": "Transfer Record",
   "transfer_model": "Transfer Template",
