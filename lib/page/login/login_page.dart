@@ -205,6 +205,11 @@ class _LoginPageState extends State<LoginPage> {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
+    if (resp.custId == null || resp.custId == '') {
+      prefs.setString(ConfigKey.CUST_ID, '');
+    } else {
+      prefs.setString(ConfigKey.CUST_ID, resp.custId);
+    }
 
     _showMainPage(context);
   }

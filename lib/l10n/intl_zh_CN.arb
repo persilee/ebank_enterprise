@@ -37,5 +37,17 @@
   "transfer_plan": "转账计划",
   "time_deposit": "定期存款",
   "loan": "贷款",
-  "other": "其他"
+  "other": "其他",
+  "account_overview": "账户总览",
+  "total_assets": "总资产",
+  "net_assets": "净资产",
+  "total_liabilities": "总负债",
+  "current": "活期",
+  "total": "合计",
+  "card_number": "卡号",
+  "tail_number": "尾号",
+  "time_deposits": "定期",
+  "credit_card": "信用卡",
+  "rest_should_also": "剩余应还",
+  "remaining_available_amount": "剩余可用额度"
 }
