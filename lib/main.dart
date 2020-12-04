@@ -1,13 +1,23 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'widget/progressHUD.dart';
 
-void main() => runApp(
-      HSGBankApp(),
-    );
+// void main() => runApp(
+//       HSGBankApp(),
+//     );
+void main(List<String> args) {
+  runApp(
+    HSGBankApp(),
+  );
+  //白色
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+}
 
 class HSGBankApp extends StatefulWidget {
   
@@ -25,20 +35,18 @@ class HSGBankApp extends StatefulWidget {
 }
 
 class _HSGBankAppState extends State<HSGBankApp> {
-  Locale _locale;
-
   changeLanguage(Locale locale) {
     setState(() {
-      _locale = locale;
+      S.load(locale);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    changeLanguage(Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN'));
+    _initLanguage();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     ///初始化progressHUD配置
@@ -67,8 +75,18 @@ class _HSGBankAppState extends State<HSGBankApp> {
         GlobalCupertinoLocalizations.delegate
       ],
       supportedLocales: S.delegate.supportedLocales,
-      locale: _locale,
     );
+  }
+
+  _initLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final languageCode = prefs.getString(ConfigKey.LANGUAGE) ?? 'en';
+    if (languageCode != 'en') {
+      changeLanguage(Locale.fromSubtags(
+        languageCode: languageCode,
+        countryCode: 'CN',
+      ));
+    }
   }
 }
 

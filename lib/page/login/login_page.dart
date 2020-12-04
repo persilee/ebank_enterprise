@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,6 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../config/global_config.dart';
 import '../../widget/progressHUD.dart';
 import '../../util/encrypt_util.dart';
 
@@ -29,12 +30,12 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
   final TextEditingController _accountTC =
-      TextEditingController(text: '18033412021');
+      TextEditingController(text: 'Smile04');
   final TextEditingController _passwordTC =
-      TextEditingController(text: '123456');
+      TextEditingController(text: 'Qwe123456~');
 
-  var _account = '18033412021';
-  var _password = '123456';
+  var _account = 'Smile04'; //'18033412021';
+  var _password = 'Qwe123456~'; //'123456';
 
   @override
   void initState() {
@@ -173,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
 
     String password = EncryptUtil.aesEncode(_password);
     UserDataRepository()
-        .login(LoginReq(userPhone: _account, password: password), 'login')
+        .login(LoginReq(username: _account, password: password), 'login')
         .then((value) {
       HSProgressHUD.showSuccess(status: S.of(context).operation_successful);
       _saveUserConfig(context, value);
@@ -202,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
     HsgHttp().clearUserCache();
 
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(ConfigKey.USER_ACCOUNT, resp.userPhone);
+    prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
 
     _showMainPage(context);
@@ -246,8 +247,7 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
       // margin: EdgeInsets.only(right: 15),
       child: FlatButton(
         onPressed: () {
-          print('LanguageChangeBtn.title == ${widget.title}');
-          _selectLanguage();
+          _selectLanguage(context);
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -273,36 +273,39 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
     );
   }
 
-  _selectLanguage() async {
-    final prefs = await SharedPreferences.getInstance();
-    final oldLang = prefs.getString(ConfigKey.LANGUAGE) ?? '';
-    print('0_______________------------- $oldLang');
-    if (oldLang.isEmpty) {
-      prefs.setString(ConfigKey.LANGUAGE, 'en');
+  _selectLanguage(BuildContext context) async {
+    List<String> languages = [
+      'English',
+      '中文',
+    ];
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) => BottomMenu(
+              title: '选择语言',
+              items: languages,
+            ));
+    print('dialog result:$result');
+    Locale locale;
+    if (result != null && result != false) {
+      switch (result) {
+        case 0:
+          locale = Locale.fromSubtags(languageCode: 'en');
+          break;
+        case 1:
+          locale = Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN');
+          break;
+      }
+    } else {
       return;
     }
 
-    Locale locale;
-    print('1_______________------------- $oldLang');
-    if (oldLang == 'en') {
-      locale = Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN');
-    } else {
-      locale = Locale.fromSubtags(languageCode: 'en');
-    }
-    print('2_______________------------- $locale');
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(ConfigKey.LANGUAGE, locale.languageCode);
+    print('change language, code:${locale.languageCode}');
     setState(() {
-      print('3_______________------------- ${locale.languageCode}');
-      // HSGBankApp.setLocale(context, locale);
-      if (locale.languageCode == 'en') {
-        title = 'English'; //S.current.english;
-      } else {
-        title = '中文'; //S.current.simplifiedChinese;
-      }
+      title = languages[result];
       HSGBankApp.setLocale(context, locale);
     });
-    print('4_______________------------- ${locale.languageCode}');
-    prefs.setString(ConfigKey.LANGUAGE, locale.languageCode);
-    print('5_______________------------- $locale');
   }
 }
 
@@ -350,19 +353,22 @@ class InputView extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.only(left: 10),
                 child: TextField(
+                  //是否自动更正
+                  autocorrect: false,
+                  //是否自动获得焦点
+                  autofocus: false,
                   controller: textEC,
-                  autofocus: true,
                   obscureText: this.isCiphertext,
                   style: TextStyle(
                     fontSize: 15,
-                    color: kColor38,
+                    color: HsgColors.firstDegreeText,
                   ),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: this.textFieldPlaceholder,
                     hintStyle: TextStyle(
                       fontSize: 15,
-                      color: kColorPlaceholder,
+                      color: HsgColors.textHintColor,
                     ),
                   ),
                 ),
@@ -428,8 +434,8 @@ class _UnderButtonViewState extends State<UnderButtonView> {
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width - 30.0,
         height: 44.0,
-        color: kColorTheme,
-        disabledColor: kColor204,
+        color: HsgColors.accent,
+        disabledColor: HsgColors.hintText,
         textColor: Colors.white,
         disabledTextColor: Colors.white,
         shape: RoundedRectangleBorder(

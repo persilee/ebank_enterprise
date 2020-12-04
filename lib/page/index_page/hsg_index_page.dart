@@ -1,7 +1,7 @@
+import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-import 'package:ebank_mobile/config/global_config.dart';
 import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_home_page.dart';
 import 'package:ebank_mobile/page/mine/hsg_mine_page.dart';
@@ -72,7 +72,7 @@ class _IndexPageState extends State<IndexPage> {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         //iconSize: 24,//使用自定义图片无效，请在图片中设置宽高属性
-        fixedColor: kColorTheme,
+        fixedColor: HsgColors.accent,
         items: bottomNavItems,
         currentIndex: currentIndex,
         type: BottomNavigationBarType.fixed,

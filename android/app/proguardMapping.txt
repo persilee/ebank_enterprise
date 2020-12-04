@@ -1,7 +1,7 @@
 # compiler: R8
 # compiler_version: 1.5.64
 # min_api: 16
-# pg_map_id: f711e25
+# pg_map_id: f0896a5
 android.support.v4.app.INotificationSideChannel$Stub -> android.support.v4.app.INotificationSideChannel$Stub:
     1:2:void <init>():20:21 -> <init>
     1:3:android.support.v4.app.INotificationSideChannel asInterface(android.os.IBinder):32:34 -> asInterface
@@ -9456,42 +9456,43 @@ io.flutter.plugins.connectivity.Connectivity -> b.a.f.a.a:
     7:7:java.lang.String getNetworkType():36:36 -> b
     1:2:java.lang.String getNetworkTypeLegacy():42:43 -> c
     3:3:java.lang.String getNetworkTypeLegacy():46:46 -> c
-io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver -> b.a.f.a.b:
+io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver -> io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver:
     android.content.Context context -> a
     android.os.Handler mainHandler -> d
+    android.net.ConnectivityManager$NetworkCallback networkCallback -> e
     io.flutter.plugin.common.EventChannel$EventSink events -> c
     io.flutter.plugins.connectivity.Connectivity connectivity -> b
     1:1:void <init>(android.content.Context,io.flutter.plugins.connectivity.Connectivity):35:35 -> <init>
-    2:2:void <init>(android.content.Context,io.flutter.plugins.connectivity.Connectivity):32:32 -> <init>
+    2:2:void <init>(android.content.Context,io.flutter.plugins.connectivity.Connectivity):31:31 -> <init>
     3:4:void <init>(android.content.Context,io.flutter.plugins.connectivity.Connectivity):36:37 -> <init>
-    1:1:void access$000(io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver):27:27 -> a
+    1:1:void access$000(io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver):26:26 -> a
     2:4:void onListen(java.lang.Object,io.flutter.plugin.common.EventChannel$EventSink):42:44 -> a
-    5:5:void onListen(java.lang.Object,io.flutter.plugin.common.EventChannel$EventSink):46:46 -> a
-    6:7:void onCancel(java.lang.Object):52:53 -> a
-    8:8:void onCancel(java.lang.Object):55:55 -> a
-    9:9:android.net.ConnectivityManager$NetworkCallback getNetworkCallback():68:68 -> a
-    1:1:io.flutter.plugins.connectivity.Connectivity access$100(io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver):27:27 -> b
-    2:2:void sendEvent():82:82 -> b
-    3:3:void sendEvent():89:89 -> b
-    1:1:io.flutter.plugin.common.EventChannel$EventSink access$200(io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver):27:27 -> c
-    1:2:void onReceive(android.content.Context,android.content.Intent):61:62 -> onReceive
-io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver$1 -> b.a.f.a.b$a:
+    5:5:void onListen(java.lang.Object,io.flutter.plugin.common.EventChannel$EventSink):56:56 -> a
+    6:6:void onListen(java.lang.Object,io.flutter.plugin.common.EventChannel$EventSink):58:58 -> a
+    7:9:void onCancel(java.lang.Object):64:66 -> a
+    10:10:void onCancel(java.lang.Object):69:69 -> a
+    11:11:void sendEvent():85:85 -> a
+    12:12:void sendEvent():92:92 -> a
+    1:1:io.flutter.plugins.connectivity.Connectivity access$100(io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver):26:26 -> b
+    1:1:io.flutter.plugin.common.EventChannel$EventSink access$200(io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver):26:26 -> c
+    1:2:void onReceive(android.content.Context,android.content.Intent):75:76 -> onReceive
+io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver$1 -> io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver$a:
     io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver this$0 -> a
-    1:1:void <init>(io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver):68:68 -> <init>
-    1:1:void onAvailable(android.net.Network):71:71 -> onAvailable
-    1:1:void onLost(android.net.Network):76:76 -> onLost
-io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver$2 -> b.a.f.a.b$b:
+    1:1:void <init>(io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver):45:45 -> <init>
+    1:1:void onAvailable(android.net.Network):48:48 -> onAvailable
+    1:1:void onLost(android.net.Network):53:53 -> onLost
+io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver$2 -> io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver$b:
     io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver this$0 -> a
-    1:1:void <init>(io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver):83:83 -> <init>
-    1:1:void run():86:86 -> run
-io.flutter.plugins.connectivity.ConnectivityMethodChannelHandler -> b.a.f.a.c:
+    1:1:void <init>(io.flutter.plugins.connectivity.ConnectivityBroadcastReceiver):86:86 -> <init>
+    1:1:void run():89:89 -> run
+io.flutter.plugins.connectivity.ConnectivityMethodChannelHandler -> b.a.f.a.b:
     io.flutter.plugins.connectivity.Connectivity connectivity -> a
     1:1:void <init>(io.flutter.plugins.connectivity.Connectivity):23:23 -> <init>
     2:2:void <init>(io.flutter.plugins.connectivity.Connectivity):25:25 -> <init>
     1:1:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):30:30 -> a
     2:2:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):35:35 -> a
     3:3:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):32:32 -> a
-io.flutter.plugins.connectivity.ConnectivityPlugin -> b.a.f.a.d:
+io.flutter.plugins.connectivity.ConnectivityPlugin -> b.a.f.a.c:
     io.flutter.plugin.common.EventChannel eventChannel -> b
     io.flutter.plugin.common.MethodChannel methodChannel -> a
     1:1:void <init>():15:15 -> <init>
@@ -9560,15 +9561,17 @@ io.flutter.plugins.sharedpreferences.MethodCallHandlerImpl -> b.a.f.b.a:
     38:38:java.util.List decodeList(java.lang.String):143:143 -> a
     39:39:java.util.List decodeList(java.lang.String):140:140 -> a
     40:40:java.util.List decodeList(java.lang.String):143:143 -> a
-    41:45:java.lang.String encodeList(java.util.List):151:155 -> a
-    46:46:java.lang.String encodeList(java.util.List):158:158 -> a
-    47:61:java.util.Map getAllPrefs():165:179 -> a
-    62:62:java.util.Map getAllPrefs():181:181 -> a
-    63:63:java.util.Map getAllPrefs():183:183 -> a
-    64:64:java.util.Map getAllPrefs():185:185 -> a
-    65:68:java.util.Map getAllPrefs():187:190 -> a
-    69:69:java.util.Map getAllPrefs():194:194 -> a
-    70:70:java.util.Map getAllPrefs():198:198 -> a
+    41:41:java.util.List decodeList(java.lang.String):145:145 -> a
+    42:46:java.lang.String encodeList(java.util.List):151:155 -> a
+    47:47:java.lang.String encodeList(java.util.List):158:158 -> a
+    48:48:java.lang.String encodeList(java.util.List):160:160 -> a
+    49:63:java.util.Map getAllPrefs():165:179 -> a
+    64:64:java.util.Map getAllPrefs():181:181 -> a
+    65:65:java.util.Map getAllPrefs():183:183 -> a
+    66:66:java.util.Map getAllPrefs():185:185 -> a
+    67:70:java.util.Map getAllPrefs():187:190 -> a
+    71:71:java.util.Map getAllPrefs():194:194 -> a
+    72:72:java.util.Map getAllPrefs():198:198 -> a
 io.flutter.plugins.sharedpreferences.MethodCallHandlerImpl$1 -> b.a.f.b.a$a:
     android.content.SharedPreferences$Editor val$editor -> a
     io.flutter.plugin.common.MethodChannel$Result val$result -> b
@@ -10699,36 +10702,38 @@ io.github.ponnamkarthik.toast.fluttertoast.MethodCallHandlerImpl -> b.b.a.a.a.b:
     1:1:void <init>(android.content.Context):16:16 -> <init>
     1:1:android.widget.Toast access$getMToast$p(io.github.ponnamkarthik.toast.fluttertoast.MethodCallHandlerImpl):16:16 -> a
     2:2:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):21:21 -> a
-    3:4:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):86:87 -> a
-    5:5:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):86:86 -> a
+    3:4:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):93:94 -> a
+    5:5:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):96:96 -> a
     6:6:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):21:21 -> a
     7:12:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):23:28 -> a
     13:13:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):30:30 -> a
     14:14:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):36:36 -> a
-    15:15:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):65:65 -> a
-    16:18:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):42:44 -> a
-    19:20:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):46:47 -> a
-    21:21:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):49:49 -> a
-    22:22:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):52:52 -> a
-    23:23:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):54:54 -> a
-    24:24:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):56:56 -> a
-    25:25:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):59:59 -> a
-    26:28:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):61:63 -> a
-    29:29:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):75:75 -> a
-    30:30:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):72:72 -> a
-    31:31:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):69:69 -> a
-    32:33:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):78:79 -> a
-    34:34:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):81:81 -> a
-    35:35:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):83:83 -> a
-    36:36:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):81:81 -> a
-    37:37:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):69:69 -> a
-    38:38:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):63:63 -> a
-    39:39:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):62:62 -> a
-    40:40:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):42:42 -> a
-    41:41:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):89:89 -> a
+    15:17:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):42:44 -> a
+    18:19:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):46:47 -> a
+    20:20:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):49:49 -> a
+    21:21:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):52:52 -> a
+    22:22:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):54:54 -> a
+    23:23:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):56:56 -> a
+    24:24:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):59:59 -> a
+    25:27:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):61:63 -> a
+    28:28:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):62:62 -> a
+    29:29:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):42:42 -> a
+    30:31:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):65:66 -> a
+    32:32:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):68:68 -> a
+    33:33:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):71:71 -> a
+    34:34:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):82:82 -> a
+    35:35:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):79:79 -> a
+    36:36:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):76:76 -> a
+    37:38:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):85:86 -> a
+    39:39:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):88:88 -> a
+    40:40:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):90:90 -> a
+    41:41:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):88:88 -> a
+    42:42:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):76:76 -> a
+    43:43:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):66:66 -> a
+    44:44:void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result):98:98 -> a
 io.github.ponnamkarthik.toast.fluttertoast.MethodCallHandlerImpl$onMethodCall$1 -> b.b.a.a.a.b$a:
     io.github.ponnamkarthik.toast.fluttertoast.MethodCallHandlerImpl this$0 -> a
-    1:1:void run():79:79 -> run
+    1:1:void run():86:86 -> run
 io.github.ponnamkarthik.toast.fluttertoast.R$attr -> io.github.ponnamkarthik.toast.fluttertoast.R$attr:
     1:1:void <init>():13:13 -> <init>
 io.github.ponnamkarthik.toast.fluttertoast.R$color -> io.github.ponnamkarthik.toast.fluttertoast.R$color:
