@@ -29,8 +29,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_account_placeholder" : MessageLookupByLibrary.simpleMessage("邮箱/手机号/用户ID"),
     "mine" : MessageLookupByLibrary.simpleMessage("我的"),
     "operation_successful" : MessageLookupByLibrary.simpleMessage("操作成功"),
+    "plaseSetPsd" : MessageLookupByLibrary.simpleMessage("请设置登录密码"),
     "please_input_account" : MessageLookupByLibrary.simpleMessage("请输入账号"),
     "please_input_password" : MessageLookupByLibrary.simpleMessage("请输入密码"),
+    "setChangLoginPasd" : MessageLookupByLibrary.simpleMessage("设置登录密码"),
     "simplifiedChinese" : MessageLookupByLibrary.simpleMessage("中文")
   };
 }

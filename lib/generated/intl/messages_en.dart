@@ -29,8 +29,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_account_placeholder" : MessageLookupByLibrary.simpleMessage("Email/Mobile Phone No./User ID"),
     "mine" : MessageLookupByLibrary.simpleMessage("Mine"),
     "operation_successful" : MessageLookupByLibrary.simpleMessage("Operation Successfully"),
+    "plaseSetPsd" : MessageLookupByLibrary.simpleMessage("Please Set the Login Password"),
     "please_input_account" : MessageLookupByLibrary.simpleMessage("Please input account"),
     "please_input_password" : MessageLookupByLibrary.simpleMessage("Please input password"),
+    "setChangLoginPasd" : MessageLookupByLibrary.simpleMessage("Chang Login Password"),
     "simplifiedChinese" : MessageLookupByLibrary.simpleMessage("Chinese")
   };
 }

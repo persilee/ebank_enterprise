@@ -9,5 +9,7 @@
   "please_input_password": "请输入密码",
   "home": "首页",
   "mine": "我的",
-  "approval": "待办"
+  "approval": "待办",
+  "setChangLoginPasd": "设置登录密码",
+  "plaseSetPsd": "请设置登录密码"
 }

@@ -144,6 +144,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Chang Login Password`
+  String get setChangLoginPasd {
+    return Intl.message(
+      'Chang Login Password',
+      name: 'setChangLoginPasd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please Set the Login Password`
+  String get plaseSetPsd {
+    return Intl.message(
+      'Please Set the Login Password',
+      name: 'plaseSetPsd',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

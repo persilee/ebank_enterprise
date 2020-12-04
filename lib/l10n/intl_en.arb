@@ -9,5 +9,7 @@
   "please_input_password": "Please input password",
   "home": "Home",
   "mine": "Mine",
-  "approval": "Approval"
+  "approval": "Approval",
+  "setChangLoginPasd": "Chang Login Password",
+  "plaseSetPsd": "Please Set the Login Password"
 }
