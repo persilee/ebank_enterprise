@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
 import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_detail_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
@@ -25,9 +26,10 @@ var aboutUs = '/about_us_page';
 var feedback = '/feedback_page';
 var changeLgPs = '/change_loginpassword_page';
 var pageAccountOverview = '/account_overview';
-var hsgMinePage ='hsg_mine_page';
+var hsgMinePage = 'hsg_mine_page';
 var pageDetailInfo = '/detail_info_page';
 var pageDetailList = '/detail_list_page';
+var pageTimeDepositRecord = '/time_deposit_record_page';
 var pageIndex = new MaterialPageRoute(builder: (context) => new IndexPage());
 
 var appRoutes = {
@@ -43,6 +45,7 @@ var appRoutes = {
   pageAccountOverview: (context) => AccountOverviewPage(),
   pageDetailList: (context) => DetailListPage(),
   pageDetailInfo: (context) => DetailInfoPage(),
+  pageTimeDepositRecord: (context) => TimeDepositRecordPage(),
 };
 
 onGenerateRoute(RouteSettings settings) {
