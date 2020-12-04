@@ -1,4 +1,3 @@
-import 'package:ebank_mobile/config/global_config.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -9,10 +8,7 @@ class ApprovalPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           S.of(context).approval,
-          style: kNavTextFont,
         ),
-        backgroundColor: kNavBgColor,
-        shadowColor: kNavShadowColor,
       ),
       body: Center(
         child: Text(S.of(context).approval),
