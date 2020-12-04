@@ -31,8 +31,11 @@
 .pub/
 /build/
 
-# 添加使用json_serializable工具生成的代码
-lib/data/source/model/*.g.dart
+# 忽略使用json_serializable工具生成的代码
+*.g.dart
+
+# 忽略国际化工具自动生成的工具
+/lib/generated/
 
 # Web related
 lib/generated_plugin_registrant.dart

@@ -10,6 +10,7 @@
   "home": "首页",
   "mine": "我的",
   "approval": "待办",
+<<<<<<< HEAD
   "loanDetails":"贷款详情",
   "businessVarieties":"业务品种",
   "loanId":"贷款编号",
@@ -26,4 +27,34 @@
   "paymentMethod":"还款方式",
   "agreement":"扣款日",
   "debitCard":"扣款卡号"
+=======
+  "setChangLoginPasd": "设置登录密码",
+  "plaseSetPsd": "请设置登录密码",
+  "transfer": "转账",
+  "transfer_record": "转账记录",
+  "transfer_model": "收款范本",
+  "deposit_open": "定期开立",
+  "deposit_record": "我的存单",
+  "deposit_rate": "利率查看",
+  "loan_apply": "贷款申请",
+  "loan_record": "贷款记录",
+  "loan_rate": "贷款利率",
+  "foreign_exchange": "外汇买卖",
+  "exchange_rate": "汇率查询",
+  "electronic_statement": "电子结单",
+  "transfer_collection": "转账收款",
+  "deposit_service": "定期服务",
+  "loan_service": "贷款服务",
+  "other_service": "其他服务",
+  "transaction_details": "收支明细",
+  "account_summary": "账户总览",
+  "more": "更多",
+  "all_features": "全部功能",
+  "my_account": "我的账户",
+  "transfer_appointment": "预约转账",
+  "transfer_plan": "转账计划",
+  "time_deposit": "定期存款",
+  "loan": "贷款",
+  "other": "其他"
+>>>>>>> b62cce1013ffa40b9c9003e95a4b83062fb17a6e
 }
