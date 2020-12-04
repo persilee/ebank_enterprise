@@ -21,16 +21,32 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "agreement" : MessageLookupByLibrary.simpleMessage("Agreement"),
     "approval" : MessageLookupByLibrary.simpleMessage("Approval"),
+    "businessVarieties" : MessageLookupByLibrary.simpleMessage("Business Varieties"),
+    "debitCard" : MessageLookupByLibrary.simpleMessage("debitCard"),
     "english" : MessageLookupByLibrary.simpleMessage("English"),
+    "expiringDate" : MessageLookupByLibrary.simpleMessage("Expiring Date"),
     "fotget_password_q" : MessageLookupByLibrary.simpleMessage("Forget Password?"),
     "home" : MessageLookupByLibrary.simpleMessage("Home"),
+    "loanAmount" : MessageLookupByLibrary.simpleMessage("Loan Amount"),
+    "loanBalance" : MessageLookupByLibrary.simpleMessage("Loan Balance"),
+    "loanDetails" : MessageLookupByLibrary.simpleMessage("loan details"),
+    "loanId" : MessageLookupByLibrary.simpleMessage("Loan Id"),
+    "loanInterestRates" : MessageLookupByLibrary.simpleMessage("Loan Interest Rates"),
     "login" : MessageLookupByLibrary.simpleMessage("Login"),
     "login_account_placeholder" : MessageLookupByLibrary.simpleMessage("Email/Mobile Phone No./User ID"),
     "mine" : MessageLookupByLibrary.simpleMessage("Mine"),
+    "normal" : MessageLookupByLibrary.simpleMessage("normal"),
     "operation_successful" : MessageLookupByLibrary.simpleMessage("Operation Successfully"),
+    "paymentHistory" : MessageLookupByLibrary.simpleMessage("Payment History"),
+    "paymentMethod" : MessageLookupByLibrary.simpleMessage("Payment Method"),
     "please_input_account" : MessageLookupByLibrary.simpleMessage("Please input account"),
     "please_input_password" : MessageLookupByLibrary.simpleMessage("Please input password"),
-    "simplifiedChinese" : MessageLookupByLibrary.simpleMessage("Chinese")
+    "repaymentSchedule" : MessageLookupByLibrary.simpleMessage("Repayment Schedule"),
+    "restPeriods" : MessageLookupByLibrary.simpleMessage("Rest Periods"),
+    "simplifiedChinese" : MessageLookupByLibrary.simpleMessage("Chinese"),
+    "startingDate" : MessageLookupByLibrary.simpleMessage("Starting Date"),
+    "totalPeriods" : MessageLookupByLibrary.simpleMessage("Total Periods")
   };
 }

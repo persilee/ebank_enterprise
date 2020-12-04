@@ -11,11 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page/mine/about_us_page.dart';
 import 'package:ebank_mobile/page/mine/feedback_page.dart';
 import 'package:ebank_mobile/page/mine/hsg_mine_page.dart';
-
+import 'package:ebank_mobile/page/loan/loan_demo.dart';
 
 var pageHome = '/';
-var pageLogin = pageHome;
+var pageLogin = "123123";
 // var pageCardList = pageHome;
+var pageloanDemo = pageHome;
 var pageCardList = '/card_list';
 var pageDialogDemo = '/dialog_demo';
 var pageCardDetail = '/card_detail';
@@ -24,13 +25,14 @@ var minePage = '/hsg_mine_page';
 var aboutUs = '/about_us_page';
 var feedback = '/feedback_page';
 var pageAccountOverview = '/account_overview';
-var hsgMinePage ='hsg_mine_page';
+var hsgMinePage = 'hsg_mine_page';
 var pageDetailInfo = '/detail_info_page';
 var pageDetailList = '/detail_list_page';
 var pageIndex = new MaterialPageRoute(builder: (context) => new IndexPage());
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
+  pageloanDemo: (context) => LoanDemoPage(),
   pageCardList: (context) => CardListPage(),
   pageDialogDemo: (context) => DialogDemoPage(),
   // pageCardDetail: (context) => CardDetailPage(),

@@ -9,5 +9,21 @@
   "please_input_password": "请输入密码",
   "home": "首页",
   "mine": "我的",
-  "approval": "待办"
+  "approval": "待办",
+  "loanDetails":"贷款详情",
+  "businessVarieties":"业务品种",
+  "loanId":"贷款编号",
+  "normal":"正常",
+  "loanAmount":"贷款金额",
+  "loanBalance":"贷款余额",
+  "paymentHistory":"还款记录",
+  "repaymentSchedule":"待还计划",
+  "loanInterestRates":"贷款利率",
+  "totalPeriods":"总期数",
+  "restPeriods":"剩余期数",
+  "startingDate":"起始日",
+  "expiringDate":"到期日",
+  "paymentMethod":"还款方式",
+  "agreement":"扣款日",
+  "debitCard":"扣款卡号"
 }

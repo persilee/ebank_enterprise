@@ -9,5 +9,21 @@
   "please_input_password": "Please input password",
   "home": "Home",
   "mine": "Mine",
-  "approval": "Approval"
+  "approval": "Approval",
+  "loanDetails":"loan details",
+  "businessVarieties":"Business Varieties",
+  "loanId":"Loan Id",
+  "normal":"normal",
+  "loanAmount":"Loan Amount",
+  "loanBalance":"Loan Balance",
+  "paymentHistory":"Payment History",
+  "repaymentSchedule":"Repayment Schedule",
+  "loanInterestRates":"Loan Interest Rates",
+  "totalPeriods":"Total Periods",
+  "restPeriods":"Rest Periods",
+  "startingDate":"Starting Date",
+  "expiringDate":"Expiring Date",
+  "paymentMethod":"Payment Method",
+  "agreement":"Agreement",
+  "debitCard":"debitCard"
 }

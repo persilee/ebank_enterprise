@@ -32,6 +32,12 @@ class _HSGBankAppState extends State<HSGBankApp> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    changeLanguage(Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN'));
+  }
+
+  @override
   Widget build(BuildContext context) {
     ///初始化progressHUD配置
     HSProgressHUD.progressHudConfig();

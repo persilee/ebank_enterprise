@@ -144,6 +144,166 @@ class S {
       args: [],
     );
   }
+
+  /// `loan details`
+  String get loanDetails {
+    return Intl.message(
+      'loan details',
+      name: 'loanDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Business Varieties`
+  String get businessVarieties {
+    return Intl.message(
+      'Business Varieties',
+      name: 'businessVarieties',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loan Id`
+  String get loanId {
+    return Intl.message(
+      'Loan Id',
+      name: 'loanId',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `normal`
+  String get normal {
+    return Intl.message(
+      'normal',
+      name: 'normal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loan Amount`
+  String get loanAmount {
+    return Intl.message(
+      'Loan Amount',
+      name: 'loanAmount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loan Balance`
+  String get loanBalance {
+    return Intl.message(
+      'Loan Balance',
+      name: 'loanBalance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment History`
+  String get paymentHistory {
+    return Intl.message(
+      'Payment History',
+      name: 'paymentHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Repayment Schedule`
+  String get repaymentSchedule {
+    return Intl.message(
+      'Repayment Schedule',
+      name: 'repaymentSchedule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loan Interest Rates`
+  String get loanInterestRates {
+    return Intl.message(
+      'Loan Interest Rates',
+      name: 'loanInterestRates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Periods`
+  String get totalPeriods {
+    return Intl.message(
+      'Total Periods',
+      name: 'totalPeriods',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rest Periods`
+  String get restPeriods {
+    return Intl.message(
+      'Rest Periods',
+      name: 'restPeriods',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Starting Date`
+  String get startingDate {
+    return Intl.message(
+      'Starting Date',
+      name: 'startingDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expiring Date`
+  String get expiringDate {
+    return Intl.message(
+      'Expiring Date',
+      name: 'expiringDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment Method`
+  String get paymentMethod {
+    return Intl.message(
+      'Payment Method',
+      name: 'paymentMethod',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Agreement`
+  String get agreement {
+    return Intl.message(
+      'Agreement',
+      name: 'agreement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `debitCard`
+  String get debitCard {
+    return Intl.message(
+      'debitCard',
+      name: 'debitCard',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
