@@ -80,6 +80,7 @@ class _FeatureListPageState extends State<FeatureListPage> {
                     Navigator.pushNamed(context, pageDetailList);
                   } else if (S.current.transfer == title) {
                     //转账
+                    Navigator.pushNamed(context, pageTransfer);
                   } else if (S.of(context).transfer_appointment == title) {
                     //'预约转账'
                   } else if (S.of(context).transfer_plan == title) {
