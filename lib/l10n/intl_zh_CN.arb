@@ -28,5 +28,12 @@
   "other_service": "其他服务",
   "transaction_details": "收支明细",
   "account_summary": "账户总览",
-  "more": "更多"
+  "more": "更多",
+  "all_features": "全部功能",
+  "my_account": "我的账户",
+  "transfer_appointment": "预约转账",
+  "transfer_plan": "转账计划",
+  "time_deposit": "定期存款",
+  "loan": "贷款",
+  "other": "其他"
 }

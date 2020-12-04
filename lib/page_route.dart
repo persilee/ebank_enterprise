@@ -2,6 +2,7 @@ import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_detail_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
+import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
@@ -29,6 +30,7 @@ var hsgMinePage = 'hsg_mine_page';
 var pageDetailInfo = '/detail_info_page';
 var pageDetailList = '/detail_list_page';
 var pageIndex = new MaterialPageRoute(builder: (context) => new IndexPage());
+var pageFeatureList = '/hsg_feature_list_page';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -43,6 +45,7 @@ var appRoutes = {
   pageAccountOverview: (context) => AccountOverviewPage(),
   pageDetailList: (context) => DetailListPage(),
   pageDetailInfo: (context) => DetailInfoPage(),
+  pageFeatureList: (context) => FeatureListPage(),
 };
 
 onGenerateRoute(RouteSettings settings) {

@@ -420,6 +420,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     onPressed: () {
                       print('更多');
+                      Navigator.pushNamed(context, pageFeatureList);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

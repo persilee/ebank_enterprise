@@ -28,5 +28,12 @@
   "other_service": "Others",
   "transaction_details": "Transaction Details",
   "account_summary": "Account Summary",
-  "more": "More"
+  "more": "More",
+  "all_features": "All Functions",
+  "my_account": "My Account",
+  "transfer_appointment": "Pre-arranged Transfer",
+  "transfer_plan": "Transfer Plan",
+  "time_deposit": "Time Deposit",
+  "loan": "Loan",
+  "other": "Other"
 }

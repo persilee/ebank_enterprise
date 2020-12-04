@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "account_summary" : MessageLookupByLibrary.simpleMessage("Account Summary"),
+    "all_features" : MessageLookupByLibrary.simpleMessage("All Functions"),
     "approval" : MessageLookupByLibrary.simpleMessage("Approval"),
     "deposit_open" : MessageLookupByLibrary.simpleMessage("Time Deposit Opening"),
     "deposit_rate" : MessageLookupByLibrary.simpleMessage("View Interest Rate"),
@@ -33,6 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "foreign_exchange" : MessageLookupByLibrary.simpleMessage("Foreign Exchange"),
     "fotget_password_q" : MessageLookupByLibrary.simpleMessage("Forget Password?"),
     "home" : MessageLookupByLibrary.simpleMessage("Home"),
+    "loan" : MessageLookupByLibrary.simpleMessage("Loan"),
     "loan_apply" : MessageLookupByLibrary.simpleMessage("Loan"),
     "loan_rate" : MessageLookupByLibrary.simpleMessage("Loan Interest Rate"),
     "loan_record" : MessageLookupByLibrary.simpleMessage("Loan Record"),
@@ -41,15 +43,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_account_placeholder" : MessageLookupByLibrary.simpleMessage("Email/Mobile Phone No./User ID"),
     "mine" : MessageLookupByLibrary.simpleMessage("Mine"),
     "more" : MessageLookupByLibrary.simpleMessage("More"),
+    "my_account" : MessageLookupByLibrary.simpleMessage("My Account"),
     "operation_successful" : MessageLookupByLibrary.simpleMessage("Operation Successfully"),
+    "other" : MessageLookupByLibrary.simpleMessage("Other"),
     "other_service" : MessageLookupByLibrary.simpleMessage("Others"),
     "please_input_account" : MessageLookupByLibrary.simpleMessage("Please input account"),
     "please_input_password" : MessageLookupByLibrary.simpleMessage("Please input password"),
     "simplifiedChinese" : MessageLookupByLibrary.simpleMessage("Chinese"),
+    "time_deposit" : MessageLookupByLibrary.simpleMessage("Time Deposit"),
     "transaction_details" : MessageLookupByLibrary.simpleMessage("Transaction Details"),
     "transfer" : MessageLookupByLibrary.simpleMessage("Transfer"),
+    "transfer_appointment" : MessageLookupByLibrary.simpleMessage("Pre-arranged Transfer"),
     "transfer_collection" : MessageLookupByLibrary.simpleMessage("Transfer"),
     "transfer_model" : MessageLookupByLibrary.simpleMessage("Transfer Template"),
+    "transfer_plan" : MessageLookupByLibrary.simpleMessage("Transfer Plan"),
     "transfer_record" : MessageLookupByLibrary.simpleMessage("Transfer Record")
   };
 }
