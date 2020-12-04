@@ -10,6 +10,8 @@ void main() => runApp(
     );
 
 class HSGBankApp extends StatefulWidget {
+  
+
   const HSGBankApp({Key key}) : super(key: key);
 
   static void setLocale(BuildContext context, Locale newLocale) async {
@@ -31,6 +33,12 @@ class _HSGBankAppState extends State<HSGBankApp> {
     });
   }
 
+  @override
+  void initState() {
+    super.initState();
+    changeLanguage(Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN'));
+  }
+  
   @override
   Widget build(BuildContext context) {
     ///初始化progressHUD配置
@@ -63,3 +71,4 @@ class _HSGBankAppState extends State<HSGBankApp> {
     );
   }
 }
+

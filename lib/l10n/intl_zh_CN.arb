@@ -9,5 +9,12 @@
   "please_input_password": "请输入密码",
   "home": "首页",
   "mine": "我的",
-  "approval": "待办"
+  "approval": "待办",
+  "limitDetails":"额度详情",
+  "contractAccount":"合约账号",
+  "loanPrincipal": "贷款本金",
+  "loanBalance": "贷款余额",
+  "startTime": "开始时间",
+  "endTime": "结束时间",
+  "loanRate": "贷款利率"
 }

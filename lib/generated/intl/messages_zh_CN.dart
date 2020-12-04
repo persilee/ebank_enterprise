@@ -22,15 +22,22 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "approval" : MessageLookupByLibrary.simpleMessage("待办"),
+    "contractAccount" : MessageLookupByLibrary.simpleMessage("合约账号"),
+    "endTime" : MessageLookupByLibrary.simpleMessage("结束时间"),
     "english" : MessageLookupByLibrary.simpleMessage("英文"),
     "fotget_password_q" : MessageLookupByLibrary.simpleMessage("忘记密码？"),
     "home" : MessageLookupByLibrary.simpleMessage("首页"),
+    "limitDetails" : MessageLookupByLibrary.simpleMessage("额度详情"),
+    "loanBalance" : MessageLookupByLibrary.simpleMessage("贷款余额"),
+    "loanPrincipal" : MessageLookupByLibrary.simpleMessage("贷款本金"),
+    "loanRate" : MessageLookupByLibrary.simpleMessage("贷款利率"),
     "login" : MessageLookupByLibrary.simpleMessage("登录"),
     "login_account_placeholder" : MessageLookupByLibrary.simpleMessage("邮箱/手机号/用户ID"),
     "mine" : MessageLookupByLibrary.simpleMessage("我的"),
     "operation_successful" : MessageLookupByLibrary.simpleMessage("操作成功"),
     "please_input_account" : MessageLookupByLibrary.simpleMessage("请输入账号"),
     "please_input_password" : MessageLookupByLibrary.simpleMessage("请输入密码"),
-    "simplifiedChinese" : MessageLookupByLibrary.simpleMessage("中文")
+    "simplifiedChinese" : MessageLookupByLibrary.simpleMessage("中文"),
+    "startTime" : MessageLookupByLibrary.simpleMessage("开始时间")
   };
 }

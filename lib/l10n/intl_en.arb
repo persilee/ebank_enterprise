@@ -9,5 +9,12 @@
   "please_input_password": "Please input password",
   "home": "Home",
   "mine": "Mine",
-  "approval": "Approval"
+  "approval": "Approval",
+  "limitDetails":"Limit Details",
+  "contractAccount":"Contract Account",
+  "loanPrincipal": "Loan Principal",
+  "loanBalance": "Loan Balance",
+  "startTime": "Start Time",
+  "endTime": "End Time",
+  "loanRate": "Loan Rate"
 }

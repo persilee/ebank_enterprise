@@ -22,15 +22,22 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "approval" : MessageLookupByLibrary.simpleMessage("Approval"),
+    "contractAccount" : MessageLookupByLibrary.simpleMessage("Contract Account"),
+    "endTime" : MessageLookupByLibrary.simpleMessage("End Time"),
     "english" : MessageLookupByLibrary.simpleMessage("English"),
     "fotget_password_q" : MessageLookupByLibrary.simpleMessage("Forget Password?"),
     "home" : MessageLookupByLibrary.simpleMessage("Home"),
+    "limitDetails" : MessageLookupByLibrary.simpleMessage("Limit Details"),
+    "loanBalance" : MessageLookupByLibrary.simpleMessage("Loan Balance"),
+    "loanPrincipal" : MessageLookupByLibrary.simpleMessage("Loan Principal"),
+    "loanRate" : MessageLookupByLibrary.simpleMessage("Loan Rate"),
     "login" : MessageLookupByLibrary.simpleMessage("Login"),
     "login_account_placeholder" : MessageLookupByLibrary.simpleMessage("Email/Mobile Phone No./User ID"),
     "mine" : MessageLookupByLibrary.simpleMessage("Mine"),
     "operation_successful" : MessageLookupByLibrary.simpleMessage("Operation Successfully"),
     "please_input_account" : MessageLookupByLibrary.simpleMessage("Please input account"),
     "please_input_password" : MessageLookupByLibrary.simpleMessage("Please input password"),
-    "simplifiedChinese" : MessageLookupByLibrary.simpleMessage("Chinese")
+    "simplifiedChinese" : MessageLookupByLibrary.simpleMessage("Chinese"),
+    "startTime" : MessageLookupByLibrary.simpleMessage("Start Time")
   };
 }
