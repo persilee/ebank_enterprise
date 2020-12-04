@@ -113,11 +113,16 @@ class _DetailListPageState extends State<DetailListPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            '转账给自己 储蓄卡9338 18..',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Color(0xFFACACAC)),
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '转账给自己 储蓄卡6221882600114166800',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Color(0xFFACACAC)),
+                                            ),
                                           ),
                                           Text(
                                             '余额 ￥10.00',
@@ -192,11 +197,16 @@ class _DetailListPageState extends State<DetailListPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            '转账给自己 储蓄卡9338 18..',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Color(0xFFACACAC)),
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '转账给自己 储蓄卡6221882600114166800',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Color(0xFFACACAC)),
+                                            ),
                                           ),
                                           Text(
                                             '余额 ￥10.00',
@@ -271,11 +281,16 @@ class _DetailListPageState extends State<DetailListPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            '转账给自己 储蓄卡9338 18..',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Color(0xFFACACAC)),
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '转账给自己 储蓄卡6221882600114166800',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Color(0xFFACACAC)),
+                                            ),
                                           ),
                                           Text(
                                             '余额 ￥10.00',
@@ -350,11 +365,16 @@ class _DetailListPageState extends State<DetailListPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            '转账给自己 储蓄卡9338 18..',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Color(0xFFACACAC)),
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '转账给自己 储蓄卡6221882600114166800',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Color(0xFFACACAC)),
+                                            ),
                                           ),
                                           Text(
                                             '余额 ￥10.00',
@@ -429,11 +449,16 @@ class _DetailListPageState extends State<DetailListPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            '转账给自己 储蓄卡9338 18..',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Color(0xFFACACAC)),
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '转账给自己 储蓄卡6221882600114166800',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Color(0xFFACACAC)),
+                                            ),
                                           ),
                                           Text(
                                             '余额 ￥10.00',
@@ -508,11 +533,16 @@ class _DetailListPageState extends State<DetailListPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            '转账给自己 储蓄卡9338 18..',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Color(0xFFACACAC)),
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '转账给自己 储蓄卡6221882600114166800',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Color(0xFFACACAC)),
+                                            ),
                                           ),
                                           Text(
                                             '余额 ￥10.00',
@@ -602,11 +632,16 @@ class _DetailListPageState extends State<DetailListPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            '转账给自己 储蓄卡9338 18..',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Color(0xFFACACAC)),
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '转账给自己 储蓄卡6221882600114166800',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Color(0xFFACACAC)),
+                                            ),
                                           ),
                                           Text(
                                             '余额 ￥10.00',
@@ -681,11 +716,16 @@ class _DetailListPageState extends State<DetailListPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            '转账给自己 储蓄卡9338 18..',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Color(0xFFACACAC)),
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '转账给自己 储蓄卡6221882600114166800',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Color(0xFFACACAC)),
+                                            ),
                                           ),
                                           Text(
                                             '余额 ￥10.00',
@@ -760,11 +800,16 @@ class _DetailListPageState extends State<DetailListPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            '转账给自己 储蓄卡9338 18..',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Color(0xFFACACAC)),
+                                          Container(
+                                            width: 160,
+                                            child: Text(
+                                              '转账给自己 储蓄卡6221882600114166800',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Color(0xFFACACAC)),
+                                            ),
                                           ),
                                           Text(
                                             '余额 ￥10.00',

@@ -21,7 +21,7 @@ FLUTTER_STORAGE_BASE_URL(值：https://storage.flutter-io.cn)
 ```
 然后运行`flutter doctor`，则下次使用`flutter pub get`时，会从镜像地址下载资源。
 
-### Json
+### 网络请求与Json
 
 对于每个网络请求或者其他需要用到Json序列化/反序列化的类，按以下步骤进行编写。
 
@@ -70,12 +70,11 @@ Future<LoginResp> login(LoginReq loginReq, String tag) {
 
 ```
 
+3.另外，为了方便将json数据转换成实体类型，可以使用转换工具，比如：[点击这里](https://caijinglong.github.io/json2dart/index_ch.html)。
+
 ### 插件
 
 - Flutter Intl：用于国际化开发，在lib/l10n目录下存放(编辑)语言文件
-
-调用方法：1. S.of(context)
-        2. S.current
 
 
 ### 资源文件
@@ -86,3 +85,6 @@ Future<LoginResp> login(LoginReq loginReq, String tag) {
 - `hsg_colors.dart`: 颜色定义
 - `hsg_dimens.dart`: 尺寸定义
 - `hsg_styles.dart`: 样式定义
+
+### 对话框调用
+参考`lib/feature_demo/dialog_demo.dart`

@@ -7,7 +7,7 @@ const ShapeBorder _dialogShape = RoundedRectangleBorder(
   ),
 );
 
-/// 这是一个提示对话框
+/// 提示对话框
 class HsgAlertDialog extends StatelessWidget {
   final String title;
   final String message;
@@ -82,15 +82,17 @@ class HsgAlertDialog extends StatelessWidget {
   }
 }
 
-Widget _titleWidget(String title) {
-  final EdgeInsets defaultTitlePadding =
-      EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0);
+Widget _titleWidget(
+  String title, {
+  EdgeInsets titlePadding = const EdgeInsets.all(20.0),
+  TextStyle style = const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+}) {
   return Padding(
-    padding: defaultTitlePadding,
+    padding: titlePadding,
     child: Center(
       child: Text(
         title,
-        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+        style: style,
         textAlign: TextAlign.center,
       ),
     ),
@@ -139,7 +141,7 @@ Widget _actionsWidget(String positiveButton, String negativeButton,
 
 var _selectedPosition = -1;
 
-/// 这是一个单选对话框
+/// 单选对话框
 class HsgSingleChoiceDialog extends StatelessWidget {
   final String title;
   final List<String> items;
@@ -155,7 +157,7 @@ class HsgSingleChoiceDialog extends StatelessWidget {
     this.negativeButton,
     this.lastSelectedPosition = -1,
   }) : super(key: key) {
-    // 上次选中的由调用者保存
+    // 上次选中的位置由调用者保存
     _selectedPosition = -1;
     if (lastSelectedPosition != -1) {
       _selectedPosition = lastSelectedPosition;
@@ -257,3 +259,160 @@ class HsgSingleChoiceDialog extends StatelessWidget {
     );
   }
 }
+
+/// 底部单选弹窗
+class BottomMenu extends StatelessWidget {
+  final String title;
+  final List<String> items;
+  const BottomMenu({Key key, this.title, this.items}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Widget titleWidget;
+    Widget contentWidget;
+    Widget actionsWidget;
+    if (title != null) {
+      titleWidget = _titleWidget(
+        title,
+        titlePadding: EdgeInsets.all(15),
+        style: TextStyle(
+          fontWeight: FontWeight.normal,
+          color: HsgColors.describeText,
+          fontSize: 13,
+        ),
+      );
+    }
+
+    if (items != null && items.length > 0) {
+      final EdgeInsets contentPadding = EdgeInsets.zero;
+      contentWidget = Padding(
+        padding: contentPadding,
+        child: ListView.separated(
+          shrinkWrap: true,
+          itemCount: items.length,
+          itemBuilder: (BuildContext context, int position) {
+            return _getItemRow(position, context);
+          },
+          separatorBuilder: (context, index) => Divider(
+            height: 1,
+          ),
+        ),
+      );
+    }
+
+    final actionChildren = [
+      Expanded(
+        child: FlatButton(
+          height: 55,
+          onPressed: () {
+            Navigator.of(context).pop(false);
+          },
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 13, top: 10),
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                fontSize: 16,
+                color: HsgColors.secondDegreeText,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ];
+
+    actionsWidget = Row(
+      children: actionChildren,
+    );
+
+    List<Widget> columnChildren = <Widget>[
+      if (title != null) titleWidget,
+      if (title != null && items != null)
+        Divider(
+          height: 1,
+        ),
+      if (items != null)
+        Flexible(
+          child: contentWidget,
+        ),
+      Divider(
+        color: HsgColors.commonBackground,
+        thickness: 7,
+        height: 7,
+      ),
+      actionsWidget,
+    ];
+
+    final menuBody = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: columnChildren,
+    );
+
+    return Material(
+      child: Ink(
+        child: menuBody,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15),
+            topRight: Radius.circular(15),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _getItemRow(int position, BuildContext context) {
+    return InkWell(
+      splashColor: HsgColors.itemClickColor,
+      child: Padding(
+        padding: EdgeInsets.only(top: 18, bottom: 18, left: 16, right: 16),
+        child: Center(
+          child: Text(
+            items[position],
+            style: TextStyle(fontSize: 16),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ),
+      onTap: () => Navigator.of(context).pop(position),
+    );
+  }
+}
+
+/// 显示设定圆角的底部对话框，需要和内部widget配合使用，内部也需要设置相同圆角，如：BottomMenu
+Future<T> showHsgBottomSheet<T>({
+  @required BuildContext context,
+  @required WidgetBuilder builder,
+  Color backgroundColor,
+  double elevation,
+  ShapeBorder shape = const RoundedRectangleBorder(
+    borderRadius: BorderRadius.only(
+      topLeft: Radius.circular(15),
+      topRight: Radius.circular(15),
+    ),
+  ),
+  Clip clipBehavior,
+  Color barrierColor,
+  bool isScrollControlled = false,
+  bool useRootNavigator = false,
+  bool isDismissible = true,
+  bool enableDrag = true,
+  RouteSettings routeSettings,
+}) =>
+    showModalBottomSheet(
+        context: context,
+        builder: builder,
+        backgroundColor: backgroundColor,
+        elevation: elevation,
+        shape: shape,
+        clipBehavior: clipBehavior,
+        barrierColor: barrierColor,
+        isScrollControlled: isScrollControlled,
+        useRootNavigator: useRootNavigator,
+        isDismissible: isDismissible,
+        enableDrag: enableDrag,
+        routeSettings: routeSettings);
