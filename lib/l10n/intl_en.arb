@@ -10,7 +10,6 @@
   "home": "Home",
   "mine": "Mine",
   "approval": "Approval",
-<<<<<<< HEAD
   "loanDetails":"loan details",
   "businessVarieties":"Business Varieties",
   "loanId":"Loan Id",
@@ -26,8 +25,7 @@
   "expiringDate":"Expiring Date",
   "paymentMethod":"Payment Method",
   "agreement":"Agreement",
-  "debitCard":"debitCard"
-=======
+  "debitCard":"debitCard",
   "setChangLoginPasd": "Chang Login Password",
   "plaseSetPsd": "Please Set the Login Password",
   "transfer": "Transfer",
@@ -56,5 +54,4 @@
   "time_deposit": "Time Deposit",
   "loan": "Loan",
   "other": "Other"
->>>>>>> b62cce1013ffa40b9c9003e95a4b83062fb17a6e
 }

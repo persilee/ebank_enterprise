@@ -42,11 +42,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
   @override
   void initState() {
     super.initState();
-<<<<<<< HEAD
-    changeLanguage(Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN'));
-=======
     _initLanguage();
->>>>>>> b62cce1013ffa40b9c9003e95a4b83062fb17a6e
   }
 
   @override

@@ -10,7 +10,6 @@
   "home": "首页",
   "mine": "我的",
   "approval": "待办",
-<<<<<<< HEAD
   "loanDetails":"贷款详情",
   "businessVarieties":"业务品种",
   "loanId":"贷款编号",
@@ -26,8 +25,7 @@
   "expiringDate":"到期日",
   "paymentMethod":"还款方式",
   "agreement":"扣款日",
-  "debitCard":"扣款卡号"
-=======
+  "debitCard":"扣款卡号",
   "setChangLoginPasd": "设置登录密码",
   "plaseSetPsd": "请设置登录密码",
   "transfer": "转账",
@@ -56,5 +54,4 @@
   "time_deposit": "定期存款",
   "loan": "贷款",
   "other": "其他"
->>>>>>> b62cce1013ffa40b9c9003e95a4b83062fb17a6e
 }
