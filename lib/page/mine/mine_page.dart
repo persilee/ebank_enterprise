@@ -1,4 +1,6 @@
-import 'package:ebank_mobile/config/global_config.dart';
+import 'dart:io';
+
+import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 /**
@@ -12,13 +14,25 @@ class MineqPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           S.of(context).mine,
-          style: kNavTextFont,
         ),
-        backgroundColor: kNavBgColor,
-        shadowColor: kNavShadowColor,
       ),
-      body: Center(
-        child: Text(S.of(context).mine),
+      body: ListView(
+        children:[
+          Container(
+            color: HsgColors.primary,
+            child: Row(
+              children: [
+                Column(
+                  children: [
+                    Text("q"),
+                    Text("2")
+                  ],
+                )
+              ],
+            )
+          )
+        ]
+      
       ),
     );
   }
