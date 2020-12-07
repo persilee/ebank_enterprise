@@ -72,31 +72,33 @@ class _CardListPageState extends State<CardListPage> {
 }
 
 Widget getCard(RemoteBankCard card) {
+  final listTile = ListTile(
+    leading: Container(
+      decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+              image: AssetImage(
+                'images/ic_launcher.png',
+              ),
+              fit: BoxFit.cover)),
+      width: 36,
+      height: 36,
+    ),
+    title: Text(
+      FormatUtil.formatSpace4(card.cardNo),
+      style: TextStyle(color: Colors.white),
+    ),
+    subtitle: Text(
+      'Demand Deposit Account',
+      style: TextStyle(color: Colors.white70),
+    ),
+  );
+
   return Card(
     color: Colors.redAccent,
-    child: Container(
+    child: Padding(
       padding: EdgeInsets.only(bottom: 30),
-      child: ListTile(
-        leading: Container(
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                  image: AssetImage(
-                    'images/ic_launcher.png',
-                  ),
-                  fit: BoxFit.cover)),
-          width: 36,
-          height: 36,
-        ),
-        title: Text(
-          FormatUtil.formatSpace4(card.cardNo),
-          style: TextStyle(color: Colors.white),
-        ),
-        subtitle: Text(
-          'Demand Deposit Account',
-          style: TextStyle(color: Colors.white70),
-        ),
-      ),
+      child: listTile,
     ),
   );
 }
