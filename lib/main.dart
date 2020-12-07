@@ -1,11 +1,10 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/util/language.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'widget/progressHUD.dart';
 
 // void main() => runApp(
@@ -77,13 +76,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
   }
 
   _initLanguage() async {
-    final prefs = await SharedPreferences.getInstance();
-    final languageCode = prefs.getString(ConfigKey.LANGUAGE) ?? 'en';
-    if (languageCode != 'en') {
-      changeLanguage(Locale.fromSubtags(
-        languageCode: languageCode,
-        countryCode: 'CN',
-      ));
-    }
+    String language = await Language.getSaveLangage();
+    changeLanguage(Language().getLocaleByLanguage(language));
   }
 }

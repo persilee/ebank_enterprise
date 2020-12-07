@@ -707,8 +707,7 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
       return;
     }
 
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(ConfigKey.LANGUAGE, language);
+    Language.saveSelectedLanguage(language);
     setState(() {
       title = languages[result];
       HSGBankApp.setLocale(context, Language().getLocaleByLanguage(language));
