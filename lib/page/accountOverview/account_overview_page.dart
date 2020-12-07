@@ -11,7 +11,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('账户总览'),
+        title: Text("账户总览"),
         centerTitle: true,
         elevation: 0,
       ),
