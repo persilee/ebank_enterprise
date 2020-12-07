@@ -350,15 +350,13 @@ class BottomMenu extends StatelessWidget {
       children: columnChildren,
     );
 
-    return Material(
-      child: Ink(
-        child: menuBody,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15),
-            topRight: Radius.circular(15),
-          ),
+    return Ink(
+      child: menuBody,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(15),
+          topRight: Radius.circular(15),
         ),
       ),
     );

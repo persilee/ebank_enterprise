@@ -37,5 +37,6 @@
   "transfer_plan": "转账计划",
   "time_deposit": "定期存款",
   "loan": "贷款",
-  "other": "其他"
+  "other": "其他",
+  "select_language": "选择语言"
 }

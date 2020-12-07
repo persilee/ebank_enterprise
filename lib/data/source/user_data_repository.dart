@@ -17,16 +17,4 @@ class UserDataRepository {
   factory UserDataRepository() => _instance;
 
   UserDataRepository._internal();
-
-  // login(LoginReq request,
-  //     {OnSuccess<LoginResp> onSuccess,
-  //     OnFailure onFailure,
-  //     @required String tag}) {
-  //   HsgHttp().post(
-  //       path: 'security/cutlogin',
-  //       data: BaseRequest(request.toJson()),
-  //       onSuccess: (data) => onSuccess(LoginResp.fromJson(data)),
-  //       onFailure: onFailure,
-  //       tag: tag);
-  // }
 }
