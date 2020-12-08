@@ -128,12 +128,77 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            LanguageChangeBtn(changeLangBtnTltle),
+            _languageChangeBtn(),
+            //LanguageChangeBtn(changeLangBtnTltle),
           ],
         ),
       ),
       statusBarColor: HsgColors.primary.withOpacity(opacity),
     );
+  }
+
+  //语言选择按钮
+  Widget _languageChangeBtn() {
+    return Container(
+      // margin: EdgeInsets.only(right: 15),
+      child: FlatButton(
+        onPressed: () {
+          _selectLanguage(context);
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              child: Text(
+                _changeLangBtnTltle,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            Container(
+              child: Icon(
+                Icons.arrow_drop_down_outlined,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _selectLanguage(BuildContext context) async {
+    List<String> languages = [
+      'English',
+      '中文',
+    ];
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) => BottomMenu(
+              title: S.current.select_language,
+              items: languages,
+            ));
+    String language;
+    if (result != null && result != false) {
+      switch (result) {
+        case 0:
+          language = Language.EN;
+          break;
+        case 1:
+          language = Language.ZH_CN;
+          break;
+      }
+    } else {
+      return;
+    }
+
+    Language.saveSelectedLanguage(language);
+    setState(() {
+      _changeLangBtnTltle = languages[result];
+      HSGBankApp.setLocale(context, Language().getLocaleByLanguage(language));
+    });
   }
 
   ///scrollview的顶部view，包含背景图、登录信息、账户总览和收支明细
@@ -641,86 +706,5 @@ class _XAppBarState extends State<XAppBar> {
         child: widget.child,
       ),
     );
-  }
-}
-
-/// 语言选择按钮
-// ignore: must_be_immutable
-class LanguageChangeBtn extends StatefulWidget {
-  String title;
-
-  LanguageChangeBtn(this.title);
-
-  @override
-  _LanguageChangeBtnState createState() => _LanguageChangeBtnState(title);
-}
-
-class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
-  String title;
-
-  _LanguageChangeBtnState(this.title);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      // margin: EdgeInsets.only(right: 15),
-      child: FlatButton(
-        onPressed: () {
-          _selectLanguage(context);
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              child: Text(
-                title,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-            Container(
-              child: Icon(
-                Icons.arrow_drop_down_outlined,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  _selectLanguage(BuildContext context) async {
-    List<String> languages = [
-      'English',
-      '中文',
-    ];
-    final result = await showHsgBottomSheet(
-        context: context,
-        builder: (context) => BottomMenu(
-              title: S.current.select_language,
-              items: languages,
-            ));
-    String language;
-    if (result != null && result != false) {
-      switch (result) {
-        case 0:
-          language = Language.EN;
-          break;
-        case 1:
-          language = Language.ZH_CN;
-          break;
-      }
-    } else {
-      return;
-    }
-
-    Language.saveSelectedLanguage(language);
-    setState(() {
-      title = languages[result];
-      HSGBankApp.setLocale(context, Language().getLocaleByLanguage(language));
-    });
   }
 }
