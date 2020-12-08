@@ -88,3 +88,37 @@ Future<LoginResp> login(LoginReq loginReq, String tag) {
 
 ### 对话框调用
 参考`lib/feature_demo/dialog_demo.dart`
+
+### 文件头配置
+为了方便追踪文件作者，需要配置一个通用文件头。安装`psioniq File Header`插件，配置`settings.json`文件：
+```Json
+"psi-header.config": {
+    "forceToTop": true,
+    "blankLinesAfter": 0,
+},
+"psi-header.variables": [
+    ["company", "深圳高阳寰球科技有限公司"],
+    ["author", "你的名字"],
+],
+"psi-header.lang-config": [
+    {
+        "language": "dart",
+        "begin": "",
+        "prefix": "///",
+        "end": "",
+        "blankLinesAfter": 1
+    }
+],
+"psi-header.templates": [
+    {
+        "language": "*",
+        "template": [
+            " Copyright (c) <<year>> <<company>>",
+            "",
+            " Author: <<author>>",
+            " Date: <<filecreated('YYYY-MM-DD')>>",
+        ]
+    }
+]
+```
+添加header快捷键：双击`control+option+h`(macOS)/双击`ctrl+alt+h`(windows)

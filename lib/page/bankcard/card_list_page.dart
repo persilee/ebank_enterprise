@@ -1,3 +1,8 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: zhanggenhua
+/// Date: 2020-11-04
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
@@ -5,6 +10,8 @@ import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 
+/// @auther zhanggenha
+/// @date 2020-12-05
 class CardListPage extends StatefulWidget {
   CardListPage({Key key}) : super(key: key);
 
