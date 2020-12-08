@@ -1,3 +1,8 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: lijiawei
+/// Date: 2020-11-25
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';

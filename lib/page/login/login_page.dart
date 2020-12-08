@@ -48,17 +48,11 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     // 添加监听
     _accountTC.addListener(() {
-      _account = _accountTC.text.toLowerCase();
-      _accountTC.value = _accountTC.value.copyWith(
-        text: _account,
-      );
+      _account = _accountTC.text;
     });
     // 添加监听
     _passwordTC.addListener(() {
-      _password = _passwordTC.text.toLowerCase();
-      _passwordTC.value = _passwordTC.value.copyWith(
-        text: _password,
-      );
+      _password = _passwordTC.text;
     });
     Intl.defaultLocale = 'en';
   }
