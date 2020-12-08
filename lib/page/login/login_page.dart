@@ -1,3 +1,8 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: lijiawei
+/// Date: 2020-12-04
+
 import 'dart:async';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -101,6 +106,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               //账号输入框
               Container(
+                height: 45,
                 margin: EdgeInsets.only(top: 36.5),
                 child: InputView(
                   _accountTC,
@@ -111,6 +117,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               //密码输入框
               Container(
+                height: 45,
                 margin: EdgeInsets.only(top: 16.0),
                 child: InputView(
                   _passwordTC,
@@ -121,6 +128,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               //忘记按钮
               Container(
+                height: 20,
                 margin: EdgeInsets.only(top: 10, right: 35, left: 35),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,

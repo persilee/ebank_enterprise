@@ -15,7 +15,7 @@ void main(List<String> args) {
   runApp(
     HSGBankApp(),
   );
-  //白色
+  //状态栏字体设置白色（电池、时间、信号等信息）
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 }
 

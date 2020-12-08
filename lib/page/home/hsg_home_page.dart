@@ -1,3 +1,8 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: lijiawei
+/// Date: 2020-12-04
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_styles.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
@@ -208,11 +213,16 @@ class _HomePageState extends State<HomePage> {
       padding: EdgeInsets.all(2.0),
       child: Container(
         child: ClipOval(
-          child: FadeInImage.assetNetwork(
-            fit: BoxFit.fitWidth,
-            image: _headPortraitUrl == null ? '' : _headPortraitUrl,
-            placeholder: 'images/home/heaerIcon/home_header_person.png',
-          ),
+          child: (_headPortraitUrl == null || _headPortraitUrl == '')
+              ? Image(
+                  image: AssetImage(
+                      'images/home/heaerIcon/home_header_person.png'),
+                )
+              : FadeInImage.assetNetwork(
+                  fit: BoxFit.fitWidth,
+                  image: _headPortraitUrl == null ? '' : _headPortraitUrl,
+                  placeholder: 'images/home/heaerIcon/home_header_person.png',
+                ),
         ),
       ),
     );
