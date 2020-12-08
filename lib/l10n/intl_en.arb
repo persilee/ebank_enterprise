@@ -38,6 +38,7 @@
   "time_deposit": "Time Deposit",
   "loan": "Loan",
   "other": "Other",
+  "select_language": "Select Language",
   "account_overview": "Account Overview",
   "total_assets": "Total Assets",
   "net_assets": "Net Assets",

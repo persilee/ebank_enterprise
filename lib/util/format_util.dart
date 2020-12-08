@@ -1,3 +1,8 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: zhanggenhua
+/// Date: 2020-11-13
+
 class FormatUtil {
   /// isEmpty
   static bool isEmpty(String text) {
