@@ -185,7 +185,8 @@ class _LoginPageState extends State<LoginPage> {
     UserDataRepository()
         .login(LoginReq(username: _account, password: password), 'login')
         .then((value) {
-      HSProgressHUD.showSuccess(status: S.of(context).operation_successful);
+      HSProgressHUD
+          .dismiss(); //showSuccess(status: S.of(context).operation_successful);
       _saveUserConfig(context, value);
     }).catchError((e) {
       setState(() {
@@ -197,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录成功-跳转操作
   _showMainPage(BuildContext context) async {
-    await Future.delayed(Duration(milliseconds: 1000));
+    // await Future.delayed(Duration(milliseconds: 1000));
     setState(() {
       _isLoading = false;
     });

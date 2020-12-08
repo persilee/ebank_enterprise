@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HSProgressHUD {
   static void progressHudConfig() {
@@ -33,11 +34,31 @@ class HSProgressHUD {
   }
 
   static void showSuccess({String status}) {
-    SVProgressHUD.showSuccess(status: status);
+    // SVProgressHUD.showSuccess(status: status);
+    SVProgressHUD.dismiss();
+    Fluttertoast.showToast(
+      msg: status,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.CENTER, // 消息框弹出的位置
+      timeInSecForIosWeb: 1, // 消息框持续的时间（目前的版本只有ios有效）
+      backgroundColor: Color.fromRGBO(0, 0, 0, 0.8),
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
   }
 
   static void showError({String status}) {
-    SVProgressHUD.showError(status: status);
+    // SVProgressHUD.showError(status: status);
+    SVProgressHUD.dismiss();
+    Fluttertoast.showToast(
+      msg: status,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.CENTER, // 消息框弹出的位置
+      timeInSecForIosWeb: 1, // 消息框持续的时间（目前的版本只有ios有效）
+      backgroundColor: Color.fromRGBO(0, 0, 0, 0.8),
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
   }
 
   static void showImage({String status}) {
