@@ -587,6 +587,7 @@ class _HomePageState extends State<HomePage> {
                     //'汇率查询'
                   } else if (S.current.electronic_statement == title) {
                     //'电子结单'
+                    Navigator.pushNamed(context, pageElectronicStatement);
                   }
                 },
               ),

@@ -4,7 +4,6 @@
 /// Date: 2020-12-07
 
 import 'package:ebank_mobile/http/hsg_http.dart';
-
 import 'model/get_account_overview_info.dart';
 
 class AccountOverviewRepository {
