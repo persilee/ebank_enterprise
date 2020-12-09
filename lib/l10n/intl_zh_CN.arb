@@ -38,6 +38,7 @@
   "time_deposit": "定期存款",
   "loan": "贷款",
   "other": "其他",
+  "select_language": "选择语言",
   "account_overview": "账户总览",
   "total_assets": "总资产",
   "net_assets": "净资产",

@@ -1,3 +1,8 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: lijiawei
+/// Date: 2020-12-03
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
