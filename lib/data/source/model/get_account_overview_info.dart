@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'get_account_overview_info.g.dart';
 
 @JsonSerializable()

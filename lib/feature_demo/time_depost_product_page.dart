@@ -1,6 +1,18 @@
+/*
+ * Filename: d:\work\flutter\ebank_mobile_enterprise\lib\feature_demo\time_depost_product_page.dart
+ * Path: d:\work\flutter\ebank_mobile_enterprise\lib\feature_demo
+ * Created Date: Thursday, December 3rd 2020, 11:34:30 am
+ * Author: wangluyao
+ * 
+ * Copyright (c) 2020 Your Company
+ */
 //import 'dart:html';
 
+import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
+import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 
 class TimeDepostProduct extends StatefulWidget {
   TimeDepostProduct({Key key}) : super(key: key);
@@ -10,190 +22,282 @@ class TimeDepostProduct extends StatefulWidget {
 }
 
 class _TimeDepostProductState extends State<TimeDepostProduct> {
+  var products = [];
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget titleSectionOne = new Container(
-      padding: const EdgeInsets.all(32.0),
-      child: new Row(
+    BorderSide _lineBorderSide() {
+      return BorderSide(
+        // 设置单侧边框的样式
+        color: HsgColors.divider,
+        width: 0.5,
+        style: BorderStyle.solid,
+      );
+    }
+
+    Widget titleSection = Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          new Expanded(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                new Text(
-                  '整存整取(HKD)',
+          Column(
+            children: [
+              Container(
+                color: HsgColors.commonBackground,
+                height: 15,
+              ),
+              Container(
+                // height: 115,
+                padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                //边框设置
+                decoration: BoxDecoration(
+                  //背景
+                  color: Colors.white,
+                  //设置四周边框
+                  border: Border(
+                    top: _lineBorderSide(),
+                    bottom: _lineBorderSide(),
+                  ), //Border.all(width: 1, color: Colors.red),
                 ),
-                new Container(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: new Text(
-                    '2.8%~3.4%',
-                    style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red[500],
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 40.0,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'The CDS',
+                        // style: TextStyle(),
+                      ),
                     ),
-                  ),
-                ),
-                new Text(
-                  '年利率',
-                  style: new TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          new Expanded(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                new Container(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: new Text(
-                    'Surprise deposit interest rate',
-                    style: new TextStyle(
-                      fontWeight: FontWeight.bold,
+                    Divider(height: 0.5, color: HsgColors.divider),
+                    Container(
+                      height: 45,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '2.8%~3.4%',
+                            style:
+                                TextStyle(fontSize: 17, color: Colors.red[500]),
+                          ),
+                          SizedBox(
+                            width: (MediaQuery.of(context).size.width - 30) /
+                                2 *
+                                1,
+                            child: Text(
+                              'Surprise deposit interest rate',
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: HsgColors.firstDegreeText,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                    Container(
+                      height: 40,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            S.current.annual_interest_rate,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: HsgColors.describeText,
+                            ),
+                          ),
+                          SizedBox(
+                            width: (MediaQuery.of(context).size.width - 30) /
+                                2 *
+                                1,
+                            child: Text(
+                              S.current.from_hundred,
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: HsgColors.describeText,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          // Text(
+                          //   S.current.from_hundred,
+                          //   style: TextStyle(
+                          //     fontSize: 15,
+                          //     color: HsgColors.describeText,
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                new Text(
-                  '100.00起存',
-                  style: new TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
     );
 
-    Widget titleSectionTwo = new Container(
-      padding: const EdgeInsets.all(32.0),
-      child: new Row(
-        children: [
-          new Expanded(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                new Text(
-                  '整存整取(USD)',
-                ),
-                new Container(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: new Text(
-                    '2.8%~3.5%',
-                    style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red[500],
-                    ),
-                  ),
-                ),
-                new Text(
-                  '年利率',
-                  style: new TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          new Expanded(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                new Container(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: new Text(
-                    'Surprise deposit interest rate',
-                    style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                new Text(
-                  '100.00起存',
-                  style: new TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('data'),
+        actions: <Widget>[
+          Text(
+            S.current.my_deposit_certificate,
+            style: TextStyle(
+              fontSize: 17.0,
+              height: 2.5,
             ),
           ),
         ],
       ),
-    );
-
-    Widget titleSectionThree = new Container(
-      padding: const EdgeInsets.all(32.0),
-      child: new Row(
+      body: ListView(
         children: [
-          new Expanded(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                new Text(
-                  ' 大额存单',
-                ),
-                new Container(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: new Text(
-                    '4.4%~4.5%',
-                    style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red[500],
-                    ),
-                  ),
-                ),
-                new Text(
-                  '年利率',
-                  style: new TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          new Expanded(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                new Container(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: new Text(
-                    'Can be withdrawn in advance',
-                    style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                new Text(
-                  '10000.00起存',
-                  style: new TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-
-    return MaterialApp(
-      home: ListView(
-        children: [
-          new Image.asset(
+          Image.asset(
             'images/time_depost/time_depost_product.png',
-            width: 600.0,
-            height: 240.0,
+            width: 500.0,
+            height: 120.0,
             fit: BoxFit.cover,
           ),
-          titleSectionOne,
-          titleSectionTwo,
-          titleSectionThree,
+          titleSection,
         ],
       ),
     );
+  }
+
+  // Widget build(BuildContext context) {
+  //   BorderSide _lineBorderSide() {
+  //     return BorderSide(
+  //       // 设置单侧边框的样式
+  //       color: HsgColors.divider,
+  //       width: 0.5,
+  //       style: BorderStyle.solid,
+  //     );
+  //   }
+  //  //}
+
+  //       // SizedBox(
+  //       //   height: 37,
+  //       //   child: Column(
+  //       //     mainAxisAlignment: MainAxisAlignment.center,
+  //       //     children: [
+  //       //       Padding(
+  //       //         padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+  //       //         child: Text(
+  //       //           S.current.whole_deposit_and_rounding_hkd,
+  //       //           style: TextStyle(fontSize: 17, color: Colors.black),
+  //       //         ),
+  //       //       ),
+  //       //     ],
+  //       //   ),
+  //       // ),
+  //       // Divider(height: 0, color: HsgColors.textHintColor),
+  //       // SizedBox(
+  //       //     height: 125,
+  //       //     child: Padding(
+  //       //       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+  //       //       child: Column(
+  //       //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //       //         children: [
+  //       //           Row(
+  //       //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       //             children: [
+  //       //               Text(
+  //       //                 '2.8%~3.4%',
+  //       //                 style:
+  //       //                     TextStyle(fontSize: 17, color: Colors.red[500]),
+  //       //               ),
+  //       //               Text(
+  //       //                 'Surprise deposit interest rate',
+  //       //                 style: TextStyle(fontSize: 17, color: Colors.black),
+  //       //               ),
+  //       //             ],
+  //       //           ),
+  //       //           Row(
+  //       //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       //             children: [
+  //       //               Text(
+  //       //                 S.current.annual_interest_rate,
+  //       //                 style: TextStyle(fontSize: 15, color: Colors.grey),
+  //       //               ),
+  //       //               Text(
+  //       //                 S.current.from_hundred,
+  //       //                 style: TextStyle(fontSize: 15, color: Colors.grey),
+  //       //               ),
+  //       //             ],
+  //       //           ),
+  //       //     ],
+  //       //   ),
+  //       // )),
+  //     ],
+  //   ),
+  // );
+
+  // @override
+  // Widget build(BuildContext context) {
+  //  return Scaffold(
+  //   appBar: AppBar(
+  //     title: Text('data'),
+  //     actions: <Widget>[
+  //       Text(
+  //         S.current.my_deposit_certificate,
+  //         style: TextStyle(
+  //           fontSize: 17.0,
+  //           height: 2.5,
+  //         ),
+  //       ),
+  //     ],
+  //   ),
+  //   body: ListView(
+  //     children: [
+  //       Image.asset(
+  //         'images/time_depost/time_depost_product.png',
+  //         width: 500.0,
+  //         height: 120.0,
+  //         fit: BoxFit.cover,
+  //       ),
+  //       titleSectionOne,
+  //       // ListView.builder(
+  //       //     itemCount: 3,
+  //       //     itemBuilder: (BuildContext context, int position) {
+  //       //       return getRow(context, position);
+  //       //     }),
+  //     ],
+  //   ),
+  // );
+
+  // Widget getRow(BuildContext context, int position) {
+  //   return GestureDetector(
+  //     child: titleSectionOne(products[position]),
+  //     onTap: () {
+  //       go2Detail(products[position]);
+  //     },
+  //   );
+  // }
+
+  // void go2Detail(TimeDepostProduct product) {
+  //   Navigator.pushNamed(context, pageTimeDepostProduct, arguments: product);
+  // }
+
+  Future<void> _loadData() async {
+    TimeDepositDataRepository()
+        .getGetTimeDepositProduct('getGetTimeDepositProduct')
+        .then((data) {
+      // products.clear();
+      //products.addAll();
+      print('$data');
+    }).catchError((e) {
+      print(e);
+      // Fluttertoast.showToast(msg: e.toString());
+    });
   }
 }
