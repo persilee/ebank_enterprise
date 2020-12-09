@@ -4,6 +4,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
+import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -192,8 +193,8 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _isLoading = false;
     });
-    // Navigator.pushNamed(context, pageDetailList);
     // Navigator.pushNamed(context, pageCardList);
+    // Navigator.pushNamed(context, pageDialogDemo);
     Navigator.pushAndRemoveUntil(context, pageIndex, (route) => false);
   }
 
@@ -205,6 +206,11 @@ class _LoginPageState extends State<LoginPage> {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
+    if (resp.custId == null || resp.custId == '') {
+      prefs.setString(ConfigKey.CUST_ID, '');
+    } else {
+      prefs.setString(ConfigKey.CUST_ID, resp.custId);
+    }
 
     _showMainPage(context);
   }
@@ -281,18 +287,17 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) => BottomMenu(
-              title: '选择语言',
+              title: S.current.select_language,
               items: languages,
             ));
-    print('dialog result:$result');
-    Locale locale;
+    String language;
     if (result != null && result != false) {
       switch (result) {
         case 0:
-          locale = Locale.fromSubtags(languageCode: 'en');
+          language = Language.EN;
           break;
         case 1:
-          locale = Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN');
+          language = Language.ZH_CN;
           break;
       }
     } else {
@@ -300,11 +305,10 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
     }
 
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(ConfigKey.LANGUAGE, locale.languageCode);
-    print('change language, code:${locale.languageCode}');
+    prefs.setString(ConfigKey.LANGUAGE, language);
     setState(() {
       title = languages[result];
-      HSGBankApp.setLocale(context, locale);
+      HSGBankApp.setLocale(context, Language().getLocaleByLanguage(language));
     });
   }
 }

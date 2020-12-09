@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
 import 'package:ebank_mobile/feature_demo/deposit_record_detail_page.dart';
 import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
@@ -52,6 +50,8 @@ var appRoutes = {
   aboutUs: (context) => AboutUsPage(),
   feedback: (context) => FeedbackPage(),
   changeLgPs: (context) => ChangeLoPS(),
+  // changeLgPs: (context) => ChangeLoPS(),
+  minePage: (context) => MinePage(),
   pageAccountOverview: (context) => AccountOverviewPage(),
   pageDetailList: (context) => DetailListPage(),
   pageDetailInfo: (context) => DetailInfoPage(),

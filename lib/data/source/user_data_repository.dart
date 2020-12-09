@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
@@ -17,16 +18,4 @@ class UserDataRepository {
   factory UserDataRepository() => _instance;
 
   UserDataRepository._internal();
-
-  // login(LoginReq request,
-  //     {OnSuccess<LoginResp> onSuccess,
-  //     OnFailure onFailure,
-  //     @required String tag}) {
-  //   HsgHttp().post(
-  //       path: 'security/cutlogin',
-  //       data: BaseRequest(request.toJson()),
-  //       onSuccess: (data) => onSuccess(LoginResp.fromJson(data)),
-  //       onFailure: onFailure,
-  //       tag: tag);
-  // }
 }
