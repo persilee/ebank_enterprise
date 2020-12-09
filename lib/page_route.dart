@@ -9,6 +9,7 @@ import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_detail_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
+import 'package:ebank_mobile/page/electronicStatement/electronic_statement_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
@@ -41,6 +42,7 @@ var pageTimeDepostProduct = '/time_depost_product_page';
 var pageFeatureList = '/hsg_feature_list_page';
 var pageTransfer = '/hsg_transfer_page';
 var pageTransferInternal = '/hsg_transfer_internal_page';
+var pageElectronicStatement = '/electronic_statement_page';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -61,6 +63,7 @@ var appRoutes = {
   pageFeatureList: (context) => FeatureListPage(),
   pageTransfer: (context) => TransferPage(),
   pageTransferInternal: (context) => TransferInternalPage(),
+  pageElectronicStatement: (context) => ElectronicStatementPage(),
 };
 
 onGenerateRoute(RouteSettings settings) {

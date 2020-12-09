@@ -29,6 +29,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   List<CardListBal> ddList = [];
   List<TdConInfoList> tdList = [];
   List<LoanMastList> lnList = [];
+
   @override
   // ignore: must_call_super
   void initState() {
@@ -152,7 +153,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
               SliverToBoxAdapter(
                 child: Column(
                   children: [
-                    Container(height: 0.8, color: HsgColors.textHintColor),
+                    Container(height: 0.5, color: HsgColors.divider),
                     Container(
                       color: Colors.white,
                       padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
@@ -223,7 +224,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
               SliverToBoxAdapter(
                 child: Column(
                   children: [
-                    Container(height: 0.8, color: HsgColors.textHintColor),
+                    Container(height: 0.5, color: HsgColors.divider),
                     Container(
                       color: Colors.white,
                       padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
@@ -294,7 +295,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
               SliverToBoxAdapter(
                 child: Column(
                   children: [
-                    Container(height: 0.8, color: HsgColors.textHintColor),
+                    Container(height: 0.5, color: HsgColors.divider),
                     Container(
                       color: Colors.white,
                       padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
