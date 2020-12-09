@@ -50,5 +50,11 @@
   "time_deposits": "Time Deposits",
   "credit_card": "Credit Card",
   "rest_should_also": "Rest Should Also",
-  "remaining_available_amount": "Remaining Available Amount"
+  "remaining_available_amount": "Remaining Available Amount",
+  "transfer_features": "Transfer Functions",
+  "recent_transfer_account": "Transfer To Account List",
+  "no_recent_transfer_account": "Have no transfer account",
+  "transfer_out": "Transfer To",
+  "transfer_type_0": "Internal Transfer",
+  "transfer_type_2": "Overseas Bank Transfer"
 }

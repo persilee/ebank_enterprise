@@ -50,5 +50,11 @@
   "time_deposits": "定期",
   "credit_card": "信用卡",
   "rest_should_also": "剩余应还",
-  "remaining_available_amount": "剩余可用额度"
+  "remaining_available_amount": "剩余可用额度",
+  "transfer_features": "转账功能",
+  "recent_transfer_account": "最近转账账号",
+  "no_recent_transfer_account": "暂无转账账号",
+  "transfer_out": "转出",
+  "transfer_type_0": "行内转账",
+  "transfer_type_2": "国际转账"
 }

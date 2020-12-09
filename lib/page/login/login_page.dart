@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
   final TextEditingController _accountTC =
-      TextEditingController(text: 'Smile04');
+      TextEditingController(text: 'Smile05');
   final TextEditingController _passwordTC =
       TextEditingController(text: 'Qwe123456~');
 

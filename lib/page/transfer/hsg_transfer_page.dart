@@ -4,8 +4,11 @@
 /// Date: 2020-12-04
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
+import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 
 class TransferPage extends StatefulWidget {
@@ -17,6 +20,13 @@ class TransferPage extends StatefulWidget {
 
 class _TransferPageState extends State<TransferPage> {
   var _partnerListData = [];
+  bool _isShowNoDataWidget = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +53,14 @@ class _TransferPageState extends State<TransferPage> {
 
   List<Widget> _sliversSection(List gridData, List listData) {
     List<Widget> section = [];
+
+    ///导航栏
     section.add(SliverAppBar(
       pinned: true,
-      title: Text('转账功能'),
+      title: Text(S.of(context).transfer_features),
     ));
 
+    ///功能网格
     section.add(SliverGrid(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisSpacing: 0,
@@ -85,36 +98,13 @@ class _TransferPageState extends State<TransferPage> {
     section.add(SliverList(
       delegate: SliverChildBuilderDelegate(
         (content, index) {
-          return Container(
-            height: 50,
-            color: Colors.white,
-            child: FlatButton(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '${listData[index]['btnTitle']}',
-                      style: TextStyle(
-                          color: HsgColors.firstDegreeText, fontSize: 15),
-                    ),
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: HsgColors.firstDegreeText,
-                    size: 18,
-                  ),
-                ],
-              ),
-              onPressed: () {},
-            ),
-          );
+          return _featureListItemWidget('${listData[index]['btnTitle']}');
         },
         childCount: listData.length,
       ),
     ));
 
+    ///最近转账账号横条
     section.add(SliverToBoxAdapter(
       child: Container(
         child: Column(
@@ -130,7 +120,7 @@ class _TransferPageState extends State<TransferPage> {
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(left: 15, right: 15),
               child: Text(
-                '最近转账账号',
+                S.of(context).recent_transfer_account,
                 style: TextStyle(
                     color: HsgColors.firstDegreeText,
                     fontSize: 15,
@@ -146,92 +136,52 @@ class _TransferPageState extends State<TransferPage> {
       ),
     ));
 
+    ///转账范本列表
     section.add(SliverList(
       delegate: SliverChildBuilderDelegate(
         (content, index) {
-          return Container(
-            height: 70,
-            decoration: BoxDecoration(
-              //背景色
-              color: Colors.white,
-              //设置底部边框
-              border: new Border(
-                bottom: BorderSide(color: HsgColors.divider, width: 0.5),
-              ),
-            ),
-            child: FlatButton(
-              child: Row(
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Image(
-                      image: AssetImage(
-                          'images/transferIcon/transfer_sample_placeholder.png'),
-                      width: 46,
-                      height: 46,
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.only(left: 15, right: 15),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(top: 10),
-                            child: Text(
-                              '张三',
-                              style: TextStyle(
-                                color: HsgColors.secondDegreeText,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 10),
-                            child: Text(
-                              '500000879001',
-                              style: TextStyle(
-                                color: HsgColors.describeText,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  FlatButton(
-                    child: Text(
-                      '转出',
-                      style: TextStyle(
-                        color: HsgColors.accent,
-                        fontSize: 13,
-                      ),
-                    ),
-                    onPressed: () {
-                      print('转出');
-                    },
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: HsgColors.accent, width: 0.5),
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                  ),
-                ],
-              ),
-              onPressed: () {},
-            ),
-          );
+          return _partnerListItemWidget(_partnerListData[index]);
         },
-        childCount: 2,
+        childCount: _partnerListData.length,
       ),
     ));
 
+    ///底部加长条，外带暂无数据显示widget
     section.add(SliverToBoxAdapter(
-      child: Container(
-        // color: HsgColors.commonBackground,
-        height: 20,
+      child: Column(
+        children: [
+          _isShowNoDataWidget
+              ? Container(
+                  width: (MediaQuery.of(context).size.width),
+                  height: 270,
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 45),
+                        child: Image(
+                          image: AssetImage(
+                              'images/noDataIcon/no_data_person.png'),
+                          width: 159,
+                          height: 128,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 20),
+                        child: Text(
+                          S.of(context).no_recent_transfer_account,
+                          style: TextStyle(
+                              color: HsgColors.describeText, fontSize: 15.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : Container(),
+          Container(
+            height: 20,
+          ),
+        ],
       ),
     ));
 
@@ -273,11 +223,137 @@ class _TransferPageState extends State<TransferPage> {
     );
   }
 
+  ///功能列表单元widget
+  Widget _featureListItemWidget(String textTitle) {
+    return Container(
+      height: 50,
+      color: Colors.white,
+      child: FlatButton(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                textTitle,
+                style:
+                    TextStyle(color: HsgColors.firstDegreeText, fontSize: 15),
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: HsgColors.firstDegreeText,
+              size: 18,
+            ),
+          ],
+        ),
+        onPressed: () {},
+      ),
+    );
+  }
+
+  ///最近转账账号列表单元widget
+  Widget _partnerListItemWidget(Rows data) {
+    return Container(
+      height: 80,
+      decoration: BoxDecoration(
+        //背景色
+        color: Colors.white,
+        //设置底部边框
+        border: new Border(
+          bottom: BorderSide(color: HsgColors.divider, width: 0.5),
+        ),
+      ),
+      child: FlatButton(
+        child: Row(
+          children: [
+            Container(
+              // alignment: Alignment.centerLeft,
+              width: 46,
+              height: 46,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(46.0 / 2),
+              ),
+              child: ClipOval(
+                child: (data.payeeBankImageUrl == null ||
+                        data.payeeBankImageUrl == '')
+                    ? Image(
+                        image: AssetImage(
+                          'images/transferIcon/transfer_sample_placeholder.png',
+                        ),
+                      )
+                    : FadeInImage.assetNetwork(
+                        fit: BoxFit.fitWidth,
+                        image: data.payeeBankImageUrl,
+                        placeholder:
+                            'images/transferIcon/transfer_sample_placeholder.png',
+                      ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.only(left: 15, right: 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 17),
+                      height: 20,
+                      child: Text(
+                        data.payeeName,
+                        style: TextStyle(
+                          color: HsgColors.secondDegreeText,
+                          fontSize: 15,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 6),
+                      height: 20,
+                      child: Text(
+                        data.payeeCardNo,
+                        style: TextStyle(
+                          color: HsgColors.describeText,
+                          fontSize: 13,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            FlatButton(
+              child: Text(
+                S.of(context).transfer_out,
+                style: TextStyle(
+                  color: HsgColors.accent,
+                  fontSize: 13,
+                ),
+              ),
+              onPressed: () {
+                print('转出');
+              },
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: HsgColors.accent, width: 0.5),
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+              ),
+            ),
+          ],
+        ),
+        onPressed: () {},
+      ),
+    );
+  }
+
   List<Map<String, Object>> _gridFeatures = [
     {
       'btnIcon':
           'images/transferIcon/transfer_features_icon/transfer_features_timely.png',
-      'btnTitle': '行内转账'
+      'btnTitle': S.current.transfer_type_0
     },
     {
       'btnIcon':
@@ -292,6 +368,29 @@ class _TransferPageState extends State<TransferPage> {
   ];
 
   List<Map<String, Object>> _listFeatures = [
-    {'btnIcon': '', 'btnTitle': '国际转账'},
+    {'btnIcon': '', 'btnTitle': S.current.transfer_type_2},
   ];
+
+  Future<void> _loadData() async {
+    TransferDataRepository()
+        .getTransferPartnerList(
+      GetTransferPartnerListReq(1, 10),
+      'getTransferPartnerList',
+    )
+        .then((data) {
+      print('$data');
+      setState(() {
+        if (data.rows != null) {
+          setState(() {
+            _partnerListData.clear();
+            _partnerListData.addAll(data.rows);
+            _isShowNoDataWidget = _partnerListData.length > 0 ? false : true;
+          });
+        }
+      });
+    }).catchError((e) {
+      HSProgressHUD.showError(status: e.toString());
+      print('${e.toString()}');
+    });
+  }
 }
