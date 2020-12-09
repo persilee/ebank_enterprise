@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 
@@ -79,9 +80,9 @@ class _TransferPageState extends State<TransferPage> {
               35,
               () {
                 String title = gridData[index]['btnTitle'];
-                if ('行内转账' == title) {
+                if (S.current.transfer_type_0 == title) {
                   //行内转账
-                  //Navigator.pushNamed(context, pageTransfer);
+                  Navigator.pushNamed(context, pageTransferInternal);
                 } else if (S.of(context).transfer_appointment == title) {
                   //'预约转账'
                 } else if (S.current.transfer_record == title) {
@@ -314,7 +315,7 @@ class _TransferPageState extends State<TransferPage> {
                       margin: EdgeInsets.only(top: 6),
                       height: 20,
                       child: Text(
-                        data.payeeCardNo,
+                        FormatUtil.formatSpace4(data.payeeCardNo),
                         style: TextStyle(
                           color: HsgColors.describeText,
                           fontSize: 13,
