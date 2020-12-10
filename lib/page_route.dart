@@ -5,6 +5,7 @@ import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
+import 'package:ebank_mobile/page/loan/loan_interest_rate.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
@@ -14,13 +15,15 @@ import 'package:ebank_mobile/page/mine/mine_page.dart';
 import 'package:ebank_mobile/page/mine/about_us_page.dart';
 import 'package:ebank_mobile/page/mine/feedback_page.dart';
 import 'package:ebank_mobile/page/mine/hsg_mine_page.dart';
-import 'package:ebank_mobile/page/loan/loan_demo.dart';
 import 'package:ebank_mobile/page/mine/change_logPswd_page.dart';
 
 var pageHome = '/';
-var pageLogin = "123123";
+var pageLogin = pageHome;
 // var pageCardList = pageHome;
-var pageloanDemo = pageHome;
+//var pageloanDemo = pageHome;
+//var pageloanDemo = '/loan_demo';
+//var pageLoanInterestRate = pageHome;
+var pageLoanInterestRate = '/loan_interest_rate';
 var pageCardList = '/card_list';
 var pageDialogDemo = '/dialog_demo';
 var pageCardDetail = '/card_detail';
@@ -39,7 +42,8 @@ var pageTransfer = '/hsg_transfer_page';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
-  pageloanDemo: (context) => LoanDemoPage(),
+  //pageloanDemo: (context) => LoanDemoPage(),
+  pageLoanInterestRate: (context) => LoanInterestRatePage(),
   pageCardList: (context) => CardListPage(),
   pageDialogDemo: (context) => DialogDemoPage(),
   // pageCardDetail: (context) => CardDetailPage(),

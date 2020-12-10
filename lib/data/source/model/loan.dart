@@ -1,66 +1,63 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: 方璐瑶
+/// Date: 2020-12-03
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'loan.g.dart';
 
 @JsonSerializable()
 class Loan extends Object {
-  @JsonKey(name: 'businessVarieties')
-  String businessVarieties;
+  @JsonKey(name: 'loan_product_name_with_value')
+  String loanProductNameWithValue;
 
   @JsonKey(name: 'loanId')
   String loanId;
 
-  @JsonKey(name: 'loanAmount')
+  @JsonKey(name: 'loan_amount')
   String loanAmount;
 
-  @JsonKey(name: 'loanBalance')
-  String loanBalance;
+  @JsonKey(name: 'loan_balance2')
+  String loanBalance2;
 
-  @JsonKey(name: 'paymentHistory')
-  String paymentHistory;
+  @JsonKey(name: 'loan_interest_rate_with_symbol')
+  String loanInterestRateWithSymbol;
 
-  @JsonKey(name: 'repaymentSchedule')
-  String repaymentSchedule;
-
-  @JsonKey(name: 'loanInterestRates')
-  String loanInterestRates;
-
-  @JsonKey(name: 'totalPeriods')
+  @JsonKey(name: 'total_periods')
   String totalPeriods;
 
-  @JsonKey(name: 'restPeriods')
-  String restPeriods;
+  @JsonKey(name: 'remaining_periods')
+  String remainingPeriods;
 
-  @JsonKey(name: 'startingDate')
-  String startingDate;
+  @JsonKey(name: 'begin_date')
+  String beginDate;
 
-  @JsonKey(name: 'expiringDate')
-  String expiringDate;
+  @JsonKey(name: 'end_date')
+  String endDate;
 
-  @JsonKey(name: 'paymentMethod')
-  String paymentMethod;
+  @JsonKey(name: 'repayment_ways')
+  String repaymentWays;
 
-  @JsonKey(name: 'agreement')
-  String agreement;
+  @JsonKey(name: 'deduct_money_date')
+  String deductMoneyDate;
 
-  @JsonKey(name: 'debitCard')
-  String debitCard;
+  @JsonKey(name: 'deduct_money_account')
+  String deductMoneyAccount;
 
   Loan(
-    this.businessVarieties,
+    this.loanProductNameWithValue,
     this.loanId,
     this.loanAmount,
-    this.loanBalance,
-    this.paymentHistory,
-    this.repaymentSchedule,
-    this.loanInterestRates,
+    this.loanBalance2,
+    this.loanInterestRateWithSymbol,
     this.totalPeriods,
-    this.restPeriods,
-    this.startingDate,
-    this.expiringDate,
-    this.paymentMethod,
-    this.agreement,
-    this.debitCard,
+    this.remainingPeriods,
+    this.beginDate,
+    this.endDate,
+    this.repaymentWays,
+    this.deductMoneyDate,
+    this.deductMoneyAccount,
   );
 
   factory Loan.fromJson(Map<String, dynamic> srcJson) =>
