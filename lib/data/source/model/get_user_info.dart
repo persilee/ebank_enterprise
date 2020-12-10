@@ -1,3 +1,8 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: lijiawei
+/// Date: 2020-12-02
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'get_user_info.g.dart';

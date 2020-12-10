@@ -110,6 +110,22 @@ flutter:
     - images/mine/aboutUs-icon2.png
     - images/mine/aboutUs-icon3.png
     - images/mine/aboutUs-icon4.png
+
+    #time-depost
+    - images/time_depost/time_depost_product.png
+
+    #没有数据的提示图片
+    - images/noDataIcon/no_data_card.png
+    - images/noDataIcon/no_data_person.png
+    - images/noDataIcon/no_data_record.png
+
+    #转账图片
+    #转账功能页面图片
+    - images/transferIcon/transfer_features_icon/transfer_features_plan.png
+    - images/transferIcon/transfer_features_icon/transfer_features_record.png
+    - images/transferIcon/transfer_features_icon/transfer_features_timely.png
+    #其他
+    - images/transferIcon/transfer_sample_placeholder.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

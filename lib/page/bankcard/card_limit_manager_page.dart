@@ -1,3 +1,8 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: zhanggenhua
+/// Date: 2020-11-05
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';

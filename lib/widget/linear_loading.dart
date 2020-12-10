@@ -1,3 +1,8 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: zhanggenhua
+/// Date: 2020-11-18
+
 import 'package:flutter/material.dart';
 
 class LinearLoading extends StatelessWidget implements PreferredSizeWidget {

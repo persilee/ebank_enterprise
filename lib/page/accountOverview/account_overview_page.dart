@@ -1,5 +1,16 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: CaiTM
+/// Date: 2020-12-07
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/account_overview_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountOverviewPage extends StatefulWidget {
   @override
@@ -7,470 +18,408 @@ class AccountOverviewPage extends StatefulWidget {
 }
 
 class _AccountOverviewPageState extends State<AccountOverviewPage> {
+  var totalAssets = '0.00';
+  var netAssets = '0.00';
+  var totalLiabilities = '0.00';
+  var localCcy = 'CNY';
+  var ddTotal = '0.00';
+  var ddCcy = 'HKD';
+  var tdTotal = '0.00';
+  var lnTotal = '0.00';
+  List<CardListBal> ddList = [];
+  List<TdConInfoList> tdList = [];
+  List<LoanMastList> lnList = [];
+
+  @override
+  // ignore: must_call_super
+  void initState() {
+    // 网络请求
+    _getAccountOverviewInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('账户总览'),
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: Container(
-        color: HsgColors.backgroundColor,
-        child: ListView(
-          children: [
-            // 总资产
-            Container(
-              height: 162,
-              margin: EdgeInsets.only(bottom: 12),
-              padding: EdgeInsets.fromLTRB(0, 19, 0, 28),
-              color: HsgColors.primary,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 15),
-                    child: Column(
-                      children: [
-                        Center(
-                          child: Text(
-                            '总资产',
-                            style:
-                                TextStyle(fontSize: 14, color: Colors.white54),
-                          ),
-                        ),
-                        Center(
-                          child: Text(
-                            '￥1,000,000.00',
-                            style: TextStyle(fontSize: 24, color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        appBar: AppBar(
+          title: Text(S.of(context).account_overview),
+          centerTitle: true,
+          elevation: 0,
+        ),
+        body: Container(
+          color: HsgColors.backgroundColor,
+          child: CustomScrollView(
+            slivers: [
+              // 总资产
+              SliverToBoxAdapter(
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(0, 19, 0, 28),
+                  color: HsgColors.primary,
+                  child: Column(
                     children: [
-                      Column(
-                        children: [
-                          Text(
-                            '净资产',
-                            style:
-                                TextStyle(fontSize: 14, color: Colors.white54),
-                          ),
-                          Padding(padding: EdgeInsets.only(top: 5)),
-                          Text(
-                            '￥50000.00',
-                            style: TextStyle(fontSize: 14, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(
-                            width: 1,
-                            height: 30,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(color: Colors.grey),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 18),
+                        child: Column(
+                          children: [
+                            Center(
+                              child: Text(
+                                S.current.total_assets,
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.white54),
+                              ),
                             ),
-                          ),
-                        ],
+                            Center(
+                              child: Text(
+                                localCcy + ' ' + totalAssets,
+                                style: TextStyle(
+                                    fontSize: 24, color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      Column(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(
-                            '总负债',
-                            style:
-                                TextStyle(fontSize: 14, color: Colors.white54),
+                          Column(
+                            children: [
+                              Text(
+                                S.current.net_assets,
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.white54),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.only(top: 5, bottom: 5)),
+                              Text(
+                                localCcy + ' ' + netAssets,
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.white),
+                              ),
+                            ],
                           ),
-                          Padding(padding: EdgeInsets.only(top: 5)),
-                          Text(
-                            '￥10000.00',
-                            style: TextStyle(fontSize: 14, color: Colors.white),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: 1,
+                                height: 30,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(color: Colors.grey),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                S.current.total_liability,
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.white54),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.only(top: 5, bottom: 5)),
+                              Text(
+                                localCcy + ' ' + totalLiabilities,
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.white),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-            // 活期
-            Container(
-              // height: 162,
-              margin: EdgeInsets.only(bottom: 12),
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 37,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: Text(
-                            '活期',
-                            style: TextStyle(fontSize: 15, color: Colors.black),
+
+              SliverToBoxAdapter(
+                child: Container(
+                  height: 12,
+                ),
+              ),
+
+              // 活期
+              SliverToBoxAdapter(
+                child: Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                  child: Text(
+                    S.current.demand_deposit,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: HsgColors.firstDegreeText),
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Container(height: 0.5, color: HsgColors.divider),
+                    Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            S.current.total,
+                            style: TextStyle(
+                                fontSize: 15, color: Color(0xFF8D8D8D)),
                           ),
+                          Text(
+                            ddTotal + ' ' + ddCcy,
+                            style: TextStyle(
+                                fontSize: 15, color: Color(0xFF262626)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                  return Container(
+                    padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
+                    color: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          ddList[index].cardNo,
+                          style:
+                              TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
                         ),
+                        Text(
+                          ddList[index].equAmt + ' ' + ddList[index].ccy,
+                          style:
+                              TextStyle(fontSize: 15, color: Color(0xFF262626)),
+                        )
                       ],
                     ),
-                  ),
-                  Divider(height: 0, color: HsgColors.textHintColor),
-                  SizedBox(
-                      height: 125,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '合计',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  '￥10000.00',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '卡号 5000 0030 5001',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  '￥10000.00',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '卡号 5000 0030 5001',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  'HKD10000.00',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ))
-                ],
+                  );
+                }, childCount: ddList.length),
               ),
-            ),
-            // 定期
-            Container(
-              height: 162,
-              margin: EdgeInsets.only(bottom: 12),
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 37,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: Text(
-                            '定期',
-                            style: TextStyle(fontSize: 15, color: Colors.black),
+
+              SliverToBoxAdapter(
+                child: Container(
+                  height: 12,
+                ),
+              ),
+
+              // 定期
+              SliverToBoxAdapter(
+                child: Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                  child: Text(
+                    S.current.time_deposits,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: HsgColors.firstDegreeText),
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Container(height: 0.5, color: HsgColors.divider),
+                    Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            S.current.total,
+                            style: TextStyle(
+                                fontSize: 15, color: Color(0xFF8D8D8D)),
                           ),
+                          Text(
+                            tdTotal + ' HKD',
+                            style: TextStyle(
+                                fontSize: 15, color: Color(0xFF262626)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                  return Container(
+                    padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
+                    color: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          tdList[index].conNo,
+                          style:
+                              TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
                         ),
+                        Text(
+                          tdList[index].bal + ' ' + tdList[index].ccy,
+                          style:
+                              TextStyle(fontSize: 15, color: Color(0xFF262626)),
+                        )
                       ],
                     ),
-                  ),
-                  Divider(height: 0, color: HsgColors.textHintColor),
-                  SizedBox(
-                      height: 125,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '合计',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  '￥10000.00',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '尾号 (5001)',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  '￥10000.00',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '尾号 (5001)',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  '￥10000.00',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ))
-                ],
+                  );
+                }, childCount: tdList.length),
               ),
-            ),
-            // 贷款
-            Container(
-              height: 162,
-              margin: EdgeInsets.only(bottom: 12),
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 37,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: Text(
-                            '贷款',
-                            style: TextStyle(fontSize: 15, color: Colors.black),
+
+              SliverToBoxAdapter(
+                child: Container(
+                  height: 12,
+                ),
+              ),
+
+              // 贷款
+              SliverToBoxAdapter(
+                child: Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                  child: Text(
+                    S.current.loan,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: HsgColors.firstDegreeText),
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Container(height: 0.5, color: HsgColors.divider),
+                    Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            S.current.total,
+                            style: TextStyle(
+                                fontSize: 15, color: Color(0xFF8D8D8D)),
                           ),
+                          Text(
+                            lnTotal + ' HKD',
+                            style: TextStyle(
+                                fontSize: 15, color: Color(0xFF262626)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                  return Container(
+                    padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
+                    color: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          lnList[index].acNo,
+                          style:
+                              TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
                         ),
+                        Text(
+                          lnList[index].unpaidPrincipal + ' HKD',
+                          style:
+                              TextStyle(fontSize: 15, color: Color(0xFF262626)),
+                        )
                       ],
                     ),
-                  ),
-                  Divider(height: 0, color: HsgColors.textHintColor),
-                  SizedBox(
-                      height: 125,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '合计',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  '￥10000.00',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '尾号 (5001)',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  '￥10000.00',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '尾号 (5001)',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  '￥10000.00',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ))
-                ],
+                  );
+                }, childCount: lnList.length),
               ),
-            ),
-            // 信用卡
-            Container(
-              // height: 162,
-              margin: EdgeInsets.only(bottom: 20),
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 37,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: Text(
-                            '信用卡',
-                            style: TextStyle(fontSize: 15, color: Colors.black),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(height: 0, color: HsgColors.textHintColor),
-                  SizedBox(
-                      height: 125,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '招商信用卡',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '剩余应还',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  '￥10000.00',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '剩余可用额度',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  'HKD10000.00',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )),
-                  Divider(height: 10, color: HsgColors.textHintColor),
-                  SizedBox(
-                      height: 125,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '招商信用卡',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '剩余应还',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  '￥10000.00',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '剩余可用额度',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  'HKD10000.00',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )),
-                ],
+
+              SliverToBoxAdapter(
+                child: Container(
+                  height: 20,
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
+            ],
+          ),
+        ));
+  }
+
+  _getAccountOverviewInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+    String custID = prefs.getString(ConfigKey.CUST_ID);
+    // 总资产
+    AccountOverviewRepository()
+        .getTotalAssets(GetTotalAssetsReq(userID), 'GetTotalAssetsReq')
+        .then((data) {
+      setState(() {
+        totalAssets = data.totalAssets;
+        netAssets = data.netAssets;
+        totalLiabilities = data.totalLiability;
+        localCcy = data.ccy;
+      });
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+    // 活期
+    AccountOverviewRepository()
+        .getCardListBalByUser('getLoanMastList')
+        .then((data) {
+      if (data.cardListBal != null) {
+        setState(() {
+          ddList = data.cardListBal;
+          ddTotal = data.totalAmt;
+          ddCcy = data.defaultCcy;
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+    //定期
+    AccountOverviewRepository()
+        .getTdConInfoList(
+            GetTdConInfoListReq(ciNo: custID), 'GetTdConInfoListReq')
+        .then((data) {
+      if (data.rows != null) {
+        setState(() {
+          tdList = data.rows;
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+    // 定期总额
+    AccountOverviewRepository()
+        .getActiveContractByCiNo(GetActiveContractByCiNoReq(custID, userID),
+            'GetActiveContractByCiNoReq')
+        .then((data) {
+      setState(() {
+        tdTotal = data.totalAmt;
+      });
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+    // 贷款
+    AccountOverviewRepository()
+        .getLoanMastList(GetLoanMastListReq(custID), 'GetLoanMastListReq')
+        .then((data) {
+      if (data.lnAcMastAppDOList != null) {
+        setState(() {
+          lnList = data.lnAcMastAppDOList;
+          lnTotal = data.totalLiability;
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
   }
 }
