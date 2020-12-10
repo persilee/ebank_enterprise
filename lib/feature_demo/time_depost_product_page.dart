@@ -10,9 +10,12 @@
 
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
 import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+
+import '../page_route.dart';
 
 class TimeDepostProduct extends StatefulWidget {
   TimeDepostProduct({Key key}) : super(key: key);
@@ -22,7 +25,7 @@ class TimeDepostProduct extends StatefulWidget {
 }
 
 class _TimeDepostProductState extends State<TimeDepostProduct> {
-  List<TdepProducDTOList> productList = [];
+  List<TdepProducHeadDTO> productList = [];
 
   void initState() {
     super.initState();
@@ -40,19 +43,32 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       );
     }
 
-    List<Widget> _titleSection(List<TdepProducDTOList> tdepProducDTOList) {
+    List<Widget> _titleSection(List<TdepProducHeadDTO> tdepProducDTOList) {
       List<Widget> section = [];
       section.add(SliverAppBar(
         pinned: false,
-        title: Text('定期产品'),
+        centerTitle: true,
+        title: Text(S.current.time_deposit),
         actions: <Widget>[
-          Text(
-            S.current.my_deposit_certificate,
-            style: TextStyle(
-              fontSize: 17.0,
-              height: 2.5,
-            ),
-          ),
+          Container(
+            child: Text.rich(TextSpan(
+                text: S.current.deposit_record,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  height: 3.0,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    debugPrint("我的存单");
+                  })),
+          )
+          // Text(
+          //   S.current.deposit_record,
+          //   style: TextStyle(
+          //     fontSize: 17.0,
+          //     height: 2.5,
+          //   ),
+          // ),
         ],
         // flexibleSpace: FlexibleSpaceBar(
         //   background: Image.asset(
@@ -86,7 +102,10 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       );
       section.add(SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
-        return Container(
+        return FlatButton(
+          onPressed: () {
+            Navigator.pushNamed(context, pageTransfer);
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -116,24 +135,25 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                         Container(
                           height: 40.0,
                           alignment: Alignment.centerLeft,
-                          child: Text('The CDS'
-                              //tdepProducHeadDTO.lclName,
-                              // style: TextStyle(),
-                              ),
+                          child: Text(
+                            tdepProducDTOList[index].engName,
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          //'The CDS'
+                          //tdepProducHeadDTO.lclName,
+                          // style: TextStyle(),
                         ),
+                        // ),
                         Divider(height: 0.5, color: HsgColors.divider),
                         Container(
+                          //padding: EdgeInsets.only(bottom: 0),
                           height: 60,
                           alignment: Alignment.centerLeft,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                // tdepProducDTOList.
-                                '2.8~3.4',
-                                // tdepProducHeadDTO.minRate +
-                                //     '~' +
-                                //     tdepProducHeadDTO.maxRate,
+                                '${tdepProducDTOList[index].minRate}~${tdepProducDTOList[index].maxRate}',
                                 style: TextStyle(
                                     fontSize: 17, color: Colors.red[500]),
                               ),
@@ -142,11 +162,13 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                                     (MediaQuery.of(context).size.width - 30) /
                                         2 *
                                         1,
+                                // height: 35,
                                 child: Text(
-                                  'Surprise deposit interest rate',
+                                  tdepProducDTOList[index].remark,
+                                  //'Surprise deposit interest rate',
                                   // tdepProducHeadDTO.remark,
                                   style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 15,
                                     color: HsgColors.firstDegreeText,
                                   ),
                                   maxLines: 2,
@@ -157,28 +179,36 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                           ),
                         ),
                         Container(
-                          height: 40.0,
+                          padding: EdgeInsets.only(top: 0.0),
+                          height: 30.0,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                S.current.annual_interest_rate,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: HsgColors.describeText,
+                              SizedBox(
+                                height: 70,
+                                child: Text(
+                                  S.current.annual_interest_rate,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: HsgColors.describeText,
+                                  ),
                                 ),
                               ),
+
                               SizedBox(
                                 width:
                                     (MediaQuery.of(context).size.width - 30) /
                                         2 *
                                         1,
+                                height: 70,
                                 child: Text(
-                                  S.current.from_hundred,
+                                  S.current.minimum_deposit +
+                                      '${tdepProducDTOList[index].minAmt}',
+                                  //S.current.from_hundred,
                                   //tdepProducHeadDTO.minAmt,
                                   //S.current.from_hundred,
                                   style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 13,
                                     color: HsgColors.describeText,
                                   ),
                                   overflow: TextOverflow.ellipsis,
@@ -202,6 +232,127 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
             ],
           ),
         );
+        // Container(
+        //   child: Column(
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     children: [
+        //       Column(
+        //         children: [
+        //           Container(
+        //             color: HsgColors.commonBackground,
+        //             height: 15,
+        //           ),
+        //           Container(
+        //             // height: 115,
+        //             padding: EdgeInsets.only(left: 15.0, right: 15.0),
+        //             //边框设置
+        //             decoration: BoxDecoration(
+        //               //背景
+        //               color: Colors.white,
+        //               //设置四周边框
+        //               border: Border(
+        //                 top: _lineBorderSide(),
+        //                 bottom: _lineBorderSide(),
+        //               ), //Border.all(width: 1, color: Colors.red),
+        //             ),
+        //             child: Column(
+        //               // mainAxisAlignment: MainAxisAlignment.start,
+        //               crossAxisAlignment: CrossAxisAlignment.start,
+        //               children: [
+        //                 Container(
+        //                   height: 40.0,
+        //                   alignment: Alignment.centerLeft,
+        //                   child: Text(
+        //                     tdepProducDTOList[index].engName,
+        //                     //'The CDS'
+        //                     //tdepProducHeadDTO.lclName,
+        //                     // style: TextStyle(),
+        //                   ),
+        //                 ),
+        //                 Divider(height: 0.5, color: HsgColors.divider),
+        //                 Container(
+        //                   height: 60,
+        //                   alignment: Alignment.centerLeft,
+        //                   child: Row(
+        //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //                     children: [
+        //                       Text(
+        //                         '${tdepProducDTOList[index].minRate}~${tdepProducDTOList[index].maxRate}',
+        //                         // '2.8~3.4',
+        //                         // tdepProducHeadDTO.minRate +
+        //                         //     '~' +
+        //                         //     tdepProducHeadDTO.maxRate,
+        //                         style: TextStyle(
+        //                             fontSize: 17, color: Colors.red[500]),
+        //                       ),
+        //                       SizedBox(
+        //                         width:
+        //                             (MediaQuery.of(context).size.width - 30) /
+        //                                 2 *
+        //                                 1,
+        //                         child: Text(
+        //                           tdepProducDTOList[index].remark,
+        //                           //'Surprise deposit interest rate',
+        //                           // tdepProducHeadDTO.remark,
+        //                           style: TextStyle(
+        //                             fontSize: 17,
+        //                             color: HsgColors.firstDegreeText,
+        //                           ),
+        //                           maxLines: 2,
+        //                           overflow: TextOverflow.ellipsis,
+        //                         ),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                 ),
+        //                 Container(
+        //                   height: 40.0,
+        //                   child: Row(
+        //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //                     children: [
+        //                       Text(
+        //                         S.current.annual_interest_rate,
+        //                         style: TextStyle(
+        //                           fontSize: 15,
+        //                           color: HsgColors.describeText,
+        //                         ),
+        //                       ),
+        //                       SizedBox(
+        //                         width:
+        //                             (MediaQuery.of(context).size.width - 30) /
+        //                                 2 *
+        //                                 1,
+        //                         child: Text(
+        //                           S.current.minimum_deposit +
+        //                               '${tdepProducDTOList[index].minAmt}',
+        //                           //S.current.from_hundred,
+        //                           //tdepProducHeadDTO.minAmt,
+        //                           //S.current.from_hundred,
+        //                           style: TextStyle(
+        //                             fontSize: 15,
+        //                             color: HsgColors.describeText,
+        //                           ),
+        //                           overflow: TextOverflow.ellipsis,
+        //                         ),
+        //                       ),
+        //                       // Text(
+        //                       //   S.current.from_hundred,
+        //                       //   style: TextStyle(
+        //                       //     fontSize: 15,
+        //                       //     color: HsgColors.describeText,
+        //                       //   ),
+        //                       // ),
+        //                     ],
+        //                   ),
+        //                 ),
+        //               ],
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     ],
+        //   ),
+        // );
       }, childCount: tdepProducDTOList.length)));
       return section;
     }
@@ -219,10 +370,12 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         .then((data) {
       // products.clear();
       //products.addAll();
+      print('-----------------------------success----------');
       print('$data');
       // productList.clear();
-      // productList.addAll(data.tdepProducDTOList);
-      print('-------------------------------$productList');
+      data.forEach((element) {
+        productList.add(element.tdepProducHeadDTO);
+      });
 
       setState(() {});
     }).catchError((e) {

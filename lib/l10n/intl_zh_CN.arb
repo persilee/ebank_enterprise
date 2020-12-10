@@ -50,12 +50,6 @@
   "time_deposits": "定期",
   "credit_card": "信用卡",
   "rest_should_also": "剩余应还",
-  "remaining_available_amount": "剩余可用额度",
-  "my_deposit_certificate":"我的存单",
   "annual_interest_rate":"年利率",
-  "from_hundred":"100.00起存",
-  "from_ten_thousand":"10000.00起存",
-  "whole_deposit_and_rounding_hkd":"整存整取(HKD)",
-  "whole_deposit_and_rounding_usd":"整存整取(USD)",
-  "certificate_of_deposit":"大额存单"
+  "minimum_deposit":"起存"
 }

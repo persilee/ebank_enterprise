@@ -50,12 +50,6 @@
   "time_deposits": "Time Deposits",
   "credit_card": "Credit Card",
   "rest_should_also": "Rest Should Also",
-  "remaining_available_amount": "Remaining Available Amount",
-  "my_deposit_certificate":"My Deposit Certificate",
   "annual_interest_rate":"Annual Interest Rate",
-  "from_hundred":"From 100.00",
-  "from_ten_thousand":"From 10000.00",
-  "whole_deposit_and_rounding_hkd":"Whole Deposit And Rounding(HKD)",
-  "whole_deposit_and_rounding_usd":"Whole Deposit And Rounding(USD)",
-  "certificate_of_deposit":"Certificate Of Deposit"
+  "minimum_deposit":"Minimum Deposit"
 }

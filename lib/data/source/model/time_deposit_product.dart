@@ -1,11 +1,8 @@
-/*
- * Filename: d:\work\flutter\ebank_mobile_enterprise\lib\data\source\model\time_deposit_product.dart
- * Path: d:\work\flutter\ebank_mobile_enterprise\lib\data\source\model
- * Created Date: Wednesday, December 9th 2020, 10:19:07 am
- * Author: wangluyao
- * 
- * Copyright (c) 2020 Your Company
- */
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: wangluyao
+/// Date: 2020-12-09
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'time_deposit_product.g.dart';
@@ -36,7 +33,12 @@ class TimeDepositProductResp extends Object {
   factory TimeDepositProductResp.fromJson(Map<String, dynamic> srcJson) =>
       _$TimeDepositProductRespFromJson(srcJson);
 
-  get length => null;
+  Map<String, dynamic> toJson() => _$TimeDepositProductRespToJson(this);
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
 
 @JsonSerializable()
@@ -45,7 +47,7 @@ class TdepProducDTOList extends Object {
   String accuPeriod;
 
   @JsonKey(name: 'annualInterestRate')
-  int annualInterestRate;
+  String annualInterestRate;
 
   @JsonKey(name: 'auctCale')
   String auctCale;
@@ -68,17 +70,14 @@ class TdepProducDTOList extends Object {
   @JsonKey(name: 'erstFlg')
   String erstFlg;
 
-  @JsonKey(name: 'id')
-  int id;
-
   @JsonKey(name: 'lclName')
   String lclName;
 
   @JsonKey(name: 'maxAmt')
-  int maxAmt;
+  String maxAmt;
 
   @JsonKey(name: 'minAmt')
-  int minAmt;
+  String minAmt;
 
   @JsonKey(name: 'prodType')
   String prodType;
@@ -96,7 +95,6 @@ class TdepProducDTOList extends Object {
     this.depositType,
     this.engName,
     this.erstFlg,
-    this.id,
     this.lclName,
     this.maxAmt,
     this.minAmt,
@@ -106,6 +104,13 @@ class TdepProducDTOList extends Object {
 
   factory TdepProducDTOList.fromJson(Map<String, dynamic> srcJson) =>
       _$TdepProducDTOListFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$TdepProducDTOListToJson(this);
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
 
 @JsonSerializable()
@@ -120,13 +125,13 @@ class TdepProducHeadDTO extends Object {
   String lclName;
 
   @JsonKey(name: 'maxRate')
-  int maxRate;
+  String maxRate;
 
   @JsonKey(name: 'minAmt')
-  int minAmt;
+  String minAmt;
 
   @JsonKey(name: 'minRate')
-  int minRate;
+  String minRate;
 
   @JsonKey(name: 'prodType')
   String prodType;
@@ -147,4 +152,11 @@ class TdepProducHeadDTO extends Object {
 
   factory TdepProducHeadDTO.fromJson(Map<String, dynamic> srcJson) =>
       _$TdepProducHeadDTOFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$TdepProducHeadDTOToJson(this);
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
