@@ -1,3 +1,8 @@
+import 'dart:math';
+
+import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
@@ -33,6 +38,42 @@ class FormatUtil {
   /// 每隔4位加空格
   static String formatSpace4(String text) {
     return formatDigitPattern(text);
+  }
+
+  /// 每隔3三位加逗号
+  static String formatSringToMoney(String num) {
+    if (isEmpty(num)) num = '0';
+
+    double numDouble =
+        double.parse(formatNum(double.parse(num), 2, type: 'floor'));
+
+    NumberFormat numberFormat = NumberFormat('###,##0.00;');
+
+    String string = numberFormat.format(numDouble);
+
+    return string;
+  }
+
+  ///取小数点后几位
+  ///num 数据
+  ///location 几位
+  static String formatNum(double num, int location, {String type}) {
+    int multiplier = pow(10, location);
+
+    num = num * multiplier;
+
+    if (isEmpty(type) || type == 'round') {
+      //round四舍五入
+      num = num.roundToDouble() / multiplier;
+    } else if (type == 'floor') {
+      //floor向下
+      num = num.floorToDouble() / multiplier;
+    } else {
+      //ceil向上
+      num = num.ceilToDouble() / multiplier;
+    }
+
+    return num.toString();
   }
 
   /// 每隔3三位加逗号

@@ -45,6 +45,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
 
     List<Widget> _titleSection(List<TdepProducHeadDTO> tdepProducDTOList) {
       List<Widget> section = [];
+
       section.add(SliverAppBar(
         pinned: false,
         centerTitle: true,
@@ -102,6 +103,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       );
       section.add(SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
+        double minRate = double.parse(tdepProducDTOList[index].minRate) * 100;
+
         return FlatButton(
           onPressed: () {
             Navigator.pushNamed(context, pageTransfer);
@@ -153,7 +156,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '${tdepProducDTOList[index].minRate}~${tdepProducDTOList[index].maxRate}',
+                                '$minRate~${tdepProducDTOList[index].maxRate}',
                                 style: TextStyle(
                                     fontSize: 17, color: Colors.red[500]),
                               ),

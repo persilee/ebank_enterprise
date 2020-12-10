@@ -9,11 +9,14 @@ import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_detail_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
+import 'package:ebank_mobile/page/electronicStatement/electronic_statement_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
+import 'package:ebank_mobile/page/loan/limit_details_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
+import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page/mine/mine_page.dart';
@@ -21,9 +24,13 @@ import 'package:ebank_mobile/page/mine/about_us_page.dart';
 import 'package:ebank_mobile/page/mine/feedback_page.dart';
 import 'package:ebank_mobile/page/mine/hsg_mine_page.dart';
 
+
+
 var pageHome = '/';
+// var pageLogin = "151";
 var pageLogin = pageHome;
 // var pageCardList = pageHome;
+var pageLimitDetailsDemo = "/limit_detail_page";
 var pageCardList = '/card_list';
 var pageDialogDemo = '/dialog_demo';
 var pageCardDetail = '/card_detail';
@@ -39,11 +46,14 @@ var pageIndex = new MaterialPageRoute(builder: (context) => new IndexPage());
 var pageTimeDepostProduct = '/time_depost_product_page';
 var pageFeatureList = '/hsg_feature_list_page';
 var pageTransfer = '/hsg_transfer_page';
+var pageTransferInternal = '/hsg_transfer_internal_page';
+var pageElectronicStatement = '/electronic_statement_page';
 
 var appRoutes = {
-  pageLogin: (context) => LoginPage(),
+  pageLogin: (contexrt) => LoginPage(),
   pageCardList: (context) => CardListPage(),
   pageDialogDemo: (context) => DialogDemoPage(),
+  pageLimitDetailsDemo: (context) => LimitDetailsPage(),
   // pageCardDetail: (context) => CardDetailPage(),
   pageCardLimit: (context) => CardLimitManagerPage(),
   minePage: (context) => MineqPage(),
@@ -58,6 +68,8 @@ var appRoutes = {
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
   pageFeatureList: (context) => FeatureListPage(),
   pageTransfer: (context) => TransferPage(),
+  pageTransferInternal: (context) => TransferInternalPage(),
+  pageElectronicStatement: (context) => ElectronicStatementPage(),
 };
 
 onGenerateRoute(RouteSettings settings) {
