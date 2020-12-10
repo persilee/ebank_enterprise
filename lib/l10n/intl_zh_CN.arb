@@ -17,7 +17,7 @@
   "transfer_model": "收款范本",
   "deposit_open": "定期开立",
   "deposit_record": "我的存单",
-  "total_deposit": "存款总额(HDK)",
+  "receipts_total_amt": "存单总额",
   "deposit_taking": "整存整取(HDK)",
   "deposit_amount": "存入金额", 
   "interest_rate" : "利率",

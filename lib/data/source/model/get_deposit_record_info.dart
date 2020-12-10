@@ -30,7 +30,7 @@ class DepositRecordReq {
 }
 
 @JsonSerializable()
-class Body extends Object {
+class DepositRecordResp extends Object {
   @JsonKey(name: 'sort')
   String sort;
 
@@ -49,7 +49,7 @@ class Body extends Object {
   @JsonKey(name: 'rows')
   List<Rows> rows;
 
-  Body(
+  DepositRecordResp(
     this.sort,
     this.page,
     this.pageSize,
@@ -58,9 +58,9 @@ class Body extends Object {
     this.rows,
   );
 
-  factory Body.fromJson(Map<String, dynamic> srcJson) =>
-      _$BodyFromJson(srcJson);
-  Map<String, dynamic> toJson() => _$BodyToJson(this);
+  factory DepositRecordResp.fromJson(Map<String, dynamic> srcJson) =>
+      _$DepositRecordRespFromJson(srcJson);
+  Map<String, dynamic> toJson() => _$DepositRecordRespToJson(this);
 }
 
 @JsonSerializable()
