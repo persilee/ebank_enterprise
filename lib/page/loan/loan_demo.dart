@@ -16,8 +16,8 @@ class LoanDemoPage extends StatefulWidget {
 }
 
 class _LoanDemoPageState extends State<LoanDemoPage> {
-  var loanTest = Loan('测试贷', '81812', '10,0000.00', '8,0000.00', '15.12%', '24',
-      '10', '2018-12-26', '2018-12-26', '按月结息', '18日', '6225*******1235');
+  var loanTest = Loans('测试贷', '81812', '10,0000.00', '8,0000.00', '15.12%',
+      '24', '10', '2018-12-26', '2018-12-26', '按月结息', '18日', '6225*******1235');
   //var _loanProductNameWithValue = '';
 
   @override

@@ -10,9 +10,9 @@ import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'model/loan_rate.dart';
 
 class LoanDataRepository {
-  Future<Loan> loan(String tag) {
+  Future<Loans> loan(String tag) {
     return request(
-        '/loan/products/getProdList', {}, tag, (data) => Loan.fromJson(data));
+        '/loan/products/getProdList', {}, tag, (data) => Loans.fromJson(data));
   }
 
   Future<LoanRateResp> getLoanRateList(LoanRateReq loanRateReq, String tag) {

@@ -8,7 +8,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'loan.g.dart';
 
 @JsonSerializable()
-class Loan extends Object {
+class Loans extends Object {
   @JsonKey(name: 'loan_product_name_with_value')
   String loanProductNameWithValue;
 
@@ -45,7 +45,7 @@ class Loan extends Object {
   @JsonKey(name: 'deduct_money_account')
   String deductMoneyAccount;
 
-  Loan(
+  Loans(
     this.loanProductNameWithValue,
     this.loanId,
     this.loanAmount,
@@ -60,8 +60,8 @@ class Loan extends Object {
     this.deductMoneyAccount,
   );
 
-  factory Loan.fromJson(Map<String, dynamic> srcJson) =>
-      _$LoanFromJson(srcJson);
+  factory Loans.fromJson(Map<String, dynamic> srcJson) =>
+      _$LoansFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$LoanToJson(this);
+  Map<String, dynamic> toJson() => _$LoansToJson(this);
 }
