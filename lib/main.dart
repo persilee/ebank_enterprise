@@ -19,6 +19,8 @@ void main(List<String> args) {
 }
 
 class HSGBankApp extends StatefulWidget {
+  
+
   const HSGBankApp({Key key}) : super(key: key);
 
   static void setLocale(BuildContext context, Locale newLocale) async {
@@ -80,3 +82,4 @@ class _HSGBankAppState extends State<HSGBankApp> {
     changeLanguage(Language().getLocaleByLanguage(language));
   }
 }
+

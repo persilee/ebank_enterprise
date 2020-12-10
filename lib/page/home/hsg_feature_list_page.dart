@@ -105,6 +105,7 @@ class _FeatureListPageState extends State<FeatureListPage> {
                     //'贷款申请'
                   } else if (S.current.loan_record == title) {
                     //'贷款记录'
+                    Navigator.pushNamed(context, pageLimitDetailsDemo);
                   } else if (S.current.loan_rate == title) {
                     //'贷款利率'
                   } else if (S.current.foreign_exchange == title) {
