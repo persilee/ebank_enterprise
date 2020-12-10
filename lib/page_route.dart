@@ -12,11 +12,8 @@ import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
-<<<<<<< HEAD
 import 'package:ebank_mobile/page/loan/loan_interest_rate.dart';
-=======
 import 'package:ebank_mobile/page/loan/limit_details_page.dart';
->>>>>>> ccd719c8b9c69ec802bf60ba40e0ede88bdb5f57
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
@@ -28,20 +25,15 @@ import 'package:ebank_mobile/page/mine/about_us_page.dart';
 import 'package:ebank_mobile/page/mine/feedback_page.dart';
 import 'package:ebank_mobile/page/mine/hsg_mine_page.dart';
 
-
-
 var pageHome = '/';
 // var pageLogin = "151";
 var pageLogin = pageHome;
 // var pageCardList = pageHome;
-<<<<<<< HEAD
 //var pageloanDemo = pageHome;
 //var pageloanDemo = '/loan_demo';
 //var pageLoanInterestRate = pageHome;
 var pageLoanInterestRate = '/loan_interest_rate';
-=======
 var pageLimitDetailsDemo = "/limit_detail_page";
->>>>>>> ccd719c8b9c69ec802bf60ba40e0ede88bdb5f57
 var pageCardList = '/card_list';
 var pageDialogDemo = '/dialog_demo';
 var pageCardDetail = '/card_detail';
