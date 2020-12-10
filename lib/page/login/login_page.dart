@@ -208,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
 
     _showMainPage(context);
   }
-
+  
   ///判断是否能点击登录按钮
   bool _judgeCanLogin() {
     if (_account.toString().length == 0 || _account == null) {
