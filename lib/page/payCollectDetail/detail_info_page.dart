@@ -1,3 +1,8 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+/// 交易详情
+/// Author: CaiTM
+/// Date: 2020-12-07
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/material.dart';
 

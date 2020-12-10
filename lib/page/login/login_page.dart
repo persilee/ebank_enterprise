@@ -1,9 +1,15 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: lijiawei
+/// Date: 2020-12-04
+
 import 'dart:async';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
+import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
   final TextEditingController _accountTC =
-      TextEditingController(text: 'Smile04');
+      TextEditingController(text: 'Smile05');
   final TextEditingController _passwordTC =
       TextEditingController(text: 'Qwe123456~');
 
@@ -42,17 +48,11 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     // 添加监听
     _accountTC.addListener(() {
-      _account = _accountTC.text.toLowerCase();
-      _accountTC.value = _accountTC.value.copyWith(
-        text: _account,
-      );
+      _account = _accountTC.text;
     });
     // 添加监听
     _passwordTC.addListener(() {
-      _password = _passwordTC.text.toLowerCase();
-      _passwordTC.value = _passwordTC.value.copyWith(
-        text: _password,
-      );
+      _password = _passwordTC.text;
     });
     Intl.defaultLocale = 'en';
   }
@@ -101,6 +101,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               //账号输入框
               Container(
+                height: 45,
                 margin: EdgeInsets.only(top: 36.5),
                 child: InputView(
                   _accountTC,
@@ -111,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               //密码输入框
               Container(
+                height: 45,
                 margin: EdgeInsets.only(top: 16.0),
                 child: InputView(
                   _passwordTC,
@@ -121,6 +123,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               //忘记按钮
               Container(
+                height: 20,
                 margin: EdgeInsets.only(top: 10, right: 35, left: 35),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -176,7 +179,8 @@ class _LoginPageState extends State<LoginPage> {
     UserDataRepository()
         .login(LoginReq(username: _account, password: password), 'login')
         .then((value) {
-      HSProgressHUD.showSuccess(status: S.of(context).operation_successful);
+      HSProgressHUD
+          .dismiss(); //showSuccess(status: S.of(context).operation_successful);
       _saveUserConfig(context, value);
     }).catchError((e) {
       setState(() {
@@ -188,12 +192,12 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录成功-跳转操作
   _showMainPage(BuildContext context) async {
-    await Future.delayed(Duration(milliseconds: 1000));
+    // await Future.delayed(Duration(milliseconds: 1000));
     setState(() {
       _isLoading = false;
     });
-    // Navigator.pushNamed(context, pageDetailList);
     // Navigator.pushNamed(context, pageCardList);
+    // Navigator.pushNamed(context, pageDialogDemo);
     Navigator.pushAndRemoveUntil(context, pageIndex, (route) => false);
   }
 
@@ -205,10 +209,15 @@ class _LoginPageState extends State<LoginPage> {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
+    if (resp.custId == null || resp.custId == '') {
+      prefs.setString(ConfigKey.CUST_ID, '');
+    } else {
+      prefs.setString(ConfigKey.CUST_ID, resp.custId);
+    }
 
     _showMainPage(context);
   }
-
+  
   ///判断是否能点击登录按钮
   bool _judgeCanLogin() {
     if (_account.toString().length == 0 || _account == null) {
@@ -281,30 +290,27 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) => BottomMenu(
-              title: '选择语言',
+              title: S.current.select_language,
               items: languages,
             ));
-    print('dialog result:$result');
-    Locale locale;
+    String language;
     if (result != null && result != false) {
       switch (result) {
         case 0:
-          locale = Locale.fromSubtags(languageCode: 'en');
+          language = Language.EN;
           break;
         case 1:
-          locale = Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN');
+          language = Language.ZH_CN;
           break;
       }
     } else {
       return;
     }
 
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(ConfigKey.LANGUAGE, locale.languageCode);
-    print('change language, code:${locale.languageCode}');
+    Language.saveSelectedLanguage(language);
     setState(() {
       title = languages[result];
-      HSGBankApp.setLocale(context, locale);
+      HSGBankApp.setLocale(context, Language().getLocaleByLanguage(language));
     });
   }
 }

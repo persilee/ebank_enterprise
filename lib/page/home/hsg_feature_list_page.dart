@@ -1,3 +1,8 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: lijiawei
+/// Date: 2020-12-03
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -99,6 +104,7 @@ class _FeatureListPageState extends State<FeatureListPage> {
                     //'贷款申请'
                   } else if (S.current.loan_record == title) {
                     //'贷款记录'
+                    Navigator.pushNamed(context, pageLimitDetailsDemo);
                   } else if (S.current.loan_rate == title) {
                     //'贷款利率'
                     // Navigator.pushNamed(context, pageloanDemo);

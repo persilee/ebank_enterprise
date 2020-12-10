@@ -86,6 +86,8 @@ class _DialogDemoPageState extends State<DialogDemoPage> {
                         negativeButton: '取消',
                       );
                     });
+                // 提示信息对话框可能返回三种结果：null(点击对话框外部或者返回按钮)、
+                // true（点击确定）和false（点击取消）
                 print('dialog result:$result');
               },
               child: Text('Alert Dialog')),
@@ -107,6 +109,8 @@ class _DialogDemoPageState extends State<DialogDemoPage> {
                   _lastSelectedPosition = result;
                 }
               },
+              // 单选对话框可能返回三种结果：null(点击对话框外部或者返回按钮)、
+              // 选中项的index（点击确定）和false（点击取消）
               child: Text('Single Choice Dialog')),
           RaisedButton(
               onPressed: () async {
@@ -119,6 +123,8 @@ class _DialogDemoPageState extends State<DialogDemoPage> {
                     );
                   },
                 );
+                // 底部弹出菜单对话框可能返回三种结果：null(点击对话框外部或者返回按钮)、
+                // 选中项的index（点击确定）和false（点击取消）
                 print('dialog result:$result');
                 if (result != null && result != false) {
                   _lastSelectedPosition = result;

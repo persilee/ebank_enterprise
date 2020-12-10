@@ -5,6 +5,7 @@
 
 import 'package:ebank_mobile/data/source/model/loan.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
+import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 
 import 'model/loan_rate.dart';
 
@@ -17,6 +18,11 @@ class LoanDataRepository {
   Future<LoanRateResp> getLoanRateList(LoanRateReq loanRateReq, String tag) {
     return request('/loan/products/getProdList', loanRateReq, tag,
         (data) => LoanRateResp.fromJson(data));
+  }
+
+  Future<GetLoanListResp> getLoanList(GetLoanListReq req, String tag) {
+    return request('/loan/masters/getLoanMastList', req, tag,
+        (data) => GetLoanListResp.fromJson(data));
   }
 
   static final _instance = LoanDataRepository._internal();
