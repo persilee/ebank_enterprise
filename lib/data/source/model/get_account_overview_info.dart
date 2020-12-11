@@ -4,6 +4,7 @@
 /// Date: 2020-12-07
 
 import 'package:json_annotation/json_annotation.dart';
+
 part 'get_account_overview_info.g.dart';
 
 // 总资产

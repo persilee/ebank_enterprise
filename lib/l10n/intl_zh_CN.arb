@@ -71,6 +71,8 @@
   "time_deposits": "定期",
   "credit_card": "信用卡",
   "rest_should_also": "剩余应还",
+  "annual_interest_rate":"年利率",
+  "minimum_deposit":"起存",
   "remaining_available_amount": "剩余可用额度",
   "transfer_features": "转账功能",
   "recent_transfer_account": "最近转账账号",
