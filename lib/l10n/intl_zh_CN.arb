@@ -92,5 +92,11 @@
   "no_recent_transfer_account": "暂无转账账号",
   "transfer_out": "转出",
   "transfer_type_0": "行内转账",
-  "transfer_type_2": "国际转账"
+  "transfer_type_2": "国际转账",
+  "transaction_info": "交易详情",
+  "transaction_account": "交易账户",
+  "transaction_amount": "交易金额",
+  "transaction_time": "交易时间",
+  "msgId": "流水号",
+  "remarks": "备注"
 }

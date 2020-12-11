@@ -92,5 +92,11 @@
   "no_recent_transfer_account": "Have no transfer account",
   "transfer_out": "Transfer To",
   "transfer_type_0": "Internal Transfer",
-  "transfer_type_2": "Overseas Bank Transfer"
+  "transfer_type_2": "Overseas Bank Transfer",
+  "transaction_info": "Transaction Information",
+  "transaction_account": "Transaction Account",
+  "transaction_amount": "Transaction Amount",
+  "transaction_time": "Transaction Time",
+  "msgId": "Transaction Journal No.",
+  "remarks": "Remarks"
 }
