@@ -98,6 +98,7 @@ class _FeatureListPageState extends State<FeatureListPage> {
                     //'定期开立'
                   } else if (S.current.deposit_record == title) {
                     //'我的存单'
+                    Navigator.pushNamed(context, pageTimeDepositRecord);
                   } else if (S.current.deposit_rate == title) {
                     //'利率查看'
                   } else if (S.current.loan_apply == title) {

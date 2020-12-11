@@ -112,6 +112,18 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                         style: TextStyle(fontSize: 15),
                       ),
                     ),
+                    // Container(
+                    //   padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                    //   //边框设置
+                    //   decoration: BoxDecoration(
+                    //     //背景
+                    //     color: Colors.white,
+                    //     //设置四周边框
+                    //     border: Border(
+                    //       top: _lineBorderSide(),
+                    //       bottom: _lineBorderSide(),
+                    //     ),
+                    //   ),
                     Divider(height: 0.5, color: HsgColors.divider),
                     Container(
                       height: 60,
@@ -143,6 +155,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                         ],
                       ),
                     ),
+                    // ),
                     Container(
                       padding: EdgeInsets.only(top: 0.0),
                       height: 30.0,
