@@ -1,10 +1,10 @@
+import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: 方璐瑶
 /// Date: 2020-12-03
 
-import 'package:ebank_mobile/data/source/loan_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/loan.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -16,34 +16,46 @@ class LoanDemoPage extends StatefulWidget {
 }
 
 class _LoanDemoPageState extends State<LoanDemoPage> {
-  var loanTest = Loans('测试贷', '81812', '10,0000.00', '8,0000.00', '15.12%',
-      '24', '10', '2018-12-26', '2018-12-26', '按月结息', '18日', '6225*******1235');
-  //var _loanProductNameWithValue = '';
+  // var loanTest = Loans('测试贷', '81812', '10,0000.00', '8,0000.00', '15.12%',
+  //     '24', '10', '2018-12-26', '2018-12-26', '按月结息', '18日', '6225*******1235');
 
-  @override
-  // ignore: must_call_super
-  void initState() {
-    super.initState();
+  // @override
+  // // ignore: must_call_super
+  // void initState() {
+  //   super.initState();
 
-    // 网络请求
-    _loadData();
-  }
+  //   // 网络请求
+  //   _loadData();
+  // }
 
-  Future<void> _loadData() async {
-    LoanDataRepository().loan('loan').then((data) {
-      Fluttertoast.showToast(msg: "网络请求成功");
-      setState(() {
-        //  _loanProductNameWithValue = data.loanProductNameWithValue;
-      });
-    }).catchError((e) {
-      // HSProgressHUD.showError(status: e.toString());
-      Fluttertoast.showToast(msg: "网络请求失败");
-      print('${e.toString()}');
-    });
-  }
+  // Future<void> _loadData() async {
+  //   LoanDataRepository().loan('loan').then((data) {
+  //     Fluttertoast.showToast(msg: "网络请求成功");
+  //     setState(() {
+  //       //  _loanProductNameWithValue = data.loanProductNameWithValue;
+  //     });
+  //   }).catchError((e) {
+  //     // HSProgressHUD.showError(status: e.toString());
+  //     Fluttertoast.showToast(msg: "网络请求失败");
+  //     print('${e.toString()}');
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
+    Loan loanDetail = ModalRoute.of(context).settings.arguments;
+    var temp = '';
+    switch (loanDetail.isMaturity) {
+      case '0':
+        temp = '未到期';
+        break;
+      case '1':
+        temp = '已到期';
+        break;
+      case '2':
+        temp = '已逾期';
+        break;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.loan_detail),
@@ -54,7 +66,6 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
         color: HsgColors.backgroundColor,
         child: ListView(
           children: [
-            // 业务品种
             Container(
               margin: EdgeInsets.only(bottom: 12),
               color: Colors.white,
@@ -69,13 +80,15 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              // 业务品种
                               Text(
                                 S.current.loan_product_name_with_value +
                                     '：' +
-                                    loanTest.loanProductNameWithValue,
+                                    loanDetail.acNo,
                               ),
+                              //贷款编号
                               Text(
-                                S.current.loanId + '：' + loanTest.loanId,
+                                S.current.loanId + '：' + loanDetail.br,
                                 style:
                                     TextStyle(fontSize: 14, color: Colors.grey),
                               ),
@@ -85,7 +98,8 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                         Column(
                           children: [
                             Text(
-                              "正常",
+                              //是否到期
+                              temp,
                               style: TextStyle(
                                 color: HsgColors.loginAgreementText,
                                 fontSize: 14,
@@ -106,6 +120,7 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              //贷款金额
                               Text(
                                 S.current.loan_amount,
                                 style:
@@ -113,7 +128,7 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                               ),
                               Padding(padding: EdgeInsets.only(top: 5)),
                               Text(
-                                loanTest.loanAmount,
+                                '￥' + loanDetail.loanAmt,
                               ),
                             ],
                           ),
@@ -133,6 +148,7 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              //贷款余额
                               Text(
                                 S.current.loan_balance2,
                                 style:
@@ -140,7 +156,7 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                               ),
                               Padding(padding: EdgeInsets.only(top: 5)),
                               Text(
-                                loanTest.loanBalance2,
+                                '￥' + loanDetail.unpaidPrincipal,
                               ),
                             ],
                           ),
@@ -151,7 +167,6 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                 ],
               ),
             ),
-            // 还款记录和计划
             Container(
               margin: EdgeInsets.only(bottom: 10),
               color: Colors.white,
@@ -167,6 +182,7 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            //还款记录
                             Text(
                               S.current.repayment_record,
                             ),
@@ -186,10 +202,19 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            //还款计划
                             Text(
                               S.current.wait_repayment_plan,
                             ),
-                            Icon(Icons.keyboard_arrow_right),
+                            InkWell(
+                              onTap: () {
+                                //此处跳转到还款计划详情
+                                // Navigator.pushNamed(context, pageloanDemo,
+                                //     arguments: loanDetail);
+                                Fluttertoast.showToast(msg: "假装跳转了!");
+                              },
+                              child: Icon(Icons.keyboard_arrow_right),
+                            ),
                           ],
                         ),
                       ],
@@ -215,7 +240,9 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(S.current.loan_interest_rate_with_symbol),
-                            Text(loanTest.loanInterestRateWithSymbol),
+                            Text((double.parse(loanDetail.intRate) * 100)
+                                    .toStringAsFixed(2) +
+                                '%'),
                           ],
                         ),
                       ],
@@ -234,7 +261,7 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                             Text(
                               S.current.total_periods,
                             ),
-                            Text(loanTest.totalPeriods),
+                            Text(loanDetail.termValue.toString()),
                           ],
                         ),
                       ],
@@ -253,7 +280,7 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                             Text(
                               S.current.remaining_periods,
                             ),
-                            Text(loanTest.remainingPeriods),
+                            Text(loanDetail.restPeriods.toString()),
                           ],
                         ),
                       ],
@@ -272,7 +299,7 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                             Text(
                               S.current.begin_date,
                             ),
-                            Text(loanTest.beginDate),
+                            Text(loanDetail.disbDate),
                           ],
                         ),
                       ],
@@ -291,7 +318,7 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                               Text(
                                 S.current.end_date,
                               ),
-                              Text(loanTest.endDate),
+                              Text(loanDetail.maturityDate),
                             ],
                           ),
                         ],
@@ -318,7 +345,7 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                             Text(
                               S.current.repayment_ways,
                             ),
-                            Text(loanTest.repaymentWays),
+                            Text(loanDetail.repaymentMethod),
                           ],
                         ),
                       ],
@@ -335,7 +362,7 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(S.current.deduct_money_date),
-                            Text(loanTest.deductMoneyDate),
+                            Text(loanDetail.repaymentDay.toString() + '日'),
                           ],
                         ),
                       ],
@@ -354,7 +381,7 @@ class _LoanDemoPageState extends State<LoanDemoPage> {
                             Text(
                               S.current.deduct_money_account,
                             ),
-                            Text(loanTest.deductMoneyAccount),
+                            Text(loanDetail.repaymentAcNo),
                           ],
                         ),
                       ],

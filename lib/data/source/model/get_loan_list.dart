@@ -104,6 +104,7 @@ class Loan extends Object {
   @JsonKey(name: 'repaymentDay')
   int repaymentDay;
 
+  //还款方法
   @JsonKey(name: 'repaymentMethod')
   String repaymentMethod;
 

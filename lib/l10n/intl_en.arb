@@ -13,7 +13,7 @@
   "loan_detail":"Loan Information",
   "loan_product_name_with_value":"Loan Product：%1$s",
   "loanId":"Loan Id",
-  "loan_amount":"Loan Amount(%1$s)",
+  "loan_amount":"Loan Amount",
   "loan_balance2":"Loan Balance",
   "repayment_record":"REpayment Records",
   "wait_repayment_plan":"Repayment Schedule",
