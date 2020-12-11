@@ -54,79 +54,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                 child: Container(
                   padding: EdgeInsets.fromLTRB(0, 19, 0, 28),
                   color: HsgColors.primary,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 18),
-                        child: Column(
-                          children: [
-                            Center(
-                              child: Text(
-                                S.current.total_assets,
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.white54),
-                              ),
-                            ),
-                            Center(
-                              child: Text(
-                                localCcy + ' ' + totalAssets,
-                                style: TextStyle(
-                                    fontSize: 24, color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Column(
-                            children: [
-                              Text(
-                                S.current.net_assets,
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.white54),
-                              ),
-                              Padding(
-                                  padding: EdgeInsets.only(top: 5, bottom: 5)),
-                              Text(
-                                localCcy + ' ' + netAssets,
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.white),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: 1,
-                                height: 30,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                S.current.total_liability,
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.white54),
-                              ),
-                              Padding(
-                                  padding: EdgeInsets.only(top: 5, bottom: 5)),
-                              Text(
-                                localCcy + ' ' + totalLiabilities,
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  child: _totalAssetsColumn(),
                 ),
               ),
 
@@ -351,6 +279,74 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
             ],
           ),
         ));
+  }
+
+  Column _totalAssetsColumn() {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(bottom: 18),
+          child: Column(
+            children: [
+              Center(
+                child: Text(
+                  S.current.total_assets,
+                  style: TextStyle(fontSize: 14, color: Colors.white54),
+                ),
+              ),
+              Center(
+                child: Text(
+                  localCcy + ' ' + totalAssets,
+                  style: TextStyle(fontSize: 24, color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
+              children: [
+                Text(
+                  S.current.net_assets,
+                  style: TextStyle(fontSize: 14, color: Colors.white54),
+                ),
+                Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
+                Text(
+                  localCcy + ' ' + netAssets,
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                SizedBox(
+                  width: 1,
+                  height: 30,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(color: Colors.grey),
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                Text(
+                  S.current.total_liability,
+                  style: TextStyle(fontSize: 14, color: Colors.white54),
+                ),
+                Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
+                Text(
+                  localCcy + ' ' + totalLiabilities,
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   _getAccountOverviewInfo() async {
