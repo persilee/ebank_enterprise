@@ -583,6 +583,8 @@ class _HomePageState extends State<HomePage> {
                     Navigator.pushNamed(context, pageLimitDetailsDemo);
                   } else if (S.current.loan_rate == title) {
                     //'贷款利率'
+                    //Navigator.pushNamed(context, pageloanDemo);
+                    Navigator.pushNamed(context, pageLoanInterestRate);
                   } else if (S.current.foreign_exchange == title) {
                     //'外汇买卖'
                   } else if (S.current.exchange_rate == title) {
