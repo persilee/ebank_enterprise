@@ -1,3 +1,8 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: lijiawei
+/// Date: 2020-12-04
+
 import 'dart:async';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -31,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
   final TextEditingController _accountTC =
-      TextEditingController(text: 'Smile04');
+      TextEditingController(text: 'Smile05');
   final TextEditingController _passwordTC =
       TextEditingController(text: 'Qwe123456~');
 
@@ -43,17 +48,11 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     // 添加监听
     _accountTC.addListener(() {
-      _account = _accountTC.text.toLowerCase();
-      _accountTC.value = _accountTC.value.copyWith(
-        text: _account,
-      );
+      _account = _accountTC.text;
     });
     // 添加监听
     _passwordTC.addListener(() {
-      _password = _passwordTC.text.toLowerCase();
-      _passwordTC.value = _passwordTC.value.copyWith(
-        text: _password,
-      );
+      _password = _passwordTC.text;
     });
     Intl.defaultLocale = 'en';
   }
@@ -102,6 +101,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               //账号输入框
               Container(
+                height: 45,
                 margin: EdgeInsets.only(top: 36.5),
                 child: InputView(
                   _accountTC,
@@ -112,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               //密码输入框
               Container(
+                height: 45,
                 margin: EdgeInsets.only(top: 16.0),
                 child: InputView(
                   _passwordTC,
@@ -122,6 +123,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               //忘记按钮
               Container(
+                height: 20,
                 margin: EdgeInsets.only(top: 10, right: 35, left: 35),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -177,7 +179,8 @@ class _LoginPageState extends State<LoginPage> {
     UserDataRepository()
         .login(LoginReq(username: _account, password: password), 'login')
         .then((value) {
-      HSProgressHUD.showSuccess(status: S.of(context).operation_successful);
+      HSProgressHUD
+          .dismiss(); //showSuccess(status: S.of(context).operation_successful);
       _saveUserConfig(context, value);
     }).catchError((e) {
       setState(() {
@@ -189,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录成功-跳转操作
   _showMainPage(BuildContext context) async {
-    await Future.delayed(Duration(milliseconds: 1000));
+    // await Future.delayed(Duration(milliseconds: 1000));
     setState(() {
       _isLoading = false;
     });
@@ -214,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
 
     _showMainPage(context);
   }
-
+  
   ///判断是否能点击登录按钮
   bool _judgeCanLogin() {
     if (_account.toString().length == 0 || _account == null) {
@@ -304,8 +307,7 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
       return;
     }
 
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(ConfigKey.LANGUAGE, language);
+    Language.saveSelectedLanguage(language);
     setState(() {
       title = languages[result];
       HSGBankApp.setLocale(context, Language().getLocaleByLanguage(language));
