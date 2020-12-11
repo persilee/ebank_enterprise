@@ -4,40 +4,40 @@
 /// Date: 2020-12-08
 import 'package:json_annotation/json_annotation.dart';
 
-part 'loan_rate.g.dart';
+part 'get_loan_rate.g.dart';
 
 @JsonSerializable()
-class LoanRateReq extends Object {
+class GetLoanRateReq extends Object {
   @JsonKey(name: 'productCodeList')
   List<String> productCodeList;
 
-  LoanRateReq(
+  GetLoanRateReq(
     this.productCodeList,
   );
 
-  factory LoanRateReq.fromJson(Map<String, dynamic> srcJson) =>
-      _$LoanRateReqFromJson(srcJson);
+  factory GetLoanRateReq.fromJson(Map<String, dynamic> srcJson) =>
+      _$GetLoanRateReqFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$LoanRateReqToJson(this);
+  Map<String, dynamic> toJson() => _$GetLoanRateReqToJson(this);
 }
 
 @JsonSerializable()
-class LoanRateResp extends Object {
+class GetLoanRateResp extends Object {
   @JsonKey(name: 'ccyList')
   List<String> ccyList;
 
   @JsonKey(name: 'prodMastList')
   List<ProdMastList> prodMastList;
 
-  LoanRateResp(
+  GetLoanRateResp(
     this.ccyList,
     this.prodMastList,
   );
 
-  factory LoanRateResp.fromJson(Map<String, dynamic> srcJson) =>
-      _$LoanRateRespFromJson(srcJson);
+  factory GetLoanRateResp.fromJson(Map<String, dynamic> srcJson) =>
+      _$GetLoanRateRespFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$LoanRateRespToJson(this);
+  Map<String, dynamic> toJson() => _$GetLoanRateRespToJson(this);
 }
 
 @JsonSerializable()

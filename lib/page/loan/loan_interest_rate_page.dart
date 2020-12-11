@@ -1,10 +1,10 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///
+///贷款利率界面
 /// Author: 方璐瑶
 /// Date: 2020-12-07
 
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/loan_rate.dart';
+import 'package:ebank_mobile/data/source/model/get_loan_rate.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -21,18 +21,19 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
   List rates = [];
   List engNames = [];
   List rateLists = [];
+  var name = '';
+  var flag = 0;
+
   @override
-// ignore: must_call_super
   void initState() {
     super.initState();
 
-    // 网络请求
     _loadData();
   }
 
   Future<void> _loadData() async {
     LoanDataRepository()
-        .getLoanRateList(LoanRateReq([]), 'getLoanRateList')
+        .getLoanRateList(GetLoanRateReq([]), 'getLoanRateList')
         .then((data) {
       setState(() {
         ccys.clear();
@@ -40,10 +41,10 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
         rates.clear();
         engNames.clear();
         rateLists.clear();
-        ccys.addAll(data.ccyList);
-        print(ccys.toString());
-        prodMast.addAll(data.prodMastList);
 
+        name = 'Loan Product';
+        flag = 1;
+        ccys.addAll(data.ccyList);
         for (int i = 0; i < data.prodMastList.length; i++) {
           rates = [];
           data.prodMastList[i].prodCcyList.forEach((e) {
@@ -59,14 +60,8 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
           }
         });
       });
-      Fluttertoast.showToast(msg: "网络请求成功");
-      print('-----------------=======Yes======--------------------' + '$data');
     }).catchError((e) {
-      // HSProgressHUD.showError(status: e.toString());
-      Fluttertoast.showToast(msg: "网络请求失败");
-      print('--------=======No=======----------');
-      print('${e.toString()}');
-      print('--------=======No=======----------');
+      Fluttertoast.showToast(msg: e.toString());
     });
   }
 
@@ -91,44 +86,44 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
 
 //显示内容
   Widget _getContent() {
-    return SizedBox(
-      child: Row(
-        children: [
-          Container(
-              child: Column(
-            children: [
-              Container(
-                color: Color(0xFF333450),
-                child: _getBox('Loan Product', 16, Colors.white),
-                // width: 120,
-              ),
-              Container(
-                child: _getCloumnBoxList(engNames),
-                //  width: 120,
-              ),
-            ],
-          )),
-          Expanded(
-              child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Container(
+    if (flag == 0) {
+      return SizedBox();
+    } else {
+      return SizedBox(
+        child: Row(
+          children: [
+            Container(
                 child: Column(
               children: [
                 Container(
                   color: Color(0xFF333450),
-                  child: _getRowBoxList(ccys, 16, Colors.white),
-                  //width: 60.0 * ccys.length,
+                  child: _getBox(name, 16, Colors.white),
                 ),
                 Container(
-                  child: _getAllBoxList(rateLists),
-                  //width: 60.0 * rateLists.length,
-                )
+                  child: _getCloumnBoxList(engNames),
+                ),
               ],
             )),
-          )),
-        ],
-      ),
-    );
+            Expanded(
+                child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                  child: Column(
+                children: [
+                  Container(
+                    color: Color(0xFF333450),
+                    child: _getRowBoxList(ccys, 16, Colors.white),
+                  ),
+                  Container(
+                    child: _getAllBoxList(rateLists),
+                  )
+                ],
+              )),
+            )),
+          ],
+        ),
+      );
+    }
   }
 
   //获得所有滑动元素
@@ -183,7 +178,6 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
       width: 120,
       height: 50,
       alignment: Alignment.center,
-      // padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(width: 0.3, color: Colors.grey)),
       ),
