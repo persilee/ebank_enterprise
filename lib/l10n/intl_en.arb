@@ -23,6 +23,10 @@
   "begin_date":"Begin Date",
   "end_date":"End Date",
   "repayment_ways":"Repayment Type",
+  "repayment_ways1":"Equivalent principal and interest",
+  "repayment_ways2":"One time repayment of principal and interest at maturity",
+  "repayment_ways3":"Monthly interest payment",
+  "repayment_ways4":"Equivalent principal",
   "deduct_money_date":"Repayment Date",
   "deduct_money_account":"Repayment Account",
   "loan_limit_detail":"Amount of details",
@@ -85,5 +89,10 @@
   "no_recent_transfer_account": "Have no transfer account",
   "transfer_out": "Transfer To",
   "transfer_type_0": "Internal Transfer",
-  "transfer_type_2": "Overseas Bank Transfer"
+  "transfer_type_2": "Overseas Bank Transfer",
+  "installment_status1":"Start",
+  "installment_status2":"Matured",
+  "installment_status3":"Overdue",
+  "installment_status4":"Compensatory",
+  "unknown":"Unknown"
 }

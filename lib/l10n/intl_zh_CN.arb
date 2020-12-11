@@ -23,6 +23,10 @@
   "begin_date":"起始日",
   "end_date":"到期日",
   "repayment_ways":"还款方式",
+  "repayment_ways1":"等额本息",
+  "repayment_ways2":"到期一次性还本付息",
+  "repayment_ways3":"按月付息，到期还本",
+  "repayment_ways4":"等额本金",
   "deduct_money_date":"扣款日",
   "deduct_money_account":"扣款卡号",
   "loan_limit_detail":"额度详情",
@@ -85,5 +89,10 @@
   "no_recent_transfer_account": "暂无转账账号",
   "transfer_out": "转出",
   "transfer_type_0": "行内转账",
-  "transfer_type_2": "国际转账"
+  "transfer_type_2": "国际转账",
+  "installment_status1":"开始",
+  "installment_status2":"到期",
+  "installment_status3":"逾期",
+  "installment_status4":"代偿",
+  "unknown":"未知"
 }

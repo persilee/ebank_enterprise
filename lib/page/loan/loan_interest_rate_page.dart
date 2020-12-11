@@ -1,10 +1,11 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///贷款利率界面
-/// Author: 方璐瑶
+/// Author: fangluyao
 /// Date: 2020-12-07
 
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_rate.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -21,7 +22,6 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
   List rates = [];
   List engNames = [];
   List rateLists = [];
-  var name = '';
   var flag = 0;
 
   @override
@@ -42,7 +42,6 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
         engNames.clear();
         rateLists.clear();
 
-        name = 'Loan Product';
         flag = 1;
         ccys.addAll(data.ccyList);
         for (int i = 0; i < data.prodMastList.length; i++) {
@@ -69,7 +68,7 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Loan Interest Rate'),
+          title: Text(S.current.loan_interest_rate_with_symbol),
           centerTitle: true,
           elevation: 0,
         ),
@@ -97,7 +96,8 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
               children: [
                 Container(
                   color: Color(0xFF333450),
-                  child: _getBox(name, 16, Colors.white),
+                  child: _getBox(
+                      S.current.loan_product_name_with_value, 16, Colors.white),
                 ),
                 Container(
                   child: _getCloumnBoxList(engNames),
