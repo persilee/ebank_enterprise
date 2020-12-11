@@ -118,142 +118,141 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                     color: HsgColors.commonBackground,
                     height: 15,
                   ),
-<<<<<<< HEAD
-                ),
-                new Text(
-                  '年利率啊',
-                  style: new TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          new Expanded(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                new Container(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: new Text(
-                    'Surprise deposit interest rate',
+                  new Text(
+                    '年利率啊',
                     style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-=======
-                  Container(
-                    // height: 115,
-                    padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                    //边框设置
-                    decoration: BoxDecoration(
-                      //背景
-                      color: Colors.white,
-                      //设置四周边框
-                      border: Border(
-                        top: _lineBorderSide(),
-                        bottom: _lineBorderSide(),
-                      ), //Border.all(width: 1, color: Colors.red),
->>>>>>> 6c8ec8c87334ebbaff05d4a7d1540e9f62a392fe
-                    ),
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 40.0,
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            tdepProducDTOList[index].engName,
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          //'The CDS'
-                          //tdepProducHeadDTO.lclName,
-                          // style: TextStyle(),
-                        ),
-                        // ),
-                        Divider(height: 0.5, color: HsgColors.divider),
-                        Container(
-                          //padding: EdgeInsets.only(bottom: 0),
-                          height: 60,
-                          alignment: Alignment.centerLeft,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '$minRate~${tdepProducDTOList[index].maxRate}',
-                                style: TextStyle(
-                                    fontSize: 17, color: Colors.red[500]),
-                              ),
-                              SizedBox(
-                                width:
-                                    (MediaQuery.of(context).size.width - 30) /
-                                        2 *
-                                        1,
-                                // height: 35,
-                                child: Text(
-                                  tdepProducDTOList[index].remark,
-                                  //'Surprise deposit interest rate',
-                                  // tdepProducHeadDTO.remark,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: HsgColors.firstDegreeText,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(top: 0.0),
-                          height: 30.0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                height: 70,
-                                child: Text(
-                                  S.current.annual_interest_rate,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: HsgColors.describeText,
-                                  ),
-                                ),
-                              ),
-
-                              SizedBox(
-                                width:
-                                    (MediaQuery.of(context).size.width - 30) /
-                                        2 *
-                                        1,
-                                height: 70,
-                                child: Text(
-                                  S.current.minimum_deposit +
-                                      '${tdepProducDTOList[index].minAmt}',
-                                  //S.current.from_hundred,
-                                  //tdepProducHeadDTO.minAmt,
-                                  //S.current.from_hundred,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: HsgColors.describeText,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              // Text(
-                              //   S.current.from_hundred,
-                              //   style: TextStyle(
-                              //     fontSize: 15,
-                              //     color: HsgColors.describeText,
-                              //   ),
-                              // ),
-                            ],
-                          ),
-                        ),
-                      ],
+                      color: Colors.grey[500],
                     ),
                   ),
                 ],
+              ),
+              new Expanded(
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    new Container(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: new Text(
+                        'Surprise deposit interest rate',
+                        style: new TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      // height: 115,
+                      padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                      //边框设置
+                      decoration: BoxDecoration(
+                        //背景
+                        color: Colors.white,
+                        //设置四周边框
+                        border: Border(
+                          top: _lineBorderSide(),
+                          bottom: _lineBorderSide(),
+                        ), //Border.all(width: 1, color: Colors.red),
+                      ),
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 40.0,
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              tdepProducDTOList[index].engName,
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            //'The CDS'
+                            //tdepProducHeadDTO.lclName,
+                            // style: TextStyle(),
+                          ),
+                          // ),
+                          Divider(height: 0.5, color: HsgColors.divider),
+                          Container(
+                            //padding: EdgeInsets.only(bottom: 0),
+                            height: 60,
+                            alignment: Alignment.centerLeft,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '$minRate~${tdepProducDTOList[index].maxRate}',
+                                  style: TextStyle(
+                                      fontSize: 17, color: Colors.red[500]),
+                                ),
+                                SizedBox(
+                                  width:
+                                      (MediaQuery.of(context).size.width - 30) /
+                                          2 *
+                                          1,
+                                  // height: 35,
+                                  child: Text(
+                                    tdepProducDTOList[index].remark,
+                                    //'Surprise deposit interest rate',
+                                    // tdepProducHeadDTO.remark,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: HsgColors.firstDegreeText,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(top: 0.0),
+                            height: 30.0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  height: 70,
+                                  child: Text(
+                                    S.current.annual_interest_rate,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: HsgColors.describeText,
+                                    ),
+                                  ),
+                                ),
+
+                                SizedBox(
+                                  width:
+                                      (MediaQuery.of(context).size.width - 30) /
+                                          2 *
+                                          1,
+                                  height: 70,
+                                  child: Text(
+                                    S.current.minimum_deposit +
+                                        '${tdepProducDTOList[index].minAmt}',
+                                    //S.current.from_hundred,
+                                    //tdepProducHeadDTO.minAmt,
+                                    //S.current.from_hundred,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: HsgColors.describeText,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                // Text(
+                                //   S.current.from_hundred,
+                                //   style: TextStyle(
+                                //     fontSize: 15,
+                                //     color: HsgColors.describeText,
+                                //   ),
+                                // ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
