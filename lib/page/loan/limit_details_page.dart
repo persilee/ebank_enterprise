@@ -115,8 +115,7 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
         InkWell(
           onTap: () {
             //此处跳转到详情
-            // Navigator.pushNamed(context, PageLoanDemo,arguments: loanDetail);
-            Fluttertoast.showToast(msg: "假装跳转了!");
+            Navigator.pushNamed(context, pageloanDetails,arguments: loanDetail);
           },
           child: Icon(
             Icons.keyboard_arrow_right,

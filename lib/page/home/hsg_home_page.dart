@@ -570,9 +570,10 @@ class _HomePageState extends State<HomePage> {
                     //收款范本
                   } else if (S.current.deposit_open == title) {
                     //'定期开立'
-                    Navigator.pushNamed(context, pageTimeDepostProduct);
+                    //Navigator.pushNamed(context, pageTimeDepostProduct);
                   } else if (S.current.deposit_record == title) {
                     //'我的存单'
+                    Navigator.pushNamed(context, pageTimeDepositRecord);
                   } else if (S.current.deposit_rate == title) {
                     //'利率查看'
                   } else if (S.current.loan_apply == title) {
@@ -582,7 +583,8 @@ class _HomePageState extends State<HomePage> {
                     Navigator.pushNamed(context, pageLimitDetails);
                   } else if (S.current.loan_rate == title) {
                     //'贷款利率'
-                    Navigator.pushNamed(context, pageRepayPlan);
+                    //Navigator.pushNamed(context, pageloanDemo);
+                    Navigator.pushNamed(context, pageLoanInterestRate);
                   } else if (S.current.foreign_exchange == title) {
                     //'外汇买卖'
                   } else if (S.current.exchange_rate == title) {

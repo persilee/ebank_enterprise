@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
