@@ -23,6 +23,7 @@ import 'package:ebank_mobile/page/loan/repay_plan_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
+import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
 import 'package:flutter/material.dart';
@@ -61,10 +62,14 @@ var pageTransfer = '/hsg_transfer_page';
 var pageTransferInternal = '/hsg_transfer_internal_page';
 var pageElectronicStatement = '/electronic_statement_page';
 var pageTimeDepostProduct = '/time_depost_product_page';
+var pageTest = '/test_page';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
   pageloanDetails: (context) => LoanDetailsPage(),
+  pageLogin: (context) => LoginPage(),
+  pageTest: (context) => XBTestPage(),
+  //pageloanDemo: (context) => LoanDemoPage(),
   pageLoanInterestRate: (context) => LoanInterestRatePage(),
   pageCardList: (context) => CardListPage(),
   pageDialogDemo: (context) => DialogDemoPage(),
