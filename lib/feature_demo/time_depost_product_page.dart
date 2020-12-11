@@ -1,10 +1,9 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///定期产品列表页面
+///
 /// Author: wangluyao
-/// Date: 2020-12-03
+/// Date: 2020-12-11
 
-//import 'dart:html';
-
+import 'dart:math';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
 import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -12,6 +11,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import '../page_route.dart';
 
@@ -112,18 +112,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                         style: TextStyle(fontSize: 15),
                       ),
                     ),
-                    // Container(
-                    //   padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                    //   //边框设置
-                    //   decoration: BoxDecoration(
-                    //     //背景
-                    //     color: Colors.white,
-                    //     //设置四周边框
-                    //     border: Border(
-                    //       top: _lineBorderSide(),
-                    //       bottom: _lineBorderSide(),
-                    //     ),
-                    //   ),
                     Divider(height: 0.5, color: HsgColors.divider),
                     Container(
                       height: 60,
@@ -155,7 +143,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                         ],
                       ),
                     ),
-                    // ),
                     Container(
                       padding: EdgeInsets.only(top: 0.0),
                       height: 30.0,
@@ -203,7 +190,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
 
     return Scaffold(
         appBar: AppBar(
-          //pinned: false,
           centerTitle: true,
           title: Text(S.current.time_deposit),
           actions: <Widget>[
@@ -234,16 +220,14 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     TimeDepositDataRepository()
         .getGetTimeDepositProduct('getGetTimeDepositProduct')
         .then((data) {
-      print('-----------------------------success----------');
-      print('$data');
+      productList.clear();
       data.forEach((element) {
         productList.add(element.tdepProducHeadDTO);
       });
 
       setState(() {});
-    }).catchError((e) {
-      print('========================$e');
-      // Fluttertoast.showToast(msg: e.toString());
+    }).catchError(() {
+      Fluttertoast.showToast(msg: "${e.toString()}");
     });
   }
 }

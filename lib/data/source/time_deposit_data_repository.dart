@@ -4,7 +4,6 @@
 /// Date: 2020-12-08
 
 import 'package:ebank_mobile/http/hsg_http.dart';
-
 import 'model/time_deposit_product.dart';
 
 class TimeDepositDataRepository {
