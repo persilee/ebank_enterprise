@@ -1,11 +1,7 @@
-/*
- * Filename: d:\work\flutter\ebank_mobile_enterprise\lib\data\source\time_deposit_data_repository.dart
- * Path: d:\work\flutter\ebank_mobile_enterprise\lib\data\source
- * Created Date: Tuesday, December 8th 2020, 4:29:25 pm
- * Author: wangluyao
- * 
- * Copyright (c) 2020 Your Company
- */
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: wangluyao
+/// Date: 2020-12-08
 
 import 'package:ebank_mobile/http/hsg_http.dart';
 
