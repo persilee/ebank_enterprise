@@ -3,21 +3,16 @@
 /// Author: 方璐瑶
 /// Date: 2020-12-07
 
-import 'package:ebank_mobile/data/source/model/loan.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 
-import 'model/loan_rate.dart';
+import 'model/get_loan_rate.dart';
 
 class LoanDataRepository {
-  Future<Loans> loan(String tag) {
-    return request(
-        '/loan/products/getProdList', {}, tag, (data) => Loans.fromJson(data));
-  }
-
-  Future<LoanRateResp> getLoanRateList(LoanRateReq loanRateReq, String tag) {
+  Future<GetLoanRateResp> getLoanRateList(
+      GetLoanRateReq loanRateReq, String tag) {
     return request('/loan/products/getProdList', loanRateReq, tag,
-        (data) => LoanRateResp.fromJson(data));
+        (data) => GetLoanRateResp.fromJson(data));
   }
 
   Future<GetLoanListResp> getLoanList(GetLoanListReq req, String tag) {

@@ -220,7 +220,7 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
                       InkWell(
                         onTap: () {
                           //此处跳转到详情
-                          Navigator.pushNamed(context, pageloanDemo,
+                          Navigator.pushNamed(context, pageloanDetails,
                               arguments: loanDetail);
                           /* 
                            * 跳转的页面调用此方法获取数据，注意 loanDetail的类型为get_loan_list.dart文件的Loan类
