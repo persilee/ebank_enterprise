@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page/mine/mine_page.dart';
 import 'package:ebank_mobile/page/mine/about_us_page.dart';
 import 'package:ebank_mobile/page/mine/feedback_page.dart';
-import 'package:ebank_mobile/page/mine/hsg_mine_page.dart';
 
 var pageHome = '/';
 var pageLogin = pageHome;
@@ -41,8 +40,7 @@ var appRoutes = {
   pageDialogDemo: (context) => DialogDemoPage(),
   // pageCardDetail: (context) => CardDetailPage(),
   pageCardLimit: (context) => CardLimitManagerPage(),
-  minePage: (context) => MineqPage(),
-  hsgMinePage: (context) => MinePage(),
+  minePage: (context) => MinePage(),
   aboutUs: (context) => AboutUsPage(),
   feedback: (context) => FeedbackPage(),
   // changeLgPs: (context) => ChangeLoPS(),
