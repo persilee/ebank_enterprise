@@ -118,28 +118,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                     color: HsgColors.commonBackground,
                     height: 15,
                   ),
-<<<<<<< HEAD
-                ),
-                new Text(
-                  '年利率啊',
-                  style: new TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          new Expanded(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                new Container(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: new Text(
-                    'Surprise deposit interest rate',
-                    style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-=======
                   Container(
                     // height: 115,
                     padding: EdgeInsets.only(left: 15.0, right: 15.0),
@@ -152,7 +130,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                         top: _lineBorderSide(),
                         bottom: _lineBorderSide(),
                       ), //Border.all(width: 1, color: Colors.red),
->>>>>>> 6c8ec8c87334ebbaff05d4a7d1540e9f62a392fe
                     ),
                     child: Column(
                       // mainAxisAlignment: MainAxisAlignment.start,

@@ -1,5 +1,5 @@
 import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
-import 'package:ebank_mobile/feature_demo/deposit_record_detail_page.dart';
+import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
@@ -53,7 +53,7 @@ var pageAccountOverview = '/account_overview';
 var pageDetailInfo = '/detail_info_page';
 var pageDetailList = '/detail_list_page';
 var pageTimeDepositRecord = '/time_deposit_record_page';
-var pageDepositRecordDetail = '/deposit_record_detail_page';
+var pageDepositInfo = '/time_deposit_info_page';
 var pageIndex = new MaterialPageRoute(builder: (context) => new IndexPage());
 var pageFeatureList = '/hsg_feature_list_page';
 var pageTransfer = '/hsg_transfer_page';
@@ -79,8 +79,7 @@ var appRoutes = {
   pageDetailList: (context) => DetailListPage(),
   pageDetailInfo: (context) => DetailInfoPage(),
   pageTimeDepositRecord: (context) => TimeDepositRecordPage(),
-  pageDepositRecordDetail: (context) => PageDepositRecordDetail(),
-  pageFeatureList: (context) => FeatureListPage(),
+  pageDepositInfo: (context) => PageDepositInfo(),
   pageTransfer: (context) => TransferPage(),
   pageTransferInternal: (context) => TransferInternalPage(),
   pageElectronicStatement: (context) => ElectronicStatementPage(),
