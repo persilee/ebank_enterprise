@@ -3,6 +3,7 @@
 /// Author: 方璐瑶
 /// Date: 2020-12-03
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -174,8 +175,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
             InkWell(
               onTap: () {
                 //此处跳转到还款计划详情
-                // Navigator.pushNamed(context, pageloanDemo, arguments: loanDetail);
-                Fluttertoast.showToast(msg: "假装跳转到还款计划详情了!");
+                Navigator.pushNamed(context, pageRepayPlan, arguments: loanDetail);
               },
               child: Icon(Icons.keyboard_arrow_right),
             ),
