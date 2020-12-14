@@ -99,7 +99,7 @@
   "transfer_type_2": "Overseas Bank Transfer",
   "installment_status1":"Start",
   "installment_status2":"Matured",
-  "installment_status3":"Overdue",
   "installment_status4":"Compensatory",
-  "unknown":"Unknown"
+  "unknown":"Unknown",
+  "day":"Day"
 }

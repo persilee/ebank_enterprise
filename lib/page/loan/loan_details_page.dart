@@ -240,7 +240,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(
             Text(S.current.deduct_money_date),
-            Text(loanDetail.repaymentDay.toString() + '日'),
+            Text(loanDetail.repaymentDay.toString() + S.current.day),
           ),
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(

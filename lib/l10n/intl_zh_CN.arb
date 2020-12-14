@@ -99,7 +99,7 @@
   "transfer_type_2": "国际转账",
   "installment_status1":"开始",
   "installment_status2":"到期",
-  "installment_status3":"逾期",
   "installment_status4":"代偿",
-  "unknown":"未知"
+  "unknown":"未知",
+  "day":"日"
 }
