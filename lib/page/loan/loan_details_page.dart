@@ -8,7 +8,6 @@ import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../page_route.dart';
 
@@ -273,7 +272,6 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, jumpPage, arguments: transfer);
-        Fluttertoast.showToast(msg: "假装跳转到还款记录详情了!");
       },
       child: _getSingleBox(text, icon),
     );
