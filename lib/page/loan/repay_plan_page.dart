@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/data/source/loan_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_schedule_detail_list.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
@@ -10,7 +12,7 @@
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 
 class RepayPlanPage extends StatefulWidget {
@@ -20,7 +22,9 @@ class RepayPlanPage extends StatefulWidget {
 
 class _RepayPlanState extends State<RepayPlanPage> {
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  var lnScheduleList = [];
   String contactNo = '';
+  String repaymentStatus = '';
 
   @override
   void initState() {
@@ -31,11 +35,27 @@ class _RepayPlanState extends State<RepayPlanPage> {
     });
   }
 
-  Future<void> _loadData() async {}
+  Future<void> _loadData() async {
+    var req = new GetScheduleDetailListReq(contactNo, repaymentStatus);
+    LoanDataRepository()
+        .getScheduleDetailList(req, 'getScheduleDetailList')
+        .then((data) {
+      if (data.getLnAcScheduleRspDetlsDTOList != null) {
+        setState(() {
+          lnScheduleList.clear();
+          lnScheduleList.addAll(data.getLnAcScheduleRspDetlsDTOList);
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     Loan loanDetail = ModalRoute.of(context).settings.arguments;
+    setState(() {
+      contactNo = loanDetail.contactNo;
+      repaymentStatus = '';
+    });
     contactNo = loanDetail.contactNo;
 
     var stackList = Stack(
@@ -161,6 +181,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           SizedBox(
+            width: 39,
             child: Text(
               "04-18",
               style: TextStyle(fontSize: 14, color: Color(0xFF4D4D4D)),
@@ -204,7 +225,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
       ],
     );
     var centerCont = Container(
-      // height: 65,
+      width: 25,
       padding: EdgeInsets.only(left: 5, right: 5),
       child: Column(
         children: [
@@ -213,6 +234,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
       ),
     );
     var rightCont = Container(
+      width: 256,
       padding: EdgeInsets.only(left: 10, right: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,15 +259,23 @@ class _RepayPlanState extends State<RepayPlanPage> {
             ],
           ),
           Padding(padding: EdgeInsets.only(top: 5)),
-          SizedBox(
-            child: Text(
-              "含本金 0.00+利息 28.00+罚息 0.00",
-              style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
-            ),
+          Wrap(
+            spacing: 20, //左右组件间距
+            runSpacing: 30, //上下组件间距
+            alignment: WrapAlignment.spaceEvenly, //横轴对齐方式
+            runAlignment: WrapAlignment.end,
+            children: [
+              Text(
+                "含本金 0.00+利息 28.00+罚息 0.00000000",
+                // maxLines: 256,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
+              ),
+            ],
           ),
           Padding(padding: EdgeInsets.only(top: 15)),
           SizedBox(
-            width: 217,
+            width: 256,
             child: Divider(
               height: 0,
               color: Color(0xFFE4E4E4),
