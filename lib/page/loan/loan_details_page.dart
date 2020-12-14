@@ -8,7 +8,6 @@ import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
-
 import '../../page_route.dart';
 
 class LoanDetailsPage extends StatefulWidget {
@@ -156,7 +155,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
         children: [
           //跳转到还款记录
           _jumpPage(
-              pageloanDetails,
+              pageRepayPlan,
               loanDetail,
               Text(
                 S.current.repayment_record,
