@@ -16,12 +16,14 @@ import 'package:ebank_mobile/page/electronicStatement/electronic_statement_page.
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
-import 'package:ebank_mobile/page/loan/loan_demo.dart';
-import 'package:ebank_mobile/page/loan/loan_interest_rate.dart';
+import 'package:ebank_mobile/page/loan/loan_details_page.dart';
+import 'package:ebank_mobile/page/loan/loan_interest_rate_page.dart';
 import 'package:ebank_mobile/page/loan/limit_details_page.dart';
+import 'package:ebank_mobile/page/loan/repay_plan_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
+//import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
 import 'package:flutter/material.dart';
@@ -35,10 +37,10 @@ var pageHome = '/';
 // var pageLogin = "151";
 var pageLogin = pageHome;
 // var pageCardList = pageHome;
-//var pageloanDemo = pageHome;
-var pageloanDemo = '/loan_demo';
-//var pageLoanInterestRate = pageHome;
-var pageLoanInterestRate = '/loan_interest_rate';
+var pageRepayPlan = "/repay_plan_page";
+var pageLimitDetails = "/limit_detail_page";
+var pageloanDetails = '/loan_details_page';
+var pageLoanInterestRate = '/loan_interest_rate_page';
 var pageLimitDetailsDemo = "/limit_detail_page";
 var pageCardList = '/card_list';
 var pageDialogDemo = '/dialog_demo';
@@ -59,14 +61,20 @@ var pageFeatureList = '/hsg_feature_list_page';
 var pageTransfer = '/hsg_transfer_page';
 var pageTransferInternal = '/hsg_transfer_internal_page';
 var pageElectronicStatement = '/electronic_statement_page';
+var pageTimeDepostProduct = '/time_depost_product_page';
+var pageTest = '/test_page';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
-  pageloanDemo: (context) => LoanDemoPage(),
+  pageloanDetails: (context) => LoanDetailsPage(),
+  pageLogin: (context) => LoginPage(),
+  // pageTest: (context) => XBTestPage(),
+  //pageloanDemo: (context) => LoanDemoPage(),
   pageLoanInterestRate: (context) => LoanInterestRatePage(),
   pageCardList: (context) => CardListPage(),
   pageDialogDemo: (context) => DialogDemoPage(),
-  pageLimitDetailsDemo: (context) => LimitDetailsPage(),
+  pageRepayPlan: (context) => RepayPlanPage(),
+  pageLimitDetails: (context) => LimitDetailsPage(),
   // pageCardDetail: (context) => CardDetailPage(),
   pageCardLimit: (context) => CardLimitManagerPage(),
 // minePage: (context) => MinePage(),
@@ -83,6 +91,7 @@ var appRoutes = {
   pageTransfer: (context) => TransferPage(),
   pageTransferInternal: (context) => TransferInternalPage(),
   pageElectronicStatement: (context) => ElectronicStatementPage(),
+  pageTimeDepostProduct: (context) => TimeDepostProduct(),
 };
 
 onGenerateRoute(RouteSettings settings) {

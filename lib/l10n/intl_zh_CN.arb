@@ -31,6 +31,13 @@
   "begin_time": "开始时间",
   "end_time": "结束时间",
   "loan_interest_rate": "贷款利率",
+  "repayment_plan": "还款计划",
+  "repayment_with_under": "还款",
+  "installment_status3": "逾期",
+  "repayment_status3": "已还清",
+  "with_principal": "含本金",
+  "interest_amt": "利息",
+  "punishment_interest": "罚息",
   "setChangLoginPasd": "设置登录密码",
   "plaseSetPsd": "请设置登录密码",
   "transfer": "转账",
@@ -92,5 +99,11 @@
   "no_recent_transfer_account": "暂无转账账号",
   "transfer_out": "转出",
   "transfer_type_0": "行内转账",
-  "transfer_type_2": "国际转账"
+  "transfer_type_2": "国际转账",
+  "transaction_info": "交易详情",
+  "transaction_account": "交易账户",
+  "transaction_amount": "交易金额",
+  "transaction_time": "交易时间",
+  "msgId": "流水号",
+  "remarks": "备注"
 }
