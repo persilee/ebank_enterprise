@@ -168,10 +168,10 @@ class _RepayPlanState extends State<RepayPlanPage> {
                         width: 2,
                         height: 40,
                         child: DecoratedBox(
-                          decoration: BoxDecoration(color: 
-                          // Color(0xFFF0F0F0)
-                          Colors.grey
-                          ),
+                          decoration: BoxDecoration(
+                              color:
+                                  // Color(0xFFF0F0F0)
+                                  Colors.grey),
                         ),
                       );
                     })),

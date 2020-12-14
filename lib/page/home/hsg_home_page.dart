@@ -570,7 +570,7 @@ class _HomePageState extends State<HomePage> {
                     //收款范本
                   } else if (S.current.deposit_open == title) {
                     //'定期开立'
-                    //Navigator.pushNamed(context, pageTimeDepostProduct);
+                    Navigator.pushNamed(context, pageTimeDepostProduct);
                   } else if (S.current.deposit_record == title) {
                     //'我的存单'
                     Navigator.pushNamed(context, pageTimeDepositRecord);
