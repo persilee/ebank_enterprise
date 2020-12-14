@@ -21,7 +21,30 @@ class TransferPage extends StatefulWidget {
 
 class _TransferPageState extends State<TransferPage> {
   var _partnerListData = [];
+  //是否显示无数据页面 true显示
   bool _isShowNoDataWidget = false;
+  //顶部网格数据
+  List<Map<String, Object>> _gridFeatures = [
+    {
+      'btnIcon':
+          'images/transferIcon/transfer_features_icon/transfer_features_timely.png',
+      'btnTitle': S.current.transfer_type_0
+    },
+    {
+      'btnIcon':
+          'images/transferIcon/transfer_features_icon/transfer_features_plan.png',
+      'btnTitle': S.current.transfer_appointment
+    },
+    {
+      'btnIcon':
+          'images/transferIcon/transfer_features_icon/transfer_features_record.png',
+      'btnTitle': S.current.transfer_record
+    },
+  ];
+  //网格下面列表数据
+  List<Map<String, Object>> _listFeatures = [
+    {'btnIcon': '', 'btnTitle': S.current.transfer_type_2},
+  ];
 
   @override
   void initState() {
@@ -147,38 +170,37 @@ class _TransferPageState extends State<TransferPage> {
       ),
     ));
 
+    //没数据显示页面
+    Widget _noDataWidget = Container(
+      width: (MediaQuery.of(context).size.width),
+      height: 270,
+      color: Colors.white,
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 45),
+            child: Image(
+              image: AssetImage('images/noDataIcon/no_data_person.png'),
+              width: 159,
+              height: 128,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            child: Text(
+              S.of(context).no_recent_transfer_account,
+              style: TextStyle(color: HsgColors.describeText, fontSize: 15.0),
+            ),
+          ),
+        ],
+      ),
+    );
+
     ///底部加长条，外带暂无数据显示widget
     section.add(SliverToBoxAdapter(
       child: Column(
         children: [
-          _isShowNoDataWidget
-              ? Container(
-                  width: (MediaQuery.of(context).size.width),
-                  height: 270,
-                  color: Colors.white,
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 45),
-                        child: Image(
-                          image: AssetImage(
-                              'images/noDataIcon/no_data_person.png'),
-                          width: 159,
-                          height: 128,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 20),
-                        child: Text(
-                          S.of(context).no_recent_transfer_account,
-                          style: TextStyle(
-                              color: HsgColors.describeText, fontSize: 15.0),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              : Container(),
+          _isShowNoDataWidget ? _noDataWidget : Container(),
           Container(
             height: 20,
           ),
@@ -255,6 +277,83 @@ class _TransferPageState extends State<TransferPage> {
 
   ///最近转账账号列表单元widget
   Widget _partnerListItemWidget(Rows data) {
+    //银行图标
+    Widget _bankImgWidget = Container(
+      width: 46,
+      height: 46,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(46.0 / 2),
+      ),
+      child: ClipOval(
+        child: (data.payeeBankImageUrl == null || data.payeeBankImageUrl == '')
+            ? Image(
+                image: AssetImage(
+                  'images/transferIcon/transfer_sample_placeholder.png',
+                ),
+              )
+            : FadeInImage.assetNetwork(
+                fit: BoxFit.fitWidth,
+                image: data.payeeBankImageUrl,
+                placeholder:
+                    'images/transferIcon/transfer_sample_placeholder.png',
+              ),
+      ),
+    );
+
+    //中间两行文字（收款人姓名，卡号）
+    Widget _middleInfoWidget = Container(
+      padding: EdgeInsets.only(left: 15, right: 15),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 17),
+            height: 20,
+            child: Text(
+              data.payeeName,
+              style: TextStyle(
+                color: HsgColors.secondDegreeText,
+                fontSize: 15,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 6),
+            height: 20,
+            child: Text(
+              FormatUtil.formatSpace4(data.payeeCardNo),
+              style: TextStyle(
+                color: HsgColors.describeText,
+                fontSize: 13,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    //右侧转出按钮
+    FlatButton _transferToBtn = FlatButton(
+      child: Text(
+        S.of(context).transfer_out,
+        style: TextStyle(
+          color: HsgColors.accent,
+          fontSize: 13,
+        ),
+      ),
+      onPressed: () {
+        print('转出');
+      },
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: HsgColors.accent, width: 0.5),
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
+    );
+
     return Container(
       height: 80,
       decoration: BoxDecoration(
@@ -268,109 +367,17 @@ class _TransferPageState extends State<TransferPage> {
       child: FlatButton(
         child: Row(
           children: [
-            Container(
-              // alignment: Alignment.centerLeft,
-              width: 46,
-              height: 46,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(46.0 / 2),
-              ),
-              child: ClipOval(
-                child: (data.payeeBankImageUrl == null ||
-                        data.payeeBankImageUrl == '')
-                    ? Image(
-                        image: AssetImage(
-                          'images/transferIcon/transfer_sample_placeholder.png',
-                        ),
-                      )
-                    : FadeInImage.assetNetwork(
-                        fit: BoxFit.fitWidth,
-                        image: data.payeeBankImageUrl,
-                        placeholder:
-                            'images/transferIcon/transfer_sample_placeholder.png',
-                      ),
-              ),
-            ),
+            _bankImgWidget,
             Expanded(
-              child: Container(
-                padding: EdgeInsets.only(left: 15, right: 15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 17),
-                      height: 20,
-                      child: Text(
-                        data.payeeName,
-                        style: TextStyle(
-                          color: HsgColors.secondDegreeText,
-                          fontSize: 15,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 6),
-                      height: 20,
-                      child: Text(
-                        FormatUtil.formatSpace4(data.payeeCardNo),
-                        style: TextStyle(
-                          color: HsgColors.describeText,
-                          fontSize: 13,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              child: _middleInfoWidget,
             ),
-            FlatButton(
-              child: Text(
-                S.of(context).transfer_out,
-                style: TextStyle(
-                  color: HsgColors.accent,
-                  fontSize: 13,
-                ),
-              ),
-              onPressed: () {
-                print('转出');
-              },
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: HsgColors.accent, width: 0.5),
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-              ),
-            ),
+            _transferToBtn,
           ],
         ),
         onPressed: () {},
       ),
     );
   }
-
-  List<Map<String, Object>> _gridFeatures = [
-    {
-      'btnIcon':
-          'images/transferIcon/transfer_features_icon/transfer_features_timely.png',
-      'btnTitle': S.current.transfer_type_0
-    },
-    {
-      'btnIcon':
-          'images/transferIcon/transfer_features_icon/transfer_features_plan.png',
-      'btnTitle': S.current.transfer_appointment
-    },
-    {
-      'btnIcon':
-          'images/transferIcon/transfer_features_icon/transfer_features_record.png',
-      'btnTitle': S.current.transfer_record
-    },
-  ];
-
-  List<Map<String, Object>> _listFeatures = [
-    {'btnIcon': '', 'btnTitle': S.current.transfer_type_2},
-  ];
 
   Future<void> _loadData() async {
     TransferDataRepository()

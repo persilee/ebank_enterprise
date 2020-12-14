@@ -14,6 +14,16 @@ class FormatUtil {
     return text == null || text.isEmpty;
   }
 
+  static bool isNumeric(String text) {
+    try {
+      double.parse(text);
+    } on FormatException {
+      return false;
+    } finally {
+      return true;
+    }
+  }
+
   /// 每隔 x位 加 pattern
   static String formatDigitPattern(String text,
       {int digit = 4, String pattern = ' '}) {

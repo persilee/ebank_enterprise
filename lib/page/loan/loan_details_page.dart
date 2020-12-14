@@ -3,6 +3,7 @@
 /// Author: fangluyao
 /// Date: 2020-12-03
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -163,6 +164,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
               ),
               Icon(Icons.keyboard_arrow_right)),
           Divider(height: 0, color: HsgColors.textHintColor),
+<<<<<<< HEAD
           //跳转到待还计划
           _jumpPage(
               pageloanDetails,
@@ -171,6 +173,20 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
                 S.current.wait_repayment_plan,
               ),
               Icon(Icons.keyboard_arrow_right)),
+=======
+          _getSingleBox(
+            Text(
+              S.current.wait_repayment_plan,
+            ),
+            InkWell(
+              onTap: () {
+                //此处跳转到还款计划详情
+                Navigator.pushNamed(context, pageRepayPlan, arguments: loanDetail);
+              },
+              child: Icon(Icons.keyboard_arrow_right),
+            ),
+          ),
+>>>>>>> 76b20f18fd2fd16c8a87146fb5c8bbe3152c7f05
         ],
       ),
     );

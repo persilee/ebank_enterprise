@@ -30,7 +30,6 @@ import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page/mine/mine_page.dart';
 import 'package:ebank_mobile/page/mine/about_us_page.dart';
 import 'package:ebank_mobile/page/mine/feedback_page.dart';
-//import 'package:ebank_mobile/page/mine/hsg_mine_page.dart';
 import 'package:ebank_mobile/page/mine/change_logPswd_page.dart';
 
 var pageHome = '/';
@@ -47,7 +46,6 @@ var pageDialogDemo = '/dialog_demo';
 var pageCardDetail = '/card_detail';
 var pageCardLimit = '/card_limit_manager';
 var minePage = '/mine_page';
-var hsgMinePage = '/hsg_mine_page';
 var aboutUs = '/about_us_page';
 var feedback = '/feedback_page';
 var changeLgPs = '/change_loginpassword_page';
@@ -77,12 +75,10 @@ var appRoutes = {
   pageLimitDetails: (context) => LimitDetailsPage(),
   // pageCardDetail: (context) => CardDetailPage(),
   pageCardLimit: (context) => CardLimitManagerPage(),
-// minePage: (context) => MinePage(),
+  minePage: (context) => MinePage(),
   aboutUs: (context) => AboutUsPage(),
   feedback: (context) => FeedbackPage(),
   changeLgPs: (context) => ChangeLoPS(),
-  // changeLgPs: (context) => ChangeLoPS(),
-  //minePage: (context) => MinePage(),
   pageAccountOverview: (context) => AccountOverviewPage(),
   pageDetailList: (context) => DetailListPage(),
   pageDetailInfo: (context) => DetailInfoPage(),
