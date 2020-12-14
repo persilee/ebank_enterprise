@@ -4,14 +4,23 @@ part 'get_schedule_detail_list.g.dart';
 
 @JsonSerializable()
 class GetScheduleDetailListReq extends Object {
+  //贷款账号
   @JsonKey(name: 'acNo')
   String acNo;
-
+  //页码
+  @JsonKey(name: 'page')
+  String page;
+  //一页数据条数
+  @JsonKey(name: 'pageSize')
+  String pageSize;
+  //还款状态
   @JsonKey(name: 'repaymentStatus')
   String repaymentStatus;
 
   GetScheduleDetailListReq(
     this.acNo,
+    this.page,
+    this.pageSize,
     this.repaymentStatus,
   );
 
@@ -38,64 +47,59 @@ class GetScheduleDetailListResp extends Object {
 
 @JsonSerializable()
 class GetLnAcScheduleRspDetlsDTOList extends Object {
+  //贷款账号
   @JsonKey(name: 'acNo')
   String acNo;
-
+  //利息摊销金额
   @JsonKey(name: 'amorIntAmt')
-  int amorIntAmt;
-
-  @JsonKey(name: 'createTime')
-  String createTime;
-
+  String amorIntAmt;
+  //分期天数
   @JsonKey(name: 'ctrDays')
-  int ctrDays;
-
+  String ctrDays;
+  //阶段分期
   @JsonKey(name: 'ctrInstal')
-  int ctrInstal;
-
+  String ctrInstal;
+  //阶段序号
   @JsonKey(name: 'ctrStageNo')
-  int ctrStageNo;
-
+  String ctrStageNo;
+  //分期日期
   @JsonKey(name: 'instalDate')
   String instalDate;
-
+  //归还金额合计
   @JsonKey(name: 'instalOutstAmt')
-  int instalOutstAmt;
-
+  String instalOutstAmt;
+  //分期状态
+  //正常NORMAL 到期EXPIRE 逾期OVERDUE 代偿COMPENSATE
   @JsonKey(name: 'instalStatus')
   String instalStatus;
-
+  //还款状态 未还NONE、部分还款PART、全额还款ALL
   @JsonKey(name: 'instalType')
   String instalType;
-
+  //分期金额
   @JsonKey(name: 'interestAmt')
-  int interestAmt;
-
+  String interestAmt;
+  //最后还款日期
   @JsonKey(name: 'lastPaymentDate')
   String lastPaymentDate;
-
-  @JsonKey(name: 'modifyTime')
-  String modifyTime;
-
+  //期后本金金额
   @JsonKey(name: 'princBalAmt')
-  int princBalAmt;
-
+  String princBalAmt;
+  //本金金额
   @JsonKey(name: 'principalAmt')
-  int principalAmt;
-
+  String principalAmt;
+  //阶段开始日期
   @JsonKey(name: 'stageStartDate')
   String stageStartDate;
-
+  //开始日期
   @JsonKey(name: 'startDate')
   String startDate;
-
+  //补贴金额
   @JsonKey(name: 'subsidyAmt')
-  int subsidyAmt;
+  String subsidyAmt;
 
   GetLnAcScheduleRspDetlsDTOList(
     this.acNo,
     this.amorIntAmt,
-    this.createTime,
     this.ctrDays,
     this.ctrInstal,
     this.ctrStageNo,
@@ -105,7 +109,6 @@ class GetLnAcScheduleRspDetlsDTOList extends Object {
     this.instalType,
     this.interestAmt,
     this.lastPaymentDate,
-    this.modifyTime,
     this.princBalAmt,
     this.principalAmt,
     this.stageStartDate,

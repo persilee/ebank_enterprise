@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
 import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
 
