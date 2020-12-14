@@ -9,6 +9,8 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../page_route.dart';
+
 class LoanDetailsPage extends StatefulWidget {
   @override
   _LoanDetailsPageState createState() => _LoanDetailsPageState();
@@ -148,38 +150,27 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
     );
     //还款记录、待还计划
     var container2 = Container(
-      margin: EdgeInsets.only(bottom: 10),
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _getSingleBox(
-            Text(
-              S.current.repayment_record,
-            ),
-            InkWell(
-              onTap: () {
-                //此处跳转到还款记录详情
-                // Navigator.pushNamed(context, pageloanDemo,arguments: loanDetail);
-                Fluttertoast.showToast(msg: "假装跳转到还款记录详情了!");
-              },
-              child: Icon(Icons.keyboard_arrow_right),
-            ),
-          ),
+          //跳转到还款记录
+          _jumpPage(
+              pageloanDetails,
+              loanDetail,
+              Text(
+                S.current.repayment_record,
+              ),
+              Icon(Icons.keyboard_arrow_right)),
           Divider(height: 0, color: HsgColors.textHintColor),
-          _getSingleBox(
-            Text(
-              S.current.wait_repayment_plan,
-            ),
-            InkWell(
-              onTap: () {
-                //此处跳转到还款计划详情
-                // Navigator.pushNamed(context, pageloanDemo, arguments: loanDetail);
-                Fluttertoast.showToast(msg: "假装跳转到还款计划详情了!");
-              },
-              child: Icon(Icons.keyboard_arrow_right),
-            ),
-          ),
+          //跳转到待还计划
+          _jumpPage(
+              pageloanDetails,
+              loanDetail,
+              Text(
+                S.current.wait_repayment_plan,
+              ),
+              Icon(Icons.keyboard_arrow_right)),
         ],
       ),
     );
@@ -228,6 +219,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
     );
     //还款方式、扣款日、扣款卡号
     var container4 = Container(
+      margin: EdgeInsets.only(bottom: 10),
       color: Colors.white,
       child: Column(
         children: [
@@ -263,15 +255,26 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           children: [
             //业务品种、贷款金额、余额
             container1,
-            //还款记录、待还计划
-            container2,
             // 贷款利率、期数、起始到期日
             container3,
             //还款方式、扣款日、扣款卡号
             container4,
+            //还款记录、待还计划
+            container2,
           ],
         ),
       ),
+    );
+  }
+
+  //页面跳转
+  Widget _jumpPage(String jumpPage, var transfer, Text text, Icon icon) {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, jumpPage, arguments: transfer);
+        Fluttertoast.showToast(msg: "假装跳转到还款记录详情了!");
+      },
+      child: _getSingleBox(text, icon),
     );
   }
 

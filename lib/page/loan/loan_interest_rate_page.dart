@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/model/get_loan_rate.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class LoanInterestRatePage extends StatefulWidget {
   LoanInterestRatePage({Key key}) : super(key: key);
@@ -17,12 +18,13 @@ class LoanInterestRatePage extends StatefulWidget {
 }
 
 class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
-  var ccys = [];
-  List<ProdMastList> prodMast = [];
-  List rates = [];
-  List engNames = [];
-  List rateLists = [];
+  var ccys = List<String>();
+  var prodMast = List<ProdMastList>();
+  var rates = List<String>();
+  var names = List<String>();
+  var rateLists = List();
   var flag = 0;
+  String language = Intl.getCurrentLocale();
 
   @override
   void initState() {
@@ -39,7 +41,7 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
         ccys.clear();
         prodMast.clear();
         rates.clear();
-        engNames.clear();
+        names.clear();
         rateLists.clear();
 
         flag = 1;
@@ -53,9 +55,14 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
           });
           rateLists.add(rates);
         }
+
         data.prodMastList.forEach((e) {
-          if (e.engName != null) {
-            engNames.add(e.engName);
+          if (e.engName != null || e.chnName != null) {
+            if (language == 'zh_CN') {
+              names.add(e.chnName);
+            } else {
+              names.add(e.engName);
+            }
           }
         });
       });
@@ -102,7 +109,7 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
                 ),
                 //固定的所有元素
                 Container(
-                  child: _getCloumnBoxList(engNames),
+                  child: _getCloumnBoxList(names),
                 ),
               ],
             )),
