@@ -1,8 +1,8 @@
-// TODO Implement this library.
-/**
-  @desc   意见反馈 
-  @author hlx
- */
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+/// desc: 意见反馈
+/// Author: hlx
+/// Date: 2020-12-03
+
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 

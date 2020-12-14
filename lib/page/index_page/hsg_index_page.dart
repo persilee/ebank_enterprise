@@ -1,10 +1,11 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/mine/mine_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_home_page.dart';
-import 'package:ebank_mobile/page/mine/hsg_mine_page.dart';
+//import 'package:ebank_mobile/page/mine/hsg_mine_page.dart';
 
 class IndexPage extends StatefulWidget {
   IndexPage({Key key}) : super(key: key);
@@ -59,7 +60,7 @@ class _IndexPageState extends State<IndexPage> {
 
   int currentIndex;
 
-  final pages = [HomePage(), ApprovalPage(), MinePage()];
+  final pages = [HomePage(), ApprovalPage(),MinePage()];
 
   @override
   void initState() {

@@ -561,15 +561,18 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, pageTimeDepostProduct);
       } else if (S.current.deposit_record == title) {
         //'我的存单'
+        Navigator.pushNamed(context, pageTimeDepositRecord);
       } else if (S.current.deposit_rate == title) {
         //'利率查看'
       } else if (S.current.loan_apply == title) {
         //'贷款申请'
       } else if (S.current.loan_record == title) {
         //'贷款记录'
-        Navigator.pushNamed(context, pageLimitDetailsDemo);
+        Navigator.pushNamed(context, pageLimitDetails);
       } else if (S.current.loan_rate == title) {
         //'贷款利率'
+        //Navigator.pushNamed(context, pageloanDemo);
+        Navigator.pushNamed(context, pageLoanInterestRate);
       } else if (S.current.foreign_exchange == title) {
         //'外汇买卖'
       } else if (S.current.exchange_rate == title) {
