@@ -1,3 +1,4 @@
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhangqirong
@@ -6,6 +7,7 @@
 // import 'package:ebank_mobile/config/hsg_colors.dart';
 // import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 // import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
@@ -65,7 +67,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
         key: refrestIndicatorKey,
         child: Column(
           children: [
-            _getHeader(),
+            _getHeader(loanDetail),
             Expanded(
               child: stackList,
             ),
@@ -99,7 +101,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
   }
 
   //获取头部(贷款本金，贷款余额)
-  Widget _getHeader() {
+  Widget _getHeader(Loan loanDetail) {
     var topBox = SizedBox(
       child: Row(
         children: [
@@ -109,7 +111,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
             style: TextStyle(fontSize: 13, color: Color(0xFF262626)),
           ),
           Text(
-            " HKD " + "1,500,000.00",
+            " HKD " + FormatUtil.formatSringToMoney(loanDetail.loanAmt),
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
           ),
         ],
@@ -124,7 +126,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
             style: TextStyle(fontSize: 13, color: Color(0xFF262626)),
           ),
           Text(
-            " HKD " + "1,500.00",
+            " HKD " + FormatUtil.formatSringToMoney(loanDetail.unpaidPrincipal),
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
           ),
         ],
