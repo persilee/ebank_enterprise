@@ -45,11 +45,15 @@ class ProdMastList extends Object {
   @JsonKey(name: 'engName')
   String engName;
 
+  @JsonKey(name: 'chnName')
+  String chnName;
+
   @JsonKey(name: 'prodCcyList')
   List<ProdCcyList> prodCcyList;
 
   ProdMastList(
     this.engName,
+    this.chnName,
     this.prodCcyList,
   );
 

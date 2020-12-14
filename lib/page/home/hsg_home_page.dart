@@ -25,12 +25,82 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   double _opacity = 0;
-  var _changeLangBtnTltle = 'English'; // S.current.english;
+  var _changeLangBtnTltle = 'English';
   var _headPortraitUrl = ''; // 头像地址
   var _enterpriseName = ''; // 企业名称
   var _userName = '高阳银行企业用户'; // 姓名
   var _characterName = '企业经办员'; // 角色名称
   var _lastLoginTime = '上次登录时间：'; // 上次登录时间
+  var _features = [
+    {
+      'title': S.current.transfer_collection,
+      'btnList': [
+        {
+          'btnIcon': 'images/home/listIcon/home_list_transfer.png',
+          'btnTitle': S.current.transfer
+        },
+        {
+          'btnIcon': 'images/home/listIcon/home_list_transfer_record.png',
+          'btnTitle': S.current.transfer_record
+        },
+        {
+          'btnIcon': 'images/home/listIcon/home_list_partner.png',
+          'btnTitle': S.current.transfer_model
+        },
+      ]
+    },
+    {
+      'title': S.current.deposit_service,
+      'btnList': [
+        {
+          'btnIcon': 'images/home/listIcon/home_list_time_deposit.png',
+          'btnTitle': S.current.deposit_open
+        },
+        {
+          'btnIcon': 'images/home/listIcon/home_list_deposit_records.png',
+          'btnTitle': S.current.deposit_record
+        },
+        {
+          'btnIcon': 'images/home/listIcon/home_list_deposit_rates.png',
+          'btnTitle': S.current.deposit_rate
+        },
+      ]
+    },
+    {
+      'title': S.current.loan_service,
+      'btnList': [
+        {
+          'btnIcon': 'images/home/listIcon/home_list_loan_apply.png',
+          'btnTitle': S.current.loan_apply
+        },
+        {
+          'btnIcon': 'images/home/listIcon/home_list_loan_recoeds.png',
+          'btnTitle': S.current.loan_record
+        },
+        {
+          'btnIcon': 'images/home/listIcon/home_list_loan_rate.png',
+          'btnTitle': S.current.loan_rate
+        },
+      ]
+    },
+    {
+      'title': S.current.other_service,
+      'btnList': [
+        {
+          'btnIcon': 'images/home/listIcon/home_list_FOREX.png',
+          'btnTitle': S.current.foreign_exchange
+        },
+        {
+          'btnIcon': 'images/home/listIcon/home_list_exchange.png',
+          'btnTitle': S.current.exchange_rate
+        },
+        {
+          'btnIcon': 'images/home/listIcon/home_list_statement.png',
+          'btnTitle': S.current.electronic_statement
+        },
+      ]
+    }
+  ];
 
   ScrollController _sctrollController = ScrollController();
 
@@ -71,7 +141,7 @@ class _HomePageState extends State<HomePage> {
             SliverFixedExtentList(
               delegate: SliverChildBuilderDelegate(
                 _buildListItem,
-                childCount: 4, //_features.length,
+                childCount: _features.length,
               ),
               itemExtent: 168.5,
             ),
@@ -387,77 +457,6 @@ class _HomePageState extends State<HomePage> {
 
   ///底下列表
   Widget _buildListItem(BuildContext context, int index) {
-    var _features = [
-      {
-        'title': S.current.transfer_collection,
-        'btnList': [
-          {
-            'btnIcon': 'images/home/listIcon/home_list_transfer.png',
-            'btnTitle': S.current.transfer
-          },
-          {
-            'btnIcon': 'images/home/listIcon/home_list_transfer_record.png',
-            'btnTitle': S.current.transfer_record
-          },
-          {
-            'btnIcon': 'images/home/listIcon/home_list_partner.png',
-            'btnTitle': S.current.transfer_model
-          },
-        ]
-      },
-      {
-        'title': S.current.deposit_service,
-        'btnList': [
-          {
-            'btnIcon': 'images/home/listIcon/home_list_time_deposit.png',
-            'btnTitle': S.current.deposit_open
-          },
-          {
-            'btnIcon': 'images/home/listIcon/home_list_deposit_records.png',
-            'btnTitle': S.current.deposit_record
-          },
-          {
-            'btnIcon': 'images/home/listIcon/home_list_deposit_rates.png',
-            'btnTitle': S.current.deposit_rate
-          },
-        ]
-      },
-      {
-        'title': S.current.loan_service,
-        'btnList': [
-          {
-            'btnIcon': 'images/home/listIcon/home_list_loan_apply.png',
-            'btnTitle': S.current.loan_apply
-          },
-          {
-            'btnIcon': 'images/home/listIcon/home_list_loan_recoeds.png',
-            'btnTitle': S.current.loan_record
-          },
-          {
-            'btnIcon': 'images/home/listIcon/home_list_loan_rate.png',
-            'btnTitle': S.current.loan_rate
-          },
-        ]
-      },
-      {
-        'title': S.current.other_service,
-        'btnList': [
-          {
-            'btnIcon': 'images/home/listIcon/home_list_FOREX.png',
-            'btnTitle': S.current.foreign_exchange
-          },
-          {
-            'btnIcon': 'images/home/listIcon/home_list_exchange.png',
-            'btnTitle': S.current.exchange_rate
-          },
-          {
-            'btnIcon': 'images/home/listIcon/home_list_statement.png',
-            'btnTitle': S.current.electronic_statement
-          },
-        ]
-      }
-    ];
-
     return ListTile(
       title: _getFeatures(_features[index]),
       onTap: () {
@@ -468,79 +467,121 @@ class _HomePageState extends State<HomePage> {
 
   ///列表单元格
   Widget _getFeatures(Map data) {
+    //更多按钮
+    FlatButton _moreBtn = FlatButton(
+      height: 25,
+      color: Color(0xF3F3F3FF),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(50)),
+      ),
+      onPressed: () {
+        Navigator.pushNamed(context, pageFeatureList);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            child: Text(
+              S.current.more,
+              style: TextStyle(
+                color: HsgColors.accent,
+                fontSize: 13,
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 8),
+            child: Image(
+              image:
+                  AssetImage('images/home/listIcon/home_list_more_arrow.png'),
+              width: 7,
+              height: 11,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    //单元格详情
+    Column _featuresDeatil = Column(
+      children: [
+        Container(
+          padding: EdgeInsets.only(left: 15, right: 15),
+          height: 45,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                data['title'],
+                style: TextStyle(
+                  color: HsgColors.firstDegreeText,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              _moreBtn,
+            ],
+          ),
+        ),
+        Container(
+          color: HsgColors.divider,
+          height: 0.5,
+        ),
+        Container(
+          height: 100,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: _craphicBtns(data),
+          ),
+        ),
+      ],
+    );
+
     return Container(
       padding: EdgeInsets.only(top: 10),
       child: Card(
         shadowColor: Color(0x46529F2E),
-        // clipBehavior: ,
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.only(left: 15, right: 15),
-              height: 45,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    data['title'],
-                    style: TextStyle(
-                      color: HsgColors.firstDegreeText,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  FlatButton(
-                    height: 25,
-                    color: Color(0xF3F3F3FF),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50)),
-                    ),
-                    onPressed: () {
-                      print('更多');
-                      Navigator.pushNamed(context, pageFeatureList);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          child: Text(
-                            S.current.more,
-                            style: TextStyle(
-                              color: HsgColors.accent,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 8),
-                          child: Image(
-                            image: AssetImage(
-                                'images/home/listIcon/home_list_more_arrow.png'),
-                            width: 7,
-                            height: 11,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              color: HsgColors.divider,
-              height: 0.5,
-            ),
-            Container(
-              height: 100,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: _craphicBtns(data),
-              ),
-            ),
-          ],
-        ),
+        child: _featuresDeatil,
       ),
     );
+  }
+
+  //功能点击事件
+  VoidCallback _featureClickFunction(String title) {
+    return () {
+      if (S.current.transfer == title) {
+        //转账
+        Navigator.pushNamed(context, pageTransfer);
+      } else if (S.current.transfer_record == title) {
+        //转账记录
+      } else if (S.current.transfer_model == title) {
+        //收款范本
+      } else if (S.current.deposit_open == title) {
+        //'定期开立'
+        Navigator.pushNamed(context, pageTimeDepostProduct);
+      } else if (S.current.deposit_record == title) {
+        //'我的存单'
+        Navigator.pushNamed(context, pageTimeDepositRecord);
+      } else if (S.current.deposit_rate == title) {
+        //'利率查看'
+      } else if (S.current.loan_apply == title) {
+        //'贷款申请'
+      } else if (S.current.loan_record == title) {
+        //'贷款记录'
+        Navigator.pushNamed(context, pageLimitDetails);
+      } else if (S.current.loan_rate == title) {
+        //'贷款利率'
+        //Navigator.pushNamed(context, pageloanDemo);
+        Navigator.pushNamed(context, pageLoanInterestRate);
+      } else if (S.current.foreign_exchange == title) {
+        //'外汇买卖'
+      } else if (S.current.exchange_rate == title) {
+        //'汇率查询'
+      } else if (S.current.electronic_statement == title) {
+        //'电子结单'
+        Navigator.pushNamed(context, pageElectronicStatement);
+      }
+    };
   }
 
   ///列表单元格的下面三个按钮和两条线
@@ -558,42 +599,7 @@ class _HomePageState extends State<HomePage> {
                 btnData['btnTitle'],
                 btnData['btnIcon'],
                 35.0,
-                () {
-                  print('${btnData['btnTitle']}');
-                  String title = btnData['btnTitle'];
-                  if (S.current.transfer == title) {
-                    //转账
-                    Navigator.pushNamed(context, pageTransfer);
-                  } else if (S.current.transfer_record == title) {
-                    //转账记录
-                  } else if (S.current.transfer_model == title) {
-                    //收款范本
-                  } else if (S.current.deposit_open == title) {
-                    //'定期开立'
-                    //Navigator.pushNamed(context, pageTimeDepostProduct);
-                  } else if (S.current.deposit_record == title) {
-                    //'我的存单'
-                    Navigator.pushNamed(context, pageTimeDepositRecord);
-                  } else if (S.current.deposit_rate == title) {
-                    //'利率查看'
-                  } else if (S.current.loan_apply == title) {
-                    //'贷款申请'
-                  } else if (S.current.loan_record == title) {
-                    //'贷款记录'
-                    Navigator.pushNamed(context, pageLimitDetails);
-                  } else if (S.current.loan_rate == title) {
-                    //'贷款利率'
-                    //Navigator.pushNamed(context, pageloanDemo);
-                    Navigator.pushNamed(context, pageLoanInterestRate);
-                  } else if (S.current.foreign_exchange == title) {
-                    //'外汇买卖'
-                  } else if (S.current.exchange_rate == title) {
-                    //'汇率查询'
-                  } else if (S.current.electronic_statement == title) {
-                    //'电子结单'
-                    Navigator.pushNamed(context, pageElectronicStatement);
-                  }
-                },
+                _featureClickFunction(btnData['btnTitle']),
               ),
               Container(
                 //假装没有第三条竖线

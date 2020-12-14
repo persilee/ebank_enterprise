@@ -51,7 +51,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   }
 
   Widget _getContent(List<Rows> rows) {
-    return CustomScrollView(slivers: <Widget>[
+    var SliverToBoxAdapters = <Widget>[
       SliverAppBar(
         pinned: true,
         title: Text(S.current.deposit_record),
@@ -60,9 +60,10 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
       SliverToBoxAdapter(
         child: Container(
           color: HsgColors.primary,
-          padding: EdgeInsets.only(left: 100, top: 30, bottom: 10),
+          padding: EdgeInsets.only(left: 0, top: 30, bottom: 10),
           child: Text(
             FormatUtil.formatSringToMoney('${totalAmt}'),
+            textAlign: TextAlign.center,
             style: TextStyle(
                 height: 1,
                 fontSize: 40,
@@ -75,9 +76,10 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         child: Container(
           margin: EdgeInsets.only(bottom: 12),
           color: HsgColors.primary,
-          padding: EdgeInsets.only(left: 120, top: 10, bottom: 30),
+          padding: EdgeInsets.only(left: 0, top: 10, bottom: 30),
           child: Text(
             ' ${S.current.receipts_total_amt} (HKD)',
+            textAlign: TextAlign.center,
             style: TextStyle(
                 height: 1,
                 fontSize: 15,
@@ -91,114 +93,112 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           delegate:
               SliverChildBuilderDelegate((BuildContext context, int index) {
         String bal = FormatUtil.formatSringToMoney('${rows[index].bal}');
+        var endTime = Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              S.current.due_date,
+              style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+            ),
+            Text(
+              //到期时间
+              rows[index].mtDate,
+              style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
+            ),
+          ],
+        );
+        //存入金额
+        var rate = [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                S.current.deposit_amount,
+                style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+              ),
+              Text(
+                '$bal  ${rows[index].ccy}',
+                style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
+              )
+            ],
+          ),
+          //利率
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                S.current.interest_rate,
+                style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+              ),
+              Text(
+                //利率
+                rows[index].conRate,
+                style: TextStyle(fontSize: 15, color: Colors.red),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                S.current.effective_date,
+                style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+              ),
+              Text(
+                //生效时间
+                rows[index].valDate,
+                style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
+              ),
+            ],
+          ),
+          endTime
+        ];
+        var startTime = rate;
+        //整存整取
+        var taking = [
+          SizedBox(
+            height: 37,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  child: Text(
+                    S.current.deposit_taking,
+                    style: TextStyle(fontSize: 15, color: Colors.black),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 0, color: HsgColors.textHintColor),
+          SizedBox(
+            height: 125,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: startTime,
+              ),
+            ),
+          )
+        ];
+        var raisedButton = RaisedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, pageDepositInfo);
+            },
+            padding: EdgeInsets.only(bottom: 12),
+            color: Colors.white,
+            elevation: 0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: taking,
+            ));
         return Container(
-            margin: EdgeInsets.only(bottom: 12),
-            child: RaisedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, pageDetailInfo);
-                },
-                padding: EdgeInsets.only(bottom: 12),
-                color: Colors.white,
-                elevation: 0,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 37,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                            child: Text(
-                              S.current.deposit_taking,
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.black),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Divider(height: 0, color: HsgColors.textHintColor),
-                    SizedBox(
-                      height: 125,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  S.current.deposit_amount,
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                //存款金额
-                                Text(
-                                  '$bal  ${rows[index].ccy}',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                )
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  S.current.interest_rate,
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  //利率
-                                  rows[index].conRate,
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.red),
-                                )
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  S.current.effective_date,
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  //生效时间
-                                  rows[index].valDate,
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  S.current.due_date,
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF8D8D8D)),
-                                ),
-                                Text(
-                                  //到期时间
-                                  rows[index].mtDate,
-                                  style: TextStyle(
-                                      fontSize: 15, color: Color(0xFF262626)),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                )));
+            margin: EdgeInsets.only(bottom: 12), child: raisedButton);
       }, childCount: rowList.length)),
-    ]);
+    ];
+    return CustomScrollView(slivers: SliverToBoxAdapters);
   }
 
   _loadDeopstData() {

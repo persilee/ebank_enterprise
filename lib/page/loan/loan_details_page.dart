@@ -1,6 +1,6 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///贷款详情界面
-/// Author: 方璐瑶
+/// Author: fangluyao
 /// Date: 2020-12-03
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -23,35 +23,35 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
     var isMaturity = '';
     switch (loanDetail.isMaturity) {
       case '0':
-        isMaturity = '开始';
+        isMaturity = S.current.installment_status1;
         break;
       case '1':
-        isMaturity = '到期';
+        isMaturity = S.current.installment_status2;
         break;
       case '2':
-        isMaturity = '逾期';
+        isMaturity = S.current.installment_status3;
         break;
       case '3':
-        isMaturity = '代偿';
+        isMaturity = S.current.installment_status4;
         break;
       case '4':
-        isMaturity = '未知';
+        isMaturity = S.current.unknown;
         break;
     }
     //判断还款方式
     var repaymentMethod = '';
     switch (loanDetail.repaymentMethod) {
       case 'EPI':
-        repaymentMethod = '等额本息';
+        repaymentMethod = S.current.repayment_ways1;
         break;
       case 'FPI':
-        repaymentMethod = '到期一次性还本付息';
+        repaymentMethod = S.current.repayment_ways2;
         break;
       case 'IOI':
-        repaymentMethod = '按月付息，到期还本';
+        repaymentMethod = S.current.repayment_ways3;
         break;
       case 'IPI':
-        repaymentMethod = '等额本金';
+        repaymentMethod = S.current.repayment_ways4;
         break;
     }
     //业务品种、贷款金额、余额
@@ -240,7 +240,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(
             Text(S.current.deduct_money_date),
-            Text(loanDetail.repaymentDay.toString() + '日'),
+            Text(loanDetail.repaymentDay.toString() + S.current.day),
           ),
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(

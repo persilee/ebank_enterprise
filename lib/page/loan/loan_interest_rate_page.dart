@@ -1,10 +1,11 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///贷款利率界面
-/// Author: 方璐瑶
+/// Author: fangluyao
 /// Date: 2020-12-07
 
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_rate.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -21,7 +22,6 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
   List rates = [];
   List engNames = [];
   List rateLists = [];
-  var name = '';
   var flag = 0;
 
   @override
@@ -42,7 +42,6 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
         engNames.clear();
         rateLists.clear();
 
-        name = 'Loan Product';
         flag = 1;
         ccys.addAll(data.ccyList);
         for (int i = 0; i < data.prodMastList.length; i++) {
@@ -69,7 +68,7 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Loan Interest Rate'),
+          title: Text(S.current.loan_interest_rate_with_symbol),
           centerTitle: true,
           elevation: 0,
         ),
@@ -95,10 +94,13 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
             Container(
                 child: Column(
               children: [
+                //固定的第一个元素
                 Container(
                   color: Color(0xFF333450),
-                  child: _getBox(name, 16, Colors.white),
+                  child: _getBox(S.current.loan_product_name_with_value, 16,
+                      120, Colors.white),
                 ),
+                //固定的所有元素
                 Container(
                   child: _getCloumnBoxList(engNames),
                 ),
@@ -110,12 +112,14 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
               child: Container(
                   child: Column(
                 children: [
+                  //滚动的第一行
                   Container(
                     color: Color(0xFF333450),
-                    child: _getRowBoxList(ccys, 16, Colors.white),
+                    child: _getRowBoxList(ccys, 16, 80, Colors.white),
                   ),
+                  //滚动的所有行
                   Container(
-                    child: _getAllBoxList(rateLists),
+                    child: _getAllBoxList(rateLists, 14, 80, Colors.black),
                   )
                 ],
               )),
@@ -127,11 +131,11 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
   }
 
   //获得所有滑动元素
-  Widget _getAllBoxList(List list) {
+  Widget _getAllBoxList(List list, double fontSize, double width, Color color) {
     List<Widget> _list = new List();
     for (int i = 0; i < list.length; i++) {
       _list.add(SizedBox(
-        child: _getRowBoxList(list[i], 14, Colors.black),
+        child: _getRowBoxList(list[i], fontSize, width, color),
       ));
     }
     return SizedBox(
@@ -142,11 +146,11 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
   }
 
   //获得滑动的一行的所有元素
-  Widget _getRowBoxList(List list, double size, Color color) {
+  Widget _getRowBoxList(List list, double fontSize, double width, Color color) {
     List<Widget> _list = new List();
     for (int i = 0; i < list.length; i++) {
       _list.add(SizedBox(
-        child: _getBox(list[i], size, color),
+        child: _getBox(list[i], fontSize, width, color),
       ));
     }
     return SizedBox(
@@ -161,7 +165,7 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
     List<Widget> _list = new List();
     for (int i = 0; i < list.length; i++) {
       _list.add(SizedBox(
-        child: _getBox(list[i], 14, Colors.black),
+        child: _getBox(list[i], 15, 120, Colors.black),
       ));
     }
     return SizedBox(
@@ -172,10 +176,10 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
   }
 
 //获得单个的元素
-  Widget _getBox(String name, double size, Color color) {
+  Widget _getBox(String name, double fontSize, double width, Color color) {
     return SizedBox(
         child: Container(
-      width: 120,
+      width: width,
       height: 50,
       alignment: Alignment.center,
       decoration: BoxDecoration(
@@ -185,7 +189,7 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
         name,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(fontSize: size, color: color),
+        style: TextStyle(fontSize: fontSize, color: color),
       ),
     ));
   }
