@@ -1,8 +1,3 @@
-import 'dart:js';
-
-import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
-import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
@@ -16,8 +11,8 @@ import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_detail_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_page.dart';
-import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
-import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
+import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
+import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page/loan/loan_details_page.dart';
 import 'package:ebank_mobile/page/loan/loan_interest_rate_page.dart';
