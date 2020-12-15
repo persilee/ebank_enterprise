@@ -4,6 +4,8 @@ import 'package:ebank_mobile/data/source/model/get_electronic_statement.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../page_route.dart';
+
 class ElectronicStatementPage extends StatefulWidget {
   @override
   _ElectronicStatementPageState createState() =>
@@ -33,61 +35,59 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
         child: ListView.builder(
             itemCount: dataList.length,
             itemBuilder: (BuildContext context, int index) {
-              return getRow(context, index);
+              return _getList(context, index);
             }),
       ),
     );
   }
 
-  Widget getRow(BuildContext context, int index) {
+  Widget _getList(BuildContext context, int index) {
     return GestureDetector(
       child: Container(
-          color: Colors.white,
-          child: RaisedButton(
-            color: Colors.white,
-            elevation: 0,
-            onPressed: () => _getFilePath(),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(top: 18, bottom: 18),
-                      child: Text(
-                        dataList[index]['date'],
-                        style: TextStyle(
-                          color: HsgColors.firstDegreeText,
-                        ),
-                      ),
+        color: Colors.white,
+        padding: EdgeInsets.only(left: 15, right: 15),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: 18, bottom: 18),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    dataList[index]['date'],
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
                     ),
-                    Container(
-                      padding: EdgeInsets.only(top: 18, bottom: 18),
-                      child: Image(
-                        color: HsgColors.firstDegreeText,
-                        image: AssetImage(
-                            'images/home/listIcon/home_list_more_arrow.png'),
-                        width: 7,
-                        height: 10,
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(
-                  color: HsgColors.divider,
-                  height: 0.5,
-                ),
-              ],
+                  ),
+                  Image(
+                    color: HsgColors.firstDegreeText,
+                    image: AssetImage(
+                        'images/home/listIcon/home_list_more_arrow.png'),
+                    width: 7,
+                    height: 10,
+                  ),
+                ],
+              ),
             ),
-          )),
+            Divider(
+              color: HsgColors.divider,
+              height: 0.5,
+            ),
+          ],
+        ),
+      ),
+      onTap: () {
+        _getFilePath(dataList[index]['date']);
+      },
     );
   }
 
-  _getFilePath() async {
+  _getFilePath(String date) async {
     RlectronicStatementRepository()
         .getFilePath(GetFilePathReq(), 'GetFilePathReq')
         .then((data) {
-      Navigator.pushNamed(context, data.filePath);
+      Navigator.pushNamed(context, pageElectronicStatementDetail,
+          arguments: {'filePath': data.filePath, 'date': date});
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });

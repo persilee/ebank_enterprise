@@ -1,6 +1,3 @@
-import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
-import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
@@ -12,9 +9,10 @@ import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_detail_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
+import 'package:ebank_mobile/page/electronicStatement/electronic_statement_detail_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_page.dart';
-import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
-import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
+import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
+import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page/loan/loan_details_page.dart';
 import 'package:ebank_mobile/page/loan/loan_interest_rate_page.dart';
@@ -59,6 +57,8 @@ var pageFeatureList = '/hsg_feature_list_page';
 var pageTransfer = '/hsg_transfer_page';
 var pageTransferInternal = '/hsg_transfer_internal_page';
 var pageElectronicStatement = '/electronic_statement_page';
+var pageElectronicStatementDetail =
+    '/electronicelectronic_statement_detail_page';
 var pageTimeDepostProduct = '/time_depost_product_page';
 var pageTest = '/test_page';
 
@@ -87,6 +87,7 @@ var appRoutes = {
   pageTransfer: (context) => TransferPage(),
   pageTransferInternal: (context) => TransferInternalPage(),
   pageElectronicStatement: (context) => ElectronicStatementPage(),
+  pageElectronicStatementDetail: (context) => ElectronicStatementDetailPage(),
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
 };
 
