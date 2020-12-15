@@ -1,13 +1,14 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///贷款详情界面
-/// Author: 方璐瑶
+/// Author: fangluyao
 /// Date: 2020-12-03
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import '../../page_route.dart';
 
 class LoanDetailsPage extends StatefulWidget {
   @override
@@ -22,35 +23,35 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
     var isMaturity = '';
     switch (loanDetail.isMaturity) {
       case '0':
-        isMaturity = '开始';
+        isMaturity = S.current.installment_status1;
         break;
       case '1':
-        isMaturity = '到期';
+        isMaturity = S.current.installment_status2;
         break;
       case '2':
-        isMaturity = '逾期';
+        isMaturity = S.current.installment_status3;
         break;
       case '3':
-        isMaturity = '代偿';
+        isMaturity = S.current.installment_status4;
         break;
       case '4':
-        isMaturity = '未知';
+        isMaturity = S.current.unknown;
         break;
     }
     //判断还款方式
     var repaymentMethod = '';
     switch (loanDetail.repaymentMethod) {
       case 'EPI':
-        repaymentMethod = '等额本息';
+        repaymentMethod = S.current.repayment_ways1;
         break;
       case 'FPI':
-        repaymentMethod = '到期一次性还本付息';
+        repaymentMethod = S.current.repayment_ways2;
         break;
       case 'IOI':
-        repaymentMethod = '按月付息，到期还本';
+        repaymentMethod = S.current.repayment_ways3;
         break;
       case 'IPI':
-        repaymentMethod = '等额本金';
+        repaymentMethod = S.current.repayment_ways4;
         break;
     }
     //业务品种、贷款金额、余额
@@ -148,38 +149,27 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
     );
     //还款记录、待还计划
     var container2 = Container(
-      margin: EdgeInsets.only(bottom: 10),
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _getSingleBox(
-            Text(
-              S.current.repayment_record,
-            ),
-            InkWell(
-              onTap: () {
-                //此处跳转到还款记录详情
-                // Navigator.pushNamed(context, pageloanDemo,arguments: loanDetail);
-                Fluttertoast.showToast(msg: "假装跳转到还款记录详情了!");
-              },
-              child: Icon(Icons.keyboard_arrow_right),
-            ),
-          ),
+          //跳转到还款记录
+          _jumpPage(
+              pageRepayPlan,
+              loanDetail,
+              Text(
+                S.current.repayment_record,
+              ),
+              Icon(Icons.keyboard_arrow_right)),
           Divider(height: 0, color: HsgColors.textHintColor),
-          _getSingleBox(
-            Text(
-              S.current.wait_repayment_plan,
-            ),
-            InkWell(
-              onTap: () {
-                //此处跳转到还款计划详情
-                // Navigator.pushNamed(context, pageloanDemo, arguments: loanDetail);
-                Fluttertoast.showToast(msg: "假装跳转到还款计划详情了!");
-              },
-              child: Icon(Icons.keyboard_arrow_right),
-            ),
-          ),
+          //跳转到待还计划
+          _jumpPage(
+              pageRepayPlan,
+              loanDetail,
+              Text(
+                S.current.wait_repayment_plan,
+              ),
+              Icon(Icons.keyboard_arrow_right)),
         ],
       ),
     );
@@ -228,6 +218,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
     );
     //还款方式、扣款日、扣款卡号
     var container4 = Container(
+      margin: EdgeInsets.only(bottom: 10),
       color: Colors.white,
       child: Column(
         children: [
@@ -240,7 +231,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(
             Text(S.current.deduct_money_date),
-            Text(loanDetail.repaymentDay.toString() + '日'),
+            Text(loanDetail.repaymentDay.toString() + S.current.day),
           ),
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(
@@ -263,15 +254,25 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           children: [
             //业务品种、贷款金额、余额
             container1,
-            //还款记录、待还计划
-            container2,
             // 贷款利率、期数、起始到期日
             container3,
             //还款方式、扣款日、扣款卡号
             container4,
+            //还款记录、待还计划
+            container2,
           ],
         ),
       ),
+    );
+  }
+
+  //页面跳转
+  Widget _jumpPage(String jumpPage, var transfer, Text text, Icon icon) {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, jumpPage, arguments: transfer);
+      },
+      child: _getSingleBox(text, icon),
     );
   }
 

@@ -1,7 +1,15 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: lijiawei
+/// Date: 2020-12-09
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/widget/hsg_general_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TransferInternalPage extends StatefulWidget {
   TransferInternalPage({Key key}) : super(key: key);
@@ -97,6 +105,16 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                                 fontSize: 15,
                                 color: HsgColors.firstDegreeText,
                               ),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp('[0-9.]')),
+                              ],
+                              onChanged: (value) {
+                                value.replaceAll(
+                                    RegExp('/^0*(0\.|[1-9])/'), '\$1');
+                                print("这个是 onChanged 时刻在监听，输出的信息是：$value");
+                              },
+                              keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: '请输入转账金额',
@@ -172,7 +190,15 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 ],
               ),
             ),
-          )
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              margin: EdgeInsets.only(top: 40),
+              child: HsgBottomBtn('提交', () {
+                print('提交');
+              }),
+            ),
+          ),
         ],
       ),
     );
