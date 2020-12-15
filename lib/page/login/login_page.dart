@@ -76,80 +76,82 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
+    Widget contentDetailWidget = Column(
+      children: [
+        //选择语言按钮
+        Container(
+          margin: EdgeInsets.only(top: 20),
+          child: Row(
+            children: [
+              //填充左侧，使button自适应宽度
+              Expanded(child: Container()),
+              LanguageChangeBtn(_changeLangBtnTltle),
+            ],
+          ),
+        ),
+        //头部logo
+        Container(
+          margin: EdgeInsets.only(top: 45),
+          child: HeaderLogoView(),
+        ),
+        //账号输入框
+        Container(
+          height: 45,
+          margin: EdgeInsets.only(top: 36.5),
+          child: InputView(
+            _accountTC,
+            imgName: 'images/login/login_input_account.png',
+            textFieldPlaceholder: S.of(context).login_account_placeholder,
+            isCiphertext: false,
+          ),
+        ),
+        //密码输入框
+        Container(
+          height: 45,
+          margin: EdgeInsets.only(top: 16.0),
+          child: InputView(
+            _passwordTC,
+            imgName: 'images/login/login_input_password.png',
+            textFieldPlaceholder: S.of(context).please_input_password,
+            isCiphertext: true,
+          ),
+        ),
+        //忘记按钮
+        Container(
+          height: 20,
+          margin: EdgeInsets.only(top: 10, right: 35, left: 35),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              //ForgetButton('忘记账户？'),
+              Container(
+                margin: EdgeInsets.only(left: 15),
+                child: ForgetButton(S.of(context).fotget_password_q, () {
+                  setState(() {
+                    print('忘记密码');
+                  });
+                }),
+              )
+            ],
+          ),
+        ),
+        //登录按钮
+        Container(
+          margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
+          child: UnderButtonView(
+            S.of(context).login,
+            _isLoading ? null : () => _login(context),
+          ),
+        )
+      ],
+    );
+
     Widget contentWidget = new Scaffold(
       backgroundColor: Colors.transparent,
       body: SafeArea(
         maintainBottomViewPadding: true,
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              //选择语言按钮
-              Container(
-                margin: EdgeInsets.only(top: 20),
-                child: Row(
-                  children: [
-                    //填充左侧，使button自适应宽度
-                    Expanded(child: Container()),
-                    LanguageChangeBtn(_changeLangBtnTltle),
-                  ],
-                ),
-              ),
-              //头部logo
-              Container(
-                margin: EdgeInsets.only(top: 45),
-                child: HeaderLogoView(),
-              ),
-              //账号输入框
-              Container(
-                height: 45,
-                margin: EdgeInsets.only(top: 36.5),
-                child: InputView(
-                  _accountTC,
-                  imgName: 'images/login/login_input_account.png',
-                  textFieldPlaceholder: S.of(context).login_account_placeholder,
-                  isCiphertext: false,
-                ),
-              ),
-              //密码输入框
-              Container(
-                height: 45,
-                margin: EdgeInsets.only(top: 16.0),
-                child: InputView(
-                  _passwordTC,
-                  imgName: 'images/login/login_input_password.png',
-                  textFieldPlaceholder: S.of(context).please_input_password,
-                  isCiphertext: true,
-                ),
-              ),
-              //忘记按钮
-              Container(
-                height: 20,
-                margin: EdgeInsets.only(top: 10, right: 35, left: 35),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    //ForgetButton('忘记账户？'),
-                    Container(
-                      margin: EdgeInsets.only(left: 15),
-                      child: ForgetButton(S.of(context).fotget_password_q, () {
-                        setState(() {
-                          print('忘记密码');
-                        });
-                      }),
-                    )
-                  ],
-                ),
-              ),
-              //登录按钮
-              Container(
-                margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
-                child: UnderButtonView(
-                  S.of(context).login,
-                  _isLoading ? null : () => _login(context),
-                ),
-              )
-            ],
-          ),
+          child: contentDetailWidget,
         ),
       ),
     );
@@ -179,8 +181,7 @@ class _LoginPageState extends State<LoginPage> {
     UserDataRepository()
         .login(LoginReq(username: _account, password: password), 'login')
         .then((value) {
-      HSProgressHUD
-          .dismiss(); //showSuccess(status: S.of(context).operation_successful);
+      HSProgressHUD.dismiss();
       _saveUserConfig(context, value);
     }).catchError((e) {
       setState(() {
@@ -192,12 +193,9 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录成功-跳转操作
   _showMainPage(BuildContext context) async {
-    // await Future.delayed(Duration(milliseconds: 1000));
     setState(() {
       _isLoading = false;
     });
-    // Navigator.pushNamed(context, pageCardList);
-    // Navigator.pushNamed(context, pageDialogDemo);
     Navigator.pushAndRemoveUntil(context, pageIndex, (route) => false);
   }
 
@@ -217,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
 
     _showMainPage(context);
   }
-  
+
   ///判断是否能点击登录按钮
   bool _judgeCanLogin() {
     if (_account.toString().length == 0 || _account == null) {
@@ -409,12 +407,7 @@ class ForgetButton extends StatelessWidget {
           //设置点击事件
           recognizer: TapGestureRecognizer()
             ..onTap = () {
-              print('title == $title');
-              // languaeChangeBtn.changTitle('titles');
-              // languaeChangeBtn.createState().changeTitle2('titleString');
               onClick();
-              // _LanguageChangeBtnState().changeTitle2('哈哈');
-              // languaeChangeBtn
             },
         ),
       ),

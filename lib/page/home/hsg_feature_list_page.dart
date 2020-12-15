@@ -16,161 +16,6 @@ class FeatureListPage extends StatefulWidget {
 }
 
 class _FeatureListPageState extends State<FeatureListPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).all_features),
-      ),
-      body: Container(
-        color: Colors.white,
-        child: CustomScrollView(
-          slivers: _sliversSection(_features),
-        ),
-      ),
-    );
-  }
-
-  List<Widget> _sliversSection(List data) {
-    List<Widget> section = [];
-    for (var item in data) {
-      List btnList = item['btnList'];
-
-      section.add(SliverToBoxAdapter(
-        child: Container(
-          color: HsgColors.commonBackground,
-          height: 10,
-        ),
-      ));
-
-      section.add(SliverToBoxAdapter(
-        child: Container(
-          padding: EdgeInsets.only(left: 15, top: 20, bottom: 10),
-          child: Text(
-            item['title'],
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
-                color: HsgColors.firstDegreeText),
-          ),
-        ),
-      ));
-      section.add(SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: 0,
-          mainAxisSpacing: 0,
-          crossAxisCount: 4,
-          childAspectRatio: 1,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            return Container(
-              color: Colors.white,
-              height: 200,
-              child: _graphicButton(
-                btnList[index]['btnTitle'],
-                btnList[index]['btnIcon'],
-                35,
-                () {
-                  print('${btnList[index]['btnTitle']}');
-                  String title = btnList[index]['btnTitle'];
-                  if (S.current.account_summary == title) {
-                    //账户总览
-                    Navigator.pushNamed(context, pageAccountOverview);
-                  } else if (S.of(context).my_account == title) {
-                    //我的账户
-                    Navigator.pushNamed(context, pageCardList);
-                  } else if (S.current.transaction_details == title) {
-                    //收支明细
-                    Navigator.pushNamed(context, pageDetailList);
-                  } else if (S.current.transfer == title) {
-                    //转账
-                    Navigator.pushNamed(context, pageTransfer);
-                  } else if (S.of(context).transfer_appointment == title) {
-                    //'预约转账'
-                  } else if (S.of(context).transfer_plan == title) {
-                    //'转账计划'
-                  } else if (S.current.transfer_record == title) {
-                    //转账记录
-                  } else if (S.current.transfer_model == title) {
-                    //收款范本
-                  } else if (S.current.deposit_open == title) {
-                    //'定期开立'
-                  } else if (S.current.deposit_record == title) {
-                    //'我的存单'
-                    Navigator.pushNamed(context, pageTimeDepositRecord);
-                  } else if (S.current.deposit_rate == title) {
-                    //'利率查看'
-                  } else if (S.current.loan_apply == title) {
-                    //'贷款申请'
-                  } else if (S.current.loan_record == title) {
-                    //'贷款记录'
-                    Navigator.pushNamed(context, pageLimitDetails);
-                  } else if (S.current.loan_rate == title) {
-                    //'贷款利率'
-                    // Navigator.pushNamed(context, pageloanDemo);
-                    Navigator.pushNamed(context, pageLoanInterestRate);
-                  } else if (S.current.foreign_exchange == title) {
-                    //'外汇买卖'
-                  } else if (S.current.exchange_rate == title) {
-                    //'汇率查询'
-                  } else if (S.current.electronic_statement == title) {
-                    //'电子结单'
-                  }
-                },
-              ),
-            );
-          },
-          childCount: btnList.length,
-        ),
-      ));
-    }
-
-    section.add(SliverToBoxAdapter(
-      child: Container(
-        color: HsgColors.commonBackground,
-        height: 20,
-      ),
-    ));
-
-    return section;
-  }
-
-  ///上图下文字的按钮
-  Widget _graphicButton(
-      String title, String iconName, double iconWidth, VoidCallback onClick) {
-    return Container(
-      child: FlatButton(
-        padding: EdgeInsets.only(left: 2, right: 2),
-        onPressed: onClick,
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              margin: EdgeInsets.only(top: 12),
-              child: Image(
-                image: AssetImage(iconName),
-                width: iconWidth,
-                height: iconWidth,
-              ),
-            ),
-            Container(
-              height: 8.0,
-            ),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: HsgColors.describeText,
-                fontSize: 12,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   List<Map<String, Object>> _features = [
     {
       'title': S.current.my_account,
@@ -266,4 +111,161 @@ class _FeatureListPageState extends State<FeatureListPage> {
       ]
     }
   ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(S.of(context).all_features),
+      ),
+      body: Container(
+        color: Colors.white,
+        child: CustomScrollView(
+          slivers: _sliversSection(_features),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _sliversSection(List data) {
+    List<Widget> section = [];
+    for (var item in data) {
+      List btnList = item['btnList'];
+
+      section.add(SliverToBoxAdapter(
+        child: Container(
+          color: HsgColors.commonBackground,
+          height: 10,
+        ),
+      ));
+
+      section.add(SliverToBoxAdapter(
+        child: Container(
+          padding: EdgeInsets.only(left: 15, top: 20, bottom: 10),
+          child: Text(
+            item['title'],
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: HsgColors.firstDegreeText),
+          ),
+        ),
+      ));
+      section.add(SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisSpacing: 0,
+          mainAxisSpacing: 0,
+          crossAxisCount: 4,
+          childAspectRatio: 1,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            VoidCallback featureClick = () {
+              print('${btnList[index]['btnTitle']}');
+              String title = btnList[index]['btnTitle'];
+              if (S.current.account_summary == title) {
+                //账户总览
+                Navigator.pushNamed(context, pageAccountOverview);
+              } else if (S.of(context).my_account == title) {
+                //我的账户
+                Navigator.pushNamed(context, pageCardList);
+              } else if (S.current.transaction_details == title) {
+                //收支明细
+                Navigator.pushNamed(context, pageDetailList);
+              } else if (S.current.transfer == title) {
+                //转账
+                Navigator.pushNamed(context, pageTransfer);
+              } else if (S.of(context).transfer_appointment == title) {
+                //'预约转账'
+              } else if (S.of(context).transfer_plan == title) {
+                //'转账计划'
+              } else if (S.current.transfer_record == title) {
+                //转账记录
+              } else if (S.current.transfer_model == title) {
+                //收款范本
+              } else if (S.current.deposit_open == title) {
+                //'定期开立'
+              } else if (S.current.deposit_record == title) {
+                //'我的存单'
+                Navigator.pushNamed(context, pageTimeDepositRecord);
+              } else if (S.current.deposit_rate == title) {
+                //'利率查看'
+              } else if (S.current.loan_apply == title) {
+                //'贷款申请'
+              } else if (S.current.loan_record == title) {
+                //'贷款记录'
+                Navigator.pushNamed(context, pageLimitDetails);
+              } else if (S.current.loan_rate == title) {
+                //'贷款利率'
+                // Navigator.pushNamed(context, pageloanDemo);
+                Navigator.pushNamed(context, pageLoanInterestRate);
+              } else if (S.current.foreign_exchange == title) {
+                //'外汇买卖'
+              } else if (S.current.exchange_rate == title) {
+                //'汇率查询'
+              } else if (S.current.electronic_statement == title) {
+                //'电子结单'
+              }
+            };
+
+            return Container(
+              color: Colors.white,
+              height: 200,
+              child: _graphicButton(
+                btnList[index]['btnTitle'],
+                btnList[index]['btnIcon'],
+                35,
+                featureClick,
+              ),
+            );
+          },
+          childCount: btnList.length,
+        ),
+      ));
+    }
+
+    section.add(SliverToBoxAdapter(
+      child: Container(
+        color: HsgColors.commonBackground,
+        height: 20,
+      ),
+    ));
+
+    return section;
+  }
+
+  ///上图下文字的按钮
+  Widget _graphicButton(
+      String title, String iconName, double iconWidth, VoidCallback onClick) {
+    return Container(
+      child: FlatButton(
+        padding: EdgeInsets.only(left: 2, right: 2),
+        onPressed: onClick,
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 12),
+              child: Image(
+                image: AssetImage(iconName),
+                width: iconWidth,
+                height: iconWidth,
+              ),
+            ),
+            Container(
+              height: 8.0,
+            ),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: HsgColors.describeText,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

@@ -1,7 +1,8 @@
-/**
-  @desc   关于我们
-  @author hlx
- */
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+/// desc: 关于我们
+/// Author: hlx
+/// Date: 2020-11-25
+
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 

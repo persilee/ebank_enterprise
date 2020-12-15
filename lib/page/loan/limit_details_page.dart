@@ -7,6 +7,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -27,7 +28,6 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
   String contactNo = "";
   //产品号
   String productCode = "";
-
   var loanDetails = [];
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
@@ -112,37 +112,40 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
           S.of(context).contract_account + " " + loanDetail.contactNo,
           style: TextStyle(fontSize: 15, color: Color(0xFF242424)),
         ),
-        InkWell(
-          onTap: () {
-            //此处跳转到详情
-            Navigator.pushNamed(context, pageloanDetails,arguments: loanDetail);
-          },
-          child: Icon(
-            Icons.keyboard_arrow_right,
-          ),
+        Icon(
+          Icons.keyboard_arrow_right,
         ),
       ],
     );
-    var titleBox = SizedBox(
-      height: 46,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-            child: titleRow,
-          ),
-        ],
+    var titleBox = InkWell(
+      onTap: () {
+        //跳转
+        _selectPage(context,loanDetail);
+        // Navigator.pushNamed(context, pageloanDetails, arguments: loanDetail);
+      },
+      child: SizedBox(
+        height: 46,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: titleRow,
+            ),
+          ],
+        ),
       ),
     );
     var contentColumn = Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        contentRow(S.of(context).loan_principal, 
-        FormatUtil.formatSringToMoney(loanDetail.loanAmt)+" HKD",
+        contentRow(
+            S.of(context).loan_principal,
+            FormatUtil.formatSringToMoney(loanDetail.loanAmt) + " HKD",
             Color(0xFF1E1E1E)),
-        contentRow(S.of(context).loan_balance2, 
-        FormatUtil.formatSringToMoney(loanDetail.unpaidPrincipal)+" HKD",
+        contentRow(
+            S.of(context).loan_balance2,
+            FormatUtil.formatSringToMoney(loanDetail.unpaidPrincipal) + " HKD",
             Color(0xFF1E1E1E)),
         contentRow(
             S.of(context).begin_time, loanDetail.disbDate, Color(0xFF1E1E1E)),
@@ -184,7 +187,6 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        //贷款金额
         Text(
           leftcont,
           style: TextStyle(fontSize: 14, color: Color(0xFF8D8D8D)),
@@ -196,4 +198,38 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
       ],
     );
   }
+  
+  //跳转
+ _selectPage(BuildContext context,Loan loanDetail) async{
+   List<String> pages = [
+      S.of(context).view_details,
+      S.of(context).view_repayment_plan,
+      S.of(context).prepayment,
+    ];
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) => BottomMenu(
+              title: S.of(context).loan_account+' '+loanDetail.contactNo,
+              items: pages,
+            ));
+    if (result != null && result != false) {
+      switch (result) {
+        case 0:
+          //查看详情
+          Navigator.pushNamed(context, pageloanDetails, arguments: loanDetail);
+          break;
+        case 1:
+          //查看还款计划
+          Navigator.pushNamed(context, pageRepayPlan, arguments: loanDetail);
+          break;
+        case 2:
+          //提前还款
+          break;
+      }
+    } else {
+      return;
+    }
+ }
+
+
 }
