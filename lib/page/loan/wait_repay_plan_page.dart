@@ -3,8 +3,6 @@
 /// Author: zhangqirong
 /// Date: 2020-12-15
 
-
-
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_schedule_detail_list.dart';
 import 'package:ebank_mobile/util/format_util.dart';
