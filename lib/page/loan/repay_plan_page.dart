@@ -1,14 +1,10 @@
-import 'package:ebank_mobile/data/source/loan_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/get_schedule_detail_list.dart';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///
+/// 还款计划页面
 /// Author: zhangqirong
 /// Date: 2020-12-10
 
-// import 'package:ebank_mobile/config/hsg_colors.dart';
-// import 'package:ebank_mobile/data/source/loan_data_repository.dart';
-// import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/data/source/loan_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_schedule_detail_list.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -23,8 +19,14 @@ class RepayPlanPage extends StatefulWidget {
 class _RepayPlanState extends State<RepayPlanPage> {
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
   var lnScheduleList = [];
-  String contactNo = '';
-  String repaymentStatus = '';
+  //贷款账号
+  String acNo;
+  //页码
+  String page;
+  //一页数据条数
+  String pageSize;
+  //还款状态
+  String repaymentStatus;
 
   @override
   void initState() {
@@ -36,7 +38,9 @@ class _RepayPlanState extends State<RepayPlanPage> {
   }
 
   Future<void> _loadData() async {
-    var req = new GetScheduleDetailListReq(contactNo, repaymentStatus);
+    // Fluttertoast.showToast(msg: repaymentStatus);
+    var req =
+        new GetScheduleDetailListReq(acNo, page, pageSize, repaymentStatus);
     LoanDataRepository()
         .getScheduleDetailList(req, 'getScheduleDetailList')
         .then((data) {
@@ -46,6 +50,8 @@ class _RepayPlanState extends State<RepayPlanPage> {
           lnScheduleList.addAll(data.getLnAcScheduleRspDetlsDTOList);
         });
       }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
     });
   }
 
@@ -53,25 +59,22 @@ class _RepayPlanState extends State<RepayPlanPage> {
   Widget build(BuildContext context) {
     Loan loanDetail = ModalRoute.of(context).settings.arguments;
     setState(() {
-      contactNo = loanDetail.contactNo;
-      repaymentStatus = '';
+      acNo = loanDetail.contactNo;
+      page = "1";
+      pageSize = "1000";
+      repaymentStatus = "";
     });
-    contactNo = loanDetail.contactNo;
-
     var stackList = Stack(
       fit: StackFit.loose,
       children: [
-        Align(
-          heightFactor: 200,
-          widthFactor: 163,
-          child: Positioned(
-            left: 21,
-            top: 100,
-            bottom: 15,
-            child: VerticalDivider(
-              width: 1,
-              color: Color(0x07000000),
-            ),
+        //竖线
+        Positioned(
+          left: 81,
+          top: 10,
+          bottom: 15,
+          child: VerticalDivider(
+            width: 1,
+            color: Color(0x16000000),
           ),
         ),
         listViewList(context),
@@ -101,7 +104,9 @@ class _RepayPlanState extends State<RepayPlanPage> {
   //生成ListView
   Widget listViewList(BuildContext context) {
     List<Widget> _list = new List();
-    for (int i = 0; i < 6; i++) {
+    int length = lnScheduleList.length;
+    length = 5;
+    for (int i = 0; i < length; i++) {
       _list.add(getListViewBuilder(_getContent()));
     }
     return new ListView(
@@ -120,47 +125,41 @@ class _RepayPlanState extends State<RepayPlanPage> {
         });
   }
 
-  //获取头部(贷款本金，贷款余额)
-  Widget _getHeader(Loan loanDetail) {
-    var topBox = SizedBox(
-      child: Row(
-        children: [
-          //贷款金额
-          Text(
-            S.of(context).loan_principal + ":",
-            style: TextStyle(fontSize: 13, color: Color(0xFF262626)),
-          ),
-          Text(
-            " HKD " + FormatUtil.formatSringToMoney(loanDetail.loanAmt),
-            style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
-          ),
-        ],
-      ),
-    );
-    var bottomBox = SizedBox(
+  Widget _getHeadBox(String left, String right){
+    return SizedBox(
       child: Row(
         children: [
           //贷款余额
           Text(
-            S.of(context).loan_balance2 + ":",
+            left,
             style: TextStyle(fontSize: 13, color: Color(0xFF262626)),
           ),
           Text(
-            " HKD " + FormatUtil.formatSringToMoney(loanDetail.unpaidPrincipal),
+            right,
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
           ),
         ],
       ),
     );
+  }
+
+  //获取头部(贷款本金，贷款余额)
+  Widget _getHeader(Loan loanDetail) {
     return Padding(
       padding: EdgeInsets.fromLTRB(15, 21, 20, 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          topBox,
+          _getHeadBox(
+            S.of(context).loan_principal + ":",
+            " HKD " + FormatUtil.formatSringToMoney(loanDetail.loanAmt)
+          ),
+          Padding(padding: EdgeInsets.only(top: 9)),
+          _getHeadBox(
+            S.of(context).loan_balance2 + ":",
+            " HKD " + FormatUtil.formatSringToMoney(loanDetail.unpaidPrincipal)
+          ),
           Padding(padding: EdgeInsets.only(top: 10)),
-          bottomBox,
-          Padding(padding: EdgeInsets.only(top: 13)),
           Container(
             height: 20,
             child: Divider(
@@ -175,21 +174,45 @@ class _RepayPlanState extends State<RepayPlanPage> {
 
   //获取内容(左[日期] 中[时间轴] 右[还款详情])
   Widget _getContent() {
+    var instalDate = '2020-04-18';
+    var year = instalDate.substring(0, 4);
+    var day = instalDate.substring(5);
+    var instalType = ''; //还款状态 未还NONE、部分还款PART、全额还款ALL
+    var repay = ''; //还款
+    switch ('PART') {
+      case 'NONE':
+        instalType = ' (未还) ';
+        repay = '还款';
+        break;
+      case 'PART':
+        instalType = ' (部分还款) ';
+        repay = '还款';
+        break;
+      case 'ALL':
+        instalType = ' (全部还款) ';
+        break;
+      default:
+    }
+    var instalOutstAmt = '28.00'; //归还金额合计
+    var principalAmt = '0.00'; //本金金额
+    var interestAmt = '28.00'; //利息
+    var amorIntAmt = '0.00'; //罚息
+
     var leftCont = Container(
+      width: 59,
       padding: EdgeInsets.only(left: 10, right: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           SizedBox(
-            width: 39,
             child: Text(
-              "04-18",
+              day,
               style: TextStyle(fontSize: 14, color: Color(0xFF4D4D4D)),
             ),
           ),
           SizedBox(
             child: Text(
-              "2020",
+              year,
               style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
             ),
           ),
@@ -242,19 +265,25 @@ class _RepayPlanState extends State<RepayPlanPage> {
           Row(
             children: [
               Text(
-                "28.00",
+                instalOutstAmt,
                 style: TextStyle(fontSize: 14, color: Color(0xFF4D4D4D)),
               ),
               Text(
-                "  (" + "已还清" + ")  ",
+                instalType,
                 style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
               ),
-              Text(
-                "还款",
-                style: TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF4871FF),
-                    decoration: TextDecoration.underline),
+              InkWell(
+                onTap: () {
+                  //跳转
+                  Fluttertoast.showToast(msg: '还款中...');
+                },
+                child: Text(
+                  repay,
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF4871FF),
+                      decoration: TextDecoration.underline),
+                ),
               ),
             ],
           ),
@@ -266,9 +295,18 @@ class _RepayPlanState extends State<RepayPlanPage> {
             runAlignment: WrapAlignment.end,
             children: [
               Text(
-                "含本金 0.00+利息 28.00+罚息 0.00000000",
-                // maxLines: 256,
-                overflow: TextOverflow.ellipsis,
+                S.of(context).with_principal +
+                    " " +
+                    principalAmt +
+                    " " +
+                    S.of(context).interest_amt +
+                    " " +
+                    interestAmt +
+                    " " +
+                    S.of(context).punishment_interest +
+                    " " +
+                    amorIntAmt,
+                maxLines: 256,
                 style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
               ),
             ],
