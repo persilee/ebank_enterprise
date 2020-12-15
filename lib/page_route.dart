@@ -87,7 +87,7 @@ var appRoutes = {
   pageDetailList: (context) => DetailListPage(),
   pageDetailInfo: (context) => DetailInfoPage(),
   pageTimeDepositRecord: (context) => TimeDepositRecordPage(),
-  pageDepositInfo: (context) => PageDepositInfo(),
+  //pageDepositInfo: (context) => PageDepositInfo(),
   pageTransfer: (context) => TransferPage(),
   pageTransferInternal: (context) => TransferInternalPage(),
   pageElectronicStatement: (context) => ElectronicStatementPage(),
@@ -98,6 +98,11 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
     return MaterialPageRoute(builder: (context) {
       return CardDetailPage(card: settings.arguments);
+    });
+  }
+  if (settings.name == pageDepositInfo) {
+    return MaterialPageRoute(builder: (context) {
+      return PageDepositInfo(deposit: settings.arguments);
     });
   }
   return null;
