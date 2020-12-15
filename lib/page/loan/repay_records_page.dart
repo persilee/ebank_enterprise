@@ -1,7 +1,7 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-/// 还款计划页面
+/// 还款记录页面
 /// Author: zhangqirong
-/// Date: 2020-12-10
+/// Date: 2020-12-15
 
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_schedule_detail_list.dart';
@@ -11,12 +11,12 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 
-class RepayPlanPage extends StatefulWidget {
+class RepayRecordsPage extends StatefulWidget {
   @override
-  _RepayPlanState createState() => _RepayPlanState();
+  _RepayRecordsState createState() => _RepayRecordsState();
 }
 
-class _RepayPlanState extends State<RepayPlanPage> {
+class _RepayRecordsState extends State<RepayRecordsPage> {
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
   List<GetLnAcScheduleRspDetlsDTOList> lnScheduleList =
       List<GetLnAcScheduleRspDetlsDTOList>();
@@ -28,6 +28,8 @@ class _RepayPlanState extends State<RepayPlanPage> {
   String pageSize;
   //还款状态
   String repaymentStatus;
+  //已还本金
+  var paidPrincipal = '';
 
   @override
   void initState() {
@@ -49,6 +51,13 @@ class _RepayPlanState extends State<RepayPlanPage> {
           lnScheduleList.clear();
           lnScheduleList.addAll(data.getLnAcScheduleRspDetlsDTOList);
         });
+        double tempMoney = 0;
+        for (int i = 0; i < lnScheduleList.length; i++) {
+          if (lnScheduleList[i].instalType == 'PART'||lnScheduleList[i].instalType == 'ALL') {
+            tempMoney += double.parse(lnScheduleList[i].instalOutstAmt);
+          }
+        }
+        paidPrincipal = tempMoney.toString();
       }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
@@ -82,7 +91,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
     );
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).repayment_plan),
+        title: Text(S.of(context).repayment_record),
         centerTitle: true,
         elevation: 0,
       ),
@@ -90,7 +99,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
         key: refrestIndicatorKey,
         child: Column(
           children: [
-            _getHeader(loanDetail),
+            _getHeader(paidPrincipal),
             Expanded(
               child: stackList,
             ),
@@ -103,9 +112,12 @@ class _RepayPlanState extends State<RepayPlanPage> {
 
   Widget listViewList(BuildContext context) {
     List<Widget> _list = new List();
+    print(lnScheduleList.length);
     //按日期降序排序
-    for (int i = lnScheduleList.length-1; i >= 0; i--) {
-      _list.add(getListViewBuilder(_getContent(lnScheduleList[i])));
+    for (int i = lnScheduleList.length - 1; i >= 0; i--) {
+      if (lnScheduleList[i].instalType == 'PART'||lnScheduleList[i].instalType == 'ALL') {
+        _list.add(getListViewBuilder(_getContent(lnScheduleList[i])));
+      }
     }
     return new ListView(
       children: _list,
@@ -142,19 +154,14 @@ class _RepayPlanState extends State<RepayPlanPage> {
   }
 
   //获取头部(贷款本金，贷款余额)
-  Widget _getHeader(Loan loanDetail) {
+  Widget _getHeader(String paidMoney) {
     return Padding(
       padding: EdgeInsets.fromLTRB(15, 21, 20, 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _getHeadBox(S.of(context).loan_principal + ":",
-              " HKD " + FormatUtil.formatSringToMoney(loanDetail.loanAmt)),
-          Padding(padding: EdgeInsets.only(top: 9)),
-          _getHeadBox(
-              S.of(context).loan_balance2 + ":",
-              " HKD " +
-                  FormatUtil.formatSringToMoney(loanDetail.unpaidPrincipal)),
+          _getHeadBox(S.of(context).paid_principal + ":",
+              " HKD " + FormatUtil.formatSringToMoney(paidMoney)),
           Padding(padding: EdgeInsets.only(top: 10)),
           Container(
             height: 20,
@@ -171,7 +178,6 @@ class _RepayPlanState extends State<RepayPlanPage> {
   //获取内容(左[日期] 中[时间轴] 右[还款详情])
   Widget _getContent(GetLnAcScheduleRspDetlsDTOList lnSchedule) {
     var instalDate = lnSchedule.instalDate;
-    instalDate = instalDate.trim();
     var year = instalDate.substring(0, 4);
     var day = instalDate.substring(5);
     var instalType = lnSchedule.instalType; //还款状态 未还NONE、部分还款PART、全额还款ALL
@@ -192,12 +198,6 @@ class _RepayPlanState extends State<RepayPlanPage> {
     var instalOutstAmt = FormatUtil.formatSringToMoney(lnSchedule.instalOutstAmt); //归还金额合计
     var principalAmt = FormatUtil.formatSringToMoney(lnSchedule.principalAmt); //本金金额
     var interestAmt = FormatUtil.formatSringToMoney(lnSchedule.interestAmt); //利息
-    var amorIntAmt = ''; //罚息
-    if (lnSchedule.amorIntAmt == null) {
-      amorIntAmt = '0.00';
-    }else{
-      amorIntAmt = lnSchedule.amorIntAmt;
-    }
 
     var leftCont = Container(
       width: 66,
@@ -301,11 +301,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
                     " " +
                     S.of(context).interest_amt +
                     " " +
-                    interestAmt +
-                    " " +
-                    S.of(context).punishment_interest +
-                    " " +
-                    amorIntAmt,
+                    interestAmt,
                 maxLines: 250,
                 style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
               ),
