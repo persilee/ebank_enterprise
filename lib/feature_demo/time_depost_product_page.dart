@@ -79,7 +79,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         return FlatButton(
           padding: EdgeInsets.all(0),
           onPressed: () {
-            Navigator.pushNamed(context, pageTransfer);
+            Navigator.pushNamed(context, pageTimeDepositContract);
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

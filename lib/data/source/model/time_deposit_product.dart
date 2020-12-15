@@ -18,7 +18,7 @@ class TimeDepositProductResp extends Object {
   String depositType;
 
   @JsonKey(name: 'tdepProducDTOList')
-  List<TdepProducDTOList> tdepProducDTOList;
+  List<TdepProducDTOList> tdepProductDTOList;
 
   @JsonKey(name: 'tdepProducHeadDTO')
   TdepProducHeadDTO tdepProducHeadDTO;
@@ -26,7 +26,7 @@ class TimeDepositProductResp extends Object {
   TimeDepositProductResp(
     this.bppdCode,
     this.depositType,
-    this.tdepProducDTOList,
+    this.tdepProductDTOList,
     this.tdepProducHeadDTO,
   );
 
