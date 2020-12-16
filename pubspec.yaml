@@ -39,7 +39,10 @@ dependencies:
   encrypt: ^4.0.0 #AES加解密
   webview_flutter: ^1.0.7
   date_format: ^1.0.6
-  flutter_cupertino_date_picker: ^1.0.2
+  flutter_cupertino_date_picker:
+    git:
+      url: https://github.com/imshashank/flutter-cupertino-date-picker # Repo
+      ref: master # Branch name
 
 dev_dependencies:
   flutter_test:
