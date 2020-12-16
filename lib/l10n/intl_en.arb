@@ -115,6 +115,8 @@
   "installment_status2":"Matured",
   "installment_status4":"Compensatory",
   "unknown":"Unknown",
+  "year":"Year",
+  "month":"Month",
   "day":"Day",
   "periods": "periods",
   "transaction_info": "Transaction Information",
@@ -122,6 +124,8 @@
   "transaction_amount": "Transaction Amount",
   "transaction_time": "Transaction Time",
   "msgId": "Transaction Journal No.",
+  "all_account": "All Accounts",
+  "account_lsit": "Accounts List",
   "remarks": "Remarks",
   "confirm": "Confirm",
   "cancel": "Cancel"

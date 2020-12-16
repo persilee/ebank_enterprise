@@ -61,8 +61,7 @@ var pageFeatureList = '/hsg_feature_list_page';
 var pageTransfer = '/hsg_transfer_page';
 var pageTransferInternal = '/hsg_transfer_internal_page';
 var pageElectronicStatement = '/electronic_statement_page';
-var pageElectronicStatementDetail =
-    '/electronicelectronic_statement_detail_page';
+var pageElectronicStatementDetail = '/electronic_statement_detail_page';
 var pageTimeDepostProduct = '/time_depost_product_page';
 var pageTest = '/test_page';
 
