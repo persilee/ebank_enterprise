@@ -107,6 +107,7 @@
   "transfer_features": "Transfer Functions",
   "recent_transfer_account": "Transfer To Account List",
   "no_recent_transfer_account": "Have no transfer account",
+  "no_transaction_record": "No transaction Record",
   "transfer_out": "Transfer To",
   "transfer_type_0": "Internal Transfer",
   "transfer_type_2": "Overseas Bank Transfer",
@@ -121,5 +122,7 @@
   "transaction_amount": "Transaction Amount",
   "transaction_time": "Transaction Time",
   "msgId": "Transaction Journal No.",
-  "remarks": "Remarks"
+  "remarks": "Remarks",
+  "confirm": "Confirm",
+  "cancel": "Cancel"
 }
