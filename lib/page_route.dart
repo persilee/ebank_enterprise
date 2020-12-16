@@ -18,6 +18,8 @@ import 'package:ebank_mobile/page/loan/loan_details_page.dart';
 import 'package:ebank_mobile/page/loan/loan_interest_rate_page.dart';
 import 'package:ebank_mobile/page/loan/limit_details_page.dart';
 import 'package:ebank_mobile/page/loan/repay_plan_page.dart';
+import 'package:ebank_mobile/page/loan/repay_records_page.dart';
+import 'package:ebank_mobile/page/loan/wait_repay_plan_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
@@ -35,11 +37,13 @@ var pageHome = '/';
 // var pageLogin = "151";
 var pageLogin = pageHome;
 // var pageCardList = pageHome;
+var pageWaitRepayPlan = "/wait_repay_plan_page.dart";
 var pageRepayPlan = "/repay_plan_page";
 var pageLimitDetails = "/limit_detail_page";
 var pageloanDetails = '/loan_details_page';
 var pageLoanInterestRate = '/loan_interest_rate_page';
 var pageLimitDetailsDemo = "/limit_detail_page";
+var pageRepayRecords = "/repay_records_page";
 var pageCardList = '/card_list';
 var pageDialogDemo = '/dialog_demo';
 var pageCardDetail = '/card_detail';
@@ -73,8 +77,10 @@ var appRoutes = {
   pageLoanInterestRate: (context) => LoanInterestRatePage(),
   pageCardList: (context) => CardListPage(),
   pageDialogDemo: (context) => DialogDemoPage(),
+  pageWaitRepayPlan: (context) => WaitRepayPlanPage(),
   pageRepayPlan: (context) => RepayPlanPage(),
   pageLimitDetails: (context) => LimitDetailsPage(),
+  pageRepayRecords: (context) => RepayRecordsPage(),
   // pageCardDetail: (context) => CardDetailPage(),
   pageCardLimit: (context) => CardLimitManagerPage(),
   minePage: (context) => MinePage(),
