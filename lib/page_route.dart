@@ -21,10 +21,7 @@ import 'package:ebank_mobile/page/loan/repay_plan_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
-<<<<<<< HEAD
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
-=======
->>>>>>> 142ac11da7f046aa00fdf2b6b02f6097fcf1607b
 //import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';

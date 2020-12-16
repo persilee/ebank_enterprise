@@ -118,5 +118,9 @@
   "transaction_amount": "交易金额",
   "transaction_time": "交易时间",
   "msgId": "流水号",
-  "remarks": "备注"
+  "remarks": "备注",
+  "product_name":"产品名称",
+  "year_interest_rate":"年利率",
+  "deposit_time_limit":"存款期限",
+  "contract_principal_and_interest":"到期本息"
 }

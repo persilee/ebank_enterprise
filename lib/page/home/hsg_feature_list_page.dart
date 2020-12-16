@@ -215,54 +215,6 @@ class _FeatureListPageState extends State<FeatureListPage> {
                 btnList[index]['btnTitle'],
                 btnList[index]['btnIcon'],
                 35,
-                ( {
-                  print('${btnList[index]['btnTitle']}');
-                  String title = btnList[index]['btnTitle'];
-                  if (S.current.account_summary == title) {
-                    //账户总览
-                    Navigator.pushNamed(context, pageAccountOverview);
-                  } else if (S.of(context).my_account == title) {
-                    //我的账户
-                    Navigator.pushNamed(context, pageCardList);
-                  } else if (S.current.transaction_details == title) {
-                    //收支明细
-                    Navigator.pushNamed(context, pageDetailList);
-                  } else if (S.current.transfer == title) {
-                    //转账
-                    Navigator.pushNamed(context, pageTransfer);
-                  } else if (S.of(context).transfer_appointment == title) {
-                    //'预约转账'
-                  } else if (S.of(context).transfer_plan == title) {
-                    //'转账计划'
-                  } else if (S.current.transfer_record == title) {
-                    //转账记录
-                  } else if (S.current.transfer_model == title) {
-                    //收款范本
-                  } else if (S.current.deposit_open == title) {
-                    //'定期开立'
-                    Navigator.pushNamed(context, pageTimeDepostProduct);
-                  } else if (S.current.deposit_record == title) {
-                    //'我的存单'
-                    Navigator.pushNamed(context, pageTimeDepositRecord);
-                  } else if (S.current.deposit_rate == title) {
-                    //'利率查看'
-                  } else if (S.current.loan_apply == title) {
-                    //'贷款申请'
-                  } else if (S.current.loan_record == title) {
-                    //'贷款记录'
-                    Navigator.pushNamed(context, pageLimitDetails);
-                  } else if (S.current.loan_rate == title) {
-                    //'贷款利率'
-                    // Navigator.pushNamed(context, pageloanDemo);
-                    Navigator.pushNamed(context, pageLoanInterestRate);
-                  } else if (S.current.foreign_exchange == title) {
-                    //'外汇买卖'
-                  } else if (S.current.exchange_rate == title) {
-                    //'汇率查询'
-                  } else if (S.current.electronic_statement == title) {
-                    //'电子结单'
-                  }
-                },)
                 featureClick,
               ),
             );

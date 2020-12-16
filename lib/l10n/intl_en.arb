@@ -118,5 +118,9 @@
   "transaction_amount": "Transaction Amount",
   "transaction_time": "Transaction Time",
   "msgId": "Transaction Journal No.",
-  "remarks": "Remarks"
+  "remarks": "Remarks",
+  "product_name":"Product Name",
+  "year_interest_rate":"Year Interest Rate",
+  "deposit_time_limit":"Deposit Time Limit",
+  "contract_principal_and_interest":"Contract Principal And Interest"
 }
