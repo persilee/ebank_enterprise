@@ -107,6 +107,7 @@
   "transfer_features": "转账功能",
   "recent_transfer_account": "最近转账账号",
   "no_recent_transfer_account": "暂无转账账号",
+  "no_transaction_record": "暂无交易记录",
   "transfer_out": "转出",
   "transfer_type_0": "行内转账",
   "transfer_type_2": "国际转账",
@@ -121,5 +122,7 @@
   "transaction_amount": "交易金额",
   "transaction_time": "交易时间",
   "msgId": "流水号",
-  "remarks": "备注"
+  "remarks": "备注",
+  "confirm": "确定",
+  "cancel": "取消"
 }

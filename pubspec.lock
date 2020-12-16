@@ -268,9 +268,11 @@ packages:
   flutter_cupertino_date_picker:
     dependency: "direct main"
     description:
-      name: flutter_cupertino_date_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: master
+      resolved-ref: "3a6b1513d77636976794b6c64630b7ae219fb371"
+      url: "https://github.com/imshashank/flutter-cupertino-date-picker"
+    source: git
     version: "1.0.26+2"
   flutter_localizations:
     dependency: "direct main"
