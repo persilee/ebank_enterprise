@@ -128,5 +128,9 @@
   "msgId": "流水号",
   "remarks": "备注",
   "confirm": "确定",
-  "cancel": "取消"
+  "cancel": "取消",
+  "share": "分享到",
+  "we_chat": "微信",
+  "moments": "朋友圈",
+  "download": "下载到本地"
 }

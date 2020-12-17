@@ -128,5 +128,9 @@
   "account_lsit": "Accounts List",
   "remarks": "Remarks",
   "confirm": "Confirm",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "share": "Share",
+  "we_chat": "Wechat",
+  "moments": "Moments",
+  "download": "Download"
 }

@@ -1,6 +1,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/electronic_statement_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_electronic_statement.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -26,7 +27,7 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('电子结单'),
+        title: Text(S.current.electronic_statement),
         centerTitle: true,
         elevation: 0,
       ),

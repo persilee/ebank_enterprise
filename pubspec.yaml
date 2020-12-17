@@ -78,6 +78,9 @@ flutter:
     - images/tabbar/tabbar_approval_select.png
     - images/tabbar/tabbar_mine_normal.png
     - images/tabbar/tabbar_mine_select.png
+    - images/tabbar/tabbar_download.png
+    - images/tabbar/tabbar_we_chat.png
+    - images/tabbar/tabbar_wechat_moments.png
 
     #home
     #home_nav
