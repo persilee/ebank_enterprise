@@ -58,10 +58,10 @@ class GetLnAcScheduleRspDetlsDTOList extends Object {
   String ctrDays;
   //阶段分期
   @JsonKey(name: 'ctrInstal')
-  String ctrInstal;
+  int ctrInstal;
   //阶段序号
   @JsonKey(name: 'ctrStageNo')
-  String ctrStageNo;
+  int ctrStageNo;
   //分期日期
   @JsonKey(name: 'instalDate')
   String instalDate;

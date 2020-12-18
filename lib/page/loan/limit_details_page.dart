@@ -121,7 +121,6 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
       onTap: () {
         //跳转
         _selectPage(context, loanDetail);
-        // Navigator.pushNamed(context, pageloanDetails, arguments: loanDetail);
       },
       child: SizedBox(
         height: 46,

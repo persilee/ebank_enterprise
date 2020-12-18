@@ -311,6 +311,7 @@ class _HomePageState extends State<HomePage> {
                       'images/home/heaerIcon/home_header_payment.png',
                       40.0, () {
                     print('收支明细');
+                    // Navigator.pushNamed(context, pageTest);
                     Navigator.pushNamed(context, pageDetailList);
                   }),
                 ),

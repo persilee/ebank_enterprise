@@ -1,6 +1,3 @@
-import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
-import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
@@ -14,14 +11,15 @@ import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_detail_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_page.dart';
-import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
-import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
-import 'package:ebank_mobile/feature_demo/time_deposit_contract_succeed_page.dart';
+import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
+import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page/loan/loan_details_page.dart';
 import 'package:ebank_mobile/page/loan/loan_interest_rate_page.dart';
 import 'package:ebank_mobile/page/loan/limit_details_page.dart';
 import 'package:ebank_mobile/page/loan/repay_plan_page.dart';
+import 'package:ebank_mobile/page/loan/repay_records_page.dart';
+import 'package:ebank_mobile/page/loan/wait_repay_plan_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
@@ -36,15 +34,19 @@ import 'package:ebank_mobile/page/mine/about_us_page.dart';
 import 'package:ebank_mobile/page/mine/feedback_page.dart';
 import 'package:ebank_mobile/page/mine/change_logPswd_page.dart';
 
+import 'feature_demo/time_deposit_contract_succeed_page.dart';
+
 var pageHome = '/';
 // var pageLogin = "151";
 var pageLogin = pageHome;
 // var pageCardList = pageHome;
+var pageWaitRepayPlan = "/wait_repay_plan_page.dart";
 var pageRepayPlan = "/repay_plan_page";
 var pageLimitDetails = "/limit_detail_page";
 var pageloanDetails = '/loan_details_page';
 var pageLoanInterestRate = '/loan_interest_rate_page';
 var pageLimitDetailsDemo = "/limit_detail_page";
+var pageRepayRecords = "/repay_records_page";
 var pageCardList = '/card_list';
 var pageDialogDemo = '/dialog_demo';
 var pageCardDetail = '/card_detail';
@@ -65,8 +67,7 @@ var pageFeatureList = '/hsg_feature_list_page';
 var pageTransfer = '/hsg_transfer_page';
 var pageTransferInternal = '/hsg_transfer_internal_page';
 var pageElectronicStatement = '/electronic_statement_page';
-var pageElectronicStatementDetail =
-    '/electronicelectronic_statement_detail_page';
+var pageElectronicStatementDetail = '/electronic_statement_detail_page';
 var pageTimeDepostProduct = '/time_depost_product_page';
 var pageTest = '/test_page';
 
@@ -74,13 +75,14 @@ var appRoutes = {
   pageLogin: (context) => LoginPage(),
   pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
-  // pageTest: (context) => XBTestPage(),
   //pageloanDemo: (context) => LoanDemoPage(),
   pageLoanInterestRate: (context) => LoanInterestRatePage(),
   pageCardList: (context) => CardListPage(),
   pageDialogDemo: (context) => DialogDemoPage(),
+  pageWaitRepayPlan: (context) => WaitRepayPlanPage(),
   pageRepayPlan: (context) => RepayPlanPage(),
   pageLimitDetails: (context) => LimitDetailsPage(),
+  pageRepayRecords: (context) => RepayRecordsPage(),
   // pageCardDetail: (context) => CardDetailPage(),
   pageCardLimit: (context) => CardLimitManagerPage(),
   minePage: (context) => MinePage(),
