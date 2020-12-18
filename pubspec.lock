@@ -274,6 +274,13 @@ packages:
       url: "https://github.com/imshashank/flutter-cupertino-date-picker"
     source: git
     version: "1.0.26+2"
+  flutter_easyrefresh:
+    dependency: "direct main"
+    description:
+      name: flutter_easyrefresh
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.7"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -286,6 +293,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.0.6"
+  flutter_tableview:
+    dependency: "direct main"
+    description:
+      name: flutter_tableview
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter

@@ -11,6 +11,7 @@ import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+import 'package:flutter_tableview/flutter_tableview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:date_format/date_format.dart';
 import 'package:intl/intl.dart';
@@ -23,8 +24,8 @@ class DetailListPage extends StatefulWidget {
 }
 
 class _DetailListPageState extends State<DetailListPage> {
-  DateTime _nowDate = DateTime.now(); //当前日期
   List<RevenueHistoryDTOList> revenueHistoryList = [];
+  DateTime _nowDate = DateTime.now(); //当前日期
   List<String> cards = [];
   List<String> accList = [''];
   String startDate = DateFormat('yyyy-MM-' + '01').format(DateTime.now());
@@ -46,203 +47,221 @@ class _DetailListPageState extends State<DetailListPage> {
         centerTitle: true,
         // elevation: 0,
       ),
-      body: Container(
-        color: HsgColors.backgroundColor,
-        child: Column(
-          children: [
-            Container(
-              height: 40,
-              color: Colors.white,
-              padding: EdgeInsets.only(left: 15, right: 15),
-              margin: EdgeInsets.only(bottom: 10),
-              child: _searchRow(_date),
+      body: Column(
+        children: [
+          Container(
+            height: 40,
+            color: Colors.white,
+            padding: EdgeInsets.only(left: 16, right: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: _cupertinoPicker,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(_date),
+                      Icon(Icons.arrow_drop_down)
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: _accountList,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(accList[_position] == ''
+                          ? intl.S.current.all_account
+                          : accList[_position]),
+                      Icon(Icons.arrow_drop_down)
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              child: RefreshIndicator(
-                child: revenueHistoryList.length > 0
-                    ? CustomScrollView(
-                        slivers: _sliversSection(revenueHistoryList),
-                      )
-                    : Container(
-                        alignment: Alignment.center,
-                        child: _noDataColumn(context),
-                      ),
-                onRefresh: () => _getRevenueByCards(startDate, cards),
-              ),
-            )
-          ],
-        ),
+          ),
+          Expanded(
+            child: revenueHistoryList.length > 0
+                ? _buildFlutterTableView()
+                : _noDataContainer(context),
+          ),
+        ],
       ),
     );
   }
 
-  List<Widget> _sliversSection(List data) {
-    List<Widget> section = [];
-
-    for (var item in data) {
-      RevenueHistoryDTOList listData = item;
-      List<DdFinHistDOList> ddFinHistList = listData.ddFinHistDOList;
-
-      section.add(
-        SliverToBoxAdapter(
-          child: Container(
-            padding: EdgeInsets.only(left: 15, top: 10),
-            color: Colors.white,
-            child: Text(listData.transDate),
-          ),
-        ),
-      );
-
-      section.add(SliverList(
-        delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-          return Column(
-            children: [
-              GestureDetector(
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(15, 23, 15, 20),
-                  color: Colors.white,
-                  child: _getRow(ddFinHistList, index),
-                ),
-                onTap: () {
-                  _goToDetail(ddFinHistList[index]);
-                },
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 70, right: 13),
-                child: Divider(height: 0.5, color: HsgColors.divider),
-              ),
-            ],
-          );
-        }, childCount: listData.ddFinHistDOList.length),
-      ));
-
-      section.add(
-        SliverToBoxAdapter(
-          child: Container(
-            color: HsgColors.commonBackground,
-            height: 10,
-          ),
-        ),
-      );
-    }
-    return section;
+  // Get row count.
+  int _rowCountAtSection(int section) {
+    return revenueHistoryList[section].ddFinHistDOList.length;
   }
 
-  Column _noDataColumn(BuildContext context) {
+  // Section header widget builder.
+  Widget _sectionHeaderBuilder(BuildContext context, int section) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image(
-          image: AssetImage('images/noDataIcon/no_data_record.png'),
-          width: 160,
-        ),
-        Padding(padding: EdgeInsets.only(top: 25)),
-        Text(
-          intl.S.of(context).no_transaction_record,
-          style: TextStyle(fontSize: 15, color: HsgColors.firstDegreeText),
-        )
-      ],
-    );
-  }
-
-  Row _searchRow(String _date) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        GestureDetector(
-          onTap: _cupertinoPicker,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[Text(_date), Icon(Icons.arrow_drop_down)],
-          ),
-        ),
-        GestureDetector(
-          onTap: _accountList,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(accList[_position]),
-              Icon(Icons.arrow_drop_down)
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Row _getRow(List<DdFinHistDOList> ddFinHistList, int index) {
-    return Row(
       children: [
         Container(
-          margin: EdgeInsets.only(right: 13),
-          child: ClipOval(
-            child: Image.asset(
-              'images/home/listIcon/home_list_payments.png',
-              height: 38,
-              width: 38,
-              fit: BoxFit.cover,
+          height: 10,
+          color: HsgColors.backgroundColor,
+        ),
+        Container(
+          height: 35,
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.only(left: 16),
+          color: Colors.white,
+          child: Text(revenueHistoryList[section].transDate),
+        ),
+      ],
+    );
+    // return Container(
+    //   height: 40,
+    //   alignment: Alignment.centerLeft,
+    //   padding: EdgeInsets.only(left: 16),
+    //   color: Colors.white,
+    //   child: Text(revenueHistoryList[section].transDate),
+    // );
+  }
+
+  // cell item widget builder.
+  Widget _cellBuilder(BuildContext context, int section, int row) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        InkWell(
+          onTap: () {
+            _goToDetail(revenueHistoryList[section].ddFinHistDOList[row]);
+            print('xxxx');
+          },
+          child: Container(
+            color: Colors.white,
+            padding: EdgeInsets.only(left: 16, right: 16, top: 15),
+            child: Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 13),
+                  child: ClipOval(
+                    child: Image.asset(
+                      'images/home/listIcon/home_list_payments.png',
+                      height: 38,
+                      width: 38,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: _transactionInfo(section, row),
+                ),
+              ],
             ),
           ),
         ),
-        Expanded(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 160,
-                    child: Text(
-                      ddFinHistList[index].acNo,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 15, color: Color(0xFF222121)),
-                    ),
-                  ),
-                  Container(
-                    child: _transactionAmount(ddFinHistList, index),
-                  ),
-                ],
-              ),
-              Padding(padding: EdgeInsets.only(bottom: 8)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 160,
-                    child: Text(
-                      ddFinHistList[index].txDateTime,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 12, color: Color(0xFFACACAC)),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+        Padding(
+          padding: EdgeInsets.only(left: 68, right: 16),
+          child: Divider(
+            height: 0.5,
+            color: HsgColors.divider,
           ),
         ),
       ],
     );
   }
 
-  Text _transactionAmount(List<DdFinHistDOList> ddFinHistList, int index) {
+  Column _transactionInfo(int section, int row) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: 160,
+              padding: EdgeInsets.only(bottom: 8),
+              child: Text(
+                revenueHistoryList[section].ddFinHistDOList[row].acNo,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 15, color: Color(0xFF222121)),
+              ),
+            ),
+            Container(
+              child: _transactionAmount(revenueHistoryList, section, row),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: 160,
+              child: Text(
+                revenueHistoryList[section].ddFinHistDOList[row].txDateTime,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 12, color: Color(0xFFACACAC)),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  // Each section header height;
+  double _sectionHeaderHeight(BuildContext context, int section) {
+    return 45;
+  }
+
+  // Each cell item widget height.
+  double _cellHeight(BuildContext context, int section, int row) {
+    return 70;
+  }
+
+  FlutterTableView _buildFlutterTableView() {
+    return FlutterTableView(
+      sectionCount: revenueHistoryList.length,
+      rowCountAtSection: _rowCountAtSection,
+      sectionHeaderBuilder: _sectionHeaderBuilder,
+      cellBuilder: _cellBuilder,
+      sectionHeaderHeight: _sectionHeaderHeight,
+      cellHeight: _cellHeight,
+    );
+  }
+
+  Container _noDataContainer(BuildContext context) {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image(
+            image: AssetImage('images/noDataIcon/no_data_record.png'),
+            width: 160,
+          ),
+          Padding(padding: EdgeInsets.only(top: 25)),
+          Text(
+            intl.S.of(context).no_transaction_record,
+            style: TextStyle(fontSize: 15, color: HsgColors.firstDegreeText),
+          )
+        ],
+      ),
+    );
+  }
+
+  Text _transactionAmount(
+      List<RevenueHistoryDTOList> revenueHistoryList, int section, int row) {
     return Text(
-      ddFinHistList[index].drCrFlg == 'C'
-          ? '+ ' + ddFinHistList[index].txCcy + ' ' + ddFinHistList[index].txAmt
-          : '- ' +
-              ddFinHistList[index].txCcy +
+      revenueHistoryList[section].ddFinHistDOList[row].drCrFlg == 'C'
+          ? '+ ' +
+              revenueHistoryList[section].ddFinHistDOList[row].txCcy +
               ' ' +
-              ddFinHistList[index].txAmt,
+              revenueHistoryList[section].ddFinHistDOList[row].txAmt
+          : '- ' +
+              revenueHistoryList[section].ddFinHistDOList[row].txCcy +
+              ' ' +
+              revenueHistoryList[section].ddFinHistDOList[row].txAmt,
       style: TextStyle(fontSize: 15, color: Color(0xFF222121)),
     );
   }
 
-  void _goToDetail(DdFinHistDOList ddFinHist) {
-    Navigator.pushNamed(context, pageDetailInfo, arguments: ddFinHist);
-  }
-
-  //调起flutter_cupertino_date_picker选择器
   void _cupertinoPicker() {
     DatePicker.showDatePicker(
       context,
@@ -267,6 +286,10 @@ class _DetailListPageState extends State<DetailListPage> {
         });
       },
     );
+  }
+
+  void _goToDetail(DdFinHistDOList ddFinHist) {
+    Navigator.pushNamed(context, pageDetailInfo, arguments: ddFinHist);
   }
 
   void _accountList() async {
