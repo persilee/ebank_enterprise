@@ -211,10 +211,10 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
 
   _loadDeopstData() {
     bool excludeClosed = true;
-    String page = '1';
-    String pageSize = '200';
+    String page = '2';
+    String pageSize = '10';
     String ciNo = '50000067';
-    String userId = '779295543468752896';
+    String userId = '776112799108562944';
     Future.wait({
       DepositDataRepository().getDepositRecordRows(
           DepositRecordReq(excludeClosed, page, pageSize), 'getDepositRecord'),

@@ -8,7 +8,7 @@ class GetDepositTrialReq extends Object {
   String conNo;
 
   @JsonKey(name: 'settBal')
-  int settBal;
+  double settBal;
 
   GetDepositTrialReq(
     this.conNo,
@@ -39,7 +39,7 @@ class DepositTrialResp extends Object {
 
   @JsonKey(name: 'valDate')
   String valDate;
-
+  //起息时间
   @JsonKey(name: 'mtDate')
   String mtDate;
 
@@ -76,6 +76,7 @@ class DepositTrialResp extends Object {
   @JsonKey(name: 'bal')
   String bal;
 
+  //预计到期本息总额
   @JsonKey(name: 'conMatAmt')
   String conMatAmt;
 
@@ -99,7 +100,7 @@ class DepositTrialResp extends Object {
 
   @JsonKey(name: 'pnltFee')
   String pnltFee;
-
+  //提前结清本息总额
   @JsonKey(name: 'matAmt')
   String matAmt;
 

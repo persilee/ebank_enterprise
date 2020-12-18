@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
 import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
 
@@ -18,6 +16,7 @@ import 'package:ebank_mobile/page/electronicStatement/electronic_statement_detai
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
+import 'package:ebank_mobile/feature_demo/time_deposit_contract_succeed_page.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page/loan/loan_details_page.dart';
 import 'package:ebank_mobile/page/loan/loan_interest_rate_page.dart';
@@ -26,6 +25,8 @@ import 'package:ebank_mobile/page/loan/repay_plan_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
+import 'package:ebank_mobile/page/timeDeposit/time_deposit_rate_page.dart';
+
 //import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
@@ -55,7 +56,9 @@ var changeLgPs = '/change_loginpassword_page';
 var pageAccountOverview = '/account_overview';
 var pageDetailInfo = '/detail_info_page';
 var pageDetailList = '/detail_list_page';
+var pageDepositRecordSucceed = '/time_deposit_contract_succeed_page';
 var pageTimeDepositRecord = '/time_deposit_record_page';
+var pageMyDepositRate = '/time_deposit_rate_page';
 var pageDepositInfo = '/time_deposit_info_page';
 var pageIndex = new MaterialPageRoute(builder: (context) => new IndexPage());
 var pageFeatureList = '/hsg_feature_list_page';
@@ -88,6 +91,8 @@ var appRoutes = {
   pageDetailList: (context) => DetailListPage(),
   pageDetailInfo: (context) => DetailInfoPage(),
   pageTimeDepositRecord: (context) => TimeDepositRecordPage(),
+  pageMyDepositRate: (context) => MyDepositRatePage(),
+  pageDepositRecordSucceed: (context) => DepositContractSucceed(),
   //pageDepositInfo: (context) => PageDepositInfo(),
   pageTransfer: (context) => TransferPage(),
   pageTransferInternal: (context) => TransferInternalPage(),

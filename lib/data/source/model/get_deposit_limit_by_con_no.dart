@@ -1,3 +1,9 @@
+/*
+ * Created Date: Wednesday, December 16th 2020, 5:20:48 pm
+ * Author: pengyikang
+ * 
+ * Copyright (c) 2020 深圳高阳寰球科技有限公司
+ */
 import 'package:json_annotation/json_annotation.dart';
 
 part 'get_deposit_limit_by_con_no.g.dart';
