@@ -82,9 +82,12 @@ class _DetailListPageState extends State<DetailListPage> {
             ),
           ),
           Expanded(
-            child: revenueHistoryList.length > 0
-                ? _buildFlutterTableView()
-                : _noDataContainer(context),
+            child: RefreshIndicator(
+              onRefresh: () => _getCardList(),
+              child: revenueHistoryList.length > 0
+                  ? _buildFlutterTableView()
+                  : _noDataContainer(context),
+            ),
           ),
         ],
       ),
@@ -130,7 +133,6 @@ class _DetailListPageState extends State<DetailListPage> {
         InkWell(
           onTap: () {
             _goToDetail(revenueHistoryList[section].ddFinHistDOList[row]);
-            print('xxxx');
           },
           child: Container(
             color: Colors.white,
@@ -229,6 +231,8 @@ class _DetailListPageState extends State<DetailListPage> {
 
   Container _noDataContainer(BuildContext context) {
     return Container(
+      color: HsgColors.backgroundColor,
+      width: MediaQuery.of(context).size.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
