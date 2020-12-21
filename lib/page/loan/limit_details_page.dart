@@ -223,7 +223,7 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
           break;
         case 2:
           //提前还款
-          // Navigator.pushNamed(context, pageRepayInput, arguments: loanDetail);
+          Navigator.pushNamed(context, pageRepayInput, arguments: loanDetail);
           break;
       }
     } else {
