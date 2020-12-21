@@ -49,7 +49,7 @@ class _ElectronicStatementDetailPageState
       ),
       body: WebView(
         initialUrl: data['filePath'],
-        // initialUrl: 'https://www.baidu.com/',
+        javascriptMode: JavascriptMode.unrestricted,
       ),
     );
   }
