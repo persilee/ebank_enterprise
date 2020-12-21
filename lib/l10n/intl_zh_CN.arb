@@ -118,5 +118,12 @@
   "transaction_amount": "交易金额",
   "transaction_time": "交易时间",
   "msgId": "流水号",
-  "remarks": "备注"
+  "remarks": "备注",
+  "contact":"联系人",
+  "phone_num":"手机号码",
+  "apply_amount":"申请金额",
+  "loan_duration":"贷款期限（月）",
+  "loan_purpose":"贷款目的",
+  "remark":"备注",
+  "apply":"申请"
 }

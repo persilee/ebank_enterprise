@@ -118,5 +118,12 @@
   "transaction_amount": "Transaction Amount",
   "transaction_time": "Transaction Time",
   "msgId": "Transaction Journal No.",
-  "remarks": "Remarks"
+  "remarks": "Remarks",
+  "contact":"Contact",
+  "phone_num":"Mobile Phone No.",
+  "apply_amount":"Application Amount",
+  "loan_duration":"Loan Tenor(Month)",
+  "loan_purpose":"Loan Purpose",
+  "remark":"Remark",
+  "apply":"Application"
 }

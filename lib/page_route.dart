@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
 import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
 
@@ -18,6 +16,7 @@ import 'package:ebank_mobile/page/electronicStatement/electronic_statement_page.
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
+import 'package:ebank_mobile/page/loan/loan_application_page.dart';
 import 'package:ebank_mobile/page/loan/loan_details_page.dart';
 import 'package:ebank_mobile/page/loan/loan_interest_rate_page.dart';
 import 'package:ebank_mobile/page/loan/limit_details_page.dart';
@@ -38,6 +37,7 @@ var pageHome = '/';
 // var pageLogin = "151";
 var pageLogin = pageHome;
 // var pageCardList = pageHome;
+var pageLoanApplication = "/loan_application_page";
 var pageRepayPlan = "/repay_plan_page";
 var pageLimitDetails = "/limit_detail_page";
 var pageloanDetails = '/loan_details_page';
@@ -69,7 +69,7 @@ var appRoutes = {
   pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
   // pageTest: (context) => XBTestPage(),
-  //pageloanDemo: (context) => LoanDemoPage(),
+  pageLoanApplication: (context) => LoanApplicationPage(),
   pageLoanInterestRate: (context) => LoanInterestRatePage(),
   pageCardList: (context) => CardListPage(),
   pageDialogDemo: (context) => DialogDemoPage(),

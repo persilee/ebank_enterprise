@@ -37,6 +37,7 @@ dependencies:
   shared_preferences: ^0.5.12+4
   flutter_svprogresshud: ^0.0.6 #加载提示框
   encrypt: ^4.0.0 #AES加解密
+  flutter_picker: ^1.1.0 #选择器
 
 dev_dependencies:
   flutter_test:
