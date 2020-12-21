@@ -17,7 +17,7 @@ class TimeDepositProductResp extends Object {
   @JsonKey(name: 'depositType')
   String depositType;
 
-  @JsonKey(name: 'tdepProducDTOList')
+  @JsonKey(name: 'tdepProductDTOList')
   List<TdepProducDTOList> tdepProductDTOList;
 
   @JsonKey(name: 'tdepProducHeadDTO')
@@ -115,6 +115,9 @@ class TdepProducDTOList extends Object {
 
 @JsonSerializable()
 class TdepProducHeadDTO extends Object {
+  @JsonKey(name: 'ccy')
+  String ccy;
+
   @JsonKey(name: 'bppdCode')
   String bppdCode;
 
@@ -140,6 +143,7 @@ class TdepProducHeadDTO extends Object {
   String remark;
 
   TdepProducHeadDTO(
+    this.ccy,
     this.bppdCode,
     this.engName,
     this.lclName,

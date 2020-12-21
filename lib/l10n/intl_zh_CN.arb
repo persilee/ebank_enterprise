@@ -102,7 +102,7 @@
   "credit_card": "信用卡",
   "rest_should_also": "剩余应还",
   "annual_interest_rate":"年利率",
-  "minimum_deposit":"起存",
+  "deposit_min_with_value":"起存",
   "remaining_available_amount": "剩余可用额度",
   "transfer_features": "转账功能",
   "recent_transfer_account": "最近转账账号",
@@ -125,5 +125,12 @@
   "product_name":"产品名称",
   "year_interest_rate":"年利率",
   "deposit_time_limit":"存款期限",
-  "contract_principal_and_interest":"到期本息"
+  "contract_principal_and_interest":"到期本息",
+  "months":"个月",
+  "instruction_at_maturity_0":"等待客户指示",
+  "instruction_at_maturity_1":"本金转期，利息支出",
+  "instruction_at_maturity_2":"本金+利息转期",
+  "instruction_at_maturity_5":"本金+利息一起支出",
+  "no_advance_withdrawal":"不可提前支取。",
+  "hint_please_select":"请选择"
 }

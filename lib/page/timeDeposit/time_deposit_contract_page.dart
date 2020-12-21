@@ -2,28 +2,48 @@
 ///定期开立购买页面
 /// Author: wangluyao
 /// Date: 2020-12-14
-
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class TimeDepositContract extends StatefulWidget {
-  TimeDepositContract({Key key}) : super(key: key);
+  final TdepProducHeadDTO productList;
+  final List<TdepProducDTOList> producDTOList;
+  TimeDepositContract({Key key, this.productList, this.producDTOList})
+      : super(key: key);
 
   @override
-  _TimeDepositContractState createState() => _TimeDepositContractState();
+  _TimeDepositContractState createState() =>
+      _TimeDepositContractState(productList, producDTOList);
 }
 
 class _TimeDepositContractState extends State<TimeDepositContract> {
-  List time = ["不计提", "日", "月", "季", "半年", "年"];
-  List account = ["500000690001", "500070800654"];
-  var _changedTermBtnTiTle = "不计提";
-  var _changedAccountTitle = "500000690001";
-  var _changedInstructionTitle = "等待客户指示";
+  String _changedAccountTitle = S.current.hint_please_select;
+  String _changedTermBtnTiTle = S.current.hint_please_select;
+  String _changedInstructionTitle = S.current.hint_please_select;
+  List<RemoteBankCard> cards = [];
+  RemoteBankCard card;
+
+  double rate = 0.0;
+  String instCode = '';
+
+  TdepProducHeadDTO productList;
+  List<TdepProducDTOList> producDTOList;
+  _TimeDepositContractState(this.productList, this.producDTOList);
+
+  void initState() {
+    super.initState();
+    //网络请求
+    _loadData();
+  }
 
   Widget _background() {
     return Container(
@@ -37,11 +57,12 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     return Container(
         color: HsgColors.backgroundColor,
         height: 40,
+        width: 500.0,
         child: Container(
-          padding: EdgeInsets.only(top: 10.0, left: 15.0),
+          padding: EdgeInsets.only(top: 15.0, left: 15.0),
           height: 10,
           child: Text(
-            '不可提前支取。',
+            S.current.no_advance_withdrawal,
             style: TextStyle(
               color: HsgColors.describeText,
               fontSize: 12.0,
@@ -51,14 +72,14 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   }
 
   //产品名称和年利率
-  Widget _titleSection() {
+  Widget _titleSection(
+      TdepProducHeadDTO tdepProduct, List<TdepProducDTOList> producDTOList) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          //color: Colors.red,
+          width: 200.0,
           margin: EdgeInsets.only(top: 20, bottom: 20.0),
-          padding: EdgeInsets.only(left: 40.0),
           height: 60,
           child: Column(children: [
             Text(
@@ -68,7 +89,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             ),
             SizedBox(height: 10.0),
             Text(
-              '整存整取（HKD）',
+              productList.lclName,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 18,
@@ -79,8 +100,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         ),
         Container(
           margin: EdgeInsets.only(top: 20, bottom: 20.0),
-          padding: EdgeInsets.only(left: 25.0),
-          height: 60,
+          width: 10.0,
+          height: 50,
           child: Column(
             children: [
               SizedBox(
@@ -94,8 +115,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           ),
         ),
         Container(
+          width: 200.0,
           margin: EdgeInsets.only(top: 20, bottom: 20.0),
-          padding: EdgeInsets.only(left: 55.0),
           height: 60,
           child: Column(children: [
             Text(
@@ -105,7 +126,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             ),
             SizedBox(height: 10.0),
             Text(
-              '2.5%',
+              _selectRate(producDTOList) + '%',
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 18, color: Colors.red, fontWeight: FontWeight.bold),
@@ -116,102 +137,99 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     );
   }
 
-  // 选择存款期限按钮
-  Widget _termChangeBtn() {
-    return Container(
-        child: FlatButton(
-      onPressed: () {
-        _selectTerm(context);
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            child: Text(
-              S.current.deposit_time_limit,
-              style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 14.0),
-            ),
-          ),
-          SizedBox(
-            width: 253.0,
-          ),
-          Container(
-            child: Text(
-              _changedTermBtnTiTle,
-              style: TextStyle(
-                color: HsgColors.aboutusTextCon,
-                fontSize: 14.0,
-              ),
-            ),
-          ),
-          Container(
-            child: Icon(
-              Icons.keyboard_arrow_right,
-              color: Colors.black,
-            ),
-          ),
-        ],
-      ),
-    ));
+  _selectRate(List<TdepProducDTOList> producDTOList) {
+    for (var i = 0; i < producDTOList.length; i++) {
+      rate = double.parse(producDTOList[i].annualInterestRate) * 100;
+      rate = double.parse(FormatUtil.formatNum(rate, 2));
+    }
+    return rate.toString();
   }
 
-  _selectTerm(BuildContext context) async {
-    List<String> terms = [
-      '不计提 ',
-      '日',
-      '月',
-      '季',
-      '半年 ',
-      '年',
-    ];
+  // 选择存款期限按钮
+  Widget _termChangeBtn(List<TdepProducDTOList> producDTOList) {
+    return Column(
+      children: [
+        _remark(),
+        Container(
+            child: FlatButton(
+          onPressed: () {
+            _selectTerm(context, producDTOList);
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                width: 210,
+                child: Text(
+                  S.current.deposit_time_limit,
+                  style: TextStyle(
+                      color: HsgColors.aboutusTextCon, fontSize: 14.0),
+                ),
+              ),
+              Container(
+                width: 145,
+                alignment: Alignment.centerRight,
+                child: Text(
+                  _changedTermBtnTiTle,
+                  style: TextStyle(
+                    color: HsgColors.aboutusTextCon,
+                    fontSize: 14.0,
+                  ),
+                ),
+              ),
+              Container(
+                child: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+        )),
+        _background()
+      ],
+    );
+  }
+
+  _selectTerm(
+      BuildContext context, List<TdepProducDTOList> producDTOList) async {
+    List<String> terms = [];
+
+    //判断存款期限数组中是否有重复数据
+    for (var i = 0; i < producDTOList.length; i++) {
+      bool isContain =
+          terms.contains(producDTOList[i].accuPeriod + S.current.months);
+      if (!isContain) {
+        terms.add(producDTOList[i].accuPeriod + S.current.months);
+      }
+    }
+
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) => BottomMenu(
               title: '存款期限',
               items: terms,
             ));
-    String term;
-    if (result != null && result != false) {
-      switch (result) {
-        case 0:
-          term = '不计提 ';
-          break;
-        case 1:
-          term = '日';
-          break;
-        case 2:
-          term = '月';
-          break;
-        case 3:
-          term = '季';
-          break;
-        case 4:
-          term = '半年 ';
-          break;
-        case 5:
-          term = '年';
-          break;
-      }
-    } else {
-      return;
-    }
     setState(() {
-      _changedTermBtnTiTle = terms[result];
+      if (result != null && result != false) {
+        _changedTermBtnTiTle = terms[result];
+      } else {
+        return _changedTermBtnTiTle;
+      }
     });
   }
 
   // 本金输入框
   Widget _inputPrincipal() {
     return Column(
-      //crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Container(
-          padding: EdgeInsets.only(left: 17.0),
+          padding: EdgeInsets.only(left: 15.0),
           child: Row(
             children: [
               Container(
                 child: Text(
-                  'HKD',
+                  productList.ccy,
                   style: TextStyle(color: Colors.black, fontSize: 18.0),
                 ),
               ),
@@ -233,7 +251,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: '100.00起存',
+                    hintText:
+                        S.current.deposit_min_with_value + productList.minAmt,
                     hintStyle: TextStyle(
                       color: HsgColors.hintText,
                       fontSize: 18.0,
@@ -252,7 +271,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           height: 10.0,
         ),
         Container(
-          padding: EdgeInsets.only(left: 17.0, bottom: 10.0),
+          padding: EdgeInsets.only(left: 15.0, bottom: 10.0),
           child: Row(
             children: [
               Container(
@@ -265,11 +284,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                 ),
               ),
               SizedBox(
-                width: 10.0,
+                width: 5.0,
               ),
               Container(
                 child: Text(
-                  '币种:1222.00',
+                  productList.ccy + ':1222.0',
                   style: TextStyle(
                     color: HsgColors.secondDegreeText,
                     fontSize: 13.0,
@@ -278,7 +297,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
               ),
             ],
           ),
-        )
+        ),
+        _background()
       ],
     );
   }
@@ -294,32 +314,58 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             _selectAccount(context);
           },
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
+                width: 210,
                 child: Text(
-                  '付款账户',
+                  S.current.payment_account,
                   style: TextStyle(
                       color: HsgColors.aboutusTextCon, fontSize: 14.0),
                 ),
               ),
-              SizedBox(
-                width: 200.0,
-              ),
-              Container(
-                child: Text(
-                  _changedAccountTitle,
-                  style: TextStyle(
-                    color: HsgColors.aboutusTextCon,
-                    fontSize: 14.0,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 145,
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      // readOnly: true,
+                      // autocorrect: false,
+                      // autofocus: false,
+                      // onChanged: (value) {
+                      //   value = _selectAccount(context);
+                      //   print("$value");
+                      // },
+
+                      _changedAccountTitle,
+                      style: TextStyle(
+                        color: HsgColors.aboutusTextCon,
+                        fontSize: 14.0,
+                      ),
+                      // onChanged: (value) {
+                      //   // _selectAccount(context);
+                      //   _changedAccountTitle;
+                      // },
+
+                      // decoration: InputDecoration(
+                      //   border: InputBorder.none,
+                      //   hintText: '请选择',
+                      //   hintStyle: TextStyle(
+                      //     color: HsgColors.hintText,
+                      //     fontSize: 14.0,
+                      //   ),
+                      // ),
+                    ),
                   ),
-                ),
-              ),
-              Container(
-                child: Icon(
-                  Icons.keyboard_arrow_right,
-                  color: Colors.black,
-                ),
+                  Container(
+                    child: Icon(
+                      Icons.keyboard_arrow_right,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -335,25 +381,27 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             _selectInstruction(context);
           },
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
+                width: 210,
                 child: Text(
-                  '到期指示',
+                  S.current.due_date_indicate,
                   style: TextStyle(
                       color: HsgColors.aboutusTextCon, fontSize: 14.0),
                 ),
               ),
-              SizedBox(
-                width: 170.0,
-              ),
               Container(
+                width: 145,
+                alignment: Alignment.centerRight,
                 child: Text(
                   _changedInstructionTitle,
                   style: TextStyle(
                     color: HsgColors.aboutusTextCon,
                     fontSize: 14.0,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               Container(
@@ -374,37 +422,38 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   }
 
   _selectAccount(BuildContext context) async {
-    String account;
-    List<String> accounts = [
-      '500000690001 ',
-      '500070800654',
-    ];
+    List<String> bankCards = [];
+    List<String> accounts = [];
+    for (RemoteBankCard card in cards) {
+      bankCards.add(card.cardNo);
+    }
+    for (var i = 0; i < bankCards.length; i++) {
+      accounts.add(FormatUtil.formatSpace4(bankCards[i]));
+    }
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) => BottomMenu(title: '付款账户', items: accounts));
-    if (result != null && result != false) {
-      switch (result) {
-        case 0:
-          account = '不计提 ';
-          break;
-        case 1:
-          account = '日';
-          break;
-      }
-    } else {
-      return;
-    }
     setState(() {
-      _changedAccountTitle = accounts[result];
+      if (result != null && result != false) {
+        _changedAccountTitle = accounts[result];
+      } else {
+        return _changedAccountTitle;
+      }
     });
   }
 
   _selectInstruction(BuildContext context) async {
     List<String> instructions = [
-      '等待客户指示',
-      '本金转期，利息支出',
-      '本金+利息转期',
-      '本金+利息一起支出',
+      S.current.instruction_at_maturity_0,
+      S.current.instruction_at_maturity_1,
+      S.current.instruction_at_maturity_2,
+      S.current.instruction_at_maturity_5,
+    ];
+    List<String> instructionDatas = [
+      '0',
+      '1',
+      '2',
+      '5',
     ];
     final result = await showHsgBottomSheet(
         context: context,
@@ -412,27 +461,13 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
               title: '到期指示',
               items: instructions,
             ));
-    String instruction;
-    if (result != null && result != false) {
-      switch (result) {
-        case 0:
-          instruction = '等待客户指示';
-          break;
-        case 1:
-          instruction = '本金转期，利息支出';
-          break;
-        case 2:
-          instruction = '本金+利息转期';
-          break;
-        case 3:
-          instruction = '本金+利息一起支出';
-          break;
-      }
-    } else {
-      return;
-    }
     setState(() {
-      _changedInstructionTitle = instructions[result];
+      if (result != null && result != false) {
+        _changedInstructionTitle = instructions[result];
+        instCode = instructionDatas[result];
+      } else {
+        return {_changedInstructionTitle, instCode};
+      }
     });
   }
 
@@ -456,15 +491,30 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         body: (ListView(
           children: [
             _background(),
-            _titleSection(),
-            _remark(),
-            _termChangeBtn(),
-            _background(),
+            _titleSection(
+              productList,
+              producDTOList,
+            ),
+            _termChangeBtn(producDTOList),
             _inputPrincipal(),
-            _background(),
             _accountsAndInstructions(),
             _submitButton(),
           ],
         )));
+  }
+
+  Future<void> _loadData() async {
+    CardDataRepository().getCardList('getCardList').then(
+      (data) {
+        if (data.cardList != null) {
+          setState(() {
+            cards.clear();
+            cards.addAll(data.cardList);
+          });
+        }
+      },
+    ).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
   }
 }

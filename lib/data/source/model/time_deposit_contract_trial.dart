@@ -16,7 +16,7 @@ class TimeDepositContractTrialReq extends Object {
   String auctCale;
 
   @JsonKey(name: 'bal')
-  int bal;
+  String bal;
 
   @JsonKey(name: 'bppdCode')
   String bppdCode;

@@ -102,7 +102,7 @@
   "credit_card": "Credit Card",
   "rest_should_also": "Rest Should Also",
   "annual_interest_rate":"Annual Interest Rate",
-  "minimum_deposit":"Minimum Deposit",
+  "deposit_min_with_value":"Minimum ",
   "remaining_available_amount": "Remaining Available Amount",
   "transfer_features": "Transfer Functions",
   "recent_transfer_account": "Transfer To Account List",
@@ -122,8 +122,15 @@
   "transaction_time": "Transaction Time",
   "msgId": "Transaction Journal No.",
   "remarks": "Remarks",
-  "product_name":"Product Name",
-  "year_interest_rate":"Year Interest Rate",
-  "deposit_time_limit":"Deposit Time Limit",
-  "contract_principal_and_interest":"Contract Principal And Interest"
+  "product_name":"Product name",
+  "year_interest_rate":"Yearly Interest Rate",
+  "deposit_time_limit":"Tenor",
+  "contract_principal_and_interest":"Principal and Interest Amount",
+  "months":"Months",
+  "instruction_at_maturity_0":"Pending For Indication",
+  "instruction_at_maturity_1":"Principal Rollover With Interest to DD Account",
+  "instruction_at_maturity_2":"Principal Plus Interest Rollover",
+  "instruction_at_maturity_5":"Principal And Interest To DD Account",
+  "no_advance_withdrawal":"No Advance Withdrawal.",
+  "hint_please_select":"Please select"
 }

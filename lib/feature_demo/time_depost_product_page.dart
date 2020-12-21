@@ -24,6 +24,7 @@ class TimeDepostProduct extends StatefulWidget {
 
 class _TimeDepostProductState extends State<TimeDepostProduct> {
   List<TdepProducHeadDTO> productList = [];
+  List<List<TdepProducDTOList>> producDTOList = [];
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   void initState() {
@@ -46,7 +47,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     }
 
     //定期产品列表
-    List<Widget> _titleSection(List<TdepProducHeadDTO> tdepProducDTOList) {
+    List<Widget> _titleSection(List<TdepProducHeadDTO> tdepProductList,
+        List<List<TdepProducDTOList>> tdepProducDTOList) {
       List<Widget> section = [];
       section.add(
         //定期产品列表上面的图片
@@ -62,24 +64,25 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       section.add(SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
         //最小年利率
-        double minRate = double.parse(tdepProducDTOList[index].minRate) * 100;
+        double minRate = double.parse(tdepProductList[index].minRate) * 100;
         minRate = double.parse(FormatUtil.formatNum(minRate, 2));
         //最大年利率
-        double maxRate = double.parse(tdepProducDTOList[index].maxRate) * 100;
+        double maxRate = double.parse(tdepProductList[index].maxRate) * 100;
         maxRate = double.parse(FormatUtil.formatNum(maxRate, 2));
         //判断选择的语言并根据语言选择产品名称
         String name;
         String language = Intl.getCurrentLocale();
         if (language == 'zh_CN') {
-          name = tdepProducDTOList[index].lclName;
+          name = tdepProductList[index].lclName;
         } else {
-          name = tdepProducDTOList[index].engName;
+          name = tdepProductList[index].engName;
         }
         //定期产品信息
         return FlatButton(
           padding: EdgeInsets.all(0),
           onPressed: () {
-            Navigator.pushNamed(context, pageTimeDepositContract);
+            print('>>>>>>$tdepProducDTOList $tdepProductList');
+            go2Detail(tdepProductList[index], tdepProducDTOList[index]);
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +134,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                                 1,
                             child: Text(
                               //定期产品描述
-                              tdepProducDTOList[index].remark,
+                              tdepProductList[index].remark,
                               style: TextStyle(
                                 fontSize: 15,
                                 color: HsgColors.firstDegreeText,
@@ -166,8 +169,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                             height: 70,
                             child: Text(
                               //定期产品起存金额
-                              S.current.minimum_deposit +
-                                  '${tdepProducDTOList[index].minAmt}',
+                              S.current.deposit_min_with_value +
+                                  '${tdepProductList[index].minAmt}',
                               style: TextStyle(
                                 fontSize: 13,
                                 color: HsgColors.describeText,
@@ -184,7 +187,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
             ],
           ),
         );
-      }, childCount: tdepProducDTOList.length)));
+      }, childCount: tdepProductList.length)));
       return section;
     }
 
@@ -210,7 +213,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         body: RefreshIndicator(
             key: refrestIndicatorKey,
             child: CustomScrollView(
-              slivers: _titleSection(productList),
+              slivers: _titleSection(productList, producDTOList),
             ),
             //下拉刷新时调用_loadData
             onRefresh: _loadData));
@@ -221,13 +224,27 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         .getGetTimeDepositProduct('getGetTimeDepositProduct')
         .then((data) {
       productList.clear();
+      producDTOList.clear();
       data.forEach((element) {
         productList.add(element.tdepProducHeadDTO);
+        producDTOList.add(element.tdepProductDTOList);
       });
 
       setState(() {});
     }).catchError(() {
       Fluttertoast.showToast(msg: "${e.toString()}");
     });
+  }
+
+  void go2Detail(TdepProducHeadDTO tdepProduct,
+      List<TdepProducDTOList> tdepProducDTOList) {
+    Navigator.pushNamed(
+      context,
+      pageTimeDepositContract,
+      arguments: {
+        'tdepProduct': tdepProduct,
+        'tdepProducDTOList': tdepProducDTOList
+      },
+    );
   }
 }

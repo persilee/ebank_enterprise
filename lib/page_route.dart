@@ -97,13 +97,22 @@ var appRoutes = {
   pageElectronicStatement: (context) => ElectronicStatementPage(),
   pageElectronicStatementDetail: (context) => ElectronicStatementDetailPage(),
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
-  pageTimeDepositContract: (context) => TimeDepositContract(),
+  // pageTimeDepositContract: (context) => TimeDepositContract(),
 };
 
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
     return MaterialPageRoute(builder: (context) {
       return CardDetailPage(card: settings.arguments);
+    });
+  }
+  if (settings.name == pageTimeDepositContract) {
+    return MaterialPageRoute(builder: (context) {
+      Map data = settings.arguments;
+      return TimeDepositContract(
+        productList: data['tdepProduct'],
+        producDTOList: data['tdepProducDTOList'],
+      );
     });
   }
   return null;
