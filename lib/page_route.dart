@@ -13,6 +13,7 @@ import 'package:ebank_mobile/page/electronicStatement/electronic_statement_detai
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_page.dart';
 import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
 import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
+import 'package:ebank_mobile/page/forexTrading/forex_trading_page.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page/loan/loan_details_page.dart';
 import 'package:ebank_mobile/page/loan/loan_interest_rate_page.dart';
@@ -70,6 +71,7 @@ var pageTransferInternal = '/hsg_transfer_internal_page';
 var pageElectronicStatement = '/electronic_statement_page';
 var pageElectronicStatementDetail = '/electronic_statement_detail_page';
 var pageTimeDepostProduct = '/time_depost_product_page';
+var pageForexTrading = '/forex_trading_page';
 var pageTest = '/test_page';
 
 var appRoutes = {
@@ -103,6 +105,7 @@ var appRoutes = {
   pageElectronicStatement: (context) => ElectronicStatementPage(),
   pageElectronicStatementDetail: (context) => ElectronicStatementDetailPage(),
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
+  pageForexTrading: (context) => ForexTradingPage(),
 };
 
 onGenerateRoute(RouteSettings settings) {

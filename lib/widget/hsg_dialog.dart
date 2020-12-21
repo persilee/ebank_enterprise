@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
@@ -400,13 +398,7 @@ class HsgBottomSingleChoice extends StatelessWidget {
     this.title,
     this.items,
     this.lastSelectedPosition = -1,
-  }) : super(key: key) {
-    // 上次选中的位置由调用者保存
-    _selectedPosition = -1;
-    if (lastSelectedPosition != -1) {
-      _selectedPosition = lastSelectedPosition;
-    }
-  }
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -433,7 +425,7 @@ class HsgBottomSingleChoice extends StatelessWidget {
           shrinkWrap: true,
           itemCount: items.length,
           itemBuilder: (BuildContext context, int position) {
-            return _getItemRow(position, context, _selectedPosition);
+            return _getItemRow(position, context, lastSelectedPosition);
           },
         ),
       );
