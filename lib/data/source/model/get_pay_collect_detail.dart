@@ -25,6 +25,11 @@ class GetRevenueByCardsReq {
     this.cards,
   });
 
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
   factory GetRevenueByCardsReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetRevenueByCardsReqFromJson(srcJson);
 

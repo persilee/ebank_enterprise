@@ -358,9 +358,15 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
         .getTotalAssets(GetTotalAssetsReq(userID), 'GetTotalAssetsReq')
         .then((data) {
       setState(() {
-        totalAssets = data.totalAssets;
-        netAssets = data.netAssets;
-        totalLiabilities = data.totalLiability;
+        if (data.totalAssets != '0') {
+          totalAssets = data.totalAssets;
+        }
+        if (data.netAssets != '0') {
+          netAssets = data.netAssets;
+        }
+        if (data.totalLiability != '0') {
+          totalLiabilities = data.totalLiability;
+        }
         localCcy = data.ccy;
       });
     }).catchError((e) {
@@ -373,7 +379,9 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
       if (data.cardListBal != null) {
         setState(() {
           ddList = data.cardListBal;
-          ddTotal = data.totalAmt;
+          if (data.totalAmt != '0') {
+            ddTotal = data.totalAmt;
+          }
           ddCcy = data.defaultCcy;
         });
       }
@@ -399,7 +407,9 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
             'GetActiveContractByCiNoReq')
         .then((data) {
       setState(() {
-        tdTotal = data.totalAmt;
+        if (data.totalAmt != '0') {
+          tdTotal = data.totalAmt;
+        }
       });
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
@@ -411,7 +421,9 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
       if (data.lnAcMastAppDOList != null) {
         setState(() {
           lnList = data.lnAcMastAppDOList;
-          lnTotal = data.totalLiability;
+          if (data.totalLiability != '0') {
+            lnTotal = data.totalLiability;
+          }
         });
       }
     }).catchError((e) {

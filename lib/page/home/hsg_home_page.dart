@@ -311,6 +311,7 @@ class _HomePageState extends State<HomePage> {
                       'images/home/heaerIcon/home_header_payment.png',
                       40.0, () {
                     print('收支明细');
+                    // Navigator.pushNamed(context, pageTest);
                     Navigator.pushNamed(context, pageDetailList);
                   }),
                 ),
@@ -564,6 +565,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, pageTimeDepositRecord);
       } else if (S.current.deposit_rate == title) {
         //'利率查看'
+        Navigator.pushNamed(context, pageMyDepositRate);
       } else if (S.current.loan_apply == title) {
         //'贷款申请'
         Navigator.pushNamed(context, pageLoanApplication);
@@ -578,6 +580,7 @@ class _HomePageState extends State<HomePage> {
         //'外汇买卖'
       } else if (S.current.exchange_rate == title) {
         //'汇率查询'
+
       } else if (S.current.electronic_statement == title) {
         //'电子结单'
         Navigator.pushNamed(context, pageElectronicStatement);

@@ -155,7 +155,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
         children: [
           //跳转到还款记录
           _jumpPage(
-              pageRepayPlan,
+              pageRepayRecords,
               loanDetail,
               Text(
                 S.current.repayment_record,
@@ -164,7 +164,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           Divider(height: 0, color: HsgColors.textHintColor),
           //跳转到待还计划
           _jumpPage(
-              pageRepayPlan,
+              pageWaitRepayPlan,
               loanDetail,
               Text(
                 S.current.wait_repayment_plan,
