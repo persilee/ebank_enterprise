@@ -140,7 +140,7 @@
   "msgId": "流水号",
   "remarks": "备注",
   "contact":"联系人",
-  "phone_num":"手机号码",
+  "contact_phone_num":"联系人手机号码",
   "apply_amount":"申请金额",
   "loan_duration":"贷款期限（月）",
   "loan_purpose":"贷款目的",
@@ -149,5 +149,6 @@
   "share": "分享到",
   "we_chat": "微信",
   "moments": "朋友圈",
-  "download": "下载到本地"
+  "download": "下载到本地",
+  "currency_choice":"币种选择"
 }

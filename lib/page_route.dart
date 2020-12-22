@@ -29,8 +29,6 @@ import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_rate_page.dart';
 
-// import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
-//import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +40,6 @@ import 'package:ebank_mobile/page/mine/change_logPswd_page.dart';
 import 'feature_demo/time_deposit_contract_succeed_page.dart';
 
 var pageHome = '/';
-// var pageLogin = "151";
 var pageLogin = pageHome;
 // var pageCardList = pageHome;
 var pageLoanApplication = "/loan_application_page";
@@ -78,13 +75,11 @@ var pageTimeDepostProduct = '/time_depost_product_page';
 var pageTest = '/test_page';
 
 var appRoutes = {
-  // pageTest: (context) => SimpleDemoPageBody(),
   pageLogin: (context) => LoginPage(),
   pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
   // pageTest: (context) => XBTestPage(),
   pageLoanApplication: (context) => LoanApplicationPage(),
-  //pageloanDemo: (context) => LoanDemoPage(),
   pageLoanInterestRate: (context) => LoanInterestRatePage(),
   pageCardList: (context) => CardListPage(),
   pageDialogDemo: (context) => DialogDemoPage(),

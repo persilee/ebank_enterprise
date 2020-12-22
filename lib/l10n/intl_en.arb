@@ -138,7 +138,7 @@
   "transaction_time": "Transaction Time",
   "msgId": "Transaction Journal No.",
   "contact":"Contact",
-  "phone_num":"Mobile Phone No.",
+  "contact_phone_num":"Contact Mobile Phone No.",
   "apply_amount":"Application Amount",
   "loan_duration":"Loan Tenor(Month)",
   "loan_purpose":"Loan Purpose",
@@ -150,5 +150,6 @@
   "share": "Share",
   "we_chat": "Wechat",
   "moments": "Moments",
-  "download": "Download"
+  "download": "Download",
+  "currency_choice":"Currency"
 }

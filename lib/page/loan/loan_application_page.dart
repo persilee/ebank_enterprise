@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class LoanApplicationPage extends StatefulWidget {
   @override
@@ -19,9 +20,12 @@ class LoanApplicationPage extends StatefulWidget {
 }
 
 class _LoanApplicationState extends State<LoanApplicationPage> {
-  var _deadline = '请选择'; //贷款期限
-  var _goal = '请选择'; //贷款目的
-  var _currency = '请选择'; //币种
+  var _deadline = ''; //贷款期限
+  var _goal = ''; //贷款目的
+  var _currency = ''; //币种
+  String _inputs = ''; //请输入提示
+  String _choose = ''; //请选择提示
+  String _notRequired = ''; //非必填提示
   int groupValue = 0; //单选框默认值
   bool _isT = false; //申请按钮是否能点击
   var checkBoxValue = false; //复选框默认值
@@ -29,6 +33,48 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   var _contactsController = new TextEditingController(); //联系人文本监听器
   var _phoneController = new TextEditingController(); //联系人手机号码文本监听器
   var _moneyController = new TextEditingController(); //申请金额文本监听器
+  String language = Intl.getCurrentLocale(); //获取当前语言
+  List<String> _deadLineLists = List(); //贷款期限列表
+  List<String> _goalLists = List(); //贷款目的列表
+//协议政策内容
+  String _content1 = '';
+  String _content2 = '';
+  String _content3 = '';
+  String _content4 = '';
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    if (language == 'zh_CN') {
+      _deadline = _goal = _currency = _choose = '请选择';
+      _inputs = "请输入";
+      _notRequired = "非必填";
+      _deadLineLists = ['三个月', '六个月', '九个月', '十二个月'];
+      _goalLists = ['项目贷款', '经营贷款', '目的'];
+      _content1 = "本人已阅读并同意签署";
+      _content2 = "《企业用户服务及授权协议》";
+      _content3 = "和";
+      _content4 = "《用户服务协议及隐私政策》";
+    } else {
+      _deadline = _goal = _currency = _choose = 'Choose';
+      _inputs = "Input";
+      _notRequired = "Not Required";
+      _deadLineLists = [
+        'Three Months',
+        'Six Months',
+        'Nine Months',
+        'Twelvemonth'
+      ];
+      _goalLists = ['Project Loan', 'Business Loans', 'Purpose'];
+      _content1 = "I have read and agree to sign";
+      _content2 = "《Enterprise User Services and Licensing Agreement》";
+      _content3 = "and";
+      _content4 = "《User Service Agreement and Privacy Policy》";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,28 +91,28 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
               _input(
                   S.of(context).contact,
                   _inputText(
-                    "请输入",
+                    _inputs,
                     _contactsController,
                   )),
-              _input(S.of(context).contact + S.of(context).phone_num,
-                  _inputText("请输入", _phoneController)),
+              _input(S.of(context).contact_phone_num,
+                  _inputText(_inputs, _phoneController)),
               _input(S.of(context).currency,
                   _inputDialog(context, ['HKD', 'USD', 'CND'])),
               _input(
                   S.of(context).apply_amount,
                   _inputText(
-                    "请输入",
+                    _inputs,
                     _moneyController,
                   )),
               _input(
                   S.of(context).loan_duration,
-                  _inputBottom(context, S.of(context).loan_duration,
-                      ['三个月', '六个月', '九个月', '十二个月'], 0)),
+                  _inputBottom(
+                      context, S.of(context).loan_duration, _deadLineLists, 0)),
               _input(
                   S.of(context).loan_purpose,
-                  _inputBottom(context, S.of(context).loan_purpose,
-                      ['项目贷款', '经营贷款', '目的'], 1)),
-              _input(S.of(context).remark, _inputText("非必填", null)),
+                  _inputBottom(
+                      context, S.of(context).loan_purpose, _goalLists, 1)),
+              _input(S.of(context).remark, _inputText(_notRequired, null)),
               Container(
                 child: Row(
                   children: [_roundCheckBox(), _textContent()],
@@ -87,12 +133,12 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
                 .hasMatch(_phoneController.text) &&
             RegExp('^(([0-9]|([1-9][0-9]{0,9}))((\.[0-9]{1,2})?))\$')
                 .hasMatch(_moneyController.text) &&
-            _deadline != '请选择' &&
-            _goal != '请选择' &&
-            _currency != '请选择') {
-          Fluttertoast.showToast(msg: '申请成功');
+            _deadline != _choose &&
+            _goal != _choose &&
+            _currency != _choose) {
+          Fluttertoast.showToast(msg: 'Application Approved');
         } else {
-          Fluttertoast.showToast(msg: '输入信息有误！');
+          Fluttertoast.showToast(msg: 'Incorrect input information!');
         }
       };
     } else {
@@ -106,23 +152,24 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
       child: RichText(
         text: TextSpan(children: <TextSpan>[
           TextSpan(
-              text: "本人已阅读并同意签署",
+              text: _content1,
               style: TextStyle(fontSize: 13, color: Colors.black)),
           TextSpan(
-              text: "《企业用户服务及授权协议》",
+              text: _content2,
               style: TextStyle(fontSize: 13, color: Colors.blue),
               recognizer: TapGestureRecognizer()
                 ..onTap = () async {
-                  Fluttertoast.showToast(msg: '跳转到《企业用户服务及授权协议》了');
+                  Fluttertoast.showToast(msg: 'The jump is successful');
                 }),
           TextSpan(
-              text: "和", style: TextStyle(fontSize: 13, color: Colors.black)),
+              text: _content3,
+              style: TextStyle(fontSize: 13, color: Colors.black)),
           TextSpan(
-              text: "《用户服务协议及隐私政策》",
+              text: _content4,
               style: TextStyle(fontSize: 13, color: Colors.blue),
               recognizer: TapGestureRecognizer()
                 ..onTap = () async {
-                  Fluttertoast.showToast(msg: '跳转到《用户服务协议及隐私政策》了');
+                  Fluttertoast.showToast(msg: 'The jump is successful');
                 }),
         ]),
       ),
@@ -183,7 +230,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
           Text(
             i == 0 ? _deadline : _goal,
             style: TextStyle(
-              color: (i == 0 ? _deadline : _goal) == '请选择'
+              color: (i == 0 ? _deadline : _goal) == _choose
                   ? color = Colors.grey
                   : color = Colors.black,
             ),
@@ -202,10 +249,10 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         context: context,
         builder: (context) {
           return HsgSingleChoiceDialog(
-            title: "币种选择",
+            title: S.of(context).currency_choice,
             items: list,
-            positiveButton: '确定',
-            negativeButton: '取消',
+            positiveButton: S.of(context).confirm,
+            negativeButton: S.of(context).cancel,
             lastSelectedPosition: groupValue,
           );
         });
@@ -231,7 +278,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
             Text(
               _currency,
               style: TextStyle(
-                color: _currency == '请选择'
+                color: _currency == _choose
                     ? color = Colors.grey
                     : color = Colors.black,
               ),
@@ -306,8 +353,6 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
       setState(() {
         i == 0 ? _deadline = str : _goal = str;
       });
-      print(index);
-      print(str);
     });
   }
 }
@@ -345,8 +390,8 @@ class _PickerTool {
             title: new Text(title ?? name,
                 style: TextStyle(color: Colors.grey, fontSize: 17)),
             selecteds: selecteds,
-            cancelText: '取消',
-            confirmText: '确定',
+            cancelText: S.of(context).cancel,
+            confirmText: S.of(context).confirm,
             cancelTextStyle: TextStyle(color: Colors.black, fontSize: 17),
             confirmTextStyle: TextStyle(color: Colors.black, fontSize: 17),
             textAlign: TextAlign.right,
