@@ -26,7 +26,6 @@ import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_rate_page.dart';
 
-import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
 //import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
@@ -75,7 +74,6 @@ var pageForexTrading = '/forex_trading_page';
 var pageTest = '/test_page';
 
 var appRoutes = {
-  pageTest: (context) => SimpleDemoPageBody(),
   pageLogin: (context) => LoginPage(),
   pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
