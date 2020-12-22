@@ -1,0 +1,130 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+/// 外汇买卖
+/// Author: CaiTM
+/// Date: 2020-12-21
+
+import 'package:json_annotation/json_annotation.dart';
+
+part 'forex_trading.g.dart';
+
+// 查询账户可用余额
+@JsonSerializable()
+class GetCardBalReq {
+  @JsonKey(name: 'cardNo')
+  String cardNo;
+
+  GetCardBalReq({
+    this.cardNo,
+  });
+
+  factory GetCardBalReq.fromJson(Map<String, dynamic> srcJson) =>
+      _$GetCardBalReqFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$GetCardBalReqToJson(this);
+}
+
+@JsonSerializable()
+class GetCardBalResp {
+  @JsonKey(name: 'cardNo')
+  String cardNo;
+  @JsonKey(name: 'defaultCcy')
+  String defaultCcy;
+  @JsonKey(name: 'totalAmt')
+  String totalAmt;
+  @JsonKey(name: 'cardListBal')
+  List<CardListBal> cardListBal;
+
+  GetCardBalResp(
+    this.cardNo,
+    this.defaultCcy,
+    this.totalAmt,
+    this.cardListBal,
+  );
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  factory GetCardBalResp.fromJson(Map<String, dynamic> srcJson) =>
+      _$GetCardBalRespFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$GetCardBalRespToJson(this);
+}
+
+@JsonSerializable()
+class CardListBal {
+  @JsonKey(name: 'cardNo')
+  String cardNo;
+  @JsonKey(name: 'avaBal')
+  String avaBal;
+  @JsonKey(name: 'ccy')
+  String ccy;
+  @JsonKey(name: 'currBal')
+  String currBal;
+  @JsonKey(name: 'equAmt')
+  String equAmt;
+
+  CardListBal(
+    this.cardNo,
+    this.avaBal,
+    this.ccy,
+    this.currBal,
+    this.equAmt,
+  );
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  factory CardListBal.fromJson(Map<String, dynamic> srcJson) =>
+      _$CardListBalFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$CardListBalToJson(this);
+}
+
+//汇率计算
+@JsonSerializable()
+class TransferTrialReq {
+  @JsonKey(name: 'amount')
+  double amount;
+  @JsonKey(name: 'corrCcy')
+  String corrCcy;
+  @JsonKey(name: 'defaultCcy')
+  String defaultCcy;
+
+  TransferTrialReq({
+    this.amount,
+    this.corrCcy,
+    this.defaultCcy,
+  });
+
+  factory TransferTrialReq.fromJson(Map<String, dynamic> srcJson) =>
+      _$TransferTrialReqFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$TransferTrialReqToJson(this);
+}
+
+@JsonSerializable()
+class TransferTrialResp {
+  @JsonKey(name: 'rate')
+  String rate;
+  @JsonKey(name: 'resultAmount')
+  String resultAmount;
+
+  TransferTrialResp(
+    this.rate,
+    this.resultAmount,
+  );
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  factory TransferTrialResp.fromJson(Map<String, dynamic> srcJson) =>
+      _$TransferTrialRespFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$TransferTrialRespToJson(this);
+}

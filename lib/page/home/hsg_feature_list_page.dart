@@ -201,6 +201,7 @@ class _FeatureListPageState extends State<FeatureListPage> {
                 Navigator.pushNamed(context, pageLoanInterestRate);
               } else if (S.current.foreign_exchange == title) {
                 //'外汇买卖'
+                Navigator.pushNamed(context, pageForexTrading);
               } else if (S.current.exchange_rate == title) {
                 //'汇率查询'
               } else if (S.current.electronic_statement == title) {

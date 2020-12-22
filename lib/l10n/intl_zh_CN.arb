@@ -131,6 +131,8 @@
   "year":"年",
   "day":"日",
   "periods": "期",
+  "please_select": "请选择",
+  "please_input": "请输入",
   "transaction_info": "交易详情",
   "transaction_account": "交易账户",
   "transaction_amount": "交易金额",

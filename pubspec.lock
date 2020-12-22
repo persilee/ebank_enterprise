@@ -8,6 +8,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "14.0.0"
+  ai_decimal_accuracy:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: b629e1027babe978d54f0578df97fd4e2c774916
+      url: "https://github.com/pdliuw/ai_decimal_accuracy.git"
+    source: git
+    version: "1.0.3"
   analyzer:
     dependency: transitive
     description:
