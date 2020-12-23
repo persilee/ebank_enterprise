@@ -40,10 +40,15 @@ dependencies:
   webview_flutter: ^1.0.7
   date_format: ^1.0.6
   pin_code_text_field: ^1.6.0 #密码输入框
+  flutter_tableview: ^1.0.1
+  flutter_easyrefresh: ^2.1.7
   flutter_cupertino_date_picker:
     git:
       url: https://github.com/imshashank/flutter-cupertino-date-picker # Repo
       ref: master # Branch name
+  ai_decimal_accuracy:
+    git:
+      url: https://github.com/pdliuw/ai_decimal_accuracy.git
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +84,10 @@ flutter:
     - images/tabbar/tabbar_approval_select.png
     - images/tabbar/tabbar_mine_normal.png
     - images/tabbar/tabbar_mine_select.png
+    - images/tabbar/tabbar_download.png
+    - images/tabbar/tabbar_we_chat.png
+    - images/tabbar/tabbar_wechat_moments.png
+    - images/tabbar/tabbar_delete.png
 
     #home
     #home_nav

@@ -359,13 +359,13 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
         .then((data) {
       setState(() {
         if (data.totalAssets != '0') {
-          ddTotal = data.totalAssets;
+          totalAssets = data.totalAssets;
         }
         if (data.netAssets != '0') {
-          ddTotal = data.netAssets;
+          netAssets = data.netAssets;
         }
         if (data.totalLiability != '0') {
-          ddTotal = data.totalLiability;
+          totalLiabilities = data.totalLiability;
         }
         localCcy = data.ccy;
       });

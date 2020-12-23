@@ -564,6 +564,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, pageTimeDepositRecord);
       } else if (S.current.deposit_rate == title) {
         //'利率查看'
+        Navigator.pushNamed(context, pageMyDepositRate);
       } else if (S.current.loan_apply == title) {
         //'贷款申请'
       } else if (S.current.loan_record == title) {
@@ -575,8 +576,10 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, pageLoanInterestRate);
       } else if (S.current.foreign_exchange == title) {
         //'外汇买卖'
+        Navigator.pushNamed(context, pageForexTrading);
       } else if (S.current.exchange_rate == title) {
         //'汇率查询'
+
       } else if (S.current.electronic_statement == title) {
         //'电子结单'
         Navigator.pushNamed(context, pageElectronicStatement);
