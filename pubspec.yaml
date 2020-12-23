@@ -39,7 +39,7 @@ dependencies:
   encrypt: ^4.0.0 #AES加解密
   webview_flutter: ^1.0.7
   date_format: ^1.0.6
-  pin_code_text_field: ^1.6.0 #密码输入款
+  pin_code_text_field: ^1.6.0 #密码输入框
   flutter_cupertino_date_picker:
     git:
       url: https://github.com/imshashank/flutter-cupertino-date-picker # Repo

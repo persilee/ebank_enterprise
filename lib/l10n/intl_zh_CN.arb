@@ -62,6 +62,7 @@
   "hint_repayment_principal": "请输入本金",
   "repayment_succeed": "还款成功",
   "repayment_succeed_p": "还款成功!",
+  "please_input_the_payment_password": "请输入支付密码",
   "setChangLoginPasd": "设置登录密码",
   "plaseSetPsd": "请设置登录密码",
   "transfer": "转账",

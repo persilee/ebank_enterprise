@@ -86,7 +86,7 @@ class _RepaySuccessPageState extends State<RepaySuccessPage> {
             _getPadding(0, 15, 0, 0),
             Text(
               S.of(context).repayment_succeed_p,
-              style: TextStyle(fontSize: 16, color: Color(0xFF282828)),
+              style: TextStyle(fontSize: 16, color: Color(0xFF282828),fontWeight: FontWeight.bold),
             ),
           ],
         ));
@@ -117,8 +117,6 @@ class _RepaySuccessPageState extends State<RepaySuccessPage> {
         padding: EdgeInsets.fromLTRB(60, 15, 60, 15),
         onPressed: () {
           Navigator.of(context).pop(1);
-          // Navigator.pushNamed(context, pageLimitDetails);
-
         },
         shape: RoundedRectangleBorder(
           side: BorderSide.none,

@@ -4,11 +4,15 @@
 /// Date: 2020-12-18
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/loan_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
+import 'package:ebank_mobile/data/source/model/post_repayment.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 class RepayConfirmPage extends StatefulWidget {
@@ -25,17 +29,35 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
   var repayInterest = ''; //还款利息
   var fine = ''; //罚金
   var totalRepay = ''; //还款总额
+  var pwd = '111111';
   Map message = new Map();
+
+  //请求数据
+  var acNo = '';
+  var dueAmount = '';
+  var instalNo = '';
+  var interestAmount = '';
+  var penaltyAmount = '';
+  var principalAmount = '';
+  var prodCode = '';
+  var refNo = '';
+  var repaymentAcNo = '';
+  var repaymentAcType = '';
+  var repaymentCiName = '';
+  var repaymentMethod = '';
+  var rescheduleType = '';
+  var totalAmount = '';
   //创建文本控制器实例
   TextEditingController _inputController = new TextEditingController();
+
   @override
   void initState() {
     super.initState();
     _inputController.addListener(() {
       var text = _inputController.text;
-      if (text == '111111') {
-        Navigator.of(context)..pop();
-        Navigator.pushReplacementNamed(context, pageRepaySuccess,arguments: message);
+      print(text);
+      if (text == pwd) {
+        _loadData();
       }
     });
     //初始化
@@ -47,23 +69,82 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
     repayInterest = '0.00';
     fine = '0.00';
     totalRepay = '0.00';
+
+    //请求数据
+    acNo = '';
+    dueAmount = '';
+    instalNo = '';
+    interestAmount = '';
+    penaltyAmount = '';
+    principalAmount = '';
+    prodCode = '';
+    refNo = '';
+    repaymentAcNo = '';
+    repaymentAcType = '';
+    repaymentCiName = '';
+    repaymentMethod = '';
+    rescheduleType = '';
+    totalAmount = '';
+  }
+
+  Future<void> _loadData() async {
+    var req = new PostRepaymentReq(
+        acNo,
+        dueAmount,
+        instalNo,
+        interestAmount,
+        penaltyAmount,
+        principalAmount,
+        prodCode,
+        refNo,
+        repaymentAcNo,
+        repaymentAcType,
+        repaymentCiName,
+        repaymentMethod,
+        rescheduleType,
+        totalRepay);
+    LoanDataRepository().postRepayment(req, "postRepayment").then((data) {
+      if (data != null) {
+        Navigator.of(context)..pop();
+        Navigator.pushReplacementNamed(context, pageRepaySuccess,
+            arguments: message);
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     message = ModalRoute.of(context).settings.arguments;
+    Loan loanDetail = message['LoanDetail'];
     setState(() {
       message = ModalRoute.of(context).settings.arguments;
       currency = message['Currency'];
       loanInterest = message['LoanInterest'];
       debitAccount = message['DebitAccount'];
-      repayPrincipal = FormatUtil.formatSringToMoney(message['RepayPrincipal']);
-      repayInterest = FormatUtil.formatSringToMoney(message['RepayInterest']);
-      fine = FormatUtil.formatSringToMoney(message['Fine']);
-      totalRepay = FormatUtil.formatSringToMoney(message['TotalRepay']);
-      restLoan = FormatUtil.formatSringToMoney(
+      repayPrincipal = message['RepayPrincipal'];
+      repayInterest = message['RepayInterest'];
+      fine = message['Fine'];
+      totalRepay = message['TotalRepay'];
+      restLoan =
           (message['LoanBalance'] - double.parse(message['RepayPrincipal']))
-              .toString());
+              .toString();
+      //请求数据
+      acNo = loanDetail.acNo;
+      dueAmount = '';
+      instalNo = '';
+      interestAmount = repayInterest;
+      penaltyAmount = fine;
+      principalAmount = repayPrincipal;
+      prodCode = 'LN000008';
+      refNo = '';
+      repaymentAcNo = loanDetail.repaymentAcNo;
+      repaymentAcType = '';
+      repaymentCiName = '';
+      repaymentMethod = message['RepaymentMethod'];
+      rescheduleType = 'I';
+      totalAmount = totalRepay;
     });
     var container1 = Container(
       color: Colors.white,
@@ -74,13 +155,17 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
           //币种
           _contentColumn(S.of(context).currency, currency),
           //还款总额
-          _contentColumn(S.of(context).total_repayment, totalRepay),
+          _contentColumn(S.of(context).total_repayment,
+              FormatUtil.formatSringToMoney(totalRepay)),
           //还款本金
-          _contentColumn(S.of(context).repayment_principal, repayPrincipal),
+          _contentColumn(S.of(context).repayment_principal,
+              FormatUtil.formatSringToMoney(repayPrincipal)),
           //还款利息
-          _contentColumn(S.of(context).repayment_interest, repayInterest),
+          _contentColumn(S.of(context).repayment_interest,
+              FormatUtil.formatSringToMoney(repayInterest)),
           //罚金
-          _contentColumn(S.of(context).fine, fine),
+          _contentColumn(
+              S.of(context).fine, FormatUtil.formatSringToMoney(fine)),
         ],
       ),
     );
@@ -91,7 +176,8 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           //剩余贷款
-          _contentColumn(S.of(context).remain_loan_amount, restLoan),
+          _contentColumn(S.of(context).remain_loan_amount,
+              FormatUtil.formatSringToMoney(restLoan)),
           //当前利率
           _contentColumn(S.of(context).loan_rate, loanInterest),
           //扣款账号
@@ -110,7 +196,6 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
         onPressed: () {
           //弹出底部弹窗输入密码
           _bottomDialog(context);
-          // __inputPassword();
         },
         shape: RoundedRectangleBorder(
           side: BorderSide.none,
@@ -144,14 +229,66 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
   _bottomDialog(BuildContext context) async {
     showModalBottomSheet(
         isScrollControlled: true,
+        enableDrag: false,
+        isDismissible: false,
         context: context,
         builder: (BuildContext context) {
-          return __inputPassword();
+          return _inputPassword();
         });
   }
 
+  Widget _inputPassword() {
+    var stackTitle = Stack(
+      fit: StackFit.loose,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              S.of(context).please_input_the_payment_password,
+              style: TextStyle(fontSize: 15),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Icon(
+                Icons.clear,
+                color: HsgColors.hintText,
+                size: 20,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+    return Container(
+      height: 500,
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(10, 15, 10, 10),
+            child: stackTitle,
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 1),
+            child: Divider(
+              height: 0,
+              color: HsgColors.textHintColor,
+            ),
+          ),
+          _pwdFrame(),
+        ],
+      ),
+    );
+  }
 
-  _test() {
+  Widget _pwdFrame() {
     return Container(
         padding: EdgeInsets.only(top: 15),
         width: MediaQuery.of(context).size.width,
@@ -159,13 +296,15 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
         child: PinCodeTextField(
           pinBoxHeight: (MediaQuery.of(context).size.width - 90) / 6,
           pinBoxWidth: (MediaQuery.of(context).size.width - 90) / 6,
-          pinBoxBorderWidth: 0.3,
+          pinBoxBorderWidth: 1,
           pinBoxRadius: 3,
+          defaultBorderColor: HsgColors.hintText,
+          hasTextBorderColor: HsgColors.hintText,
           controller: _inputController,
           isCupertino: false,
           maxLength: 6,
           hideCharacter: true,
-          maskCharacter: "·",
+          maskCharacter: "●",
           pinBoxDecoration: ProvidedPinBoxDecoration.defaultPinBoxDecoration,
           pinTextStyle: TextStyle(fontSize: 20),
           autofocus: true,
@@ -175,31 +314,6 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
           },
           keyboardType: TextInputType.number,
         ));
-  }
-
-  __inputPassword() {
-    return Container(
-      height: 425,
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(10, 15, 10, 10),
-            child: Text(
-              "请输入支付密码",
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 5),
-            child: Divider(
-              height: 0,
-              color: HsgColors.textHintColor,
-            ),
-          ),
-          _test(),
-        ],
-      ),
-    );
   }
 
   Widget _getPadding(double l, double t, double r, double b) {
@@ -234,67 +348,5 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
             ),
           ],
         ));
-  }
-}
-
-///  继承CustomPainter ，来实现自定义图形绘制
-class MyCustom extends CustomPainter {
-  ///  传入的密码，通过其长度来绘制圆点
-  String pwdLength;
-  MyCustom(this.pwdLength);
-
-  ///  此处Sizes是指使用该类的父布局大小
-  @override
-  void paint(Canvas canvas, Size size) {
-    // 密码画笔
-    Paint mPwdPaint;
-    Paint mRectPaint;
-
-    // 初始化密码画笔
-    mPwdPaint = new Paint();
-    mPwdPaint..color = Colors.black;
-
-//   mPwdPaint.setAntiAlias(true);
-    // 初始化密码框
-    mRectPaint = new Paint();
-    mRectPaint..color = Color(0xff707070);
-
-    ///  圆角矩形的绘制
-    RRect r = new RRect.fromLTRBR(0.0, 0.0, size.width, size.height,
-        new Radius.circular(size.height / 12));
-
-    ///  画笔的风格
-    mRectPaint.style = PaintingStyle.stroke;
-    canvas.drawRRect(r, mRectPaint);
-
-    ///  将其分成六个 格子（六位支付密码）
-    var per = size.width / 6.0;
-    var offsetX = per;
-    while (offsetX < size.width) {
-      canvas.drawLine(new Offset(offsetX, 0.0),
-          new Offset(offsetX, size.height), mRectPaint);
-      offsetX += per;
-    }
-
-    ///  画实心圆
-    var half = per / 2;
-    var radio = per / 8;
-    mPwdPaint.style = PaintingStyle.fill;
-
-    ///  当前有几位密码，画几个实心圆
-    for (int i = 0; i < pwdLength.length && i < 6; i++) {
-      canvas.drawArc(
-          new Rect.fromLTRB(i * per + half - radio, size.height / 2 - radio,
-              i * per + half + radio, size.height / 2 + radio),
-          0.0,
-          2 * 3.0,
-          true,
-          mPwdPaint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
   }
 }

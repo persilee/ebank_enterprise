@@ -1,15 +1,20 @@
+import 'package:ebank_mobile/data/source/loan_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhangqirong
 /// Date: 2020-12-16
 
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
+import 'package:ebank_mobile/data/source/model/get_loan_money_caculate.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RepayInputPage extends StatefulWidget {
   @override
@@ -22,11 +27,18 @@ class _RepayInputPageState extends State<RepayInputPage> {
   double max = 0; //还款最大值(贷款余额)
   var loanInterest = ''; //贷款利率
   var debitAccount = ''; //扣款账号
-  var repayPrincipal = ''; //还款金额
+
   var _repayInterest = ''; //还款利息
   var _fine = ''; //罚金
   var _totalRepay = ''; //还款总额
   bool _isBtnDisabled = false;
+
+  var acNo = '';
+  var instalNo = '';
+  var isInterestCharge = '';
+  var repayPrincipal = ''; //还款金额
+  var repaymentMethod = '';
+  var rescheduleType = 'I';
 
   //创建文本控制器实例
   TextEditingController _inputController = new TextEditingController();
@@ -36,13 +48,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
     super.initState();
     _inputController.addListener(() {
       String text = _inputController.text;
-      RegExp postalcode = new RegExp(r'^(0\d)');
-      if (postalcode.hasMatch(text)) {
-        _inputController.text = text.substring(1);
-        _inputController.selection =
-            TextSelection.collapsed(offset: _inputController.text.length);
-      }
-      repayPrincipal = _inputController.text;
+
       int length = text.length;
       if (length <= 0) {
         setState(() {
@@ -52,6 +58,24 @@ class _RepayInputPageState extends State<RepayInputPage> {
           _totalRepay = '0.00';
         });
       } else {
+        RegExp postalcode = new RegExp(r'^(0\d)');
+        if (postalcode.hasMatch(text)) {
+          _inputController.text = text.substring(1);
+          _inputController.selection =
+              TextSelection.collapsed(offset: _inputController.text.length);
+        }
+        if (double.parse(_inputController.text) > max) {
+          _inputController.text = formatDouble(max, 2);
+          _inputController.selection =
+              TextSelection.collapsed(offset: _inputController.text.length);
+        }
+        repayPrincipal = _inputController.text;
+        if (double.parse(repayPrincipal) == max) {
+          repaymentMethod = "SETTLEMENT";
+        }else{
+          repaymentMethod = "PART_PREPAYMENT";
+        }
+        _loadData();
         if (double.parse(text) != 0) {
           _isBtnDisabled = true;
         }
@@ -66,7 +90,9 @@ class _RepayInputPageState extends State<RepayInputPage> {
     _repayInterest = '0.00';
     _fine = '0.00';
     _totalRepay = '0.00';
-    
+    repaymentMethod = "PART_PREPAYMENT";
+
+    message.putIfAbsent('RepaymentMethod', () => repaymentMethod);
     message.putIfAbsent('LoanBalance', () => max);
     message.putIfAbsent('Currency', () => currency);
     message.putIfAbsent('TotalRepay', () => _totalRepay);
@@ -77,10 +103,34 @@ class _RepayInputPageState extends State<RepayInputPage> {
     message.putIfAbsent('DebitAccount', () => debitAccount);
   }
 
+  Future<void> _loadData() async {
+    LoanDataRepository()
+        .getLoanCaculate(
+            GetLoanCaculateReq(acNo, instalNo, isInterestCharge, repayPrincipal,
+                repaymentMethod, rescheduleType),
+            "getLoanMoneyCaculate")
+        .then((data) {
+      if (data != null) {
+        setState(() {
+          if (data.feeAmount != null) {
+            _fine = data.feeAmount;
+          }
+          _repayInterest = data.interestAmount;
+          _totalRepay = data.repaymentAmount;
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Loan loanDetail = ModalRoute.of(context).settings.arguments;
     setState(() {
+      message.putIfAbsent('LoanDetail', () => loanDetail);
+      acNo = loanDetail.acNo;
+      instalNo = loanDetail.restPeriods.toString();
       max = double.parse(loanDetail.unpaidPrincipal);
       debitAccount = FormatUtil.formatSpace4(loanDetail.repaymentAcNo);
       loanInterest =
@@ -119,11 +169,11 @@ class _RepayInputPageState extends State<RepayInputPage> {
           //还款本金
           _repayPrincipal(loanDetail),
           //还款利息
-          _contentColumn(S.of(context).repayment_interest, _repayInterest),
+          _contentColumn(S.of(context).repayment_interest, FormatUtil.formatSringToMoney(_repayInterest)),
           //罚金
-          _contentColumn(S.of(context).fine, _fine),
+          _contentColumn(S.of(context).fine, FormatUtil.formatSringToMoney(_fine)),
           //还款总额
-          _contentColumn(S.of(context).total_repayment, _totalRepay),
+          _contentColumn(S.of(context).total_repayment, FormatUtil.formatSringToMoney(_totalRepay)),
         ],
       ),
     );
@@ -178,6 +228,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
         message['Fine'] = _fine;
         message['LoanInterest'] = loanInterest;
         message['DebitAccount'] = debitAccount;
+        message['RepaymentMethod'] = repaymentMethod;
         Navigator.pushNamed(context, pageRepayConfirm, arguments: message);
       };
     } else {
@@ -198,16 +249,6 @@ class _RepayInputPageState extends State<RepayInputPage> {
           .substring(0, num.toString().lastIndexOf(".") + postion + 1)
           .toString();
     }
-  }
-
-  _change(String intRate) {
-    repayPrincipal = _inputController.text;
-    String repayDayRate = formatDouble((double.parse(intRate) / 360), 5);
-    _repayInterest = formatDouble(
-        double.parse(repayDayRate) * double.parse(_inputController.text), 2);
-    _totalRepay = formatDouble(
-        (double.parse(_inputController.text) + double.parse(_repayInterest)),
-        2);
   }
 
   //还款金额输入
@@ -238,14 +279,11 @@ class _RepayInputPageState extends State<RepayInputPage> {
               ),
               onChanged: (text) {
                 //输入框数据修改后
-                if (double.parse(_inputController.text) > max) {
-                  _inputController.text = formatDouble(max, 2);
-                  _inputController.selection = TextSelection.collapsed(
-                      offset: _inputController.text.length);
-                }
+
                 setState(() {
-                  _change(loanDetail.intRate);
+                  repayPrincipal = _inputController.text;
                 });
+                // _loadData();
               },
             ),
           ),
@@ -268,8 +306,9 @@ class _RepayInputPageState extends State<RepayInputPage> {
               _inputController.selection =
                   TextSelection.collapsed(offset: _inputController.text.length);
               setState(() {
-                _change(loanDetail.intRate);
+                repayPrincipal = _inputController.text;
               });
+              // _loadData();//达到最大值后不修改了
             },
           ),
         ),

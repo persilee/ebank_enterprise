@@ -61,6 +61,7 @@
   "early_repayment": "Pay Off",
   "repayment_succeed": "Repayment Succeed",
   "repayment_succeed_p": "Repayment Succeed!",
+  "please_input_the_payment_password": "Please Input The Payment Password",
   "hint_repayment_principal": "Please Enter The Principal",
   "setChangLoginPasd": "Chang Login Password",
   "plaseSetPsd": "Please Set the Login Password",
