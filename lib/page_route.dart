@@ -25,7 +25,7 @@ import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_rate_page.dart';
 
-import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
+//import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
 //import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
@@ -36,6 +36,7 @@ import 'package:ebank_mobile/page/mine/feedback_page.dart';
 import 'package:ebank_mobile/page/mine/change_logPswd_page.dart';
 
 import 'feature_demo/time_deposit_contract_succeed_page.dart';
+import 'page/home/hsg_feature_list_page.dart';
 
 var pageHome = '/';
 // var pageLogin = "151";
@@ -73,7 +74,7 @@ var pageTimeDepostProduct = '/time_depost_product_page';
 var pageTest = '/test_page';
 
 var appRoutes = {
-  pageTest: (context) => SimpleDemoPageBody(),
+  // pageTest: (context) => SimpleDemoPageBody(),
   pageLogin: (context) => LoginPage(),
   pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
@@ -91,6 +92,7 @@ var appRoutes = {
   aboutUs: (context) => AboutUsPage(),
   feedback: (context) => FeedbackPage(),
   changeLgPs: (context) => ChangeLoPS(),
+  //pageFeatureList(context) => FeatureListPage(),
   pageAccountOverview: (context) => AccountOverviewPage(),
   pageDetailList: (context) => DetailListPage(),
   pageDetailInfo: (context) => DetailInfoPage(),

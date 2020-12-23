@@ -21,6 +21,7 @@ class TransferPage extends StatefulWidget {
 
 class _TransferPageState extends State<TransferPage> {
   var _partnerListData = [];
+  var cards = [];
   //是否显示无数据页面 true显示
   bool _isShowNoDataWidget = false;
   //顶部网格数据
@@ -105,6 +106,7 @@ class _TransferPageState extends State<TransferPage> {
                 String title = gridData[index]['btnTitle'];
                 if (S.current.transfer_type_0 == title) {
                   //行内转账
+                  //  go2Detail(cards[1]);
                   Navigator.pushNamed(context, pageTransferInternal);
                 } else if (S.of(context).transfer_appointment == title) {
                   //'预约转账'
@@ -378,6 +380,10 @@ class _TransferPageState extends State<TransferPage> {
       ),
     );
   }
+
+  // void go2Detail(RemoteBankCard card) {
+  //   Navigator.pushNamed(context, pageTransferInternal, arguments: card);
+  // }
 
   Future<void> _loadData() async {
     TransferDataRepository()

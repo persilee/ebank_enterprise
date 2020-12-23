@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: lijiawei
@@ -11,6 +13,12 @@ class TransferDataRepository {
       GetTransferPartnerListReq req, String tag) {
     return request('/ddep/transferpartner/getTransferPartnerList', req, tag,
         (data) => TransferPartnerListResp.fromJson(data));
+  }
+
+  Future<TransferByAccountResp> getTransferByAccount(
+      GetTransferByAccount req, String tag) {
+    return request('/ddep/transfer/doTransferAccout', req, tag,
+        (data) => TransferByAccountResp.fromJson(data));
   }
 
   static final _instance = TransferDataRepository._internal();

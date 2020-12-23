@@ -54,7 +54,22 @@
   "setChangLoginPasd": "Chang Login Password",
   "plaseSetPsd": "Please Set the Login Password",
   "transfer": "Transfer",
-  "transfer_record": "Transfer Record",
+  "transfer_record": "Transfer RNameecord",
+
+
+  "transfer_amount": "Transfer Amount",
+  "int_input_tran_amount": "Please input transfer amount",
+  "name": "Name",
+  "hint_input_receipt_name": "Please input the beneficiary name",
+  "hint_input_receipt_account": "Please input beneficiary account number",
+  "account_num": "Account No.",
+  "tran_limit_amt_with_value" : "Limit ：",
+  "transfer_from": "Transfer From",
+  "balance_with_value":"Balance：",
+  "receipt_side" :"Transfer To",
+  "transfer_postscript":"Remark",
+  
+
   "transfer_model": "Transfer Template",
   "time_deposiy" : "Time Deposit",
   "deposit_open": "Time Deposit Opening",
