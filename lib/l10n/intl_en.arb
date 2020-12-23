@@ -154,5 +154,15 @@
   "we_chat": "Wechat",
   "moments": "Moments",
   "download": "Download",
-  "currency_choice":"Currency"
+  "currency_choice":"Currency",
+  "debit_account": "Debit Account",
+  "debit_currency": "Debit Currency",
+  "available_balance": "Available Balance",
+  "debit_amount": "Debit Amount",
+  "credit_account": "Credit Account",
+  "credit_currency": "Credit Currency",
+  "rate_of_exchange": "Exchange Rate",
+  "credit_amount": "Credit Amount",
+  "currency_option": "Currency Option",
+  "foreign_exchange_explain": "The above amount is the trial amount, please refer to the actual amount received!"
 }

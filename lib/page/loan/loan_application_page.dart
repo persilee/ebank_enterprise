@@ -43,6 +43,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   var _contactsController = new TextEditingController(); //联系人文本监听器
   var _phoneController = new TextEditingController(); //联系人手机号码文本监听器
   var _moneyController = new TextEditingController(); //申请金额文本监听器
+  var _remarkController = new TextEditingController(); //备注文本监听器
   String language = Intl.getCurrentLocale(); //获取当前语言
   List<String> _deadLineLists = List(); //贷款期限列表
   int _index = 3; //贷款期限对应的几个月
@@ -115,15 +116,13 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
                 _goal,
                 _phoneController.text,
                 "LN000008",
-                "无",
+                _remarkController.text,
                 "EPI",
                 "MONTH",
                 _index),
             "getLoanApplication")
-        .then((data) {
-      print(data.userPhone);
-      print(_phoneController.text + "==========");
-    }).catchError((e) {
+        .then((data) {})
+        .catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
   }
@@ -164,7 +163,8 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
                   S.of(context).loan_purpose,
                   _inputBottom(
                       context, S.of(context).loan_purpose, _goalLists, 1)),
-              _input(S.of(context).remark, _inputText(_notRequired, null)),
+              _input(S.of(context).remark,
+                  _inputText(_notRequired, _remarkController)),
               Container(
                 child: Row(
                   children: [_roundCheckBox(), _textContent()],
@@ -185,22 +185,21 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         _deadline != _choose &&
         _goal != _choose &&
         _currency != _choose) {
-      return () async {
-        await _reqData();
-
-        // Navigator.pushNamed(context, pageOperationResult);
-
-        // WidgetsBinding.instance.addPostFrameCallback((_) {
-        //   showModalBottomSheet(
-        //       context: context,
-        //       builder: (context) {
-        //         return Container(
-        //           child: main_keyboard(),
-        //         );
-        //       });
-        // });
+      return () {
+        _reqData();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Container(
+                  child: PasswordInputBox(),
+                );
+              });
+        });
       };
-      // return () => _reqData();
+      // return () {
+      //   _reqData();
+      // };
     } else {
       return null;
     }
@@ -464,9 +463,9 @@ class _PickerTool {
   }
 }
 
-///  自定义 密码输入框 第一步 —— 使用画笔画出单个的框
+/// 自定义密码输入框 使用画笔画出单个的框
 class CustomJPasswordField extends StatelessWidget {
-  ///  传入当前密码
+  //  传入当前密码
   String data;
   CustomJPasswordField(this.data);
 
@@ -478,13 +477,13 @@ class CustomJPasswordField extends StatelessWidget {
   }
 }
 
-///  继承CustomPainter ，来实现自定义图形绘制
+//  继承CustomPainter ，来实现自定义图形绘制
 class MyCustom extends CustomPainter {
-  ///  传入的密码，通过其长度来绘制圆点
+  //  传入的密码，通过其长度来绘制圆点
   String pwdLength;
   MyCustom(this.pwdLength);
 
-  ///  此处Sizes是指使用该类的父布局大小
+  //  此处Sizes是指使用该类的父布局大小
   @override
   void paint(Canvas canvas, Size size) {
     // 密码画笔
@@ -500,15 +499,15 @@ class MyCustom extends CustomPainter {
     mRectPaint = new Paint();
     mRectPaint..color = Color(0xff707070);
 
-    ///  圆角矩形的绘制
+    //  圆角矩形的绘制
     RRect r = new RRect.fromLTRBR(0.0, 0.0, size.width, size.height,
         new Radius.circular(size.height / 12));
 
-    ///  画笔的风格
+    //  画笔的风格
     mRectPaint.style = PaintingStyle.stroke;
     canvas.drawRRect(r, mRectPaint);
 
-    ///  将其分成六个 格子（六位支付密码）
+    //  将其分成六个 格子（六位支付密码）
     var per = size.width / 6.0;
     var offsetX = per;
     while (offsetX < size.width) {
@@ -517,12 +516,12 @@ class MyCustom extends CustomPainter {
       offsetX += per;
     }
 
-    ///  画实心圆
+    //  画实心圆
     var half = per / 2;
     var radio = per / 8;
     mPwdPaint.style = PaintingStyle.fill;
 
-    ///  当前有几位密码，画几个实心圆
+    //  当前有几位密码，画几个实心圆
     for (int i = 0; i < pwdLength.length && i < 6; i++) {
       canvas.drawArc(
           new Rect.fromLTRB(i * per + half - radio, size.height / 2 - radio,
@@ -544,8 +543,8 @@ class MyCustom extends CustomPainter {
 class CustomKbBtn extends StatefulWidget {
   ///  按钮显示的文本内容
   Widget text;
-
-  CustomKbBtn({Key key, this.text, this.callback}) : super(key: key);
+  int i = 0;
+  CustomKbBtn({Key key, this.text, this.callback, this.i}) : super(key: key);
 
   ///  按钮 点击事件的回调函数
   final callback;
@@ -578,10 +577,6 @@ class ButtonState extends State<CustomKbBtn> {
               borderRadius: new BorderRadius.circular(0.0)),
           // 边框颜色
           borderSide: new BorderSide(color: Color(0x10333333)),
-          // child: new Text(
-          //   widget.text,
-          //   style: new TextStyle(color: Color(0xff333333), fontSize: 20.0),
-          // ),
           child: widget.text,
           // 按钮点击事件
           onPressed: back,
@@ -589,8 +584,7 @@ class ButtonState extends State<CustomKbBtn> {
   }
 }
 
-/// 自定义密码 键盘
-
+// 自定义密码键盘
 class MyKeyboard extends StatefulWidget {
   final callback;
 
@@ -603,14 +597,9 @@ class MyKeyboard extends StatefulWidget {
 }
 
 class MyKeyboardStat extends State<MyKeyboard> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  /// 定义 确定 按钮 接口  暴露给调用方
-  ///回调函数执行体
+  //定义确定按钮接口暴露给调用方
+  //回调函数执行体
   var backMethod;
-  void onCommitChange() {
-    widget.callback(new KeyEvent("commit"));
-  }
 
   void onOneChange(BuildContext cont) {
     widget.callback(new KeyEvent("1"));
@@ -660,34 +649,43 @@ class MyKeyboardStat extends State<MyKeyboard> {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      key: _scaffoldKey,
       width: double.infinity,
-      height: 250.0,
+      height: 200.0,
       color: Colors.white,
-      child: new Column(
+      child: Column(
         children: <Widget>[
-          new Container(
-            height: 30.0,
-            color: Colors.white,
-            alignment: Alignment.center,
-            child: new Text(
-              '下滑隐藏',
-              style: new TextStyle(fontSize: 12.0, color: Color(0xff999999)),
-            ),
-          ),
-
-          ///  键盘主体
-          new Column(
+          //  键盘主体
+          Column(
             children: <Widget>[
               ///  第一行
               new Row(
                 children: <Widget>[
                   CustomKbBtn(
-                      text: Text('1'), callback: (val) => onOneChange(context)),
+                      text: Text(
+                        '1',
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Color(0xFF222222),
+                        ),
+                      ),
+                      callback: (val) => onOneChange(context)),
                   CustomKbBtn(
-                      text: Text('2'), callback: (val) => onTwoChange(context)),
+                      text: Text(
+                        '2',
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Color(0xFF222222),
+                        ),
+                      ),
+                      callback: (val) => onTwoChange(context)),
                   CustomKbBtn(
-                      text: Text('3'),
+                      text: Text(
+                        '3',
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Color(0xFF222222),
+                        ),
+                      ),
                       callback: (val) => onThreeChange(context)),
                 ],
               ),
@@ -696,13 +694,32 @@ class MyKeyboardStat extends State<MyKeyboard> {
               new Row(
                 children: <Widget>[
                   CustomKbBtn(
-                      text: Text('4'),
+                      text: Text(
+                        '4',
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Color(0xFF222222),
+                        ),
+                      ),
                       callback: (val) => onFourChange(context)),
                   CustomKbBtn(
-                      text: Text('5'),
+                      text: Text(
+                        '5',
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Color(0xFF222222),
+                        ),
+                      ),
                       callback: (val) => onFiveChange(context)),
                   CustomKbBtn(
-                      text: Text('6'), callback: (val) => onSixChange(context)),
+                      text: Text(
+                        '6',
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Color(0xFF222222),
+                        ),
+                      ),
+                      callback: (val) => onSixChange(context)),
                 ],
               ),
 
@@ -710,30 +727,60 @@ class MyKeyboardStat extends State<MyKeyboard> {
               new Row(
                 children: <Widget>[
                   CustomKbBtn(
-                      text: Text('7'),
+                      text: Text(
+                        '7',
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Color(0xFF222222),
+                        ),
+                      ),
                       callback: (val) => onSevenChange(context)),
                   CustomKbBtn(
-                      text: Text('8'),
+                      text: Text(
+                        '8',
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Color(0xFF222222),
+                        ),
+                      ),
                       callback: (val) => onEightChange(context)),
                   CustomKbBtn(
-                      text: Text('9'),
+                      text: Text(
+                        '9',
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Color(0xFF222222),
+                        ),
+                      ),
                       callback: (val) => onNineChange(context)),
                 ],
               ),
-
-              ///  第四行
-              new Row(
+              // 第四行
+              Row(
                 children: <Widget>[
+                  Container(
+                    color: Colors.grey,
+                    child: CustomKbBtn(text: null, callback: null),
+                  ),
                   CustomKbBtn(
-                      text: Text(' '), callback: (val) => onDeleteChange()),
-                  CustomKbBtn(
-                      text: Text('0'),
+                      text: Text(
+                        '0',
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Color(0xFF222222),
+                        ),
+                      ),
                       callback: (val) => onZeroChange(context)),
-                  CustomKbBtn(
+                  Container(
+                    color: Colors.grey,
+                    child: CustomKbBtn(
                       text: Icon(
                         Icons.backspace_outlined,
+                        size: 25,
                       ),
-                      callback: (val) => onDeleteChange()),
+                      callback: (val) => onDeleteChange(),
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -744,7 +791,7 @@ class MyKeyboardStat extends State<MyKeyboard> {
   }
 }
 
-///  支符密码  用于 密码输入框和键盘之间进行通信
+///  支符密码用于密码输入框和键盘之间进行通信
 class KeyEvent {
   ///  当前点击的按钮所代表的值
   String key;
@@ -753,95 +800,87 @@ class KeyEvent {
   bool isDelete() => this.key == "del";
 }
 
-/// 支付密码  +  自定义键盘
-
-class main_keyboard extends StatefulWidget {
-  static final String sName = "enter";
-
+//自定义密码输入框
+class PasswordInputBox extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    return new keyboardState();
-  }
+  PasswordInputBoxState createState() => PasswordInputBoxState();
 }
 
-class keyboardState extends State<main_keyboard> {
-  /// 用户输入的密码
+class PasswordInputBoxState extends State<PasswordInputBox> {
+  // 用户输入的密码
   String pwdData = '';
-
-  /*
-    GlobalKey：整个应用程序中唯一的键
-    ScaffoldState：Scaffold框架的状态
-    解释：_scaffoldKey的值是Scaffold框架状态的唯一键
-   */
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  // VoidCallback：没有参数并且不返回数据的回调
-  VoidCallback _showBottomSheetCallback;
 
   @override
   void initState() {
     super.initState();
-    _showBottomSheetCallback = _showBottomSheet;
-    _test();
   }
 
-  _test() {
-    if (pwdData == '123456') {
+  _isPassword(String pwd) {
+    if (pwdData == pwd) {
       Navigator.pushNamed(context, pageOperationResult);
+    } else {
+      Fluttertoast.showToast(msg: "密码错误，请重新输入");
+      pwdData = '';
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      key: _scaffoldKey,
-      body: _buildContent(context),
+    return new Container(
+      child: _buildContent(context),
     );
   }
 
   Widget _buildContent(BuildContext c) {
     return new Container(
       width: double.maxFinite,
-      height: 300.0,
+      height: 400.0,
       color: Color(0xffffffff),
       child: new Column(
         children: <Widget>[
           new Padding(
-            padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(),
-                Text(
-                  '请输入支付密码',
-                  style:
-                      new TextStyle(fontSize: 18.0, color: Color(0xff333333)),
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Icon(Icons.clear),
-                ),
-              ],
-            ),
-          ),
+              padding: const EdgeInsets.only(top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 130),
+                    child: Text(
+                      '输入支付密码',
+                      style: new TextStyle(
+                          fontSize: 16.0, color: Color(0xff333333)),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: Icon(
+                        Icons.clear,
+                      ),
+                    ),
+                  ),
+                ],
+              )),
           Divider(
             color: HsgColors.divider,
           ),
-
-          ///密码框
+          //密码框
           new Padding(
-            padding: const EdgeInsets.only(top: 15.0),
+            padding: const EdgeInsets.only(top: 50.0),
             child: _buildPwd(pwdData),
+          ),
+          //键盘框
+          new Padding(
+            padding: const EdgeInsets.only(top: 50.0),
+            child: MyKeyboard(_onKeyDown),
           ),
         ],
       ),
     );
   }
-
-  /// 密码键盘 确认按钮 事件
-  void onAffirmButton() {}
 
   /// 密码键盘的整体回调，根据不同的按钮事件来进行相应的逻辑实现
   void _onKeyDown(KeyEvent data) {
@@ -852,57 +891,27 @@ class keyboardState extends State<main_keyboard> {
         setState(() {});
       }
     }
-//点击了数字按钮时  将密码进行完整的拼接
+//点击了数字按钮时将密码进行完整的拼接
     else {
       if (pwdData.length < 6) {
         pwdData += data.key;
+      }
+      //如果数字有六位则进行密码校验
+      if (pwdData.length == 6) {
+        _isPassword("111111");
       }
       setState(() {});
     }
   }
 
-  /// 底部弹出 自定义键盘  下滑消失
-  void _showBottomSheet() {
-    setState(() {
-      // disable the button  // 禁用按钮
-      _showBottomSheetCallback = null;
-    });
-
-    /*
-      currentState：获取具有此全局键的树中的控件状态
-      showBottomSheet：显示持久性的质感设计底部面板
-      解释：联系上文，_scaffoldKey是Scaffold框架状态的唯一键，因此代码大意为，
-           在Scaffold框架中显示持久性的质感设计底部面板
-     */
-    _scaffoldKey.currentState
-        .showBottomSheet<void>((BuildContext context) {
-          /// 将自定义的密码键盘作为其child   这里将回调函数传入
-          return new MyKeyboard(_onKeyDown);
-        })
-        .closed
-        .whenComplete(() {
-          if (mounted) {
-            setState(() {
-              // re-enable the button  // 重新启用按钮
-              _showBottomSheetCallback = _showBottomSheet;
-            });
-          }
-        });
-  }
-
-  /// 构建 密码输入框  定义了其宽度和高度
+  // 构建密码输入框定义了其宽度和高度
   Widget _buildPwd(var pwd) {
     return new GestureDetector(
       child: new Container(
         width: 250.0,
-        height: 40.0,
-//      color: Colors.white,  自定义密码输入框的使用
-        child: new CustomJPasswordField(pwd),
+        height: 45.0,
+        child: CustomJPasswordField(pwd),
       ),
-// 用户点击输入框的时候，弹出自定义的键盘
-      onTap: () {
-        _showBottomSheetCallback();
-      },
     );
   }
 }

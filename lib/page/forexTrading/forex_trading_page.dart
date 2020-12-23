@@ -20,8 +20,10 @@ class ForexTradingPage extends StatefulWidget {
 
 class _ForexTradingPageState extends State<ForexTradingPage> {
   List<String> accList = [''];
+  List<String> passwordList = [];
   List<String> ccyList1 = ['CNY', 'EUR', 'HKD'];
   List<String> ccyList2 = ['CNY', 'EUR', 'HKD', 'USD'];
+  List<String> strNum = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
   int _paymentAccId = -1;
   int _incomeAccId = -1;
   int _paymentCcyId = -1;
@@ -46,7 +48,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('外汇买卖'),
+        title: Text(S.current.foreign_exchange),
         centerTitle: true,
         elevation: 0,
       ),
@@ -66,7 +68,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.only(left: 15, top: 12),
                 child: Text(
-                  '上述金额为试算金额，请以实际到账金额为准！',
+                  S.current.foreign_exchange_explain,
                   style: TextStyle(
                     fontSize: 12,
                     color: HsgColors.describeText,
@@ -91,12 +93,12 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         onPressed: _incomeAmt == ''
             ? null
             : () {
-                _submitData();
+                _openModalBottomSheet();
               },
         color: Color(0xFF4871FF),
         disabledColor: Color(0xFFD1D1D1),
         child: Text(
-          '确认',
+          S.current.confirm,
           style: TextStyle(
             fontSize: 16,
             color: Colors.white,
@@ -142,7 +144,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('可用余额'),
+              Text(S.current.available_balance),
               Text(_balance),
             ],
           ),
@@ -153,29 +155,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         ),
         Padding(
           padding: EdgeInsets.only(top: 16, bottom: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('支出金额'),
-              Expanded(
-                child: TextField(
-                  textAlign: TextAlign.end,
-                  keyboardType: TextInputType.number,
-                  controller: _payAmtController,
-                  decoration: InputDecoration.collapsed(
-                    hintText: S.current.please_input,
-                    hintStyle: TextStyle(
-                      fontSize: 14,
-                      color: HsgColors.textHintColor,
-                    ),
-                  ),
-                  onChanged: (text) {
-                    _transferTrial();
-                  },
-                ),
-              )
-            ],
-          ),
+          child: _payAmtInput(),
         ),
         Divider(
           height: 0.5,
@@ -214,7 +194,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('汇率'),
+              Text(S.current.rate_of_exchange),
               Text(_rate),
             ],
           ),
@@ -228,7 +208,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('收入金额'),
+              Text(S.current.credit_amount),
               Text(_incomeAmt),
             ],
           ),
@@ -237,11 +217,37 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     );
   }
 
+  Row _payAmtInput() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(S.current.debit_amount),
+        Expanded(
+          child: TextField(
+            textAlign: TextAlign.end,
+            keyboardType: TextInputType.number,
+            controller: _payAmtController,
+            decoration: InputDecoration.collapsed(
+              hintText: S.current.please_input,
+              hintStyle: TextStyle(
+                fontSize: 14,
+                color: HsgColors.textHintColor,
+              ),
+            ),
+            onChanged: (text) {
+              _transferTrial();
+            },
+          ),
+        )
+      ],
+    );
+  }
+
   Row _incomeCurrencyRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('收入币种'),
+        Text(S.current.credit_currency),
         Row(
           children: [
             Padding(
@@ -272,7 +278,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('支出币种'),
+        Text(S.current.debit_currency),
         Row(
           children: [
             Padding(
@@ -303,7 +309,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('支出账户'),
+        Text(S.current.debit_account),
         Row(
           children: [
             Padding(
@@ -334,7 +340,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('收入账户'),
+        Text(S.current.credit_account),
         Row(
           children: [
             Padding(
@@ -394,10 +400,10 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         context: context,
         builder: (context) {
           return HsgSingleChoiceDialog(
-            title: "币种选择",
+            title: S.current.currency_option,
             items: dataList,
-            positiveButton: '确定',
-            negativeButton: '取消',
+            positiveButton: S.current.confirm,
+            negativeButton: S.current.cancel,
             lastSelectedPosition: index,
           );
         });
@@ -478,5 +484,249 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     }
   }
 
-  _submitData() async {}
+  _submitData() async {
+    _openModalBottomSheet();
+  }
+
+  Future _openModalBottomSheet() async {
+    passwordList.clear();
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 25, right: 7),
+                    child: _passwordBoxTitle(context),
+                  ),
+                  Divider(
+                    height: 0.5,
+                    color: HsgColors.divider,
+                  )
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 10),
+                child: _passwordBox(),
+              ),
+              Container(
+                color: Color(0xFFD1D1D1),
+                child: _passwordKeyboard(context),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Row _passwordBoxTitle(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 40,
+            alignment: Alignment.center,
+            child: Text('输入支付密码'),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.clear,
+            size: 18,
+          ),
+        )
+      ],
+    );
+  }
+
+  Column _passwordKeyboard(BuildContext context) {
+    return Column(
+      children: [
+        GridView(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.only(top: 2, bottom: 2),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //横轴元素个数
+            crossAxisCount: 3,
+            mainAxisSpacing: 2.0,
+            crossAxisSpacing: 2.0,
+            childAspectRatio: 2.5,
+          ),
+          children: _sliversSection(context),
+        ),
+        GridView(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //横轴元素个数
+            crossAxisCount: 3,
+            mainAxisSpacing: 2.0,
+            crossAxisSpacing: 2.0,
+            childAspectRatio: 2.5,
+          ),
+          children: [
+            Container(),
+            Container(
+              child: FlatButton(
+                color: Colors.white,
+                child: Text(
+                  '0',
+                  style: TextStyle(
+                    fontSize: 25,
+                    color: Color(0xFF666666),
+                  ),
+                ),
+                onPressed: () {
+                  if (passwordList.length < 6) {
+                    passwordList.add('0');
+                    (context as Element).markNeedsBuild();
+                  }
+                },
+              ),
+            ),
+            Container(
+              child: FlatButton(
+                onPressed: () {
+                  if (passwordList.length > 0) {
+                    passwordList.removeLast();
+                    (context as Element).markNeedsBuild();
+                  }
+                },
+                child: Icon(
+                  Icons.backspace_outlined,
+                ),
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  Row _passwordBox() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 48,
+          height: 48,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
+          ),
+          child: Text(
+            passwordList.length > 0 ? passwordList[0] : '',
+            style: TextStyle(
+              fontSize: 30,
+            ),
+          ),
+        ),
+        Container(
+          width: 48,
+          height: 48,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
+          ),
+          child: Text(
+            passwordList.length > 1 ? passwordList[1] : '',
+            style: TextStyle(
+              fontSize: 30,
+            ),
+          ),
+        ),
+        Container(
+          width: 48,
+          height: 48,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
+          ),
+          child: Text(
+            passwordList.length > 2 ? passwordList[2] : '',
+            style: TextStyle(
+              fontSize: 30,
+            ),
+          ),
+        ),
+        Container(
+          width: 48,
+          height: 48,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
+          ),
+          child: Text(
+            passwordList.length > 3 ? passwordList[3] : '',
+            style: TextStyle(
+              fontSize: 30,
+            ),
+          ),
+        ),
+        Container(
+          width: 48,
+          height: 48,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
+          ),
+          child: Text(
+            passwordList.length > 4 ? passwordList[4] : '',
+            style: TextStyle(
+              fontSize: 30,
+            ),
+          ),
+        ),
+        Container(
+          width: 48,
+          height: 48,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
+          ),
+          child: Text(
+            passwordList.length > 5 ? passwordList[5] : '',
+            style: TextStyle(
+              fontSize: 30,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  List<Widget> _sliversSection(BuildContext context) {
+    List<Widget> section = [];
+    for (var item in strNum) {
+      section.add(
+        FlatButton(
+          color: Colors.white,
+          child: Text(
+            item,
+            style: TextStyle(
+              fontSize: 25,
+              color: Color(0xFF666666),
+            ),
+          ),
+          onPressed: () {
+            if (passwordList.length < 6) {
+              passwordList.add(item);
+              (context as Element).markNeedsBuild();
+            }
+          },
+        ),
+      );
+    }
+    return section;
+  }
 }
