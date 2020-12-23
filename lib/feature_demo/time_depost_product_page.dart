@@ -229,7 +229,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         productList.add(element.tdepProducHeadDTO);
         producDTOList.add(element.tdepProductDTOList);
       });
-
       setState(() {});
     }).catchError(() {
       Fluttertoast.showToast(msg: "${e.toString()}");

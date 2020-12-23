@@ -24,6 +24,7 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.transaction_info),
+        centerTitle: true,
       ),
       body: Container(
         child: Container(

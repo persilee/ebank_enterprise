@@ -120,7 +120,7 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
     var titleBox = InkWell(
       onTap: () {
         //跳转
-        _selectPage(context,loanDetail);
+        _selectPage(context, loanDetail);
       },
       child: SizedBox(
         height: 46,
@@ -197,10 +197,10 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
       ],
     );
   }
-  
+
   //跳转
- _selectPage(BuildContext context,Loan loanDetail) async{
-   List<String> pages = [
+  _selectPage(BuildContext context, Loan loanDetail) async {
+    List<String> pages = [
       S.of(context).view_details,
       S.of(context).view_repayment_plan,
       S.of(context).prepayment,
@@ -208,7 +208,7 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) => BottomMenu(
-              title: S.of(context).loan_account+' '+loanDetail.contactNo,
+              title: S.of(context).loan_account + ' ' + loanDetail.contactNo,
               items: pages,
             ));
     if (result != null && result != false) {
@@ -228,7 +228,5 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
     } else {
       return;
     }
- }
-
-
+  }
 }
