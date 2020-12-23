@@ -55,10 +55,12 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
     super.initState();
     _inputController.addListener(() {
       var text = _inputController.text;
-      print(text);
       if (text == pwd) {
         _loadData();
+      }else{
+        Fluttertoast.showToast(msg: '密码错误!');
       }
+
     });
     //初始化
     currency = 'HKD';
