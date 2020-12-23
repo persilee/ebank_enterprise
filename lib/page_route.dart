@@ -23,14 +23,19 @@ import 'package:ebank_mobile/page/loan/loan_details_page.dart';
 import 'package:ebank_mobile/page/loan/loan_interest_rate_page.dart';
 import 'package:ebank_mobile/page/loan/limit_details_page.dart';
 import 'package:ebank_mobile/page/loan/operation_result_page.dart';
+import 'package:ebank_mobile/page/loan/repay_confirm_page.dart';
+import 'package:ebank_mobile/page/loan/repay_input_page.dart';
 import 'package:ebank_mobile/page/loan/repay_plan_page.dart';
 import 'package:ebank_mobile/page/loan/repay_records_page.dart';
+import 'package:ebank_mobile/page/loan/repay_success_page.dart';
 import 'package:ebank_mobile/page/loan/wait_repay_plan_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
+import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_rate_page.dart';
 
+// import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
 //import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
@@ -47,12 +52,14 @@ var pageLogin = pageHome;
 // var pageCardList = pageHome;
 var pageLoanApplication = "/loan_application_page";
 var pageOperationResult = "/operation_result_page";
+var pageRepaySuccess = "/repay_success_page.dart";
+var pageRepayConfirm = "/repay_confirm_page.dart";
+var pageRepayInput = "/repay_input_page.dart";
 var pageWaitRepayPlan = "/wait_repay_plan_page.dart";
 var pageRepayPlan = "/repay_plan_page";
-var pageLimitDetails = "/limit_detail_page";
+var pageLimitDetails = "/limit_details_page";
 var pageloanDetails = '/loan_details_page';
 var pageLoanInterestRate = '/loan_interest_rate_page';
-var pageLimitDetailsDemo = "/limit_detail_page";
 var pageRepayRecords = "/repay_records_page";
 var pageCardList = '/card_list';
 var pageDialogDemo = '/dialog_demo';
@@ -78,8 +85,10 @@ var pageElectronicStatementDetail = '/electronic_statement_detail_page';
 var pageTimeDepostProduct = '/time_depost_product_page';
 var pageForexTrading = '/forex_trading_page';
 var pageTest = '/test_page';
+var pageTimeDepositContract = '/time_deposit_contract_page';
 
 var appRoutes = {
+  // pageTest: (context) => SimpleDemoPageBody(),
   pageLogin: (context) => LoginPage(),
   pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
@@ -89,6 +98,9 @@ var appRoutes = {
   pageLoanInterestRate: (context) => LoanInterestRatePage(),
   pageCardList: (context) => CardListPage(),
   pageDialogDemo: (context) => DialogDemoPage(),
+  pageRepaySuccess: (context) => RepaySuccessPage(),
+  pageRepayConfirm: (context) => RepayConfirmPage(),
+  pageRepayInput: (context) => RepayInputPage(),
   pageWaitRepayPlan: (context) => WaitRepayPlanPage(),
   pageRepayPlan: (context) => RepayPlanPage(),
   pageLimitDetails: (context) => LimitDetailsPage(),
@@ -111,6 +123,7 @@ var appRoutes = {
   pageElectronicStatement: (context) => ElectronicStatementPage(),
   pageElectronicStatementDetail: (context) => ElectronicStatementDetailPage(),
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
+  // pageTimeDepositContract: (context) => TimeDepositContract(),
   pageForexTrading: (context) => ForexTradingPage(),
 };
 
@@ -118,6 +131,15 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
     return MaterialPageRoute(builder: (context) {
       return CardDetailPage(card: settings.arguments);
+    });
+  }
+  if (settings.name == pageTimeDepositContract) {
+    return MaterialPageRoute(builder: (context) {
+      Map data = settings.arguments;
+      return TimeDepositContract(
+        productList: data['tdepProduct'],
+        producDTOList: data['tdepProducDTOList'],
+      );
     });
   }
   if (settings.name == pageDepositInfo) {
