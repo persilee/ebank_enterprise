@@ -192,12 +192,12 @@ class _FeatureListPageState extends State<FeatureListPage> {
                 //'利率查看'
               } else if (S.current.loan_apply == title) {
                 //'贷款申请'
+                Navigator.pushNamed(context, pageLoanApplication);
               } else if (S.current.loan_record == title) {
                 //'贷款记录'
                 Navigator.pushNamed(context, pageLimitDetails);
               } else if (S.current.loan_rate == title) {
                 //'贷款利率'
-                // Navigator.pushNamed(context, pageloanDemo);
                 Navigator.pushNamed(context, pageLoanInterestRate);
               } else if (S.current.foreign_exchange == title) {
                 //'外汇买卖'

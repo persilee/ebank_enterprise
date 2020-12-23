@@ -1,3 +1,6 @@
+import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
+import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
@@ -15,9 +18,11 @@ import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
 import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
 import 'package:ebank_mobile/page/forexTrading/forex_trading_page.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
+import 'package:ebank_mobile/page/loan/loan_application_page.dart';
 import 'package:ebank_mobile/page/loan/loan_details_page.dart';
 import 'package:ebank_mobile/page/loan/loan_interest_rate_page.dart';
 import 'package:ebank_mobile/page/loan/limit_details_page.dart';
+import 'package:ebank_mobile/page/loan/operation_result_page.dart';
 import 'package:ebank_mobile/page/loan/repay_confirm_page.dart';
 import 'package:ebank_mobile/page/loan/repay_input_page.dart';
 import 'package:ebank_mobile/page/loan/repay_plan_page.dart';
@@ -43,9 +48,10 @@ import 'package:ebank_mobile/page/mine/change_logPswd_page.dart';
 import 'feature_demo/time_deposit_contract_succeed_page.dart';
 
 var pageHome = '/';
-// var pageLogin = "151";
 var pageLogin = pageHome;
 // var pageCardList = pageHome;
+var pageLoanApplication = "/loan_application_page";
+var pageOperationResult = "/operation_result_page";
 var pageRepaySuccess = "/repay_success_page.dart";
 var pageRepayConfirm = "/repay_confirm_page.dart";
 var pageRepayInput = "/repay_input_page.dart";
@@ -86,7 +92,9 @@ var appRoutes = {
   pageLogin: (context) => LoginPage(),
   pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
-  //pageloanDemo: (context) => LoanDemoPage(),
+  // pageTest: (context) => XBTestPage(),
+  pageLoanApplication: (context) => LoanApplicationPage(),
+  pageOperationResult: (context) => OperationResultPage(),
   pageLoanInterestRate: (context) => LoanInterestRatePage(),
   pageCardList: (context) => CardListPage(),
   pageDialogDemo: (context) => DialogDemoPage(),
