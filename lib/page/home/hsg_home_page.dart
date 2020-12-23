@@ -311,7 +311,6 @@ class _HomePageState extends State<HomePage> {
                       'images/home/heaerIcon/home_header_payment.png',
                       40.0, () {
                     print('收支明细');
-                    // Navigator.pushNamed(context, pageTest);
                     Navigator.pushNamed(context, pageDetailList);
                   }),
                 ),
@@ -577,6 +576,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, pageLoanInterestRate);
       } else if (S.current.foreign_exchange == title) {
         //'外汇买卖'
+        Navigator.pushNamed(context, pageForexTrading);
       } else if (S.current.exchange_rate == title) {
         //'汇率查询'
 

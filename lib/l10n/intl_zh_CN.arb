@@ -129,9 +129,10 @@
   "installment_status4":"代偿",
   "unknown":"未知",
   "year":"年",
-  "month":"月",
   "day":"日",
   "periods": "期",
+  "please_select": "请选择",
+  "please_input": "请输入",
   "transaction_info": "交易详情",
   "transaction_account": "交易账户",
   "transaction_amount": "交易金额",
@@ -140,6 +141,7 @@
   "account_lsit": "账户列表",
   "msgId": "流水号",
   "remarks": "备注",
+<<<<<<< HEAD
   "product_name":"产品名称",
   "year_interest_rate":"年利率",
   "deposit_time_limit":"存款期限",
@@ -153,8 +155,20 @@
   "hint_please_select":"请选择",
   "confirm": "确定",
   "cancel": "取消",
+=======
+>>>>>>> 12ac8a6fb64a2d2001010d4ec7ac2d3f4457ea94
   "share": "分享到",
   "we_chat": "微信",
   "moments": "朋友圈",
-  "download": "下载到本地"
+  "download": "下载到本地",
+  "debit_account": "支出账户",
+  "debit_currency": "支出币种",
+  "available_balance": "可用余额",
+  "debit_amount": "支出金额",
+  "credit_account": "收入账户",
+  "credit_currency": "收入币种",
+  "rate_of_exchange": "汇率",
+  "credit_amount": "收入金额",
+  "currency_option": "币种选择",
+  "foreign_exchange_explain": "上述金额为试算金额，请以实际到账金额为准！"
 }
