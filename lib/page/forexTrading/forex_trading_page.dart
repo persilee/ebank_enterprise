@@ -8,8 +8,14 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
+import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -23,7 +29,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   List<String> passwordList = [];
   List<String> ccyList1 = ['CNY', 'EUR', 'HKD'];
   List<String> ccyList2 = ['CNY', 'EUR', 'HKD', 'USD'];
-  List<String> strNum = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  List<RemoteBankCard> cards = [];
   int _paymentAccId = -1;
   int _incomeAccId = -1;
   int _paymentCcyId = -1;
@@ -32,6 +38,9 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   var _incomeAcc = S.current.please_select;
   var _paymentCcy = S.current.please_select;
   var _incomeCcy = S.current.please_select;
+  var _incomeName = '';
+  var _incomeBackCode = '';
+  var _payPassword = '';
   var _balance = '0.00';
   var _payAmtController = TextEditingController();
   var _rate = '';
@@ -77,7 +86,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
               ),
               Container(
                 padding: EdgeInsets.fromLTRB(30, 40, 30, 0),
-                child: _subDataButton(),
+                child: _confirmButton(),
               ),
             ],
           ),
@@ -86,14 +95,15 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     );
   }
 
-  ButtonTheme _subDataButton() {
+  //确认按钮
+  ButtonTheme _confirmButton() {
     return ButtonTheme(
       minWidth: double.infinity,
       child: FlatButton(
         onPressed: _incomeAmt == ''
             ? null
             : () {
-                _openModalBottomSheet();
+                _openBottomSheet();
               },
         color: Color(0xFF4871FF),
         disabledColor: Color(0xFFD1D1D1),
@@ -217,6 +227,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     );
   }
 
+  //支出金额输入框
   Row _payAmtInput() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -367,6 +378,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     );
   }
 
+  //账户选择弹窗
   void _accountList(bool isAcc, int index) async {
     final result = await showHsgBottomSheet(
         context: context,
@@ -389,12 +401,19 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         } else {
           _incomeAccId = result;
           _incomeAcc = accList[_incomeAccId];
+          cards.forEach((item) {
+            if (_incomeAcc == item.cardNo) {
+              _incomeName = item.ciName;
+              _incomeBackCode = item.bankCode;
+            }
+          });
         }
         _transferTrial();
       });
     }
   }
 
+  //币种选择弹窗
   void _currencyList(bool isCcy, int index, List<String> dataList) async {
     final result = await showDialog(
         context: context,
@@ -425,10 +444,30 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     }
   }
 
+  //交易密码窗口
+  void _openBottomSheet() async {
+    passwordList = await showHsgBottomSheet(
+      context: context,
+      builder: (context) {
+        return HsgPasswordDialog(
+          title: S.current.input_password,
+        );
+      },
+    );
+    if (passwordList != null) {
+      if (passwordList.length == 6) {
+        _payPassword = EncryptUtil.aesEncode(passwordList.join());
+        _submitFormData();
+      }
+    }
+  }
+
   _getCardList() async {
     CardDataRepository().getCardList('getCardList').then((data) {
       if (data.cardList != null) {
         setState(() {
+          cards.clear();
+          cards = data.cardList;
           accList.clear();
           data.cardList.forEach((item) {
             accList.add(item.cardNo);
@@ -440,6 +479,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     });
   }
 
+  //获取账户可用余额
   _getCardBal(String cardNo) async {
     ForexTradingRepository()
         .getCardBalByCardNo(GetCardBalReq(cardNo: cardNo), 'GetCardBalReq')
@@ -459,6 +499,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     });
   }
 
+  //计算汇率
   _transferTrial() async {
     if (_paymentAcc != S.current.please_select &&
         _paymentCcy != S.current.please_select &&
@@ -484,249 +525,24 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     }
   }
 
-  _submitData() async {
-    _openModalBottomSheet();
-  }
-
-  Future _openModalBottomSheet() async {
-    passwordList.clear();
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 25, right: 7),
-                    child: _passwordBoxTitle(context),
-                  ),
-                  Divider(
-                    height: 0.5,
-                    color: HsgColors.divider,
-                  )
-                ],
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 10),
-                child: _passwordBox(),
-              ),
-              Container(
-                color: Color(0xFFD1D1D1),
-                child: _passwordKeyboard(context),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Row _passwordBoxTitle(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            height: 40,
-            alignment: Alignment.center,
-            child: Text('输入支付密码'),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.clear,
-            size: 18,
-          ),
-        )
-      ],
-    );
-  }
-
-  Column _passwordKeyboard(BuildContext context) {
-    return Column(
-      children: [
-        GridView(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.only(top: 2, bottom: 2),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //横轴元素个数
-            crossAxisCount: 3,
-            mainAxisSpacing: 2.0,
-            crossAxisSpacing: 2.0,
-            childAspectRatio: 2.5,
-          ),
-          children: _sliversSection(context),
-        ),
-        GridView(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //横轴元素个数
-            crossAxisCount: 3,
-            mainAxisSpacing: 2.0,
-            crossAxisSpacing: 2.0,
-            childAspectRatio: 2.5,
-          ),
-          children: [
-            Container(),
-            Container(
-              child: FlatButton(
-                color: Colors.white,
-                child: Text(
-                  '0',
-                  style: TextStyle(
-                    fontSize: 25,
-                    color: Color(0xFF666666),
-                  ),
-                ),
-                onPressed: () {
-                  if (passwordList.length < 6) {
-                    passwordList.add('0');
-                    (context as Element).markNeedsBuild();
-                  }
-                },
-              ),
-            ),
-            Container(
-              child: FlatButton(
-                onPressed: () {
-                  if (passwordList.length > 0) {
-                    passwordList.removeLast();
-                    (context as Element).markNeedsBuild();
-                  }
-                },
-                child: Icon(
-                  Icons.backspace_outlined,
-                ),
-              ),
-            ),
-          ],
-        )
-      ],
-    );
-  }
-
-  Row _passwordBox() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          width: 48,
-          height: 48,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
-          ),
-          child: Text(
-            passwordList.length > 0 ? passwordList[0] : '',
-            style: TextStyle(
-              fontSize: 30,
-            ),
-          ),
-        ),
-        Container(
-          width: 48,
-          height: 48,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
-          ),
-          child: Text(
-            passwordList.length > 1 ? passwordList[1] : '',
-            style: TextStyle(
-              fontSize: 30,
-            ),
-          ),
-        ),
-        Container(
-          width: 48,
-          height: 48,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
-          ),
-          child: Text(
-            passwordList.length > 2 ? passwordList[2] : '',
-            style: TextStyle(
-              fontSize: 30,
-            ),
-          ),
-        ),
-        Container(
-          width: 48,
-          height: 48,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
-          ),
-          child: Text(
-            passwordList.length > 3 ? passwordList[3] : '',
-            style: TextStyle(
-              fontSize: 30,
-            ),
-          ),
-        ),
-        Container(
-          width: 48,
-          height: 48,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
-          ),
-          child: Text(
-            passwordList.length > 4 ? passwordList[4] : '',
-            style: TextStyle(
-              fontSize: 30,
-            ),
-          ),
-        ),
-        Container(
-          width: 48,
-          height: 48,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
-          ),
-          child: Text(
-            passwordList.length > 5 ? passwordList[5] : '',
-            style: TextStyle(
-              fontSize: 30,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  List<Widget> _sliversSection(BuildContext context) {
-    List<Widget> section = [];
-    for (var item in strNum) {
-      section.add(
-        FlatButton(
-          color: Colors.white,
-          child: Text(
-            item,
-            style: TextStyle(
-              fontSize: 25,
-              color: Color(0xFF666666),
-            ),
-          ),
-          onPressed: () {
-            if (passwordList.length < 6) {
-              passwordList.add(item);
-              (context as Element).markNeedsBuild();
-            }
-          },
-        ),
-      );
-    }
-    return section;
+  _submitFormData() async {
+    VerifyTradePawRepository()
+        .verifyTransPwdNoSms(
+            VerifyTransPwdNoSmsReq(_payPassword), 'VerifyTransPwdNoSmsReq')
+        .then((data) {
+      ForexTradingRepository()
+          .doTransferAccout(
+              DoTransferAccoutReq(_incomeAmt, _paymentAcc, _incomeAcc,
+                  _paymentCcy, _incomeCcy, _incomeName, _incomeBackCode),
+              'DoTransferAccoutReq')
+          .then((data) {
+        Fluttertoast.showToast(msg: S.current.operate_success);
+        Navigator.pop(context, pageIndex);
+      }).catchError((e) {
+        Fluttertoast.showToast(msg: e.toString());
+      });
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
   }
 }

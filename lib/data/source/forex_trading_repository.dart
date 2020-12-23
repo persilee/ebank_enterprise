@@ -14,6 +14,13 @@ class ForexTradingRepository {
         (data) => TransferTrialResp.fromJson(data));
   }
 
+  //外汇买卖
+  Future<DoTransferAccoutResp> doTransferAccout(
+      DoTransferAccoutReq req, String tag) {
+    return request('/ddep/transfer/doTransferAccout', req, tag,
+        (data) => DoTransferAccoutResp.fromJson(data));
+  }
+
   static final _instance = ForexTradingRepository._internal();
   factory ForexTradingRepository() => _instance;
 

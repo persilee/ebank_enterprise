@@ -128,3 +128,52 @@ class TransferTrialResp {
 
   Map<String, dynamic> toJson() => _$TransferTrialRespToJson(this);
 }
+
+//外汇买卖
+@JsonSerializable()
+class DoTransferAccoutReq {
+  @JsonKey(name: 'amount')
+  String amount;
+  @JsonKey(name: 'creditCurrency')
+  String creditCurrency;
+  @JsonKey(name: 'debitCurrency')
+  String debitCurrency;
+  @JsonKey(name: 'payeeCardNo')
+  String payeeCardNo;
+  @JsonKey(name: 'payerCardNo')
+  String payerCardNo;
+  @JsonKey(name: 'payeeName')
+  String payeeName;
+  @JsonKey(name: 'payeeBankCode')
+  String payeeBankCode;
+
+  DoTransferAccoutReq(
+    this.amount,
+    this.creditCurrency,
+    this.debitCurrency,
+    this.payeeCardNo,
+    this.payerCardNo,
+    this.payeeName,
+    this.payeeBankCode,
+  );
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  factory DoTransferAccoutReq.fromJson(Map<String, dynamic> srcJson) =>
+      _$DoTransferAccoutReqFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$DoTransferAccoutReqToJson(this);
+}
+
+@JsonSerializable()
+class DoTransferAccoutResp {
+  DoTransferAccoutResp();
+
+  factory DoTransferAccoutResp.fromJson(Map<String, dynamic> srcJson) =>
+      _$DoTransferAccoutRespFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$DoTransferAccoutRespToJson(this);
+}
