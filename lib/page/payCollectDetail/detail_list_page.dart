@@ -127,44 +127,46 @@ class _DetailListPageState extends State<DetailListPage> {
 
   // cell item widget builder.
   Widget _cellBuilder(BuildContext context, int section, int row) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        InkWell(
-          onTap: () {
-            _goToDetail(revenueHistoryList[section].ddFinHistDOList[row]);
-          },
-          child: Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(left: 16, right: 16, top: 15),
-            child: Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(right: 13),
-                  child: ClipOval(
-                    child: Image.asset(
-                      'images/home/listIcon/home_list_payments.png',
-                      height: 38,
-                      width: 38,
-                      fit: BoxFit.cover,
+    return Container(
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            onTap: () {
+              _goToDetail(revenueHistoryList[section].ddFinHistDOList[row]);
+            },
+            child: Container(
+              padding: EdgeInsets.only(left: 16, right: 16, top: 15),
+              child: Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 13),
+                    child: ClipOval(
+                      child: Image.asset(
+                        'images/home/listIcon/home_list_payments.png',
+                        height: 38,
+                        width: 38,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: _transactionInfo(section, row),
-                ),
-              ],
+                  Expanded(
+                    child: _transactionInfo(section, row),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 68, right: 16),
-          child: Divider(
-            height: 0.5,
-            color: HsgColors.divider,
+          Padding(
+            padding: EdgeInsets.only(left: 68, right: 16),
+            child: Divider(
+              height: 0.5,
+              color: HsgColors.divider,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

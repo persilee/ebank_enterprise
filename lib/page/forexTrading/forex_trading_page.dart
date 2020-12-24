@@ -9,11 +9,8 @@ import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
-import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
-import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
-import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +23,6 @@ class ForexTradingPage extends StatefulWidget {
 
 class _ForexTradingPageState extends State<ForexTradingPage> {
   List<String> accList = [''];
-  List<String> passwordList = [];
   List<String> ccyList1 = ['CNY', 'EUR', 'HKD'];
   List<String> ccyList2 = ['CNY', 'EUR', 'HKD', 'USD'];
   List<RemoteBankCard> cards = [];
@@ -40,7 +36,6 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   var _incomeCcy = S.current.please_select;
   var _incomeName = '';
   var _incomeBackCode = '';
-  var _payPassword = '';
   var _balance = '0.00';
   var _payAmtController = TextEditingController();
   var _rate = '';
@@ -446,7 +441,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
 
   //交易密码窗口
   void _openBottomSheet() async {
-    passwordList = await showHsgBottomSheet(
+    final isPassword = await showHsgBottomSheet(
       context: context,
       builder: (context) {
         return HsgPasswordDialog(
@@ -454,11 +449,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         );
       },
     );
-    if (passwordList != null) {
-      if (passwordList.length == 6) {
-        _payPassword = EncryptUtil.aesEncode(passwordList.join());
-        _submitFormData();
-      }
+    if (isPassword != null && isPassword == true) {
+      _submitFormData();
     }
   }
 
@@ -526,21 +518,14 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   }
 
   _submitFormData() async {
-    VerifyTradePawRepository()
-        .verifyTransPwdNoSms(
-            VerifyTransPwdNoSmsReq(_payPassword), 'VerifyTransPwdNoSmsReq')
+    ForexTradingRepository()
+        .doTransferAccout(
+            DoTransferAccoutReq(_incomeAmt, _paymentAcc, _incomeAcc,
+                _paymentCcy, _incomeCcy, _incomeName, _incomeBackCode),
+            'DoTransferAccoutReq')
         .then((data) {
-      ForexTradingRepository()
-          .doTransferAccout(
-              DoTransferAccoutReq(_incomeAmt, _paymentAcc, _incomeAcc,
-                  _paymentCcy, _incomeCcy, _incomeName, _incomeBackCode),
-              'DoTransferAccoutReq')
-          .then((data) {
-        Fluttertoast.showToast(msg: S.current.operate_success);
-        Navigator.pop(context, pageIndex);
-      }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
-      });
+      Fluttertoast.showToast(msg: S.current.operate_success);
+      Navigator.pop(context, pageIndex);
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
