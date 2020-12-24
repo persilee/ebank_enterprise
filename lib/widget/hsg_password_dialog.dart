@@ -135,8 +135,6 @@ class HsgPasswordDialog extends StatelessWidget {
     for (var i = 0; i < 6; i++) {
       passwordbox.add(
         Container(
-          width: 48,
-          height: 48,
           alignment: Alignment.center,
           decoration: BoxDecoration(
             border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
@@ -232,13 +230,13 @@ class HsgPasswordDialog extends StatelessWidget {
         .then((data) {
       Navigator.pop(context, true);
     }).catchError((e) {
-      passwordList.clear();
-      (context as Element).markNeedsBuild();
       if (e.toString() == 'ECUST031') {
         Fluttertoast.showToast(msg: '交易密码错误！请重试');
       } else {
         Fluttertoast.showToast(msg: '未设置交易密码！');
       }
+      passwordList.clear();
+      (context as Element).markNeedsBuild();
     });
   }
 }
