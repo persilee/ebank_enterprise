@@ -141,7 +141,6 @@
   "account_lsit": "账户列表",
   "msgId": "流水号",
   "remarks": "备注",
-<<<<<<< HEAD
   "product_name":"产品名称",
   "year_interest_rate":"年利率",
   "deposit_time_limit":"存款期限",
@@ -155,8 +154,6 @@
   "hint_please_select":"请选择",
   "confirm": "确定",
   "cancel": "取消",
-=======
->>>>>>> 12ac8a6fb64a2d2001010d4ec7ac2d3f4457ea94
   "share": "分享到",
   "we_chat": "微信",
   "moments": "朋友圈",

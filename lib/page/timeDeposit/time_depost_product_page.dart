@@ -13,7 +13,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import '../page_route.dart';
+import '../../page_route.dart';
 
 class TimeDepostProduct extends StatefulWidget {
   TimeDepostProduct({Key key}) : super(key: key);

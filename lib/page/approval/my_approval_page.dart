@@ -63,14 +63,17 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                 ),
               ),
               Container(
-                decoration: HsgStyles.homeHeaderShadow,
-                padding: EdgeInsets.all(0),
-                // color: Colors.green,
-                margin: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 30.0),
+                width: 370,
+                // height: 130,
+                // decoration: HsgStyles.homeHeaderShadow,
+                // padding: EdgeInsets.all(0),
+                margin: EdgeInsets.only(left: 10.0),
+                color: Colors.green,
+                padding: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 30.0),
                 child: Column(
                   children: [
                     Container(
-                        width: 370,
+                        width: 340,
                         // color: Colors.red,
                         child: Text(
                           "定期开立",
@@ -81,7 +84,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                               fontWeight: FontWeight.bold),
                         )),
                     Container(
-                      width: 370,
+                      width: 340,
                       // color: Colors.yellow,
                       padding: EdgeInsets.only(top: 18),
                       child: Row(
@@ -94,7 +97,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                             ),
                           ),
                           SizedBox(
-                            width: 250.0,
+                            width: 225.0,
                           ),
                           Text(
                             "070365989",
@@ -107,9 +110,9 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                       ),
                     ),
                     Container(
-                      width: 370,
-                      padding: EdgeInsets.only(top: 12),
-                      // color: Colors.yellow,
+                      width: 340,
+                      padding: EdgeInsets.only(top: 12, bottom: 0),
+                      color: Colors.red,
                       child: Row(
                         children: [
                           Text(
@@ -120,7 +123,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                             ),
                           ),
                           SizedBox(
-                            width: 180.0,
+                            width: 150.0,
                           ),
                           Text(
                             "2011-11-02 11:12:30",

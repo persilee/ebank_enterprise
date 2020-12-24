@@ -4,7 +4,7 @@
 /// Date: 2020-12-07
 
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
-import 'package:ebank_mobile/feature_demo/time_depost_product_page.dart';
+import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
 import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_detail_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';

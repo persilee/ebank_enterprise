@@ -1,6 +1,3 @@
-import 'dart:ffi';
-import 'dart:math';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///定期开立购买页面
 /// Author: wangluyao
@@ -8,6 +5,7 @@ import 'dart:math';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/time_deposit_contract.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_contract_trial.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
 import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
@@ -18,6 +16,7 @@ import 'package:ebank_mobile/widget/hsg_general_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class TimeDepositContract extends StatefulWidget {
   final TdepProducHeadDTO productList;
@@ -35,15 +34,15 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String _changedTermBtnTiTle = S.current.hint_please_select;
   String _changedInstructionTitle = S.current.hint_please_select;
   String _changedRateTitle = '';
-  String accuPeriod = '';
-  String auctCale = '';
-  String depositType = '';
+  String accuPeriod = '0';
+  String auctCale = '0';
+  String depositType = '0';
   String rate = '0';
-  int matAmt;
+  String matAmt = '0.00';
   List<RemoteBankCard> cards = [];
   RemoteBankCard card;
 
-  String bal = '';
+  double bal = 0.00;
   String instCode = '';
 
   TdepProducHeadDTO productList;
@@ -54,48 +53,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
   void initState() {
     super.initState();
-    // this.bal = '';
-    // String accuPeriod = _selectTerm(context, producDTOList);
-    // String auctCale = _selectAuctCale(producDTOList);
-    // String bppdCode = _selectBppdCode(producDTOList);
-    // String depositType = _selectDepositType(producDTOList);
-    // String prodType = _selectProdType(producDTOList);
-    // print(">>>>>>>>>  $_selectTerm(context, producDTOList) ");
-    print('>>>>11 $productList $producDTOList');
     //网络请求
     _loadData();
-    // _loadDepositData(accuPeriod, auctCale, this.bal, bppdCode, productList.ccy,
-    //     depositType, prodType);
-    // print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + this.bal);
   }
-
-  // _selectAuctCale(List<TdepProducDTOList> producDTOList) {
-  //   for (var i = 0; i < producDTOList.length; i++) {
-  //     auctCale = producDTOList[i].auctCale;
-  //   }
-  //   return auctCale;
-  // }
-
-  // _selectBppdCode(List<TdepProducDTOList> producDTOList) {
-  //   for (var i = 0; i < producDTOList.length; i++) {
-  //     bppdCode = producDTOList[i].bppdCode;
-  //   }
-  //   return bppdCode;
-  // }
-
-  // _selectDepositType(List<TdepProducDTOList> producDTOList) {
-  //   for (var i = 0; i < producDTOList.length; i++) {
-  //     depositType = producDTOList[i].depositType;
-  //   }
-  //   return depositType;
-  // }
-
-  // _selectProdType(List<TdepProducDTOList> producDTOList) {
-  //   for (var i = 0; i < producDTOList.length; i++) {
-  //     prodType = producDTOList[i].prodType;
-  //   }
-  //   return prodType;
-  // }
 
   Widget _background() {
     return Container(
@@ -211,7 +171,13 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   //产品名称和年利率
   Widget _titleSection(
       TdepProducHeadDTO tdepProduct, List<TdepProducDTOList> producDTOList) {
-    print('>>>>22 $producDTOList');
+    String name;
+    String language = Intl.getCurrentLocale();
+    if (language == 'zh_CN') {
+      name = productList.lclName;
+    } else {
+      name = productList.engName;
+    }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -227,7 +193,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             ),
             SizedBox(height: 10.0),
             Text(
-              productList.lclName,
+              name,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 18,
@@ -286,12 +252,13 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
               Container(
                 child: Text(
                   productList.ccy,
+                  textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.black, fontSize: 18.0),
                 ),
               ),
               Expanded(
                   child: Container(
-                margin: EdgeInsets.only(left: 20),
+                margin: EdgeInsets.only(left: 20, bottom: 5.0),
                 child: TextField(
                   autocorrect: false,
                   autofocus: false,
@@ -301,23 +268,28 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                     FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
                   ],
                   onChanged: (value) {
-                    value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1');
+                    double.parse(
+                        value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
                     print("输入的金额是:$value");
-                    // bal=
-                    // this.setState(() {
-                    //   this.bal = value;
-                    // });
-                    __loadDepositData(
-                        accuPeriod,
-                        auctCale,
-                        value,
-                        productList.bppdCode,
-                        productList.ccy,
-                        depositType,
-                        productList.prodType);
+                    _loadDepositData(
+                        // accuPeriod,
+                        // auctCale,
+                        // value,
+                        // productList.bppdCode,
+                        // productList.ccy,
+                        // depositType,
+                        // productList.prodType
+                        '2',
+                        '12',
+                        double.parse(value),
+                        'TD000022',
+                        'HKD',
+                        'A',
+                        'MMDP');
                   },
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(0),
                     border: InputBorder.none,
                     hintText:
                         S.current.deposit_min_with_value + productList.minAmt,
@@ -356,7 +328,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
               ),
               Container(
                 child: Text(
-                  productList.ccy + ":" + matAmt.toString(),
+                  // '${productList.ccy}:$matAmt',
+                  productList.ccy + ":" + matAmt,
                   style: TextStyle(
                     color: HsgColors.secondDegreeText,
                     fontSize: 13.0,
@@ -521,8 +494,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   Widget _submitButton() {
     return Container(
       margin: EdgeInsets.only(top: 40.0),
-      child: HsgBottomBtn('确认 ', () {
+      child: HsgBottomBtn('立即存入', () {
         print('确认');
+        // _loadContractData(accuPeriod, rate, auctCale, bal, productList.bppdCode, productList.ccy, custName, depositType, instCode, mergeTerm, payDdAc, payDdAmt, prodType, remarks, settDdAc)
       }),
     );
   }
@@ -564,7 +538,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     });
   }
 
-  Future<void> __loadDepositData(String accuPeriod, String auctCale, String bal,
+  Future<void> _loadDepositData(String accuPeriod, String auctCale, double bal,
       String bppdCode, String ccy, String depositType, String prodType) async {
     TimeDepositDataRepository()
         .getTimeDepositContractTrial(
@@ -573,30 +547,52 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             'getTimeDepositContractTrial')
         .then((value) {
       setState(() {
-        matAmt = value.matAmt;
+        matAmt = (value.matAmt).toString();
       });
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
   }
 
-  // _loadDepositData(String accuPeriod, String auctCale, String bal,
-  //     String bppdCode, String ccy, String depositType, String prodType) {
-  //   print(
-  //       '>>>>>><  $accuPeriod $auctCale $bal $bppdCode $ccy $depositType $prodType');
-  //   Future.wait({
-  //     TimeDepositDataRepository().getTimeDepositContractTrial(
-  //         TimeDepositContractTrialReq(
-  //             accuPeriod, auctCale, bal, bppdCode, ccy, depositType, prodType),
-  //         'getTimeDepositContractTrial')
-  //   }).then((value) {
-  //     value.forEach((element) {
-  //       if (element is TimeDepositContractTrialResp) {
-  //         setState(() {
-  //           matAmt = element.matAmt.toString();
-  //         });
-  //       }
-  //     });
-  //   });
-  // }
+  Future<void> _loadContractData(
+      String accuPeriod,
+      String annualInterestRate,
+      String auctCale,
+      String bal,
+      String bppdCode,
+      String ccy,
+      String custName,
+      String depositType,
+      String instCode,
+      String mergeTerm,
+      String payDdAc,
+      String payDdAmt,
+      String prodType,
+      String remarks,
+      String settDdAc) async {
+    TimeDepositDataRepository()
+        .getTimeDepositContract(
+            TimeDepositContractReq(
+                accuPeriod,
+                annualInterestRate,
+                auctCale,
+                bal,
+                bppdCode,
+                ccy,
+                custName,
+                depositType,
+                instCode,
+                mergeTerm,
+                payDdAc,
+                payDdAmt,
+                prodType,
+                remarks,
+                settDdAc),
+            'getTimeDepositContract')
+        .then((value) {
+      setState(() {});
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
 }

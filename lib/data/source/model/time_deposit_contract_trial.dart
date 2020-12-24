@@ -16,7 +16,7 @@ class TimeDepositContractTrialReq extends Object {
   String auctCale;
 
   @JsonKey(name: 'bal')
-  String bal;
+  double bal;
 
   @JsonKey(name: 'bppdCode')
   String bppdCode;
@@ -44,10 +44,6 @@ class TimeDepositContractTrialReq extends Object {
       _$TimeDepositContractTrialReqFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$TimeDepositContractTrialReqToJson(this);
-
-  String toString() {
-    return toJson().toString();
-  }
 }
 
 @JsonSerializable()
@@ -59,16 +55,16 @@ class TimeDepositContractTrialResp extends Object {
   String auctCale;
 
   @JsonKey(name: 'bal')
-  int bal;
+  String bal;
 
   @JsonKey(name: 'ccy')
   String ccy;
 
   @JsonKey(name: 'matAmt')
-  int matAmt;
+  String matAmt;
 
   @JsonKey(name: 'matInt')
-  int matInt;
+  String matInt;
 
   @JsonKey(name: 'mtDate')
   String mtDate;
