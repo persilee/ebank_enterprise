@@ -13,6 +13,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -28,8 +29,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   List<RemoteBankCard> cards = [];
   int _paymentAccId = -1;
   int _incomeAccId = -1;
-  int _paymentCcyId = -1;
-  int _incomeCcyId = -1;
+  int _paymentCcyId = 0;
+  int _incomeCcyId = 0;
   var _paymentAcc = S.current.please_select;
   var _incomeAcc = S.current.please_select;
   var _paymentCcy = S.current.please_select;
@@ -518,12 +519,14 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   }
 
   _submitFormData() async {
+    HSProgressHUD.show();
     ForexTradingRepository()
         .doTransferAccout(
             DoTransferAccoutReq(_incomeAmt, _paymentAcc, _incomeAcc,
                 _paymentCcy, _incomeCcy, _incomeName, _incomeBackCode),
             'DoTransferAccoutReq')
         .then((data) {
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(msg: S.current.operate_success);
       Navigator.pop(context, pageIndex);
     }).catchError((e) {

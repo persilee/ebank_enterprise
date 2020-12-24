@@ -180,6 +180,7 @@
   "download": "下载到本地",
   "currency_choice":"币种选择",
   "debit_currency": "支出币种",
+  "available_balance": "可用余额",
   "debit_amount": "支出金额",
   "credit_account": "收入账户",
   "credit_currency": "收入币种",

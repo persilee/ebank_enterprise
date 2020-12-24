@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/get_pay_collect_detail.dart';
 import 'package:ebank_mobile/data/source/pay_collect_detail_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_tableview/flutter_tableview.dart';
@@ -324,11 +325,13 @@ class _DetailListPageState extends State<DetailListPage> {
   }
 
   _getRevenueByCards(String localDateStart, List<String> cards) async {
+    HSProgressHUD.show();
     PayCollectDetailRepository()
         .getRevenueByCards(
             GetRevenueByCardsReq(localDateStart: startDate, cards: cards),
             'GetRevenueByCardsReq')
         .then((data) {
+      HSProgressHUD.dismiss();
       if (data.revenueHistoryDTOList != null) {
         setState(() {
           revenueHistoryList = data.revenueHistoryDTOList;
