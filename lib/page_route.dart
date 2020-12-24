@@ -39,6 +39,7 @@ import 'package:ebank_mobile/page/timeDeposit/time_deposit_rate_page.dart';
 //import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
+import 'package:ebank_mobile/page/userAgreement/user_agreement_page.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page/mine/mine_page.dart';
 import 'package:ebank_mobile/page/mine/about_us_page.dart';
@@ -86,6 +87,7 @@ var pageTimeDepostProduct = '/time_depost_product_page';
 var pageForexTrading = '/forex_trading_page';
 var pageTest = '/test_page';
 var pageTimeDepositContract = '/time_deposit_contract_page';
+var pageUserAgreement = '/user_agreement_page';
 
 var appRoutes = {
   // pageTest: (context) => SimpleDemoPageBody(),
@@ -125,6 +127,7 @@ var appRoutes = {
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
   // pageTimeDepositContract: (context) => TimeDepositContract(),
   pageForexTrading: (context) => ForexTradingPage(),
+  pageUserAgreement: (context) => UserAgreementPage(),
 };
 
 onGenerateRoute(RouteSettings settings) {
