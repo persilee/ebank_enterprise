@@ -4,26 +4,71 @@
 /// Date: 2020-12-24
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:ebank_mobile/data/source/model/get_user_agreement.dart';
+import 'package:ebank_mobile/data/source/user_agreement_repository.dart';
 
 class UserAgreementPage extends StatefulWidget {
+  final String pactId;
+  UserAgreementPage({Key key, this.pactId}) : super(key: key);
   @override
-  _UserAgreementPageState createState() => _UserAgreementPageState();
+  _UserAgreementPageState createState() => _UserAgreementPageState(pactId);
 }
 
 class _UserAgreementPageState extends State<UserAgreementPage> {
+  String pactUrl = '';
+  String pactId;
+  String pactTitle = '';
+
+  _UserAgreementPageState(this.pactId);
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserAgreement(pactId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('用户协议'),
+        title: Container(
+          alignment: Alignment.center,
+          width: 290,
+          child: Text(
+            pactTitle,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
         centerTitle: true,
       ),
-      body: WebView(
-        initialUrl:
-            'http://161.189.8.160:7600/kont/pact/url/99867_CN.html?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=admin%2F20201224%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201224T065834Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=cb2ccadb3b50e24767b33b07c61d3ad01530d4d358ec8a1c0f2a99b28c9f3f16',
-        // javascriptMode: JavascriptMode.unrestricted,
-      ),
+      body: pactUrl != ''
+          ? WebView(
+              initialUrl: pactUrl,
+              javascriptMode: JavascriptMode.unrestricted,
+            )
+          : Container(),
     );
+  }
+
+  _getUserAgreement(String pactId) async {
+    UserAgreementRepository()
+        .getUserPact(GetUserAgreementReq(pactId), 'GetUserAgreementReq')
+        .then((data) {
+      setState(() {
+        if (Intl.getCurrentLocale() == 'zh_CN') {
+          pactUrl = data.detailCnLink;
+          pactTitle = data.pactNameCn;
+        } else {
+          pactUrl = data.detailEnLink;
+          pactTitle = data.pactNameEn;
+        }
+      });
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
   }
 }

@@ -127,7 +127,7 @@ var appRoutes = {
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
   // pageTimeDepositContract: (context) => TimeDepositContract(),
   pageForexTrading: (context) => ForexTradingPage(),
-  pageUserAgreement: (context) => UserAgreementPage(),
+  // pageUserAgreement: (context) => UserAgreementPage(),
 };
 
 onGenerateRoute(RouteSettings settings) {
@@ -148,6 +148,11 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageDepositInfo) {
     return MaterialPageRoute(builder: (context) {
       return PageDepositInfo(deposit: settings.arguments);
+    });
+  }
+  if (settings.name == pageUserAgreement) {
+    return MaterialPageRoute(builder: (context) {
+      return UserAgreementPage(pactId: settings.arguments);
     });
   }
   return null;
