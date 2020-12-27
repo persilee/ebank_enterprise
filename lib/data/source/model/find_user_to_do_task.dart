@@ -1,3 +1,8 @@
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+///
+/// Author: wangluyao
+/// Date: 2020-12-21
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'find_user_to_do_task.g.dart';

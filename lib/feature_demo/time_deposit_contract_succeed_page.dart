@@ -53,7 +53,7 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
             padding: EdgeInsets.fromLTRB(0, 20, 0, 15),
             child: RaisedButton(
               onPressed: () {
-                Navigator.pushNamed(context, pageTimeDepositRecord);
+                Navigator.popAndPushNamed(context, pageTimeDepostProduct);
               },
               textColor: Colors.blue,
               color: Colors.blue[500],

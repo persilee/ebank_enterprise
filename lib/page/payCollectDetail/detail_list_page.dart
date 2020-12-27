@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/get_pay_collect_detail.dart';
 import 'package:ebank_mobile/data/source/pay_collect_detail_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_tableview/flutter_tableview.dart';
@@ -127,44 +128,46 @@ class _DetailListPageState extends State<DetailListPage> {
 
   // cell item widget builder.
   Widget _cellBuilder(BuildContext context, int section, int row) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        InkWell(
-          onTap: () {
-            _goToDetail(revenueHistoryList[section].ddFinHistDOList[row]);
-          },
-          child: Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(left: 16, right: 16, top: 15),
-            child: Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(right: 13),
-                  child: ClipOval(
-                    child: Image.asset(
-                      'images/home/listIcon/home_list_payments.png',
-                      height: 38,
-                      width: 38,
-                      fit: BoxFit.cover,
+    return Container(
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            onTap: () {
+              _goToDetail(revenueHistoryList[section].ddFinHistDOList[row]);
+            },
+            child: Container(
+              padding: EdgeInsets.only(left: 16, right: 16, top: 15),
+              child: Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 13),
+                    child: ClipOval(
+                      child: Image.asset(
+                        'images/home/listIcon/home_list_payments.png',
+                        height: 38,
+                        width: 38,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: _transactionInfo(section, row),
-                ),
-              ],
+                  Expanded(
+                    child: _transactionInfo(section, row),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 68, right: 16),
-          child: Divider(
-            height: 0.5,
-            color: HsgColors.divider,
+          Padding(
+            padding: EdgeInsets.only(left: 68, right: 16),
+            child: Divider(
+              height: 0.5,
+              color: HsgColors.divider,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -322,11 +325,13 @@ class _DetailListPageState extends State<DetailListPage> {
   }
 
   _getRevenueByCards(String localDateStart, List<String> cards) async {
+    HSProgressHUD.show();
     PayCollectDetailRepository()
         .getRevenueByCards(
             GetRevenueByCardsReq(localDateStart: startDate, cards: cards),
             'GetRevenueByCardsReq')
         .then((data) {
+      HSProgressHUD.dismiss();
       if (data.revenueHistoryDTOList != null) {
         setState(() {
           revenueHistoryList = data.revenueHistoryDTOList;

@@ -237,7 +237,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
 
   void go2Detail(TdepProducHeadDTO tdepProduct,
       List<TdepProducDTOList> tdepProducDTOList) {
-    Navigator.pushNamed(
+    Navigator.popAndPushNamed(
       context,
       pageTimeDepositContract,
       arguments: {

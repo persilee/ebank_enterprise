@@ -295,6 +295,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_picker
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.5"
   flutter_svprogresshud:
     dependency: "direct main"
     description:
@@ -487,6 +494,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.9.2"
+  pin_code_text_field:
+    dependency: "direct main"
+    description:
+      name: pin_code_text_field
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.7.1"
   platform:
     dependency: transitive
     description:

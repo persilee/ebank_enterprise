@@ -69,11 +69,6 @@ class _ApprovalPageState extends State<TabBarAndTopTab>
         body: TabBarView(
           controller: tabController,
           children: [MyApprovalPage(), MyApprovalPage(), MyApprovalPage()],
-          // children: tabs.map((e) {
-          //   return Center(
-          //     child: Text(e),
-          //   );
-          // }).toList(),
         ));
   }
 

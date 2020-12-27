@@ -64,12 +64,13 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
               ),
               Container(
                 width: 370,
-                // height: 130,
-                // decoration: HsgStyles.homeHeaderShadow,
+
+                // height: 95,
+                decoration: HsgStyles.homeHeaderShadow,
                 // padding: EdgeInsets.all(0),
                 margin: EdgeInsets.only(left: 10.0),
-                color: Colors.green,
-                padding: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 30.0),
+                // color: Colors.green,
+                padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 15.0),
                 child: Column(
                   children: [
                     Container(
@@ -86,7 +87,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                     Container(
                       width: 340,
                       // color: Colors.yellow,
-                      padding: EdgeInsets.only(top: 18),
+                      padding: EdgeInsets.only(top: 15),
                       child: Row(
                         children: [
                           Text(
@@ -111,8 +112,9 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                     ),
                     Container(
                       width: 340,
-                      padding: EdgeInsets.only(top: 12, bottom: 0),
-                      color: Colors.red,
+                      // margin: EdgeInsets.only(bottom: 5),
+                      padding: EdgeInsets.only(top: 10, bottom: 0),
+                      // color: Colors.red,
                       child: Row(
                         children: [
                           Text(
@@ -134,7 +136,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                           )
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
