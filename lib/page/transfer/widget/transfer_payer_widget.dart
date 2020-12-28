@@ -93,7 +93,7 @@ Widget TransferPayerWidget(
           ),
 
           //第二部分
-          TransferPayeeWidget(nameChange, accountChange),
+          //TransferPayeeWidget(nameChange, accountChange),
           // Container(
           //   color: Colors.white,
           //   margin: EdgeInsets.only(top: 20),
@@ -167,8 +167,9 @@ Widget TransferPayerWidget(
           //     ],
           //   ),
           // ),
-          TransferOtherWidget(remark, transferChange),
           //第三部分
+          //TransferOtherWidget(remark, transferChange),
+
           // Container(
           //   color: Colors.white,
           //   margin: EdgeInsets.only(top: 20),

@@ -7,7 +7,8 @@ Widget TransferPayeeWidget(
   Function(String inputStr) nameChange,
   Function(String inputStr) accountChange,
 ) {
-  return Container(
+  return SliverToBoxAdapter(
+      child: Container(
     color: Colors.white,
     margin: EdgeInsets.only(top: 20),
     padding: EdgeInsets.fromLTRB(0, 20, 15, 0),
@@ -76,7 +77,7 @@ Widget TransferPayeeWidget(
             )),
       ],
     ),
-  );
+  ));
 }
 
 Widget _fiveRowLeft(String name) {

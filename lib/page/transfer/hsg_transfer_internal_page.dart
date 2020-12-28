@@ -307,8 +307,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _selectAccount,
               _getCcy,
               _getCardTotals),
-          //  TransferPayeeWidget(_nameInputChange, _accountInputChange),
-          //TransferOtherWidget(remark, _transferInputChange),
+          TransferPayeeWidget(_nameInputChange, _accountInputChange),
+          TransferOtherWidget(remark, _transferInputChange),
           SliverToBoxAdapter(
             child: Container(
               height: 80,

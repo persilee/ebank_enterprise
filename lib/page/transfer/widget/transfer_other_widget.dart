@@ -9,7 +9,8 @@ Widget TransferOtherWidget(
       ? transferChange('${S.current.transfer}')
       : transferChange(remark);
 
-  return Container(
+  return SliverToBoxAdapter(
+      child: Container(
     color: Colors.white,
     margin: EdgeInsets.only(top: 20),
     padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -37,5 +38,5 @@ Widget TransferOtherWidget(
         )
       ],
     ),
-  );
+  ));
 }
