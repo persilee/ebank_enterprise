@@ -45,6 +45,9 @@ dependencies:
     git:
       url: https://github.com/imshashank/flutter-cupertino-date-picker # Repo
       ref: master # Branch name
+  ai_decimal_accuracy:
+    git:
+      url: https://github.com/pdliuw/ai_decimal_accuracy.git
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +86,7 @@ flutter:
     - images/tabbar/tabbar_download.png
     - images/tabbar/tabbar_we_chat.png
     - images/tabbar/tabbar_wechat_moments.png
+    - images/tabbar/tabbar_delete.png
 
     #home
     #home_nav

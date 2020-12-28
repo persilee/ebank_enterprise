@@ -4,7 +4,8 @@
  * 
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
-import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
+import 'package:ebank_mobile/page/home/hsg_home_page.dart';
+import 'package:ebank_mobile/page/timeDeposit/time_deposit_record_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -53,7 +54,7 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
             padding: EdgeInsets.fromLTRB(0, 20, 0, 15),
             child: RaisedButton(
               onPressed: () {
-                Navigator.pushNamed(context, pageTimeDepositRecord);
+                Navigator.pushNamed(context, pageTransfer);
               },
               textColor: Colors.blue,
               color: Colors.blue[500],

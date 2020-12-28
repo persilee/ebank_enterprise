@@ -7,6 +7,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -43,8 +44,12 @@ class _TransferPageState extends State<TransferPage> {
     },
   ];
   //网格下面列表数据
+
   List<Map<String, Object>> _listFeatures = [
-    {'btnIcon': '', 'btnTitle': S.current.transfer_type_2},
+    {
+      'btnIcon': '',
+      'btnTitle': S.current.transfer_type_2,
+    },
   ];
 
   @override
@@ -110,6 +115,7 @@ class _TransferPageState extends State<TransferPage> {
                   Navigator.pushNamed(context, pageTransferInternal);
                 } else if (S.of(context).transfer_appointment == title) {
                   //'预约转账'
+                  Navigator.pushNamed(context, pageDialogDemo);
                 } else if (S.current.transfer_record == title) {
                   //转账记录
                 }
@@ -124,6 +130,8 @@ class _TransferPageState extends State<TransferPage> {
     section.add(SliverList(
       delegate: SliverChildBuilderDelegate(
         (content, index) {
+          // Navigator.pushNamed(context, pageInternational);
+
           return _featureListItemWidget('${listData[index]['btnTitle']}');
         },
         childCount: listData.length,
@@ -272,7 +280,10 @@ class _TransferPageState extends State<TransferPage> {
             ),
           ],
         ),
-        onPressed: () {},
+        //国际转账
+        onPressed: () {
+          Navigator.pushNamed(context, pageInternational);
+        },
       ),
     );
   }

@@ -248,7 +248,7 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
                 EbankInterestRateDOList doListNew;
                 dataList.insert(2, doListNew);
               }
-              //遍历拿出来的ccy
+              //遍历拿出来的集合
               dataList.forEach((element) {
                 String rate = element == null ? '--' : element.intRate;
                 rateList.add(rate);

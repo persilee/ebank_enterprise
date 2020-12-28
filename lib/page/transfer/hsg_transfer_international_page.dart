@@ -1,9 +1,3 @@
-/// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///
-/// Author: lijiawei
-/// Date: 2020-12-09
-
-import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
@@ -11,30 +5,22 @@ import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_succeed_page.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
-import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
-import 'package:ebank_mobile/widget/hsg_general_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ebank_mobile/widget/hsg_general_button.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../page_route.dart';
 
-class TransferInternalPage extends StatefulWidget {
-  TransferInternalPage({Key key}) : super(key: key);
+class TransferInternationalPage extends StatefulWidget {
+  TransferInternationalPage({Key key}) : super(key: key);
 
   @override
-  _TransferInternalPageState createState() => _TransferInternalPageState();
+  _TransferInternationalPageState createState() =>
+      _TransferInternationalPageState();
 }
 
-class _TransferInternalPageState extends State<TransferInternalPage> {
+class _TransferInternationalPageState extends State<TransferInternationalPage> {
   SliverToBoxAdapter _gaySliver = SliverToBoxAdapter(
     child: Container(
       height: 15,
@@ -163,20 +149,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             //获取集合
             List<CardBalBean> dataList = [];
 
-            // var ccyLists = List<String>();
-
-            // element.cardListBal.forEach((ccylists) {
-            //   ccyList.add(ccylists.ccy);
-            //   if (!ccyList.contains('CNY')) {
-            //     CardBalBean doListNew;
-            //     dataList.insert(0, doListNew);
-            //   }
-            //   dataList.forEach((element) {
-            //     String ccyCNY = element == null ? 'CNY' : element.ccy;
-            //     ccyList.insert(0, ccyCNY);
-            //   });
-            // });
-
             for (int i = 0; i < cardBal.length; i++) {
               CardBalBean doList = cardBal[i];
               ccyLists.add(doList.ccy);
@@ -279,7 +251,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.current.transfer_type_0),
+        title: Text(''),
         centerTitle: true,
       ),
       body: CustomScrollView(
@@ -307,8 +279,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _selectAccount,
               _getCcy,
               _getCardTotals),
-          //  TransferPayeeWidget(_nameInputChange, _accountInputChange),
-          //TransferOtherWidget(remark, _transferInputChange),
           SliverToBoxAdapter(
             child: Container(
               height: 80,

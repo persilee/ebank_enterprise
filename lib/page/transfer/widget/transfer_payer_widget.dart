@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:ffi';
 
+import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
+import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -13,42 +15,38 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/services.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 
-typedef _InputCallback = Function(String inputStr);
-typedef _InputName = Function(String inputName);
-typedef _InputAccount = Function(String inputAccount);
-typedef _InputTransfer = Function(String inputTransfer);
-// ignore: non_constant_identifier_names
-
 Widget TransferPayerWidget(
-    String ccy,
-    String singleLimit,
-    String inputStr,
-    String totalBalance,
-    String cardNo,
-    String payeeBankCode,
-    double money,
-    String payeeName,
-    String payeeCardNo,
-    String remark,
-    _InputCallback moneyChange,
-    _InputName nameChange,
-    _InputAccount accountChange,
-    _InputTransfer transferChange) {
+  String _limitMoney,
+  String _changedCcyTitle,
+  String _changedRateTitle,
+  String _changedAccountTitle,
+  String ccy,
+  String singleLimit,
+  String inputStr,
+  String totalBalance,
+  String cardNo,
+  String payeeBankCode,
+  double money,
+  String payeeName,
+  String payeeCardNo,
+  String remark,
+  Function(String inputStr) moneyChange,
+  Function(String inputStr) nameChange,
+  Function(String inputStr) accountChange,
+  Function(String inputStr) transferChange,
+  Function() getcardList,
+  Function() _getCcy,
+  Function(String cardNos) getCardTotals,
+) {
   return SliverToBoxAdapter(
     child: Container(
       child: Column(
         children: [
           //获取第一行
-          _oneRow(S.current.transfer_amount,
-              ' ${S.current.tran_limit_amt_with_value} ${singleLimit}'),
+          _oneRow(S.current.transfer_amount, _limitMoney, singleLimit),
           //第二行
-          _twoRow(
-            ccy,
-            money,
-            S.current.int_input_tran_amount,
-            moneyChange,
-          ),
-
+          _twoRow(ccy, _changedCcyTitle, money, S.current.int_input_tran_amount,
+              moneyChange, _getCcy),
           Container(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
               child: Divider(
@@ -69,8 +67,16 @@ Widget TransferPayerWidget(
                         color: HsgColors.firstDegreeText, fontSize: 14),
                   ),
                 ),
-                _threeRowRight('$payeeBankCode  $cardNo',
-                    ' ${S.current.balance_with_value}${totalBalance}'),
+                _threeRowRight(
+                    ccy,
+                    _changedCcyTitle,
+                    cardNo,
+                    '$payeeBankCode',
+                    ' ${totalBalance}',
+                    getcardList,
+                    _changedAccountTitle,
+                    _changedRateTitle,
+                    getCardTotals),
                 Container(
                   margin: EdgeInsets.only(top: 3, left: 15),
                   child: Icon(
@@ -85,118 +91,121 @@ Widget TransferPayerWidget(
               ],
             ),
           ),
-          Container(
-            color: Colors.white,
-            margin: EdgeInsets.only(top: 20),
-            padding: EdgeInsets.fromLTRB(0, 20, 15, 0),
-            child: Column(
-              children: [
-                Container(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 15),
-                        child: Text(
-                          S.current.receipt_side,
-                          style: TextStyle(
-                              color: HsgColors.describeText, fontSize: 13),
-                          textAlign: TextAlign.right,
-                        ),
-                      ),
-                    ])),
-                //姓名行
-                Container(
-                  child: Row(
-                    children: [
-                      _fiveRowLeft(S.current.name),
 
-                      _fiveRowRight(
-                          nameChange, S.current.hint_input_receipt_name),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                      ),
-                      Image(
-                        image:
-                            AssetImage('images/login/login_input_account.png'),
-                        width: 20,
-                        height: 20,
-                      ),
-                      //Image.asset('images/login/login_input_account.png'),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    child: Divider(
-                      color: HsgColors.divider,
-                      height: 0.5,
-                    )),
-                //账号
-                Container(
-                  child: Row(
-                    children: [
-                      //获取账户
-                      _fiveRowLeft(S.current.account_num),
+          //第二部分
+          TransferPayeeWidget(nameChange, accountChange),
+          // Container(
+          //   color: Colors.white,
+          //   margin: EdgeInsets.only(top: 20),
+          //   padding: EdgeInsets.fromLTRB(0, 20, 15, 0),
+          //   child: Column(
+          //     children: [
+          //       Container(
+          //           child: Row(
+          //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //               children: [
+          //             Container(
+          //               padding: EdgeInsets.only(left: 15),
+          //               child: Text(
+          //                 S.current.receipt_side,
+          //                 style: TextStyle(
+          //                     color: HsgColors.describeText, fontSize: 13),
+          //                 textAlign: TextAlign.right,
+          //               ),
+          //             ),
+          //           ])),
 
-                      _fiveRowRight(
-                          accountChange, S.current.hint_input_receipt_account),
+          //       Container(
+          //         child: Row(
+          //           children: [
+          //             _fiveRowLeft(S.current.name),
+          //             _fiveRowRight(
+          //                 nameChange, S.current.hint_input_receipt_name),
+          //             Container(
+          //               padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+          //             ),
+          //             Image(
+          //               image:
+          //                   AssetImage('images/login/login_input_account.png'),
+          //               width: 20,
+          //               height: 20,
+          //             ),
+          //             Container(
+          //               padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //       Container(
+          //           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+          //           child: Divider(
+          //             color: HsgColors.divider,
+          //             height: 0.5,
+          //           )),
+          //       //账号
+          //       Container(
+          //         child: Row(
+          //           children: [
+          //             //获取账户
+          //             _fiveRowLeft(S.current.account_num),
 
-                      Container(
-                        padding: EdgeInsets.fromLTRB(65, 0, 0, 0),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    child: Divider(
-                      color: HsgColors.divider,
-                      height: 0.5,
-                    )),
-              ],
-            ),
-          ),
-          Container(
-            color: Colors.white,
-            margin: EdgeInsets.only(top: 20),
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-            child: Row(
-              children: [
-                Container(
-                  child: Text(S.current.transfer_postscript),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(left: 200),
-                    child: TextField(
-                        onChanged: (remark) {
-                          transferChange(remark);
-                          print('这是附言$remark');
-                        },
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: S.current.transfer,
-                          hintStyle: TextStyle(
-                            fontSize: 13.5,
-                            color: HsgColors.textHintColor,
-                          ),
-                        )),
-                  ),
-                )
-              ],
-            ),
-          ),
+          //             _fiveRowRight(
+          //                 accountChange, S.current.hint_input_receipt_account),
+
+          //             Container(
+          //               padding: EdgeInsets.fromLTRB(65, 0, 0, 0),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //       Container(
+          //           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+          //           child: Divider(
+          //             color: HsgColors.divider,
+          //             height: 0.5,
+          //           )),
+          //     ],
+          //   ),
+          // ),
+          TransferOtherWidget(remark, transferChange),
+          //第三部分
+          // Container(
+          //   color: Colors.white,
+          //   margin: EdgeInsets.only(top: 20),
+          //   padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+          //   child: Row(
+          //     children: [
+          //       Container(
+          //         child: Text(S.current.transfer_postscript),
+          //       ),
+          //       Expanded(
+          //         child: Container(
+          //           margin: EdgeInsets.only(left: 200),
+          //           child: TextField(
+          //               onChanged: (remark) {
+          //                 transferChange(remark);
+          //               },
+          //               decoration: InputDecoration(
+          //                 border: InputBorder.none,
+          //                 hintText: S.current.transfer,
+          //                 hintStyle: TextStyle(
+          //                   fontSize: 13.5,
+          //                   color: HsgColors.textHintColor,
+          //                 ),
+          //               )),
+          //         ),
+          //       )
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     ),
   );
 }
 
-Widget _oneRow(String leftText, String rightText) {
+Widget _oneRow(String leftText, String rightText, String singleLimits) {
+  rightText = rightText == '' ? singleLimits : rightText;
   return Container(
     padding: EdgeInsets.all(15),
     color: Colors.white,
@@ -213,9 +222,7 @@ Widget _oneRow(String leftText, String rightText) {
         ),
         Expanded(
           child: Text(
-            //FormatUtil.formatSringToMoney(rightText),
-            rightText,
-            //2,000,000.00',
+            '${S.current.tran_limit_amt_with_value} ${FormatUtil.formatSringToMoney(rightText)}',
             style: TextStyle(
                 color: HsgColors.describeText,
                 fontSize: 13,
@@ -228,8 +235,9 @@ Widget _oneRow(String leftText, String rightText) {
   );
 }
 
-Widget _twoRow(
-    String ccys, double money, String hintText, Function moneyChanges) {
+Widget _twoRow(String ccy, String _changedCcyTitles, double money,
+    String hintText, Function moneyChanges, Function _getCcy) {
+  _changedCcyTitles = _changedCcyTitles == '' ? ccy : _changedCcyTitles;
   return Container(
     color: Colors.white,
     padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -239,12 +247,16 @@ Widget _twoRow(
           width: 75,
           height: 30,
           child: FlatButton(
+            onPressed: () {
+              print('切换币种');
+              _getCcy();
+            },
             padding: EdgeInsets.only(left: 0, right: 0),
             child: Row(
               children: [
                 Container(
                   child: Text(
-                    ccys,
+                    _changedCcyTitles,
                     style: TextStyle(
                       color: HsgColors.firstDegreeText,
                       fontSize: 18,
@@ -258,9 +270,6 @@ Widget _twoRow(
                 )
               ],
             ),
-            onPressed: () {
-              print('切换币种');
-            },
           ),
         ),
         Expanded(
@@ -284,7 +293,7 @@ Widget _twoRow(
 
                 moneyChanges(money);
 
-                print("这个是 onChanged 时刻在监听，输 出的信息是：$money");
+                print("这个是 onChanged 时刻在监听，输出的信息是：$money");
               },
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
@@ -303,18 +312,37 @@ Widget _twoRow(
   );
 }
 
-Widget _threeRowRight(String payeeBankCode, String balance) {
+Widget _threeRowRight(
+    String ccy,
+    String _changedCcyTitles,
+    String cardCodeOne,
+    String payeeBankCode,
+    String balance,
+    Function getcardList,
+    String _changedAccountTitle,
+    String _changedRateTitle,
+    Function(String _changedRateTitle) getCardTotals) {
+  _changedAccountTitle =
+      _changedAccountTitle == '' ? cardCodeOne : _changedAccountTitle;
+  _changedRateTitle = _changedRateTitle == '' ? balance : _changedRateTitle;
+  _changedCcyTitles = _changedCcyTitles == '' ? ccy : _changedCcyTitles;
+  String account = FormatUtil.formatSpace4('${_changedAccountTitle}');
   return Expanded(
     child: GestureDetector(
       onTap: () {
+        getcardList();
+        //选择卡号
+        getCardTotals(_changedAccountTitle);
+
         print('选择账号');
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          //卡号
           Container(
             child: Text(
-              payeeBankCode,
+              '${payeeBankCode}  ${account}',
               style: TextStyle(
                 color: HsgColors.firstDegreeText,
                 fontSize: 14,
@@ -324,7 +352,8 @@ Widget _threeRowRight(String payeeBankCode, String balance) {
           Container(
             margin: EdgeInsets.only(top: 5),
             child: Text(
-              balance,
+              '${S.current.balance_with_value}${_changedCcyTitles} ${FormatUtil.formatSringToMoney(_changedRateTitle)}',
+              // ${_changedRateTitle},
               style: TextStyle(
                 color: HsgColors.secondDegreeText,
                 fontSize: 13,
@@ -337,40 +366,40 @@ Widget _threeRowRight(String payeeBankCode, String balance) {
   );
 }
 
-Widget _fiveRowLeft(String name) {
-  return Container(
-    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-    child: Text(
-      name,
-      style: TextStyle(
-        color: HsgColors.firstDegreeText,
-        fontSize: 14,
-      ),
-    ),
-  );
-}
+// Widget _fiveRowLeft(String name) {
+//   return Container(
+//     padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+//     child: Text(
+//       name,
+//       style: TextStyle(
+//         color: HsgColors.firstDegreeText,
+//         fontSize: 14,
+//       ),
+//     ),
+//   );
+// }
 
-Widget _fiveRowRight(Function nameChanges, String hintText) {
-  return Expanded(
-    child: Container(
-      child: TextField(
-          //是否自动更正
-          autocorrect: false,
-          //是否自动获得焦点
-          autofocus: false,
-          onChanged: (payeeName) {
-            nameChanges(payeeName);
-            print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
-          },
-          textAlign: TextAlign.right,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: hintText,
-            hintStyle: TextStyle(
-              fontSize: 14,
-              color: HsgColors.textHintColor,
-            ),
-          )),
-    ),
-  );
-}
+// Widget _fiveRowRight(Function nameChanges, String hintText) {
+//   return Expanded(
+//     child: Container(
+//       child: TextField(
+//           //是否自动更正
+//           autocorrect: false,
+//           //是否自动获得焦点
+//           autofocus: false,
+//           onChanged: (payeeName) {
+//             nameChanges(payeeName);
+//             print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
+//           },
+//           textAlign: TextAlign.right,
+//           decoration: InputDecoration(
+//             border: InputBorder.none,
+//             hintText: hintText,
+//             hintStyle: TextStyle(
+//               fontSize: 14,
+//               color: HsgColors.textHintColor,
+//             ),
+//           )),
+//     ),
+//   );
+// }
