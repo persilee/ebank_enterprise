@@ -567,6 +567,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, pageMyDepositRate);
       } else if (S.current.loan_apply == title) {
         //'贷款申请'
+        Navigator.pushNamed(context, pageLoanApplication);
       } else if (S.current.loan_record == title) {
         //'贷款记录'
         Navigator.pushNamed(context, pageLimitDetails);
