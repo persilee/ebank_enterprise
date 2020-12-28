@@ -85,7 +85,22 @@
   "setChangLoginPasd": "Chang Login Password",
   "plaseSetPsd": "Please Set the Login Password",
   "transfer": "Transfer",
-  "transfer_record": "Transfer Record",
+  "transfer_record": "Transfer RNameecord",
+
+
+  "transfer_amount": "Transfer Amount",
+  "int_input_tran_amount": "Please input transfer amount",
+  "name": "Name",
+  "hint_input_receipt_name": "Please input the beneficiary name",
+  "hint_input_receipt_account": "Please input beneficiary account number",
+  "account_num": "Account No.",
+  "tran_limit_amt_with_value" : "Limit ：",
+  "transfer_from": "Transfer From",
+  "balance_with_value":"Balance:",
+  "receipt_side" :"Transfer To",
+  "transfer_postscript":"Remark",
+  
+
   "transfer_model": "Transfer Template",
   "time_deposiy" : "Time Deposit",
   "deposit_open": "Time Deposit Opening",
@@ -205,5 +220,9 @@
   "currency_option": "Currency Option",
   "foreign_exchange_explain": "The above amount is the trial amount, please refer to the actual amount received!",
   "input_password": "Input Payment Password",
-  "operate_success": "Operate Successfully!"
+  "operate_success": "Operate Successfully!",
+  "selling_price": "Selling Price",
+  "buying_price": "Buying Price",
+  "rate_notes1": "The service hours are 7:00-23:00 daily.The quoted price is for reference only. The actual traded price shall prevail.Last updated on ",
+  "rate_notes2": ".The unit is 1 foreign currency converted into HKD."
 }

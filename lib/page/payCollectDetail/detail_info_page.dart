@@ -57,14 +57,19 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    S.current.msgId,
-                    style: TextStyle(fontSize: 14, color: Color(0xFF262626)),
+                  Expanded(
+                    child: Text(
+                      S.current.msgId,
+                      style: TextStyle(fontSize: 14, color: Color(0xFF262626)),
+                    ),
                   ),
-                  Text(
-                    ddFinHist.msgId,
-                    style: TextStyle(fontSize: 14, color: Color(0xFF9C9C9C)),
-                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: Text(
+                      ddFinHist.msgId,
+                      style: TextStyle(fontSize: 14, color: Color(0xFF9C9C9C)),
+                    ),
+                  )
                 ],
               ),
               Padding(

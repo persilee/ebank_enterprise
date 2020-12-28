@@ -217,8 +217,10 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
               text: _content2,
               style: TextStyle(fontSize: 13, color: Colors.blue),
               recognizer: TapGestureRecognizer()
-                ..onTap = () async {
-                  Fluttertoast.showToast(msg: 'The jump is successful');
+                ..onTap = () {
+                  Navigator.pushNamed(context, pageUserAgreement,
+                      arguments: '99867');
+                  // Fluttertoast.showToast(msg: 'The jump is successful');
                 }),
           TextSpan(
               text: _content3,
@@ -227,8 +229,10 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
               text: _content4,
               style: TextStyle(fontSize: 13, color: Colors.blue),
               recognizer: TapGestureRecognizer()
-                ..onTap = () async {
-                  Fluttertoast.showToast(msg: 'The jump is successful');
+                ..onTap = () {
+                  Navigator.pushNamed(context, pageUserAgreement,
+                      arguments: '99868');
+                  // Fluttertoast.showToast(msg: 'The jump is successful');
                 }),
         ]),
       ),

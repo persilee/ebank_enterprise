@@ -85,6 +85,21 @@
   "plaseSetPsd": "请设置登录密码",
   "transfer": "转账",
   "transfer_record": "转账记录",
+
+  "transfer_amount": "转账金额",
+  "int_input_tran_amount": "请输入转账金额",
+  "name": "姓名",
+  "hint_input_receipt_name": "请输入收款人姓名",
+  "hint_input_receipt_account": "请输入收款人账号",
+  "account_num": "账号",
+  "tran_limit_amt_with_value" : "限额：",
+  "transfer_from": "转出账号",
+  "balance_with_value":"余额：",
+  "receipt_side" :"收款方",
+  "transfer_postscript":"转账附言",
+  
+
+  
   "transfer_model": "收款范本",
   "deposit_open": "定期开立",
   "time_deposit_type": "定期类型",
@@ -195,6 +210,7 @@
   "download": "下载到本地",
   "currency_choice": "币种选择",
   "debit_currency": "支出币种",
+  "available_balance": "可用余额",
   "debit_amount": "支出金额",
   "credit_account": "收入账户",
   "credit_currency": "收入币种",
@@ -203,5 +219,9 @@
   "currency_option": "币种选择",
   "foreign_exchange_explain": "上述金额为试算金额，请以实际到账金额为准！",
   "input_password": "输入支付密码",
-  "operate_success": "操作成功！"
+  "operate_success": "操作成功！",
+  "selling_price": "银行卖出价",
+  "buying_price": "银行买入价",
+  "rate_notes1": "服务时间为每日7:00-23:00。牌价仅供参考，交易时以实际成交牌价为准。更新于",
+  "rate_notes2": "。单位为1外币换算港币。"
 }

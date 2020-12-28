@@ -89,6 +89,7 @@ flutter:
     - images/tabbar/tabbar_we_chat.png
     - images/tabbar/tabbar_wechat_moments.png
     - images/tabbar/tabbar_delete.png
+    - images/tabbar/tabbar_reset.png
 
     #home
     #home_nav

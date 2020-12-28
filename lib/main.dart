@@ -1,10 +1,13 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'widget/progressHUD.dart';
 
 // void main() => runApp(
@@ -19,8 +22,6 @@ void main(List<String> args) {
 }
 
 class HSGBankApp extends StatefulWidget {
-  
-
   const HSGBankApp({Key key}) : super(key: key);
 
   static void setLocale(BuildContext context, Locale newLocale) async {
@@ -34,6 +35,8 @@ class HSGBankApp extends StatefulWidget {
 }
 
 class _HSGBankAppState extends State<HSGBankApp> {
+  List<PublicParameters> publicParametersList = [];
+
   changeLanguage(Locale locale) {
     setState(() {
       S.load(locale);
@@ -44,6 +47,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
   void initState() {
     super.initState();
     _initLanguage();
+    _getPublicParameters();
   }
 
   @override
@@ -81,5 +85,19 @@ class _HSGBankAppState extends State<HSGBankApp> {
     String language = await Language.getSaveLangage();
     changeLanguage(Language().getLocaleByLanguage(language));
   }
-}
 
+  //获取公共参数
+  _getPublicParameters() async {
+    PublicParametersRepository()
+        .getPublicCode(GetPublicParametersReq(), 'GetPublicParametersReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        setState(() {
+          publicParametersList = data.publicCodeGetRedisRspDtoList;
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+}

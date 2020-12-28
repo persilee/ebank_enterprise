@@ -53,10 +53,7 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
   Widget _getCloumnBoxList(List list) {
     List<Widget> _list = new List();
     for (int i = 0; i < list.length; i++) {
-      _list.add(SizedBox(
-          //   child: _getBox(list[i], 15, 120, Colors.black),
-          // ));
-          child: _getOneCloum(list[i], 15, 120, Colors.black)));
+      _list.add(SizedBox(child: _getOneCloum(list[i], 15, 120, Colors.black)));
     }
     return SizedBox(
       child: Column(
@@ -251,14 +248,12 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
                 EbankInterestRateDOList doListNew;
                 dataList.insert(2, doListNew);
               }
-
+              //遍历拿出来的集合
               dataList.forEach((element) {
                 String rate = element == null ? '--' : element.intRate;
                 rateList.add(rate);
               });
               rateLists.add(rateList);
-
-              print("=====================>" + rateLists.toString());
             }
 
             data.ebankInterestRateRspDTOList.forEach((element) {
