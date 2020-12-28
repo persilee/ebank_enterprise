@@ -1,6 +1,3 @@
-import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
-import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
@@ -39,6 +36,11 @@ import 'package:ebank_mobile/page/timeDeposit/time_deposit_rate_page.dart';
 //import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
+import 'package:ebank_mobile/page/transfer/transfer_partner_page.dart';
+import 'package:ebank_mobile/page/transfer/add_partner_page.dart';
+import 'package:ebank_mobile/page/transfer/select_bank_page.dart';
+import 'package:ebank_mobile/page/transfer/select_city_page.dart';
+import 'package:ebank_mobile/page/transfer/select_branch_bank_page.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page/mine/mine_page.dart';
 import 'package:ebank_mobile/page/mine/about_us_page.dart';
@@ -50,6 +52,12 @@ import 'feature_demo/time_deposit_contract_succeed_page.dart';
 var pageHome = '/';
 var pageLogin = pageHome;
 // var pageCardList = pageHome;
+
+var pageSelectBranchBank = "/select_branch_bank_page.dart";
+var pageSelectCity = "/select_city_page.dart";
+var pageSelectBank = "/select_bank_page.dart";
+var pageAddPartner = "/add_partner_page.dart";
+var pageTranferPartner = "/transfer_partner_page.dart";
 var pageLoanApplication = "/loan_application_page";
 var pageOperationResult = "/operation_result_page";
 var pageRepaySuccess = "/repay_success_page.dart";
@@ -98,6 +106,11 @@ var appRoutes = {
   pageLoanInterestRate: (context) => LoanInterestRatePage(),
   pageCardList: (context) => CardListPage(),
   pageDialogDemo: (context) => DialogDemoPage(),
+  pageSelectBank: (context) => SelectBankPage(),
+  pageSelectCity: (context) => SelectCityPage(),
+  pageSelectBranchBank: (context) => SelectBranchBankPage(),
+  pageAddPartner: (context) => AddPartnerPage(),
+  pageTranferPartner: (context) => TransferPartner(),
   pageRepaySuccess: (context) => RepaySuccessPage(),
   pageRepayConfirm: (context) => RepayConfirmPage(),
   pageRepayInput: (context) => RepayInputPage(),

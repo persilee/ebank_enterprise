@@ -38,9 +38,9 @@ dependencies:
   flutter_svprogresshud: ^0.0.6 #加载提示框
   encrypt: ^4.0.0 #AES加解密
   flutter_picker: ^1.1.0 #选择器
+  contact_picker: ^0.0.2 #获取联系人
   webview_flutter: ^1.0.7
   date_format: ^1.0.6
-  pin_code_text_field: ^1.6.0 #密码输入框
   flutter_tableview: ^1.0.1
   flutter_easyrefresh: ^2.1.7
   flutter_cupertino_date_picker:
@@ -141,8 +141,11 @@ flutter:
     - images/transferIcon/transfer_features_icon/transfer_features_plan.png
     - images/transferIcon/transfer_features_icon/transfer_features_record.png
     - images/transferIcon/transfer_features_icon/transfer_features_timely.png
+    - images/transferIcon/transfer_features_icon/transfer_features_scan.png
+    - images/transferIcon/transfer_features_icon/transfer_features_acount.png
     #其他
     - images/transferIcon/transfer_sample_placeholder.png
+    - images/transferIcon/transfer_bank.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

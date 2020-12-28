@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/data/source/model/add_partner.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: lijiawei
@@ -11,6 +13,12 @@ class TransferDataRepository {
       GetTransferPartnerListReq req, String tag) {
     return request('/ddep/transferpartner/getTransferPartnerList', req, tag,
         (data) => TransferPartnerListResp.fromJson(data));
+  }
+
+  //添加范本请求
+  Future<AddPartnerResp> addPartner(AddPartnerReq req, String tag) {
+    return request('ddep/transferpartner/addTransferPartner', req, tag,
+        (data) => AddPartnerResp.fromJson(data));
   }
 
   static final _instance = TransferDataRepository._internal();
