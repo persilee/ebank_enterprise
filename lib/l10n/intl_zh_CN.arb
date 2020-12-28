@@ -170,8 +170,6 @@
   "account_lsit": "账户列表",
   "msgId": "流水号",
   "remarks": "备注",
-<<<<<<< HEAD
-=======
   "contact":"联系人",
   "contact_phone_num":"联系人手机号码",
   "apply_amount":"申请金额",
@@ -191,7 +189,6 @@
   "hint_please_select":"请选择",
   "confirm": "确定",
   "cancel": "取消",
->>>>>>> 9b19c3a50c8d4a398bb8af5d96a3d384d602f61f
   "share": "分享到",
   "we_chat": "微信",
   "moments": "朋友圈",
@@ -207,5 +204,9 @@
   "currency_option": "币种选择",
   "foreign_exchange_explain": "上述金额为试算金额，请以实际到账金额为准！",
   "input_password": "输入支付密码",
-  "operate_success": "操作成功！"
+  "operate_success": "操作成功！",
+  "selling_price": "银行卖出价",
+  "buying_price": "银行买入价",
+  "rate_notes1": "服务时间为每日7:00-23:00。牌价仅供参考，交易时以实际成交牌价为准。更新于",
+  "rate_notes2": "。单位为1外币换算港币。"
 }

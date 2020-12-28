@@ -580,7 +580,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, pageForexTrading);
       } else if (S.current.exchange_rate == title) {
         //'汇率查询'
-
+        Navigator.pushNamed(context, pageExchangeRateInquiry);
       } else if (S.current.electronic_statement == title) {
         //'电子结单'
         Navigator.pushNamed(context, pageElectronicStatement);
