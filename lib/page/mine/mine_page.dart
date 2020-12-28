@@ -3,15 +3,15 @@
 /// Author: hlx
 /// Date: 2020-12-11
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/config/hsg_styles.dart';
+import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ebank_mobile/data/source/model/get_user_info.dart';
-import '../../page_route.dart';
 
 class MinePage extends StatefulWidget {
   @override
@@ -20,35 +20,19 @@ class MinePage extends StatefulWidget {
 
 class _MinePageState extends State<MinePage> {
   double _opacity = 0;
-  var _headPortraitUrl = ''; // 头像地址
-  var _enterpriseName = ''; // 企业名称
-  var _userName = '高阳银行企业用户'; // 姓名
-  var _characterName = '企业经办员'; // 角色名称
-  var _lastLoginTime = '上次登录时间：'; // 上次登录时间
-
   ScrollController _sctrollController = ScrollController();
-
-  @override
+  String _lastLoginTime = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now());
+  String _userName= "";
+  bool _switchZhiWen=true; //指纹登录
+  bool _switchFaceId=false; //faceID登录
+  
+@override
   // ignore: must_call_super
   void initState() {
-    // 监听滚动
-    _sctrollController.addListener(
-      () {
-        setState(() {
-          num opacity = _sctrollController.offset / 120;
-          _opacity = opacity.abs();
-          if (_opacity > 1) {
-            _opacity = 1;
-          } else if (_opacity < 0) {
-            _opacity = 0;
-          }
-        });
-      },
-    );
-
     // 网络请求
-    // _loadData();
+    _getUser();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,11 +44,11 @@ class _MinePageState extends State<MinePage> {
           controller: _sctrollController,
           slivers: [
             SliverToBoxAdapter(
-              child: _homeHeaderView(),
+              child: _mineHeaderView(),
             ),
             SliverToBoxAdapter(
               child: Container(
-                height: 20,
+                child: _mineContendView(context),
               ),
             ),
           ],
@@ -73,7 +57,7 @@ class _MinePageState extends State<MinePage> {
     );
   }
 
-  ///自定义导航条（包含联系客服、消息、标题、切换语言按钮）
+  ///自定义导航条（包含联系客服、消息、标题）
   Widget _mineAppbar(double opacity) {
     return XAppBar(
       child: Container(
@@ -106,7 +90,7 @@ class _MinePageState extends State<MinePage> {
               child: Container(
                 alignment: Alignment.center,
                 child: Text(
-                  '我的',
+                  '',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.normal,
@@ -115,7 +99,6 @@ class _MinePageState extends State<MinePage> {
                 ),
               ),
             ),
-            //LanguageChangeBtn(changeLangBtnTltle),
           ],
         ),
       ),
@@ -123,103 +106,334 @@ class _MinePageState extends State<MinePage> {
     );
   }
 
-  ///scrollview的顶部view，包含背景图、登录信息、账户总览和收支明细
-  Widget _homeHeaderView() {
-    final double _headerViewHeight = MediaQuery.of(context).size.width - 30.0;
+  ///scrollview的顶部view，包含背景图、登录信息
+  Widget _mineHeaderView() {
     return Container(
       child: Stack(
         children: [
           Image(
             width: MediaQuery.of(context).size.width,
-            image: AssetImage('images/home/heaerIcon/home_header_bg.png'),
+            height: 180,
+            image: AssetImage('images/mine/mine-icon.png'),
+            fit: BoxFit.cover,
+          ),
+          Stack(
+            alignment: AlignmentDirectional.bottomStart,
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 180,
+                decoration: BoxDecoration(color: Color(0x90000000)),
+              ),
+            ],
           ),
           Row(
             children: [
               Container(
-                margin: EdgeInsets.only(top: 88.0, left: 32),
+                margin: EdgeInsets.only(
+                    top: 78.0, left: 32, right: 24.0, bottom: 78.0),
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 2),
+                    border: Border.all(color: Colors.white, width: 1),
                     borderRadius: BorderRadius.circular(28)),
                 child: ClipOval(
                   child: Image.asset(
-                    'images/home/heaerIcon/home_header_person.png',
+                    'images/mine/mine-icon.png',
                     height: 56,
                     width: 56,
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              
+              Expanded(
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _userName,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: HsgColors.aboutusText,
+                          fontSize: 20.0,
+                          height: 1.5),
+                    ),
+                    Text(S.of(context).lastLoginTime + _lastLoginTime,
+                        style: TextStyle(
+                            color: HsgColors.aboutusText, fontSize: 12.0))
+                  ],
+                ),
+              ),
+              Container(
+                  padding: EdgeInsets.all(10),
+                  alignment: Alignment.centerRight,
+                  child: InkWell(
+                    onTap: () {
+                    },
+                    child: Icon(
+                      Icons.navigate_next,
+                      color: Colors.white,
+                    ),
+                  )),
             ],
           )
         ],
       ),
     );
   }
+ 
 
-  //头像
-  Widget _headPortrait() {
-    return Container(
-      // color: Colors.white,
-      width: 55,
-      height: 55,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(55.0 / 2),
-      ),
-      padding: EdgeInsets.all(2.0),
-      child: Container(
-        child: ClipOval(
-          child: (_headPortraitUrl == null || _headPortraitUrl == '')
-              ? Image(
-                  image: AssetImage(
-                      'images/home/heaerIcon/home_header_person.png'),
-                )
-              : FadeInImage.assetNetwork(
-                  fit: BoxFit.fitWidth,
-                  image: _headPortraitUrl == null ? '' : _headPortraitUrl,
-                  placeholder: 'images/home/heaerIcon/home_header_person.png',
-                ),
+/// 中间内容的内容
+Widget _mineContendView(context) {
+  return Container(
+      child: Column(children: [
+    Container(
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.only(bottom: 16),
+      color: Colors.white,
+      padding: EdgeInsets.only(left: 20, right: 20),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                S.of(context).fingerprintLogin,
+              ),
+               Switch(
+          value: _switchZhiWen,//当前状态
+          onChanged:(value){
+            //重新构建页面  
+            setState(() {
+              _switchZhiWen=value;
+            });
+          },
         ),
+            ],
+          ),
+          Divider(height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(S.of(context).faceIdlogin),
+                 Switch(
+          value: _switchFaceId,//当前状态
+          onChanged:(value){
+            //重新构建页面  
+            setState(() {
+              _switchFaceId=value;
+            });
+          },
+        ),
+            ],
+          ),
+        ],
       ),
-    );
-  }
+    ),
+    //修改登录密码
+    Container(
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.only(bottom: 16),
+      color: Colors.white,
+      padding: EdgeInsets.only(left: 20, right: 20),
+      child: Column(
+        children: [
+          Container(
+            height: 50.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(S.of(context).resetLoginPsw),
+                Container(
+                    padding: EdgeInsets.all(10),
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, changeLgPs);
+                      
+                      },
+                      child: Icon(
+                        Icons.navigate_next,
+                        color: HsgColors.nextPageIcon,
+                      ),
+                    )),
+              ],
+            ),
+          ),
+          Divider(height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
+          //修改支付密码
+          Container(
+            height: 50.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(S.of(context).changPayPws),
+                Container(
+                    padding: EdgeInsets.all(10),
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () {
+                         Navigator.pushNamed(context, changeLgPs);
+                      },
+                      child: Icon(
+                        Icons.navigate_next,
+                        color: HsgColors.nextPageIcon,
+                      ),
+                    )),
+              ],
+            ),
+          ),
+          Divider(height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
+          Container(
+            height: 50.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(S.of(context).resetPayPwd),
+                Container(
+                    padding: EdgeInsets.all(10),
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () {},
+                      child: Icon(
+                        Icons.navigate_next,
+                        color: HsgColors.nextPageIcon,
+                      ),
+                    )),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+    //
+    Container(
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.only(bottom: 16),
+      color: Colors.white,
+      padding: EdgeInsets.only(left: 20, right: 20),
+      child: Column(
+        children: [
+          Container(
+            height: 50.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(S.of(context).feedback),
+                Container(
+                    padding: EdgeInsets.all(10),
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () {
+                         Navigator.pushNamed(context, feedback);
+                      },
+                      child: Icon(
+                        Icons.navigate_next,
+                        color: HsgColors.nextPageIcon,
+                      ),
+                    )),
+              ],
+            ),
+          ),
+          Divider(height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
+          Container(
+            height: 50.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(S.of(context).aboutUs),
+                Container(
+                    padding: EdgeInsets.all(10),
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () {
+                        //调整关于我们
+                        Navigator.pushNamed(context, aboutUs);
+                      },
+                      child: Icon(
+                        Icons.navigate_next,
+                        color: HsgColors.nextPageIcon,
+                      ),
+                    )),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+    //退出按钮
+    Container(
+        height: 50,
+        color: Colors.white,
+        child: Center(
+          child: 
+          InkWell(
+                      onTap: () {
+                        //调整关于我们
+                          _loginOut();
+                      },
+                      child: Text(S.of(context).loginOut,
+              style: TextStyle(color: HsgColors.redTextColor)),
+                    )
+          
+          
+        ))
+  ]));
+}
 
-  Future<void> _loadData() async {
+//获取用户信息
+  _getUser() async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
 
-    UserDataRepository()
-        .getUserInfo(
-      GetUserInfoReq(userID),
-      'getUserInfo',
-    )
-        .then((data) {
-      print('$data');
-      setState(() {
-        _headPortraitUrl = data.headPortrait; //头像地址
-        _enterpriseName = '高阳寰球科技有限公司'; // 企业名称
-        _userName = data.actualName; // 姓名
-        _characterName = '企业经办员'; // 角色名称
-        _lastLoginTime = '上次登录时间：2020-12-01'; // 上次登录时间
+      UserDataRepository()
+          .getUserInfo(
+        GetUserInfoReq(userID),
+        'getUserInfo',
+      ).then((data) {
+        setState(() {
+          _userName = data.actualName; // 姓名
+         // _lastLoginTime = data.lastLoginTime; // 上次登录时间
+        });
+      }).catchError((e) {
+        // Fluttertoast.showToast(msg: e.toString());
+        HSProgressHUD.showError(status: e.toString());
+        print('${e.toString()}');
       });
-    }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
-      HSProgressHUD.showError(status: e.toString());
-      print('${e.toString()}');
-    });
   }
-}
 
+  //退出
+_loginOut() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+    UserDataRepository().getUserInfo(
+        GetUserInfoReq(userID),
+        'logout',
+      ).then((data) {
+        setState(() {
+          
+          // prefs.setString(ConfigKey.USER_ACCOUNT, '');
+          // prefs.setString(ConfigKey.USER_ID, '');
+          // prefs.setString(ConfigKey.NET_TOKEN, '');
+           Navigator.pushNamed(context, pageLogin);
+           
+           HSProgressHUD.showInfo(status: S.of(context).logoutSuccess );
+           //  S.of(context).please_input_password
+        });
+      }).catchError((e) {
+        // Fluttertoast.showToast(msg: e.toString());
+        HSProgressHUD.showError(status: e.toString());
+        print('${e.toString()}');
+      });
+}
+ 
+}
 /// 这是一个可以指定SafeArea区域背景色的AppBar
 /// PreferredSizeWidget提供指定高度的方法
 /// 如果没有约束其高度，则会使用PreferredSizeWidget指定的高度
 class XAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Widget child; //从外部指定内容
   final Color statusBarColor; //设置statusbar的颜色
-
   XAppBar({this.child, this.statusBarColor}) : super();
-
   @override
   State<StatefulWidget> createState() {
     return new _XAppBarState();
@@ -236,8 +450,7 @@ class _XAppBarState extends State<XAppBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height:
-          100, //自动设置为系统appbar高度
+      height: 100, //自动设置为系统appbar高度
       width: 100,
       color: widget.statusBarColor,
       child: SafeArea(
@@ -248,12 +461,3 @@ class _XAppBarState extends State<XAppBar> {
     );
   }
 }
-
-//个人信息
-// Widget _userInfo(){
-//   return Container(
-//      //有时在不确定宽高的情况下需要设置Container的最大或最小宽高，可以通过Container的constraints属性来设置
-//   constraints: new BoxConstraints.expand(),
-//   child: ,
-//   )
-// }

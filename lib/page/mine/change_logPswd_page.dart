@@ -15,6 +15,7 @@ class ChangeLoPS extends StatefulWidget {
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _ChangeLoPSState extends State<ChangeLoPS> {
+  String oldPwd = '';
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -33,62 +34,121 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                     padding: EdgeInsets.all(10.0),
                     child: Text(S.of(context).plaseSetPsd),
                   ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.only(bottom: 16),
+                    color: Colors.white,
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    child: Column(
                       children: [
-                        Text(
-                          '合计',
-                          style:
-                              TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+                        Container(
+                          height: 50.0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(S.of(context).oldPwd),
+                              
+                            ],
+                          ),
                         ),
-                        Text(
-                          '￥10000.00',
-                          style:
-                              TextStyle(fontSize: 15, color: Color(0xFF262626)),
+                        Divider(
+                            height: 1,
+                            color: HsgColors.divider,
+                            indent: 3,
+                            endIndent: 3),
+                        Container(
+                          height: 50.0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(S.of(context).newPwd),
+                              Container(
+                                  padding: EdgeInsets.all(10),
+                                  alignment: Alignment.centerRight,
+                                  child: InkWell(
+                                    onTap: () {
+                                      //调整关于我们
+                                      // Navigator.pushNamed(context, aboutUs);
+                                    },
+                                    child: Icon(
+                                      Icons.navigate_next,
+                                      color: HsgColors.nextPageIcon,
+                                    ),
+                                  )),
+                            ],
+                          ),
                         ),
-                      ]),
-                        Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '合计',
-                          style:
-                              TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+                        Divider(
+                            height: 1,
+                            color: HsgColors.divider,
+                            indent: 3,
+                            endIndent: 3),
+                        Container(
+                          height: 50.0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(S.of(context).confimPwd),
+                              Container(
+                                  padding: EdgeInsets.all(10),
+                                  alignment: Alignment.centerRight,
+                                  child: InkWell(
+                                    onTap: () {
+                                      //调整关于我们
+                                      // Navigator.pushNamed(context, aboutUs);
+                                    },
+                                    child: Icon(
+                                      Icons.navigate_next,
+                                      color: HsgColors.nextPageIcon,
+                                    ),
+                                  )),
+                            ],
+                          ),
                         ),
-                        Text(
-                          '￥10000.00',
-                          style:
-                              TextStyle(fontSize: 15, color: Color(0xFF262626)),
+                        Divider(
+                            height: 1,
+                            color: HsgColors.divider,
+                            indent: 3,
+                            endIndent: 3),
+                        Container(
+                          height: 50.0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(S.of(context).SMS),
+                              Container(
+                                  padding: EdgeInsets.all(10),
+                                  alignment: Alignment.centerRight,
+                                  child: InkWell(
+                                    onTap: () {
+                                      //调整关于我们
+                                      // Navigator.pushNamed(context, aboutUs);
+                                    },
+                                    child: Icon(
+                                      Icons.navigate_next,
+                                      color: HsgColors.nextPageIcon,
+                                    ),
+                                  )),
+                            ],
+                          ),
                         ),
-                      ]),
-                        Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '合计',
-                          style:
-                              TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-                        ),
-                        Text(
-                          '￥10000.00',
-                          style:
-                              TextStyle(fontSize: 15, color: Color(0xFF262626)),
-                        ),
-                      ]),
-                   Container(
-                  margin: EdgeInsets.all(40), //外边距
-                  height: 44.0,
-                  width: MediaQuery.of(context).size.width,
-                  child: RaisedButton(
-                    child: Text("提交"),
-                    onPressed: () => print("提交"),
-                    color: HsgColors.accent,
-                    textColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5) //设置圆角
-                        ),
+                      ],
+                    ),
                   ),
-                )
+                  Container(
+                    margin: EdgeInsets.all(40), //外边距
+                    height: 44.0,
+                    width: MediaQuery.of(context).size.width,
+                    child: RaisedButton(
+                      child: Text(S.of(context).sumit),
+                      onPressed: () => print("提交"),
+                      color: HsgColors.accent,
+                      textColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5) //设置圆角
+                          ),
+                    ),
+                  )
                 ],
               )),
         ));

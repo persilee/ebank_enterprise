@@ -111,6 +111,7 @@ flutter:
     - images/mine/aboutUs-icon2.png
     - images/mine/aboutUs-icon3.png
     - images/mine/aboutUs-icon4.png
+    - images/mine/mine-icon.png
 
     #time-depost
     - images/time_depost/time_depost_product.png
