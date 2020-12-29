@@ -41,7 +41,6 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     _localCcy = ccyList1[_localCcyId];
     _foreignCcy = ccyList2[_foreignCcyId];
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text(S.current.exchange_rate),
         centerTitle: true,
@@ -82,20 +81,12 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
               ),
             ),
             Container(
-              padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-              child: _rateListTitle(),
+              color: Color(0xFFEEF0EF),
+              padding: EdgeInsets.fromLTRB(10, 8, 0, 8),
+              child: _listTitle(),
             ),
-            Container(
-              child: GridView(
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 0,
-                  crossAxisSpacing: 0,
-                  childAspectRatio: 2.5,
-                ),
-                children: _interestRateList(),
-              ),
+            Expanded(
+              child: _listContent(),
             ),
           ],
         ),
@@ -103,75 +94,53 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     );
   }
 
-  GridView _rateListTitle() {
-    return GridView(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.only(top: 1),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        mainAxisSpacing: 0,
-        crossAxisSpacing: 0,
-        childAspectRatio: 3.5,
-      ),
+  Row _listTitle() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Container(
-          color: Color(0xFFEEF0EF),
-          alignment: Alignment.center,
-          child: Text(
-            S.current.currency,
-            style: TextStyle(fontSize: 16, color: HsgColors.secondDegreeText),
-          ),
+        Text(
+          S.current.currency,
+          style: TextStyle(fontSize: 16, color: HsgColors.secondDegreeText),
         ),
-        Container(
-          color: Color(0xFFEEF0EF),
-          alignment: Alignment.center,
-          child: Text(
-            S.current.selling_price,
-            style: TextStyle(fontSize: 16, color: HsgColors.secondDegreeText),
-          ),
+        Text(
+          S.current.selling_price,
+          style: TextStyle(fontSize: 16, color: HsgColors.secondDegreeText),
         ),
-        Container(
-          color: Color(0xFFEEF0EF),
-          alignment: Alignment.center,
-          child: Text(
-            S.current.buying_price,
-            style: TextStyle(fontSize: 16, color: HsgColors.secondDegreeText),
-          ),
+        Text(
+          S.current.buying_price,
+          style: TextStyle(fontSize: 16, color: HsgColors.secondDegreeText),
         ),
       ],
     );
   }
 
-  List<Widget> _interestRateList() {
-    List<Widget> rates = [];
-    for (var item in rateList) {
-      rates.add(Container(
-        alignment: Alignment.center,
-        decoration: _boxDecoration(),
-        child: Text(
-          item['ccy'],
-          style: TextStyle(fontSize: 16),
-        ),
-      ));
-      rates.add(Container(
-        alignment: Alignment.center,
-        decoration: _boxDecoration(),
-        child: Text(
-          item['sellingPrice'],
-          style: TextStyle(fontSize: 16),
-        ),
-      ));
-      rates.add(Container(
-        alignment: Alignment.center,
-        decoration: _boxDecoration(),
-        child: Text(
-          item['buyingPrice'],
-          style: TextStyle(fontSize: 16),
-        ),
-      ));
-    }
-    return rates;
+  ListView _listContent() {
+    return ListView.builder(
+      itemCount: rateList.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          padding: EdgeInsets.only(top: 15, bottom: 15),
+          decoration: _boxDecoration(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                rateList[index]['ccy'],
+                style: TextStyle(fontSize: 16),
+              ),
+              Text(
+                rateList[index]['sellingPrice'],
+                style: TextStyle(fontSize: 16),
+              ),
+              Text(
+                rateList[index]['buyingPrice'],
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   BoxDecoration _boxDecoration() {
