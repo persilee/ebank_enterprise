@@ -339,6 +339,7 @@ class _DetailListPageState extends State<DetailListPage> {
       }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.dismiss();
     });
   }
 

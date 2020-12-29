@@ -41,6 +41,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     _localCcy = ccyList1[_localCcyId];
     _foreignCcy = ccyList2[_foreignCcyId];
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text(S.current.exchange_rate),
         centerTitle: true,
