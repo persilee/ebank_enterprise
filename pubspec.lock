@@ -529,6 +529,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.4.0"
+  popup_window:
+    dependency: "direct main"
+    description:
+      name: popup_window
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.1"
   process:
     dependency: transitive
     description:

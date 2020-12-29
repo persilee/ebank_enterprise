@@ -35,10 +35,10 @@ import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_rate_page.dart';
 
-// import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
-//import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
+import 'package:ebank_mobile/page/transfer/transfer_detail_page.dart';
+import 'package:ebank_mobile/page/transfer/transfer_record-page.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page/mine/mine_page.dart';
 import 'package:ebank_mobile/page/mine/about_us_page.dart';
@@ -51,6 +51,8 @@ var pageHome = '/';
 var pageLogin = pageHome;
 // var pageCardList = pageHome;
 var pageLoanApplication = "/loan_application_page";
+var pageTransferRecord = "/transfer_record_page";
+var pageTransferDetail = "/transfer_detail_page";
 var pageOperationResult = "/operation_result_page";
 var pageRepaySuccess = "/repay_success_page.dart";
 var pageRepayConfirm = "/repay_confirm_page.dart";
@@ -96,6 +98,8 @@ var appRoutes = {
   pageLoanApplication: (context) => LoanApplicationPage(),
   pageOperationResult: (context) => OperationResultPage(),
   pageLoanInterestRate: (context) => LoanInterestRatePage(),
+  pageTransferRecord: (context) => TrsnsferRecordPage(),
+  pageTransferDetail: (context) => TransferDetailPage(),
   pageCardList: (context) => CardListPage(),
   pageDialogDemo: (context) => DialogDemoPage(),
   pageRepaySuccess: (context) => RepaySuccessPage(),
