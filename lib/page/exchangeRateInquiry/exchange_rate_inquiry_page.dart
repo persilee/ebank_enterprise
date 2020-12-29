@@ -198,21 +198,25 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        GestureDetector(
-          onTap: () {
-            _currencyList(true, _localCcyId, ccyList1);
-          },
-          child: Row(
-            children: [
-              Text(
-                _localCcy,
-                style: TextStyle(fontSize: 20),
-              ),
-              Icon(
-                Icons.arrow_drop_down,
-                size: 25,
-              ),
-            ],
+        Container(
+          width: 70,
+          child: GestureDetector(
+            onTap: () {
+              _currencyList(true, _localCcyId, ccyList1);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  _localCcy,
+                  style: TextStyle(fontSize: 20),
+                ),
+                Icon(
+                  Icons.arrow_drop_down,
+                  size: 25,
+                ),
+              ],
+            ),
           ),
         ),
         GestureDetector(
@@ -226,21 +230,25 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
             height: 25,
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            _currencyList(false, _foreignCcyId, ccyList2);
-          },
-          child: Row(
-            children: [
-              Text(
-                _foreignCcy,
-                style: TextStyle(fontSize: 20),
-              ),
-              Icon(
-                Icons.arrow_drop_down,
-                size: 25,
-              ),
-            ],
+        Container(
+          width: 70,
+          child: GestureDetector(
+            onTap: () {
+              _currencyList(false, _foreignCcyId, ccyList2);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  _foreignCcy,
+                  style: TextStyle(fontSize: 20),
+                ),
+                Icon(
+                  Icons.arrow_drop_down,
+                  size: 25,
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -280,7 +288,9 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     List<String> newList = [];
     int newId = 0;
     setState(() {
-      _isSwap = false;
+      if (_amtController.text != '') {
+        _isSwap = false;
+      }
       newList = ccyList1;
       ccyList1 = ccyList2;
       ccyList2 = newList;
