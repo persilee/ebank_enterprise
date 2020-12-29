@@ -11,6 +11,7 @@ import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_detail_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_page.dart';
+import 'package:ebank_mobile/page/exchangeRateInquiry/exchange_rate_inquiry_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_succeed_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_record_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_info_page.dart';
@@ -138,7 +139,7 @@ var appRoutes = {
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
   // pageTimeDepositContract: (context) => TimeDepositContract(),
   pageForexTrading: (context) => ForexTradingPage(),
-  // pageExchangeRateInquiry: (context) => ExchangeRateInquiryPage(),
+  pageExchangeRateInquiry: (context) => ExchangeRateInquiryPage(),
 };
 
 onGenerateRoute(RouteSettings settings) {
