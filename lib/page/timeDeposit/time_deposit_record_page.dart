@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../page_route.dart';
+import '../../page_route.dart';
 
 class TimeDepositRecordPage extends StatefulWidget {
   TimeDepositRecordPage({Key key}) : super(key: key);
@@ -25,11 +25,12 @@ class TimeDepositRecordPage extends StatefulWidget {
 }
 
 class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
-  // var totalName = '存款总额';
   var ccy = '';
   var totalAmt = '';
   List<Rows> rowList = [];
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
+  double conRate;
 
   @override
   void initState() {
@@ -93,6 +94,9 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           delegate:
               SliverChildBuilderDelegate((BuildContext context, int index) {
         String bal = FormatUtil.formatSringToMoney('${rows[index].bal}');
+
+        double conRate = double.parse(rows[index].conRate) * 100;
+        conRate = double.parse(FormatUtil.formatNum(conRate, 2));
         var endTime = Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -132,7 +136,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
               ),
               Text(
                 //利率
-                rows[index].conRate,
+                '${conRate}%',
                 style: TextStyle(fontSize: 15, color: Colors.red),
               )
             ],
@@ -185,7 +189,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         ];
         var raisedButton = RaisedButton(
             onPressed: () {
-              Navigator.pushNamed(context, pageDepositInfo);
+              go2Detail(rowList[index]);
             },
             padding: EdgeInsets.only(bottom: 12),
             color: Colors.white,
@@ -201,12 +205,16 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     return CustomScrollView(slivers: SliverToBoxAdapters);
   }
 
+  void go2Detail(Rows deposit) {
+    Navigator.pushNamed(context, pageDepositInfo, arguments: deposit);
+  }
+
   _loadDeopstData() {
     bool excludeClosed = true;
-    String page = '1';
-    String pageSize = '200';
+    String page = '2';
+    String pageSize = '10';
     String ciNo = '50000067';
-    String userId = '779295543468752896';
+    String userId = '776112799108562944';
     Future.wait({
       DepositDataRepository().getDepositRecordRows(
           DepositRecordReq(excludeClosed, page, pageSize), 'getDepositRecord'),

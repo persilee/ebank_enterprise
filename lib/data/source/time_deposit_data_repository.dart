@@ -4,6 +4,8 @@
 /// Date: 2020-12-08
 
 import 'package:ebank_mobile/http/hsg_http.dart';
+import 'model/time_deposit_contract.dart';
+import 'model/time_deposit_contract_trial.dart';
 import 'model/time_deposit_product.dart';
 
 class TimeDepositDataRepository {
@@ -15,6 +17,18 @@ class TimeDepositDataRepository {
       });
       return result;
     });
+  }
+
+  Future<TimeDepositContractResp> getTimeDepositContract(
+      TimeDepositContractReq req, String tag) {
+    return request('/tdep/timeDeposit/openTdContract', req, tag,
+        (data) => TimeDepositContractResp.fromJson(data));
+  }
+
+  Future<TimeDepositContractTrialResp> getTimeDepositContractTrial(
+      TimeDepositContractTrialReq req, String tag) {
+    return request('/tdep/timeDeposit/openTdContractTrial', req, tag,
+        (data) => TimeDepositContractTrialResp.fromJson(data));
   }
 
   static final _instance = TimeDepositDataRepository._internal();

@@ -556,6 +556,7 @@ class _HomePageState extends State<HomePage> {
         //转账记录
       } else if (S.current.transfer_model == title) {
         //收款范本
+        Navigator.pushNamed(context, pageTranferPartner);
       } else if (S.current.deposit_open == title) {
         //'定期开立'
         Navigator.pushNamed(context, pageTimeDepostProduct);
@@ -564,8 +565,10 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, pageTimeDepositRecord);
       } else if (S.current.deposit_rate == title) {
         //'利率查看'
+        Navigator.pushNamed(context, pageMyDepositRate);
       } else if (S.current.loan_apply == title) {
         //'贷款申请'
+        Navigator.pushNamed(context, pageLoanApplication);
       } else if (S.current.loan_record == title) {
         //'贷款记录'
         Navigator.pushNamed(context, pageLimitDetails);
@@ -575,8 +578,10 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, pageLoanInterestRate);
       } else if (S.current.foreign_exchange == title) {
         //'外汇买卖'
+        Navigator.pushNamed(context, pageForexTrading);
       } else if (S.current.exchange_rate == title) {
         //'汇率查询'
+        Navigator.pushNamed(context, pageExchangeRateInquiry);
       } else if (S.current.electronic_statement == title) {
         //'电子结单'
         Navigator.pushNamed(context, pageElectronicStatement);

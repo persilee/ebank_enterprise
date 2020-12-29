@@ -37,7 +37,19 @@ dependencies:
   shared_preferences: ^0.5.12+4
   flutter_svprogresshud: ^0.0.6 #加载提示框
   encrypt: ^4.0.0 #AES加解密
+  flutter_picker: ^1.1.0 #选择器
+  contact_picker: ^0.0.2 #获取联系人
   webview_flutter: ^1.0.7
+  date_format: ^1.0.6
+  flutter_tableview: ^1.0.1
+  flutter_easyrefresh: ^2.1.7
+  flutter_cupertino_date_picker:
+    git:
+      url: https://github.com/imshashank/flutter-cupertino-date-picker # Repo
+      ref: master # Branch name
+  ai_decimal_accuracy:
+    git:
+      url: https://github.com/pdliuw/ai_decimal_accuracy.git
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +85,11 @@ flutter:
     - images/tabbar/tabbar_approval_select.png
     - images/tabbar/tabbar_mine_normal.png
     - images/tabbar/tabbar_mine_select.png
+    - images/tabbar/tabbar_download.png
+    - images/tabbar/tabbar_we_chat.png
+    - images/tabbar/tabbar_wechat_moments.png
+    - images/tabbar/tabbar_delete.png
+    - images/tabbar/tabbar_reset.png
 
     #home
     #home_nav
@@ -126,8 +143,11 @@ flutter:
     - images/transferIcon/transfer_features_icon/transfer_features_plan.png
     - images/transferIcon/transfer_features_icon/transfer_features_record.png
     - images/transferIcon/transfer_features_icon/transfer_features_timely.png
+    - images/transferIcon/transfer_features_icon/transfer_features_scan.png
+    - images/transferIcon/transfer_features_icon/transfer_features_acount.png
     #其他
     - images/transferIcon/transfer_sample_placeholder.png
+    - images/transferIcon/transfer_bank.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
