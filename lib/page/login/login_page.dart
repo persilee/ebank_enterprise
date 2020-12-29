@@ -3,8 +3,6 @@
 /// Author: lijiawei
 /// Date: 2020-12-04
 
-import 'dart:async';
-
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
@@ -36,12 +34,13 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
   final TextEditingController _accountTC =
-      TextEditingController(text: 'Smile04');
-  final TextEditingController _passwordTC =
-      TextEditingController(text: 'Qwe123456~');
+      TextEditingController(text: 'huanglixia');
 
-  var _account = 'Smile04'; //'18033412021';
-  var _password = 'Qwe123456~'; //'123456';
+  final TextEditingController _passwordTC =
+      TextEditingController(text: 'sFE9Y06I');
+
+  var _account = 'huanglixia'; //'18033412021';
+  var _password = 'sFE9Y06I'; //'123456';
 
   @override
   void initState() {

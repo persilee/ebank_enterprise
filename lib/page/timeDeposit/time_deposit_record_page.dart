@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../page_route.dart';
+import '../../page_route.dart';
 
 class TimeDepositRecordPage extends StatefulWidget {
   TimeDepositRecordPage({Key key}) : super(key: key);

@@ -4,23 +4,21 @@
 /// Date: 2020-12-23
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
+import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
+import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
+// ignore: must_be_immutable
 class HsgPasswordDialog extends StatelessWidget {
   final String title;
-  final List<String> keyboardNum = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9'
-  ];
-  final List<String> passwordList = [];
+  List<String> keyboardNum = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  List<String> passwordList = [];
+  String password = '';
+
   HsgPasswordDialog({Key key, this.title});
+
   @override
   Widget build(BuildContext context) {
     Widget passwordBoxTitle;
@@ -32,7 +30,12 @@ class HsgPasswordDialog extends StatelessWidget {
             child: Container(
               height: 40,
               alignment: Alignment.center,
-              child: Text(title),
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: HsgColors.firstDegreeText,
+                ),
+              ),
             ),
           ),
           GestureDetector(
@@ -42,6 +45,7 @@ class HsgPasswordDialog extends StatelessWidget {
             child: Icon(
               Icons.clear,
               size: 18,
+              color: HsgColors.firstDegreeText,
             ),
           )
         ],
@@ -66,8 +70,17 @@ class HsgPasswordDialog extends StatelessWidget {
             ],
           ),
           Container(
-            padding: EdgeInsets.only(top: 10),
-            child: _passwordBox(),
+            padding: EdgeInsets.only(top: 15),
+            child: GridView(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.only(left: 50, right: 50),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 6,
+                childAspectRatio: 1,
+              ),
+              children: _passwordBox(),
+            ),
           ),
           Container(
             color: Color(0xFFD1D1D1),
@@ -78,121 +91,28 @@ class HsgPasswordDialog extends StatelessWidget {
     );
   }
 
-  //密码框
-  Row _passwordBox() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          width: 48,
-          height: 48,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
-          ),
-          child: Text(
-            passwordList.length > 0 ? '*' : '',
-            style: TextStyle(
-              fontSize: 35,
-            ),
-          ),
-        ),
-        Container(
-          width: 48,
-          height: 48,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
-          ),
-          child: Text(
-            passwordList.length > 1 ? '*' : '',
-            style: TextStyle(
-              fontSize: 35,
-            ),
-          ),
-        ),
-        Container(
-          width: 48,
-          height: 48,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
-          ),
-          child: Text(
-            passwordList.length > 2 ? '*' : '',
-            style: TextStyle(
-              fontSize: 35,
-            ),
-          ),
-        ),
-        Container(
-          width: 48,
-          height: 48,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
-          ),
-          child: Text(
-            passwordList.length > 3 ? '*' : '',
-            style: TextStyle(
-              fontSize: 35,
-            ),
-          ),
-        ),
-        Container(
-          width: 48,
-          height: 48,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
-          ),
-          child: Text(
-            passwordList.length > 4 ? '*' : '',
-            style: TextStyle(
-              fontSize: 35,
-            ),
-          ),
-        ),
-        Container(
-          width: 48,
-          height: 48,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
-          ),
-          child: Text(
-            passwordList.length > 5 ? '*' : '',
-            style: TextStyle(
-              fontSize: 35,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Column _passwordKeyboard(BuildContext context) {
     return Column(
       children: [
         GridView(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.only(top: 2, bottom: 2),
+          padding: EdgeInsets.only(top: 1),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
-            mainAxisSpacing: 2.0,
-            crossAxisSpacing: 2.0,
+            mainAxisSpacing: 1.0,
+            crossAxisSpacing: 1.0,
             childAspectRatio: 2.5,
           ),
-          children: _sliversSection(context),
+          children: _keyboardButtonNum(context),
         ),
         GridView(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.only(top: 1),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
-            mainAxisSpacing: 2.0,
-            crossAxisSpacing: 2.0,
+            mainAxisSpacing: 1.0,
             childAspectRatio: 2.5,
           ),
           children: [
@@ -209,6 +129,60 @@ class HsgPasswordDialog extends StatelessWidget {
     );
   }
 
+  //密码框
+  List<Widget> _passwordBox() {
+    List<Widget> passwordbox = [];
+    for (var i = 0; i < 6; i++) {
+      passwordbox.add(
+        Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
+          ),
+          child: Text(
+            passwordList.length > i ? '●' : '',
+            style: TextStyle(
+              fontSize: 16,
+              color: HsgColors.firstDegreeText,
+            ),
+          ),
+        ),
+      );
+    }
+    return passwordbox;
+  }
+
+  //键盘按钮1-9
+  List<Widget> _keyboardButtonNum(BuildContext context) {
+    List<Widget> keyboardBut = [];
+    for (var item in keyboardNum) {
+      keyboardBut.add(
+        FlatButton(
+          color: Colors.white,
+          child: Text(
+            item,
+            style: TextStyle(
+              fontSize: 25,
+              color: HsgColors.firstDegreeText,
+            ),
+          ),
+          onPressed: () {
+            if (passwordList.length < 6) {
+              passwordList.add(item);
+              (context as Element).markNeedsBuild();
+            }
+            if (passwordList.length == 6) {
+              password = EncryptUtil.aesEncode(passwordList.join());
+              _verifyTradePaw(password, context);
+            }
+          },
+        ),
+      );
+    }
+    return keyboardBut;
+  }
+
+  //键盘按钮0
   FlatButton _keyboardButtonZero(BuildContext context) {
     return FlatButton(
       color: Colors.white,
@@ -216,7 +190,7 @@ class HsgPasswordDialog extends StatelessWidget {
         '0',
         style: TextStyle(
           fontSize: 25,
-          color: Color(0xFF666666),
+          color: HsgColors.firstDegreeText,
         ),
       ),
       onPressed: () {
@@ -225,12 +199,14 @@ class HsgPasswordDialog extends StatelessWidget {
           (context as Element).markNeedsBuild();
         }
         if (passwordList.length == 6) {
-          Navigator.pop(context, passwordList);
+          password = EncryptUtil.aesEncode(passwordList.join());
+          _verifyTradePaw(password, context);
         }
       },
     );
   }
 
+  //键盘按钮删除
   FlatButton _keyboardButtonDel(BuildContext context) {
     return FlatButton(
       onPressed: () {
@@ -241,35 +217,26 @@ class HsgPasswordDialog extends StatelessWidget {
       },
       child: Icon(
         Icons.backspace_outlined,
+        color: HsgColors.firstDegreeText,
       ),
     );
   }
 
-  List<Widget> _sliversSection(BuildContext context) {
-    List<Widget> section = [];
-    for (var item in keyboardNum) {
-      section.add(
-        FlatButton(
-          color: Colors.white,
-          child: Text(
-            item,
-            style: TextStyle(
-              fontSize: 25,
-              color: Color(0xFF666666),
-            ),
-          ),
-          onPressed: () {
-            if (passwordList.length < 6) {
-              passwordList.add(item);
-              (context as Element).markNeedsBuild();
-            }
-            if (passwordList.length == 6) {
-              Navigator.pop(context, passwordList);
-            }
-          },
-        ),
-      );
-    }
-    return section;
+  //验证交易密码
+  _verifyTradePaw(String payPassword, BuildContext context) async {
+    VerifyTradePawRepository()
+        .verifyTransPwdNoSms(
+            VerifyTransPwdNoSmsReq(payPassword), 'VerifyTransPwdNoSmsReq')
+        .then((data) {
+      Navigator.pop(context, true);
+    }).catchError((e) {
+      if (e.toString() == 'ECUST031') {
+        Fluttertoast.showToast(msg: '交易密码错误！请重试');
+      } else {
+        Fluttertoast.showToast(msg: '未设置交易密码！');
+      }
+      passwordList.clear();
+      (context as Element).markNeedsBuild();
+    });
   }
 }

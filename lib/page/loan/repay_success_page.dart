@@ -3,7 +3,6 @@
 /// Author: zhangqirong
 /// Date: 2020-12-18
 
-import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';

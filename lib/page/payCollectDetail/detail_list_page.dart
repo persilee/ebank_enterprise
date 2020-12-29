@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/get_pay_collect_detail.dart';
 import 'package:ebank_mobile/data/source/pay_collect_detail_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_tableview/flutter_tableview.dart';
@@ -53,33 +54,7 @@ class _DetailListPageState extends State<DetailListPage> {
             height: 40,
             color: Colors.white,
             padding: EdgeInsets.only(left: 16, right: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: _cupertinoPicker,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(_date),
-                      Icon(Icons.arrow_drop_down)
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: _accountList,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(accList[_position] == ''
-                          ? intl.S.current.all_account
-                          : accList[_position]),
-                      Icon(Icons.arrow_drop_down)
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            child: _getRow(_date),
           ),
           Expanded(
             child: RefreshIndicator(
@@ -91,6 +66,33 @@ class _DetailListPageState extends State<DetailListPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Row _getRow(String _date) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        GestureDetector(
+          onTap: _cupertinoPicker,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[Text(_date), Icon(Icons.arrow_drop_down)],
+          ),
+        ),
+        GestureDetector(
+          onTap: _accountList,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(accList[_position] == ''
+                  ? intl.S.current.all_account
+                  : accList[_position]),
+              Icon(Icons.arrow_drop_down)
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -116,55 +118,54 @@ class _DetailListPageState extends State<DetailListPage> {
         ),
       ],
     );
-    // return Container(
-    //   height: 40,
-    //   alignment: Alignment.centerLeft,
-    //   padding: EdgeInsets.only(left: 16),
-    //   color: Colors.white,
-    //   child: Text(revenueHistoryList[section].transDate),
-    // );
   }
 
   // cell item widget builder.
   Widget _cellBuilder(BuildContext context, int section, int row) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        InkWell(
-          onTap: () {
-            _goToDetail(revenueHistoryList[section].ddFinHistDOList[row]);
-          },
-          child: Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(left: 16, right: 16, top: 15),
-            child: Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(right: 13),
-                  child: ClipOval(
-                    child: Image.asset(
-                      'images/home/listIcon/home_list_payments.png',
-                      height: 38,
-                      width: 38,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: _transactionInfo(section, row),
-                ),
-              ],
+    return Container(
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            onTap: () {
+              _goToDetail(revenueHistoryList[section].ddFinHistDOList[row]);
+            },
+            child: _getContainer(section, row),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 68, right: 16),
+            child: Divider(
+              height: 0.5,
+              color: HsgColors.divider,
             ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 68, right: 16),
-          child: Divider(
-            height: 0.5,
-            color: HsgColors.divider,
+        ],
+      ),
+    );
+  }
+
+  Container _getContainer(int section, int row) {
+    return Container(
+      padding: EdgeInsets.only(left: 16, right: 16, top: 15),
+      child: Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 13),
+            child: ClipOval(
+              child: Image.asset(
+                'images/home/listIcon/home_list_payments.png',
+                height: 38,
+                width: 38,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
-      ],
+          Expanded(
+            child: _transactionInfo(section, row),
+          ),
+        ],
+      ),
     );
   }
 
@@ -322,11 +323,13 @@ class _DetailListPageState extends State<DetailListPage> {
   }
 
   _getRevenueByCards(String localDateStart, List<String> cards) async {
+    HSProgressHUD.show();
     PayCollectDetailRepository()
         .getRevenueByCards(
             GetRevenueByCardsReq(localDateStart: startDate, cards: cards),
             'GetRevenueByCardsReq')
         .then((data) {
+      HSProgressHUD.dismiss();
       if (data.revenueHistoryDTOList != null) {
         setState(() {
           revenueHistoryList = data.revenueHistoryDTOList;
@@ -334,6 +337,7 @@ class _DetailListPageState extends State<DetailListPage> {
       }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.dismiss();
     });
   }
 

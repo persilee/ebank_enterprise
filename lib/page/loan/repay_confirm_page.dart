@@ -7,13 +7,16 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'package:ebank_mobile/data/source/model/post_repayment.dart';
+import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
+import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 class RepayConfirmPage extends StatefulWidget {
   @override
@@ -21,6 +24,8 @@ class RepayConfirmPage extends StatefulWidget {
 }
 
 class _RepayConfirmPageState extends State<RepayConfirmPage> {
+  List<String> passwordList = [];
+  var _payPassword = '';
   var currency = ''; //币种
   var restLoan = ''; //贷款余额
   var loanInterest = ''; //贷款利率
@@ -29,9 +34,7 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
   var repayInterest = ''; //还款利息
   var fine = ''; //罚金
   var totalRepay = ''; //还款总额
-  var pwd = '111111';
   Map message = new Map();
-
   //请求数据
   var acNo = '';
   var dueAmount = '';
@@ -47,19 +50,10 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
   var repaymentMethod = '';
   var rescheduleType = '';
   var totalAmount = '';
-  //创建文本控制器实例
-  TextEditingController _inputController = new TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _inputController.addListener(() {
-      var text = _inputController.text;
-      print(text);
-      if (text == pwd) {
-        _loadData();
-      }
-    });
     //初始化
     currency = 'HKD';
     restLoan = '0.00';
@@ -185,6 +179,7 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
         ],
       ),
     );
+    //确定提交按钮
     var btnConfirm = Container(
       padding: EdgeInsets.fromLTRB(30, 50, 30, 50),
       child: RaisedButton(
@@ -195,7 +190,7 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
         padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
         onPressed: () {
           //弹出底部弹窗输入密码
-          _bottomDialog(context);
+          _openBottomSheet();
         },
         shape: RoundedRectangleBorder(
           side: BorderSide.none,
@@ -225,95 +220,34 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
     );
   }
 
-  //底部弹窗
-  _bottomDialog(BuildContext context) async {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        enableDrag: false,
-        isDismissible: false,
-        context: context,
-        builder: (BuildContext context) {
-          return _inputPassword();
-        });
+  //交易密码窗口
+  void _openBottomSheet() async {
+    passwordList = await showHsgBottomSheet(
+      context: context,
+      builder: (context) {
+        return HsgPasswordDialog(
+          title: S.current.input_password,
+        );
+      },
+    );
+    if (passwordList != null) {
+      if (passwordList.length == 6) {
+        _payPassword = EncryptUtil.aesEncode(passwordList.join());
+        _submitRepayment();
+      }
+    }
   }
 
-  Widget _inputPassword() {
-    var stackTitle = Stack(
-      fit: StackFit.loose,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              S.of(context).please_input_the_payment_password,
-              style: TextStyle(fontSize: 15),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Icon(
-                Icons.clear,
-                color: HsgColors.hintText,
-                size: 20,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-    return Container(
-      height: 500,
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(10, 15, 10, 10),
-            child: stackTitle,
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 1),
-            child: Divider(
-              height: 0,
-              color: HsgColors.textHintColor,
-            ),
-          ),
-          _pwdFrame(),
-        ],
-      ),
-    );
-  }
-
-  Widget _pwdFrame() {
-    return Container(
-        padding: EdgeInsets.only(top: 15),
-        width: MediaQuery.of(context).size.width,
-        alignment: Alignment.center,
-        child: PinCodeTextField(
-          pinBoxHeight: (MediaQuery.of(context).size.width - 90) / 6,
-          pinBoxWidth: (MediaQuery.of(context).size.width - 90) / 6,
-          pinBoxBorderWidth: 1,
-          pinBoxRadius: 3,
-          defaultBorderColor: HsgColors.hintText,
-          hasTextBorderColor: HsgColors.hintText,
-          controller: _inputController,
-          isCupertino: false,
-          maxLength: 6,
-          hideCharacter: true,
-          maskCharacter: "●",
-          pinBoxDecoration: ProvidedPinBoxDecoration.defaultPinBoxDecoration,
-          pinTextStyle: TextStyle(fontSize: 20),
-          autofocus: true,
-          errorBorderColor: Colors.red,
-          onTextChanged: (chara) {
-            // print("chara==>$chara");
-          },
-          keyboardType: TextInputType.number,
-        ));
+  void _submitRepayment() async {
+    VerifyTradePawRepository()
+        .verifyTransPwdNoSms(
+            VerifyTransPwdNoSmsReq(_payPassword), 'VerifyTransPwdNoSmsReq')
+        .then((data) {
+          _loadData();
+        })
+        .catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
   }
 
   Widget _getPadding(double l, double t, double r, double b) {

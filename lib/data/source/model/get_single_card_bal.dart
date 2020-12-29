@@ -58,12 +58,10 @@ class CardBalBean extends Object {
   @JsonKey(name: 'equAmt')
   String equAmt;
 
-  CardBalBean(
-    this.cardNo,
-    this.ccy,
-    this.currBal,
-    this.equAmt,
-  );
+  @JsonKey(name: 'avaBal')
+  String avaBal;
+
+  CardBalBean(this.cardNo, this.ccy, this.currBal, this.equAmt, this.avaBal);
 
   factory CardBalBean.fromJson(Map<String, dynamic> srcJson) =>
       _$CardBalBeanFromJson(srcJson);
