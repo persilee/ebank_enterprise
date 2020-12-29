@@ -240,5 +240,11 @@
   "placeOldPwd": "Please Enter The Old Password",
   "placeNewPwd": "Please Enter The New Password",
   "placeConfimPwd": "Please Enter The New Password Again",
-  "placeSMS": "Please Input SMS Verification Code"
+  "placeSMS": "Please Input SMS Verification Code",
+  "setPayPwd": "Change Payment Password",
+  "plaseSetPayPsd": "Please Set Payment Password",
+  "oldPayPwd": "Old Payment Password",
+  "newPayPwd": "New Payment Password",
+  "confimPayPwd": "Confirm New Payment Password",
+  "resetPayPsd": "Set Payment Password"
 }

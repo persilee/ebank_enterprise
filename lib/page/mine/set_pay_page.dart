@@ -1,5 +1,5 @@
 /**
-  @desc   设置支付密码
+  @desc   修改支付密码
   @author hlx
  */
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -18,13 +18,13 @@ class _SetPayPageState extends State<SetPayPage> {
   TextEditingController _oldPwd = TextEditingController();
   TextEditingController _newPwd = TextEditingController();
   TextEditingController _confimPwd = TextEditingController();
-  TextEditingController _SMS = TextEditingController();
+  TextEditingController _sms = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: AppBar(
-          title: Text(S.of(context).setChangLoginPasd),
+          title: Text(S.of(context).resetPayPsd),
           elevation: 15.0,
         ),
         body: Container(
@@ -36,7 +36,7 @@ class _SetPayPageState extends State<SetPayPage> {
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.all(10.0),
-                    child: Text(S.of(context).plaseSetPsd),
+                    child: Text(S.of(context).plaseSetPayPsd),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -45,28 +45,20 @@ class _SetPayPageState extends State<SetPayPage> {
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Column(
                       children: [
-                        InputList(S.of(context).oldPwd,
-                            S.of(context).placeOldPwd, _oldPwd),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
-                        InputList(S.of(context).newPwd,
+                        InputList(S.of(context).newPayPwd,
                             S.of(context).placeNewPwd, _newPwd),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
-                        InputList(S.of(context).confimPwd,
+                        InputList(S.of(context).confimPayPwd,
                             S.of(context).placeConfimPwd, _confimPwd),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
-                        InputList(S.of(context).SMS, S.of(context).placeSMS, _SMS,isShow:true),
                       ],
                     ),
                   ),
@@ -139,6 +131,7 @@ class InputList extends StatelessWidget {
               width: 90,
               height: 32,
               child: FlatButton(
+                onPressed: () {},
                 //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
                 padding: EdgeInsets.symmetric(horizontal: 8),
                 //文字颜色

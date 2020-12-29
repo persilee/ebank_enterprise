@@ -239,5 +239,11 @@
   "placeOldPwd": "请输入旧密码",
   "placeNewPwd": "请输入新密码",
   "placeConfimPwd": "请再次输入新密码",
-  "placeSMS": "请输入短信验证码"
+  "placeSMS": "请输入短信验证码",
+  "setPayPwd": "修改支付密码",
+  "plaseSetPayPsd": "请设置支付密码",
+  "oldPayPwd": "旧支付密码",
+  "newPayPwd": "新支付密码",
+  "confimPayPwd": "确认新支付密码",
+  "resetPayPsd": "设置支付密码"
 }

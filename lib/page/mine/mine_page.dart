@@ -294,7 +294,7 @@ Widget _mineContendView(context) {
                     alignment: Alignment.centerRight,
                     child: InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, changePayPS);
+                        Navigator.pushNamed(context, setPayPage);
                       },
                       child: Icon(
                         Icons.navigate_next,
