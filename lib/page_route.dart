@@ -47,6 +47,8 @@ import 'package:ebank_mobile/page/mine/mine_page.dart';
 import 'package:ebank_mobile/page/mine/about_us_page.dart';
 import 'package:ebank_mobile/page/mine/feedback_page.dart';
 import 'package:ebank_mobile/page/mine/change_logPswd_page.dart';
+import 'package:ebank_mobile/page/mine/change_pay_page.dart';
+import 'package:ebank_mobile/page/mine/set_pay_page.dart';
 
 var pageHome = '/';
 var pageLogin = pageHome;
@@ -75,7 +77,9 @@ var pageCardLimit = '/card_limit_manager';
 var minePage = '/mine_page';
 var aboutUs = '/about_us_page';
 var feedback = '/feedback_page';
-var changeLgPs = '/change_loginpassword_page';
+var changeLgPs = '/change_loginpassword_page.dart';
+var changePayPS = '/change_pay_page.dart';
+var setPayPage = '/set_pay_page.dart';
 var pageAccountOverview = '/account_overview';
 var pageDetailInfo = '/detail_info_page';
 var pageDetailList = '/detail_list_page';
@@ -123,7 +127,8 @@ var appRoutes = {
   aboutUs: (context) => AboutUsPage(),
   feedback: (context) => FeedbackPage(),
   changeLgPs: (context) => ChangeLoPS(),
-  //pageFeatureList(context) => FeatureListPage(),
+ // setPayPage: (context) => SetPayPage(),
+  changePayPS: (context) => ChangePayPage(),
   pageAccountOverview: (context) => AccountOverviewPage(),
   pageDetailList: (context) => DetailListPage(),
   pageDetailInfo: (context) => DetailInfoPage(),

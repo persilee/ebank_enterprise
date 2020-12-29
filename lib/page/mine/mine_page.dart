@@ -272,7 +272,7 @@ Widget _mineContendView(context) {
                     alignment: Alignment.centerRight,
                     child: InkWell(
                       onTap: () {
-                         Navigator.pushNamed(context, changeLgPs);
+                         Navigator.pushNamed(context, changePayPS);
                       },
                       child: Icon(
                         Icons.navigate_next,
@@ -293,7 +293,9 @@ Widget _mineContendView(context) {
                     padding: EdgeInsets.all(10),
                     alignment: Alignment.centerRight,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, changePayPS);
+                      },
                       child: Icon(
                         Icons.navigate_next,
                         color: HsgColors.nextPageIcon,

@@ -91,11 +91,11 @@
   "hint_input_receipt_name": "请输入收款人姓名",
   "hint_input_receipt_account": "请输入收款人账号",
   "account_num": "账号",
-  "tran_limit_amt_with_value" : "限额：",
+  "tran_limit_amt_with_value": "限额：",
   "transfer_from": "转出账号",
-  "balance_with_value":"余额：",
-  "receipt_side" :"收款方",
-  "transfer_postscript":"转账附言",
+  "balance_with_value": "余额：",
+  "receipt_side": "收款方",
+  "transfer_postscript": "转账附言",
   "transfer_model": "收款范本",
   "deposit_open": "定期开立",
   "time_deposit_type": "定期类型",
@@ -235,5 +235,9 @@
   "sumit": "提交",
   "newPwd": "新密码",
   "confimPwd": "确认新密码",
-  "SMS": "短信验证码"
+  "SMS": "短信验证码",
+  "placeOldPwd": "请输入旧密码",
+  "placeNewPwd": "请输入新密码",
+  "placeConfimPwd": "请再次输入新密码",
+  "placeSMS": "请输入短信验证码"
 }

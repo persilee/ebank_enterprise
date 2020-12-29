@@ -1,20 +1,20 @@
 /**
-  @desc   修改登录密码
+  @desc   修改支付密码
   @author hlx
  */
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 
-class ChangeLoPS extends StatefulWidget {
+class ChangePayPage extends StatefulWidget {
   @override
-  _ChangeLoPSState createState() => _ChangeLoPSState();
+  _ChangePayPageState createState() => _ChangePayPageState();
 }
 
 //表单状态
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-class _ChangeLoPSState extends State<ChangeLoPS> {
+class _ChangePayPageState extends State<ChangePayPage> {
   TextEditingController _oldPwd = TextEditingController();
   TextEditingController _newPwd = TextEditingController();
   TextEditingController _confimPwd = TextEditingController();
