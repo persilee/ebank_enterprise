@@ -1,5 +1,9 @@
-import 'dart:ui';
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+/// 外汇买卖
+/// Author: CaiTM
+/// Date: 2020-12-28
 
+import 'dart:ui';
 import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -30,7 +34,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   String _localCcy = '';
   String _foreignCcy = '';
   String _foreignAmt = '0.00';
-  bool _input = false;
+  bool _isSwap = true;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +82,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
             ),
             Container(
               color: Color(0xFFEEF0EF),
-              padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+              padding: EdgeInsets.fromLTRB(10, 8, 0, 8),
               child: _listTitle(),
             ),
             Expanded(
@@ -87,38 +91,6 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
           ],
         ),
       ),
-    );
-  }
-
-  ListView _listContent() {
-    return ListView.builder(
-      itemCount: rateList.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          padding: EdgeInsets.only(top: 15, bottom: 15),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                  bottom: BorderSide(width: 0.5, color: HsgColors.divider))),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                rateList[index]['ccy'],
-                style: TextStyle(fontSize: 16),
-              ),
-              Text(
-                rateList[index]['sellingPrice'],
-                style: TextStyle(fontSize: 16),
-              ),
-              Text(
-                rateList[index]['buyingPrice'],
-                style: TextStyle(fontSize: 16),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 
@@ -142,6 +114,44 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     );
   }
 
+  ListView _listContent() {
+    return ListView.builder(
+      itemCount: rateList.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          padding: EdgeInsets.only(top: 15, bottom: 15),
+          decoration: _boxDecoration(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                rateList[index]['ccy'],
+                style: TextStyle(fontSize: 16),
+              ),
+              Text(
+                rateList[index]['sellingPrice'],
+                style: TextStyle(fontSize: 16),
+              ),
+              Text(
+                rateList[index]['buyingPrice'],
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  BoxDecoration _boxDecoration() {
+    return BoxDecoration(
+      color: Colors.white,
+      border: Border(
+        bottom: BorderSide(width: 0.5, color: HsgColors.divider),
+      ),
+    );
+  }
+
   TextField _foreignAmtInput() {
     return TextField(
       textAlign: TextAlign.center,
@@ -151,7 +161,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
         border: InputBorder.none,
         hintStyle: TextStyle(
           fontSize: 20,
-          color: _input ? Colors.black : HsgColors.textHintColor,
+          color: _foreignAmt != '0.00' ? Colors.black : HsgColors.textHintColor,
         ),
       ),
     );
@@ -188,21 +198,25 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        GestureDetector(
-          onTap: () {
-            _currencyList(true, _localCcyId, ccyList1);
-          },
-          child: Row(
-            children: [
-              Text(
-                _localCcy,
-                style: TextStyle(fontSize: 20),
-              ),
-              Icon(
-                Icons.arrow_drop_down,
-                size: 25,
-              ),
-            ],
+        Container(
+          width: 70,
+          child: GestureDetector(
+            onTap: () {
+              _currencyList(true, _localCcyId, ccyList1);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  _localCcy,
+                  style: TextStyle(fontSize: 20),
+                ),
+                Icon(
+                  Icons.arrow_drop_down,
+                  size: 25,
+                ),
+              ],
+            ),
           ),
         ),
         GestureDetector(
@@ -216,21 +230,25 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
             height: 25,
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            _currencyList(false, _foreignCcyId, ccyList2);
-          },
-          child: Row(
-            children: [
-              Text(
-                _foreignCcy,
-                style: TextStyle(fontSize: 20),
-              ),
-              Icon(
-                Icons.arrow_drop_down,
-                size: 25,
-              ),
-            ],
+        Container(
+          width: 70,
+          child: GestureDetector(
+            onTap: () {
+              _currencyList(false, _foreignCcyId, ccyList2);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  _foreignCcy,
+                  style: TextStyle(fontSize: 20),
+                ),
+                Icon(
+                  Icons.arrow_drop_down,
+                  size: 25,
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -252,6 +270,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
         });
     if (result != null && result != false) {
       setState(() {
+        _isSwap = true;
         if (isCcy) {
           _localCcyId = result;
           _localCcy = dataList[_localCcyId];
@@ -260,28 +279,40 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
           _foreignCcy = dataList[_foreignCcyId];
         }
       });
+      _amountConversion();
     }
   }
 
+  //转换
   _currencySwap() async {
+    List<String> newList = [];
+    int newId = 0;
     setState(() {
-      List<String> newList = [];
+      if (_amtController.text != '') {
+        _isSwap = false;
+      }
       newList = ccyList1;
       ccyList1 = ccyList2;
       ccyList2 = newList;
-      _foreignAmt = '0.00';
-      _amtController.text = '';
+
+      newId = _localCcyId;
+      _localCcyId = _foreignCcyId;
+      _foreignCcyId = newId;
+
+      _amountConversion();
     });
   }
 
+  //计算转换金额
   _amountConversion() async {
-    _input = true;
     rateList.forEach((element) {
       if (element['ccy'] == _foreignCcy) {
         setState(() {
           if (_amtController.text != '') {
-            double newAmt =
-                AiDecimalAccuracy.parse(_amtController.text).toDouble() /
+            double newAmt = _isSwap
+                ? AiDecimalAccuracy.parse(_amtController.text).toDouble() /
+                    AiDecimalAccuracy.parse(element['buyingPrice']).toDouble()
+                : AiDecimalAccuracy.parse(_amtController.text).toDouble() *
                     AiDecimalAccuracy.parse(element['buyingPrice']).toDouble();
             _foreignAmt = newAmt.toStringAsFixed(2);
           } else {
@@ -289,11 +320,14 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
           }
         });
       }
+
       if (element['ccy'] == _localCcy) {
         setState(() {
           if (_amtController.text != '') {
-            double newAmt =
-                AiDecimalAccuracy.parse(_amtController.text).toDouble() *
+            double newAmt = _isSwap
+                ? AiDecimalAccuracy.parse(_amtController.text).toDouble() *
+                    AiDecimalAccuracy.parse(element['buyingPrice']).toDouble()
+                : AiDecimalAccuracy.parse(_amtController.text).toDouble() /
                     AiDecimalAccuracy.parse(element['buyingPrice']).toDouble();
             _foreignAmt = newAmt.toStringAsFixed(2);
           } else {

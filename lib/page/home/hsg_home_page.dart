@@ -554,6 +554,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, pageTransfer);
       } else if (S.current.transfer_record == title) {
         //转账记录
+        Navigator.pushNamed(context, pageTransferRecord);
       } else if (S.current.transfer_model == title) {
         //收款范本
         Navigator.pushNamed(context, pageTranferPartner);

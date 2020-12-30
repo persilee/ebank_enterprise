@@ -38,6 +38,7 @@ dependencies:
   flutter_svprogresshud: ^0.0.6 #加载提示框
   encrypt: ^4.0.0 #AES加解密
   flutter_picker: ^1.1.0 #选择器
+  popup_window: ^1.1.1 #顶部弹窗
   contact_picker: ^0.0.2 #获取联系人
   left_scroll_actions: ^1.4.0
   webview_flutter: ^1.0.7
@@ -129,6 +130,7 @@ flutter:
     - images/mine/aboutUs-icon2.png
     - images/mine/aboutUs-icon3.png
     - images/mine/aboutUs-icon4.png
+    - images/mine/mine-icon.png
 
     #time-depost
     - images/time_depost/time_depost_product.png
@@ -143,6 +145,16 @@ flutter:
     - images/transferIcon/transfer_features_icon/transfer_features_plan.png
     - images/transferIcon/transfer_features_icon/transfer_features_record.png
     - images/transferIcon/transfer_features_icon/transfer_features_timely.png
+    
+    #转账记录页面图片
+    - images/transferIcon/transfert_to.png
+    - images/transferIcon/transfer_from.png
+    - images/transferIcon/transfer_wallet.png
+    - images\transferIcon/tansfer_bank.png
+    
+    #其他
+    - images/transferIcon/transfer_sample_placeholder.png
+   
     - images/transferIcon/transfer_features_icon/transfer_features_scan.png
     - images/transferIcon/transfer_features_icon/transfer_features_acount.png
     #其他

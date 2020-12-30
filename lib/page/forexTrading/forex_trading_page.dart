@@ -531,6 +531,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
       Navigator.pop(context, pageIndex);
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.dismiss();
     });
   }
 }

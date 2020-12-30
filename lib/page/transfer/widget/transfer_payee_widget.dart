@@ -1,9 +1,22 @@
+/*
+ * 
+ * Created Date: Thursday, December 10th 2020, 5:34:04 pm
+ * Author: pengyikang
+ * 
+ * Copyright (c) 2020 深圳高阳寰球科技有限公司
+ */
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 Widget TransferPayeeWidget(
+  String oneRowText,
+  String towRowleft,
+  String threeRowLeft,
+  String twoRowRight,
+  String threeRowRight,
   Function(String inputStr) nameChange,
   Function(String inputStr) accountChange,
 ) {
@@ -21,7 +34,7 @@ Widget TransferPayeeWidget(
               Container(
                 padding: EdgeInsets.only(left: 15),
                 child: Text(
-                  S.current.receipt_side,
+                  oneRowText,
                   style: TextStyle(color: HsgColors.describeText, fontSize: 13),
                   textAlign: TextAlign.right,
                 ),
@@ -31,8 +44,8 @@ Widget TransferPayeeWidget(
         Container(
           child: Row(
             children: [
-              _fiveRowLeft(S.current.name),
-              _fiveRowRight(nameChange, S.current.hint_input_receipt_name),
+              _fiveRowLeft(towRowleft),
+              _fiveRowRight(nameChange, twoRowRight),
               Container(
                 padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
               ),
@@ -41,14 +54,11 @@ Widget TransferPayeeWidget(
                 width: 20,
                 height: 20,
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
-              ),
             ],
           ),
         ),
         Container(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+            padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
             child: Divider(
               color: HsgColors.divider,
               height: 0.5,
@@ -58,19 +68,21 @@ Widget TransferPayeeWidget(
           child: Row(
             children: [
               //获取账户
-              _fiveRowLeft(S.current.account_num),
+              _fiveRowLeft(threeRowLeft),
 
               _fiveRowRight(
-                  accountChange, S.current.hint_input_receipt_account),
+                accountChange,
+                threeRowRight,
+              ),
 
               Container(
-                padding: EdgeInsets.fromLTRB(65, 0, 0, 0),
+                padding: EdgeInsets.fromLTRB(40, 0, 0, 0),
               ),
             ],
           ),
         ),
         Container(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+            padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
             child: Divider(
               color: HsgColors.divider,
               height: 0.5,
