@@ -1,3 +1,10 @@
+/*
+ * 
+ * Created Date: Thursday, December 10th 2020, 5:34:04 pm
+ * Author: pengyikang
+ * 
+ * Copyright (c) 2020 深圳高阳寰球科技有限公司
+ */
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
