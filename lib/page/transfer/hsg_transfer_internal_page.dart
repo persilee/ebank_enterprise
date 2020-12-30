@@ -299,15 +299,19 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               money,
               payeeName,
               payeeCardNo,
-              remark,
               _amountInputChange,
-              _nameInputChange,
-              _accountInputChange,
-              _transferInputChange,
               _selectAccount,
               _getCcy,
               _getCardTotals),
-          TransferPayeeWidget(_nameInputChange, _accountInputChange),
+          //拿第二部分
+          TransferPayeeWidget(
+              S.current.receipt_side,
+              S.current.name,
+              S.current.account_num,
+              S.current.hint_input_receipt_name,
+              S.current.hint_input_receipt_account,
+              _nameInputChange,
+              _accountInputChange),
           TransferOtherWidget(remark, _transferInputChange),
           SliverToBoxAdapter(
             child: Container(
