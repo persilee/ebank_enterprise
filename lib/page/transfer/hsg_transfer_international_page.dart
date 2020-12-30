@@ -88,6 +88,22 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   String _limitMoney = '';
 
+  //国家/地区
+  List<String> countryList = ['中国', '中国香港'];
+  //转账费用
+  List<String> transferFeeList = ['收款人支付', '本人支付', '各付各行'];
+  //汇款用途
+  List<String> feeUse = [
+    '贷款',
+    '加工费',
+    '运输费',
+    '投资款',
+    '还款/供款',
+    '学费',
+  ];
+
+  var _countryText = '';
+
   @override
   void initState() {
     super.initState();
@@ -224,7 +240,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //根据货币类型拿余额
-  _getavaBal(String changedCcyTitle) {
+  Future<Function> _getavaBal(String changedCcyTitle) {
     Future.wait({
       CardDataRepository().getSingleCardBal(
           GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
@@ -242,7 +258,56 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
   }
 
-  _selectCountry() {}
+  //选择国家地区
+  Future<Function> _selectCountry() async {
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return BottomMenu(
+            title: '国家/地区',
+            items: countryList,
+          );
+        });
+    if (result != null && result != false) {
+      _countryText = countryList[result];
+    }
+
+    setState(() {
+      _position = result;
+    });
+  }
+
+  //转账费用
+  Future<Function> _selectTransferFee() async {
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return BottomMenu(
+            title: '其他费用',
+            items: transferFeeList,
+          );
+        });
+
+    setState(() {
+      _position = result;
+    });
+  }
+
+  //汇款费用
+  Future<Function> _selectFeeUse() async {
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return BottomMenu(
+            title: '汇款用途',
+            items: feeUse,
+          );
+        });
+
+    setState(() {
+      _position = result;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -310,11 +375,12 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               children: [
                 _getRedText(S.current.international_transfer_account_prompt),
                 //国家地区
-                _getSelectColumn(S.current.state_area, S.current.please_select),
+                _getSelectColumn(
+                    S.current.state_area, _countryText, _selectCountry),
                 _getLine(),
                 //收款银行
-                _getSelectColumn(
-                    S.current.receipt_bank, S.current.please_select),
+                _getSelectColumn(S.current.receipt_bank,
+                    S.current.please_select, _selectCountry),
                 _getLine(),
                 //银行SWIFT
                 _getInputColumn(S.current.bank_swift, S.current.please_input),
@@ -337,12 +403,12 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               child: Column(
                 children: [
                   //转账费用
-                  _getSelectColumn(
-                      S.current.Transfer_fee, S.current.please_select),
+                  _getSelectColumn(S.current.Transfer_fee,
+                      S.current.please_select, _selectTransferFee),
                   _getLine(),
                   //汇款用途
-                  _getSelectColumn(
-                      S.current.remittance_usage, S.current.please_select),
+                  _getSelectColumn(S.current.remittance_usage,
+                      S.current.please_select, _selectFeeUse),
                   _getLine(),
                   //转账附言
                   _getInputColumn(
@@ -481,7 +547,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     );
   }
 
-  _getSelectColumn(String leftText, String rightText) {
+  _getSelectColumn(String leftText, String rightText, Function selectMethod) {
+    String righText = rightText == '' ? '请选择' : rightText;
     return Container(
       height: 50,
       color: Colors.white,
@@ -499,6 +566,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           Expanded(
             child: GestureDetector(
               onTap: () {
+                selectMethod();
                 print('选择账号');
               },
               child: Column(
@@ -507,7 +575,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   Container(
                     margin: EdgeInsets.only(top: 5),
                     child: Text(
-                      rightText,
+                      righText,
                       style: TextStyle(
                         color: HsgColors.secondDegreeText,
                         fontSize: 13,
