@@ -1,4 +1,6 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
+import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +16,16 @@ class AuthorizationHistoryPage extends StatefulWidget {
 
 class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+
+    //网络请求
+    _loadAuthorzationRateData();
+  }
+
+  List<Rows> rowList = [];
+
+  Widget _getContent(List<Rows> rows) {
     return CustomScrollView(
       slivers: <Widget>[
         SliverList(
@@ -23,7 +34,8 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
             return SizedBox(
                 child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, pageAuthorizationTaskApproval);
+                //  Navigator.pushNamed(context, pageAuthorizationTaskApproval);
+                go2Detail(rowList[index]);
                 print('选择账号');
               },
               child: Column(
@@ -35,21 +47,34 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
                       child: Column(
                         children: [
                           //发起人
-                          _getRow(S.current.sponsor, '77664564548'),
+                          _getRow(S.current.sponsor, rowList[index].processId),
                           //待办任务名称
-                          _getRow(S.current.to_do_task_name, '一对一转账审批'),
+                          _getRow(S.current.to_do_task_name,
+                              rowList[index].taskName),
                           //创建时间
-                          _getRow(
-                              S.current.creation_time, '2020-11-11 14:16:24')
+                          _getRow(S.current.creation_time,
+                              rowList[index].createTime)
                         ],
                       ))
                 ],
               ),
             ));
           },
-          childCount: 4,
+          childCount: rowList.length,
         ))
       ],
+    );
+  }
+
+  void go2Detail(Rows history) {
+    Navigator.pushNamed(context, pageAuthorizationTaskApproval,
+        arguments: history);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _getContent(rowList),
     );
   }
 
@@ -74,5 +99,20 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
         ],
       ),
     );
+  }
+
+  _loadAuthorzationRateData() async {
+    var bool = false;
+    var page = 0;
+    var pageSize = 10;
+    NeedToBeDealtWithRepository()
+        .findUserFinishedTask(GetFindUserFinishedTaskReq(bool, page, pageSize),
+            'findUserFinishedTask')
+        .then((data) {
+      setState(() {
+        rowList.clear();
+        rowList.addAll(data.rows);
+      });
+    });
   }
 }

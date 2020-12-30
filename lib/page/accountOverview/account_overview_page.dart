@@ -54,7 +54,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                 child: Container(
                   padding: EdgeInsets.fromLTRB(0, 19, 0, 28),
                   color: HsgColors.primary,
-                  child: _totalAssetsColumn(),
+                  child: _accountOverviewColumn(),
                 ),
               ),
 
@@ -79,53 +79,12 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                 ),
               ),
               SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    Container(height: 0.5, color: HsgColors.divider),
-                    Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            S.current.total,
-                            style: TextStyle(
-                                fontSize: 15, color: Color(0xFF8D8D8D)),
-                          ),
-                          Text(
-                            ddTotal + ' ' + ddCcy,
-                            style: TextStyle(
-                                fontSize: 15, color: Color(0xFF262626)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                child: _ddTotalColumn(),
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                  return Container(
-                    padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
-                    color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          ddList[index].cardNo,
-                          style:
-                              TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-                        ),
-                        Text(
-                          ddList[index].equAmt + ' ' + ddList[index].ccy,
-                          style:
-                              TextStyle(fontSize: 15, color: Color(0xFF262626)),
-                        )
-                      ],
-                    ),
-                  );
+                  return _ddSliverList(index);
                 }, childCount: ddList.length),
               ),
 
@@ -150,53 +109,12 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                 ),
               ),
               SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    Container(height: 0.5, color: HsgColors.divider),
-                    Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            S.current.total,
-                            style: TextStyle(
-                                fontSize: 15, color: Color(0xFF8D8D8D)),
-                          ),
-                          Text(
-                            tdTotal + ' HKD',
-                            style: TextStyle(
-                                fontSize: 15, color: Color(0xFF262626)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                child: _taTotalColumn(),
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                  return Container(
-                    padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
-                    color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          tdList[index].conNo,
-                          style:
-                              TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-                        ),
-                        Text(
-                          tdList[index].bal + ' ' + tdList[index].ccy,
-                          style:
-                              TextStyle(fontSize: 15, color: Color(0xFF262626)),
-                        )
-                      ],
-                    ),
-                  );
+                  return _tdSliverList(index);
                 }, childCount: tdList.length),
               ),
 
@@ -221,53 +139,12 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                 ),
               ),
               SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    Container(height: 0.5, color: HsgColors.divider),
-                    Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            S.current.total,
-                            style: TextStyle(
-                                fontSize: 15, color: Color(0xFF8D8D8D)),
-                          ),
-                          Text(
-                            lnTotal + ' HKD',
-                            style: TextStyle(
-                                fontSize: 15, color: Color(0xFF262626)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                child: _lnTotalColumn(),
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                  return Container(
-                    padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
-                    color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          lnList[index].acNo,
-                          style:
-                              TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-                        ),
-                        Text(
-                          lnList[index].unpaidPrincipal + ' HKD',
-                          style:
-                              TextStyle(fontSize: 15, color: Color(0xFF262626)),
-                        )
-                      ],
-                    ),
-                  );
+                  return _lnSliverList(index);
                 }, childCount: lnList.length),
               ),
 
@@ -281,69 +158,220 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
         ));
   }
 
-  Column _totalAssetsColumn() {
+  Container _lnSliverList(int index) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
+      color: Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            lnList[index].acNo,
+            style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+          ),
+          Text(
+            lnList[index].unpaidPrincipal + ' HKD',
+            style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
+          )
+        ],
+      ),
+    );
+  }
+
+  Column _lnTotalColumn() {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.only(bottom: 18),
-          child: Column(
+        Container(height: 0.5, color: HsgColors.divider),
+        Container(
+          color: Colors.white,
+          padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Center(
-                child: Text(
-                  S.current.total_assets,
-                  style: TextStyle(fontSize: 14, color: Colors.white54),
-                ),
+              Text(
+                S.current.total,
+                style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
               ),
-              Center(
-                child: Text(
-                  localCcy + ' ' + totalAssets,
-                  style: TextStyle(fontSize: 24, color: Colors.white),
-                ),
+              Text(
+                lnTotal + ' HKD',
+                style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
               ),
             ],
           ),
         ),
+      ],
+    );
+  }
+
+  Container _tdSliverList(int index) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
+      color: Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            tdList[index].conNo,
+            style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+          ),
+          Text(
+            tdList[index].bal + ' ' + tdList[index].ccy,
+            style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
+          )
+        ],
+      ),
+    );
+  }
+
+  Column _taTotalColumn() {
+    return Column(
+      children: [
+        Container(height: 0.5, color: HsgColors.divider),
+        Container(
+          color: Colors.white,
+          padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                S.current.total,
+                style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+              ),
+              Text(
+                tdTotal + ' HKD',
+                style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Container _ddSliverList(int index) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
+      color: Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            ddList[index].cardNo,
+            style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+          ),
+          Text(
+            ddList[index].equAmt + ' ' + ddList[index].ccy,
+            style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
+          )
+        ],
+      ),
+    );
+  }
+
+  Column _ddTotalColumn() {
+    return Column(
+      children: [
+        Container(height: 0.5, color: HsgColors.divider),
+        Container(
+          color: Colors.white,
+          padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                S.current.total,
+                style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+              ),
+              Text(
+                ddTotal + ' ' + ddCcy,
+                style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column _accountOverviewColumn() {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(bottom: 18),
+          child: _totalAssets(),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Column(
-              children: [
-                Text(
-                  S.current.net_assets,
-                  style: TextStyle(fontSize: 14, color: Colors.white54),
-                ),
-                Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
-                Text(
-                  localCcy + ' ' + netAssets,
-                  style: TextStyle(fontSize: 14, color: Colors.white),
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                SizedBox(
-                  width: 1,
-                  height: 30,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(color: Colors.grey),
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                Text(
-                  S.current.total_liability,
-                  style: TextStyle(fontSize: 14, color: Colors.white54),
-                ),
-                Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
-                Text(
-                  localCcy + ' ' + totalLiabilities,
-                  style: TextStyle(fontSize: 14, color: Colors.white),
-                ),
-              ],
-            ),
+            _netAssets(),
+            _dividingLine(),
+            _totalLiability(),
           ],
+        ),
+      ],
+    );
+  }
+
+  Column _totalLiability() {
+    return Column(
+      children: [
+        Text(
+          S.current.total_liability,
+          style: TextStyle(fontSize: 14, color: Colors.white54),
+        ),
+        Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
+        Text(
+          localCcy + ' ' + totalLiabilities,
+          style: TextStyle(fontSize: 14, color: Colors.white),
+        ),
+      ],
+    );
+  }
+
+  Column _dividingLine() {
+    return Column(
+      children: [
+        SizedBox(
+          width: 1,
+          height: 30,
+          child: DecoratedBox(
+            decoration: BoxDecoration(color: Colors.grey),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column _netAssets() {
+    return Column(
+      children: [
+        Text(
+          S.current.net_assets,
+          style: TextStyle(fontSize: 14, color: Colors.white54),
+        ),
+        Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
+        Text(
+          localCcy + ' ' + netAssets,
+          style: TextStyle(fontSize: 14, color: Colors.white),
+        ),
+      ],
+    );
+  }
+
+  Column _totalAssets() {
+    return Column(
+      children: [
+        Center(
+          child: Text(
+            S.current.total_assets,
+            style: TextStyle(fontSize: 14, color: Colors.white54),
+          ),
+        ),
+        Center(
+          child: Text(
+            localCcy + ' ' + totalAssets,
+            style: TextStyle(fontSize: 24, color: Colors.white),
+          ),
         ),
       ],
     );

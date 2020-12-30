@@ -183,6 +183,7 @@ class _FeatureListPageState extends State<FeatureListPage> {
                 //转账记录
               } else if (S.current.transfer_model == title) {
                 //收款范本
+                Navigator.pushNamed(context, pageTranferPartner);
               } else if (S.current.deposit_open == title) {
                 //'定期开立'
               } else if (S.current.deposit_record == title) {

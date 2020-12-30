@@ -75,6 +75,7 @@ Future<LoginResp> login(LoginReq loginReq, String tag) {
 ### 插件
 
 - Flutter Intl：用于国际化开发，在lib/l10n目录下存放(编辑)语言文件
+注意：若手动修改了 intl_en.arb 和 intl_zh_CN.arb 两个文件，末尾的逗号记得删除，保证文件格式是 JSON 格式
 
 
 ### 资源文件

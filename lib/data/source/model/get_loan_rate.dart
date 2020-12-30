@@ -1,5 +1,5 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///
+///贷款利率
 /// Author: fangluyao
 /// Date: 2020-12-08
 import 'package:json_annotation/json_annotation.dart';

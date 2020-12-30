@@ -1,17 +1,30 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
+import 'package:ebank_mobile/data/source/model/find_user_finished_task_detail.dart';
+import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AuthorizationTaskApprovalPage extends StatefulWidget {
-  AuthorizationTaskApprovalPage({Key key}) : super(key: key);
+  final Rows history;
+  AuthorizationTaskApprovalPage({Key key, this.history}) : super(key: key);
 
   @override
   _AuthorizationTaskApprovalPageState createState() =>
-      _AuthorizationTaskApprovalPageState();
+      _AuthorizationTaskApprovalPageState(history);
 }
 
 class _AuthorizationTaskApprovalPageState
     extends State<AuthorizationTaskApprovalPage> {
+  Rows history;
+  _AuthorizationTaskApprovalPageState(this.history);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadHistoryData(history.processId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,5 +159,14 @@ class _AuthorizationTaskApprovalPageState
       color: HsgColors.divider,
       height: 0.5,
     ));
+  }
+
+  void _loadHistoryData(String processId) {
+    Future.wait({
+      NeedToBeDealtWithRepository()
+          .findUserFinishedDetail(
+              GetFindUserFinishedDetailReq(processId), 'findUserFinishedDetail')
+          .then((value) {})
+    });
   }
 }

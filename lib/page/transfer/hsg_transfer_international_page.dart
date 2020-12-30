@@ -235,6 +235,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
   }
 
+  _selectCountry() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -3,8 +3,6 @@
 /// Author: lijiawei
 /// Date: 2020-12-04
 
-import 'dart:async';
-
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
@@ -37,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _accountTC =
       TextEditingController(text: 'pengyikang');
+
   final TextEditingController _passwordTC =
       TextEditingController(text: '0c9W7825');
 

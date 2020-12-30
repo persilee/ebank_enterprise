@@ -1,4 +1,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/get_my_application.dart';
+import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
 
@@ -11,12 +14,25 @@ class MyApplicationPage extends StatefulWidget {
 
 class _MyApplicationPageState extends State<MyApplicationPage> {
   @override
+  void initState() {
+    super.initState();
+
+    //网络请求
+    _loadMyApplicationData();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: _getContent(rowList),
+    );
+  }
+
+  List<Rows> rowList = [];
+  Widget _getContent(List<Rows> rows) {
     return CustomScrollView(
       slivers: <Widget>[
         SliverList(
-            //                Navigator.pushNamed(context, pageAuthorizationHistory);
-
             delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             return SizedBox(
@@ -33,16 +49,18 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
                       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: Column(
                         children: [
-                          _getRow('发起人', '77664564548'),
-                          _getRow('待办任务名称', '一对一转账审批'),
-                          _getRow('创建时间', '2020-11-11 14:16:24')
+                          _getRow(S.current.sponsor, rowList[index].processId),
+                          _getRow(S.current.to_do_task_name,
+                              rowList[index].taskName),
+                          _getRow(S.current.creation_time,
+                              rowList[index].createTime)
                         ],
                       ))
                 ],
               ),
             ));
           },
-          childCount: 2,
+          childCount: rowList.length,
         ))
       ],
     );
@@ -69,5 +87,28 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
         ],
       ),
     );
+  }
+
+  _loadMyApplicationData() async {
+    var finish = false;
+    var page = 0;
+    var pageSize = 10;
+    var processId = '';
+    var processKey = '';
+    var processStatus = true;
+    var processTitle = '';
+    var sort = '';
+    var taskName = '';
+    NeedToBeDealtWithRepository()
+        .getMyApplication(
+            GetMyApplicationReq(finish, page, pageSize, processId, processKey,
+                processStatus, processTitle, sort, taskName),
+            'tag')
+        .then((data) {
+      setState(() {
+        rowList.clear();
+        rowList.addAll(data.rows);
+      });
+    });
   }
 }

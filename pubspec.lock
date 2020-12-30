@@ -185,6 +185,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.6"
+  contact_picker:
+    dependency: "direct main"
+    description:
+      name: contact_picker
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.2"
   convert:
     dependency: transitive
     description:
@@ -494,13 +501,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.9.2"
-  pin_code_text_field:
-    dependency: "direct main"
-    description:
-      name: pin_code_text_field
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.7.1"
   platform:
     dependency: transitive
     description:
@@ -529,6 +529,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.4.0"
+  popup_window:
+    dependency: "direct main"
+    description:
+      name: popup_window
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.1"
   process:
     dependency: transitive
     description:

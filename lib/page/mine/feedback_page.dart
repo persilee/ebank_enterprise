@@ -1,3 +1,8 @@
+import 'package:ebank_mobile/data/source/feedbackApi.dart';
+import 'package:ebank_mobile/data/source/model/getFeedback.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// desc: 意见反馈
 /// Author: hlx
@@ -12,11 +17,14 @@ class FeedbackPage extends StatefulWidget {
 }
 
 class _FeedbackPageState extends State<FeedbackPage> {
+  TextEditingController _feedbackController = TextEditingController();
+  var _content ='';
   @override
   Widget build(BuildContext context) {
+    _feedbackController.text = '';
     return new Scaffold(
         appBar: AppBar(
-          title: Text('意见反馈'),
+          title: Text(S.of(context).feedback),
           elevation: 15.0,
         ),
         body: Container(
@@ -31,8 +39,9 @@ class _FeedbackPageState extends State<FeedbackPage> {
                     padding:
                         EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
                     child:
-                    //https://www.jianshu.com/p/3fb613ffac22   使用from 表单提交
-                     TextFormField(
+                        //https://www.jianshu.com/p/3fb613ffac22   使用from 表单提交
+                        TextField(
+                      controller: _feedbackController,
                       textAlign: TextAlign.start,
                       maxLines: 10,
                       maxLength: 300, //允许输入的字符长度/
@@ -42,37 +51,26 @@ class _FeedbackPageState extends State<FeedbackPage> {
                         fontSize: 18.0,
                       ),
                       decoration: InputDecoration(
-                        hintText: "请写下您的建议，如功能需求，产品吐槽等，我们会努力改进…",
+                        hintText: S.of(context).feedBackInfo,
                         hintMaxLines: 20,
                         border: InputBorder.none,
                         hintStyle: TextStyle(
                             fontSize: 15.0,
                             color: HsgColors.hintText), //设置提示文字样式
                       ),
-                      onChanged: (newValue) {
-                        // print(newValue); // 当输入内容变更时,如何处理
+                      onChanged: (newValue)  {
                       },
                     ),
                   ),
                 ),
-                // Container(
-                //   height: 30.0,
-                //   margin: EdgeInsets.only(right: 15.0),
-                //   width: MediaQuery.of(context).size.width,
-                //   color: Colors.white,
-                //   child: Text('还能输入300字',
-                //       textAlign: TextAlign.end,
-                //       style: TextStyle(
-                //         color: HsgColors.secondDegreeText,
-                //       )),
-                // ),
                 Container(
                   margin: EdgeInsets.all(40), //外边距
                   height: 44.0,
                   width: MediaQuery.of(context).size.width,
                   child: RaisedButton(
-                    child: Text("提交"),
-                    onPressed: () => print("提交"),
+                    child: Text(S.of(context).sumit),
+                   // _content == '' ? null : _submitFeedBack(),
+                    onPressed:  _submitFeedBack(),
                     color: HsgColors.accent,
                     textColor: Colors.white,
                     shape: RoundedRectangleBorder(
@@ -82,5 +80,26 @@ class _FeedbackPageState extends State<FeedbackPage> {
                 )
               ],
             )));
+  }
+
+  _submitFeedBack() async {
+    String feedbackProblem = _feedbackController.text;
+    String opinionPhone = '';
+    String opinionTheme = '反馈';
+    String problemType = '4';
+    HSProgressHUD.show();
+    FeedbackRepository()
+    .feedBack(
+      GetFeedBackReq(feedbackProblem, opinionPhone, opinionTheme, problemType),
+      'GetFeedBackReq',
+    ).then((data) {
+      HSProgressHUD.showError(status: '意见反馈成功');
+     Navigator.pop(context);
+     HSProgressHUD.dismiss();
+    }).catchError((e) {
+      // Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.showError(status: e.toString());
+      print('${e.toString()}');
+    });
   }
 }
