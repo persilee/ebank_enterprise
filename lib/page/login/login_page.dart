@@ -3,8 +3,6 @@
 /// Author: lijiawei
 /// Date: 2020-12-04
 
-import 'dart:async';
-
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';

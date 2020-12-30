@@ -554,8 +554,10 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, pageTransfer);
       } else if (S.current.transfer_record == title) {
         //转账记录
+        Navigator.pushNamed(context, pageTransferRecord);
       } else if (S.current.transfer_model == title) {
         //收款范本
+        Navigator.pushNamed(context, pageTranferPartner);
       } else if (S.current.deposit_open == title) {
         //'定期开立'
         Navigator.pushNamed(context, pageTimeDepostProduct);
@@ -580,7 +582,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, pageForexTrading);
       } else if (S.current.exchange_rate == title) {
         //'汇率查询'
-
+        Navigator.pushNamed(context, pageExchangeRateInquiry);
       } else if (S.current.electronic_statement == title) {
         //'电子结单'
         Navigator.pushNamed(context, pageElectronicStatement);

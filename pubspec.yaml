@@ -38,9 +38,10 @@ dependencies:
   flutter_svprogresshud: ^0.0.6 #加载提示框
   encrypt: ^4.0.0 #AES加解密
   flutter_picker: ^1.1.0 #选择器
+  popup_window: ^1.1.1 #顶部弹窗
+  contact_picker: ^0.0.2 #获取联系人
   webview_flutter: ^1.0.7
   date_format: ^1.0.6
-  pin_code_text_field: ^1.6.0 #密码输入框
   flutter_tableview: ^1.0.1
   flutter_easyrefresh: ^2.1.7
   flutter_cupertino_date_picker:
@@ -89,6 +90,7 @@ flutter:
     - images/tabbar/tabbar_we_chat.png
     - images/tabbar/tabbar_wechat_moments.png
     - images/tabbar/tabbar_delete.png
+    - images/tabbar/tabbar_reset.png
 
     #home
     #home_nav
@@ -127,6 +129,7 @@ flutter:
     - images/mine/aboutUs-icon2.png
     - images/mine/aboutUs-icon3.png
     - images/mine/aboutUs-icon4.png
+    - images/mine/mine-icon.png
 
     #time-depost
     - images/time_depost/time_depost_product.png
@@ -142,8 +145,21 @@ flutter:
     - images/transferIcon/transfer_features_icon/transfer_features_plan.png
     - images/transferIcon/transfer_features_icon/transfer_features_record.png
     - images/transferIcon/transfer_features_icon/transfer_features_timely.png
+    
+    #转账记录页面图片
+    - images/transferIcon/transfert_to.png
+    - images/transferIcon/transfer_from.png
+    - images/transferIcon/transfer_wallet.png
+    - images\transferIcon/tansfer_bank.png
+    
     #其他
     - images/transferIcon/transfer_sample_placeholder.png
+   
+    - images/transferIcon/transfer_features_icon/transfer_features_scan.png
+    - images/transferIcon/transfer_features_icon/transfer_features_acount.png
+    #其他
+    - images/transferIcon/transfer_sample_placeholder.png
+    - images/transferIcon/transfer_bank.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

@@ -25,5 +25,8 @@ class HsgColors {
   static const Color aboutusConBg = Color(0xFFF6F6F6);
   static const Color aboutusConTxtBg = Color(0xFFF6F6F6);
   static const Color aboutusCircle = Color(0xFFFA9B1CE);
-
+  static const Color nextPageIcon = Color(0xFF282828);
+  static const Color redTextColor = Color(0xFFC33838);
+  static const Color blueTextColor = Color(0xFF4871FF);
+  static const Color blueBGColor = Color(0xFFEFF3FF);
 }

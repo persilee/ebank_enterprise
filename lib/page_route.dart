@@ -1,6 +1,3 @@
-import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
-import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
@@ -8,6 +5,7 @@ import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
 
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
 import 'package:ebank_mobile/page/approval/task_approval_page.dart';
+import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
 import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_detail_page.dart';
@@ -15,8 +13,10 @@ import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_detail_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_page.dart';
-import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
-import 'package:ebank_mobile/feature_demo/time_deposit_info_page.dart';
+import 'package:ebank_mobile/page/exchangeRateInquiry/exchange_rate_inquiry_page.dart';
+import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_succeed_page.dart';
+import 'package:ebank_mobile/page/timeDeposit/time_deposit_record_page.dart';
+import 'package:ebank_mobile/page/timeDeposit/time_deposit_info_page.dart';
 import 'package:ebank_mobile/page/forexTrading/forex_trading_page.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page/loan/loan_application_page.dart';
@@ -33,26 +33,40 @@ import 'package:ebank_mobile/page/loan/wait_repay_plan_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
-import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_rate_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_open_transfer_page.dart';
 
-// import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
-//import 'package:ebank_mobile/page/payCollectDetail/test_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
+import 'package:ebank_mobile/page/transfer/hsg_transfer_international_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
+import 'package:ebank_mobile/page/transfer/transfer_detail_page.dart';
+import 'package:ebank_mobile/page/transfer/transfer_record-page.dart';
+import 'package:ebank_mobile/page/transfer/transfer_partner_page.dart';
+import 'package:ebank_mobile/page/transfer/add_partner_page.dart';
+import 'package:ebank_mobile/page/transfer/select_bank_page.dart';
+import 'package:ebank_mobile/page/transfer/select_city_page.dart';
+import 'package:ebank_mobile/page/transfer/select_branch_bank_page.dart';
+import 'package:ebank_mobile/page/userAgreement/user_agreement_page.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page/mine/mine_page.dart';
 import 'package:ebank_mobile/page/mine/about_us_page.dart';
 import 'package:ebank_mobile/page/mine/feedback_page.dart';
 import 'package:ebank_mobile/page/mine/change_logPswd_page.dart';
-
-import 'feature_demo/time_deposit_contract_succeed_page.dart';
+import 'package:ebank_mobile/page/mine/change_pay_page.dart';
+import 'package:ebank_mobile/page/mine/set_pay_page.dart';
 
 var pageHome = '/';
 var pageLogin = pageHome;
 // var pageCardList = pageHome;
+
+var pageSelectBranchBank = "/select_branch_bank_page.dart";
+var pageSelectCity = "/select_city_page.dart";
+var pageSelectBank = "/select_bank_page.dart";
+var pageAddPartner = "/add_partner_page.dart";
+var pageTranferPartner = "/transfer_partner_page.dart";
 var pageLoanApplication = "/loan_application_page";
+var pageTransferRecord = "/transfer_record_page";
+var pageTransferDetail = "/transfer_detail_page";
 var pageOperationResult = "/operation_result_page";
 var pageRepaySuccess = "/repay_success_page.dart";
 var pageRepayConfirm = "/repay_confirm_page.dart";
@@ -70,7 +84,9 @@ var pageCardLimit = '/card_limit_manager';
 var minePage = '/mine_page';
 var aboutUs = '/about_us_page';
 var feedback = '/feedback_page';
-var changeLgPs = '/change_loginpassword_page';
+var changeLgPs = '/change_loginpassword_page.dart';
+var changePayPS = '/change_pay_page.dart';
+var setPayPage = '/set_pay_page.dart';
 var pageAccountOverview = '/account_overview';
 var pageDetailInfo = '/detail_info_page';
 var pageDetailList = '/detail_list_page';
@@ -82,26 +98,33 @@ var pageIndex = new MaterialPageRoute(builder: (context) => new IndexPage());
 var pageFeatureList = '/hsg_feature_list_page';
 var pageTransfer = '/hsg_transfer_page';
 var pageTransferInternal = '/hsg_transfer_internal_page';
+var pageInternational = '/hsg_transfer_international_page';
 var pageElectronicStatement = '/electronic_statement_page';
 var pageElectronicStatementDetail = '/electronic_statement_detail_page';
 var pageTimeDepostProduct = '/time_depost_product_page';
 var pageForexTrading = '/forex_trading_page';
-var pageTest = '/test_page';
+var pageExchangeRateInquiry = '/exchange_rate_inquiry_page';
 var pageTimeDepositContract = '/time_deposit_contract_page';
 var pageOpenTransfer = '/hsg_open_transfer_page';
 var pageTaskApproval = '/task_approval_page';
+var pageUserAgreement = '/user_agreement_page';
 
 var appRoutes = {
-  // pageTest: (context) => SimpleDemoPageBody(),
   pageLogin: (context) => LoginPage(),
   pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
-  // pageTest: (context) => XBTestPage(),
   pageLoanApplication: (context) => LoanApplicationPage(),
   pageOperationResult: (context) => OperationResultPage(),
   pageLoanInterestRate: (context) => LoanInterestRatePage(),
+  pageTransferRecord: (context) => TrsnsferRecordPage(),
+  pageTransferDetail: (context) => TransferDetailPage(),
   pageCardList: (context) => CardListPage(),
   pageDialogDemo: (context) => DialogDemoPage(),
+  pageSelectBank: (context) => SelectBankPage(),
+  pageSelectCity: (context) => SelectCityPage(),
+  pageSelectBranchBank: (context) => SelectBranchBankPage(),
+  pageAddPartner: (context) => AddPartnerPage(),
+  pageTranferPartner: (context) => TransferPartner(),
   pageRepaySuccess: (context) => RepaySuccessPage(),
   pageRepayConfirm: (context) => RepayConfirmPage(),
   pageRepayInput: (context) => RepayInputPage(),
@@ -115,6 +138,8 @@ var appRoutes = {
   aboutUs: (context) => AboutUsPage(),
   feedback: (context) => FeedbackPage(),
   changeLgPs: (context) => ChangeLoPS(),
+  setPayPage: (context) => SetPayPage(),
+  changePayPS: (context) => ChangePayPage(),
   pageAccountOverview: (context) => AccountOverviewPage(),
   pageDetailList: (context) => DetailListPage(),
   pageDetailInfo: (context) => DetailInfoPage(),
@@ -122,6 +147,7 @@ var appRoutes = {
   pageMyDepositRate: (context) => MyDepositRatePage(),
   pageDepositRecordSucceed: (context) => DepositContractSucceed(),
   //pageDepositInfo: (context) => PageDepositInfo(),
+  pageInternational: (context) => TransferInternationalPage(),
   pageTransfer: (context) => TransferPage(),
   pageTransferInternal: (context) => TransferInternalPage(),
   pageElectronicStatement: (context) => ElectronicStatementPage(),
@@ -131,6 +157,7 @@ var appRoutes = {
   pageForexTrading: (context) => ForexTradingPage(),
   pageOpenTransfer: (context) => OpenTransferPage(),
   pageTaskApproval: (context) => TaskApprovalPage(),
+  pageExchangeRateInquiry: (context) => ExchangeRateInquiryPage(),
 };
 
 onGenerateRoute(RouteSettings settings) {
@@ -151,6 +178,11 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageDepositInfo) {
     return MaterialPageRoute(builder: (context) {
       return PageDepositInfo(deposit: settings.arguments);
+    });
+  }
+  if (settings.name == pageUserAgreement) {
+    return MaterialPageRoute(builder: (context) {
+      return UserAgreementPage(pactId: settings.arguments);
     });
   }
   return null;

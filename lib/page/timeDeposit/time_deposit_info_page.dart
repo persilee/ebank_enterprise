@@ -257,6 +257,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
+                                            //取消按钮
                                             Container(
                                                 child: FlatButton(
                                               onPressed: () =>
@@ -268,7 +269,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                                               //确定按钮
                                               child: FlatButton(
                                                 onPressed: () {
-                                                  //_isLoading? null: () =>
                                                   _contractEarly(context);
                                                 },
                                                 child: Text(S.current.confirm),

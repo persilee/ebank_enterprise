@@ -1,11 +1,9 @@
-import 'package:ebank_mobile/data/source/loan_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhangqirong
 /// Date: 2020-12-16
 
+import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_money_caculate.dart';
 import 'package:ebank_mobile/generated/l10n.dart';

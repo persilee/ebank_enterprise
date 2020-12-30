@@ -18,58 +18,58 @@ class OpenTransferPage extends StatefulWidget {
 }
 
 class _OpenTransferPageState extends State<OpenTransferPage> {
-  // String groupValue = "0";
+  String groupValue = "0";
 
-  // void updateGroupValue(String v) {
-  //   setState(() {
-  //     groupValue = v;
-  //   });
-  // }
+  void updateGroupValue(String v) {
+    setState(() {
+      groupValue = v;
+    });
+  }
 
-  // Widget _listItem(BuildContext context, value) {
-  //   var deviceSize = MediaQuery.of(context).size;
-  //   print(value['type']);
-  //   return groupValue == value['type']
-  //       ? RaisedButton(
-  //           color: Color(0xFFDCF0FF),
-  //           onPressed: () {
-  //             print('切换${value}');
-  //             updateGroupValue(value['type']);
-  //           },
-  //           child: Text(
-  //             value['title'],
-  //             style: TextStyle(color: HsgColors.accent),
-  //           ),
-  //         )
-  //       : OutlineButton(
-  //           onPressed: () {
-  //             print('切换${value}');
-  //             updateGroupValue(value['type']);
-  //           },
-  //           child: Text(value['title']),
-  //         );
-  // }
+  Widget _listItem(BuildContext context, value) {
+    var deviceSize = MediaQuery.of(context).size;
+    print(value['type']);
+    return groupValue == value['type']
+        ? RaisedButton(
+            color: Color(0xFFDCF0FF),
+            onPressed: () {
+              print('切换${value}');
+              updateGroupValue(value['type']);
+            },
+            child: Text(
+              value['title'],
+              style: TextStyle(color: HsgColors.accent),
+            ),
+          )
+        : OutlineButton(
+            onPressed: () {
+              print('切换${value}');
+              updateGroupValue(value['type']);
+            },
+            child: Text(value['title']),
+          );
+  }
 
   Widget _transferInfo() {
-    // String groupValue = "1";
-    // List frequency = [
-    //   {
-    //     "title": "仅一次",
-    //     "type": "0",
-    //   },
-    //   {
-    //     "title": "每日",
-    //     "type": "1",
-    //   },
-    //   {
-    //     "title": "每月",
-    //     "type": "2",
-    //   },
-    //   {
-    //     "title": "每年",
-    //     "type": "3",
-    //   }
-    // ];
+    String groupValue = "1";
+    List frequency = [
+      {
+        "title": "仅一次",
+        "type": "0",
+      },
+      {
+        "title": "每日",
+        "type": "1",
+      },
+      {
+        "title": "每月",
+        "type": "2",
+      },
+      {
+        "title": "每年",
+        "type": "3",
+      }
+    ];
     return Column(
       children: [
         Container(
@@ -97,12 +97,12 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                   autofocus: false,
                   style: TextStyle(
                       color: HsgColors.firstDegreeText, fontSize: 14.0),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
-                  ],
+                  // inputFormatters: [
+                  //   FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+                  // ],
                   onChanged: (value) {
-                    double.parse(
-                        value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
+                    // double.parse(
+                    //     value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
                     print("输入的计划名称是:$value");
                   },
                   keyboardType: TextInputType.number,
@@ -117,79 +117,81 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                   ),
                 ),
               )),
-              Container(
-                child: Row(
-                  children: [
-                    Container(
-                      child: Text(
-                        '预约频率',
-                        style: TextStyle(color: Colors.black, fontSize: 14.0),
-                      ),
-                    ),
-                    Container(
-                        child: GridView.count(
-                            crossAxisCount: 4,
-                            crossAxisSpacing: 10.0,
-                            mainAxisSpacing: 10.0,
-                            childAspectRatio: 3 / 1,
-                            shrinkWrap: true,
-                            children:
-                                // frequency.asMap().keys.map((value) {
-                                //   return _listItem(context, value);
-                                // }).toList(),
-                                [
-                          RaisedButton(
-                            color: Color(0xFFDCF0FF),
-                            onPressed: () {
-                              // print('切换${value}');
-                              // updateGroupValue(value['type']);
-                              Text(
-                                '仅一次',
-                                style: TextStyle(color: HsgColors.accent),
-                              );
-                            },
-                            child: Text(
-                              // value['title'],
-                              '仅一次',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
-                          RaisedButton(
-                            color: Color(0xFFDCF0FF),
-                            onPressed: () {
-                              // print('切换${value}');
-                              // updateGroupValue(value['type']);
-                              Text(
-                                '仅一次',
-                                style: TextStyle(color: HsgColors.accent),
-                              );
-                            },
-                            child: Text(
-                              // value['title'],
-                              '仅一次',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
-                          RaisedButton(
-                            color: Color(0xFFDCF0FF),
-                            onPressed: () {
-                              // print('切换${value}');
-                              // updateGroupValue(value['type']);
-                              Text(
-                                '仅一次',
-                                style: TextStyle(color: HsgColors.accent),
-                              );
-                            },
-                            child: Text(
-                              // value['title'],
-                              '仅一次',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
-                        ]))
-                  ],
-                ),
-              ),
+
+              // Container(
+              // child:
+              // Row(
+              //   children: [
+              //     Container(
+              //       child: Text(
+              //         '预约频率',
+              //         style: TextStyle(color: Colors.black, fontSize: 14.0),
+              //       ),
+              //     ),
+              // Container(
+              //     child: GridView.count(
+              //         crossAxisCount: 4,
+              //         crossAxisSpacing: 10.0,
+              //         mainAxisSpacing: 10.0,
+              //         childAspectRatio: 3 / 1,
+              //         shrinkWrap: true,
+              //         children:
+              //             // frequency.asMap().keys.map((value) {
+              //             //   return _listItem(context, value);
+              //             // }).toList(),
+              //             [
+              //       RaisedButton(
+              //         color: Color(0xFFDCF0FF),
+              //         onPressed: () {
+              //           // print('切换${value}');
+              //           // updateGroupValue(value['type']);
+              //           Text(
+              //             '仅一次',
+              //             style: TextStyle(color: HsgColors.accent),
+              //           );
+              //         },
+              //         child: Text(
+              //           // value['title'],
+              //           '仅一次',
+              //           style: TextStyle(color: Colors.black),
+              //         ),
+              //       ),
+              //       RaisedButton(
+              //         color: Color(0xFFDCF0FF),
+              //         onPressed: () {
+              //           // print('切换${value}');
+              //           // updateGroupValue(value['type']);
+              //           Text(
+              //             '仅一次',
+              //             style: TextStyle(color: HsgColors.accent),
+              //           );
+              //         },
+              //         child: Text(
+              //           // value['title'],
+              //           '仅一次',
+              //           style: TextStyle(color: Colors.black),
+              //         ),
+              //       ),
+              //       RaisedButton(
+              //         color: Color(0xFFDCF0FF),
+              //         onPressed: () {
+              //           // print('切换${value}');
+              //           // updateGroupValue(value['type']);
+              //           Text(
+              //             '仅一次',
+              //             style: TextStyle(color: HsgColors.accent),
+              //           );
+              //         },
+              //         child: Text(
+              //           // value['title'],
+              //           '仅一次',
+              //           style: TextStyle(color: Colors.black),
+              //         ),
+              //       ),
+              //     ]))
+              // ],
+              // ),
+              // ),
             ],
           ),
         ),
@@ -197,9 +199,21 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           padding: EdgeInsets.only(left: 15.0, right: 15.0),
           child: Divider(height: 0.5, color: HsgColors.divider),
         ),
+        Container(
+          padding: EdgeInsets.all(15),
+          child: Row(
+            children: [
+              Container(
+                child: Text('预约频率'),
+              ),
+            ],
+          ),
+        )
       ],
     );
   }
+
+  Widget _payee() {}
 
   @override
   Widget build(BuildContext context) {

@@ -54,33 +54,7 @@ class _DetailListPageState extends State<DetailListPage> {
             height: 40,
             color: Colors.white,
             padding: EdgeInsets.only(left: 16, right: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: _cupertinoPicker,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(_date),
-                      Icon(Icons.arrow_drop_down)
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: _accountList,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(accList[_position] == ''
-                          ? intl.S.current.all_account
-                          : accList[_position]),
-                      Icon(Icons.arrow_drop_down)
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            child: _getRow(_date),
           ),
           Expanded(
             child: RefreshIndicator(
@@ -92,6 +66,33 @@ class _DetailListPageState extends State<DetailListPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Row _getRow(String _date) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        GestureDetector(
+          onTap: _cupertinoPicker,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[Text(_date), Icon(Icons.arrow_drop_down)],
+          ),
+        ),
+        GestureDetector(
+          onTap: _accountList,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(accList[_position] == ''
+                  ? intl.S.current.all_account
+                  : accList[_position]),
+              Icon(Icons.arrow_drop_down)
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -117,13 +118,6 @@ class _DetailListPageState extends State<DetailListPage> {
         ),
       ],
     );
-    // return Container(
-    //   height: 40,
-    //   alignment: Alignment.centerLeft,
-    //   padding: EdgeInsets.only(left: 16),
-    //   color: Colors.white,
-    //   child: Text(revenueHistoryList[section].transDate),
-    // );
   }
 
   // cell item widget builder.
@@ -137,27 +131,7 @@ class _DetailListPageState extends State<DetailListPage> {
             onTap: () {
               _goToDetail(revenueHistoryList[section].ddFinHistDOList[row]);
             },
-            child: Container(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 15),
-              child: Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 13),
-                    child: ClipOval(
-                      child: Image.asset(
-                        'images/home/listIcon/home_list_payments.png',
-                        height: 38,
-                        width: 38,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: _transactionInfo(section, row),
-                  ),
-                ],
-              ),
-            ),
+            child: _getContainer(section, row),
           ),
           Padding(
             padding: EdgeInsets.only(left: 68, right: 16),
@@ -165,6 +139,30 @@ class _DetailListPageState extends State<DetailListPage> {
               height: 0.5,
               color: HsgColors.divider,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container _getContainer(int section, int row) {
+    return Container(
+      padding: EdgeInsets.only(left: 16, right: 16, top: 15),
+      child: Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 13),
+            child: ClipOval(
+              child: Image.asset(
+                'images/home/listIcon/home_list_payments.png',
+                height: 38,
+                width: 38,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Expanded(
+            child: _transactionInfo(section, row),
           ),
         ],
       ),
@@ -339,6 +337,7 @@ class _DetailListPageState extends State<DetailListPage> {
       }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.dismiss();
     });
   }
 
