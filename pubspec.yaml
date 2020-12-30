@@ -130,6 +130,7 @@ flutter:
 
     #time-depost
     - images/time_depost/time_depost_product.png
+    - images/time_depost/time_deposit_contract_succeed.png
 
     #没有数据的提示图片
     - images/noDataIcon/no_data_card.png

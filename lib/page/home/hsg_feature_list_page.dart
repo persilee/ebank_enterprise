@@ -185,6 +185,7 @@ class _FeatureListPageState extends State<FeatureListPage> {
                 //收款范本
               } else if (S.current.deposit_open == title) {
                 //'定期开立'
+                Navigator.pushNamed(context, pageTimeDepostProduct);
               } else if (S.current.deposit_record == title) {
                 //'我的存单'
                 Navigator.pushNamed(context, pageTimeDepositRecord);

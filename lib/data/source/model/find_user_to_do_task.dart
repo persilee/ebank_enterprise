@@ -15,37 +15,9 @@ class FindUserToDoTaskReq extends Object {
   @JsonKey(name: 'pageSize')
   int pageSize;
 
-  @JsonKey(name: 'processId')
-  String processId;
-
-  @JsonKey(name: 'processKey')
-  String processKey;
-
-  @JsonKey(name: 'processTitle')
-  String processTitle;
-
-  @JsonKey(name: 'sort')
-  String sort;
-
-  @JsonKey(name: 'startUser')
-  String startUser;
-
-  @JsonKey(name: 'taskId')
-  String taskId;
-
-  @JsonKey(name: 'taskName')
-  String taskName;
-
   FindUserToDoTaskReq(
     this.page,
     this.pageSize,
-    this.processId,
-    this.processKey,
-    this.processTitle,
-    this.sort,
-    this.startUser,
-    this.taskId,
-    this.taskName,
   );
 
   factory FindUserToDoTaskReq.fromJson(Map<String, dynamic> srcJson) =>
@@ -62,17 +34,64 @@ class FindUserToDoTaskResp extends Object {
   @JsonKey(name: 'pageSize')
   int pageSize;
 
-  @JsonKey(name: 'sort')
-  String sort;
+  @JsonKey(name: 'count')
+  int count;
+
+  @JsonKey(name: 'totalPage')
+  int totalPage;
+
+  @JsonKey(name: 'rows')
+  List<Rows> rows;
 
   FindUserToDoTaskResp(
     this.page,
     this.pageSize,
-    this.sort,
+    this.count,
+    this.totalPage,
+    this.rows,
   );
 
   factory FindUserToDoTaskResp.fromJson(Map<String, dynamic> srcJson) =>
       _$FindUserToDoTaskRespFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$FindUserToDoTaskRespToJson(this);
+}
+
+@JsonSerializable()
+class Rows extends Object {
+  @JsonKey(name: 'processId')
+  String processId;
+
+  @JsonKey(name: 'processKey')
+  String processKey;
+
+  @JsonKey(name: 'processTitle')
+  String processTitle;
+
+  @JsonKey(name: 'taskId')
+  String taskId;
+
+  @JsonKey(name: 'taskName')
+  String taskName;
+
+  @JsonKey(name: 'startUser')
+  String startUser;
+
+  @JsonKey(name: 'createTime')
+  String createTime;
+
+  Rows(
+    this.processId,
+    this.processKey,
+    this.processTitle,
+    this.taskId,
+    this.taskName,
+    this.startUser,
+    this.createTime,
+  );
+
+  factory Rows.fromJson(Map<String, dynamic> srcJson) =>
+      _$RowsFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$RowsToJson(this);
 }
