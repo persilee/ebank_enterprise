@@ -35,7 +35,7 @@ class _TransferPartnerState extends State<TransferPartner> {
   Future<void> _loadData() async {
     TransferDataRepository()
         .getTransferPartnerList(
-      GetTransferPartnerListReq(1, 10),
+      GetTransferPartnerListReq(0, 10),
       'getTransferPartnerList',
     )
         .then((data) {

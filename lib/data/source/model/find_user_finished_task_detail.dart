@@ -41,7 +41,7 @@ class FindUserFinishedDetailResp extends Object {
   String servCtr;
 
   @JsonKey(name: 'commentList')
-  List<dynamic> commentList;
+  List<CommentList> commentList;
 
   @JsonKey(name: 'result')
   bool result;
@@ -59,6 +59,29 @@ class FindUserFinishedDetailResp extends Object {
   factory FindUserFinishedDetailResp.fromJson(Map<String, dynamic> srcJson) =>
       _$FindUserFinishedDetailRespFromJson(srcJson);
   Map<String, dynamic> toJson() => _$FindUserFinishedDetailRespToJson(this);
+}
+
+@JsonSerializable()
+  class CommentList extends Object {
+
+  @JsonKey(name: 'comment')
+  String comment;
+
+  @JsonKey(name: 'result')
+  bool result;
+
+  @JsonKey(name: 'time')
+  String time;
+
+  @JsonKey(name: 'userName')
+  String userName;
+
+  CommentList(this.comment,this.result,this.time,this.userName,);
+
+  factory CommentList.fromJson(Map<String, dynamic> srcJson) => _$CommentListFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$CommentListToJson(this);
+
 }
 
 @JsonSerializable()

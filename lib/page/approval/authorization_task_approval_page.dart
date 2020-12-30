@@ -25,7 +25,7 @@ class _AuthorizationTaskApprovalPageState
     extends State<AuthorizationTaskApprovalPage> {
   Rows history;
   _AuthorizationTaskApprovalPageState(this.history);
-
+  var commentList = <CommentList>[];
   @override
   void initState() {
     super.initState();
@@ -108,37 +108,45 @@ class _AuthorizationTaskApprovalPageState
               ),
             ),
           ),
-          SliverList(
-              delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return SizedBox(
-                child: Column(
-                  children: [
-                    Container(
-                        color: Colors.white,
-                        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                        child: Column(
-                          children: [
-                            _getHintLine(),
-                            //发起人
-                            _getRow('审批人', '77664564548'),
-                            //待办任务名称
-                            _getRow('审批时间', '一对一转账审批'),
-                            //创建时间
-                            _getRow('审批意见', '2020-11-11 14:16:24'),
-                            //审批结果
-                            _getRow('审批结果', 'ok'),
-                          ],
-                        ))
-                  ],
+          commentList.length > 0
+              ? SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return SizedBox(
+                      child: Column(
+                        children: [
+                          Container(
+                              color: Colors.white,
+                              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                              child: Column(
+                                children: [
+                                  _getHintLine(),
+                                  //发起人
+                                  _getRow('审批人', commentList[index].userName),
+                                  //待办任务名称
+                                  _getRow('审批时间', commentList[index].time),
+                                  //创建时间
+                                  _getRow('审批意见', commentList[index].comment),
+                                  //审批结果
+                                  _getRow('审批结果',
+                                      commentList[index].result.toString()),
+                                ],
+                              ))
+                        ],
+                      ),
+                    );
+                  },
+                  childCount: commentList.length,
+                ))
+              : SliverToBoxAdapter(
+                  child: Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                    child: Text('无内容'),
+                  ),
                 ),
-              );
-            },
-            childCount: 4,
-          ))
         ],
       ),
-
       // child: child,
     );
   }
@@ -174,7 +182,12 @@ class _AuthorizationTaskApprovalPageState
           .findUserFinishedDetail(
               GetFindUserFinishedDetailReq(processId), 'findUserFinishedDetail')
           .then((data) {
-        setState(() {});
+        setState(() {
+          if (data != null) {
+            commentList.clear();
+            commentList.addAll(data.commentList);
+          }
+        });
       })
     });
   }
