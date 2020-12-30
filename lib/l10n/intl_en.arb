@@ -248,7 +248,6 @@
   "other_fee":"Remittance Charges Options",
   "bank_swift":"SWIFT Address",
   "middle_bank_swift":"Receiver's Correspondent Bank SWIFT",
-  "remittance_usage":"Purpose of Remittance",
   "no_transfer_record": "No transfer Record",
   "transfer_time":"Transfer Time",
   "transfer_status":"Transfer Status",
