@@ -138,13 +138,17 @@ class _AuthorizationTaskApprovalPageState
                         ],
                       )),
                   _getHintLine(),
-                  _fromAccount == ""
+                  (_fromAccount == "" || _fromAccount == null)
                       ? Container()
                       : _getRow("收款账户", _fromAccount),
                   _getHintLine(),
-                  _payeeName == "" ? Container() : _getRow("账户名称", _payeeName),
+                  (_payeeName == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow("账户名称", _payeeName),
                   _getHintLine(),
-                  _fromCcy == "" ? Container() : _getRow("转入货币", _fromCcy),
+                  (_fromCcy == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow("转入货币", _fromCcy),
                 ],
               ),
             ),
@@ -178,21 +182,29 @@ class _AuthorizationTaskApprovalPageState
                         ],
                       )),
                   _getHintLine(),
-                  _accountNumber == ""
+                  (_accountNumber == "" || _fromAccount == null)
                       ? Container()
                       : _getRow("付款账户", _accountNumber),
                   _getHintLine(),
-                  _accountName == ""
+                  (_accountName == "" || _fromAccount == null)
                       ? Container()
                       : _getRow("账户名称", _accountName),
                   _getHintLine(),
-                  _payBank == "" ? Container() : _getRow("付款银行", _payBank),
+                  (_payBank == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow("付款银行", _payBank),
                   _getHintLine(),
-                  _toCcy == "" ? Container() : _getRow("转出货币", _toCcy),
+                  (_toCcy == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow("转出货币", _toCcy),
                   _getHintLine(),
-                  _toaccount == "" ? Container() : _getRow("转出金额", _toaccount),
+                  (_toaccount == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow("转出金额", _toaccount),
                   _getHintLine(),
-                  _remark == "" ? Container() : _getRow("附言", _remark),
+                  (_remark == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow("附言", _remark),
                 ],
               ),
             ),
@@ -245,7 +257,6 @@ class _AuthorizationTaskApprovalPageState
             _payeeName = data.operateEndValue.payeeName;
           }
         });
-        print(data.commentList.toString());
       })
     });
   }
