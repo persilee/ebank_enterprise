@@ -94,6 +94,27 @@
   "account_num": "Account No.",
   "tran_limit_amt_with_value": "Limit ：",
   "transfer_from": "Transfer From",
+  
+
+  "my_to_do_list" :"My to do list",
+  "authorization_history" :"Authorization history",
+  "my_application":"My application",
+ "sponsor" :"Sponsor",
+ "to_do_task_name":"To do task name",
+ "creation_time":"Creation time",
+  "international_transfer":"Overseas Bank Transfer",
+  "remitter_address_prompt":"*Please note if the address is incomplete or incorrect, remittance may be rejected.\n*Address must include apartment/building number, street name and city. ",
+  "transfer_in":"Transfer in",
+  "company_name":"Company name",
+  "international_transfer_account_prompt":"*Beneficiary's IBAN is required for funds remitting to European countries",
+  
+  "receipt_bank":"Bank",
+  
+  "Transfer_fee":"Transfer fee",
+  "remittance_usage":"Purpose of Remittance",
+  "remittance_address":"Remittance address",
+  "collection_address":"Collection address",
+ 
   "balance_with_value": "Balance:",
   "receipt_side": "Transfer To",
   "transfer_postscript": "Remark",

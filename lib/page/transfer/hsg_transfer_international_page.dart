@@ -1,3 +1,11 @@
+/*
+ * 
+ * Created Date: Thursday, December 10th 2020, 5:34:04 pm
+ * Author: pengyikang
+ * 
+ * Copyright (c) 2020 深圳高阳寰球科技有限公司
+ */
+import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
@@ -5,6 +13,8 @@ import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
+import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -52,7 +62,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   var ccyList = List();
 
   List<String> ccyLists = [];
-  //List<String> ccyList = [];
 
   var payerName = '';
 
@@ -118,8 +127,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         });
     if (result != null && result != false) {
       _changedAccountTitle = cardNoList[result];
-      // //余额
-      // _changedRateTitle = totalBalances[result];
     }
 
     setState(() {
@@ -190,20 +197,12 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //选择货币方法
   Future<Function> _getCcy() async {
-    //List<String> a = [];
-    print('4444444444444');
-    // if (ccyList == []) {
-    //   ccyList.add(ccyListOne[]);
-    // }
-    //ccyList = ccyList == [] ? ccyListOne : ccyList;
-    print('$ccyList pppppppppppppppppppppp');
     final result = await showDialog(
         context: context,
         builder: (context) {
           return HsgSingleChoiceDialog(
             title: '币种选择',
             items: ccyLists,
-            //  ccyList = ccyList == [] ? ccyListOne : ccyList,
             positiveButton: '确定',
             negativeButton: '取消',
             lastSelectedPosition: _lastSelectedPosition,
@@ -217,8 +216,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       _changedRateTitle = totalBalances[result];
     }
 
-    //_getCardTotals(_changedAccountTitle);
-    print('9999999999999999$_changedCcyTitle');
     //加了这个可以立即显示
     setState(() {
       _position = result;
@@ -238,20 +235,20 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           setState(() {
             bals.clear();
             bals.add(element.cardListBal);
-            if (bals.contains(changedCcyTitle)) {
-              //_changedRateTitle = element.cardListBal[1].avaBal;
-            }
+            if (bals.contains(changedCcyTitle)) {}
           });
         }
       });
     });
   }
 
+  _selectCountry() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: Text(S.current.international_transfer),
         centerTitle: true,
       ),
       body: CustomScrollView(
@@ -271,19 +268,95 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               money,
               payeeName,
               payeeCardNo,
-              remark,
               _amountInputChange,
-              _nameInputChange,
-              _accountInputChange,
-              _transferInputChange,
               _selectAccount,
               _getCcy,
               _getCardTotals),
           SliverToBoxAdapter(
             child: Container(
-              height: 80,
-              padding: EdgeInsets.fromLTRB(29.6, 30, 29.6, 0),
-              margin: EdgeInsets.only(top: 60),
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              margin: EdgeInsets.only(top: 20),
+              height: 155,
+              color: Colors.white,
+              child: Column(
+                children: [
+                  _getAddress(
+                      S.current.remittance_address, S.current.please_input),
+                  _getLine(),
+                  Container(
+                    padding: EdgeInsets.only(right: 50),
+                    height: 70,
+                    child: _getRedText(S.current.remitter_address_prompt),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          TransferPayeeWidget(
+              S.current.transfer_in,
+              S.current.company_name,
+              S.current.account_num,
+              S.current.please_input,
+              S.current.please_input,
+              _nameInputChange,
+              _accountInputChange),
+          SliverToBoxAdapter(
+              child: Container(
+            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+            height: 360,
+            color: Colors.white,
+            margin: EdgeInsets.only(bottom: 20),
+            child: Column(
+              children: [
+                _getRedText(S.current.international_transfer_account_prompt),
+                //国家地区
+                _getSelectColumn(S.current.state_area, S.current.please_select),
+                _getLine(),
+                //收款银行
+                _getSelectColumn(
+                    S.current.receipt_bank, S.current.please_select),
+                _getLine(),
+                //银行SWIFT
+                _getInputColumn(S.current.bank_swift, S.current.please_input),
+                _getLine(),
+                //中间行
+                _getInputColumn(
+                    S.current.middle_bank_swift, S.current.optional),
+                _getLine(),
+                //收款地址
+                _getAddress(
+                    S.current.collection_address, S.current.please_input),
+                _getLine(),
+              ],
+            ),
+          )),
+          SliverToBoxAdapter(
+            child: Container(
+              color: Colors.white,
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Column(
+                children: [
+                  //转账费用
+                  _getSelectColumn(
+                      S.current.Transfer_fee, S.current.please_select),
+                  _getLine(),
+                  //汇款用途
+                  _getSelectColumn(
+                      S.current.remittance_usage, S.current.please_select),
+                  _getLine(),
+                  //转账附言
+                  _getInputColumn(
+                      S.current.transfer_postscript, S.current.optional),
+                  _getLine()
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 90,
+              padding: EdgeInsets.fromLTRB(29.6, 30, 29.6, 10),
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 80),
               child: FlatButton(
                 child: Text('提交'),
                 textColor: Colors.white,
@@ -293,6 +366,164 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   print('提交');
                 },
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _getRedText(String redText) {
+    return Container(
+        height: 70,
+        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+        child: Text(
+          redText,
+          style: TextStyle(color: Color(0XFFA61F23), fontSize: 13.5),
+        ));
+  }
+
+  _getAddress(String topText, String inputText) {
+    return Container(
+      height: 80,
+      color: Colors.white,
+      child: Column(
+        children: [
+          Container(
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                Container(
+                  margin: EdgeInsets.only(top: 15),
+                  child: Text(
+                    topText,
+                    style: TextStyle(fontSize: 13),
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ])),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: TextField(
+                  //是否自动更正
+                  autocorrect: false,
+                  //是否自动获得焦点
+                  autofocus: false,
+                  onChanged: (payeeName) {
+                    // nameChanges(payeeName);
+                    print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
+                  },
+                  textAlign: TextAlign.right,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: inputText,
+                    hintStyle: TextStyle(
+                      fontSize: 13.5,
+                      color: HsgColors.textHintColor,
+                    ),
+                  )),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _getLine() {
+    return Container(
+        child: Divider(
+      color: HsgColors.divider,
+      height: 0.5,
+    ));
+  }
+
+  _getInputColumn(String leftText, String righteText) {
+    return Container(
+      height: 50,
+      color: Colors.white,
+      padding: EdgeInsets.only(right: 15),
+      child: Row(
+        children: [
+          Container(
+            child: Text(
+              leftText,
+              style: TextStyle(
+                color: HsgColors.firstDegreeText,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              child: TextField(
+                  //是否自动更正
+                  autocorrect: false,
+                  //是否自动获得焦点
+                  autofocus: false,
+                  onChanged: (payeeName) {
+                    // nameChanges(payeeName);
+                    print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
+                  },
+                  textAlign: TextAlign.right,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: righteText,
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      color: HsgColors.textHintColor,
+                    ),
+                  )),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  _getSelectColumn(String leftText, String rightText) {
+    return Container(
+      height: 50,
+      color: Colors.white,
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+            child: Text(
+              leftText,
+              style: TextStyle(color: HsgColors.firstDegreeText, fontSize: 14),
+            ),
+          ),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                print('选择账号');
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 5),
+                    child: Text(
+                      rightText,
+                      style: TextStyle(
+                        color: HsgColors.secondDegreeText,
+                        fontSize: 13,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 7, left: 5),
+            child: Icon(
+              Icons.arrow_forward_ios,
+              color: HsgColors.firstDegreeText,
+              size: 16,
             ),
           ),
         ],
