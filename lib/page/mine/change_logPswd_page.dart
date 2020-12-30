@@ -222,20 +222,24 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
 
   //修改密码接口
   _updateLoginPassword() async {
-    HSProgressHUD.show();
-    final prefs = await SharedPreferences.getInstance();
-    String userID = prefs.getString(ConfigKey.USER_ID);
-    UpdateLoginPawRepository()
-        .modifyLoginPassword(
-            ModifyPasswordReq(_newPwd.text, _oldPwd.text, _sms.text, userID),
-            'ModifyPasswordReq')
-        .then((data) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: S.current.operate_success);
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-      HSProgressHUD.dismiss();
-    });
+    if (_newPwd.text != _confimPwd.text) {
+      Fluttertoast.showToast(msg: '两次输入的密码不一致，请重新输入');
+    } else {
+      HSProgressHUD.show();
+      final prefs = await SharedPreferences.getInstance();
+      String userID = prefs.getString(ConfigKey.USER_ID);
+      UpdateLoginPawRepository()
+          .modifyLoginPassword(
+              ModifyPasswordReq(_newPwd.text, _oldPwd.text, _sms.text, userID),
+              'ModifyPasswordReq')
+          .then((data) {
+        HSProgressHUD.dismiss();
+        Fluttertoast.showToast(msg: S.current.operate_success);
+      }).catchError((e) {
+        Fluttertoast.showToast(msg: e.toString());
+        HSProgressHUD.dismiss();
+      });
+    }
   }
 }
 
