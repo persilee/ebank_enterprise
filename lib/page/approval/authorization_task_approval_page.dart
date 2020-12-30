@@ -79,7 +79,7 @@ class _AuthorizationTaskApprovalPageState
                         ],
                       )),
                   _getHintLine(),
-                  _getRow('付款账户', '84981891898'),
+                  _getRow('付款账户', history.processId),
                   _getHintLine(),
                   _getRow('付款账户', '84981891898'),
                   _getHintLine(),
@@ -170,10 +170,12 @@ class _AuthorizationTaskApprovalPageState
 
   void _loadHistoryData(String processId) {
     Future.wait({
-      NeedToBeDealtWithRepository().findUserFinishedDetail(
-          GetFindUserFinishedDetailReq(processId), 'findUserFinishedDetail')
-    }).then((data) {
-      setState(() {});
+      NeedToBeDealtWithRepository()
+          .findUserFinishedDetail(
+              GetFindUserFinishedDetailReq(processId), 'findUserFinishedDetail')
+          .then((data) {
+        setState(() {});
+      })
     });
   }
 }
