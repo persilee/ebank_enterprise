@@ -32,13 +32,13 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   void initState() {
     super.initState();
     //备注监听器(限制5个字数)
-    _nameController.addListener(() { 
+    _nameController.addListener(() {
       _check();
     });
-    _acountController.addListener(() { 
+    _acountController.addListener(() {
       _check();
     });
-    _smsController.addListener(() { 
+    _smsController.addListener(() {
       _check();
     });
 
@@ -78,7 +78,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             'addPartner')
         .then((data) {
       print(data.toString());
-      if (data != null) {}
+      if (data != null) {
+        Fluttertoast.showToast(msg: '添加成功');
+        Navigator.of(context).pop();
+      }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
@@ -165,6 +168,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               if (data != null) {
                 setState(() {
                   _bank = data;
+                  _check();
                 });
               }
             });
@@ -185,6 +189,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               if (data != null) {
                 setState(() {
                   _location = data;
+                  _check();
                 });
               }
             });
@@ -205,6 +210,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               if (data != null) {
                 setState(() {
                   _branch = data;
+                  _check();
                 });
               }
             });
@@ -391,6 +397,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   _confirm() {
     if (_isInputed) {
       return () {
+        // Fluttertoast.showToast(msg: '添加成功');
+        // Navigator.of(context).pop();
         _loadData();
       };
     } else {

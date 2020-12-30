@@ -4,6 +4,7 @@
 /// Date: 2020-12-08
 
 import 'package:ebank_mobile/data/source/model/add_partner.dart';
+import 'package:ebank_mobile/data/source/model/delete_partner.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
@@ -20,6 +21,13 @@ class TransferDataRepository {
     return request('ddep/transferpartner/addTransferPartner', req, tag,
         (data) => AddPartnerResp.fromJson(data));
   }
+
+  //删除范本请求
+  Future<DeletePartnerResp> deletePartner(DeletePartnerReq req, String tag) {
+    return request('ddep/transferpartner/deleteTransferPartner', req, tag,
+        (data) => DeletePartnerResp.fromJson(data));
+  }
+
   
   Future<TransferByAccountResp> getTransferByAccount(
       GetTransferByAccount req, String tag) {
