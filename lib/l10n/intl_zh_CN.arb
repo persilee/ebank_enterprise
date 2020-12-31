@@ -294,5 +294,9 @@
   "to_ccy":"转出货币",
   "to_amount":"转出金额",
   "postscript":"附言",
-  "authorization_records":"授权记录"
+  "authorization_records":"授权记录",
+  "customer_service": "联系客服",
+  "hello": "您好，",
+  "serve_you": "高阳银行客服为您服务~",
+  "call": "呼叫"
 }

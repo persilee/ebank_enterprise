@@ -312,5 +312,9 @@
   "to_ccy":"Transfer Money",
   "to_amount":"Transfer-out Amount",
   "postscript":"Postscript",
-  "authorization_records":"Authorization Records"
+  "authorization_records":"Authorization Records",
+  "customer_service": "Contact Customer Service",
+  "hello": "Hello,",
+  "serve_you": "The customer service of Hisun Bank is at your service~",
+  "call": "Call"
 }
