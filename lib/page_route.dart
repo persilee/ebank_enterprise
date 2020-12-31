@@ -17,6 +17,7 @@ import 'package:ebank_mobile/page/customerService/contact_customer_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_detail_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_page.dart';
 import 'package:ebank_mobile/page/exchangeRateInquiry/exchange_rate_inquiry_page.dart';
+import 'package:ebank_mobile/page/mine/id_cardVerification_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_succeed_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_record_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_info_page.dart';
@@ -90,6 +91,7 @@ var feedback = '/feedback_page';
 var changeLgPs = '/change_loginpassword_page.dart';
 var changePayPS = '/change_pay_page.dart';
 var setPayPage = '/set_pay_page.dart';
+var iDcardVerification = '/id_cardVerification_page.dart';
 var pageAccountOverview = '/account_overview';
 var pageDetailInfo = '/detail_info_page';
 var pageDetailList = '/detail_list_page';
@@ -146,6 +148,7 @@ var appRoutes = {
   changeLgPs: (context) => ChangeLoPS(),
   setPayPage: (context) => SetPayPage(),
   changePayPS: (context) => ChangePayPage(),
+  iDcardVerification: (context) => IdIardVerificationPage(),
   pageAccountOverview: (context) => AccountOverviewPage(),
   pageDetailList: (context) => DetailListPage(),
   pageDetailInfo: (context) => DetailInfoPage(),
