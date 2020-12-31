@@ -27,12 +27,12 @@ class _AuthorizationTaskApprovalPageState
   _AuthorizationTaskApprovalPageState(this.history);
   var commentList = <CommentList>[];
   //转账信息
-  bool _transfer = false;
+  bool _transfer = true;
   var _fromAccount = "";
   var _fromCcy = "";
   var _payeeName = "";
   //付款信息
-  bool _pay = false;
+  bool _pay = true;
   var _accountNumber = "";
   var _accountName = "";
   var _payBank = "";
@@ -123,7 +123,7 @@ class _AuthorizationTaskApprovalPageState
 //转账信息
   _tansferInfo() {
     return SliverToBoxAdapter(
-      child: !_transfer
+      child: _transfer
           ? Container()
           : Container(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -167,7 +167,7 @@ class _AuthorizationTaskApprovalPageState
 //付款信息
   _payInfo() {
     return SliverToBoxAdapter(
-      child: !_pay
+      child: _pay
           ? Container()
           : Container(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -257,8 +257,8 @@ class _AuthorizationTaskApprovalPageState
             commentList.addAll(data.commentList);
           }
           if (data.operateEndValue != null) {
-            _pay = true;
-            _transfer = true;
+            _pay = false;
+            _transfer = false;
             _accountNumber = data.operateEndValue.payerCardNo;
             _accountName = data.operateEndValue.payerName;
             _payBank = data.operateEndValue.payerBankCode;
