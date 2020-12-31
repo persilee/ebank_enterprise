@@ -110,7 +110,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
 
   _loadAuthorzationRateData() async {
     var bool = false;
-    var page = 0;
+    var page = 1;
     var pageSize = 10;
     NeedToBeDealtWithRepository()
         .findUserFinishedTask(GetFindUserFinishedTaskReq(bool, page, pageSize),

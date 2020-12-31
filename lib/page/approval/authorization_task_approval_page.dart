@@ -26,6 +26,19 @@ class _AuthorizationTaskApprovalPageState
   Rows history;
   _AuthorizationTaskApprovalPageState(this.history);
   var commentList = <CommentList>[];
+  //转账信息
+  bool _transfer = false;
+  var _fromAccount = "";
+  var _fromCcy = "";
+  var _payeeName = "";
+  //付款信息
+  bool _pay = false;
+  var _accountNumber = "";
+  var _accountName = "";
+  var _payBank = "";
+  var _toCcy = "";
+  var _toaccount = "";
+  var _remark = "";
   @override
   void initState() {
     super.initState();
@@ -148,6 +161,106 @@ class _AuthorizationTaskApprovalPageState
         ],
       ),
       // child: child,
+    );
+  }
+
+//转账信息
+  _tansferInfo() {
+    return SliverToBoxAdapter(
+      child: !_transfer
+          ? Container()
+          : Container(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              color: Colors.white,
+              child: Column(
+                children: [
+                  Container(
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: Text(
+                              '转账信息',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )
+                        ],
+                      )),
+                  _getHintLine(),
+                  (_fromAccount == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow("收款账户", _fromAccount),
+                  _getHintLine(),
+                  (_payeeName == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow("账户名称", _payeeName),
+                  _getHintLine(),
+                  (_fromCcy == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow("转入货币", _fromCcy),
+                ],
+              ),
+            ),
+    );
+  }
+
+//付款信息
+  _payInfo() {
+    return SliverToBoxAdapter(
+      child: !_pay
+          ? Container()
+          : Container(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              color: Colors.white,
+              child: Column(
+                children: [
+                  Container(
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: Text(
+                              '付款信息',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )
+                        ],
+                      )),
+                  _getHintLine(),
+                  (_accountNumber == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow("付款账户", _accountNumber),
+                  _getHintLine(),
+                  (_accountName == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow("账户名称", _accountName),
+                  _getHintLine(),
+                  (_payBank == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow("付款银行", _payBank),
+                  _getHintLine(),
+                  (_toCcy == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow("转出货币", _toCcy),
+                  _getHintLine(),
+                  (_toaccount == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow("转出金额", _toaccount),
+                  _getHintLine(),
+                  (_remark == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow("附言", _remark),
+                ],
+              ),
+            ),
     );
   }
 
