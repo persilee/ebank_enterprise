@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordTC =
       TextEditingController(text: '4N0021S8');
 
-  var _account = 'pengyikang'; //'18033412021';
+  var _account = 'pengyikang '; //'18033412021';
   var _password = '0c9W7825'; //'123456';
 
   @override

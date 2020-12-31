@@ -18,7 +18,6 @@ class ApplicationTaskApprovalPage extends StatefulWidget {
 
 class _ApplicationTaskApprovalPageState
     extends State<ApplicationTaskApprovalPage> {
-  _ApplicationTaskApprovalPageState();
   var processId = "";
   var commentList = [];
   //转账信息

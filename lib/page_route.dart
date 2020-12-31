@@ -173,6 +173,11 @@ onGenerateRoute(RouteSettings settings) {
       return CardDetailPage(card: settings.arguments);
     });
   }
+  // if (settings.name == pageApplicationTaskApproval) {
+  //   return MaterialPageRoute(builder: (context) {
+  //     return ApplicationTaskApprovalPage(application: settings.arguments);
+  //   });
+  // }
   if (settings.name == pageTimeDepositContract) {
     return MaterialPageRoute(builder: (context) {
       Map data = settings.arguments;
