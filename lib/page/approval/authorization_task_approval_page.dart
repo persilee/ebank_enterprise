@@ -39,7 +39,6 @@ class _AuthorizationTaskApprovalPageState
   var _toCcy = "";
   var _toaccount = "";
   var _remark = "";
-
   @override
   void initState() {
     super.initState();
@@ -57,66 +56,71 @@ class _AuthorizationTaskApprovalPageState
         slivers: <Widget>[
           _transferInfo(),
           _payInfo(),
-          SliverToBoxAdapter(
-            child: Container(
-              color: Colors.white,
-              margin: EdgeInsets.only(top: 10),
-              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-              child: Row(
-                children: [
-                  Container(
-                    child: Text(
-                      '审批历史',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          commentList.length > 0
-              ? SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return SizedBox(
-                      child: Column(
-                        children: [
-                          Container(
-                              color: Colors.white,
-                              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                              child: Column(
-                                children: [
-                                  _getHintLine(),
-                                  //发起人
-                                  _getRow('审批人', commentList[index].userName),
-                                  //待办任务名称
-                                  _getRow('审批时间', commentList[index].time),
-                                  //创建时间
-                                  _getRow('审批意见', commentList[index].comment),
-                                  //审批结果
-                                  _getRow('审批结果',
-                                      commentList[index].result.toString()),
-                                ],
-                              ))
-                        ],
-                      ),
-                    );
-                  },
-                  childCount: commentList.length,
-                ))
-              : SliverToBoxAdapter(
-                  child: Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
-                    child: Text('无内容'),
-                  ),
-                ),
+          _historyHead(),
+          _historyContent(),
         ],
       ),
       // child: child,
+    );
+  }
+
+  //审批历史内容
+  Widget _historyContent() {
+    return commentList.length > 0
+        ? SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return SizedBox(
+                  child: Column(
+                    children: [
+                      Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                          child: Column(
+                            children: [
+                              _getHintLine(),
+                              //发起人
+                              _getRow('审批人', commentList[index].userName),
+                              //待办任务名称
+                              _getRow('审批时间', commentList[index].time),
+                              //创建时间
+                              _getRow('审批意见', commentList[index].comment),
+                              //审批结果
+                              _getRow(
+                                  '审批结果', commentList[index].result.toString()),
+                            ],
+                          ))
+                    ],
+                  ),
+                );
+              },
+              childCount: commentList.length,
+            ),
+          )
+        : SliverToBoxAdapter();
+  }
+
+  //审批历史头
+  Widget _historyHead() {
+    return SliverToBoxAdapter(
+      child: Container(
+        color: Colors.white,
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+        child: Row(
+          children: [
+            Container(
+              child: Text(
+                '审批历史',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
