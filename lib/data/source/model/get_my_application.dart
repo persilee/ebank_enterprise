@@ -7,29 +7,59 @@
  */
 import 'package:json_annotation/json_annotation.dart';
 
-part 'find_user_to_do_task.g.dart';
+part 'get_my_application.g.dart';
 
 @JsonSerializable()
-class FindUserToDoTaskReq extends Object {
+class GetMyApplicationReq extends Object {
+  @JsonKey(name: 'finish')
+  bool finish;
+
   @JsonKey(name: 'page')
   int page;
 
   @JsonKey(name: 'pageSize')
   int pageSize;
 
-  FindUserToDoTaskReq(
+  @JsonKey(name: 'processId')
+  String processId;
+
+  @JsonKey(name: 'processKey')
+  String processKey;
+
+  @JsonKey(name: 'processStatus')
+  bool processStatus;
+
+  @JsonKey(name: 'processTitle')
+  String processTitle;
+
+  @JsonKey(name: 'sort')
+  String sort;
+
+  @JsonKey(name: 'taskName')
+  String taskName;
+  GetMyApplicationReq(
+    this.finish,
     this.page,
     this.pageSize,
+    this.processId,
+    this.processKey,
+    this.processStatus,
+    this.processTitle,
+    this.sort,
+    this.taskName,
   );
 
-  factory FindUserToDoTaskReq.fromJson(Map<String, dynamic> srcJson) =>
-      _$FindUserToDoTaskReqFromJson(srcJson);
+  factory GetMyApplicationReq.fromJson(Map<String, dynamic> srcJson) =>
+      _$GetMyApplicationReqFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$FindUserToDoTaskReqToJson(this);
+  Map<String, dynamic> toJson() => _$GetMyApplicationReqToJson(this);
 }
 
 @JsonSerializable()
-class FindUserToDoTaskResp extends Object {
+class MyApplicationResp extends Object {
+  @JsonKey(name: 'sort')
+  String sort;
+
   @JsonKey(name: 'page')
   int page;
 
@@ -45,7 +75,8 @@ class FindUserToDoTaskResp extends Object {
   @JsonKey(name: 'rows')
   List<Rows> rows;
 
-  FindUserToDoTaskResp(
+  MyApplicationResp(
+    this.sort,
     this.page,
     this.pageSize,
     this.count,
@@ -53,10 +84,9 @@ class FindUserToDoTaskResp extends Object {
     this.rows,
   );
 
-  factory FindUserToDoTaskResp.fromJson(Map<String, dynamic> srcJson) =>
-      _$FindUserToDoTaskRespFromJson(srcJson);
-
-  Map<String, dynamic> toJson() => _$FindUserToDoTaskRespToJson(this);
+  factory MyApplicationResp.fromJson(Map<String, dynamic> srcJson) =>
+      _$MyApplicationRespFromJson(srcJson);
+  Map<String, dynamic> toJson() => _$MyApplicationRespToJson(this);
 }
 
 @JsonSerializable()
@@ -76,9 +106,6 @@ class Rows extends Object {
   @JsonKey(name: 'taskName')
   String taskName;
 
-  @JsonKey(name: 'startUser')
-  String startUser;
-
   @JsonKey(name: 'createTime')
   String createTime;
 
@@ -88,12 +115,9 @@ class Rows extends Object {
     this.processTitle,
     this.taskId,
     this.taskName,
-    this.startUser,
     this.createTime,
   );
-
   factory Rows.fromJson(Map<String, dynamic> srcJson) =>
       _$RowsFromJson(srcJson);
-
   Map<String, dynamic> toJson() => _$RowsToJson(this);
 }

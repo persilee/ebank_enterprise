@@ -5,6 +5,7 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -18,12 +19,22 @@ class OpenTransferPage extends StatefulWidget {
 }
 
 class _OpenTransferPageState extends State<OpenTransferPage> {
+  var payeeName = '';
+  var payeeCardNo = '';
   String groupValue = "0";
 
   void updateGroupValue(String v) {
     setState(() {
       groupValue = v;
     });
+  }
+
+  Function _nameInputChange(String name) {
+    payeeName = name;
+  }
+
+  Function _accountInputChange(String account) {
+    payeeCardNo = account;
   }
 
   Widget _listItem(BuildContext context, value) {
@@ -89,20 +100,13 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               ),
               Expanded(
                   child: Container(
-                // color: Colors.red,
-                // margin: EdgeInsets.only(left: 20),
                 child: TextField(
                   textAlign: TextAlign.right,
                   autocorrect: false,
                   autofocus: false,
                   style: TextStyle(
                       color: HsgColors.firstDegreeText, fontSize: 14.0),
-                  // inputFormatters: [
-                  //   FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
-                  // ],
                   onChanged: (value) {
-                    // double.parse(
-                    //     value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
                     print("输入的计划名称是:$value");
                   },
                   keyboardType: TextInputType.number,
@@ -213,7 +217,38 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     );
   }
 
-  Widget _payee() {}
+  Widget _transferAmount() {
+    return Column(
+      children: [
+        Container(
+          color: HsgColors.backgroundColor,
+          height: 15,
+        ),
+        Row(
+          children: [
+            Container(
+              margin: EdgeInsets.all(15),
+              child: Text(
+                '转账金额',
+                style:
+                    TextStyle(fontSize: 13, color: HsgColors.secondDegreeText),
+              ),
+            ),
+            Expanded(
+                child: Container(
+              margin: EdgeInsets.all(15),
+              child: Text(
+                '限额：LAK 5000.00',
+                style:
+                    TextStyle(fontSize: 13, color: HsgColors.secondDegreeText),
+                textAlign: TextAlign.right,
+              ),
+            )),
+          ],
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -236,8 +271,32 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             )
           ],
         ),
-        body: (Container(
-          child: _transferInfo(),
-        )));
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverToBoxAdapter(
+              child: _transferInfo(),
+            ),
+            TransferPayeeWidget('收款方', '姓名', '账号', S.current.please_input,
+                S.current.please_input, _nameInputChange, _accountInputChange),
+            SliverToBoxAdapter(
+              child: _transferAmount(),
+            ),
+          ],
+        )
+        // (ListView(
+        //   // child: _transferInfo(),
+        //   children: <Widget>[
+        //     _transferInfo(),
+        //     TransferPayeeWidget(
+        //         S.current.transfer_in,
+        //         S.current.company_name,
+        //         S.current.account_num,
+        //         S.current.please_input,
+        //         S.current.please_input,
+        //         _nameInputChange,
+        //         _accountInputChange),
+        //   ],
+        // ))
+        );
   }
 }

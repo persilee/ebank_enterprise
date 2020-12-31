@@ -7,8 +7,10 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/feature_demo/my_tab_indicator.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/approval/authorization_history_page.dart';
 import 'package:flutter/material.dart';
 
+import 'my_appplication_page.dart';
 import 'my_approval_page.dart';
 
 class TabBarAndTopTab extends StatefulWidget {
@@ -20,7 +22,12 @@ class TabBarAndTopTab extends StatefulWidget {
 class _ApprovalPageState extends State<TabBarAndTopTab>
     with SingleTickerProviderStateMixin {
   _ApprovalPageState();
-  List tabs = ["我的待办", "授权记录", "我的申请"];
+  List tabs = [
+    S.current.my_to_do_list,
+    // S.current.authorization_history,
+    '授权记录',
+    S.current.my_application
+  ];
   TabController tabController;
   @override
   void initState() {
@@ -68,7 +75,11 @@ class _ApprovalPageState extends State<TabBarAndTopTab>
         ),
         body: TabBarView(
           controller: tabController,
-          children: [MyApprovalPage(), MyApprovalPage(), MyApprovalPage()],
+          children: [
+            MyApprovalPage(),
+            AuthorizationHistoryPage(),
+            MyApplicationPage()
+          ],
         ));
   }
 

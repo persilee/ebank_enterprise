@@ -193,20 +193,6 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
             ],
           ),
         ),
-        SliverList(
-            delegate:
-                SliverChildBuilderDelegate((BuildContext context, int index) {
-          return SizedBox(
-              child: Column(
-            children: [
-              Container(
-                child: Row(
-                  children: [],
-                ),
-              ),
-            ],
-          ));
-        }, childCount: ebankInterestRateList.length))
       ],
     );
   }

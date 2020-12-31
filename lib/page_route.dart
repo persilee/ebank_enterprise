@@ -8,6 +8,10 @@ import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
 import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
+import 'package:ebank_mobile/page/approval/application_task_approval_page.dart';
+import 'package:ebank_mobile/page/approval/authorization_history_page.dart';
+import 'package:ebank_mobile/page/approval/authorization_task_approval_page.dart';
+import 'package:ebank_mobile/page/approval/my_appplication_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_detail_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
@@ -97,6 +101,7 @@ var pageDepositInfo = '/time_deposit_info_page';
 var pageIndex = new MaterialPageRoute(builder: (context) => new IndexPage());
 var pageFeatureList = '/hsg_feature_list_page';
 var pageTransfer = '/hsg_transfer_page';
+var pageAuthorizationHistory = '/authorization_history_page';
 var pageTransferInternal = '/hsg_transfer_internal_page';
 var pageInternational = '/hsg_transfer_international_page';
 var pageElectronicStatement = '/electronic_statement_page';
@@ -108,6 +113,9 @@ var pageTimeDepositContract = '/time_deposit_contract_page';
 var pageOpenTransfer = '/hsg_open_transfer_page';
 var pageTaskApproval = '/task_approval_page';
 var pageUserAgreement = '/user_agreement_page';
+var pageApplication = '/my_appplication_page';
+var pageApplicationTaskApproval = '/application_task_approval_page';
+var pageAuthorizationTaskApproval = '/authorization_task_approval_page';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -149,17 +157,20 @@ var appRoutes = {
   //pageDepositInfo: (context) => PageDepositInfo(),
   pageInternational: (context) => TransferInternationalPage(),
   pageTransfer: (context) => TransferPage(),
+  pageAuthorizationHistory: (context) => AuthorizationHistoryPage(),
   pageTransferInternal: (context) => TransferInternalPage(),
   pageElectronicStatement: (context) => ElectronicStatementPage(),
   pageElectronicStatementDetail: (context) => ElectronicStatementDetailPage(),
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
   // pageTimeDepositContract: (context) => TimeDepositContract(),
   pageForexTrading: (context) => ForexTradingPage(),
-  pageOpenTransfer: (context) => OpenTransferPage(),
   pageTaskApproval: (context) => TaskApprovalPage(),
+  pageApplication: (context) => MyApplicationPage(),
+  // pageAuthorizationTaskApproval: (context) => AuthorizationTaskApprovalPage(),
+  // pageExchangeRateInquiry: (context) => ExchangeRateInquiryPage(),
   pageExchangeRateInquiry: (context) => ExchangeRateInquiryPage(),
+  pageOpenTransfer: (context) => OpenTransferPage(),
 };
-
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
     return MaterialPageRoute(builder: (context) {
@@ -183,6 +194,11 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageUserAgreement) {
     return MaterialPageRoute(builder: (context) {
       return UserAgreementPage(pactId: settings.arguments);
+    });
+  }
+  if (settings.name == pageAuthorizationTaskApproval) {
+    return MaterialPageRoute(builder: (context) {
+      return AuthorizationTaskApprovalPage(history: settings.arguments);
     });
   }
   return null;
