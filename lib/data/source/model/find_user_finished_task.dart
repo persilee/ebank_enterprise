@@ -11,9 +11,6 @@ part 'find_user_finished_task.g.dart';
 
 @JsonSerializable()
 class GetFindUserFinishedTaskReq extends Object {
-  @JsonKey(name: 'finish')
-  bool finish;
-
   @JsonKey(name: 'page')
   int page;
 
@@ -21,7 +18,6 @@ class GetFindUserFinishedTaskReq extends Object {
   int pageSize;
 
   GetFindUserFinishedTaskReq(
-    this.finish,
     this.page,
     this.pageSize,
   );
@@ -58,7 +54,6 @@ class FindUserFinishedTaskResp extends Object {
 
   factory FindUserFinishedTaskResp.fromJson(Map<String, dynamic> srcJson) =>
       _$FindUserFinishedTaskRespFromJson(srcJson);
-
   Map<String, dynamic> toJson() => _$FindUserFinishedTaskRespToJson(this);
 }
 

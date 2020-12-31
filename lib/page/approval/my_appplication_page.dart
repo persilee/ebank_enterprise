@@ -46,6 +46,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
             return SizedBox(
                 child: GestureDetector(
               onTap: () {
+                // go2Detail(rowList[index]);
                 Navigator.pushNamed(context, pageApplicationTaskApproval,
                     arguments: rows[index]);
                 print('选择账号');
@@ -73,6 +74,11 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
         ))
       ],
     );
+  }
+
+  void go2Detail(Rows application) {
+    Navigator.pushNamed(context, pageApplicationTaskApproval,
+        arguments: application);
   }
 
   _getRow(String leftText, String rightText) {
@@ -110,7 +116,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
     var taskName = '';
     NeedToBeDealtWithRepository()
         .getMyApplication(
-            GetMyApplicationReq(finish, page, pageSize, processId, processKey,
+            GetMyApplicationReq(finish, 1, pageSize, processId, processKey,
                 processStatus, processTitle, sort, taskName),
             'tag')
         .then((data) {

@@ -39,7 +39,6 @@ class _AuthorizationTaskApprovalPageState
   var _toCcy = "";
   var _toaccount = "";
   var _remark = "";
-
   @override
   void initState() {
     super.initState();

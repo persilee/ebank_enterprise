@@ -109,8 +109,7 @@ class _SelectBranchBankPageState extends State<SelectBranchBankPage> {
     return Padding(
           padding: EdgeInsets.only(top: 10, bottom: 10, left: 18),
           child: Text(
-            // S.current.partner_information,
-            '如无法选择准确的网点，建议选择同城任一网点',
+            S.current.pick_branch_office_tips,
             style: TextStyle(color: HsgColors.hintText, fontSize: 13),
           ),
         );
