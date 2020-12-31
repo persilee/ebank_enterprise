@@ -54,69 +54,70 @@ class _ApplicationTaskApprovalPageState
         slivers: <Widget>[
           _transferInfo(),
           _payInfo(),
-          SliverToBoxAdapter(
-            child: Container(
-              color: Colors.white,
-              margin: EdgeInsets.only(top: 10),
-              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-              child: Row(
-                children: [
-                  Container(
-                    child: Text(
-                      S.current.approval_histroy,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          commentList.length > 0
-              ? SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return SizedBox(
-                      child: Column(
-                        children: [
-                          Container(
-                              color: Colors.white,
-                              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                              child: Column(
-                                children: [
-                                  _getHintLine(),
-                                  _getRow(S.current.approver,
-                                      commentList[index].userName),
-                                  _getRow(S.current.approver_time,
-                                      commentList[index].time),
-                                  _getRow(S.current.approver_opinion,
-                                      commentList[index].comment),
-                                  _getRow(
-                                      S.current.approver_result,
-                                      commentList[index].result
-                                          ? S.current.success
-                                          : S.current.failed),
-                                ],
-                              ))
-                        ],
-                      ),
-                    );
-                  },
-                  childCount: commentList.length,
-                ))
-              : SliverToBoxAdapter(
-                  child: Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
-                    child: Text(S.current.no_content),
-                  ),
-                ),
+          _historyHeader(),
+          _historyContent(),
         ],
       ),
-      // child: child,
     );
+  }
+
+  _historyHeader() {
+    return SliverToBoxAdapter(
+      child: Container(
+        color: Colors.white,
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+        child: Row(
+          children: [
+            Container(
+              child: Text(
+                S.current.approval_histroy,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _historyContent() {
+    return commentList.length > 0
+        ? SliverList(
+            delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return SizedBox(
+                child: Column(
+                  children: [
+                    Container(
+                        color: Colors.white,
+                        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                        child: Column(
+                          children: [
+                            _getHintLine(),
+                            _getRow(S.current.approver,
+                                commentList[index].userName),
+                            _getRow(S.current.approver_time,
+                                commentList[index].time),
+                            _getRow(S.current.approver_opinion,
+                                commentList[index].comment),
+                            _getRow(
+                                S.current.approver_result,
+                                commentList[index].result
+                                    ? S.current.success
+                                    : S.current.failed),
+                          ],
+                        ))
+                  ],
+                ),
+              );
+            },
+            childCount: commentList.length,
+          ))
+        : SliverToBoxAdapter();
   }
 
 //转账信息
