@@ -1,13 +1,10 @@
-import 'dart:async';
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+/// 重置支付密码--身份证验证
+/// Author: hlx
+/// Date: 2020-12-31
 
-import 'package:ebank_mobile/data/source/mine_pay_pwdApi.dart';
-import 'package:ebank_mobile/data/source/model/get_verification_code.dart';
-import 'package:ebank_mobile/data/source/model/set_payment_pwd.dart';
-import 'package:ebank_mobile/data/source/verification_code_repository.dart';
-/**
-  @desc   重置支付密码
-  @author hlx
- */
+import 'package:ebank_mobile/data/source/model/update_login_password.dart';
+import 'package:ebank_mobile/data/source/update_login_paw_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -15,29 +12,58 @@ import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
+import 'package:ebank_mobile/data/source/model/get_verification_code.dart';
+import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 
-class ChangePayPage extends StatefulWidget {
+class IdIardVerificationPage extends StatefulWidget {
   @override
-  _ChangePayPageState createState() => _ChangePayPageState();
+  _IdIardVerificationPageState createState() => _IdIardVerificationPageState();
 }
+
 
 //表单状态
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-class _ChangePayPageState extends State<ChangePayPage> {
-  TextEditingController _oldPwd = TextEditingController();
-  TextEditingController _newPwd = TextEditingController();
-  TextEditingController _confimPwd = TextEditingController();
+class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
+  TextEditingController _account = TextEditingController();
+  TextEditingController _userName = TextEditingController();
+  TextEditingController _idCardType = TextEditingController();
+  TextEditingController _idNumber = TextEditingController();
+  TextEditingController _phone = TextEditingController();
+  TextEditingController _msm = TextEditingController();
   TextEditingController _sms = TextEditingController();
-  
   Timer _timer;
   int countdownTime = 0;
-  
+   TextEditingController userAccount= TextEditingController();
+
+   @override
+  // ignore: must_call_super
+  void  initState()  {
+    // 网络请求
+    _getUser();
+  }
+
+    _getUser() async {
+   final prefs = await SharedPreferences.getInstance();
+     userAccount.text = prefs.getString(ConfigKey.USER_ACCOUNT);
+    }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (_timer != null) {
+      _timer.cancel();
+    }
+  }
+
+ 
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: AppBar(
-          title: Text(S.of(context).setPayPwd),
+          title: Text(S.of(context).iDCardVerification),
           elevation: 15.0,
         ),
         body: Container(
@@ -47,9 +73,20 @@ class _ChangePayPageState extends State<ChangePayPage> {
               key: _formKey,
               child: ListView(
                 children: <Widget>[
+                    Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.only(bottom: 5),
+                    color: Colors.white,
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    child:Column(
+                      children: [
+                        InputList(S.of(context).account_number,
+                            '', userAccount),
+                      ]),
+                    ),
                   Container(
                     padding: EdgeInsets.all(10.0),
-                    child: Text(S.of(context).plaseSetPayPsd),
+                    child: Text(S.of(context).pleaseFillInTheBankInformation, style: TextStyle(fontSize: 12),),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -58,28 +95,34 @@ class _ChangePayPageState extends State<ChangePayPage> {
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Column(
                       children: [
-                        InputList(S.of(context).oldPayPwd,
-                            S.of(context).placeOldPwd, _oldPwd),
+                        InputList(S.of(context).name,
+                            S.of(context).placeName, _account),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
-                        InputList(S.of(context).newPayPwd,
-                            S.of(context).placeNewPwd, _newPwd),
+                        InputList(S.of(context).idType,
+                            S.of(context).placeIdType, _userName),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
-                        InputList(S.of(context).confimPayPwd,
-                            S.of(context).placeConfimPwd, _confimPwd),
+                        InputList(S.of(context).IdentificationNumber,
+                            S.of(context).placeIdNumber, _idCardType),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
-                            
+                        InputList(S.of(context).reservedMobilePhoneNumber,
+                            S.of(context).placeReveredMobilePhone, _idCardType),
+                        Divider(
+                            height: 1,
+                            color: HsgColors.divider,
+                            indent: 3,
+                            endIndent: 3),
                         Container(
                           height: 50,
                           child: Row(
@@ -107,11 +150,13 @@ class _ChangePayPageState extends State<ChangePayPage> {
                       child: Text(S.of(context).sumit),
                       onPressed: _submit()
                           ? () {
-                              _submitData();
+                              _updateLoginPassword();
                             }
                           : null,
                       color: HsgColors.accent,
                       textColor: Colors.white,
+                      disabledTextColor: Colors.white,
+                      disabledColor: Color(0xFFD1D1D1),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5) //设置圆角
                           ),
@@ -122,52 +167,20 @@ class _ChangePayPageState extends State<ChangePayPage> {
         ));
   }
 
-  //提交按钮
-  _submitData() async {
-    if (_newPwd.text != _confimPwd.text) {
-      Fluttertoast.showToast(msg: S.of(context).differentPwd);
-    } else {
-       HSProgressHUD.show();
-         final prefs = await SharedPreferences.getInstance();
-      String userID = prefs.getString(ConfigKey.USER_ID);
-      PaymentPwdRepository()
-          .updateTransPassword(
-        SetPaymentPwdReq(_oldPwd.text, _newPwd.text, userID, _sms.text),
-        'updateTransPassword',
-      ).then((data) {
-        HSProgressHUD.showError(status: '密码修改成功');
-        Navigator.pop(context);
-        HSProgressHUD.dismiss();
-      }).catchError((e) {
-        // Fluttertoast.showToast(msg: e.toString());
-        HSProgressHUD.showError(status: e.toString());
-        print('${e.toString()}');
-      });
-    }
-  }
-    bool _submit() {
-    if (_oldPwd.text != '' &&
-        _newPwd.text != '' &&
-        _confimPwd.text != '') {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  //倒计时方法
-  _startCountdown() {
-    countdownTime = 60;
-    final call = (timer) {
-      setState(() {
-        if (countdownTime < 1) {
-          _timer.cancel();
-        } else {
-          countdownTime -= 1;
-        }
-      });
-    };
-    _timer = Timer.periodic(Duration(seconds: 1), call);
+  //验证码输入框
+  TextField otpTextField() {
+    return TextField(
+      textAlign: TextAlign.end,
+      keyboardType: TextInputType.number,
+      controller: _sms,
+      decoration: InputDecoration.collapsed(
+        hintText: S.current.please_input,
+        hintStyle: TextStyle(
+          fontSize: 14,
+          color: HsgColors.textHintColor,
+        ),
+      ),
+    );
   }
 
   //获取验证码按钮
@@ -197,6 +210,32 @@ class _ChangePayPageState extends State<ChangePayPage> {
     );
   }
 
+  bool _submit() {
+    if (_account.text != '' &&
+        _userName.text != '' &&
+        _idCardType.text != '' &&
+        _sms.text != '') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  //倒计时方法
+  _startCountdown() {
+    countdownTime = 60;
+    final call = (timer) {
+      setState(() {
+        if (countdownTime < 1) {
+          _timer.cancel();
+        } else {
+          countdownTime -= 1;
+        }
+      });
+    };
+    _timer = Timer.periodic(Duration(seconds: 1), call);
+  }
+
   //获取验证码接口
   _getVerificationCode() async {
     HSProgressHUD.show();
@@ -217,32 +256,36 @@ class _ChangePayPageState extends State<ChangePayPage> {
     });
   }
 
-  //验证码输入框
-  TextField otpTextField() {
-    return TextField(
-      textAlign: TextAlign.end,
-      keyboardType: TextInputType.number,
-      controller: _sms,
-      decoration: InputDecoration.collapsed(
-        hintText: S.current.please_input,
-        hintStyle: TextStyle(
-          fontSize: 14,
-          color: HsgColors.textHintColor,
-        ),
-      ),
-    );
+  //修改密码接口
+  _updateLoginPassword() async {
+    if (_userName.text != _idCardType.text) {
+      Fluttertoast.showToast(msg: S.of(context).differentPwd);
+    } else {
+      HSProgressHUD.show();
+      final prefs = await SharedPreferences.getInstance();
+      String userID = prefs.getString(ConfigKey.USER_ID);
+      UpdateLoginPawRepository()
+          .modifyLoginPassword(
+              ModifyPasswordReq(_userName.text, _account.text, _sms.text, userID),
+              'ModifyPasswordReq')
+          .then((data) {
+        HSProgressHUD.dismiss();
+        Fluttertoast.showToast(msg: S.current.operate_success);
+      }).catchError((e) {
+        Fluttertoast.showToast(msg: e.toString());
+        HSProgressHUD.dismiss();
+      });
+    }
   }
 }
 
-
-//封装一行
+// ignore: must_be_immutable
 class InputList extends StatelessWidget {
-  InputList(this.labText, this.placeholderText, this.inputValue,
-      {this.isShow = false});
+
+  InputList(this.labText, this.placeholderText, this.inputValue);
   final String labText;
   final String placeholderText;
   TextEditingController inputValue = TextEditingController();
-  final bool isShow;
 
   @override
   Widget build(BuildContext context) {
@@ -257,8 +300,8 @@ class InputList extends StatelessWidget {
               controller: this.inputValue,
               maxLines: 1, //最大行数
               autocorrect: true, //是否自动更正
-              autofocus: true, //是否自动对焦
-              obscureText: true, //是否是密码
+              autofocus: false, //是否自动对焦
+              obscureText: false, //是否是密码
               textAlign: TextAlign.right, //文本对齐方式
               onChanged: (text) {
                 //内容改变的回调
@@ -273,7 +316,7 @@ class InputList extends StatelessWidget {
                 border: InputBorder.none,
                 hintText: this.placeholderText,
                 hintStyle: TextStyle(
-                  fontSize: 15,
+                  fontSize: 14,
                   color: HsgColors.textHintColor,
                 ),
               ),
