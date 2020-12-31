@@ -97,8 +97,6 @@
   "account_num": "Account No.",
   "tran_limit_amt_with_value": "Limit ：",
   "transfer_from": "Transfer From",
-  
-
   "my_to_do_list" :"My to do list",
   "authorization_history" :"Authorization history",
   "my_application":"My application",
@@ -110,14 +108,11 @@
   "transfer_in":"Transfer in",
   "company_name":"Company name",
   "international_transfer_account_prompt":"*Beneficiary's IBAN is required for funds remitting to European countries",
-  
   "receipt_bank":"Bank",
-  
   "Transfer_fee":"Transfer fee",
   "remittance_usage":"Purpose of Remittance",
   "remittance_address":"Remittance address",
   "collection_address":"Collection address",
- 
   "balance_with_value": "Balance:",
   "receipt_side": "Transfer To",
   "transfer_postscript": "Remark",
@@ -251,7 +246,6 @@
   "other_fee": "Remittance Charges Options",
   "bank_swift": "SWIFT Address",
   "middle_bank_swift": "Receiver's Correspondent Bank SWIFT",
-  "remittance_usage": "Purpose of Remittance",
   "no_transfer_record": "No transfer Record",
   "transfer_time": "Transfer Time",
   "transfer_status": "Transfer Status",
@@ -298,5 +292,21 @@
   "confimPayPwd": "Confirm New Payment Password",
   "resetPayPsd": "Set Payment Password",
   "differentPwd": "The Two Passwords Are Inconsistent, Please Re-enter",
-  "sendmsm": "Send Verification Code"
+  "sendmsm": "Send Verification Code",
+  "task_approval":"Task Approval",
+  "approval_histroy":"Approval History",
+  "approver":"Approver",
+  "approver_time":"Aprroval Time",
+  "approver_opinion":"Aprroval Opinion",
+  "approver_result":"Aprroval Result",
+  "no_content":"No content",
+  "transfer_info":"Transfer  Information",
+  "userName":"Account Title",
+  "from_ccy":"Into the currency",
+  "payment_info":"Payment Information",
+  "payment_bank":" Paying Bank",
+  "to_ccy":"Transfer Money",
+  "to_amount":"Transfer-out Amount",
+  "postscript":"Postscript",
+  "authorization_records":"Authorization Records"
 }
