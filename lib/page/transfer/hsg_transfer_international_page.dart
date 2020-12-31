@@ -13,6 +13,7 @@ import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/transfer/select_bank_page.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
@@ -87,6 +88,26 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   int _lastSelectedPosition = -1;
 
   String _limitMoney = '';
+
+  //国家/地区
+  List<String> countryList = ['中国', '中国香港'];
+  //转账费用
+  List<String> transferFeeList = ['收款人支付', '本人支付', '各付各行'];
+  //汇款用途
+  List<String> feeUse = [
+    '贷款',
+    '加工费',
+    '运输费',
+    '投资款',
+    '还款/供款',
+    '学费',
+  ];
+
+  var _countryText = '';
+
+  var _transferFee = '';
+
+  var _feeUse = '';
 
   @override
   void initState() {
@@ -224,7 +245,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //根据货币类型拿余额
-  _getavaBal(String changedCcyTitle) {
+  Future<Function> _getavaBal(String changedCcyTitle) {
     Future.wait({
       CardDataRepository().getSingleCardBal(
           GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
@@ -242,7 +263,66 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
   }
 
-  _selectCountry() {}
+  //选择国家地区
+  Future<Function> _selectCountry() async {
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return BottomMenu(
+            title: '国家/地区',
+            items: countryList,
+          );
+        });
+    if (result != null && result != false) {
+      _countryText = countryList[result];
+    }
+
+    setState(() {
+      _position = result;
+    });
+  }
+
+  Future<Function> _selectBank() async {
+    Navigator.pushNamed(context, pageSelectBank);
+  }
+
+  //转账费用
+  Future<Function> _selectTransferFee() async {
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return BottomMenu(
+            title: '其他费用',
+            items: transferFeeList,
+          );
+        });
+    if (result != null && result != false) {
+      _transferFee = transferFeeList[result];
+    }
+
+    setState(() {
+      _position = result;
+    });
+  }
+
+  //汇款费用
+  Future<Function> _selectFeeUse() async {
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return BottomMenu(
+            title: '汇款用途',
+            items: feeUse,
+          );
+        });
+    if (result != null && result != false) {
+      _feeUse = feeUse[result];
+    }
+
+    setState(() {
+      _position = result;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -310,11 +390,12 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               children: [
                 _getRedText(S.current.international_transfer_account_prompt),
                 //国家地区
-                _getSelectColumn(S.current.state_area, S.current.please_select),
+                _getSelectColumn(
+                    S.current.state_area, _countryText, _selectCountry),
                 _getLine(),
                 //收款银行
-                _getSelectColumn(
-                    S.current.receipt_bank, S.current.please_select),
+                _getSelectColumn(S.current.receipt_bank,
+                    S.current.please_select, _selectBank),
                 _getLine(),
                 //银行SWIFT
                 _getInputColumn(S.current.bank_swift, S.current.please_input),
@@ -338,11 +419,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                 children: [
                   //转账费用
                   _getSelectColumn(
-                      S.current.Transfer_fee, S.current.please_select),
+                      S.current.Transfer_fee, _transferFee, _selectTransferFee),
                   _getLine(),
                   //汇款用途
                   _getSelectColumn(
-                      S.current.remittance_usage, S.current.please_select),
+                      S.current.remittance_usage, _feeUse, _selectFeeUse),
                   _getLine(),
                   //转账附言
                   _getInputColumn(
@@ -481,7 +562,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     );
   }
 
-  _getSelectColumn(String leftText, String rightText) {
+  _getSelectColumn(String leftText, String rightText, Function selectMethod) {
+    String righText = rightText == '' ? '请选择' : rightText;
     return Container(
       height: 50,
       color: Colors.white,
@@ -499,6 +581,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           Expanded(
             child: GestureDetector(
               onTap: () {
+                selectMethod();
                 print('选择账号');
               },
               child: Column(
@@ -507,12 +590,31 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   Container(
                     margin: EdgeInsets.only(top: 5),
                     child: Text(
-                      rightText,
-                      style: TextStyle(
-                        color: HsgColors.secondDegreeText,
-                        fontSize: 13,
-                      ),
+                      righText,
+                      style: rightText == ''
+                          ? TextStyle(
+                              color: HsgColors.secondDegreeText,
+                              fontSize: 13,
+                            )
+                          : TextStyle(
+                              color: HsgColors.firstDegreeText,
+                              fontSize: 13,
+                            ),
                     ),
+                    // child: TextField(
+                    //   decoration: InputDecoration(
+                    //       border: InputBorder.none,
+                    //       hintText: rightText,
+                    //       hintStyle: rightText == '请选择'
+                    //           ? TextStyle(
+                    //               color: HsgColors.hintText,
+                    //               // fontSize: 14,
+                    //             )
+                    //           : TextStyle(
+                    //               color: HsgColors.firstDegreeText,
+                    //               //   fontSize: 14,
+                    //             )),
+                    // ),
                   )
                 ],
               ),

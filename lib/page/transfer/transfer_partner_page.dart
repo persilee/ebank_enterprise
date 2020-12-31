@@ -26,28 +26,44 @@ class _TransferPartnerState extends State<TransferPartner> {
   var _searchController = TextEditingController();
   var _partnerListData = <Rows>[];
   var _tempList = <Rows>[];
+  ScrollController _scrollController = ScrollController();
+  var _showmore = false;
+  var page = 1;
+  var totalPage = 0;
   @override
   void initState() {
     super.initState();
+
+    _scrollController.addListener(() {
+      setState(() {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          if (page < totalPage) {
+            _showmore = true;
+          }
+        }
+      });
+    });
     _loadData();
   }
 
   Future<void> _loadData() async {
     TransferDataRepository()
         .getTransferPartnerList(
-      GetTransferPartnerListReq(0, 10),
+      GetTransferPartnerListReq(page, 10),
       'getTransferPartnerList',
     )
         .then((data) {
       setState(() {
         if (data.rows != null) {
+          totalPage = data.totalPage;
           setState(() {
-            _partnerListData.clear();
             _partnerListData.addAll(data.rows);
             _tempList.clear();
             _tempList.addAll(_partnerListData);
           });
         }
+        _showmore = false;
       });
     }).catchError((e) {
       HSProgressHUD.showError(status: e.toString());
@@ -69,8 +85,16 @@ class _TransferPartnerState extends State<TransferPartner> {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, pageAddPartner)
-                    .then((value) => _loadData());
+                Navigator.pushNamed(context, pageAddPartner).then((value) {
+                  setState(() {
+                    _partnerListData.clear();
+                    page = 1;
+                  });
+                  //跳回顶部
+                  _scrollController
+                      .jumpTo(_scrollController.position.minScrollExtent);
+                  _loadData();
+                });
               },
               padding: EdgeInsets.only(right: 15),
               icon: Icon(Icons.add),
@@ -85,25 +109,24 @@ class _TransferPartnerState extends State<TransferPartner> {
 
   Widget _myColumn() {
     return SingleChildScrollView(
+        controller: _scrollController,
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
+            //搜索框
             Container(
               color: Colors.white,
               padding: EdgeInsets.only(left: 15, right: 25),
               margin: EdgeInsets.only(bottom: 16, top: 16),
               child: _searchIcon(),
             ),
-            SingleChildScrollView(
-              child: Column(),
-            ),
-
             //卡号列表
             Container(
               color: Colors.white,
               padding: EdgeInsets.only(left: 0, right: 0),
               child: _getAllRowsList(),
             ),
+            //说明
             Container(
               padding: EdgeInsets.fromLTRB(16, 15, 0, 15),
               alignment: Alignment.centerLeft,
@@ -115,8 +138,42 @@ class _TransferPartnerState extends State<TransferPartner> {
                 ),
               ),
             ),
+            //加载更多
+            _tempList.length > 6 ? _loadMore() : Container(),
           ],
         ));
+  }
+
+  //底部加载更多
+  Widget _loadMore() {
+    return _showmore
+        ? InkWell(
+            onTap: () {
+              page += 1;
+              _loadData();
+            },
+            child: Container(
+              height: 50,
+              alignment: Alignment.center,
+              child: Text(
+                S.current.click_to_load_more,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Color(0xFFA9A8A8),
+                ),
+              ),
+            ))
+        : Container(
+            height: 50,
+            alignment: Alignment.center,
+            child: Text(
+              S.current.all_loaded,
+              style: TextStyle(
+                fontSize: 13,
+                color: Color(0xFFA9A8A8),
+              ),
+            ),
+          );
   }
 
   //搜索框(通过关键字搜索，为空则检索全部)
@@ -182,6 +239,8 @@ class _TransferPartnerState extends State<TransferPartner> {
         .then((data) {
       setState(() {
         if (data.count >= 1) {
+          page = 1;
+          _partnerListData.clear();
           _loadData();
         }
       });

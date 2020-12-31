@@ -13,6 +13,7 @@ import 'package:ebank_mobile/page/approval/my_appplication_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_detail_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
+import 'package:ebank_mobile/page/customerService/contact_customer_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_detail_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_page.dart';
 import 'package:ebank_mobile/page/exchangeRateInquiry/exchange_rate_inquiry_page.dart';
@@ -114,6 +115,7 @@ var pageUserAgreement = '/user_agreement_page';
 var pageApplication = '/my_appplication_page';
 var pageApplicationTaskApproval = '/application_task_approval_page';
 var pageAuthorizationTaskApproval = '/authorization_task_approval_page';
+var pageContactCustomer = '/contact_customer_page';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -166,8 +168,8 @@ var appRoutes = {
   pageApplication: (context) => MyApplicationPage(),
   pageApplicationTaskApproval: (context) => ApplicationTaskApprovalPage(),
   // pageAuthorizationTaskApproval: (context) => AuthorizationTaskApprovalPage(),
-  // pageExchangeRateInquiry: (context) => ExchangeRateInquiryPage(),
   pageExchangeRateInquiry: (context) => ExchangeRateInquiryPage(),
+  pageContactCustomer: (context) => ContactCustomerPage(),
 };
 
 onGenerateRoute(RouteSettings settings) {
@@ -176,6 +178,11 @@ onGenerateRoute(RouteSettings settings) {
       return CardDetailPage(card: settings.arguments);
     });
   }
+  // if (settings.name == pageApplicationTaskApproval) {
+  //   return MaterialPageRoute(builder: (context) {
+  //     return ApplicationTaskApprovalPage(application: settings.arguments);
+  //   });
+  // }
   if (settings.name == pageTimeDepositContract) {
     return MaterialPageRoute(builder: (context) {
       Map data = settings.arguments;
