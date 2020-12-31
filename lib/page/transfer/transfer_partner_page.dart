@@ -334,7 +334,6 @@ class _TransferPartnerState extends State<TransferPartner> {
       ],
     );
     return Container(
-      height: 63.0,
       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
       color: Colors.white,
       child: Column(
