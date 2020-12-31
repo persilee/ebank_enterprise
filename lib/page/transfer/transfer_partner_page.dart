@@ -139,7 +139,7 @@ class _TransferPartnerState extends State<TransferPartner> {
               ),
             ),
             //加载更多
-            _tempList.length > 6 ? _loadMore() : Container(),
+            _tempList.length > 8 ? _loadMore() : Container(),
           ],
         ));
   }
@@ -334,7 +334,7 @@ class _TransferPartnerState extends State<TransferPartner> {
       ],
     );
     return Container(
-      height: 63.0,
+      // height: 63.0,
       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
       color: Colors.white,
       child: Column(
