@@ -89,6 +89,8 @@
   "transfer_partner": "Transfer Partner",
   "delete": "Delete",
   "tran_out_declare": "Note:\n1. The \"transfer to\" payee is the information of the payment user you have recently transferred.",
+  "click_to_load_more": "Click to Load More",
+  "all_loaded": "All Loaded",
   "transfer_amount": "Transfer Amount",
   "int_input_tran_amount": "Please input transfer amount",
   "name": "Name",

@@ -27,12 +27,12 @@ class _AuthorizationTaskApprovalPageState
   _AuthorizationTaskApprovalPageState(this.history);
   var commentList = <CommentList>[];
   //转账信息
-  bool _transfer = false;
+  bool _transfer = true;
   var _fromAccount = "";
   var _fromCcy = "";
   var _payeeName = "";
   //付款信息
-  bool _pay = false;
+  bool _pay = true;
   var _accountNumber = "";
   var _accountName = "";
   var _payBank = "";
@@ -54,120 +54,80 @@ class _AuthorizationTaskApprovalPageState
       ),
       body: CustomScrollView(
         slivers: <Widget>[
-          SliverToBoxAdapter(
-            child: Container(
-              color: Colors.white,
-              margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-              padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
-              child: Column(
-                children: [
-                  _getHintLine(),
-                  _getRow('账号名称', 'mike'),
-                  _getHintLine(),
-                  _getRow('转入货币', 'EUR')
-                ],
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-              color: Colors.white,
-              child: Column(
-                children: [
-                  Container(
-                      color: Colors.white,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: Text(
-                              '付款信息',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )
-                        ],
-                      )),
-                  _getHintLine(),
-                  _getRow('付款账户', history.processId),
-                  _getHintLine(),
-                  _getRow('付款账户', '84981891898'),
-                  _getHintLine(),
-                  _getRow('付款账户', '84981891898'),
-                ],
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              color: Colors.white,
-              margin: EdgeInsets.only(top: 10),
-              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-              child: Row(
-                children: [
-                  Container(
-                    child: Text(
-                      '审批历史',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          commentList.length > 0
-              ? SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return SizedBox(
-                      child: Column(
-                        children: [
-                          Container(
-                              color: Colors.white,
-                              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                              child: Column(
-                                children: [
-                                  _getHintLine(),
-                                  //发起人
-                                  _getRow('审批人', commentList[index].userName),
-                                  //待办任务名称
-                                  _getRow('审批时间', commentList[index].time),
-                                  //创建时间
-                                  _getRow('审批意见', commentList[index].comment),
-                                  //审批结果
-                                  _getRow('审批结果',
-                                      commentList[index].result.toString()),
-                                ],
-                              ))
-                        ],
-                      ),
-                    );
-                  },
-                  childCount: commentList.length,
-                ))
-              : SliverToBoxAdapter(
-                  child: Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
-                    child: Text('无内容'),
-                  ),
-                ),
+          _transferInfo(),
+          _payInfo(),
+          _historyHead(),
+          _historyContent(),
         ],
       ),
       // child: child,
     );
   }
 
-//转账信息
-  _tansferInfo() {
+  //审批历史内容
+  Widget _historyContent() {
+    return commentList.length > 0
+        ? SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return SizedBox(
+                  child: Column(
+                    children: [
+                      Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                          child: Column(
+                            children: [
+                              _getHintLine(),
+                              //发起人
+                              _getRow('审批人', commentList[index].userName),
+                              //待办任务名称
+                              _getRow('审批时间', commentList[index].time),
+                              //创建时间
+                              _getRow('审批意见', commentList[index].comment),
+                              //审批结果
+                              _getRow(
+                                  '审批结果', commentList[index].result.toString()),
+                            ],
+                          ))
+                    ],
+                  ),
+                );
+              },
+              childCount: commentList.length,
+            ),
+          )
+        : SliverToBoxAdapter();
+  }
+
+  //审批历史头
+  Widget _historyHead() {
     return SliverToBoxAdapter(
-      child: !_transfer
+      child: Container(
+        color: Colors.white,
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+        child: Row(
+          children: [
+            Container(
+              child: Text(
+                '审批历史',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+//转账信息
+  _transferInfo() {
+    return SliverToBoxAdapter(
+      child: _transfer
           ? Container()
           : Container(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -211,7 +171,7 @@ class _AuthorizationTaskApprovalPageState
 //付款信息
   _payInfo() {
     return SliverToBoxAdapter(
-      child: !_pay
+      child: _pay
           ? Container()
           : Container(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -299,6 +259,19 @@ class _AuthorizationTaskApprovalPageState
           if (data != null) {
             commentList.clear();
             commentList.addAll(data.commentList);
+          }
+          if (data.operateEndValue != null) {
+            _pay = false;
+            _transfer = false;
+            _accountNumber = data.operateEndValue.payerCardNo;
+            _accountName = data.operateEndValue.payerName;
+            _payBank = data.operateEndValue.payerBankCode;
+            _toCcy = data.operateEndValue.debitCurrency;
+            _toaccount = data.operateEndValue.amount;
+            _remark = data.operateEndValue.remark;
+            _fromAccount = data.operateEndValue.payeeBankCode;
+            _fromCcy = data.operateEndValue.debitCurrency;
+            _payeeName = data.operateEndValue.payeeName;
           }
         });
       })
