@@ -49,59 +49,21 @@ class _AuthorizationTaskApprovalPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('任务审批'),
+        title: Text(S.current.task_approval),
         centerTitle: true,
       ),
       body: CustomScrollView(
         slivers: <Widget>[
           _transferInfo(),
           _payInfo(),
-          _historyHead(),
+          _historyHeader(),
           _historyContent(),
         ],
       ),
-      // child: child,
     );
   }
 
-  //审批历史内容
-  Widget _historyContent() {
-    return commentList.length > 0
-        ? SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return SizedBox(
-                  child: Column(
-                    children: [
-                      Container(
-                          color: Colors.white,
-                          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                          child: Column(
-                            children: [
-                              _getHintLine(),
-                              //发起人
-                              _getRow('审批人', commentList[index].userName),
-                              //待办任务名称
-                              _getRow('审批时间', commentList[index].time),
-                              //创建时间
-                              _getRow('审批意见', commentList[index].comment),
-                              //审批结果
-                              _getRow(
-                                  '审批结果', commentList[index].result.toString()),
-                            ],
-                          ))
-                    ],
-                  ),
-                );
-              },
-              childCount: commentList.length,
-            ),
-          )
-        : SliverToBoxAdapter();
-  }
-
-  //审批历史头
-  Widget _historyHead() {
+  _historyHeader() {
     return SliverToBoxAdapter(
       child: Container(
         color: Colors.white,
@@ -111,7 +73,7 @@ class _AuthorizationTaskApprovalPageState
           children: [
             Container(
               child: Text(
-                '审批历史',
+                S.current.approval_histroy,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -122,6 +84,42 @@ class _AuthorizationTaskApprovalPageState
         ),
       ),
     );
+  }
+
+  _historyContent() {
+    return commentList.length > 0
+        ? SliverList(
+            delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return SizedBox(
+                child: Column(
+                  children: [
+                    Container(
+                        color: Colors.white,
+                        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                        child: Column(
+                          children: [
+                            _getHintLine(),
+                            _getRow(S.current.approver,
+                                commentList[index].userName),
+                            _getRow(S.current.approver_time,
+                                commentList[index].time),
+                            _getRow(S.current.approver_opinion,
+                                commentList[index].comment),
+                            _getRow(
+                                S.current.approver_result,
+                                commentList[index].result
+                                    ? S.current.success
+                                    : S.current.failed),
+                          ],
+                        ))
+                  ],
+                ),
+              );
+            },
+            childCount: commentList.length,
+          ))
+        : SliverToBoxAdapter();
   }
 
 //转账信息
@@ -141,7 +139,7 @@ class _AuthorizationTaskApprovalPageState
                           Container(
                             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                             child: Text(
-                              '转账信息',
+                              S.current.transfer_info,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -153,15 +151,15 @@ class _AuthorizationTaskApprovalPageState
                   _getHintLine(),
                   (_fromAccount == "" || _fromAccount == null)
                       ? Container()
-                      : _getRow("收款账户", _fromAccount),
+                      : _getRow(S.current.transfer_to_account, _fromAccount),
                   _getHintLine(),
                   (_payeeName == "" || _fromAccount == null)
                       ? Container()
-                      : _getRow("账户名称", _payeeName),
+                      : _getRow(S.current.userName, _payeeName),
                   _getHintLine(),
                   (_fromCcy == "" || _fromAccount == null)
                       ? Container()
-                      : _getRow("转入货币", _fromCcy),
+                      : _getRow(S.current.from_ccy, _fromCcy),
                 ],
               ),
             ),
@@ -185,7 +183,7 @@ class _AuthorizationTaskApprovalPageState
                           Container(
                             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                             child: Text(
-                              '付款信息',
+                              S.current.payment_info,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -197,27 +195,27 @@ class _AuthorizationTaskApprovalPageState
                   _getHintLine(),
                   (_accountNumber == "" || _fromAccount == null)
                       ? Container()
-                      : _getRow("付款账户", _accountNumber),
+                      : _getRow(S.current.payment_account, _accountNumber),
                   _getHintLine(),
                   (_accountName == "" || _fromAccount == null)
                       ? Container()
-                      : _getRow("账户名称", _accountName),
+                      : _getRow(S.current.userName, _accountName),
                   _getHintLine(),
                   (_payBank == "" || _fromAccount == null)
                       ? Container()
-                      : _getRow("付款银行", _payBank),
+                      : _getRow(S.current.payment_bank, _payBank),
                   _getHintLine(),
                   (_toCcy == "" || _fromAccount == null)
                       ? Container()
-                      : _getRow("转出货币", _toCcy),
+                      : _getRow(S.current.to_ccy, _toCcy),
                   _getHintLine(),
                   (_toaccount == "" || _fromAccount == null)
                       ? Container()
-                      : _getRow("转出金额", _toaccount),
+                      : _getRow(S.current.to_amount, _toaccount),
                   _getHintLine(),
                   (_remark == "" || _fromAccount == null)
                       ? Container()
-                      : _getRow("附言", _remark),
+                      : _getRow(S.current.postscript, _remark),
                 ],
               ),
             ),
