@@ -10,6 +10,7 @@ import 'package:ebank_mobile/data/source/model/find_user_finished_task_detail.da
 import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import 'model/find_user_application_task_detail.dart';
 import 'model/get_my_application.dart';
 
 class NeedToBeDealtWithRepository {
@@ -32,6 +33,13 @@ class NeedToBeDealtWithRepository {
       GetMyApplicationReq req, String tag) {
     return request('/firmWkfl/processTask/findUserStartTask', req, tag,
         (data) => MyApplicationResp.fromJson(data));
+  }
+
+  //我的申请详情
+  Future<FindUserApplicationDetailResp> findUserApplicationDetail(
+      FindUserApplicationDetailReq req, String tag) {
+    return request('/firmWkfl/processTask/findHistoryTaskDetail', req, tag,
+        (data) => FindUserApplicationDetailResp.fromJson(data));
   }
 
   static final _instance = NeedToBeDealtWithRepository._internal();
