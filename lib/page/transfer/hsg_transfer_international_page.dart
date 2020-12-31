@@ -356,7 +356,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             child: Container(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
               margin: EdgeInsets.only(top: 20),
-              height: 155,
               color: Colors.white,
               child: Column(
                 children: [
@@ -365,7 +364,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   _getLine(),
                   Container(
                     padding: EdgeInsets.only(right: 50),
-                    height: 70,
                     child: _getRedText(S.current.remitter_address_prompt),
                   ),
                 ],
@@ -456,8 +454,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   _getRedText(String redText) {
     return Container(
-        height: 70,
-        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+        // height: 70,
+        padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
         child: Text(
           redText,
           style: TextStyle(color: Color(0XFFA61F23), fontSize: 13.5),
