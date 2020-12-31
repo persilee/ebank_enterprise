@@ -298,5 +298,12 @@
   "customer_service": "联系客服",
   "hello": "您好，",
   "serve_you": "高阳银行客服为您服务~",
-  "call": "呼叫"
+  "call": "呼叫",
+  "contact": "联系人",
+  "contact_phone_num": "联系人手机号码",
+  "apply_amount": "申请金额",
+  "loan_duration": "贷款期限(月)",
+  "loan_purpose": "贷款目的",
+  "remark": "备注",
+  "apply": "申请"
 }
