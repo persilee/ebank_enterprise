@@ -55,7 +55,7 @@ class _AuthorizationTaskApprovalPageState
       ),
       body: CustomScrollView(
         slivers: <Widget>[
-          _tansferInfo(),
+          _transferInfo(),
           _payInfo(),
           SliverToBoxAdapter(
             child: Container(
@@ -121,7 +121,7 @@ class _AuthorizationTaskApprovalPageState
   }
 
 //转账信息
-  _tansferInfo() {
+  _transferInfo() {
     return SliverToBoxAdapter(
       child: _transfer
           ? Container()
