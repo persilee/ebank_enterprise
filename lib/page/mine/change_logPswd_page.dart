@@ -91,7 +91,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                           height: 50,
                           child: Row(
                             children: [
-                              Text('短信验证码'),
+                              Text(S.of(context).sendmsm),
                               Expanded(
                                 child: otpTextField(),
                               ),
@@ -223,7 +223,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   //修改密码接口
   _updateLoginPassword() async {
     if (_newPwd.text != _confimPwd.text) {
-      Fluttertoast.showToast(msg: '两次输入的密码不一致，请重新输入');
+      Fluttertoast.showToast(msg: S.of(context).differentPwd);
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
