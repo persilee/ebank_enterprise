@@ -109,7 +109,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
   }
 
   _loadAuthorzationRateData() async {
-    // var bools = false;
+    var bool = false;
     var page = 1;
     var pageSize = 10;
     NeedToBeDealtWithRepository()

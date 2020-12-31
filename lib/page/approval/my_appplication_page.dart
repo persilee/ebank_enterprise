@@ -5,6 +5,7 @@
  * 
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_my_application.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
@@ -45,7 +46,9 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
             return SizedBox(
                 child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, pageApplicationTaskApproval);
+                // go2Detail(rowList[index]);
+                Navigator.pushNamed(context, pageApplicationTaskApproval,
+                    arguments: rows[index]);
                 print('选择账号');
               },
               child: Column(
@@ -71,6 +74,11 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
         ))
       ],
     );
+  }
+
+  void go2Detail(Rows application) {
+    Navigator.pushNamed(context, pageApplicationTaskApproval,
+        arguments: application);
   }
 
   _getRow(String leftText, String rightText) {
