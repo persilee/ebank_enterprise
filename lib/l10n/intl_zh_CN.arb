@@ -287,7 +287,7 @@
   "placeName": "请输入名字",
   "placeIdType": "请输入证件类型",
   "placeIdNumber": "请输入证件号码",
-  "placeReveredMobilePhone": "请输入预留手机号码"
+  "placeReveredMobilePhone": "请输入预留手机号码",
   "task_approval":"任务审批",
   "approval_histroy":"审批历史",
   "approver":"审批人",
