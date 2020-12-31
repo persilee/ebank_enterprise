@@ -98,7 +98,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
 
   _loadMyApplicationData() async {
     var finish = false;
-    var page = 0;
+    var page = 1;
     var pageSize = 10;
     var processId = '';
     var processKey = '';
@@ -108,7 +108,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
     var taskName = '';
     NeedToBeDealtWithRepository()
         .getMyApplication(
-            GetMyApplicationReq(finish, page, pageSize, processId, processKey,
+            GetMyApplicationReq(finish, 1, pageSize, processId, processKey,
                 processStatus, processTitle, sort, taskName),
             'tag')
         .then((data) {

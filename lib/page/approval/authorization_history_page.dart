@@ -30,7 +30,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
     _loadAuthorzationRateData();
   }
 
-  List<Rows> rowList = [];
+  List<Rows> rowLists = [];
 
   Widget _getContent(List<Rows> rows) {
     return CustomScrollView(
@@ -42,7 +42,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
                 child: GestureDetector(
               onTap: () {
                 //  Navigator.pushNamed(context, pageAuthorizationTaskApproval);
-                go2Detail(rowList[index]);
+                go2Detail(rowLists[index]);
                 print('选择账号');
               },
               child: Column(
@@ -54,20 +54,20 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
                       child: Column(
                         children: [
                           //发起人
-                          _getRow(S.current.sponsor, rowList[index].processId),
+                          _getRow(S.current.sponsor, rowLists[index].processId),
                           //待办任务名称
                           _getRow(S.current.to_do_task_name,
-                              rowList[index].taskName),
+                              rowLists[index].taskName),
                           //创建时间
                           _getRow(S.current.creation_time,
-                              rowList[index].createTime)
+                              rowLists[index].createTime)
                         ],
                       ))
                 ],
               ),
             ));
           },
-          childCount: rowList.length,
+          childCount: rowLists.length,
         ))
       ],
     );
@@ -81,7 +81,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _getContent(rowList),
+      body: _getContent(rowLists),
     );
   }
 
@@ -109,16 +109,16 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
   }
 
   _loadAuthorzationRateData() async {
-    var bool = false;
-    var page = 0;
+    // var bools = false;
+    var page = 1;
     var pageSize = 10;
     NeedToBeDealtWithRepository()
-        .findUserFinishedTask(GetFindUserFinishedTaskReq(bool, page, pageSize),
-            'findUserFinishedTask')
+        .findUserFinishedTask(
+            GetFindUserFinishedTaskReq(1, pageSize), 'findUserFinishedTask')
         .then((data) {
       setState(() {
-        rowList.clear();
-        rowList.addAll(data.rows);
+        rowLists.clear();
+        rowLists.addAll(data.rows);
       });
     });
   }
