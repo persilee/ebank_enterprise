@@ -37,6 +37,10 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _accountTC =
       TextEditingController(text: 'pengyikang');
+<<<<<<< HEAD
+=======
+
+>>>>>>> 29ad1b0987d9adb14bc78a1919139a69d527852b
   final TextEditingController _passwordTC =
       TextEditingController(text: '0c9W7825');
 

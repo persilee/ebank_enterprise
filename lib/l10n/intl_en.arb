@@ -87,6 +87,7 @@
   "setChangLoginPasd": "Set Login Password",
   "plaseSetPsd": "Please Set the Login Password",
   "transfer": "Transfer",
+<<<<<<< HEAD
   "transfer_record": "Transfer RNameecord",
   "first_time_of_transfer":"First Transfer Date",
   "time_of_transfer":"Transfer Date",
@@ -102,6 +103,9 @@
   "open_transfer":"Open Transfer",
   "monthly_with_value":" per month",
   "yearly_with_value":" per year",
+=======
+  "transfer_record": "Transfer Record",
+>>>>>>> 29ad1b0987d9adb14bc78a1919139a69d527852b
   "transfer_partner": "Transfer Partner",
   "delete": "Delete",
   "tran_out_declare": "Note:\n1. The \"transfer to\" payee is the information of the payment user you have recently transferred.",

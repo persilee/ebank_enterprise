@@ -95,6 +95,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   ButtonTheme _confirmButton() {
     return ButtonTheme(
       minWidth: double.infinity,
+      height: 44,
       child: FlatButton(
         onPressed: _incomeAmt == ''
             ? null

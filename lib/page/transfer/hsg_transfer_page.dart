@@ -118,6 +118,7 @@ class _TransferPageState extends State<TransferPage> {
                   Navigator.pushNamed(context, pageOpenTransfer);
                 } else if (S.current.transfer_record == title) {
                   //转账记录
+                  Navigator.pushNamed(context, pageTransferRecord);
                 }
               },
             ),
