@@ -9,6 +9,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/get_international_transfer.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
@@ -104,11 +105,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   ];
   List<String> ccyListPlay = ['CNY', 'HKD', 'EUR'];
 
-  var _countryText = '';
+  var _countryText = S.current.please_select;
 
-  var _transferFee = '';
+  var _transferFee = S.current.please_select;
 
-  var _feeUse = '';
+  var _feeUse = S.current.please_select;
 
   var _bankReceive = S.current.please_select;
 
@@ -401,7 +402,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             child: Container(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
               margin: EdgeInsets.only(top: 20),
-              height: 155,
               color: Colors.white,
               child: Column(
                 children: [
@@ -410,7 +410,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   _getLine(),
                   Container(
                     padding: EdgeInsets.only(right: 50),
-                    height: 70,
                     child: _getRedText(S.current.remitter_address_prompt),
                   ),
                 ],
@@ -504,8 +503,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   _getRedText(String redText) {
     return Container(
-        height: 70,
-        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+        // height: 70,
+        padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
         child: Text(
           redText,
           style: TextStyle(color: Color(0XFFA61F23), fontSize: 13.5),
@@ -733,28 +732,32 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
     HSProgressHUD.show();
     TransferDataRepository()
-        .getTransferByAccount(
-            GetTransferByAccount(
+        .getInterNationalTransfer(
+            GetInternationalTransferReq(
                 //转账金额
                 money,
+                bankSwift,
+                //转账费用
+                _transferFee,
                 //贷方货币
-                ccy,
+                _changedCcyTitle,
                 //借方货币
-                ccy,
-                //收款方银行
+                // debitCurrency,
+                //国家地区
+                _countryText,
+                intermediateBankSwift,
+                payeeAddress,
                 payeeBankCode,
-                //收款方卡号
                 payeeCardNo,
-                //收款方姓名
                 payeeName,
-                //付款方银行
+                payerAddress,
                 payerBankCode,
                 //付款方卡号
-                cardNo,
-                //付款方姓名
+                _changedAccountTitle,
                 payerName,
-                //附言
-                remark),
+                remark,
+                //汇款用途
+                _feeUse),
             'getTransferByAccount')
         .then((value) {
       HSProgressHUD.dismiss();

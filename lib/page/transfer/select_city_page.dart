@@ -102,8 +102,7 @@ class _SelectCityPageState extends State<SelectCityPage> {
     return Padding(
           padding: EdgeInsets.only(top: 10, bottom: 10, left: 18),
           child: Text(
-            // S.current.partner_information,
-            '热门城市',
+            S.current.popular_city,
             style: TextStyle(color: HsgColors.hintText, fontSize: 13),
           ),
         );

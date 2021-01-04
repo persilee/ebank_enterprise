@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 
+import 'model/get_international_transfer.dart';
 import 'model/get_transfer_record.dart';
 
 class TransferDataRepository {
@@ -37,11 +38,18 @@ class TransferDataRepository {
         (data) => DeletePartnerResp.fromJson(data));
   }
 
-  
+  //行内转账
   Future<TransferByAccountResp> getTransferByAccount(
       GetTransferByAccount req, String tag) {
     return request('/ddep/transfer/doTransferAccout', req, tag,
         (data) => TransferByAccountResp.fromJson(data));
+  }
+
+  //国际转账
+  Future<InternationalTransferResp> getInterNationalTransfer(
+      GetInternationalTransferReq req, String tag) {
+    return request('/ddep/transfer/doInternationalTransfer', req, tag,
+        (data) => InternationalTransferResp.fromJson(data));
   }
 
   static final _instance = TransferDataRepository._internal();

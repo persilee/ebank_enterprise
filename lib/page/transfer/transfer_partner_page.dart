@@ -85,8 +85,16 @@ class _TransferPartnerState extends State<TransferPartner> {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, pageAddPartner)
-                    .then((value) => _loadData());
+                Navigator.pushNamed(context, pageAddPartner).then((value) {
+                  setState(() {
+                    _partnerListData.clear();
+                    page = 1;
+                  });
+                  //跳回顶部
+                  _scrollController
+                      .jumpTo(_scrollController.position.minScrollExtent);
+                  _loadData();
+                });
               },
               padding: EdgeInsets.only(right: 15),
               icon: Icon(Icons.add),
@@ -131,14 +139,13 @@ class _TransferPartnerState extends State<TransferPartner> {
               ),
             ),
             //加载更多
-            _tempList.length > 0?
-            _loadmore():Container(),
+            _tempList.length > 8 ? _loadMore() : Container(),
           ],
         ));
   }
 
   //底部加载更多
-  Widget _loadmore() {
+  Widget _loadMore() {
     return _showmore
         ? InkWell(
             onTap: () {
@@ -232,6 +239,8 @@ class _TransferPartnerState extends State<TransferPartner> {
         .then((data) {
       setState(() {
         if (data.count >= 1) {
+          page = 1;
+          _partnerListData.clear();
           _loadData();
         }
       });
@@ -325,7 +334,7 @@ class _TransferPartnerState extends State<TransferPartner> {
       ],
     );
     return Container(
-      height: 63.0,
+      // height: 63.0,
       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
       color: Colors.white,
       child: Column(
