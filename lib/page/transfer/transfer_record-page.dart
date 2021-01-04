@@ -303,7 +303,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width / 3,
+            width: MediaQuery.of(context).size.width / 2.5,
             child: _popDialog(),
           ),
         ],
@@ -314,7 +314,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   //顶部弹窗
   Widget _popDialog() {
     return PopupWindowButton(
-      offset: Offset(MediaQuery.of(context).size.width / 2.6, 200),
+      offset: Offset(MediaQuery.of(context).size.width / 2.3, 200),
       buttonBuilder: (BuildContext context) {
         return GestureDetector(
           child: Row(
@@ -399,7 +399,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         //确定按钮
         Container(
           margin: EdgeInsets.all(4),
-          width: 72,
+          width: 73,
           height: 23.5,
           decoration: BoxDecoration(
             color: Color(0xff4871FF),
@@ -452,7 +452,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         child: Text(
           time,
           style: TextStyle(
-              fontSize: 10,
+              fontSize: 11,
               color: isButton ? Color(0xff7A7A7A) : Color(0xff4871FF)),
           textAlign: TextAlign.center,
         ),
