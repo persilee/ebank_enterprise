@@ -34,9 +34,12 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   DateTime _nowDate = DateTime.now(); //当前时间
   String _time = intl.S.current.the_same_month;
   String _endDate =
-      DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now()); //开始时间
-  String _startDate = DateFormat('yyyy-MM-dd 23:59:59')
-      .format(DateTime.now().subtract(Duration(days: 30))); //结束时间
+      DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now()); //结束时间
+  String _startDate = DateFormat('yyyy-MM-dd 23:59:59').format(DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    1,
+  )); //开始时间
   String _start = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示开始时间
   String _end = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示结束时间
   String _actualName = ""; //用户真实姓名
@@ -344,165 +347,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                       ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      //当天按钮
-                      Container(
-                        margin: EdgeInsets.all(3),
-                        width: 78,
-                        height: 30,
-                        child: OutlineButton(
-                          borderSide: BorderSide(
-                              color: isButton1
-                                  ? Color(0xffD1D1D1)
-                                  : Color(0xff4871FF)),
-                          child: Text(
-                            intl.S.of(context).the_same_day,
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: isButton1
-                                    ? Color(0xff7A7A7A)
-                                    : Color(0xff4871FF)),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _time = intl.S.of(context).the_same_day;
-                              _endDate = DateFormat('yyyy-MM-dd 00:00:00')
-                                  .format(DateTime.now());
-                              _startDate = DateFormat('yyyy-MM-dd 23:59:59')
-                                  .format(DateTime.now());
-                              isButton1 = !isButton1;
-                            });
-                            if (!isButton1) {
-                              isButton2 = true;
-                              isButton3 = true;
-                              isButton4 = true;
-                            }
-                            Navigator.of(context).pop(_loadData());
-                          },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                        ),
-                      ),
-                      //本月按钮
-                      Container(
-                        margin: EdgeInsets.all(3),
-                        width: 78,
-                        height: 30,
-                        child: OutlineButton(
-                          borderSide: BorderSide(
-                              color: isButton2
-                                  ? Color(0xffD1D1D1)
-                                  : Color(0xff4871FF)),
-                          child: Text(
-                            intl.S.of(context).the_same_month,
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: isButton2
-                                    ? Color(0xff7A7A7A)
-                                    : Color(0xff4871FF)),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _time = intl.S.of(context).the_same_day;
-                              _endDate = DateFormat('yyyy-MM-dd 00:00:00')
-                                  .format(DateTime.now());
-                              _startDate = DateFormat('yyyy-MM-dd 23:59:59')
-                                  .format(DateTime.now()
-                                      .subtract(Duration(days: 30)));
-                              isButton2 = !isButton2;
-                            });
-                            if (!isButton2) {
-                              isButton1 = true;
-                              isButton3 = true;
-                              isButton4 = true;
-                            }
-                            Navigator.of(context).pop(_loadData());
-                          },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                        ),
-                      ),
-                      //最近三个月按钮
-                      Container(
-                        margin: EdgeInsets.all(3),
-                        width: 78,
-                        height: 30,
-                        child: OutlineButton(
-                          borderSide: BorderSide(
-                              color: isButton3
-                                  ? Color(0xffD1D1D1)
-                                  : Color(0xff4871FF)),
-                          child: Text(
-                            intl.S.of(context).last_three_month,
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: isButton3
-                                    ? Color(0xff7A7A7A)
-                                    : Color(0xff4871FF)),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _time = intl.S.of(context).the_same_day;
-                              _endDate = DateFormat('yyyy-MM-dd 00:00:00')
-                                  .format(DateTime.now());
-                              _startDate = DateFormat('yyyy-MM-dd 23:59:59')
-                                  .format(DateTime.now()
-                                      .subtract(Duration(days: 90)));
-                              isButton3 = !isButton3;
-                            });
-                            if (!isButton3) {
-                              isButton1 = true;
-                              isButton2 = true;
-                              isButton4 = true;
-                            }
-                            Navigator.of(context).pop(_loadData());
-                          },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                        ),
-                      ),
-                      //最近半年按钮
-                      Container(
-                        margin: EdgeInsets.all(3),
-                        width: 78,
-                        height: 30,
-                        child: OutlineButton(
-                          borderSide: BorderSide(
-                              color: isButton4
-                                  ? Color(0xffD1D1D1)
-                                  : Color(0xff4871FF)),
-                          child: Text(
-                            intl.S.of(context).last_half_year,
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: isButton4
-                                    ? Color(0xff7A7A7A)
-                                    : Color(0xff4871FF)),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _time = intl.S.of(context).last_half_year;
-                              _endDate = DateFormat('yyyy-MM-dd 00:00:00')
-                                  .format(DateTime.now());
-                              _startDate = DateFormat('yyyy-MM-dd 23:59:59')
-                                  .format(DateTime.now()
-                                      .subtract(Duration(days: 180)));
-                              isButton4 = !isButton2;
-                            });
-                            if (!isButton4) {
-                              isButton1 = true;
-                              isButton2 = true;
-                              isButton3 = true;
-                            }
-                            Navigator.of(context).pop(_loadData());
-                          },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                        ),
-                      ),
-                    ],
-                  ),
+                  //交易时间
+                  _tradingHour(),
                   Padding(
                     padding: EdgeInsets.fromLTRB(2.5, 14, 0, 16),
                     child: Text(
@@ -514,39 +360,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                       ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      _timeButton(_start, 0),
-                      Text(
-                        intl.S.of(context).zhi,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Color(0xff262626),
-                          decoration: TextDecoration.none,
-                        ),
-                      ),
-                      _timeButton(_end, 1),
-                      Container(
-                        margin: EdgeInsets.all(4),
-                        width: 72,
-                        height: 23.5,
-                        child: RaisedButton(
-                          color: Colors.blue,
-                          child: Text(
-                            intl.S.of(context).confirm,
-                            style: TextStyle(fontSize: 11, color: Colors.white),
-                          ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          onPressed: () {
-                            setState(() {
-                              _time = _start + "—" + _end;
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  )
+                  //自定义时间
+                  _userDefind(context),
                 ],
               ),
             ),
@@ -556,8 +371,200 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     );
   }
 
+  //自定义时间
+  Widget _userDefind(BuildContext context) {
+    return Row(
+      children: [
+        //开始时间按钮
+        _timeButton(_start, 0, context),
+        Text(
+          intl.S.of(context).zhi,
+          style: TextStyle(
+            fontSize: 13,
+            color: Color(0xff262626),
+            decoration: TextDecoration.none,
+          ),
+        ),
+        //结束时间按钮
+        _timeButton(_end, 1, context),
+        //确定按钮
+        Container(
+          margin: EdgeInsets.all(4),
+          width: 72,
+          height: 23.5,
+          child: RaisedButton(
+            color: Colors.blue,
+            child: Text(
+              intl.S.of(context).confirm,
+              style: TextStyle(fontSize: 11, color: Colors.white),
+            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            onPressed: () {
+              setState(() {
+                _time = _start + "—" + _end;
+              });
+              Navigator.of(context).pop(_loadData());
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  //交易时间的四个时间区
+  Widget _tradingHour() {
+    return Row(
+      children: [
+        //当天按钮
+        Container(
+          margin: EdgeInsets.all(3),
+          width: 78,
+          height: 30,
+          child: OutlineButton(
+            borderSide: BorderSide(
+                color: isButton1 ? Color(0xffD1D1D1) : Color(0xff4871FF)),
+            child: Text(
+              intl.S.of(context).the_same_day,
+              style: TextStyle(
+                  fontSize: 10,
+                  color: isButton1 ? Color(0xff7A7A7A) : Color(0xff4871FF)),
+              textAlign: TextAlign.center,
+            ),
+            onPressed: () {
+              setState(() {
+                _time = intl.S.of(context).the_same_day;
+                _endDate =
+                    DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now());
+                _startDate =
+                    DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now());
+                isButton1 = !isButton1;
+              });
+              if (!isButton1) {
+                isButton2 = true;
+                isButton3 = true;
+                isButton4 = true;
+              }
+              Navigator.of(context).pop(_loadData());
+            },
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          ),
+        ),
+        //本月按钮
+        Container(
+          margin: EdgeInsets.all(3),
+          width: 78,
+          height: 30,
+          child: OutlineButton(
+            borderSide: BorderSide(
+                color: isButton2 ? Color(0xffD1D1D1) : Color(0xff4871FF)),
+            child: Text(
+              intl.S.of(context).the_same_month,
+              style: TextStyle(
+                  fontSize: 10,
+                  color: isButton2 ? Color(0xff7A7A7A) : Color(0xff4871FF)),
+              textAlign: TextAlign.center,
+            ),
+            onPressed: () {
+              setState(() {
+                _time = intl.S.of(context).the_same_month;
+                _endDate =
+                    DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now());
+                _startDate = DateFormat('yyyy-MM-dd 23:59:59').format(DateTime(
+                  DateTime.now().year,
+                  DateTime.now().month,
+                  1,
+                ));
+                isButton2 = !isButton2;
+              });
+              if (!isButton2) {
+                isButton1 = true;
+                isButton3 = true;
+                isButton4 = true;
+              }
+              Navigator.of(context).pop(_loadData());
+            },
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          ),
+        ),
+        //最近三个月按钮
+        Container(
+          margin: EdgeInsets.all(3),
+          width: 78,
+          height: 30,
+          child: OutlineButton(
+            borderSide: BorderSide(
+                color: isButton3 ? Color(0xffD1D1D1) : Color(0xff4871FF)),
+            child: Text(
+              intl.S.of(context).last_three_month,
+              style: TextStyle(
+                  fontSize: 10,
+                  color: isButton3 ? Color(0xff7A7A7A) : Color(0xff4871FF)),
+              textAlign: TextAlign.center,
+            ),
+            onPressed: () {
+              setState(() {
+                _time = intl.S.of(context).last_three_month;
+                _endDate =
+                    DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now());
+                _startDate = DateFormat('yyyy-MM-dd 23:59:59')
+                    .format(DateTime.now().subtract(Duration(days: 90)));
+                isButton3 = !isButton3;
+              });
+              if (!isButton3) {
+                isButton1 = true;
+                isButton2 = true;
+                isButton4 = true;
+              }
+              Navigator.of(context).pop(_loadData());
+            },
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          ),
+        ),
+        //最近半年按钮
+        Container(
+          margin: EdgeInsets.all(3),
+          width: 78,
+          height: 30,
+          child: OutlineButton(
+            borderSide: BorderSide(
+                color: isButton4 ? Color(0xffD1D1D1) : Color(0xff4871FF)),
+            child: Text(
+              intl.S.of(context).last_half_year,
+              style: TextStyle(
+                  fontSize: 10,
+                  color: isButton4 ? Color(0xff7A7A7A) : Color(0xff4871FF)),
+              textAlign: TextAlign.center,
+            ),
+            onPressed: () {
+              setState(() {
+                _time = intl.S.of(context).last_half_year;
+                _endDate =
+                    DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now());
+                _startDate = DateFormat('yyyy-MM-dd 23:59:59')
+                    .format(DateTime.now().subtract(Duration(days: 180)));
+                isButton4 = !isButton4;
+              });
+              if (!isButton4) {
+                isButton1 = true;
+                isButton2 = true;
+                isButton3 = true;
+              }
+              Navigator.of(context).pop(_loadData());
+            },
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          ),
+        ),
+      ],
+    );
+  }
+
   //自定义时间按钮
-  Widget _timeButton(String name, int i) {
+  Widget _timeButton(String name, int i, BuildContext context) {
     return Container(
       margin: EdgeInsets.all(5),
       width: 111.5,
@@ -582,7 +589,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           ],
         ),
         onPressed: () {
-          _cupertinoPicker(i);
+          _cupertinoPicker(i, context);
         },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       ),
@@ -609,7 +616,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   }
 
 //时间弹窗
-  _cupertinoPicker(int i) {
+  _cupertinoPicker(int i, BuildContext context) {
     DatePicker.showDatePicker(
       context,
       pickerTheme: DateTimePickerTheme(
@@ -626,14 +633,16 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       locale: DateTimePickerLocale.zh_cn,
       //确定
       onConfirm: (dateTime, List<int> index) {
-        setState(() {
-          _startDate = DateFormat('yyyy-MM-dd HH-mm-ss').format(dateTime);
-          _endDate = DateFormat('yyyy-MM-dd HH-mm-ss').format(dateTime);
-          _nowDate = dateTime;
-          i == 0
-              ? _start = formatDate(dateTime, [yyyy, mm, dd])
-              : _end = formatDate(dateTime, [yyyy, mm, dd]);
-        });
+        setState(
+          () {
+            _startDate = DateFormat('yyyy-MM-dd HH-mm-ss').format(dateTime);
+            _endDate = DateFormat('yyyy-MM-dd HH-mm-ss').format(dateTime);
+            _nowDate = dateTime;
+            i == 0
+                ? _start = formatDate(dateTime, [yyyy, mm, dd])
+                : _end = formatDate(dateTime, [yyyy, mm, dd]);
+          },
+        );
         (context as Element).markNeedsBuild();
       },
     );
@@ -682,7 +691,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     );
   }
 
-  //单行内容2
+  //转账金额
   Widget _rowContent2(String left, String right, String status) {
     Color acountColor;
     switch (status) {
@@ -723,7 +732,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   }
 }
 
-/// 虚线
+// 虚线
 class DottedLine extends StatelessWidget {
   final double height;
   final Color color;

@@ -169,8 +169,11 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                             height: 70,
                             child: Text(
                               //定期产品起存金额
-                              S.current.deposit_min_with_value +
-                                  '${tdepProductList[index].minAmt}',
+                              language == 'zh_CN'
+                                  ? '${tdepProductList[index].minAmt}' +
+                                      S.current.deposit_min_with_value
+                                  : S.current.deposit_min_with_value +
+                                      '${tdepProductList[index].minAmt}',
                               style: TextStyle(
                                 fontSize: 13,
                                 color: HsgColors.describeText,
