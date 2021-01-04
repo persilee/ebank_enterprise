@@ -143,21 +143,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           padding: EdgeInsets.only(top: 10, bottom: 10),
           child: _inputFrame(
             S.current.account_number,
-            _inputFieldIcon(
-              _acountController,
-              InkWell(
-                onTap: () {
-                  Fluttertoast.showToast(msg: '点击扫描');
-                },
-                child: Image(
-                  color: Colors.blueAccent,
-                  image: AssetImage(
-                      'images/transferIcon/transfer_features_icon/transfer_features_scan.png'),
-                  width: 21,
-                  height: 30,
-                ),
-              ),
-            ),
+            _inputField(_acountController, S.current.please_input),
           ),
         ),
         Divider(height: 0.5, color: HsgColors.divider),

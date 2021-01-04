@@ -283,6 +283,7 @@ Widget _mineContendView(context) {
             ),
           ),
           Divider(height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
+          //重置支付密码
           Container(
             height: 50.0,
             child: Row(
@@ -294,7 +295,7 @@ Widget _mineContendView(context) {
                     alignment: Alignment.centerRight,
                     child: InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, setPayPage);
+                        Navigator.pushNamed(context, iDcardVerification);
                       },
                       child: Icon(
                         Icons.navigate_next,

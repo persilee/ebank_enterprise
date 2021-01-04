@@ -40,13 +40,13 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   bool button3 = true;
   bool button4 = true;
   DateTime _nowDate = DateTime.now();
-  String _endDate =
-      DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now()); //结束时间
-  String _startDate = DateFormat('yyyy-MM-dd 23:59:59').format(DateTime(
-    DateTime.now().year,
-    DateTime.now().month,
-    1,
-  ));
+  // String _endDate =
+  //     DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now()); //结束时间
+  // String _startDate = DateFormat('yyyy-MM-dd 23:59:59').format(DateTime(
+  //   DateTime.now().year,
+  //   DateTime.now().month,
+  //   1,
+  // ));
   String _start = DateFormat('yyyy-MM-dd')
       .format(DateTime.now().add(Duration(days: 1))); //显示开始时间
   String _end = DateFormat('yyyy-MM-dd')
@@ -89,6 +89,24 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     });
   }
 
+  void _clear() {
+    setState(() {
+      String _start = DateFormat('yyyy-MM-dd')
+          .format(DateTime.now().add(Duration(days: 1)));
+      String _end = DateFormat('yyyy-MM-dd')
+          .format(DateTime.now().add(Duration(days: 1)));
+      String _startMonthly =
+          DateFormat('dd').format(DateTime.now().add(Duration(days: 1)));
+      String _endMonthly =
+          DateFormat('yyyy-MM').format(DateTime.now().add(Duration(days: 60)));
+      String _startYearly =
+          DateFormat('MM-dd').format(DateTime.now().add(Duration(days: 1)));
+      String _endYearly =
+          DateFormat('yyyy').format(DateTime.now().add(Duration(days: 730)));
+      print("+++++" + _start + _end);
+    });
+  }
+
   Function _amountInputChange(String title) {
     money = double.parse(title);
   }
@@ -125,7 +143,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
         cancel: Text(intl.S.current.cancel,
             style: TextStyle(color: Colors.black, fontSize: 16)),
       ),
-      minDateTime: groupValue == '1'
+      minDateTime: double.parse(groupValue) < 2
           ? DateTime.now().add(Duration(days: 1))
           : DateTime.parse((DateTime.now().year).toString() + '-01-01'),
       maxDateTime: groupValue == '2'
@@ -140,8 +158,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       onConfirm: (dateTime, List<int> index) {
         setState(
           () {
-            _startDate = DateFormat('yyyy-MM-dd HH-mm-ss').format(dateTime);
-            _endDate = DateFormat('yyyy-MM-dd HH-mm-ss').format(dateTime);
+            // _startDate = DateFormat('yyyy-MM-dd HH-mm-ss').format(dateTime);
+            // _endDate = DateFormat('yyyy-MM-dd HH-mm-ss').format(dateTime);
             _nowDate = dateTime;
             i == 0
                 ? _start = DateFormat('yyyy-MM-dd').format(dateTime)
@@ -186,8 +204,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       onConfirm: (dateTime, List<int> index) {
         setState(
           () {
-            _startDate = DateFormat('yyyy-MM-dd HH-mm-ss').format(dateTime);
-            _endDate = DateFormat('yyyy-MM-dd HH-mm-ss').format(dateTime);
+            // _startDate = DateFormat('yyyy-MM-dd HH-mm-ss').format(dateTime);
+            // _endDate = DateFormat('yyyy-MM-dd HH-mm-ss').format(dateTime);
             _nowDate = dateTime;
             i == 0
                 ? _start = DateFormat('yyyy-MM-dd').format(dateTime)
@@ -563,6 +581,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                             onPressed: () {
                               print('切换${value}');
                               updateGroupValue(value['type']);
+                              _clear();
+                              print("*****" + _start + _end);
                             },
                             color: Color(0xFFF3F3F3),
                             child: Text(

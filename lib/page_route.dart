@@ -15,9 +15,11 @@ import 'package:ebank_mobile/page/approval/my_appplication_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_detail_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_list_page.dart';
+import 'package:ebank_mobile/page/customerService/contact_customer_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_detail_page.dart';
 import 'package:ebank_mobile/page/electronicStatement/electronic_statement_page.dart';
 import 'package:ebank_mobile/page/exchangeRateInquiry/exchange_rate_inquiry_page.dart';
+import 'package:ebank_mobile/page/mine/id_cardVerification_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_succeed_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_record_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_info_page.dart';
@@ -91,6 +93,7 @@ var feedback = '/feedback_page';
 var changeLgPs = '/change_loginpassword_page.dart';
 var changePayPS = '/change_pay_page.dart';
 var setPayPage = '/set_pay_page.dart';
+var iDcardVerification = '/id_cardVerification_page.dart';
 var pageAccountOverview = '/account_overview';
 var pageDetailInfo = '/detail_info_page';
 var pageDetailList = '/detail_list_page';
@@ -116,6 +119,7 @@ var pageUserAgreement = '/user_agreement_page';
 var pageApplication = '/my_appplication_page';
 var pageApplicationTaskApproval = '/application_task_approval_page';
 var pageAuthorizationTaskApproval = '/authorization_task_approval_page';
+var pageContactCustomer = '/contact_customer_page';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -148,6 +152,7 @@ var appRoutes = {
   changeLgPs: (context) => ChangeLoPS(),
   setPayPage: (context) => SetPayPage(),
   changePayPS: (context) => ChangePayPage(),
+  iDcardVerification: (context) => IdIardVerificationPage(),
   pageAccountOverview: (context) => AccountOverviewPage(),
   pageDetailList: (context) => DetailListPage(),
   pageDetailInfo: (context) => DetailInfoPage(),
@@ -167,9 +172,9 @@ var appRoutes = {
   pageTaskApproval: (context) => TaskApprovalPage(),
   pageApplication: (context) => MyApplicationPage(),
   // pageAuthorizationTaskApproval: (context) => AuthorizationTaskApprovalPage(),
-  // pageExchangeRateInquiry: (context) => ExchangeRateInquiryPage(),
   pageExchangeRateInquiry: (context) => ExchangeRateInquiryPage(),
   pageOpenTransfer: (context) => OpenTransferPage(),
+  pageContactCustomer: (context) => ContactCustomerPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
@@ -177,6 +182,11 @@ onGenerateRoute(RouteSettings settings) {
       return CardDetailPage(card: settings.arguments);
     });
   }
+  // if (settings.name == pageApplicationTaskApproval) {
+  //   return MaterialPageRoute(builder: (context) {
+  //     return ApplicationTaskApprovalPage(application: settings.arguments);
+  //   });
+  // }
   if (settings.name == pageTimeDepositContract) {
     return MaterialPageRoute(builder: (context) {
       Map data = settings.arguments;

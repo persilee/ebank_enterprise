@@ -81,7 +81,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         return FlatButton(
           padding: EdgeInsets.all(0),
           onPressed: () {
-            print('>>>>>>$tdepProducDTOList $tdepProductList');
             go2Detail(tdepProductList[index], tdepProducDTOList[index]);
           },
           child: Column(

@@ -7,6 +7,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_styles.dart';
 import 'package:ebank_mobile/data/source/model/find_user_to_do_task.dart';
 import 'package:ebank_mobile/data/source/process_task_data_repository.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -73,21 +74,15 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
               ),
               Container(
                 width: 360,
-
-                // height: 95,
                 decoration: HsgStyles.homeHeaderShadow,
-                // padding: EdgeInsets.all(0),
                 margin: EdgeInsets.only(left: 10.0),
-                // color: Colors.green,
                 padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 15.0),
                 child: Column(
                   children: [
                     Container(
                         width: 340,
-                        // color: Colors.red,
                         child: Text(
-                          "定期开立",
-                          // row[index].taskName,
+                          row[index].taskName,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 15.0,
@@ -96,55 +91,63 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                         )),
                     Container(
                       width: 340,
-                      // color: Colors.yellow,
                       padding: EdgeInsets.only(top: 15),
                       child: Row(
                         children: [
-                          Text(
-                            "发起人",
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              color: HsgColors.secondDegreeText,
+                          Container(
+                            width: 130,
+                            child: Text(
+                              S.current.sponsor,
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: HsgColors.secondDegreeText,
+                              ),
                             ),
                           ),
                           SizedBox(
-                            width: 224.0,
+                            width: 8.0,
                           ),
-                          Text(
-                            "070365989",
-                            // row[index].startUser,
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              color: HsgColors.aboutusTextCon,
-                            ),
-                          )
+                          Container(
+                              width: 200,
+                              child: Text(
+                                row[index].startUser,
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: HsgColors.aboutusTextCon,
+                                ),
+                              )),
                         ],
                       ),
                     ),
                     Container(
                       width: 340,
                       padding: EdgeInsets.only(top: 10, bottom: 0),
-                      // color: Colors.red,
                       child: Row(
                         children: [
-                          Text(
-                            "创建时间",
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              color: HsgColors.secondDegreeText,
+                          Container(
+                            width: 130,
+                            child: Text(
+                              S.current.creation_time,
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: HsgColors.secondDegreeText,
+                              ),
                             ),
                           ),
                           SizedBox(
-                            width: 150.0,
+                            width: 8.0,
                           ),
-                          Text(
-                            "2011-11-02 11:12:30",
-                            // row[index].createTime,
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              color: HsgColors.aboutusTextCon,
-                            ),
-                          )
+                          Container(
+                              width: 200,
+                              child: Text(
+                                row[index].createTime,
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: HsgColors.aboutusTextCon,
+                                ),
+                              )),
                         ],
                       ),
                     ),
@@ -153,7 +156,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
               ),
             ],
           ));
-    }, childCount: 4)));
+    }, childCount: row.length)));
     return section;
   }
 

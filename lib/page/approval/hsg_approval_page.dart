@@ -25,7 +25,7 @@ class _ApprovalPageState extends State<TabBarAndTopTab>
   List tabs = [
     S.current.my_to_do_list,
     // S.current.authorization_history,
-    '授权记录',
+    S.current.authorization_records,
     S.current.my_application
   ];
   TabController tabController;

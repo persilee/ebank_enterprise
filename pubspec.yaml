@@ -43,6 +43,7 @@ dependencies:
   left_scroll_actions: ^1.4.0
   webview_flutter: ^1.0.7
   date_format: ^1.0.6
+  url_launcher: ^5.1.2
   flutter_tableview: ^1.0.1
   flutter_easyrefresh: ^2.1.7
   flutter_cupertino_date_picker:
@@ -98,6 +99,7 @@ flutter:
     - images/home/navIcon/home_nav_message_has.png
     - images/home/navIcon/home_nav_message.png
     - images/home/navIcon/home_nav_service.png
+    - images/home/navIcon/home_nav_phone.png
     - images/home/heaerIcon/home_header_person.png
     #home_header
     - images/home/heaerIcon/home_header_bg.png

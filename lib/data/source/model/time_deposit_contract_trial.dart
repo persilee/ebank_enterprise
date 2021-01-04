@@ -24,11 +24,14 @@ class TimeDepositContractTrialReq extends Object {
   @JsonKey(name: 'ccy')
   String ccy;
 
+  @JsonKey(name: 'ciNo')
+  String ciNo;
+
   @JsonKey(name: 'depositType')
   String depositType;
 
-  @JsonKey(name: 'prodType')
-  String prodType;
+  @JsonKey(name: 'tenor')
+  String tenor;
 
   TimeDepositContractTrialReq(
     this.accuPeriod,
@@ -36,8 +39,9 @@ class TimeDepositContractTrialReq extends Object {
     this.bal,
     this.bppdCode,
     this.ccy,
+    this.ciNo,
     this.depositType,
-    this.prodType,
+    this.tenor,
   );
 
   factory TimeDepositContractTrialReq.fromJson(Map<String, dynamic> srcJson) =>
@@ -48,17 +52,20 @@ class TimeDepositContractTrialReq extends Object {
 
 @JsonSerializable()
 class TimeDepositContractTrialResp extends Object {
-  @JsonKey(name: 'accuPeriod')
-  String accuPeriod;
-
-  @JsonKey(name: 'auctCale')
-  String auctCale;
+  @JsonKey(name: 'ccy')
+  String ccy;
 
   @JsonKey(name: 'bal')
   String bal;
 
-  @JsonKey(name: 'ccy')
-  String ccy;
+  @JsonKey(name: 'auctCale')
+  String auctCale;
+
+  @JsonKey(name: 'valDate')
+  String valDate;
+
+  @JsonKey(name: 'mtDate')
+  String mtDate;
 
   @JsonKey(name: 'matAmt')
   String matAmt;
@@ -66,29 +73,22 @@ class TimeDepositContractTrialResp extends Object {
   @JsonKey(name: 'matInt')
   String matInt;
 
-  @JsonKey(name: 'mtDate')
-  String mtDate;
-
-  @JsonKey(name: 'valDate')
-  String valDate;
+  @JsonKey(name: 'conRate')
+  String conRate;
 
   TimeDepositContractTrialResp(
-    this.accuPeriod,
-    this.auctCale,
-    this.bal,
     this.ccy,
+    this.bal,
+    this.auctCale,
+    this.valDate,
+    this.mtDate,
     this.matAmt,
     this.matInt,
-    this.mtDate,
-    this.valDate,
+    this.conRate,
   );
 
   factory TimeDepositContractTrialResp.fromJson(Map<String, dynamic> srcJson) =>
       _$TimeDepositContractTrialRespFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$TimeDepositContractTrialRespToJson(this);
-
-  String toString() {
-    return toJson().toString();
-  }
 }

@@ -31,11 +31,12 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   String _card = intl.S.current.card;
   List<String> _cradLists = []; //银行卡列表
   int _position = 0;
-  DateTime _nowDate = DateTime.now(); //当前时间
+  String _startConfirm = "";
+  String _endConfirm = "";
   String _time = intl.S.current.the_same_month;
   String _endDate =
-      DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now()); //结束时间
-  String _startDate = DateFormat('yyyy-MM-dd 23:59:59').format(DateTime(
+      DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now()); //结束时间
+  String _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(DateTime(
     DateTime.now().year,
     DateTime.now().month,
     1,
@@ -323,7 +324,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           ),
         );
       },
-      windowBuilder: (BuildContext context, Animation<double> animation,
+      windowBuilder: (BuildContext popcontext, Animation<double> animation,
           Animation<double> secondaryAnimation) {
         return FadeTransition(
           opacity: animation,
@@ -361,7 +362,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                     ),
                   ),
                   //自定义时间
-                  _userDefind(context),
+                  _userDefind(popcontext),
                 ],
               ),
             ),
@@ -372,11 +373,11 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   }
 
   //自定义时间
-  Widget _userDefind(BuildContext context) {
+  Widget _userDefind(BuildContext popcontext) {
     return Row(
       children: [
         //开始时间按钮
-        _timeButton(_start, 0, context),
+        _timeButton(_start, 0, popcontext),
         Text(
           intl.S.of(context).zhi,
           style: TextStyle(
@@ -386,23 +387,29 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           ),
         ),
         //结束时间按钮
-        _timeButton(_end, 1, context),
+        _timeButton(_end, 1, popcontext),
         //确定按钮
         Container(
           margin: EdgeInsets.all(4),
           width: 72,
           height: 23.5,
-          child: RaisedButton(
-            color: Colors.blue,
+          decoration: BoxDecoration(
+            color: Color(0xff4871FF),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: OutlineButton(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            borderSide: BorderSide(color: Colors.white),
             child: Text(
               intl.S.of(context).confirm,
               style: TextStyle(fontSize: 11, color: Colors.white),
             ),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             onPressed: () {
               setState(() {
                 _time = _start + "—" + _end;
+                _startDate = _startConfirm;
+                _endDate = _endConfirm;
               });
               Navigator.of(context).pop(_loadData());
             },
@@ -564,18 +571,24 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   }
 
   //自定义时间按钮
-  Widget _timeButton(String name, int i, BuildContext context) {
+  Widget _timeButton(String name, int i, BuildContext popcontext) {
     return Container(
       margin: EdgeInsets.all(5),
       width: 111.5,
       height: 23.5,
-      child: RaisedButton(
+      decoration: BoxDecoration(
+        color: Color(0xffECECEC),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: OutlineButton(
+        borderSide: BorderSide(color: Colors.white),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               name,
-              style: TextStyle(fontSize: 13, color: Color(0xff262626)),
+              style: TextStyle(fontSize: 13, color: Color(0xff212121)),
             ),
             Container(
               width: 8,
@@ -589,9 +602,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           ],
         ),
         onPressed: () {
-          _cupertinoPicker(i, context);
+          _cupertinoPicker(i, popcontext);
         },
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       ),
     );
   }
@@ -616,7 +628,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   }
 
 //时间弹窗
-  _cupertinoPicker(int i, BuildContext context) {
+  _cupertinoPicker(int i, BuildContext popcontext) {
     DatePicker.showDatePicker(
       context,
       pickerTheme: DateTimePickerTheme(
@@ -628,22 +640,21 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       ),
       minDateTime: DateTime.parse('1900-01-01'),
       maxDateTime: DateTime.now(),
-      initialDateTime: _nowDate,
+      initialDateTime: DateTime.now(),
       dateFormat: 'yyyy-MM-dd',
       locale: DateTimePickerLocale.zh_cn,
       //确定
       onConfirm: (dateTime, List<int> index) {
-        setState(
-          () {
-            _startDate = DateFormat('yyyy-MM-dd HH-mm-ss').format(dateTime);
-            _endDate = DateFormat('yyyy-MM-dd HH-mm-ss').format(dateTime);
-            _nowDate = dateTime;
-            i == 0
-                ? _start = formatDate(dateTime, [yyyy, mm, dd])
-                : _end = formatDate(dateTime, [yyyy, mm, dd]);
-          },
-        );
-        (context as Element).markNeedsBuild();
+        setState(() {
+          if (i == 0) {
+            _start = formatDate(dateTime, [yyyy, mm, dd]);
+            _startConfirm = DateFormat('yyyy-MM-dd 00:00:00').format(dateTime);
+          } else {
+            _end = formatDate(dateTime, [yyyy, mm, dd]);
+            _endConfirm = DateFormat('yyyy-MM-dd 23:59:59').format(dateTime);
+          }
+        });
+        (popcontext as Element).markNeedsBuild();
       },
     );
   }
