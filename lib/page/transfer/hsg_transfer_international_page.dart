@@ -273,34 +273,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     if (result != null && result != false) {
       //货币种类
       // _changedCcyTitle = ccyList[result];
-      groupValue = result;
-      setState(() {
-        _changedCcyTitle = ccyListPlay[result];
+      _changedCcyTitle = ccyListPlay[result];
 
-        //余额
-        _changedRateTitle = totalBalances[result];
-      });
+      // //余额
+      // _changedRateTitle = totalBalances[result];
     }
 
-    // _getavaBal(_changedCcyTitle);
-  }
-
-  //根据货币类型拿余额
-  Future<Function> _getavaBal(String changedCcyTitle) {
-    Future.wait({
-      CardDataRepository().getSingleCardBal(
-          GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
-    }).then((value) {
-      value.forEach((element) {
-        // 通过货币查询余额
-        if (element is GetSingleCardBalResp) {
-          setState(() {
-            bals.clear();
-            bals.add(element.cardListBal);
-            if (bals.contains(changedCcyTitle)) {}
-          });
-        }
-      });
+    setState(() {
+      _position = result;
     });
   }
 
@@ -320,6 +300,25 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
     setState(() {
       _position = result;
+    });
+  }
+
+  //根据货币类型拿余额
+  Future<Function> _getavaBal(String changedCcyTitle) {
+    Future.wait({
+      CardDataRepository().getSingleCardBal(
+          GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
+    }).then((value) {
+      value.forEach((element) {
+        // 通过货币查询余额
+        if (element is GetSingleCardBalResp) {
+          setState(() {
+            bals.clear();
+            bals.add(element.cardListBal);
+            if (bals.contains(changedCcyTitle)) {}
+          });
+        }
+      });
     });
   }
 
@@ -387,13 +386,10 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               _changedAccountTitle,
               ccy,
               singleLimit,
-              inpuntStr,
               totalBalance,
               cardNo,
               payeeBankCode,
               money,
-              payeeName,
-              payeeCardNo,
               _amountInputChange,
               _selectAccount,
               _getCcy,

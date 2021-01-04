@@ -34,6 +34,25 @@ class _ApplicationTaskApprovalPageState
   var _toaccount = "";
   var _remark = "";
 
+  var _listDetail = [
+    {
+      'title': '转账信息',
+      'rowList': [
+        {'leftText': '用户账号', 'rightText': '5241548521225210'},
+        {'leftText': '付款账户', 'rightText': '5241548521225210'},
+        {'leftText': '服务', 'rightText': '5241548521225210'},
+      ]
+    },
+    {
+      'title': '付款信息',
+      'rowList': [
+        {'leftText': '用户账号11', 'rightText': '5241548521225210'},
+        {'leftText': '付款账户11', 'rightText': '5241548521225210'},
+        {'leftText': '服务11', 'rightText': '5241548521225210'},
+      ]
+    },
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -52,6 +71,7 @@ class _ApplicationTaskApprovalPageState
       ),
       body: CustomScrollView(
         slivers: <Widget>[
+          //  _sliverFixed(),
           _transferInfo(),
           _payInfo(),
           _historyHeader(),
@@ -59,6 +79,82 @@ class _ApplicationTaskApprovalPageState
         ],
       ),
     );
+  }
+
+  _sliverFixed() {
+    return SliverFixedExtentList(
+      delegate: SliverChildBuilderDelegate(
+        _buildListItem,
+        childCount: _listDetail.length,
+      ),
+      itemExtent: 200.5,
+    );
+  }
+
+  ///底下列表
+  Widget _buildListItem(BuildContext context, int index) {
+    return ListTile(
+      title: _getFeatures(_listDetail[index]),
+    );
+  }
+
+  ///列表单元格
+  Widget _getFeatures(Map data) {
+    //单元格详情
+    Column _featuresDeatil = Column(
+      children: [
+        Container(
+          padding: EdgeInsets.only(left: 15, right: 15),
+          height: 50,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                data['title'],
+                style: TextStyle(
+                  color: HsgColors.firstDegreeText,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+        // _getRow(data['leftText'], data['rightText']),
+        Container(
+          // height: 200,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: _craphicBtns(data),
+          ),
+        ),
+      ],
+    );
+
+    return Container(
+      padding: EdgeInsets.only(top: 10),
+      child: Card(
+        shadowColor: Color(0x46529F2E),
+        child: _featuresDeatil,
+      ),
+    );
+  }
+
+  List<Widget> _craphicBtns(Map data) {
+    List<Widget> btns = [];
+    List dataList = data['rowList'];
+
+    for (var i = 0; i < dataList.length; i++) {
+      Map btnData = dataList[i];
+      btns.add(
+        Container(
+          child: Column(
+            children: [_getRow(btnData['leftText'], btnData['rightText'])],
+          ),
+        ),
+      );
+    }
+    return btns;
   }
 
   _historyHeader() {
@@ -131,22 +227,7 @@ class _ApplicationTaskApprovalPageState
               color: Colors.white,
               child: Column(
                 children: [
-                  Container(
-                      color: Colors.white,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: Text(
-                              S.current.transfer_info,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )
-                        ],
-                      )),
+                  _getTitle(S.current.transfer_info),
                   _getHintLine(),
                   (_fromAccount == "" || _fromAccount == null)
                       ? Container()
@@ -175,22 +256,7 @@ class _ApplicationTaskApprovalPageState
               color: Colors.white,
               child: Column(
                 children: [
-                  Container(
-                      color: Colors.white,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: Text(
-                              S.current.payment_info,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )
-                        ],
-                      )),
+                  _getTitle(S.current.payment_info),
                   _getHintLine(),
                   (_accountNumber == "" || _accountNumber == null)
                       ? Container()
@@ -236,6 +302,25 @@ class _ApplicationTaskApprovalPageState
         ],
       ),
     );
+  }
+
+  _getTitle(String title) {
+    return Container(
+        color: Colors.white,
+        child: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+          ],
+        ));
   }
 
   _getHintLine() {

@@ -77,6 +77,7 @@ class _AuthorizationTaskApprovalPageState
     );
   }
 
+  //历史记录标题
   _historyHeader() {
     return SliverToBoxAdapter(
       child: Container(
@@ -152,18 +153,7 @@ class _AuthorizationTaskApprovalPageState
                   Container(
                       color: Colors.white,
                       child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: Text(
-                              '基本信息',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )
-                        ],
+                        children: [_getTitle('基本信息')],
                       )),
                   _getHintLine(),
                   (_userId == "" || _userId == null)
@@ -200,18 +190,7 @@ class _AuthorizationTaskApprovalPageState
                   Container(
                       color: Colors.white,
                       child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: Text(
-                              S.current.transfer_info,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )
-                        ],
+                        children: [_getTitle(S.current.transfer_info)],
                       )),
                   _getHintLine(),
                   (_fromAccount == "" || _fromAccount == null)
@@ -244,18 +223,7 @@ class _AuthorizationTaskApprovalPageState
                   Container(
                       color: Colors.white,
                       child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: Text(
-                              S.current.payment_info,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )
-                        ],
+                        children: [_getTitle(S.current.payment_info)],
                       )),
                   _getHintLine(),
                   (_accountNumber == "" || _accountNumber == null)
@@ -300,6 +268,19 @@ class _AuthorizationTaskApprovalPageState
             child: Text(rightText),
           )
         ],
+      ),
+    );
+  }
+
+  _getTitle(title) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
