@@ -139,7 +139,7 @@ class _TransferPartnerState extends State<TransferPartner> {
               ),
             ),
             //加载更多
-            _tempList.length > 6 ? _loadMore() : Container(),
+            _tempList.length > 8 ? _loadMore() : Container(),
           ],
         ));
   }
@@ -345,7 +345,6 @@ class _TransferPartnerState extends State<TransferPartner> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Image(
-                  // image: AssetImage(row.payeeBankImageUrl == null? 'images/transferIcon/transfer_bank.png' : row.payeeBankImageUrl),
                   image: AssetImage('images/transferIcon/transfer_bank.png'),
                   width: 30,
                   height: 30,
