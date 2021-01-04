@@ -87,7 +87,7 @@
   "setChangLoginPasd": "Set Login Password",
   "plaseSetPsd": "Please Set the Login Password",
   "transfer": "Transfer",
-  "transfer_record": "Transfer RNameecord",
+  "transfer_record": "Transfer Record",
   "transfer_partner": "Transfer Partner",
   "delete": "Delete",
   "tran_out_declare": "Note:\n1. The \"transfer to\" payee is the information of the payment user you have recently transferred.",

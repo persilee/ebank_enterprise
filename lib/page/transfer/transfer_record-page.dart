@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///转账记录
 /// Author: fangluyao
@@ -194,44 +196,50 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             arguments: _transferHistory);
       },
       child: Container(
-        width: 400,
-        height: 200,
+        width: MediaQuery.of(context).size.width,
         color: Colors.white,
-        padding: EdgeInsets.fromLTRB(0, 14, 0, 20.5),
+        padding: EdgeInsets.fromLTRB(0, 14, 0, 16),
         margin: EdgeInsets.only(top: 15),
         child: Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Column(
-                  children: [
-                    Text(
-                      _actualName,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xff262626),
+                Container(
+                  width: MediaQuery.of(context).size.width / 2.5,
+                  child: Column(
+                    children: [
+                      Text(
+                        _actualName,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xff262626),
+                        ),
                       ),
-                    ),
-                    Text(
-                      _transferHistory.paymentCardNo,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xff262626),
+                      Text(
+                        _transferHistory.paymentCardNo,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Color(0xff262626),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                Image.asset(
-                  "images/transferIcon/transfert_to.png",
-                  width: 25,
-                  height: 25,
+                Container(
+                  width: MediaQuery.of(context).size.width / 5,
+                  child: Image.asset(
+                    "images/transferIcon/transfert_to.png",
+                    width: 25,
+                    height: 25,
+                  ),
                 ),
-                Column(
-                  children: [
-                    Container(
-                      width: 150,
-                      child: Text(
+                Container(
+                  width: MediaQuery.of(context).size.width / 2.5,
+                  padding: EdgeInsets.only(right: 16),
+                  child: Column(
+                    children: [
+                      Text(
                         _transferHistory.receiveName,
                         style: TextStyle(
                           fontSize: 14,
@@ -239,17 +247,15 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                    ),
-                    Container(
-                      child: Text(
+                      Text(
                         _transferHistory.receiveCardNo,
                         style: TextStyle(
                           fontSize: 12,
                           color: Color(0xff262626),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -257,7 +263,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
               padding: EdgeInsets.fromLTRB(19.5, 10, 19.5, 10),
               child: DottedLine(),
             ),
-            _rowContent2(intl.S.of(context).transfer_amount,
+            _transferAmount(intl.S.of(context).transfer_amount,
                 _transferHistory.amount, _transferHistory.status),
             _rowContent(intl.S.of(context).transfer_time,
                 _transferHistory.transactionHour),
@@ -274,28 +280,30 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     return Container(
       height: 50,
       color: Colors.white,
-      padding: EdgeInsets.only(left: 16, right: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           GestureDetector(
             onTap: _chooseBankCard,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  _card,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Color(0xff262626),
+            child: Container(
+              width: MediaQuery.of(context).size.width / 2,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    _card,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xff262626),
+                    ),
                   ),
-                ),
-                Icon(Icons.arrow_drop_down)
-              ],
+                  Icon(Icons.arrow_drop_down),
+                ],
+              ),
             ),
           ),
           Container(
-            width: 160,
+            width: MediaQuery.of(context).size.width / 3,
             child: _popDialog(),
           ),
         ],
@@ -306,7 +314,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   //顶部弹窗
   Widget _popDialog() {
     return PopupWindowButton(
-      offset: Offset(190, 200),
+      offset: Offset(MediaQuery.of(context).size.width / 2.6, 200),
       buttonBuilder: (BuildContext context) {
         return GestureDetector(
           child: Row(
@@ -315,7 +323,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
               Text(
                 _time,
                 style: TextStyle(
-                  fontSize: 13,
+                  fontSize: 12,
                   color: Color(0xff262626),
                 ),
               ),
@@ -419,154 +427,80 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     );
   }
 
-  //交易时间的四个时间区
+  //交易时间
   Widget _tradingHour() {
     return Row(
       children: [
-        //当天按钮
-        Container(
-          margin: EdgeInsets.all(3),
-          width: 78,
-          height: 30,
-          child: OutlineButton(
-            borderSide: BorderSide(
-                color: isButton1 ? Color(0xffD1D1D1) : Color(0xff4871FF)),
-            child: Text(
-              intl.S.of(context).the_same_day,
-              style: TextStyle(
-                  fontSize: 10,
-                  color: isButton1 ? Color(0xff7A7A7A) : Color(0xff4871FF)),
-              textAlign: TextAlign.center,
-            ),
-            onPressed: () {
-              setState(() {
-                _time = intl.S.of(context).the_same_day;
-                _endDate =
-                    DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now());
-                _startDate =
-                    DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now());
-                isButton1 = !isButton1;
-              });
-              if (!isButton1) {
+        _trandingHourButton(1, isButton1, intl.S.current.the_same_day),
+        _trandingHourButton(2, isButton2, intl.S.current.the_same_month),
+        _trandingHourButton(3, isButton3, intl.S.current.last_three_month),
+        _trandingHourButton(4, isButton4, intl.S.current.last_half_year),
+      ],
+    );
+  }
+
+//交易时间按钮
+  Widget _trandingHourButton(int i, bool isButton, String time) {
+    return Container(
+      margin: EdgeInsets.all(3),
+      width: 78,
+      height: 30,
+      child: OutlineButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        borderSide:
+            BorderSide(color: isButton ? Color(0xffD1D1D1) : Color(0xff4871FF)),
+        child: Text(
+          time,
+          style: TextStyle(
+              fontSize: 10,
+              color: isButton ? Color(0xff7A7A7A) : Color(0xff4871FF)),
+          textAlign: TextAlign.center,
+        ),
+        onPressed: () {
+          setState(() {
+            _time = time;
+            _endDate = DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now());
+            switch (i) {
+              case 1:
+                isButton1 = false;
                 isButton2 = true;
                 isButton3 = true;
                 isButton4 = true;
-              }
-              Navigator.of(context).pop(_loadData());
-            },
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          ),
-        ),
-        //本月按钮
-        Container(
-          margin: EdgeInsets.all(3),
-          width: 78,
-          height: 30,
-          child: OutlineButton(
-            borderSide: BorderSide(
-                color: isButton2 ? Color(0xffD1D1D1) : Color(0xff4871FF)),
-            child: Text(
-              intl.S.of(context).the_same_month,
-              style: TextStyle(
-                  fontSize: 10,
-                  color: isButton2 ? Color(0xff7A7A7A) : Color(0xff4871FF)),
-              textAlign: TextAlign.center,
-            ),
-            onPressed: () {
-              setState(() {
-                _time = intl.S.of(context).the_same_month;
-                _endDate =
+                _startDate =
                     DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now());
-                _startDate = DateFormat('yyyy-MM-dd 23:59:59').format(DateTime(
+                break;
+              case 2:
+                isButton1 = true;
+                isButton2 = false;
+                isButton3 = true;
+                isButton4 = true;
+                _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(DateTime(
                   DateTime.now().year,
                   DateTime.now().month,
                   1,
                 ));
-                isButton2 = !isButton2;
-              });
-              if (!isButton2) {
+                break;
+              case 3:
                 isButton1 = true;
-                isButton3 = true;
+                isButton2 = true;
+                isButton3 = false;
                 isButton4 = true;
-              }
-              Navigator.of(context).pop(_loadData());
-            },
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          ),
-        ),
-        //最近三个月按钮
-        Container(
-          margin: EdgeInsets.all(3),
-          width: 78,
-          height: 30,
-          child: OutlineButton(
-            borderSide: BorderSide(
-                color: isButton3 ? Color(0xffD1D1D1) : Color(0xff4871FF)),
-            child: Text(
-              intl.S.of(context).last_three_month,
-              style: TextStyle(
-                  fontSize: 10,
-                  color: isButton3 ? Color(0xff7A7A7A) : Color(0xff4871FF)),
-              textAlign: TextAlign.center,
-            ),
-            onPressed: () {
-              setState(() {
-                _time = intl.S.of(context).last_three_month;
-                _endDate =
-                    DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now());
-                _startDate = DateFormat('yyyy-MM-dd 23:59:59')
+                _startDate = DateFormat('yyyy-MM-dd 00:00:00')
                     .format(DateTime.now().subtract(Duration(days: 90)));
-                isButton3 = !isButton3;
-              });
-              if (!isButton3) {
-                isButton1 = true;
-                isButton2 = true;
-                isButton4 = true;
-              }
-              Navigator.of(context).pop(_loadData());
-            },
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          ),
-        ),
-        //最近半年按钮
-        Container(
-          margin: EdgeInsets.all(3),
-          width: 78,
-          height: 30,
-          child: OutlineButton(
-            borderSide: BorderSide(
-                color: isButton4 ? Color(0xffD1D1D1) : Color(0xff4871FF)),
-            child: Text(
-              intl.S.of(context).last_half_year,
-              style: TextStyle(
-                  fontSize: 10,
-                  color: isButton4 ? Color(0xff7A7A7A) : Color(0xff4871FF)),
-              textAlign: TextAlign.center,
-            ),
-            onPressed: () {
-              setState(() {
-                _time = intl.S.of(context).last_half_year;
-                _endDate =
-                    DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now());
-                _startDate = DateFormat('yyyy-MM-dd 23:59:59')
-                    .format(DateTime.now().subtract(Duration(days: 180)));
-                isButton4 = !isButton4;
-              });
-              if (!isButton4) {
+                break;
+              case 4:
                 isButton1 = true;
                 isButton2 = true;
                 isButton3 = true;
-              }
-              Navigator.of(context).pop(_loadData());
-            },
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          ),
-        ),
-      ],
+                isButton4 = false;
+                _startDate = DateFormat('yyyy-MM-dd 00:00:00')
+                    .format(DateTime.now().subtract(Duration(days: 180)));
+                break;
+            }
+          });
+          Navigator.of(context).pop(_loadData());
+        },
+      ),
     );
   }
 
@@ -703,7 +637,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   }
 
   //转账金额
-  Widget _rowContent2(String left, String right, String status) {
+  Widget _transferAmount(String left, String right, String status) {
     Color acountColor;
     switch (status) {
       case 'N':
