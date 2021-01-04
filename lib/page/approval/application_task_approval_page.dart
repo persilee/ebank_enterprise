@@ -46,75 +46,14 @@ class _ApplicationTaskApprovalPageState
     processId = history.processId;
     print(processId);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('任务审批'),
-        centerTitle: true,
-      ),
-      body: CustomScrollView(
-        slivers: <Widget>[
+        appBar: AppBar(
+          title: Text('任务审批'),
+          centerTitle: true,
+        ),
+        body: CustomScrollView(slivers: <Widget>[
           _transferInfo(),
           _payInfo(),
-          SliverToBoxAdapter(
-            child: Container(
-              color: Colors.white,
-              margin: EdgeInsets.only(top: 10),
-              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-              child: Row(
-                children: [
-                  Container(
-                    child: Text(
-                      '审批历史',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          commentList.length > 0
-              ? SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return SizedBox(
-                      child: Column(
-                        children: [
-                          Container(
-                              color: Colors.white,
-                              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                              child: Column(
-                                children: [
-                                  _getHintLine(),
-                                  //发起人
-                                  _getRow('审批人', commentList[index].userName),
-                                  //待办任务名称
-                                  _getRow('审批时间', commentList[index].time),
-                                  //创建时间
-                                  _getRow('审批意见', commentList[index].comment),
-                                  //审批结果
-                                  _getRow('审批结果',
-                                      commentList[index].result.toString()),
-                                ],
-                              ))
-                        ],
-                      ),
-                    );
-                  },
-                  childCount: commentList.length,
-                ))
-              : SliverToBoxAdapter(
-                  child: Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
-                    child: Text('无内容'),
-                  ),
-                ),
-        ],
-      ),
-      // child: child,
-    );
+        ]));
   }
 
 //转账信息
@@ -245,7 +184,7 @@ class _ApplicationTaskApprovalPageState
   void _loadHistoryData() {
     Future.wait({
       NeedToBeDealtWithRepository()
-          .findUserApplicationDetail(FindUserApplicationDetailReq("39368"),
+          .findUserApplicationDetail(FindUserApplicationDetailReq('67621'),
               'findUserApplicationDetail')
           .then((data) {
         setState(() {

@@ -102,6 +102,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     '还款/供款',
     '学费',
   ];
+  List<String> ccyListPlay = ['CNY', 'HKD', 'EUR'];
 
   var _countryText = '';
 
@@ -109,29 +110,66 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   var _feeUse = '';
 
+  var _bankReceive = S.current.please_select;
+
+  int groupValue = 0;
+
+  var bankSwift = '';
+
+  var payerAddress = '';
+
+  var payeeAddress = '';
+
+  var intermediateBankSwift = '';
+
   @override
   void initState() {
     super.initState();
     _loadTransferData();
   }
 
+  //转账金额
   // ignore: missing_return
   Function _amountInputChange(String title) {
     money = double.parse(title);
   }
 
+  //付款方地址
+  _addressChange(String address) {
+    payerAddress = address;
+  }
+
+  //收款方地址
+  _addressTwoChange(String addressTwo) {
+    payeeAddress = addressTwo;
+    print('$payeeAddress 99999999');
+  }
+
+  //中间行Swift
+  _middleSwift(String middleSwift) {
+    intermediateBankSwift = middleSwift;
+  }
+
+  //银行Swift
+  _bankSwift(String bankSwifts) {
+    bankSwift = bankSwifts;
+  }
+
+  //公司名
   // ignore: missing_return
-  Function _nameInputChange(String name) {
+  _nameInputChange(String name) {
     payeeName = name;
   }
 
+  //账号
   // ignore: missing_return
-  Function _accountInputChange(String account) {
+  _accountInputChange(String account) {
     payeeCardNo = account;
   }
 
+  //转账附言
   // ignore: missing_return
-  Function _transferInputChange(String transfer) {
+  _transferInputChange(String transfer) {
     remark = transfer;
   }
 
@@ -217,31 +255,33 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //选择货币方法
-  Future<Function> _getCcy() async {
+  _getCcy() async {
     final result = await showDialog(
         context: context,
         builder: (context) {
           return HsgSingleChoiceDialog(
-            title: '币种选择',
-            items: ccyLists,
-            positiveButton: '确定',
-            negativeButton: '取消',
-            lastSelectedPosition: _lastSelectedPosition,
+            title: S.of(context).currency_choice,
+            items: ccyListPlay,
+            // ccyLists,
+            positiveButton: S.of(context).confirm,
+            negativeButton: S.of(context).cancel,
+            lastSelectedPosition: groupValue,
           );
         });
 
     if (result != null && result != false) {
       //货币种类
-      _changedCcyTitle = ccyList[result];
-      //余额
-      _changedRateTitle = totalBalances[result];
+      // _changedCcyTitle = ccyList[result];
+      groupValue = result;
+      setState(() {
+        _changedCcyTitle = ccyListPlay[result];
+
+        //余额
+        _changedRateTitle = totalBalances[result];
+      });
     }
 
-    //加了这个可以立即显示
-    setState(() {
-      _position = result;
-    });
-    _getavaBal(_changedCcyTitle);
+    // _getavaBal(_changedCcyTitle);
   }
 
   //根据货币类型拿余额
@@ -264,7 +304,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //选择国家地区
-  Future<Function> _selectCountry() async {
+  _selectCountry() async {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
@@ -282,12 +322,17 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
   }
 
-  Future<Function> _selectBank() async {
-    Navigator.pushNamed(context, pageSelectBank);
+  //选择收款银行
+  _selectBank() async {
+    Navigator.pushNamed(context, pageSelectBank).then((data) {
+      setState(() {
+        _bankReceive = data;
+      });
+    });
   }
 
   //转账费用
-  Future<Function> _selectTransferFee() async {
+  _selectTransferFee() async {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
@@ -360,8 +405,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               color: Colors.white,
               child: Column(
                 children: [
-                  _getAddress(
-                      S.current.remittance_address, S.current.please_input),
+                  _getAddress(S.current.remittance_address,
+                      S.current.please_input, _addressChange),
                   _getLine(),
                   Container(
                     padding: EdgeInsets.only(right: 50),
@@ -394,19 +439,22 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                     S.current.state_area, _countryText, _selectCountry),
                 _getLine(),
                 //收款银行
-                _getSelectColumn(S.current.receipt_bank,
-                    S.current.please_select, _selectBank),
+                _getSelectColumn(
+                    S.current.receipt_bank, _bankReceive, _selectBank),
                 _getLine(),
                 //银行SWIFT
-                _getInputColumn(S.current.bank_swift, S.current.please_input),
+                _getInputColumn(
+                    S.current.bank_swift, S.current.please_input, _bankSwift
+                    //  _addressChange,
+                    ),
                 _getLine(),
                 //中间行
-                _getInputColumn(
-                    S.current.middle_bank_swift, S.current.optional),
+                _getInputColumn(S.current.middle_bank_swift, S.current.optional,
+                    _middleSwift),
                 _getLine(),
                 //收款地址
-                _getAddress(
-                    S.current.collection_address, S.current.please_input),
+                _getAddress(S.current.collection_address,
+                    S.current.please_input, _addressTwoChange),
                 _getLine(),
               ],
             ),
@@ -426,8 +474,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                       S.current.remittance_usage, _feeUse, _selectFeeUse),
                   _getLine(),
                   //转账附言
-                  _getInputColumn(
-                      S.current.transfer_postscript, S.current.optional),
+                  _getInputColumn(S.current.transfer_postscript,
+                      S.current.optional, _transferInputChange),
                   _getLine()
                 ],
               ),
@@ -464,7 +512,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         ));
   }
 
-  _getAddress(String topText, String inputText) {
+  _getAddress(
+      String topText, String inputText, Function(String inputStr) nameChange) {
     return Container(
       height: 80,
       color: Colors.white,
@@ -492,7 +541,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   //是否自动获得焦点
                   autofocus: false,
                   onChanged: (payeeName) {
-                    // nameChanges(payeeName);
+                    nameChange(payeeName);
                     print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
                   },
                   textAlign: TextAlign.right,
@@ -519,7 +568,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     ));
   }
 
-  _getInputColumn(String leftText, String righteText) {
+  _getInputColumn(String leftText, String righteText,
+      Function(String inputStr) moneyChange) {
     return Container(
       height: 50,
       color: Colors.white,
@@ -543,7 +593,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   //是否自动获得焦点
                   autofocus: false,
                   onChanged: (payeeName) {
-                    // nameChanges(payeeName);
+                    moneyChange(payeeName);
                     print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
                   },
                   textAlign: TextAlign.right,
@@ -591,7 +641,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                     margin: EdgeInsets.only(top: 5),
                     child: Text(
                       righText,
-                      style: rightText == ''
+                      style: righText == '请选择'
                           ? TextStyle(
                               color: HsgColors.secondDegreeText,
                               fontSize: 13,
@@ -601,20 +651,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                               fontSize: 13,
                             ),
                     ),
-                    // child: TextField(
-                    //   decoration: InputDecoration(
-                    //       border: InputBorder.none,
-                    //       hintText: rightText,
-                    //       hintStyle: rightText == '请选择'
-                    //           ? TextStyle(
-                    //               color: HsgColors.hintText,
-                    //               // fontSize: 14,
-                    //             )
-                    //           : TextStyle(
-                    //               color: HsgColors.firstDegreeText,
-                    //               //   fontSize: 14,
-                    //             )),
-                    // ),
                   )
                 ],
               ),
