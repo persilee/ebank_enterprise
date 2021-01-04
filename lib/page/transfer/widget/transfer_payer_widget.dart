@@ -238,7 +238,8 @@ Widget _threeRowRight(
           Container(
             margin: EdgeInsets.only(top: 5),
             child: Text(
-              '${S.current.balance_with_value}${_changedCcyTitles} ${FormatUtil.formatSringToMoney(_changedRateTitle)}',
+              '余额:0.00',
+              // '${S.current.balance_with_value}${_changedCcyTitles} ${FormatUtil.formatSringToMoney(_changedRateTitle)}',
               // ${_changedRateTitle},
               style: TextStyle(
                 color: HsgColors.secondDegreeText,

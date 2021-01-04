@@ -334,7 +334,6 @@ class _TransferPartnerState extends State<TransferPartner> {
       ],
     );
     return Container(
-      // height: 63.0,
       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
       color: Colors.white,
       child: Column(
@@ -346,7 +345,6 @@ class _TransferPartnerState extends State<TransferPartner> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Image(
-                  // image: AssetImage(row.payeeBankImageUrl == null? 'images/transferIcon/transfer_bank.png' : row.payeeBankImageUrl),
                   image: AssetImage('images/transferIcon/transfer_bank.png'),
                   width: 30,
                   height: 30,

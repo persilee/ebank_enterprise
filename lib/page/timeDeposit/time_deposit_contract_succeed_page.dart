@@ -4,6 +4,8 @@
  * 
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
+import 'package:ebank_mobile/config/hsg_colors.dart';
+// import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
 import 'package:ebank_mobile/page/home/hsg_home_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_record_page.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -28,39 +30,40 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
       body: ListView(
         children: [
           Container(
-            height: 250,
+            padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
+            child: Image.asset(
+              'images/time_depost/time_deposit_contract_succeed.png',
+              width: 64.0,
+              height: 64.0,
+              // fit: BoxFit.cover,
+            ),
+          ),
+          Container(
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.fromLTRB(0, 180, 0, 0),
+                  padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
                   child: Text(
                     S.current.operation_successful,
-                    style: TextStyle(fontSize: 30),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 )
               ],
             ),
           ),
           Container(
-            child: Text(
-              S.current.turn_to_current_success_sub,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-            ),
-          ),
-          Container(
-            width: 10,
-            height: 85,
-            padding: EdgeInsets.fromLTRB(0, 20, 0, 15),
-            child: RaisedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, pageTransfer);
-              },
-              textColor: Colors.blue,
-              color: Colors.blue[500],
-              child: (Text(S.current.complete,
-                  style: TextStyle(color: Colors.white))),
-            ),
+            margin: EdgeInsets.fromLTRB(30, 75, 30, 0),
+            child: ButtonTheme(
+                minWidth: 5,
+                height: 45,
+                child: FlatButton(
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, pageTimeDepostProduct);
+                  },
+                  color: HsgColors.accent,
+                  child: (Text(S.current.complete,
+                      style: TextStyle(color: Colors.white))),
+                )),
           )
         ],
       ),

@@ -13,7 +13,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import '../page_route.dart';
+import '../../page_route.dart';
 
 class TimeDepostProduct extends StatefulWidget {
   TimeDepostProduct({Key key}) : super(key: key);
@@ -81,7 +81,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         return FlatButton(
           padding: EdgeInsets.all(0),
           onPressed: () {
-            print('>>>>>>$tdepProducDTOList $tdepProductList');
             go2Detail(tdepProductList[index], tdepProducDTOList[index]);
           },
           child: Column(
@@ -169,8 +168,11 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                             height: 70,
                             child: Text(
                               //定期产品起存金额
-                              S.current.deposit_min_with_value +
-                                  '${tdepProductList[index].minAmt}',
+                              language == 'zh_CN'
+                                  ? '${tdepProductList[index].minAmt}' +
+                                      S.current.deposit_min_with_value
+                                  : S.current.deposit_min_with_value +
+                                      '${tdepProductList[index].minAmt}',
                               style: TextStyle(
                                 fontSize: 13,
                                 color: HsgColors.describeText,
@@ -237,7 +239,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
 
   void go2Detail(TdepProducHeadDTO tdepProduct,
       List<TdepProducDTOList> tdepProducDTOList) {
-    Navigator.pushNamed(
+    Navigator.popAndPushNamed(
       context,
       pageTimeDepositContract,
       arguments: {

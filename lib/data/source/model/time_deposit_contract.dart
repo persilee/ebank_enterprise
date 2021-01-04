@@ -13,13 +13,13 @@ class TimeDepositContractReq extends Object {
   String accuPeriod;
 
   @JsonKey(name: 'annualInterestRate')
-  String annualInterestRate;
+  double annualInterestRate;
 
   @JsonKey(name: 'auctCale')
   String auctCale;
 
   @JsonKey(name: 'bal')
-  String bal;
+  double bal;
 
   @JsonKey(name: 'bppdCode')
   String bppdCode;
@@ -43,7 +43,7 @@ class TimeDepositContractReq extends Object {
   String payDdAc;
 
   @JsonKey(name: 'payDdAmt')
-  String payDdAmt;
+  double payDdAmt;
 
   @JsonKey(name: 'prodType')
   String prodType;

@@ -115,7 +115,7 @@ class _TransferPageState extends State<TransferPage> {
                   Navigator.pushNamed(context, pageTransferInternal);
                 } else if (S.of(context).transfer_appointment == title) {
                   //'预约转账'
-                  Navigator.pushNamed(context, pageDialogDemo);
+                  Navigator.pushNamed(context, pageOpenTransfer);
                 } else if (S.current.transfer_record == title) {
                   //转账记录
                   Navigator.pushNamed(context, pageTransferRecord);
