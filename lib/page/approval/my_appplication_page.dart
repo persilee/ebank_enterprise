@@ -46,10 +46,10 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
             return SizedBox(
                 child: GestureDetector(
               onTap: () {
-                // go2Detail(rowList[index]);
-                Navigator.pushNamed(context, pageApplicationTaskApproval,
-                    arguments: rows[index]);
-                print('选择账号');
+                go2Detail(rowList[index]);
+                // Navigator.pushNamed(context, pageApplicationTaskApproval,
+                //     arguments: rows[index]);
+                // print('选择账号');
               },
               child: Column(
                 children: [
