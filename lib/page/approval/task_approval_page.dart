@@ -386,7 +386,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
           //底部按钮
           Container(
             width: 400,
-            margin: EdgeInsets.only(top: 20, bottom: 15),
+            margin: EdgeInsets.only(top: 20, bottom: 15, right: 15),
             // color: Colors.yellow,
             child: _getToggleChild(),
           ),
