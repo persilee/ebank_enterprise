@@ -153,7 +153,7 @@ flutter:
     - images/transferIcon/transfert_to.png
     - images/transferIcon/transfer_from.png
     - images/transferIcon/transfer_wallet.png
-    - images\transferIcon/tansfer_bank.png
+    - images/transferIcon/tansfer_bank.png
     
     #其他
     - images/transferIcon/transfer_sample_placeholder.png
