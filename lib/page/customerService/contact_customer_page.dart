@@ -39,7 +39,7 @@ class _ContactCustomerPageState extends State<ContactCustomerPage> {
                 alignment: Alignment.topCenter,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(top: 70),
+                    margin: EdgeInsets.only(top: 90),
                     padding: EdgeInsets.only(left: 35, right: 35),
                     width: double.infinity,
                     height: 223,
@@ -50,7 +50,7 @@ class _ContactCustomerPageState extends State<ContactCustomerPage> {
                     child: _getPhoneColumn(),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 35),
+                    margin: EdgeInsets.only(top: 55),
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(

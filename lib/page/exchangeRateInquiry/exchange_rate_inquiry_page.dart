@@ -18,28 +18,34 @@ class ExchangeRateInquiryPage extends StatefulWidget {
 }
 
 class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
-  List<String> ccyList1 = ['HKD'];
-  List<String> ccyList2 = ['USD', 'EUR', 'GBP', 'CAD', 'AUD'];
+  List<String> _primitiveCcyList = ['HKD'];
+  List<String> _objectiveCcyList = ['USD', 'EUR', 'GBP', 'CAD', 'AUD'];
   List<Map<String, Object>> rateList = [
-    {'ccy': 'USD', 'sellingPrice': '7.7474', 'buyingPrice': '7.7527'},
-    {'ccy': 'EUR', 'sellingPrice': '9.0412', 'buyingPrice': '9.0668'},
-    {'ccy': 'GBP', 'sellingPrice': '9.8144', 'buyingPrice': '9.8483'},
-    {'ccy': 'CAD', 'sellingPrice': '5.8003', 'buyingPrice': '5.8195'},
-    {'ccy': 'AUD', 'sellingPrice': '5.5100', 'buyingPrice': '5.5331'}
+    {'ccy': 'USD', 'selling': '7.8820', 'buying': '7.7524'},
+    {'ccy': 'EUR', 'selling': '9.6058', 'buying': '9.5005'},
+    {'ccy': 'GBP', 'selling': '10.6166', 'buying': '10.5376'},
+    {'ccy': 'CAD', 'selling': '6.2332', 'buying': '6.0684'},
+    {'ccy': 'AUD', 'selling': '6.1162', 'buying': '5.9481'}
   ];
   TextEditingController _amtController = TextEditingController();
   String updateDate = DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
-  int _localCcyId = 0;
-  int _foreignCcyId = 0;
-  String _localCcy = '';
-  String _foreignCcy = '';
-  String _foreignAmt = '0.00';
+  int _primitiveCcyId = 0;
+  int _objectiveCcyId = 0;
+  String _primitiveCcy = '';
+  String _objectiveCcy = '';
+  String _primitiveCcyAmt = '0.00';
   bool _isSwap = true;
 
   @override
+  // ignore: must_call_super
+  void initState() {
+    // 网络请求
+  }
+
+  @override
   Widget build(BuildContext context) {
-    _localCcy = ccyList1[_localCcyId];
-    _foreignCcy = ccyList2[_foreignCcyId];
+    _primitiveCcy = _primitiveCcyList[_primitiveCcyId];
+    _objectiveCcy = _objectiveCcyList[_objectiveCcyId];
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.exchange_rate),
@@ -61,13 +67,13 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
               child: Row(
                 children: [
                   Expanded(
-                    child: _localAmtInput(),
+                    child: _primitiveCcyAmtTextField(),
                   ),
                   Container(
                     width: 40,
                   ),
                   Expanded(
-                    child: _foreignAmtInput(),
+                    child: _objectiveCcyAmtTextField(),
                   ),
                 ],
               ),
@@ -82,11 +88,14 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
             ),
             Container(
               color: Color(0xFFEEF0EF),
-              padding: EdgeInsets.fromLTRB(10, 8, 0, 8),
+              height: 40,
               child: _listTitle(),
             ),
             Expanded(
-              child: _listContent(),
+              child: RefreshIndicator(
+                child: _listContent(),
+                onRefresh: _getExchangeRateList,
+              ),
             ),
           ],
         ),
@@ -96,19 +105,30 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
 
   Row _listTitle() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Text(
-          S.current.currency,
-          style: TextStyle(fontSize: 16, color: HsgColors.secondDegreeText),
+        Expanded(
+          child: Center(
+            child: Text(
+              S.current.currency,
+              style: TextStyle(fontSize: 16, color: HsgColors.secondDegreeText),
+            ),
+          ),
         ),
-        Text(
-          S.current.selling_price,
-          style: TextStyle(fontSize: 16, color: HsgColors.secondDegreeText),
+        Expanded(
+          child: Center(
+            child: Text(
+              S.current.selling_price,
+              style: TextStyle(fontSize: 16, color: HsgColors.secondDegreeText),
+            ),
+          ),
         ),
-        Text(
-          S.current.buying_price,
-          style: TextStyle(fontSize: 16, color: HsgColors.secondDegreeText),
+        Expanded(
+          child: Center(
+            child: Text(
+              S.current.buying_price,
+              style: TextStyle(fontSize: 16, color: HsgColors.secondDegreeText),
+            ),
+          ),
         ),
       ],
     );
@@ -119,22 +139,33 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
       itemCount: rateList.length,
       itemBuilder: (BuildContext context, int index) {
         return Container(
-          padding: EdgeInsets.only(top: 15, bottom: 15),
           decoration: _boxDecoration(),
+          height: 50,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text(
-                rateList[index]['ccy'],
-                style: TextStyle(fontSize: 16),
+              Expanded(
+                child: Center(
+                  child: Text(
+                    rateList[index]['ccy'],
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
               ),
-              Text(
-                rateList[index]['sellingPrice'],
-                style: TextStyle(fontSize: 16),
+              Expanded(
+                child: Center(
+                  child: Text(
+                    rateList[index]['selling'],
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
               ),
-              Text(
-                rateList[index]['buyingPrice'],
-                style: TextStyle(fontSize: 16),
+              Expanded(
+                child: Center(
+                  child: Text(
+                    rateList[index]['buying'],
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
               ),
             ],
           ),
@@ -152,22 +183,8 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     );
   }
 
-  TextField _foreignAmtInput() {
-    return TextField(
-      textAlign: TextAlign.center,
-      decoration: InputDecoration(
-        hintText: _foreignAmt,
-        enabled: false,
-        border: InputBorder.none,
-        hintStyle: TextStyle(
-          fontSize: 20,
-          color: _foreignAmt != '0.00' ? Colors.black : HsgColors.textHintColor,
-        ),
-      ),
-    );
-  }
-
-  TextField _localAmtInput() {
+  //金额输入框
+  TextField _primitiveCcyAmtTextField() {
     return TextField(
       keyboardType: TextInputType.number,
       controller: _amtController,
@@ -194,64 +211,93 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     );
   }
 
+  TextField _objectiveCcyAmtTextField() {
+    return TextField(
+      textAlign: TextAlign.center,
+      decoration: InputDecoration(
+        hintText: _primitiveCcyAmt,
+        enabled: false,
+        border: InputBorder.none,
+        hintStyle: TextStyle(
+          fontSize: 20,
+          color: _primitiveCcyAmt != '0.00'
+              ? Colors.black
+              : HsgColors.textHintColor,
+        ),
+      ),
+    );
+  }
+
   Row _getCurrencyRow() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Container(
-          width: 70,
-          child: GestureDetector(
-            onTap: () {
-              _currencyList(true, _localCcyId, ccyList1);
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  _localCcy,
-                  style: TextStyle(fontSize: 20),
-                ),
-                Icon(
-                  Icons.arrow_drop_down,
-                  size: 25,
-                ),
-              ],
+        Expanded(
+          child: _primitiveCcySelect(),
+        ),
+        Expanded(
+          child: Center(
+            child: GestureDetector(
+              onTap: () {
+                _currencySwap();
+              },
+              child: Image(
+                color: HsgColors.firstDegreeText,
+                image: AssetImage('images/tabbar/tabbar_reset.png'),
+                width: 25,
+                height: 25,
+              ),
             ),
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            _currencySwap();
-          },
-          child: Image(
-            color: HsgColors.firstDegreeText,
-            image: AssetImage('images/tabbar/tabbar_reset.png'),
-            width: 25,
-            height: 25,
-          ),
-        ),
-        Container(
-          width: 70,
-          child: GestureDetector(
-            onTap: () {
-              _currencyList(false, _foreignCcyId, ccyList2);
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  _foreignCcy,
-                  style: TextStyle(fontSize: 20),
-                ),
-                Icon(
-                  Icons.arrow_drop_down,
-                  size: 25,
-                ),
-              ],
-            ),
-          ),
+        Expanded(
+          child: _objectiveCcySelect(),
         ),
       ],
+    );
+  }
+
+  GestureDetector _primitiveCcySelect() {
+    return GestureDetector(
+      onTap: () {
+        _currencyList(true, _primitiveCcyId, _primitiveCcyList);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            _primitiveCcy,
+            style: TextStyle(fontSize: 20),
+          ),
+          Icon(
+            Icons.arrow_drop_down,
+            size: 25,
+          ),
+        ],
+      ),
+    );
+  }
+
+  GestureDetector _objectiveCcySelect() {
+    return GestureDetector(
+      onTap: () {
+        _currencyList(false, _objectiveCcyId, _objectiveCcyList);
+      },
+      child: Padding(
+        padding: EdgeInsets.only(left: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              _objectiveCcy,
+              style: TextStyle(fontSize: 20),
+            ),
+            Icon(
+              Icons.arrow_drop_down,
+              size: 25,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -272,11 +318,11 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
       setState(() {
         _isSwap = true;
         if (isCcy) {
-          _localCcyId = result;
-          _localCcy = dataList[_localCcyId];
+          _primitiveCcyId = result;
+          _primitiveCcy = dataList[_primitiveCcyId];
         } else {
-          _foreignCcyId = result;
-          _foreignCcy = dataList[_foreignCcyId];
+          _objectiveCcyId = result;
+          _objectiveCcy = dataList[_objectiveCcyId];
         }
       });
       _amountConversion();
@@ -285,56 +331,51 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
 
   //转换
   _currencySwap() async {
-    List<String> newList = [];
-    int newId = 0;
+    List<String> newCcyList = [];
+    int newCcyId = 0;
     setState(() {
       if (_amtController.text != '') {
         _isSwap = false;
       }
-      newList = ccyList1;
-      ccyList1 = ccyList2;
-      ccyList2 = newList;
 
-      newId = _localCcyId;
-      _localCcyId = _foreignCcyId;
-      _foreignCcyId = newId;
+      newCcyList = _primitiveCcyList;
+      _primitiveCcyList = _objectiveCcyList;
+      _objectiveCcyList = newCcyList;
 
-      _amountConversion();
+      newCcyId = _primitiveCcyId;
+      _primitiveCcyId = _objectiveCcyId;
+      _objectiveCcyId = newCcyId;
     });
+    _amountConversion();
   }
 
-  //计算转换金额
+  //计算兑换金额
   _amountConversion() async {
-    rateList.forEach((element) {
-      if (element['ccy'] == _foreignCcy) {
-        setState(() {
-          if (_amtController.text != '') {
+    for (var i = 0; i < rateList.length; i++) {
+      setState(() {
+        if (_amtController.text != '') {
+          AiDecimalAccuracy _amount =
+              AiDecimalAccuracy.parse(_amtController.text);
+          AiDecimalAccuracy _rate =
+              AiDecimalAccuracy.parse(rateList[i]['buying']);
+          if (rateList[i]['ccy'] == _objectiveCcy) {
             double newAmt = _isSwap
-                ? AiDecimalAccuracy.parse(_amtController.text).toDouble() /
-                    AiDecimalAccuracy.parse(element['buyingPrice']).toDouble()
-                : AiDecimalAccuracy.parse(_amtController.text).toDouble() *
-                    AiDecimalAccuracy.parse(element['buyingPrice']).toDouble();
-            _foreignAmt = newAmt.toStringAsFixed(2);
-          } else {
-            _foreignAmt = '0.00';
+                ? (_amount / _rate).toDouble()
+                : (_amount * _rate).toDouble();
+            _primitiveCcyAmt = newAmt.toStringAsFixed(4);
           }
-        });
-      }
-
-      if (element['ccy'] == _localCcy) {
-        setState(() {
-          if (_amtController.text != '') {
+          if (rateList[i]['ccy'] == _primitiveCcy) {
             double newAmt = _isSwap
-                ? AiDecimalAccuracy.parse(_amtController.text).toDouble() *
-                    AiDecimalAccuracy.parse(element['buyingPrice']).toDouble()
-                : AiDecimalAccuracy.parse(_amtController.text).toDouble() /
-                    AiDecimalAccuracy.parse(element['buyingPrice']).toDouble();
-            _foreignAmt = newAmt.toStringAsFixed(2);
-          } else {
-            _foreignAmt = '0.00';
+                ? (_amount * _rate).toDouble()
+                : (_amount / _rate).toDouble();
+            _primitiveCcyAmt = newAmt.toStringAsFixed(4);
           }
-        });
-      }
-    });
+        } else {
+          _primitiveCcyAmt = '0.00';
+        }
+      });
+    }
   }
+
+  Future _getExchangeRateList() async {}
 }

@@ -1,6 +1,3 @@
-import 'dart:async';
-import 'dart:ffi';
-
 import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -70,17 +67,6 @@ Widget TransferPayerWidget(
                     _changedAccountTitle,
                     _changedRateTitle,
                     getCardTotals),
-                Container(
-                  margin: EdgeInsets.only(top: 3, left: 15),
-                  child: Icon(
-                    Icons.arrow_forward_ios,
-                    color: HsgColors.firstDegreeText,
-                    size: 16,
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
-                ),
               ],
             ),
           ),
@@ -227,16 +213,31 @@ Widget _threeRowRight(
         children: [
           //卡号
           Container(
-            child: Text(
-              '${payeeBankCode}  ${account}',
-              style: TextStyle(
-                color: HsgColors.firstDegreeText,
-                fontSize: 14,
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                child: Text(
+                  '${payeeBankCode}  ${account}',
+                  style: TextStyle(
+                    color: HsgColors.firstDegreeText,
+                    fontSize: 14,
+                  ),
+                ),
               ),
-            ),
-          ),
+              Container(
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  color: HsgColors.firstDegreeText,
+                  size: 16,
+                ),
+              ),
+            ],
+          )),
           Container(
             margin: EdgeInsets.only(top: 5),
+            padding: EdgeInsets.fromLTRB(0, 0, 46, 0),
             child: Text(
               '余额:0.00',
               // '${S.current.balance_with_value}${_changedCcyTitles} ${FormatUtil.formatSringToMoney(_changedRateTitle)}',
@@ -246,7 +247,7 @@ Widget _threeRowRight(
                 fontSize: 13,
               ),
             ),
-          )
+          ),
         ],
       ),
     ),
