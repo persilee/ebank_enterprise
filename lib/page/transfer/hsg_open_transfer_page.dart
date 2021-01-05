@@ -5,7 +5,6 @@
 import 'package:date_format/date_format.dart';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
@@ -635,12 +634,9 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                 'LAK',
                 '',
                 '',
+                '2351',
                 '',
-                '',
-                '',
-                2351,
-                '',
-                '',
+                0.0,
                 _amountInputChange,
                 _selectAccount,
                 _getCcy,

@@ -2,7 +2,7 @@
  * 
  * Created Date: Thursday, December 10th 2020, 5:34:04 pm
  * Author: pengyikang
- * 
+ * 国际转账页面
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -143,7 +143,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //收款方地址
   _addressTwoChange(String addressTwo) {
     payeeAddress = addressTwo;
-    print('$payeeAddress 99999999');
   }
 
   //中间行Swift
@@ -273,8 +272,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     if (result != null && result != false) {
       //货币种类
       // _changedCcyTitle = ccyList[result];
+      groupValue = result;
       _changedCcyTitle = ccyListPlay[result];
-
       // //余额
       // _changedRateTitle = totalBalances[result];
     }

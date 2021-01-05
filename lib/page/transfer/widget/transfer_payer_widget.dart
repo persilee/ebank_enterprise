@@ -6,7 +6,7 @@ import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///
+///转账方法
 /// Author: lijiawei
 /// Date: 2020-12-09
 

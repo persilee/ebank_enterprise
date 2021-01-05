@@ -1,7 +1,7 @@
 /*
  * Created Date: Wednesday, December 16th 2020, 5:20:48 pm
  * Author: pengyikang
- * 
+ * 定期利率查看页面
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
 
