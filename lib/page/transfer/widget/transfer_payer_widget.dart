@@ -126,7 +126,7 @@ Widget _oneRow(String leftText, String rightText, String singleLimits) {
 
 Widget _twoRow(String ccy, String _changedCcyTitles, double money,
     String hintText, Function moneyChanges, Function _getCcy) {
-  _changedCcyTitles = _changedCcyTitles == '' ? ccy : _changedCcyTitles;
+  _changedCcyTitles = _changedCcyTitles == '' ? 'CNY' : _changedCcyTitles;
   return Container(
     color: Colors.white,
     padding: EdgeInsets.fromLTRB(15, 0, 15, 0),

@@ -126,6 +126,7 @@ class _ApplicationTaskApprovalPageState
       child: _transfer
           ? Container()
           : Container(
+              margin: EdgeInsets.only(bottom: 10),
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
               color: Colors.white,
               child: Column(
@@ -151,11 +152,11 @@ class _ApplicationTaskApprovalPageState
                       ? Container()
                       : _getRow(S.current.transfer_to_account, _fromAccount),
                   _getHintLine(),
-                  (_payeeName == "" || _fromAccount == null)
+                  (_payeeName == "" || _payeeName == null)
                       ? Container()
                       : _getRow(S.current.userName, _payeeName),
                   _getHintLine(),
-                  (_fromCcy == "" || _fromAccount == null)
+                  (_fromCcy == "" || _fromCcy == null)
                       ? Container()
                       : _getRow(S.current.from_ccy, _fromCcy),
                 ],
@@ -191,27 +192,27 @@ class _ApplicationTaskApprovalPageState
                         ],
                       )),
                   _getHintLine(),
-                  (_accountNumber == "" || _fromAccount == null)
+                  (_accountNumber == "" || _accountNumber == null)
                       ? Container()
                       : _getRow(S.current.payment_account, _accountNumber),
                   _getHintLine(),
-                  (_accountName == "" || _fromAccount == null)
+                  (_accountName == "" || _accountName == null)
                       ? Container()
                       : _getRow(S.current.userName, _accountName),
                   _getHintLine(),
-                  (_payBank == "" || _fromAccount == null)
+                  (_payBank == "" || _payBank == null)
                       ? Container()
                       : _getRow(S.current.payment_bank, _payBank),
                   _getHintLine(),
-                  (_toCcy == "" || _fromAccount == null)
+                  (_toCcy == "" || _toCcy == null)
                       ? Container()
                       : _getRow(S.current.to_ccy, _toCcy),
                   _getHintLine(),
-                  (_toaccount == "" || _fromAccount == null)
+                  (_toaccount == "" || _toaccount == null)
                       ? Container()
                       : _getRow(S.current.to_amount, _toaccount),
                   _getHintLine(),
-                  (_remark == "" || _fromAccount == null)
+                  (_remark == "" || _remark == null)
                       ? Container()
                       : _getRow(S.current.postscript, _remark),
                 ],
@@ -248,7 +249,7 @@ class _ApplicationTaskApprovalPageState
   void _loadHistoryData() {
     Future.wait({
       NeedToBeDealtWithRepository()
-          .findUserApplicationDetail(FindUserApplicationDetailReq("39368"),
+          .findUserApplicationDetail(FindUserApplicationDetailReq('39368'),
               'findUserApplicationDetail')
           .then((data) {
         setState(() {
