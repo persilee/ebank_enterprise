@@ -87,10 +87,7 @@
   "setChangLoginPasd": "Set Login Password",
   "plaseSetPsd": "Please Set the Login Password",
   "transfer": "Transfer",
-<<<<<<< HEAD
 
-=======
->>>>>>> 0662f07acb627d893593b193dfda174a80473eba
   "first_time_of_transfer":"First Transfer Date",
   "time_of_transfer":"Transfer Date",
   "only_once":"One Time",
@@ -144,6 +141,10 @@
   "time_deposit_type": "Product",
   "time_deposit_interest_rate": "Interest Rate",
   "deposit_record": "My Time Deposits",
+  "reject_to_sponsor":"reject to sponsor",
+  "reject":"reject",
+  "examine_and_approve":"approve",
+  "sign":"sign",
   "time_deposit_operation_success": "Time Deposit Operation Success",
   "month": "Month",
   "receipts_total_amt": "Receipts Total Amt",

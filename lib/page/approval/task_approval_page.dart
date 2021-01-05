@@ -4,6 +4,7 @@
 /// Date: 2020-12-29
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -24,14 +25,15 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
     });
   }
 
+//签收、驳回至发起人、驳回、审批按钮
   _getToggleChild() {
     if (!offstage) {
       return Container(
         child: Row(
-          // crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
+              width: 120,
               margin: EdgeInsets.only(right: 15),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black, width: 0.5),
@@ -39,8 +41,10 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
               ),
               height: 40,
               child: FlatButton(
+                //驳回至发起人按钮
+                padding: EdgeInsets.all(0),
                 child: Text(
-                  '驳回至发起人',
+                  S.current.reject_to_sponsor,
                   style: TextStyle(fontSize: 13),
                 ),
                 onPressed: () {
@@ -57,8 +61,10 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
               ),
               height: 40,
               child: FlatButton(
+                //驳回按钮
+                padding: EdgeInsets.all(0),
                 child: Text(
-                  '驳回',
+                  S.current.reject,
                   style: TextStyle(fontSize: 13),
                 ),
                 onPressed: () {
@@ -69,7 +75,6 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
             Container(
               // color: HsgColors.accent,
               width: 60,
-
               decoration: BoxDecoration(
                 color: HsgColors.accent,
                 border: Border.all(color: Colors.black, width: 0.5),
@@ -77,8 +82,10 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
               ),
               height: 40,
               child: FlatButton(
+                //审批按钮
+                padding: EdgeInsets.all(0),
                 child: Text(
-                  '审批',
+                  S.current.examine_and_approve,
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.white,
@@ -105,15 +112,17 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
             height: 40,
             width: 60,
             child: FlatButton(
+              //签收按钮
+              padding: EdgeInsets.all(0),
               child: Text(
-                '签收',
+                S.current.sign,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 13,
                 ),
               ),
               onPressed: () {
-                FocusScope.of(context).requestFocus(focusNode);
+                _toggle();
               },
             ),
           ),
@@ -125,14 +134,12 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   @override
   void initState() {
     super.initState();
+    //监听输入框
     focusNode.addListener(() {
       bool hasFocus = focusNode.hasFocus;
       bool hasListeners = focusNode.hasListeners;
       print("focusNode 兼听 hasFocus:$hasFocus  hasListeners:$hasListeners");
     });
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   FocusScope.of(context).requestFocus(focusNode);
-    // });
   }
 
   Map transferInfo = {
@@ -310,6 +317,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
     return listWidget;
   }
 
+//我的审批
   Widget _myApproval(BuildContext context) {
     return Container(
       child: Column(
@@ -333,7 +341,6 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
             ],
           ),
           Container(
-            // padding: EdgeInsets.only(left: 15.0, right: 15.0),
             child: Divider(height: 0.5, color: HsgColors.divider),
           ),
           Container(
@@ -347,6 +354,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
               ],
             ),
           ),
+          //审批意见输入框
           Container(
             margin: EdgeInsets.only(left: 15, right: 15),
             // color: Colors.grey,
@@ -362,10 +370,6 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
                   borderSide:
                       BorderSide(color: HsgColors.textHintColor, width: 1),
                 ),
-                // border: OutlineInputBorder(
-                //   borderRadius: BorderRadius.all(Radius.circular(10)),
-                //   // borderSide: BorderSide(color: Colors.green, width: 2),
-                // ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                   borderSide:
@@ -379,24 +383,12 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
               ),
             ),
           ),
+          //底部按钮
           Container(
             width: 400,
-            margin: EdgeInsets.only(top: 20, bottom: 15),
+            margin: EdgeInsets.only(top: 20, bottom: 15, right: 15),
             // color: Colors.yellow,
-            child: FlatButton(
-              child: _getToggleChild(),
-              // Text(
-              //   '签收',
-              //   style: TextStyle(
-              //     color: Colors.white,
-              //     fontSize: 13,
-              //   ),
-              // ),
-              onPressed: () {
-                _toggle();
-                FocusScope.of(context).requestFocus(focusNode);
-              },
-            ),
+            child: _getToggleChild(),
           ),
         ],
       ),
