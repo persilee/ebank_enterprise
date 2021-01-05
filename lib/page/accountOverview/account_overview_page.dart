@@ -74,7 +74,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
-                        color: HsgColors.firstDegreeText),
+                        color: HsgColors.aboutusTextCon),
                   ),
                 ),
               ),
@@ -104,7 +104,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
-                        color: HsgColors.firstDegreeText),
+                        color: HsgColors.aboutusTextCon),
                   ),
                 ),
               ),
@@ -134,7 +134,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
-                        color: HsgColors.firstDegreeText),
+                        color: HsgColors.aboutusTextCon),
                   ),
                 ),
               ),

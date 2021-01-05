@@ -5,7 +5,11 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_styles.dart';
+import 'package:ebank_mobile/data/source/model/find_user_to_do_task.dart';
+import 'package:ebank_mobile/data/source/process_task_data_repository.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../page_route.dart';
 
@@ -17,15 +21,21 @@ class MyApprovalPage extends StatefulWidget {
 }
 
 class _MyApprovalPageState extends State<MyApprovalPage> {
-  List<Widget> _list() {
+  List<Rows> row = [];
+
+  void initState() {
+    super.initState();
+    _loadData(1, 20);
+  }
+
+  List<Widget> _list(List<Rows> row) {
     List<Widget> section = [];
     section.add(SliverList(
-        delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+        delegate: SliverChildBuilderDelegate((context, index) {
       return FlatButton(
-          // color: Colors.yellow,
           padding: EdgeInsets.only(top: 10.0),
           onPressed: () {
-            Navigator.pushNamed(context, pageTransfer);
+            Navigator.pushNamed(context, pageTaskApproval);
           },
           child: Row(
             children: [
@@ -63,17 +73,16 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                 ),
               ),
               Container(
+                width: 360,
                 decoration: HsgStyles.homeHeaderShadow,
-                padding: EdgeInsets.all(0),
-                // color: Colors.green,
-                margin: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 30.0),
+                margin: EdgeInsets.only(left: 10.0),
+                padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 15.0),
                 child: Column(
                   children: [
                     Container(
-                        width: 370,
-                        // color: Colors.red,
+                        width: 340,
                         child: Text(
-                          "定期开立",
+                          row[index].taskName,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 15.0,
@@ -81,63 +90,73 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                               fontWeight: FontWeight.bold),
                         )),
                     Container(
-                      width: 370,
-                      // color: Colors.yellow,
-                      padding: EdgeInsets.only(top: 18),
+                      width: 340,
+                      padding: EdgeInsets.only(top: 15),
                       child: Row(
                         children: [
-                          Text(
-                            "发起人",
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              color: HsgColors.secondDegreeText,
+                          Container(
+                            width: 130,
+                            child: Text(
+                              S.current.sponsor,
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: HsgColors.secondDegreeText,
+                              ),
                             ),
                           ),
                           SizedBox(
-                            width: 250.0,
+                            width: 8.0,
                           ),
-                          Text(
-                            "070365989",
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              color: HsgColors.aboutusTextCon,
-                            ),
-                          )
+                          Container(
+                              width: 200,
+                              child: Text(
+                                row[index].startUser,
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: HsgColors.aboutusTextCon,
+                                ),
+                              )),
                         ],
                       ),
                     ),
                     Container(
-                      width: 370,
-                      padding: EdgeInsets.only(top: 12),
-                      // color: Colors.yellow,
+                      width: 340,
+                      padding: EdgeInsets.only(top: 10, bottom: 0),
                       child: Row(
                         children: [
-                          Text(
-                            "创建时间",
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              color: HsgColors.secondDegreeText,
+                          Container(
+                            width: 130,
+                            child: Text(
+                              S.current.creation_time,
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: HsgColors.secondDegreeText,
+                              ),
                             ),
                           ),
                           SizedBox(
-                            width: 180.0,
+                            width: 8.0,
                           ),
-                          Text(
-                            "2011-11-02 11:12:30",
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              color: HsgColors.aboutusTextCon,
-                            ),
-                          )
+                          Container(
+                              width: 200,
+                              child: Text(
+                                row[index].createTime,
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: HsgColors.aboutusTextCon,
+                                ),
+                              )),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
             ],
           ));
-    }, childCount: 4)));
+    }, childCount: row.length)));
     return section;
   }
 
@@ -145,7 +164,26 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   Widget build(BuildContext context) {
     return Container(
         child: CustomScrollView(
-      slivers: _list(),
+      slivers: _list(row),
     ));
+  }
+
+  Future<void> _loadData(
+    int page,
+    int pageSize,
+  ) async {
+    ProcessTaskDataRepository()
+        .findUserToDoTask(
+            FindUserToDoTaskReq(page, pageSize), 'findUserToDoTask')
+        .then((data) {
+      if (data.rows != null) {
+        setState(() {
+          row.clear();
+          row.addAll(data.rows);
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
   }
 }

@@ -5,7 +5,7 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/feature_demo/my_tab_indicator.dart';
-import 'package:ebank_mobile/feature_demo/time_depost_product_page.dart';
+import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/approval/authorization_history_page.dart';
 import 'package:flutter/material.dart';

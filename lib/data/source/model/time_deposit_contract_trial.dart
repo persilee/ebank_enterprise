@@ -16,7 +16,7 @@ class TimeDepositContractTrialReq extends Object {
   String auctCale;
 
   @JsonKey(name: 'bal')
-  String bal;
+  double bal;
 
   @JsonKey(name: 'bppdCode')
   String bppdCode;
@@ -24,11 +24,14 @@ class TimeDepositContractTrialReq extends Object {
   @JsonKey(name: 'ccy')
   String ccy;
 
+  @JsonKey(name: 'ciNo')
+  String ciNo;
+
   @JsonKey(name: 'depositType')
   String depositType;
 
-  @JsonKey(name: 'prodType')
-  String prodType;
+  @JsonKey(name: 'tenor')
+  String tenor;
 
   TimeDepositContractTrialReq(
     this.accuPeriod,
@@ -36,63 +39,56 @@ class TimeDepositContractTrialReq extends Object {
     this.bal,
     this.bppdCode,
     this.ccy,
+    this.ciNo,
     this.depositType,
-    this.prodType,
+    this.tenor,
   );
 
   factory TimeDepositContractTrialReq.fromJson(Map<String, dynamic> srcJson) =>
       _$TimeDepositContractTrialReqFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$TimeDepositContractTrialReqToJson(this);
-
-  String toString() {
-    return toJson().toString();
-  }
 }
 
 @JsonSerializable()
 class TimeDepositContractTrialResp extends Object {
-  @JsonKey(name: 'accuPeriod')
-  String accuPeriod;
+  @JsonKey(name: 'ccy')
+  String ccy;
+
+  @JsonKey(name: 'bal')
+  String bal;
 
   @JsonKey(name: 'auctCale')
   String auctCale;
 
-  @JsonKey(name: 'bal')
-  int bal;
-
-  @JsonKey(name: 'ccy')
-  String ccy;
-
-  @JsonKey(name: 'matAmt')
-  int matAmt;
-
-  @JsonKey(name: 'matInt')
-  int matInt;
+  @JsonKey(name: 'valDate')
+  String valDate;
 
   @JsonKey(name: 'mtDate')
   String mtDate;
 
-  @JsonKey(name: 'valDate')
-  String valDate;
+  @JsonKey(name: 'matAmt')
+  String matAmt;
+
+  @JsonKey(name: 'matInt')
+  String matInt;
+
+  @JsonKey(name: 'conRate')
+  String conRate;
 
   TimeDepositContractTrialResp(
-    this.accuPeriod,
-    this.auctCale,
-    this.bal,
     this.ccy,
+    this.bal,
+    this.auctCale,
+    this.valDate,
+    this.mtDate,
     this.matAmt,
     this.matInt,
-    this.mtDate,
-    this.valDate,
+    this.conRate,
   );
 
   factory TimeDepositContractTrialResp.fromJson(Map<String, dynamic> srcJson) =>
       _$TimeDepositContractTrialRespFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$TimeDepositContractTrialRespToJson(this);
-
-  String toString() {
-    return toJson().toString();
-  }
 }

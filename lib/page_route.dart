@@ -4,7 +4,9 @@
 /// Date: 2020-12-07
 
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
-import 'package:ebank_mobile/feature_demo/time_depost_product_page.dart';
+import 'package:ebank_mobile/page/approval/task_approval_page.dart';
+import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
+import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
 import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
 import 'package:ebank_mobile/page/approval/application_task_approval_page.dart';
 import 'package:ebank_mobile/page/approval/authorization_history_page.dart';
@@ -37,8 +39,8 @@ import 'package:ebank_mobile/page/loan/wait_repay_plan_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
-import 'package:ebank_mobile/feature_demo/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_rate_page.dart';
+import 'package:ebank_mobile/page/transfer/hsg_open_transfer_page.dart';
 
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_international_page.dart';
@@ -111,6 +113,8 @@ var pageTimeDepostProduct = '/time_depost_product_page';
 var pageForexTrading = '/forex_trading_page';
 var pageExchangeRateInquiry = '/exchange_rate_inquiry_page';
 var pageTimeDepositContract = '/time_deposit_contract_page';
+var pageOpenTransfer = '/hsg_open_transfer_page';
+var pageTaskApproval = '/task_approval_page';
 var pageUserAgreement = '/user_agreement_page';
 var pageApplication = '/my_appplication_page';
 var pageApplicationTaskApproval = '/application_task_approval_page';
@@ -165,13 +169,13 @@ var appRoutes = {
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
   // pageTimeDepositContract: (context) => TimeDepositContract(),
   pageForexTrading: (context) => ForexTradingPage(),
+  pageTaskApproval: (context) => TaskApprovalPage(),
   pageApplication: (context) => MyApplicationPage(),
-  pageApplicationTaskApproval: (context) => ApplicationTaskApprovalPage(),
   // pageAuthorizationTaskApproval: (context) => AuthorizationTaskApprovalPage(),
   pageExchangeRateInquiry: (context) => ExchangeRateInquiryPage(),
+  pageOpenTransfer: (context) => OpenTransferPage(),
   pageContactCustomer: (context) => ContactCustomerPage(),
 };
-
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
     return MaterialPageRoute(builder: (context) {
