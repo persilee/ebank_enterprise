@@ -2,14 +2,10 @@
 ///预约转账页面
 /// Author: wangluyao
 /// Date: 2020-12-28
-import 'package:date_format/date_format.dart';
-
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
-import 'package:english_words/english_words.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -40,15 +36,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       .format(DateTime.now().add(Duration(days: 1))); //显示开始时间
   String _end = DateFormat('yyyy-MM-dd')
       .format(DateTime.now().add(Duration(days: 1))); //显示结束时间
-  String _startMonthly =
-      DateFormat('dd').format(DateTime.now().add(Duration(days: 1))); //显示每月开始时间
-  String _endMonthly = DateFormat('yyyy-MM')
-      .format(DateTime.now().add(Duration(days: 60))); //显示 每月结束时间
-  String _startYearly = DateFormat('MM-dd')
-      .format(DateTime.now().add(Duration(days: 1))); //显示每年开始时间
-  String _endYearly = DateFormat('yyyy')
-      .format(DateTime.now().add(Duration(days: 730))); //显示每年结束时间
 
+//预约频率
   List frequency = [
     {
       "title": intl.S.current.only_once,
@@ -70,29 +59,6 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
 
   Function _transferInputChange(String transfer) {
     remark = transfer;
-  }
-
-  void updateGroupValue(String v) {
-    setState(() {
-      groupValue = v;
-    });
-  }
-
-  void _clear() {
-    setState(() {
-      _start = DateFormat('yyyy-MM-dd')
-          .format(DateTime.now().add(Duration(days: 1)));
-      _end = DateFormat('yyyy-MM-dd')
-          .format(DateTime.now().add(Duration(days: 1)));
-      _startMonthly =
-          DateFormat('dd').format(DateTime.now().add(Duration(days: 1)));
-      _endMonthly =
-          DateFormat('yyyy-MM').format(DateTime.now().add(Duration(days: 60)));
-      _startYearly =
-          DateFormat('MM-dd').format(DateTime.now().add(Duration(days: 1)));
-      _endYearly =
-          DateFormat('yyyy').format(DateTime.now().add(Duration(days: 730)));
-    });
   }
 
   Function _amountInputChange(String title) {
@@ -119,6 +85,31 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     payeeCardNo = account;
   }
 
+  void updateGroupValue(String v) {
+    setState(() {
+      groupValue = v;
+    });
+  }
+
+//初始化开始时间和结束时间
+  void _clear() {
+    setState(() {
+      _start = double.parse(groupValue) > 1
+          ? (groupValue == '2'
+              ? DateFormat('dd').format(DateTime.now().add(Duration(days: 1)))
+              : DateFormat('MM-dd')
+                  .format(DateTime.now().add(Duration(days: 1))))
+          : DateFormat('yyyy-MM-dd')
+              .format(DateTime.now().add(Duration(days: 1)));
+      _end = double.parse(groupValue) > 1
+          ? (groupValue == '2'
+              ? DateFormat('yyyy-MM').format(DateTime.now())
+              : DateFormat('yyyy').format(DateTime.now()))
+          : DateFormat('yyyy-MM-dd')
+              .format(DateTime.now().add(Duration(days: 1)));
+    });
+  }
+
 //选择开始时间
   _startCupertinoPicker(int i, BuildContext context) {
     DatePicker.showDatePicker(
@@ -134,7 +125,10 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           ? DateTime.now().add(Duration(days: 1))
           : DateTime.parse((DateTime.now().year).toString() + '-01-01'),
       maxDateTime: groupValue == '2'
-          ? DateTime.parse((DateTime.now().year).toString() + '-01-28')
+          ? DateTime.parse((DateTime.now().year).toString() +
+              '-' +
+              DateFormat('MM').format(DateTime.now()) +
+              '-28')
           : DateTime.parse('2100-12-31'),
       initialDateTime: _nowDate,
       dateFormat: double.parse(groupValue) > 1
@@ -146,15 +140,30 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
         setState(
           () {
             _nowDate = dateTime;
-            i == 0
-                ? _start = DateFormat('yyyy-MM-dd').format(dateTime)
-                : _end = DateFormat('yyyy-MM-dd').format(dateTime);
-            i == 0
-                ? _startMonthly = DateFormat('dd').format(dateTime)
-                : _endMonthly = DateFormat('yyyy-MM').format(dateTime);
-            i == 0
-                ? _startYearly = DateFormat('MM-dd').format(dateTime)
-                : _endYearly = DateFormat('yyyy').format(dateTime);
+            DateTime nextMonth = DateTime.now();
+            nextMonth = dateTime.isAfter(DateTime.now())
+                ? DateTime.now()
+                : DateTime(nextMonth.year, nextMonth.month + 1, nextMonth.day);
+            DateTime nextYear = DateTime.now();
+            nextYear = dateTime.isAfter(DateTime.now())
+                ? DateTime.now()
+                : DateTime(nextYear.year + 1, nextYear.month, nextYear.day);
+
+            _start = double.parse(groupValue) > 1
+                ? (groupValue == '2'
+                    ? DateFormat('dd').format(dateTime)
+                    : DateFormat('MM-dd').format(dateTime))
+                : DateFormat('yyyy-MM-dd').format(dateTime);
+            _end = double.parse(groupValue) > 1
+                ? (groupValue == '2'
+                    ? ((dateTime.isAfter(DateTime.now()))
+                        ? DateFormat('yyyy-MM').format(DateTime.now())
+                        : (DateFormat('yyyy-MM').format(nextMonth)))
+                    : (dateTime.isAfter(DateTime.now())
+                        ? DateFormat('yyyy').format(DateTime.now())
+                        : DateFormat('yyyy').format(nextYear)))
+                : DateFormat('yyyy-MM-dd')
+                    .format(DateTime.now().add(Duration(days: 1)));
           },
         );
         (context as Element).markNeedsBuild();
@@ -175,9 +184,9 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       ),
       minDateTime: double.parse(groupValue) > 1
           ? (groupValue == '2'
-              ? DateTime.now().add(Duration(days: 30))
-              : DateTime.now().add(Duration(days: 365)))
-          : DateTime.now().add(Duration(days: 2)),
+              ? DateTime.parse(_end + '01')
+              : DateTime.parse(_end + '01-01'))
+          : DateTime.now().add(Duration(days: 1)),
       initialDateTime: _nowDate,
       dateFormat: double.parse(groupValue) > 1
           ? (groupValue == '2' ? 'yyyy年-MM月' : 'yyyy年')
@@ -189,14 +198,16 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           () {
             _nowDate = dateTime;
             i == 0
-                ? _start = DateFormat('yyyy-MM-dd').format(dateTime)
-                : _end = DateFormat('yyyy-MM-dd').format(dateTime);
-            i == 0
-                ? _startMonthly = DateFormat('dd').format(dateTime)
-                : _endMonthly = DateFormat('yyyy-MM').format(dateTime);
-            i == 0
-                ? _startYearly = DateFormat('MM-dd').format(dateTime)
-                : _endYearly = DateFormat('yyyy').format(dateTime);
+                ? _start = double.parse(groupValue) > 1
+                    ? (groupValue == '2'
+                        ? DateFormat('dd').format(dateTime)
+                        : DateFormat('MM-dd').format(dateTime))
+                    : DateFormat('yyyy-MM-dd').format(dateTime)
+                : _end = double.parse(groupValue) > 1
+                    ? (groupValue == '2'
+                        ? DateFormat('yyyy-MM').format(dateTime)
+                        : DateFormat('yyyy').format(dateTime))
+                    : DateFormat('yyyy-MM-dd').format(dateTime);
           },
         );
         (context as Element).markNeedsBuild();
@@ -224,6 +235,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                   style: TextStyle(color: Colors.black, fontSize: 14),
                 ),
               ),
+              //选择转账时间
               Container(
                 margin: EdgeInsets.all(5),
                 width: 150,
@@ -278,6 +290,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           padding: EdgeInsets.only(left: 15.0, right: 15.0),
           child: Divider(height: 0.5, color: HsgColors.divider),
         ),
+        //选择转账时间
         Container(
           color: Colors.white,
           child: Row(
@@ -344,6 +357,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           padding: EdgeInsets.only(left: 15.0, right: 15.0),
           child: Divider(height: 0.5, color: HsgColors.divider),
         ),
+        //有效期
         Container(
           padding: EdgeInsets.only(top: 5, bottom: 5),
           color: Colors.white,
@@ -385,6 +399,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           padding: EdgeInsets.only(left: 15.0, right: 15.0),
           child: Divider(height: 0.5, color: HsgColors.divider),
         ),
+        //选择截止日期
         Container(
             color: Colors.white,
             child: _switchValue == true
@@ -436,7 +451,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     );
   }
 
-//计划信息
+// 计划信息
   Widget _transferInfo() {
     String groupValue = '1';
     return Container(
@@ -448,6 +463,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             padding: EdgeInsets.only(left: 15.0),
             child: Row(
               children: [
+                //计划名称
                 Container(
                   child: Text(
                     intl.S.current.plan_name,
@@ -486,6 +502,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             padding: EdgeInsets.only(left: 15.0, right: 15.0),
             child: Divider(height: 0.5, color: HsgColors.divider),
           ),
+          //预约频率
           Container(
             padding: EdgeInsets.all(15),
             child: Row(
@@ -580,19 +597,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             SliverToBoxAdapter(
               child: groupValue == '0'
                   ? _once(_start, 0, context)
-                  : _manyTimes(
-                      (double.parse(groupValue) > 1
-                          ? (groupValue == '2' ? _startMonthly : _startYearly)
-                          : _start),
-                      (double.parse(groupValue) > 1
-                          ? (groupValue == '2' ? _endMonthly : _endYearly)
-                          : _end),
-                      0,
-                      1,
-                      context),
-            ),
-            SliverToBoxAdapter(
-              child: _transferInfo(),
+                  : _manyTimes(_start, _end, 0, 1, context),
             ),
             TransferPayeeWidget(
                 intl.S.current.receipt_side,
