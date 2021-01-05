@@ -25,9 +25,11 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
 
   void initState() {
     super.initState();
+    //网络请求
     _loadData(1, 20);
   }
 
+//待办列表
   List<Widget> _list(List<Rows> row) {
     List<Widget> section = [];
     section.add(SliverList(
