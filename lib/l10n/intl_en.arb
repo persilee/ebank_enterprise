@@ -87,7 +87,10 @@
   "setChangLoginPasd": "Set Login Password",
   "plaseSetPsd": "Please Set the Login Password",
   "transfer": "Transfer",
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0662f07acb627d893593b193dfda174a80473eba
   "first_time_of_transfer":"First Transfer Date",
   "time_of_transfer":"Transfer Date",
   "only_once":"One Time",

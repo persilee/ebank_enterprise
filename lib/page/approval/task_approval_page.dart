@@ -105,7 +105,6 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
             height: 40,
             width: 60,
             child: FlatButton(
-              onPressed: null,
               child: Text(
                 '签收',
                 style: TextStyle(
@@ -113,6 +112,9 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
                   fontSize: 13,
                 ),
               ),
+              onPressed: () {
+                FocusScope.of(context).requestFocus(focusNode);
+              },
             ),
           ),
         ],
