@@ -112,11 +112,9 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
                   fontSize: 13,
                 ),
               ),
-              // ),
-
-              // onPressed: () {
-              //   FocusScope.of(context).requestFocus(focusNode);
-              // },
+              onPressed: () {
+                FocusScope.of(context).requestFocus(focusNode);
+              },
             ),
           ),
         ],
