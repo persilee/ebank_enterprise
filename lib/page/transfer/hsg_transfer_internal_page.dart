@@ -1,9 +1,8 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///
+///行内转账页面
 /// Author: lijiawei
 /// Date: 2020-12-09
 
-import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
@@ -66,7 +65,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   var ccyList = List();
 
   List<String> ccyLists = [];
-  //List<String> ccyList = [];
 
   var payerName = '';
 
@@ -163,20 +161,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             //获取集合
             List<CardBalBean> dataList = [];
 
-            // var ccyLists = List<String>();
-
-            // element.cardListBal.forEach((ccylists) {
-            //   ccyList.add(ccylists.ccy);
-            //   if (!ccyList.contains('CNY')) {
-            //     CardBalBean doListNew;
-            //     dataList.insert(0, doListNew);
-            //   }
-            //   dataList.forEach((element) {
-            //     String ccyCNY = element == null ? 'CNY' : element.ccy;
-            //     ccyList.insert(0, ccyCNY);
-            //   });
-            // });
-
             for (int i = 0; i < cardBal.length; i++) {
               CardBalBean doList = cardBal[i];
               ccyLists.add(doList.ccy);
@@ -218,20 +202,12 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   //选择货币方法
   Future<Function> _getCcy() async {
-    //List<String> a = [];
-    print('4444444444444');
-    // if (ccyList == []) {
-    //   ccyList.add(ccyListOne[]);
-    // }
-    //ccyList = ccyList == [] ? ccyListOne : ccyList;
-    print('$ccyList pppppppppppppppppppppp');
     final result = await showDialog(
         context: context,
         builder: (context) {
           return HsgSingleChoiceDialog(
             title: '币种选择',
             items: ccyLists,
-            //  ccyList = ccyList == [] ? ccyListOne : ccyList,
             positiveButton: '确定',
             negativeButton: '取消',
             lastSelectedPosition: _lastSelectedPosition,
@@ -245,8 +221,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       _changedRateTitle = totalBalances[result];
     }
 
-    //_getCardTotals(_changedAccountTitle);
-    print('9999999999999999$_changedCcyTitle');
     //加了这个可以立即显示
     setState(() {
       _position = result;
@@ -266,9 +240,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           setState(() {
             bals.clear();
             bals.add(element.cardListBal);
-            if (bals.contains(changedCcyTitle)) {
-              //_changedRateTitle = element.cardListBal[1].avaBal;
-            }
+            if (bals.contains(changedCcyTitle)) {}
           });
         }
       });
@@ -292,13 +264,10 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _changedAccountTitle,
               ccy,
               singleLimit,
-              inpuntStr,
               totalBalance,
               cardNo,
               payeeBankCode,
               money,
-              payeeName,
-              payeeCardNo,
               _amountInputChange,
               _selectAccount,
               _getCcy,

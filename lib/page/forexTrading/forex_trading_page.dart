@@ -500,7 +500,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         _incomeAcc != S.current.please_select &&
         _incomeCcy != S.current.please_select &&
         _payAmtController.text != '') {
-      var _amount = AiDecimalAccuracy.parse(_payAmtController.text).toDouble();
+      double _amount =
+          AiDecimalAccuracy.parse(_payAmtController.text).toDouble();
       ForexTradingRepository()
           .transferTrial(
               TransferTrialReq(
