@@ -15,12 +15,12 @@ class ElectronicStatementPage extends StatefulWidget {
 
 class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
   var dataList = [
-    {'date': '2020-06'},
     {'date': '2020-07'},
     {'date': '2020-08'},
     {'date': '2020-09'},
     {'date': '2020-10'},
     {'date': '2020-11'},
+    {'date': '2020-12'},
   ];
 
   @override
