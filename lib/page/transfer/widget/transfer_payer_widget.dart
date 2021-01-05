@@ -6,7 +6,7 @@ import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///
+///转账方法
 /// Author: lijiawei
 /// Date: 2020-12-09
 
@@ -22,13 +22,10 @@ Widget TransferPayerWidget(
   String _changedAccountTitle,
   String ccy,
   String singleLimit,
-  String inputStr,
   String totalBalance,
   String cardNo,
   String payeeBankCode,
   double money,
-  String payeeName,
-  String payeeCardNo,
   Function(String inputStr) moneyChange,
   Function() getcardList,
   Function() _getCcy,

@@ -171,6 +171,7 @@ var appRoutes = {
   pageForexTrading: (context) => ForexTradingPage(),
   pageTaskApproval: (context) => TaskApprovalPage(),
   pageApplication: (context) => MyApplicationPage(),
+  pageApplicationTaskApproval: (context) => ApplicationTaskApprovalPage(),
   // pageAuthorizationTaskApproval: (context) => AuthorizationTaskApprovalPage(),
   pageExchangeRateInquiry: (context) => ExchangeRateInquiryPage(),
   pageOpenTransfer: (context) => OpenTransferPage(),

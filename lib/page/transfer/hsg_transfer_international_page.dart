@@ -2,7 +2,7 @@
  * 
  * Created Date: Thursday, December 10th 2020, 5:34:04 pm
  * Author: pengyikang
- * 
+ * 国际转账页面
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -143,7 +143,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //收款方地址
   _addressTwoChange(String addressTwo) {
     payeeAddress = addressTwo;
-    print('$payeeAddress 99999999');
   }
 
   //中间行Swift
@@ -274,33 +273,13 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       //货币种类
       // _changedCcyTitle = ccyList[result];
       groupValue = result;
-      setState(() {
-        _changedCcyTitle = ccyListPlay[result];
-
-        //余额
-        _changedRateTitle = totalBalances[result];
-      });
+      _changedCcyTitle = ccyListPlay[result];
+      // //余额
+      // _changedRateTitle = totalBalances[result];
     }
 
-    // _getavaBal(_changedCcyTitle);
-  }
-
-  //根据货币类型拿余额
-  Future<Function> _getavaBal(String changedCcyTitle) {
-    Future.wait({
-      CardDataRepository().getSingleCardBal(
-          GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
-    }).then((value) {
-      value.forEach((element) {
-        // 通过货币查询余额
-        if (element is GetSingleCardBalResp) {
-          setState(() {
-            bals.clear();
-            bals.add(element.cardListBal);
-            if (bals.contains(changedCcyTitle)) {}
-          });
-        }
-      });
+    setState(() {
+      _position = result;
     });
   }
 
@@ -320,6 +299,25 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
     setState(() {
       _position = result;
+    });
+  }
+
+  //根据货币类型拿余额
+  Future<Function> _getavaBal(String changedCcyTitle) {
+    Future.wait({
+      CardDataRepository().getSingleCardBal(
+          GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
+    }).then((value) {
+      value.forEach((element) {
+        // 通过货币查询余额
+        if (element is GetSingleCardBalResp) {
+          setState(() {
+            bals.clear();
+            bals.add(element.cardListBal);
+            if (bals.contains(changedCcyTitle)) {}
+          });
+        }
+      });
     });
   }
 
@@ -387,13 +385,10 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               _changedAccountTitle,
               ccy,
               singleLimit,
-              inpuntStr,
               totalBalance,
               cardNo,
               payeeBankCode,
               money,
-              payeeName,
-              payeeCardNo,
               _amountInputChange,
               _selectAccount,
               _getCcy,

@@ -1,7 +1,7 @@
 /*
  * Created Date: Wednesday, December 16th 2020, 5:20:48 pm
  * Author: pengyikang
- * 
+ * 我的存单详情页面
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
 
@@ -190,9 +190,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                 width: 3,
                 height: 85,
                 padding: EdgeInsets.fromLTRB(40, 20, 40, 15),
-                //color: Colors.blue,
                 child: RaisedButton(
-                  //color: Colors.blue,
                   onPressed: () async {
                     showDialog(
                       context: context,
@@ -207,47 +205,16 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                                   height: 105,
                                   child: Column(
                                     children: [
-                                      Container(
-                                        padding: EdgeInsets.only(left: 50),
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                                child: Text(
-                                              S.current.contract_settlement_amt,
-                                              style: TextStyle(fontSize: 13),
-                                              textAlign: TextAlign.center,
-                                            )),
-                                            Container(
-                                              child: Text(
-                                                '${ccy}${conMatAmts}',
-                                                style: TextStyle(fontSize: 13),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      //提前结清
-                                      Container(
-                                        padding: EdgeInsets.only(left: 50),
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                                child: Text(
-                                              S.current.early_settlement_amt,
-                                              style: TextStyle(fontSize: 13),
-                                              textAlign: TextAlign.center,
-                                            )),
-                                            Container(
-                                              child: Text(
-                                                '${ccy}${matAmts}',
-                                                style: TextStyle(fontSize: 13),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
+                                      //预计到期总额
+                                      _contractSettlement(
+                                          S.current.contract_settlement_amt,
+                                          '${ccy}${conMatAmts}'),
+
+                                      //提前结清本息总额
+                                      _contractSettlement(
+                                          S.current.early_settlement_amt,
+                                          '${ccy}${matAmts}'),
+
                                       Container(
                                         child: Divider(),
                                         margin: EdgeInsets.only(top: 3),
@@ -298,6 +265,30 @@ class _PageDepositInfo extends State<PageDepositInfo> {
             )
           ],
         ));
+  }
+
+  //提前结清
+  _contractSettlement(String leftText, String rightText) {
+    return Container(
+      padding: EdgeInsets.only(left: 50),
+      child: Row(
+        children: [
+          Container(
+              child: Text(
+            leftText,
+            style: TextStyle(fontSize: 13),
+            textAlign: TextAlign.center,
+          )),
+          Container(
+            child: Text(
+              rightText,
+              style: TextStyle(fontSize: 13),
+              textAlign: TextAlign.center,
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   _loadDepositData(String conNo, double settBal) {
