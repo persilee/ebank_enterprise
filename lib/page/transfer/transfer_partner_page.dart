@@ -262,6 +262,8 @@ class _TransferPartnerState extends State<TransferPartner> {
   }
 
   Widget _getDeleteBuilder(Widget function, Rows row) {
+    String history = ModalRoute.of(context).settings.arguments;
+    print('$history 88888');
     return CupertinoLeftScroll(
       key: Key(row.payeeCardNo),
       child: function,

@@ -413,13 +413,16 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             ),
           ),
           TransferPayeeWidget(
-              S.current.transfer_in,
-              S.current.company_name,
-              S.current.account_num,
-              S.current.please_input,
-              S.current.please_input,
-              _nameInputChange,
-              _accountInputChange),
+            context,
+            S.current.transfer_in,
+            S.current.company_name,
+            S.current.account_num,
+            S.current.please_input,
+            S.current.please_input,
+            _nameInputChange,
+            _accountInputChange,
+            'international',
+          ),
           SliverToBoxAdapter(
               child: Container(
             padding: EdgeInsets.fromLTRB(15, 0, 15, 0),

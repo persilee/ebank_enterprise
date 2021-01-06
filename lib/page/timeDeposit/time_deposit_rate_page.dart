@@ -48,6 +48,65 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
     );
   }
 
+  Widget _getContents(List<EbankInterestRateRspDTOList> rows) {
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          title: Text(S.current.time_deposit_interest_rate),
+          centerTitle: true,
+        ),
+        SliverToBoxAdapter(
+          child: Row(
+            children: [
+              _getContentOne(),
+
+              _getContentTwo(),
+              //行
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  //对第一列操作
+  _getContentOne() {
+    return Container(
+      child: Column(
+        children: [
+          //固定第一个
+          Container(
+            color: Color(0xFF333450),
+            child: _getBox(S.current.time_deposit_type, 16, 120, Colors.white),
+          ),
+          //固定第一列
+          Container(
+            child: _getCloumnBoxList(names),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //对币种和利率操作
+  _getContentTwo() {
+    return Container(
+      child: Column(
+        children: [
+          //获取币种
+          Container(
+            color: Color(0xFF333450),
+            child: _getRowBoxList(ccys, 16, 80, Colors.white),
+          ),
+          //获取币种利率
+          Container(
+            child: _getAllBoxList(rateLists, 14, 80, Colors.black),
+          )
+        ],
+      ),
+    );
+  }
+
   //获得固定的一列的所有元素
   Widget _getCloumnBoxList(List list) {
     List<Widget> _list = new List();
@@ -74,7 +133,7 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 5),
+              padding: EdgeInsets.only(top: 10),
               child: Text(
                 S.current.time_deposit,
                 maxLines: 1,
@@ -101,29 +160,32 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
   Widget _getBox(String name, double fontSize, double width, Color color) {
     name = name == null ? '' : name;
     return SizedBox(
-        child: Container(
-      width: MediaQuery.of(context).size.width / 4,
-      height: MediaQuery.of(context).size.height / 13,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(width: 0.3, color: Colors.grey)),
+      child: Container(
+        width: MediaQuery.of(context).size.width / 4,
+        height: MediaQuery.of(context).size.height / 13,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(width: 0.3, color: Colors.grey)),
+        ),
+        child: Text(
+          name,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(fontSize: fontSize, color: color),
+        ),
       ),
-      child: Text(
-        name,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(fontSize: fontSize, color: color),
-      ),
-    ));
+    );
   }
 
   //获得滑动的一行的所有元素
   Widget _getRowBoxList(List list, double fontSize, double width, Color color) {
     List<Widget> _list = new List();
     for (int i = 0; i < list.length; i++) {
-      _list.add(SizedBox(
-        child: _getBox(list[i], fontSize, width, color),
-      ));
+      _list.add(
+        SizedBox(
+          child: _getBox(list[i], fontSize, width, color),
+        ),
+      );
     }
     return SizedBox(
       child: Row(
@@ -147,106 +209,65 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
     );
   }
 
-  Widget _getContents(List<EbankInterestRateRspDTOList> rows) {
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverAppBar(
-          title: Text(S.current.time_deposit_interest_rate),
-          centerTitle: true,
-        ),
-        SliverToBoxAdapter(
-          child: Row(
-            children: [
-              Container(
-                child: Column(
-                  children: [
-                    //固定第一个
-                    Container(
-                      color: Color(0xFF333450),
-                      child: _getBox(
-                          S.current.time_deposit_type, 16, 120, Colors.white),
-                    ),
-                    //固定第一列
-                    Container(
-                      child: _getCloumnBoxList(names),
-                    ),
-                  ],
-                ),
-              ),
-              //行
-              Container(
-                child: Column(
-                  children: [
-                    //获取币种
-                    Container(
-                      color: Color(0xFF333450),
-                      child: _getRowBoxList(ccys, 16, 80, Colors.white),
-                    ),
-                    //获取币种利率
-                    Container(
-                      child: _getAllBoxList(rateLists, 14, 80, Colors.black),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
   _loadDeopstRateData() {
     DepositDataRepository()
         .getDepositRate(GetDepositRate(), 'GetDepositRate')
-        .then((data) {
-      if (data.ebankInterestRateRspDTOList != null) {
-        setState(() {
-          if (data.ebankInterestRateRspDTOList != null) {
-            ebankInterestRateList.clear();
-            names.clear();
-            ebankInterestRateList.addAll(data.ebankInterestRateRspDTOList);
+        .then(
+      (data) {
+        if (data.ebankInterestRateRspDTOList != null) {
+          setState(
+            () {
+              if (data.ebankInterestRateRspDTOList != null) {
+                ebankInterestRateList.clear();
+                names.clear();
+                ebankInterestRateList.addAll(data.ebankInterestRateRspDTOList);
 
-            ccys.addAll(data.ccyList);
+                ccys.addAll(data.ccyList);
 
-            // rates = [];
-            for (int i = 0; i < ebankInterestRateList.length; i++) {
-              List<EbankInterestRateDOList> dataList =
-                  ebankInterestRateList[i].ebankInterestRateDOList;
-              List<String> ccyList = [];
-              List<String> rateList = [];
-              for (int i = 0; i < dataList.length; i++) {
-                EbankInterestRateDOList doList = dataList[i];
-                ccyList.add(doList.ccy);
+                // rates = [];
+                for (int i = 0; i < ebankInterestRateList.length; i++) {
+                  List<EbankInterestRateDOList> dataList =
+                      ebankInterestRateList[i].ebankInterestRateDOList;
+                  List<String> ccyList = [];
+                  List<String> rateList = [];
+                  for (int i = 0; i < dataList.length; i++) {
+                    EbankInterestRateDOList doList = dataList[i];
+                    ccyList.add(doList.ccy);
+                  }
+                  if (!ccyList.contains('CNY')) {
+                    EbankInterestRateDOList doListNew;
+                    dataList.insert(0, doListNew);
+                  }
+                  if (!ccyList.contains('USD')) {
+                    EbankInterestRateDOList doListNew;
+                    dataList.insert(1, doListNew);
+                  }
+
+                  if (!ccyList.contains('HKD')) {
+                    EbankInterestRateDOList doListNew;
+                    dataList.insert(2, doListNew);
+                  }
+                  for (int i = 0; i < ccyList.length; i++) {}
+                  //遍历拿出来的集合
+                  dataList.forEach(
+                    (element) {
+                      String rate = element == null ? '--' : element.intRate;
+                      rateList.add(rate);
+                    },
+                  );
+                  rateLists.add(rateList);
+                }
+
+                data.ebankInterestRateRspDTOList.forEach(
+                  (element) {
+                    names.add(element.ebankInterestRateHead.auctCale);
+                  },
+                );
               }
-              if (!ccyList.contains('CNY')) {
-                EbankInterestRateDOList doListNew;
-                dataList.insert(0, doListNew);
-              }
-
-              if (!ccyList.contains('USD')) {
-                EbankInterestRateDOList doListNew;
-                dataList.insert(1, doListNew);
-              }
-
-              if (!ccyList.contains('HKD')) {
-                EbankInterestRateDOList doListNew;
-                dataList.insert(2, doListNew);
-              }
-              //遍历拿出来的集合
-              dataList.forEach((element) {
-                String rate = element == null ? '--' : element.intRate;
-                rateList.add(rate);
-              });
-              rateLists.add(rateList);
-            }
-
-            data.ebankInterestRateRspDTOList.forEach((element) {
-              names.add(element.ebankInterestRateHead.auctCale);
-            });
-          }
-        });
-      }
-    });
+            },
+          );
+        }
+      },
+    );
   }
 }

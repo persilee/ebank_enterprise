@@ -269,13 +269,17 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _getCardTotals),
           //拿第二部分
           TransferPayeeWidget(
-              S.current.receipt_side,
-              S.current.name,
-              S.current.account_num,
-              S.current.hint_input_receipt_name,
-              S.current.hint_input_receipt_account,
-              _nameInputChange,
-              _accountInputChange),
+            context,
+            S.current.receipt_side,
+            S.current.name,
+            S.current.account_num,
+            S.current.hint_input_receipt_name,
+            S.current.hint_input_receipt_account,
+            _nameInputChange,
+            _accountInputChange,
+            'internal',
+          ),
+          //第三部分
           TransferOtherWidget(remark, _transferInputChange),
 
           //提交按钮
