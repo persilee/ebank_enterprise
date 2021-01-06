@@ -345,5 +345,6 @@
   "customer_service": "Contact Customer Service",
   "hello": "Hello,",
   "serve_you": "The customer service of Hisun Bank is at your service~",
-  "call": "Call"
+  "call": "Call",
+  "not_required":"Optional"
 }
