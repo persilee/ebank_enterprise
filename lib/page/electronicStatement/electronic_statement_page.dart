@@ -83,7 +83,7 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
     );
   }
 
-  _getFilePath(String date) async {
+  _getFilePath(String date) {
     RlectronicStatementRepository()
         .getFilePath(GetFilePathReq(), 'GetFilePathReq')
         .then((data) {
