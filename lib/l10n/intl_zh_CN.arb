@@ -344,5 +344,6 @@
   "loan_duration": "贷款期限(月)",
   "loan_purpose": "贷款目的",
   "remark": "备注",
-  "apply": "申请"
+  "apply": "申请",
+  "not_required":"非必填"
 }

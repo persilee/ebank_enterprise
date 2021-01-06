@@ -21,7 +21,6 @@ class AddPartnerPage extends StatefulWidget {
 class _AddPartnerPageState extends State<AddPartnerPage> {
   var _isInputed = false; //按钮可点击标志
   var _bank = '';
-  var _location = '';
   var _branch = '';
   var _nameController = TextEditingController();
   var _acountController = TextEditingController();
@@ -53,17 +52,16 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     });
     //初始化
     _bank = S.current.please_select;
-    _location = S.current.please_select;
     _branch = S.current.optional;
   }
 
-  Future<void> _loadData() async {
+  _loadData() {
     TransferDataRepository()
         .addPartner(
             AddPartnerReq(
                 "",
                 _bank,
-                _location,
+                "",
                 _branch,
                 "",
                 "",
@@ -168,27 +166,6 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           ),
         ),
         Divider(height: 0.5, color: HsgColors.divider),
-        //开户地
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, pageSelectCity).then((data) {
-              if (data != null) {
-                setState(() {
-                  _location = data;
-                  _check();
-                });
-              }
-            });
-          },
-          child: Container(
-            padding: EdgeInsets.only(top: 16, bottom: 16),
-            child: _inputFrame(
-              S.current.open_account_place,
-              _inputSelector(_location, S.of(context).please_select),
-            ),
-          ),
-        ),
-        Divider(height: 0.5, color: HsgColors.divider),
         //分支行
         GestureDetector(
           onTap: () {
@@ -220,7 +197,6 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               InkWell(
                 onTap: () {
                   _contact();
-                  // Fluttertoast.showToast(msg: '点击选择联系人');
                 },
                 child: Image(
                   color: Colors.blueAccent,
@@ -366,10 +342,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     );
   }
 
+  //按钮可点击检查
   _check() {
     setState(() {
       if (_bank != S.current.please_select &&
-          _location != S.current.please_select &&
           _nameController.text.length > 0 &&
           _acountController.text.length > 0 &&
           _smsController.text.length > 0) {
@@ -380,11 +356,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     });
   }
 
+  //确认按钮点击事件
   _confirm() {
     if (_isInputed) {
       return () {
-        // Fluttertoast.showToast(msg: '添加成功');
-        // Navigator.of(context).pop();
         _loadData();
       };
     } else {

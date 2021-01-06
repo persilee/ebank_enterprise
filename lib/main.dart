@@ -9,6 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'widget/progressHUD.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 
 // void main() => runApp(
 //       HSGBankApp(),
@@ -35,8 +37,6 @@ class HSGBankApp extends StatefulWidget {
 }
 
 class _HSGBankAppState extends State<HSGBankApp> {
-  List<PublicParameters> publicParametersList = [];
-
   changeLanguage(Locale locale) {
     setState(() {
       S.load(locale);
@@ -88,13 +88,29 @@ class _HSGBankAppState extends State<HSGBankApp> {
 
   //获取公共参数
   _getPublicParameters() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    //获取证件类型
     PublicParametersRepository()
-        .getPublicCode(GetPublicParametersReq(), 'GetPublicParametersReq')
+        .getIdType(GetIdTypeReq(), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {}
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+
+    //获取本币
+    PublicParametersRepository()
+        .getLocalCurrency(GetLocalCurrencyReq(), 'GetLocalCurrencyReq')
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
-        setState(() {
-          publicParametersList = data.publicCodeGetRedisRspDtoList;
-        });
+        String code = data.publicCodeGetRedisRspDtoList[0].code;
+        if (code != prefs.getString(ConfigKey.LOCAL_CCY)) {
+          prefs.setString(ConfigKey.LOCAL_CCY, code);
+          print('>-------------------<');
+        }
+      } else {
+        prefs.setString(ConfigKey.LOCAL_CCY, '');
       }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());

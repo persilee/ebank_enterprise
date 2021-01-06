@@ -2,27 +2,28 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'get_public_parameters.g.dart';
 
+//获取证件类型
 @JsonSerializable()
-class GetPublicParametersReq extends Object {
+class GetIdTypeReq extends Object {
   @JsonKey(name: 'type')
   String type;
 
-  GetPublicParametersReq({
+  GetIdTypeReq({
     this.type = 'CERT_TYPE',
   });
 
-  factory GetPublicParametersReq.fromJson(Map<String, dynamic> srcJson) =>
-      _$GetPublicParametersReqFromJson(srcJson);
+  factory GetIdTypeReq.fromJson(Map<String, dynamic> srcJson) =>
+      _$GetIdTypeReqFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$GetPublicParametersReqToJson(this);
+  Map<String, dynamic> toJson() => _$GetIdTypeReqToJson(this);
 }
 
 @JsonSerializable()
-class GetPublicParametersResp extends Object {
+class GetIdTypeResp extends Object {
   @JsonKey(name: 'publicCodeGetRedisRspDtoList')
-  List<PublicParameters> publicCodeGetRedisRspDtoList;
+  List<IdType> publicCodeGetRedisRspDtoList;
 
-  GetPublicParametersResp(
+  GetIdTypeResp(
     this.publicCodeGetRedisRspDtoList,
   );
 
@@ -31,14 +32,14 @@ class GetPublicParametersResp extends Object {
     return toJson().toString();
   }
 
-  factory GetPublicParametersResp.fromJson(Map<String, dynamic> srcJson) =>
-      _$GetPublicParametersRespFromJson(srcJson);
+  factory GetIdTypeResp.fromJson(Map<String, dynamic> srcJson) =>
+      _$GetIdTypeRespFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$GetPublicParametersRespToJson(this);
+  Map<String, dynamic> toJson() => _$GetIdTypeRespToJson(this);
 }
 
 @JsonSerializable()
-class PublicParameters extends Object {
+class IdType extends Object {
   @JsonKey(name: 'code')
   String code;
   @JsonKey(name: 'localName')
@@ -48,7 +49,7 @@ class PublicParameters extends Object {
   @JsonKey(name: 'type')
   String type;
 
-  PublicParameters(
+  IdType(
     this.code,
     this.localName,
     this.engName,
@@ -60,8 +61,73 @@ class PublicParameters extends Object {
     return toJson().toString();
   }
 
-  factory PublicParameters.fromJson(Map<String, dynamic> srcJson) =>
-      _$PublicParametersFromJson(srcJson);
+  factory IdType.fromJson(Map<String, dynamic> srcJson) =>
+      _$IdTypeFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$PublicParametersToJson(this);
+  Map<String, dynamic> toJson() => _$IdTypeToJson(this);
+}
+
+//获取本币
+@JsonSerializable()
+class GetLocalCurrencyReq extends Object {
+  @JsonKey(name: 'type')
+  String type;
+
+  GetLocalCurrencyReq({
+    this.type = 'LOCAL_CCY',
+  });
+
+  factory GetLocalCurrencyReq.fromJson(Map<String, dynamic> srcJson) =>
+      _$GetLocalCurrencyReqFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$GetLocalCurrencyReqToJson(this);
+}
+
+@JsonSerializable()
+class GetLocalCurrencyResp extends Object {
+  @JsonKey(name: 'publicCodeGetRedisRspDtoList')
+  List<LocalCurrency> publicCodeGetRedisRspDtoList;
+
+  GetLocalCurrencyResp(
+    this.publicCodeGetRedisRspDtoList,
+  );
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  factory GetLocalCurrencyResp.fromJson(Map<String, dynamic> srcJson) =>
+      _$GetLocalCurrencyRespFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$GetLocalCurrencyRespToJson(this);
+}
+
+@JsonSerializable()
+class LocalCurrency extends Object {
+  @JsonKey(name: 'code')
+  String code;
+  @JsonKey(name: 'name')
+  String name;
+  @JsonKey(name: 'cName')
+  String cName;
+  @JsonKey(name: 'type')
+  String type;
+
+  LocalCurrency(
+    this.code,
+    this.name,
+    this.cName,
+    this.type,
+  );
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  factory LocalCurrency.fromJson(Map<String, dynamic> srcJson) =>
+      _$LocalCurrencyFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$LocalCurrencyToJson(this);
 }
