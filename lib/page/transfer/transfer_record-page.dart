@@ -7,6 +7,7 @@ import 'dart:ui';
 
 import 'package:date_format/date_format.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_record.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
@@ -34,19 +35,16 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   List<TransferRecord> _transferHistoryList = []; //转账记录列表
   String _card = intl.S.current.card; //银行卡
   List<String> _cradLists = []; //银行卡列表
+  List<String> _imageUrl = []; //银行卡图标列表
   int _position = 0;
   String _time = intl.S.current.the_same_month; //时间
   String _endDate =
       DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now()); //结束时间
-  String _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(DateTime(
-    DateTime.now().year,
-    DateTime.now().month,
-    1,
-  )); //开始时间
+  String _startDate = DateFormat('yyyy-MM-dd 00:00:00')
+      .format(DateTime(DateTime.now().year, DateTime.now().month, 1)); //开始时间
   String _start = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示开始时间
   String _end = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示结束时间
   String _actualName = ""; //用户真实姓名
-  String _language = Intl.getCurrentLocale(); //获取当前语言
   bool _isButton1 = false; //交易时间第一个按钮
   bool _isButton2 = true; //交易时间第二个按钮
   bool _isButton3 = false; //交易时间第三个按钮
@@ -58,54 +56,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
     _actualNameReqData();
     _loadData();
-  }
-
-  //用户信息
-  Future<void> _actualNameReqData() async {
-    final prefs = await SharedPreferences.getInstance();
-    String userID = prefs.getString(ConfigKey.USER_ID);
-    UserDataRepository()
-        .getUserInfo(GetUserInfoReq(userID), "getUserInfo")
-        .then((data) {
-      setState(() {
-        _actualName = data.actualName;
-      });
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
-  }
-
-//转账记录
-  _loadData() {
-    //国际化
-    if (_language == 'zh_CN') {
-      _cradLists = ['全部账户', '一网通账户（9396）', '招商银行储蓄卡（9396）'];
-    } else {
-      _cradLists = ['All account', 'One network (9396)', 'A cash Card (9396)'];
-    }
-    //请求参数
-    String ccy = '';
-    int page = 1;
-    int pageSize = 10;
-    List<String> paymentCardNos = [];
-    String sort = '';
-    String loginName = '18033412021';
-    String userId = '778309634589982720';
-    TransferDataRepository()
-        .getTransferRecord(
-            GetTransferRecordReq(ccy, _endDate, page, pageSize, paymentCardNos,
-                sort, _startDate, loginName, userId),
-            'getTransferRecord')
-        .then((data) {
-      if (data.transferRecord != null) {
-        setState(() {
-          _transferHistoryList.clear();
-          _transferHistoryList.addAll(data.transferRecord);
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
+    _getCardList();
   }
 
   @override
@@ -118,11 +69,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         body: Column(
           children: [
             _headerWidget(),
-            Expanded(
-              child: _transferHistoryList.length > 0
-                  ? _getlistViewList(context)
-                  : _noDataContainer(context),
-            ),
+            Expanded(child: _getlistViewList(context)),
           ],
         ));
   }
@@ -163,15 +110,26 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   //多个转账记录列表
   Widget _getlistViewList(BuildContext context) {
     List<Widget> _list = new List();
+    bool _isData = false;
     for (int i = 0; i < _transferHistoryList.length; i++) {
-      _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
+      if (_position == 0) {
+        _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
+        _isData = true;
+      } else if ((_cradLists[_position] ==
+              _transferHistoryList[i].paymentCardNo) ||
+          (_cradLists[_position] == _transferHistoryList[i].receiveCardNo)) {
+        _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
+        _isData = true;
+      }
     }
     _list.add(_toLoad());
     return RefreshIndicator(
       onRefresh: () => _loadData(),
-      child: ListView(
-        children: _list,
-      ),
+      child: _isData
+          ? ListView(
+              children: _list,
+            )
+          : _noDataContainer(context),
     );
   }
 
@@ -529,10 +487,11 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
-          return HsgBottomSingleChoice(
+          return HsgBottomCardChoice(
             title: intl.S.of(context).select_bank_card,
             items: _cradLists,
             lastSelectedPosition: _position,
+            imageUrl: _imageUrl,
           );
         });
     if (result != null && result != false) {
@@ -651,5 +610,67 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         ],
       ),
     );
+  }
+
+  //获取用户真实姓名
+  Future<void> _actualNameReqData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+    UserDataRepository()
+        .getUserInfo(GetUserInfoReq(userID), "getUserInfo")
+        .then((data) {
+      setState(() {
+        _actualName = data.actualName;
+      });
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+
+  //转账记录
+  _loadData() {
+    //请求参数
+    String ccy = '';
+    int page = 1;
+    int pageSize = 10;
+    List<String> paymentCardNos = [];
+    String sort = '';
+    String loginName = '18033412021';
+    String userId = '778309634589982720';
+    TransferDataRepository()
+        .getTransferRecord(
+            GetTransferRecordReq(ccy, _endDate, page, pageSize, paymentCardNos,
+                sort, _startDate, loginName, userId),
+            'getTransferRecord')
+        .then((data) {
+      if (data.transferRecord != null) {
+        setState(() {
+          _transferHistoryList.clear();
+          _transferHistoryList.addAll(data.transferRecord);
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+
+  //获取银行卡
+  _getCardList() {
+    CardDataRepository().getCardList('getCardList').then((data) {
+      if (data.cardList != null) {
+        setState(() {
+          _cradLists.clear();
+          _imageUrl.clear();
+          _cradLists.add(intl.S.current.all_account);
+          _imageUrl.add("images/transferIcon/transfer_wallet.png");
+          data.cardList.forEach((e) {
+            _cradLists.add(e.cardNo);
+            _imageUrl.add(e.imageUrl);
+          });
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
   }
 }
