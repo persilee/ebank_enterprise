@@ -21,7 +21,6 @@ class IdIardVerificationPage extends StatefulWidget {
   _IdIardVerificationPageState createState() => _IdIardVerificationPageState();
 }
 
-
 //表单状态
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -35,19 +34,19 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   TextEditingController _sms = TextEditingController();
   Timer _timer;
   int countdownTime = 0;
-   TextEditingController userAccount= TextEditingController();
+  TextEditingController userAccount = TextEditingController();
 
-   @override
+  @override
   // ignore: must_call_super
-  void  initState()  {
+  void initState() {
     // 网络请求
     _getUser();
   }
 
-    _getUser() async {
-   final prefs = await SharedPreferences.getInstance();
-     userAccount.text = prefs.getString(ConfigKey.USER_ACCOUNT);
-    }
+  _getUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    userAccount.text = prefs.getString(ConfigKey.USER_ACCOUNT);
+  }
 
   @override
   void dispose() {
@@ -56,8 +55,6 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       _timer.cancel();
     }
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -73,17 +70,15 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
               key: _formKey,
               child: ListView(
                 children: <Widget>[
-                    Container(
+                  Container(
                     width: MediaQuery.of(context).size.width,
                     margin: EdgeInsets.only(bottom: 12),
                     color: Colors.white,
                     padding: EdgeInsets.only(left: 20, right: 20),
-                    child:Column(
-                      children: [
-                        InputList(S.of(context).account_number,
-                            '', userAccount),
-                      ]),
-                    ),
+                    child: Column(children: [
+                      InputList(S.of(context).account_number, '', userAccount),
+                    ]),
+                  ),
                   // Container(
                   //   padding: EdgeInsets.all(10.0),
                   //   child: Text(S.of(context).pleaseFillInTheBankInformation, style: TextStyle(fontSize: 12),),
@@ -97,11 +92,14 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                       children: [
                         Container(
                           alignment: Alignment.topLeft,
-                          padding: EdgeInsets.only(top:10.0,bottom:1.0),
-                          child: Text(S.of(context).pleaseFillInTheBankInformation, style: TextStyle(fontSize: 12),),
-                  ),
-                        InputList(S.of(context).name,
-                            S.of(context).placeName, _account),
+                          padding: EdgeInsets.only(top: 10.0, bottom: 1.0),
+                          child: Text(
+                            S.of(context).pleaseFillInTheBankInformation,
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                        InputList(S.of(context).name, S.of(context).placeName,
+                            _account),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
@@ -152,7 +150,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                     height: 44.0,
                     width: MediaQuery.of(context).size.width,
                     child: RaisedButton(
-                      child: Text(S.of(context).sumit),
+                      child: Text(S.of(context).submit),
                       onPressed: _submit()
                           ? () {
                               _updateLoginPassword();
@@ -179,7 +177,8 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       keyboardType: TextInputType.number,
       controller: _sms,
       cursorColor: Colors.red,
-      decoration: InputDecoration.collapsed(// 边色与边宽度
+      decoration: InputDecoration.collapsed(
+        // 边色与边宽度
         hintText: S.current.placeSMS,
         hintStyle: TextStyle(
           fontSize: 14,
@@ -209,7 +208,9 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       disabledTextColor: HsgColors.describeText,
       disabledBorderColor: HsgColors.describeText,
       child: Text(
-        countdownTime > 0 ? '${countdownTime}s' : S.of(context).getVerificationCode,
+        countdownTime > 0
+            ? '${countdownTime}s'
+            : S.of(context).getVerificationCode,
         style: TextStyle(fontSize: 14),
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -272,7 +273,8 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       String userID = prefs.getString(ConfigKey.USER_ID);
       UpdateLoginPawRepository()
           .modifyLoginPassword(
-              ModifyPasswordReq(_userName.text, _account.text, _sms.text, userID),
+              ModifyPasswordReq(
+                  _userName.text, _account.text, _sms.text, userID),
               'ModifyPasswordReq')
           .then((data) {
         HSProgressHUD.dismiss();
@@ -287,7 +289,6 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
 
 // ignore: must_be_immutable
 class InputList extends StatelessWidget {
-
   InputList(this.labText, this.placeholderText, this.inputValue);
   final String labText;
   final String placeholderText;

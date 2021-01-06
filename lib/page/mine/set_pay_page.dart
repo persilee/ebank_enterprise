@@ -67,7 +67,7 @@ class _SetPayPageState extends State<SetPayPage> {
                     height: 44.0,
                     width: MediaQuery.of(context).size.width,
                     child: RaisedButton(
-                      child: Text(S.of(context).sumit),
+                      child: Text(S.of(context).submit),
                       onPressed: () => print("提交"),
                       color: HsgColors.accent,
                       textColor: Colors.white,
@@ -148,7 +148,8 @@ class InputList extends StatelessWidget {
                 // },
                 child: Text(
                   '获取验证码',
-                  style: TextStyle(fontSize: 14,color: HsgColors.blueTextColor),
+                  style:
+                      TextStyle(fontSize: 14, color: HsgColors.blueTextColor),
                 ),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),

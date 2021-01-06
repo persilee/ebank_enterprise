@@ -13,7 +13,7 @@ import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_trial.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
-import 'package:ebank_mobile/widget/hsg_dialog.dart';
+
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -76,8 +76,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   @override
   Widget build(BuildContext context) {
     deposit = ModalRoute.of(context).settings.arguments;
-    String conMatAmts = FormatUtil.formatSringToMoney('${conMatAmt}');
-    String matAmts = FormatUtil.formatSringToMoney('${matAmt}');
+    String conMatAmts = FormatUtil.formatSringToMoney('$conMatAmt');
+    String matAmts = FormatUtil.formatSringToMoney('$matAmt');
 
     Widget _unit(String leftText, String rightText, bool isShowLine) {
       return Column(
@@ -122,7 +122,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                   Expanded(child: Text(S.current.payment_account)),
                   Container(
                     child: Text(
-                      FormatUtil.formatSpace4('${settDbAc}'),
+                      FormatUtil.formatSpace4('$settDbAc'),
                     ),
                   )
                 ],
@@ -163,9 +163,9 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                   _unit(S.current.currency, ccy, true),
                   //存入金额
                   _unit(S.current.deposit_amount,
-                      FormatUtil.formatSringToMoney('${bal}'), true),
+                      FormatUtil.formatSringToMoney('$bal'), true),
                   //存期
-                  _unit(S.current.deposit_term, '${auctCale}${S.current.month}',
+                  _unit(S.current.deposit_term, '$auctCale${S.current.month}',
                       true),
                   //生效日期
                   _unit(S.current.effective_date, valDate, true),
@@ -201,53 +201,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                                     fontSize: 15, fontWeight: FontWeight.bold),
                                 textAlign: TextAlign.center),
                             children: <Widget>[
-                              Container(
-                                  height: 105,
-                                  child: Column(
-                                    children: [
-                                      //预计到期总额
-                                      _contractSettlement(
-                                          S.current.contract_settlement_amt,
-                                          '${ccy}${conMatAmts}'),
-
-                                      //提前结清本息总额
-                                      _contractSettlement(
-                                          S.current.early_settlement_amt,
-                                          '${ccy}${matAmts}'),
-
-                                      Container(
-                                        child: Divider(),
-                                        margin: EdgeInsets.only(top: 3),
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            //取消按钮
-                                            Container(
-                                                child: FlatButton(
-                                              onPressed: () =>
-                                                  Navigator.of(context).pop(),
-                                              child: Text(S.current.cancel),
-                                              color: Colors.white,
-                                            )),
-                                            Container(
-                                              //确定按钮
-                                              child: FlatButton(
-                                                onPressed: () {
-                                                  _contractEarly(context);
-                                                },
-                                                child: Text(S.current.confirm),
-                                                color: Colors.white,
-                                                textColor: Colors.blue,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  )),
+                              _DialogBox(conMatAmts, matAmts)
                             ]);
                       },
                     );
@@ -262,6 +216,54 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                 S.current.deposit_declare,
                 style: TextStyle(color: Color(0xFF8D8D8D), fontSize: 12),
               )),
+            )
+          ],
+        ));
+  }
+
+  //对话框
+  // ignore: non_constant_identifier_names
+  _DialogBox(String contractMoney, String earlySettleMoney) {
+    return Container(
+        height: 105,
+        child: Column(
+          children: [
+            //预计到期总额
+            _contractSettlement(
+                S.current.contract_settlement_amt, '$ccy$contractMoney'),
+
+            //提前结清本息总额
+            _contractSettlement(
+                S.current.early_settlement_amt, '$ccy$earlySettleMoney'),
+
+            Container(
+              child: Divider(),
+              margin: EdgeInsets.only(top: 3),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  //取消按钮
+                  Container(
+                      child: FlatButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(S.current.cancel),
+                    color: Colors.white,
+                  )),
+                  Container(
+                    //确定按钮
+                    child: FlatButton(
+                      onPressed: () {
+                        _contractEarly(context);
+                      },
+                      child: Text(S.current.confirm),
+                      color: Colors.white,
+                      textColor: Colors.blue,
+                    ),
+                  )
+                ],
+              ),
             )
           ],
         ));

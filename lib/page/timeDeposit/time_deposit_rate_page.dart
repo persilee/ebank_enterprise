@@ -7,7 +7,6 @@
 
 import 'dart:ui';
 
-import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_rate.dart';
 import 'package:flutter/material.dart';
@@ -66,8 +65,8 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
   Widget _getOneCloum(String name, double fontSize, double width, Color color) {
     return SizedBox(
       child: Container(
-        width: width,
-        height: 50,
+        width: MediaQuery.of(context).size.width / 4,
+        height: MediaQuery.of(context).size.height / 13,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(width: 0.3, color: Colors.grey)),
@@ -87,7 +86,7 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
             ),
             Container(
               child: Text(
-                '${name} ${S.current.month}',
+                '$name ${S.current.month}',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -103,8 +102,8 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
     name = name == null ? '' : name;
     return SizedBox(
         child: Container(
-      width: width,
-      height: 50,
+      width: MediaQuery.of(context).size.width / 4,
+      height: MediaQuery.of(context).size.height / 13,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(width: 0.3, color: Colors.grey)),
@@ -197,7 +196,7 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
     );
   }
 
-  Future<void> _loadDeopstRateData() async {
+  _loadDeopstRateData() {
     DepositDataRepository()
         .getDepositRate(GetDepositRate(), 'GetDepositRate')
         .then((data) {
