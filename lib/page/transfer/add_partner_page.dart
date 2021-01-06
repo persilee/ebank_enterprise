@@ -22,6 +22,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   var _isInputed = false; //按钮可点击标志
   var _bank = '';
   var _branch = '';
+  var transferType = '';
   var _nameController = TextEditingController();
   var _acountController = TextEditingController();
   var _smsController = TextEditingController();
@@ -40,7 +41,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     _smsController.addListener(() {
       _check();
     });
-
+    //备注最多输入5个文字
     _aliasController.addListener(() {
       String text = _aliasController.text;
       int length = text.length;
@@ -53,6 +54,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     //初始化
     _bank = S.current.please_select;
     _branch = S.current.optional;
+    transferType = '0';
   }
 
   _loadData() {
@@ -72,7 +74,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                 "",
                 _smsController.text,
                 _aliasController.text,
-                "0"),
+                transferType),
             'addPartner')
         .then((data) {
       print(data.toString());
@@ -223,7 +225,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     );
   }
 
-  //通用输入框(传入左边内容和右边内容)
+  //通用框(传入左边内容和右边组件)
   Widget _inputFrame(String left, Widget right) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
