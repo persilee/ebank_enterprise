@@ -1,5 +1,3 @@
-import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -12,7 +10,9 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/services.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 
+// ignore: non_constant_identifier_names
 Widget TransferPayerWidget(
+  BuildContext context,
   String _limitMoney,
   String _changedCcyTitle,
   String _changedRateTitle,
@@ -58,11 +58,12 @@ Widget TransferPayerWidget(
                   ),
                 ),
                 _threeRowRight(
+                    context,
                     ccy,
                     _changedCcyTitle,
                     cardNo,
                     '$payeeBankCode',
-                    ' ${totalBalance}',
+                    ' $totalBalance',
                     getcardList,
                     _changedAccountTitle,
                     _changedRateTitle,
@@ -185,6 +186,7 @@ Widget _twoRow(String ccy, String _changedCcyTitles, double money,
 }
 
 Widget _threeRowRight(
+    BuildContext context,
     String ccy,
     String _changedCcyTitles,
     String cardCodeOne,
@@ -198,7 +200,7 @@ Widget _threeRowRight(
       _changedAccountTitle == '' ? cardCodeOne : _changedAccountTitle;
   _changedRateTitle = _changedRateTitle == '' ? balance : _changedRateTitle;
   _changedCcyTitles = _changedCcyTitles == '' ? ccy : _changedCcyTitles;
-  String account = FormatUtil.formatSpace4('${_changedAccountTitle}');
+  String account = FormatUtil.formatSpace4('$_changedAccountTitle');
   return Expanded(
     child: GestureDetector(
       onTap: () {
@@ -219,7 +221,7 @@ Widget _threeRowRight(
               Container(
                 padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
                 child: Text(
-                  '${payeeBankCode}  ${account}',
+                  '$payeeBankCode  $account',
                   style: TextStyle(
                     color: HsgColors.firstDegreeText,
                     fontSize: 14,
@@ -237,9 +239,9 @@ Widget _threeRowRight(
           )),
           Container(
             margin: EdgeInsets.only(top: 5),
-            padding: EdgeInsets.fromLTRB(0, 0, 46, 0),
+            width: MediaQuery.of(context).size.width / 3.1,
             child: Text(
-              '余额:0.00',
+              '余额:120.05',
               // '${S.current.balance_with_value}${_changedCcyTitles} ${FormatUtil.formatSringToMoney(_changedRateTitle)}',
               // ${_changedRateTitle},
               style: TextStyle(

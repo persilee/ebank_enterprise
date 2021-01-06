@@ -30,6 +30,7 @@ class _TransferPartnerState extends State<TransferPartner> {
   var _showmore = false;
   var _page = 1;
   var _totalPage = 0;
+  var _transferType = '';
   @override
   void initState() {
     super.initState();
@@ -72,6 +73,8 @@ class _TransferPartnerState extends State<TransferPartner> {
 
   @override
   Widget build(BuildContext context) {
+    _transferType = ModalRoute.of(context).settings.arguments;
+    print('$_transferType --------');
     setState(() {
       if (_tempList.isEmpty) {
         _tempList.addAll(_partnerListData);
@@ -272,8 +275,8 @@ class _TransferPartnerState extends State<TransferPartner> {
           color: Colors.red,
           onTap: () {
             LeftScrollGlobalListener.instance
-                .targetStatus(
-                    LeftScrollCloseTag('row.payeeCardNo'), Key(partner.payeeCardNo))
+                .targetStatus(LeftScrollCloseTag('row.payeeCardNo'),
+                    Key(partner.payeeCardNo))
                 .value = false;
             _deletePartner(partner.custId, partner.payeeCardNo);
             HSProgressHUD.showSuccess(status: '删除成功!');
@@ -288,12 +291,16 @@ class _TransferPartnerState extends State<TransferPartner> {
     var _cardLength = partner.payeeCardNo.length;
     var _cardNo = '';
     var _bankName = '';
-    partner.bankSwift == null ? _bankName = '无银行名' : _bankName = partner.bankSwift;
+    partner.bankSwift == null
+        ? _bankName = '无银行名'
+        : _bankName = partner.bankSwift;
     //取卡号最后四位
     if (_cardLength > 4) {
       _cardNo = partner.payeeCardNo.substring(_cardLength - 5, _cardLength - 1);
     } else {
-      partner.payeeCardNo == null ? _cardNo = '' : _cardNo = partner.payeeCardNo;
+      partner.payeeCardNo == null
+          ? _cardNo = ''
+          : _cardNo = partner.payeeCardNo;
     }
     //备注
     var _remarkCont = partner.remark == '' || partner.remark == null
@@ -309,7 +316,7 @@ class _TransferPartnerState extends State<TransferPartner> {
             alignment: Alignment.center,
             child: Text(
               partner.remark,
-              style: TextStyle(fontSize: 11,color: Color(0xFFA9A9A9)),
+              style: TextStyle(fontSize: 11, color: Color(0xFFA9A9A9)),
             ),
           );
     //文字部分
@@ -321,7 +328,7 @@ class _TransferPartnerState extends State<TransferPartner> {
           children: [
             Text(
               partner.payeeName == null ? '无名' : partner.payeeName,
-              style: TextStyle(fontSize: 14,color: Color(0xFF232323)),
+              style: TextStyle(fontSize: 14, color: Color(0xFF232323)),
             ),
             Padding(
               padding: EdgeInsets.only(right: 5),
@@ -348,32 +355,41 @@ class _TransferPartnerState extends State<TransferPartner> {
             width: 30,
             height: 30,
           );
-    return Container(
-      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-      color: Colors.white,
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(top: 15, bottom: 15),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                //银行图标
-                _bankImage,
-                Padding(
-                  padding: EdgeInsets.only(right: 20),
-                ),
-                //文字部分
-                _contWord,
-              ],
+    return InkWell(
+      onTap: (){
+        if(_transferType != null){
+        Navigator.pop(context, partner);
+        }else{
+          Navigator.pushNamed(context, pageInternational,arguments: partner);
+        }
+      },
+      child: Container(
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+        color: Colors.white,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: 15, bottom: 15),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  //银行图标
+                  _bankImage,
+                  Padding(
+                    padding: EdgeInsets.only(right: 20),
+                  ),
+                  //文字部分
+                  _contWord,
+                ],
+              ),
             ),
-          ),
-          Divider(
-            height: 1,
-            color: HsgColors.divider,
-          ),
-        ],
+            Divider(
+              height: 1,
+              color: HsgColors.divider,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -330,7 +330,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   }
 
   //转换
-  _currencySwap() async {
+  _currencySwap() {
     List<String> newCcyList = [];
     int newCcyId = 0;
     setState(() {
@@ -350,7 +350,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   }
 
   //计算兑换金额
-  _amountConversion() async {
+  _amountConversion() {
     for (var i = 0; i < rateList.length; i++) {
       setState(() {
         if (_amtController.text != '') {
@@ -358,12 +358,14 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
               AiDecimalAccuracy.parse(_amtController.text);
           AiDecimalAccuracy _rate =
               AiDecimalAccuracy.parse(rateList[i]['buying']);
+
           if (rateList[i]['ccy'] == _objectiveCcy) {
             double newAmt = _isSwap
                 ? (_amount / _rate).toDouble()
                 : (_amount * _rate).toDouble();
             _primitiveCcyAmt = newAmt.toStringAsFixed(4);
           }
+
           if (rateList[i]['ccy'] == _primitiveCcy) {
             double newAmt = _isSwap
                 ? (_amount * _rate).toDouble()

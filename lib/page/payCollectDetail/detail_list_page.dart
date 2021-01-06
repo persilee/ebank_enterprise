@@ -322,7 +322,7 @@ class _DetailListPageState extends State<DetailListPage> {
     }
   }
 
-  _getRevenueByCards(String localDateStart, List<String> cards) async {
+  _getRevenueByCards(String localDateStart, List<String> cards) {
     HSProgressHUD.show();
     PayCollectDetailRepository()
         .getRevenueByCards(
@@ -341,7 +341,7 @@ class _DetailListPageState extends State<DetailListPage> {
     });
   }
 
-  _getCardList() async {
+  _getCardList() {
     CardDataRepository().getCardList('getCardList').then((data) {
       if (data.cardList != null) {
         setState(() {
