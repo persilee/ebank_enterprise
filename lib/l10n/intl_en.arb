@@ -301,7 +301,7 @@
   "logoutSuccess": "Exit successful",
   "feedBackInfo": "Please input your opinion...",
   "oldPwd": "Old Password",
-  "sumit": "Submit",
+  "submit": "Submit",
   "newPwd": "New Password",
   "confimPwd": "Confirm New Password",
   "SMS": "SMS Verification Code",

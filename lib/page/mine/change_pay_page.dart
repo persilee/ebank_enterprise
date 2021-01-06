@@ -29,10 +29,10 @@ class _ChangePayPageState extends State<ChangePayPage> {
   TextEditingController _newPwd = TextEditingController();
   TextEditingController _confimPwd = TextEditingController();
   TextEditingController _sms = TextEditingController();
-  
+
   Timer _timer;
   int countdownTime = 0;
-  
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -79,7 +79,6 @@ class _ChangePayPageState extends State<ChangePayPage> {
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
-                            
                         Container(
                           height: 50,
                           child: Row(
@@ -104,7 +103,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
                     height: 44.0,
                     width: MediaQuery.of(context).size.width,
                     child: RaisedButton(
-                      child: Text(S.of(context).sumit),
+                      child: Text(S.of(context).submit),
                       onPressed: _submit()
                           ? () {
                               _submitData();
@@ -127,14 +126,15 @@ class _ChangePayPageState extends State<ChangePayPage> {
     if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differentPwd);
     } else {
-       HSProgressHUD.show();
-         final prefs = await SharedPreferences.getInstance();
+      HSProgressHUD.show();
+      final prefs = await SharedPreferences.getInstance();
       String userID = prefs.getString(ConfigKey.USER_ID);
       PaymentPwdRepository()
           .updateTransPassword(
         SetPaymentPwdReq(_oldPwd.text, _newPwd.text, userID, _sms.text),
         'updateTransPassword',
-      ).then((data) {
+      )
+          .then((data) {
         HSProgressHUD.showError(status: '密码修改成功');
         Navigator.pop(context);
         HSProgressHUD.dismiss();
@@ -145,10 +145,9 @@ class _ChangePayPageState extends State<ChangePayPage> {
       });
     }
   }
-    bool _submit() {
-    if (_oldPwd.text != '' &&
-        _newPwd.text != '' &&
-        _confimPwd.text != '') {
+
+  bool _submit() {
+    if (_oldPwd.text != '' && _newPwd.text != '' && _confimPwd.text != '') {
       return true;
     } else {
       return false;
@@ -233,7 +232,6 @@ class _ChangePayPageState extends State<ChangePayPage> {
     );
   }
 }
-
 
 //封装一行
 class InputList extends StatelessWidget {

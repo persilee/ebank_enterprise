@@ -18,7 +18,7 @@ class FeedbackPage extends StatefulWidget {
 
 class _FeedbackPageState extends State<FeedbackPage> {
   TextEditingController _feedbackController = TextEditingController();
-  var _content ='';
+  var _content = '';
   @override
   Widget build(BuildContext context) {
     _feedbackController.text = '';
@@ -58,8 +58,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                             fontSize: 15.0,
                             color: HsgColors.hintText), //设置提示文字样式
                       ),
-                      onChanged: (newValue)  {
-                      },
+                      onChanged: (newValue) {},
                     ),
                   ),
                 ),
@@ -68,9 +67,9 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   height: 44.0,
                   width: MediaQuery.of(context).size.width,
                   child: RaisedButton(
-                    child: Text(S.of(context).sumit),
-                   // _content == '' ? null : _submitFeedBack(),
-                    onPressed:  _submitFeedBack(),
+                    child: Text(S.of(context).submit),
+                    // _content == '' ? null : _submitFeedBack(),
+                    onPressed: _submitFeedBack(),
                     color: HsgColors.accent,
                     textColor: Colors.white,
                     shape: RoundedRectangleBorder(
@@ -89,13 +88,14 @@ class _FeedbackPageState extends State<FeedbackPage> {
     String problemType = '4';
     HSProgressHUD.show();
     FeedbackRepository()
-    .feedBack(
+        .feedBack(
       GetFeedBackReq(feedbackProblem, opinionPhone, opinionTheme, problemType),
       'GetFeedBackReq',
-    ).then((data) {
+    )
+        .then((data) {
       HSProgressHUD.showError(status: '意见反馈成功');
-     Navigator.pop(context);
-     HSProgressHUD.dismiss();
+      Navigator.pop(context);
+      HSProgressHUD.dismiss();
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.showError(status: e.toString());

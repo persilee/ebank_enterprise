@@ -111,7 +111,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                     height: 44.0,
                     width: MediaQuery.of(context).size.width,
                     child: RaisedButton(
-                      child: Text(S.of(context).sumit),
+                      child: Text(S.of(context).submit),
                       onPressed: _submit()
                           ? () {
                               _updateLoginPassword();
