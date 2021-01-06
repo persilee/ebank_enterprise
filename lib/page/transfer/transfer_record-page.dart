@@ -14,6 +14,7 @@ import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_dotted_line.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
@@ -22,6 +23,7 @@ import 'package:intl/intl.dart';
 import 'package:popup_window/popup_window.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../page_route.dart';
+import 'widget/transfer_record_text_style_widget.dart';
 
 class TrsnsferRecordPage extends StatefulWidget {
   @override
@@ -29,13 +31,11 @@ class TrsnsferRecordPage extends StatefulWidget {
 }
 
 class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
-  List<Rows> _transferHistoryList = [];
-  String _card = intl.S.current.card;
+  List<TransferRecord> _transferHistoryList = []; //转账记录列表
+  String _card = intl.S.current.card; //银行卡
   List<String> _cradLists = []; //银行卡列表
   int _position = 0;
-  String _startConfirm = "";
-  String _endConfirm = "";
-  String _time = intl.S.current.the_same_month;
+  String _time = intl.S.current.the_same_month; //时间
   String _endDate =
       DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now()); //结束时间
   String _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(DateTime(
@@ -46,11 +46,11 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   String _start = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示开始时间
   String _end = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示结束时间
   String _actualName = ""; //用户真实姓名
-  String language = Intl.getCurrentLocale(); //获取当前语言
-  bool isButton1 = true;
-  bool isButton2 = false;
-  bool isButton3 = true;
-  bool isButton4 = true;
+  String _language = Intl.getCurrentLocale(); //获取当前语言
+  bool _isButton1 = false; //交易时间第一个按钮
+  bool _isButton2 = true; //交易时间第二个按钮
+  bool _isButton3 = false; //交易时间第三个按钮
+  bool _isButton4 = false; //交易时间第四个按钮
 
   @override
   void initState() {
@@ -76,9 +76,9 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   }
 
 //转账记录
-  Future<void> _loadData() async {
+  _loadData() {
     //国际化
-    if (language == 'zh_CN') {
+    if (_language == 'zh_CN') {
       _cradLists = ['全部账户', '一网通账户（9396）', '招商银行储蓄卡（9396）'];
     } else {
       _cradLists = ['All account', 'One network (9396)', 'A cash Card (9396)'];
@@ -97,10 +97,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                 sort, _startDate, loginName, userId),
             'getTransferRecord')
         .then((data) {
-      if (data.rows != null) {
+      if (data.transferRecord != null) {
         setState(() {
           _transferHistoryList.clear();
-          _transferHistoryList.addAll(data.rows);
+          _transferHistoryList.addAll(data.transferRecord);
         });
       }
     }).catchError((e) {
@@ -160,7 +160,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         });
   }
 
-  //多个列表
+  //多个转账记录列表
   Widget _getlistViewList(BuildContext context) {
     List<Widget> _list = new List();
     for (int i = 0; i < _transferHistoryList.length; i++) {
@@ -189,7 +189,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   }
 
   //转账记录内容
-  Widget _contentWidget(Rows _transferHistory) {
+  Widget _contentWidget(TransferRecord _transferHistory) {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, pageTransferDetail,
@@ -202,67 +202,22 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         margin: EdgeInsets.only(top: 15),
         child: Column(
           children: [
+            //转账记录账号及图标
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  width: MediaQuery.of(context).size.width / 2.5,
-                  child: Column(
-                    children: [
-                      Text(
-                        _actualName,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xff262626),
-                        ),
-                      ),
-                      Text(
-                        _transferHistory.paymentCardNo,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Color(0xff262626),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 5,
-                  child: Image.asset(
-                    "images/transferIcon/transfert_to.png",
-                    width: 25,
-                    height: 25,
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 2.5,
-                  padding: EdgeInsets.only(right: 16),
-                  child: Column(
-                    children: [
-                      Text(
-                        _transferHistory.receiveName,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xff262626),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        _transferHistory.receiveCardNo,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Color(0xff262626),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                _transferAccount(_actualName, _transferHistory.paymentCardNo),
+                _transferRecordImage("images/transferIcon/transfert_to.png"),
+                _transferAccount(_transferHistory.receiveName,
+                    _transferHistory.receiveCardNo),
               ],
             ),
+            //虚线
             Container(
               padding: EdgeInsets.fromLTRB(19.5, 10, 19.5, 10),
               child: DottedLine(),
             ),
+            //转账记录金额、时间、状态
             _transferAmount(intl.S.of(context).transfer_amount,
                 _transferHistory.amount, _transferHistory.status),
             _rowContent(intl.S.of(context).transfer_time,
@@ -275,6 +230,40 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     );
   }
 
+//转账记录图标
+  Widget _transferRecordImage(String imgurl) {
+    return Container(
+      width: MediaQuery.of(context).size.width / 5,
+      child: Image.asset(
+        imgurl,
+        width: 25,
+        height: 25,
+      ),
+    );
+  }
+
+  //转账账号
+  Widget _transferAccount(String name, String card) {
+    return Container(
+      width: MediaQuery.of(context).size.width / 2.5,
+      padding: EdgeInsets.only(right: 5),
+      child: Column(
+        children: [
+          Text(
+            name,
+            style: TRANSFER_RECORD_FIRST_TEXT_STYLE,
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            card,
+            style: TRANSFER_RECORD_SECOND_TEXT_STYLE,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
   //头部
   Widget _headerWidget() {
     return Container(
@@ -283,25 +272,15 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          //银行卡
           GestureDetector(
             onTap: _chooseBankCard,
             child: Container(
               width: MediaQuery.of(context).size.width / 2,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    _card,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Color(0xff262626),
-                    ),
-                  ),
-                  Icon(Icons.arrow_drop_down),
-                ],
-              ),
+              child: _headerText(_card),
             ),
           ),
+          //时间
           Container(
             width: MediaQuery.of(context).size.width / 2.5,
             child: _popDialog(),
@@ -311,25 +290,27 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     );
   }
 
+//头部文字
+  Widget _headerText(String name) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          name,
+          style: TRANSFER_RECORD_SECOND_TEXT_STYLE,
+        ),
+        Icon(Icons.arrow_drop_down),
+      ],
+    );
+  }
+
   //顶部弹窗
   Widget _popDialog() {
     return PopupWindowButton(
       offset: Offset(MediaQuery.of(context).size.width / 2.3, 200),
       buttonBuilder: (BuildContext context) {
         return GestureDetector(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                _time,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Color(0xff262626),
-                ),
-              ),
-              Icon(Icons.arrow_drop_down)
-            ],
-          ),
+          child: _headerText(_time),
         );
       },
       windowBuilder: (BuildContext popcontext, Animation<double> animation,
@@ -338,45 +319,41 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           opacity: animation,
           child: SizeTransition(
             sizeFactor: animation,
-            child: Container(
-              color: Colors.white,
-              height: 180,
-              padding: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(2.5, 0, 0, 10),
-                    child: Text(
-                      intl.S.of(context).transaction_time,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xff262626),
-                        decoration: TextDecoration.none,
-                      ),
-                    ),
-                  ),
-                  //交易时间
-                  _tradingHour(),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(2.5, 14, 0, 16),
-                    child: Text(
-                      intl.S.of(context).user_defined,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xff262626),
-                        decoration: TextDecoration.none,
-                      ),
-                    ),
-                  ),
-                  //自定义时间
-                  _userDefind(popcontext),
-                ],
-              ),
-            ),
+            child: _popDialogContent(popcontext),
           ),
         );
       },
+    );
+  }
+
+  //顶部弹窗内容
+  Widget _popDialogContent(BuildContext popcontext) {
+    return Container(
+      color: Colors.white,
+      height: 180,
+      padding: EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //交易时间
+          _timeText(intl.S.of(context).transaction_time),
+          _tradingHour(),
+          //自定义时间
+          _timeText(intl.S.of(context).user_defined),
+          _userDefind(popcontext),
+        ],
+      ),
+    );
+  }
+
+  //时间文本
+  Widget _timeText(String text) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(2.5, 12, 0, 12),
+      child: Text(
+        text,
+        style: TRANSFER_RECORD_POP_TEXT_STYLE,
+      ),
     );
   }
 
@@ -386,44 +363,47 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       children: [
         //开始时间按钮
         _timeButton(_start, 0, popcontext),
+        //至
         Text(
           intl.S.of(context).zhi,
           style: TextStyle(
-            fontSize: 13,
-            color: Color(0xff262626),
+            fontSize: 12,
+            color: HsgColors.aboutusTextCon,
             decoration: TextDecoration.none,
           ),
         ),
         //结束时间按钮
         _timeButton(_end, 1, popcontext),
         //确定按钮
-        Container(
-          margin: EdgeInsets.all(4),
-          width: 73,
-          height: 23.5,
-          decoration: BoxDecoration(
-            color: Color(0xff4871FF),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: OutlineButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            borderSide: BorderSide(color: Colors.white),
-            child: Text(
-              intl.S.of(context).confirm,
-              style: TextStyle(fontSize: 11, color: Colors.white),
-            ),
-            onPressed: () {
-              setState(() {
-                _time = _start + "—" + _end;
-                _startDate = _startConfirm;
-                _endDate = _endConfirm;
-              });
-              Navigator.of(context).pop(_loadData());
-            },
-          ),
-        ),
+        _confimrButton(),
       ],
+    );
+  }
+
+  //确定按钮
+  Widget _confimrButton() {
+    return Container(
+      margin: EdgeInsets.all(4),
+      width: 73,
+      height: 23.5,
+      decoration: BoxDecoration(
+        color: HsgColors.blueTextColor,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: OutlineButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        borderSide: BorderSide(color: Colors.white),
+        child: Text(
+          intl.S.of(context).confirm,
+          style: TextStyle(fontSize: 11, color: Colors.white),
+        ),
+        onPressed: () {
+          setState(() {
+            _time = _start + "—" + _end;
+          });
+          Navigator.of(context).pop(_loadData());
+        },
+      ),
     );
   }
 
@@ -431,10 +411,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _tradingHour() {
     return Row(
       children: [
-        _trandingHourButton(1, isButton1, intl.S.current.the_same_day),
-        _trandingHourButton(2, isButton2, intl.S.current.the_same_month),
-        _trandingHourButton(3, isButton3, intl.S.current.last_three_month),
-        _trandingHourButton(4, isButton4, intl.S.current.last_half_year),
+        _trandingHourButton(1, _isButton1, intl.S.current.the_same_day),
+        _trandingHourButton(2, _isButton2, intl.S.current.the_same_month),
+        _trandingHourButton(3, _isButton3, intl.S.current.last_three_month),
+        _trandingHourButton(4, _isButton4, intl.S.current.last_half_year),
       ],
     );
   }
@@ -447,13 +427,15 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       height: 30,
       child: OutlineButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        borderSide:
-            BorderSide(color: isButton ? Color(0xffD1D1D1) : Color(0xff4871FF)),
+        borderSide: BorderSide(
+          color: isButton ? HsgColors.blueTextColor : Color(0xffD1D1D1),
+        ),
         child: Text(
           time,
           style: TextStyle(
-              fontSize: 11,
-              color: isButton ? Color(0xff7A7A7A) : Color(0xff4871FF)),
+            fontSize: 10,
+            color: isButton ? HsgColors.blueTextColor : Color(0xff7A7A7A),
+          ),
           textAlign: TextAlign.center,
         ),
         onPressed: () {
@@ -462,18 +444,18 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             _endDate = DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now());
             switch (i) {
               case 1:
-                isButton1 = false;
-                isButton2 = true;
-                isButton3 = true;
-                isButton4 = true;
+                _isButton1 = true;
+                _isButton2 = false;
+                _isButton3 = false;
+                _isButton4 = false;
                 _startDate =
                     DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now());
                 break;
               case 2:
-                isButton1 = true;
-                isButton2 = false;
-                isButton3 = true;
-                isButton4 = true;
+                _isButton1 = false;
+                _isButton2 = true;
+                _isButton3 = false;
+                _isButton4 = false;
                 _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(DateTime(
                   DateTime.now().year,
                   DateTime.now().month,
@@ -481,18 +463,18 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                 ));
                 break;
               case 3:
-                isButton1 = true;
-                isButton2 = true;
-                isButton3 = false;
-                isButton4 = true;
+                _isButton1 = false;
+                _isButton2 = false;
+                _isButton3 = true;
+                _isButton4 = false;
                 _startDate = DateFormat('yyyy-MM-dd 00:00:00')
                     .format(DateTime.now().subtract(Duration(days: 90)));
                 break;
               case 4:
-                isButton1 = true;
-                isButton2 = true;
-                isButton3 = true;
-                isButton4 = false;
+                _isButton1 = false;
+                _isButton2 = false;
+                _isButton3 = false;
+                _isButton4 = true;
                 _startDate = DateFormat('yyyy-MM-dd 00:00:00')
                     .format(DateTime.now().subtract(Duration(days: 180)));
                 break;
@@ -536,7 +518,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           ],
         ),
         onPressed: () {
-          _cupertinoPicker(i, popcontext);
+          _timePicker(i, popcontext);
         },
       ),
     );
@@ -561,16 +543,20 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     }
   }
 
-//时间弹窗
-  _cupertinoPicker(int i, BuildContext popcontext) {
+//时间选择器弹窗
+  _timePicker(int i, BuildContext popcontext) {
     DatePicker.showDatePicker(
       context,
       pickerTheme: DateTimePickerTheme(
         showTitle: true,
-        confirm: Text(intl.S.current.confirm,
-            style: TextStyle(color: Colors.black, fontSize: 16)),
-        cancel: Text(intl.S.current.cancel,
-            style: TextStyle(color: Colors.black, fontSize: 16)),
+        confirm: Text(
+          intl.S.current.confirm,
+          style: TRANSFER_RECORD_TIME_PICKER_TEXT_STYLE,
+        ),
+        cancel: Text(
+          intl.S.current.cancel,
+          style: TRANSFER_RECORD_TIME_PICKER_TEXT_STYLE,
+        ),
       ),
       minDateTime: DateTime.parse('1900-01-01'),
       maxDateTime: DateTime.now(),
@@ -582,10 +568,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         setState(() {
           if (i == 0) {
             _start = formatDate(dateTime, [yyyy, mm, dd]);
-            _startConfirm = DateFormat('yyyy-MM-dd 00:00:00').format(dateTime);
+            _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(dateTime);
           } else {
             _end = formatDate(dateTime, [yyyy, mm, dd]);
-            _endConfirm = DateFormat('yyyy-MM-dd 23:59:59').format(dateTime);
+            _endDate = DateFormat('yyyy-MM-dd 23:59:59').format(dateTime);
           }
         });
         (popcontext as Element).markNeedsBuild();
@@ -599,7 +585,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     switch (right) {
       case 'N':
         right = intl.S.current.success;
-        statusColor = Color(0xff9C9C9C);
+        statusColor = HsgColors.describeText;
         break;
       case 'E':
         right = intl.S.current.failed;
@@ -607,23 +593,17 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         break;
       case 'P':
         right = intl.S.current.on_processing;
-        statusColor = Color(0xff4871FF);
+        statusColor = HsgColors.blueTextColor;
         break;
       default:
-        statusColor = Color(0xff9C9C9C);
+        statusColor = HsgColors.describeText;
     }
     return Container(
       padding: EdgeInsets.fromLTRB(20.5, 0, 20.5, 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            left,
-            style: TextStyle(
-              fontSize: 12,
-              color: Color(0xff9C9C9C),
-            ),
-          ),
+          Text(left, style: TRANSFER_RECORD_CONTENT_TEXT_STYLE),
           Text(
             right,
             style: TextStyle(
@@ -644,13 +624,13 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         acountColor = Color(0xffF1454E);
         break;
       case 'E':
-        acountColor = Color(0xff9C9C9C);
+        acountColor = HsgColors.describeText;
         break;
       case 'P':
         acountColor = Color(0xff1F1F1F);
         break;
       default:
-        acountColor = Color(0xff9C9C9C);
+        acountColor = HsgColors.describeText;
     }
     return Container(
       padding: EdgeInsets.fromLTRB(20.5, 0, 20.5, 10),
@@ -659,10 +639,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         children: [
           Text(
             left,
-            style: TextStyle(
-              fontSize: 12,
-              color: Color(0xff9C9C9C),
-            ),
+            style: TRANSFER_RECORD_CONTENT_TEXT_STYLE,
           ),
           Text(
             right,
@@ -673,46 +650,6 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           ),
         ],
       ),
-    );
-  }
-}
-
-// 虚线
-class DottedLine extends StatelessWidget {
-  final double height;
-  final Color color;
-  final Axis direction;
-
-  const DottedLine({
-    this.height = 1,
-    this.color = HsgColors.divider,
-    this.direction = Axis.horizontal,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final boxWidth = direction == Axis.horizontal
-            ? constraints.constrainWidth()
-            : constraints.constrainHeight();
-        final dashWidth = 8.0;
-        final dashHeight = height;
-        final dashCount = (boxWidth / (2 * dashWidth)).floor();
-        return Flex(
-          children: List.generate(dashCount, (_) {
-            return SizedBox(
-              width: direction == Axis.horizontal ? dashWidth : dashHeight,
-              height: direction == Axis.horizontal ? dashHeight : dashWidth,
-              child: DecoratedBox(
-                decoration: BoxDecoration(color: color),
-              ),
-            );
-          }),
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          direction: direction,
-        );
-      },
     );
   }
 }

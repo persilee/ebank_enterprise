@@ -1,5 +1,5 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///
+/// 账户总览
 /// Author: CaiTM
 /// Date: 2020-12-07
 
@@ -18,14 +18,14 @@ class AccountOverviewPage extends StatefulWidget {
 }
 
 class _AccountOverviewPageState extends State<AccountOverviewPage> {
-  var totalAssets = '0.00';
-  var netAssets = '0.00';
-  var totalLiabilities = '0.00';
-  var localCcy = 'CNY';
-  var ddTotal = '0.00';
-  var ddCcy = 'HKD';
-  var tdTotal = '0.00';
-  var lnTotal = '0.00';
+  String totalAssets = '0.00';
+  String netAssets = '0.00';
+  String totalLiabilities = '0.00';
+  String localCcy = '';
+  String ddTotal = '0.00';
+  String ddCcy = 'HKD';
+  String tdTotal = '0.00';
+  String lnTotal = '0.00';
   List<CardListBal> ddList = [];
   List<TdConInfoList> tdList = [];
   List<LoanMastList> lnList = [];
@@ -109,7 +109,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                 ),
               ),
               SliverToBoxAdapter(
-                child: _taTotalColumn(),
+                child: _tdTotalColumn(),
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -223,7 +223,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     );
   }
 
-  Column _taTotalColumn() {
+  Column _tdTotalColumn() {
     return Column(
       children: [
         Container(height: 0.5, color: HsgColors.divider),
@@ -381,6 +381,10 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
     String custID = prefs.getString(ConfigKey.CUST_ID);
+    setState(() {
+      localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
+    });
+
     // 总资产
     AccountOverviewRepository()
         .getTotalAssets(GetTotalAssetsReq(userID), 'GetTotalAssetsReq')
@@ -400,6 +404,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
+
     // 活期
     AccountOverviewRepository()
         .getCardListBalByUser('getLoanMastList')
@@ -416,6 +421,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
+
     //定期
     AccountOverviewRepository()
         .getTdConInfoList(
@@ -429,6 +435,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
+
     // 定期总额
     AccountOverviewRepository()
         .getActiveContractByCiNo(GetActiveContractByCiNoReq(custID, userID),
@@ -442,6 +449,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
+
     // 贷款
     AccountOverviewRepository()
         .getLoanMastList(GetLoanMastListReq(custID), 'GetLoanMastListReq')

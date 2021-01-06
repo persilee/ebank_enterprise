@@ -15,4 +15,6 @@ class ConfigKey {
 
   static const NET_TOKEN = "net_token";
   static const LOGIN_SECRET = "login_secret";
+
+  static const LOCAL_CCY = "local_ccy";
 }
