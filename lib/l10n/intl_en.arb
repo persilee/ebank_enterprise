@@ -326,6 +326,7 @@
   "placeIdType": "Please Input ID Type",
   "placeIdNumber": "Please Input ID Number",
   "placeReveredMobilePhone": "Please Enter Ehe Eeserved Mobile Phone Number",
+  "getVerificationCode": "Get SMS",
   "task_approval":"Task Approval",
   "approval_histroy":"Approval History",
   "approver":"Approver",

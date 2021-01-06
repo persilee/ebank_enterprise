@@ -75,7 +75,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                 children: <Widget>[
                     Container(
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(bottom: 5),
+                    margin: EdgeInsets.only(bottom: 12),
                     color: Colors.white,
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child:Column(
@@ -84,10 +84,10 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                             '', userAccount),
                       ]),
                     ),
-                  Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(S.of(context).pleaseFillInTheBankInformation, style: TextStyle(fontSize: 12),),
-                  ),
+                  // Container(
+                  //   padding: EdgeInsets.all(10.0),
+                  //   child: Text(S.of(context).pleaseFillInTheBankInformation, style: TextStyle(fontSize: 12),),
+                  // ),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin: EdgeInsets.only(bottom: 16),
@@ -95,6 +95,11 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Column(
                       children: [
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.only(top:10.0,bottom:1.0),
+                          child: Text(S.of(context).pleaseFillInTheBankInformation, style: TextStyle(fontSize: 12),),
+                  ),
                         InputList(S.of(context).name,
                             S.of(context).placeName, _account),
                         Divider(
@@ -173,8 +178,9 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       textAlign: TextAlign.end,
       keyboardType: TextInputType.number,
       controller: _sms,
-      decoration: InputDecoration.collapsed(
-        hintText: S.current.please_input,
+      cursorColor: Colors.red,
+      decoration: InputDecoration.collapsed(// 边色与边宽度
+        hintText: S.current.placeSMS,
         hintStyle: TextStyle(
           fontSize: 14,
           color: HsgColors.textHintColor,
@@ -203,7 +209,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       disabledTextColor: HsgColors.describeText,
       disabledBorderColor: HsgColors.describeText,
       child: Text(
-        countdownTime > 0 ? '${countdownTime}s' : '获取验证码',
+        countdownTime > 0 ? '${countdownTime}s' : S.of(context).getVerificationCode,
         style: TextStyle(fontSize: 14),
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
