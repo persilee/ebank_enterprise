@@ -4,6 +4,9 @@
 /// Date: 2020-12-29
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/find_user_to_do_task.dart';
+import 'package:ebank_mobile/data/source/model/get_process_task.dart';
+import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +21,8 @@ class TaskApprovalPage extends StatefulWidget {
 class _TaskApprovalPageState extends State<TaskApprovalPage> {
   FocusNode focusNode = FocusNode();
   bool offstage = true;
+
+  var taskId = '';
 
   void _toggle() {
     setState(() {
@@ -139,6 +144,8 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
       bool hasFocus = focusNode.hasFocus;
       bool hasListeners = focusNode.hasListeners;
       print("focusNode 兼听 hasFocus:$hasFocus  hasListeners:$hasListeners");
+
+      _getTaskApproval();
     });
   }
 
@@ -162,6 +169,9 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
 
   @override
   Widget build(BuildContext context) {
+    Rows application = ModalRoute.of(context).settings.arguments;
+    taskId = application.processId;
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -317,7 +327,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
     return listWidget;
   }
 
-//我的审批
+  //我的审批
   Widget _myApproval(BuildContext context) {
     return Container(
       child: Column(
@@ -393,5 +403,19 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
         ],
       ),
     );
+  }
+
+  void _getTaskApproval() {
+    //b驳回
+    bool approveResult = true;
+
+    var comment = '审批意见';
+    //驳回至发起人
+    bool rejectToStart = true;
+    Future.wait({
+      NeedToBeDealtWithRepository().getMyProcessTask(
+          GetProcessTaskReq(approveResult, comment, rejectToStart, taskId),
+          'getMyProcessTask')
+    });
   }
 }

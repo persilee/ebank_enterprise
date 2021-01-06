@@ -31,11 +31,11 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   double money = 0;
   String cardTotals = '';
   String time = intl.S.current.time_of_transfer;
-  DateTime _nowDate = DateTime.now();
+  DateTime _endValue = DateTime.now().add(Duration(days: 1));
+  DateTime _startValue = DateTime.now().add(Duration(days: 1));
   String _start = DateFormat('yyyy-MM-dd')
       .format(DateTime.now().add(Duration(days: 1))); //显示开始时间
-  String _end = DateFormat('yyyy-MM-dd')
-      .format(DateTime.now().add(Duration(days: 1))); //显示结束时间
+  String _end = DateFormat('yyyy-MM-dd').format(DateTime.now()); //显示结束时间
 
 //预约频率
   List frequency = [
@@ -94,6 +94,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
 //初始化开始时间和结束时间
   void _clear() {
     setState(() {
+      _endValue = DateTime.now().add(Duration(days: 1));
+      _startValue = DateTime.now().add(Duration(days: 1));
       _start = double.parse(groupValue) > 1
           ? (groupValue == '2'
               ? DateFormat('dd').format(DateTime.now().add(Duration(days: 1)))
@@ -105,8 +107,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           ? (groupValue == '2'
               ? DateFormat('yyyy-MM').format(DateTime.now())
               : DateFormat('yyyy').format(DateTime.now()))
-          : DateFormat('yyyy-MM-dd')
-              .format(DateTime.now().add(Duration(days: 1)));
+          : DateFormat('yyyy-MM-dd').format(DateTime.parse(_start));
     });
   }
 
@@ -130,40 +131,50 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               DateFormat('MM').format(DateTime.now()) +
               '-28')
           : DateTime.parse('2100-12-31'),
-      initialDateTime: _nowDate,
+      initialDateTime: _startValue,
       dateFormat: double.parse(groupValue) > 1
           ? (groupValue == '2' ? 'dd日' : 'MM月-dd日')
           : 'yyyy年-MM月-dd日',
       locale: DateTimePickerLocale.zh_cn,
       //确定
-      onConfirm: (dateTime, List<int> index) {
+      onConfirm: (startDate, List<int> index) {
         setState(
           () {
-            _nowDate = dateTime;
+            _startValue = startDate;
             DateTime nextMonth = DateTime.now();
-            nextMonth = dateTime.isAfter(DateTime.now())
+            nextMonth = startDate.isAfter(DateTime.now())
                 ? DateTime.now()
                 : DateTime(nextMonth.year, nextMonth.month + 1, nextMonth.day);
             DateTime nextYear = DateTime.now();
-            nextYear = dateTime.isAfter(DateTime.now())
+            nextYear = startDate.isAfter(DateTime.now())
                 ? DateTime.now()
                 : DateTime(nextYear.year + 1, nextYear.month, nextYear.day);
 
             _start = double.parse(groupValue) > 1
                 ? (groupValue == '2'
-                    ? DateFormat('dd').format(dateTime)
-                    : DateFormat('MM-dd').format(dateTime))
-                : DateFormat('yyyy-MM-dd').format(dateTime);
+                    ? DateFormat('dd').format(startDate)
+                    : DateFormat('MM-dd').format(startDate))
+                : DateFormat('yyyy-MM-dd').format(startDate);
             _end = double.parse(groupValue) > 1
                 ? (groupValue == '2'
-                    ? ((dateTime.isAfter(DateTime.now()))
+                    ? ((startDate.isAfter(DateTime.now()))
                         ? DateFormat('yyyy-MM').format(DateTime.now())
                         : (DateFormat('yyyy-MM').format(nextMonth)))
-                    : (dateTime.isAfter(DateTime.now())
+                    : (startDate.isAfter(DateTime.now())
                         ? DateFormat('yyyy').format(DateTime.now())
                         : DateFormat('yyyy').format(nextYear)))
-                : DateFormat('yyyy-MM-dd')
-                    .format(DateTime.now().add(Duration(days: 1)));
+                : DateFormat('yyyy-MM-dd').format(startDate);
+            if (groupValue == '0') {
+              _endValue = _startValue;
+            } else if (groupValue == '2') {
+              _endValue = (startDate.isAfter(DateTime.now()))
+                  ? DateTime.now()
+                  : nextMonth;
+            } else if (groupValue == '3') {
+              _endValue = (startDate.isAfter(DateTime.now()))
+                  ? DateTime.now()
+                  : nextYear;
+            }
           },
         );
         (context as Element).markNeedsBuild();
@@ -173,6 +184,17 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
 
 //选择结束时间
   _endCupertinoPicker(int i, BuildContext context) {
+    print(_start);
+    DateTime nextMonth = DateTime.now();
+    nextMonth = _startValue.isAfter(DateTime.now())
+        ? DateTime.now()
+        : DateTime(nextMonth.year, nextMonth.month + 1, nextMonth.day);
+
+    DateTime nextYear = DateTime.now();
+    nextYear = _startValue.isAfter(DateTime.now())
+        ? DateTime.now()
+        : DateTime(nextYear.year + 1, nextYear.month, nextYear.day);
+
     DatePicker.showDatePicker(
       context,
       pickerTheme: DateTimePickerTheme(
@@ -183,31 +205,35 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             style: TextStyle(color: Colors.black, fontSize: 16)),
       ),
       minDateTime: double.parse(groupValue) > 1
-          ? (groupValue == '2'
-              ? DateTime.parse(_end + '01')
-              : DateTime.parse(_end + '01-01'))
-          : DateTime.now().add(Duration(days: 1)),
-      initialDateTime: _nowDate,
+          ? (groupValue == '2' ? nextMonth : nextYear)
+          : _startValue,
+      initialDateTime: double.parse(groupValue) > 1 ? _endValue : _startValue,
       dateFormat: double.parse(groupValue) > 1
           ? (groupValue == '2' ? 'yyyy年-MM月' : 'yyyy年')
           : 'yyyy年-MM月-dd日',
       locale: DateTimePickerLocale.zh_cn,
       //确定
-      onConfirm: (dateTime, List<int> index) {
+      onConfirm: (endDate, List<int> index) {
         setState(
           () {
-            _nowDate = dateTime;
+            _endValue = double.parse(groupValue) > 1
+                ? ((groupValue == '2'
+                    ? DateTime(endDate.year, endDate.month, _startValue.day)
+                    : DateTime(
+                        endDate.year, _startValue.month, _startValue.day)))
+                : endDate;
+
             i == 0
                 ? _start = double.parse(groupValue) > 1
                     ? (groupValue == '2'
-                        ? DateFormat('dd').format(dateTime)
-                        : DateFormat('MM-dd').format(dateTime))
-                    : DateFormat('yyyy-MM-dd').format(dateTime)
+                        ? DateFormat('dd').format(_startValue)
+                        : DateFormat('MM-dd').format(_startValue))
+                    : DateFormat('yyyy-MM-dd').format(_startValue)
                 : _end = double.parse(groupValue) > 1
                     ? (groupValue == '2'
-                        ? DateFormat('yyyy-MM').format(dateTime)
-                        : DateFormat('yyyy').format(dateTime))
-                    : DateFormat('yyyy-MM-dd').format(dateTime);
+                        ? DateFormat('yyyy-MM').format(endDate)
+                        : DateFormat('yyyy').format(endDate))
+                    : DateFormat('yyyy-MM-dd').format(endDate);
           },
         );
         (context as Element).markNeedsBuild();
@@ -630,13 +656,14 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             TransferOtherWidget('转账', _transferInputChange),
             SliverToBoxAdapter(
               child: Container(
-                margin: EdgeInsets.fromLTRB(30, 75, 30, 0),
+                margin: EdgeInsets.fromLTRB(30, 40, 30, 40),
                 child: ButtonTheme(
                     minWidth: 5,
                     height: 45,
                     child: FlatButton(
                       onPressed: () {
-                        print('转账');
+                        print("开始时间:{$_startValue}");
+                        print("结束时间:{$_endValue}");
                       },
                       color: HsgColors.accent,
                       child:

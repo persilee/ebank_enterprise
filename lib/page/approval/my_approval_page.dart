@@ -37,7 +37,8 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
       return FlatButton(
           padding: EdgeInsets.only(top: 10.0),
           onPressed: () {
-            Navigator.pushNamed(context, pageTaskApproval);
+            // Navigator.pushNamed(context, pageTaskApproval);
+            go2Detail(row[index]);
           },
           child: Row(
             children: [
@@ -168,6 +169,10 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
         child: CustomScrollView(
       slivers: _list(row),
     ));
+  }
+
+  void go2Detail(Rows approval) {
+    Navigator.pushNamed(context, pageTaskApproval, arguments: approval);
   }
 
   Future<void> _loadData(
