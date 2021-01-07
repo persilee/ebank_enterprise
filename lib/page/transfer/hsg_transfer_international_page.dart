@@ -421,7 +421,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             S.current.please_input,
             _nameInputChange,
             _accountInputChange,
-            'international',
+            '2',
           ),
           SliverToBoxAdapter(
               child: Container(
