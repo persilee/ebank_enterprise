@@ -9,12 +9,9 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
-import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
 import '../../page_route.dart';
 
 class TimeDepositRecordPage extends StatefulWidget {
@@ -52,6 +49,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   }
 
   Widget _getContent(List<Rows> rows) {
+    // ignore: non_constant_identifier_names
     var SliverToBoxAdapters = <Widget>[
       SliverAppBar(
         pinned: true,
@@ -63,7 +61,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           color: HsgColors.primary,
           padding: EdgeInsets.only(left: 0, top: 30, bottom: 10),
           child: Text(
-            FormatUtil.formatSringToMoney('${totalAmt}'),
+            FormatUtil.formatSringToMoney(totalAmt),
             textAlign: TextAlign.center,
             style: TextStyle(
                 height: 1,
@@ -136,7 +134,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
               ),
               Text(
                 //利率
-                '${conRate}%',
+                '$conRate%',
                 style: TextStyle(fontSize: 15, color: Colors.red),
               )
             ],

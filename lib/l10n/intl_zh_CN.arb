@@ -293,7 +293,7 @@
   "logoutSuccess": "退出成功",
   "feedBackInfo": "请写下您的建议，如功能需求，产品吐槽等，我们会努力改进…",
   "oldPwd": "旧密码",
-  "sumit": "提交",
+  "submit": "提交",
   "newPwd": "新密码",
   "confimPwd": "确认新密码",
   "SMS": "短信验证码",
@@ -344,5 +344,6 @@
   "loan_duration": "贷款期限(月)",
   "loan_purpose": "贷款目的",
   "remark": "备注",
-  "apply": "申请"
+  "apply": "申请",
+  "not_required":"非必填"
 }

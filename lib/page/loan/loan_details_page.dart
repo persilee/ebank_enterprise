@@ -60,87 +60,18 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
       color: Colors.white,
       child: Column(
         children: [
-          _getSingleBox(
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // 业务品种
-                  Text(
-                    S.current.loan_product_name_with_value +
-                        '：' +
-                        loanDetail.acNo,
-                  ),
-                  //贷款编号
-                  Text(
-                    S.current.loanId + '：' + loanDetail.br,
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              children: [
-                Text(
-                  //是否到期
-                  isMaturity,
-                  style: TextStyle(
-                    color: HsgColors.loginAgreementText,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          //业务品种
+          _business(loanDetail.acNo, loanDetail.br, isMaturity),
           Divider(height: 0, color: HsgColors.textHintColor),
           Padding(
             padding: EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
             child: Row(
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      //贷款金额
-                      Text(
-                        S.current.loan_amount,
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      Padding(padding: EdgeInsets.only(top: 5)),
-                      Text(
-                        '￥' + FormatUtil.formatSringToMoney(loanDetail.loanAmt),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 30),
-                  child: SizedBox(
-                    width: 1,
-                    height: 30,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(color: HsgColors.textHintColor),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      //贷款余额
-                      Text(
-                        S.current.loan_balance2,
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      Padding(padding: EdgeInsets.only(top: 5)),
-                      Text(
-                        '￥' +
-                            FormatUtil.formatSringToMoney(
-                                loanDetail.unpaidPrincipal),
-                      ),
-                    ],
-                  ),
-                ),
+                //贷款金额
+                _loanMoney(S.current.loan_amount, loanDetail.loanAmt),
+                _verticalMoulding(),
+                //贷款余额
+                _loanMoney(S.current.loan_balance2, loanDetail.unpaidPrincipal),
               ],
             ),
           ),
@@ -266,6 +197,69 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
     );
   }
 
+  //业务品种
+  Widget _business(String acNo, String br, String isMaturity) {
+    return _getSingleBox(
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 业务品种
+            Text(
+              S.current.loan_product_name_with_value + '：' + acNo,
+            ),
+            //贷款编号
+            Text(
+              S.current.loanId + '：' + br,
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+      Text(
+        //是否到期
+        isMaturity,
+        style: TextStyle(
+          color: HsgColors.loginAgreementText,
+          fontSize: 14,
+        ),
+      ),
+    );
+  }
+
+  //竖线条
+  Widget _verticalMoulding() {
+    return Padding(
+      padding: EdgeInsets.only(right: 30),
+      child: SizedBox(
+        width: 1,
+        height: 30,
+        child: DecoratedBox(
+          decoration: BoxDecoration(color: HsgColors.textHintColor),
+        ),
+      ),
+    );
+  }
+
+  //贷款额
+  Widget _loanMoney(String loanName, String money) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            loanName,
+            style: TextStyle(fontSize: 14, color: Colors.grey),
+          ),
+          Padding(padding: EdgeInsets.only(top: 5)),
+          Text(
+            '￥' + FormatUtil.formatSringToMoney(money),
+          ),
+        ],
+      ),
+    );
+  }
+
   //页面跳转
   Widget _jumpPage(String jumpPage, var transfer, Text text, Icon icon) {
     return InkWell(
@@ -278,8 +272,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
 
   //获得单条内容
   Widget _getSingleBox(Widget name, Widget content) {
-    return SizedBox(
-        child: Padding(
+    return Padding(
       padding: EdgeInsets.all(15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -293,7 +286,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           ),
         ],
       ),
-    ));
+    );
   }
 
   Type arb() => S;

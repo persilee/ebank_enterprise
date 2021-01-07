@@ -10,19 +10,13 @@ import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_succeed_page.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
-import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
-import 'package:ebank_mobile/widget/hsg_general_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ebank_mobile/widget/hsg_general_button.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../page_route.dart';
 
@@ -118,7 +112,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   }
 
   //选择账号方法
-  Future<Function> _selectAccount() async {
+  _selectAccount() async {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
@@ -142,7 +136,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     //_getCcy();
   }
 
-  Function _getCardTotals(String _changedAccountTitle) {
+  _getCardTotals(String _changedAccountTitle) {
     Future.wait({
       CardDataRepository().getSingleCardBal(
           GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
@@ -201,7 +195,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   }
 
   //选择货币方法
-  Future<Function> _getCcy() async {
+  _getCcy() async {
     final result = await showDialog(
         context: context,
         builder: (context) {
@@ -258,6 +252,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         slivers: <Widget>[
           _gaySliver,
           TransferPayerWidget(
+              context,
               _limitMoney,
               _changedCcyTitle,
               _changedRateTitle,
@@ -274,27 +269,32 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _getCardTotals),
           //拿第二部分
           TransferPayeeWidget(
-              S.current.receipt_side,
-              S.current.name,
-              S.current.account_num,
-              S.current.hint_input_receipt_name,
-              S.current.hint_input_receipt_account,
-              _nameInputChange,
-              _accountInputChange),
+            context,
+            S.current.receipt_side,
+            S.current.name,
+            S.current.account_num,
+            S.current.hint_input_receipt_name,
+            S.current.hint_input_receipt_account,
+            _nameInputChange,
+            _accountInputChange,
+            'internal',
+          ),
+          //第三部分
           TransferOtherWidget(remark, _transferInputChange),
+
+          //提交按钮
           SliverToBoxAdapter(
             child: Container(
               height: 80,
               padding: EdgeInsets.fromLTRB(29.6, 30, 29.6, 0),
               margin: EdgeInsets.only(top: 60),
-              child: FlatButton(
-                child: Text('提交'),
+              child: RaisedButton(
+                child: Text(S.current.submit),
                 textColor: Colors.white,
                 color: Colors.blue[500],
-                onPressed: () {
-                  _tranferAccount(context);
-                  print('提交');
-                },
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                onPressed: _isClick(),
               ),
             ),
           ),
@@ -407,5 +407,16 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       _isLoading = false;
     });
     Navigator.pushNamed(context, pageDepositRecordSucceed);
+  }
+
+  _isClick() {
+    if (money > 0 && payeeName.length > 0 && payeeCardNo.length > 0) {
+      return () {
+        _tranferAccount(context);
+        print('提交');
+      };
+    } else {
+      return null;
+    }
   }
 }

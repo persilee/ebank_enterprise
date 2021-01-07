@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 
 class AuthorizationTaskApprovalPage extends StatefulWidget {
   final Rows history;
+
   AuthorizationTaskApprovalPage({Key key, this.history}) : super(key: key);
 
   @override

@@ -406,9 +406,8 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   }
 
   void _getTaskApproval() {
-    //b驳回
+    //驳回
     bool approveResult = true;
-
     var comment = '审批意见';
     //驳回至发起人
     bool rejectToStart = true;

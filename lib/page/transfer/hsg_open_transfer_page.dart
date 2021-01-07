@@ -251,10 +251,12 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
         ),
         Container(
           color: Colors.white,
+          width: MediaQuery.of(context).size.width,
           child: Row(
             children: [
               Container(
-                width: 215,
+                //width: 215,
+                width: MediaQuery.of(context).size.width / 5,
                 margin: EdgeInsets.only(left: 15),
                 child: Text(
                   intl.S.current.time_of_transfer,
@@ -264,7 +266,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               //选择转账时间
               Container(
                 margin: EdgeInsets.all(5),
-                width: 150,
+                width: MediaQuery.of(context).size.width / 1.4,
+                // width: 150,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -572,6 +575,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             ),
             SliverToBoxAdapter(
               child: Container(
+                width: MediaQuery.of(context).size.width,
                 color: Colors.white,
                 padding: EdgeInsets.only(bottom: 15),
                 child: GridView.count(
@@ -621,11 +625,14 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               ),
             ),
             SliverToBoxAdapter(
+                child: Container(
+              width: MediaQuery.of(context).size.width,
               child: groupValue == '0'
                   ? _once(_start, 0, context)
                   : _manyTimes(_start, _end, 0, 1, context),
-            ),
+            )),
             TransferPayeeWidget(
+                context,
                 intl.S.current.receipt_side,
                 intl.S.current.name,
                 intl.S.current.account_num,
@@ -639,6 +646,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               ),
             ),
             TransferPayerWidget(
+                context,
                 '5000.00',
                 'LAK',
                 '',

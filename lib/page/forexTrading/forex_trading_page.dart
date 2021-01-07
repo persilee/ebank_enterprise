@@ -456,7 +456,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     }
   }
 
-  _getCardList() async {
+  _getCardList() {
     CardDataRepository().getCardList('getCardList').then((data) {
       if (data.cardList != null) {
         setState(() {
@@ -474,7 +474,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   }
 
   //获取账户可用余额
-  _getCardBal(String cardNo) async {
+  _getCardBal(String cardNo) {
     ForexTradingRepository()
         .getCardBalByCardNo(GetCardBalReq(cardNo: cardNo), 'GetCardBalReq')
         .then((data) {
@@ -494,7 +494,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   }
 
   //计算汇率
-  _transferTrial() async {
+  _transferTrial() {
     if (_paymentAcc != S.current.please_select &&
         _paymentCcy != S.current.please_select &&
         _incomeAcc != S.current.please_select &&
@@ -520,12 +520,12 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     }
   }
 
-  _submitFormData() async {
+  _submitFormData() {
     HSProgressHUD.show();
     ForexTradingRepository()
         .doTransferAccout(
-            DoTransferAccoutReq(_incomeAmt, _paymentAcc, _incomeAcc,
-                _paymentCcy, _incomeCcy, _incomeName, _incomeBackCode),
+            DoTransferAccoutReq(_incomeAmt, _incomeCcy, _paymentCcy, _incomeAcc,
+                _paymentAcc, _incomeName, _incomeBackCode),
             'DoTransferAccoutReq')
         .then((data) {
       HSProgressHUD.dismiss();

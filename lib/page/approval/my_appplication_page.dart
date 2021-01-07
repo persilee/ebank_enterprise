@@ -41,37 +41,35 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
     return CustomScrollView(
       slivers: <Widget>[
         SliverList(
-            delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            return SizedBox(
-                child: GestureDetector(
-              onTap: () {
-                go2Detail(rowList[index]);
-                // Navigator.pushNamed(context, pageApplicationTaskApproval,
-                //     arguments: rows[index]);
-                // print('选择账号');
-              },
-              child: Column(
-                children: [
-                  Container(
-                      color: Colors.white,
-                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      child: Column(
-                        children: [
-                          _getRow(S.current.sponsor, rowList[index].processId),
-                          _getRow(S.current.to_do_task_name,
-                              rowList[index].taskName),
-                          _getRow(S.current.creation_time,
-                              rowList[index].createTime)
-                        ],
-                      ))
-                ],
-              ),
-            ));
-          },
-          childCount: rowList.length,
-        ))
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return GestureDetector(
+                onTap: () {
+                  go2Detail(rowList[index]);
+                },
+                child: Column(
+                  children: [
+                    Container(
+                        color: Colors.white,
+                        margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: Column(
+                          children: [
+                            _getRow(
+                                S.current.sponsor, rowList[index].processId),
+                            _getRow(S.current.to_do_task_name,
+                                rowList[index].taskName),
+                            _getRow(S.current.creation_time,
+                                rowList[index].createTime)
+                          ],
+                        ))
+                  ],
+                ),
+              );
+            },
+            childCount: rowList.length,
+          ),
+        ),
       ],
     );
   }
