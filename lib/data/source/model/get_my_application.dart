@@ -73,7 +73,7 @@ class MyApplicationResp extends Object {
   int totalPage;
 
   @JsonKey(name: 'rows')
-  List<Rows> rows;
+  List<MyApplicationDetail> rows;
 
   MyApplicationResp(
     this.sort,
@@ -90,7 +90,7 @@ class MyApplicationResp extends Object {
 }
 
 @JsonSerializable()
-class Rows extends Object {
+class MyApplicationDetail extends Object {
   @JsonKey(name: 'processId')
   String processId;
 
@@ -109,7 +109,7 @@ class Rows extends Object {
   @JsonKey(name: 'createTime')
   String createTime;
 
-  Rows(
+  MyApplicationDetail(
     this.processId,
     this.processKey,
     this.processTitle,
@@ -117,7 +117,7 @@ class Rows extends Object {
     this.taskName,
     this.createTime,
   );
-  factory Rows.fromJson(Map<String, dynamic> srcJson) =>
-      _$RowsFromJson(srcJson);
-  Map<String, dynamic> toJson() => _$RowsToJson(this);
+  factory MyApplicationDetail.fromJson(Map<String, dynamic> srcJson) =>
+      _$MyApplicationDetailFromJson(srcJson);
+  Map<String, dynamic> toJson() => _$MyApplicationDetailToJson(this);
 }

@@ -42,7 +42,7 @@ class FindUserFinishedTaskResp extends Object {
   int totalPage;
 
   @JsonKey(name: 'rows')
-  List<Rows> rows;
+  List<FinishTaskDetail> rows;
 
   FindUserFinishedTaskResp(
     this.page,
@@ -58,7 +58,7 @@ class FindUserFinishedTaskResp extends Object {
 }
 
 @JsonSerializable()
-class Rows extends Object {
+class FinishTaskDetail extends Object {
   @JsonKey(name: 'processId')
   String processId;
 
@@ -83,7 +83,7 @@ class Rows extends Object {
   @JsonKey(name: 'createTime')
   String createTime;
 
-  Rows(
+  FinishTaskDetail(
     this.processId,
     this.processKey,
     this.processTitle,
@@ -94,7 +94,7 @@ class Rows extends Object {
     this.createTime,
   );
 
-  factory Rows.fromJson(Map<String, dynamic> srcJson) =>
-      _$RowsFromJson(srcJson);
-  Map<String, dynamic> toJson() => _$RowsToJson(this);
+  factory FinishTaskDetail.fromJson(Map<String, dynamic> srcJson) =>
+      _$FinishTaskDetailFromJson(srcJson);
+  Map<String, dynamic> toJson() => _$FinishTaskDetailToJson(this);
 }

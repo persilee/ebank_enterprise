@@ -9,7 +9,6 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
-import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,86 +24,96 @@ Widget TransferPayeeWidget(
     Function(String inputStr) accountChange,
     [String tranferType]) {
   return SliverToBoxAdapter(
-      child: Container(
-    color: Colors.white,
-    margin: EdgeInsets.only(top: 20),
-    padding: EdgeInsets.fromLTRB(0, 20, 15, 0),
-    child: Column(
-      children: [
-        Container(
+    child: Container(
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 20),
+      padding: EdgeInsets.fromLTRB(0, 20, 15, 0),
+      child: Column(
+        children: [
+          Container(
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-              Container(
-                padding: EdgeInsets.only(left: 15),
-                child: Text(
-                  oneRowText,
-                  style: TextStyle(color: HsgColors.describeText, fontSize: 13),
-                  textAlign: TextAlign.right,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(left: 15),
+                  child: Text(
+                    oneRowText,
+                    style:
+                        TextStyle(color: HsgColors.describeText, fontSize: 13),
+                    textAlign: TextAlign.right,
+                  ),
                 ),
-              ),
-            ])),
-
-        Container(
-          child: Row(
-            children: [
-              _fiveRowLeft(towRowleft),
-              _fiveRowRight(nameChange, twoRowRight),
-              Container(
-                padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, pageTranferPartner,
-                          arguments: tranferType)
-                      .then((value) {
-                    if (value != null) {
-                      Rows rowListPartner = value;
-                    }
-                  });
-                },
-                child: Image(
-                  image: AssetImage('images/login/login_input_account.png'),
-                  width: 20,
-                  height: 20,
-                ),
-              )
-            ],
+              ],
+            ),
           ),
-        ),
-        Container(
+
+          Container(
+            child: Row(
+              children: [
+                _fiveRowLeft(towRowleft),
+                _fiveRowRight(nameChange, twoRowRight),
+                Container(
+                  padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, pageTranferPartner,
+                            arguments: tranferType)
+                        .then(
+                      (value) {
+                        if (value != null) {
+                          Rows rowListPartner = value;
+                        } else {
+                          var playInput = 'kkkkkkkkkkkkkkkkkk';
+                        }
+                      },
+                    );
+                  },
+                  child: Image(
+                    image: AssetImage('images/login/login_input_account.png'),
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
             padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
             child: Divider(
               color: HsgColors.divider,
               height: 0.5,
-            )),
-        //账号
-        Container(
-          child: Row(
-            children: [
-              //获取账户
-              _fiveRowLeft(threeRowLeft),
-
-              _fiveRowRight(
-                accountChange,
-                threeRowRight,
-              ),
-
-              Container(
-                padding: EdgeInsets.fromLTRB(40, 0, 0, 0),
-              ),
-            ],
+            ),
           ),
-        ),
-        Container(
+          //账号
+          Container(
+            child: Row(
+              children: [
+                //获取账户
+                _fiveRowLeft(threeRowLeft),
+
+                _fiveRowRight(
+                  accountChange,
+                  threeRowRight,
+                ),
+
+                Container(
+                  padding: EdgeInsets.fromLTRB(40, 0, 0, 0),
+                ),
+              ],
+            ),
+          ),
+          Container(
             padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
             child: Divider(
               color: HsgColors.divider,
               height: 0.5,
-            )),
-      ],
+            ),
+          ),
+        ],
+      ),
     ),
-  ));
+  );
 }
 
 Widget _fiveRowLeft(String name) {
@@ -121,26 +130,32 @@ Widget _fiveRowLeft(String name) {
 }
 
 Widget _fiveRowRight(Function nameChanges, String hintText) {
+  var payeeName = '';
+  payeeName = payeeName == '' ? '' : 'nihao';
   return Expanded(
     child: Container(
       child: TextField(
-          //是否自动更正
-          autocorrect: false,
-          //是否自动获得焦点
-          autofocus: false,
-          onChanged: (payeeName) {
-            nameChanges(payeeName);
-            print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
-          },
-          textAlign: TextAlign.right,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: hintText,
-            hintStyle: TextStyle(
-              fontSize: 14,
-              color: HsgColors.textHintColor,
-            ),
-          )),
+        //是否自动更正
+        autocorrect: false,
+        //是否自动获得焦点
+        autofocus: false,
+        controller: TextEditingController(text: payeeName),
+        onChanged: (payeeName) {
+          payeeName = '88888888';
+          nameChanges(payeeName);
+          print('$nameChanges 99999');
+          print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
+        },
+        textAlign: TextAlign.right,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: hintText,
+          hintStyle: TextStyle(
+            fontSize: 14,
+            color: HsgColors.textHintColor,
+          ),
+        ),
+      ),
     ),
   );
 }

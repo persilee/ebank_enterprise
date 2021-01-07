@@ -99,6 +99,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   // ignore: missing_return
   Function _nameInputChange(String name) {
     payeeName = name;
+    print('$payeeName 9999');
   }
 
   // ignore: missing_return
@@ -277,7 +278,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             S.current.hint_input_receipt_account,
             _nameInputChange,
             _accountInputChange,
-            'internal',
+            '0',
           ),
           //第三部分
           TransferOtherWidget(remark, _transferInputChange),

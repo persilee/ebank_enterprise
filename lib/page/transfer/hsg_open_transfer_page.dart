@@ -57,31 +57,31 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     }
   ];
 
-  Function _transferInputChange(String transfer) {
+  _transferInputChange(String transfer) {
     remark = transfer;
   }
 
-  Function _amountInputChange(String title) {
+  _amountInputChange(String title) {
     money = double.parse(title);
   }
 
-  Function _getCardTotals(String title) {
+  _getCardTotals(String title) {
     cardTotals = title;
   }
 
-  Future<Function> _selectAccount() async {
+  _selectAccount() async {
     setState(() {});
   }
 
-  Future<Function> _getCcy() async {
+  _getCcy() async {
     setState(() {});
   }
 
-  Function _nameInputChange(String name) {
+  _nameInputChange(String name) {
     payeeName = name;
   }
 
-  Function _accountInputChange(String account) {
+  _accountInputChange(String account) {
     payeeCardNo = account;
   }
 
@@ -593,7 +593,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                             padding: EdgeInsets.all(0),
                             color: Color(0xFFDCF0FF),
                             onPressed: () {
-                              print('切换${value}');
+                              print('切换$value');
                               updateGroupValue(value['type']);
                             },
                             child: Text(

@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 
 class PageDepositInfo extends StatefulWidget {
-  final Rows deposit;
+  final DepositRecord deposit;
   PageDepositInfo({Key key, this.deposit}) : super(key: key);
 
   @override
@@ -43,7 +43,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   var settDbAc = '';
 
-  Rows deposit;
+  DepositRecord deposit;
   //第二个接口所需变量
   var conMatAmt = '';
 

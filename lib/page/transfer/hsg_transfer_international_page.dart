@@ -319,14 +319,18 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //选择收款银行
-  _selectBank() async {
-    Navigator.pushNamed(context, pageSelectBank).then((data) {
-      if (data != null) {
-        setState(() {
-          _bankReceive = data;
-        });
-      }
-    });
+  _selectBank() {
+    Navigator.pushNamed(context, pageSelectBank).then(
+      (data) {
+        if (data != null) {
+          setState(
+            () {
+              _bankReceive = data;
+            },
+          );
+        }
+      },
+    );
   }
 
   //转账费用
@@ -351,13 +355,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //汇款用途
   _selectFeeUse() async {
     final result = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return BottomMenu(
-            title: '汇款用途',
-            items: feeUse,
-          );
-        });
+      context: context,
+      builder: (context) {
+        return BottomMenu(
+          title: '汇款用途',
+          items: feeUse,
+        );
+      },
+    );
     if (result != null && result != false) {
       _feeUse = feeUse[result];
     }
@@ -421,42 +426,43 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             S.current.please_input,
             _nameInputChange,
             _accountInputChange,
-            'international',
+            '2',
           ),
           SliverToBoxAdapter(
-              child: Container(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-            height: 360,
-            color: Colors.white,
-            margin: EdgeInsets.only(bottom: 20),
-            child: Column(
-              children: [
-                _getRedText(S.current.international_transfer_account_prompt),
-                //国家地区
-                _getSelectColumn(
-                    S.current.state_area, _countryText, _selectCountry),
-                _getLine(),
-                //收款银行
-                _getSelectColumn(
-                    S.current.receipt_bank, _bankReceive, _selectBank),
-                _getLine(),
-                //银行SWIFT
-                _getInputColumn(
-                    S.current.bank_swift, S.current.please_input, _bankSwift
-                    //  _addressChange,
-                    ),
-                _getLine(),
-                //中间行
-                _getInputColumn(S.current.middle_bank_swift, S.current.optional,
-                    _middleSwift),
-                _getLine(),
-                //收款地址
-                _getAddress(S.current.collection_address,
-                    S.current.please_input, _addressTwoChange),
-                _getLine(),
-              ],
+            child: Container(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              height: 360,
+              color: Colors.white,
+              margin: EdgeInsets.only(bottom: 20),
+              child: Column(
+                children: [
+                  _getRedText(S.current.international_transfer_account_prompt),
+                  //国家地区
+                  _getSelectColumn(
+                      S.current.state_area, _countryText, _selectCountry),
+                  _getLine(),
+                  //收款银行
+                  _getSelectColumn(
+                      S.current.receipt_bank, _bankReceive, _selectBank),
+                  _getLine(),
+                  //银行SWIFT
+                  _getInputColumn(
+                      S.current.bank_swift, S.current.please_input, _bankSwift
+                      //  _addressChange,
+                      ),
+                  _getLine(),
+                  //中间行
+                  _getInputColumn(S.current.middle_bank_swift,
+                      S.current.optional, _middleSwift),
+                  _getLine(),
+                  //收款地址
+                  _getAddress(S.current.collection_address,
+                      S.current.please_input, _addressTwoChange),
+                  _getLine(),
+                ],
+              ),
             ),
-          )),
+          ),
           SliverToBoxAdapter(
             child: Container(
               color: Colors.white,
@@ -499,6 +505,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     );
   }
 
+  //判断是否可以点击
   _isClick() {
     if (money > 0 &&
         payeeName.length > 0 &&
@@ -519,15 +526,18 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     }
   }
 
+  //红色字体
   _getRedText(String redText) {
     return Container(
-        padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-        child: Text(
-          redText,
-          style: TextStyle(color: Color(0XFFA61F23), fontSize: 13.5),
-        ));
+      padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+      child: Text(
+        redText,
+        style: TextStyle(color: Color(0XFFA61F23), fontSize: 13.5),
+      ),
+    );
   }
 
+  //获取地址
   _getAddress(
       String topText, String inputText, Function(String inputStr) nameChange) {
     return Container(
@@ -576,6 +586,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     );
   }
 
+  //拿到虚线
   _getLine() {
     return Container(
         child: Divider(
@@ -584,6 +595,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     ));
   }
 
+  //获取输入行
   _getInputColumn(String leftText, String righteText,
       Function(String inputStr) moneyChange) {
     return Container(
@@ -628,6 +640,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     );
   }
 
+  //获取选择行
   _getSelectColumn(String leftText, String rightText, Function selectMethod) {
     String righText = rightText == '' ? S.current.please_select : rightText;
     return Container(

@@ -30,9 +30,9 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
     _loadAuthorzationRateData();
   }
 
-  List<Rows> rowLists = [];
+  List<FinishTaskDetail> rowLists = [];
 
-  Widget _getContent(List<Rows> rows) {
+  Widget _getContent(List<FinishTaskDetail> rows) {
     return CustomScrollView(
       slivers: <Widget>[
         SliverList(
@@ -73,7 +73,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
     );
   }
 
-  void go2Detail(Rows history) {
+  void go2Detail(FinishTaskDetail history) {
     Navigator.pushNamed(context, pageAuthorizationTaskApproval,
         arguments: history);
   }
