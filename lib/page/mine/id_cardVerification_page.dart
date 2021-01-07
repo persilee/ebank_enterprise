@@ -25,18 +25,16 @@ class IdIardVerificationPage extends StatefulWidget {
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
-  TextEditingController _account = TextEditingController();
-  TextEditingController _userName = TextEditingController();
-  TextEditingController _idCardType = TextEditingController();
-  TextEditingController _idNumber = TextEditingController();
-  TextEditingController _phone = TextEditingController();
-  TextEditingController _msm = TextEditingController();
-  TextEditingController _sms = TextEditingController();
+  TextEditingController _cardNo = TextEditingController();//卡号
+  TextEditingController _certNo = TextEditingController(); //证件号
+  TextEditingController _certType = TextEditingController(); //证件类型
+  TextEditingController _phoneNo = TextEditingController();
+  TextEditingController _realName = TextEditingController();
+  TextEditingController _smsCode = TextEditingController();
   Timer _timer;
   int countdownTime = 0;
-  TextEditingController userAccount = TextEditingController();
-
-  @override
+   TextEditingController userAccount= TextEditingController();
+   @override
   // ignore: must_call_super
   void initState() {
     // 网络请求
@@ -92,35 +90,32 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                       children: [
                         Container(
                           alignment: Alignment.topLeft,
-                          padding: EdgeInsets.only(top: 10.0, bottom: 1.0),
-                          child: Text(
-                            S.of(context).pleaseFillInTheBankInformation,
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ),
-                        InputList(S.of(context).name, S.of(context).placeName,
-                            _account),
+                          padding: EdgeInsets.only(top:10.0,bottom:1.0),
+                          child: Text(S.of(context).pleaseFillInTheBankInformation, style: TextStyle(fontSize: 12),),
+                  ),
+                        InputList(S.of(context).name,
+                            S.of(context).placeName,_realName),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
                         InputList(S.of(context).idType,
-                            S.of(context).placeIdType, _userName),
+                            S.of(context).placeIdType, _certType),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
                         InputList(S.of(context).IdentificationNumber,
-                            S.of(context).placeIdNumber, _idCardType),
+                            S.of(context).placeIdNumber, _certNo),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
                         InputList(S.of(context).reservedMobilePhoneNumber,
-                            S.of(context).placeReveredMobilePhone, _idCardType),
+                            S.of(context).placeReveredMobilePhone, _phoneNo),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
@@ -175,10 +170,8 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
     return TextField(
       textAlign: TextAlign.end,
       keyboardType: TextInputType.number,
-      controller: _sms,
-      cursorColor: Colors.red,
-      decoration: InputDecoration.collapsed(
-        // 边色与边宽度
+      controller: _smsCode,
+      decoration: InputDecoration.collapsed(// 边色与边宽度
         hintText: S.current.placeSMS,
         hintStyle: TextStyle(
           fontSize: 14,

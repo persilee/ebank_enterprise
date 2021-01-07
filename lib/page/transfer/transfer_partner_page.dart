@@ -30,6 +30,7 @@ class _TransferPartnerState extends State<TransferPartner> {
   var _showmore = false;
   var _page = 1;
   var _totalPage = 0;
+  var _transferType = '';
   @override
   void initState() {
     super.initState();
@@ -72,6 +73,8 @@ class _TransferPartnerState extends State<TransferPartner> {
 
   @override
   Widget build(BuildContext context) {
+    _transferType = ModalRoute.of(context).settings.arguments;
+    print('$_transferType --------');
     setState(() {
       if (_tempList.isEmpty) {
         _tempList.addAll(_partnerListData);
@@ -216,7 +219,7 @@ class _TransferPartnerState extends State<TransferPartner> {
             alignment: Alignment.centerRight,
             child: Text(
               S.current.search,
-              style: TextStyle(color: Color(0xFF4871FF)),
+              style: TextStyle(color: HsgColors.blueTextColor),
             ),
           ),
         ),
@@ -224,7 +227,7 @@ class _TransferPartnerState extends State<TransferPartner> {
         hintText: '银行名/账户/户名/手机号',
         hintStyle: TextStyle(
           fontSize: 15,
-          color: HsgColors.textHintColor,
+          color: HsgColors.hintText,
         ),
       ),
       onChanged: (text) {},
@@ -261,9 +264,9 @@ class _TransferPartnerState extends State<TransferPartner> {
     );
   }
 
-  Widget _getDeleteBuilder(Widget function, Rows row) {
+  Widget _getDeleteBuilder(Widget function, Rows partner) {
     return CupertinoLeftScroll(
-      key: Key(row.payeeCardNo),
+      key: Key(partner.payeeCardNo),
       child: function,
       closeTag: LeftScrollCloseTag('row.payeeCardNo'),
       buttons: [
@@ -272,10 +275,10 @@ class _TransferPartnerState extends State<TransferPartner> {
           color: Colors.red,
           onTap: () {
             LeftScrollGlobalListener.instance
-                .targetStatus(
-                    LeftScrollCloseTag('row.payeeCardNo'), Key(row.payeeCardNo))
+                .targetStatus(LeftScrollCloseTag('row.payeeCardNo'),
+                    Key(partner.payeeCardNo))
                 .value = false;
-            _deletePartner(row.custId, row.payeeCardNo);
+            _deletePartner(partner.custId, partner.payeeCardNo);
             HSProgressHUD.showSuccess(status: '删除成功!');
           },
         ),
@@ -284,49 +287,53 @@ class _TransferPartnerState extends State<TransferPartner> {
   }
 
   //单条伙伴
-  Widget _allContentRow(Rows row) {
-    var _cardLength = row.payeeCardNo.length;
+  Widget _allContentRow(Rows partner) {
+    var _cardLength = partner.payeeCardNo.length;
     var _cardNo = '';
     var _bankName = '';
-    row.bankSwift == null ? _bankName = '无银行名' : _bankName = row.bankSwift;
+    partner.bankSwift == null
+        ? _bankName = '无银行名'
+        : _bankName = partner.bankSwift;
     //取卡号最后四位
     if (_cardLength > 4) {
-      _cardNo = row.payeeCardNo.substring(_cardLength - 5, _cardLength - 1);
+      _cardNo = partner.payeeCardNo.substring(_cardLength - 5, _cardLength - 1);
     } else {
-      row.payeeCardNo == null ? _cardNo = '' : _cardNo = row.payeeCardNo;
+      partner.payeeCardNo == null
+          ? _cardNo = ''
+          : _cardNo = partner.payeeCardNo;
     }
     //备注
-    var remarkCont = row.remark == '' || row.remark == null
+    var _remarkCont = partner.remark == '' || partner.remark == null
         ? Container()
         : Container(
-            padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+            padding: EdgeInsets.fromLTRB(9, 2.5, 9, 2.5),
             decoration: new BoxDecoration(
               //背景
-              color: Color(0x77A9A9A9),
+              color: Color(0xFFF1F1F1),
               //设置四周圆角 角度
               borderRadius: BorderRadius.all(Radius.circular(4.0)),
             ),
             alignment: Alignment.center,
             child: Text(
-              row.remark,
-              style: TextStyle(fontSize: 11),
+              partner.remark,
+              style: TextStyle(fontSize: 11, color: Color(0xFFA9A9A9)),
             ),
           );
     //文字部分
-    var contWord = Column(
+    var _contWord = Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
             Text(
-              row.payeeName == null ? '无名' : row.payeeName,
-              style: TextStyle(fontSize: 14),
+              partner.payeeName == null ? '无名' : partner.payeeName,
+              style: TextStyle(fontSize: 14, color: Color(0xFF232323)),
             ),
             Padding(
               padding: EdgeInsets.only(right: 5),
             ),
-            remarkCont,
+            _remarkCont,
           ],
         ),
         Text(
@@ -337,9 +344,9 @@ class _TransferPartnerState extends State<TransferPartner> {
     );
 
     //银行图标
-    var _bankImage = row.payeeBankImageUrl != null
+    var _bankImage = partner.payeeBankImageUrl != null
         ? Image.network(
-            row.payeeBankImageUrl,
+            partner.payeeBankImageUrl,
             width: 30,
             height: 30,
           )
@@ -348,32 +355,41 @@ class _TransferPartnerState extends State<TransferPartner> {
             width: 30,
             height: 30,
           );
-    return Container(
-      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-      color: Colors.white,
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(top: 15, bottom: 15),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                //银行图标
-                _bankImage,
-                Padding(
-                  padding: EdgeInsets.only(right: 20),
-                ),
-                //文字部分
-                contWord,
-              ],
+    return InkWell(
+      onTap: (){
+        if(_transferType != null){
+        Navigator.pop(context, partner);
+        }else{
+          Navigator.pushNamed(context, pageInternational,arguments: partner);
+        }
+      },
+      child: Container(
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+        color: Colors.white,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: 15, bottom: 15),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  //银行图标
+                  _bankImage,
+                  Padding(
+                    padding: EdgeInsets.only(right: 20),
+                  ),
+                  //文字部分
+                  _contWord,
+                ],
+              ),
             ),
-          ),
-          Divider(
-            height: 1,
-            color: HsgColors.textHintColor,
-          ),
-        ],
+            Divider(
+              height: 1,
+              color: HsgColors.divider,
+            ),
+          ],
+        ),
       ),
     );
   }
