@@ -57,10 +57,25 @@ class GetTransferRecordReq extends Object {
 
 @JsonSerializable()
 class GetTransferRecordResp extends Object {
+  @JsonKey(name: 'page')
+  int page;
+
+  @JsonKey(name: 'pageSize')
+  int pageSize;
+
+  @JsonKey(name: 'count')
+  int count;
+
+  @JsonKey(name: 'totalPage')
+  int totalPage;
+
   @JsonKey(name: 'rows')
   List<TransferRecord> transferRecord;
 
   GetTransferRecordResp(
+    this.page,
+    this.count,
+    this.totalPage,
     this.transferRecord,
   );
 
