@@ -277,7 +277,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             S.current.hint_input_receipt_account,
             _nameInputChange,
             _accountInputChange,
-            'internal',
+            '0',
           ),
           //第三部分
           TransferOtherWidget(remark, _transferInputChange),

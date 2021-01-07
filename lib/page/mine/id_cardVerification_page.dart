@@ -74,7 +74,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                     color: Colors.white,
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Column(children: [
-                      InputList(S.of(context).account_number, '', userAccount),
+                      InputList(S.of(context).account_number, '', _cardNo),
                     ]),
                   ),
                   // Container(
@@ -209,12 +209,12 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }
-
   bool _submit() {
-    if (_account.text != '' &&
-        _userName.text != '' &&
-        _idCardType.text != '' &&
-        _sms.text != '') {
+    if (_cardNo.text != '' &&
+        _certType.text != '' &&
+        _phoneNo.text != '' &&
+        _realName.text != ''&&
+        _smsCode.text !='') {
       return true;
     } else {
       return false;
@@ -247,7 +247,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
         .then((data) {
       _startCountdown();
       setState(() {
-        _sms.text = '123456';
+        _smsCode.text = '123456';
       });
       HSProgressHUD.dismiss();
     }).catchError((e) {
@@ -256,28 +256,33 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
     });
   }
 
-  //修改密码接口
+//                         _certNo = TextEditingController(); //证件号
+//   TextEditingController _certType = TextEditingController(); //证件类型
+//   TextEditingController _phoneNo = TextEditingController();
+//   TextEditingController _realName = TextEditingController();
+//   TextEditingController _smsCode = TextEditingController();
+  //验证身份信息
   _updateLoginPassword() async {
-    if (_userName.text != _idCardType.text) {
-      Fluttertoast.showToast(msg: S.of(context).differentPwd);
-    } else {
-      HSProgressHUD.show();
-      final prefs = await SharedPreferences.getInstance();
-      String userID = prefs.getString(ConfigKey.USER_ID);
-      UpdateLoginPawRepository()
-          .modifyLoginPassword(
-              ModifyPasswordReq(
-                  _userName.text, _account.text, _sms.text, userID),
-              'ModifyPasswordReq')
-          .then((data) {
-        HSProgressHUD.dismiss();
-        Fluttertoast.showToast(msg: S.current.operate_success);
-      }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
-        HSProgressHUD.dismiss();
-      });
-    }
-  }
+  //   if (_userName.text != _idCardType.text) {
+  //     Fluttertoast.showToast(msg: S.of(context).differentPwd);
+  //   } else {
+  //     HSProgressHUD.show();
+  //     final prefs = await SharedPreferences.getInstance();
+  //     String userID = prefs.getString(ConfigKey.USER_ID);
+  //     UpdateLoginPawRepository()
+  //         .modifyLoginPassword(
+  //             ModifyPasswordReq(
+  //                 _userName.text, _account.text, _sms.text, userID),
+  //             'ModifyPasswordReq')
+  //         .then((data) {
+  //       HSProgressHUD.dismiss();
+  //       Fluttertoast.showToast(msg: S.current.operate_success);
+  //     }).catchError((e) {
+  //       Fluttertoast.showToast(msg: e.toString());
+  //       HSProgressHUD.dismiss();
+  //     });
+  //   }
+ }
 }
 
 // ignore: must_be_immutable

@@ -58,11 +58,23 @@ class _TransferPartnerState extends State<TransferPartner> {
       setState(() {
         if (data.rows != null) {
           _totalPage = data.totalPage;
-          setState(() {
-            _partnerListData.addAll(data.rows);
-            _tempList.clear();
+          _partnerListData.addAll(data.rows);
+          _tempList.clear();
+          if (_transferType != '') {
+            for (int i = 0; i < _partnerListData.length; i++) {
+              //如果是国际转账或者行内转账跳过来的，只显示对应类型的的伙伴，否则显示全部
+              if (_partnerListData[i].transferType == _transferType) {
+                _tempList.add(_partnerListData[i]);
+              }
+            }
+            //要显示的条数不足10条，继续加载下一页，直到达到最大页数
+            if (_tempList.length < 10 && _page < _totalPage) {
+              _page += 1;
+              _loadData();
+            }
+          }else{
             _tempList.addAll(_partnerListData);
-          });
+          }
         }
         _showmore = false;
       });
@@ -73,8 +85,8 @@ class _TransferPartnerState extends State<TransferPartner> {
 
   @override
   Widget build(BuildContext context) {
-    _transferType = ModalRoute.of(context).settings.arguments;
-    print('$_transferType --------');
+    var _arguments = ModalRoute.of(context).settings.arguments;
+    _arguments == null? _transferType = '':_transferType = _arguments;
     setState(() {
       if (_tempList.isEmpty) {
         _tempList.addAll(_partnerListData);
@@ -142,7 +154,7 @@ class _TransferPartnerState extends State<TransferPartner> {
               ),
             ),
             //加载更多
-            _tempList.length > 8 ? _loadMore() : Container(),
+            _tempList.length >= 10 ? _loadMore() : Container(),
           ],
         ));
   }
@@ -337,7 +349,7 @@ class _TransferPartnerState extends State<TransferPartner> {
           ],
         ),
         Text(
-          '$_bankName($_cardNo)',
+          '$_bankName($_cardNo)  ' + (partner.transferType == '0' ? '本行' : '国际'),
           style: TextStyle(fontSize: 13, color: HsgColors.hintText),
         )
       ],
@@ -356,11 +368,11 @@ class _TransferPartnerState extends State<TransferPartner> {
             height: 30,
           );
     return InkWell(
-      onTap: (){
-        if(_transferType != null){
-        Navigator.pop(context, partner);
-        }else{
-          Navigator.pushNamed(context, pageInternational,arguments: partner);
+      onTap: () {
+        if (_transferType != null) {
+          Navigator.pop(context, partner);
+        } else {
+          Navigator.pushNamed(context, pageInternational, arguments: partner);
         }
       },
       child: Container(
