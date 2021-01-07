@@ -303,9 +303,9 @@ class _TransferPartnerState extends State<TransferPartner> {
     var _cardLength = partner.payeeCardNo.length;
     var _cardNo = '';
     var _bankName = '';
-    partner.bankSwift == null
+    partner.payeeBankLocalName == null
         ? _bankName = '无银行名'
-        : _bankName = partner.bankSwift;
+        : _bankName = partner.payeeBankLocalName;
     //取卡号最后四位
     if (_cardLength > 4) {
       _cardNo = partner.payeeCardNo.substring(_cardLength - 5, _cardLength - 1);
