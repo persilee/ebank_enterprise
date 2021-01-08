@@ -67,6 +67,8 @@
   "repayment_succeed_p": "Repayment Succeed!",
   "optional": "Optional",
   "can_be_empty":"Can be Empty",
+  "prompt": "Prompt",
+  "select_transfer_type_first": "Please select transfer type first",
   "add_partner": "Add Partner",
   "partner_information": "Partner Information",
   "account_name": "Account Name",

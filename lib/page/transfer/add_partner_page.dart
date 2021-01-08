@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/model/add_partner.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_single_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,6 +28,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   var _transferType = '';
   var _swiftAdress = '';
   var _bankCode = '';
+  final String _transferType_0 = S.current.transfer_type_0;
+  final String _transferType_2 = S.current.transfer_type_2;
   var _nameController = TextEditingController();
   var _acountController = TextEditingController();
   var _smsController = TextEditingController();
@@ -75,15 +78,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     String _swiftAdressReq;
     String _branchReq;
     _branch == S.current.optional ? _branchReq = '' : _branchReq = _branch;
-    switch (_transferType) {
-      case '行内转账':
-        myTransferType = '0';
-        break;
-      case '国际转账':
-        myTransferType = '2';
-        break;
-      default:
-        myTransferType = '';
+    if (_transferType == _transferType_0) {
+      myTransferType = '0';
+    } else if (_transferType == _transferType_2) {
+      myTransferType = '2';
     }
     if (_showInternational) {
       _centerSwiftReq = _centerSwiftController.text;
@@ -172,7 +170,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           padding: EdgeInsets.only(top: 10, bottom: 16),
           child: _inputFrame(
             S.current.account_name,
-            _inputField(_nameController, S.current.please_input,TextInputType.text),
+            _inputField(
+                _nameController, S.current.please_input, TextInputType.text),
           ),
         ),
         Divider(height: 0.5, color: HsgColors.divider),
@@ -181,31 +180,15 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           padding: EdgeInsets.only(top: 16, bottom: 16),
           child: _inputFrame(
             S.current.account_number,
-            _inputField(_acountController, S.current.please_input,TextInputType.number),
+            _inputField(_acountController, S.current.please_input,
+                TextInputType.number),
           ),
         ),
         Divider(height: 0.5, color: HsgColors.divider),
         //转账类型
         GestureDetector(
           onTap: () {
-            SinglePicker.showStringPicker(
-              context,
-              data: [S.current.transfer_type_0, S.current.transfer_type_2],
-              title: S.current.transfer_type,
-              clickCallBack: (int index, var str) {
-                setState(() {
-                  _transferType = str;
-                  if (_transferType == S.current.transfer_type_2) {
-                    _showInternational = true;
-                  } else if (_transferType == S.current.transfer_type_0) {
-                    _showInternational = false;
-                    //初始化国际转账的内容
-                    _centerSwiftController.text = '';
-                    _payeeAdressController.text = '';
-                  }
-                });
-              },
-            );
+            _transferTypeDialog();
           },
           child: Container(
             padding: EdgeInsets.only(top: 16, bottom: 16),
@@ -219,18 +202,29 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         //银行
         GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, pageSelectBank).then((data) {
-              if (data != null) {
-                Banks _bank;
-                setState(() {
-                  _bank = data;
-                  _bankName = _bank.localName;
-                  _swiftAdress = _bank.bankSwift;
-                  _bankCode = _bank.bankCode;
-                  _check();
-                });
+            if (_transferType != S.current.please_select) {
+              String _type;
+              if (_transferType == _transferType_0) {
+                _type = '0';
+              } else if (_transferType == _transferType_2) {
+                _type = '2';
               }
-            });
+              Navigator.pushNamed(context, pageSelectBank, arguments: _type)
+                  .then((data) {
+                if (data != null) {
+                  Banks _bank;
+                  setState(() {
+                    _bank = data;
+                    _bankName = _bank.localName;
+                    _swiftAdress = _bank.bankSwift;
+                    _bankCode = _bank.bankCode;
+                    _check();
+                  });
+                }
+              });
+            } else {
+              _showTipsDialog();
+            }
           },
           child: Container(
             padding: EdgeInsets.only(top: 16, bottom: 16),
@@ -294,11 +288,30 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           padding: EdgeInsets.only(top: 16, bottom: 16),
           child: _inputFrame(
             S.current.alias,
-            _inputField(_aliasController, S.current.word_limit_5, TextInputType.text),
+            _inputField(
+                _aliasController, S.current.word_limit_5, TextInputType.text),
           ),
         ),
       ],
     );
+  }
+
+  //(转账类型未输入)提示弹窗
+  _showTipsDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertDialog(
+            title: S.current.prompt,
+            message: S.current.select_transfer_type_first,
+            positiveButton: S.current.confirm,
+            negativeButton: S.current.cancel,
+          );
+        }).then((value) {
+      if (value == true) {
+        _transferTypeDialog();
+      }
+    });
   }
 
   //国际转账需要输入的部分
@@ -331,6 +344,28 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     );
   }
 
+  //转账类型弹窗
+  _transferTypeDialog() {
+    SinglePicker.showStringPicker(
+      context,
+      data: [S.current.transfer_type_0, S.current.transfer_type_2],
+      title: S.current.transfer_type,
+      clickCallBack: (int index, var str) {
+        setState(() {
+          _transferType = str;
+          if (_transferType == S.current.transfer_type_2) {
+            _showInternational = true;
+          } else if (_transferType == S.current.transfer_type_0) {
+            _showInternational = false;
+            //初始化国际转账的内容
+            _centerSwiftController.text = '';
+            _payeeAdressController.text = '';
+          }
+        });
+      },
+    );
+  }
+
   //收款人地址
   Widget _payeeAdress(TextEditingController _inputController) {
     var inputRow = Row(
@@ -348,7 +383,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 isCollapsed: true,
-                hintText: S.of(context).payee_address,
+                hintText: S.current.payee_address,
                 hintStyle: TextStyle(color: HsgColors.hintText, fontSize: 14),
                 border: InputBorder.none,
               ),
@@ -368,7 +403,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               children: [
                 Container(
                   child: Text(
-                    S.of(context).payee_address,
+                    S.current.payee_address,
                     style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
                   ),
                 ),
@@ -469,7 +504,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   }
 
   //通用文字输入框(传入监听器)
-  Widget _inputField(TextEditingController _inputController, String hint, TextInputType inputType) {
+  Widget _inputField(TextEditingController _inputController, String hint,
+      TextInputType inputType) {
     return Expanded(
       child: TextField(
         textAlign: TextAlign.end,
