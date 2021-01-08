@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+///文字样式
+/// Author: fangluyao
+/// Date: 2021-01-08
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -19,3 +24,4 @@ const AGREEMENT_TEXT_STYLE =
     TextStyle(fontSize: 13, color: HsgColors.aboutusTextCon);
 const AGREEMENT_JUMP_TEXT_STYLE =
     TextStyle(fontSize: 13, color: HsgColors.accent);
+const CONTENT_PADDING = EdgeInsets.only(left: 15, right: 15);

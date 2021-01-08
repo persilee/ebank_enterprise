@@ -24,6 +24,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:popup_window/popup_window.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:webview_flutter/platform_interface.dart';
 import '../../page_route.dart';
 
 class TrsnsferRecordPage extends StatefulWidget {
@@ -204,7 +205,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           children: [
             //转账记录账号及图标
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _transferAccount(_actualName, _transferHistory.paymentCardNo),
                 _transferRecordImage("images/transferIcon/transfert_to.png"),
@@ -233,7 +234,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 //转账记录图标
   Widget _transferRecordImage(String imgurl) {
     return Container(
-      width: MediaQuery.of(context).size.width / 5,
+      width: MediaQuery.of(context).size.width / 7,
       child: Image.asset(
         imgurl,
         width: 25,
@@ -246,7 +247,6 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _transferAccount(String name, String card) {
     return Container(
       width: MediaQuery.of(context).size.width / 2.5,
-      padding: EdgeInsets.only(right: 5),
       child: Column(
         children: [
           Text(

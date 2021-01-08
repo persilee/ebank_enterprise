@@ -14,6 +14,7 @@ import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_single_picker.dart';
@@ -41,7 +42,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   String _notRequired = S.current.not_required; //非必填提示
   int groupValue = 0; //单选框默认值
   bool _isButton = false; //申请按钮是否能点击
-  bool checkBoxValue = false; //复选框默认值
+  bool _checkBoxValue = false; //复选框默认值
   Color color = Colors.grey; //请选择文字的颜色
   var _contactsController = new TextEditingController(); //联系人文本监听器
   var _phoneController = new TextEditingController(); //联系人手机号码文本监听器
@@ -68,6 +69,17 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   void initState() {
     super.initState();
     _custIdReqData();
+
+    //输入框监听
+    _contactsController.addListener(() {
+      _isClick();
+    });
+    _phoneController.addListener(() {
+      _isClick();
+    });
+    _moneyController.addListener(() {
+      _isClick();
+    });
   }
 
   //获取客户号
@@ -87,6 +99,9 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
 
   //贷款申请请求
   _reqData() {
+    String _prdtCode = "LN000008";
+    String _repaymentMethod = "EPI";
+    String _termUnit = "MONTH";
     LoanDataRepository()
         .getLoanApplication(
             LoanApplicationReq(
@@ -96,10 +111,10 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
                 int.parse(_moneyController.text),
                 _goal,
                 _phoneController.text,
-                "LN000008",
+                _prdtCode,
                 _remarkController.text,
-                "EPI",
-                "MONTH",
+                _repaymentMethod,
+                _termUnit,
                 _index),
             "getLoanApplication")
         .then((data) {})
@@ -117,56 +132,85 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-          padding: EdgeInsets.only(right: 15),
-          child: Column(
-            children: [
-              //联系人
-              _input(S.of(context).contact,
-                  _inputText(_inputs, _contactsController)),
-              //联系人手机号码
-              _input(S.of(context).contact_phone_num,
-                  _inputText(_inputs, _phoneController)),
-              //币种
-              _input(S.of(context).currency,
-                  _inputDialog(context, ['HKD', 'USD', 'CND'])),
-              //申请金额
-              _input(S.of(context).apply_amount,
-                  _inputText(_inputs, _moneyController)),
-              //贷款期限
-              _input(
-                  S.of(context).loan_duration,
-                  _inputBottom(
-                      context, S.of(context).loan_duration, _deadLineLists, 0)),
-              //贷款目的
-              _input(
-                  S.of(context).loan_purpose,
-                  _inputBottom(
-                      context, S.of(context).loan_purpose, _goalLists, 1)),
-              //备注
-              _input(S.of(context).remark,
-                  _inputText(_notRequired, _remarkController)),
-              //复选框及协议文本内容
-              Container(
-                child: Row(
-                  children: [_roundCheckBox(), _textContent()],
-                ),
+        padding: CONTENT_PADDING,
+        child: Column(
+          children: [
+            //联系人
+            _input(
+              S.of(context).contact,
+              _inputText(_inputs, _contactsController),
+            ),
+            //联系人手机号码
+            _input(
+              S.of(context).contact_phone_num,
+              _inputText(_inputs, _phoneController),
+            ),
+            //币种
+            _input(
+              S.of(context).currency,
+              _inputDialog(context, ['HKD', 'USD', 'CND']),
+            ),
+            //申请金额
+            _input(
+              S.of(context).apply_amount,
+              _inputText(_inputs, _moneyController),
+            ),
+            //贷款期限
+            _input(
+              S.of(context).loan_duration,
+              _inputBottom(
+                  context, S.of(context).loan_duration, _deadLineLists, 0),
+            ),
+            //贷款目的
+            _input(
+              S.of(context).loan_purpose,
+              _inputBottom(context, S.of(context).loan_purpose, _goalLists, 1),
+            ),
+            //备注
+            _input(
+              S.of(context).remark,
+              _inputText(_notRequired, _remarkController),
+            ),
+            //复选框及协议文本内容
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              child: Row(
+                children: [_roundCheckBox(), _textContent()],
               ),
-              //申请按钮
-              _applicationButton(S.of(context).apply),
-            ],
-          )),
+            ),
+            //申请按钮
+            Container(
+              margin: EdgeInsets.only(top: 40),
+              child: HsgButton.button(title: "申请", click: _confirmButton()),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   //判断按钮能否使用
   _isClick() {
-    if (_isButton &&
+    if (_checkBoxValue &&
         _contactsController.text.length > 0 &&
         _phoneController.text.length > 0 &&
         _moneyController.text.length > 0 &&
         _deadline != _choose &&
         _goal != _choose &&
         _currency != _choose) {
+      return setState(() {
+        _isButton = true;
+      });
+    } else {
+      setState(() {
+        _isButton = false;
+      });
+    }
+  }
+
+  //确认按钮点击事件
+  _confirmButton() {
+    if (_isButton) {
       return () {
         _openBottomSheet();
       };
@@ -185,48 +229,27 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
               text: S.current.loan_application_agreement1,
               style: AGREEMENT_TEXT_STYLE,
             ),
-            TextSpan(
-              text: S.current.loan_application_agreement2,
-              style: AGREEMENT_JUMP_TEXT_STYLE,
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  Navigator.pushNamed(context, pageUserAgreement,
-                      arguments: '99867');
-                },
-            ),
+            _conetentJump(S.current.loan_application_agreement2, '99867'),
             TextSpan(
               text: S.current.loan_application_agreement3,
               style: AGREEMENT_TEXT_STYLE,
             ),
-            TextSpan(
-              text: S.current.loan_application_agreement4,
-              style: AGREEMENT_JUMP_TEXT_STYLE,
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  Navigator.pushNamed(context, pageUserAgreement,
-                      arguments: '99868');
-                },
-            ),
+            _conetentJump(S.current.loan_application_agreement4, '99868'),
           ],
         ),
       ),
     );
   }
 
-  //申请按钮
-  Widget _applicationButton(String name) {
-    return Container(
-      padding: EdgeInsets.only(left: 15),
-      margin: EdgeInsets.only(top: 40),
-      width: 320,
-      height: 50,
-      child: RaisedButton(
-        onPressed: _isClick(),
-        child: Text(name),
-        color: Colors.blue,
-        textColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      ),
+  //协议文本跳转内容
+  _conetentJump(String text, String arguments) {
+    return TextSpan(
+      text: text,
+      style: AGREEMENT_JUMP_TEXT_STYLE,
+      recognizer: TapGestureRecognizer()
+        ..onTap = () {
+          Navigator.pushNamed(context, pageUserAgreement, arguments: arguments);
+        },
     );
   }
 
@@ -294,6 +317,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
       groupValue = result;
       setState(() {
         _currency = list[result];
+        _isClick();
       });
     }
   }
@@ -331,7 +355,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         Row(
           children: [
             Container(
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
               child: Text(
                 name,
                 style: FIRST_DEGREE_TEXT_STYLE,
@@ -355,13 +379,13 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          checkBoxValue = !checkBoxValue;
-          _isButton = checkBoxValue;
+          _checkBoxValue = !_checkBoxValue;
+          _isClick();
         });
       },
       child: Padding(
-        padding: EdgeInsets.fromLTRB(30, 10, 10, 25),
-        child: checkBoxValue
+        padding: EdgeInsets.fromLTRB(15, 10, 10, 25),
+        child: _checkBoxValue
             ? _ckeckBoxImge("images/common/check_btn_common_checked.png")
             : _ckeckBoxImge("images/common/check_btn_common_no_check.png"),
       ),
@@ -387,6 +411,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         setState(() {
           i == 0 ? _deadline = str : _goal = str;
           _index = _index * (index + 1);
+          _isClick();
         });
       },
     );
