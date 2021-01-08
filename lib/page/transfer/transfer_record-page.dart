@@ -70,6 +70,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             _loadMore = true;
           });
         }
+        _lazyLoad();
       }
     });
   }
@@ -165,13 +166,27 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   //加载更多
   _loadMoreData() {
     return _loadMore
-        ? InkWell(
-            onTap: () {
-              _page++;
-              _loadData();
-            },
-            child: _toLoad(intl.S.current.click_to_load_more))
+        ? Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+              ),
+              CircularProgressIndicator(
+                strokeWidth: 3.0,
+              ),
+            ],
+          )
         : _toLoad(intl.S.current.load_more_finished);
+  }
+
+  //延迟加载
+  Future<Null> _lazyLoad() {
+    return Future.delayed(Duration(seconds: 0), () {
+      setState(() {
+        _page++;
+        _loadData();
+      });
+    });
   }
 
   //转账记录内容
@@ -681,7 +696,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   }
 
   //转账记录
-  _loadData() {
+  Future _loadData() async {
     //请求参数
     String ccy = '';
     int pageSize = 10;
