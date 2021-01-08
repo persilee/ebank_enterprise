@@ -201,7 +201,11 @@ class HsgSingleChoiceDialog extends StatelessWidget {
         negativeButton,
         context,
         () {
-          Navigator.of(context).pop(_selectedPosition);
+          if (items.length > 0) {
+            Navigator.of(context).pop(_selectedPosition);
+          } else {
+            Navigator.pop(context);
+          }
         },
       );
     }
@@ -387,16 +391,18 @@ class BottomMenu extends StatelessWidget {
   }
 }
 
-//底部圆角单选弹窗
+//账户单选底部圆角弹窗
 class HsgBottomSingleChoice extends StatelessWidget {
   final String title;
   final List<String> items;
+  final List<String> icons;
   final lastSelectedPosition;
 
   HsgBottomSingleChoice({
     Key key,
     this.title,
     this.items,
+    this.icons,
     this.lastSelectedPosition = -1,
   });
 
@@ -498,12 +504,19 @@ class HsgBottomSingleChoice extends StatelessWidget {
       Container(
         padding: EdgeInsets.only(right: 20),
         child: ClipOval(
-          child: Image.asset(
-            'images/home/listIcon/home_list_card_bank.png',
-            height: 23,
-            width: 23,
-            fit: BoxFit.cover,
-          ),
+          child: icons != null && icons.length > 0
+              ? Image.network(
+                  icons[position],
+                  height: 23,
+                  width: 23,
+                  fit: BoxFit.cover,
+                )
+              : Image.asset(
+                  'images/home/listIcon/home_list_card_bank.png',
+                  height: 23,
+                  width: 23,
+                  fit: BoxFit.cover,
+                ),
         ),
       ),
       Expanded(

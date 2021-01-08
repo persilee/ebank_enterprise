@@ -249,6 +249,7 @@
   "debit_currency": "支出币种",
   "available_balance": "可用余额",
   "debit_amount": "支出金额",
+  "debit_accno": "支出账户",
   "credit_account": "收入账户",
   "credit_currency": "收入币种",
   "rate_of_exchange": "汇率",
