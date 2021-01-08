@@ -207,37 +207,42 @@ Widget _threeRowRight(
         getcardList();
         //选择卡号
         getCardTotals(_changedAccountTitle);
+
+        print('选择账号');
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           //卡号
           Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
-                  child: Text(
-                    '$payeeBankCode  $account',
-                    style: TextStyle(
-                      color: HsgColors.firstDegreeText,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-                Container(
-                  child: Icon(
-                    Icons.arrow_forward_ios,
+              child: Row(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height / 30,
+                width: MediaQuery.of(context).size.width / 1.58,
+                child: Text(
+                  '$payeeBankCode  $account',
+                  style: TextStyle(
                     color: HsgColors.firstDegreeText,
-                    size: 16,
+                    fontSize: 14,
                   ),
+                  textAlign: TextAlign.right,
                 ),
-              ],
-            ),
-          ),
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height / 30,
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width / 8,
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  color: HsgColors.firstDegreeText,
+                  size: 16,
+                ),
+              ),
+            ],
+          )),
           Container(
-            margin: EdgeInsets.only(top: 5),
+            height: MediaQuery.of(context).size.height / 30,
             width: MediaQuery.of(context).size.width / 3.1,
             child: Text(
               '余额:120.05',

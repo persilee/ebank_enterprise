@@ -8,12 +8,14 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 
-import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
-import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 Widget TransferPayeeWidget(
+    String payeeName, //从输入框拿回来的回参
+    String accountForSelect,
+    String payeeNameForSelect,
+    Function() _getImage,
     BuildContext context,
     String oneRowText,
     String towRowleft,
@@ -23,6 +25,10 @@ Widget TransferPayeeWidget(
     Function(String inputStr) nameChange,
     Function(String inputStr) accountChange,
     [String tranferType]) {
+  print('$payeeNameForSelect oooooooooooooooooooooo');
+  print('$payeeName   pppppppp');
+//  print('$nameChange 8888888');
+  List selectList = List();
   return SliverToBoxAdapter(
     child: Container(
       color: Colors.white,
@@ -51,30 +57,12 @@ Widget TransferPayeeWidget(
             child: Row(
               children: [
                 _fiveRowLeft(towRowleft),
-                _fiveRowRight(nameChange, twoRowRight),
+                _fiveRowRight(
+                    nameChange, twoRowRight, payeeNameForSelect, payeeName),
                 Container(
                   padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                 ),
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, pageTranferPartner,
-                            arguments: tranferType)
-                        .then(
-                      (value) {
-                        if (value != null) {
-                          Rows rowListPartner = value;
-                        } else {
-                          var playInput = 'kkkkkkkkkkkkkkkkkk';
-                        }
-                      },
-                    );
-                  },
-                  child: Image(
-                    image: AssetImage('images/login/login_input_account.png'),
-                    width: 20,
-                    height: 20,
-                  ),
-                ),
+                _getImage(),
               ],
             ),
           ),
@@ -91,11 +79,8 @@ Widget TransferPayeeWidget(
               children: [
                 //获取账户
                 _fiveRowLeft(threeRowLeft),
-
                 _fiveRowRight(
-                  accountChange,
-                  threeRowRight,
-                ),
+                    accountChange, threeRowRight, accountForSelect, payeeName),
 
                 Container(
                   padding: EdgeInsets.fromLTRB(40, 0, 0, 0),
@@ -129,23 +114,36 @@ Widget _fiveRowLeft(String name) {
   );
 }
 
-Widget _fiveRowRight(Function nameChanges, String hintText) {
-  var payeeName = '';
-  payeeName = payeeName == '' ? '' : 'nihao';
+Widget _fiveRowRight(Function nameChanges, String hintText, String forSelect,
+    String payeeNames) {
+  print('$forSelect 77777777777');
+  // print('$payeeNames  p222222');
+  // payeeNames = forSelect == '' ? payeeNames : forSelect;
+  // if (payeeNames == forSelect) {
+  //   payeeNames = forSelect;
+  // } else {
+  //   payeeNames = payeeNames;
+  // }
+
   return Expanded(
     child: Container(
       child: TextField(
-        //是否自动更正
+        onChanged: (payeeName) {
+          if (payeeName == forSelect) {
+            nameChanges(forSelect);
+          } else {
+            nameChanges(payeeName);
+          }
+
+          print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
+
+          print('$forSelect 555555');
+        },
+        // 是否自动更正
         autocorrect: false,
         //是否自动获得焦点
-        autofocus: false,
-        controller: TextEditingController(text: payeeName),
-        onChanged: (payeeName) {
-          payeeName = '88888888';
-          nameChanges(payeeName);
-          print('$nameChanges 99999');
-          print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
-        },
+        autofocus: true,
+        controller: TextEditingController(text: payeeNames),
         textAlign: TextAlign.right,
         decoration: InputDecoration(
           border: InputBorder.none,

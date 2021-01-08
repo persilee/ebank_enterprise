@@ -11,11 +11,14 @@ import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_international_transfer.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
+import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
+import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 
@@ -120,6 +123,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   var intermediateBankSwift = '';
 
+  List<String> passwordList = [];
+
+  String tranferType = '2';
+
+  var payeeNameForSelects;
+
+  var accountSelect = '';
+
   @override
   void initState() {
     super.initState();
@@ -152,19 +163,16 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //公司名
-  // ignore: missing_return
   _nameInputChange(String name) {
     payeeName = name;
   }
 
   //账号
-  // ignore: missing_return
   _accountInputChange(String account) {
     payeeCardNo = account;
   }
 
   //转账附言
-  // ignore: missing_return
   _transferInputChange(String transfer) {
     remark = transfer;
   }
@@ -418,6 +426,10 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             ),
           ),
           TransferPayeeWidget(
+            payeeName,
+            accountSelect,
+            payeeNameForSelects,
+            _getImage,
             context,
             S.current.transfer_in,
             S.current.company_name,
@@ -505,6 +517,35 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     );
   }
 
+  Widget _getImage() {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, pageTranferPartner, arguments: tranferType)
+            .then(
+          (value) {
+            setState(
+              () {
+                if (value != null) {
+                  Rows rowListPartner = value;
+                  payeeNameForSelects = rowListPartner.payeeName;
+                  accountSelect = rowListPartner.payeeCardNo;
+                  print('$payeeNameForSelects  9999999999999999999');
+                } else {
+                  //  var playInput = 'kkkkkkkkkkkkkkkkkk';
+                }
+              },
+            );
+          },
+        );
+      },
+      child: Image(
+        image: AssetImage('images/login/login_input_account.png'),
+        width: 20,
+        height: 20,
+      ),
+    );
+  }
+
   //判断是否可以点击
   _isClick() {
     if (money > 0 &&
@@ -518,11 +559,28 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _transferFee != S.current.please_select &&
         _feeUse != S.current.please_select) {
       return () {
-        _tranferInternational(context);
+        _openBottomSheet();
         print('提交');
       };
     } else {
       return null;
+    }
+  }
+
+  //交易密码窗口
+  void _openBottomSheet() async {
+    passwordList = await showHsgBottomSheet(
+      context: context,
+      builder: (context) {
+        return HsgPasswordDialog(
+          title: S.current.input_password,
+        );
+      },
+    );
+    if (passwordList != null) {
+      if (passwordList.length == 6) {
+        _tranferInternational(context);
+      }
     }
   }
 
