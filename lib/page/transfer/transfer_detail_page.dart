@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/config/hsg_text_style.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///转账详情界面
 /// Author: fangluyao
@@ -80,7 +82,7 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
       children: [
         Text(
           S.of(context).transfer_amount,
-          style: TextStyle(fontSize: 14, color: Color(0xFF9C9C9C)),
+          style: FIRST_DESCRIBE_TEXT_STYLE,
         ),
         Padding(
           padding: EdgeInsets.only(top: 8, bottom: 40),
@@ -108,12 +110,12 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
           children: [
             Text(
               left,
-              style: TextStyle(fontSize: 14, color: Colors.black),
+              style: FIRST_DEGREE_TEXT_STYLE,
             ),
             Expanded(
               child: Text(
                 rifht,
-                style: TextStyle(fontSize: 14, color: Color(0xFF9C9C9C)),
+                style: FIRST_DESCRIBE_TEXT_STYLE,
                 textAlign: TextAlign.right,
               ),
             ),

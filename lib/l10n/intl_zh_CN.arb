@@ -345,5 +345,16 @@
   "loan_purpose": "贷款目的",
   "remark": "备注",
   "apply": "申请",
-  "not_required":"非必填"
+  "not_required":"非必填",
+  "loan_application_agreement1":"本人已阅读并同意签署",
+  "loan_application_agreement2":"《企业用户服务及授权协议》",
+  "loan_application_agreement3":"和",
+  "loan_application_agreement4":"《用户服务协议及隐私政策》",
+  "three_month":"三个月",
+  "six_month":"六个月",
+  "nine_month":"九个月",
+  "twelemonth":"十二个月",
+  "project_loan":"项目贷款",
+  "business_loan":"经营贷款",
+  "purpose":"目的"
 }
