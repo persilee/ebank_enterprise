@@ -16,6 +16,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:left_scroll_actions/cupertinoLeftScroll.dart';
 import 'package:left_scroll_actions/leftScroll.dart';
 import 'package:left_scroll_actions/left_scroll_actions.dart';
+import 'package:ebank_mobile/util/format_util.dart';
 
 class TransferPartner extends StatefulWidget {
   @override
@@ -72,7 +73,7 @@ class _TransferPartnerState extends State<TransferPartner> {
               _page += 1;
               _loadData();
             }
-          }else{
+          } else {
             _tempList.addAll(_partnerListData);
           }
         }
@@ -86,7 +87,7 @@ class _TransferPartnerState extends State<TransferPartner> {
   @override
   Widget build(BuildContext context) {
     var _arguments = ModalRoute.of(context).settings.arguments;
-    _arguments == null? _transferType = '':_transferType = _arguments;
+    _arguments == null ? _transferType = '' : _transferType = _arguments;
     setState(() {
       if (_tempList.isEmpty) {
         _tempList.addAll(_partnerListData);
@@ -300,20 +301,12 @@ class _TransferPartnerState extends State<TransferPartner> {
 
   //单条伙伴
   Widget _allContentRow(Rows partner) {
-    var _cardLength = partner.payeeCardNo.length;
     var _cardNo = '';
-    var _bankName = '';
-    partner.bankSwift == null
-        ? _bankName = '无银行名'
-        : _bankName = partner.bankSwift;
     //取卡号最后四位
-    if (_cardLength > 4) {
-      _cardNo = partner.payeeCardNo.substring(_cardLength - 5, _cardLength - 1);
-    } else {
-      partner.payeeCardNo == null
-          ? _cardNo = ''
-          : _cardNo = partner.payeeCardNo;
-    }
+    partner.payeeCardNo == null
+        ? _cardNo = ''
+        : _cardNo = FormatUtil.formatSpace4(partner.payeeCardNo);
+
     //备注
     var _remarkCont = partner.remark == '' || partner.remark == null
         ? Container()
@@ -336,20 +329,12 @@ class _TransferPartnerState extends State<TransferPartner> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              partner.payeeName == null ? '无名' : partner.payeeName,
-              style: TextStyle(fontSize: 14, color: Color(0xFF232323)),
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: 5),
-            ),
-            _remarkCont,
-          ],
+        Text(
+          partner.payeeName == null ? '无名' : partner.payeeName,
+          style: TextStyle(fontSize: 14, color: Color(0xFF232323)),
         ),
         Text(
-          '$_bankName($_cardNo)  ' + (partner.transferType == '0' ? '本行' : '国际'),
+          '$_cardNo   ' + (partner.transferType == '0' ? '本行' : '国际'),
           style: TextStyle(fontSize: 13, color: HsgColors.hintText),
         )
       ],

@@ -3,6 +3,8 @@
 /// Author: zhangqirong
 /// Date: 2020-12-25
 
+import 'package:ebank_mobile/data/source/bank_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,8 +17,27 @@ class SelectBankPage extends StatefulWidget {
 
 class _SelectBankPageState extends State<SelectBankPage> {
   var _searchController = TextEditingController();
-  var _bankList = ['招商银行', '中国农业银行', '中国工商银行'];
-  var _tempList = [];
+  var _bankList = <Banks>[];
+  var _tempList = <Banks>[];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  _loadData() {
+    BankDataRepository()
+        .getBankList(GetBankListReq(1, 10), 'getBankList')
+        .then((data) {
+      if (data != null) {
+        setState(() {
+          _bankList.clear();
+          _bankList.addAll(data.banks);
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +88,7 @@ class _SelectBankPageState extends State<SelectBankPage> {
                 } else {
                   _tempList.clear();
                   _bankList.forEach((e) {
-                    if (e.contains(text)) {
+                    if (e.localName.contains(text)) {
                       _tempList.add(e);
                     }
                   });
@@ -100,10 +121,10 @@ class _SelectBankPageState extends State<SelectBankPage> {
     );
   }
 
-  Widget _listIcon(String text) {
+  Widget _listIcon(Banks bank) {
     return GestureDetector(
       onTap: () {
-        Navigator.pop(context, text);
+        Navigator.pop(context, bank);
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(20, 15, 20, 0),
@@ -113,16 +134,23 @@ class _SelectBankPageState extends State<SelectBankPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Image(
-                  image: AssetImage('images/transferIcon/transfer_bank.png'),
-                  width: 40,
-                  height: 40,
-                ),
+                bank.bankIcon != null
+                    ? Image.network(
+                        bank.bankIcon,
+                        width: 30,
+                        height: 30,
+                      )
+                    : Image(
+                        image:
+                            AssetImage('images/transferIcon/transfer_bank.png'),
+                        width: 30,
+                        height: 30,
+                      ),
                 Padding(
                   padding: EdgeInsets.only(right: 20),
                 ),
                 Text(
-                  text,
+                  bank.localName,
                   style: TextStyle(fontSize: 16),
                 )
               ],
@@ -154,6 +182,7 @@ class _SelectBankPageState extends State<SelectBankPage> {
   //生成ListView
   Widget _getlistViewList(BuildContext context) {
     List<Widget> _list = new List();
+    print(_tempList.length);
     _list.add(_getListViewBuilder(_searchIcon()));
     for (int i = 0; i < _tempList.length; i++) {
       _list.add(_getListViewBuilder(_listIcon(_tempList[i])));
