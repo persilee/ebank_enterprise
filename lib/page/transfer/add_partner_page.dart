@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:contact_picker/contact_picker.dart';
+import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
 
 class AddPartnerPage extends StatefulWidget {
   @override
@@ -21,7 +22,7 @@ class AddPartnerPage extends StatefulWidget {
 
 class _AddPartnerPageState extends State<AddPartnerPage> {
   var _isInputed = false; //按钮可点击标志
-  var _bank = '';
+  var _bankName = '';
   var _branch = '';
   var _transferType = '';
   var _swiftAdress = '';
@@ -60,9 +61,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       }
     });
     //初始化
-    _bank = S.current.please_select;
+    _bankName = S.current.please_select;
     _branch = S.current.optional;
     _transferType = S.current.please_select;
+    _swiftAdress = S.current.bank_swift;
   }
 
   _loadData() {
@@ -70,6 +72,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     String _centerSwiftReq;
     String _payeeAdressReq;
     String _swiftAdressReq;
+    String _branchReq;
+    _branch == S.current.optional ? _branchReq = '' : _branchReq = _branch;
     switch (_transferType) {
       case '行内转账':
         myTransferType = '0';
@@ -93,9 +97,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         .addPartner(
             AddPartnerReq(
                 "",
-                _swiftAdress,
+                _swiftAdressReq,
                 "",
-                _branch,
+                _branchReq,
                 _centerSwiftReq,
                 _payeeAdressReq,
                 _acountController.text,
@@ -193,8 +197,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                   if (_transferType == S.current.transfer_type_2) {
                     _showInternational = true;
                   } else if (_transferType == S.current.transfer_type_0) {
-                    //初始化国际转账的内容
                     _showInternational = false;
+                    //初始化国际转账的内容
+                    _centerSwiftController.text = '';
+                    _payeeAdressController.text = '';
                   }
                 });
               },
@@ -214,8 +220,11 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           onTap: () {
             Navigator.pushNamed(context, pageSelectBank).then((data) {
               if (data != null) {
+                Banks _bank;
                 setState(() {
                   _bank = data;
+                  _bankName = _bank.localName;
+                  _swiftAdress = _bank.bankSwift;
                   _check();
                 });
               }
@@ -225,7 +234,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             padding: EdgeInsets.only(top: 16, bottom: 16),
             child: _inputFrame(
               S.current.bank,
-              _inputSelector(_bank, S.of(context).please_select),
+              _inputSelector(_bankName, S.of(context).please_select),
             ),
           ),
         ),
@@ -300,7 +309,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             padding: EdgeInsets.only(top: 16, bottom: 16),
             child: _inputFrame(
               S.current.bank_swift,
-              _mutableText(S.current.bank_swift, S.current.bank_swift),
+              _mutableText(_swiftAdress, S.current.bank_swift),
             ),
           ),
           Divider(height: 0.5, color: HsgColors.divider),
@@ -554,7 +563,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   //按钮可点击检查
   _check() {
     setState(() {
-      if (_bank != S.current.please_select &&
+      if (_bankName != S.current.please_select &&
           _nameController.text.length > 0 &&
           _acountController.text.length > 0 &&
           _smsController.text.length > 0) {
