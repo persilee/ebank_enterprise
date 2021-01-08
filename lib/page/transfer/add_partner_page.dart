@@ -26,6 +26,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   var _branch = '';
   var _transferType = '';
   var _swiftAdress = '';
+  var _bankCode = '';
   var _nameController = TextEditingController();
   var _acountController = TextEditingController();
   var _smsController = TextEditingController();
@@ -96,7 +97,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     TransferDataRepository()
         .addPartner(
             AddPartnerReq(
-                "",
+                _bankCode,
                 _swiftAdressReq,
                 "",
                 _branchReq,
@@ -171,7 +172,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           padding: EdgeInsets.only(top: 10, bottom: 16),
           child: _inputFrame(
             S.current.account_name,
-            _inputField(_nameController, S.current.please_input),
+            _inputField(_nameController, S.current.please_input,TextInputType.text),
           ),
         ),
         Divider(height: 0.5, color: HsgColors.divider),
@@ -180,7 +181,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           padding: EdgeInsets.only(top: 16, bottom: 16),
           child: _inputFrame(
             S.current.account_number,
-            _inputField(_acountController, S.current.please_input),
+            _inputField(_acountController, S.current.please_input,TextInputType.number),
           ),
         ),
         Divider(height: 0.5, color: HsgColors.divider),
@@ -225,6 +226,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                   _bank = data;
                   _bankName = _bank.localName;
                   _swiftAdress = _bank.bankSwift;
+                  _bankCode = _bank.bankCode;
                   _check();
                 });
               }
@@ -292,7 +294,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           padding: EdgeInsets.only(top: 16, bottom: 16),
           child: _inputFrame(
             S.current.alias,
-            _inputField(_aliasController, S.current.word_limit_5),
+            _inputField(_aliasController, S.current.word_limit_5, TextInputType.text),
           ),
         ),
       ],
@@ -394,7 +396,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           );
   }
 
-  //纯输入框
+  //纯输入框(可不填)
   _onlyTextField(TextEditingController _inputController) {
     return Container(
       padding: EdgeInsets.only(right: 9),
@@ -407,7 +409,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         decoration: InputDecoration.collapsed(
           border: InputBorder.none,
-          hintText: S.current.please_input,
+          hintText: S.current.can_be_empty,
           hintStyle: TextStyle(
             fontSize: 14,
             color: HsgColors.textHintColor,
@@ -467,11 +469,11 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   }
 
   //通用文字输入框(传入监听器)
-  Widget _inputField(TextEditingController _inputController, String hint) {
+  Widget _inputField(TextEditingController _inputController, String hint, TextInputType inputType) {
     return Expanded(
       child: TextField(
         textAlign: TextAlign.end,
-        keyboardType: TextInputType.text,
+        keyboardType: inputType,
         controller: _inputController,
         decoration: InputDecoration.collapsed(
           hintText: hint,
@@ -566,7 +568,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       if (_bankName != S.current.please_select &&
           _nameController.text.length > 0 &&
           _acountController.text.length > 0 &&
-          _smsController.text.length > 0) {
+          _smsController.text.length > 0 &&
+          _transferType != S.current.please_select) {
         if (_showInternational == true) {
           if (_payeeAdressController.text.length > 0) {
             _isInputed = true;

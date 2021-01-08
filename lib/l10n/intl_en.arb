@@ -66,7 +66,7 @@
   "repayment_succeed": "Repayment Succeed",
   "repayment_succeed_p": "Repayment Succeed!",
   "optional": "Optional",
-  "Can be empty":"Can be Empty",
+  "can_be_empty":"Can be Empty",
   "add_partner": "Add Partner",
   "partner_information": "Partner Information",
   "account_name": "Account Name",
