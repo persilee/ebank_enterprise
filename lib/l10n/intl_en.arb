@@ -254,6 +254,7 @@
   "debit_currency": "Debit Currency",
   "available_balance": "Available Balance",
   "debit_amount": "Debit Amount",
+  "debit_accno": "Debit Account",
   "credit_account": "Credit Account",
   "credit_currency": "Credit Currency",
   "rate_of_exchange": "Exchange Rate",
