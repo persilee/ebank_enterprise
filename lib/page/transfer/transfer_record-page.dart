@@ -49,6 +49,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   bool _isButton2 = true; //交易时间第二个按钮
   bool _isButton3 = false; //交易时间第三个按钮
   bool _isButton4 = false; //交易时间第四个按钮
+  ScrollController _controller = ScrollController(); //滚动监听
+  int _page = 1; //几页数据
+  int _totalPage = 1; //数据总页数
+  bool _loadMore = false; //是否加载更多
 
   @override
   void initState() {
@@ -57,24 +61,37 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     _actualNameReqData();
     _loadData();
     _getCardList();
+
+    //滚动监听
+    _controller.addListener(() {
+      if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+        if (_page < _totalPage) {
+          setState(() {
+            _loadMore = true;
+          });
+        }
+        _lazyLoad();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(intl.S.of(context).transfer_record),
-          centerTitle: true,
-        ),
-        body: Column(
-          children: [
-            _headerWidget(),
-            Expanded(child: _getlistViewList(context)),
-          ],
-        ));
+      appBar: AppBar(
+        title: Text(intl.S.of(context).transfer_record),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          _headerWidget(),
+          Expanded(child: _getlistViewList(context)),
+        ],
+      ),
+    );
   }
 
-//没有数据时显示页面
+  //没有数据时显示页面
   Container _noDataContainer(BuildContext context) {
     return Container(
       color: HsgColors.backgroundColor,
@@ -96,21 +113,23 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     );
   }
 
-  //封装ListView.Builder
+  //单个转账记录
   Widget _getListViewBuilder(Widget function) {
     return ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: 1,
-        itemBuilder: (BuildContext context, int position) {
-          return function;
-        });
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: 1,
+      itemBuilder: (BuildContext context, int position) {
+        return function;
+      },
+    );
   }
 
   //多个转账记录列表
   Widget _getlistViewList(BuildContext context) {
     List<Widget> _list = new List();
     bool _isData = false;
+    //添加转账记录
     for (int i = 0; i < _transferHistoryList.length; i++) {
       if (_position == 0) {
         _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
@@ -122,28 +141,52 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         _isData = true;
       }
     }
-    _list.add(_toLoad());
+    _list.add(_loadMoreData());
+
     return RefreshIndicator(
       onRefresh: () => _loadData(),
       child: _isData
-          ? ListView(
-              children: _list,
-            )
+          ? ListView(controller: _controller, children: _list)
           : _noDataContainer(context),
     );
   }
 
-  //加载完毕
-  Widget _toLoad() {
+  //加载
+  Widget _toLoad(String loadStatus) {
     return Container(
-      height: 80,
-      padding: EdgeInsets.only(top: 20),
+      padding: EdgeInsets.all(20),
       child: Text(
-        intl.S.current.load_more_finished,
+        loadStatus,
         style: TextStyle(fontSize: 14, color: Colors.grey),
         textAlign: TextAlign.center,
       ),
     );
+  }
+
+  //加载更多
+  _loadMoreData() {
+    return _loadMore
+        ? Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+              ),
+              CircularProgressIndicator(
+                strokeWidth: 3.0,
+              ),
+            ],
+          )
+        : _toLoad(intl.S.current.load_more_finished);
+  }
+
+  //延迟加载
+  Future<Null> _lazyLoad() {
+    return Future.delayed(Duration(seconds: 0), () {
+      setState(() {
+        _page++;
+        _loadData();
+      });
+    });
   }
 
   //转账记录内容
@@ -249,12 +292,12 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   }
 
 //头部文字
-  Widget _headerText(String name) {
+  Widget _headerText(String text) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          name,
+          text,
           style: TRANSFER_RECORD_SECOND_TEXT_STYLE,
         ),
         Icon(Icons.arrow_drop_down),
@@ -358,6 +401,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         onPressed: () {
           setState(() {
             _time = _start + "—" + _end;
+            _page = 1;
+            _transferHistoryList.clear();
           });
           Navigator.of(context).pop(_loadData());
         },
@@ -399,6 +444,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         onPressed: () {
           setState(() {
             _time = time;
+            _page = 1;
+            _transferHistoryList.clear();
             _endDate = DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now());
             switch (i) {
               case 1:
@@ -485,15 +532,16 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   //银行卡弹窗
   _chooseBankCard() async {
     final result = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return HsgBottomCardChoice(
-            title: intl.S.of(context).select_bank_card,
-            items: _cradLists,
-            lastSelectedPosition: _position,
-            imageUrl: _imageUrl,
-          );
-        });
+      context: context,
+      builder: (context) {
+        return HsgBottomCardChoice(
+          title: intl.S.of(context).select_bank_card,
+          items: _cradLists,
+          lastSelectedPosition: _position,
+          imageUrl: _imageUrl,
+        );
+      },
+    );
     if (result != null && result != false) {
       setState(() {
         _position = result;
@@ -502,7 +550,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     }
   }
 
-//时间选择器弹窗
+  //时间选择器弹窗
   _timePicker(int i, BuildContext popcontext) {
     DatePicker.showDatePicker(
       context,
@@ -627,33 +675,6 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     });
   }
 
-  //转账记录
-  _loadData() {
-    //请求参数
-    String ccy = '';
-    int page = 1;
-    int pageSize = 10;
-    List<String> paymentCardNos = [];
-    String sort = '';
-    String loginName = '18033412021';
-    String userId = '778309634589982720';
-    TransferDataRepository()
-        .getTransferRecord(
-            GetTransferRecordReq(ccy, _endDate, page, pageSize, paymentCardNos,
-                sort, _startDate, loginName, userId),
-            'getTransferRecord')
-        .then((data) {
-      if (data.transferRecord != null) {
-        setState(() {
-          _transferHistoryList.clear();
-          _transferHistoryList.addAll(data.transferRecord);
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
-  }
-
   //获取银行卡
   _getCardList() {
     CardDataRepository().getCardList('getCardList').then((data) {
@@ -669,6 +690,33 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           });
         });
       }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+
+  //转账记录
+  Future _loadData() async {
+    //请求参数
+    String ccy = '';
+    int pageSize = 10;
+    List<String> paymentCardNos = [];
+    String sort = '';
+    String loginName = '18033412021';
+    String userId = '778309634589982720';
+    TransferDataRepository()
+        .getTransferRecord(
+            GetTransferRecordReq(ccy, _endDate, _page, pageSize, paymentCardNos,
+                sort, _startDate, loginName, userId),
+            'getTransferRecord')
+        .then((data) {
+      setState(() {
+        if (data.transferRecord != null) {
+          _totalPage = data.totalPage;
+          _transferHistoryList.addAll(data.transferRecord);
+        }
+        _loadMore = false;
+      });
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
