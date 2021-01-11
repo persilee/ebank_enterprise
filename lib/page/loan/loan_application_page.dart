@@ -97,32 +97,6 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
     });
   }
 
-  //贷款申请请求
-  _reqData() {
-    String _prdtCode = "LN000008";
-    String _repaymentMethod = "EPI";
-    String _termUnit = "MONTH";
-    LoanDataRepository()
-        .getLoanApplication(
-            LoanApplicationReq(
-                _currency,
-                _custId,
-                _contactsController.text,
-                int.parse(_moneyController.text),
-                _goal,
-                _phoneController.text,
-                _prdtCode,
-                _remarkController.text,
-                _repaymentMethod,
-                _termUnit,
-                _index),
-            "getLoanApplication")
-        .then((data) {})
-        .catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,7 +106,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         elevation: 0,
       ),
       body: Container(
-        color: HsgColors.backgroundColor,
+        color: HsgColors.commonBackground,
         height: double.infinity,
         child: SingleChildScrollView(
           child: Column(
@@ -153,8 +127,11 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
               ),
               //申请按钮
               Container(
-                margin: EdgeInsets.only(top: 40),
-                child: HsgButton.button(title: "申请", click: _confirmButton()),
+                margin: EdgeInsets.only(top: 40, bottom: 20),
+                child: HsgButton.button(
+                  title: S.current.apply,
+                  click: _isButton ? _openBottomSheet : null,
+                ),
               ),
             ],
           ),
@@ -224,17 +201,6 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
     }
   }
 
-  //确认按钮点击事件
-  _confirmButton() {
-    if (_isButton) {
-      return () {
-        _openBottomSheet();
-      };
-    } else {
-      return null;
-    }
-  }
-
   //协议文本内容
   Widget _textContent() {
     return Expanded(
@@ -271,7 +237,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
 
 //文字输入框
   Widget _inputText(String name, TextEditingController controller) {
-    return SizedBox(
+    return Container(
       child: TextField(
         controller: controller,
         autocorrect: false,
@@ -307,8 +273,15 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
                   : Colors.black,
             ),
           ),
-          Icon(
-            Icons.keyboard_arrow_right,
+          Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Image(
+              color: HsgColors.firstDegreeText,
+              image:
+                  AssetImage('images/home/listIcon/home_list_more_arrow.png'),
+              width: 7,
+              height: 10,
+            ),
           ),
         ],
       ),
@@ -356,8 +329,15 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
                   : HsgColors.aboutusTextCon,
             ),
           ),
-          Icon(
-            Icons.keyboard_arrow_right,
+          Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Image(
+              color: HsgColors.firstDegreeText,
+              image:
+                  AssetImage('images/home/listIcon/home_list_more_arrow.png'),
+              width: 7,
+              height: 10,
+            ),
           ),
         ],
       ),
@@ -371,10 +351,12 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         Row(
           children: [
             Container(
-              padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+              padding: EdgeInsets.fromLTRB(0, 16, 0, 16),
+              width: MediaQuery.of(context).size.width / 2,
               child: Text(
                 name,
-                style: FIRST_DEGREE_TEXT_STYLE,
+                style:
+                    TextStyle(fontSize: 15, color: HsgColors.firstDegreeText),
               ),
             ),
             Expanded(
@@ -460,6 +442,32 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
       _reqData();
       Navigator.pushNamed(context, pageOperationResult);
     }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+
+  //贷款申请请求
+  _reqData() {
+    String _prdtCode = "LN000008";
+    String _repaymentMethod = "EPI";
+    String _termUnit = "MONTH";
+    LoanDataRepository()
+        .getLoanApplication(
+            LoanApplicationReq(
+                _currency,
+                _custId,
+                _contactsController.text,
+                int.parse(_moneyController.text),
+                _goal,
+                _phoneController.text,
+                _prdtCode,
+                _remarkController.text,
+                _repaymentMethod,
+                _termUnit,
+                _index),
+            "getLoanApplication")
+        .then((data) {})
+        .catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
   }

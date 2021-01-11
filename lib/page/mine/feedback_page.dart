@@ -69,7 +69,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   child: RaisedButton(
                     child: Text(S.of(context).submit),
                     // _content == '' ? null : _submitFeedBack(),
-                    onPressed: _submitFeedBack(),
+                    onPressed: _submitFeedBack,
                     color: HsgColors.accent,
                     textColor: Colors.white,
                     shape: RoundedRectangleBorder(
