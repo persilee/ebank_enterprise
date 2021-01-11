@@ -28,9 +28,7 @@ class IdIardVerificationPage extends StatefulWidget {
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
-  TextEditingController _cardNo = TextEditingController(); //卡号
   TextEditingController _certNo = TextEditingController(); //证件号
-  TextEditingController _certType = TextEditingController(); //证件类型
   TextEditingController _phoneNo = TextEditingController();
   TextEditingController _realName = TextEditingController();
   TextEditingController _smsCode = TextEditingController();
@@ -40,6 +38,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   List<String> _accList = []; //账号列表
   List<String> _accIcon = [];
   String _accNo = '';
+  String _certType = '身份证';
   int _accNoId = -1;
 
   //证件信息
@@ -132,7 +131,6 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                   children: [
                     Container(
                       color: Colors.white,
-                      height: 50,
                       padding: CONTENT_PADDING,
                       margin: EdgeInsets.only(bottom: 12),
                       child: SelectInkWell(
@@ -160,9 +158,17 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                           InputList(S.of(context).name, S.of(context).placeName,
                               _realName),
                           //证件类型
-                          InputList(S.of(context).idType,
-                              S.of(context).placeIdType, _certType),
-
+                          Container(
+                            child: SelectInkWell(
+                              title: S.current.idType,
+                              item: _certType,
+                              onTap: () {},
+                            ),
+                          ),
+                          Divider(
+                            height: 0.5,
+                            color: HsgColors.divider,
+                          ),
                           //证件类型
                           // Container(
                           // height: 50.0,
@@ -317,7 +323,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   bool _submit() {
     if (_realName.text != '' &&
         //_cardNo.text != '' &&
-        _certType.text != '' &&
+        _certType != '' &&
         _phoneNo.text != '' &&
         _smsCode.text != '') {
       print('打印数据true');
@@ -394,8 +400,8 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
 
     ChecInformantApiRepository()
         .authentication(
-            CheckoutInformantReq(_certNo.text, '卡号', _certType.text,
-                _phoneNo.text, _realName.text, _smsCode.text),
+            CheckoutInformantReq(_certNo.text, '卡号', _certType, _phoneNo.text,
+                _realName.text, _smsCode.text),
             'authentication')
         .then((data) {
       HSProgressHUD.dismiss();
@@ -471,29 +477,32 @@ class SelectInkWell extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(title),
-          Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(right: 12),
-                child: item == ''
-                    ? Text(S.current.please_select,
-                        style: TextStyle(color: HsgColors.textHintColor))
-                    : Text(item),
-              ),
-              Image(
-                color: HsgColors.firstDegreeText,
-                image:
-                    AssetImage('images/home/listIcon/home_list_more_arrow.png'),
-                width: 7,
-                height: 10,
-              ),
-            ],
-          ),
-        ],
+      child: Container(
+        height: 50,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(title),
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 12),
+                  child: item == ''
+                      ? Text(S.current.please_select,
+                          style: TextStyle(color: HsgColors.textHintColor))
+                      : Text(item),
+                ),
+                Image(
+                  color: HsgColors.firstDegreeText,
+                  image: AssetImage(
+                      'images/home/listIcon/home_list_more_arrow.png'),
+                  width: 7,
+                  height: 10,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
