@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/config/hsg_text_style.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 重置支付密码--身份证验证
 /// Author: hlx
@@ -35,7 +37,10 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   Timer _timer;
   int countdownTime = 0;
   TextEditingController userAccount = TextEditingController();
-  List<Map<String, Object>> _accList = []; //账号列表
+  List<String> _accList = []; //账号列表
+  List<String> _accIcon = [];
+  String _accNo = '';
+  int _accNoId = -1;
 
   //证件信息
   List<String> idInformation = ['身份证', '护照'];
@@ -52,10 +57,10 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       if (data.cardList != null) {
         setState(() {
           _accList.clear();
+          _accIcon.clear();
           data.cardList.forEach((item) {
-            _accList.addAll([
-              {'cardNo': item.cardNo, 'imageUrl': item.imageUrl}
-            ]);
+            _accList.add(item.cardNo);
+            _accIcon.add(item.imageUrl);
           });
         });
       }
@@ -64,8 +69,25 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
     });
   }
 
-//弹窗账户列表
-  _selectAccount() {}
+//账户选择弹窗
+  void _accountBottomSheet() async {
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return HsgBottomSingleChoice(
+            title: S.of(context).account_lsit,
+            items: _accList,
+            icons: _accIcon,
+            lastSelectedPosition: _accNoId,
+          );
+        });
+    if (result != null && result != false) {
+      setState(() {
+        _accNoId = result;
+        _accNo = _accList[_accNoId];
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -96,159 +118,155 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
     return new Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).iDCardVerification),
-          elevation: 15.0,
+          centerTitle: true,
+          elevation: 0,
         ),
         body: Container(
           color: HsgColors.commonBackground,
+          height: double.infinity,
           child: Form(
               //绑定状态属性
               key: _formKey,
-              child: ListView(
-                children: <Widget>[
-                  //账号
-                  GestureDetector(
-                    onTap: () {
-                      print('11111');
-                     // _selectAccount();
-                    },
-                    child: Container(
-                      //width: MediaQuery.of(context).size.width,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      color: Colors.white,
+                      height: 50,
+                      padding: CONTENT_PADDING,
                       margin: EdgeInsets.only(bottom: 12),
-                      color: Colors.red,
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      child:
-                          InputList(
-                              S.of(context).account_number, '', userAccount),
-                       
-                      
+                      child: SelectInkWell(
+                        title: S.current.account_number,
+                        item: _accNo,
+                        onTap: _accountBottomSheet,
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(bottom: 16),
-                    color: Colors.white,
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.topLeft,
-                          padding: EdgeInsets.only(top: 10.0, bottom: 1.0),
-                          child: Text(
-                            S.of(context).pleaseFillInTheBankInformation,
-                            style: TextStyle(fontSize: 12),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.only(bottom: 16),
+                      padding: CONTENT_PADDING,
+                      color: Colors.white,
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.only(top: 10.0, bottom: 1.0),
+                            child: Text(
+                              S.of(context).pleaseFillInTheBankInformation,
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ),
-                        ),
-                        //姓名
-                        InputList(S.of(context).name, S.of(context).placeName,
-                            _realName),
-                        //证件类型
-                        InputList(S.of(context).idType,
-                            S.of(context).placeIdType, _certType),
+                          //姓名
+                          InputList(S.of(context).name, S.of(context).placeName,
+                              _realName),
+                          //证件类型
+                          InputList(S.of(context).idType,
+                              S.of(context).placeIdType, _certType),
 
-                        //证件类型
-                        // Container(
-                        // height: 50.0,
-                        // child: Column(
-                        //   children: [
-                        //     Row(
-                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //       children: [
-                        //         Text(S.of(context).idType),
-                        //            Expanded(
-                        //     child: GestureDetector(
-                        //       onTap: () {
-                        //         _selectDocumentType();
-                        //         print('选择账号');
-                        //       },
-                        //       child: Column(
-                        //         crossAxisAlignment: CrossAxisAlignment.end,
-                        //         children: [
-                        //           Container(
-                        //             margin: EdgeInsets.only(top: 5),
-                        //             child: Text(
-                        //               _certType.text == '' ? S.current.please_select : '请选择1',
-                        //               style: '请选择证件' == S.current.please_select
-                        //                   ? TextStyle(
-                        //                       color: HsgColors.secondDegreeText,
-                        //                       fontSize: 15,
-                        //                     )
-                        //                   : TextStyle(
-                        //                       color: HsgColors.firstDegreeText,
-                        //                       fontSize: 15,
-                        //                     ),
-                        //             ),
-                        //           )
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ),
-                        //   Container(
-                        //     margin: EdgeInsets.only(top: 7, left: 5),
-                        //     child: Icon(
-                        //       Icons.arrow_forward_ios,
-                        //       color: HsgColors.firstDegreeText,
-                        //       size: 16,
-                        //     ),
-                        //   ),
-                        //       ],
-                        //     ),
-                        //     Divider(
-                        //         height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
-                        //   ],
-                        // )),
+                          //证件类型
+                          // Container(
+                          // height: 50.0,
+                          // child: Column(
+                          //   children: [
+                          //     Row(
+                          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //       children: [
+                          //         Text(S.of(context).idType),
+                          //            Expanded(
+                          //     child: GestureDetector(
+                          //       onTap: () {
+                          //         _selectDocumentType();
+                          //         print('选择账号');
+                          //       },
+                          //       child: Column(
+                          //         crossAxisAlignment: CrossAxisAlignment.end,
+                          //         children: [
+                          //           Container(
+                          //             margin: EdgeInsets.only(top: 5),
+                          //             child: Text(
+                          //               _certType.text == '' ? S.current.please_select : '请选择1',
+                          //               style: '请选择证件' == S.current.please_select
+                          //                   ? TextStyle(
+                          //                       color: HsgColors.secondDegreeText,
+                          //                       fontSize: 15,
+                          //                     )
+                          //                   : TextStyle(
+                          //                       color: HsgColors.firstDegreeText,
+                          //                       fontSize: 15,
+                          //                     ),
+                          //             ),
+                          //           )
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   ),
+                          //   Container(
+                          //     margin: EdgeInsets.only(top: 7, left: 5),
+                          //     child: Icon(
+                          //       Icons.arrow_forward_ios,
+                          //       color: HsgColors.firstDegreeText,
+                          //       size: 16,
+                          //     ),
+                          //   ),
+                          //       ],
+                          //     ),
+                          //     Divider(
+                          //         height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
+                          //   ],
+                          // )),
 
-                        //证件号码
-                        InputList(S.of(context).IdentificationNumber,
-                            S.of(context).placeIdNumber, _certNo),
-                        //预留手机号
-                        InputList(S.of(context).reservedMobilePhoneNumber,
-                            S.of(context).placeReveredMobilePhone, _phoneNo),
+                          //证件号码
+                          InputList(S.of(context).IdentificationNumber,
+                              S.of(context).placeIdNumber, _certNo),
+                          //预留手机号
+                          InputList(S.of(context).reservedMobilePhoneNumber,
+                              S.of(context).placeReveredMobilePhone, _phoneNo),
 
-                        //短信验证码
-                        Container(
-                          height: 50,
-                          child: Row(
-                            children: [
-                              Text(S.of(context).sendmsm),
-                              Expanded(
-                                child: otpTextField(),
-                              ),
-                              SizedBox(
-                                width: 90,
-                                height: 32,
-                                child: _otpButton(),
-                              )
-                            ],
+                          //短信验证码
+                          Container(
+                            height: 50,
+                            child: Row(
+                              children: [
+                                Text(S.of(context).sendmsm),
+                                Expanded(
+                                  child: otpTextField(),
+                                ),
+                                SizedBox(
+                                  width: 90,
+                                  height: 32,
+                                  child: _otpButton(),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(40), //外边距
-                    height: 44.0,
-                    width: MediaQuery.of(context).size.width,
-                    child: RaisedButton(
-                      child: Text(S.of(context).submit),
-                      onPressed: _submit()
-                          ? () {
-                              _updateLoginPassword();
-                            }
-                          : null,
-                      color: HsgColors.accent,
-                      textColor: Colors.white,
-                      disabledTextColor: Colors.white,
-                      disabledColor: Color(0xFFD1D1D1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5) //设置圆角
-                          ),
-                    ),
-                  )
-                ],
+                    Container(
+                      margin: EdgeInsets.all(40), //外边距
+                      height: 44.0,
+                      width: MediaQuery.of(context).size.width,
+                      child: RaisedButton(
+                        child: Text(S.of(context).submit),
+                        onPressed: _submit()
+                            ? () {
+                                _updateLoginPassword();
+                              }
+                            : null,
+                        color: HsgColors.accent,
+                        textColor: Colors.white,
+                        disabledTextColor: Colors.white,
+                        disabledColor: Color(0xFFD1D1D1),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5) //设置圆角
+                            ),
+                      ),
+                    )
+                  ],
+                ),
               )),
         ));
   }
-  
 
   //验证码输入框
   TextField otpTextField() {
@@ -440,5 +458,43 @@ class InputList extends StatelessWidget {
                 height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
           ],
         ));
+  }
+}
+
+class SelectInkWell extends StatelessWidget {
+  final String title;
+  final String item;
+  final void Function() onTap;
+  SelectInkWell({Key key, this.title, this.item, this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(title),
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(right: 12),
+                child: item == ''
+                    ? Text(S.current.please_select,
+                        style: TextStyle(color: HsgColors.textHintColor))
+                    : Text(item),
+              ),
+              Image(
+                color: HsgColors.firstDegreeText,
+                image:
+                    AssetImage('images/home/listIcon/home_list_more_arrow.png'),
+                width: 7,
+                height: 10,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
