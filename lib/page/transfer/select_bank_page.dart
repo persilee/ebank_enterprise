@@ -188,48 +188,51 @@ class _SelectBankPageState extends State<SelectBankPage> {
     );
   }
 
-  Widget _listIcon(Banks bank) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pop(context, bank);
-      },
-      child: Container(
-        padding: EdgeInsets.fromLTRB(20, 15, 20, 0),
-        color: Colors.white,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                bank.bankIcon != null
-                    ? Image.network(
-                        bank.bankIcon,
-                        width: 30,
-                        height: 30,
-                      )
-                    : Image(
-                        image:
-                            AssetImage('images/transferIcon/transfer_bank.png'),
-                        width: 30,
-                        height: 30,
-                      ),
-                Padding(
-                  padding: EdgeInsets.only(right: 20),
-                ),
-                Text(
-                  bank.localName,
-                  style: TextStyle(fontSize: 16),
-                )
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Divider(
-                height: 0,
-                color: HsgColors.textHintColor,
+  Widget _bankListIcon(Banks bank) {
+    var bankImage = bank.bankIcon != null
+        ? Image.network(
+            bank.bankIcon,
+            width: 30,
+            height: 30,
+          )
+        : Image(
+            image: AssetImage('images/transferIcon/transfer_bank.png'),
+            width: 30,
+            height: 30,
+          );
+
+    return Container(
+      color: Colors.white,
+      child: FlatButton(
+        onPressed: () {
+          Navigator.pop(context, bank);
+        },
+        child: Container(
+          padding: EdgeInsets.fromLTRB(10, 15, 10, 0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  bankImage,
+                  Padding(
+                    padding: EdgeInsets.only(right: 20),
+                  ),
+                  Text(
+                    bank.localName,
+                    style: TextStyle(fontSize: 16),
+                  )
+                ],
               ),
-            ),
-          ],
+              Padding(
+                padding: EdgeInsets.only(top: 15),
+                child: Divider(
+                  height: 0,
+                  color: HsgColors.textHintColor,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -251,7 +254,7 @@ class _SelectBankPageState extends State<SelectBankPage> {
     List<Widget> _list = new List();
     _list.add(_getListViewBuilder(_searchIcon()));
     for (int i = 0; i < _tempList.length; i++) {
-      _list.add(_getListViewBuilder(_listIcon(_tempList[i])));
+      _list.add(_getListViewBuilder(_bankListIcon(_tempList[i])));
     }
     _list.add(_loadMore());
     return new ListView(
