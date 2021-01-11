@@ -136,13 +136,15 @@ class HsgPasswordDialog extends StatelessWidget {
       passwordbox.add(
         Container(
           alignment: Alignment.center,
+          padding: EdgeInsets.only(top: 10),
           decoration: BoxDecoration(
             border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
           ),
           child: Text(
-            passwordList.length > i ? '●' : '',
+            passwordList.length > i ? '*' : '',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
               color: HsgColors.firstDegreeText,
             ),
           ),
