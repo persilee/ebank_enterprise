@@ -131,61 +131,77 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        padding: CONTENT_PADDING,
-        child: Column(
-          children: [
-            //联系人
-            _input(
-              S.of(context).contact,
-              _inputText(_inputs, _contactsController),
-            ),
-            //联系人手机号码
-            _input(
-              S.of(context).contact_phone_num,
-              _inputText(_inputs, _phoneController),
-            ),
-            //币种
-            _input(
-              S.of(context).currency,
-              _inputDialog(context, ['HKD', 'USD', 'CND']),
-            ),
-            //申请金额
-            _input(
-              S.of(context).apply_amount,
-              _inputText(_inputs, _moneyController),
-            ),
-            //贷款期限
-            _input(
-              S.of(context).loan_duration,
-              _inputBottom(
-                  context, S.of(context).loan_duration, _deadLineLists, 0),
-            ),
-            //贷款目的
-            _input(
-              S.of(context).loan_purpose,
-              _inputBottom(context, S.of(context).loan_purpose, _goalLists, 1),
-            ),
-            //备注
-            _input(
-              S.of(context).remark,
-              _inputText(_notRequired, _remarkController),
-            ),
-            //复选框及协议文本内容
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Row(
-                children: [_roundCheckBox(), _textContent()],
+      body: Container(
+        color: HsgColors.backgroundColor,
+        height: double.infinity,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 15),
+                padding: CONTENT_PADDING,
+                color: Colors.white,
+                child: _formColumn(),
               ),
-            ),
-            //申请按钮
-            Container(
-              margin: EdgeInsets.only(top: 40),
-              child: HsgButton.button(title: "申请", click: _confirmButton()),
-            ),
-          ],
+              //复选框及协议文本内容
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                padding: CONTENT_PADDING,
+                child: Row(
+                  children: [_roundCheckBox(), _textContent()],
+                ),
+              ),
+              //申请按钮
+              Container(
+                margin: EdgeInsets.only(top: 40),
+                child: HsgButton.button(title: "申请", click: _confirmButton()),
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Column _formColumn() {
+    return Column(
+      children: [
+        //联系人
+        _input(
+          S.of(context).contact,
+          _inputText(_inputs, _contactsController),
+        ),
+        //联系人手机号码
+        _input(
+          S.of(context).contact_phone_num,
+          _inputText(_inputs, _phoneController),
+        ),
+        //币种
+        _input(
+          S.of(context).currency,
+          _inputDialog(context, ['HKD', 'USD', 'CND']),
+        ),
+        //申请金额
+        _input(
+          S.of(context).apply_amount,
+          _inputText(_inputs, _moneyController),
+        ),
+        //贷款期限
+        _input(
+          S.of(context).loan_duration,
+          _inputBottom(context, S.of(context).loan_duration, _deadLineLists, 0),
+        ),
+        //贷款目的
+        _input(
+          S.of(context).loan_purpose,
+          _inputBottom(context, S.of(context).loan_purpose, _goalLists, 1),
+        ),
+        //备注
+        _input(
+          S.of(context).remark,
+          _inputText(_notRequired, _remarkController),
+        ),
+      ],
     );
   }
 
@@ -368,7 +384,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         ),
         Divider(
           color: HsgColors.divider,
-          height: 5,
+          height: 0.5,
         ),
       ],
     );
