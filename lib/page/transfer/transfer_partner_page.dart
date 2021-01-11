@@ -334,9 +334,9 @@ class _TransferPartnerState extends State<TransferPartner> {
             width: 30,
             height: 30,
           );
-    return InkWell(
-      onTap: () {
-        if (_transferType != null) {
+    return FlatButton(
+      onPressed: () {
+        if (_transferType != '') {
           Navigator.pop(context, partner);
         } else {
           Navigator.pushNamed(context, pageInternational, arguments: partner);
@@ -344,7 +344,6 @@ class _TransferPartnerState extends State<TransferPartner> {
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-        color: Colors.white,
         child: Column(
           children: [
             Container(
