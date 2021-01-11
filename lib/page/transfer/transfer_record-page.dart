@@ -7,6 +7,7 @@ import 'dart:ui';
 
 import 'package:date_format/date_format.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_record.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
@@ -23,8 +24,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:popup_window/popup_window.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:webview_flutter/platform_interface.dart';
 import '../../page_route.dart';
-import 'widget/transfer_record_text_style_widget.dart';
 
 class TrsnsferRecordPage extends StatefulWidget {
   @override
@@ -103,10 +104,9 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             image: AssetImage('images/noDataIcon/no_data_record.png'),
             width: 160,
           ),
-          Padding(padding: EdgeInsets.only(top: 25)),
           Text(
             intl.S.of(context).no_transfer_record,
-            style: TextStyle(fontSize: 15, color: HsgColors.firstDegreeText),
+            style: FIRST_DEGREE_TEXT_STYLE,
           )
         ],
       ),
@@ -205,7 +205,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           children: [
             //转账记录账号及图标
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _transferAccount(_actualName, _transferHistory.paymentCardNo),
                 _transferRecordImage("images/transferIcon/transfert_to.png"),
@@ -234,7 +234,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 //转账记录图标
   Widget _transferRecordImage(String imgurl) {
     return Container(
-      width: MediaQuery.of(context).size.width / 5,
+      width: MediaQuery.of(context).size.width / 7,
       child: Image.asset(
         imgurl,
         width: 25,
@@ -247,17 +247,16 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _transferAccount(String name, String card) {
     return Container(
       width: MediaQuery.of(context).size.width / 2.5,
-      padding: EdgeInsets.only(right: 5),
       child: Column(
         children: [
           Text(
             name,
-            style: TRANSFER_RECORD_FIRST_TEXT_STYLE,
+            style: FIRST_DEGREE_TEXT_STYLE,
             textAlign: TextAlign.center,
           ),
           Text(
             card,
-            style: TRANSFER_RECORD_SECOND_TEXT_STYLE,
+            style: SECOND_DEGREE_TEXT_STYLE,
             textAlign: TextAlign.center,
           ),
         ],
@@ -298,7 +297,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       children: [
         Text(
           text,
-          style: TRANSFER_RECORD_SECOND_TEXT_STYLE,
+          style: SECOND_DEGREE_TEXT_STYLE,
         ),
         Icon(Icons.arrow_drop_down),
       ],
@@ -610,7 +609,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(left, style: TRANSFER_RECORD_CONTENT_TEXT_STYLE),
+          Text(left, style: FIRST_DEGREE_TEXT_STYLE),
           Text(
             right,
             style: TextStyle(
@@ -646,7 +645,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         children: [
           Text(
             left,
-            style: TRANSFER_RECORD_CONTENT_TEXT_STYLE,
+            style: FIRST_DEGREE_TEXT_STYLE,
           ),
           Text(
             right,

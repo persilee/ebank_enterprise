@@ -107,7 +107,6 @@ class _HSGBankAppState extends State<HSGBankApp> {
         String code = data.publicCodeGetRedisRspDtoList[0].code;
         if (code != prefs.getString(ConfigKey.LOCAL_CCY)) {
           prefs.setString(ConfigKey.LOCAL_CCY, code);
-          print('>-------------------<');
         }
       } else {
         prefs.setString(ConfigKey.LOCAL_CCY, '');

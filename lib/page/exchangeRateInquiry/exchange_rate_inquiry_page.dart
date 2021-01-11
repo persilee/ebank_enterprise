@@ -31,8 +31,8 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   String updateDate = DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
   int _primitiveCcyId = 0;
   int _objectiveCcyId = 0;
-  String _primitiveCcy = '';
-  String _objectiveCcy = '';
+  String _primitiveCcy = '--';
+  String _objectiveCcy = '--';
   String _primitiveCcyAmt = '0.00';
   bool _isSwap = true;
 
@@ -44,8 +44,12 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
 
   @override
   Widget build(BuildContext context) {
-    _primitiveCcy = _primitiveCcyList[_primitiveCcyId];
-    _objectiveCcy = _objectiveCcyList[_objectiveCcyId];
+    if (_primitiveCcyList.length > 0) {
+      _primitiveCcy = _primitiveCcyList[_primitiveCcyId];
+    }
+    if (_objectiveCcyList.length > 0) {
+      _objectiveCcy = _objectiveCcyList[_objectiveCcyId];
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.exchange_rate),
@@ -104,13 +108,15 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   }
 
   Row _listTitle() {
+    TextStyle style =
+        TextStyle(fontSize: 16, color: HsgColors.secondDegreeText);
     return Row(
       children: [
         Expanded(
           child: Center(
             child: Text(
               S.current.currency,
-              style: TextStyle(fontSize: 16, color: HsgColors.secondDegreeText),
+              style: style,
             ),
           ),
         ),
@@ -118,7 +124,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
           child: Center(
             child: Text(
               S.current.selling_price,
-              style: TextStyle(fontSize: 16, color: HsgColors.secondDegreeText),
+              style: style,
             ),
           ),
         ),
@@ -126,7 +132,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
           child: Center(
             child: Text(
               S.current.buying_price,
-              style: TextStyle(fontSize: 16, color: HsgColors.secondDegreeText),
+              style: style,
             ),
           ),
         ),
@@ -232,11 +238,17 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     return Row(
       children: [
         Expanded(
-          child: _primitiveCcySelect(),
+          child: CurrencyInkWell(
+            item: _primitiveCcy,
+            onTap: () {
+              _currencyShowDialog(true, _primitiveCcyId, _primitiveCcyList);
+            },
+          ),
         ),
         Expanded(
-          child: Center(
-            child: GestureDetector(
+          child: Container(
+            margin: EdgeInsets.only(right: 5),
+            child: InkWell(
               onTap: () {
                 _currencySwap();
               },
@@ -250,59 +262,19 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
           ),
         ),
         Expanded(
-          child: _objectiveCcySelect(),
-        ),
+          child: CurrencyInkWell(
+            item: _objectiveCcy,
+            onTap: () {
+              _currencyShowDialog(false, _objectiveCcyId, _objectiveCcyList);
+            },
+          ),
+        )
       ],
     );
   }
 
-  GestureDetector _primitiveCcySelect() {
-    return GestureDetector(
-      onTap: () {
-        _currencyList(true, _primitiveCcyId, _primitiveCcyList);
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            _primitiveCcy,
-            style: TextStyle(fontSize: 20),
-          ),
-          Icon(
-            Icons.arrow_drop_down,
-            size: 25,
-          ),
-        ],
-      ),
-    );
-  }
-
-  GestureDetector _objectiveCcySelect() {
-    return GestureDetector(
-      onTap: () {
-        _currencyList(false, _objectiveCcyId, _objectiveCcyList);
-      },
-      child: Padding(
-        padding: EdgeInsets.only(left: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              _objectiveCcy,
-              style: TextStyle(fontSize: 20),
-            ),
-            Icon(
-              Icons.arrow_drop_down,
-              size: 25,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   //币种选择弹窗
-  void _currencyList(bool isCcy, int index, List<String> dataList) async {
+  void _currencyShowDialog(bool isCcy, int index, List<String> dataList) async {
     final result = await showDialog(
         context: context,
         builder: (context) {
@@ -329,7 +301,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     }
   }
 
-  //转换
+  //货币互换
   _currencySwap() {
     List<String> newCcyList = [];
     int newCcyId = 0;
@@ -380,4 +352,27 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   }
 
   Future _getExchangeRateList() async {}
+}
+
+class CurrencyInkWell extends StatelessWidget {
+  final String item;
+  final void Function() onTap;
+  CurrencyInkWell({Key key, this.item, this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(item, style: TextStyle(fontSize: 20)),
+          Icon(
+            Icons.arrow_drop_down,
+            size: 25,
+          ),
+        ],
+      ),
+    );
+  }
 }

@@ -8,6 +8,7 @@ import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 
 class TransferDetailPage extends StatefulWidget {
   @override
@@ -28,7 +29,7 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
         color: Colors.white,
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.fromLTRB(15, 20, 17, 15),
+        padding: EdgeInsets.only(top: 20),
         child: _transfer(_transferHistory),
       ),
     );
@@ -36,20 +37,23 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
 
 //转账内容
   Widget _transfer(TransferRecord _transferHistory) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _transferAccount(_transferHistory),
-        _rowWidget(S.of(context).payee_name, _transferHistory.receiveName),
-        _rowWidget(S.of(context).transfer_from_account,
-            _transferHistory.receiveCardNo),
-        _rowWidget(
-            S.of(context).transfer_to_account, _transferHistory.paymentCardNo),
-        _rowWidget(
-            S.of(context).transaction_time, _transferHistory.transactionHour),
-        _differentContent(_transferHistory),
-        _rowWidget(S.of(context).remark, _transferHistory.remark),
-      ],
+    return Container(
+      padding: CONTENT_PADDING,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _transferAccount(_transferHistory),
+          _rowWidget(S.of(context).payee_name, _transferHistory.receiveName),
+          _rowWidget(S.of(context).transfer_from_account,
+              _transferHistory.receiveCardNo),
+          _rowWidget(S.of(context).transfer_to_account,
+              _transferHistory.paymentCardNo),
+          _rowWidget(
+              S.of(context).transaction_time, _transferHistory.transactionHour),
+          _differentContent(_transferHistory),
+          _rowWidget(S.of(context).remark, _transferHistory.remark),
+        ],
+      ),
     );
   }
 
@@ -80,7 +84,7 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
       children: [
         Text(
           S.of(context).transfer_amount,
-          style: TextStyle(fontSize: 14, color: Color(0xFF9C9C9C)),
+          style: FIRST_DESCRIBE_TEXT_STYLE,
         ),
         Padding(
           padding: EdgeInsets.only(top: 8, bottom: 40),
@@ -108,12 +112,12 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
           children: [
             Text(
               left,
-              style: TextStyle(fontSize: 14, color: Colors.black),
+              style: FIRST_DEGREE_TEXT_STYLE,
             ),
             Expanded(
               child: Text(
                 rifht,
-                style: TextStyle(fontSize: 14, color: Color(0xFF9C9C9C)),
+                style: FIRST_DESCRIBE_TEXT_STYLE,
                 textAlign: TextAlign.right,
               ),
             ),
