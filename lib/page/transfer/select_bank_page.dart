@@ -50,9 +50,10 @@ class _SelectBankPageState extends State<SelectBankPage> {
         setState(() {
           _totalPage = data.totalPage;
           _bankList.addAll(data.banks);
+          _tempList.clear();
           if (_transferType != '') {
             for (int i = 0; i < _bankList.length; i++) {
-              //如果是国际转账或者行内转账跳过来的，只显示对应类型的的伙伴，否则显示全部
+              //如果是国际转账或者行内转账的，只显示对应类型的的银行，否则显示全部
               if (_bankList[i].bankType == _transferType) {
                 _tempList.add(_bankList[i]);
               }

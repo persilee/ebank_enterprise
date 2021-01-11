@@ -69,6 +69,7 @@
   "can_be_empty":"可不填",
   "prompt": "提示",
   "select_transfer_type_first": "请先选择转账类型",
+  "select_bank_first": "请先选择银行",
   "add_partner": "添加伙伴",
   "partner_information": "伙伴信息",
   "account_name": "户名",
