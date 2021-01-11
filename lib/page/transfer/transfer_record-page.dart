@@ -24,7 +24,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:popup_window/popup_window.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:webview_flutter/platform_interface.dart';
 import '../../page_route.dart';
 
 class TrsnsferRecordPage extends StatefulWidget {
@@ -43,7 +42,14 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now()); //结束时间
   String _startDate = DateFormat('yyyy-MM-dd 00:00:00')
       .format(DateTime(DateTime.now().year, DateTime.now().month, 1)); //开始时间
-  String _start = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示开始时间
+  String _start = formatDate(
+    DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      1,
+    ),
+    [yyyy, mm, dd],
+  ); //显示开始时间
   String _end = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示结束时间
   String _actualName = ""; //用户真实姓名
   bool _isButton1 = false; //交易时间第一个按钮
@@ -446,6 +452,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             _page = 1;
             _transferHistoryList.clear();
             _endDate = DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now());
+            _end = formatDate(DateTime.now(), [yyyy, mm, dd]);
             switch (i) {
               case 1:
                 _isButton1 = true;
@@ -454,33 +461,62 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                 _isButton4 = false;
                 _startDate =
                     DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now());
+                _start = formatDate(DateTime.now(), [yyyy, mm, dd]);
                 break;
               case 2:
                 _isButton1 = false;
                 _isButton2 = true;
                 _isButton3 = false;
                 _isButton4 = false;
-                _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(DateTime(
-                  DateTime.now().year,
-                  DateTime.now().month,
-                  1,
-                ));
+                _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(
+                  DateTime(DateTime.now().year, DateTime.now().month, 1),
+                );
+                _start = formatDate(
+                  DateTime(DateTime.now().year, DateTime.now().month, 1),
+                  [yyyy, mm, dd],
+                );
                 break;
               case 3:
                 _isButton1 = false;
                 _isButton2 = false;
                 _isButton3 = true;
                 _isButton4 = false;
-                _startDate = DateFormat('yyyy-MM-dd 00:00:00')
-                    .format(DateTime.now().subtract(Duration(days: 90)));
+                _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(
+                  DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month - 3,
+                    DateTime.now().day,
+                  ),
+                );
+                _start = formatDate(
+                  DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month - 3,
+                    DateTime.now().day,
+                  ),
+                  [yyyy, mm, dd],
+                );
                 break;
               case 4:
                 _isButton1 = false;
                 _isButton2 = false;
                 _isButton3 = false;
                 _isButton4 = true;
-                _startDate = DateFormat('yyyy-MM-dd 00:00:00')
-                    .format(DateTime.now().subtract(Duration(days: 180)));
+                _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(
+                  DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month - 6,
+                    DateTime.now().day,
+                  ),
+                );
+                _start = formatDate(
+                  DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month - 6,
+                    DateTime.now().day,
+                  ),
+                  [yyyy, mm, dd],
+                );
                 break;
             }
           });
