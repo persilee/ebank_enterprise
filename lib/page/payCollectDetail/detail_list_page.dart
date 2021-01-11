@@ -27,9 +27,11 @@ class DetailListPage extends StatefulWidget {
 class _DetailListPageState extends State<DetailListPage> {
   List<RevenueHistoryDTOList> revenueHistoryList = [];
   DateTime _nowDate = DateTime.now(); //当前日期
-  List<String> cards = [];
-  List<String> accList = [''];
-  String startDate = DateFormat('yyyy-MM-' + '01').format(DateTime.now());
+  List<String> _allAccNoList = [];
+  List<String> _accNoList = [];
+  List<String> _cardList = [];
+  List<String> _cardIcon = [];
+  String _startDate = DateFormat('yyyy-MM-' + '01').format(DateTime.now());
   int _position = 0;
 
   @override
@@ -41,7 +43,7 @@ class _DetailListPageState extends State<DetailListPage> {
 
   @override
   Widget build(BuildContext context) {
-    var _date = formatDate(_nowDate, [yyyy, '-', mm]);
+    String _date = formatDate(_nowDate, [yyyy, '-', mm]);
     return Scaffold(
       appBar: AppBar(
         title: Text(intl.S.of(context).transaction_details),
@@ -54,7 +56,7 @@ class _DetailListPageState extends State<DetailListPage> {
             height: 40,
             color: Colors.white,
             padding: EdgeInsets.only(left: 16, right: 16),
-            child: _getRow(_date),
+            child: _getSelectButRow(_date),
           ),
           Expanded(
             child: RefreshIndicator(
@@ -69,7 +71,8 @@ class _DetailListPageState extends State<DetailListPage> {
     );
   }
 
-  Row _getRow(String _date) {
+  //头部选择
+  Row _getSelectButRow(String _date) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -85,9 +88,11 @@ class _DetailListPageState extends State<DetailListPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(accList[_position] == ''
-                  ? intl.S.current.all_account
-                  : accList[_position]),
+              _cardList.length > 0
+                  ? Text(_cardList[_position] == ''
+                      ? intl.S.current.all_account
+                      : _cardList[_position])
+                  : Text(intl.S.current.all_account),
               Icon(Icons.arrow_drop_down)
             ],
           ),
@@ -230,6 +235,7 @@ class _DetailListPageState extends State<DetailListPage> {
     );
   }
 
+  //页面无数据显示
   Container _noDataContainer(BuildContext context) {
     return Container(
       color: HsgColors.backgroundColor,
@@ -251,6 +257,7 @@ class _DetailListPageState extends State<DetailListPage> {
     );
   }
 
+  //交易金额
   Text _transactionAmount(
       List<RevenueHistoryDTOList> revenueHistoryList, int section, int row) {
     return Text(
@@ -267,6 +274,7 @@ class _DetailListPageState extends State<DetailListPage> {
     );
   }
 
+  //日期选择
   void _cupertinoPicker() {
     DatePicker.showDatePicker(
       context,
@@ -285,48 +293,53 @@ class _DetailListPageState extends State<DetailListPage> {
       onConfirm: (dateTime, List<int> index) {
         //确定的时候
         setState(() {
-          startDate = DateFormat('yyyy-MM-' + '01').format(dateTime);
+          _startDate = DateFormat('yyyy-MM-' + '01').format(dateTime);
           _nowDate = dateTime;
-          _getRevenueByCards(startDate, cards);
         });
+        if (_position != 0) {
+          _getRevenueByCards(_startDate, _accNoList);
+        } else {
+          _getRevenueByCards(_startDate, _allAccNoList);
+        }
       },
     );
   }
 
-  void _goToDetail(DdFinHistDOList ddFinHist) {
-    Navigator.pushNamed(context, pageDetailInfo, arguments: ddFinHist);
-  }
-
+  //账户选择
   void _accountList() async {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
-          return HsgBottomSingleChoice(
+          return HsgBottomCardChoice(
             title: intl.S.of(context).account_lsit,
-            items: accList,
+            items: _cardList,
             lastSelectedPosition: _position,
+            imageUrl: _cardIcon,
           );
         });
     if (result != null && result != false) {
       setState(() {
         _position = result;
       });
-      if (result != 0) {
-        List<String> accNoList = [];
-        accNoList.clear();
-        accNoList.add(accList[result]);
-        _getRevenueByCards(startDate, accNoList);
+      if (_position != 0) {
+        _accNoList.clear();
+        _accNoList.add(_cardList[result]);
+        _getRevenueByCards(_startDate, _accNoList);
       } else {
-        _getRevenueByCards(startDate, cards);
+        _getRevenueByCards(_startDate, _allAccNoList);
       }
     }
   }
 
-  _getRevenueByCards(String localDateStart, List<String> cards) async {
+  void _goToDetail(DdFinHistDOList ddFinHist) {
+    Navigator.pushNamed(context, pageDetailInfo, arguments: ddFinHist);
+  }
+
+  _getRevenueByCards(String localDateStart, List<String> cards) {
     HSProgressHUD.show();
     PayCollectDetailRepository()
         .getRevenueByCards(
-            GetRevenueByCardsReq(localDateStart: startDate, cards: cards),
+            GetRevenueByCardsReq(localDateStart: localDateStart, cards: cards),
             'GetRevenueByCardsReq')
         .then((data) {
       HSProgressHUD.dismiss();
@@ -341,19 +354,22 @@ class _DetailListPageState extends State<DetailListPage> {
     });
   }
 
-  _getCardList() async {
+  _getCardList() {
     CardDataRepository().getCardList('getCardList').then((data) {
       if (data.cardList != null) {
         setState(() {
-          cards.clear();
-          accList.clear();
-          accList.add(intl.S.current.all_account);
+          _cardList.clear();
+          _cardIcon.clear();
+          _allAccNoList.clear();
+          _cardList.add(intl.S.current.all_account);
+          _cardIcon.add("images/transferIcon/transfer_wallet.png");
           data.cardList.forEach((item) {
-            cards.add(item.cardNo);
-            accList.add(item.cardNo);
+            _allAccNoList.add(item.cardNo);
+            _cardList.add(item.cardNo);
+            _cardIcon.add(item.imageUrl);
           });
-          _getRevenueByCards(startDate, cards);
         });
+        _getRevenueByCards(_startDate, _allAccNoList);
       }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());

@@ -8,10 +8,12 @@ import 'package:ebank_mobile/data/source/model/add_partner.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/hsg_single_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:contact_picker/contact_picker.dart';
+import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
 
 class AddPartnerPage extends StatefulWidget {
   @override
@@ -20,13 +22,17 @@ class AddPartnerPage extends StatefulWidget {
 
 class _AddPartnerPageState extends State<AddPartnerPage> {
   var _isInputed = false; //按钮可点击标志
-  var _bank = '';
-  var _location = '';
+  var _bankName = '';
   var _branch = '';
+  var _transferType = '';
+  var _swiftAdress = '';
   var _nameController = TextEditingController();
   var _acountController = TextEditingController();
   var _smsController = TextEditingController();
   var _aliasController = TextEditingController();
+  var _centerSwiftController = TextEditingController();
+  var _payeeAdressController = TextEditingController();
+  bool _showInternational = false; //国际转账
 
   @override
   void initState() {
@@ -41,7 +47,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     _smsController.addListener(() {
       _check();
     });
-
+    _payeeAdressController.addListener(() {
+      _check();
+    });
+    //备注最多输入5个文字
     _aliasController.addListener(() {
       String text = _aliasController.text;
       int length = text.length;
@@ -52,21 +61,47 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       }
     });
     //初始化
-    _bank = S.current.please_select;
-    _location = S.current.please_select;
+    _bankName = S.current.please_select;
     _branch = S.current.optional;
+    _transferType = S.current.please_select;
+    _swiftAdress = S.current.bank_swift;
   }
 
-  Future<void> _loadData() async {
+  _loadData() {
+    String myTransferType;
+    String _centerSwiftReq;
+    String _payeeAdressReq;
+    String _swiftAdressReq;
+    String _branchReq;
+    _branch == S.current.optional ? _branchReq = '' : _branchReq = _branch;
+    switch (_transferType) {
+      case '行内转账':
+        myTransferType = '0';
+        break;
+      case '国际转账':
+        myTransferType = '2';
+        break;
+      default:
+        myTransferType = '';
+    }
+    if (_showInternational) {
+      _centerSwiftReq = _centerSwiftController.text;
+      _payeeAdressReq = _payeeAdressController.text;
+      _swiftAdressReq = _swiftAdress;
+    } else {
+      _centerSwiftReq = '';
+      _payeeAdressReq = '';
+      _swiftAdressReq = '';
+    }
     TransferDataRepository()
         .addPartner(
             AddPartnerReq(
                 "",
-                _bank,
-                _location,
-                _branch,
+                _swiftAdressReq,
                 "",
-                "",
+                _branchReq,
+                _centerSwiftReq,
+                _payeeAdressReq,
                 _acountController.text,
                 _nameController.text,
                 "",
@@ -74,7 +109,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                 "",
                 _smsController.text,
                 _aliasController.text,
-                "0"),
+                myTransferType),
             'addPartner')
         .then((data) {
       print(data.toString());
@@ -96,6 +131,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         elevation: 0,
       ),
       body: Container(
+        height: MediaQuery.of(context).size.height,
         color: HsgColors.backgroundColor,
         child: SingleChildScrollView(
           child: Column(
@@ -108,7 +144,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               ),
               //按钮容器
               Container(
-                padding: EdgeInsets.fromLTRB(30, 40, 30, 0),
+                padding: EdgeInsets.fromLTRB(30, 40, 30, 40),
                 child: _confirmButton(),
               ),
             ],
@@ -122,11 +158,12 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        //伙伴信息
         Padding(
           padding: EdgeInsets.only(top: 10),
           child: Text(
             S.current.partner_information,
-            style: TextStyle(color: HsgColors.hintText, fontSize: 13),
+            style: TextStyle(color: HsgColors.secondDegreeText, fontSize: 13),
           ),
         ),
         //户名
@@ -140,10 +177,41 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         Divider(height: 0.5, color: HsgColors.divider),
         //账号
         Container(
-          padding: EdgeInsets.only(top: 10, bottom: 10),
+          padding: EdgeInsets.only(top: 16, bottom: 16),
           child: _inputFrame(
             S.current.account_number,
             _inputField(_acountController, S.current.please_input),
+          ),
+        ),
+        Divider(height: 0.5, color: HsgColors.divider),
+        //转账类型
+        GestureDetector(
+          onTap: () {
+            SinglePicker.showStringPicker(
+              context,
+              data: [S.current.transfer_type_0, S.current.transfer_type_2],
+              title: S.current.transfer_type,
+              clickCallBack: (int index, var str) {
+                setState(() {
+                  _transferType = str;
+                  if (_transferType == S.current.transfer_type_2) {
+                    _showInternational = true;
+                  } else if (_transferType == S.current.transfer_type_0) {
+                    _showInternational = false;
+                    //初始化国际转账的内容
+                    _centerSwiftController.text = '';
+                    _payeeAdressController.text = '';
+                  }
+                });
+              },
+            );
+          },
+          child: Container(
+            padding: EdgeInsets.only(top: 16, bottom: 16),
+            child: _inputFrame(
+              S.current.transfer_type,
+              _inputSelector(_transferType, S.of(context).please_select),
+            ),
           ),
         ),
         Divider(height: 0.5, color: HsgColors.divider),
@@ -152,8 +220,11 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           onTap: () {
             Navigator.pushNamed(context, pageSelectBank).then((data) {
               if (data != null) {
+                Banks _bank;
                 setState(() {
                   _bank = data;
+                  _bankName = _bank.localName;
+                  _swiftAdress = _bank.bankSwift;
                   _check();
                 });
               }
@@ -163,28 +234,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             padding: EdgeInsets.only(top: 16, bottom: 16),
             child: _inputFrame(
               S.current.bank,
-              _inputSelector(_bank, S.of(context).please_select),
-            ),
-          ),
-        ),
-        Divider(height: 0.5, color: HsgColors.divider),
-        //开户地
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, pageSelectCity).then((data) {
-              if (data != null) {
-                setState(() {
-                  _location = data;
-                  _check();
-                });
-              }
-            });
-          },
-          child: Container(
-            padding: EdgeInsets.only(top: 16, bottom: 16),
-            child: _inputFrame(
-              S.current.open_account_place,
-              _inputSelector(_location, S.of(context).please_select),
+              _inputSelector(_bankName, S.of(context).please_select),
             ),
           ),
         ),
@@ -210,9 +260,12 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           ),
         ),
         Divider(height: 0.5, color: HsgColors.divider),
+        //国际转账部分
+        _showInternational ? _getInternationalPart() : Container(),
+        Divider(height: 0.5, color: HsgColors.divider),
         //短信通知
         Container(
-          padding: EdgeInsets.only(top: 10, bottom: 10),
+          padding: EdgeInsets.only(top: 16, bottom: 16),
           child: _inputFrame(
             S.current.sms_notification,
             _inputFieldIcon(
@@ -220,14 +273,14 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               InkWell(
                 onTap: () {
                   _contact();
-                  // Fluttertoast.showToast(msg: '点击选择联系人');
                 },
                 child: Image(
-                  color: Colors.blueAccent,
+                  color: HsgColors.accent,
                   image: AssetImage(
                       'images/transferIcon/transfer_features_icon/transfer_features_acount.png'),
                   width: 21,
-                  height: 30,
+                  height: 21,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
@@ -246,12 +299,139 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     );
   }
 
-  //通用输入框(传入左边内容和右边内容)
+  //国际转账需要输入的部分
+  _getInternationalPart() {
+    return Container(
+      child: Column(
+        children: [
+          //银行SWIFT
+          Container(
+            padding: EdgeInsets.only(top: 16, bottom: 16),
+            child: _inputFrame(
+              S.current.bank_swift,
+              _mutableText(_swiftAdress, S.current.bank_swift),
+            ),
+          ),
+          Divider(height: 0.5, color: HsgColors.divider),
+          //中间行SWFIT
+          Container(
+            height: 48,
+            child: _inputFrame(
+              S.current.middle_bank_swift,
+              _onlyTextField(_centerSwiftController),
+            ),
+          ),
+          Divider(height: 0.5, color: HsgColors.divider),
+          _payeeAdress(_payeeAdressController),
+          Divider(height: 0.5, color: HsgColors.divider),
+        ],
+      ),
+    );
+  }
+
+  //收款人地址
+  Widget _payeeAdress(TextEditingController _inputController) {
+    var inputRow = Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(right: 8),
+          child: Container(
+            width: 170,
+            height: 21,
+            child: TextField(
+              controller: _inputController,
+              textAlign: TextAlign.end,
+              style: TextStyle(fontSize: 14, color: Colors.black87),
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                isCollapsed: true,
+                hintText: S.of(context).payee_address,
+                hintStyle: TextStyle(color: HsgColors.hintText, fontSize: 14),
+                border: InputBorder.none,
+              ),
+              onChanged: (text) {},
+            ),
+          ),
+        ),
+      ],
+    );
+    return Container(
+        padding: EdgeInsets.only(top: 16, bottom: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  child: Text(
+                    S.of(context).payee_address,
+                    style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
+                  ),
+                ),
+              ],
+            ),
+            //收款人地址输入框
+            inputRow,
+          ],
+        ));
+  }
+
+  //纯文本(初始灰色，有内容黑色)
+  _mutableText(String _income, String _hint) {
+    return _income == _hint
+        ? Text(
+            _income,
+            style: TextStyle(
+              fontSize: 14,
+              color: HsgColors.textHintColor,
+            ),
+          )
+        : Text(
+            _income,
+            style: TextStyle(fontSize: 14),
+          );
+  }
+
+  //纯输入框
+  _onlyTextField(TextEditingController _inputController) {
+    return Container(
+      padding: EdgeInsets.only(right: 9),
+      width: 170,
+      child: TextField(
+        style: TextStyle(fontSize: 14),
+        textAlign: TextAlign.end,
+        keyboardType: TextInputType.number,
+        controller: _inputController,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        decoration: InputDecoration.collapsed(
+          border: InputBorder.none,
+          hintText: S.current.please_input,
+          hintStyle: TextStyle(
+            fontSize: 14,
+            color: HsgColors.textHintColor,
+          ),
+        ),
+        onChanged: (text) {},
+      ),
+    );
+  }
+
+  //通用框(传入左边内容和右边组件)
   Widget _inputFrame(String left, Widget right) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(left),
+        Container(
+          width: 120,
+          child: Text(
+            left,
+            style: TextStyle(color: HsgColors.firstDegreeText),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
         right,
       ],
     );
@@ -308,23 +488,37 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   //通用选择器
   Widget _inputSelector(String _income, String _hint) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Padding(
+        Container(
+          alignment: Alignment.centerRight,
+          width: 170,
           padding: EdgeInsets.only(right: 12),
           child: _income == _hint
               ? Text(
                   _income,
                   style: TextStyle(
+                    fontSize: 14,
                     color: HsgColors.textHintColor,
                   ),
+                  textAlign: TextAlign.right,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 )
-              : Text(_income),
+              : Text(
+                  _income,
+                  style: TextStyle(fontSize: 14),
+                  textAlign: TextAlign.right,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
         ),
         Image(
-          color: HsgColors.firstDegreeText,
+          color: HsgColors.nextPageIcon,
           image: AssetImage('images/home/listIcon/home_list_more_arrow.png'),
-          width: 7,
+          width: 10,
           height: 10,
+          fit: BoxFit.contain,
         ),
       ],
     );
@@ -366,25 +560,32 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     );
   }
 
+  //按钮可点击检查
   _check() {
     setState(() {
-      if (_bank != S.current.please_select &&
-          _location != S.current.please_select &&
+      if (_bankName != S.current.please_select &&
           _nameController.text.length > 0 &&
           _acountController.text.length > 0 &&
           _smsController.text.length > 0) {
-        _isInputed = true;
+        if (_showInternational == true) {
+          if (_payeeAdressController.text.length > 0) {
+            _isInputed = true;
+          } else {
+            _isInputed = false;
+          }
+        } else {
+          _isInputed = true;
+        }
       } else {
         _isInputed = false;
       }
     });
   }
 
+  //确认按钮点击事件
   _confirm() {
     if (_isInputed) {
       return () {
-        // Fluttertoast.showToast(msg: '添加成功');
-        // Navigator.of(context).pop();
         _loadData();
       };
     } else {

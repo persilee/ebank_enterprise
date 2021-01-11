@@ -4,9 +4,11 @@
 /// Date: 2020-12-29
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/do_claim_task.dart';
 import 'package:ebank_mobile/data/source/model/find_user_to_do_task.dart';
 import 'package:ebank_mobile/data/source/model/get_process_task.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
+import 'package:ebank_mobile/data/source/process_task_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -186,6 +188,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
         onPressed: () {
           if (buttonText == S.current.sign) {
             _toggle();
+            _doClaimTask();
           } else {
             if (comment.length != 0) {
               if (buttonText == S.current.examine_and_approve) {
@@ -385,6 +388,13 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
       NeedToBeDealtWithRepository().getMyProcessTask(
           GetProcessTaskReq(approveResult, comment, rejectToStart, taskId),
           'getMyProcessTask')
+    });
+  }
+
+  void _doClaimTask() {
+    Future.wait({
+      ProcessTaskDataRepository()
+          .doClaimTask(DoClaimTaskReq(taskId), 'doClaimTask')
     });
   }
 }

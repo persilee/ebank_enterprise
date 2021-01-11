@@ -11,11 +11,8 @@ import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_international_transfer.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
-import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/page/transfer/select_bank_page.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -130,8 +127,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //转账金额
-  // ignore: missing_return
-  Function _amountInputChange(String title) {
+  _amountInputChange(String title) {
     money = double.parse(title);
   }
 
@@ -174,7 +170,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //选择账号方法
-  Future<Function> _selectAccount() async {
+  _selectAccount() async {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
@@ -196,7 +192,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     //_getCcy();
   }
 
-  Function _getCardTotals(String _changedAccountTitle) {
+  _getCardTotals(String _changedAccountTitle) {
     Future.wait({
       CardDataRepository().getSingleCardBal(
           GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
@@ -303,7 +299,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //根据货币类型拿余额
-  Future<Function> _getavaBal(String changedCcyTitle) {
+
+  _getavaBal(String changedCcyTitle) {
     Future.wait({
       CardDataRepository().getSingleCardBal(
           GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
@@ -324,9 +321,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //选择收款银行
   _selectBank() async {
     Navigator.pushNamed(context, pageSelectBank).then((data) {
-      setState(() {
-        _bankReceive = data;
-      });
+      if (data != null) {
+        setState(() {
+          _bankReceive = data;
+        });
+      }
     });
   }
 
@@ -349,8 +348,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
   }
 
-  //汇款费用
-  Future<Function> _selectFeeUse() async {
+  //汇款用途
+  _selectFeeUse() async {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
@@ -379,6 +378,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         slivers: <Widget>[
           _gaySliver,
           TransferPayerWidget(
+              context,
               _limitMoney,
               _changedCcyTitle,
               _changedRateTitle,
@@ -404,7 +404,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                       S.current.please_input, _addressChange),
                   _getLine(),
                   Container(
-                    padding: EdgeInsets.only(right: 50),
+                    width: MediaQuery.of(context).size.width,
+                    //padding: EdgeInsets.only(right: 50),
                     child: _getRedText(S.current.remitter_address_prompt),
                   ),
                 ],
@@ -412,13 +413,16 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             ),
           ),
           TransferPayeeWidget(
-              S.current.transfer_in,
-              S.current.company_name,
-              S.current.account_num,
-              S.current.please_input,
-              S.current.please_input,
-              _nameInputChange,
-              _accountInputChange),
+            context,
+            S.current.transfer_in,
+            S.current.company_name,
+            S.current.account_num,
+            S.current.please_input,
+            S.current.please_input,
+            _nameInputChange,
+            _accountInputChange,
+            '2',
+          ),
           SliverToBoxAdapter(
               child: Container(
             padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -480,14 +484,13 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               height: 90,
               padding: EdgeInsets.fromLTRB(29.6, 30, 29.6, 10),
               margin: EdgeInsets.fromLTRB(0, 20, 0, 80),
-              child: FlatButton(
-                child: Text('提交'),
+              child: RaisedButton(
+                child: Text(S.current.submit),
                 textColor: Colors.white,
                 color: Colors.blue[500],
-                onPressed: () {
-                  _tranferAccount(context);
-                  print('提交');
-                },
+                onPressed: _isClick(),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
               ),
             ),
           ),
@@ -496,9 +499,28 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     );
   }
 
+  _isClick() {
+    if (money > 0 &&
+        payeeName.length > 0 &&
+        payeeCardNo.length > 0 &&
+        payerAddress.length > 0 &&
+        _countryText != S.current.please_select &&
+        _bankReceive != S.current.please_select &&
+        bankSwift.length > 0 &&
+        payeeAddress.length > 0 &&
+        _transferFee != S.current.please_select &&
+        _feeUse != S.current.please_select) {
+      return () {
+        _tranferInternational(context);
+        print('提交');
+      };
+    } else {
+      return null;
+    }
+  }
+
   _getRedText(String redText) {
     return Container(
-        // height: 70,
         padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
         child: Text(
           redText,
@@ -607,7 +629,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   _getSelectColumn(String leftText, String rightText, Function selectMethod) {
-    String righText = rightText == '' ? '请选择' : rightText;
+    String righText = rightText == '' ? S.current.please_select : rightText;
     return Container(
       height: 50,
       color: Colors.white,
@@ -635,14 +657,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                     margin: EdgeInsets.only(top: 5),
                     child: Text(
                       righText,
-                      style: righText == '请选择'
+                      style: righText == S.current.please_select
                           ? TextStyle(
                               color: HsgColors.secondDegreeText,
-                              fontSize: 13,
+                              fontSize: 15,
                             )
                           : TextStyle(
                               color: HsgColors.firstDegreeText,
-                              fontSize: 13,
+                              fontSize: 15,
                             ),
                     ),
                   )
@@ -721,7 +743,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
   }
 
-  void _tranferAccount(BuildContext context) {
+  void _tranferInternational(BuildContext context) {
     setState(() {
       _isLoading = true;
     });

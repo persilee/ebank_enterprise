@@ -16,6 +16,8 @@ import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:intl/intl.dart';
 
+import '../../page_route.dart';
+
 class OpenTransferPage extends StatefulWidget {
   OpenTransferPage({Key key}) : super(key: key);
 
@@ -220,24 +222,51 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     setState(() {
       _endValue = DateTime.now().add(Duration(days: 1));
       _startValue = DateTime.now().add(Duration(days: 1));
-      _start = double.parse(groupValue) > 1
-          ? (groupValue == '2'
-              ? DateFormat('dd').format(DateTime.now().add(Duration(days: 1)))
-              : DateFormat('MM-dd')
-                  .format(DateTime.now().add(Duration(days: 1))))
-          : DateFormat('yyyy-MM-dd')
-              .format(DateTime.now().add(Duration(days: 1)));
-      _end = double.parse(groupValue) > 1
-          ? (groupValue == '2'
-              ? DateFormat('yyyy-MM').format(DateTime.now())
-              : DateFormat('yyyy').format(DateTime.now()))
-          : DateFormat('yyyy-MM-dd').format(DateTime.parse(_start));
+      //开始时间
+      if (double.parse(groupValue) > 1) {
+        if (groupValue == '2') {
+          _start =
+              DateFormat('dd').format(DateTime.now().add(Duration(days: 1)));
+        } else {
+          _start =
+              DateFormat('MM-dd').format(DateTime.now().add(Duration(days: 1)));
+        }
+      } else {
+        _start = DateFormat('yyyy-MM-dd')
+            .format(DateTime.now().add(Duration(days: 1)));
+      }
+      //结束时间
+      if (double.parse(groupValue) > 1) {
+        if (groupValue == '2') {
+          _end = DateFormat('yyyy-MM').format(DateTime.now());
+        } else {
+          _end = DateFormat('yyyy').format(DateTime.now());
+        }
+      } else {
+        _end = DateFormat('yyyy-MM-dd').format(DateTime.parse(_start));
+      }
     });
   }
 
 //选择转账时间
   Widget _transferDate(String transferDate, int i) {
     String language = Intl.getCurrentLocale();
+    //每月、每年中英文位置
+    if (double.parse(groupValue) > 1) {
+      if (groupValue == '2') {
+        if (language == 'zh_CN') {
+          transferDate = intl.S.current.monthly_with_value + transferDate;
+        } else {
+          transferDate = transferDate + intl.S.current.monthly_with_value;
+        }
+      } else {
+        if (language == 'zh_CN') {
+          transferDate = intl.S.current.yearly_with_value + transferDate;
+        } else {
+          transferDate = transferDate + intl.S.current.yearly_with_value;
+        }
+      }
+    }
     return Container(
       color: Colors.white,
       child: Row(
@@ -256,19 +285,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                   color: Colors.white,
                   child: Row(
                     children: [
-                      _selectedTime(double.parse(groupValue) > 1
-                          ? (groupValue == '2'
-                              ? (language == 'zh_CN'
-                                  ? intl.S.current.monthly_with_value +
-                                      transferDate
-                                  : transferDate +
-                                      intl.S.current.monthly_with_value)
-                              : (language == 'zh_CN'
-                                  ? intl.S.current.yearly_with_value +
-                                      transferDate
-                                  : transferDate +
-                                      intl.S.current.yearly_with_value))
-                          : transferDate),
+                      _selectedTime(transferDate),
                       _rightArrow(),
                     ],
                   ),
@@ -356,21 +373,30 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                 ? DateTime.now()
                 : DateTime(nextYear.year + 1, nextYear.month, nextYear.day);
             //每月开始时间只显示日，每年开始时间只显示月和日
-            _start = double.parse(groupValue) > 1
-                ? (groupValue == '2'
-                    ? DateFormat('dd').format(startDate)
-                    : DateFormat('MM-dd').format(startDate))
-                : DateFormat('yyyy-MM-dd').format(startDate);
+            if (double.parse(groupValue) > 1) {
+              if (groupValue == '2') {
+                _start = DateFormat('dd').format(startDate);
+              } else {
+                _start = DateFormat('MM-dd').format(startDate);
+              }
+            } else {
+              _start = DateFormat('yyyy-MM-dd').format(startDate);
+            }
             //每月结束时间只显示月和日，每年结束时间只显年
-            _end = double.parse(groupValue) > 1
-                ? (groupValue == '2'
-                    ? ((startDate.isAfter(DateTime.now()))
-                        ? DateFormat('yyyy-MM').format(DateTime.now())
-                        : (DateFormat('yyyy-MM').format(nextMonth)))
-                    : (startDate.isAfter(DateTime.now())
-                        ? DateFormat('yyyy').format(DateTime.now())
-                        : DateFormat('yyyy').format(nextYear)))
-                : DateFormat('yyyy-MM-dd').format(startDate);
+            if (double.parse(groupValue) > 1) {
+              if (groupValue == '2') {
+                _end = startDate.isAfter(DateTime.now())
+                    ? DateFormat('yyyy-MM').format(DateTime.now())
+                    : (DateFormat('yyyy-MM').format(nextMonth));
+              } else {
+                _end = startDate.isAfter(DateTime.now())
+                    ? DateFormat('yyyy').format(DateTime.now())
+                    : DateFormat('yyyy').format(nextYear);
+              }
+            } else {
+              _end = DateFormat('yyyy-MM-dd').format(startDate);
+            }
+
             if (groupValue == '0') {
               _endValue = _startValue; //仅1次转账时间等于截止日期
             } else if (groupValue == '2') {
@@ -423,25 +449,38 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       onConfirm: (endDate, List<int> index) {
         setState(
           () {
-            _endValue = double.parse(groupValue) > 1
-                ? ((groupValue == '2'
-                    ? DateTime(endDate.year, endDate.month,
-                        _startValue.day) //选择每月转账日期时，截止日期为当前年月加选择的日
-                    : DateTime(
-                        endDate.year, _startValue.month, _startValue.day)))
-                : endDate;
-
-            i == 0
-                ? _start = double.parse(groupValue) > 1
-                    ? (groupValue == '2'
-                        ? DateFormat('dd').format(_startValue)
-                        : DateFormat('MM-dd').format(_startValue))
-                    : DateFormat('yyyy-MM-dd').format(_startValue)
-                : _end = double.parse(groupValue) > 1
-                    ? (groupValue == '2'
-                        ? DateFormat('yyyy-MM').format(endDate)
-                        : DateFormat('yyyy').format(endDate))
-                    : DateFormat('yyyy-MM-dd').format(endDate);
+            if (double.parse(groupValue) > 1) {
+              if (groupValue == '2') {
+                _endValue =
+                    DateTime(endDate.year, endDate.month, _startValue.day);
+              } else {
+                _endValue =
+                    DateTime(endDate.year, _startValue.month, _startValue.day);
+              }
+            } else {
+              _endValue = endDate;
+            }
+            if (i == 0) {
+              if (double.parse(groupValue) > 1) {
+                if (groupValue == '2') {
+                  _start = DateFormat('dd').format(_startValue);
+                } else {
+                  _start = DateFormat('MM-dd').format(_startValue);
+                }
+              } else {
+                _start = DateFormat('yyyy-MM-dd').format(_startValue);
+              }
+            } else {
+              if (double.parse(groupValue) > 1) {
+                if (groupValue == '2') {
+                  _end = DateFormat('yyyy-MM').format(endDate);
+                } else {
+                  _end = DateFormat('yyyy').format(endDate);
+                }
+              } else {
+                _end = DateFormat('yyyy-MM-dd').format(endDate);
+              }
+            }
           },
         );
         (context as Element).markNeedsBuild();
@@ -580,7 +619,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      debugPrint(intl.S.current.transfer_plan);
+                      Navigator.pushNamed(context, pageTransferRecord);
                     })),
             )
           ],
@@ -592,11 +631,15 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             ),
             _frequencyBtn(),
             SliverToBoxAdapter(
-              child: groupValue == '0'
-                  ? _once(_start, 0)
-                  : _manyTimes(_start, _end, 0, 1),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: groupValue == '0'
+                    ? _once(_start, 0)
+                    : _manyTimes(_start, _end, 0, 1),
+              ),
             ),
             TransferPayeeWidget(
+                context,
                 intl.S.current.receipt_side,
                 intl.S.current.name,
                 intl.S.current.account_num,
@@ -610,6 +653,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               ),
             ),
             TransferPayerWidget(
+                context,
                 '5000.00',
                 'LAK',
                 '',

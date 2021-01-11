@@ -201,7 +201,11 @@ class HsgSingleChoiceDialog extends StatelessWidget {
         negativeButton,
         context,
         () {
-          Navigator.of(context).pop(_selectedPosition);
+          if (items.length > 0) {
+            Navigator.of(context).pop(_selectedPosition);
+          } else {
+            Navigator.pop(context);
+          }
         },
       );
     }
@@ -387,16 +391,18 @@ class BottomMenu extends StatelessWidget {
   }
 }
 
-//底部圆角单选弹窗
+//账户单选底部圆角弹窗
 class HsgBottomSingleChoice extends StatelessWidget {
   final String title;
   final List<String> items;
+  final List<String> icons;
   final lastSelectedPosition;
 
   HsgBottomSingleChoice({
     Key key,
     this.title,
     this.items,
+    this.icons,
     this.lastSelectedPosition = -1,
   });
 
@@ -498,12 +504,177 @@ class HsgBottomSingleChoice extends StatelessWidget {
       Container(
         padding: EdgeInsets.only(right: 20),
         child: ClipOval(
-          child: Image.asset(
-            'images/home/listIcon/home_list_card_bank.png',
-            height: 23,
-            width: 23,
-            fit: BoxFit.cover,
+          child: icons != null && icons.length > 0
+              ? Image.network(
+                  icons[position],
+                  height: 23,
+                  width: 23,
+                  fit: BoxFit.cover,
+                )
+              : Image.asset(
+                  'images/home/listIcon/home_list_card_bank.png',
+                  height: 23,
+                  width: 23,
+                  fit: BoxFit.cover,
+                ),
+        ),
+      ),
+      Expanded(
+        child: Text(
+          items[position],
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(left: 10),
+        child: Image.asset(
+          position == selectedPosition
+              ? 'images/common/check_btn_common_checked.png'
+              : 'images/common/check_btn_common_no_check.png',
+          height: 18,
+          width: 18,
+        ),
+      ),
+    ];
+    return InkWell(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(30, 13, 35, 13),
+        child: Row(
+          children: rowChildren,
+        ),
+      ),
+      onTap: () {
+        _selectedPosition = position;
+        (context as Element).markNeedsBuild();
+        Navigator.of(context).pop(position);
+      },
+    );
+  }
+}
+
+//底部银行卡弹窗
+class HsgBottomCardChoice extends StatelessWidget {
+  final String title;
+  final List<String> items;
+  final lastSelectedPosition;
+  final List<String> imageUrl;
+
+  HsgBottomCardChoice({
+    Key key,
+    this.title,
+    this.items,
+    this.lastSelectedPosition = -1,
+    this.imageUrl,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Widget titleWidget;
+    Widget contentWidget;
+    Widget actionsWidget;
+    if (title != null) {
+      titleWidget = _titleWidget(
+        title,
+        titlePadding: EdgeInsets.all(15),
+        style: TextStyle(
+          fontWeight: FontWeight.normal,
+        ),
+      );
+    }
+
+    if (items != null && items.length > 0) {
+      final EdgeInsets contentPadding = EdgeInsets.fromLTRB(0, 0, 0, 20);
+      contentWidget = Padding(
+        padding: contentPadding,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: items.length,
+          itemBuilder: (BuildContext context, int position) {
+            return _getItemRow(
+                position, context, lastSelectedPosition, imageUrl);
+          },
+        ),
+      );
+    }
+
+    final actionChildren = [
+      Expanded(
+        child: FlatButton(
+          height: 55,
+          onPressed: () {
+            Navigator.of(context).pop(false);
+          },
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 13, top: 10),
+            child: Text(
+              S.current.cancel,
+              style: TextStyle(
+                // fontSize: 16,
+                color: HsgColors.secondDegreeText,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
           ),
+        ),
+      ),
+    ];
+
+    actionsWidget = Row(
+      children: actionChildren,
+    );
+
+    List<Widget> columnChildren = <Widget>[
+      if (title != null) titleWidget,
+      if (items != null && items.length > 0)
+        Flexible(
+          child: contentWidget,
+        ),
+      Divider(
+        color: HsgColors.commonBackground,
+        thickness: 7,
+        height: 7,
+      ),
+      actionsWidget,
+    ];
+
+    final dialogChild = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: columnChildren,
+    );
+
+    return Ink(
+      child: dialogChild,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(15),
+          topRight: Radius.circular(15),
+        ),
+      ),
+    );
+  }
+
+  Widget _getItemRow(int position, BuildContext context, int selectedPosition,
+      List<String> imageUrl) {
+    List<Widget> rowChildren = [
+      Container(
+        padding: EdgeInsets.only(right: 20),
+        child: ClipOval(
+          child: position == 0
+              ? Image.asset(
+                  imageUrl[0],
+                  height: 23,
+                  width: 23,
+                  fit: BoxFit.cover,
+                )
+              : Image.network(
+                  imageUrl[position],
+                  height: 23,
+                  width: 23,
+                  fit: BoxFit.cover,
+                ),
         ),
       ),
       Expanded(

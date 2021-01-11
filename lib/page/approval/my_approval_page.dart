@@ -21,6 +21,7 @@ class MyApprovalPage extends StatefulWidget {
 
 class _MyApprovalPageState extends State<MyApprovalPage> {
   List<Rows> toDoTask = [];
+  Rows approval;
   ScrollController _sctrollController = ScrollController();
   int totalPage = 0;
   int page = 1;
@@ -28,14 +29,14 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
 
   void initState() {
     //网络请求
-    _loadData(page, 10);
+    _loadData(page, 20);
     super.initState();
     _sctrollController.addListener(() {
       setState(() {
         if (_sctrollController.position.pixels ==
             _sctrollController.position.maxScrollExtent) {
           //网络请求
-          _loadData(page, 10);
+          _loadData(page, 20);
         }
       });
     });

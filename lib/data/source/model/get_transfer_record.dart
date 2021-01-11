@@ -57,11 +57,26 @@ class GetTransferRecordReq extends Object {
 
 @JsonSerializable()
 class GetTransferRecordResp extends Object {
+  @JsonKey(name: 'page')
+  int page;
+
+  @JsonKey(name: 'pageSize')
+  int pageSize;
+
+  @JsonKey(name: 'count')
+  int count;
+
+  @JsonKey(name: 'totalPage')
+  int totalPage;
+
   @JsonKey(name: 'rows')
-  List<Rows> rows;
+  List<TransferRecord> transferRecord;
 
   GetTransferRecordResp(
-    this.rows,
+    this.page,
+    this.count,
+    this.totalPage,
+    this.transferRecord,
   );
 
   factory GetTransferRecordResp.fromJson(Map<String, dynamic> srcJson) =>
@@ -71,7 +86,7 @@ class GetTransferRecordResp extends Object {
 }
 
 @JsonSerializable()
-class Rows extends Object {
+class TransferRecord extends Object {
   //id
   @JsonKey(name: 'id')
   String id;
@@ -148,7 +163,7 @@ class Rows extends Object {
   @JsonKey(name: 'createTime')
   String createTime;
 
-  Rows(
+  TransferRecord(
     this.id,
     this.msgId,
     this.transactionHour,
@@ -176,8 +191,8 @@ class Rows extends Object {
     this.createTime,
   );
 
-  factory Rows.fromJson(Map<String, dynamic> srcJson) =>
-      _$RowsFromJson(srcJson);
+  factory TransferRecord.fromJson(Map<String, dynamic> srcJson) =>
+      _$TransferRecordFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$RowsToJson(this);
+  Map<String, dynamic> toJson() => _$TransferRecordToJson(this);
 }
