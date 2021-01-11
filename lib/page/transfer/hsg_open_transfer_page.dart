@@ -665,6 +665,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                 : _manyTimes(_start, _end, 0, 1, context),
           )),
           TransferPayeeWidget(
+              payeeCardNo,
               payeeName,
               accountSelect,
               payeeName,
