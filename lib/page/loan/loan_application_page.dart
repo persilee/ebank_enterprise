@@ -106,7 +106,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         elevation: 0,
       ),
       body: Container(
-        color: HsgColors.backgroundColor,
+        color: HsgColors.commonBackground,
         height: double.infinity,
         child: SingleChildScrollView(
           child: Column(
@@ -127,7 +127,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
               ),
               //申请按钮
               Container(
-                margin: EdgeInsets.only(top: 40),
+                margin: EdgeInsets.only(top: 40, bottom: 20),
                 child: HsgButton.button(
                   title: S.current.apply,
                   click: _isButton ? _openBottomSheet : null,

@@ -62,10 +62,10 @@ class _ElectronicStatementDetailPageState
       builder: (builder) {
         return Container(
           decoration: BoxDecoration(
-              color: HsgColors.backgroundColor,
+              color: HsgColors.commonBackground,
               borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(15.0),
-                  topRight: const Radius.circular(15.0))),
+                  topLeft: Radius.circular(15.0),
+                  topRight: Radius.circular(15.0))),
           child: SingleChildScrollView(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

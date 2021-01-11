@@ -61,7 +61,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         elevation: 0,
       ),
       body: Container(
-        color: HsgColors.backgroundColor,
+        color: HsgColors.commonBackground,
         height: double.infinity,
         child: SingleChildScrollView(
           child: Column(
@@ -86,7 +86,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
               ),
               //確定按鈕
               Container(
-                margin: EdgeInsets.only(top: 40),
+                margin: EdgeInsets.only(top: 40, bottom: 20),
                 child: HsgButton.button(
                   title: S.current.confirm,
                   click: _boolBut()
@@ -378,18 +378,16 @@ class SelectInkWell extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 50,
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(color: HsgColors.divider, width: 0.5)),
-          ),
-          child: _getSelect(),
+        decoration: BoxDecoration(
+          border:
+              Border(bottom: BorderSide(color: HsgColors.divider, width: 0.5)),
         ),
+        child: _getSelectRow(),
       ),
     );
   }
 
-  Row _getSelect() {
+  Row _getSelectRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -426,15 +424,13 @@ class ItemContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      child: Container(
-        decoration: BoxDecoration(
-          border:
-              Border(bottom: BorderSide(color: HsgColors.divider, width: 0.5)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text(title), Text(item)],
-        ),
+      decoration: BoxDecoration(
+        border:
+            Border(bottom: BorderSide(color: HsgColors.divider, width: 0.5)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [Text(title), Text(item)],
       ),
     );
   }
