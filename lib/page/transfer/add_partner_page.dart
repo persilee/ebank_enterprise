@@ -139,6 +139,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               //输入数据容器
               Container(
                 color: Colors.white,
+                margin: EdgeInsets.only(top: 15),
                 padding: EdgeInsets.only(left: 15, right: 15),
                 child: formColumn(),
               ),
