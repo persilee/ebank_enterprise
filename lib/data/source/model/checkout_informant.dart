@@ -9,11 +9,11 @@ part 'checkout_informant.g.dart';
 //提交身份验证信息
 @JsonSerializable()
 class CheckoutInformantReq {
-  @JsonKey(name: 'certNo')
+  @JsonKey(name: 'certNo') //证件号
   String certNo;
-  @JsonKey(name: 'cardNo')
+  @JsonKey(name: 'cardNo') //卡号
   String cardNo;
-  @JsonKey(name: 'certType')
+  @JsonKey(name: 'certType') //证件类型
   String certType;
    @JsonKey(name: 'phoneNo')
   String phoneNo;

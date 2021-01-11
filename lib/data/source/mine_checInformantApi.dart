@@ -7,7 +7,7 @@ import 'package:ebank_mobile/data/source/model/set_payment_pwd.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 class ChecInformantApiRepository {
   //修改支付密码
-  Future<CheckoutInformantReq> updateTransPassword(CheckoutInformantReq req, String tag) {
+  Future<CheckoutInformantReq> authentication(CheckoutInformantReq req, String tag) {
     return request(
       'cust/user/verification', req, tag, (data) => CheckoutInformantReq.fromJson(data));
   }

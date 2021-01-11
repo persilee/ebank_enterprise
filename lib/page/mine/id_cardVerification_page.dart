@@ -2,11 +2,12 @@
 /// 重置支付密码--身份证验证
 /// Author: hlx
 /// Date: 2020-12-31
-
-import 'package:ebank_mobile/data/source/model/update_login_password.dart';
-import 'package:ebank_mobile/data/source/update_login_paw_repository.dart';
+import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/mine_checInformantApi.dart';
+import 'package:ebank_mobile/data/source/model/checkout_informant.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -25,7 +26,7 @@ class IdIardVerificationPage extends StatefulWidget {
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
-  TextEditingController _cardNo = TextEditingController();//卡号
+  TextEditingController _cardNo = TextEditingController(); //卡号
   TextEditingController _certNo = TextEditingController(); //证件号
   TextEditingController _certType = TextEditingController(); //证件类型
   TextEditingController _phoneNo = TextEditingController();
@@ -33,18 +34,38 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   TextEditingController _smsCode = TextEditingController();
   Timer _timer;
   int countdownTime = 0;
-   TextEditingController userAccount= TextEditingController();
-   @override
+  TextEditingController userAccount = TextEditingController();
+  List<Map<String, Object>> _accList = []; //账号列表
+
+  //证件信息
+  List<String> idInformation = ['身份证', '护照'];
+  @override
   // ignore: must_call_super
   void initState() {
     // 网络请求
-    _getUser();
+    _getUserCardList();
   }
 
-  _getUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    userAccount.text = prefs.getString(ConfigKey.USER_ACCOUNT);
+  //账户列表
+  _getUserCardList() async {
+    CardDataRepository().getCardList('getCardList').then((data) {
+      if (data.cardList != null) {
+        setState(() {
+          _accList.clear();
+          data.cardList.forEach((item) {
+            _accList.addAll([
+              {'cardNo': item.cardNo, 'imageUrl': item.imageUrl}
+            ]);
+          });
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
   }
+
+//弹窗账户列表
+  _selectAccount() {}
 
   @override
   void dispose() {
@@ -52,6 +73,22 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
     if (_timer != null) {
       _timer.cancel();
     }
+  }
+
+  //选择国家地区
+  _selectDocumentType() async {
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return BottomMenu(
+            title: S.of(context).idType,
+            items: idInformation,
+          );
+        });
+    print('弹窗显示的结果');
+    setState(() {
+      _certType = result;
+    });
   }
 
   @override
@@ -68,19 +105,24 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
               key: _formKey,
               child: ListView(
                 children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(bottom: 12),
-                    color: Colors.white,
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Column(children: [
-                      InputList(S.of(context).account_number, '', _cardNo),
-                    ]),
+                  //账号
+                  GestureDetector(
+                    onTap: () {
+                      print('11111');
+                     // _selectAccount();
+                    },
+                    child: Container(
+                      //width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.only(bottom: 12),
+                      color: Colors.red,
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      child:
+                          InputList(
+                              S.of(context).account_number, '', userAccount),
+                       
+                      
+                    ),
                   ),
-                  // Container(
-                  //   padding: EdgeInsets.all(10.0),
-                  //   child: Text(S.of(context).pleaseFillInTheBankInformation, style: TextStyle(fontSize: 12),),
-                  // ),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin: EdgeInsets.only(bottom: 16),
@@ -90,37 +132,79 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                       children: [
                         Container(
                           alignment: Alignment.topLeft,
-                          padding: EdgeInsets.only(top:10.0,bottom:1.0),
-                          child: Text(S.of(context).pleaseFillInTheBankInformation, style: TextStyle(fontSize: 12),),
-                  ),
-                        InputList(S.of(context).name,
-                            S.of(context).placeName,_realName),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
+                          padding: EdgeInsets.only(top: 10.0, bottom: 1.0),
+                          child: Text(
+                            S.of(context).pleaseFillInTheBankInformation,
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                        //姓名
+                        InputList(S.of(context).name, S.of(context).placeName,
+                            _realName),
+                        //证件类型
                         InputList(S.of(context).idType,
                             S.of(context).placeIdType, _certType),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
+
+                        //证件类型
+                        // Container(
+                        // height: 50.0,
+                        // child: Column(
+                        //   children: [
+                        //     Row(
+                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //       children: [
+                        //         Text(S.of(context).idType),
+                        //            Expanded(
+                        //     child: GestureDetector(
+                        //       onTap: () {
+                        //         _selectDocumentType();
+                        //         print('选择账号');
+                        //       },
+                        //       child: Column(
+                        //         crossAxisAlignment: CrossAxisAlignment.end,
+                        //         children: [
+                        //           Container(
+                        //             margin: EdgeInsets.only(top: 5),
+                        //             child: Text(
+                        //               _certType.text == '' ? S.current.please_select : '请选择1',
+                        //               style: '请选择证件' == S.current.please_select
+                        //                   ? TextStyle(
+                        //                       color: HsgColors.secondDegreeText,
+                        //                       fontSize: 15,
+                        //                     )
+                        //                   : TextStyle(
+                        //                       color: HsgColors.firstDegreeText,
+                        //                       fontSize: 15,
+                        //                     ),
+                        //             ),
+                        //           )
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        //   Container(
+                        //     margin: EdgeInsets.only(top: 7, left: 5),
+                        //     child: Icon(
+                        //       Icons.arrow_forward_ios,
+                        //       color: HsgColors.firstDegreeText,
+                        //       size: 16,
+                        //     ),
+                        //   ),
+                        //       ],
+                        //     ),
+                        //     Divider(
+                        //         height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
+                        //   ],
+                        // )),
+
+                        //证件号码
                         InputList(S.of(context).IdentificationNumber,
                             S.of(context).placeIdNumber, _certNo),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
+                        //预留手机号
                         InputList(S.of(context).reservedMobilePhoneNumber,
                             S.of(context).placeReveredMobilePhone, _phoneNo),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
+
+                        //短信验证码
                         Container(
                           height: 50,
                           child: Row(
@@ -164,6 +248,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
               )),
         ));
   }
+  
 
   //验证码输入框
   TextField otpTextField() {
@@ -171,7 +256,8 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       textAlign: TextAlign.end,
       keyboardType: TextInputType.number,
       controller: _smsCode,
-      decoration: InputDecoration.collapsed(// 边色与边宽度
+      decoration: InputDecoration.collapsed(
+        // 边色与边宽度
         hintText: S.current.placeSMS,
         hintStyle: TextStyle(
           fontSize: 14,
@@ -209,14 +295,17 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }
+
   bool _submit() {
-    if (_cardNo.text != '' &&
+    if (_realName.text != '' &&
+        //_cardNo.text != '' &&
         _certType.text != '' &&
         _phoneNo.text != '' &&
-        _realName.text != ''&&
-        _smsCode.text !='') {
+        _smsCode.text != '') {
+      print('打印数据true');
       return true;
     } else {
+      print('打印数据false');
       return false;
     }
   }
@@ -263,26 +352,42 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
 //   TextEditingController _smsCode = TextEditingController();
   //验证身份信息
   _updateLoginPassword() async {
-  //   if (_userName.text != _idCardType.text) {
-  //     Fluttertoast.showToast(msg: S.of(context).differentPwd);
-  //   } else {
-  //     HSProgressHUD.show();
-  //     final prefs = await SharedPreferences.getInstance();
-  //     String userID = prefs.getString(ConfigKey.USER_ID);
-  //     UpdateLoginPawRepository()
-  //         .modifyLoginPassword(
-  //             ModifyPasswordReq(
-  //                 _userName.text, _account.text, _sms.text, userID),
-  //             'ModifyPasswordReq')
-  //         .then((data) {
-  //       HSProgressHUD.dismiss();
-  //       Fluttertoast.showToast(msg: S.current.operate_success);
-  //     }).catchError((e) {
-  //       Fluttertoast.showToast(msg: e.toString());
-  //       HSProgressHUD.dismiss();
-  //     });
-  //   }
- }
+    print('object');
+    //  TextEditingController _certType = TextEditingController(); //证件类型
+    // TextEditingController _phoneNo = TextEditingController();
+    // TextEditingController _realName = TextEditingController();
+    // TextEditingController _smsCode = TextEditingController();
+    print('1111_certType,$_certType.text');
+    HSProgressHUD.show();
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+
+    //         @JsonKey(name: 'certNo') //证件号
+    // String certNo;
+    // @JsonKey(name: 'cardNo') //卡号
+    // String cardNo;
+    // @JsonKey(name: 'certType') //证件类型
+    // String certType;
+    //  @JsonKey(name: 'phoneNo')
+    // String phoneNo;
+    // @JsonKey(name: 'realName')
+    // String realName;
+    // @JsonKey(name: 'smsCode')
+
+    ChecInformantApiRepository()
+        .authentication(
+            CheckoutInformantReq(_certNo.text, '卡号', _certType.text,
+                _phoneNo.text, _realName.text, _smsCode.text),
+            'authentication')
+        .then((data) {
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(msg: S.current.operate_success);
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.dismiss();
+    });
+    //
+  }
 }
 
 // ignore: must_be_immutable
@@ -295,40 +400,45 @@ class InputList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50.0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(this.labText),
-          Expanded(
-            child: TextField(
-              controller: this.inputValue,
-              maxLines: 1, //最大行数
-              autocorrect: true, //是否自动更正
-              autofocus: false, //是否自动对焦
-              obscureText: false, //是否是密码
-              textAlign: TextAlign.right, //文本对齐方式
-              onChanged: (text) {
-                //内容改变的回调
-                print('change $text');
-              },
-              onSubmitted: (text) {
-                //内容提交(按回车)的回调
-                print('submit $text');
-              },
-              enabled: true, //是否禁用
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: this.placeholderText,
-                hintStyle: TextStyle(
-                  fontSize: 14,
-                  color: HsgColors.textHintColor,
+        height: 50.0,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(this.labText),
+                Expanded(
+                  child: TextField(
+                    controller: this.inputValue,
+                    maxLines: 1, //最大行数
+                    autocorrect: true, //是否自动更正
+                    autofocus: false, //是否自动对焦
+                    obscureText: false, //是否是密码
+                    textAlign: TextAlign.right, //文本对齐方式
+                    onChanged: (text) {
+                      //内容改变的回调
+                      print('change $text');
+                    },
+                    onSubmitted: (text) {
+                      //内容提交(按回车)的回调
+                      print('submit $text');
+                    },
+                    enabled: true, //是否禁用
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: this.placeholderText,
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        color: HsgColors.textHintColor,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ),
-        ],
-      ),
-    );
+            Divider(
+                height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
+          ],
+        ));
   }
 }
