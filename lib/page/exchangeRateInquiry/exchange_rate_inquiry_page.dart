@@ -56,7 +56,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
         centerTitle: true,
       ),
       body: Container(
-        color: HsgColors.backgroundColor,
+        color: HsgColors.commonBackground,
         child: Column(
           children: [
             Container(
