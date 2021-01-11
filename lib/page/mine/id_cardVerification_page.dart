@@ -28,6 +28,7 @@ class IdIardVerificationPage extends StatefulWidget {
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
+  TextEditingController _cardNo = TextEditingController(); //账号
   TextEditingController _certNo = TextEditingController(); //证件号
   TextEditingController _phoneNo = TextEditingController();
   TextEditingController _realName = TextEditingController();
@@ -39,7 +40,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   List<String> _accIcon = [];
   String _accNo = '';
   String _certType = '身份证';
-  int _accNoId = -1;
+  int _accNoId = 0;
 
   //证件信息
   List<String> idInformation = ['身份证', '护照'];
@@ -84,6 +85,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       setState(() {
         _accNoId = result;
         _accNo = _accList[_accNoId];
+        _cardNo.text=_accList[_accNoId];
       });
     }
   }
@@ -400,7 +402,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
 
     ChecInformantApiRepository()
         .authentication(
-            CheckoutInformantReq(_certNo.text, '卡号', _certType, _phoneNo.text,
+            CheckoutInformantReq(_certNo.text, _accNo, _certType, _phoneNo.text,
                 _realName.text, _smsCode.text),
             'authentication')
         .then((data) {
