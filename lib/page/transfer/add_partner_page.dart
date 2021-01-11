@@ -193,6 +193,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             _transferTypeDialog();
           },
           child: Container(
+            color: Colors.white,
             padding: EdgeInsets.only(top: 16, bottom: 16),
             child: _inputFrame(
               S.current.transfer_type,
@@ -229,6 +230,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             }
           },
           child: Container(
+            color: Colors.white,
             padding: EdgeInsets.only(top: 16, bottom: 16),
             child: _inputFrame(
               S.current.bank,
@@ -245,11 +247,12 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                 setState(() {
                   _branch = data;
                   _check();
-                });
+                }); 
               }
             });
           },
           child: Container(
+            color: Colors.white,
             padding: EdgeInsets.only(top: 16, bottom: 16),
             child: _inputFrame(
               S.current.branch_office,
