@@ -147,7 +147,9 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         _isData = true;
       }
     }
-    _list.add(_loadMoreData());
+    _list.add(
+      _loadMore ? _loadMoreData() : _toLoad(intl.S.current.load_more_finished),
+    );
 
     return RefreshIndicator(
       onRefresh: () => _loadData(),
@@ -157,7 +159,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     );
   }
 
-  //加载
+  //加载完毕
   Widget _toLoad(String loadStatus) {
     return Container(
       padding: EdgeInsets.all(20),
@@ -171,18 +173,16 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
   //加载更多
   _loadMoreData() {
-    return _loadMore
-        ? Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 20),
-              ),
-              CircularProgressIndicator(
-                strokeWidth: 3.0,
-              ),
-            ],
-          )
-        : _toLoad(intl.S.current.load_more_finished);
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: 20),
+        ),
+        CircularProgressIndicator(
+          strokeWidth: 3.0,
+        ),
+      ],
+    );
   }
 
   //延迟加载
@@ -648,10 +648,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           Text(left, style: FIRST_DEGREE_TEXT_STYLE),
           Text(
             right,
-            style: TextStyle(
-              fontSize: 12,
-              color: statusColor,
-            ),
+            style: TextStyle(fontSize: 12, color: statusColor),
           ),
         ],
       ),
@@ -685,10 +682,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           ),
           Text(
             right,
-            style: TextStyle(
-              fontSize: 12,
-              color: acountColor,
-            ),
+            style: TextStyle(fontSize: 12, color: acountColor),
           ),
         ],
       ),
