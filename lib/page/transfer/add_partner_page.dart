@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/model/add_partner.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_single_picker.dart';
 import 'package:flutter/material.dart';
@@ -143,8 +144,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               ),
               //按钮容器
               Container(
-                padding: EdgeInsets.fromLTRB(30, 40, 30, 40),
-                child: _confirmButton(),
+                padding: EdgeInsets.fromLTRB(0, 40, 0, 40),
+                child: HsgButton.button(
+                    title: S.current.confirm, click: _confirm()),
               ),
             ],
           ),
@@ -576,26 +578,6 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       text = text.replaceAll(new RegExp(r"\s+\b|\b\s"), "");
       _smsController.text = text;
     });
-  }
-
-  //确认按钮
-  Widget _confirmButton() {
-    return ButtonTheme(
-      minWidth: double.infinity,
-      height: 48,
-      child: FlatButton(
-        onPressed: _confirm(),
-        color: Color(0xFF4871FF),
-        disabledColor: Color(0xFFD1D1D1),
-        child: Text(
-          S.current.confirm,
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
   }
 
   //按钮可点击检查
