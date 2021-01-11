@@ -271,7 +271,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
 
 //文字输入框
   Widget _inputText(String name, TextEditingController controller) {
-    return SizedBox(
+    return Container(
       child: TextField(
         controller: controller,
         autocorrect: false,
@@ -372,6 +372,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
           children: [
             Container(
               padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+              width: MediaQuery.of(context).size.width / 2,
               child: Text(
                 name,
                 style: FIRST_DEGREE_TEXT_STYLE,
