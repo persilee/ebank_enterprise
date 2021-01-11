@@ -9,7 +9,6 @@ import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
 import 'package:ebank_mobile/data/source/model/find_user_finished_task_detail.dart';
 import 'package:ebank_mobile/data/source/model/get_process_task.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 import 'model/find_user_application_task_detail.dart';
 import 'model/get_my_application.dart';

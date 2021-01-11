@@ -47,7 +47,7 @@ class DepositRecordResp extends Object {
   int totalPage;
 
   @JsonKey(name: 'rows')
-  List<Rows> rows;
+  List<DepositRecord> rows;
 
   DepositRecordResp(
     this.sort,
@@ -64,7 +64,7 @@ class DepositRecordResp extends Object {
 }
 
 @JsonSerializable()
-class Rows extends Object {
+class DepositRecord extends Object {
   //档期
   @JsonKey(name: 'auctCale')
   String auctCale;
@@ -111,7 +111,7 @@ class Rows extends Object {
   @JsonKey(name: 'erstFlg')
   String erstFlg;
 
-  Rows(
+  DepositRecord(
     this.auctCale,
     this.conNo,
     this.conRate,
@@ -129,7 +129,7 @@ class Rows extends Object {
     this.erstFlg,
   );
 
-  factory Rows.fromJson(Map<String, dynamic> srcJson) =>
-      _$RowsFromJson(srcJson);
-  Map<String, dynamic> toJson() => _$RowsToJson(this);
+  factory DepositRecord.fromJson(Map<String, dynamic> srcJson) =>
+      _$DepositRecordFromJson(srcJson);
+  Map<String, dynamic> toJson() => _$DepositRecordToJson(this);
 }

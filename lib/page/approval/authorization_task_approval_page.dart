@@ -13,7 +13,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AuthorizationTaskApprovalPage extends StatefulWidget {
-  final Rows history;
+  final FinishTaskDetail history;
 
   AuthorizationTaskApprovalPage({Key key, this.history}) : super(key: key);
 
@@ -24,7 +24,7 @@ class AuthorizationTaskApprovalPage extends StatefulWidget {
 
 class _AuthorizationTaskApprovalPageState
     extends State<AuthorizationTaskApprovalPage> {
-  Rows history;
+  FinishTaskDetail history;
 
   _AuthorizationTaskApprovalPageState(this.history);
   var commentList = <CommentList>[];

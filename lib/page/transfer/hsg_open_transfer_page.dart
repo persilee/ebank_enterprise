@@ -3,9 +3,11 @@
 /// Author: wangluyao
 /// Date: 2020-12-28
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -57,31 +59,37 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     }
   ];
 
-  Function _transferInputChange(String transfer) {
+  var tranferType;
+
+  String payeeNameForSelects;
+
+  var accountSelect = '';
+
+  _transferInputChange(String transfer) {
     remark = transfer;
   }
 
-  Function _amountInputChange(String title) {
+  _amountInputChange(String title) {
     money = double.parse(title);
   }
 
-  Function _getCardTotals(String title) {
+  _getCardTotals(String title) {
     cardTotals = title;
   }
 
-  Future<Function> _selectAccount() async {
+  _selectAccount() async {
     setState(() {});
   }
 
-  Future<Function> _getCcy() async {
+  _getCcy() async {
     setState(() {});
   }
 
-  Function _nameInputChange(String name) {
+  _nameInputChange(String name) {
     payeeName = name;
   }
 
-  Function _accountInputChange(String account) {
+  _accountInputChange(String account) {
     payeeCardNo = account;
   }
 
@@ -547,139 +555,169 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     );
   }
 
+  Widget _getImage() {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, pageTranferPartner, arguments: tranferType)
+            .then(
+          (value) {
+            if (value != null) {
+              Rows rowListPartner = value;
+              payeeNameForSelects = rowListPartner.payeeName;
+              accountSelect = rowListPartner.payeeCardNo;
+            } else {
+              //  var playInput = 'kkkkkkkkkkkkkkkkkk';
+            }
+          },
+        );
+      },
+      child: Image(
+        image: AssetImage('images/login/login_input_account.png'),
+        width: 20,
+        height: 20,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(intl.S.current.open_transfer),
-          actions: <Widget>[
-            Container(
-              child: Text.rich(TextSpan(
-                  text: intl.S.current.transfer_plan,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    height: 3.0,
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      debugPrint(intl.S.current.transfer_plan);
-                    })),
-            )
-          ],
-        ),
-        body: CustomScrollView(
-          slivers: <Widget>[
-            SliverToBoxAdapter(
-              child: _transferInfo(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(intl.S.current.open_transfer),
+        actions: <Widget>[
+          Container(
+            child: Text.rich(TextSpan(
+                text: intl.S.current.transfer_plan,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  height: 3.0,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    debugPrint(intl.S.current.transfer_plan);
+                  })),
+          )
+        ],
+      ),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverToBoxAdapter(
+            child: _transferInfo(),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              color: Colors.white,
+              padding: EdgeInsets.only(bottom: 15),
+              child: GridView.count(
+                padding: EdgeInsets.only(left: 15, right: 15),
+                scrollDirection: Axis.vertical,
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                crossAxisCount: 4,
+                crossAxisSpacing: 30.0,
+                mainAxisSpacing: 10.0,
+                childAspectRatio: 1 / 0.4,
+                children: frequency.map((value) {
+                  return groupValue == value['type']
+                      ? FlatButton(
+                          padding: EdgeInsets.all(0),
+                          color: Color(0xFFDCF0FF),
+                          onPressed: () {
+                            print('切换$value');
+                            updateGroupValue(value['type']);
+                          },
+                          child: Text(
+                            value['title'],
+                            style: TextStyle(
+                                color: HsgColors.accent,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.normal),
+                          ),
+                        )
+                      : FlatButton(
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {
+                            print('切换${value}');
+                            updateGroupValue(value['type']);
+                            _clear();
+                          },
+                          color: Color(0xFFF3F3F3),
+                          child: Text(
+                            value['title'],
+                            style: TextStyle(
+                                color: Color(0xFF868686),
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.normal),
+                          ),
+                        );
+                }).toList(),
+              ),
             ),
-            SliverToBoxAdapter(
+          ),
+          SliverToBoxAdapter(
               child: Container(
-                width: MediaQuery.of(context).size.width,
-                color: Colors.white,
-                padding: EdgeInsets.only(bottom: 15),
-                child: GridView.count(
-                  padding: EdgeInsets.only(left: 15, right: 15),
-                  scrollDirection: Axis.vertical,
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  crossAxisCount: 4,
-                  crossAxisSpacing: 30.0,
-                  mainAxisSpacing: 10.0,
-                  childAspectRatio: 1 / 0.4,
-                  children: frequency.map((value) {
-                    return groupValue == value['type']
-                        ? FlatButton(
-                            padding: EdgeInsets.all(0),
-                            color: Color(0xFFDCF0FF),
-                            onPressed: () {
-                              print('切换${value}');
-                              updateGroupValue(value['type']);
-                            },
-                            child: Text(
-                              value['title'],
-                              style: TextStyle(
-                                  color: HsgColors.accent,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                          )
-                        : FlatButton(
-                            padding: EdgeInsets.all(0),
-                            onPressed: () {
-                              print('切换${value}');
-                              updateGroupValue(value['type']);
-                              _clear();
-                            },
-                            color: Color(0xFFF3F3F3),
-                            child: Text(
-                              value['title'],
-                              style: TextStyle(
-                                  color: Color(0xFF868686),
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                          );
-                  }).toList(),
+            width: MediaQuery.of(context).size.width,
+            child: groupValue == '0'
+                ? _once(_start, 0, context)
+                : _manyTimes(_start, _end, 0, 1, context),
+          )),
+          TransferPayeeWidget(
+              payeeCardNo,
+              payeeName,
+              accountSelect,
+              payeeName,
+              _getImage,
+              context,
+              intl.S.current.receipt_side,
+              intl.S.current.name,
+              intl.S.current.account_num,
+              intl.S.current.please_input,
+              intl.S.current.please_input,
+              _nameInputChange,
+              _accountInputChange),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 20,
+            ),
+          ),
+          TransferPayerWidget(
+              context,
+              '5000.00',
+              'LAK',
+              '',
+              '高阳寰球500000674001',
+              'LAK',
+              '',
+              '',
+              '2351',
+              '',
+              0.0,
+              _amountInputChange,
+              _selectAccount,
+              _getCcy,
+              _getCardTotals),
+          TransferOtherWidget('转账', _transferInputChange),
+          SliverToBoxAdapter(
+            child: Container(
+              margin: EdgeInsets.fromLTRB(30, 40, 30, 40),
+              child: ButtonTheme(
+                minWidth: 5,
+                height: 45,
+                child: FlatButton(
+                  onPressed: () {
+                    print("开始时间:{$_startValue}");
+                    print("结束时间:{$_endValue}");
+                  },
+                  color: HsgColors.accent,
+                  child: (Text('转账', style: TextStyle(color: Colors.white))),
                 ),
               ),
             ),
-            SliverToBoxAdapter(
-                child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: groupValue == '0'
-                  ? _once(_start, 0, context)
-                  : _manyTimes(_start, _end, 0, 1, context),
-            )),
-            TransferPayeeWidget(
-                context,
-                intl.S.current.receipt_side,
-                intl.S.current.name,
-                intl.S.current.account_num,
-                intl.S.current.please_input,
-                intl.S.current.please_input,
-                _nameInputChange,
-                _accountInputChange),
-            SliverToBoxAdapter(
-              child: Container(
-                height: 20,
-              ),
-            ),
-            TransferPayerWidget(
-                context,
-                '5000.00',
-                'LAK',
-                '',
-                '高阳寰球500000674001',
-                'LAK',
-                '',
-                '',
-                '2351',
-                '',
-                0.0,
-                _amountInputChange,
-                _selectAccount,
-                _getCcy,
-                _getCardTotals),
-            TransferOtherWidget('转账', _transferInputChange),
-            SliverToBoxAdapter(
-              child: Container(
-                margin: EdgeInsets.fromLTRB(30, 40, 30, 40),
-                child: ButtonTheme(
-                    minWidth: 5,
-                    height: 45,
-                    child: FlatButton(
-                      onPressed: () {
-                        print("开始时间:{$_startValue}");
-                        print("结束时间:{$_endValue}");
-                      },
-                      color: HsgColors.accent,
-                      child:
-                          (Text('转账', style: TextStyle(color: Colors.white))),
-                    )),
-              ),
-            ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

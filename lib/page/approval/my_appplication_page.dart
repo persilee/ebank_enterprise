@@ -36,8 +36,8 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
     );
   }
 
-  List<Rows> rowList = [];
-  Widget _getContent(List<Rows> rows) {
+  List<MyApplicationDetail> rowList = [];
+  Widget _getContent(List<MyApplicationDetail> rows) {
     return CustomScrollView(
       slivers: <Widget>[
         SliverList(
@@ -74,7 +74,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
     );
   }
 
-  void go2Detail(Rows application) {
+  void go2Detail(MyApplicationDetail application) {
     Navigator.pushNamed(context, pageApplicationTaskApproval,
         arguments: application);
   }

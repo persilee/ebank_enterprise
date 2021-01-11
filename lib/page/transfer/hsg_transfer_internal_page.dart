@@ -8,12 +8,15 @@ import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
+import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
+import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +44,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   var singleLimit = '';
 
   String inpuntStr;
+
   List<RemoteBankCard> cardList = [];
+
   List<CardBalBean> cardBal = [];
 
   var _isLoading = false;
@@ -85,29 +90,49 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   String _limitMoney = '';
 
+  var payeeNameForSelects = '';
+
+  var _nameController = TextEditingController();
+
+  var _accountController = TextEditingController();
+
+  var accountSelect = '';
+
+  List<String> passwordList = []; //密码列表
+
+  var _payPassword = ''; //支付密码
+
   @override
   void initState() {
     super.initState();
+    _nameController.addListener(() {
+      _nameInputChange(_nameController.text); //输入框内容改变时调用
+    });
+    _accountController.addListener(() {
+      _accountInputChange(_accountController.text); //输入框内容改变时调用
+    });
     _loadTransferData();
   }
 
-  // ignore: missing_return
-  Function _amountInputChange(String title) {
+  _amountInputChange(String title) {
     money = double.parse(title);
   }
 
-  // ignore: missing_return
-  Function _nameInputChange(String name) {
-    payeeName = name;
+  _nameInputChange(String name) {
+    setState(() {
+      payeeName = name;
+      print('$payeeName iiiii');
+    });
   }
 
-  // ignore: missing_return
-  Function _accountInputChange(String account) {
-    payeeCardNo = account;
+  _accountInputChange(String account) {
+    setState(() {
+      payeeCardNo = account;
+      print('$payeeCardNo  aaaaaaaaaaaaa');
+    });
   }
 
-  // ignore: missing_return
-  Function _transferInputChange(String transfer) {
+  _transferInputChange(String transfer) {
     remark = transfer;
   }
 
@@ -177,7 +202,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               totalBalances.add(avaBAL);
             });
             // ccyList.add(ccyLists);
-
             // 添加余额
             element.cardListBal.forEach((bals) {
               totalBalances.add(bals.avaBal);
@@ -269,16 +293,21 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _getCardTotals),
           //拿第二部分
           TransferPayeeWidget(
-            context,
-            S.current.receipt_side,
-            S.current.name,
-            S.current.account_num,
-            S.current.hint_input_receipt_name,
-            S.current.hint_input_receipt_account,
-            _nameInputChange,
-            _accountInputChange,
-            '0',
-          ),
+              payeeCardNo,
+              payeeName,
+              accountSelect,
+              payeeNameForSelects,
+              _getImage,
+              context,
+              S.current.receipt_side,
+              S.current.name,
+              S.current.account_num,
+              S.current.hint_input_receipt_name,
+              S.current.hint_input_receipt_account,
+              _nameInputChange,
+              _accountInputChange,
+              _nameController,
+              _accountController),
           //第三部分
           TransferOtherWidget(remark, _transferInputChange),
 
@@ -299,6 +328,31 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _getImage() {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, pageTranferPartner, arguments: '0').then(
+          (value) {
+            setState(() {
+              if (value != null) {
+                Rows rowListPartner = value;
+                _nameController.text = rowListPartner.payeeName;
+                _accountController.text = rowListPartner.payeeCardNo;
+                print('$_nameController  9999999999999999999');
+                print('$_accountController sssssssssss');
+              } else {}
+            });
+          },
+        );
+      },
+      child: Image(
+        image: AssetImage('images/login/login_input_account.png'),
+        width: 20,
+        height: 20,
       ),
     );
   }
@@ -402,7 +456,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   }
 
   //结算成功-跳转页面
-  _showContractSucceedPage(BuildContext context) async {
+  _showContractSucceedPage(BuildContext context) {
     setState(() {
       _isLoading = false;
     });
@@ -412,11 +466,28 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   _isClick() {
     if (money > 0 && payeeName.length > 0 && payeeCardNo.length > 0) {
       return () {
-        _tranferAccount(context);
-        print('提交');
+        _openBottomSheet();
       };
     } else {
       return null;
+    }
+  }
+
+  //交易密码窗口
+  void _openBottomSheet() async {
+    passwordList = await showHsgBottomSheet(
+      context: context,
+      builder: (context) {
+        return HsgPasswordDialog(
+          title: S.current.input_password,
+        );
+      },
+    );
+    if (passwordList != null) {
+      if (passwordList.length == 6) {
+        _payPassword = EncryptUtil.aesEncode(passwordList.join());
+        _tranferAccount(context);
+      }
     }
   }
 }

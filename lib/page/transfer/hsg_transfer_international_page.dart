@@ -7,15 +7,19 @@
  */
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_international_transfer.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
+import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
+
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 
@@ -108,7 +112,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   var _feeUse = S.current.please_select;
 
-  var _bankReceive = S.current.please_select;
+  var _payeeBank = S.current.please_select;
 
   int groupValue = 0;
 
@@ -120,15 +124,43 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   var intermediateBankSwift = '';
 
+  List<String> passwordList = [];
+
+  String tranferType = '2';
+
+  var payeeNameForSelects;
+
+  var accountSelect = '';
+
+  var payeeBank = '';
+
+  var _getBankSwift = S.current.please_input;
+
+  var _getPayeeBank = '';
+
+  var _companyController = TextEditingController();
+
+  var _accountController = TextEditingController();
+
+  var _bankSwiftController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+    _companyController.addListener(() {
+      _nameInputChange(_companyController.text); //输入框内容改变时调用
+    });
+    _accountController.addListener(() {
+      _accountInputChange(_accountController.text); //输入框内容改变时调用
+    });
+
     _loadTransferData();
   }
 
   //转账金额
   _amountInputChange(String title) {
     money = double.parse(title);
+    print('$money 11111111');
   }
 
   //付款方地址
@@ -152,19 +184,22 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //公司名
-  // ignore: missing_return
   _nameInputChange(String name) {
-    payeeName = name;
+    setState(() {
+      payeeName = name;
+      print('>>>>>> $payeeName');
+    });
   }
 
   //账号
-  // ignore: missing_return
   _accountInputChange(String account) {
-    payeeCardNo = account;
+    setState(() {
+      payeeCardNo = account;
+      print('aaaaaaaaaa $payeeCardNo');
+    });
   }
 
   //转账附言
-  // ignore: missing_return
   _transferInputChange(String transfer) {
     remark = transfer;
   }
@@ -319,14 +354,23 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //选择收款银行
-  _selectBank() async {
-    Navigator.pushNamed(context, pageSelectBank).then((data) {
-      if (data != null) {
-        setState(() {
-          _bankReceive = data;
-        });
-      }
-    });
+  _selectBank() {
+    Navigator.pushNamed(context, pageSelectBank, arguments: '2').then(
+      (data) {
+        if (data != null) {
+          Banks _bankReceive;
+          setState(
+            () {
+              _bankReceive = data;
+              //银行swift
+              _bankSwiftController.text = _bankReceive.bankSwift;
+              //收款银行名字
+              _getPayeeBank = _bankReceive.localName;
+            },
+          );
+        }
+      },
+    );
   }
 
   //转账费用
@@ -342,7 +386,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     if (result != null && result != false) {
       _transferFee = transferFeeList[result];
     }
-
     setState(() {
       _position = result;
     });
@@ -351,17 +394,17 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //汇款用途
   _selectFeeUse() async {
     final result = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return BottomMenu(
-            title: '汇款用途',
-            items: feeUse,
-          );
-        });
+      context: context,
+      builder: (context) {
+        return BottomMenu(
+          title: '汇款用途',
+          items: feeUse,
+        );
+      },
+    );
     if (result != null && result != false) {
       _feeUse = feeUse[result];
     }
-
     setState(() {
       _position = result;
     });
@@ -405,7 +448,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   _getLine(),
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    //padding: EdgeInsets.only(right: 50),
                     child: _getRedText(S.current.remitter_address_prompt),
                   ),
                 ],
@@ -413,50 +455,54 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             ),
           ),
           TransferPayeeWidget(
-            context,
-            S.current.transfer_in,
-            S.current.company_name,
-            S.current.account_num,
-            S.current.please_input,
-            S.current.please_input,
-            _nameInputChange,
-            _accountInputChange,
-            '2',
-          ),
+              payeeCardNo,
+              payeeName,
+              accountSelect,
+              payeeNameForSelects,
+              _getImage,
+              context,
+              S.current.transfer_in,
+              S.current.company_name,
+              S.current.account_num,
+              S.current.please_input,
+              S.current.please_input,
+              _nameInputChange,
+              _accountInputChange,
+              _companyController,
+              _accountController),
           SliverToBoxAdapter(
-              child: Container(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-            height: 360,
-            color: Colors.white,
-            margin: EdgeInsets.only(bottom: 20),
-            child: Column(
-              children: [
-                _getRedText(S.current.international_transfer_account_prompt),
-                //国家地区
-                _getSelectColumn(
-                    S.current.state_area, _countryText, _selectCountry),
-                _getLine(),
-                //收款银行
-                _getSelectColumn(
-                    S.current.receipt_bank, _bankReceive, _selectBank),
-                _getLine(),
-                //银行SWIFT
-                _getInputColumn(
-                    S.current.bank_swift, S.current.please_input, _bankSwift
-                    //  _addressChange,
-                    ),
-                _getLine(),
-                //中间行
-                _getInputColumn(S.current.middle_bank_swift, S.current.optional,
-                    _middleSwift),
-                _getLine(),
-                //收款地址
-                _getAddress(S.current.collection_address,
-                    S.current.please_input, _addressTwoChange),
-                _getLine(),
-              ],
+            child: Container(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              color: Colors.white,
+              margin: EdgeInsets.only(bottom: 20),
+              child: Column(
+                children: [
+                  _getRedText(S.current.international_transfer_account_prompt),
+                  //国家地区
+                  _getSelectColumn(
+                      S.current.state_area, _countryText, _selectCountry),
+                  _getLine(),
+                  //收款银行
+                  _getSelectColumn(
+                      S.current.receipt_bank, _getPayeeBank, _selectBank),
+                  _getLine(),
+                  //银行SWIFT
+                  _getInputColumn(S.current.bank_swift, S.current.optional,
+                      _bankSwift, _bankSwiftController),
+                  _getLine(),
+
+                  //中间行
+                  _getInputColumn(S.current.middle_bank_swift,
+                      S.current.optional, _middleSwift),
+                  _getLine(),
+                  //收款地址
+                  _getAddress(S.current.collection_address,
+                      S.current.please_input, _addressTwoChange),
+                  _getLine(),
+                ],
+              ),
             ),
-          )),
+          ),
           SliverToBoxAdapter(
             child: Container(
               color: Colors.white,
@@ -499,19 +545,46 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     );
   }
 
+  Widget _getImage() {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, pageTranferPartner, arguments: '2').then(
+          (value) {
+            setState(
+              () {
+                if (value != null) {
+                  Rows rowListPartner = value;
+                  _companyController.text = rowListPartner.payeeName;
+                  _accountController.text = rowListPartner.payeeCardNo;
+                } else {}
+              },
+            );
+          },
+        );
+      },
+      child: Image(
+        image: AssetImage('images/login/login_input_account.png'),
+        width: 20,
+        height: 20,
+      ),
+    );
+  }
+
+  //判断是否可以点击
   _isClick() {
     if (money > 0 &&
         payeeName.length > 0 &&
         payeeCardNo.length > 0 &&
         payerAddress.length > 0 &&
         _countryText != S.current.please_select &&
-        _bankReceive != S.current.please_select &&
-        bankSwift.length > 0 &&
+        _getPayeeBank != S.current.please_select &&
+        _bankSwiftController.text.length > 0 &&
         payeeAddress.length > 0 &&
         _transferFee != S.current.please_select &&
         _feeUse != S.current.please_select) {
       return () {
-        _tranferInternational(context);
+        _openBottomSheet();
+
         print('提交');
       };
     } else {
@@ -519,63 +592,88 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     }
   }
 
-  _getRedText(String redText) {
-    return Container(
-        padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-        child: Text(
-          redText,
-          style: TextStyle(color: Color(0XFFA61F23), fontSize: 13.5),
-        ));
+  //交易密码窗口
+  void _openBottomSheet() async {
+    passwordList = await showHsgBottomSheet(
+      context: context,
+      builder: (context) {
+        return HsgPasswordDialog(
+          title: S.current.input_password,
+        );
+      },
+    );
+    if (passwordList != null) {
+      if (passwordList.length == 6) {
+        _tranferInternational(context);
+      }
+    }
   }
 
-  _getAddress(
-      String topText, String inputText, Function(String inputStr) nameChange) {
+  //红色字体
+  _getRedText(String redText) {
     return Container(
-      height: 80,
-      color: Colors.white,
-      child: Column(
-        children: [
-          Container(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                Container(
-                  margin: EdgeInsets.only(top: 15),
-                  child: Text(
-                    topText,
-                    style: TextStyle(fontSize: 13),
-                    textAlign: TextAlign.right,
-                  ),
-                ),
-              ])),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-              child: TextField(
-                  //是否自动更正
-                  autocorrect: false,
-                  //是否自动获得焦点
-                  autofocus: false,
-                  onChanged: (payeeName) {
-                    nameChange(payeeName);
-                    print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
-                  },
-                  textAlign: TextAlign.right,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: inputText,
-                    hintStyle: TextStyle(
-                      fontSize: 13.5,
-                      color: HsgColors.textHintColor,
-                    ),
-                  )),
-            ),
-          ),
-        ],
+      padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+      child: Text(
+        redText,
+        style: TextStyle(color: Color(0XFFA61F23), fontSize: 13.5),
       ),
     );
   }
 
+  //获取地址
+  _getAddress(
+    String topText,
+    String inputText,
+    Function(String inputStr) nameChange,
+  ) {
+    var _topRow = [
+      Container(
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Container(
+            margin: EdgeInsets.only(top: 15),
+            child: Text(
+              topText,
+              style: TextStyle(fontSize: 13),
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ]),
+      ),
+      Expanded(
+        child: Container(
+          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+          child: TextField(
+              //是否自动更正
+              autocorrect: false,
+              //是否自动获得焦点
+              autofocus: false,
+              onChanged: (payeeName) {
+                nameChange(payeeName);
+                print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
+              },
+              textAlign: TextAlign.right,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: inputText,
+                hintStyle: TextStyle(
+                  fontSize: 13.5,
+                  color: HsgColors.textHintColor,
+                ),
+              )),
+        ),
+      ),
+    ];
+    return Container(
+      height: MediaQuery.of(context).size.width / 5,
+      color: Colors.white,
+      child: Column(
+        children: _topRow,
+      ),
+    );
+  }
+
+  //拿到虚线
   _getLine() {
     return Container(
         child: Divider(
@@ -584,10 +682,36 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     ));
   }
 
-  _getInputColumn(String leftText, String righteText,
-      Function(String inputStr) moneyChange) {
-    return Container(
-      height: 50,
+  //获取输入行
+  _getInputColumn(
+      String leftText, String righteText, Function(String inputStr) moneyChange,
+      [TextEditingController _controller]) {
+    var rightExpand = Expanded(
+      child: Container(
+        child: TextField(
+            //是否自动更正
+            autocorrect: false,
+            //是否自动获得焦点
+            autofocus: false,
+            controller: _controller,
+            onChanged: (payeeName) {
+              moneyChange(payeeName);
+              print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
+            },
+            //  controller: _controller,
+            textAlign: TextAlign.right,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: righteText,
+              hintStyle: TextStyle(
+                fontSize: 14,
+                color: HsgColors.textHintColor,
+              ),
+            )),
+      ),
+    );
+    var _leftText = Container(
+      height: MediaQuery.of(context).size.width / 7,
       color: Colors.white,
       padding: EdgeInsets.only(right: 15),
       child: Row(
@@ -601,41 +725,47 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               ),
             ),
           ),
-          Expanded(
-            child: Container(
-              child: TextField(
-                  //是否自动更正
-                  autocorrect: false,
-                  //是否自动获得焦点
-                  autofocus: false,
-                  onChanged: (payeeName) {
-                    moneyChange(payeeName);
-                    print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
-                  },
-                  textAlign: TextAlign.right,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: righteText,
-                    hintStyle: TextStyle(
-                      fontSize: 14,
-                      color: HsgColors.textHintColor,
-                    ),
-                  )),
-            ),
-          )
+          rightExpand
         ],
       ),
     );
+    return _leftText;
   }
 
+  //获取选择行
   _getSelectColumn(String leftText, String rightText, Function selectMethod) {
     String righText = rightText == '' ? S.current.please_select : rightText;
+    var _rightText = [
+      Container(
+        margin: EdgeInsets.only(top: 5),
+        child: Text(
+          righText,
+          style: righText == S.current.please_select
+              ? TextStyle(
+                  color: HsgColors.secondDegreeText,
+                  fontSize: 15,
+                )
+              : TextStyle(
+                  color: HsgColors.firstDegreeText,
+                  fontSize: 15,
+                ),
+        ),
+      ),
+      Container(
+        margin: EdgeInsets.only(top: 7, left: 5),
+        child: Icon(
+          Icons.arrow_forward_ios,
+          color: HsgColors.firstDegreeText,
+          size: 16,
+        ),
+      ),
+    ];
     return Container(
-      height: 50,
+      height: MediaQuery.of(context).size.width / 7,
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
             padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
@@ -644,40 +774,15 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               style: TextStyle(color: HsgColors.firstDegreeText, fontSize: 14),
             ),
           ),
-          Expanded(
+          Container(
             child: GestureDetector(
               onTap: () {
                 selectMethod();
                 print('选择账号');
               },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 5),
-                    child: Text(
-                      righText,
-                      style: righText == S.current.please_select
-                          ? TextStyle(
-                              color: HsgColors.secondDegreeText,
-                              fontSize: 15,
-                            )
-                          : TextStyle(
-                              color: HsgColors.firstDegreeText,
-                              fontSize: 15,
-                            ),
-                    ),
-                  )
-                ],
+              child: Row(
+                children: _rightText,
               ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 7, left: 5),
-            child: Icon(
-              Icons.arrow_forward_ios,
-              color: HsgColors.firstDegreeText,
-              size: 16,
             ),
           ),
         ],
@@ -751,17 +856,13 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     TransferDataRepository()
         .getInterNationalTransfer(
             GetInternationalTransferReq(
-                //转账金额
-                money,
-                bankSwift,
-                //转账费用
-                _transferFee,
-                //贷方货币
-                _changedCcyTitle,
+                money, //转账金额
+                _bankSwiftController.text,
+                _transferFee, //转账费用
+                _changedCcyTitle, //贷方货币
                 //借方货币
                 // debitCurrency,
-                //国家地区
-                _countryText,
+                _countryText, //国家地区
                 intermediateBankSwift,
                 payeeAddress,
                 payeeBankCode,

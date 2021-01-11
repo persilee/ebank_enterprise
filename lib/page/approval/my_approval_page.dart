@@ -21,7 +21,7 @@ class MyApprovalPage extends StatefulWidget {
 }
 
 class _MyApprovalPageState extends State<MyApprovalPage> {
-  List<Rows> row = [];
+  List<FindUserTaskDetail> row = [];
 
   void initState() {
     super.initState();
@@ -30,118 +30,119 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   }
 
 //待办列表
-  List<Widget> _list(List<Rows> row) {
+  List<Widget> _list(List<FindUserTaskDetail> row) {
     List<Widget> section = [];
-    section.add(SliverList(
+    section.add(
+      SliverList(
         delegate: SliverChildBuilderDelegate((context, index) {
-      return FlatButton(
-          padding: EdgeInsets.only(top: 10.0),
-          onPressed: () {
-            // Navigator.pushNamed(context, pageTaskApproval);
-            go2Detail(row[index]);
-          },
-          child: Row(
-            children: [
-              Container(
-                child: Column(
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(left: 10.0),
-                          child: Icon(
-                            Icons.fiber_manual_record,
-                            color: HsgColors.accent,
-                            size: 8.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(left: 10.0, top: 10.0),
-                          child: SizedBox(
-                            width: 1.0,
-                            height: 100.0,
-                            child: DecoratedBox(
-                              decoration:
-                                  BoxDecoration(color: HsgColors.divider),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: 360,
-                decoration: HsgStyles.homeHeaderShadow,
-                margin: EdgeInsets.only(left: 10.0),
-                padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 15.0),
-                child: Column(
-                  children: [
-                    Container(
-                        width: 340,
-                        child: Text(
-                          row[index].taskName,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              color: HsgColors.aboutusTextCon,
-                              fontWeight: FontWeight.bold),
-                        )),
-                    Container(
-                      width: 340,
-                      padding: EdgeInsets.only(top: 15),
-                      child: Row(
+          return FlatButton(
+            padding: EdgeInsets.only(top: 10.0),
+            onPressed: () {
+              // Navigator.pushNamed(context, pageTaskApproval);
+              go2Detail(row[index]);
+            },
+            child: Row(
+              children: [
+                Container(
+                  child: Column(
+                    children: [
+                      Column(
                         children: [
                           Container(
-                            width: 130,
-                            child: Text(
-                              S.current.sponsor,
-                              style: TextStyle(
-                                fontSize: 14.0,
-                                color: HsgColors.secondDegreeText,
-                              ),
+                            padding: EdgeInsets.only(left: 10.0),
+                            child: Icon(
+                              Icons.fiber_manual_record,
+                              color: HsgColors.accent,
+                              size: 8.0,
                             ),
                           ),
-                          SizedBox(
-                            width: 8.0,
-                          ),
-                          Container(
-                              width: 200,
-                              child: Text(
-                                row[index].startUser,
-                                textAlign: TextAlign.right,
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: HsgColors.aboutusTextCon,
-                                ),
-                              )),
                         ],
                       ),
-                    ),
-                    Container(
-                      width: 340,
-                      padding: EdgeInsets.only(top: 10, bottom: 0),
-                      child: Row(
+                      Column(
                         children: [
                           Container(
-                            width: 130,
-                            child: Text(
-                              S.current.creation_time,
-                              style: TextStyle(
-                                fontSize: 14.0,
-                                color: HsgColors.secondDegreeText,
+                            padding: EdgeInsets.only(left: 10.0, top: 10.0),
+                            child: SizedBox(
+                              width: 1.0,
+                              height: 100.0,
+                              child: DecoratedBox(
+                                decoration:
+                                    BoxDecoration(color: HsgColors.divider),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 8.0,
-                          ),
-                          Container(
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 360,
+                  decoration: HsgStyles.homeHeaderShadow,
+                  margin: EdgeInsets.only(left: 10.0),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 15.0),
+                  child: Column(
+                    children: [
+                      Container(
+                          width: 340,
+                          child: Text(
+                            row[index].taskName,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 15.0,
+                                color: HsgColors.aboutusTextCon,
+                                fontWeight: FontWeight.bold),
+                          )),
+                      Container(
+                        width: 340,
+                        padding: EdgeInsets.only(top: 15),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 130,
+                              child: Text(
+                                S.current.sponsor,
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: HsgColors.secondDegreeText,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8.0,
+                            ),
+                            Container(
+                                width: 200,
+                                child: Text(
+                                  row[index].startUser,
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: HsgColors.aboutusTextCon,
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: 340,
+                        padding: EdgeInsets.only(top: 10, bottom: 0),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 130,
+                              child: Text(
+                                S.current.creation_time,
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: HsgColors.secondDegreeText,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8.0,
+                            ),
+                            Container(
                               width: 200,
                               child: Text(
                                 row[index].createTime,
@@ -150,28 +151,33 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                                   fontSize: 14.0,
                                   color: HsgColors.aboutusTextCon,
                                 ),
-                              )),
-                        ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ));
-    }, childCount: row.length)));
+              ],
+            ),
+          );
+        }, childCount: row.length),
+      ),
+    );
     return section;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: CustomScrollView(
-      slivers: _list(row),
-    ));
+      child: CustomScrollView(
+        slivers: _list(row),
+      ),
+    );
   }
 
-  void go2Detail(Rows approval) {
+  void go2Detail(FindUserTaskDetail approval) {
     Navigator.pushNamed(context, pageTaskApproval, arguments: approval);
   }
 
@@ -182,15 +188,21 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     ProcessTaskDataRepository()
         .findUserToDoTask(
             FindUserToDoTaskReq(page, pageSize), 'findUserToDoTask')
-        .then((data) {
-      if (data.rows != null) {
-        setState(() {
-          row.clear();
-          row.addAll(data.rows);
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
+        .then(
+      (data) {
+        if (data.rows != null) {
+          setState(
+            () {
+              row.clear();
+              row.addAll(data.rows);
+            },
+          );
+        }
+      },
+    ).catchError(
+      (e) {
+        Fluttertoast.showToast(msg: e.toString());
+      },
+    );
   }
 }

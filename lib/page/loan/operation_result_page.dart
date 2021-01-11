@@ -1,10 +1,7 @@
-import 'package:ebank_mobile/generated/intl/messages_en.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../page_route.dart';
 
 class OperationResultPage extends StatefulWidget {
   @override

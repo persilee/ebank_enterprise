@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司

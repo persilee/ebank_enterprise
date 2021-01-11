@@ -112,7 +112,7 @@ class HsgHttp {
     prefs.setString(ConfigKey.NET_TOKEN, token);
   }
 
-  //TODO 切换用户或者退出登录时需要清除缓存
+  //切换用户或者退出登录时需要清除缓存
   clearUserCache() {
     _loginName = '';
     _userId = '';

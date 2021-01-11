@@ -169,7 +169,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
 
   @override
   Widget build(BuildContext context) {
-    Rows application = ModalRoute.of(context).settings.arguments;
+    FindUserTaskDetail application = ModalRoute.of(context).settings.arguments;
     taskId = application.processId;
 
     return Scaffold(

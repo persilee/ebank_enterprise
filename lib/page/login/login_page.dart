@@ -33,12 +33,12 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
   final TextEditingController _accountTC =
-      TextEditingController(text: 'fangluyao');
+      TextEditingController(text: 'wangluyao');
   final TextEditingController _passwordTC =
-      TextEditingController(text: 'b0S25X5Y');
+      TextEditingController(text: '13w89WZ8');
 
-  var _account = 'fangluyao'; //'18033412021';
-  var _password = 'b0S25X5Y'; //'123456';
+  var _account = 'wangluyao'; //'18033412021';
+  var _password = '13w89WZ8'; //'123456';
 
   @override
   void initState() {

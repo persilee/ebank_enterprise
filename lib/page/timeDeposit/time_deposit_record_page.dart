@@ -24,7 +24,7 @@ class TimeDepositRecordPage extends StatefulWidget {
 class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   var ccy = '';
   var totalAmt = '';
-  List<Rows> rowList = [];
+  List<DepositRecord> rowList = [];
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   double conRate;
@@ -48,7 +48,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     );
   }
 
-  Widget _getContent(List<Rows> rows) {
+  Widget _getContent(List<DepositRecord> rows) {
     // ignore: non_constant_identifier_names
     var SliverToBoxAdapters = <Widget>[
       SliverAppBar(
@@ -203,7 +203,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     return CustomScrollView(slivers: SliverToBoxAdapters);
   }
 
-  void go2Detail(Rows deposit) {
+  void go2Detail(DepositRecord deposit) {
     Navigator.pushNamed(context, pageDepositInfo, arguments: deposit);
   }
 
