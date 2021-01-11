@@ -77,6 +77,8 @@ class _TransferPartnerState extends State<TransferPartner> {
             _tempList.addAll(_partnerListData);
           }
         }
+        _partnerListData.clear();
+        _partnerListData.addAll(_tempList);
         _showmore = false;
       });
     }).catchError((e) {

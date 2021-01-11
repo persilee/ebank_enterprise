@@ -65,6 +65,8 @@ class _SelectBankPageState extends State<SelectBankPage> {
           } else {
             _tempList.addAll(_bankList);
           }
+          _bankList.clear();
+          _bankList.addAll(_tempList);
         });
       }
     });
