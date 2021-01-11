@@ -7,6 +7,7 @@ import 'dart:ui';
 
 import 'package:date_format/date_format.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_record.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
@@ -24,7 +25,6 @@ import 'package:intl/intl.dart';
 import 'package:popup_window/popup_window.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../page_route.dart';
-import 'widget/transfer_record_text_style_widget.dart';
 
 class TrsnsferRecordPage extends StatefulWidget {
   @override
@@ -42,7 +42,14 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now()); //结束时间
   String _startDate = DateFormat('yyyy-MM-dd 00:00:00')
       .format(DateTime(DateTime.now().year, DateTime.now().month, 1)); //开始时间
-  String _start = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示开始时间
+  String _start = formatDate(
+    DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      1,
+    ),
+    [yyyy, mm, dd],
+  ); //显示开始时间
   String _end = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示结束时间
   String _actualName = ""; //用户真实姓名
   bool _isButton1 = false; //交易时间第一个按钮
@@ -103,10 +110,9 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             image: AssetImage('images/noDataIcon/no_data_record.png'),
             width: 160,
           ),
-          Padding(padding: EdgeInsets.only(top: 25)),
           Text(
             intl.S.of(context).no_transfer_record,
-            style: TextStyle(fontSize: 15, color: HsgColors.firstDegreeText),
+            style: FIRST_DEGREE_TEXT_STYLE,
           )
         ],
       ),
@@ -141,7 +147,9 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         _isData = true;
       }
     }
-    _list.add(_loadMoreData());
+    _list.add(
+      _loadMore ? _loadMoreData() : _toLoad(intl.S.current.load_more_finished),
+    );
 
     return RefreshIndicator(
       onRefresh: () => _loadData(),
@@ -151,7 +159,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     );
   }
 
-  //加载
+  //加载完毕
   Widget _toLoad(String loadStatus) {
     return Container(
       padding: EdgeInsets.all(20),
@@ -165,18 +173,16 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
   //加载更多
   _loadMoreData() {
-    return _loadMore
-        ? Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 20),
-              ),
-              CircularProgressIndicator(
-                strokeWidth: 3.0,
-              ),
-            ],
-          )
-        : _toLoad(intl.S.current.load_more_finished);
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: 20),
+        ),
+        CircularProgressIndicator(
+          strokeWidth: 3.0,
+        ),
+      ],
+    );
   }
 
   //延迟加载
@@ -205,7 +211,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           children: [
             //转账记录账号及图标
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _transferAccount(_actualName, _transferHistory.paymentCardNo),
                 _transferRecordImage("images/transferIcon/transfert_to.png"),
@@ -234,7 +240,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 //转账记录图标
   Widget _transferRecordImage(String imgurl) {
     return Container(
-      width: MediaQuery.of(context).size.width / 5,
+      width: MediaQuery.of(context).size.width / 7,
       child: Image.asset(
         imgurl,
         width: 25,
@@ -247,17 +253,16 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _transferAccount(String name, String card) {
     return Container(
       width: MediaQuery.of(context).size.width / 2.5,
-      padding: EdgeInsets.only(right: 5),
       child: Column(
         children: [
           Text(
             name,
-            style: TRANSFER_RECORD_FIRST_TEXT_STYLE,
+            style: FIRST_DEGREE_TEXT_STYLE,
             textAlign: TextAlign.center,
           ),
           Text(
             card,
-            style: TRANSFER_RECORD_SECOND_TEXT_STYLE,
+            style: SECOND_DEGREE_TEXT_STYLE,
             textAlign: TextAlign.center,
           ),
         ],
@@ -298,7 +303,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       children: [
         Text(
           text,
-          style: TRANSFER_RECORD_SECOND_TEXT_STYLE,
+          style: SECOND_DEGREE_TEXT_STYLE,
         ),
         Icon(Icons.arrow_drop_down),
       ],
@@ -447,6 +452,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             _page = 1;
             _transferHistoryList.clear();
             _endDate = DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now());
+            _end = formatDate(DateTime.now(), [yyyy, mm, dd]);
             switch (i) {
               case 1:
                 _isButton1 = true;
@@ -455,33 +461,62 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                 _isButton4 = false;
                 _startDate =
                     DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now());
+                _start = formatDate(DateTime.now(), [yyyy, mm, dd]);
                 break;
               case 2:
                 _isButton1 = false;
                 _isButton2 = true;
                 _isButton3 = false;
                 _isButton4 = false;
-                _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(DateTime(
-                  DateTime.now().year,
-                  DateTime.now().month,
-                  1,
-                ));
+                _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(
+                  DateTime(DateTime.now().year, DateTime.now().month, 1),
+                );
+                _start = formatDate(
+                  DateTime(DateTime.now().year, DateTime.now().month, 1),
+                  [yyyy, mm, dd],
+                );
                 break;
               case 3:
                 _isButton1 = false;
                 _isButton2 = false;
                 _isButton3 = true;
                 _isButton4 = false;
-                _startDate = DateFormat('yyyy-MM-dd 00:00:00')
-                    .format(DateTime.now().subtract(Duration(days: 90)));
+                _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(
+                  DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month - 3,
+                    DateTime.now().day,
+                  ),
+                );
+                _start = formatDate(
+                  DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month - 3,
+                    DateTime.now().day,
+                  ),
+                  [yyyy, mm, dd],
+                );
                 break;
               case 4:
                 _isButton1 = false;
                 _isButton2 = false;
                 _isButton3 = false;
                 _isButton4 = true;
-                _startDate = DateFormat('yyyy-MM-dd 00:00:00')
-                    .format(DateTime.now().subtract(Duration(days: 180)));
+                _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(
+                  DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month - 6,
+                    DateTime.now().day,
+                  ),
+                );
+                _start = formatDate(
+                  DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month - 6,
+                    DateTime.now().day,
+                  ),
+                  [yyyy, mm, dd],
+                );
                 break;
             }
           });
@@ -610,13 +645,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(left, style: TRANSFER_RECORD_CONTENT_TEXT_STYLE),
+          Text(left, style: FIRST_DEGREE_TEXT_STYLE),
           Text(
             right,
-            style: TextStyle(
-              fontSize: 12,
-              color: statusColor,
-            ),
+            style: TextStyle(fontSize: 12, color: statusColor),
           ),
         ],
       ),
@@ -646,14 +678,11 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         children: [
           Text(
             left,
-            style: TRANSFER_RECORD_CONTENT_TEXT_STYLE,
+            style: FIRST_DEGREE_TEXT_STYLE,
           ),
           Text(
             right,
-            style: TextStyle(
-              fontSize: 12,
-              color: acountColor,
-            ),
+            style: TextStyle(fontSize: 12, color: acountColor),
           ),
         ],
       ),

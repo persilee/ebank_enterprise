@@ -5,12 +5,14 @@
 
 import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -23,24 +25,25 @@ class ForexTradingPage extends StatefulWidget {
 }
 
 class _ForexTradingPageState extends State<ForexTradingPage> {
-  List<String> accList = [''];
-  List<String> ccyList1 = ['CNY', 'EUR', 'HKD'];
-  List<String> ccyList2 = ['CNY', 'EUR', 'HKD', 'USD'];
+  List<String> _accList = [];
+  List<String> _accIcon = [];
+  List<String> _paymentCcyList = ['CNY', 'EUR', 'HKD'];
+  List<String> _incomeCcyList = ['CNY', 'EUR', 'HKD', 'USD'];
   List<RemoteBankCard> cards = [];
   int _paymentAccId = -1;
   int _incomeAccId = -1;
   int _paymentCcyId = 0;
   int _incomeCcyId = 0;
-  var _paymentAcc = S.current.please_select;
-  var _incomeAcc = S.current.please_select;
-  var _paymentCcy = S.current.please_select;
-  var _incomeCcy = S.current.please_select;
-  var _incomeName = '';
-  var _incomeBackCode = '';
-  var _balance = '0.00';
-  var _payAmtController = TextEditingController();
-  var _rate = '';
-  var _incomeAmt = '';
+  String _paymentAcc = '';
+  String _incomeAcc = '';
+  String _paymentCcy = '';
+  String _incomeCcy = '';
+  String _incomeName = '';
+  String _incomeBackCode = '';
+  String _balance = '0.00';
+  TextEditingController _payAmtController = TextEditingController();
+  String _rate = '';
+  String _incomeAmt = '';
 
   @override
   // ignore: must_call_super
@@ -65,13 +68,14 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
             children: [
               Container(
                 color: Colors.white,
-                padding: EdgeInsets.only(left: 15, right: 15),
                 margin: EdgeInsets.only(top: 15),
+                padding: CONTENT_PADDING,
                 child: _formColumn(),
               ),
               Container(
                 alignment: Alignment.topLeft,
-                padding: EdgeInsets.only(left: 15, top: 12),
+                margin: EdgeInsets.only(top: 12),
+                padding: CONTENT_PADDING,
                 child: Text(
                   S.current.foreign_exchange_explain,
                   style: TextStyle(
@@ -80,9 +84,17 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
                   ),
                 ),
               ),
+              //確定按鈕
               Container(
-                padding: EdgeInsets.fromLTRB(30, 40, 30, 0),
-                child: _confirmButton(),
+                margin: EdgeInsets.only(top: 40),
+                child: HsgButton.button(
+                  title: S.current.confirm,
+                  click: _boolBut()
+                      ? () {
+                          _openBottomSheet();
+                        }
+                      : null,
+                ),
               ),
             ],
           ),
@@ -91,298 +103,114 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     );
   }
 
-  //确认按钮
-  ButtonTheme _confirmButton() {
-    return ButtonTheme(
-      minWidth: double.infinity,
-      height: 44,
-      child: FlatButton(
-        onPressed: _incomeAmt == ''
-            ? null
-            : () {
-                _openBottomSheet();
-              },
-        color: Color(0xFF4871FF),
-        disabledColor: Color(0xFFD1D1D1),
-        child: Text(
-          S.current.confirm,
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
+  bool _boolBut() {
+    if (_paymentAcc != '' &&
+        _paymentCcy != '' &&
+        _incomeAcc != '' &&
+        _incomeCcy != '' &&
+        _payAmtController.text != '' &&
+        _rate != '' &&
+        _incomeAmt != '') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Column _formColumn() {
     return Column(
       children: [
-        GestureDetector(
+        SelectInkWell(
+          title: S.current.debit_accno,
+          item: _paymentAcc,
           onTap: () {
-            _accountList(true, _paymentAccId);
+            _accountBottomSheet(true, _paymentAccId);
           },
-          child: Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(top: 16, bottom: 16),
-            child: _paymentAccountRow(),
-          ),
         ),
-        Divider(
-          height: 0.5,
-          color: HsgColors.divider,
-        ),
-        GestureDetector(
+        SelectInkWell(
+          title: S.current.debit_currency,
+          item: _paymentCcy,
           onTap: () {
-            _currencyList(true, _paymentCcyId, ccyList1);
+            _currencyShowDialog(true, _paymentCcyId, _paymentCcyList);
           },
-          child: Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(top: 16, bottom: 16),
-            child: _paymentCurrencyRow(),
-          ),
         ),
-        Divider(
-          height: 0.5,
-          color: HsgColors.divider,
+        ItemContainer(
+          title: S.current.available_balance,
+          item: _balance,
         ),
-        Padding(
-          padding: EdgeInsets.only(top: 16, bottom: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(S.current.available_balance),
-              Text(_balance),
-            ],
-          ),
+        Container(
+          height: 50,
+          child: _payAmtTextField(),
         ),
-        Divider(
-          height: 0.5,
-          color: HsgColors.divider,
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 16, bottom: 16),
-          child: _payAmtInput(),
-        ),
-        Divider(
-          height: 0.5,
-          color: HsgColors.divider,
-        ),
-        GestureDetector(
+        SelectInkWell(
+          title: S.current.debit_accno,
+          item: _incomeAcc,
           onTap: () {
-            _accountList(false, _incomeAccId);
+            _accountBottomSheet(false, _incomeAccId);
           },
-          child: Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(top: 16, bottom: 16),
-            child: _incomeAccountRow(),
-          ),
         ),
-        Divider(
-          height: 0.5,
-          color: HsgColors.divider,
-        ),
-        GestureDetector(
+        SelectInkWell(
+          title: S.current.debit_currency,
+          item: _incomeCcy,
           onTap: () {
-            _currencyList(false, _incomeCcyId, ccyList2);
+            _currencyShowDialog(false, _incomeCcyId, _incomeCcyList);
           },
-          child: Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(top: 16, bottom: 16),
-            child: _incomeCurrencyRow(),
-          ),
         ),
-        Divider(
-          height: 0.5,
-          color: HsgColors.divider,
+        ItemContainer(
+          title: S.current.rate_of_exchange,
+          item: _rate,
         ),
-        Padding(
-          padding: EdgeInsets.only(top: 16, bottom: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(S.current.rate_of_exchange),
-              Text(_rate),
-            ],
-          ),
-        ),
-        Divider(
-          height: 0.5,
-          color: HsgColors.divider,
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 16, bottom: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(S.current.credit_amount),
-              Text(_incomeAmt),
-            ],
-          ),
+        ItemContainer(
+          title: S.current.credit_amount,
+          item: _incomeAmt,
         ),
       ],
     );
   }
 
   //支出金额输入框
-  Row _payAmtInput() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(S.current.debit_amount),
-        Expanded(
-          child: TextField(
-            textAlign: TextAlign.end,
-            keyboardType: TextInputType.number,
-            controller: _payAmtController,
-            decoration: InputDecoration.collapsed(
-              hintText: S.current.please_input,
-              hintStyle: TextStyle(
-                fontSize: 14,
-                color: HsgColors.textHintColor,
+  Container _payAmtTextField() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border:
+            Border(bottom: BorderSide(color: HsgColors.divider, width: 0.5)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(S.current.debit_amount),
+          Expanded(
+            child: TextField(
+              textAlign: TextAlign.end,
+              keyboardType: TextInputType.number,
+              controller: _payAmtController,
+              decoration: InputDecoration.collapsed(
+                hintText: S.current.please_input,
+                hintStyle: TextStyle(
+                  fontSize: 14,
+                  color: HsgColors.textHintColor,
+                ),
               ),
+              onChanged: (text) {
+                _transferTrial();
+              },
             ),
-            onChanged: (text) {
-              _transferTrial();
-            },
-          ),
-        )
-      ],
-    );
-  }
-
-  Row _incomeCurrencyRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(S.current.credit_currency),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(right: 12),
-              child: _incomeCcy == S.current.please_select
-                  ? Text(
-                      _incomeCcy,
-                      style: TextStyle(
-                        color: HsgColors.textHintColor,
-                      ),
-                    )
-                  : Text(_incomeCcy),
-            ),
-            Image(
-              color: HsgColors.firstDegreeText,
-              image:
-                  AssetImage('images/home/listIcon/home_list_more_arrow.png'),
-              width: 7,
-              height: 10,
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Row _paymentCurrencyRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(S.current.debit_currency),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(right: 12),
-              child: _paymentCcy == S.current.please_select
-                  ? Text(
-                      _paymentCcy,
-                      style: TextStyle(
-                        color: HsgColors.textHintColor,
-                      ),
-                    )
-                  : Text(_paymentCcy),
-            ),
-            Image(
-              color: HsgColors.firstDegreeText,
-              image:
-                  AssetImage('images/home/listIcon/home_list_more_arrow.png'),
-              width: 7,
-              height: 10,
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Row _paymentAccountRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(S.current.debit_account),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(right: 12),
-              child: _paymentAcc == S.current.please_select
-                  ? Text(
-                      _paymentAcc,
-                      style: TextStyle(
-                        color: HsgColors.textHintColor,
-                      ),
-                    )
-                  : Text(_paymentAcc),
-            ),
-            Image(
-              color: HsgColors.firstDegreeText,
-              image:
-                  AssetImage('images/home/listIcon/home_list_more_arrow.png'),
-              width: 7,
-              height: 10,
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Row _incomeAccountRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(S.current.credit_account),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(right: 12),
-              child: _incomeAcc == S.current.please_select
-                  ? Text(
-                      _incomeAcc,
-                      style: TextStyle(
-                        color: HsgColors.textHintColor,
-                      ),
-                    )
-                  : Text(_incomeAcc),
-            ),
-            Image(
-              color: HsgColors.firstDegreeText,
-              image:
-                  AssetImage('images/home/listIcon/home_list_more_arrow.png'),
-              width: 7,
-              height: 10,
-            ),
-          ],
-        ),
-      ],
+          )
+        ],
+      ),
     );
   }
 
   //账户选择弹窗
-  void _accountList(bool isAcc, int index) async {
+  void _accountBottomSheet(bool isAcc, int index) async {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
           return HsgBottomSingleChoice(
             title: S.of(context).account_lsit,
-            items: accList,
+            items: _accList,
+            icons: _accIcon,
             lastSelectedPosition: index,
           );
         });
@@ -390,14 +218,13 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
       setState(() {
         if (isAcc) {
           _paymentAccId = result;
-          _paymentAcc = accList[_paymentAccId];
-          if (_paymentAcc != S.current.please_select &&
-              _paymentCcy != S.current.please_select) {
+          _paymentAcc = _accList[_paymentAccId];
+          if (_paymentAcc != '' && _paymentCcy != '') {
             _getCardBal(_paymentAcc);
           }
         } else {
           _incomeAccId = result;
-          _incomeAcc = accList[_incomeAccId];
+          _incomeAcc = _accList[_incomeAccId];
           cards.forEach((item) {
             if (_incomeAcc == item.cardNo) {
               _incomeName = item.ciName;
@@ -411,7 +238,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   }
 
   //币种选择弹窗
-  void _currencyList(bool isCcy, int index, List<String> dataList) async {
+  void _currencyShowDialog(bool isCcy, int index, List<String> dataList) async {
     final result = await showDialog(
         context: context,
         builder: (context) {
@@ -428,8 +255,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         if (isCcy) {
           _paymentCcyId = result;
           _paymentCcy = dataList[_paymentCcyId];
-          if (_paymentAcc != S.current.please_select &&
-              _paymentCcy != S.current.please_select) {
+          if (_paymentAcc != '' && _paymentCcy != '') {
             _getCardBal(_paymentAcc);
           }
         } else {
@@ -461,10 +287,12 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
       if (data.cardList != null) {
         setState(() {
           cards.clear();
+          _accIcon.clear();
           cards = data.cardList;
-          accList.clear();
+          _accList.clear();
           data.cardList.forEach((item) {
-            accList.add(item.cardNo);
+            _accList.add(item.cardNo);
+            _accIcon.add(item.imageUrl);
           });
         });
       }
@@ -495,10 +323,10 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
 
   //计算汇率
   _transferTrial() {
-    if (_paymentAcc != S.current.please_select &&
-        _paymentCcy != S.current.please_select &&
-        _incomeAcc != S.current.please_select &&
-        _incomeCcy != S.current.please_select &&
+    if (_paymentAcc != '' &&
+        _paymentCcy != '' &&
+        _incomeAcc != '' &&
+        _incomeCcy != '' &&
         _payAmtController.text != '') {
       double _amount =
           AiDecimalAccuracy.parse(_payAmtController.text).toDouble();
@@ -535,5 +363,79 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
       Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.dismiss();
     });
+  }
+}
+
+class SelectInkWell extends StatelessWidget {
+  final String title;
+  final String item;
+  final void Function() onTap;
+  SelectInkWell({Key key, this.title, this.item, this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: 50,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(color: HsgColors.divider, width: 0.5)),
+          ),
+          child: _getSelect(),
+        ),
+      ),
+    );
+  }
+
+  Row _getSelect() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title),
+        Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: item == ''
+                  ? Text(S.current.please_select,
+                      style: TextStyle(color: HsgColors.textHintColor))
+                  : Text(item),
+            ),
+            Image(
+              color: HsgColors.firstDegreeText,
+              image:
+                  AssetImage('images/home/listIcon/home_list_more_arrow.png'),
+              width: 7,
+              height: 10,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class ItemContainer extends StatelessWidget {
+  final String title;
+  final String item;
+  ItemContainer({Key key, this.title, this.item}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50,
+      child: Container(
+        decoration: BoxDecoration(
+          border:
+              Border(bottom: BorderSide(color: HsgColors.divider, width: 0.5)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [Text(title), Text(item)],
+        ),
+      ),
+    );
   }
 }

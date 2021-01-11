@@ -567,7 +567,6 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               accountSelect = rowListPartner.payeeCardNo;
             } else {
               //  var playInput = 'kkkkkkkkkkkkkkkkkk';
-
             }
           },
         );

@@ -160,6 +160,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //转账金额
   _amountInputChange(String title) {
     money = double.parse(title);
+    print('$money 11111111');
   }
 
   //付款方地址
@@ -472,7 +473,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           SliverToBoxAdapter(
             child: Container(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-              height: 360,
               color: Colors.white,
               margin: EdgeInsets.only(bottom: 20),
               child: Column(
@@ -577,13 +577,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         payeeCardNo.length > 0 &&
         payerAddress.length > 0 &&
         _countryText != S.current.please_select &&
-        _payeeBank != S.current.please_select &&
-        bankSwift.length > 0 &&
+        _getPayeeBank != S.current.please_select &&
+        _bankSwiftController.text.length > 0 &&
         payeeAddress.length > 0 &&
         _transferFee != S.current.please_select &&
         _feeUse != S.current.please_select) {
       return () {
         _openBottomSheet();
+
         print('提交');
       };
     } else {
@@ -734,6 +735,31 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //获取选择行
   _getSelectColumn(String leftText, String rightText, Function selectMethod) {
     String righText = rightText == '' ? S.current.please_select : rightText;
+    var _rightText = [
+      Container(
+        margin: EdgeInsets.only(top: 5),
+        child: Text(
+          righText,
+          style: righText == S.current.please_select
+              ? TextStyle(
+                  color: HsgColors.secondDegreeText,
+                  fontSize: 15,
+                )
+              : TextStyle(
+                  color: HsgColors.firstDegreeText,
+                  fontSize: 15,
+                ),
+        ),
+      ),
+      Container(
+        margin: EdgeInsets.only(top: 7, left: 5),
+        child: Icon(
+          Icons.arrow_forward_ios,
+          color: HsgColors.firstDegreeText,
+          size: 16,
+        ),
+      ),
+    ];
     return Container(
       height: MediaQuery.of(context).size.width / 7,
       color: Colors.white,
@@ -755,31 +781,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                 print('选择账号');
               },
               child: Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 5),
-                    child: Text(
-                      righText,
-                      style: righText == S.current.please_select
-                          ? TextStyle(
-                              color: HsgColors.secondDegreeText,
-                              fontSize: 15,
-                            )
-                          : TextStyle(
-                              color: HsgColors.firstDegreeText,
-                              fontSize: 15,
-                            ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 7, left: 5),
-                    child: Icon(
-                      Icons.arrow_forward_ios,
-                      color: HsgColors.firstDegreeText,
-                      size: 16,
-                    ),
-                  ),
-                ],
+                children: _rightText,
               ),
             ),
           ),
@@ -855,7 +857,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         .getInterNationalTransfer(
             GetInternationalTransferReq(
                 money, //转账金额
-                bankSwift,
+                _bankSwiftController.text,
                 _transferFee, //转账费用
                 _changedCcyTitle, //贷方货币
                 //借方货币
