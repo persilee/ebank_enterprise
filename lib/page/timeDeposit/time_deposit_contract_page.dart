@@ -60,6 +60,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     _loadData();
   }
 
+//背景色
   Widget _background() {
     return Container(
       color: HsgColors.backgroundColor,
@@ -67,23 +68,242 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     );
   }
 
-  // 产品描述
-  Widget _remark(List<TdepProducDTOList> producDTOList) {
+//右箭头图标
+  Widget _rightArrow() {
     return Container(
-        color: HsgColors.backgroundColor,
-        height: 40,
-        width: 500.0,
-        child: Container(
-          padding: EdgeInsets.only(top: 15.0, left: 15.0),
-          height: 10,
-          child: Text(
-            S.current.no_advance_withdrawal,
-            style: TextStyle(
-              color: HsgColors.describeText,
-              fontSize: 12.0,
+      width: 20,
+      child: Icon(
+        Icons.keyboard_arrow_right,
+        color: Colors.black,
+      ),
+    );
+  }
+
+//分割线
+  Widget _line() {
+    return Container(
+      padding: EdgeInsets.only(left: 15.0, right: 15.0),
+      child: Divider(height: 0.5, color: HsgColors.divider),
+    );
+  }
+
+//垂直分割线
+  Widget _verticalLine() {
+    return Container(
+      margin: EdgeInsets.only(top: 20, bottom: 20.0),
+      width: 0.5,
+      height: 50,
+      child: Column(
+        children: [
+          SizedBox(
+            width: 1,
+            height: 40,
+            child: DecoratedBox(
+              decoration: BoxDecoration(color: HsgColors.divider),
             ),
           ),
-        ));
+        ],
+      ),
+    );
+  }
+
+//显示一列文字
+  Widget _displayColumn(String upperText, String nextText) {
+    return Container(
+      margin: EdgeInsets.only(left: 15, right: 15),
+      width: (MediaQuery.of(context).size.width - 60.5) / 2,
+      height: MediaQuery.of(context).size.height / 9,
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 5),
+            child: Text(
+              //上文字
+              upperText,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13, color: HsgColors.secondDegreeText),
+            ),
+          ),
+          SizedBox(height: 10.0),
+          Text(
+            //下文字
+            nextText,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 18,
+                color: upperText == S.current.year_interest_rate
+                    ? Colors.red
+                    : Colors.black,
+                fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+
+//弹窗按钮左侧文本
+  Widget _leftText(String leftText) {
+    return Container(
+      width: (MediaQuery.of(context).size.width - 32) / 2,
+      child: Text(
+        leftText,
+        style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 14.0),
+      ),
+    );
+  }
+
+//弹窗按钮
+  Widget _button(_select) {
+    return Container(
+      child: FlatButton(
+        onPressed: () {
+          _select();
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _leftText(S.current.payment_account),
+            _display(_changedAccountTitle),
+            _rightArrow(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  //显示选择的值
+  Widget _display(String display) {
+    return Container(
+      width: ((MediaQuery.of(context).size.width - 32) / 2) - 20,
+      alignment: Alignment.centerRight,
+      child: TextField(
+        textAlign: TextAlign.right,
+        enabled: false,
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: display,
+            hintStyle: display == S.current.hint_please_select
+                ? TextStyle(
+                    color: HsgColors.hintText,
+                    fontSize: 14.0,
+                  )
+                : TextStyle(
+                    color: HsgColors.firstDegreeText,
+                    fontSize: 14.0,
+                  )),
+      ),
+    );
+  }
+
+  //显示币种
+  Widget _showCcy() {
+    return Container(
+      child: Text(
+        productList.ccy,
+        textAlign: TextAlign.center,
+        style: TextStyle(color: Colors.black, fontSize: 18.0),
+      ),
+    );
+  }
+
+  //到期本息
+  Widget _showMatAmt() {
+    return Container(
+      padding: EdgeInsets.only(top: 10.0, left: 15.0, bottom: 10.0),
+      child: Row(
+        children: [
+          Container(
+            child: Text(
+              S.current.contract_principal_and_interest,
+              style: TextStyle(
+                color: HsgColors.secondDegreeText,
+                fontSize: 13.0,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 5.0,
+          ),
+          Container(
+            child: Text(
+              productList.ccy + ":" + matAmt,
+              style: TextStyle(
+                color: HsgColors.secondDegreeText,
+                fontSize: 13.0,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //输入本金
+  Widget _inputBal() {
+    return Expanded(
+      child: Container(
+        margin: EdgeInsets.only(left: 20),
+        child: TextField(
+          autocorrect: false,
+          autofocus: false,
+          style: TextStyle(color: HsgColors.firstDegreeText, fontSize: 18.0),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+          ],
+          onChanged: (value) {
+            double.parse(value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
+            bal = double.parse(value);
+            print("输入的金额是:$value");
+            //输入金额大于起存金额时进行网络请求,计算到期金额
+            if (double.parse(value) >= double.parse(productList.minAmt)) {
+              _loadDepositData(
+                  // accuPeriod,
+                  // auctCale,
+                  // double.parse(value),
+                  // productList.bppdCode,
+                  // productList.ccy,
+                  //  card.custId,
+                  // depositType,
+                  // '',         // tenor
+                  '2',
+                  '1',
+                  double.parse(value),
+                  'TD000001',
+                  'HKD',
+                  '8000000004',
+                  'A',
+                  '');
+            }
+          },
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.all(0),
+            border: InputBorder.none,
+            hintText: S.current.deposit_min_with_value + productList.minAmt,
+            hintStyle: TextStyle(
+              color: HsgColors.hintText,
+              fontSize: 18.0,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // 产品描述
+  Widget _remark() {
+    return Container(
+      color: HsgColors.backgroundColor,
+      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.only(top: 10.0, left: 15.0, bottom: 10.0),
+      child: Text(
+        S.current.no_advance_withdrawal,
+        style: TextStyle(
+          color: HsgColors.describeText,
+          fontSize: 12.0,
+        ),
+      ),
+    );
   }
 
   // 选择存款期限按钮
@@ -91,59 +311,59 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       BuildContext context, List<TdepProducDTOList> producDTOList) {
     return Column(
       children: [
-        _remark(producDTOList),
         Container(
             child: FlatButton(
           onPressed: () {
             _selectTerm(context, producDTOList);
           },
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Container(
-                width: 190,
-                child: Text(
-                  S.current.deposit_time_limit,
-                  style: TextStyle(
-                      color: HsgColors.aboutusTextCon, fontSize: 14.0),
-                ),
-              ),
-              Container(
-                width: 145,
-                alignment: Alignment.centerRight,
-                child: TextField(
-                  onTap: () {
-                    _selectTerm(context, producDTOList);
-                  },
-                  textAlign: TextAlign.right,
-                  enabled: false,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: _changedTermBtnTiTle,
-                      hintStyle:
-                          _changedTermBtnTiTle == S.current.hint_please_select
-                              ? TextStyle(
-                                  color: HsgColors.hintText,
-                                  fontSize: 14.0,
-                                )
-                              : TextStyle(
-                                  color: HsgColors.firstDegreeText,
-                                  fontSize: 14.0,
-                                )),
-                ),
-              ),
-              Container(
-                child: Icon(
-                  Icons.keyboard_arrow_right,
-                  color: Colors.black,
-                ),
-              ),
+              _leftText(S.current.deposit_time_limit),
+              _display(_changedTermBtnTiTle),
+              _rightArrow(),
             ],
           ),
         )),
         _background()
       ],
     );
+  }
+
+//选择付款账户按钮
+  Widget _accountChangeBtn() {
+    return Container(
+        child: FlatButton(
+      onPressed: () {
+        _selectAccount(context);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          _leftText(S.current.payment_account),
+          _display(_changedAccountTitle),
+          _rightArrow(),
+        ],
+      ),
+    ));
+  }
+
+  //选择到期指示按钮
+  Widget _instructionChangeBtn() {
+    return Container(
+        child: FlatButton(
+      onPressed: () {
+        _selectInstruction(context);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          _leftText(S.current.due_date_indicate),
+          _display(_changedInstructionTitle),
+          _rightArrow(),
+        ],
+      ),
+    ));
   }
 
 //存款期限弹窗
@@ -220,68 +440,16 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          width: 190.0,
-          margin: EdgeInsets.only(top: 20, bottom: 20.0),
-          height: 60,
-          child: Column(children: [
-            Text(
-              S.current.product_name,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13, color: HsgColors.secondDegreeText),
-            ),
-            SizedBox(height: 10.0),
-            Text(
-              name,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold),
-            ),
-          ]),
-        ),
-        Container(
-          margin: EdgeInsets.only(top: 20, bottom: 20.0),
-          width: 10.0,
-          height: 50,
-          child: Column(
-            children: [
-              SizedBox(
-                width: 1,
-                height: 40,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(color: HsgColors.divider),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          width: 190.0,
-          margin: EdgeInsets.only(top: 20, bottom: 20.0),
-          height: 60,
-          child: Column(children: [
-            Text(
-              S.current.year_interest_rate,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13, color: HsgColors.secondDegreeText),
-            ),
-            SizedBox(height: 10.0),
-            Text(
-              rate + '%',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 18, color: Colors.red, fontWeight: FontWeight.bold),
-            ),
-          ]),
-        ),
+        _displayColumn(S.current.product_name, name),
+        _verticalLine(),
+        _displayColumn(S.current.year_interest_rate, rate + '%'),
       ],
     );
   }
 
   // 本金输入框
   Widget _inputPrincipal(RemoteBankCard card) {
+    //按计提周期计算存款期限
     switch (producDTOList[0].accuPeriod) {
       case '2':
         _changedTermBtnTiTle = (producDTOList[0].auctCale + S.current.months);
@@ -295,223 +463,21 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     }
     rate = FormatUtil.formatNum(
         double.parse(producDTOList[0].annualInterestRate) * 100, 2);
+
     return Column(
       children: [
         Container(
           padding: EdgeInsets.only(left: 15.0),
           child: Row(
             children: [
-              Container(
-                child: Text(
-                  productList.ccy,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.black, fontSize: 18.0),
-                ),
-              ),
-              Expanded(
-                  child: Container(
-                margin: EdgeInsets.only(left: 20),
-                child: TextField(
-                  autocorrect: false,
-                  autofocus: false,
-                  style: TextStyle(
-                      color: HsgColors.firstDegreeText, fontSize: 18.0),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
-                  ],
-                  onChanged: (value) {
-                    double.parse(
-                        value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
-                    bal = double.parse(value);
-                    print("输入的金额是:$value");
-                    if (double.parse(value) >=
-                        double.parse(productList.minAmt)) {
-                      _loadDepositData(
-                          // accuPeriod,
-                          // auctCale,
-                          // double.parse(value),
-                          // productList.bppdCode,
-                          // productList.ccy,
-                          //  card.custId,
-                          // depositType,
-                          // '', // tenor
-                          '2',
-                          '1',
-                          double.parse(value),
-                          'TD000001',
-                          'HKD',
-                          '8000000004',
-                          'A',
-                          '');
-                    }
-                  },
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(0),
-                    border: InputBorder.none,
-                    hintText:
-                        S.current.deposit_min_with_value + productList.minAmt,
-                    hintStyle: TextStyle(
-                      color: HsgColors.hintText,
-                      fontSize: 18.0,
-                    ),
-                  ),
-                ),
-              ))
+              _showCcy(),
+              _inputBal(),
             ],
           ),
         ),
-        Container(
-          padding: EdgeInsets.only(left: 15.0, right: 15.0),
-          child: Divider(height: 0.5, color: HsgColors.divider),
-        ),
-        SizedBox(
-          height: 10.0,
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 15.0, bottom: 10.0),
-          child: Row(
-            children: [
-              Container(
-                child: Text(
-                  S.current.contract_principal_and_interest,
-                  style: TextStyle(
-                    color: HsgColors.secondDegreeText,
-                    fontSize: 13.0,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 5.0,
-              ),
-              Container(
-                child: Text(
-                  productList.ccy + ":" + matAmt,
-                  style: TextStyle(
-                    color: HsgColors.secondDegreeText,
-                    fontSize: 13.0,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        _background()
-      ],
-    );
-  }
-
-  //付款账户和到期指示
-  Widget _accountsAndInstructions() {
-    return Column(
-      children: [
-        //付款账户按钮
-        Container(
-            child: FlatButton(
-          onPressed: () {
-            _selectAccount(context);
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                width: 190,
-                child: Text(
-                  S.current.payment_account,
-                  style: TextStyle(
-                      color: HsgColors.aboutusTextCon, fontSize: 14.0),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 145,
-                    alignment: Alignment.centerRight,
-                    child: TextField(
-                      textAlign: TextAlign.right,
-                      enabled: false,
-                      decoration: InputDecoration(
-                          hintText: _changedAccountTitle,
-                          hintStyle: _changedAccountTitle ==
-                                  S.current.hint_please_select
-                              ? TextStyle(
-                                  color: HsgColors.hintText,
-                                  fontSize: 14.0,
-                                )
-                              : TextStyle(
-                                  color: HsgColors.firstDegreeText,
-                                  fontSize: 14.0,
-                                )),
-                    ),
-                  ),
-                  Container(
-                    child: Icon(
-                      Icons.keyboard_arrow_right,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        )),
-        Container(
-          padding: EdgeInsets.only(left: 15.0, right: 15.0),
-          child: Divider(height: 0.5, color: HsgColors.divider),
-        ),
-        //到期指示按钮
-        Container(
-            child: FlatButton(
-          onPressed: () {
-            _selectInstruction(context);
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                width: 190,
-                child: Text(
-                  S.current.due_date_indicate,
-                  style: TextStyle(
-                      color: HsgColors.aboutusTextCon, fontSize: 14.0),
-                ),
-              ),
-              Container(
-                width: 145,
-                alignment: Alignment.centerRight,
-                child: TextField(
-                  textAlign: TextAlign.right,
-                  enabled: false,
-                  maxLines: 2,
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(top: 15.0),
-                      hintText: _changedInstructionTitle,
-                      hintStyle: _changedInstructionTitle ==
-                              S.current.hint_please_select
-                          ? TextStyle(
-                              color: HsgColors.hintText,
-                              fontSize: 14.0,
-                            )
-                          : TextStyle(
-                              color: HsgColors.firstDegreeText,
-                              fontSize: 14.0,
-                            )),
-                ),
-              ),
-              Container(
-                child: Icon(
-                  Icons.keyboard_arrow_right,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
-        )),
-        Container(
-          padding: EdgeInsets.only(left: 15.0, right: 15.0),
-          child: Divider(height: 0.5, color: HsgColors.divider),
-        ),
+        _line(),
+        _showMatAmt(),
+        _background(),
       ],
     );
   }
@@ -535,7 +501,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     } else {
       return;
     }
-    setState(() {});
+    setState(() {
+      // return _changedAccountTitle;
+    });
   }
 
 //到期指示弹窗
@@ -656,9 +624,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
               productList,
               producDTOList,
             ),
+            _remark(),
             _termChangeBtn(context, producDTOList),
             _inputPrincipal(card),
-            _accountsAndInstructions(),
+            _accountChangeBtn(),
+            _instructionChangeBtn(),
             _submitButton(),
           ],
         )));

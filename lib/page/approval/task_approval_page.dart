@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/model/find_user_to_do_task.dart';
 import 'package:ebank_mobile/data/source/model/get_process_task.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -20,121 +21,12 @@ class TaskApprovalPage extends StatefulWidget {
 
 class _TaskApprovalPageState extends State<TaskApprovalPage> {
   FocusNode focusNode = FocusNode();
-  bool offstage = true;
-
+  bool offstage = true; //判断签收按钮是否被点击
+  // bool canBeClicked = false; //判断按钮是否可以被点击
+  bool approveResult = false; //审批结果
+  bool rejectToStart = true; //是否驳回至发起人
+  String comment = ''; //审批意见
   var taskId = '';
-
-  void _toggle() {
-    setState(() {
-      offstage = !offstage;
-    });
-  }
-
-//签收、驳回至发起人、驳回、审批按钮
-  _getToggleChild() {
-    if (!offstage) {
-      return Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              width: 120,
-              margin: EdgeInsets.only(right: 15),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 0.5),
-                borderRadius: BorderRadius.circular((5)),
-              ),
-              height: 40,
-              child: FlatButton(
-                //驳回至发起人按钮
-                padding: EdgeInsets.all(0),
-                child: Text(
-                  S.current.reject_to_sponsor,
-                  style: TextStyle(fontSize: 13),
-                ),
-                onPressed: () {
-                  print('驳回至发起人');
-                },
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(right: 15),
-              width: 60,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 0.5),
-                borderRadius: BorderRadius.circular((5)),
-              ),
-              height: 40,
-              child: FlatButton(
-                //驳回按钮
-                padding: EdgeInsets.all(0),
-                child: Text(
-                  S.current.reject,
-                  style: TextStyle(fontSize: 13),
-                ),
-                onPressed: () {
-                  print('驳回');
-                },
-              ),
-            ),
-            Container(
-              // color: HsgColors.accent,
-              width: 60,
-              decoration: BoxDecoration(
-                color: HsgColors.accent,
-                border: Border.all(color: Colors.black, width: 0.5),
-                borderRadius: BorderRadius.circular((5)),
-              ),
-              height: 40,
-              child: FlatButton(
-                //审批按钮
-                padding: EdgeInsets.all(0),
-                child: Text(
-                  S.current.examine_and_approve,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.white,
-                  ),
-                ),
-                onPressed: () {
-                  print('审批');
-                },
-              ),
-            ),
-          ],
-        ),
-      );
-    } else {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: HsgColors.accent,
-              border: Border.all(color: Colors.black, width: 0.5),
-              borderRadius: BorderRadius.circular((5)),
-            ),
-            height: 40,
-            width: 60,
-            child: FlatButton(
-              //签收按钮
-              padding: EdgeInsets.all(0),
-              child: Text(
-                S.current.sign,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                ),
-              ),
-              onPressed: () {
-                _toggle();
-              },
-            ),
-          ),
-        ],
-      );
-    }
-  }
 
   @override
   void initState() {
@@ -144,9 +36,219 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
       bool hasFocus = focusNode.hasFocus;
       bool hasListeners = focusNode.hasListeners;
       print("focusNode 兼听 hasFocus:$hasFocus  hasListeners:$hasListeners");
-
-      _getTaskApproval();
     });
+  }
+
+//签收按钮被点击时改变offstage
+  void _toggle() {
+    setState(() {
+      offstage = !offstage;
+    });
+  }
+
+//分割线
+  Widget _line() {
+    return Container(
+      padding: EdgeInsets.only(left: 15.0, right: 15.0),
+      child: Divider(height: 0.5, color: HsgColors.divider),
+    );
+  }
+
+//顶部提示
+  Widget _tips() {
+    return Container(
+      padding: EdgeInsets.only(top: 10, bottom: 10, left: 15),
+      width: MediaQuery.of(context).size.width,
+      color: Color(0xFFDCE4FF),
+      child: Text(
+        S.current.task_approval_tips,
+        style: TextStyle(
+          color: HsgColors.accent,
+          fontSize: 13,
+        ),
+      ),
+    );
+  }
+
+//提示对话框
+  _alertDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertDialog(
+            title: "提示",
+            message: "请输入审批意见",
+            positiveButton: '确定',
+            // negativeButton: '取消',
+          );
+        });
+  }
+
+//列表标题
+  Widget _title(String title) {
+    return Row(
+      children: [
+        Container(
+          margin: EdgeInsets.only(left: 15, top: 15, bottom: 15),
+          child: Text(
+            title,
+            style: TextStyle(
+                color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ],
+    );
+  }
+
+//审批意见
+  Widget _approvalComments() {
+    return Container(
+      margin: EdgeInsets.only(left: 15, top: 10, bottom: 10),
+      child: Row(
+        children: [
+          Text(
+            S.current.approval_comment,
+            style: TextStyle(fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
+
+//审批意见输入框
+  Widget _inputApprovalComments() {
+    return Container(
+      margin: EdgeInsets.only(left: 15, right: 15),
+      child: TextField(
+        focusNode: focusNode,
+        maxLines: 4,
+        enabled: !offstage,
+        decoration: InputDecoration(
+          fillColor: HsgColors.itemClickColor,
+          filled: offstage,
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+            borderSide: BorderSide(color: HsgColors.textHintColor, width: 1),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+            borderSide: BorderSide(color: HsgColors.textHintColor, width: 1),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(color: HsgColors.textHintColor, width: 1),
+          ),
+        ),
+        onChanged: (value) {
+          print('输入的是:$value');
+          comment = value;
+        },
+      ),
+    );
+  }
+
+//底部按钮
+  Widget _button() {
+    return Container(
+      width: MediaQuery.of(context).size.width - 30,
+      margin: EdgeInsets.only(top: 20, bottom: 15),
+      child: _getToggleChild(),
+    );
+  }
+
+//按钮
+  Widget _buttonStyle(double buttonWidth, String buttonText) {
+    return Container(
+      margin: EdgeInsets.only(left: 10),
+      width: buttonWidth,
+      decoration: BoxDecoration(
+        color: (buttonText == S.current.examine_and_approve ||
+                buttonText == S.current.sign)
+            ? HsgColors.accent
+            : Colors.white,
+        border: Border.all(color: Colors.black, width: 0.5),
+        borderRadius: BorderRadius.circular((5)),
+      ),
+      height: 40,
+      child: FlatButton(
+        padding: EdgeInsets.all(0),
+        disabledColor: HsgColors.btnDisabled,
+        child: Text(
+          buttonText,
+          style: TextStyle(
+            fontSize: 13,
+            color: (buttonText == S.current.examine_and_approve ||
+                    buttonText == S.current.sign)
+                ? Colors.white
+                : Colors.black,
+          ),
+        ),
+        onPressed: () {
+          if (buttonText == S.current.sign) {
+            _toggle();
+          } else {
+            if (comment.length != 0) {
+              if (buttonText == S.current.examine_and_approve) {
+                print('审批');
+              } else if (buttonText == S.current.reject_to_sponsor) {
+                print('驳回至发起人');
+                _getTaskApproval();
+              } else if (buttonText == S.current.reject) {
+                print('驳回');
+              }
+            } else {
+              _alertDialog();
+            }
+          }
+        },
+      ),
+    );
+  }
+
+//根据输入框的状态判断底部按钮
+  _getToggleChild() {
+    if (!offstage) {
+      return Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            _buttonStyle(120, S.current.reject_to_sponsor),
+            _buttonStyle(60, S.current.reject),
+            _buttonStyle(60, S.current.examine_and_approve),
+          ],
+        ),
+      );
+    } else {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          _buttonStyle(60, S.current.sign),
+        ],
+      );
+    }
+  }
+
+  //我的审批
+  Widget _myApproval(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            color: HsgColors.backgroundColor,
+            height: 15,
+          ),
+          _title(S.current.my_approval),
+          Container(
+            child: Divider(height: 0.5, color: HsgColors.divider),
+          ),
+          _approvalComments(),
+          //审批意见输入框
+          _inputApprovalComments(),
+          //底部按钮
+          _button(),
+        ],
+      ),
+    );
   }
 
   Map transferInfo = {
@@ -171,28 +273,15 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   Widget build(BuildContext context) {
     Rows application = ModalRoute.of(context).settings.arguments;
     taskId = application.processId;
-
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('任务审批'),
+          title: Text(S.current.task_approval),
         ),
         body: SingleChildScrollView(
-            child: Container(
           child: Column(
             children: [
-              Container(
-                padding: EdgeInsets.only(top: 10, bottom: 10, left: 15),
-                width: 400,
-                color: Color(0xFFDCE4FF),
-                child: Text(
-                  '请确认以下信息，然后完成审批',
-                  style: TextStyle(
-                    color: HsgColors.accent,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
+              _tips(),
               Column(
                 children: _transferlistView(),
               ),
@@ -202,9 +291,10 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
               _myApproval(context),
             ],
           ),
-        )));
+        ));
   }
 
+//转账信息列表
   List<Widget> _transferlistView() {
     List<Widget> listWidget = [];
     transferInfo.forEach((k, v) {
@@ -212,33 +302,18 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
         color: HsgColors.backgroundColor,
         height: 15,
       ));
-      listWidget.add(Row(
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-            child: Text(
-              k,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
-      ));
+      listWidget.add(_title(k));
       listWidget.add(Container(
         child: Divider(height: 0.5, color: HsgColors.divider),
       ));
       v.map((f) {
         listWidget.add(Column(children: [
           Container(
-            // color: Colors.green,
             child: Row(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-                  // color: Colors.yellow,
-                  width: 212,
+                  margin: EdgeInsets.only(left: 15, top: 10, bottom: 10),
+                  width: (MediaQuery.of(context).size.width - 30) / 2,
                   child: Text(
                     f["title"],
                     style: TextStyle(color: Colors.black, fontSize: 14),
@@ -246,8 +321,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
                 ),
                 Container(
                   margin: EdgeInsets.only(right: 15),
-                  width: 150,
-                  // color: Colors.red,
+                  width: (MediaQuery.of(context).size.width - 30) / 2,
                   child: Text(f["type"],
                       textAlign: TextAlign.right,
                       style: TextStyle(
@@ -256,16 +330,14 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
               ],
             ),
           ),
-          Container(
-            padding: EdgeInsets.only(left: 15.0, right: 15.0),
-            child: Divider(height: 0.5, color: HsgColors.divider),
-          ),
+          _line(),
         ]));
       }).toList();
     });
     return listWidget;
   }
 
+//付款信息列表
   List<Widget> _paymentlistView() {
     List<Widget> listWidget = [];
     paymentInfo.forEach((k, v) {
@@ -273,33 +345,18 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
         color: HsgColors.backgroundColor,
         height: 15,
       ));
-      listWidget.add(Row(
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-            child: Text(
-              k,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
-      ));
+      listWidget.add(_title(k));
       listWidget.add(Container(
         child: Divider(height: 0.5, color: HsgColors.divider),
       ));
       v.map((f) {
         listWidget.add(Column(children: [
           Container(
-            // color: Colors.green,
             child: Row(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-                  // color: Colors.yellow,
-                  width: 212,
+                  margin: EdgeInsets.only(left: 15, top: 10, bottom: 10),
+                  width: (MediaQuery.of(context).size.width - 30) / 2,
                   child: Text(
                     f["title"],
                     style: TextStyle(color: Colors.black, fontSize: 14),
@@ -307,8 +364,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
                 ),
                 Container(
                   margin: EdgeInsets.only(right: 15),
-                  width: 150,
-                  // color: Colors.red,
+                  width: (MediaQuery.of(context).size.width - 30) / 2,
                   child: Text(f["type"],
                       textAlign: TextAlign.right,
                       style: TextStyle(
@@ -317,101 +373,14 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
               ],
             ),
           ),
-          Container(
-            padding: EdgeInsets.only(left: 15.0, right: 15.0),
-            child: Divider(height: 0.5, color: HsgColors.divider),
-          ),
+          _line(),
         ]));
       }).toList();
     });
     return listWidget;
   }
 
-  //我的审批
-  Widget _myApproval(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            color: HsgColors.backgroundColor,
-            height: 15,
-          ),
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-                child: Text(
-                  '我的审批',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-          ),
-          Container(
-            child: Divider(height: 0.5, color: HsgColors.divider),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 15, top: 10, bottom: 10),
-            child: Row(
-              children: [
-                Text(
-                  '审批意见',
-                  style: TextStyle(fontSize: 14),
-                ),
-              ],
-            ),
-          ),
-          //审批意见输入框
-          Container(
-            margin: EdgeInsets.only(left: 15, right: 15),
-            // color: Colors.grey,
-            child: TextField(
-              focusNode: focusNode,
-              maxLines: 4,
-              enabled: !offstage,
-              decoration: InputDecoration(
-                fillColor: HsgColors.itemClickColor,
-                filled: offstage,
-                disabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  borderSide:
-                      BorderSide(color: HsgColors.textHintColor, width: 1),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  borderSide:
-                      BorderSide(color: HsgColors.textHintColor, width: 1),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  borderSide:
-                      BorderSide(color: HsgColors.textHintColor, width: 1),
-                ),
-              ),
-            ),
-          ),
-          //底部按钮
-          Container(
-            width: 400,
-            margin: EdgeInsets.only(top: 20, bottom: 15, right: 15),
-            // color: Colors.yellow,
-            child: _getToggleChild(),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _getTaskApproval() {
-    //b驳回
-    bool approveResult = true;
-
-    var comment = '审批意见';
-    //驳回至发起人
-    bool rejectToStart = true;
     Future.wait({
       NeedToBeDealtWithRepository().getMyProcessTask(
           GetProcessTaskReq(approveResult, comment, rejectToStart, taskId),

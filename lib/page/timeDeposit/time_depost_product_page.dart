@@ -26,6 +26,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   List<TdepProducHeadDTO> productList = [];
   List<List<TdepProducDTOList>> producDTOList = [];
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  String language = Intl.getCurrentLocale();
 
   void initState() {
     super.initState();
@@ -35,12 +36,130 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     });
   }
 
+//背景
+  Widget _background() {
+    return Container(
+      color: HsgColors.commonBackground,
+      height: 15,
+    );
+  }
+
+// 设置单侧边框的样式
   BorderSide _lineBorderSide() {
     return BorderSide(
-      // 设置单侧边框的样式
       color: HsgColors.divider,
       width: 0.5,
       style: BorderStyle.solid,
+    );
+  }
+
+  //定期产品列表上面的图片
+  Widget _picture() {
+    return Image.asset(
+      'images/time_depost/time_depost_product.png',
+      width: 500.0,
+      height: 120.0,
+      fit: BoxFit.cover,
+    );
+  }
+
+  //定期产品名称
+  Widget _productName(String productName) {
+    return Container(
+      height: 40.0,
+      alignment: Alignment.centerLeft,
+      child: Text(
+        productName,
+        style: TextStyle(fontSize: 15),
+      ),
+    );
+  }
+
+  //定期产品年利率
+  Widget _rateAndRemark(double minRate, double maxRate, String remark) {
+    return Container(
+      height: 60,
+      alignment: Alignment.centerLeft,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            //定期产品年利率
+            '$minRate%~$maxRate%',
+            style: TextStyle(fontSize: 17, color: Colors.red[500]),
+          ),
+          SizedBox(
+            width: (MediaQuery.of(context).size.width - 30) / 2 * 1,
+            child: Text(
+              //定期产品描述
+              remark,
+              style: TextStyle(
+                fontSize: 15,
+                color: HsgColors.firstDegreeText,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //年利率文本
+  Widget _rateText() {
+    return SizedBox(
+      height: 70,
+      child: Text(
+        S.current.annual_interest_rate,
+        style: TextStyle(
+          fontSize: 13,
+          color: HsgColors.describeText,
+        ),
+      ),
+    );
+  }
+
+  //起存金额
+  Widget _minAmt(String minAmt) {
+    return SizedBox(
+      width: (MediaQuery.of(context).size.width - 30) / 2 * 1,
+      height: 70,
+      child: Text(
+        //定期产品起存金额
+        language == 'zh_CN'
+            ? minAmt + S.current.deposit_min_with_value
+            : S.current.deposit_min_with_value + minAmt,
+        style: TextStyle(
+          fontSize: 13,
+          color: HsgColors.describeText,
+        ),
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+
+  //定期产品信息
+  Widget _productInfo(String name, double minRate, double maxRate,
+      String remark, String minAmt) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _productName(name),
+        Divider(height: 0.5, color: HsgColors.divider),
+        _rateAndRemark(minRate, maxRate, remark),
+        Container(
+          padding: EdgeInsets.only(top: 0.0),
+          height: 30.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _rateText(),
+              _minAmt(minAmt),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -49,14 +168,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       List<List<TdepProducDTOList>> tdepProducDTOList) {
     List<Widget> section = [];
     section.add(
-      //定期产品列表上面的图片
       SliverToBoxAdapter(
-        child: Image.asset(
-          'images/time_depost/time_depost_product.png',
-          width: 500.0,
-          height: 120.0,
-          fit: BoxFit.cover,
-        ),
+        child: _picture(),
       ),
     );
     section.add(SliverList(
@@ -69,7 +182,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       maxRate = double.parse(FormatUtil.formatNum(maxRate, 2));
       //判断选择的语言并根据语言选择产品名称
       String name;
-      String language = Intl.getCurrentLocale();
       if (language == 'zh_CN') {
         name = tdepProductList[index].lclName;
       } else {
@@ -84,103 +196,18 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              color: HsgColors.commonBackground,
-              height: 15,
-            ),
+            _background(),
             Container(
               padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              //边框设置
               decoration: BoxDecoration(
-                //背景
                 color: Colors.white,
-                //设置四周边框
                 border: Border(
                   top: _lineBorderSide(),
                   bottom: _lineBorderSide(),
                 ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 40.0,
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      //定期产品名称
-                      '$name',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
-                  Divider(height: 0.5, color: HsgColors.divider),
-                  Container(
-                    height: 60,
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          //定期产品年利率
-                          '$minRate%~$maxRate%',
-                          style:
-                              TextStyle(fontSize: 17, color: Colors.red[500]),
-                        ),
-                        SizedBox(
-                          width:
-                              (MediaQuery.of(context).size.width - 30) / 2 * 1,
-                          child: Text(
-                            //定期产品描述
-                            tdepProductList[index].remark,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: HsgColors.firstDegreeText,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(top: 0.0),
-                    height: 30.0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          height: 70,
-                          child: Text(
-                            S.current.annual_interest_rate,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: HsgColors.describeText,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width:
-                              (MediaQuery.of(context).size.width - 30) / 2 * 1,
-                          height: 70,
-                          child: Text(
-                            //定期产品起存金额
-                            language == 'zh_CN'
-                                ? '${tdepProductList[index].minAmt}' +
-                                    S.current.deposit_min_with_value
-                                : S.current.deposit_min_with_value +
-                                    '${tdepProductList[index].minAmt}',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: HsgColors.describeText,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              child: _productInfo(name, minRate, maxRate,
+                  tdepProductList[index].remark, tdepProductList[index].minAmt),
             ),
           ],
         ),
@@ -235,9 +262,10 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     });
   }
 
+//页面跳转传值
   void go2Detail(TdepProducHeadDTO tdepProduct,
       List<TdepProducDTOList> tdepProducDTOList) {
-    Navigator.popAndPushNamed(
+    Navigator.pushNamed(
       context,
       pageTimeDepositContract,
       arguments: {

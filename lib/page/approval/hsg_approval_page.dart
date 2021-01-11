@@ -5,11 +5,9 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/feature_demo/my_tab_indicator.dart';
-import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/approval/authorization_history_page.dart';
 import 'package:flutter/material.dart';
-
 import 'my_appplication_page.dart';
 import 'my_approval_page.dart';
 
@@ -24,7 +22,6 @@ class _ApprovalPageState extends State<TabBarAndTopTab>
   _ApprovalPageState();
   List tabs = [
     S.current.my_to_do_list,
-    // S.current.authorization_history,
     S.current.authorization_records,
     S.current.my_application
   ];
@@ -42,17 +39,19 @@ class _ApprovalPageState extends State<TabBarAndTopTab>
 
 //顶部切换
   Widget _tabBar() {
-    return TabBar(
-        isScrollable: false,
-        labelStyle: TextStyle(
-            fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.black),
-        labelColor: Colors.black,
-        unselectedLabelColor: Colors.black,
-        controller: tabController,
-        indicatorWeight: 4.0,
-        indicator: MyUnderlineTabIndicator(
-            borderSide: BorderSide(width: 4.0, color: HsgColors.accent)),
-        tabs: tabs.map((e) => Tab(text: e)).toList());
+    return Material(
+      child: TabBar(
+          isScrollable: false,
+          labelStyle: TextStyle(
+              fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.black),
+          labelColor: Colors.black,
+          unselectedLabelColor: Colors.black,
+          controller: tabController,
+          indicatorWeight: 4.0,
+          indicator: MyUnderlineTabIndicator(
+              borderSide: BorderSide(width: 4.0, color: HsgColors.accent)),
+          tabs: tabs.map((e) => Tab(text: e)).toList()),
+    );
   }
 
   @override
@@ -60,14 +59,13 @@ class _ApprovalPageState extends State<TabBarAndTopTab>
     return Scaffold(
         appBar: AppBar(
           bottom: PreferredSize(
-              preferredSize: Size.fromHeight(52),
-              child: Material(
-                  color: Colors.white,
-                  child: Theme(
-                      data: ThemeData(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent),
-                      child: _tabBar()))),
+            preferredSize: Size.fromHeight(52),
+            child: Theme(
+                data: ThemeData(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent),
+                child: _tabBar()),
+          ),
           centerTitle: true,
           title: Text(
             S.of(context).approval,
