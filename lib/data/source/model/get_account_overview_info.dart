@@ -12,10 +12,21 @@ part 'get_account_overview_info.g.dart';
 class GetTotalAssetsReq {
   @JsonKey(name: 'userId')
   String userId;
+  @JsonKey(name: 'ciNo')
+  String ciNo;
+  @JsonKey(name: 'ccy')
+  String ccy;
 
   GetTotalAssetsReq(
     this.userId,
+    this.ciNo,
+    this.ccy,
   );
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 
   factory GetTotalAssetsReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetTotalAssetsReqFromJson(srcJson);
@@ -41,6 +52,11 @@ class GetTotalAssetsResp extends Object {
     this.netAssets,
   );
 
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
   factory GetTotalAssetsResp.fromJson(Map<String, dynamic> srcJson) =>
       _$GetTotalAssetsRespFromJson(srcJson);
 
@@ -49,7 +65,33 @@ class GetTotalAssetsResp extends Object {
 
 // 活期
 @JsonSerializable()
-class GetCardListBalByUserReq {}
+class GetCardListBalByUserReq {
+  @JsonKey(name: 'accountType')
+  String accountType;
+  @JsonKey(name: 'ccy')
+  String ccy;
+  @JsonKey(name: 'ciNo')
+  String ciNo;
+  @JsonKey(name: 'cardNoList')
+  List<String> cardNoList;
+
+  GetCardListBalByUserReq(
+    this.accountType,
+    this.ccy,
+    this.ciNo,
+    this.cardNoList,
+  );
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  factory GetCardListBalByUserReq.fromJson(Map<String, dynamic> srcJson) =>
+      _$GetCardListBalByUserReqFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$GetCardListBalByUserReqToJson(this);
+}
 
 @JsonSerializable()
 class GetCardListBalByUserResp extends Object {
@@ -119,6 +161,11 @@ class GetTdConInfoListReq {
 
   GetTdConInfoListReq({this.ciNo, this.page = '1', this.pageSize = '200'});
 
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
   factory GetTdConInfoListReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetTdConInfoListReqFromJson(srcJson);
 
@@ -186,6 +233,11 @@ class GetActiveContractByCiNoReq {
 
   GetActiveContractByCiNoReq(this.ciNo, this.userId);
 
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
   factory GetActiveContractByCiNoReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetActiveContractByCiNoReqFromJson(srcJson);
 
@@ -219,6 +271,11 @@ class GetLoanMastListReq {
   String ciNo;
 
   GetLoanMastListReq(this.ciNo);
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 
   factory GetLoanMastListReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetLoanMastListReqFromJson(srcJson);

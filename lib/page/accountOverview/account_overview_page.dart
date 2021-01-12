@@ -5,8 +5,10 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/account_overview_repository.dart';
+import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -29,12 +31,13 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   List<CardListBal> ddList = [];
   List<TdConInfoList> tdList = [];
   List<LoanMastList> lnList = [];
+  List<String> cardNoList = [];
 
   @override
   // ignore: must_call_super
   void initState() {
     // 网络请求
-    _getAccountOverviewInfo();
+    _getCardList();
   }
 
   @override
@@ -46,7 +49,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
           elevation: 0,
         ),
         body: Container(
-          color: HsgColors.backgroundColor,
+          color: HsgColors.commonBackground,
           child: CustomScrollView(
             slivers: [
               // 总资产
@@ -321,8 +324,43 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
         ),
         Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
         Text(
-          localCcy + ' ' + totalLiabilities,
+          localCcy + ' ' + FormatUtil.formatSringToMoney(totalLiabilities),
           style: TextStyle(fontSize: 14, color: Colors.white),
+        ),
+      ],
+    );
+  }
+
+  Column _netAssets() {
+    return Column(
+      children: [
+        Text(
+          S.current.net_assets,
+          style: TextStyle(fontSize: 14, color: Colors.white54),
+        ),
+        Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
+        Text(
+          localCcy + ' ' + FormatUtil.formatSringToMoney(netAssets),
+          style: TextStyle(fontSize: 14, color: Colors.white),
+        ),
+      ],
+    );
+  }
+
+  Column _totalAssets() {
+    return Column(
+      children: [
+        Center(
+          child: Text(
+            S.current.total_assets,
+            style: TextStyle(fontSize: 14, color: Colors.white54),
+          ),
+        ),
+        Center(
+          child: Text(
+            localCcy + ' ' + FormatUtil.formatSringToMoney(totalAssets),
+            style: TextStyle(fontSize: 24, color: Colors.white),
+          ),
         ),
       ],
     );
@@ -342,39 +380,19 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     );
   }
 
-  Column _netAssets() {
-    return Column(
-      children: [
-        Text(
-          S.current.net_assets,
-          style: TextStyle(fontSize: 14, color: Colors.white54),
-        ),
-        Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
-        Text(
-          localCcy + ' ' + netAssets,
-          style: TextStyle(fontSize: 14, color: Colors.white),
-        ),
-      ],
-    );
-  }
-
-  Column _totalAssets() {
-    return Column(
-      children: [
-        Center(
-          child: Text(
-            S.current.total_assets,
-            style: TextStyle(fontSize: 14, color: Colors.white54),
-          ),
-        ),
-        Center(
-          child: Text(
-            localCcy + ' ' + totalAssets,
-            style: TextStyle(fontSize: 24, color: Colors.white),
-          ),
-        ),
-      ],
-    );
+  _getCardList() {
+    CardDataRepository().getCardList('getCardList').then((data) {
+      if (data.cardList != null) {
+        setState(() {
+          data.cardList.forEach((item) {
+            cardNoList.add(item.cardNo);
+          });
+        });
+        _getAccountOverviewInfo();
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
   }
 
   _getAccountOverviewInfo() async {
@@ -387,7 +405,8 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
 
     // 总资产
     AccountOverviewRepository()
-        .getTotalAssets(GetTotalAssetsReq(userID), 'GetTotalAssetsReq')
+        .getTotalAssets(GetTotalAssetsReq(userID, '8000000004', localCcy),
+            'GetTotalAssetsReq')
         .then((data) {
       setState(() {
         if (data.totalAssets != '0') {
@@ -407,7 +426,9 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
 
     // 活期
     AccountOverviewRepository()
-        .getCardListBalByUser('getLoanMastList')
+        .getCardListBalByUser(
+            GetCardListBalByUserReq('', localCcy, '8000000004', cardNoList),
+            'GetCardListBalByUserReq')
         .then((data) {
       if (data.cardListBal != null) {
         setState(() {
@@ -425,7 +446,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     //定期
     AccountOverviewRepository()
         .getTdConInfoList(
-            GetTdConInfoListReq(ciNo: custID), 'GetTdConInfoListReq')
+            GetTdConInfoListReq(ciNo: '8000000030'), 'GetTdConInfoListReq')
         .then((data) {
       if (data.rows != null) {
         setState(() {

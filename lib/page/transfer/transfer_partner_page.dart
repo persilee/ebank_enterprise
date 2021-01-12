@@ -341,7 +341,11 @@ class _TransferPartnerState extends State<TransferPartner> {
         if (_transferType != '') {
           Navigator.pop(context, partner);
         } else {
-          Navigator.pushNamed(context, pageInternational, arguments: partner);
+          if (partner.transferType == '0') {
+            Navigator.pushNamed(context, pageTransferInternal, arguments: partner);
+          } else if (partner.transferType == '2') {
+            Navigator.pushNamed(context, pageInternational, arguments: partner);
+          }
         }
       },
       child: Container(
