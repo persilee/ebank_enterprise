@@ -34,6 +34,7 @@ class LoanApplicationPage extends StatefulWidget {
 }
 
 class _LoanApplicationState extends State<LoanApplicationPage> {
+  List<String> _ccy = ['HKD', 'USD', 'CND']; //币种
   String _deadline = S.current.please_select; //贷款期限
   String _goal = S.current.please_select; //贷款目的
   String _currency = S.current.please_select; //币种
@@ -145,33 +146,33 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
       children: [
         //联系人
         _input(
-          S.of(context).contact,
+          S.current.contact,
           _inputText(_inputs, _contactsController),
         ),
         //联系人手机号码
         _input(
-          S.of(context).contact_phone_num,
+          S.current.contact_phone_num,
           _inputText(_inputs, _phoneController),
         ),
         //币种
         _input(
-          S.of(context).currency,
-          _inputDialog(context, ['HKD', 'USD', 'CND']),
+          S.current.currency,
+          _inputDialog(_ccy),
         ),
         //申请金额
         _input(
-          S.of(context).apply_amount,
+          S.current.apply_amount,
           _inputText(_inputs, _moneyController),
         ),
         //贷款期限
         _input(
-          S.of(context).loan_duration,
-          _inputBottom(context, S.of(context).loan_duration, _deadLineLists, 0),
+          S.current.loan_duration,
+          _inputBottom(S.current.loan_duration, _deadLineLists, 0),
         ),
         //贷款目的
         _input(
-          S.of(context).loan_purpose,
-          _inputBottom(context, S.of(context).loan_purpose, _goalLists, 1),
+          S.current.loan_purpose,
+          _inputBottom(S.current.loan_purpose, _goalLists, 1),
         ),
         //备注
         _input(
@@ -236,7 +237,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   }
 
 //文字输入框
-  Widget _inputText(String name, TextEditingController controller) {
+  Widget _inputText(String hintText, TextEditingController controller) {
     return Container(
       child: TextField(
         controller: controller,
@@ -247,7 +248,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         keyboardType: TextInputType.text,
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: name,
+          hintText: hintText,
           hintStyle: FIRST_DESCRIBE_TEXT_STYLE,
         ),
       ),
@@ -255,8 +256,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   }
 
   //底部弹窗
-  Widget _inputBottom(
-      BuildContext context, String name, List<String> list, int i) {
+  Widget _inputBottom(String name, List<String> list, int i) {
     return InkWell(
       onTap: () {
         _select(name, list, i);
@@ -289,7 +289,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   }
 
   //全局弹窗内容
-  _showDialog(BuildContext context, List<String> list) async {
+  _showDialog(List<String> list) async {
     final result = await showDialog(
       context: context,
       builder: (context) {
@@ -312,10 +312,10 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   }
 
 //全局弹窗
-  Widget _inputDialog(BuildContext context, List<String> list) {
+  Widget _inputDialog(List<String> list) {
     return InkWell(
       onTap: () {
-        _showDialog(context, list);
+        _showDialog(list);
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -400,11 +400,11 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   }
 
   //底部弹窗内容选择
-  _select(String name, List list, int i) {
+  _select(String title, List list, int i) {
     SinglePicker.showStringPicker(
       context,
       data: list,
-      title: name,
+      title: title,
       clickCallBack: (int index, var str) {
         setState(() {
           i == 0 ? _deadline = str : _goal = str;

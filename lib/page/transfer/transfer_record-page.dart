@@ -1,10 +1,9 @@
-import 'dart:ui';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///转账记录
 /// Author: fangluyao
 /// Date: 2020-12-24
 
+import 'dart:ui';
 import 'package:date_format/date_format.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
@@ -43,13 +42,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   String _startDate = DateFormat('yyyy-MM-dd 00:00:00')
       .format(DateTime(DateTime.now().year, DateTime.now().month, 1)); //开始时间
   String _start = formatDate(
-    DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      1,
-    ),
-    [yyyy, mm, dd],
-  ); //显示开始时间
+      DateTime(DateTime.now().year, DateTime.now().month, 1),
+      [yyyy, mm, dd]); //显示开始时间
   String _end = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示结束时间
   String _actualName = ""; //用户真实姓名
   bool _isButton1 = false; //交易时间第一个按钮
@@ -71,14 +65,16 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
     //滚动监听
     _controller.addListener(() {
-      if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-        if (_page < _totalPage) {
-          setState(() {
+      setState(() {
+        if (_controller.position.pixels ==
+            _controller.position.maxScrollExtent) {
+          if (_page < _totalPage) {
             _loadMore = true;
-          });
+          }
+          _page++;
+          _loadData();
         }
-        _lazyLoad();
-      }
+      });
     });
   }
 
@@ -165,7 +161,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       padding: EdgeInsets.all(20),
       child: Text(
         loadStatus,
-        style: TextStyle(fontSize: 14, color: Colors.grey),
+        style: FIRST_DESCRIBE_TEXT_STYLE,
         textAlign: TextAlign.center,
       ),
     );
@@ -173,26 +169,13 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
   //加载更多
   _loadMoreData() {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: 20),
-        ),
-        CircularProgressIndicator(
-          strokeWidth: 3.0,
-        ),
-      ],
+    return Center(
+      child: Container(
+        width: 15,
+        height: 15,
+        child: CircularProgressIndicator(),
+      ),
     );
-  }
-
-  //延迟加载
-  Future<Null> _lazyLoad() {
-    return Future.delayed(Duration(seconds: 0), () {
-      setState(() {
-        _page++;
-        _loadData();
-      });
-    });
   }
 
   //转账记录内容
