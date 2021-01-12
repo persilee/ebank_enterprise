@@ -332,7 +332,8 @@ class _TransferPartnerState extends State<TransferPartner> {
             height: 30,
           )
         : Image(
-            image: AssetImage('images/transferIcon/transfer_sample_placeholder.png'),
+            image: AssetImage(
+                'images/transferIcon/transfer_sample_placeholder.png'),
             width: 30,
             height: 30,
           );
@@ -342,7 +343,8 @@ class _TransferPartnerState extends State<TransferPartner> {
           Navigator.pop(context, partner);
         } else {
           if (partner.transferType == '0') {
-            Navigator.pushNamed(context, pageTransferInternal, arguments: partner);
+            Navigator.pushNamed(context, pageTransferInternal,
+                arguments: partner);
           } else if (partner.transferType == '2') {
             Navigator.pushNamed(context, pageInternational, arguments: partner);
           }
