@@ -109,7 +109,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       _nameInputChange(_nameController.text); //输入框内容改变时调用
     });
     _accountController.addListener(() {
-      _accountInputChange(_accountController.text); //输入框内容改变时调用
+      _accountInputChange(_accountController.text);
     });
     _loadTransferData();
   }
@@ -142,7 +142,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         context: context,
         builder: (context) {
           return HsgBottomSingleChoice(
-            title: '银行卡号',
+            title: S.current.account_lsit,
             items: cardNoList,
             lastSelectedPosition: _position,
           );
@@ -224,7 +224,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         context: context,
         builder: (context) {
           return HsgSingleChoiceDialog(
-            title: '币种选择',
+            title: S.current.currency_choice,
             items: ccyLists,
             positiveButton: '确定',
             negativeButton: '取消',
@@ -267,6 +267,15 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   @override
   Widget build(BuildContext context) {
+    var _arguments = ModalRoute.of(context).settings.arguments;
+
+    setState(() {
+      if (_arguments != null) {
+        Rows rowPartner = _arguments;
+        _nameController.text = rowPartner.payeeBankLocalName;
+        _accountController.text = rowPartner.payeeCardNo;
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.transfer_type_0),
@@ -309,7 +318,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _nameController,
               _accountController),
           //第三部分
-          TransferOtherWidget(remark, _transferInputChange),
+          TransferOtherWidget(context, remark, _transferInputChange),
 
           //提交按钮
           SliverToBoxAdapter(

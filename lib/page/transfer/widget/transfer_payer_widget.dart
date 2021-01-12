@@ -36,7 +36,7 @@ Widget TransferPayerWidget(
           _oneRow(S.current.transfer_amount, _limitMoney, singleLimit),
           //第二行
           _twoRow(ccy, _changedCcyTitle, money, S.current.int_input_tran_amount,
-              moneyChange, _getCcy),
+              moneyChange, _getCcy, context),
           Container(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
               child: Divider(
@@ -101,17 +101,23 @@ Widget _oneRow(String leftText, String rightText, String singleLimits) {
   );
 }
 
-Widget _twoRow(String ccy, String _changedCcyTitles, double money,
-    String hintText, Function moneyChanges, Function _getCcy) {
+Widget _twoRow(
+    String ccy,
+    String _changedCcyTitles,
+    double money,
+    String hintText,
+    Function moneyChanges,
+    Function _getCcy,
+    BuildContext context) {
   _changedCcyTitles = _changedCcyTitles == '' ? 'CNY' : _changedCcyTitles;
   return Container(
+    width: MediaQuery.of(context).size.width,
     color: Colors.white,
     padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
     child: Row(
       children: [
         Container(
-          width: 75,
-          height: 30,
+          width: MediaQuery.of(context).size.width / 5,
           child: FlatButton(
             onPressed: () {
               print('切换币种');
@@ -121,6 +127,7 @@ Widget _twoRow(String ccy, String _changedCcyTitles, double money,
             child: Row(
               children: [
                 Container(
+                  padding: EdgeInsets.only(right: 3),
                   child: Text(
                     _changedCcyTitles,
                     style: TextStyle(
@@ -138,14 +145,15 @@ Widget _twoRow(String ccy, String _changedCcyTitles, double money,
             ),
           ),
         ),
-        Expanded(
+        Container(
           child: Container(
-            margin: EdgeInsets.only(left: 10),
+            width: MediaQuery.of(context).size.width / 1.4,
             child: TextField(
               //是否自动更正
               autocorrect: false,
               //是否自动获得焦点
               autofocus: false,
+              textAlign: TextAlign.right,
               style: TextStyle(
                 fontSize: 18,
                 color: HsgColors.firstDegreeText,
@@ -153,12 +161,9 @@ Widget _twoRow(String ccy, String _changedCcyTitles, double money,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
               ],
-              //onSubmit
               onChanged: (money) {
                 money.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1');
-
                 moneyChanges(money);
-
                 print("这个是 onChanged 时刻在监听，输出的信息是：$money");
               },
               keyboardType: TextInputType.number,
@@ -205,6 +210,30 @@ Widget _threeRowRight(
   _changedRateTitle = _changedRateTitle == '' ? balance : _changedRateTitle;
   _changedCcyTitles = _changedCcyTitles == '' ? ccy : _changedCcyTitles;
   String account = FormatUtil.formatSpace4('$_changedAccountTitle');
+  var _getAccount = [
+    Container(
+      height: MediaQuery.of(context).size.height / 30,
+      width: MediaQuery.of(context).size.width / 1.95,
+      child: Text(
+        '$payeeBankCode  $account',
+        style: TextStyle(
+          color: HsgColors.firstDegreeText,
+          fontSize: 14,
+        ),
+        textAlign: TextAlign.left,
+      ),
+    ),
+    Container(
+      height: MediaQuery.of(context).size.height / 30,
+      alignment: Alignment.center,
+      width: MediaQuery.of(context).size.width / 20,
+      child: Icon(
+        Icons.arrow_forward_ios,
+        color: HsgColors.firstDegreeText,
+        size: 16,
+      ),
+    ),
+  ];
   return Expanded(
     child: GestureDetector(
       onTap: () {
@@ -219,33 +248,11 @@ Widget _threeRowRight(
         children: [
           //卡号
           Container(
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height / 30,
-                    width: MediaQuery.of(context).size.width / 1.95,
-                    child: Text(
-                      '$payeeBankCode  $account',
-                      style: TextStyle(
-                        color: HsgColors.firstDegreeText,
-                        fontSize: 14,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height / 30,
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width / 20,
-                    child: Icon(
-                      Icons.arrow_forward_ios,
-                      color: HsgColors.firstDegreeText,
-                      size: 16,
-                    ),
-                  ),
-                ],
-              )),
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              children: _getAccount,
+            ),
+          ),
           Container(
             height: MediaQuery.of(context).size.height / 30,
             width: MediaQuery.of(context).size.width / 2.3,

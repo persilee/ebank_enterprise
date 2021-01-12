@@ -698,7 +698,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               _selectAccount,
               _getCcy,
               _getCardTotals),
-          TransferOtherWidget('转账', _transferInputChange),
+          TransferOtherWidget(context, '转账', _transferInputChange),
           SliverToBoxAdapter(
             child: Container(
               margin: EdgeInsets.fromLTRB(30, 40, 30, 40),

@@ -50,8 +50,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   List<RemoteBankCard> cardList = [];
   List<CardBalBean> cardBal = [];
 
-  var _isLoading = false;
-
   var payeeBankCode = '';
 
   var payerBankCode = '';
@@ -87,8 +85,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   int _position = 0;
 
-  int _lastSelectedPosition = -1;
-
   String _limitMoney = '';
 
   //国家/地区
@@ -112,7 +108,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   var _feeUse = S.current.please_select;
 
-  var _payeeBank = S.current.please_select;
+  // var _payeeBank = S.current.please_select;
 
   int groupValue = 0;
 
@@ -160,7 +156,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //转账金额
   _amountInputChange(String title) {
     money = double.parse(title);
-    print('$money 11111111');
   }
 
   //付款方地址
@@ -187,7 +182,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   _nameInputChange(String name) {
     setState(() {
       payeeName = name;
-      print('>>>>>> $payeeName');
     });
   }
 
@@ -195,7 +189,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   _accountInputChange(String account) {
     setState(() {
       payeeCardNo = account;
-      print('aaaaaaaaaa $payeeCardNo');
     });
   }
 
@@ -849,9 +842,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   void _tranferInternational(BuildContext context) {
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() {});
     HSProgressHUD.show();
     TransferDataRepository()
         .getInterNationalTransfer(
@@ -863,7 +854,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                 //借方货币
                 // debitCurrency,
                 _countryText, //国家地区
-                intermediateBankSwift,
+                intermediateBankSwift, //中间行swift
                 payeeAddress,
                 payeeBankCode,
                 payeeCardNo,
@@ -881,18 +872,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       HSProgressHUD.dismiss();
       _showContractSucceedPage(context);
     }).catchError((e) {
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() {});
       HSProgressHUD.showError(status: '${e.toString()}');
     });
   }
 
   //结算成功-跳转页面
   _showContractSucceedPage(BuildContext context) async {
-    setState(() {
-      _isLoading = false;
-    });
+    setState(() {});
     Navigator.pushNamed(context, pageDepositRecordSucceed);
   }
 }
