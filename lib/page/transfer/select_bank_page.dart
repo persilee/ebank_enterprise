@@ -197,7 +197,7 @@ class _SelectBankPageState extends State<SelectBankPage> {
             height: 30,
           )
         : Image(
-            image: AssetImage('images/transferIcon/transfer_bank.png'),
+            image: AssetImage('images/transferIcon/transfer_sample_placeholder.png'),
             width: 30,
             height: 30,
           );
