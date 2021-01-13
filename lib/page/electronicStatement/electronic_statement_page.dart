@@ -32,7 +32,7 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
         elevation: 0,
       ),
       body: Container(
-        color: HsgColors.backgroundColor,
+        color: HsgColors.commonBackground,
         child: ListView.builder(
             itemCount: dataList.length,
             itemBuilder: (BuildContext context, int index) {

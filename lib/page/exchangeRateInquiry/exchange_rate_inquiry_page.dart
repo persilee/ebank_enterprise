@@ -56,7 +56,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
         centerTitle: true,
       ),
       body: Container(
-        color: HsgColors.backgroundColor,
+        color: HsgColors.commonBackground,
         child: Column(
           children: [
             Container(
@@ -83,7 +83,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
               ),
             ),
             Container(
-              color: HsgColors.backgroundColor,
+              color: HsgColors.commonBackground,
               padding: EdgeInsets.fromLTRB(18, 12, 18, 12),
               child: Text(
                 S.current.rate_notes1 + updateDate + S.current.rate_notes2,

@@ -40,7 +40,6 @@ class _LoginPageState extends State<LoginPage> {
 
   var _account = 'pengyikang'; //'18033412021';
   var _password = '0c9W7825'; //'123456';
-
   @override
   void initState() {
     super.initState();

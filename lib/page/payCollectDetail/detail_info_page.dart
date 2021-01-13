@@ -27,109 +27,89 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
         centerTitle: true,
       ),
       body: Container(
+        color: HsgColors.commonBackground,
         child: Container(
           color: Colors.white,
           padding: EdgeInsets.fromLTRB(15, 20, 17, 15),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Center(
-                child: Text(
-                  S.current.transaction_amount,
-                  style: TextStyle(fontSize: 14, color: Color(0xFF9C9C9C)),
-                ),
-              ),
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 8, bottom: 40),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Center(
                   child: Text(
-                    ddFinHist.drCrFlg == 'C'
-                        ? '+ ' + ddFinHist.txCcy + ' ' + ddFinHist.txAmt
-                        : '- ' + ddFinHist.txCcy + ' ' + ddFinHist.txAmt,
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF000000),
+                    S.current.transaction_amount,
+                    style: TextStyle(color: HsgColors.describeText),
+                  ),
+                ),
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 8, bottom: 40),
+                    child: Text(
+                      ddFinHist.drCrFlg == 'C'
+                          ? '+ ' + ddFinHist.txCcy + ' ' + ddFinHist.txAmt
+                          : '- ' + ddFinHist.txCcy + ' ' + ddFinHist.txAmt,
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w500,
+                        color: HsgColors.aboutusTextCon,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      S.current.msgId,
-                      style: TextStyle(fontSize: 14, color: Color(0xFF262626)),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 20),
-                    child: Text(
-                      ddFinHist.msgId,
-                      style: TextStyle(fontSize: 14, color: Color(0xFF9C9C9C)),
-                    ),
-                  )
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 8, bottom: 8),
-                child: Divider(height: 0.5, color: HsgColors.divider),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    S.current.transaction_account,
-                    style: TextStyle(fontSize: 14, color: Color(0xFF262626)),
-                  ),
-                  Text(
-                    ddFinHist.acNo,
-                    style: TextStyle(fontSize: 14, color: Color(0xFF9C9C9C)),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 8, bottom: 8),
-                child: Divider(height: 0.5, color: HsgColors.divider),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    S.current.transaction_time,
-                    style: TextStyle(fontSize: 14, color: Color(0xFF262626)),
-                  ),
-                  Text(
-                    ddFinHist.txDateTime,
-                    style: TextStyle(fontSize: 14, color: Color(0xFF9C9C9C)),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 8, bottom: 8),
-                child: Divider(height: 0.5, color: HsgColors.divider),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    S.current.remarks,
-                    style: TextStyle(fontSize: 14, color: Color(0xFF262626)),
-                  ),
-                  Text(
-                    ddFinHist.narrative,
-                    style: TextStyle(fontSize: 14, color: Color(0xFF9C9C9C)),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 8, bottom: 8),
-                child: Divider(height: 0.5, color: HsgColors.divider),
-              ),
-            ],
+                ContentRow(
+                  label: S.current.msgId,
+                  item: ddFinHist.msgId,
+                ),
+                ContentRow(
+                  label: S.current.transaction_account,
+                  item: ddFinHist.acNo,
+                ),
+                ContentRow(
+                  label: S.current.transaction_time,
+                  item: ddFinHist.txDateTime,
+                ),
+                ContentRow(
+                  label: S.current.remarks,
+                  item: ddFinHist.narrative,
+                ),
+              ],
+            ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ContentRow extends StatelessWidget {
+  final String label;
+  final String item;
+  ContentRow({Key key, this.label, this.item}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 38,
+      decoration: BoxDecoration(
+        border:
+            Border(bottom: BorderSide(color: HsgColors.divider, width: 0.5)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            child: Text(
+              label,
+              style: TextStyle(color: HsgColors.aboutusTextCon),
+            ),
+          ),
+          Container(
+            child: Text(
+              item != '' && item != null ? item : '',
+              style: TextStyle(color: HsgColors.describeText),
+            ),
+          ),
+        ],
       ),
     );
   }

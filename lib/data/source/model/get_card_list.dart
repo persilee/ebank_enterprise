@@ -12,9 +12,13 @@ class GetCardListResp extends Object {
   GetCardListResp(
     this.cardList,
   );
-
+  @override
+  String toString() {
+    return toJson().toString();
+  }
   factory GetCardListResp.fromJson(Map<String, dynamic> srcJson) =>
       _$GetCardListRespFromJson(srcJson);
+  
 
   Map<String, dynamic> toJson() => _$GetCardListRespToJson(this);
 }
@@ -63,6 +67,10 @@ class RemoteBankCard extends Object {
     this.own,
     this.phoneNumber,
   );
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 
   factory RemoteBankCard.fromJson(Map<String, dynamic> srcJson) =>
       _$RemoteBankCardFromJson(srcJson);

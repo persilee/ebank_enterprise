@@ -34,6 +34,7 @@ class LoanApplicationPage extends StatefulWidget {
 }
 
 class _LoanApplicationState extends State<LoanApplicationPage> {
+  List<String> _ccy = ['HKD', 'USD', 'CND']; //币种
   String _deadline = S.current.please_select; //贷款期限
   String _goal = S.current.please_select; //贷款目的
   String _currency = S.current.please_select; //币种
@@ -97,32 +98,6 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
     });
   }
 
-  //贷款申请请求
-  _reqData() {
-    String _prdtCode = "LN000008";
-    String _repaymentMethod = "EPI";
-    String _termUnit = "MONTH";
-    LoanDataRepository()
-        .getLoanApplication(
-            LoanApplicationReq(
-                _currency,
-                _custId,
-                _contactsController.text,
-                int.parse(_moneyController.text),
-                _goal,
-                _phoneController.text,
-                _prdtCode,
-                _remarkController.text,
-                _repaymentMethod,
-                _termUnit,
-                _index),
-            "getLoanApplication")
-        .then((data) {})
-        .catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,7 +107,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         elevation: 0,
       ),
       body: Container(
-        color: HsgColors.backgroundColor,
+        color: HsgColors.commonBackground,
         height: double.infinity,
         child: SingleChildScrollView(
           child: Column(
@@ -153,8 +128,11 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
               ),
               //申请按钮
               Container(
-                margin: EdgeInsets.only(top: 40),
-                child: HsgButton.button(title: "申请", click: _confirmButton()),
+                margin: EdgeInsets.only(top: 40, bottom: 20),
+                child: HsgButton.button(
+                  title: S.current.apply,
+                  click: _isButton ? _openBottomSheet : null,
+                ),
               ),
             ],
           ),
@@ -168,33 +146,33 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
       children: [
         //联系人
         _input(
-          S.of(context).contact,
+          S.current.contact,
           _inputText(_inputs, _contactsController),
         ),
         //联系人手机号码
         _input(
-          S.of(context).contact_phone_num,
+          S.current.contact_phone_num,
           _inputText(_inputs, _phoneController),
         ),
         //币种
         _input(
-          S.of(context).currency,
-          _inputDialog(context, ['HKD', 'USD', 'CND']),
+          S.current.currency,
+          _inputDialog(_ccy),
         ),
         //申请金额
         _input(
-          S.of(context).apply_amount,
+          S.current.apply_amount,
           _inputText(_inputs, _moneyController),
         ),
         //贷款期限
         _input(
-          S.of(context).loan_duration,
-          _inputBottom(context, S.of(context).loan_duration, _deadLineLists, 0),
+          S.current.loan_duration,
+          _inputBottom(S.current.loan_duration, _deadLineLists, 0),
         ),
         //贷款目的
         _input(
-          S.of(context).loan_purpose,
-          _inputBottom(context, S.of(context).loan_purpose, _goalLists, 1),
+          S.current.loan_purpose,
+          _inputBottom(S.current.loan_purpose, _goalLists, 1),
         ),
         //备注
         _input(
@@ -221,17 +199,6 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
       setState(() {
         _isButton = false;
       });
-    }
-  }
-
-  //确认按钮点击事件
-  _confirmButton() {
-    if (_isButton) {
-      return () {
-        _openBottomSheet();
-      };
-    } else {
-      return null;
     }
   }
 
@@ -270,8 +237,8 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   }
 
 //文字输入框
-  Widget _inputText(String name, TextEditingController controller) {
-    return SizedBox(
+  Widget _inputText(String hintText, TextEditingController controller) {
+    return Container(
       child: TextField(
         controller: controller,
         autocorrect: false,
@@ -281,7 +248,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         keyboardType: TextInputType.text,
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: name,
+          hintText: hintText,
           hintStyle: FIRST_DESCRIBE_TEXT_STYLE,
         ),
       ),
@@ -289,8 +256,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   }
 
   //底部弹窗
-  Widget _inputBottom(
-      BuildContext context, String name, List<String> list, int i) {
+  Widget _inputBottom(String name, List<String> list, int i) {
     return InkWell(
       onTap: () {
         _select(name, list, i);
@@ -307,8 +273,15 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
                   : Colors.black,
             ),
           ),
-          Icon(
-            Icons.keyboard_arrow_right,
+          Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Image(
+              color: HsgColors.firstDegreeText,
+              image:
+                  AssetImage('images/home/listIcon/home_list_more_arrow.png'),
+              width: 7,
+              height: 10,
+            ),
           ),
         ],
       ),
@@ -316,7 +289,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   }
 
   //全局弹窗内容
-  _showDialog(BuildContext context, List<String> list) async {
+  _showDialog(List<String> list) async {
     final result = await showDialog(
       context: context,
       builder: (context) {
@@ -339,10 +312,10 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   }
 
 //全局弹窗
-  Widget _inputDialog(BuildContext context, List<String> list) {
+  Widget _inputDialog(List<String> list) {
     return InkWell(
       onTap: () {
-        _showDialog(context, list);
+        _showDialog(list);
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -356,8 +329,15 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
                   : HsgColors.aboutusTextCon,
             ),
           ),
-          Icon(
-            Icons.keyboard_arrow_right,
+          Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Image(
+              color: HsgColors.firstDegreeText,
+              image:
+                  AssetImage('images/home/listIcon/home_list_more_arrow.png'),
+              width: 7,
+              height: 10,
+            ),
           ),
         ],
       ),
@@ -371,10 +351,12 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         Row(
           children: [
             Container(
-              padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+              padding: EdgeInsets.fromLTRB(0, 16, 0, 16),
+              width: MediaQuery.of(context).size.width / 2,
               child: Text(
                 name,
-                style: FIRST_DEGREE_TEXT_STYLE,
+                style:
+                    TextStyle(fontSize: 15, color: HsgColors.firstDegreeText),
               ),
             ),
             Expanded(
@@ -418,11 +400,11 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   }
 
   //底部弹窗内容选择
-  _select(String name, List list, int i) {
+  _select(String title, List list, int i) {
     SinglePicker.showStringPicker(
       context,
       data: list,
-      title: name,
+      title: title,
       clickCallBack: (int index, var str) {
         setState(() {
           i == 0 ? _deadline = str : _goal = str;
@@ -460,6 +442,32 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
       _reqData();
       Navigator.pushNamed(context, pageOperationResult);
     }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+
+  //贷款申请请求
+  _reqData() {
+    String _prdtCode = "LN000008";
+    String _repaymentMethod = "EPI";
+    String _termUnit = "MONTH";
+    LoanDataRepository()
+        .getLoanApplication(
+            LoanApplicationReq(
+                _currency,
+                _custId,
+                _contactsController.text,
+                int.parse(_moneyController.text),
+                _goal,
+                _phoneController.text,
+                _prdtCode,
+                _remarkController.text,
+                _repaymentMethod,
+                _termUnit,
+                _index),
+            "getLoanApplication")
+        .then((data) {})
+        .catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
   }
