@@ -19,13 +19,10 @@ class ApprovalPage extends StatefulWidget {
 
 class _ApprovalPageState extends State<ApprovalPage>
     with SingleTickerProviderStateMixin {
-  int _currentTopTabIndex;
-
   _ApprovalPageState();
   final List tabs = [
     S.current.my_to_do_list,
     S.current.authorization_history,
-    //S.current.authorization_records,
     S.current.my_application
   ];
   TabController tabController;
@@ -33,10 +30,6 @@ class _ApprovalPageState extends State<ApprovalPage>
   void initState() {
     super.initState();
     tabController = TabController(length: tabs.length, vsync: this);
-
-    // tabController.addListener(() {
-    //   _currentTopTabIndex = tabController.index;
-    // });
   }
 
   @override

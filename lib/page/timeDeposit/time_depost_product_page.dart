@@ -232,7 +232,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      debugPrint("我的存单");
+                      Navigator.pushNamed(context, pageTimeDepositRecord);
                     })),
             )
           ],

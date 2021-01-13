@@ -550,7 +550,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                     _changedInstructionTitle == S.current.hint_please_select)
                 ? null
                 : () {
-                    //_openBottomSheet();
+                    _openBottomSheet();
                     Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
                         arguments: 'timeDepositProduct');
                   },
