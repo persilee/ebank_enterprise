@@ -49,14 +49,7 @@ Widget TransferPayerWidget(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  child: Text(
-                    S.current.transfer_from,
-                    style: TextStyle(
-                        color: HsgColors.firstDegreeText, fontSize: 14),
-                  ),
-                ),
+                _threeRowLeft(context),
                 _threeRowRight(
                     context,
                     ccy,
@@ -185,6 +178,17 @@ Widget _twoRow(String ccy, String _changedCcyTitles, double money,
   );
 }
 
+Widget _threeRowLeft(BuildContext context) {
+  return Container(
+    width: MediaQuery.of(context).size.width / 2.5,
+    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+    child: Text(
+      S.current.transfer_from,
+      style: TextStyle(color: HsgColors.firstDegreeText, fontSize: 14),
+    ),
+  );
+}
+
 Widget _threeRowRight(
     BuildContext context,
     String ccy,
@@ -215,39 +219,45 @@ Widget _threeRowRight(
         children: [
           //卡号
           Container(
+              width: MediaQuery.of(context).size.width,
               child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
-                child: Text(
-                  '$payeeBankCode  $account',
-                  style: TextStyle(
-                    color: HsgColors.firstDegreeText,
-                    fontSize: 14,
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height / 30,
+                    width: MediaQuery.of(context).size.width / 1.95,
+                    child: Text(
+                      '$payeeBankCode  $account',
+                      style: TextStyle(
+                        color: HsgColors.firstDegreeText,
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
                   ),
-                ),
-              ),
-              Container(
-                child: Icon(
-                  Icons.arrow_forward_ios,
-                  color: HsgColors.firstDegreeText,
-                  size: 16,
-                ),
-              ),
-            ],
-          )),
+                  Container(
+                    height: MediaQuery.of(context).size.height / 30,
+                    alignment: Alignment.center,
+                    width: MediaQuery.of(context).size.width / 20,
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      color: HsgColors.firstDegreeText,
+                      size: 16,
+                    ),
+                  ),
+                ],
+              )),
           Container(
-            margin: EdgeInsets.only(top: 5),
-            width: MediaQuery.of(context).size.width / 3.1,
+            height: MediaQuery.of(context).size.height / 30,
+            width: MediaQuery.of(context).size.width / 2.3,
             child: Text(
-              '余额:120.05',
+              '余额:(HKD)120.05',
               // '${S.current.balance_with_value}${_changedCcyTitles} ${FormatUtil.formatSringToMoney(_changedRateTitle)}',
               // ${_changedRateTitle},
               style: TextStyle(
                 color: HsgColors.secondDegreeText,
                 fontSize: 13,
               ),
+              textAlign: TextAlign.left,
             ),
           ),
         ],

@@ -3,10 +3,20 @@
 /// Author: wangluyao
 /// Date: 2020-12-28
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/add_transfer_plan.dart';
+import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
+import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
+import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +24,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 import '../../page_route.dart';
@@ -30,12 +41,36 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   bool _switchValue = false; //判断开关按钮是否开启
   var payeeName = '';
   var payeeCardNo = '';
+  var cardNo = '';
+  var cardNoList = List<String>();
+  var payerBankCode = '';
+  var payerName = '';
+  var payerCardNo = '';
+  var totalBalance = '0.0';
+  var ccy = '';
+  var ccyListOne = List<String>();
+  var singleLimit = '';
+  var bals = [];
+  List<String> ccyLists = [];
+  List<CardBalBean> cardBal = [];
+  var ccyList = List();
+  List<String> totalBalances = [];
+  int _lastSelectedPosition = -1;
+  String _limitMoney = '';
+  String _changedRateTitle = '';
+  String _changedCcyTitle = '';
+  List<String> passwordList = []; //密码列表
+  var _payPassword = ''; //支付密码
+  int _position = 0;
+  String _changedAccountTitle = '';
   String groupValue = '0'; //预约频率对应的type值
   String remark = '';
   double money = 0;
   String cardTotals = '';
   DateTime _endValue = DateTime.now().add(Duration(days: 1)); //转账时间
   DateTime _startValue = DateTime.now().add(Duration(days: 1)); //截止日期
+  String _startTime = '';
+  String _endTime = '';
   String _start = DateFormat('yyyy-MM-dd')
       .format(DateTime.now().add(Duration(days: 1))); //显示开始时间
   String _end = DateFormat('yyyy-MM-dd').format(DateTime.now()); //显示结束时间
@@ -60,32 +95,72 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     }
   ];
 
-  Function _transferInputChange(String transfer) {
+  var tranferType;
+
+  String payeeNameForSelects;
+
+  var accountSelect = '';
+
+  _transferInputChange(String transfer) {
     remark = transfer;
   }
 
-  Function _amountInputChange(String title) {
+  _amountInputChange(String title) {
     money = double.parse(title);
   }
 
-  Function _getCardTotals(String title) {
-    cardTotals = title;
+  //选择货币方法
+  _getCcy() async {
+    final result = await showDialog(
+        context: context,
+        builder: (context) {
+          return HsgSingleChoiceDialog(
+            title: '币种选择',
+            items: ccyLists,
+            positiveButton: '确定',
+            negativeButton: '取消',
+            lastSelectedPosition: _lastSelectedPosition,
+          );
+        });
+
+    if (result != null && result != false) {
+      //货币种类
+      _changedCcyTitle = ccyList[result];
+      //余额
+      _changedRateTitle = totalBalances[result];
+    }
+
+    //加了这个可以立即显示
+    setState(() {
+      _position = result;
+    });
+    _getavaBal(_changedCcyTitle);
   }
 
-  Future<Function> _selectAccount() async {
-    setState(() {});
-  }
-
-  Future<Function> _getCcy() async {
-    setState(() {});
-  }
-
-  Function _nameInputChange(String name) {
+  _nameInputChange(String name) {
     payeeName = name;
   }
 
-  Function _accountInputChange(String account) {
+  _accountInputChange(String account) {
     payeeCardNo = account;
+  }
+
+  var _payeeNameController = TextEditingController();
+
+  var _payeeAccountController = TextEditingController();
+
+  var _payeeBankCodeController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _payeeNameController.addListener(() {
+      _nameInputChange(_payeeNameController.text); //输入框内容改变时调用
+    });
+    _payeeAccountController.addListener(() {
+      _accountInputChange(_payeeAccountController.text); //输入框内容改变时调用
+    });
+    _loadTransferData();
   }
 
   //改变groupValue为选中预约频率的type值
@@ -175,6 +250,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     return FlatButton(
       padding: EdgeInsets.all(0),
       color: btnColor,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5))),
       onPressed: () {
         updateGroupValue(btnType);
         _clear();
@@ -222,6 +299,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     setState(() {
       _endValue = DateTime.now().add(Duration(days: 1));
       _startValue = DateTime.now().add(Duration(days: 1));
+      _startTime = DateFormat('yyyy-MM-dd').format(_startValue);
+      _endTime = DateFormat('yyyy-MM-dd').format(_endValue);
       //开始时间
       if (double.parse(groupValue) > 1) {
         if (groupValue == '2') {
@@ -361,7 +440,9 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       onConfirm: (startDate, List<int> index) {
         setState(
           () {
-            _startValue = startDate;
+            _startValue = DateFormat('yyyy-MM-dd').format(startDate) == ''
+                ? _startValue
+                : startDate;
             //当选择每月转账时间的日期在当前日期前，截止日期加一月
             DateTime nextMonth = DateTime.now();
             nextMonth = startDate.isAfter(DateTime.now())
@@ -449,17 +530,22 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       onConfirm: (endDate, List<int> index) {
         setState(
           () {
-            if (double.parse(groupValue) > 1) {
-              if (groupValue == '2') {
-                _endValue =
-                    DateTime(endDate.year, endDate.month, _startValue.day);
-              } else {
-                _endValue =
-                    DateTime(endDate.year, _startValue.month, _startValue.day);
-              }
+            if (DateFormat('yyyy-MM-dd').format(endDate) == '') {
+              _endValue = _endValue;
             } else {
-              _endValue = endDate;
+              if (double.parse(groupValue) > 1) {
+                if (groupValue == '2') {
+                  _endValue =
+                      DateTime(endDate.year, endDate.month, _startValue.day);
+                } else {
+                  _endValue = DateTime(
+                      endDate.year, _startValue.month, _startValue.day);
+                }
+              } else {
+                _endValue = endDate;
+              }
             }
+
             if (i == 0) {
               if (double.parse(groupValue) > 1) {
                 if (groupValue == '2') {
@@ -490,6 +576,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
 
 //转账按钮
   Widget _transferBtn() {
+    _startTime = DateFormat('yyyy-MM-dd').format(_startValue);
+    _endTime = DateFormat('yyyy-MM-dd').format(_endValue);
     return Container(
       margin: EdgeInsets.fromLTRB(30, 40, 30, 40),
       child: ButtonTheme(
@@ -501,11 +589,12 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                     _endValue == DateTime(0, 0, 0))
                 ? null
                 : () {
-                    print("开始时间:" +
-                        DateFormat('yyyy-MM-dd 00:00:00').format(_startValue));
-                    print("结束时间:" +
-                        DateFormat('yyyy-MM-dd 23:59:59').format(_endValue));
+                    print("开始时间:" + _startTime);
+                    print("结束时间:" + _endTime);
+                    _openBottomSheet();
                   },
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             color: HsgColors.accent,
             disabledColor: HsgColors.btnDisabled,
             child: (Text(S.current.transfer,
@@ -526,9 +615,9 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           crossAxisCount: 4,
-          crossAxisSpacing: 30.0,
+          crossAxisSpacing: 5.0,
           mainAxisSpacing: 10.0,
-          childAspectRatio: 1 / 0.4,
+          childAspectRatio: 1 / 0.35,
           children: frequency.map((value) {
             return groupValue == value['type']
                 ? _chooseBtn(value['title'], value['type'], Color(0xFFDCF0FF),
@@ -603,76 +692,317 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     );
   }
 
+  Widget _getImage() {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, pageTranferPartner, arguments: '0').then(
+          (value) {
+            if (value != null) {
+              Rows rowListPartner = value;
+              _payeeNameController.text = rowListPartner.payeeName;
+              _payeeAccountController.text = rowListPartner.payeeCardNo;
+              _payeeBankCodeController.text = rowListPartner.bankCode;
+            } else {}
+          },
+        );
+      },
+      child: Image(
+        image: AssetImage('images/login/login_input_account.png'),
+        width: 20,
+        height: 20,
+      ),
+    );
+  }
+
+  //交易密码窗口
+  void _openBottomSheet() async {
+    final isPassword = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return HsgPasswordDialog(
+            title: S.current.input_password,
+          );
+        });
+    if (isPassword != null && isPassword == true) {
+      _addTransferPlan();
+      Navigator.pushNamed(context, pageDepositRecordSucceed);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(intl.S.current.open_transfer),
-          actions: <Widget>[
-            Container(
-              child: Text.rich(TextSpan(
-                  text: intl.S.current.transfer_plan,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    height: 3.0,
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigator.pushNamed(context, pageTransferRecord);
-                    })),
-            )
-          ],
-        ),
-        body: CustomScrollView(
-          slivers: <Widget>[
-            SliverToBoxAdapter(
-              child: _transferInfo(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(intl.S.current.open_transfer),
+        actions: <Widget>[
+          Container(
+            child: Text.rich(TextSpan(
+                text: intl.S.current.transfer_plan,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  height: 3.0,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Navigator.pushNamed(context, pageTransferRecord);
+                  })),
+          )
+        ],
+      ),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverToBoxAdapter(
+            child: _transferInfo(),
+          ),
+          _frequencyBtn(),
+          SliverToBoxAdapter(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: groupValue == '0'
+                  ? _once(_start, 0)
+                  : _manyTimes(_start, _end, 0, 1),
             ),
-            _frequencyBtn(),
-            SliverToBoxAdapter(
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                child: groupValue == '0'
-                    ? _once(_start, 0)
-                    : _manyTimes(_start, _end, 0, 1),
-              ),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 20,
             ),
-            TransferPayeeWidget(
-                context,
-                intl.S.current.receipt_side,
-                intl.S.current.name,
-                intl.S.current.account_num,
-                intl.S.current.please_input,
-                intl.S.current.please_input,
-                _nameInputChange,
-                _accountInputChange),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 20,
-              ),
-            ),
-            TransferPayerWidget(
-                context,
-                '5000.00',
-                'LAK',
-                '',
-                '高阳寰球500000674001',
-                'LAK',
-                '',
-                '',
-                '2351',
-                '',
-                0.0,
-                _amountInputChange,
-                _selectAccount,
-                _getCcy,
-                _getCardTotals),
-            TransferOtherWidget('转账', _transferInputChange),
-            SliverToBoxAdapter(
-              child: _transferBtn(),
-            ),
-          ],
-        ));
+          ),
+          TransferPayerWidget(
+              context,
+              _limitMoney,
+              _changedCcyTitle,
+              _changedRateTitle,
+              _changedAccountTitle,
+              ccy,
+              singleLimit,
+              totalBalance,
+              cardNo,
+              payerBankCode,
+              money,
+              _amountInputChange,
+              _selectAccount,
+              _getCcy,
+              _getCardTotals),
+          TransferPayeeWidget(
+              payeeCardNo,
+              payeeName,
+              accountSelect,
+              payeeNameForSelects,
+              _getImage,
+              context,
+              intl.S.current.receipt_side,
+              intl.S.current.company_name,
+              intl.S.current.account_num,
+              intl.S.current.please_input,
+              intl.S.current.please_input,
+              _nameInputChange,
+              _accountInputChange,
+              _payeeNameController,
+              _payeeAccountController),
+          TransferOtherWidget('', _transferInputChange),
+          SliverToBoxAdapter(
+            child: _transferBtn(),
+          ),
+        ],
+      ),
+    );
+  }
+
+//选择账号方法
+  _selectAccount() async {
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return HsgBottomSingleChoice(
+            title: '银行卡号',
+            items: cardNoList,
+            lastSelectedPosition: _position,
+          );
+        });
+    if (result != null && result != false) {
+      _changedAccountTitle = cardNoList[result];
+    }
+
+    setState(() {
+      _position = result;
+    });
+    _getCardTotals(_changedAccountTitle);
+  }
+
+  _loadTransferData() {
+    Future.wait({
+      CardDataRepository().getCardList('GetCardList'),
+    }).then((value) {
+      value.forEach((element) {
+        //通过绑定手机号查询卡列表接口POST
+        if (element is GetCardListResp) {
+          setState(() {
+            //付款方卡号
+            cardNo = element.cardList[0].cardNo;
+            element.cardList.forEach((e) {
+              cardNoList.add(e.cardNo);
+            });
+            //付款方银行名字
+            payerBankCode = element.cardList[0].ciName;
+            //付款方姓名
+            payerName = element.cardList[0].ciName;
+            //付款方卡号
+            payerCardNo = element.cardList[0].ciName;
+          });
+          _getCardTotal(cardNo);
+        }
+      });
+    });
+  }
+
+  _getCardTotal(String cardNo) {
+    Future.wait({
+      CardDataRepository()
+          .getSingleCardBal(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
+      CardDataRepository().getCardLimitByCardNo(
+          GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
+    }).then((value) {
+      value.forEach((element) {
+        // 通过卡号查询余额
+        if (element is GetSingleCardBalResp) {
+          setState(() {
+            //余额
+            totalBalance = element.cardListBal[0].avaBal;
+            ccy = element.cardListBal[0].ccy;
+
+            element.cardListBal.forEach((element) {
+              ccyListOne.clear();
+              ccyListOne.add(element.ccy);
+            });
+          });
+        }
+        //查询额度
+        else if (element is GetCardLimitByCardNoResp) {
+          setState(() {
+            //单次限额
+            singleLimit = element.singleLimit;
+          });
+        }
+      });
+    });
+  }
+
+  _addTransferPlan() {
+    Future.wait({
+      TransferDataRepository().addTransferPlan(
+          AddTransferPlanReq(
+            money,
+            '',
+            '',
+            '',
+            'HKD', // _changedCcyTitle,
+            'HKD',
+            '',
+            false,
+            _endTime,
+            0,
+            groupValue,
+            '',
+            '',
+            _payeeBankCodeController.text,
+            _payeeAccountController.text,
+            _payeeNameController.text,
+            payerBankCode,
+            _changedAccountTitle,
+            payerName,
+            '',
+            planName,
+            remark,
+            '',
+            '',
+            _startTime,
+            '0',
+          ),
+          'AddTransferPlanReq')
+    }).then((value) {
+      setState(() {
+        // Navigator.pushNamed(context, pageDepositRecordSucceed);
+      });
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+
+  _getCardTotals(String _changedAccountTitle) {
+    Future.wait({
+      CardDataRepository().getSingleCardBal(
+          GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
+      CardDataRepository().getCardLimitByCardNo(
+          GetCardLimitByCardNoReq(_changedAccountTitle),
+          'GetCardLimitByCardNoReq'),
+    }).then((value) {
+      value.forEach((element) {
+        // 通过卡号查询余额
+        if (element is GetSingleCardBalResp) {
+          setState(() {
+            bals.clear();
+            bals.addAll(element.cardListBal);
+            ccyLists.clear();
+            //通过卡号查询货币
+            //获取集合
+            List<CardBalBean> dataList = [];
+
+            for (int i = 0; i < cardBal.length; i++) {
+              CardBalBean doList = cardBal[i];
+              ccyLists.add(doList.ccy);
+
+              if (!ccyLists.contains('CNY')) {
+                CardBalBean doListNew;
+                cardBal.insert(0, doListNew);
+              }
+            }
+
+            if (!ccyLists.contains('CNY')) {
+              CardBalBean doListNew;
+              dataList.insert(0, doListNew);
+            }
+
+            dataList.forEach((element) {
+              String ccyCNY = element == null ? 'CNY' : element.ccy;
+              ccyList.add(ccyCNY);
+              String avaBAL = element == null ? '0.00' : element.avaBal;
+              totalBalances.add(avaBAL);
+            });
+            // ccyList.add(ccyLists);
+            // 添加余额
+            element.cardListBal.forEach((bals) {
+              totalBalances.add(bals.avaBal);
+            });
+          });
+        }
+        //查询额度
+        else if (element is GetCardLimitByCardNoResp) {
+          setState(() {
+            _limitMoney = element.singleLimit;
+          });
+        }
+      });
+    });
+  }
+
+  //根据货币类型拿余额
+  _getavaBal(String changedCcyTitle) {
+    Future.wait({
+      CardDataRepository().getSingleCardBal(
+          GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
+    }).then((value) {
+      value.forEach((element) {
+        // 通过货币查询余额
+        if (element is GetSingleCardBalResp) {
+          setState(() {
+            bals.clear();
+            bals.add(element.cardListBal);
+            if (bals.contains(changedCcyTitle)) {}
+          });
+        }
+      });
+    });
   }
 }

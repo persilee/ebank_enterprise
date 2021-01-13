@@ -12,19 +12,21 @@ class HsgButton {
     Function click,
   }) {
     return Container(
-      width: 300,
-      height: 50,
-      child: RaisedButton(
-        onPressed: click,
-        child: Text(
-          title,
-          style: TextStyle(fontSize: 17, color: Colors.white),
-          textAlign: TextAlign.center,
+      padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+      child: ButtonTheme(
+        minWidth: double.infinity,
+        height: 45,
+        child: RaisedButton(
+          onPressed: click,
+          child: Text(
+            title,
+            style: TextStyle(fontSize: 16, color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
+          color: HsgColors.blueTextColor,
+          disabledColor: HsgColors.btnDisabled,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         ),
-        disabledColor: HsgColors.btnDisabled,
-        color: HsgColors.btnPrimary,
-        textColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       ),
     );
   }

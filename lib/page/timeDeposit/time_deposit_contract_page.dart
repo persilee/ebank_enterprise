@@ -709,7 +709,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             'getTimeDepositContract')
         .then((value) {
       setState(() {
-        Navigator.popAndPushNamed(context, pageDepositRecordSucceed);
+        Navigator.pushNamed(context, pageDepositRecordSucceed);
       });
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());

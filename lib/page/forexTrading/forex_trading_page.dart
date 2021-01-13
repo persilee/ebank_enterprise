@@ -5,12 +5,14 @@
 
 import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -67,11 +69,13 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
               Container(
                 color: Colors.white,
                 margin: EdgeInsets.only(top: 15),
+                padding: CONTENT_PADDING,
                 child: _formColumn(),
               ),
               Container(
                 alignment: Alignment.topLeft,
-                padding: EdgeInsets.only(left: 15, top: 12),
+                margin: EdgeInsets.only(top: 12),
+                padding: CONTENT_PADDING,
                 child: Text(
                   S.current.foreign_exchange_explain,
                   style: TextStyle(
@@ -80,36 +84,19 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
                   ),
                 ),
               ),
+              //確定按鈕
               Container(
                 margin: EdgeInsets.only(top: 40),
-                padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                child: _confirmButton(),
+                child: HsgButton.button(
+                  title: S.current.confirm,
+                  click: _boolBut()
+                      ? () {
+                          _openBottomSheet();
+                        }
+                      : null,
+                ),
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  //确认按钮
-  ButtonTheme _confirmButton() {
-    return ButtonTheme(
-      minWidth: double.infinity,
-      height: 44,
-      child: FlatButton(
-        onPressed: _boolBut()
-            ? () {
-                _openBottomSheet();
-              }
-            : null,
-        color: Color(0xFF4871FF),
-        disabledColor: Color(0xFFD1D1D1),
-        child: Text(
-          S.current.confirm,
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.white,
           ),
         ),
       ),
@@ -153,7 +140,6 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         ),
         Container(
           height: 50,
-          padding: EdgeInsets.only(left: 15, right: 15),
           child: _payAmtTextField(),
         ),
         SelectInkWell(
@@ -392,10 +378,8 @@ class SelectInkWell extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 50,
-        padding: EdgeInsets.only(left: 15, right: 15),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
             border: Border(
                 bottom: BorderSide(color: HsgColors.divider, width: 0.5)),
           ),
@@ -442,10 +426,8 @@ class ItemContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      padding: EdgeInsets.only(left: 15, right: 15),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
           border:
               Border(bottom: BorderSide(color: HsgColors.divider, width: 0.5)),
         ),

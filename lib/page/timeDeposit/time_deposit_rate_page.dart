@@ -242,7 +242,6 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
                     EbankInterestRateDOList doListNew;
                     dataList.insert(1, doListNew);
                   }
-
                   if (!ccyList.contains('HKD')) {
                     EbankInterestRateDOList doListNew;
                     dataList.insert(2, doListNew);

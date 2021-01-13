@@ -19,10 +19,26 @@ class _SelectBankPageState extends State<SelectBankPage> {
   var _searchController = TextEditingController();
   var _bankList = <Banks>[];
   var _tempList = <Banks>[];
+  var _transferType = '';
+  ScrollController _scrollController = ScrollController();
+  var _showmore = false;
+  var _page = 1;
+  var _totalPage = 0;
 
   @override
   void initState() {
     super.initState();
+    //滚动监听
+    _scrollController.addListener(() {
+      setState(() {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          if (_page < _totalPage) {
+            _showmore = true;
+          }
+        }
+      });
+    });
     _loadData();
   }
 
@@ -32,8 +48,25 @@ class _SelectBankPageState extends State<SelectBankPage> {
         .then((data) {
       if (data != null) {
         setState(() {
-          _bankList.clear();
+          _totalPage = data.totalPage;
           _bankList.addAll(data.banks);
+          if (_transferType != '') {
+            for (int i = 0; i < _bankList.length; i++) {
+              //如果是国际转账或者行内转账跳过来的，只显示对应类型的的伙伴，否则显示全部
+              if (_bankList[i].bankType == _transferType) {
+                _tempList.add(_bankList[i]);
+              }
+            }
+            //要显示的条数不足10条，继续加载下一页，直到达到最大页数
+            if (_tempList.length < 10 && _page < _totalPage) {
+              _page += 1;
+              _loadData();
+            }
+          } else {
+            _tempList.addAll(_bankList);
+          }
+          _bankList.clear();
+          _bankList.addAll(_tempList);
         });
       }
     });
@@ -41,6 +74,8 @@ class _SelectBankPageState extends State<SelectBankPage> {
 
   @override
   Widget build(BuildContext context) {
+    var _arguments = ModalRoute.of(context).settings.arguments;
+    _arguments == null ? _transferType = '' : _transferType = _arguments;
     setState(() {
       if (_tempList.isEmpty) {
         _tempList.addAll(_bankList);
@@ -59,6 +94,38 @@ class _SelectBankPageState extends State<SelectBankPage> {
         child: _getlistViewList(context),
       ),
     );
+  }
+
+  //底部加载更多
+  Widget _loadMore() {
+    return _showmore
+        ? InkWell(
+            onTap: () {
+              _page += 1;
+              _loadData();
+            },
+            child: Container(
+              height: 50,
+              alignment: Alignment.center,
+              child: Text(
+                S.current.click_to_load_more,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Color(0xFFA9A8A8),
+                ),
+              ),
+            ))
+        : Container(
+            height: 50,
+            alignment: Alignment.center,
+            child: Text(
+              S.current.all_loaded,
+              style: TextStyle(
+                fontSize: 13,
+                color: Color(0xFFA9A8A8),
+              ),
+            ),
+          );
   }
 
   //搜索框(通过关键字搜索，为空则检索全部)
@@ -121,48 +188,51 @@ class _SelectBankPageState extends State<SelectBankPage> {
     );
   }
 
-  Widget _listIcon(Banks bank) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pop(context, bank);
-      },
-      child: Container(
-        padding: EdgeInsets.fromLTRB(20, 15, 20, 0),
-        color: Colors.white,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                bank.bankIcon != null
-                    ? Image.network(
-                        bank.bankIcon,
-                        width: 30,
-                        height: 30,
-                      )
-                    : Image(
-                        image:
-                            AssetImage('images/transferIcon/transfer_bank.png'),
-                        width: 30,
-                        height: 30,
-                      ),
-                Padding(
-                  padding: EdgeInsets.only(right: 20),
-                ),
-                Text(
-                  bank.localName,
-                  style: TextStyle(fontSize: 16),
-                )
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Divider(
-                height: 0,
-                color: HsgColors.textHintColor,
+  Widget _bankListIcon(Banks bank) {
+    var bankImage = bank.bankIcon != null
+        ? Image.network(
+            bank.bankIcon,
+            width: 30,
+            height: 30,
+          )
+        : Image(
+            image: AssetImage('images/transferIcon/transfer_bank.png'),
+            width: 30,
+            height: 30,
+          );
+
+    return Container(
+      color: Colors.white,
+      child: FlatButton(
+        onPressed: () {
+          Navigator.pop(context, bank);
+        },
+        child: Container(
+          padding: EdgeInsets.fromLTRB(10, 15, 10, 0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  bankImage,
+                  Padding(
+                    padding: EdgeInsets.only(right: 20),
+                  ),
+                  Text(
+                    bank.localName,
+                    style: TextStyle(fontSize: 16),
+                  )
+                ],
               ),
-            ),
-          ],
+              Padding(
+                padding: EdgeInsets.only(top: 15),
+                child: Divider(
+                  height: 0,
+                  color: HsgColors.textHintColor,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -182,12 +252,13 @@ class _SelectBankPageState extends State<SelectBankPage> {
   //生成ListView
   Widget _getlistViewList(BuildContext context) {
     List<Widget> _list = new List();
-    print(_tempList.length);
     _list.add(_getListViewBuilder(_searchIcon()));
     for (int i = 0; i < _tempList.length; i++) {
-      _list.add(_getListViewBuilder(_listIcon(_tempList[i])));
+      _list.add(_getListViewBuilder(_bankListIcon(_tempList[i])));
     }
+    _list.add(_loadMore());
     return new ListView(
+      controller: _scrollController,
       children: _list,
     );
   }

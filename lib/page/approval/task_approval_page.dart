@@ -10,6 +10,7 @@ import 'package:ebank_mobile/data/source/model/get_process_task.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/data/source/process_task_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   FocusNode focusNode = FocusNode();
   bool offstage = true; //判断签收按钮是否被点击
   // bool canBeClicked = false; //判断按钮是否可以被点击
-  bool approveResult = false; //审批结果
+  bool approveResult = true; //审批结果
   bool rejectToStart = true; //是否驳回至发起人
   String comment = ''; //审批意见
   var taskId = '';
@@ -195,10 +196,15 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
                 print('审批');
               } else if (buttonText == S.current.reject_to_sponsor) {
                 print('驳回至发起人');
-                _getTaskApproval();
+                approveResult = false;
               } else if (buttonText == S.current.reject) {
                 print('驳回');
+                approveResult = false;
               }
+              _getTaskApproval(buttonText == S.current.reject_to_sponsor
+                  ? rejectToStart
+                  : null);
+              Navigator.pushNamed(context, pageDepositRecordSucceed);
             } else {
               _alertDialog();
             }
@@ -274,8 +280,8 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
 
   @override
   Widget build(BuildContext context) {
-    Rows application = ModalRoute.of(context).settings.arguments;
-    taskId = application.processId;
+    FindUserTaskDetail application = ModalRoute.of(context).settings.arguments;
+    taskId = application.taskId;
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -383,7 +389,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
     return listWidget;
   }
 
-  void _getTaskApproval() {
+  void _getTaskApproval(bool rejectToStart) {
     Future.wait({
       NeedToBeDealtWithRepository().getMyProcessTask(
           GetProcessTaskReq(approveResult, comment, rejectToStart, taskId),

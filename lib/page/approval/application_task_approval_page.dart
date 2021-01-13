@@ -61,7 +61,7 @@ class _ApplicationTaskApprovalPageState
 
   @override
   Widget build(BuildContext context) {
-    Rows history = ModalRoute.of(context).settings.arguments;
+    MyApplicationDetail history = ModalRoute.of(context).settings.arguments;
     processId = history.processId;
     print(processId);
     return Scaffold(

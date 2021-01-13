@@ -19,44 +19,66 @@ class MyApprovalPage extends StatefulWidget {
   _MyApprovalPageState createState() => _MyApprovalPageState();
 }
 
+enum LoadingStatus { STATUS_LOADING, STATUS_COMPLETED, STATUS_IDEL }
+
 class _MyApprovalPageState extends State<MyApprovalPage> {
-  List<Rows> toDoTask = [];
-  Rows approval;
+  List<FindUserTaskDetail> toDoTask = [];
+  List<FindUserTaskDetail> list = []; //页面显示的待办列表
+  FindUserTaskDetail approval;
   ScrollController _sctrollController = ScrollController();
-  int totalPage = 0;
+  int count = 0;
   int page = 1;
-  bool _showmore = false;
+  LoadingStatus loadStatus; //加载状态
 
   void initState() {
-    //网络请求
-    _loadData(page, 20);
     super.initState();
+    //网络请求
+    _loadData(page, 10);
     _sctrollController.addListener(() {
-      setState(() {
-        if (_sctrollController.position.pixels ==
-            _sctrollController.position.maxScrollExtent) {
-          //网络请求
-          _loadData(page, 20);
-        }
-      });
+      if (_sctrollController.position.pixels ==
+          _sctrollController.position.maxScrollExtent) {
+        //加载更多
+        _getMore();
+      }
     });
   }
 
   void dispose() {
-    _sctrollController.dispose();
     super.dispose();
+    _sctrollController.dispose();
   }
 
-//显示加载状态
-  Widget _buildProgressIndicator() {
+//设置padding
+  Widget _pad(Widget widget, {l, t, r, b}) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Center(
-        child: Opacity(
-          opacity: _showmore ? 1.0 : 0.0,
-          child: CircularProgressIndicator(),
+      padding: EdgeInsets.fromLTRB(
+        l ??= 0.0,
+        t ??= 0.0,
+        r ??= 0.0,
+        b ??= 0.0,
+      ),
+      child: widget,
+    );
+  }
+
+//加载
+  Widget _loadingView() {
+    var loadingIndicator = Visibility(
+      visible: loadStatus == LoadingStatus.STATUS_LOADING ? false : true,
+      child: SizedBox(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation(Colors.blue),
         ),
       ),
+    );
+    return _pad(
+      Row(
+        children: <Widget>[loadingIndicator],
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+      ),
+      t: 20.0,
+      b: 20.0,
     );
   }
 
@@ -156,8 +178,8 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   }
 
 //待办列表
-  Widget _todoInformation(
-      Rows approval, String taskName, String startUser, String createTime) {
+  Widget _todoInformation(FindUserTaskDetail approval, String taskName,
+      String startUser, String createTime) {
     return FlatButton(
         padding: EdgeInsets.only(top: 10.0),
         onPressed: () {
@@ -181,13 +203,23 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: toDoTask.length + 1,
+      itemCount: list.length + 1,
       itemBuilder: (context, index) {
-        if (index == toDoTask.length) {
-          return _buildProgressIndicator();
+        if (index == list.length) {
+          return _loadingView();
         } else {
-          return _todoInformation(toDoTask[index], toDoTask[index].taskName,
-              toDoTask[index].startUser, toDoTask[index].createTime);
+          return Column(
+            children: <Widget>[
+              Center(
+                child: _pad(
+                  _todoInformation(list[index], list[index].taskName,
+                      list[index].startUser, list[index].createTime),
+                  t: 10.0,
+                  b: 10.0,
+                ),
+              ),
+            ],
+          );
         }
       },
       controller: _sctrollController,
@@ -195,7 +227,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   }
 
 //跳转并传值
-  void go2Detail(Rows approval) {
+  void go2Detail(FindUserTaskDetail approval) {
     Navigator.pushNamed(context, pageTaskApproval, arguments: approval);
   }
 
@@ -203,25 +235,41 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     int page,
     int pageSize,
   ) async {
-    if (!_showmore) {
+    ProcessTaskDataRepository()
+        .findUserToDoTask(
+            FindUserToDoTaskReq(page, pageSize), 'findUserToDoTask')
+        .then((data) {
+      if (data.rows != null) {
+        count = data.count;
+        setState(() {
+          toDoTask.clear();
+          toDoTask.addAll(data.rows);
+          list.addAll(toDoTask);
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+
+//加载更多
+  Future _getMore() async {
+    if (loadStatus == LoadingStatus.STATUS_IDEL) {
       setState(() {
-        _showmore = true;
-      });
-      ProcessTaskDataRepository()
-          .findUserToDoTask(
-              FindUserToDoTaskReq(page, pageSize), 'findUserToDoTask')
-          .then((data) {
-        if (data.rows != null) {
-          totalPage = data.totalPage;
-          setState(() {
-            _showmore = false;
-            toDoTask.clear();
-            toDoTask.addAll(data.rows);
-          });
-        }
-      }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
+        loadStatus = LoadingStatus.STATUS_LOADING;
       });
     }
+    if (toDoTask.length < count) {
+      _loadData(page, 10);
+    }
+    setState(() {
+      if (list.length < count) {
+        page = page + 1;
+        _loadData(page, 10);
+        loadStatus = LoadingStatus.STATUS_IDEL;
+      } else {
+        loadStatus = LoadingStatus.STATUS_COMPLETED;
+      }
+    });
   }
 }

@@ -77,6 +77,8 @@ class _TransferPartnerState extends State<TransferPartner> {
             _tempList.addAll(_partnerListData);
           }
         }
+        _partnerListData.clear();
+        _partnerListData.addAll(_tempList);
         _showmore = false;
       });
     }).catchError((e) {
@@ -302,28 +304,10 @@ class _TransferPartnerState extends State<TransferPartner> {
   //单条伙伴
   Widget _allContentRow(Rows partner) {
     var _cardNo = '';
-    //取卡号最后四位
+    //卡号格式化
     partner.payeeCardNo == null
-        ? _cardNo = ''
+        ? _cardNo = '卡号为空'
         : _cardNo = FormatUtil.formatSpace4(partner.payeeCardNo);
-
-    //备注
-    var _remarkCont = partner.remark == '' || partner.remark == null
-        ? Container()
-        : Container(
-            padding: EdgeInsets.fromLTRB(9, 2.5, 9, 2.5),
-            decoration: new BoxDecoration(
-              //背景
-              color: Color(0xFFF1F1F1),
-              //设置四周圆角 角度
-              borderRadius: BorderRadius.all(Radius.circular(4.0)),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              partner.remark,
-              style: TextStyle(fontSize: 11, color: Color(0xFFA9A9A9)),
-            ),
-          );
     //文字部分
     var _contWord = Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -352,17 +336,16 @@ class _TransferPartnerState extends State<TransferPartner> {
             width: 30,
             height: 30,
           );
-    return InkWell(
-      onTap: () {
-        if (_transferType != null) {
+    return FlatButton(
+      onPressed: () {
+        if (_transferType != '') {
           Navigator.pop(context, partner);
         } else {
           Navigator.pushNamed(context, pageInternational, arguments: partner);
         }
       },
       child: Container(
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-        color: Colors.white,
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: Column(
           children: [
             Container(
