@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/model/add_partner.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/log_util.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_single_picker.dart';
@@ -38,31 +39,31 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   var _centerSwiftController = TextEditingController();
   var _payeeAdressController = TextEditingController();
   bool _showInternational = false; //国际转账
-
+  var _alias = '';
+  var words = 20;
   @override
   void initState() {
     super.initState();
-    //备注监听器(限制5个字数)
-    _nameController.addListener(() {
-      _check();
-    });
-    _acountController.addListener(() {
-      _check();
-    });
-    _smsController.addListener(() {
-      _check();
-    });
-    _payeeAdressController.addListener(() {
-      _check();
-    });
-    //备注最多输入5个文字
+    //备注最多输入words个文字
     _aliasController.addListener(() {
       String text = _aliasController.text;
       int length = text.length;
-      if (length > 5) {
-        _aliasController.text = text.substring(0, 5);
+
+      if (length > words) {
+        _alias += text.substring(0, (length ~/ words) * words);
+
+        _aliasController.text = text.substring(words);
         _aliasController.selection =
             TextSelection.collapsed(offset: _aliasController.text.length);
+      } else if (length == 0) {
+        if (_alias != '') {
+          _aliasController.text =
+              _alias.substring(_alias.length - words, _alias.length);
+
+          _aliasController.selection =
+              TextSelection.collapsed(offset: _aliasController.text.length);
+          _alias = _alias.substring(0, _alias.length - words);
+        }
       }
     });
     //初始化
@@ -529,7 +530,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                 color: HsgColors.textHintColor,
               ),
             ),
-            onChanged: (text) {},
+            onChanged: (text) {
+              _check();
+            },
           ),
         ),
         image,
@@ -552,7 +555,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             color: HsgColors.textHintColor,
           ),
         ),
-        onChanged: (text) {},
+        onChanged: (text) {
+          _check();
+        },
       ),
     );
   }
