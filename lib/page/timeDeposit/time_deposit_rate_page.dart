@@ -156,7 +156,7 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
     );
   }
 
-//获得单个的元素
+  //获得币种单个的元素
   Widget _getBox(String name, double fontSize, double width, Color color) {
     name = name == null ? '' : name;
     return SizedBox(
@@ -169,6 +169,27 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
         ),
         child: Text(
           name,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(fontSize: fontSize, color: color),
+        ),
+      ),
+    );
+  }
+
+  //获取利率单个元素
+  Widget _getRateBox(String name, double fontSize, double width, Color color) {
+    name = name == null ? '' : name;
+    return SizedBox(
+      child: Container(
+        width: MediaQuery.of(context).size.width / 4,
+        height: MediaQuery.of(context).size.height / 13,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(width: 0.3, color: Colors.grey)),
+        ),
+        child: Text(
+          name = name != '--' ? '$name%' : '--',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(fontSize: fontSize, color: color),
@@ -194,13 +215,33 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
     );
   }
 
+  //获取利率滑动行所有数据
+  Widget _getRowRateBoxList(
+      List list, double fontSize, double width, Color color) {
+    List<Widget> _list = new List();
+    for (int i = 0; i < list.length; i++) {
+      _list.add(
+        SizedBox(
+          child: _getRateBox(list[i], fontSize, width, color),
+        ),
+      );
+    }
+    return SizedBox(
+      child: Row(
+        children: _list,
+      ),
+    );
+  }
+
   //获得所有滑动元素
   Widget _getAllBoxList(List list, double fontSize, double width, Color color) {
     List<Widget> _list = new List();
     for (int i = 0; i < list.length; i++) {
-      _list.add(SizedBox(
-        child: _getRowBoxList(list[i], fontSize, width, color),
-      ));
+      _list.add(
+        SizedBox(
+          child: _getRowRateBoxList(list[i], fontSize, width, color),
+        ),
+      );
     }
     return SizedBox(
       child: Column(

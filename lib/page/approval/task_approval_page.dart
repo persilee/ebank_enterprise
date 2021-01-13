@@ -204,7 +204,8 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
               _getTaskApproval(buttonText == S.current.reject_to_sponsor
                   ? rejectToStart
                   : null);
-              Navigator.pushNamed(context, pageDepositRecordSucceed);
+              Navigator.pushReplacementNamed(context, pageDepositRecordSucceed,
+                  arguments: 'taskApproval');
             } else {
               _alertDialog();
             }

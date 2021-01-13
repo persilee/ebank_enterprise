@@ -801,7 +801,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               _accountInputChange,
               _payeeNameController,
               _payeeAccountController),
-          TransferOtherWidget('', _transferInputChange),
+          TransferOtherWidget(context, '', _transferInputChange),
           SliverToBoxAdapter(
             child: _transferBtn(),
           ),
