@@ -5,6 +5,7 @@
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
 import 'package:ebank_mobile/config/hsg_colors.dart';
+
 // import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
 
 import 'package:ebank_mobile/page_route.dart';
@@ -21,6 +22,8 @@ class DepositContractSucceed extends StatefulWidget {
 class _DepositContractSucceed extends State<DepositContractSucceed> {
   @override
   Widget build(BuildContext context) {
+    var _arguments = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.operation_successful),
@@ -57,7 +60,14 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                 height: 45,
                 child: FlatButton(
                   onPressed: () {
-                    Navigator.popAndPushNamed(context, pageTimeDepostProduct);
+                    //行内转账跳转
+                    if (_arguments == '0') {
+                      Navigator.popAndPushNamed(context, pageTransfer);
+                    }
+                    //定期开立跳转
+                    if (_arguments == 'timeDepositProduct') {
+                      Navigator.popAndPushNamed(context, pageTimeDepostProduct);
+                    }
                   },
                   color: HsgColors.accent,
                   child: (Text(S.current.complete,
