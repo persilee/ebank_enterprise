@@ -86,10 +86,7 @@ class TextFieldContainer extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width / 2,
-            child: Text(title),
-          ),
+          Text(title),
           Expanded(
             child: TextField(
               controller: controller,
@@ -100,10 +97,7 @@ class TextFieldContainer extends StatelessWidget {
               keyboardType: keyboardType,
               decoration: InputDecoration.collapsed(
                 hintText: hintText,
-                hintStyle: TextStyle(
-                  fontSize: 14,
-                  color: HsgColors.textHintColor,
-                ),
+                hintStyle: HINET_TEXT_STYLE,
               ),
               onChanged: (text) {
                 callback();
