@@ -166,7 +166,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
               S.current.months);
           depositTerms
               .add((int.parse(producDTOList[i].auctCale) * 3).toString());
-
           break;
         case '4':
           terms.add((int.parse(producDTOList[i].auctCale) * 6).toString() +
