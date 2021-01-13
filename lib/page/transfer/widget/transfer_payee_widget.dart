@@ -120,7 +120,7 @@ Widget _fiveRowRight(Function nameChanges, String hintText, String forSelect,
         // 是否自动更正
         autocorrect: false,
         //是否自动获得焦点
-        autofocus: true,
+        autofocus: false,
         controller: _controller,
         textAlign: TextAlign.right,
         decoration: InputDecoration(

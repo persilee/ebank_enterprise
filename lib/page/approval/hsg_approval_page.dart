@@ -23,7 +23,7 @@ class _ApprovalPageState extends State<TabBarAndTopTab>
   int _currentTopTabIndex;
 
   _ApprovalPageState();
-  List tabs = [
+  final List tabs = [
     S.current.my_to_do_list,
     S.current.authorization_history,
     //S.current.authorization_records,
@@ -35,9 +35,9 @@ class _ApprovalPageState extends State<TabBarAndTopTab>
     super.initState();
     tabController = TabController(length: tabs.length, vsync: this);
 
-    tabController.addListener(() {
-      _currentTopTabIndex = tabController.index;
-    });
+    // tabController.addListener(() {
+    //   _currentTopTabIndex = tabController.index;
+    // });
   }
 
   @override
@@ -46,49 +46,56 @@ class _ApprovalPageState extends State<TabBarAndTopTab>
   }
 
 //顶部切换
-  Widget _tabBar() {
+  Widget _tabBar(BuildContext context) {
     return TabBar(
-        isScrollable: true,
-        labelStyle: TextStyle(
-            fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.black),
-        labelColor: Colors.black,
-        unselectedLabelColor: Colors.black,
-        controller: tabController,
-        indicatorWeight: 4,
-        indicatorPadding: EdgeInsets.all(20),
-        indicatorSize: TabBarIndicatorSize.label,
-        indicator: MyUnderlineTabIndicator(
-            borderSide: BorderSide(width: 3.0, color: HsgColors.accent)),
-        tabs: tabs.map((e) => Tab(text: e)).toList());
+      isScrollable: true,
+      labelStyle: TextStyle(
+          fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.black),
+      labelColor: Colors.black,
+      unselectedLabelColor: Colors.black,
+      controller: tabController,
+      indicatorWeight: 4,
+      indicatorSize: TabBarIndicatorSize.label,
+      indicator: MyUnderlineTabIndicator(
+          borderSide: BorderSide(width: 3.0, color: HsgColors.accent)),
+      tabs: tabs.map((e) => Tab(text: e)).toList(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          bottom: PreferredSize(
-              preferredSize: Size.fromHeight(52),
-              child: Material(
-                  color: Colors.white,
-                  child: Theme(
-                      data: ThemeData(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent),
-                      child: _tabBar()))),
-          centerTitle: true,
-          title: Text(
-            S.of(context).approval,
+      appBar: AppBar(
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(52),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            color: Colors.white,
+            child: Center(
+              child: Theme(
+                data: ThemeData(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent),
+                child: _tabBar(context),
+              ),
+            ),
           ),
-          elevation: 0,
         ),
-        body: TabBarView(
-          controller: tabController,
-          children: [
-            MyApprovalPage(),
-            AuthorizationHistoryPage(),
-            MyApplicationPage()
-          ],
-        ));
+        centerTitle: true,
+        title: Text(
+          S.of(context).approval,
+        ),
+        elevation: 0,
+      ),
+      body: TabBarView(
+        controller: tabController,
+        children: [
+          MyApprovalPage(),
+          AuthorizationHistoryPage(),
+          MyApplicationPage()
+        ],
+      ),
+    );
   }
 
   void dispose() {

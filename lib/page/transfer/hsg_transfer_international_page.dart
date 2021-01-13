@@ -140,6 +140,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   var _bankSwiftController = TextEditingController();
 
+  var check = false;
+
   @override
   void initState() {
     super.initState();
@@ -405,6 +407,16 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   @override
   Widget build(BuildContext context) {
+    var _arguments = ModalRoute.of(context).settings.arguments;
+
+    setState(() {
+      if (_arguments != null && !check) {
+        Rows listPartner = _arguments;
+        _companyController.text = listPartner.payeeName;
+        _accountController.text = listPartner.payeeCardNo;
+        check = false;
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.international_transfer),
