@@ -90,9 +90,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 //垂直分割线
   Widget _verticalLine() {
     return Container(
-      margin: EdgeInsets.only(top: 20, bottom: 20.0),
+      margin: EdgeInsets.only(top: 30, bottom: 20.0),
       width: 0.5,
-      height: 50,
       child: Column(
         children: [
           SizedBox(
@@ -112,11 +111,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     return Container(
       margin: EdgeInsets.only(left: 15, right: 15),
       width: (MediaQuery.of(context).size.width - 60.5) / 2,
-      height: MediaQuery.of(context).size.height / 9,
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.only(top: 5),
+            padding: EdgeInsets.only(top: 20, bottom: 15),
             child: Text(
               //上文字
               upperText,
@@ -124,17 +122,19 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
               style: TextStyle(fontSize: 13, color: HsgColors.secondDegreeText),
             ),
           ),
-          SizedBox(height: 10.0),
-          Text(
-            //下文字
-            nextText,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 18,
-                color: upperText == S.current.year_interest_rate
-                    ? Colors.red
-                    : Colors.black,
-                fontWeight: FontWeight.bold),
+          Container(
+            padding: EdgeInsets.only(bottom: 20),
+            child: Text(
+              //下文字
+              nextText,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 18,
+                  color: upperText == S.current.year_interest_rate
+                      ? Colors.red
+                      : Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),
@@ -438,7 +438,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       name = productList.engName;
     }
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _displayColumn(S.current.product_name, name),
         _verticalLine(),
