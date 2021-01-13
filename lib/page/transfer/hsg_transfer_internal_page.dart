@@ -110,14 +110,10 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
     _nameController.addListener(() {
       _nameInputChange(_nameController.text); //输入框内容改变时调用
-      // setState(() {
-      //   payeeName = _nameController.text;
-      // });
     });
     _accountController.addListener(() {
-      _accountInputChange(_accountController.text);
-      // payeeCardNo = _accountController.text;
-      print('$_accountController 000000000000000000000');
+      _accountInputChange(_accountController.text); //输入框时调用
+      print('$_accountController 000000000000000000');
     });
 
     _loadTransferData();
@@ -480,14 +476,15 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     setState(() {
       _isLoading = false;
     });
-    Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
+    Navigator.pushReplacementNamed(context, pageDepositRecordSucceed,
         arguments: '0');
+    //Navigator.of(context).pop(pageDepositRecordSucceed);
   }
 
   _isClick() {
     if (money > 0 && payeeName.length > 0 && payeeCardNo.length > 0) {
       return () {
-        _openBottomSheet();
+        // _openBottomSheet();
         _tranferAccount(context);
       };
     } else {
@@ -508,7 +505,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     if (passwordList != null) {
       if (passwordList.length == 6) {
         _payPassword = EncryptUtil.aesEncode(passwordList.join());
-        // _tranferAccount(context);
+        _tranferAccount(context);
       }
     }
   }
