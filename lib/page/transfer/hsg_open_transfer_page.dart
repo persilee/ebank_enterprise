@@ -3,11 +3,20 @@
 /// Author: wangluyao
 /// Date: 2020-12-28
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/add_transfer_plan.dart';
+import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
+import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +24,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+
+import '../../page_route.dart';
 
 class OpenTransferPage extends StatefulWidget {
   OpenTransferPage({Key key}) : super(key: key);
@@ -25,21 +37,45 @@ class OpenTransferPage extends StatefulWidget {
 }
 
 class _OpenTransferPageState extends State<OpenTransferPage> {
-  bool _switchValue = false;
+  String planName = ''; //输入的计划名称
+  bool _switchValue = false; //判断开关按钮是否开启
   var payeeName = '';
   var payeeCardNo = '';
-  String groupValue = '0';
+  var cardNo = '';
+  var cardNoList = List<String>();
+  var payerBankCode = '';
+  var payerName = '';
+  var payerCardNo = '';
+  var totalBalance = '0.0';
+  var ccy = '';
+  var ccyListOne = List<String>();
+  var singleLimit = '';
+  var bals = [];
+  List<String> ccyLists = [];
+  List<CardBalBean> cardBal = [];
+  var ccyList = List();
+  List<String> totalBalances = [];
+  int _lastSelectedPosition = -1;
+  String _limitMoney = '';
+  String _changedRateTitle = '';
+  String _changedCcyTitle = '';
+  List<String> passwordList = []; //密码列表
+  var _payPassword = ''; //支付密码
+  int _position = 0;
+  String _changedAccountTitle = '';
+  String groupValue = '0'; //预约频率对应的type值
   String remark = '';
   double money = 0;
   String cardTotals = '';
-  String time = intl.S.current.time_of_transfer;
-  DateTime _endValue = DateTime.now().add(Duration(days: 1));
-  DateTime _startValue = DateTime.now().add(Duration(days: 1));
+  DateTime _endValue = DateTime.now().add(Duration(days: 1)); //转账时间
+  DateTime _startValue = DateTime.now().add(Duration(days: 1)); //截止日期
+  String _startTime = '';
+  String _endTime = '';
   String _start = DateFormat('yyyy-MM-dd')
       .format(DateTime.now().add(Duration(days: 1))); //显示开始时间
   String _end = DateFormat('yyyy-MM-dd').format(DateTime.now()); //显示结束时间
 
-//预约频率
+  //预约频率集合
   List frequency = [
     {
       "title": intl.S.current.only_once,
@@ -73,16 +109,32 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     money = double.parse(title);
   }
 
-  _getCardTotals(String title) {
-    cardTotals = title;
-  }
-
-  _selectAccount() async {
-    setState(() {});
-  }
-
+  //选择货币方法
   _getCcy() async {
-    setState(() {});
+    final result = await showDialog(
+        context: context,
+        builder: (context) {
+          return HsgSingleChoiceDialog(
+            title: '币种选择',
+            items: ccyLists,
+            positiveButton: '确定',
+            negativeButton: '取消',
+            lastSelectedPosition: _lastSelectedPosition,
+          );
+        });
+
+    if (result != null && result != false) {
+      //货币种类
+      _changedCcyTitle = ccyList[result];
+      //余额
+      _changedRateTitle = totalBalances[result];
+    }
+
+    //加了这个可以立即显示
+    setState(() {
+      _position = result;
+    });
+    _getavaBal(_changedCcyTitle);
   }
 
   _nameInputChange(String name) {
@@ -93,33 +145,271 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     payeeCardNo = account;
   }
 
+  var _payeeNameController = TextEditingController();
+
+  var _payeeAccountController = TextEditingController();
+
+  var _payeeBankCodeController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _payeeNameController.addListener(() {
+      _nameInputChange(_payeeNameController.text); //输入框内容改变时调用
+    });
+    _payeeAccountController.addListener(() {
+      _accountInputChange(_payeeAccountController.text); //输入框内容改变时调用
+    });
+    _loadTransferData();
+  }
+
+  //改变groupValue为选中预约频率的type值
   void updateGroupValue(String v) {
     setState(() {
       groupValue = v;
     });
   }
 
-//初始化开始时间和结束时间
-  void _clear() {
+//分割线
+  Widget _line() {
+    return Container(
+      padding: EdgeInsets.only(left: 15.0, right: 15.0),
+      child: Divider(height: 0.5, color: HsgColors.divider),
+    );
+  }
+
+//右箭头
+  Widget _rightArrow() {
+    return Icon(
+      Icons.keyboard_arrow_right,
+      color: Colors.black,
+    );
+  }
+
+//左侧文本
+  Widget _leftText(String leftText) {
+    return Container(
+      width: (MediaQuery.of(context).size.width - 30) / 2,
+      margin: EdgeInsets.only(left: 15),
+      child: Text(
+        leftText,
+        style: TextStyle(color: Colors.black, fontSize: 14),
+      ),
+    );
+  }
+
+//显示选中时间
+  Widget _selectedTime(String selectedTime) {
+    return Text(
+      selectedTime,
+      style: TextStyle(fontSize: 13, color: Color(0xff262626)),
+    );
+  }
+
+//开关按钮
+  Widget _switch() {
+    return Container(
+      width: (MediaQuery.of(context).size.width - 30) / 2,
+      alignment: Alignment.centerRight,
+      child: Container(
+        width: MediaQuery.of(context).size.width / 8,
+        child: FittedBox(
+          alignment: Alignment.centerRight,
+          child: CupertinoSwitch(
+            value: _switchValue,
+            activeColor: HsgColors.blueTextColor,
+            trackColor: HsgColors.textHintColor,
+            onChanged: (value) {
+              setState(() {
+                _switchValue = value;
+              });
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+//有效期
+  Widget _termOfValidity() {
+    return Container(
+      padding: EdgeInsets.only(top: 10, bottom: 10),
+      color: Colors.white,
+      child: Row(
+        children: [
+          _leftText(intl.S.current.valid_date_short),
+          _switch(),
+        ],
+      ),
+    );
+  }
+
+//选择按钮
+  Widget _chooseBtn(
+      String btnTitle, String btnType, Color btnColor, Color textColor) {
+    return FlatButton(
+      padding: EdgeInsets.all(0),
+      color: btnColor,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5))),
+      onPressed: () {
+        updateGroupValue(btnType);
+        _clear();
+      },
+      child: Text(
+        btnTitle,
+        style: TextStyle(
+            color: textColor, fontSize: 14.0, fontWeight: FontWeight.normal),
+      ),
+    );
+  }
+
+//计划名称输入框
+  Widget _inputPlanName() {
+    return Expanded(
+      child: Container(
+        width: MediaQuery.of(context).size.width / 3,
+        margin: EdgeInsets.only(right: 15),
+        child: TextField(
+          textAlign: TextAlign.right,
+          autocorrect: false,
+          autofocus: false,
+          style: TextStyle(color: HsgColors.firstDegreeText, fontSize: 14.0),
+          onChanged: (value) {
+            print("输入的计划名称是:$value");
+            planName = value;
+          },
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.all(0),
+            border: InputBorder.none,
+            hintText: intl.S.current.hint_input_plan_name,
+            hintStyle: TextStyle(
+              color: HsgColors.hintText,
+              fontSize: 14.0,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+//初始化开始时间、结束时间、转账时间和截止日期
+  _clear() {
     setState(() {
       _endValue = DateTime.now().add(Duration(days: 1));
       _startValue = DateTime.now().add(Duration(days: 1));
-      _start = double.parse(groupValue) > 1
-          ? (groupValue == '2'
-              ? DateFormat('dd').format(DateTime.now().add(Duration(days: 1)))
-              : DateFormat('MM-dd')
-                  .format(DateTime.now().add(Duration(days: 1))))
-          : DateFormat('yyyy-MM-dd')
-              .format(DateTime.now().add(Duration(days: 1)));
-      _end = double.parse(groupValue) > 1
-          ? (groupValue == '2'
-              ? DateFormat('yyyy-MM').format(DateTime.now())
-              : DateFormat('yyyy').format(DateTime.now()))
-          : DateFormat('yyyy-MM-dd').format(DateTime.parse(_start));
+      _startTime = DateFormat('yyyy-MM-dd').format(_startValue);
+      _endTime = DateFormat('yyyy-MM-dd').format(_endValue);
+      //开始时间
+      if (double.parse(groupValue) > 1) {
+        if (groupValue == '2') {
+          _start =
+              DateFormat('dd').format(DateTime.now().add(Duration(days: 1)));
+        } else {
+          _start =
+              DateFormat('MM-dd').format(DateTime.now().add(Duration(days: 1)));
+        }
+      } else {
+        _start = DateFormat('yyyy-MM-dd')
+            .format(DateTime.now().add(Duration(days: 1)));
+      }
+      //结束时间
+      if (double.parse(groupValue) > 1) {
+        if (groupValue == '2') {
+          _end = DateFormat('yyyy-MM').format(DateTime.now());
+        } else {
+          _end = DateFormat('yyyy').format(DateTime.now());
+        }
+      } else {
+        _end = DateFormat('yyyy-MM-dd').format(DateTime.parse(_start));
+      }
     });
   }
 
-//选择开始时间
+//选择转账时间
+  Widget _transferDate(String transferDate, int i) {
+    String language = Intl.getCurrentLocale();
+    //每月、每年中英文位置
+    if (double.parse(groupValue) > 1) {
+      if (groupValue == '2') {
+        if (language == 'zh_CN') {
+          transferDate = intl.S.current.monthly_with_value + transferDate;
+        } else {
+          transferDate = transferDate + intl.S.current.monthly_with_value;
+        }
+      } else {
+        if (language == 'zh_CN') {
+          transferDate = intl.S.current.yearly_with_value + transferDate;
+        } else {
+          transferDate = transferDate + intl.S.current.yearly_with_value;
+        }
+      }
+    }
+    return Container(
+      color: Colors.white,
+      child: Row(
+        children: [
+          _leftText(groupValue == '1'
+              ? intl.S.current.first_time_of_transfer
+              : intl.S.current.time_of_transfer),
+          //选择转账时间
+          Container(
+            width: (MediaQuery.of(context).size.width - 30) / 2,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FlatButton(
+                  padding: EdgeInsets.all(0),
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      _selectedTime(transferDate),
+                      _rightArrow(),
+                    ],
+                  ),
+                  onPressed: () {
+                    _startCupertinoPicker(i, context);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+//选择截止日期
+  Widget _endDate(String endDate, int i) {
+    return Container(
+        color: Colors.white,
+        child: _switchValue == true
+            ? Row(
+                children: [
+                  _leftText(intl.S.current.deadline),
+                  Container(
+                    width: (MediaQuery.of(context).size.width - 30) / 2,
+                    child: FlatButton(
+                      color: Colors.white,
+                      padding: EdgeInsets.all(0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            _selectedTime(endDate),
+                            _rightArrow(),
+                          ]),
+                      onPressed: () {
+                        _endCupertinoPicker(i, context);
+                      },
+                    ),
+                  ),
+                ],
+              )
+            : Container());
+  }
+
+//选择开始时间弹窗
   _startCupertinoPicker(int i, BuildContext context) {
     DatePicker.showDatePicker(
       context,
@@ -133,13 +423,15 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       minDateTime: double.parse(groupValue) < 2
           ? DateTime.now().add(Duration(days: 1))
           : DateTime.parse((DateTime.now().year).toString() + '-01-01'),
-      maxDateTime: groupValue == '2'
+
+      maxDateTime: groupValue == '2' //选择每月转账时间的最大日期为每月28日
           ? DateTime.parse((DateTime.now().year).toString() +
               '-' +
               DateFormat('MM').format(DateTime.now()) +
               '-28')
           : DateTime.parse('2100-12-31'),
       initialDateTime: _startValue,
+      //选择每月转账时间只显示日，选择每年转账时间只显示月和日
       dateFormat: double.parse(groupValue) > 1
           ? (groupValue == '2' ? 'dd日' : 'MM月-dd日')
           : 'yyyy年-MM月-dd日',
@@ -148,40 +440,54 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       onConfirm: (startDate, List<int> index) {
         setState(
           () {
-            _startValue = startDate;
+            _startValue = DateFormat('yyyy-MM-dd').format(startDate) == ''
+                ? _startValue
+                : startDate;
+            //当选择每月转账时间的日期在当前日期前，截止日期加一月
             DateTime nextMonth = DateTime.now();
             nextMonth = startDate.isAfter(DateTime.now())
                 ? DateTime.now()
                 : DateTime(nextMonth.year, nextMonth.month + 1, nextMonth.day);
+            //当选择每年转账时间的日期在当前日期前，截止日期加一年
             DateTime nextYear = DateTime.now();
             nextYear = startDate.isAfter(DateTime.now())
                 ? DateTime.now()
                 : DateTime(nextYear.year + 1, nextYear.month, nextYear.day);
+            //每月开始时间只显示日，每年开始时间只显示月和日
+            if (double.parse(groupValue) > 1) {
+              if (groupValue == '2') {
+                _start = DateFormat('dd').format(startDate);
+              } else {
+                _start = DateFormat('MM-dd').format(startDate);
+              }
+            } else {
+              _start = DateFormat('yyyy-MM-dd').format(startDate);
+            }
+            //每月结束时间只显示月和日，每年结束时间只显年
+            if (double.parse(groupValue) > 1) {
+              if (groupValue == '2') {
+                _end = startDate.isAfter(DateTime.now())
+                    ? DateFormat('yyyy-MM').format(DateTime.now())
+                    : (DateFormat('yyyy-MM').format(nextMonth));
+              } else {
+                _end = startDate.isAfter(DateTime.now())
+                    ? DateFormat('yyyy').format(DateTime.now())
+                    : DateFormat('yyyy').format(nextYear);
+              }
+            } else {
+              _end = DateFormat('yyyy-MM-dd').format(startDate);
+            }
 
-            _start = double.parse(groupValue) > 1
-                ? (groupValue == '2'
-                    ? DateFormat('dd').format(startDate)
-                    : DateFormat('MM-dd').format(startDate))
-                : DateFormat('yyyy-MM-dd').format(startDate);
-            _end = double.parse(groupValue) > 1
-                ? (groupValue == '2'
-                    ? ((startDate.isAfter(DateTime.now()))
-                        ? DateFormat('yyyy-MM').format(DateTime.now())
-                        : (DateFormat('yyyy-MM').format(nextMonth)))
-                    : (startDate.isAfter(DateTime.now())
-                        ? DateFormat('yyyy').format(DateTime.now())
-                        : DateFormat('yyyy').format(nextYear)))
-                : DateFormat('yyyy-MM-dd').format(startDate);
             if (groupValue == '0') {
-              _endValue = _startValue;
+              _endValue = _startValue; //仅1次转账时间等于截止日期
             } else if (groupValue == '2') {
               _endValue = (startDate.isAfter(DateTime.now()))
-                  ? DateTime.now()
-                  : nextMonth;
+                  ? DateTime.now() //当选择每月转账时间的日期在当前日期前，
+                  : nextMonth; //截止日期加一月
             } else if (groupValue == '3') {
               _endValue = (startDate.isAfter(DateTime.now()))
-                  ? DateTime.now()
-                  : nextYear;
+                  ? DateTime.now() //当选择每年转账时间的日期在当前日期前，
+                  : nextYear; //截止日期加一年
             }
           },
         );
@@ -190,14 +496,14 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     );
   }
 
-//选择结束时间
+//选择结束时间弹窗
   _endCupertinoPicker(int i, BuildContext context) {
-    print(_start);
+    //当选择每月转账时间的日期在当前日期前，截止日期加一月
     DateTime nextMonth = DateTime.now();
     nextMonth = _startValue.isAfter(DateTime.now())
         ? DateTime.now()
         : DateTime(nextMonth.year, nextMonth.month + 1, nextMonth.day);
-
+//当选择每年转账时间的日期在当前日期前，截止日期加一年
     DateTime nextYear = DateTime.now();
     nextYear = _startValue.isAfter(DateTime.now())
         ? DateTime.now()
@@ -224,24 +530,43 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       onConfirm: (endDate, List<int> index) {
         setState(
           () {
-            _endValue = double.parse(groupValue) > 1
-                ? ((groupValue == '2'
-                    ? DateTime(endDate.year, endDate.month, _startValue.day)
-                    : DateTime(
-                        endDate.year, _startValue.month, _startValue.day)))
-                : endDate;
+            if (DateFormat('yyyy-MM-dd').format(endDate) == '') {
+              _endValue = _endValue;
+            } else {
+              if (double.parse(groupValue) > 1) {
+                if (groupValue == '2') {
+                  _endValue =
+                      DateTime(endDate.year, endDate.month, _startValue.day);
+                } else {
+                  _endValue = DateTime(
+                      endDate.year, _startValue.month, _startValue.day);
+                }
+              } else {
+                _endValue = endDate;
+              }
+            }
 
-            i == 0
-                ? _start = double.parse(groupValue) > 1
-                    ? (groupValue == '2'
-                        ? DateFormat('dd').format(_startValue)
-                        : DateFormat('MM-dd').format(_startValue))
-                    : DateFormat('yyyy-MM-dd').format(_startValue)
-                : _end = double.parse(groupValue) > 1
-                    ? (groupValue == '2'
-                        ? DateFormat('yyyy-MM').format(endDate)
-                        : DateFormat('yyyy').format(endDate))
-                    : DateFormat('yyyy-MM-dd').format(endDate);
+            if (i == 0) {
+              if (double.parse(groupValue) > 1) {
+                if (groupValue == '2') {
+                  _start = DateFormat('dd').format(_startValue);
+                } else {
+                  _start = DateFormat('MM-dd').format(_startValue);
+                }
+              } else {
+                _start = DateFormat('yyyy-MM-dd').format(_startValue);
+              }
+            } else {
+              if (double.parse(groupValue) > 1) {
+                if (groupValue == '2') {
+                  _end = DateFormat('yyyy-MM').format(endDate);
+                } else {
+                  _end = DateFormat('yyyy').format(endDate);
+                }
+              } else {
+                _end = DateFormat('yyyy-MM-dd').format(endDate);
+              }
+            }
           },
         );
         (context as Element).markNeedsBuild();
@@ -249,241 +574,86 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     );
   }
 
+//转账按钮
+  Widget _transferBtn() {
+    _startTime = DateFormat('yyyy-MM-dd').format(_startValue);
+    _endTime = DateFormat('yyyy-MM-dd').format(_endValue);
+    return Container(
+      margin: EdgeInsets.fromLTRB(30, 40, 30, 40),
+      child: ButtonTheme(
+          minWidth: 5,
+          height: 45,
+          child: FlatButton(
+            onPressed: (planName == '' ||
+                    _startValue == DateTime(0, 0, 0) ||
+                    _endValue == DateTime(0, 0, 0))
+                ? null
+                : () {
+                    print("开始时间:" + _startTime);
+                    print("结束时间:" + _endTime);
+                    _openBottomSheet();
+                  },
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            color: HsgColors.accent,
+            disabledColor: HsgColors.btnDisabled,
+            child: (Text(S.current.transfer,
+                style: TextStyle(color: Colors.white))),
+          )),
+    );
+  }
+
+//选择频率按钮
+  Widget _frequencyBtn() {
+    return SliverToBoxAdapter(
+      child: Container(
+        color: Colors.white,
+        padding: EdgeInsets.only(bottom: 15),
+        child: GridView.count(
+          padding: EdgeInsets.only(left: 15, right: 15),
+          scrollDirection: Axis.vertical,
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          crossAxisCount: 4,
+          crossAxisSpacing: 5.0,
+          mainAxisSpacing: 10.0,
+          childAspectRatio: 1 / 0.35,
+          children: frequency.map((value) {
+            return groupValue == value['type']
+                ? _chooseBtn(value['title'], value['type'], Color(0xFFDCF0FF),
+                    HsgColors.accent)
+                : _chooseBtn(value['title'], value['type'], Color(0xFFF3F3F3),
+                    Color(0xFF868686));
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
 //仅一次时间选择
-  Widget _once(String name, int i, BuildContext context) {
+  Widget _once(String startTime, int i) {
     return Column(
       children: [
-        Container(
-          padding: EdgeInsets.only(left: 15.0, right: 15.0),
-          child: Divider(height: 0.5, color: HsgColors.divider),
-        ),
-        Container(
-          color: Colors.white,
-          width: MediaQuery.of(context).size.width,
-          child: Row(
-            children: [
-              Container(
-                //width: 215,
-                width: MediaQuery.of(context).size.width / 5,
-                margin: EdgeInsets.only(left: 15),
-                child: Text(
-                  intl.S.current.time_of_transfer,
-                  style: TextStyle(color: Colors.black, fontSize: 14),
-                ),
-              ),
-              //选择转账时间
-              Container(
-                margin: EdgeInsets.all(5),
-                width: MediaQuery.of(context).size.width / 1.4,
-                // width: 150,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FlatButton(
-                      color: Colors.white,
-                      child: Row(
-                        children: [
-                          Text(
-                            name,
-                            style: TextStyle(
-                                fontSize: 13, color: Color(0xff262626)),
-                          ),
-                          Container(
-                            width: 8,
-                            height: 7,
-                            margin: EdgeInsets.only(bottom: 20),
-                            child: Icon(
-                              Icons.keyboard_arrow_right,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                      onPressed: () {
-                        _startCupertinoPicker(i, context);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 15.0, right: 15.0),
-          child: Divider(height: 0.5, color: HsgColors.divider),
-        ),
+        _line(),
+        _transferDate(startTime, i),
+        _line(),
       ],
     );
   }
 
 //每日、每月、每年时间选择
-  Widget _manyTimes(
-      String startTime, String endTime, int i, int j, BuildContext context) {
-    String language = Intl.getCurrentLocale();
+  Widget _manyTimes(String startTime, String endTime, int i, int j) {
     return Column(
       children: [
-        Container(
-          padding: EdgeInsets.only(left: 15.0, right: 15.0),
-          child: Divider(height: 0.5, color: HsgColors.divider),
-        ),
+        _line(),
         //选择转账时间
-        Container(
-          color: Colors.white,
-          child: Row(
-            children: [
-              Container(
-                width: 215,
-                margin: EdgeInsets.only(left: 15),
-                child: Text(
-                  groupValue == '1'
-                      ? intl.S.current.first_time_of_transfer
-                      : time,
-                  style: TextStyle(color: Colors.black, fontSize: 14),
-                ),
-              ),
-              Container(
-                width: 150,
-                margin: EdgeInsets.all(5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FlatButton(
-                      color: Colors.white,
-                      child: Row(
-                        children: [
-                          Text(
-                            double.parse(groupValue) > 1
-                                ? (groupValue == '2'
-                                    ? (language == 'zh_CN'
-                                        ? intl.S.current.monthly_with_value +
-                                            startTime
-                                        : startTime +
-                                            intl.S.current.monthly_with_value)
-                                    : (language == 'zh_CN'
-                                        ? intl.S.current.yearly_with_value +
-                                            startTime
-                                        : startTime +
-                                            intl.S.current.yearly_with_value))
-                                : startTime,
-                            style: TextStyle(
-                                fontSize: 13, color: Color(0xff262626)),
-                          ),
-                          Container(
-                            width: 8,
-                            height: 7,
-                            margin: EdgeInsets.only(bottom: 20),
-                            child: Icon(
-                              Icons.keyboard_arrow_right,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                      onPressed: () {
-                        _startCupertinoPicker(i, context);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 15.0, right: 15.0),
-          child: Divider(height: 0.5, color: HsgColors.divider),
-        ),
+        _transferDate(startTime, i),
+        _line(),
         //有效期
-        Container(
-          padding: EdgeInsets.only(top: 5, bottom: 5),
-          color: Colors.white,
-          child: Row(
-            children: [
-              Container(
-                width: 270,
-                margin: EdgeInsets.only(left: 15),
-                child: Text(
-                  intl.S.current.valid_date_short,
-                  style: TextStyle(color: Colors.black, fontSize: 14),
-                ),
-              ),
-              Container(
-                width: 100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Transform.scale(
-                      scale: 0.7,
-                      child: CupertinoSwitch(
-                        value: _switchValue,
-                        activeColor: HsgColors.blueTextColor,
-                        trackColor: HsgColors.textHintColor,
-                        onChanged: (value) {
-                          setState(() {
-                            _switchValue = value;
-                          });
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 15.0, right: 15.0),
-          child: Divider(height: 0.5, color: HsgColors.divider),
-        ),
+        _termOfValidity(),
+        _line(),
         //选择截止日期
-        Container(
-            color: Colors.white,
-            child: _switchValue == true
-                ? Row(
-                    children: [
-                      Container(
-                        width: 215,
-                        margin: EdgeInsets.only(left: 15),
-                        child: Text(
-                          intl.S.current.deadline,
-                          style: TextStyle(color: Colors.black, fontSize: 14),
-                        ),
-                      ),
-                      Container(
-                        width: 150,
-                        margin: EdgeInsets.all(5),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            FlatButton(
-                              color: Colors.white,
-                              child: Row(children: [
-                                Text(
-                                  endTime,
-                                  style: TextStyle(
-                                      fontSize: 13, color: Color(0xff262626)),
-                                ),
-                                Container(
-                                  width: 8,
-                                  height: 7,
-                                  margin: EdgeInsets.only(bottom: 20),
-                                  child: Icon(
-                                    Icons.keyboard_arrow_right,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ]),
-                              onPressed: () {
-                                _endCupertinoPicker(j, context);
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-                : Container()),
+        _endDate(endTime, j),
       ],
     );
   }
@@ -497,48 +667,15 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.only(left: 15.0),
             child: Row(
               children: [
                 //计划名称
-                Container(
-                  child: Text(
-                    intl.S.current.plan_name,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.black, fontSize: 14.0),
-                  ),
-                ),
-                Expanded(
-                    child: Container(
-                  margin: EdgeInsets.only(right: 15),
-                  child: TextField(
-                    textAlign: TextAlign.right,
-                    autocorrect: false,
-                    autofocus: false,
-                    style: TextStyle(
-                        color: HsgColors.firstDegreeText, fontSize: 14.0),
-                    onChanged: (value) {
-                      print("输入的计划名称是:$value");
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(0),
-                      border: InputBorder.none,
-                      hintText: intl.S.current.hint_input_plan_name,
-                      hintStyle: TextStyle(
-                        color: HsgColors.hintText,
-                        fontSize: 14.0,
-                      ),
-                    ),
-                  ),
-                )),
+                _leftText(intl.S.current.plan_name),
+                _inputPlanName(),
               ],
             ),
           ),
-          Container(
-            padding: EdgeInsets.only(left: 15.0, right: 15.0),
-            child: Divider(height: 0.5, color: HsgColors.divider),
-          ),
+          _line(),
           //预约频率
           Container(
             padding: EdgeInsets.all(15),
@@ -558,16 +695,14 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   Widget _getImage() {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, pageTranferPartner, arguments: tranferType)
-            .then(
+        Navigator.pushNamed(context, pageTranferPartner, arguments: '0').then(
           (value) {
             if (value != null) {
               Rows rowListPartner = value;
-              payeeNameForSelects = rowListPartner.payeeName;
-              accountSelect = rowListPartner.payeeCardNo;
-            } else {
-              //  var playInput = 'kkkkkkkkkkkkkkkkkk';
-            }
+              _payeeNameController.text = rowListPartner.payeeName;
+              _payeeAccountController.text = rowListPartner.payeeCardNo;
+              _payeeBankCodeController.text = rowListPartner.bankCode;
+            } else {}
           },
         );
       },
@@ -577,6 +712,21 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
         height: 20,
       ),
     );
+  }
+
+  //交易密码窗口
+  void _openBottomSheet() async {
+    final isPassword = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return HsgPasswordDialog(
+            title: S.current.input_password,
+          );
+        });
+    if (isPassword != null && isPassword == true) {
+      _addTransferPlan();
+      Navigator.pushNamed(context, pageDepositRecordSucceed);
+    }
   }
 
   @override
@@ -595,7 +745,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    debugPrint(intl.S.current.transfer_plan);
+                    Navigator.pushNamed(context, pageTransferRecord);
                   })),
           )
         ],
@@ -605,119 +755,254 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           SliverToBoxAdapter(
             child: _transferInfo(),
           ),
+          _frequencyBtn(),
           SliverToBoxAdapter(
             child: Container(
               width: MediaQuery.of(context).size.width,
-              color: Colors.white,
-              padding: EdgeInsets.only(bottom: 15),
-              child: GridView.count(
-                padding: EdgeInsets.only(left: 15, right: 15),
-                scrollDirection: Axis.vertical,
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                crossAxisCount: 4,
-                crossAxisSpacing: 30.0,
-                mainAxisSpacing: 10.0,
-                childAspectRatio: 1 / 0.4,
-                children: frequency.map((value) {
-                  return groupValue == value['type']
-                      ? FlatButton(
-                          padding: EdgeInsets.all(0),
-                          color: Color(0xFFDCF0FF),
-                          onPressed: () {
-                            print('切换$value');
-                            updateGroupValue(value['type']);
-                          },
-                          child: Text(
-                            value['title'],
-                            style: TextStyle(
-                                color: HsgColors.accent,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.normal),
-                          ),
-                        )
-                      : FlatButton(
-                          padding: EdgeInsets.all(0),
-                          onPressed: () {
-                            print('切换${value}');
-                            updateGroupValue(value['type']);
-                            _clear();
-                          },
-                          color: Color(0xFFF3F3F3),
-                          child: Text(
-                            value['title'],
-                            style: TextStyle(
-                                color: Color(0xFF868686),
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.normal),
-                          ),
-                        );
-                }).toList(),
-              ),
+              child: groupValue == '0'
+                  ? _once(_start, 0)
+                  : _manyTimes(_start, _end, 0, 1),
             ),
           ),
           SliverToBoxAdapter(
-              child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: groupValue == '0'
-                ? _once(_start, 0, context)
-                : _manyTimes(_start, _end, 0, 1, context),
-          )),
-          TransferPayeeWidget(
-              payeeCardNo,
-              payeeName,
-              accountSelect,
-              payeeName,
-              _getImage,
-              context,
-              intl.S.current.receipt_side,
-              intl.S.current.name,
-              intl.S.current.account_num,
-              intl.S.current.please_input,
-              intl.S.current.please_input,
-              _nameInputChange,
-              _accountInputChange),
-          SliverToBoxAdapter(
-            child: Container(
+            child: SizedBox(
               height: 20,
             ),
           ),
           TransferPayerWidget(
               context,
-              '5000.00',
-              'LAK',
-              '',
-              '高阳寰球500000674001',
-              'LAK',
-              '',
-              '',
-              '2351',
-              '',
-              0.0,
+              _limitMoney,
+              _changedCcyTitle,
+              _changedRateTitle,
+              _changedAccountTitle,
+              ccy,
+              singleLimit,
+              totalBalance,
+              cardNo,
+              payerBankCode,
+              money,
               _amountInputChange,
               _selectAccount,
               _getCcy,
               _getCardTotals),
-          TransferOtherWidget(context, '转账', _transferInputChange),
+          TransferPayeeWidget(
+              payeeCardNo,
+              payeeName,
+              accountSelect,
+              payeeNameForSelects,
+              _getImage,
+              context,
+              intl.S.current.receipt_side,
+              intl.S.current.company_name,
+              intl.S.current.account_num,
+              intl.S.current.please_input,
+              intl.S.current.please_input,
+              _nameInputChange,
+              _accountInputChange,
+              _payeeNameController,
+              _payeeAccountController),
+          TransferOtherWidget(context, '', _transferInputChange),
           SliverToBoxAdapter(
-            child: Container(
-              margin: EdgeInsets.fromLTRB(30, 40, 30, 40),
-              child: ButtonTheme(
-                minWidth: 5,
-                height: 45,
-                child: FlatButton(
-                  onPressed: () {
-                    print("开始时间:{$_startValue}");
-                    print("结束时间:{$_endValue}");
-                  },
-                  color: HsgColors.accent,
-                  child: (Text('转账', style: TextStyle(color: Colors.white))),
-                ),
-              ),
-            ),
+            child: _transferBtn(),
           ),
         ],
       ),
     );
+  }
+
+//选择账号方法
+  _selectAccount() async {
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return HsgBottomSingleChoice(
+            title: '银行卡号',
+            items: cardNoList,
+            lastSelectedPosition: _position,
+          );
+        });
+    if (result != null && result != false) {
+      _changedAccountTitle = cardNoList[result];
+    }
+
+    setState(() {
+      _position = result;
+    });
+    _getCardTotals(_changedAccountTitle);
+  }
+
+  _loadTransferData() {
+    Future.wait({
+      CardDataRepository().getCardList('GetCardList'),
+    }).then((value) {
+      value.forEach((element) {
+        //通过绑定手机号查询卡列表接口POST
+        if (element is GetCardListResp) {
+          setState(() {
+            //付款方卡号
+            cardNo = element.cardList[0].cardNo;
+            element.cardList.forEach((e) {
+              cardNoList.add(e.cardNo);
+            });
+            //付款方银行名字
+            payerBankCode = element.cardList[0].ciName;
+            //付款方姓名
+            payerName = element.cardList[0].ciName;
+            //付款方卡号
+            payerCardNo = element.cardList[0].ciName;
+          });
+          _getCardTotal(cardNo);
+        }
+      });
+    });
+  }
+
+  _getCardTotal(String cardNo) {
+    Future.wait({
+      CardDataRepository()
+          .getSingleCardBal(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
+      CardDataRepository().getCardLimitByCardNo(
+          GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
+    }).then((value) {
+      value.forEach((element) {
+        // 通过卡号查询余额
+        if (element is GetSingleCardBalResp) {
+          setState(() {
+            //余额
+            totalBalance = element.cardListBal[0].avaBal;
+            ccy = element.cardListBal[0].ccy;
+
+            element.cardListBal.forEach((element) {
+              ccyListOne.clear();
+              ccyListOne.add(element.ccy);
+            });
+          });
+        }
+        //查询额度
+        else if (element is GetCardLimitByCardNoResp) {
+          setState(() {
+            //单次限额
+            singleLimit = element.singleLimit;
+          });
+        }
+      });
+    });
+  }
+
+  _addTransferPlan() {
+    Future.wait({
+      TransferDataRepository().addTransferPlan(
+          AddTransferPlanReq(
+            money,
+            '',
+            '',
+            '',
+            'HKD', // _changedCcyTitle,
+            'HKD',
+            '',
+            false,
+            _endTime,
+            0,
+            groupValue,
+            '',
+            '',
+            _payeeBankCodeController.text,
+            _payeeAccountController.text,
+            _payeeNameController.text,
+            payerBankCode,
+            _changedAccountTitle,
+            payerName,
+            '',
+            planName,
+            remark,
+            '',
+            '',
+            _startTime,
+            '0',
+          ),
+          'AddTransferPlanReq')
+    }).then((value) {
+      setState(() {
+        // Navigator.pushNamed(context, pageDepositRecordSucceed);
+      });
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+
+  _getCardTotals(String _changedAccountTitle) {
+    Future.wait({
+      CardDataRepository().getSingleCardBal(
+          GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
+      CardDataRepository().getCardLimitByCardNo(
+          GetCardLimitByCardNoReq(_changedAccountTitle),
+          'GetCardLimitByCardNoReq'),
+    }).then((value) {
+      value.forEach((element) {
+        // 通过卡号查询余额
+        if (element is GetSingleCardBalResp) {
+          setState(() {
+            bals.clear();
+            bals.addAll(element.cardListBal);
+            ccyLists.clear();
+            //通过卡号查询货币
+            //获取集合
+            List<CardBalBean> dataList = [];
+
+            for (int i = 0; i < cardBal.length; i++) {
+              CardBalBean doList = cardBal[i];
+              ccyLists.add(doList.ccy);
+
+              if (!ccyLists.contains('CNY')) {
+                CardBalBean doListNew;
+                cardBal.insert(0, doListNew);
+              }
+            }
+
+            if (!ccyLists.contains('CNY')) {
+              CardBalBean doListNew;
+              dataList.insert(0, doListNew);
+            }
+
+            dataList.forEach((element) {
+              String ccyCNY = element == null ? 'CNY' : element.ccy;
+              ccyList.add(ccyCNY);
+              String avaBAL = element == null ? '0.00' : element.avaBal;
+              totalBalances.add(avaBAL);
+            });
+            // ccyList.add(ccyLists);
+            // 添加余额
+            element.cardListBal.forEach((bals) {
+              totalBalances.add(bals.avaBal);
+            });
+          });
+        }
+        //查询额度
+        else if (element is GetCardLimitByCardNoResp) {
+          setState(() {
+            _limitMoney = element.singleLimit;
+          });
+        }
+      });
+    });
+  }
+
+  //根据货币类型拿余额
+  _getavaBal(String changedCcyTitle) {
+    Future.wait({
+      CardDataRepository().getSingleCardBal(
+          GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
+    }).then((value) {
+      value.forEach((element) {
+        // 通过货币查询余额
+        if (element is GetSingleCardBalResp) {
+          setState(() {
+            bals.clear();
+            bals.add(element.cardListBal);
+            if (bals.contains(changedCcyTitle)) {}
+          });
+        }
+      });
+    });
   }
 }

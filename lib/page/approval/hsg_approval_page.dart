@@ -8,17 +8,16 @@ import 'package:ebank_mobile/feature_demo/my_tab_indicator.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/approval/authorization_history_page.dart';
 import 'package:flutter/material.dart';
-
 import 'my_appplication_page.dart';
 import 'my_approval_page.dart';
 
-class TabBarAndTopTab extends StatefulWidget {
-  TabBarAndTopTab();
+class ApprovalPage extends StatefulWidget {
+  ApprovalPage();
   @override
   _ApprovalPageState createState() => _ApprovalPageState();
 }
 
-class _ApprovalPageState extends State<TabBarAndTopTab>
+class _ApprovalPageState extends State<ApprovalPage>
     with SingleTickerProviderStateMixin {
   int _currentTopTabIndex;
 

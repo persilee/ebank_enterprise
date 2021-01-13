@@ -476,7 +476,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     setState(() {
       _isLoading = false;
     });
-    Navigator.pushReplacementNamed(context, pageDepositRecordSucceed,
+    Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
         arguments: '0');
     //Navigator.of(context).pop(pageDepositRecordSucceed);
   }

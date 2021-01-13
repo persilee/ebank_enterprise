@@ -63,12 +63,17 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                     //行内转账跳转
                     //pageTransfer
                     if (_arguments == '0') {
-                      Navigator.of(context).pushNamed(pageTransferInternal);
+                      Navigator.of(context)
+                          .pushReplacementNamed(pageTransferInternal);
                     }
                     //定期开立跳转
                     if (_arguments == 'timeDepositProduct') {
                       Navigator.pushReplacementNamed(
                           context, pageTimeDepostProduct);
+                    }
+                    //任务审批跳转
+                    if (_arguments == 'taskApproval') {
+                      Navigator.pop(context);
                     }
                   },
                   color: HsgColors.accent,

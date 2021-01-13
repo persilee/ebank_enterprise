@@ -4,6 +4,7 @@
 /// Date: 2020-12-08
 
 import 'package:ebank_mobile/data/source/model/add_partner.dart';
+import 'package:ebank_mobile/data/source/model/add_transfer_plan.dart';
 import 'package:ebank_mobile/data/source/model/delete_partner.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
@@ -50,6 +51,13 @@ class TransferDataRepository {
       GetInternationalTransferReq req, String tag) {
     return request('/ddep/transfer/doInternationalTransfer', req, tag,
         (data) => InternationalTransferResp.fromJson(data));
+  }
+
+  //预约转账
+  Future<AddTransferPlanResp> addTransferPlan(
+      AddTransferPlanReq req, String tag) {
+    return request('/ddep/transferPlan/addTransferPlan', req, tag,
+        (data) => AddTransferPlanResp.fromJson(data));
   }
 
   static final _instance = TransferDataRepository._internal();

@@ -7,10 +7,9 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_styles.dart';
 import 'package:ebank_mobile/data/source/model/find_user_to_do_task.dart';
 import 'package:ebank_mobile/data/source/process_task_data_repository.dart';
-import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../../page_route.dart';
 
 class MyApprovalPage extends StatefulWidget {
@@ -20,163 +19,214 @@ class MyApprovalPage extends StatefulWidget {
   _MyApprovalPageState createState() => _MyApprovalPageState();
 }
 
+enum LoadingStatus { STATUS_LOADING, STATUS_COMPLETED, STATUS_IDEL }
+
 class _MyApprovalPageState extends State<MyApprovalPage> {
-  List<FindUserTaskDetail> row = [];
+  List<FindUserTaskDetail> toDoTask = [];
+  List<FindUserTaskDetail> list = []; //页面显示的待办列表
+  FindUserTaskDetail approval;
+  ScrollController _sctrollController = ScrollController();
+  int count = 0;
+  int page = 1;
+  LoadingStatus loadStatus; //加载状态
 
   void initState() {
     super.initState();
     //网络请求
-    _loadData(1, 20);
+    _loadData(page, 10);
+    _sctrollController.addListener(() {
+      if (_sctrollController.position.pixels ==
+          _sctrollController.position.maxScrollExtent) {
+        //加载更多
+        _getMore();
+      }
+    });
+  }
+
+  void dispose() {
+    super.dispose();
+    _sctrollController.dispose();
+  }
+
+//设置padding
+  Widget _pad(Widget widget, {l, t, r, b}) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        l ??= 0.0,
+        t ??= 0.0,
+        r ??= 0.0,
+        b ??= 0.0,
+      ),
+      child: widget,
+    );
+  }
+
+//加载
+  Widget _loadingView() {
+    var loadingIndicator = Visibility(
+      visible: loadStatus == LoadingStatus.STATUS_LOADING ? false : true,
+      child: SizedBox(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation(Colors.blue),
+        ),
+      ),
+    );
+    return _pad(
+      Row(
+        children: <Widget>[loadingIndicator],
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+      ),
+      t: 20.0,
+      b: 20.0,
+    );
+  }
+
+//蓝色圆点
+  Widget _icon() {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.only(left: 10.0),
+          child: Icon(
+            Icons.fiber_manual_record,
+            color: HsgColors.accent,
+            size: 8.0,
+          ),
+        ),
+      ],
+    );
+  }
+
+//竖直线
+  Widget _line() {
+    return Container(
+      padding: EdgeInsets.only(left: 10.0, top: 10.0),
+      child: SizedBox(
+        width: 1.0,
+        height: 100.0,
+        child: DecoratedBox(
+          decoration: BoxDecoration(color: HsgColors.divider),
+        ),
+      ),
+    );
+  }
+
+//待办任务名称
+  Widget _taskName(String taskName) {
+    return Container(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          taskName,
+          textAlign: TextAlign.left,
+          style: TextStyle(
+              fontSize: 15.0,
+              color: HsgColors.aboutusTextCon,
+              fontWeight: FontWeight.bold),
+        ));
+  }
+
+//发起人、创建时间
+  Widget _rowInformation(String leftText, String rightText) {
+    return Container(
+      padding: EdgeInsets.only(top: 15),
+      child: Row(
+        children: [
+          Container(
+            width: ((MediaQuery.of(context).size.width / 1.09) - 22) / 2,
+            child: Text(
+              leftText,
+              style: TextStyle(
+                fontSize: 14.0,
+                color: HsgColors.secondDegreeText,
+              ),
+            ),
+          ),
+          Container(
+              width: ((MediaQuery.of(context).size.width / 1.09) - 22) / 2,
+              child: Text(
+                rightText,
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: HsgColors.aboutusTextCon,
+                ),
+              )),
+        ],
+      ),
+    );
+  }
+
+  //待办列表右侧信息
+  Widget _rightInfo(String taskName, String startUser, String createTime) {
+    return Container(
+      width: MediaQuery.of(context).size.width / 1.09,
+      decoration: HsgStyles.homeHeaderShadow,
+      margin: EdgeInsets.only(left: 10.0),
+      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 15.0),
+      child: Column(
+        children: [
+          //待办任务名称
+          _taskName(taskName),
+          //发起人
+          _rowInformation(intl.S.current.sponsor, startUser),
+          //创建时间
+          _rowInformation(intl.S.current.creation_time, createTime),
+        ],
+      ),
+    );
   }
 
 //待办列表
-  List<Widget> _list(List<FindUserTaskDetail> row) {
-    List<Widget> section = [];
-    section.add(
-      SliverList(
-        delegate: SliverChildBuilderDelegate((context, index) {
-          return FlatButton(
-            padding: EdgeInsets.only(top: 10.0),
-            onPressed: () {
-              // Navigator.pushNamed(context, pageTaskApproval);
-              go2Detail(row[index]);
-            },
-            child: Row(
+  Widget _todoInformation(FindUserTaskDetail approval, String taskName,
+      String startUser, String createTime) {
+    return FlatButton(
+        padding: EdgeInsets.only(top: 10.0),
+        onPressed: () {
+          go2Detail(approval);
+        },
+        child: Row(
+          children: [
+            //左侧图标
+            Column(
               children: [
-                Container(
-                  child: Column(
-                    children: [
-                      Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 10.0),
-                            child: Icon(
-                              Icons.fiber_manual_record,
-                              color: HsgColors.accent,
-                              size: 8.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 10.0, top: 10.0),
-                            child: SizedBox(
-                              width: 1.0,
-                              height: 100.0,
-                              child: DecoratedBox(
-                                decoration:
-                                    BoxDecoration(color: HsgColors.divider),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 360,
-                  decoration: HsgStyles.homeHeaderShadow,
-                  margin: EdgeInsets.only(left: 10.0),
-                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 15.0),
-                  child: Column(
-                    children: [
-                      Container(
-                          width: 340,
-                          child: Text(
-                            row[index].taskName,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 15.0,
-                                color: HsgColors.aboutusTextCon,
-                                fontWeight: FontWeight.bold),
-                          )),
-                      Container(
-                        width: 340,
-                        padding: EdgeInsets.only(top: 15),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 130,
-                              child: Text(
-                                S.current.sponsor,
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: HsgColors.secondDegreeText,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 8.0,
-                            ),
-                            Container(
-                                width: 200,
-                                child: Text(
-                                  row[index].startUser,
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    fontSize: 14.0,
-                                    color: HsgColors.aboutusTextCon,
-                                  ),
-                                )),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: 340,
-                        padding: EdgeInsets.only(top: 10, bottom: 0),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 130,
-                              child: Text(
-                                S.current.creation_time,
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: HsgColors.secondDegreeText,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 8.0,
-                            ),
-                            Container(
-                              width: 200,
-                              child: Text(
-                                row[index].createTime,
-                                textAlign: TextAlign.right,
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: HsgColors.aboutusTextCon,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                _icon(),
+                _line(),
               ],
             ),
-          );
-        }, childCount: row.length),
-      ),
-    );
-    return section;
+            //右侧待办信息
+            _rightInfo(taskName, startUser, createTime),
+          ],
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: CustomScrollView(
-        slivers: _list(row),
-      ),
+    return ListView.builder(
+      itemCount: list.length + 1,
+      itemBuilder: (context, index) {
+        if (index == list.length) {
+          return _loadingView();
+        } else {
+          return Column(
+            children: <Widget>[
+              Center(
+                child: _pad(
+                  _todoInformation(list[index], list[index].taskName,
+                      list[index].startUser, list[index].createTime),
+                  t: 10.0,
+                  b: 10.0,
+                ),
+              ),
+            ],
+          );
+        }
+      },
+      controller: _sctrollController,
     );
   }
 
+//跳转并传值
   void go2Detail(FindUserTaskDetail approval) {
     Navigator.pushNamed(context, pageTaskApproval, arguments: approval);
   }
@@ -188,21 +238,38 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     ProcessTaskDataRepository()
         .findUserToDoTask(
             FindUserToDoTaskReq(page, pageSize), 'findUserToDoTask')
-        .then(
-      (data) {
-        if (data.rows != null) {
-          setState(
-            () {
-              row.clear();
-              row.addAll(data.rows);
-            },
-          );
-        }
-      },
-    ).catchError(
-      (e) {
-        Fluttertoast.showToast(msg: e.toString());
-      },
-    );
+        .then((data) {
+      if (data.rows != null) {
+        count = data.count;
+        setState(() {
+          toDoTask.clear();
+          toDoTask.addAll(data.rows);
+          list.addAll(toDoTask);
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+
+//加载更多
+  Future _getMore() async {
+    if (loadStatus == LoadingStatus.STATUS_IDEL) {
+      setState(() {
+        loadStatus = LoadingStatus.STATUS_LOADING;
+      });
+    }
+    if (toDoTask.length < count) {
+      _loadData(page, 10);
+    }
+    setState(() {
+      if (list.length < count) {
+        page = page + 1;
+        _loadData(page, 10);
+        loadStatus = LoadingStatus.STATUS_IDEL;
+      } else {
+        loadStatus = LoadingStatus.STATUS_COMPLETED;
+      }
+    });
   }
 }

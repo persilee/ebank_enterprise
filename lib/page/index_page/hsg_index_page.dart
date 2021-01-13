@@ -60,7 +60,7 @@ class _IndexPageState extends State<IndexPage> {
 
   int currentIndex;
 
-  final pages = [HomePage(), TabBarAndTopTab(), MinePage()];
+  final pages = [HomePage(), ApprovalPage(), MinePage()];
 
   @override
   void initState() {

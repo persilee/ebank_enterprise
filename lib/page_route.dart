@@ -4,6 +4,7 @@
 /// Date: 2020-12-07
 
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
+import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
@@ -120,6 +121,7 @@ var pageApplication = '/my_appplication_page';
 var pageApplicationTaskApproval = '/application_task_approval_page';
 var pageAuthorizationTaskApproval = '/authorization_task_approval_page';
 var pageContactCustomer = '/contact_customer_page';
+var pageApproval = 'hsg_approval_page';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -176,6 +178,7 @@ var appRoutes = {
   pageExchangeRateInquiry: (context) => ExchangeRateInquiryPage(),
   pageOpenTransfer: (context) => OpenTransferPage(),
   pageContactCustomer: (context) => ContactCustomerPage(),
+  pageApproval: (context) => ApprovalPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
