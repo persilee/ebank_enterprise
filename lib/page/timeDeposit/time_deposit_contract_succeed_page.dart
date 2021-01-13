@@ -70,7 +70,7 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                     }
                     //任务审批跳转
                     if (_arguments == 'taskApproval') {
-                      Navigator.pop(context, true);
+                      Navigator.pop(context);
                     }
                   },
                   color: HsgColors.accent,
