@@ -102,15 +102,24 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   var _payPassword = ''; //支付密码
 
+  var check = false;
+
   @override
   void initState() {
     super.initState();
+
     _nameController.addListener(() {
       _nameInputChange(_nameController.text); //输入框内容改变时调用
+      // setState(() {
+      //   payeeName = _nameController.text;
+      // });
     });
     _accountController.addListener(() {
-      _accountInputChange(_accountController.text); //输入框内容改变时调用
+      _accountInputChange(_accountController.text);
+      // payeeCardNo = _accountController.text;
+      print('$_accountController 000000000000000000000');
     });
+
     _loadTransferData();
   }
 
@@ -119,17 +128,13 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   }
 
   _nameInputChange(String name) {
-    setState(() {
-      payeeName = name;
-      print('$payeeName iiiii');
-    });
+    payeeName = name;
+    print('$payeeName iiiii');
   }
 
   _accountInputChange(String account) {
-    setState(() {
-      payeeCardNo = account;
-      print('$payeeCardNo  aaaaaaaaaaaaa');
-    });
+    payeeCardNo = account;
+    print('$payeeCardNo  aaaaaaaaaaaaa');
   }
 
   _transferInputChange(String transfer) {
@@ -142,7 +147,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         context: context,
         builder: (context) {
           return HsgBottomSingleChoice(
-            title: '银行卡号',
+            title: S.current.account_lsit,
             items: cardNoList,
             lastSelectedPosition: _position,
           );
@@ -224,7 +229,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         context: context,
         builder: (context) {
           return HsgSingleChoiceDialog(
-            title: '币种选择',
+            title: S.current.currency_choice,
             items: ccyLists,
             positiveButton: '确定',
             negativeButton: '取消',
@@ -267,6 +272,21 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   @override
   Widget build(BuildContext context) {
+    var _arguments = ModalRoute.of(context).settings.arguments;
+
+    setState(() {
+      if (_arguments != null && !check) {
+        Rows rowPartner = _arguments;
+        _nameController.text = rowPartner.payeeName;
+        _accountController.text = rowPartner.payeeCardNo;
+        _nameController.selection = TextSelection.collapsed(
+            affinity: TextAffinity.downstream,
+            offset: _nameController.text.length);
+        _accountController.selection =
+            TextSelection.collapsed(offset: _accountController.text.length);
+        check = true;
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.transfer_type_0),
@@ -309,7 +329,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _nameController,
               _accountController),
           //第三部分
-          TransferOtherWidget(remark, _transferInputChange),
+          TransferOtherWidget(context, remark, _transferInputChange),
 
           //提交按钮
           SliverToBoxAdapter(
@@ -460,13 +480,15 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     setState(() {
       _isLoading = false;
     });
-    Navigator.pushNamed(context, pageDepositRecordSucceed);
+    Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
+        arguments: '0');
   }
 
   _isClick() {
     if (money > 0 && payeeName.length > 0 && payeeCardNo.length > 0) {
       return () {
         _openBottomSheet();
+        _tranferAccount(context);
       };
     } else {
       return null;
@@ -486,7 +508,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     if (passwordList != null) {
       if (passwordList.length == 6) {
         _payPassword = EncryptUtil.aesEncode(passwordList.join());
-        _tranferAccount(context);
+        // _tranferAccount(context);
       }
     }
   }

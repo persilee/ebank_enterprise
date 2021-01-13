@@ -30,7 +30,6 @@ Widget TransferPayeeWidget(
 ]) {
   print('$payeeNameForSelect oooooooooooooooooooooo');
   print('$payeeName   pppppppp');
-  //  print('$nameChange 8888888');
 
   return SliverToBoxAdapter(
     child: Container(
@@ -84,10 +83,6 @@ Widget TransferPayeeWidget(
                 _fiveRowLeft(threeRowLeft),
                 _fiveRowRight(accountChange, threeRowRight, accountForSelect,
                     accountName, _accountController),
-
-                Container(
-                  padding: EdgeInsets.fromLTRB(40, 0, 0, 0),
-                ),
               ],
             ),
           ),
@@ -119,63 +114,15 @@ Widget _fiveRowLeft(String name) {
 
 Widget _fiveRowRight(Function nameChanges, String hintText, String forSelect,
     String forInput, TextEditingController _controller) {
-  // _controller.addListener(() {，
-  //   nameChanges(_controller.text); //输入框内容改变时调用
-  // });
-  // _controller.text = forSelect; //选择银行回跳那里写
-  // print('$forSelect 77777777777');
-  // print('$forInput  p222222');
-  // forSelect = forSelect == '' ? forInput : forSelect;
-  // print('$forSelect >>>>>>>>>>>>');
-  // if (forSelect != forInput) {
-  //   forSelect = forInput;
-  // }
-  //forInput = forSelect == '' ? forInput : forSelect;
-  //forSelect = forInput;
-  // if (forSelect == '') {
-  //   forSelect = forInput;
-  // }
-  // if (forSelect != '' || forSelect == forInput) {
-  //   forSelect = forSelect;
-  // }
-  // if (payeeNames == forSelect) {
-  //   payeeNames = forSelect;
-  //   nameChanges(forSelect);
-  // }
-  // else {
-  //   nameChanges(payeeNames);
-  // }
   return Expanded(
     child: Container(
       child: TextField(
         // 是否自动更正
         autocorrect: false,
         //是否自动获得焦点
-        autofocus: true,
+        autofocus: false,
         controller: _controller,
-        //使得光标永远在文字末尾
-        // controller: TextEditingController.fromValue(
-        //   TextEditingValue(
-        //     text: forSelect,
-        //     selection: TextSelection.fromPosition(
-        //       TextPosition(
-        //           affinity: TextAffinity.downstream, offset: forSelect.length),
-        //     ),
-        //   ),
-        // ),
-
         textAlign: TextAlign.right,
-        // onChanged: (payeeName) {
-        //   // nameChanges(payeeName);
-        //   // if (payeeName == forSelect) {
-        //   //   nameChanges(forSelect);
-        //   // } else {
-        //   //   nameChanges(payeeName);
-        //   // }
-        //   print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
-
-        //   print('$forSelect 555555');
-        // },
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hintText,

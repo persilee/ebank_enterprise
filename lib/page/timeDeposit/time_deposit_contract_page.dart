@@ -70,20 +70,21 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   // 产品描述
   Widget _remark(List<TdepProducDTOList> producDTOList) {
     return Container(
-        color: HsgColors.backgroundColor,
-        height: 40,
-        width: 500.0,
-        child: Container(
-          padding: EdgeInsets.only(top: 15.0, left: 15.0),
-          height: 10,
-          child: Text(
-            S.current.no_advance_withdrawal,
-            style: TextStyle(
-              color: HsgColors.describeText,
-              fontSize: 12.0,
-            ),
+      color: HsgColors.backgroundColor,
+      height: 40,
+      width: 500.0,
+      child: Container(
+        padding: EdgeInsets.only(top: 15.0, left: 15.0),
+        height: 10,
+        child: Text(
+          S.current.no_advance_withdrawal,
+          style: TextStyle(
+            color: HsgColors.describeText,
+            fontSize: 12.0,
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   // 选择存款期限按钮
@@ -582,7 +583,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                     _changedInstructionTitle == S.current.hint_please_select)
                 ? null
                 : () {
-                    _openBottomSheet();
+                    //_openBottomSheet();
+                    Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
+                        arguments: 'timeDepositProduct');
                   },
             color: HsgColors.accent,
             disabledColor: HsgColors.btnDisabled,
@@ -739,7 +742,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             'getTimeDepositContract')
         .then((value) {
       setState(() {
-        Navigator.popAndPushNamed(context, pageDepositRecordSucceed);
+        Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
+            arguments: 'timeDepositContract');
       });
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
