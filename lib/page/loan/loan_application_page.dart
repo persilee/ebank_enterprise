@@ -16,6 +16,7 @@ import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_single_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,9 +24,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../page_route.dart';
 
 class LoanApplicationPage extends StatefulWidget {
@@ -34,53 +33,39 @@ class LoanApplicationPage extends StatefulWidget {
 }
 
 class _LoanApplicationState extends State<LoanApplicationPage> {
-  List<String> _ccy = ['HKD', 'USD', 'CND']; //币种
-  String _deadline = S.current.please_select; //贷款期限
-  String _goal = S.current.please_select; //贷款目的
-  String _currency = S.current.please_select; //币种
+  int _ccyId = 0; //币种下标
+  int _index = 3; //贷款期限对应的几个月
+  String _deadLine = ''; //贷款期限
+  String _goal = ""; //贷款目的
+  String _currency = ""; //币种
   String _inputs = S.current.please_input; //请输入提示
-  String _choose = S.current.please_select; //请选择提示
   String _notRequired = S.current.not_required; //非必填提示
-  int groupValue = 0; //单选框默认值
+  String _custId = ''; //客户号
   bool _isButton = false; //申请按钮是否能点击
   bool _checkBoxValue = false; //复选框默认值
-  Color color = Colors.grey; //请选择文字的颜色
+  var _payPassword = ''; //支付密码
   var _contactsController = new TextEditingController(); //联系人文本监听器
   var _phoneController = new TextEditingController(); //联系人手机号码文本监听器
   var _moneyController = new TextEditingController(); //申请金额文本监听器
   var _remarkController = new TextEditingController(); //备注文本监听器
-  String language = Intl.getCurrentLocale(); //获取当前语言
+  List<String> _passwordList = []; //密码列表
+  List<String> _ccyList = ['HKD', 'USD', 'CND']; //币种列表
   List<String> _deadLineLists = [
     S.current.three_month,
     S.current.six_month,
     S.current.nine_month,
     S.current.twelemonth
   ]; //贷款期限列表
-  int _index = 3; //贷款期限对应的几个月
   List<String> _goalLists = [
     S.current.project_loan,
     S.current.business_loan,
     S.current.purpose
   ]; //贷款目的列表
-  String _custId = ''; //客户号
-  List<String> passwordList = []; //密码列表
-  var _payPassword = ''; //支付密码
 
   @override
   void initState() {
     super.initState();
     _custIdReqData();
-
-    //输入框监听
-    _contactsController.addListener(() {
-      _isClick();
-    });
-    _phoneController.addListener(() {
-      _isClick();
-    });
-    _moneyController.addListener(() {
-      _isClick();
-    });
   }
 
   //获取客户号
@@ -145,39 +130,57 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
     return Column(
       children: [
         //联系人
-        _input(
-          S.current.contact,
-          _inputText(_inputs, _contactsController),
+        TextFieldContainer(
+          title: S.current.contact,
+          hintText: _inputs,
+          keyboardType: TextInputType.text,
+          controller: _contactsController,
+          callback: _isClick,
         ),
         //联系人手机号码
-        _input(
-          S.current.contact_phone_num,
-          _inputText(_inputs, _phoneController),
+        TextFieldContainer(
+          title: S.current.contact_phone_num,
+          hintText: _inputs,
+          keyboardType: TextInputType.number,
+          controller: _phoneController,
+          callback: _isClick,
         ),
         //币种
-        _input(
-          S.current.currency,
-          _inputDialog(_ccy),
+        SelectInkWell(
+          title: S.current.debit_currency,
+          item: _currency,
+          onTap: () {
+            _showDialog(_ccyId, _ccyList);
+          },
         ),
         //申请金额
-        _input(
-          S.current.apply_amount,
-          _inputText(_inputs, _moneyController),
+        TextFieldContainer(
+          title: S.current.apply_amount,
+          hintText: _inputs,
+          keyboardType: TextInputType.number,
+          controller: _moneyController,
+          callback: _isClick,
         ),
-        //贷款期限
-        _input(
-          S.current.loan_duration,
-          _inputBottom(S.current.loan_duration, _deadLineLists, 0),
+        SelectInkWell(
+          title: S.current.loan_duration,
+          item: _deadLine,
+          onTap: () {
+            _select(S.current.loan_duration, _deadLineLists, 0);
+          },
         ),
-        //贷款目的
-        _input(
-          S.current.loan_purpose,
-          _inputBottom(S.current.loan_purpose, _goalLists, 1),
+        SelectInkWell(
+          title: S.current.loan_purpose,
+          item: _goal,
+          onTap: () {
+            _select(S.current.loan_purpose, _goalLists, 1);
+          },
         ),
         //备注
-        _input(
-          S.of(context).remark,
-          _inputText(_notRequired, _remarkController),
+        TextFieldContainer(
+          title: S.current.remark,
+          hintText: _notRequired,
+          keyboardType: TextInputType.text,
+          controller: _remarkController,
         ),
       ],
     );
@@ -186,12 +189,12 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   //判断按钮能否使用
   _isClick() {
     if (_checkBoxValue &&
-        _contactsController.text.length > 0 &&
-        _phoneController.text.length > 0 &&
-        _moneyController.text.length > 0 &&
-        _deadline != _choose &&
-        _goal != _choose &&
-        _currency != _choose) {
+        _contactsController.text != '' &&
+        _phoneController.text != '' &&
+        _moneyController.text != '' &&
+        _deadLine != '' &&
+        _goal != '' &&
+        _currency != '') {
       return setState(() {
         _isButton = true;
       });
@@ -236,60 +239,8 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
     );
   }
 
-//文字输入框
-  Widget _inputText(String hintText, TextEditingController controller) {
-    return Container(
-      child: TextField(
-        controller: controller,
-        autocorrect: false,
-        autofocus: false,
-        textAlign: TextAlign.right,
-        style: FIRST_DEGREE_TEXT_STYLE,
-        keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: hintText,
-          hintStyle: FIRST_DESCRIBE_TEXT_STYLE,
-        ),
-      ),
-    );
-  }
-
-  //底部弹窗
-  Widget _inputBottom(String name, List<String> list, int i) {
-    return InkWell(
-      onTap: () {
-        _select(name, list, i);
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            i == 0 ? _deadline : _goal,
-            style: TextStyle(
-              fontSize: 14,
-              color: (i == 0 ? _deadline : _goal) == _choose
-                  ? Colors.grey
-                  : Colors.black,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 12),
-            child: Image(
-              color: HsgColors.firstDegreeText,
-              image:
-                  AssetImage('images/home/listIcon/home_list_more_arrow.png'),
-              width: 7,
-              height: 10,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   //全局弹窗内容
-  _showDialog(List<String> list) async {
+  _showDialog(int index, List<String> list) async {
     final result = await showDialog(
       context: context,
       builder: (context) {
@@ -298,78 +249,17 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
           items: list,
           positiveButton: S.of(context).confirm,
           negativeButton: S.of(context).cancel,
-          lastSelectedPosition: groupValue,
+          lastSelectedPosition: index,
         );
       },
     );
     if (result != null && result != false) {
-      groupValue = result;
       setState(() {
+        _ccyId = result;
         _currency = list[result];
         _isClick();
       });
     }
-  }
-
-//全局弹窗
-  Widget _inputDialog(List<String> list) {
-    return InkWell(
-      onTap: () {
-        _showDialog(list);
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            _currency,
-            style: TextStyle(
-              fontSize: 14,
-              color: _currency == _choose
-                  ? HsgColors.describeText
-                  : HsgColors.aboutusTextCon,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 12),
-            child: Image(
-              color: HsgColors.firstDegreeText,
-              image:
-                  AssetImage('images/home/listIcon/home_list_more_arrow.png'),
-              width: 7,
-              height: 10,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-//单行内容
-  Widget _input(String name, Widget widget) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Container(
-              padding: EdgeInsets.fromLTRB(0, 16, 0, 16),
-              width: MediaQuery.of(context).size.width / 2,
-              child: Text(
-                name,
-                style:
-                    TextStyle(fontSize: 15, color: HsgColors.firstDegreeText),
-              ),
-            ),
-            Expanded(
-              child: widget,
-            ),
-          ],
-        ),
-        Divider(
-          color: HsgColors.divider,
-          height: 0.5,
-        ),
-      ],
-    );
   }
 
 //圆形复选框
@@ -407,7 +297,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
       title: title,
       clickCallBack: (int index, var str) {
         setState(() {
-          i == 0 ? _deadline = str : _goal = str;
+          i == 0 ? _deadLine = str : _goal = str;
           _index = _index * (index + 1);
           _isClick();
         });
@@ -417,7 +307,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
 
   //交易密码窗口
   void _openBottomSheet() async {
-    passwordList = await showHsgBottomSheet(
+    _passwordList = await showHsgBottomSheet(
       context: context,
       builder: (context) {
         return HsgPasswordDialog(
@@ -425,9 +315,9 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         );
       },
     );
-    if (passwordList != null) {
-      if (passwordList.length == 6) {
-        _payPassword = EncryptUtil.aesEncode(passwordList.join());
+    if (_passwordList != null) {
+      if (_passwordList.length == 6) {
+        _payPassword = EncryptUtil.aesEncode(_passwordList.join());
         _submitFormData();
       }
     }
