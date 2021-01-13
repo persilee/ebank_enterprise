@@ -139,6 +139,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               //输入数据容器
               Container(
                 color: Colors.white,
+                margin: EdgeInsets.only(top: 15),
                 padding: EdgeInsets.only(left: 15, right: 15),
                 child: formColumn(),
               ),
@@ -205,29 +206,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         //银行
         GestureDetector(
           onTap: () {
-            if (_transferType != S.current.please_select) {
-              String _type;
-              if (_transferType == _transferType_0) {
-                _type = '0';
-              } else if (_transferType == _transferType_2) {
-                _type = '2';
-              }
-              Navigator.pushNamed(context, pageSelectBank, arguments: _type)
-                  .then((data) {
-                if (data != null) {
-                  Banks _bank;
-                  setState(() {
-                    _bank = data;
-                    _bankName = _bank.localName;
-                    _swiftAdress = _bank.bankSwift;
-                    _bankCode = _bank.bankCode;
-                    _check();
-                  });
-                }
-              });
-            } else {
-              _showTipsDialog();
-            }
+            _bankTap(context);
           },
           child: Container(
             color: Colors.white,
@@ -242,14 +221,20 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         //分支行
         GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, pageSelectBranchBank).then((data) {
-              if (data != null) {
-                setState(() {
-                  _branch = data;
-                  _check();
-                }); 
-              }
-            });
+            if (_bankName != S.current.please_select) {
+              Navigator.pushNamed(context, pageSelectBranchBank,
+                      arguments: '招商银行')
+                  .then((data) {
+                if (data != null) {
+                  setState(() {
+                    _branch = data;
+                    _check();
+                  });
+                }
+              });
+            } else {
+              _showBankTips(context);
+            }
           },
           child: Container(
             color: Colors.white,
@@ -301,8 +286,34 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     );
   }
 
-  //(转账类型未输入)提示弹窗
-  _showTipsDialog() {
+  _bankTap(BuildContext context) {
+    if (_transferType != S.current.please_select) {
+      String _type;
+      if (_transferType == _transferType_0) {
+        _type = '0';
+      } else if (_transferType == _transferType_2) {
+        _type = '2';
+      }
+      Navigator.pushNamed(context, pageSelectBank, arguments: _type)
+          .then((data) {
+        if (data != null) {
+          Banks _bank;
+          setState(() {
+            _bank = data;
+            _bankName = _bank.localName;
+            _swiftAdress = _bank.bankSwift;
+            _bankCode = _bank.bankCode;
+            _check();
+          });
+        }
+      });
+    } else {
+      _showTypeTips();
+    }
+  }
+
+  //提示弹窗(提示语句，确认事件)
+  _showTypeTips() {
     showDialog(
         context: context,
         builder: (context) {
@@ -315,6 +326,24 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         }).then((value) {
       if (value == true) {
         _transferTypeDialog();
+      }
+    });
+  }
+
+  //提示弹窗(提示语句，确认事件)
+  _showBankTips(BuildContext homeContext) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertDialog(
+            title: S.current.prompt,
+            message: S.current.select_bank_first,
+            positiveButton: S.current.confirm,
+            negativeButton: S.current.cancel,
+          );
+        }).then((value) {
+      if (value == true) {
+        _bankTap(homeContext);
       }
     });
   }

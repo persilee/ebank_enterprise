@@ -1,13 +1,15 @@
-import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/bank_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_branch_list.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///
+/// 分支行
 /// Author: zhangqirong
 /// Date: 2020-12-25
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/config/hsg_colors.dart';
 
 class SelectBranchBankPage extends StatefulWidget {
   @override
@@ -16,16 +18,65 @@ class SelectBranchBankPage extends StatefulWidget {
 
 class _SelectBranchBankPageState extends State<SelectBranchBankPage> {
   var _searchController = TextEditingController();
-  var _branchList = [
-    '中国建设银行股份有限公司深圳市分行',
-    '中国建设银行有股份限公司东莞市分行',
-    '中国建设银行股份有限公司北京市分行'
-  ];
-  var _brList = ['105584000005', '105584000006', '105584000007'];
-  var _tempList = [];
+  var _branchList = <Branches>[];
+  var _tempList = <Branches>[];
+  var _bankType = '';
+  ScrollController _scrollController = ScrollController();
+  var _showmore = false;
+  var _page = 1;
+  var _totalPage = 0;
+  @override
+  void initState() {
+    super.initState();
+    //滚动监听
+    _scrollController.addListener(() {
+      setState(() {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          if (_page < _totalPage) {
+            _showmore = true;
+          }
+        }
+      });
+    });
+    _loadData();
+  }
+
+  _loadData() {
+    BankDataRepository()
+        .getBrnachList(GetBranchListReq(_page, 10), '')
+        .then((data) {
+      if (data != null) {
+        setState(() {
+          _totalPage = data.totalPage;
+          _branchList.addAll(data.branches);
+          _tempList.clear();
+          if (_bankType != '') {
+            for (int i = 0; i < _branchList.length; i++) {
+              //如果银行名不为空，只显示对应银行的的分支行，否则显示全部
+              if (_branchList[i].localFullName.contains(_bankType)) {
+                _tempList.add(_branchList[i]);
+              }
+            }
+            //要显示的条数不足10条，继续加载下一页，直到达到最大页数
+            if (_tempList.length < 10 && _page < _totalPage) {
+              _page += 1;
+              _loadData();
+            }
+          } else {
+            _tempList.addAll(_branchList);
+          }
+          _branchList.clear();
+          _branchList.addAll(_tempList);
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    var _arguments = ModalRoute.of(context).settings.arguments;
+    _arguments == null ? _bankType = '' : _bankType = _arguments;
     setState(() {
       if (_tempList.isEmpty) {
         _tempList.addAll(_branchList);
@@ -44,6 +95,38 @@ class _SelectBranchBankPageState extends State<SelectBranchBankPage> {
         child: _getlistViewList(context),
       ),
     );
+  }
+
+  //底部加载更多
+  Widget _loadMore() {
+    return _showmore
+        ? InkWell(
+            onTap: () {
+              _page += 1;
+              _loadData();
+            },
+            child: Container(
+              height: 50,
+              alignment: Alignment.center,
+              child: Text(
+                S.current.click_to_load_more,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Color(0xFFA9A8A8),
+                ),
+              ),
+            ))
+        : Container(
+            height: 50,
+            alignment: Alignment.center,
+            child: Text(
+              S.current.all_loaded,
+              style: TextStyle(
+                fontSize: 13,
+                color: Color(0xFFA9A8A8),
+              ),
+            ),
+          );
   }
 
   //搜索框(通过关键字搜索，为空则检索全部)
@@ -72,7 +155,7 @@ class _SelectBranchBankPageState extends State<SelectBranchBankPage> {
                 } else {
                   _tempList.clear();
                   _branchList.forEach((e) {
-                    if (e.contains(text)) {
+                    if (e.remark.contains(text)) {
                       _tempList.add(e);
                     }
                   });
@@ -105,14 +188,14 @@ class _SelectBranchBankPageState extends State<SelectBranchBankPage> {
     );
   }
 
-  Widget _hintIcon(){
+  Widget _hintIcon() {
     return Padding(
-          padding: EdgeInsets.only(top: 10, bottom: 10, left: 18),
-          child: Text(
-            S.current.pick_branch_office_tips,
-            style: TextStyle(color: HsgColors.hintText, fontSize: 13),
-          ),
-        );
+      padding: EdgeInsets.only(top: 10, bottom: 10, left: 18),
+      child: Text(
+        S.current.pick_branch_office_tips,
+        style: TextStyle(color: HsgColors.hintText, fontSize: 13),
+      ),
+    );
   }
 
   Widget _listIcon(String text, String number) {
@@ -170,8 +253,10 @@ class _SelectBranchBankPageState extends State<SelectBranchBankPage> {
     _list.add(_getListViewBuilder(_searchIcon()));
     _list.add(_getListViewBuilder(_hintIcon()));
     for (int i = 0; i < _tempList.length; i++) {
-      _list.add(_getListViewBuilder(_listIcon(_tempList[i], _brList[i])));
+      _list.add(_getListViewBuilder(
+          _listIcon(_tempList[i].localFullName, _tempList[i].phone)));
     }
+    _list.add(_loadMore());
     return new ListView(
       children: _list,
     );
