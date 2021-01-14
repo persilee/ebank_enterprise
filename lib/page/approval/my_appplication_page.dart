@@ -20,63 +20,72 @@ class MyApplicationPage extends StatefulWidget {
   _MyApplicationPageState createState() => _MyApplicationPageState();
 }
 
+enum LoadingStatus { STATUS_LOADING, STATUS_COMPLETED, STATUS_IDEL }
+
 class _MyApplicationPageState extends State<MyApplicationPage> {
+  LoadingStatus loadStatus; //加载状态
+  int count = 0;
+  int page = 1;
+  ScrollController _scrollController = ScrollController();
+  List<MyApplicationDetail> list = []; //页面显示的待办列表
+  List<MyApplicationDetail> myApplicationList = [];
+
+  var application;
+
   @override
   void initState() {
     super.initState();
-
     //网络请求
-    _loadMyApplicationData();
+    _loadMyApplicationData(page, 10);
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        //加载更多
+        _getMore();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _getContent(rowList),
+      body: _getContent(list),
     );
   }
 
-  List<MyApplicationDetail> rowList = [];
-  Widget _getContent(List<MyApplicationDetail> rows) {
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return GestureDetector(
-                onTap: () {
-                  go2Detail(rowList[index]);
-                },
-                child: Column(
-                  children: [
-                    Container(
-                        color: Colors.white,
-                        margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        child: Column(
-                          children: [
-                            _getRow(
-                                S.current.sponsor, rowList[index].processId),
-                            _getRow(S.current.to_do_task_name,
-                                rowList[index].taskName),
-                            _getRow(S.current.creation_time,
-                                rowList[index].createTime)
-                          ],
-                        ))
-                  ],
-                ),
-              );
+  _getContent(List<MyApplicationDetail> list) {
+    return ListView.builder(
+      itemCount: list.length + 1,
+      itemBuilder: (context, index) {
+        if (index == list.length) {
+          return _loadingView();
+        } else {
+          return GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, pageApplicationTaskApproval,
+                  arguments: list[index]);
             },
-            childCount: rowList.length,
-          ),
-        ),
-      ],
+            child: Column(
+              children: [
+                Container(
+                  color: Colors.white,
+                  margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  child: Column(
+                    children: [
+                      _getRow(S.current.sponsor, list[index].processId),
+                      _getRow(S.current.to_do_task_name, list[index].taskName),
+                      _getRow(S.current.creation_time, list[index].createTime)
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        }
+      },
+      controller: _scrollController,
     );
-  }
-
-  void go2Detail(MyApplicationDetail application) {
-    Navigator.pushNamed(context, pageApplicationTaskApproval,
-        arguments: application);
   }
 
   _getRow(String leftText, String rightText) {
@@ -96,16 +105,15 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
               ),
               textAlign: TextAlign.right,
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  _loadMyApplicationData() async {
+  _loadMyApplicationData(page, pageSize) {
     var finish = false;
-    var page = 1;
-    var pageSize = 10;
+
     var processId = '';
     var processKey = '';
     var processStatus = true;
@@ -114,14 +122,79 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
     var taskName = '';
     NeedToBeDealtWithRepository()
         .getMyApplication(
-            GetMyApplicationReq(finish, 1, pageSize, processId, processKey,
+            GetMyApplicationReq(finish, page, pageSize, processId, processKey,
                 processStatus, processTitle, sort, taskName),
             'tag')
         .then((data) {
-      setState(() {
-        rowList.clear();
-        rowList.addAll(data.rows);
-      });
+      if (data.rows != null) {
+        count = data.count;
+        setState(() {
+          myApplicationList.clear();
+          myApplicationList.addAll(data.rows);
+          list.addAll(myApplicationList);
+        });
+      }
     });
+  }
+
+  //加载更多
+  _getMore() {
+    if (loadStatus == LoadingStatus.STATUS_IDEL) {
+      setState(() {
+        loadStatus = LoadingStatus.STATUS_LOADING;
+      });
+    }
+    if (myApplicationList.length < count) {
+      _loadMyApplicationData(page, 10);
+    }
+    setState(() {
+      if (list.length < count) {
+        page = page + 1;
+        _loadMyApplicationData(page, 10);
+        loadStatus = LoadingStatus.STATUS_IDEL;
+      } else {
+        loadStatus = LoadingStatus.STATUS_COMPLETED;
+      }
+    });
+  }
+
+  //加载
+  Widget _loadingView() {
+    var loadingIndicator = Visibility(
+      visible: loadStatus == LoadingStatus.STATUS_LOADING ? false : true,
+      child: SizedBox(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation(Colors.blue),
+        ),
+      ),
+    );
+    return _pad(
+      Row(
+        children: <Widget>[loadingIndicator],
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+      ),
+      t: 20.0,
+      b: 20.0,
+    );
+  }
+
+//设置padding
+  Widget _pad(Widget widget, {l, t, r, b}) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        l ??= 0.0,
+        t ??= 0.0,
+        r ??= 0.0,
+        b ??= 0.0,
+      ),
+      child: widget,
+    );
+  }
+
+  //销毁
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
   }
 }

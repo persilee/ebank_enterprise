@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/config/hsg_colors.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///行内转账页面
 /// Author: lijiawei
@@ -92,6 +94,10 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   var payeeNameForSelects = '';
 
+  var _transferMoneyController = TextEditingController();
+
+  var _remarkController = TextEditingController();
+
   var _nameController = TextEditingController();
 
   var _accountController = TextEditingController();
@@ -109,11 +115,19 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     super.initState();
 
     _nameController.addListener(() {
-      _nameInputChange(_nameController.text); //输入框内容改变时调用
+      _nameInputChange(_nameController.text); //收款名字输入框内容改变时调用
     });
     _accountController.addListener(() {
-      _accountInputChange(_accountController.text); //输入框时调用
+      _accountInputChange(_accountController.text); //收款账号输入框时调用
       print('$_accountController 000000000000000000');
+    });
+    _transferMoneyController.addListener(() {
+      _amountInputChange(_transferMoneyController.text); //金额输入框时调用
+      print('$_transferMoneyController 1111');
+    });
+    _remarkController.addListener(() {
+      _transferInputChange(_remarkController.text); //金额输入框时调用
+      print('$_remarkController 1111222');
     });
 
     _loadTransferData();
@@ -121,6 +135,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   _amountInputChange(String title) {
     money = double.parse(title);
+    print('$payeeName iiiidddd');
   }
 
   _nameInputChange(String name) {
@@ -306,7 +321,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _amountInputChange,
               _selectAccount,
               _getCcy,
-              _getCardTotals),
+              _getCardTotals,
+              _transferMoneyController),
           //拿第二部分
           TransferPayeeWidget(
               payeeCardNo,
@@ -325,7 +341,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _nameController,
               _accountController),
           //第三部分
-          TransferOtherWidget(context, remark, _transferInputChange),
+          TransferOtherWidget(
+              context, remark, _transferInputChange, _remarkController),
 
           //提交按钮
           SliverToBoxAdapter(
@@ -340,6 +357,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
                 onPressed: _isClick(),
+                disabledColor: HsgColors.btnDisabled,
               ),
             ),
           ),
@@ -476,16 +494,14 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     setState(() {
       _isLoading = false;
     });
-    Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
-        arguments: '0');
-    //Navigator.of(context).pop(pageDepositRecordSucceed);
+    Navigator.pushNamed(context, pageDepositRecordSucceed, arguments: '0');
   }
 
   _isClick() {
     if (money > 0 && payeeName.length > 0 && payeeCardNo.length > 0) {
       return () {
-        // _openBottomSheet();
-        _tranferAccount(context);
+        _openBottomSheet();
+        // _tranferAccount(context);
       };
     } else {
       return null;
@@ -506,7 +522,20 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       if (passwordList.length == 6) {
         _payPassword = EncryptUtil.aesEncode(passwordList.join());
         _tranferAccount(context);
+        _clean();
       }
     }
+  }
+
+  //清空数据
+  _clean() {
+    setState(() {
+      ccy = 'CNY';
+      _transferMoneyController.text = '';
+      _nameController.text = '';
+      _accountController.text = '';
+      _remarkController.text = '';
+      remark = '';
+    });
   }
 }

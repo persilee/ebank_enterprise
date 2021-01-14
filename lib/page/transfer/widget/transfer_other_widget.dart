@@ -11,7 +11,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 Widget TransferOtherWidget(BuildContext context, String remark,
-    Function(String inputStr) transferChange) {
+    Function(String inputStr) transferChange,
+    [TextEditingController _remarkController]) {
   remark = transferChange(remark) == null
       ? transferChange('${S.current.transfer}')
       : transferChange(remark);
@@ -32,9 +33,10 @@ Widget TransferOtherWidget(BuildContext context, String remark,
         Expanded(
           child: Container(
             child: TextField(
-              onChanged: (remark) {
-                transferChange(remark);
-              },
+              // onChanged: (remark) {
+              //   transferChange(remark);
+              // },
+              controller: _remarkController,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: S.current.transfer,

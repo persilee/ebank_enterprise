@@ -114,7 +114,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.only(top: 20, bottom: 15),
+            padding: EdgeInsets.only(top: 20, bottom: 10),
             child: Text(
               //上文字
               upperText,
