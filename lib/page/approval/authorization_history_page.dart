@@ -30,6 +30,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
   ScrollController _scrollController = ScrollController();
   List<FinishTaskDetail> list = []; //页面显示的待办列表
   List<FinishTaskDetail> finishTaskList = [];
+  bool _loadMore = false;
   @override
   void initState() {
     super.initState();
@@ -135,16 +136,13 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
         loadStatus = LoadingStatus.STATUS_LOADING;
       });
     }
-    if (finishTaskList.length < count) {
-      _loadAuthorzationRateData(page, 10);
-    }
     setState(() {
       if (list.length < count) {
         page = page + 1;
         _loadAuthorzationRateData(page, 10);
         loadStatus = LoadingStatus.STATUS_IDEL;
       } else {
-        loadStatus = LoadingStatus.STATUS_COMPLETED;
+        loadStatus = LoadingStatus.STATUS_LOADING;
       }
     });
   }

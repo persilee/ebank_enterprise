@@ -26,6 +26,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
   LoadingStatus loadStatus; //加载状态
   int count = 0;
   int page = 1;
+  bool _loadMore = false; //是否加载更多
   ScrollController _scrollController = ScrollController();
   List<MyApplicationDetail> list = []; //页面显示的待办列表
   List<MyApplicationDetail> myApplicationList = [];
@@ -63,7 +64,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
           return GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, pageApplicationTaskApproval,
-                  arguments: list[index]);
+                  arguments: list);
             },
             child: Column(
               children: [
@@ -86,6 +87,17 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
       },
       controller: _scrollController,
     );
+  }
+
+  // void go2Detail(MyApplicationDetail application) {
+  //   Navigator.pushNamed(context, pageApplicationTaskApproval,
+  //       arguments: application);
+  // }
+
+  //销毁
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
   }
 
   _getRow(String leftText, String rightText) {
@@ -113,7 +125,6 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
 
   _loadMyApplicationData(page, pageSize) {
     var finish = false;
-
     var processId = '';
     var processKey = '';
     var processStatus = true;
@@ -144,21 +155,20 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
         loadStatus = LoadingStatus.STATUS_LOADING;
       });
     }
-    if (myApplicationList.length < count) {
-      _loadMyApplicationData(page, 10);
-    }
+
     setState(() {
       if (list.length < count) {
+        _loadMore = true;
         page = page + 1;
         _loadMyApplicationData(page, 10);
         loadStatus = LoadingStatus.STATUS_IDEL;
       } else {
-        loadStatus = LoadingStatus.STATUS_COMPLETED;
+        loadStatus = LoadingStatus.STATUS_LOADING;
       }
     });
   }
 
-  //加载
+//加载
   Widget _loadingView() {
     var loadingIndicator = Visibility(
       visible: loadStatus == LoadingStatus.STATUS_LOADING ? false : true,
@@ -190,11 +200,5 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
       ),
       child: widget,
     );
-  }
-
-  //销毁
-  void dispose() {
-    super.dispose();
-    _scrollController.dispose();
   }
 }
