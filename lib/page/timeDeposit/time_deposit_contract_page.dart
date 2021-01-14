@@ -209,7 +209,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   //到期本息
   Widget _showMatAmt() {
     return Container(
-      padding: EdgeInsets.only(top: 10.0, left: 15.0, bottom: 10.0),
+      padding: EdgeInsets.only(top: 10.0, left: 15.0, bottom: 15.0),
       child: Row(
         children: [
           Container(
@@ -467,7 +467,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.only(left: 15.0),
+          padding: EdgeInsets.only(left: 15.0, top: 10),
           child: Row(
             children: [
               _showCcy(),
@@ -550,7 +550,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                     _changedInstructionTitle == S.current.hint_please_select)
                 ? null
                 : () {
-                    //_openBottomSheet();
+                    _openBottomSheet();
                     Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
                         arguments: 'timeDepositProduct');
                   },
@@ -630,6 +630,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             _termChangeBtn(context, producDTOList),
             _inputPrincipal(card),
             _accountChangeBtn(),
+            _line(),
             _instructionChangeBtn(),
             _submitButton(),
           ],
