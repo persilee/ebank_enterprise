@@ -745,7 +745,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    Navigator.pushNamed(context, pageTransferRecord);
+                    Navigator.pushNamed(context, pageTransferPlan);
                   })),
           )
         ],
