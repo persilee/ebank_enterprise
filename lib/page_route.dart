@@ -46,6 +46,7 @@ import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_international_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_detail_page.dart';
+import 'package:ebank_mobile/page/transfer/transfer_plan_details.dart';
 import 'package:ebank_mobile/page/transfer/transfer_plan_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_record-page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_partner_page.dart';
@@ -121,8 +122,8 @@ var pageApplication = '/my_appplication_page';
 var pageApplicationTaskApproval = '/application_task_approval_page';
 var pageAuthorizationTaskApproval = '/authorization_task_approval_page';
 var pageContactCustomer = '/contact_customer_page';
-var pageApproval = 'hsg_approval_page';
-var pageTransferPlan = 'transfer_plan_page';
+var pageTransferPlan = '/transfer_plan_page';
+var pageTransferPlanDetails = '/transfer_plan_details';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -180,6 +181,7 @@ var appRoutes = {
   pageOpenTransfer: (context) => OpenTransferPage(),
   pageContactCustomer: (context) => ContactCustomerPage(),
   pageTransferPlan: (context) => TransferPlanPage(),
+  // pageTransferPlanDetails: (context) => TransferPlanDetailsPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
@@ -214,6 +216,11 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageAuthorizationTaskApproval) {
     return MaterialPageRoute(builder: (context) {
       return AuthorizationTaskApprovalPage(history: settings.arguments);
+    });
+  }
+  if (settings.name == pageTransferPlanDetails) {
+    return MaterialPageRoute(builder: (context) {
+      return TransferPlanDetailsPage(transferPlan: settings.arguments);
     });
   }
   return null;

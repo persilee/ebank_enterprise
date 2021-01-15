@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+///预约转账
+/// Author: wangluyao
+/// Date: 2021-01-11
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'add_transfer_plan.g.dart';

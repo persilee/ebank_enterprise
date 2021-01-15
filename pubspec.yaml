@@ -154,6 +154,7 @@ flutter:
     - images/transferIcon/transfer_from.png
     - images/transferIcon/transfer_wallet.png
     - images/transferIcon/transfer_bank.png
+    - images/transferIcon/transfer_plan.png
     
     #其他
     - images/transferIcon/transfer_sample_placeholder.png

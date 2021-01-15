@@ -43,11 +43,6 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     });
   }
 
-  void dispose() {
-    super.dispose();
-    _sctrollController.dispose();
-  }
-
 //设置padding
   Widget _pad(Widget widget, {l, t, r, b}) {
     return Padding(
@@ -259,17 +254,19 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
         loadStatus = LoadingStatus.STATUS_LOADING;
       });
     }
-    if (toDoTask.length < count) {
-      _loadData(page, 10);
-    }
     setState(() {
       if (list.length < count) {
         page = page + 1;
         _loadData(page, 10);
         loadStatus = LoadingStatus.STATUS_IDEL;
       } else {
-        loadStatus = LoadingStatus.STATUS_COMPLETED;
+        loadStatus = LoadingStatus.STATUS_LOADING;
       }
     });
+  }
+
+  void dispose() {
+    super.dispose();
+    _sctrollController.dispose();
   }
 }
