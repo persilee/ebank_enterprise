@@ -769,7 +769,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               height: 20,
             ),
           ),
-          TransferPayerWidget(
+          transferPayerWidget(
               context,
               _limitMoney,
               _changedCcyTitle,
@@ -785,7 +785,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               _selectAccount,
               _getCcy,
               _getCardTotals),
-          TransferPayeeWidget(
+          transferPayeeWidget(
               payeeCardNo,
               payeeName,
               accountSelect,
@@ -801,7 +801,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               _accountInputChange,
               _payeeNameController,
               _payeeAccountController),
-          TransferOtherWidget(context, '', _transferInputChange),
+          transferOtherWidget(context, '', _transferInputChange),
           SliverToBoxAdapter(
             child: _transferBtn(),
           ),

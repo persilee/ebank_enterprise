@@ -43,11 +43,6 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     });
   }
 
-  void dispose() {
-    super.dispose();
-    _sctrollController.dispose();
-  }
-
 //设置padding
   Widget _pad(Widget widget, {l, t, r, b}) {
     return Padding(
@@ -271,5 +266,10 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
         loadStatus = LoadingStatus.STATUS_COMPLETED;
       }
     });
+  }
+
+  void dispose() {
+    super.dispose();
+    _sctrollController.dispose();
   }
 }

@@ -30,7 +30,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
   ScrollController _scrollController = ScrollController();
   List<FinishTaskDetail> list = []; //页面显示的待办列表
   List<FinishTaskDetail> finishTaskList = [];
-  bool _loadMore = false;
+
   @override
   void initState() {
     super.initState();
@@ -157,27 +157,10 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
         ),
       ),
     );
-    return _pad(
-      Row(
-        children: <Widget>[loadingIndicator],
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-      ),
-      t: 20.0,
-      b: 20.0,
-    );
-  }
-
-//设置padding
-  Widget _pad(Widget widget, {l, t, r, b}) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        l ??= 0.0,
-        t ??= 0.0,
-        r ??= 0.0,
-        b ??= 0.0,
-      ),
-      child: widget,
+    return Row(
+      children: <Widget>[loadingIndicator],
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
     );
   }
 

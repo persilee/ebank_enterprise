@@ -26,7 +26,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
   LoadingStatus loadStatus; //加载状态
   int count = 0;
   int page = 1;
-  bool _loadMore = false; //是否加载更多
+//是否加载更多
   ScrollController _scrollController = ScrollController();
   List<MyApplicationDetail> list = []; //页面显示的待办列表
   List<MyApplicationDetail> myApplicationList = [];
@@ -88,11 +88,6 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
       controller: _scrollController,
     );
   }
-
-  // void go2Detail(MyApplicationDetail application) {
-  //   Navigator.pushNamed(context, pageApplicationTaskApproval,
-  //       arguments: application);
-  // }
 
   //销毁
   void dispose() {
@@ -158,7 +153,6 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
 
     setState(() {
       if (list.length < count) {
-        _loadMore = true;
         page = page + 1;
         _loadMyApplicationData(page, 10);
         loadStatus = LoadingStatus.STATUS_IDEL;
@@ -178,27 +172,10 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
         ),
       ),
     );
-    return _pad(
-      Row(
-        children: <Widget>[loadingIndicator],
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-      ),
-      t: 20.0,
-      b: 20.0,
-    );
-  }
-
-//设置padding
-  Widget _pad(Widget widget, {l, t, r, b}) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        l ??= 0.0,
-        t ??= 0.0,
-        r ??= 0.0,
-        b ??= 0.0,
-      ),
-      child: widget,
+    return Row(
+      children: <Widget>[loadingIndicator],
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
     );
   }
 }
