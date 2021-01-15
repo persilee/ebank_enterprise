@@ -30,9 +30,11 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
   List<String> _statusList = ['P'];
   List<TransferPlan> transferPlanList = [];
   TransferPlan transferPlan;
-  String frequency;
-  String transferType;
-  String planId;
+  String frequency = '';
+  String transferType = '';
+  String planId = '';
+  String btnTitle = S.current.cancel_plan;
+  Color btnColor = HsgColors.accent;
 
   List state = [
     {
@@ -221,9 +223,9 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
           Container(
             width: (MediaQuery.of(context).size.width - 30) / 4.3,
             child: _btnStyle(
-              S.current.cancel_plan,
+              btnTitle,
               null,
-              HsgColors.blueTextColor,
+              btnColor,
               Colors.white,
               BorderSide.none,
               13.0,
@@ -387,6 +389,13 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
               transferPlanList.addAll(value.rows);
             }
           });
+        }
+        if (_statusList == ['E']) {
+          btnTitle = '已结束';
+          btnColor = Color(0xFF00C16C);
+        } else {
+          btnTitle = S.current.cancel_plan;
+          btnColor = HsgColors.accent;
         }
       });
     }).catchError((e) {
