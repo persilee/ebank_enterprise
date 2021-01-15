@@ -12,22 +12,22 @@ import 'package:ebank_mobile/generated/l10n.dart';
 
 // ignore: non_constant_identifier_names
 Widget TransferPayerWidget(
-  BuildContext context,
-  String _limitMoney,
-  String _changedCcyTitle,
-  String _changedRateTitle,
-  String _changedAccountTitle,
-  String ccy,
-  String singleLimit,
-  String totalBalance,
-  String cardNo,
-  String payeeBankCode,
-  double money,
-  Function(String inputStr) moneyChange,
-  Function() getcardList,
-  Function() _getCcy,
-  Function(String cardNos) getCardTotals,
-) {
+    BuildContext context,
+    String _limitMoney,
+    String _changedCcyTitle,
+    String _changedRateTitle,
+    String _changedAccountTitle,
+    String ccy,
+    String singleLimit,
+    String totalBalance,
+    String cardNo,
+    String payeeBankCode,
+    double money,
+    Function(String inputStr) moneyChange,
+    Function() getcardList,
+    Function() _getCcy,
+    Function(String cardNos) getCardTotals,
+    [TextEditingController _transferMoneyController]) {
   return SliverToBoxAdapter(
     child: Container(
       child: Column(
@@ -36,7 +36,7 @@ Widget TransferPayerWidget(
           _oneRow(S.current.transfer_amount, _limitMoney, singleLimit),
           //第二行
           _twoRow(ccy, _changedCcyTitle, money, S.current.int_input_tran_amount,
-              moneyChange, _getCcy, context),
+              moneyChange, _getCcy, context, _transferMoneyController),
           Container(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
               child: Divider(
@@ -108,7 +108,8 @@ Widget _twoRow(
     String hintText,
     Function moneyChanges,
     Function _getCcy,
-    BuildContext context) {
+    BuildContext context,
+    TextEditingController _transferMoneyController) {
   _changedCcyTitles = _changedCcyTitles == '' ? 'CNY' : _changedCcyTitles;
   return Container(
     width: MediaQuery.of(context).size.width,
@@ -161,11 +162,12 @@ Widget _twoRow(
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
               ],
-              onChanged: (money) {
-                money.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1');
-                moneyChanges(money);
-                print("这个是 onChanged 时刻在监听，输出的信息是：$money");
-              },
+              // onChanged: (money) {
+              //   money.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1');
+              //   moneyChanges(money);
+              //   print("这个是 onChanged 时刻在监听，输出的信息是：$money");
+              // },
+              controller: _transferMoneyController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 border: InputBorder.none,

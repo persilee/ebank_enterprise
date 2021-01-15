@@ -134,11 +134,21 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   var _getPayeeBank = '';
 
-  var _companyController = TextEditingController();
+  var _transferMoneyController = TextEditingController(); //转账金额
 
-  var _accountController = TextEditingController();
+  var _payerAddressController = TextEditingController(); //汇款地址
 
-  var _bankSwiftController = TextEditingController();
+  var _payeeAddressController = TextEditingController(); //收款地址
+
+  var _companyController = TextEditingController(); //公司名
+
+  var _accountController = TextEditingController(); //账号
+
+  var _bankSwiftController = TextEditingController(); //银行swift
+
+  var _middleBankSwiftController = TextEditingController(); //中间行swift
+
+  var _remarkController = TextEditingController();
 
   var check = false;
 
@@ -146,10 +156,13 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   void initState() {
     super.initState();
     _companyController.addListener(() {
-      _nameInputChange(_companyController.text); //输入框内容改变时调用
+      _nameInputChange(_companyController.text); //公司名输入框内容改变时调用
     });
     _accountController.addListener(() {
-      _accountInputChange(_accountController.text); //输入框内容改变时调用
+      _accountInputChange(_accountController.text); //账号输入框内容改变时调用
+    });
+    _transferMoneyController.addListener(() {
+      _amountInputChange(_transferMoneyController.text); //金额输入框内容改变时调用
     });
 
     _loadTransferData();
@@ -440,7 +453,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               _amountInputChange,
               _selectAccount,
               _getCcy,
-              _getCardTotals),
+              _getCardTotals,
+              _transferMoneyController),
           SliverToBoxAdapter(
             child: Container(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -448,8 +462,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               color: Colors.white,
               child: Column(
                 children: [
-                  _getAddress(S.current.remittance_address,
-                      S.current.please_input, _addressChange),
+                  _getAddress(
+                      S.current.remittance_address,
+                      S.current.please_input,
+                      _addressChange,
+                      _payerAddressController),
                   _getLine(),
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -492,17 +509,23 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                       S.current.receipt_bank, _getPayeeBank, _selectBank),
                   _getLine(),
                   //银行SWIFT
-                  _getInputColumn(S.current.bank_swift, S.current.optional,
+                  _getInputColumn(S.current.bank_swift, S.current.please_input,
                       _bankSwift, _bankSwiftController),
                   _getLine(),
 
                   //中间行
-                  _getInputColumn(S.current.middle_bank_swift,
-                      S.current.optional, _middleSwift),
+                  _getInputColumn(
+                      S.current.middle_bank_swift,
+                      S.current.not_required,
+                      _middleSwift,
+                      _middleBankSwiftController),
                   _getLine(),
                   //收款地址
-                  _getAddress(S.current.collection_address,
-                      S.current.please_input, _addressTwoChange),
+                  _getAddress(
+                      S.current.collection_address,
+                      S.current.please_input,
+                      _addressTwoChange,
+                      _payeeAddressController),
                   _getLine(),
                 ],
               ),
@@ -523,8 +546,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                       S.current.remittance_usage, _feeUse, _selectFeeUse),
                   _getLine(),
                   //转账附言
-                  _getInputColumn(S.current.transfer_postscript,
-                      S.current.optional, _transferInputChange),
+                  _getInputColumn(
+                      S.current.transfer_postscript,
+                      S.current.not_required,
+                      _transferInputChange,
+                      _remarkController),
                   _getLine()
                 ],
               ),
@@ -538,10 +564,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               child: RaisedButton(
                 child: Text(S.current.submit),
                 textColor: Colors.white,
-                color: Colors.blue[500],
+                color: Colors.blue,
                 onPressed: _isClick(),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
+                disabledColor: HsgColors.btnDisabled,
               ),
             ),
           ),
@@ -575,45 +602,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     );
   }
 
-  //判断是否可以点击
-  _isClick() {
-    if (money > 0 &&
-        payeeName.length > 0 &&
-        payeeCardNo.length > 0 &&
-        payerAddress.length > 0 &&
-        _countryText != S.current.please_select &&
-        _getPayeeBank != S.current.please_select &&
-        _bankSwiftController.text.length > 0 &&
-        payeeAddress.length > 0 &&
-        _transferFee != S.current.please_select &&
-        _feeUse != S.current.please_select) {
-      return () {
-        _openBottomSheet();
-
-        print('提交');
-      };
-    } else {
-      return null;
-    }
-  }
-
-  //交易密码窗口
-  void _openBottomSheet() async {
-    passwordList = await showHsgBottomSheet(
-      context: context,
-      builder: (context) {
-        return HsgPasswordDialog(
-          title: S.current.input_password,
-        );
-      },
-    );
-    if (passwordList != null) {
-      if (passwordList.length == 6) {
-        _tranferInternational(context);
-      }
-    }
-  }
-
   //红色字体
   _getRedText(String redText) {
     return Container(
@@ -627,10 +615,10 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //获取地址
   _getAddress(
-    String topText,
-    String inputText,
-    Function(String inputStr) nameChange,
-  ) {
+      String topText,
+      String inputText,
+      Function(String inputStr) nameChange,
+      TextEditingController _payerAddressController) {
     var _topRow = [
       Container(
         child:
@@ -653,10 +641,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               autocorrect: false,
               //是否自动获得焦点
               autofocus: false,
-              onChanged: (payeeName) {
-                nameChange(payeeName);
-                print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
-              },
+              controller: _payerAddressController,
               textAlign: TextAlign.right,
               decoration: InputDecoration(
                 border: InputBorder.none,
@@ -703,7 +688,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               moneyChange(payeeName);
               print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
             },
-            //  controller: _controller,
             textAlign: TextAlign.right,
             decoration: InputDecoration(
               border: InputBorder.none,
@@ -893,5 +877,62 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   _showContractSucceedPage(BuildContext context) async {
     setState(() {});
     Navigator.pushNamed(context, pageDepositRecordSucceed);
+  }
+
+  //判断是否可以点击
+  _isClick() {
+    if (money > 0 &&
+        payeeName.length > 0 &&
+        payeeCardNo.length > 0 &&
+        payerAddress.length > 0 &&
+        _countryText != S.current.please_select &&
+        _getPayeeBank != S.current.please_select &&
+        _bankSwiftController.text.length > 0 &&
+        payeeAddress.length > 0 &&
+        _transferFee != S.current.please_select &&
+        _feeUse != S.current.please_select) {
+      return () {
+        _openBottomSheet();
+
+        print('提交');
+      };
+    } else {
+      return null;
+    }
+  }
+
+  //交易密码窗口
+  void _openBottomSheet() async {
+    passwordList = await showHsgBottomSheet(
+      context: context,
+      builder: (context) {
+        return HsgPasswordDialog(
+          title: S.current.input_password,
+        );
+      },
+    );
+    if (passwordList != null) {
+      if (passwordList.length == 6) {
+        _tranferInternational(context);
+        _cleanData();
+      }
+    }
+  }
+
+  _cleanData() {
+    setState(() {
+      _transferMoneyController.text = '';
+      _payeeAddressController.text = '';
+      _payerAddressController.text = '';
+      _companyController.text = '';
+      _accountController.text = '';
+      _bankSwiftController.text = '';
+      _middleBankSwiftController.text = '';
+      _remarkController.text = '';
+      _countryText = '';
+      _getPayeeBank = '';
+      _transferFee = '';
+      _feeUse = '';
+    });
   }
 }

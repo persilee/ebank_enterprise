@@ -61,12 +61,15 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                 child: FlatButton(
                   onPressed: () {
                     //行内转账跳转
+                    //pageTransfer
                     if (_arguments == '0') {
-                      Navigator.popAndPushNamed(context, pageTransfer);
+                      Navigator.of(context)
+                          .pushReplacementNamed(pageTransferInternal);
                     }
                     //定期开立跳转
                     if (_arguments == 'timeDepositProduct') {
-                      Navigator.popAndPushNamed(context, pageTimeDepostProduct);
+                      Navigator.pushReplacementNamed(
+                          context, pageTimeDepostProduct);
                     }
                     //任务审批跳转
                     if (_arguments == 'taskApproval') {
