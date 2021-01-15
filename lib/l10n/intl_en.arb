@@ -367,6 +367,7 @@
   "twelemonth":"Twelvemonth",
   "project_loan":"Project Loan",
   "business_loan":"Business Loan",
-  "purpose":"Purpose"
+  "purpose":"Purpose",
+  "no_data_now":"No Data"
 }
   
