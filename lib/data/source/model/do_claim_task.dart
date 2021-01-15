@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+///任务审批签收
+/// Author: wangluyao
+/// Date: 2021-01-11
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'do_claim_task.g.dart';

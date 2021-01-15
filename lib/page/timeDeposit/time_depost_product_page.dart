@@ -172,47 +172,54 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         child: _picture(),
       ),
     );
-    section.add(SliverList(
+    section.add(
+      SliverList(
         delegate: SliverChildBuilderDelegate((context, index) {
-      //最小年利率
-      double minRate = double.parse(tdepProductList[index].minRate) * 100;
-      minRate = double.parse(FormatUtil.formatNum(minRate, 2));
-      //最大年利率
-      double maxRate = double.parse(tdepProductList[index].maxRate) * 100;
-      maxRate = double.parse(FormatUtil.formatNum(maxRate, 2));
-      //判断选择的语言并根据语言选择产品名称
-      String name;
-      if (language == 'zh_CN') {
-        name = tdepProductList[index].lclName;
-      } else {
-        name = tdepProductList[index].engName;
-      }
-      //定期产品信息
-      return FlatButton(
-        padding: EdgeInsets.all(0),
-        onPressed: () {
-          go2Detail(tdepProductList[index], tdepProducDTOList[index]);
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _background(),
-            Container(
-              padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                  top: _lineBorderSide(),
-                  bottom: _lineBorderSide(),
+          //最小年利率
+          double minRate = double.parse(tdepProductList[index].minRate) * 100;
+          minRate = double.parse(FormatUtil.formatNum(minRate, 2));
+          //最大年利率
+          double maxRate = double.parse(tdepProductList[index].maxRate) * 100;
+          maxRate = double.parse(FormatUtil.formatNum(maxRate, 2));
+          //判断选择的语言并根据语言选择产品名称
+          String name;
+          if (language == 'zh_CN') {
+            name = tdepProductList[index].lclName;
+          } else {
+            name = tdepProductList[index].engName;
+          }
+          //定期产品信息
+          return FlatButton(
+            padding: EdgeInsets.all(0),
+            onPressed: () {
+              go2Detail(tdepProductList[index], tdepProducDTOList[index]);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _background(),
+                Container(
+                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      top: _lineBorderSide(),
+                      bottom: _lineBorderSide(),
+                    ),
+                  ),
+                  child: _productInfo(
+                      name,
+                      minRate,
+                      maxRate,
+                      tdepProductList[index].remark,
+                      tdepProductList[index].minAmt),
                 ),
-              ),
-              child: _productInfo(name, minRate, maxRate,
-                  tdepProductList[index].remark, tdepProductList[index].minAmt),
+              ],
             ),
-          ],
-        ),
-      );
-    }, childCount: tdepProductList.length)));
+          );
+        }, childCount: tdepProductList.length),
+      ),
+    );
     return section;
   }
 
