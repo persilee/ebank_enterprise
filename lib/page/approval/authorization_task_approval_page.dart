@@ -176,6 +176,7 @@ class _AuthorizationTaskApprovalPageState
   }
 
   //转账信息
+  // ignore: unused_element
   _transferInfo() {
     return SliverToBoxAdapter(
       child: _transfer

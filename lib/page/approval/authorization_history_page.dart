@@ -65,27 +65,12 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
         } else {
           return GestureDetector(
             onTap: () {
-              //  Navigator.pushNamed(context, pageAuthorizationTaskApproval);
               go2Detail(list[index]);
               print('选择账号');
             },
             child: Column(
               children: [
-                Container(
-                  color: Colors.white,
-                  margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: Column(
-                    children: [
-                      //发起人
-                      _getRow(S.current.sponsor, list[index].processId),
-                      //待办任务名称
-                      _getRow(S.current.to_do_task_name, list[index].taskName),
-                      //创建时间
-                      _getRow(S.current.creation_time, list[index].createTime)
-                    ],
-                  ),
-                )
+                _getColumn(index)
               ],
             ),
           );
@@ -95,6 +80,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
     ):notDataContainer(context, S.current.no_data_now);
   }
 
+ 
   _getRow(String leftText, String rightText) {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
@@ -113,6 +99,23 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
               textAlign: TextAlign.right,
             ),
           )
+        ],
+      ),
+    );
+  }
+  _getColumn(index){
+    return Container(
+        color: Colors.white,
+        margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        child: Column(
+        children: [
+        //发起人
+        _getRow(S.current.sponsor, list[index].processId),
+        //待办任务名称
+        _getRow(S.current.to_do_task_name, list[index].taskName),
+        //创建时间
+        _getRow(S.current.creation_time, list[index].createTime)
         ],
       ),
     );

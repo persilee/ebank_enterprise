@@ -50,7 +50,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   var matAmt = '';
 
   //第三个接口所需变量
-  var _isLoading = false;
 
   var eryInt = '';
 
@@ -221,6 +220,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   }
 
   //对话框
+  // ignore: non_constant_identifier_names
   _DialogBox(String contractMoney, String earlySettleMoney) {
     return Container(
         height: 105,
@@ -328,7 +328,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   _contractEarly(BuildContext context) {
     setState(() {
-      _isLoading = true;
     });
     HSProgressHUD.show();
 
@@ -350,7 +349,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
       // _cleanDeposit(context, value);
     }).catchError((e) {
       setState(() {
-        _isLoading = false;
       });
       HSProgressHUD.showError(status: '${e.toString()}');
     });
@@ -359,7 +357,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   //结算成功-跳转页面
   _showContractSucceedPage(BuildContext context) async {
     setState(() {
-      _isLoading = false;
     });
     Navigator.pushNamed(context, pageDepositRecordSucceed);
   }

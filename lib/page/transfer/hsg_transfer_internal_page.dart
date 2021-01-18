@@ -1,5 +1,3 @@
-import 'package:ebank_mobile/config/hsg_colors.dart';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///行内转账页面
 /// Author: lijiawei
@@ -17,7 +15,7 @@ import 'package:ebank_mobile/page/transfer/widget/transfer_button_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
-import 'package:ebank_mobile/util/encrypt_util.dart';
+
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -51,8 +49,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   List<RemoteBankCard> cardList = [];
 
   List<CardBalBean> cardBal = [];
-
-  var _isLoading = false;
 
   var payeeBankCode = '';
 
@@ -107,7 +103,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   List<String> passwordList = []; //密码列表
 
-  var _payPassword = ''; //支付密码
+//支付密码
 
   var check = false;
 
@@ -120,15 +116,12 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     });
     _accountController.addListener(() {
       _accountInputChange(_accountController.text); //收款账号输入框时调用
-      print('$_accountController 000000000000000000');
     });
     _transferMoneyController.addListener(() {
       _amountInputChange(_transferMoneyController.text); //金额输入框时调用
-      print('$_transferMoneyController 1111');
     });
     _remarkController.addListener(() {
       _transferInputChange(_remarkController.text); //金额输入框时调用
-      print('$_remarkController 1111222');
     });
 
     _loadTransferData();
@@ -136,17 +129,14 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   _amountInputChange(String title) {
     money = double.parse(title);
-    print('$payeeName iiiidddd');
   }
 
   _nameInputChange(String name) {
     payeeName = name;
-    print('$payeeName iiiii');
   }
 
   _accountInputChange(String account) {
     payeeCardNo = account;
-    print('$payeeCardNo  aaaaaaaaaaaaa');
   }
 
   _transferInputChange(String transfer) {
@@ -174,7 +164,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       _position = result;
     });
     _getCardTotals(_changedAccountTitle);
-
     //_getCcy();
   }
 
@@ -347,7 +336,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
           //提交按钮
           getButton(S.current.submit, _isClick),
-         
         ],
       ),
     );
@@ -363,8 +351,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 Rows rowListPartner = value;
                 _nameController.text = rowListPartner.payeeName;
                 _accountController.text = rowListPartner.payeeCardNo;
-                print('$_nameController  9999999999999999999');
-                print('$_accountController sssssssssss');
               } else {}
             });
           },
@@ -437,9 +423,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   }
 
   void _tranferAccount(BuildContext context) {
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() {});
     HSProgressHUD.show();
     TransferDataRepository()
         .getTransferByAccount(
@@ -469,18 +453,14 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       HSProgressHUD.dismiss();
       _showContractSucceedPage(context);
     }).catchError((e) {
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() {});
       HSProgressHUD.showError(status: '${e.toString()}');
     });
   }
 
   //结算成功-跳转页面
   _showContractSucceedPage(BuildContext context) {
-    setState(() {
-      _isLoading = false;
-    });
+    setState(() {});
     Navigator.pushNamed(context, pageDepositRecordSucceed, arguments: '0');
   }
 
@@ -507,7 +487,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     );
     if (passwordList != null) {
       if (passwordList.length == 6) {
-        _payPassword = EncryptUtil.aesEncode(passwordList.join());
         _tranferAccount(context);
         _clean();
       }

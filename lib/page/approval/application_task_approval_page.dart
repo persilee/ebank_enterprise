@@ -81,6 +81,7 @@ class _ApplicationTaskApprovalPageState
     );
   }
 
+  // ignore: unused_element
   _sliverFixed() {
     return SliverFixedExtentList(
       delegate: SliverChildBuilderDelegate(

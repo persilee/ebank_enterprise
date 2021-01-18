@@ -1,14 +1,12 @@
-import 'package:ebank_mobile/util/format_util.dart';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///转账方法
 /// Author: lijiawei
 /// Date: 2020-12-09
-
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/services.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/format_util.dart';
 
 Widget transferPayerWidget(
     BuildContext context,
@@ -161,11 +159,10 @@ Widget _twoRow(
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
               ],
-              // onChanged: (money) {
-              //   money.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1');
-              //   moneyChanges(money);
-              //   print("这个是 onChanged 时刻在监听，输出的信息是：$money");
-              // },
+              onChanged: (money) {
+                money.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1');
+                moneyChanges(money);
+              },
               controller: _transferMoneyController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
@@ -241,7 +238,6 @@ Widget _threeRowRight(
         getcardList();
         //选择卡号
         getCardTotals(_changedAccountTitle);
-
         print('选择账号');
       },
       child: Column(

@@ -70,22 +70,11 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
           return  GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, pageApplicationTaskApproval,
-                  arguments: list);
+                  arguments: list[index]);
             },
             child: Column(
               children: [
-                Container(
-                  color: Colors.white,
-                  margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: Column(
-                    children: [
-                      _getRow(S.current.sponsor, list[index].processId),
-                      _getRow(S.current.to_do_task_name, list[index].taskName),
-                      _getRow(S.current.creation_time, list[index].createTime)
-                    ],
-                  ),
-                ) 
+                _getColumn(index),
               ],
             ),
           );
@@ -122,6 +111,21 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
         ],
       ),
     );
+  }
+
+ _getColumn(index){
+ return Container(
+     color: Colors.white,
+     margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+     padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+     child: Column(
+     children: [
+     _getRow(S.current.sponsor, list[index].processId),
+     _getRow(S.current.to_do_task_name, list[index].taskName),
+     _getRow(S.current.creation_time, list[index].createTime)
+     ],
+    ),
+   );
   }
 
   _loadMyApplicationData(page, pageSize) {

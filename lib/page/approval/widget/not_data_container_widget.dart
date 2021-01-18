@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 notDataContainer(BuildContext context, String noDateText){
 
     return Container(
-      color: HsgColors.backgroundColor,
       width: MediaQuery.of(context).size.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

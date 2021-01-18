@@ -100,6 +100,13 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     '投资款',
     '还款/供款',
     '学费',
+    '参与费',
+    '工资/花红/佣金',
+    '服务费',
+    '生活费',
+    '存款转移',
+    '房地产投资',
+    '其他',
   ];
   List<String> ccyListPlay = ['CNY', 'HKD', 'EUR'];
 
@@ -342,6 +349,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //根据货币类型拿余额
 
+  // ignore: unused_element
   _getavaBal(String changedCcyTitle) {
     Future.wait({
       CardDataRepository().getSingleCardBal(
