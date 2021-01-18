@@ -329,8 +329,9 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
                   btnTitle = S.current.finished;
                   btnColor = HsgColors.finishedBtn;
                 }
-                nextDate =
-                    groupValue == '1' ? '--' : transferPlanList[index].nextDate;
+                nextDate = transferPlanList[index].nextDate == null
+                    ? '--'
+                    : transferPlanList[index].nextDate;
                 return FlatButton(
                   padding: EdgeInsets.all(0),
                   onPressed: () {
