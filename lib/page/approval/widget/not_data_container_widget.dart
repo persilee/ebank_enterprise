@@ -1,5 +1,3 @@
-
-
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +7,7 @@ import 'package:flutter/material.dart';
 /// Author: 彭逸康
 /// Date: 2021-01-15
 
+<<<<<<< HEAD
 notDataContainer(BuildContext context, String noDateText){
 
     return Container(
@@ -21,11 +20,24 @@ notDataContainer(BuildContext context, String noDateText){
             width: 160,
           ),
           Text(
+=======
+notDataContainer(BuildContext context, String noDateText) {
+  return Container(
+    // color: HsgColors.backgroundColor,
+    width: MediaQuery.of(context).size.width,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image(
+          image: AssetImage('images/noDataIcon/no_data_record.png'),
+          width: 160,
+        ),
+        Text(
+>>>>>>> c4a8fcf4d455ca43a8b5ea1a783c78f5c92f2ab2
           noDateText,
-            style: FIRST_DEGREE_TEXT_STYLE,
-          )
-        ],
-      ),
-    );
-  }
-
+          style: FIRST_DEGREE_TEXT_STYLE,
+        )
+      ],
+    ),
+  );
+}

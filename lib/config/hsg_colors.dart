@@ -29,4 +29,15 @@ class HsgColors {
   static const Color redTextColor = Color(0xFFC33838);
   static const Color blueTextColor = Color(0xFF4871FF);
   static const Color blueBGColor = Color(0xFFEFF3FF);
+  static const Color detailText = Color(0xFF9A9A9A);
+  static const Color notSelectedBtn = Color(0xFF8B8B8B);
+  static const Color canceledBtn = Color(0xFFD5D5D5);
+  static const Color finishedBtn = Color(0xFF00C16C);
+  static const Color blueIcon = Color(0xFF4C74FF);
+  static const Color toDoDetailText = Color(0xFF8D8D8D);
+  static const Color redText = Color(0xFFF8514D);
+  static const Color topText = Color(0xFF828282);
+  static const Color frequencyBtn = Color(0xFFDCF0FF);
+  static const Color notSelectedFrequencyBtn = Color(0xFFF3F3F3);
+  static const Color notSelectedFrequencyBtnText = Color(0xFF868686);
 }

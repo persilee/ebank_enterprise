@@ -59,8 +59,6 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   String _limitMoney = '';
   String _changedRateTitle = '';
   String _changedCcyTitle = '';
-  List<String> passwordList = []; //密码列表
-  var _payPassword = ''; //支付密码
   int _position = 0;
   String _changedAccountTitle = '';
   String groupValue = '0'; //预约频率对应的type值
@@ -182,7 +180,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   Widget _rightArrow() {
     return Icon(
       Icons.keyboard_arrow_right,
-      color: Colors.black,
+      color: HsgColors.nextPageIcon,
     );
   }
 
@@ -193,7 +191,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       margin: EdgeInsets.only(left: 15),
       child: Text(
         leftText,
-        style: TextStyle(color: Colors.black, fontSize: 14),
+        style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 14),
       ),
     );
   }
@@ -202,7 +200,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   Widget _selectedTime(String selectedTime) {
     return Text(
       selectedTime,
-      style: TextStyle(fontSize: 13, color: Color(0xff262626)),
+      style: TextStyle(fontSize: 13, color: HsgColors.aboutusTextCon),
     );
   }
 
@@ -274,7 +272,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           textAlign: TextAlign.right,
           autocorrect: false,
           autofocus: false,
-          style: TextStyle(color: HsgColors.firstDegreeText, fontSize: 14.0),
+          style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 14.0),
           onChanged: (value) {
             print("输入的计划名称是:$value");
             planName = value;
@@ -620,10 +618,13 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           childAspectRatio: 1 / 0.35,
           children: frequency.map((value) {
             return groupValue == value['type']
-                ? _chooseBtn(value['title'], value['type'], Color(0xFFDCF0FF),
-                    HsgColors.accent)
-                : _chooseBtn(value['title'], value['type'], Color(0xFFF3F3F3),
-                    Color(0xFF868686));
+                ? _chooseBtn(value['title'], value['type'],
+                    HsgColors.frequencyBtn, HsgColors.accent)
+                : _chooseBtn(
+                    value['title'],
+                    value['type'],
+                    HsgColors.notSelectedFrequencyBtn,
+                    HsgColors.notSelectedFrequencyBtnText);
           }).toList(),
         ),
       ),
@@ -660,7 +661,6 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
 
 // 计划信息
   Widget _transferInfo() {
-    String groupValue = '1';
     return Container(
       margin: EdgeInsets.only(top: 20),
       color: Colors.white,

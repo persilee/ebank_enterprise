@@ -150,6 +150,7 @@ class _TransferPlanDetailsPageState extends State<TransferPlanDetailsPage> {
       default:
         frequency = '国际转账';
     }
+    nextDate = nextDate == null ? '--' : nextDate;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
