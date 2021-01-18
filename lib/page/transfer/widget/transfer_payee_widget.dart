@@ -11,7 +11,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Widget TransferPayeeWidget(
+Widget transferPayeeWidget(
   String accountName,
   String payeeName, //从输入框拿回来的回参
   String accountForSelect,

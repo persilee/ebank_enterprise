@@ -15,6 +15,7 @@ import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/transfer/widget/transfer_button_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
 
@@ -129,8 +130,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   var accountSelect = '';
 
   var payeeBank = '';
-
-  var _getBankSwift = S.current.please_input;
 
   var _getPayeeBank = '';
 
@@ -438,7 +437,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       body: CustomScrollView(
         slivers: <Widget>[
           _gaySliver,
-          TransferPayerWidget(
+          transferPayerWidget(
               context,
               _limitMoney,
               _changedCcyTitle,
@@ -476,7 +475,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               ),
             ),
           ),
-          TransferPayeeWidget(
+          transferPayeeWidget(
               payeeCardNo,
               payeeName,
               accountSelect,
@@ -556,22 +555,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Container(
-              height: 90,
-              padding: EdgeInsets.fromLTRB(29.6, 30, 29.6, 10),
-              margin: EdgeInsets.fromLTRB(0, 20, 0, 80),
-              child: RaisedButton(
-                child: Text(S.current.submit),
-                textColor: Colors.white,
-                color: Colors.blue,
-                onPressed: _isClick(),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                disabledColor: HsgColors.btnDisabled,
-              ),
-            ),
-          ),
+             //提交按钮
+             getButton(S.current.submit, _isClick),
         ],
       ),
     );

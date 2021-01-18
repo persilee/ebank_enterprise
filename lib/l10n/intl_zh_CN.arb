@@ -380,5 +380,6 @@
   "twelemonth":"十二个月",
   "project_loan":"项目贷款",
   "business_loan":"经营贷款",
-  "purpose":"目的"
+  "purpose":"目的",
+  "no_data_now" :"暂无数据"
 }

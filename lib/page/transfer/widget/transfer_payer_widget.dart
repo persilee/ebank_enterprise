@@ -10,8 +10,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/services.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 
-// ignore: non_constant_identifier_names
-Widget TransferPayerWidget(
+Widget transferPayerWidget(
     BuildContext context,
     String _limitMoney,
     String _changedCcyTitle,

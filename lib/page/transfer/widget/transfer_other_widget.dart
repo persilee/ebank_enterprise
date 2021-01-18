@@ -10,7 +10,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Widget TransferOtherWidget(BuildContext context, String remark,
+Widget transferOtherWidget(BuildContext context, String remark,
     Function(String inputStr) transferChange,
     [TextEditingController _remarkController]) {
   remark = transferChange(remark) == null

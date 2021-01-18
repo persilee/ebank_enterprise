@@ -49,8 +49,6 @@ class _AuthorizationTaskApprovalPageState
 
   var _processTitle = "";
 
-  bool _result;
-
   String _servCtr = "";
 
   @override
@@ -321,7 +319,7 @@ class _AuthorizationTaskApprovalPageState
             _userId = data.userId;
             _processKey = data.processKey;
             _processTitle = data.processTitle;
-            _result = data.result;
+            // _result = data.result;
             _servCtr = data.servCtr;
           }
         });

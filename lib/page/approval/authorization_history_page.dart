@@ -9,6 +9,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../page_route.dart';
@@ -30,7 +31,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
   ScrollController _scrollController = ScrollController();
   List<FinishTaskDetail> list = []; //页面显示的待办列表
   List<FinishTaskDetail> finishTaskList = [];
-  bool _loadMore = false;
+
   @override
   void initState() {
     super.initState();
@@ -52,7 +53,11 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+      bool _isDate = false;
+        if(list.length != 0){
+          _isDate = true;
+        }
+    return _isDate ? ListView.builder(
       itemCount: list.length + 1,
       itemBuilder: (context, index) {
         if (index == list.length) {
@@ -87,7 +92,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
         }
       },
       controller: _scrollController,
-    );
+    ):notDataContainer(context, S.current.no_data_now);
   }
 
   _getRow(String leftText, String rightText) {
@@ -157,27 +162,10 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
         ),
       ),
     );
-    return _pad(
-      Row(
-        children: <Widget>[loadingIndicator],
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-      ),
-      t: 20.0,
-      b: 20.0,
-    );
-  }
-
-//设置padding
-  Widget _pad(Widget widget, {l, t, r, b}) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        l ??= 0.0,
-        t ??= 0.0,
-        r ??= 0.0,
-        b ??= 0.0,
-      ),
-      child: widget,
+    return Row(
+      children: <Widget>[loadingIndicator],
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
     );
   }
 

@@ -10,6 +10,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_my_application.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
   LoadingStatus loadStatus; //加载状态
   int count = 0;
   int page = 1;
-  bool _loadMore = false; //是否加载更多
+//是否加载更多
   ScrollController _scrollController = ScrollController();
   List<MyApplicationDetail> list = []; //页面显示的待办列表
   List<MyApplicationDetail> myApplicationList = [];
@@ -49,19 +50,24 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+ 
+    return Scaffold(   
       body: _getContent(list),
     );
   }
 
   _getContent(List<MyApplicationDetail> list) {
-    return ListView.builder(
-      itemCount: list.length + 1,
+       bool _isDate = false;
+        if(list.length != 0){
+          _isDate = true;
+        }
+    return _isDate? ListView.builder(   
+      itemCount: list.length + 1,    
       itemBuilder: (context, index) {
         if (index == list.length) {
           return _loadingView();
         } else {
-          return GestureDetector(
+          return  GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, pageApplicationTaskApproval,
                   arguments: list);
@@ -79,20 +85,15 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
                       _getRow(S.current.creation_time, list[index].createTime)
                     ],
                   ),
-                )
+                ) 
               ],
             ),
           );
         }
       },
       controller: _scrollController,
-    );
+    ) : notDataContainer(context,S.current.no_data_now);
   }
-
-  // void go2Detail(MyApplicationDetail application) {
-  //   Navigator.pushNamed(context, pageApplicationTaskApproval,
-  //       arguments: application);
-  // }
 
   //销毁
   void dispose() {
@@ -158,7 +159,6 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
 
     setState(() {
       if (list.length < count) {
-        _loadMore = true;
         page = page + 1;
         _loadMyApplicationData(page, 10);
         loadStatus = LoadingStatus.STATUS_IDEL;
@@ -178,27 +178,10 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
         ),
       ),
     );
-    return _pad(
-      Row(
-        children: <Widget>[loadingIndicator],
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-      ),
-      t: 20.0,
-      b: 20.0,
-    );
-  }
-
-//设置padding
-  Widget _pad(Widget widget, {l, t, r, b}) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        l ??= 0.0,
-        t ??= 0.0,
-        r ??= 0.0,
-        b ??= 0.0,
-      ),
-      child: widget,
+    return Row(
+      children: <Widget>[loadingIndicator],
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
     );
   }
 }
