@@ -4,10 +4,11 @@
 /// Date: 2021-01-15
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/delete_transfer_plan.dart';
+import 'package:ebank_mobile/data/source/model/cancel_transfer_plan.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_plan_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -24,17 +25,17 @@ class TransferPlanPage extends StatefulWidget {
 }
 
 class _TransferPlanPageState extends State<TransferPlanPage> {
-  bool btnOne = true;
-  bool btnTwo = false;
   String groupValue = '0';
   List<String> _statusList = ['P'];
   List<TransferPlan> transferPlanList = [];
-  TransferPlan transferPlan;
   String frequency = '';
   String transferType = '';
   String planId = '';
+  String nextDate = '--';
   String btnTitle = S.current.cancel_plan;
   Color btnColor = HsgColors.accent;
+  bool _isDate = false;
+  var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   List state = [
     {
@@ -50,7 +51,9 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
   @override
   void initState() {
     super.initState();
-    _getTransferPlanList();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      refrestIndicatorKey.currentState.show();
+    });
   }
 
   //改变groupValue
@@ -77,14 +80,14 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
         context: context,
         builder: (context) {
           return HsgAlertDialog(
-            title: "提示",
-            message: "确认取消转账计划？",
-            positiveButton: '确定',
-            negativeButton: '取消',
+            title: S.current.prompt,
+            message: S.current.confirm_cancel_transfer_plan,
+            positiveButton: S.current.confirm,
+            negativeButton: S.current.cancel,
           );
         }).then((value) {
       if (value == true) {
-        _delTransferPlan();
+        _cancleTransferPlan();
       }
     });
   }
@@ -100,12 +103,12 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
         children: [
           Container(
             width: (MediaQuery.of(context).size.width - 30) / 2,
-            child: _textStyle(leftText, Color(0xff9a9a9a), 12.0,
+            child: _textStyle(leftText, HsgColors.detailText, 12.0,
                 FontWeight.normal, TextAlign.left),
           ),
           Container(
             width: (MediaQuery.of(context).size.width - 30) / 2,
-            child: _textStyle(rightText, Color(0xff9a9a9a), 12.0,
+            child: _textStyle(rightText, HsgColors.detailText, 12.0,
                 FontWeight.normal, TextAlign.right),
           ),
         ],
@@ -156,13 +159,16 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
           _getTransferPlanList();
           print(btnTitle);
         } else if (btnTitle == S.current.already_finished) {
-          _statusList = ['A'];
+          _statusList = ['C', 'E'];
           updateGroupValue(btnType);
           _getTransferPlanList();
           print(btnTitle);
         } else if (btnTitle == S.current.cancel_plan) {
           _alertDialog();
-        } else if (btnTitle == S.current.finished) {}
+        } else {
+          _statusList = ['C', 'E'];
+          _getTransferPlanList();
+        }
       },
       child: _textStyle(
           btnTitle, textColor, textSize, FontWeight.normal, TextAlign.center),
@@ -189,8 +195,8 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
               : _btnStyle(
                   value['title'],
                   value['type'],
-                  Color(0xFFFFFFFF),
-                  Color(0xFF8B8B8B),
+                  Colors.white,
+                  HsgColors.notSelectedBtn,
                   BorderSide(color: HsgColors.divider),
                   14.0);
         }).toList(),
@@ -276,76 +282,95 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
       ),
     );
     section.add(
-      SliverList(
-        delegate: SliverChildBuilderDelegate((context, index) {
-          planId = transferPlanList[index].planId;
-          switch (transferPlanList[index].frequency) {
-            case '0':
-              frequency = '仅1次';
-              break;
-            case '1':
-              frequency = '每日';
-              break;
-            case '2':
-              frequency = '每月';
-              break;
-            default:
-              frequency = '每年';
-          }
-          switch (transferPlanList[index].transferType) {
-            case '0':
-              transferType = '行内转账';
-              break;
-            case '1':
-              frequency = '跨行转账';
-              break;
-            default:
-              frequency = '国际转账';
-          }
-          return FlatButton(
-            padding: EdgeInsets.all(0),
-            onPressed: () {
-              go2Detail(transferPlanList[index]);
-            },
-            child: Column(
-              children: [
-                _planName(transferPlanList[index].planName),
-                Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.only(left: 15, right: 15, top: 15),
-                  child: Row(
+      _isDate
+          ? SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                planId = transferPlanList[index].planId;
+                switch (transferPlanList[index].frequency) {
+                  case '0':
+                    frequency = S.current.only_once;
+                    break;
+                  case '1':
+                    frequency = S.current.daily;
+                    break;
+                  case '2':
+                    frequency = S.current.monthly;
+                    break;
+                  default:
+                    frequency = S.current.yearly;
+                }
+                switch (transferPlanList[index].transferType) {
+                  case '0':
+                    transferType = S.current.transfer_type_0;
+                    break;
+                  case '1':
+                    frequency = '跨行转账';
+                    break;
+                  default:
+                    frequency = S.current.transfer_type_2;
+                }
+                if (transferPlanList[index].status == 'P') {
+                  btnTitle = S.current.cancel_plan;
+                  btnColor = HsgColors.accent;
+                } else if (transferPlanList[index].status == 'C') {
+                  btnTitle = S.current.canceled;
+                  btnColor = HsgColors.canceledBtn;
+                } else {
+                  btnTitle = S.current.finished;
+                  btnColor = HsgColors.finishedBtn;
+                }
+                nextDate =
+                    groupValue == '1' ? '--' : transferPlanList[index].nextDate;
+                return FlatButton(
+                  padding: EdgeInsets.all(0),
+                  onPressed: () {
+                    go2Detail(transferPlanList[index]);
+                  },
+                  child: Column(
                     children: [
-                      _bank(
-                          transferPlanList[index].payerName,
-                          FormatUtil.formatSpace4(
-                              transferPlanList[index].payerCardNo)),
-                      _transferRecordImage(
-                          'images/transferIcon/transfert_to.png',
-                          MediaQuery.of(context).size.width / 7,
-                          25,
-                          25),
-                      _bank(
-                          transferPlanList[index].payeeName,
-                          FormatUtil.formatSpace4(
-                              transferPlanList[index].payeeCardNo)),
+                      _planName(transferPlanList[index].planName),
+                      Container(
+                        color: Colors.white,
+                        padding: EdgeInsets.only(left: 15, right: 15, top: 15),
+                        child: Row(
+                          children: [
+                            _bank(
+                                transferPlanList[index].payerName,
+                                FormatUtil.formatSpace4(
+                                    transferPlanList[index].payerCardNo)),
+                            _transferRecordImage(
+                                'images/transferIcon/transfert_to.png',
+                                MediaQuery.of(context).size.width / 7,
+                                25,
+                                25),
+                            _bank(
+                                transferPlanList[index].payeeName,
+                                FormatUtil.formatSpace4(
+                                    transferPlanList[index].payeeCardNo)),
+                          ],
+                        ),
+                      ),
+                      _dottedLine(),
+                      _planInfo(
+                          transferPlanList[index].debitCurrency +
+                              ' ' +
+                              transferPlanList[index].amount,
+                          frequency,
+                          transferPlanList[index].startDate,
+                          transferPlanList[index].endDate,
+                          nextDate,
+                          transferType),
                     ],
                   ),
-                ),
-                _dottedLine(),
-                _planInfo(
-                    transferPlanList[index].debitCurrency +
-                        ' ' +
-                        transferPlanList[index].amount,
-                    frequency,
-                    transferPlanList[index].startDate,
-                    transferPlanList[index].endDate,
-                    transferPlanList[index].nextDate,
-                    transferType),
-              ],
+                );
+              }, childCount: transferPlanList.length),
+            )
+          : SliverToBoxAdapter(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 3.5 / 5,
+                child: notDataContainer(context, S.current.no_data_now),
+              ),
             ),
-          );
-        }, childCount: transferPlanList.length),
-      ),
     );
     return section;
   }
@@ -357,35 +382,34 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
         centerTitle: true,
         title: Text(S.current.transfer_plan),
       ),
-      body: CustomScrollView(
-        slivers: _transferPlanList(),
-      ),
+      body: RefreshIndicator(
+          key: refrestIndicatorKey,
+          child: CustomScrollView(
+            slivers: _transferPlanList(),
+          ),
+          onRefresh: _getTransferPlanList),
     );
   }
 
-  void _getTransferPlanList() {
-    Future.wait({
-      TransferDataRepository().getTransferPlanList(
-          GetTransferPlanListReq(1, 10, '', _statusList, '0'),
-          'getTransferPlanList')
-    }).then((data) {
-      data.forEach((value) {
-        if (value is GetTransferPlanListResp) {
-          setState(() {
-            if (value.rows != null) {
-              transferPlanList.clear();
-              transferPlanList.addAll(value.rows);
-            }
-            if (groupValue == '0') {
-              btnTitle = S.current.cancel_plan;
-              btnColor = HsgColors.accent;
-            } else {
-              btnTitle = S.current.finished;
-              btnColor = Color(0xFF00C16C);
-            }
-          });
-        }
-      });
+  Future<void> _getTransferPlanList() async {
+    TransferDataRepository()
+        .getTransferPlanList(
+            GetTransferPlanListReq(1, 10, '', _statusList, '0'),
+            'getTransferPlanList')
+        .then((value) {
+      if (value is GetTransferPlanListResp) {
+        setState(() {
+          if (value.rows != null) {
+            transferPlanList.clear();
+            transferPlanList.addAll(value.rows);
+          }
+          if (transferPlanList.length != 0) {
+            _isDate = true;
+          } else {
+            _isDate = false;
+          }
+        });
+      }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
@@ -397,10 +421,10 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
         arguments: transferPlan);
   }
 
-  void _delTransferPlan() {
+  void _cancleTransferPlan() {
     Future.wait({
-      TransferDataRepository().deleteTransferPlan(
-          DeleteTransferPlanReq(planId), 'deleteTransferPlan')
+      TransferDataRepository().cancelTransferPlan(
+          CancelTransferPlanReq(planId), 'deleteTransferPlan')
     }).then((data) {
       setState(() {
         _statusList = ['P'];

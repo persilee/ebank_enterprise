@@ -86,7 +86,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           Text(
             //定期产品年利率
             '$minRate%~$maxRate%',
-            style: TextStyle(fontSize: 17, color: Colors.red[500]),
+            style: TextStyle(fontSize: 17, color: HsgColors.redText),
           ),
           SizedBox(
             width: (MediaQuery.of(context).size.width - 30) / 2 * 1,
@@ -95,7 +95,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
               remark,
               style: TextStyle(
                 fontSize: 15,
-                color: HsgColors.firstDegreeText,
+                color: HsgColors.aboutusTextCon,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -114,7 +114,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         S.current.annual_interest_rate,
         style: TextStyle(
           fontSize: 13,
-          color: HsgColors.describeText,
+          color: HsgColors.secondDegreeText,
         ),
       ),
     );
@@ -132,7 +132,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
             : S.current.deposit_min_with_value + minAmt,
         style: TextStyle(
           fontSize: 13,
-          color: HsgColors.describeText,
+          color: HsgColors.secondDegreeText,
         ),
         overflow: TextOverflow.ellipsis,
       ),
@@ -226,31 +226,32 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(S.current.time_deposit),
-          actions: <Widget>[
-            Container(
-              child: Text.rich(TextSpan(
-                  text: S.current.deposit_record,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    height: 3.0,
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigator.pushNamed(context, pageTimeDepositRecord);
-                    })),
-            )
-          ],
-        ),
-        body: RefreshIndicator(
-            key: refrestIndicatorKey,
-            child: CustomScrollView(
-              slivers: _titleSection(productList, producDTOList),
-            ),
-            //下拉刷新时调用_loadData
-            onRefresh: _loadData));
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(S.current.time_deposit),
+        actions: <Widget>[
+          Container(
+            child: Text.rich(TextSpan(
+                text: S.current.deposit_record,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  height: 3.0,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Navigator.pushNamed(context, pageTimeDepositRecord);
+                  })),
+          )
+        ],
+      ),
+      body: RefreshIndicator(
+          key: refrestIndicatorKey,
+          child: CustomScrollView(
+            slivers: _titleSection(productList, producDTOList),
+          ),
+          //下拉刷新时调用_loadData
+          onRefresh: _loadData),
+    );
   }
 
   Future<void> _loadData() async {

@@ -8,6 +8,8 @@ import 'package:ebank_mobile/config/hsg_styles.dart';
 import 'package:ebank_mobile/data/source/model/find_user_to_do_task.dart';
 import 'package:ebank_mobile/data/source/process_task_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
+import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../page_route.dart';
@@ -29,11 +31,15 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   int count = 0;
   int page = 1;
   LoadingStatus loadStatus; //加载状态
+  bool _isDate = false;
+  var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   void initState() {
     super.initState();
-    //网络请求
-    _loadData(page, 10);
+    //下拉刷新
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      refrestIndicatorKey.currentState.show();
+    });
     _sctrollController.addListener(() {
       if (_sctrollController.position.pixels ==
           _sctrollController.position.maxScrollExtent) {
@@ -62,7 +68,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
       visible: loadStatus == LoadingStatus.STATUS_LOADING ? false : true,
       child: SizedBox(
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation(Colors.blue),
+          valueColor: AlwaysStoppedAnimation(HsgColors.accent),
         ),
       ),
     );
@@ -85,7 +91,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
           padding: EdgeInsets.only(left: 10.0),
           child: Icon(
             Icons.fiber_manual_record,
-            color: HsgColors.accent,
+            color: HsgColors.blueIcon,
             size: 8.0,
           ),
         ),
@@ -133,7 +139,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
               leftText,
               style: TextStyle(
                 fontSize: 14.0,
-                color: HsgColors.secondDegreeText,
+                color: HsgColors.toDoDetailText,
               ),
             ),
           ),
@@ -197,28 +203,33 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: list.length + 1,
-      itemBuilder: (context, index) {
-        if (index == list.length) {
-          return _loadingView();
-        } else {
-          return Column(
-            children: <Widget>[
-              Center(
-                child: _pad(
-                  _todoInformation(list[index], list[index].taskName,
-                      list[index].startUser, list[index].createTime),
-                  t: 10.0,
-                  b: 10.0,
-                ),
-              ),
-            ],
-          );
-        }
-      },
-      controller: _sctrollController,
-    );
+    return RefreshIndicator(
+        key: refrestIndicatorKey,
+        child: _isDate
+            ? ListView.builder(
+                itemCount: list.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == list.length) {
+                    return _loadingView();
+                  } else {
+                    return Column(
+                      children: <Widget>[
+                        Center(
+                          child: _pad(
+                            _todoInformation(list[index], list[index].taskName,
+                                list[index].startUser, list[index].createTime),
+                            t: 10.0,
+                            b: 10.0,
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                },
+                controller: _sctrollController,
+              )
+            : notDataContainer(context, S.current.no_data_now),
+        onRefresh: _loadData);
   }
 
 //跳转并传值
@@ -226,13 +237,9 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     Navigator.pushNamed(context, pageTaskApproval, arguments: approval);
   }
 
-  Future<void> _loadData(
-    int page,
-    int pageSize,
-  ) async {
+  Future<void> _loadData() async {
     ProcessTaskDataRepository()
-        .findUserToDoTask(
-            FindUserToDoTaskReq(page, pageSize), 'findUserToDoTask')
+        .findUserToDoTask(FindUserToDoTaskReq(page, 10), 'findUserToDoTask')
         .then((data) {
       if (data.rows != null) {
         count = data.count;
@@ -240,6 +247,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
           toDoTask.clear();
           toDoTask.addAll(data.rows);
           list.addAll(toDoTask);
+          _isDate = true;
         });
       }
     }).catchError((e) {
@@ -257,7 +265,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     setState(() {
       if (list.length < count) {
         page = page + 1;
-        _loadData(page, 10);
+        _loadData();
         loadStatus = LoadingStatus.STATUS_IDEL;
       } else {
         loadStatus = LoadingStatus.STATUS_LOADING;

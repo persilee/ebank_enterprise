@@ -5,8 +5,8 @@
 
 import 'package:ebank_mobile/data/source/model/add_partner.dart';
 import 'package:ebank_mobile/data/source/model/add_transfer_plan.dart';
+import 'package:ebank_mobile/data/source/model/cancel_transfer_plan.dart';
 import 'package:ebank_mobile/data/source/model/delete_partner.dart';
-import 'package:ebank_mobile/data/source/model/delete_transfer_plan.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
@@ -71,10 +71,10 @@ class TransferDataRepository {
   }
 
   //取消转账计划
-  Future<DeleteTransferPlanResp> deleteTransferPlan(
-      DeleteTransferPlanReq req, String tag) {
-    return request('/ddep/transferPlan/delTransferPlan', req, tag,
-        (data) => DeleteTransferPlanResp.fromJson(data));
+  Future<CancelTransferPlanResp> cancelTransferPlan(
+      CancelTransferPlanReq req, String tag) {
+    return request('/ddep/transferPlan/cancelTransferPlan', req, tag,
+        (data) => CancelTransferPlanResp.fromJson(data));
   }
 
 //转账计划详情

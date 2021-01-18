@@ -63,7 +63,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 //背景色
   Widget _background() {
     return Container(
-      color: HsgColors.backgroundColor,
+      color: HsgColors.commonBackground,
       height: 15,
     );
   }
@@ -74,7 +74,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       width: 20,
       child: Icon(
         Icons.keyboard_arrow_right,
-        color: Colors.black,
+        color: HsgColors.nextPageIcon,
       ),
     );
   }
@@ -119,7 +119,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
               //上文字
               upperText,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13, color: HsgColors.secondDegreeText),
+              style: TextStyle(fontSize: 13, color: HsgColors.topText),
             ),
           ),
           Container(
@@ -131,8 +131,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
               style: TextStyle(
                   fontSize: 18,
                   color: upperText == S.current.year_interest_rate
-                      ? Colors.red
-                      : Colors.black,
+                      ? HsgColors.redText
+                      : HsgColors.aboutusTextCon,
                   fontWeight: FontWeight.bold),
             ),
           ),
@@ -188,7 +188,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                     fontSize: 14.0,
                   )
                 : TextStyle(
-                    color: HsgColors.firstDegreeText,
+                    color: HsgColors.aboutusTextCon,
                     fontSize: 14.0,
                   )),
       ),
@@ -201,7 +201,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       child: Text(
         productList.ccy,
         textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.black, fontSize: 18.0),
+        style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 18.0),
       ),
     );
   }
@@ -246,7 +246,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         child: TextField(
           autocorrect: false,
           autofocus: false,
-          style: TextStyle(color: HsgColors.firstDegreeText, fontSize: 18.0),
+          style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 18.0),
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
           ],
@@ -293,7 +293,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   // 产品描述
   Widget _remark() {
     return Container(
-      color: HsgColors.backgroundColor,
+      color: HsgColors.commonBackground,
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.only(top: 10.0, left: 15.0, bottom: 10.0),
       child: Text(
