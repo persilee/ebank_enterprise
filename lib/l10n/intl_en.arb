@@ -96,6 +96,7 @@
   "already_finished":"Finished",
   "plan_name_with_value":"Plan Title:",
   "cancel_plan":"Cancel Plan",
+  "finished":"Finished",
   "transfer_amount_each_time_with_value":"Transfer Amount",
   "transfer_frequency":"Transfer Frequency",
   "first_time_of_transfer_with_value":"First Transfer Date",

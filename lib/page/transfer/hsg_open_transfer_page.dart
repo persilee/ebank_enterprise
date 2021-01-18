@@ -59,8 +59,6 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   String _limitMoney = '';
   String _changedRateTitle = '';
   String _changedCcyTitle = '';
-  List<String> passwordList = []; //密码列表
-  var _payPassword = ''; //支付密码
   int _position = 0;
   String _changedAccountTitle = '';
   String groupValue = '0'; //预约频率对应的type值
@@ -660,7 +658,6 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
 
 // 计划信息
   Widget _transferInfo() {
-    String groupValue = '1';
     return Container(
       margin: EdgeInsets.only(top: 20),
       color: Colors.white,

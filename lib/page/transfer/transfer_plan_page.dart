@@ -134,14 +134,8 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
   }
 
   //按钮样式
-  Widget _btnStyle(
-    String btnTitle,
-    String btnType,
-    Color btnColor,
-    Color textColor,
-    BorderSide borderSide,
-    double textSize,
-  ) {
+  Widget _btnStyle(String btnTitle, String btnType, Color btnColor,
+      Color textColor, BorderSide borderSide, double textSize) {
     BorderRadius borderRadius;
     if (btnTitle == S.current.in_progress) {
       borderRadius = BorderRadius.horizontal(left: Radius.circular(5));
@@ -162,13 +156,13 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
           _getTransferPlanList();
           print(btnTitle);
         } else if (btnTitle == S.current.already_finished) {
-          _statusList = ['E'];
+          _statusList = ['A'];
           updateGroupValue(btnType);
           _getTransferPlanList();
           print(btnTitle);
         } else if (btnTitle == S.current.cancel_plan) {
           _alertDialog();
-        }
+        } else if (btnTitle == S.current.finished) {}
       },
       child: _textStyle(
           btnTitle, textColor, textSize, FontWeight.normal, TextAlign.center),
@@ -223,13 +217,7 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
           Container(
             width: (MediaQuery.of(context).size.width - 30) / 4.3,
             child: _btnStyle(
-              btnTitle,
-              null,
-              btnColor,
-              Colors.white,
-              BorderSide.none,
-              13.0,
-            ),
+                btnTitle, null, btnColor, Colors.white, BorderSide.none, 13.0),
           ),
         ],
       ),
@@ -388,14 +376,14 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
               transferPlanList.clear();
               transferPlanList.addAll(value.rows);
             }
+            if (groupValue == '0') {
+              btnTitle = S.current.cancel_plan;
+              btnColor = HsgColors.accent;
+            } else {
+              btnTitle = S.current.finished;
+              btnColor = Color(0xFF00C16C);
+            }
           });
-        }
-        if (_statusList == ['E']) {
-          btnTitle = '已结束';
-          btnColor = Color(0xFF00C16C);
-        } else {
-          btnTitle = S.current.cancel_plan;
-          btnColor = HsgColors.accent;
         }
       });
     }).catchError((e) {
