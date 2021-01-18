@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+///转账计划详情页面
+/// Author: wangluyao
+/// Date: 2021-01-15
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_plan_details.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_plan_list.dart';

@@ -35,6 +35,7 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
   String btnTitle = S.current.cancel_plan;
   Color btnColor = HsgColors.accent;
   bool _isDate = false;
+  BorderRadius borderRadius;
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   List state = [
@@ -137,16 +138,14 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
   }
 
   //按钮样式
-  Widget _btnStyle(String btnTitle, String btnType, Color btnColor,
-      Color textColor, BorderSide borderSide, double textSize) {
-    BorderRadius borderRadius;
-    if (btnTitle == S.current.in_progress) {
-      borderRadius = BorderRadius.horizontal(left: Radius.circular(5));
-    } else if (btnTitle == S.current.already_finished) {
-      borderRadius = BorderRadius.horizontal(right: Radius.circular(5));
-    } else {
-      borderRadius = BorderRadius.all(Radius.circular(50));
-    }
+  Widget _btnStyle(
+      String btnTitle,
+      String btnType,
+      Color btnColor,
+      Color textColor,
+      BorderSide borderSide,
+      double textSize,
+      BorderRadius borderRadius) {
     return FlatButton(
       padding: EdgeInsets.zero,
       color: btnColor,
@@ -189,16 +188,20 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
         mainAxisSpacing: 10.0,
         childAspectRatio: 1 / 0.25,
         children: state.map((value) {
+          borderRadius = value['title'] == S.current.in_progress
+              ? BorderRadius.horizontal(left: Radius.circular(5))
+              : BorderRadius.horizontal(right: Radius.circular(5));
           return groupValue == value['type']
               ? _btnStyle(value['title'], value['type'], HsgColors.primary,
-                  HsgColors.aboutusText, BorderSide.none, 14.0)
+                  HsgColors.aboutusText, BorderSide.none, 14.0, borderRadius)
               : _btnStyle(
                   value['title'],
                   value['type'],
                   Colors.white,
                   HsgColors.notSelectedBtn,
                   BorderSide(color: HsgColors.divider),
-                  14.0);
+                  14.0,
+                  borderRadius);
         }).toList(),
       ),
     );
@@ -223,7 +226,14 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
           Container(
             width: (MediaQuery.of(context).size.width - 30) / 4.3,
             child: _btnStyle(
-                btnTitle, null, btnColor, Colors.white, BorderSide.none, 13.0),
+              btnTitle,
+              null,
+              btnColor,
+              Colors.white,
+              BorderSide.none,
+              13.0,
+              BorderRadius.all(Radius.circular(50)),
+            ),
           ),
         ],
       ),
@@ -312,7 +322,7 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
                 if (transferPlanList[index].status == 'P') {
                   btnTitle = S.current.cancel_plan;
                   btnColor = HsgColors.accent;
-                } else if (transferPlanList[index].status == 'C') {
+                } else if (transferPlanList[index].status == 'E') {
                   btnTitle = S.current.canceled;
                   btnColor = HsgColors.canceledBtn;
                 } else {
