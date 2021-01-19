@@ -92,7 +92,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
 
     //获取证件类型
     PublicParametersRepository()
-        .getIdType(GetIdTypeReq(), 'GetIdTypeReq')
+        .getIdType(GetIdTypeReq('CERT_TYPE'), 'GetIdTypeReq')
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {}
     }).catchError((e) {

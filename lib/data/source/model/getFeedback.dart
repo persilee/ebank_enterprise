@@ -2,13 +2,7 @@
 /// 意见反馈的对象
 /// Author: hlx
 /// Date: 2020-12-02
-///
-///
-///  "feedbackProblem": "string",
-// "opinionPhone": "string",
-// "opinionTheme": "string",
-// "problemType": "string"
-
+/// 
 import 'package:json_annotation/json_annotation.dart';
 
 part 'getFeedback.g.dart';

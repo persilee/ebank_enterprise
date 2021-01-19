@@ -8,9 +8,9 @@ class GetIdTypeReq extends Object {
   @JsonKey(name: 'type')
   String type;
 
-  GetIdTypeReq({
-    this.type = 'CERT_TYPE',
-  });
+  GetIdTypeReq(
+    this.type 
+  );
 
   factory GetIdTypeReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetIdTypeReqFromJson(srcJson);
@@ -42,17 +42,17 @@ class GetIdTypeResp extends Object {
 class IdType extends Object {
   @JsonKey(name: 'code')
   String code;
-  @JsonKey(name: 'localName')
-  String localName;
-  @JsonKey(name: 'engName')
-  String engName;
+  @JsonKey(name: 'cname')
+  String cname;
+  @JsonKey(name: 'name')
+  String name;
   @JsonKey(name: 'type')
   String type;
 
   IdType(
     this.code,
-    this.localName,
-    this.engName,
+    this.cname,
+    this.name,
     this.type,
   );
 

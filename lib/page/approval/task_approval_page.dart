@@ -10,6 +10,7 @@ import 'package:ebank_mobile/data/source/model/get_process_task.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/data/source/process_task_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/approval/widget/information_display_list_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,11 +26,26 @@ class TaskApprovalPage extends StatefulWidget {
 class _TaskApprovalPageState extends State<TaskApprovalPage> {
   FocusNode focusNode = FocusNode();
   bool offstage = true; //判断签收按钮是否被点击
-  // bool canBeClicked = false; //判断按钮是否可以被点击
   bool approveResult = true; //审批结果
   bool rejectToStart = true; //是否驳回至发起人
   String comment = ''; //审批意见
   var taskId = '';
+
+  Map transferInfo = {
+    "转账信息": [
+      {"title": "收款账号", "type": "500000617001"},
+      {"title": "账号名称", "type": "Mike"},
+      {"title": "转入货币", "type": "EUR"},
+    ],
+    "付款信息": [
+      {"title": "付款账号", "type": "500000740001"},
+      {"title": "账户名称", "type": "Leo"},
+      {"title": "付款银行", "type": "HISUN-高阳银行"},
+      {"title": "转出货币", "type": "EUR"},
+      {"title": "转出金额", "type": "1000"},
+      {"title": "附言", "type": "转账"},
+    ],
+  };
 
   @override
   void initState() {
@@ -47,14 +63,6 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
     setState(() {
       offstage = !offstage;
     });
-  }
-
-//分割线
-  Widget _line() {
-    return Container(
-      padding: EdgeInsets.only(left: 15.0, right: 15.0),
-      child: Divider(height: 0.5, color: HsgColors.divider),
-    );
   }
 
 //顶部提示
@@ -261,133 +269,27 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
     );
   }
 
-  Map transferInfo = {
-    "转账信息": [
-      {"title": "收款账号", "type": "500000617001"},
-      {"title": "账号名称", "type": "Mike"},
-      {"title": "转入货币", "type": "EUR"},
-    ]
-  };
-  Map paymentInfo = {
-    "付款信息": [
-      {"title": "付款账号", "type": "500000740001"},
-      {"title": "账户名称", "type": "Leo"},
-      {"title": "付款银行", "type": "HISUN-高阳银行"},
-      {"title": "转出货币", "type": "EUR"},
-      {"title": "转出金额", "type": "1000"},
-      {"title": "附言", "type": "转账"},
-    ]
-  };
-
   @override
   Widget build(BuildContext context) {
     FindUserTaskDetail application = ModalRoute.of(context).settings.arguments;
     taskId = application.taskId;
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(S.current.task_approval),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(S.current.task_approval),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _tips(),
+            Column(
+              children: informationDisplayList(context, transferInfo),
+            ),
+            _myApproval(context),
+          ],
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              _tips(),
-              Column(
-                children: _transferlistView(),
-              ),
-              Column(
-                children: _paymentlistView(),
-              ),
-              _myApproval(context),
-            ],
-          ),
-        ));
-  }
-
-//转账信息列表
-  List<Widget> _transferlistView() {
-    List<Widget> listWidget = [];
-    transferInfo.forEach((k, v) {
-      listWidget.add(Container(
-        color: HsgColors.backgroundColor,
-        height: 15,
-      ));
-      listWidget.add(_title(k));
-      listWidget.add(Container(
-        child: Divider(height: 0.5, color: HsgColors.divider),
-      ));
-      v.map((f) {
-        listWidget.add(Column(children: [
-          Container(
-            child: Row(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(left: 15, top: 10, bottom: 10),
-                  width: (MediaQuery.of(context).size.width - 30) / 2,
-                  child: Text(
-                    f["title"],
-                    style: TextStyle(color: Colors.black, fontSize: 14),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 15),
-                  width: (MediaQuery.of(context).size.width - 30) / 2,
-                  child: Text(f["type"],
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                          color: HsgColors.mainTabTextNormal, fontSize: 14)),
-                ),
-              ],
-            ),
-          ),
-          _line(),
-        ]));
-      }).toList();
-    });
-    return listWidget;
-  }
-
-//付款信息列表
-  List<Widget> _paymentlistView() {
-    List<Widget> listWidget = [];
-    paymentInfo.forEach((k, v) {
-      listWidget.add(Container(
-        color: HsgColors.backgroundColor,
-        height: 15,
-      ));
-      listWidget.add(_title(k));
-      listWidget.add(Container(
-        child: Divider(height: 0.5, color: HsgColors.divider),
-      ));
-      v.map((f) {
-        listWidget.add(Column(children: [
-          Container(
-            child: Row(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(left: 15, top: 10, bottom: 10),
-                  width: (MediaQuery.of(context).size.width - 30) / 2,
-                  child: Text(
-                    f["title"],
-                    style: TextStyle(color: Colors.black, fontSize: 14),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 15),
-                  width: (MediaQuery.of(context).size.width - 30) / 2,
-                  child: Text(f["type"],
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                          color: HsgColors.mainTabTextNormal, fontSize: 14)),
-                ),
-              ],
-            ),
-          ),
-          _line(),
-        ]));
-      }).toList();
-    });
-    return listWidget;
+      ),
+    );
   }
 
   void _getTaskApproval(bool rejectToStart) {
