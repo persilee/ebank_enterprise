@@ -37,51 +37,54 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
   @override
   void initState() {
     super.initState();
-    //网络请求
-    _loadMyApplicationData(page, 10);
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        //加载更多
-        _getMore();
-      }
+    setState(() {
+      //网络请求
+      _loadMyApplicationData(page, 10);
+      _scrollController.addListener(() {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          //加载更多
+          _getMore();
+        }
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
- 
-    return Scaffold(   
+    return Scaffold(
       body: _getContent(list),
     );
   }
 
   _getContent(List<MyApplicationDetail> list) {
-       bool _isDate = false;
-        if(list.length != 0){
-          _isDate = true;
-        }
-    return _isDate? ListView.builder(   
-      itemCount: list.length + 1,    
-      itemBuilder: (context, index) {
-        if (index == list.length) {
-          return _loadingView();
-        } else {
-          return  GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, pageApplicationTaskApproval,
-                  arguments: list[index]);
+    bool _isDate = false;
+    if (list.length != 0) {
+      _isDate = true;
+    }
+    return _isDate
+        ? ListView.builder(
+            itemCount: list.length + 1,
+            itemBuilder: (context, index) {
+              if (index == list.length) {
+                return _loadingView();
+              } else {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, pageApplicationTaskApproval,
+                        arguments: list[index]);
+                  },
+                  child: Column(
+                    children: [
+                      _getColumn(index),
+                    ],
+                  ),
+                );
+              }
             },
-            child: Column(
-              children: [
-                _getColumn(index),
-              ],
-            ),
-          );
-        }
-      },
-      controller: _scrollController,
-    ) : notDataContainer(context,S.current.no_data_now);
+            controller: _scrollController,
+          )
+        : notDataContainer(context, S.current.no_data_now);
   }
 
   //销毁
@@ -113,19 +116,19 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
     );
   }
 
- _getColumn(index){
- return Container(
-     color: Colors.white,
-     margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-     padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-     child: Column(
-     children: [
-     _getRow(S.current.sponsor, list[index].processId),
-     _getRow(S.current.to_do_task_name, list[index].taskName),
-     _getRow(S.current.creation_time, list[index].createTime)
-     ],
-    ),
-   );
+  _getColumn(index) {
+    return Container(
+      color: Colors.white,
+      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Column(
+        children: [
+          _getRow(S.current.sponsor, list[index].processId),
+          _getRow(S.current.to_do_task_name, list[index].taskName),
+          _getRow(S.current.creation_time, list[index].createTime)
+        ],
+      ),
+    );
   }
 
   _loadMyApplicationData(page, pageSize) {

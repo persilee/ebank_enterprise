@@ -2,7 +2,6 @@
 ///行内转账页面
 /// Author: lijiawei
 /// Date: 2020-12-09
-
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';

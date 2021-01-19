@@ -5,6 +5,7 @@
  * 授权历史记录页面
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
@@ -31,18 +32,20 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
   ScrollController _scrollController = ScrollController();
   List<FinishTaskDetail> list = []; //页面显示的待办列表
   List<FinishTaskDetail> finishTaskList = [];
-
+  var _future;
   @override
   void initState() {
     super.initState();
     //网络请求
     _loadAuthorzationRateData(page, 10);
+
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         //加载更多
         _getMore();
       }
+      _future = _loadAuthorzationRateData(page, 10);
     });
   }
 
@@ -53,34 +56,33 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-      bool _isDate = false;
-        if(list.length != 0){
-          _isDate = true;
-        }
-    return _isDate ? ListView.builder(
-      itemCount: list.length + 1,
-      itemBuilder: (context, index) {
-        if (index == list.length) {
-          return _loadingView();
-        } else {
-          return GestureDetector(
-            onTap: () {
-              go2Detail(list[index]);
-              print('选择账号');
+    bool _isDate = false;
+    if (list.length != 0) {
+      _isDate = true;
+    }
+    return _isDate
+        ? ListView.builder(
+            itemCount: list.length + 1,
+            itemBuilder: (context, index) {
+              if (index == list.length) {
+                return _loadingView();
+              } else {
+                return GestureDetector(
+                  onTap: () {
+                    go2Detail(list[index]);
+                    print('选择账号');
+                  },
+                  child: Column(
+                    children: [_getColumn(index)],
+                  ),
+                );
+              }
             },
-            child: Column(
-              children: [
-                _getColumn(index)
-              ],
-            ),
-          );
-        }
-      },
-      controller: _scrollController,
-    ):notDataContainer(context, S.current.no_data_now);
+            controller: _scrollController,
+          )
+        : notDataContainer(context, S.current.no_data_now);
   }
 
- 
   _getRow(String leftText, String rightText) {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
@@ -103,19 +105,20 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
       ),
     );
   }
-  _getColumn(index){
+
+  _getColumn(index) {
     return Container(
-        color: Colors.white,
-        margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-        child: Column(
+      color: Colors.white,
+      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Column(
         children: [
-        //发起人
-        _getRow(S.current.sponsor, list[index].processId),
-        //待办任务名称
-        _getRow(S.current.to_do_task_name, list[index].taskName),
-        //创建时间
-        _getRow(S.current.creation_time, list[index].createTime)
+          //发起人
+          _getRow(S.current.sponsor, list[index].processId),
+          //待办任务名称
+          _getRow(S.current.to_do_task_name, list[index].taskName),
+          //创建时间
+          _getRow(S.current.creation_time, list[index].createTime)
         ],
       ),
     );
