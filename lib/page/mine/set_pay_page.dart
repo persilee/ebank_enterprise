@@ -1,10 +1,12 @@
 /**
-  @desc   修改支付密码
+  @desc   重置支付密码
   @author hlx
  */
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SetPayPage extends StatefulWidget {
   @override
@@ -13,12 +15,9 @@ class SetPayPage extends StatefulWidget {
 
 //表单状态
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
 class _SetPayPageState extends State<SetPayPage> {
-  TextEditingController _oldPwd = TextEditingController();
   TextEditingController _newPwd = TextEditingController();
   TextEditingController _confimPwd = TextEditingController();
-  TextEditingController _sms = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +44,7 @@ class _SetPayPageState extends State<SetPayPage> {
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Column(
                       children: [
+                        //新密码
                         InputList(S.of(context).newPayPwd,
                             S.of(context).placeNewPwd, _newPwd),
                         Divider(
@@ -52,13 +52,9 @@ class _SetPayPageState extends State<SetPayPage> {
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
+                        //确认新密码
                         InputList(S.of(context).confimPayPwd,
                             S.of(context).placeConfimPwd, _confimPwd),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
                       ],
                     ),
                   ),
@@ -68,7 +64,11 @@ class _SetPayPageState extends State<SetPayPage> {
                     width: MediaQuery.of(context).size.width,
                     child: RaisedButton(
                       child: Text(S.of(context).submit),
-                      onPressed: () => print("提交"),
+                      onPressed: _submit()
+                          ? () {
+                              _submitData();
+                            }
+                          : null,
                       color: HsgColors.accent,
                       textColor: Colors.white,
                       shape: RoundedRectangleBorder(
@@ -80,16 +80,45 @@ class _SetPayPageState extends State<SetPayPage> {
               )),
         ));
   }
-}
+bool _submit() {
+    if (_newPwd.text != '' && _confimPwd.text != '') {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
+ //提交按钮
+  _submitData() async {
+    if (_newPwd.text != _confimPwd.text) {
+      Fluttertoast.showToast(msg: S.of(context).differentPwd);
+    } else {
+      HSProgressHUD.show();
+      // final prefs = await SharedPreferences.getInstance();
+      // String userID = prefs.getString(ConfigKey.USER_ID);
+      // PaymentPwdRepository()
+      //     .updateTransPassword(
+      //   SetPaymentPwdReq(_oldPwd.text, _newPwd.text, userID, _sms.text),
+      //   'updateTransPassword',
+      // )
+      //     .then((data) {
+      //   HSProgressHUD.showError(status: '密码修改成功');
+      //   Navigator.pop(context);
+      //   HSProgressHUD.dismiss();
+      // }).catchError((e) {
+      //   // Fluttertoast.showToast(msg: e.toString());
+      //   HSProgressHUD.showError(status: e.toString());
+      //   print('${e.toString()}');
+      // });
+    }
+  }
+}
 //封装一行
 class InputList extends StatelessWidget {
-  InputList(this.labText, this.placeholderText, this.inputValue,
-      {this.isShow = false});
+  InputList(this.labText, this.placeholderText, this.inputValue);
   final String labText;
   final String placeholderText;
   TextEditingController inputValue = TextEditingController();
-  final bool isShow;
 
   @override
   Widget build(BuildContext context) {
@@ -126,34 +155,6 @@ class InputList extends StatelessWidget {
               ),
             ),
           ),
-          if (this.isShow)
-            SizedBox(
-              width: 90,
-              height: 32,
-              child: FlatButton(
-                onPressed: () {},
-                //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                //文字颜色
-                textColor: Colors.black12,
-                //按钮颜色
-                color: HsgColors.blueBGColor,
-                //画圆角
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                //如果使用FlatButton，必须初始化onPressed这个方法
-                // onPressed: () {
-                //   widget.onPressed(_controller.text);
-                // },
-                child: Text(
-                  '获取验证码',
-                  style:
-                      TextStyle(fontSize: 14, color: HsgColors.blueTextColor),
-                ),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-            ),
         ],
       ),
     );
