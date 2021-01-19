@@ -10,6 +10,7 @@ import 'package:ebank_mobile/data/source/model/get_process_task.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/data/source/process_task_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/approval/widget/information_display_list_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -62,14 +63,6 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
     setState(() {
       offstage = !offstage;
     });
-  }
-
-//分割线
-  Widget _line() {
-    return Container(
-      padding: EdgeInsets.only(left: 15.0, right: 15.0),
-      child: Divider(height: 0.5, color: HsgColors.divider),
-    );
   }
 
 //顶部提示
@@ -276,61 +269,6 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
     );
   }
 
-//审批信息列表展示
-  List<Widget> _transferlistView() {
-    List<Widget> listWidget = [];
-    transferInfo.forEach((title, value) {
-      listWidget.add(
-        Container(
-          color: HsgColors.backgroundColor,
-          height: 15,
-        ),
-      );
-      listWidget.add(
-        _title(title),
-      );
-      listWidget.add(
-        Container(
-          child: Divider(height: 0.5, color: HsgColors.divider),
-        ),
-      );
-      value.map((f) {
-        listWidget.add(
-          Column(
-            children: [
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(left: 15, top: 10, bottom: 10),
-                      width: (MediaQuery.of(context).size.width - 30) / 2,
-                      child: Text(
-                        f["title"],
-                        style: TextStyle(color: Colors.black, fontSize: 14),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(right: 15),
-                      width: (MediaQuery.of(context).size.width - 30) / 2,
-                      child: Text(
-                        f["type"],
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                            color: HsgColors.mainTabTextNormal, fontSize: 14),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              _line(),
-            ],
-          ),
-        );
-      }).toList();
-    });
-    return listWidget;
-  }
-
   @override
   Widget build(BuildContext context) {
     FindUserTaskDetail application = ModalRoute.of(context).settings.arguments;
@@ -345,7 +283,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
           children: [
             _tips(),
             Column(
-              children: _transferlistView(),
+              children: informationDisplayList(context, transferInfo),
             ),
             _myApproval(context),
           ],
