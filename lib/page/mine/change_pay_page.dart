@@ -1,13 +1,12 @@
+///
+///@desc   修改支付密码
+///@author hlx
+///
 import 'dart:async';
-
 import 'package:ebank_mobile/data/source/mine_pay_pwdApi.dart';
 import 'package:ebank_mobile/data/source/model/get_verification_code.dart';
 import 'package:ebank_mobile/data/source/model/set_payment_pwd.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
-/**
-  @desc   重置支付密码
-  @author hlx
- */
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';

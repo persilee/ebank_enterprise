@@ -21,6 +21,8 @@ class CheckoutInformantReq {
   String realName;
   @JsonKey(name: 'smsCode')
   String smsCode;
+  @JsonKey(name: 'payPassword')
+  String payPassword;
 
   CheckoutInformantReq(
     this.certNo,
@@ -28,7 +30,8 @@ class CheckoutInformantReq {
     this.certType,
     this.phoneNo,
     this.realName,
-    this.smsCode
+    this.smsCode,
+    this.payPassword
   );
 
   @override
@@ -45,9 +48,9 @@ class CheckoutInformantReq {
 @JsonSerializable()
 class CheckoutInformantResp {
   @JsonKey(name: 'enabled')
-  String phoneNo;
+  bool enabled;
 
-  CheckoutInformantResp(this.phoneNo);
+  CheckoutInformantResp(this.enabled);
 
   factory CheckoutInformantResp.fromJson(Map<String, dynamic> srcJson) =>
       _$CheckoutInformantRespFromJson(srcJson);
