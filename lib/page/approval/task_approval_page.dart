@@ -151,7 +151,6 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
           ),
         ),
         onChanged: (value) {
-          print('输入的是:$value');
           comment = value;
         },
       ),
@@ -200,13 +199,8 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
             _doClaimTask();
           } else {
             if (comment.length != 0) {
-              if (buttonText == S.current.examine_and_approve) {
-                print('审批');
-              } else if (buttonText == S.current.reject_to_sponsor) {
-                print('驳回至发起人');
-                approveResult = false;
-              } else if (buttonText == S.current.reject) {
-                print('驳回');
+              if (buttonText == S.current.reject_to_sponsor ||
+                  buttonText == S.current.reject) {
                 approveResult = false;
               }
               _getTaskApproval(buttonText == S.current.reject_to_sponsor

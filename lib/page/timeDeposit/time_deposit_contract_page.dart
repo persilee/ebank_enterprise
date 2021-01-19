@@ -235,7 +235,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           onChanged: (value) {
             double.parse(value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
             bal = double.parse(value);
-            print("输入的金额是:$value");
             //输入金额大于起存金额时进行网络请求,计算到期金额
             if (double.parse(value) >= double.parse(productList.minAmt)) {
               _loadDepositData(

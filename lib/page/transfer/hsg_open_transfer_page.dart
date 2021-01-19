@@ -268,7 +268,6 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           autofocus: false,
           style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 14.0),
           onChanged: (value) {
-            print("输入的计划名称是:$value");
             planName = value;
           },
           keyboardType: TextInputType.number,

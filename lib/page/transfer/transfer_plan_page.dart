@@ -156,12 +156,10 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
           _statusList = ['P'];
           updateGroupValue(btnType);
           _getTransferPlanList();
-          print(btnTitle);
         } else if (btnTitle == S.current.already_finished) {
           _statusList = ['C', 'E'];
           updateGroupValue(btnType);
           _getTransferPlanList();
-          print(btnTitle);
         } else if (btnTitle == S.current.cancel_plan) {
           _alertDialog();
         } else {
