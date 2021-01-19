@@ -31,7 +31,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   String comment = ''; //审批意见
   var taskId = '';
 
-  Map transferInfo = {
+  Map approvalInfo = {
     "转账信息": [
       {"title": "收款账号", "type": "500000617001"},
       {"title": "账号名称", "type": "Mike"},
@@ -91,12 +91,11 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
             title: "提示",
             message: "请输入审批意见",
             positiveButton: '确定',
-            // negativeButton: '取消',
           );
         });
   }
 
-//列表标题
+//审批信息列表标题
   Widget _title(String title) {
     return Row(
       children: [
@@ -282,11 +281,12 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _tips(),
+            _tips(), //提示
             Column(
-              children: informationDisplayList(context, transferInfo),
+              //审批信息列表
+              children: informationDisplayList(context, approvalInfo),
             ),
-            _myApproval(context),
+            _myApproval(context), //我的审批
           ],
         ),
       ),

@@ -1,5 +1,5 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///
+///定期
 /// Author: wangluyao
 /// Date: 2020-12-08
 
@@ -9,6 +9,7 @@ import 'model/time_deposit_contract_trial.dart';
 import 'model/time_deposit_product.dart';
 
 class TimeDepositDataRepository {
+  //获取定期产品
   Future<List<TimeDepositProductResp>> getGetTimeDepositProduct(String tag) {
     return request('/tdep/timeDeposit/getTdepProducts', {}, tag, (data) {
       List<TimeDepositProductResp> result = [];
@@ -19,12 +20,14 @@ class TimeDepositDataRepository {
     });
   }
 
+  //定期开立
   Future<TimeDepositContractResp> getTimeDepositContract(
       TimeDepositContractReq req, String tag) {
     return request('/tdep/timeDeposit/openTdContract', req, tag,
         (data) => TimeDepositContractResp.fromJson(data));
   }
 
+  //定期开立试算
   Future<TimeDepositContractTrialResp> getTimeDepositContractTrial(
       TimeDepositContractTrialReq req, String tag) {
     return request('/tdep/timeDeposit/openTdContractTrial', req, tag,

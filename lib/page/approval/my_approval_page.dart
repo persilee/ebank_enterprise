@@ -117,15 +117,16 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
 //待办任务名称
   Widget _taskName(String taskName) {
     return Container(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          taskName,
-          textAlign: TextAlign.left,
-          style: TextStyle(
-              fontSize: 15.0,
-              color: HsgColors.aboutusTextCon,
-              fontWeight: FontWeight.bold),
-        ));
+      alignment: Alignment.centerLeft,
+      child: Text(
+        taskName,
+        textAlign: TextAlign.left,
+        style: TextStyle(
+            fontSize: 15.0,
+            color: HsgColors.aboutusTextCon,
+            fontWeight: FontWeight.bold),
+      ),
+    );
   }
 
 //发起人、创建时间
@@ -145,15 +146,16 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
             ),
           ),
           Container(
-              width: ((MediaQuery.of(context).size.width / 1.09) - 22) / 2,
-              child: Text(
-                rightText,
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                  fontSize: 14.0,
-                  color: HsgColors.aboutusTextCon,
-                ),
-              )),
+            width: ((MediaQuery.of(context).size.width / 1.09) - 22) / 2,
+            child: Text(
+              rightText,
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                fontSize: 14.0,
+                color: HsgColors.aboutusTextCon,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -183,23 +185,24 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   Widget _todoInformation(FindUserTaskDetail approval, String taskName,
       String startUser, String createTime) {
     return FlatButton(
-        padding: EdgeInsets.only(top: 10.0),
-        onPressed: () {
-          go2Detail(approval);
-        },
-        child: Row(
-          children: [
-            //左侧图标
-            Column(
-              children: [
-                _icon(),
-                _line(),
-              ],
-            ),
-            //右侧待办信息
-            _rightInfo(taskName, startUser, createTime),
-          ],
-        ));
+      padding: EdgeInsets.only(top: 10.0),
+      onPressed: () {
+        go2Detail(approval);
+      },
+      child: Row(
+        children: [
+          //左侧图标
+          Column(
+            children: [
+              _icon(),
+              _line(),
+            ],
+          ),
+          //右侧待办信息
+          _rightInfo(taskName, startUser, createTime),
+        ],
+      ),
+    );
   }
 
   @override

@@ -161,17 +161,18 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         textAlign: TextAlign.right,
         enabled: false,
         decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: display,
-            hintStyle: display == S.current.hint_please_select
-                ? TextStyle(
-                    color: HsgColors.hintText,
-                    fontSize: 14.0,
-                  )
-                : TextStyle(
-                    color: HsgColors.aboutusTextCon,
-                    fontSize: 14.0,
-                  )),
+          border: InputBorder.none,
+          hintText: display,
+          hintStyle: display == S.current.hint_please_select
+              ? TextStyle(
+                  color: HsgColors.hintText,
+                  fontSize: 14.0,
+                )
+              : TextStyle(
+                  color: HsgColors.aboutusTextCon,
+                  fontSize: 14.0,
+                ),
+        ),
       ),
     );
   }
@@ -314,37 +315,39 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 //选择付款账户按钮
   Widget _accountChangeBtn() {
     return Container(
-        child: FlatButton(
-      onPressed: () {
-        _selectAccount(context);
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          _leftText(S.current.payment_account),
-          _display(_changedAccountTitle),
-          _rightArrow(),
-        ],
+      child: FlatButton(
+        onPressed: () {
+          _selectAccount(context);
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _leftText(S.current.payment_account),
+            _display(_changedAccountTitle),
+            _rightArrow(),
+          ],
+        ),
       ),
-    ));
+    );
   }
 
   //选择到期指示按钮
   Widget _instructionChangeBtn() {
     return Container(
-        child: FlatButton(
-      onPressed: () {
-        _selectInstruction(context);
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          _leftText(S.current.due_date_indicate),
-          _display(_changedInstructionTitle),
-          _rightArrow(),
-        ],
+      child: FlatButton(
+        onPressed: () {
+          _selectInstruction(context);
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _leftText(S.current.due_date_indicate),
+            _display(_changedInstructionTitle),
+            _rightArrow(),
+          ],
+        ),
       ),
-    ));
+    );
   }
 
 //存款期限弹窗
@@ -388,11 +391,12 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     }
 
     final result = await showHsgBottomSheet(
-        context: context,
-        builder: (context) => BottomMenu(
-              title: '存款期限',
-              items: terms,
-            ));
+      context: context,
+      builder: (context) => BottomMenu(
+        title: '存款期限',
+        items: terms,
+      ),
+    );
 
     setState(() {
       if (result != null && result != false) {
@@ -500,11 +504,12 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       '5',
     ];
     final result = await showHsgBottomSheet(
-        context: context,
-        builder: (context) => BottomMenu(
-              title: S.current.due_date_indicate,
-              items: instructions,
-            ));
+      context: context,
+      builder: (context) => BottomMenu(
+        title: S.current.due_date_indicate,
+        items: instructions,
+      ),
+    );
     setState(() {
       if (result != null && result != false) {
         _changedInstructionTitle = instructions[result];
@@ -518,32 +523,31 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   //确认按钮
   Widget _submitButton() {
     return Container(
-        padding: EdgeInsets.fromLTRB(30, 40, 30, 0),
-        child: ButtonTheme(
-          minWidth: 5,
-          height: 45,
-          child: FlatButton(
-            onPressed: (matAmt == '0.00' ||
-                    _changedTermBtnTiTle == S.current.hint_please_select ||
-                    _changedAccountTitle == S.current.hint_please_select ||
-                    _changedInstructionTitle == S.current.hint_please_select)
-                ? null
-                : () {
-                    _openBottomSheet();
-                    Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
-                        arguments: 'timeDepositProduct');
-                  },
-            color: HsgColors.accent,
-            disabledColor: HsgColors.btnDisabled,
-            child: Text(
-              S.current.deposit_now,
-              style: TextStyle(
-                fontSize: 15.0,
-                color: Colors.white,
-              ),
+      padding: EdgeInsets.fromLTRB(30, 40, 30, 0),
+      child: ButtonTheme(
+        minWidth: 5,
+        height: 45,
+        child: FlatButton(
+          onPressed: (matAmt == '0.00' ||
+                  _changedTermBtnTiTle == S.current.hint_please_select ||
+                  _changedAccountTitle == S.current.hint_please_select ||
+                  _changedInstructionTitle == S.current.hint_please_select)
+              ? null
+              : () {
+                  _openBottomSheet();
+                },
+          color: HsgColors.accent,
+          disabledColor: HsgColors.btnDisabled,
+          child: Text(
+            S.current.deposit_now,
+            style: TextStyle(
+              fontSize: 15.0,
+              color: Colors.white,
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
 //输入密码弹窗
@@ -588,32 +592,36 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           // "ok",
           // "500000666003"
           );
+      Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
+          arguments: 'timeDepositProduct');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text('定期开立'),
-        ),
-        body: (ListView(
-          children: [
-            _background(),
-            _titleSection(
-              productList,
-              producDTOList,
-            ),
-            _remark(),
-            _termChangeBtn(context, producDTOList),
-            _inputPrincipal(card),
-            _accountChangeBtn(),
-            _line(),
-            _instructionChangeBtn(),
-            _submitButton(),
-          ],
-        )));
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('定期开立'),
+      ),
+      body: ListView(
+        children: [
+          _background(),
+          _titleSection(
+            //产品名称和年利率
+            productList,
+            producDTOList,
+          ),
+          _remark(), // 产品描述
+          _termChangeBtn(context, producDTOList), // 选择存款期限
+          _inputPrincipal(card), // 本金输入框
+          _accountChangeBtn(), //选择付款账户
+          _line(),
+          _instructionChangeBtn(), //选择到期指示
+          _submitButton(),
+        ],
+      ),
+    );
   }
 
   Future<void> _loadData() async {

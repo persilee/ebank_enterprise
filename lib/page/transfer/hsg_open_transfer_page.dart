@@ -375,30 +375,31 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
 //选择截止日期
   Widget _endDate(String endDate, int i) {
     return Container(
-        color: Colors.white,
-        child: _switchValue == true
-            ? Row(
-                children: [
-                  _leftText(intl.S.current.deadline),
-                  Container(
-                    width: (MediaQuery.of(context).size.width - 30) / 2,
-                    child: FlatButton(
-                      color: Colors.white,
-                      padding: EdgeInsets.all(0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            _selectedTime(endDate),
-                            _rightArrow(),
-                          ]),
-                      onPressed: () {
-                        _endCupertinoPicker(i, context);
-                      },
-                    ),
+      color: Colors.white,
+      child: _switchValue == true
+          ? Row(
+              children: [
+                _leftText(intl.S.current.deadline),
+                Container(
+                  width: (MediaQuery.of(context).size.width - 30) / 2,
+                  child: FlatButton(
+                    color: Colors.white,
+                    padding: EdgeInsets.all(0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          _selectedTime(endDate),
+                          _rightArrow(),
+                        ]),
+                    onPressed: () {
+                      _endCupertinoPicker(i, context);
+                    },
                   ),
-                ],
-              )
-            : Container());
+                ),
+              ],
+            )
+          : Container(),
+    );
   }
 
 //选择开始时间弹窗
@@ -573,28 +574,35 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     return Container(
       margin: EdgeInsets.fromLTRB(30, 40, 30, 40),
       child: ButtonTheme(
-          minWidth: 5,
-          height: 45,
-          child: FlatButton(
-            onPressed: (planName == '' ||
-                    _startValue == DateTime(0, 0, 0) ||
-                    _endValue == DateTime(0, 0, 0) ||
-                    (money.toString()) == '' ||
-                    payerName == '' ||
-                    _changedAccountTitle == '' ||
-                    _payeeNameController.text == '' ||
-                    _payeeAccountController.text == '')
-                ? null
-                : () {
-                    _openBottomSheet();
-                  },
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            color: HsgColors.accent,
-            disabledColor: HsgColors.btnDisabled,
-            child: (Text(S.current.transfer,
-                style: TextStyle(color: Colors.white))),
-          )),
+        minWidth: 5,
+        height: 45,
+        child: FlatButton(
+          onPressed: (planName == '' ||
+                  _startValue == DateTime(0, 0, 0) ||
+                  _endValue == DateTime(0, 0, 0) ||
+                  (money.toString()) == '' ||
+                  payerName == '' ||
+                  _changedAccountTitle == '' ||
+                  _payeeNameController.text == '' ||
+                  _payeeAccountController.text == '')
+              ? null
+              : () {
+                  _openBottomSheet();
+                },
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+          color: HsgColors.accent,
+          disabledColor: HsgColors.btnDisabled,
+          child: Text(
+            S.current.transfer,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15.0,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -734,26 +742,29 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
         title: Text(intl.S.current.open_transfer),
         actions: <Widget>[
           Container(
-            child: Text.rich(TextSpan(
-                text: intl.S.current.transfer_plan,
-                style: TextStyle(
-                  fontSize: 14.0,
-                  height: 3.0,
-                ),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    Navigator.pushNamed(context, pageTransferPlan);
-                  })),
+            child: Text.rich(
+              TextSpan(
+                  text: intl.S.current.transfer_plan,
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    height: 3.0,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.pushNamed(context, pageTransferPlan);
+                    }),
+            ),
           )
         ],
       ),
       body: CustomScrollView(
         slivers: <Widget>[
           SliverToBoxAdapter(
-            child: _transferInfo(),
+            child: _transferInfo(), // 计划信息
           ),
-          _frequencyBtn(),
+          _frequencyBtn(), //选择频率按钮
           SliverToBoxAdapter(
+            //选择转账时间和截止日期
             child: Container(
               width: MediaQuery.of(context).size.width,
               child: groupValue == '0'
@@ -766,6 +777,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               height: 20,
             ),
           ),
+          //转账方法
           transferPayerWidget(
               context,
               _limitMoney,
@@ -782,6 +794,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               _selectAccount,
               _getCcy,
               _getCardTotals),
+          //获取用户姓名及账号方法
           transferPayeeWidget(
               payeeCardNo,
               payeeName,
@@ -798,6 +811,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               _accountInputChange,
               _payeeNameController,
               _payeeAccountController),
+          //备注
           transferOtherWidget(context, '', _transferInputChange),
           SliverToBoxAdapter(
             child: _transferBtn(),

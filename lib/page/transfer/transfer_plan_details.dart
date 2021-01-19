@@ -24,7 +24,6 @@ class TransferPlanDetailsPage extends StatefulWidget {
 class _TransferPlanDetailsPageState extends State<TransferPlanDetailsPage> {
   TransferPlan transferPlan;
   _TransferPlanDetailsPageState(this.transferPlan);
-  // String planId = '';
   String planName = '';
   String transferType = '';
   String transferTypeCode = '';
@@ -132,28 +131,27 @@ class _TransferPlanDetailsPageState extends State<TransferPlanDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    //判断转账频率
     switch (frequencyCode) {
       case '0':
-        frequency = '仅1次';
+        frequency = S.current.only_once;
         break;
       case '1':
-        frequency = '每日';
+        frequency = S.current.daily;
         break;
       case '2':
-        frequency = '每月';
+        frequency = S.current.monthly;
         break;
       default:
-        frequency = '每年';
+        frequency = S.current.yearly;
     }
+    //判断转账类型
     switch (transferTypeCode) {
       case '0':
-        transferType = '行内转账';
-        break;
-      case '1':
-        frequency = '跨行转账';
+        transferType = S.current.transfer_type_0;
         break;
       default:
-        frequency = '国际转账';
+        frequency = S.current.transfer_type_2;
     }
     nextDate = nextDate == null ? '--' : nextDate;
     return Scaffold(

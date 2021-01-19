@@ -26,7 +26,7 @@ class TransferPlanPage extends StatefulWidget {
 
 class _TransferPlanPageState extends State<TransferPlanPage> {
   String groupValue = '0';
-  List<String> _statusList = ['P'];
+  List<String> _statusList = ['P']; //转账计划状态
   List<TransferPlan> transferPlanList = [];
   String frequency = '';
   String transferType = '';
@@ -296,6 +296,7 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
           ? SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
                 planId = transferPlanList[index].planId;
+                //判断转账频率
                 switch (transferPlanList[index].frequency) {
                   case '0':
                     frequency = S.current.only_once;
@@ -309,16 +310,15 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
                   default:
                     frequency = S.current.yearly;
                 }
+                //判断转账类型
                 switch (transferPlanList[index].transferType) {
                   case '0':
                     transferType = S.current.transfer_type_0;
                     break;
-                  case '1':
-                    frequency = '跨行转账';
-                    break;
                   default:
                     frequency = S.current.transfer_type_2;
                 }
+                //根据转账计划的状态改变按钮颜色
                 if (transferPlanList[index].status == 'P') {
                   btnTitle = S.current.cancel_plan;
                   btnColor = HsgColors.accent;
@@ -339,7 +339,9 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
                   },
                   child: Column(
                     children: [
+                      //计划名称
                       _planName(transferPlanList[index].planName),
+                      //付款账户和收款账户
                       Container(
                         color: Colors.white,
                         padding: EdgeInsets.only(left: 15, right: 15, top: 15),
@@ -362,6 +364,7 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
                         ),
                       ),
                       _dottedLine(),
+                      //转账计划信息
                       _planInfo(
                           transferPlanList[index].debitCurrency +
                               ' ' +
@@ -377,6 +380,7 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
               }, childCount: transferPlanList.length),
             )
           : SliverToBoxAdapter(
+              //暂无数据页面
               child: Container(
                 height: MediaQuery.of(context).size.height * 3.5 / 5,
                 child: notDataContainer(context, S.current.no_data_now),
