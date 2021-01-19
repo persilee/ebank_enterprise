@@ -21,6 +21,7 @@ class MyApprovalPage extends StatefulWidget {
   _MyApprovalPageState createState() => _MyApprovalPageState();
 }
 
+//加载状态
 enum LoadingStatus { STATUS_LOADING, STATUS_COMPLETED, STATUS_IDEL }
 
 class _MyApprovalPageState extends State<MyApprovalPage> {
@@ -256,7 +257,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   }
 
 //加载更多
-  Future _getMore() async {
+  _getMore() {
     if (loadStatus == LoadingStatus.STATUS_IDEL) {
       setState(() {
         loadStatus = LoadingStatus.STATUS_LOADING;

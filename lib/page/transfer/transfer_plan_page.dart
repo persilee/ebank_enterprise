@@ -322,7 +322,7 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
                 if (transferPlanList[index].status == 'P') {
                   btnTitle = S.current.cancel_plan;
                   btnColor = HsgColors.accent;
-                } else if (transferPlanList[index].status == 'E') {
+                } else if (transferPlanList[index].status == 'C') {
                   btnTitle = S.current.canceled;
                   btnColor = HsgColors.canceledBtn;
                 } else {
