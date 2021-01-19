@@ -53,6 +53,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
     //监听输入框
     focusNode.addListener(() {
       bool hasFocus = focusNode.hasFocus;
+      // ignore: invalid_use_of_protected_member
       bool hasListeners = focusNode.hasListeners;
       print("focusNode 兼听 hasFocus:$hasFocus  hasListeners:$hasListeners");
     });

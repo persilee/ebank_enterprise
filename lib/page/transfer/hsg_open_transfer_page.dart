@@ -51,9 +51,12 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   var ccyListOne = List<String>();
   var singleLimit = '';
   var bals = [];
+  var ccyList = List();
+  var tranferType;
+  var accountSelect = '';
   List<String> ccyLists = [];
   List<CardBalBean> cardBal = [];
-  var ccyList = List();
+  String payeeNameForSelects;
   List<String> totalBalances = [];
   int _lastSelectedPosition = -1;
   String _limitMoney = '';
@@ -72,6 +75,9 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   String _start = DateFormat('yyyy-MM-dd')
       .format(DateTime.now().add(Duration(days: 1))); //显示开始时间
   String _end = DateFormat('yyyy-MM-dd').format(DateTime.now()); //显示结束时间
+  var _payeeNameController = TextEditingController();
+  var _payeeAccountController = TextEditingController();
+  var _payeeBankCodeController = TextEditingController();
 
   //预约频率集合
   List frequency = [
@@ -92,12 +98,6 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       "type": "3",
     }
   ];
-
-  var tranferType;
-
-  String payeeNameForSelects;
-
-  var accountSelect = '';
 
   _transferInputChange(String transfer) {
     remark = transfer;
@@ -142,12 +142,6 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   _accountInputChange(String account) {
     payeeCardNo = account;
   }
-
-  var _payeeNameController = TextEditingController();
-
-  var _payeeAccountController = TextEditingController();
-
-  var _payeeBankCodeController = TextEditingController();
 
   @override
   void initState() {
@@ -584,11 +578,14 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           child: FlatButton(
             onPressed: (planName == '' ||
                     _startValue == DateTime(0, 0, 0) ||
-                    _endValue == DateTime(0, 0, 0))
+                    _endValue == DateTime(0, 0, 0) ||
+                    (money.toString()) == '' ||
+                    payerName == '' ||
+                    _changedAccountTitle == '' ||
+                    _payeeNameController.text == '' ||
+                    _payeeAccountController.text == '')
                 ? null
                 : () {
-                    print("开始时间:" + _startTime);
-                    print("结束时间:" + _endTime);
                     _openBottomSheet();
                   },
             shape:
@@ -871,7 +868,6 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             //余额
             totalBalance = element.cardListBal[0].avaBal;
             ccy = element.cardListBal[0].ccy;
-
             element.cardListBal.forEach((element) {
               ccyListOne.clear();
               ccyListOne.add(element.ccy);
@@ -922,9 +918,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           ),
           'AddTransferPlanReq')
     }).then((value) {
-      setState(() {
-        // Navigator.pushNamed(context, pageDepositRecordSucceed);
-      });
+      setState(() {});
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
@@ -970,7 +964,6 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               String avaBAL = element == null ? '0.00' : element.avaBal;
               totalBalances.add(avaBAL);
             });
-            // ccyList.add(ccyLists);
             // 添加余额
             element.cardListBal.forEach((bals) {
               totalBalances.add(bals.avaBal);

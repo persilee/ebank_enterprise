@@ -152,25 +152,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     );
   }
 
-//弹窗按钮
-  Widget _button(_select) {
-    return Container(
-      child: FlatButton(
-        onPressed: () {
-          _select();
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            _leftText(S.current.payment_account),
-            _display(_changedAccountTitle),
-            _rightArrow(),
-          ],
-        ),
-      ),
-    );
-  }
-
   //显示选择的值
   Widget _display(String display) {
     return Container(
