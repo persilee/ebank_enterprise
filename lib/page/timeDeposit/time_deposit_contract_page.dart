@@ -482,9 +482,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     } else {
       return;
     }
-    setState(() {
-      // return _changedAccountTitle;
-    });
+    setState(() {});
   }
 
 //到期指示弹窗
