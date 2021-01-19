@@ -392,7 +392,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
     ///transactionPwd-交易密码，cardLimit-卡限额
     VerificationCodeRepository()
         .sendSmsByPhone(
-            SendSmsByPhoneNumberReq(_phoneNo.text, 'authentication'), 'sendSms')
+            SendSmsByPhoneNumberReq(_phoneNo.text, 'transactionPwd'), 'sendSms')
         .then((data) {
       _startCountdown();
       setState(() {
@@ -461,11 +461,9 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
               ),
             'setTransactionPassword')
         .then((data) {
-      if (data.enabled == true) {
-        print('最后一个接口');
-      }
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(msg: S.current.operate_success);
+      Navigator.pushNamed(context, minePage);
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.dismiss();

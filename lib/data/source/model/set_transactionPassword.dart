@@ -21,8 +21,8 @@ class SetTransactionPasswordReq {
   String payPassword;
    @JsonKey(name: 'phoneNumber')
   String phoneNumber;
-  @JsonKey(name: 'userld')
-  String userld;
+  @JsonKey(name: 'userId')
+  String userId;
   @JsonKey(name: 'verify')
   bool verify;
   @JsonKey(name: 'smsCode')
@@ -35,7 +35,7 @@ class SetTransactionPasswordReq {
     this.certificateType,
     this.payPassword,
     this.phoneNumber,
-    this.userld,
+    this.userId,
     this.verify,
     this.smsCode
   );
