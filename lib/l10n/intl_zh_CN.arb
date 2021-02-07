@@ -1,5 +1,6 @@
 {
   "login": "登录",
+  "last_login_time_with_value":"上次登录时间：",
   "simplifiedChinese": "中文",
   "english": "英文",
   "login_account_placeholder": "邮箱/手机号/用户ID",

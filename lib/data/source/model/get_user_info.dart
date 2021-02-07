@@ -8,7 +8,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'get_user_info.g.dart';
 
 @JsonSerializable()
-class GetUserInfoReq {
+class GetUserInfoReq extends Object {
   @JsonKey(name: 'userId')
   String userId;
 
@@ -24,127 +24,139 @@ class GetUserInfoReq {
 
 @JsonSerializable()
 class UserInfoResp extends Object {
-  @JsonKey(name: 'certification')
+  @JsonKey(name: 'userId')
+  String userId;
 
-  ///是否实名 1实名
-  bool certification;
+  @JsonKey(name: 'custId')
+  String custId;
+
+  @JsonKey(name: 'userAccount')
+  String userAccount;
+
+  @JsonKey(name: 'localUserName')
+  String localUserName;
+
+  @JsonKey(name: 'englishUserName')
+  String englishUserName;
+
+  @JsonKey(name: 'custLocalName')
+  String custLocalName;
+
+  @JsonKey(name: 'custEngName')
+  String custEngName;
+
+  @JsonKey(name: 'userEmail')
+  String userEmail;
+
+  @JsonKey(name: 'userPhone')
+  String userPhone;
 
   @JsonKey(name: 'headPortrait')
-
-  ///头像地址
   String headPortrait;
 
-  @JsonKey(name: 'certificateNo')
+  @JsonKey(name: 'passwordEnabled')
+  bool passwordEnabled;
 
-  ///证件号码
+  @JsonKey(name: 'tiedCardMark')
+  bool tiedCardMark;
+
+  @JsonKey(name: 'certification')
+  bool certification;
+
+  @JsonKey(name: 'certificateType')
+  String certificateType;
+
+  @JsonKey(name: 'certificateNo')
   String certificateNo;
 
   @JsonKey(name: 'actualName')
-
-  ///证件姓名
   String actualName;
 
-  @JsonKey(name: 'passwordEnabled')
-
-  ///是否设置支付密码 1是
-  bool passwordEnabled;
-
-  @JsonKey(name: 'userName')
-
-  ///用户姓名
-  String userName;
-
-  @JsonKey(name: 'createBy')
-
-  ///创建人
-  String createBy;
-
-  @JsonKey(name: 'custId')
-
-  ///客户号
-  String custId;
-
-  @JsonKey(name: 'englishUserName')
-
-  ///用户名称(英文)
-  String englishUserName;
-
-  @JsonKey(name: 'localUserName')
-
-  ///用户名称(本地)
-  String localUserName;
-
-  @JsonKey(name: 'lockEnabled')
-
-  ///用户被锁
-  bool lockEnabled;
-
-  @JsonKey(name: 'modifyBy')
-
-  ///修改人
-  String modifyBy;
-
-  @JsonKey(name: 'passwordErrors')
-
-  ///密码错误次数
-  int passwordErrors;
-
-  @JsonKey(name: 'userAccount')
-
-  ///用户账号*
-  String userAccount;
-
-  @JsonKey(name: 'userEmail')
-
-  ///邮箱地址
-  String userEmail;
-
-  @JsonKey(name: 'userId')
-
-  ///用户编号
-  String userId;
-
-  @JsonKey(name: 'userPhone')
-
-  ///手机号码
-  String userPhone;
-
-  @JsonKey(name: 'userRole')
-
-  ///用户角色
-  String userRole;
-
   @JsonKey(name: 'userStatus')
-
-  ///用户状态
   String userStatus;
 
-  @JsonKey(name: 'userType')
+  @JsonKey(name: 'passwordErrors')
+  int passwordErrors;
 
-  ///用户类型(0:个人网银 1：个人手机网银 2：企业网银)
+  @JsonKey(name: 'lockEnabled')
+  bool lockEnabled;
+
+  @JsonKey(name: 'userType')
   String userType;
 
+  @JsonKey(name: 'platType')
+  String platType;
+
+  @JsonKey(name: 'lastLoginTime')
+  String lastLoginTime;
+
+  @JsonKey(name: 'createBy')
+  String createBy;
+
+  @JsonKey(name: 'modifyBy')
+  String modifyBy;
+
+  @JsonKey(name: 'createTime')
+  String createTime;
+
+  @JsonKey(name: 'modifyTime')
+  String modifyTime;
+
+  @JsonKey(name: 'firstLanding')
+  bool firstLanding;
+
+  @JsonKey(name: 'roleLocalName')
+  String roleLocalName;
+
+  @JsonKey(name: 'roleEngName')
+  String roleEngName;
+
+  @JsonKey(name: 'roleCode')
+  String roleCode;
+
+  @JsonKey(name: 'processId')
+  String processId;
+
+  @JsonKey(name: 'belongCustStatus')
+  String belongCustStatus;
+
+  @JsonKey(name: 'areaCode')
+  String areaCode;
+
   UserInfoResp(
-    this.certification,
+    this.userId,
+    this.custId,
+    this.userAccount,
+    this.localUserName,
+    this.englishUserName,
+    this.custLocalName,
+    this.custEngName,
+    this.userEmail,
+    this.userPhone,
     this.headPortrait,
+    this.passwordEnabled,
+    this.tiedCardMark,
+    this.certification,
+    this.certificateType,
     this.certificateNo,
     this.actualName,
-    this.passwordEnabled,
-    this.userName,
-    this.createBy,
-    this.custId,
-    this.englishUserName,
-    this.localUserName,
-    this.lockEnabled,
-    this.modifyBy,
-    this.passwordErrors,
-    this.userAccount,
-    this.userEmail,
-    this.userId,
-    this.userPhone,
-    this.userRole,
     this.userStatus,
+    this.passwordErrors,
+    this.lockEnabled,
     this.userType,
+    this.platType,
+    this.lastLoginTime,
+    this.createBy,
+    this.modifyBy,
+    this.createTime,
+    this.modifyTime,
+    this.firstLanding,
+    this.roleLocalName,
+    this.roleEngName,
+    this.roleCode,
+    this.processId,
+    this.belongCustStatus,
+    this.areaCode,
   );
 
   factory UserInfoResp.fromJson(Map<String, dynamic> srcJson) =>

@@ -247,12 +247,14 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
         .then((data) {
       if (data.rows != null) {
         count = data.count;
-        setState(() {
-          toDoTask.clear();
-          toDoTask.addAll(data.rows);
-          list.addAll(toDoTask);
-          _isDate = true;
-        });
+        if (this.mounted) {
+          setState(() {
+            toDoTask.clear();
+            toDoTask.addAll(data.rows);
+            list.addAll(toDoTask);
+            _isDate = true;
+          });
+        }
       }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());

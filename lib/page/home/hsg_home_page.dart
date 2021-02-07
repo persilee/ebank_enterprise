@@ -13,6 +13,7 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 
@@ -29,78 +30,10 @@ class _HomePageState extends State<HomePage> {
   var _headPortraitUrl = ''; // 头像地址
   var _enterpriseName = ''; // 企业名称
   var _userName = '高阳银行企业用户'; // 姓名
-  var _characterName = '企业经办员'; // 角色名称
+  var _characterName = ''; // 角色名称
   var _lastLoginTime = '上次登录时间：'; // 上次登录时间
-  var _features = [
-    {
-      'title': S.current.transfer_collection,
-      'btnList': [
-        {
-          'btnIcon': 'images/home/listIcon/home_list_transfer.png',
-          'btnTitle': S.current.transfer
-        },
-        {
-          'btnIcon': 'images/home/listIcon/home_list_transfer_record.png',
-          'btnTitle': S.current.transfer_record
-        },
-        {
-          'btnIcon': 'images/home/listIcon/home_list_partner.png',
-          'btnTitle': S.current.transfer_model
-        },
-      ]
-    },
-    {
-      'title': S.current.deposit_service,
-      'btnList': [
-        {
-          'btnIcon': 'images/home/listIcon/home_list_time_deposit.png',
-          'btnTitle': S.current.deposit_open
-        },
-        {
-          'btnIcon': 'images/home/listIcon/home_list_deposit_records.png',
-          'btnTitle': S.current.deposit_record
-        },
-        {
-          'btnIcon': 'images/home/listIcon/home_list_deposit_rates.png',
-          'btnTitle': S.current.deposit_rate
-        },
-      ]
-    },
-    {
-      'title': S.current.loan_service,
-      'btnList': [
-        {
-          'btnIcon': 'images/home/listIcon/home_list_loan_apply.png',
-          'btnTitle': S.current.loan_apply
-        },
-        {
-          'btnIcon': 'images/home/listIcon/home_list_loan_recoeds.png',
-          'btnTitle': S.current.loan_record
-        },
-        {
-          'btnIcon': 'images/home/listIcon/home_list_loan_rate.png',
-          'btnTitle': S.current.loan_rate
-        },
-      ]
-    },
-    {
-      'title': S.current.other_service,
-      'btnList': [
-        {
-          'btnIcon': 'images/home/listIcon/home_list_FOREX.png',
-          'btnTitle': S.current.foreign_exchange
-        },
-        {
-          'btnIcon': 'images/home/listIcon/home_list_exchange.png',
-          'btnTitle': S.current.exchange_rate
-        },
-        {
-          'btnIcon': 'images/home/listIcon/home_list_statement.png',
-          'btnTitle': S.current.electronic_statement
-        },
-      ]
-    }
-  ];
+  String language = Intl.getCurrentLocale();
+  var _features = [];
 
   ScrollController _sctrollController = ScrollController();
 
@@ -128,6 +61,76 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _features = [
+      {
+        'title': S.current.transfer_collection,
+        'btnList': [
+          {
+            'btnIcon': 'images/home/listIcon/home_list_transfer.png',
+            'btnTitle': S.current.transfer
+          },
+          {
+            'btnIcon': 'images/home/listIcon/home_list_transfer_record.png',
+            'btnTitle': S.current.transfer_record
+          },
+          {
+            'btnIcon': 'images/home/listIcon/home_list_partner.png',
+            'btnTitle': S.current.transfer_model
+          },
+        ]
+      },
+      {
+        'title': S.current.deposit_service,
+        'btnList': [
+          {
+            'btnIcon': 'images/home/listIcon/home_list_time_deposit.png',
+            'btnTitle': S.current.deposit_open
+          },
+          {
+            'btnIcon': 'images/home/listIcon/home_list_deposit_records.png',
+            'btnTitle': S.current.deposit_record
+          },
+          {
+            'btnIcon': 'images/home/listIcon/home_list_deposit_rates.png',
+            'btnTitle': S.current.deposit_rate
+          },
+        ]
+      },
+      {
+        'title': S.current.loan_service,
+        'btnList': [
+          {
+            'btnIcon': 'images/home/listIcon/home_list_loan_apply.png',
+            'btnTitle': S.current.loan_apply
+          },
+          {
+            'btnIcon': 'images/home/listIcon/home_list_loan_recoeds.png',
+            'btnTitle': S.current.loan_record
+          },
+          {
+            'btnIcon': 'images/home/listIcon/home_list_loan_rate.png',
+            'btnTitle': S.current.loan_rate
+          },
+        ]
+      },
+      {
+        'title': S.current.other_service,
+        'btnList': [
+          {
+            'btnIcon': 'images/home/listIcon/home_list_FOREX.png',
+            'btnTitle': S.current.foreign_exchange
+          },
+          {
+            'btnIcon': 'images/home/listIcon/home_list_exchange.png',
+            'btnTitle': S.current.exchange_rate
+          },
+          {
+            'btnIcon': 'images/home/listIcon/home_list_statement.png',
+            'btnTitle': S.current.electronic_statement
+          },
+        ]
+      }
+    ];
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: _homeAppbar(_opacity, _changeLangBtnTltle),
@@ -138,13 +141,17 @@ class _HomePageState extends State<HomePage> {
             SliverToBoxAdapter(
               child: _homeHeaderView(),
             ),
-            SliverFixedExtentList(
-              delegate: SliverChildBuilderDelegate(
-                _buildListItem,
-                childCount: _features.length,
-              ),
-              itemExtent: 168.5,
-            ),
+            _characterName != "企业复核员" &&
+                    _characterName != "Enterprise Auditor" &&
+                    _characterName != ""
+                ? SliverFixedExtentList(
+                    delegate: SliverChildBuilderDelegate(
+                      _buildListItem,
+                      childCount: _features.length,
+                    ),
+                    itemExtent: 168.5,
+                  )
+                : SliverToBoxAdapter(),
             SliverToBoxAdapter(
               child: Container(
                 height: 20,
@@ -676,10 +683,16 @@ class _HomePageState extends State<HomePage> {
       print('$data');
       setState(() {
         _headPortraitUrl = data.headPortrait; //头像地址
-        _enterpriseName = '高阳寰球科技有限公司'; // 企业名称
-        _userName = data.actualName; // 姓名
-        _characterName = '企业经办员'; // 角色名称
-        _lastLoginTime = '上次登录时间：2020-12-01'; // 上次登录时间
+        _enterpriseName =
+            language == 'zh_CN' ? data.custLocalName : data.custEngName; // 企业名称
+        _userName = language == 'zh_CN'
+            ? data.localUserName
+            : data.englishUserName; // 姓名
+        _characterName = language == 'zh_CN'
+            ? data.roleLocalName
+            : data.roleEngName; //用户角色名称
+        _lastLoginTime =
+            S.current.last_login_time_with_value + data.lastLoginTime; // 上次登录时间
       });
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString());

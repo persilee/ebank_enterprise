@@ -1,5 +1,6 @@
 {
   "login": "Login",
+  "last_login_time_with_value":"Last Sign In time: ",
   "simplifiedChinese": "Chinese",
   "english": "English",
   "login_account_placeholder": "Email/Mobile Phone No./User ID",
