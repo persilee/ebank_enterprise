@@ -66,7 +66,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
 //加载
   Widget _loadingView() {
     var loadingIndicator = Visibility(
-      visible: loadStatus == LoadingStatus.STATUS_LOADING ? false : true,
+      visible: loadStatus == LoadingStatus.STATUS_LOADING ? true : false,
       child: SizedBox(
         child: CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation(HsgColors.accent),
@@ -245,16 +245,16 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     ProcessTaskDataRepository()
         .findUserToDoTask(FindUserToDoTaskReq(page, 10), 'findUserToDoTask')
         .then((data) {
-      if (data.rows != null) {
+      if (data.rows.length != 0) {
         count = data.count;
-        if (this.mounted) {
-          setState(() {
-            toDoTask.clear();
-            toDoTask.addAll(data.rows);
-            list.addAll(toDoTask);
-            _isDate = true;
-          });
-        }
+        _isDate = true;
+        setState(() {
+          toDoTask.clear();
+          toDoTask.addAll(data.rows);
+          list.addAll(toDoTask);
+        });
+      } else {
+        _isDate = false;
       }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
@@ -272,9 +272,9 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
       if (list.length < count) {
         page = page + 1;
         _loadData();
-        loadStatus = LoadingStatus.STATUS_IDEL;
-      } else {
         loadStatus = LoadingStatus.STATUS_LOADING;
+      } else {
+        loadStatus = LoadingStatus.STATUS_IDEL;
       }
     });
   }
