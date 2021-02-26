@@ -340,6 +340,7 @@
   "confimPayPwd": "Confirm New Payment Password",
   "resetPayPsd": "Set Payment Password",
   "differentPwd": "The Two Passwords Are Inconsistent, Please Re-enter",
+  "differentOldNewPwd": "The new password and the old password are not allowed to be the same, please re-enter",
   "sendmsm": "Send Verification Code",
   "iDCardVerification": "ID Card Verification",
   "pleaseFillInTheBankInformation": "Please Fill In The Bank Reservation Information To Complete The Identity Verification",

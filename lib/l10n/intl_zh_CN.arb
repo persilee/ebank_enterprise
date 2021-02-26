@@ -332,6 +332,7 @@
   "confimPayPwd": "确认新支付密码",
   "resetPayPsd": "设置支付密码",
   "differentPwd": "两次输入的密码不一致，请重新输入",
+  "differentOldNewPwd": "新密码和旧密码不允许一致，请重新输入",
   "sendmsm": "短信验证码",
   "iDCardVerification": "身份验证",
   "pleaseFillInTheBankInformation": "请填写银行预留信息完成身份验证",
