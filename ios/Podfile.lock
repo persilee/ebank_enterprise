@@ -2,6 +2,8 @@ PODS:
   - connectivity (0.0.1):
     - Flutter
     - Reachability
+  - contact_picker (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_svprogresshud (0.0.1):
     - Flutter
@@ -15,15 +17,19 @@ PODS:
   - shared_preferences (0.0.1):
     - Flutter
   - Toast (4.0.0)
+  - url_launcher (0.0.1):
+    - Flutter
   - webview_flutter (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
+  - contact_picker (from `.symlinks/plugins/contact_picker/ios`)
   - Flutter (from `Flutter`)
   - flutter_svprogresshud (from `.symlinks/plugins/flutter_svprogresshud/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 SPEC REPOS:
@@ -34,6 +40,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   connectivity:
     :path: ".symlinks/plugins/connectivity/ios"
+  contact_picker:
+    :path: ".symlinks/plugins/contact_picker/ios"
   Flutter:
     :path: Flutter
   flutter_svprogresshud:
@@ -42,17 +50,21 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
+  url_launcher:
+    :path: ".symlinks/plugins/url_launcher/ios"
   webview_flutter:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
   connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
+  contact_picker: 57db5d8b410b52a0457d88f7b15de7d3307e8f16
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_svprogresshud: ceba1e73d861459f50f602df702308c661dd7509
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
