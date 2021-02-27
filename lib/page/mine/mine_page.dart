@@ -74,6 +74,7 @@ class _MinePageState extends State<MinePage> {
               ),
               onPressed: () {
                 print('联系客服');
+                Navigator.pushNamed(context, pageContactCustomer);
               },
             ),
             IconButton(

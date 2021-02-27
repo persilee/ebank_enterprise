@@ -21,7 +21,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
   var _content = '';
   @override
   Widget build(BuildContext context) {
-    _feedbackController.text = '';
+    // _feedbackController.text = '';
     return new Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).feedback),
