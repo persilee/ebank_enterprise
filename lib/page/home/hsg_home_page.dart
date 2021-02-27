@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   var _userName = '高阳银行企业用户'; // 姓名
   var _characterName = ''; // 角色名称
   var _lastLoginTime = '上次登录时间：'; // 上次登录时间
-  String language = Intl.getCurrentLocale();
+  String _language = Intl.getCurrentLocale();
   var _features = [];
 
   ScrollController _sctrollController = ScrollController();
@@ -263,9 +263,11 @@ class _HomePageState extends State<HomePage> {
       switch (result) {
         case 0:
           language = Language.EN;
+          _loadData();
           break;
         case 1:
           language = Language.ZH_CN;
+          _loadData();
           break;
       }
     } else {
@@ -396,7 +398,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       constraints: BoxConstraints(
           maxWidth: (MediaQuery.of(context).size.width / 3 * 2 - 20)),
-      height: 20,
+      height: 22,
       child: Text(
         _enterpriseName,
         overflow: TextOverflow.ellipsis,
@@ -440,11 +442,16 @@ class _HomePageState extends State<HomePage> {
               size: 18,
             ),
           ),
-          Text(
-            _characterName,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
+          Container(
+            width: 70,
+            child: Text(
+              _characterName,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           )
         ],
@@ -683,14 +690,23 @@ class _HomePageState extends State<HomePage> {
       print('$data');
       setState(() {
         _headPortraitUrl = data.headPortrait; //头像地址
-        _enterpriseName =
-            language == 'zh_CN' ? data.custLocalName : data.custEngName; // 企业名称
-        _userName = language == 'zh_CN'
-            ? data.localUserName
-            : data.englishUserName; // 姓名
-        _characterName = language == 'zh_CN'
-            ? data.roleLocalName
-            : data.roleEngName; //用户角色名称
+        if (_language == 'zh_CN') {
+          _enterpriseName = data.custLocalName; // 企业名称
+          _userName = data.localUserName; // 姓名
+          _characterName = data.roleLocalName; //用户角色名称
+        } else {
+          _enterpriseName = data.custEngName; // 企业名称
+          _userName = data.englishUserName; // 姓名
+          _characterName = data.roleEngName; //用户角色名称
+        }
+        // _enterpriseName =
+        //     language == 'zh_CN' ? data.custLocalName : data.custEngName; // 企业名称
+        // _userName = language == 'zh_CN'
+        //     ? data.localUserName
+        //     : data.englishUserName; // 姓名
+        // _characterName = language == 'zh_CN'
+        //     ? data.roleLocalName
+        //     : data.roleEngName; //用户角色名称
         _lastLoginTime =
             S.current.last_login_time_with_value + data.lastLoginTime; // 上次登录时间
       });
