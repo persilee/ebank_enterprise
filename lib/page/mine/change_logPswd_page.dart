@@ -7,10 +7,12 @@ import 'package:ebank_mobile/data/source/update_login_paw_repository.dart';
 /// Date: 2020-12-29
 
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
@@ -30,6 +32,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   TextEditingController _newPwd = TextEditingController();
   TextEditingController _confimPwd = TextEditingController();
   TextEditingController _sms = TextEditingController();
+  String userAcc;
   Timer _timer;
   int countdownTime = 0;
 
@@ -66,22 +69,34 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Column(
                       children: [
-                        InputList(S.of(context).oldPwd,
-                            S.of(context).placeOldPwd, _oldPwd),
+                        InputList(
+                          S.of(context).oldPwd,
+                          S.of(context).placeOldPwd,
+                          _oldPwd,
+                          LengthLimitingTextInputFormatter(16),
+                        ),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
-                        InputList(S.of(context).newPwd,
-                            S.of(context).placeNewPwd, _newPwd),
+                        InputList(
+                          S.of(context).newPwd,
+                          S.of(context).placeNewPwd,
+                          _newPwd,
+                          LengthLimitingTextInputFormatter(16),
+                        ),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
-                        InputList(S.of(context).confimPwd,
-                            S.of(context).placeConfimPwd, _confimPwd),
+                        InputList(
+                          S.of(context).confimPwd,
+                          S.of(context).placeConfimPwd,
+                          _confimPwd,
+                          LengthLimitingTextInputFormatter(16),
+                        ),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
@@ -144,6 +159,10 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
           color: HsgColors.textHintColor,
         ),
       ),
+      inputFormatters: <TextInputFormatter>[
+        WhitelistingTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(6)
+      ],
     );
   }
 
@@ -175,14 +194,39 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   }
 
   bool _submit() {
+    // RegExp mobile = new RegExp(
+    //     "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\"]");
     if (_oldPwd.text != '' &&
-        _newPwd.text != '' &&
-        _confimPwd.text != '' &&
-        _sms.text != '') {
+            _newPwd.text != '' &&
+            _confimPwd.text != '' &&
+            _sms.text != ''
+        // mobile.hasMatch(_newPwd.text)
+        // (_newPwd.text).contains(userAcc) == false &&
+        // _newPwd.text == _confimPwd.text &&
+        // _oldPwd.text != _newPwd.text
+        ) {
       return true;
     } else {
       return false;
     }
+    // if (mobile.hasMatch(_newPwd.text) == false) {
+    //   HSProgressHUD.showInfo(status: "密码需包含数字、大写小字母和特殊字符");
+    //   return false;
+    // } else {
+    //   if ((_newPwd.text).contains(userAcc) == true) {
+    //     HSProgressHUD.showInfo(status: "密码不能包含账户名");
+    //     return false;
+    //   }
+    // }
+    // if (_newPwd.text != _confimPwd.text) {
+    //   HSProgressHUD.showInfo(status: "新密码与确认新密码不一致");
+    //   return false;
+    // }
+    // if (_oldPwd.text == _newPwd.text) {
+    //   HSProgressHUD.showInfo(status: "新密码不能与旧密码一致");
+    //   return false;
+    // }
+    // return true;
   }
 
   //倒计时方法
@@ -204,7 +248,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   _getVerificationCode() async {
     HSProgressHUD.show();
     final prefs = await SharedPreferences.getInstance();
-    String userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
+    userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
     VerificationCodeRepository()
         .sendSmsByAccount(
             SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
@@ -222,19 +266,36 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
 
   //修改密码接口
   _updateLoginPassword() async {
+    String oldPwd = EncryptUtil.aesEncode(_oldPwd.text);
+    String newPwd = EncryptUtil.aesEncode(_newPwd.text);
+    RegExp characters = new RegExp(
+        "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
+    RegExp letter = new RegExp("[a-zA-Z]");
+    RegExp number = new RegExp("[0-9]");
     if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differentPwd);
+    } else if (_oldPwd.text == _newPwd.text) {
+      HSProgressHUD.showInfo(status: "新密码不能与旧密码一致");
+    } else if ((_newPwd.text).contains(userAcc) == true) {
+      HSProgressHUD.showInfo(status: "密码不能包含账户名");
+    } else if ((_newPwd.text).length < 8 || (_newPwd.text).length > 16) {
+      HSProgressHUD.showInfo(status: "密码8-16位");
+    } else if (number.hasMatch(_newPwd.text) == false ||
+        letter.hasMatch(_newPwd.text) == false ||
+        characters.hasMatch(_newPwd.text) == false) {
+      HSProgressHUD.showInfo(status: "密码需包含数字、大小写字母和特殊字符");
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
       String userID = prefs.getString(ConfigKey.USER_ID);
       UpdateLoginPawRepository()
           .modifyLoginPassword(
-              ModifyPasswordReq(_newPwd.text, _oldPwd.text, _sms.text, userID),
+              ModifyPasswordReq(newPwd, oldPwd, _sms.text, userID),
               'ModifyPasswordReq')
           .then((data) {
-        HSProgressHUD.dismiss();
         Fluttertoast.showToast(msg: S.current.operate_success);
+        Navigator.pop(context);
+        HSProgressHUD.dismiss();
       }).catchError((e) {
         Fluttertoast.showToast(msg: e.toString());
         HSProgressHUD.dismiss();
@@ -245,9 +306,11 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
 
 // ignore: must_be_immutable
 class InputList extends StatelessWidget {
-  InputList(this.labText, this.placeholderText, this.inputValue);
+  InputList(this.labText, this.placeholderText, this.inputValue,
+      this.textInputFormatter);
   final String labText;
   final String placeholderText;
+  TextInputFormatter textInputFormatter;
   TextEditingController inputValue = TextEditingController();
 
   @override
@@ -283,6 +346,7 @@ class InputList extends StatelessWidget {
                   color: HsgColors.textHintColor,
                 ),
               ),
+              inputFormatters: <TextInputFormatter>[this.textInputFormatter],
             ),
           ),
         ],
