@@ -346,6 +346,7 @@
   "task_approval_tips":"请确认以下信息，然后完成审批",
   "approval_comment":"审批意见",
   "my_approval":"我的审批",
+  "getVerificationCode": "获取验证码",
   "task_approval":"任务审批",
   "approval_histroy":"审批历史",
   "approver":"审批人",
