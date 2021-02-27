@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class HsgColors {
+  static const Color theme = Color(0xff4871FF);
+
   /// 主色调
   static const Color primary = Color(0xff2f323e);
   static const Color primaryDark = Color(0xff282b36);
