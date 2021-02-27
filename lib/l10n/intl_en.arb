@@ -340,7 +340,6 @@
   "confimPayPwd": "Confirm New Payment Password",
   "resetPayPsd": "Set Payment Password",
   "differentPwd": "The Two Passwords Are Inconsistent, Please Re-enter",
-  "differentOldNewPwd": "The new password and the old password are not allowed to be the same, please re-enter",
   "sendmsm": "Send Verification Code",
   "iDCardVerification": "ID Card Verification",
   "pleaseFillInTheBankInformation": "Please Fill In The Bank Reservation Information To Complete The Identity Verification",
@@ -387,6 +386,15 @@
   "project_loan":"Project Loan",
   "business_loan":"Business Loan",
   "purpose":"Purpose",
-  "no_data_now":"No Data"
-}
+  "no_data_now":"No Data",
+  "phone_num":"Phone Number",
+  "reset_password":"Reset Password",
+
+  "format_mobile_error":"The format of the mobile phone number you entered is wrong",
+  "not_contain_password":"Password cannot contain account name",
+  "password_8_16":"Password 8-16 bits",
+  "password_need_num":"The password must contain numbers",
+  "password_need_low_and_top":"Password should contain upper and lower case letters",
+  "password_need_special_font":"The password should contain special characters"
+ }
   

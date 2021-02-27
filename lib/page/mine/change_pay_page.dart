@@ -127,7 +127,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
     if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differentPwd);
     } else if (_newPwd.text == _oldPwd.text) {
-      Fluttertoast.showToast(msg: S.of(context).differentOldNewPwd);
+      // Fluttertoast.showToast(msg: S.of(context).differentOldNewPwd);
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
