@@ -29,6 +29,10 @@ class _MinePageState extends State<MinePage> {
   String _userName = "";
   String _headPortraitUrl = "";
   var _imgPath;
+  // var _headPortraitUrl = ''; // 头像地址
+  // String _lastLoginTime =
+  //     DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now()); //上次登录时间
+  // String _userName = ""; //用户名
   bool _switchZhiWen = true; //指纹登录
   bool _switchFaceId = false; //faceID登录
 
@@ -78,6 +82,7 @@ class _MinePageState extends State<MinePage> {
               ),
               onPressed: () {
                 print('联系客服');
+                Navigator.pushNamed(context, pageContactCustomer);
               },
             ),
             IconButton(

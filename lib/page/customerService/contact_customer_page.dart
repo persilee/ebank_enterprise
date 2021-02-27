@@ -40,7 +40,7 @@ class _ContactCustomerPageState extends State<ContactCustomerPage> {
                 children: [
                   Container(
                     margin: EdgeInsets.only(top: 90),
-                    padding: EdgeInsets.only(left: 35, right: 35),
+                    padding: EdgeInsets.only(left: 30, right: 30),
                     width: double.infinity,
                     height: 223,
                     decoration: BoxDecoration(
@@ -170,7 +170,7 @@ class PhoneButton extends StatelessWidget {
               phone,
               style: TextStyle(
                 color: Color(0xFF4871FF),
-                fontSize: 18,
+                fontSize: 17,
               ),
             )
           ],
