@@ -35,10 +35,10 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _accountTC =
       TextEditingController(text: 'pengyikang');
   final TextEditingController _passwordTC =
-      TextEditingController(text: '0c9W7825');
+      TextEditingController(text: '2wFW2MCu');
 
   var _account = 'pengyikang'; //'18033412021';
-  var _password = '0c9W7825'; //'123456';
+  var _password = '2wFW2MCu'; //'123456';
 
   @override
   void initState() {
@@ -125,6 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                 margin: EdgeInsets.only(left: 15),
                 child: ForgetButton(S.of(context).fotget_password_q, () {
                   setState(() {
+                    Navigator.pushNamed(context, pageForgetPassword);
                     print('忘记密码');
                   });
                 }),

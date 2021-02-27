@@ -172,6 +172,7 @@ class _FeatureListPageState extends State<FeatureListPage> {
               } else if (S.current.transaction_details == title) {
                 //收支明细
                 Navigator.pushNamed(context, pageDetailList);
+                // Navigator.pushNamed(context, pageForgetPassword);
               } else if (S.current.transfer == title) {
                 //转账
                 Navigator.pushNamed(context, pageTransfer);

@@ -563,8 +563,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               ),
             ),
           ),
-             //提交按钮
-             getButton(S.current.submit, _isClick),
+          //提交按钮
+          getButton(S.current.submit, _isClick),
         ],
       ),
     );

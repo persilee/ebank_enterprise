@@ -384,5 +384,14 @@
   "project_loan":"项目贷款",
   "business_loan":"经营贷款",
   "purpose":"目的",
-  "no_data_now" :"暂无数据"
+  "no_data_now" :"暂无数据",
+  "phone_num":"手机号码",
+  "reset_password":"重置密码",
+  
+  "format_mobile_error":"您输入的手机号码格式错误",
+  "not_contain_password":"密码不能包含账户名",
+  "password_8_16":"密码8-16位",
+  "password_need_num":"密码需包含数字",
+  "password_need_low_and_top":"密码需包含大小写字母",
+  "password_need_special_font":"密码需包含特殊字符"
 }
