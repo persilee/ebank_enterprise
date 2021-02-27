@@ -30,9 +30,6 @@ class _MinePageState extends State<MinePage> {
   String _headPortraitUrl = "";
   var _imgPath;
   // var _headPortraitUrl = ''; // 头像地址
-  // String _lastLoginTime =
-  //     DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now()); //上次登录时间
-  // String _userName = ""; //用户名
   bool _switchZhiWen = true; //指纹登录
   bool _switchFaceId = false; //faceID登录
 
@@ -355,22 +352,24 @@ class _MinePageState extends State<MinePage> {
                         fontSize: 20.0,
                         height: 1.5),
                   ),
-                  Text(S.of(context).lastLoginTime + _lastLoginTime,
-                      style: TextStyle(
-                          color: HsgColors.aboutusText, fontSize: 12.0))
+                  Text(
+                    S.of(context).lastLoginTime + _lastLoginTime,
+                    style: TextStyle(
+                      color: HsgColors.aboutusText,
+                      fontSize: 12.0,
+                    ),
+                  ),
                 ],
               ),
             ),
             Container(
-                padding: EdgeInsets.all(10),
-                alignment: Alignment.centerRight,
-                child: InkWell(
-                  onTap: () {},
-                  child: Icon(
-                    Icons.navigate_next,
-                    color: Colors.white,
-                  ),
-                )),
+              padding: EdgeInsets.all(10),
+              alignment: Alignment.centerRight,
+              child: Icon(
+                Icons.navigate_next,
+                color: Colors.white,
+              ),
+            ),
           ],
         ),
       ),
@@ -402,15 +401,13 @@ class _MinePageState extends State<MinePage> {
   //设置头像
   Widget _headPortraitImage() {
     Widget imagW;
-    if (_imgPath.toString().length > 0) {
+    if (_imgPath != null && _imgPath != '') {
       imagW = Image(
-        //'images/mine/mine-icon.png'
-        image: AssetImage('images/home/heaerIcon/home_header_person.png'),
+        image: AssetImage('$_imgPath'),
       );
     } else {
       imagW = (_headPortraitUrl == null || _headPortraitUrl == '')
           ? Image(
-              //'images/mine/mine-icon.png'
               image: AssetImage('images/home/heaerIcon/home_header_person.png'),
             )
           : FadeInImage.assetNetwork(
@@ -502,7 +499,7 @@ class _MinePageState extends State<MinePage> {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
     setState(() {
-      _imgPath = image;
+      _imgPath = image.path;
     });
   }
 
@@ -510,7 +507,7 @@ class _MinePageState extends State<MinePage> {
   _openGallery() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
-      _imgPath = image;
+      _imgPath = image.path;
     });
   }
 }
