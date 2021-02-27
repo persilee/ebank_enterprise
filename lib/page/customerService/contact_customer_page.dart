@@ -170,7 +170,7 @@ class PhoneButton extends StatelessWidget {
               phone,
               style: TextStyle(
                 color: Color(0xFF4871FF),
-                fontSize: 18,
+                fontSize: 17,
               ),
             )
           ],

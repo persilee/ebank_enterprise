@@ -74,6 +74,7 @@ class _MinePageState extends State<MinePage> {
               ),
               onPressed: () {
                 print('联系客服');
+                Navigator.pushNamed(context, pageContactCustomer);
               },
             ),
             IconButton(
@@ -131,22 +132,6 @@ class _MinePageState extends State<MinePage> {
           Row(
             children: [
               _headPortrait(),
-              // Container(
-              //   margin: EdgeInsets.only(
-              //       top: 78.0, left: 32, right: 24.0, bottom: 78.0),
-              //   decoration: BoxDecoration(
-              //     border: Border.all(color: Colors.white, width: 1),
-              //     borderRadius: BorderRadius.circular(28),
-              //   ),
-              //   child: ClipOval(
-              //     child: Image.asset(
-              //       'images/mine/mine-icon.png',
-              //       height: 56,
-              //       width: 56,
-              //       fit: BoxFit.cover,
-              //     ),
-              //   ),
-              // ),
               Expanded(
                 child: Column(
                   // mainAxisAlignment: MainAxisAlignment.start,
@@ -260,7 +245,7 @@ class _MinePageState extends State<MinePage> {
           ],
         ),
       ),
-      //修改登录密码
+      //密码
       Container(
         width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.only(bottom: 16),
@@ -268,79 +253,19 @@ class _MinePageState extends State<MinePage> {
         padding: EdgeInsets.only(left: 20, right: 20),
         child: Column(
           children: [
-            Container(
-              height: 50.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(S.of(context).resetLoginPsw),
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, changeLgPs);
-                        },
-                        child: Icon(
-                          Icons.navigate_next,
-                          color: HsgColors.nextPageIcon,
-                        ),
-                      )),
-                ],
-              ),
-            ),
+            //修改登录密码
+            _getContext(changeLgPs, S.of(context).resetLoginPsw),
             Divider(
                 height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
             //修改支付密码
-            Container(
-              height: 50.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(S.of(context).changPayPws),
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, changePayPS);
-                        },
-                        child: Icon(
-                          Icons.navigate_next,
-                          color: HsgColors.nextPageIcon,
-                        ),
-                      )),
-                ],
-              ),
-            ),
+            _getContext(changePayPS, S.of(context).changPayPws),
             Divider(
                 height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
             //重置支付密码
-            Container(
-              height: 50.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(S.of(context).resetPayPwd),
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, iDcardVerification);
-                        },
-                        child: Icon(
-                          Icons.navigate_next,
-                          color: HsgColors.nextPageIcon,
-                        ),
-                      )),
-                ],
-              ),
-            ),
+            _getContext(iDcardVerification, S.of(context).resetPayPwd),
           ],
         ),
       ),
-      //
       Container(
         width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.only(bottom: 16),
@@ -348,51 +273,12 @@ class _MinePageState extends State<MinePage> {
         padding: EdgeInsets.only(left: 20, right: 20),
         child: Column(
           children: [
-            Container(
-              height: 50.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(S.of(context).feedback),
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, feedback);
-                        },
-                        child: Icon(
-                          Icons.navigate_next,
-                          color: HsgColors.nextPageIcon,
-                        ),
-                      )),
-                ],
-              ),
-            ),
+            //意见反馈
+            _getContext(feedback, S.of(context).feedback),
             Divider(
                 height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
-            Container(
-              height: 50.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(S.of(context).aboutUs),
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () {
-                          //调整关于我们
-                          Navigator.pushNamed(context, aboutUs);
-                        },
-                        child: Icon(
-                          Icons.navigate_next,
-                          color: HsgColors.nextPageIcon,
-                        ),
-                      )),
-                ],
-              ),
-            ),
+            //关于我们
+            _getContext(aboutUs, S.of(context).aboutUs),
           ],
         ),
       ),
@@ -410,6 +296,31 @@ class _MinePageState extends State<MinePage> {
                 style: TextStyle(color: HsgColors.redTextColor)),
           )))
     ]));
+  }
+
+  Widget _getContext(String pushNamed, String name) {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, pushNamed);
+      },
+      child: Container(
+        height: 50.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(name),
+            Container(
+              padding: EdgeInsets.all(10),
+              alignment: Alignment.centerRight,
+              child: Icon(
+                Icons.navigate_next,
+                color: HsgColors.nextPageIcon,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
 //获取用户信息
