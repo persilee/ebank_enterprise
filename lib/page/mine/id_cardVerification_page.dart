@@ -87,6 +87,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
             _accList.add(item.cardNo);
             _accIcon.add(item.imageUrl);
           });
+          _accNo = _accList[_accNoId];
         });
       }
     }).catchError((e) {
