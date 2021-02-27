@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 class ChangePayPage extends StatefulWidget {
   @override
@@ -86,6 +87,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
                               Expanded(
                                 child: otpTextField(),
                               ),
+                              Padding(padding: EdgeInsets.only(right: 10)),
                               SizedBox(
                                 width: 90,
                                 height: 32,
@@ -124,6 +126,8 @@ class _ChangePayPageState extends State<ChangePayPage> {
   _submitData() async {
     if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differentPwd);
+    } else if (_newPwd.text == _oldPwd.text) {
+      Fluttertoast.showToast(msg: S.of(context).differentOldNewPwd);
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
@@ -188,7 +192,9 @@ class _ChangePayPageState extends State<ChangePayPage> {
       disabledTextColor: HsgColors.describeText,
       disabledBorderColor: HsgColors.describeText,
       child: Text(
-        countdownTime > 0 ? '${countdownTime}s' : '获取验证码',
+        countdownTime > 0
+            ? '${countdownTime}s'
+            : S.of(context).getVerificationCode,
         style: TextStyle(fontSize: 14),
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -221,8 +227,11 @@ class _ChangePayPageState extends State<ChangePayPage> {
       textAlign: TextAlign.end,
       keyboardType: TextInputType.number,
       controller: _sms,
+      inputFormatters: <TextInputFormatter>[
+        LengthLimitingTextInputFormatter(6), //限制长度
+      ],
       decoration: InputDecoration.collapsed(
-        hintText: S.current.please_input,
+        hintText: S.current.placeSMS,
         hintStyle: TextStyle(
           fontSize: 14,
           color: HsgColors.textHintColor,
