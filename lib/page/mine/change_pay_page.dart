@@ -34,6 +34,14 @@ class _ChangePayPageState extends State<ChangePayPage> {
   int countdownTime = 0;
 
   @override
+  void dispose() {
+    super.dispose();
+    if (_timer != null) {
+      _timer.cancel();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: AppBar(
@@ -112,6 +120,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
                           : null,
                       color: HsgColors.accent,
                       textColor: Colors.white,
+                      disabledColor: Color(0xFFD1D1D1),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5) //设置圆角
                           ),
@@ -127,7 +136,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
     if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differentPwd);
     } else if (_newPwd.text == _oldPwd.text) {
-      Fluttertoast.showToast(msg: S.of(context).differentOldNewPwd);
+      Fluttertoast.showToast(msg: S.of(context).differnet_old_new_pwd);
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
