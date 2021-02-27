@@ -34,6 +34,14 @@ class _ChangePayPageState extends State<ChangePayPage> {
   int countdownTime = 0;
 
   @override
+  void dispose() {
+    super.dispose();
+    if (_timer != null) {
+      _timer.cancel();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: AppBar(
