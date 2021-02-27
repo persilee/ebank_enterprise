@@ -31,9 +31,10 @@ class _HomePageState extends State<HomePage> {
   var _enterpriseName = ''; // 企业名称
   var _userName = '高阳银行企业用户'; // 姓名
   var _characterName = ''; // 角色名称
-  var _lastLoginTime = '上次登录时间：'; // 上次登录时间
-  String language = Intl.getCurrentLocale();
+  var _lastLoginTime = ''; // 上次登录时间
+  String _language = Intl.getCurrentLocale();
   var _features = [];
+  UserInfoResp _data;
 
   ScrollController _sctrollController = ScrollController();
 
@@ -263,9 +264,15 @@ class _HomePageState extends State<HomePage> {
       switch (result) {
         case 0:
           language = Language.EN;
+          setState(() {
+            _language = 'en';
+          });
           break;
         case 1:
           language = Language.ZH_CN;
+          setState(() {
+            _language = 'zh_CN';
+          });
           break;
       }
     } else {
@@ -276,6 +283,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _changeLangBtnTltle = languages[result];
       HSGBankApp.setLocale(context, Language().getLocaleByLanguage(language));
+      _changeUserInfoShow(_data);
     });
   }
 
@@ -396,7 +404,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       constraints: BoxConstraints(
           maxWidth: (MediaQuery.of(context).size.width / 3 * 2 - 20)),
-      height: 20,
+      height: 22,
       child: Text(
         _enterpriseName,
         overflow: TextOverflow.ellipsis,
@@ -440,11 +448,16 @@ class _HomePageState extends State<HomePage> {
               size: 18,
             ),
           ),
-          Text(
-            _characterName,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
+          Container(
+            width: 70,
+            child: Text(
+              _characterName,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           )
         ],
@@ -455,7 +468,7 @@ class _HomePageState extends State<HomePage> {
   //时间信息
   Widget _timeInfo() {
     return Text(
-      _lastLoginTime,
+      S.current.last_login_time_with_value + _lastLoginTime,
       style: TextStyle(
         color: Colors.white,
         fontSize: 12,
@@ -670,6 +683,22 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _changeUserInfoShow(UserInfoResp model) {
+    setState(() {
+      _headPortraitUrl = model.headPortrait; //头像地址
+      _enterpriseName = _language == 'zh_CN'
+          ? model.custLocalName
+          : model.custEngName; // 企业名称
+      _userName = _language == 'zh_CN'
+          ? model.localUserName
+          : model.englishUserName; // 姓名
+      _characterName = _language == 'zh_CN'
+          ? model.roleLocalName
+          : model.roleEngName; //用户角色名称
+      _lastLoginTime = model.lastLoginTime; // 上次登录时间
+    });
+  }
+
   Future<void> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
@@ -683,16 +712,17 @@ class _HomePageState extends State<HomePage> {
       print('$data');
       setState(() {
         _headPortraitUrl = data.headPortrait; //头像地址
-        _enterpriseName =
-            language == 'zh_CN' ? data.custLocalName : data.custEngName; // 企业名称
-        _userName = language == 'zh_CN'
+        _enterpriseName = _language == 'zh_CN'
+            ? data.custLocalName
+            : data.custEngName; // 企业名称
+        _userName = _language == 'zh_CN'
             ? data.localUserName
             : data.englishUserName; // 姓名
-        _characterName = language == 'zh_CN'
+        _characterName = _language == 'zh_CN'
             ? data.roleLocalName
             : data.roleEngName; //用户角色名称
-        _lastLoginTime =
-            S.current.last_login_time_with_value + data.lastLoginTime; // 上次登录时间
+        _lastLoginTime = data.lastLoginTime; // 上次登录时间
+        _data = data;
       });
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString());

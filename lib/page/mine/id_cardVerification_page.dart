@@ -23,6 +23,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
+import 'package:flutter/services.dart';
 
 class IdIardVerificationPage extends StatefulWidget {
   @override
@@ -39,7 +40,6 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   TextEditingController _phoneNo = TextEditingController(); //预留手机号
   TextEditingController _realName = TextEditingController(); //真实姓名
   TextEditingController _smsCode = TextEditingController(); //短信验证码
-
 
   //第二部分
   TextEditingController _newPwd = TextEditingController(); //新密码
@@ -61,6 +61,16 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   // ignore: must_call_super
   void initState() {
     // 网络请求
+    _phoneNo.addListener(() {
+      //电话号码限制11位数
+      String text = _phoneNo.text;
+      int length = text.length;
+      if (length > 11) {
+        _phoneNo.text = text.substring(0, 11);
+        _phoneNo.selection =
+            TextSelection.collapsed(offset: _phoneNo.text.length);
+      }
+    });
     _getUserCardList();
     _getIdCardList();
   }
@@ -171,9 +181,10 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
               key: _formKey,
               child: SingleChildScrollView(
                 child:
-                  //三元运算符
+                    //三元运算符
                     isShowIdCheckout
-                        ? Column( //身份证验证信息
+                        ? Column(
+                            //身份证验证信息
                             children: [
                               //账号
                               Container(
@@ -240,6 +251,9 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                                           Expanded(
                                             child: otpTextField(),
                                           ),
+                                          Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 10)),
                                           SizedBox(
                                             width: 90,
                                             height: 32,
@@ -275,32 +289,34 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                               )
                             ],
                           )
-                        :   
-                        Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(bottom: 16),
-                    color: Colors.white,
-                    padding: EdgeInsets.only(left: 20, right: 20,bottom: 20),
-                    child: Column(
-                      children: [
-                        //新密码
-                        InputList(S.of(context).newPayPwd,S.of(context).placeNewPwd, _newPwd, isPwd :true),
-                        //确认新密码
-                        InputList(S.of(context).confimPayPwd,
-                            S.of(context).placeConfimPwd, _confimPwd,isShowLine:false, isPwd :true),
-                         //提交
-                        HsgButton.button(
-                          title: S.current.confirm,
-                          click: _boolBut()
-                              ? () {
-                                submitChangePassword();
-                                }
-                              : null,
-                ),
-                           
-                      ],
-                    ),
-                  ),
+                        : Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(bottom: 16),
+                            color: Colors.white,
+                            padding: EdgeInsets.only(
+                                left: 20, right: 20, bottom: 20),
+                            child: Column(
+                              children: [
+                                //新密码
+                                InputList(S.of(context).newPayPwd,
+                                    S.of(context).placeNewPwd, _newPwd,
+                                    isPwd: true),
+                                //确认新密码
+                                InputList(S.of(context).confimPayPwd,
+                                    S.of(context).placeConfimPwd, _confimPwd,
+                                    isShowLine: false, isPwd: true),
+                                //提交
+                                HsgButton.button(
+                                  title: S.current.confirm,
+                                  click: _boolBut()
+                                      ? () {
+                                          submitChangePassword();
+                                        }
+                                      : null,
+                                ),
+                              ],
+                            ),
+                          ),
               )),
         ));
   }
@@ -311,6 +327,9 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       textAlign: TextAlign.end,
       keyboardType: TextInputType.number,
       controller: _smsCode,
+      inputFormatters: <TextInputFormatter>[
+        LengthLimitingTextInputFormatter(6), //限制长度
+      ],
       decoration: InputDecoration.collapsed(
         // 边色与边宽度
         hintText: S.current.placeSMS,
@@ -407,6 +426,17 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
 
   //验证身份信息 提交数据
   _updateLoginPassword() async {
+    // RegExp postalcode1 =
+    //     new RegExp(r'(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x))$');
+    // if (!postalcode1.hasMatch(_certNo.text)) {
+    //   Fluttertoast.showToast(msg: '请输入正确的身份证!');
+    //   return;
+    // }
+    RegExp postalcode2 = new RegExp(r'^\d{11}$');
+    if (!postalcode2.hasMatch(_phoneNo.text)) {
+      Fluttertoast.showToast(msg: '请输入正确的手机号!');
+      return;
+    }
     isShowIdCheckout = false;
     //不调用接口
     // HSProgressHUD.show();
@@ -427,7 +457,6 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
     // });
   }
 
-
   //验证新密码非空，且一致
   bool _boolBut() {
     if (_newPwd.text != '' && _confimPwd.text != '') {
@@ -436,12 +465,12 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       return false;
     }
   }
-  
+
   //提交修改密码表单
   submitChangePassword() async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
-    if(_newPwd.text!=_confimPwd.text){
+    if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differentPwd);
       return;
     }
@@ -449,16 +478,15 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
     ChecInformantApiRepository()
         .setTransactionPassword(
             SetTransactionPasswordReq(
-              _realName.text,
-              _accNo,
-              _certNo.text,
-              _certTypeKey,
-              _confimPwd.text,
-              _phoneNo.text,
-              userID,
-              true,
-              _smsCode.text
-              ),
+                _realName.text,
+                _accNo,
+                _certNo.text,
+                _certTypeKey,
+                _confimPwd.text,
+                _phoneNo.text,
+                userID,
+                true,
+                _smsCode.text),
             'setTransactionPassword')
         .then((data) {
       HSProgressHUD.dismiss();
@@ -468,16 +496,13 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.dismiss();
     });
-
-    
   }
-    
 }
 
-
 // ignore: must_be_immutable
-class  InputList extends StatelessWidget {
-  InputList(this.labText, this.placeholderText, this.inputValue,{this.isShowLine =true,this.isPwd = false});
+class InputList extends StatelessWidget {
+  InputList(this.labText, this.placeholderText, this.inputValue,
+      {this.isShowLine = true, this.isPwd = false});
   final String labText;
   final String placeholderText;
   TextEditingController inputValue = TextEditingController();
@@ -523,10 +548,9 @@ class  InputList extends StatelessWidget {
                 ),
               ],
             ),
-            if(isShowLine)
-            Divider(
-                height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
-            
+            if (isShowLine)
+              Divider(
+                  height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
           ],
         ));
   }

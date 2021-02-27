@@ -5,6 +5,7 @@
 
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
 import 'package:ebank_mobile/page/approval/task_approval_page.dart';
+import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
 import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
@@ -165,6 +166,7 @@ var appRoutes = {
   pageDepositRecordSucceed: (context) => DepositContractSucceed(),
   //pageDepositInfo: (context) => PageDepositInfo(),
   pageInternational: (context) => TransferInternationalPage(),
+  pageFeatureList: (context) => FeatureListPage(),
   pageTransfer: (context) => TransferPage(),
   pageAuthorizationHistory: (context) => AuthorizationHistoryPage(),
   pageTransferInternal: (context) => TransferInternalPage(),

@@ -8,10 +8,13 @@ import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MinePage extends StatefulWidget {
   @override
@@ -21,18 +24,24 @@ class MinePage extends StatefulWidget {
 class _MinePageState extends State<MinePage> {
   double _opacity = 0;
   ScrollController _sctrollController = ScrollController();
-  String _lastLoginTime = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now());
-  String _userName= "";
-  bool _switchZhiWen=true; //指纹登录
-  bool _switchFaceId=false; //faceID登录
-  
-@override
+  String _lastLoginTime =
+      DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now());
+  String _userName = "";
+  String _headPortraitUrl = "";
+  var _imgPath;
+  // var _headPortraitUrl = ''; // 头像地址
+  // String _lastLoginTime =
+  //     DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now()); //上次登录时间
+  // String _userName = ""; //用户名
+  bool _switchZhiWen = true; //指纹登录
+  bool _switchFaceId = false; //faceID登录
+
+  @override
   // ignore: must_call_super
   void initState() {
     // 网络请求
     _getUser();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +82,7 @@ class _MinePageState extends State<MinePage> {
               ),
               onPressed: () {
                 print('联系客服');
+                Navigator.pushNamed(context, pageContactCustomer);
               },
             ),
             IconButton(
@@ -114,7 +124,8 @@ class _MinePageState extends State<MinePage> {
           Image(
             width: MediaQuery.of(context).size.width,
             height: 180,
-            image: AssetImage('images/mine/mine-icon.png'),
+            image: AssetImage(
+                'images/mine/mine-icon.png'), //'images/mine/mine-icon.png',
             fit: BoxFit.cover,
           ),
           Stack(
@@ -127,309 +138,383 @@ class _MinePageState extends State<MinePage> {
               ),
             ],
           ),
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(
-                    top: 78.0, left: 32, right: 24.0, bottom: 78.0),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 1),
-                    borderRadius: BorderRadius.circular(28)),
-                child: ClipOval(
-                  child: Image.asset(
-                    'images/mine/mine-icon.png',
-                    height: 56,
-                    width: 56,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _userName,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: HsgColors.aboutusText,
-                          fontSize: 20.0,
-                          height: 1.5),
-                    ),
-                    Text(S.of(context).lastLoginTime + _lastLoginTime,
-                        style: TextStyle(
-                            color: HsgColors.aboutusText, fontSize: 12.0))
-                  ],
-                ),
-              ),
-              Container(
-                  padding: EdgeInsets.all(10),
-                  alignment: Alignment.centerRight,
-                  child: InkWell(
-                    onTap: () {
-                    },
-                    child: Icon(
-                      Icons.navigate_next,
-                      color: Colors.white,
-                    ),
-                  )),
-            ],
-          )
+          _headerInfoWidget(),
         ],
       ),
     );
   }
- 
 
-/// 中间内容的内容
-Widget _mineContendView(context) {
-  return Container(
-      child: Column(children: [
-    Container(
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(bottom: 16),
-      color: Colors.white,
-      padding: EdgeInsets.only(left: 20, right: 20),
+  /// 中间内容的内容
+  Widget _mineContendView(context) {
+    ///指纹登录开关单元widget
+    Widget touchIDUnitW = _switchUnitWidget(
+        S.of(context).fingerprintLogin, _switchZhiWen, true, (bool value) {
+      setState(() {
+        _switchZhiWen = value;
+      });
+    });
+
+    ///人脸登录开关单元widget
+    Widget faceIDUintW = _switchUnitWidget(
+        S.of(context).faceIdlogin, _switchFaceId, true, (bool value) {
+      setState(() {
+        _switchFaceId = value;
+      });
+    });
+
+    return Container(
       child: Column(
         children: [
-          Row(
+          Container(
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.only(bottom: 16),
+            color: Colors.white,
+            child: Column(
+              children: [
+                touchIDUnitW,
+                faceIDUintW,
+              ],
+            ),
+          ),
+          //修改登录密码
+          Container(
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.only(bottom: 16),
+            color: Colors.white,
+            // padding: EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              children: [
+                _flatBtnNuitWidget(S.of(context).resetLoginPsw, true, () {
+                  Navigator.pushNamed(context, changeLgPs);
+                }),
+                _flatBtnNuitWidget(S.of(context).changPayPws, true, () {
+                  Navigator.pushNamed(context, changePayPS);
+                }),
+                _flatBtnNuitWidget(S.of(context).resetPayPwd, true, () {
+                  Navigator.pushNamed(context, iDcardVerification);
+                }),
+              ],
+            ),
+          ),
+          //
+          Container(
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.only(bottom: 16),
+            color: Colors.white,
+            // padding: EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              children: [
+                _flatBtnNuitWidget(S.of(context).feedback, true, () {
+                  Navigator.pushNamed(context, feedback);
+                }),
+                _flatBtnNuitWidget(S.of(context).aboutUs, true, () {
+                  Navigator.pushNamed(context, aboutUs);
+                }),
+              ],
+            ),
+          ),
+          //退出按钮
+          Container(
+            height: 50,
+            color: Colors.white,
+            child: FlatButton(
+              height: 50.0,
+              onPressed: () {
+                //调整关于我们
+                _loginOut();
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: Center(
+                  child: Text(
+                    S.of(context).loginOut,
+                    style: TextStyle(color: HsgColors.redTextColor),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            height: 35,
+          ),
+        ],
+      ),
+    );
+  }
+
+  ///右侧switchp选项的单元widget
+  Widget _switchUnitWidget(String textString, bool switchValue, bool isShowLine,
+      Function(bool value) onChangedF) {
+    Widget switchUnitW;
+    switchUnitW = Container(
+      child: Column(
+        children: [
+          Container(
+            height: 50.0,
+            padding: EdgeInsets.only(left: 15, right: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  textString,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                  ),
+                ),
+                CupertinoSwitch(
+                  activeColor: HsgColors.theme,
+                  value: switchValue,
+                  onChanged: (value) {
+                    //重新构建页面
+                    onChangedF(value);
+                  },
+                ),
+              ],
+            ),
+          ),
+          isShowLine
+              ? Container(
+                  padding: EdgeInsets.only(left: 15, right: 15),
+                  child: Divider(
+                      height: 1,
+                      color: HsgColors.divider,
+                      indent: 3,
+                      endIndent: 3),
+                )
+              : Container(),
+        ],
+      ),
+    );
+    return switchUnitW;
+  }
+
+  ///按钮单元格，左文字，有箭头图标
+  Widget _flatBtnNuitWidget(
+      String leftString, bool isShowLine, VoidCallback onClick) {
+    return Column(
+      children: [
+        FlatButton(
+          height: 50.0,
+          onPressed: onClick,
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                S.of(context).fingerprintLogin,
+                leftString,
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15,
+                  color: Colors.black,
+                ),
               ),
-               Switch(
-          value: _switchZhiWen,//当前状态
-          onChanged:(value){
-            //重新构建页面  
-            setState(() {
-              _switchZhiWen=value;
-            });
-          },
-        ),
+              Container(
+                alignment: Alignment.centerRight,
+                child: Icon(
+                  Icons.navigate_next,
+                  color: HsgColors.nextPageIcon,
+                ),
+              ),
             ],
           ),
-          Divider(height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(S.of(context).faceIdlogin),
-                 Switch(
-          value: _switchFaceId,//当前状态
-          onChanged:(value){
-            //重新构建页面  
-            setState(() {
-              _switchFaceId=value;
-            });
-          },
         ),
-            ],
-          ),
-        ],
+        isShowLine
+            ? Container(
+                padding: EdgeInsets.only(left: 15, right: 15),
+                child: Divider(
+                    height: 1,
+                    color: HsgColors.divider,
+                    indent: 3,
+                    endIndent: 3),
+              )
+            : Container(),
+      ],
+    );
+  }
+
+//头部信息展示
+  Widget _headerInfoWidget() {
+    return GestureDetector(
+      child: Container(
+        child: Row(
+          children: [
+            Container(
+              margin: EdgeInsets.only(
+                  top: 78.0, left: 32, right: 24.0, bottom: 78.0),
+              child: _headPortrait(),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _userName,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        color: HsgColors.aboutusText,
+                        fontSize: 20.0,
+                        height: 1.5),
+                  ),
+                  Text(S.of(context).lastLoginTime + _lastLoginTime,
+                      style: TextStyle(
+                          color: HsgColors.aboutusText, fontSize: 12.0))
+                ],
+              ),
+            ),
+            Container(
+                padding: EdgeInsets.all(10),
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {},
+                  child: Icon(
+                    Icons.navigate_next,
+                    color: Colors.white,
+                  ),
+                )),
+          ],
+        ),
       ),
-    ),
-    //修改登录密码
-    Container(
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(bottom: 16),
-      color: Colors.white,
-      padding: EdgeInsets.only(left: 20, right: 20),
-      child: Column(
-        children: [
-          Container(
-            height: 50.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(S.of(context).resetLoginPsw),
-                Container(
-                    padding: EdgeInsets.all(10),
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, changeLgPs);
-                      
-                      },
-                      child: Icon(
-                        Icons.navigate_next,
-                        color: HsgColors.nextPageIcon,
-                      ),
-                    )),
-              ],
-            ),
-          ),
-          Divider(height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
-          //修改支付密码
-          Container(
-            height: 50.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(S.of(context).changPayPws),
-                Container(
-                    padding: EdgeInsets.all(10),
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () {
-                         Navigator.pushNamed(context, changePayPS);
-                      },
-                      child: Icon(
-                        Icons.navigate_next,
-                        color: HsgColors.nextPageIcon,
-                      ),
-                    )),
-              ],
-            ),
-          ),
-          Divider(height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
-          //重置支付密码
-          Container(
-            height: 50.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(S.of(context).resetPayPwd),
-                Container(
-                    padding: EdgeInsets.all(10),
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, iDcardVerification);
-                      },
-                      child: Icon(
-                        Icons.navigate_next,
-                        color: HsgColors.nextPageIcon,
-                      ),
-                    )),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
-    //
-    Container(
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.only(bottom: 16),
-      color: Colors.white,
-      padding: EdgeInsets.only(left: 20, right: 20),
-      child: Column(
-        children: [
-          Container(
-            height: 50.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(S.of(context).feedback),
-                Container(
-                    padding: EdgeInsets.all(10),
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () {
-                         Navigator.pushNamed(context, feedback);
-                      },
-                      child: Icon(
-                        Icons.navigate_next,
-                        color: HsgColors.nextPageIcon,
-                      ),
-                    )),
-              ],
-            ),
-          ),
-          Divider(height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
-          Container(
-            height: 50.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(S.of(context).aboutUs),
-                Container(
-                    padding: EdgeInsets.all(10),
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () {
-                        //调整关于我们
-                        Navigator.pushNamed(context, aboutUs);
-                      },
-                      child: Icon(
-                        Icons.navigate_next,
-                        color: HsgColors.nextPageIcon,
-                      ),
-                    )),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
-    //退出按钮
-    Container(
-        height: 50,
+      onTap: () {
+        _headerInfoTapClick(context);
+      },
+    );
+  }
+
+  ///头像
+  Widget _headPortrait() {
+    return Container(
+      // color: Colors.white,
+      width: 55,
+      height: 55,
+      decoration: BoxDecoration(
         color: Colors.white,
-        child: Center(
-          child: 
-          InkWell(
-                      onTap: () {
-                        //调整关于我们
-                          _loginOut();
-                      },
-                      child: Text(S.of(context).loginOut,
-              style: TextStyle(color: HsgColors.redTextColor)),
-                    )
-          
-          
-        ))
-  ]));
-}
+        borderRadius: BorderRadius.circular(55.0 / 2),
+      ),
+      padding: EdgeInsets.all(2.0),
+      child: Container(
+        child: ClipOval(
+          child: _headPortraitImage(),
+        ),
+      ),
+    );
+  }
+
+  //设置头像
+  Widget _headPortraitImage() {
+    Widget imagW;
+    if (_imgPath.toString().length > 0) {
+      imagW = Image(
+        //'images/mine/mine-icon.png'
+        image: AssetImage('images/home/heaerIcon/home_header_person.png'),
+      );
+    } else {
+      imagW = (_headPortraitUrl == null || _headPortraitUrl == '')
+          ? Image(
+              //'images/mine/mine-icon.png'
+              image: AssetImage('images/home/heaerIcon/home_header_person.png'),
+            )
+          : FadeInImage.assetNetwork(
+              fit: BoxFit.fitWidth,
+              image: _headPortraitUrl == null ? '' : _headPortraitUrl,
+              placeholder: 'images/home/heaerIcon/home_header_person.png',
+            );
+    }
+
+    return imagW;
+  }
 
 //获取用户信息
   _getUser() async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
 
-      UserDataRepository()
-          .getUserInfo(
-        GetUserInfoReq(userID),
-        'getUserInfo',
-      ).then((data) {
-        setState(() {
-          _userName = data.actualName; // 姓名
-         // _lastLoginTime = data.lastLoginTime; // 上次登录时间
-        });
-      }).catchError((e) {
-        // Fluttertoast.showToast(msg: e.toString());
-        HSProgressHUD.showError(status: e.toString());
-        print('${e.toString()}');
+    UserDataRepository()
+        .getUserInfo(
+      GetUserInfoReq(userID),
+      'getUserInfo',
+    )
+        .then((data) {
+      setState(() {
+        _userName = data.actualName; // 姓名
+        _headPortraitUrl = data.headPortrait; //头像
+        // _lastLoginTime = data.lastLoginTime; // 上次登录时间
       });
+    }).catchError((e) {
+      // Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.showError(status: e.toString());
+      print('${e.toString()}');
+    });
   }
 
   //退出
-_loginOut() async {
+  _loginOut() async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
-    UserDataRepository().getUserInfo(
-        GetUserInfoReq(userID),
-        'logout',
-      ).then((data) {
-        setState(() {
-          
-          // prefs.setString(ConfigKey.USER_ACCOUNT, '');
-          // prefs.setString(ConfigKey.USER_ID, '');
-          // prefs.setString(ConfigKey.NET_TOKEN, '');
-           Navigator.pushNamed(context, pageLogin);
-           
-           HSProgressHUD.showInfo(status: S.of(context).logoutSuccess );
-           //  S.of(context).please_input_password
-        });
-      }).catchError((e) {
-        // Fluttertoast.showToast(msg: e.toString());
-        HSProgressHUD.showError(status: e.toString());
-        print('${e.toString()}');
+    UserDataRepository()
+        .getUserInfo(
+      GetUserInfoReq(userID),
+      'logout',
+    )
+        .then((data) {
+      setState(() {
+        // prefs.setString(ConfigKey.USER_ACCOUNT, '');
+        // prefs.setString(ConfigKey.USER_ID, '');
+        // prefs.setString(ConfigKey.NET_TOKEN, '');
+        Navigator.pushNamed(context, pageLogin);
+
+        HSProgressHUD.showInfo(status: S.of(context).logoutSuccess);
+        //  S.of(context).please_input_password
       });
+    }).catchError((e) {
+      // Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.showError(status: e.toString());
+      print('${e.toString()}');
+    });
+  }
+
+  _headerInfoTapClick(BuildContext context) async {
+    List<String> operations = [
+      '相册',
+      '相机',
+    ];
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) => BottomMenu(
+              title: '照片选择', //S.current.select_language,
+              items: operations,
+            ));
+    if (result != null && result != false) {
+      switch (result) {
+        case 0:
+          _openGallery();
+          break;
+        case 1:
+          _takePhoto();
+          break;
+      }
+    } else {
+      return;
+    }
+  }
+
+  /*拍照*/
+  _takePhoto() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      _imgPath = image;
+    });
+  }
+
+  /*相册*/
+  _openGallery() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _imgPath = image;
+    });
+  }
 }
- 
-}
+
 /// 这是一个可以指定SafeArea区域背景色的AppBar
 /// PreferredSizeWidget提供指定高度的方法
 /// 如果没有约束其高度，则会使用PreferredSizeWidget指定的高度

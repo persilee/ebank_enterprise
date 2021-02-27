@@ -273,9 +273,9 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     RegExp letter = new RegExp("[a-zA-Z]");
     RegExp number = new RegExp("[0-9]");
     if (_newPwd.text != _confimPwd.text) {
-      Fluttertoast.showToast(msg: S.of(context).differentPwd);
+      HSProgressHUD.showInfo(status: S.of(context).differentPwd);
     } else if (_oldPwd.text == _newPwd.text) {
-      HSProgressHUD.showInfo(status: "新密码不能与旧密码一致");
+      HSProgressHUD.showInfo(status: S.of(context).differentOldNewPwd);
     } else if ((_newPwd.text).contains(userAcc) == true) {
       HSProgressHUD.showInfo(status: "密码不能包含账户名");
     } else if ((_newPwd.text).length < 8 || (_newPwd.text).length > 16) {

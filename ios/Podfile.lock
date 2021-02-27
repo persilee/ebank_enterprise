@@ -13,6 +13,8 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
+  - image_picker (0.0.1):
+    - Flutter
   - Reachability (3.2)
   - shared_preferences (0.0.1):
     - Flutter
@@ -28,6 +30,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_svprogresshud (from `.symlinks/plugins/flutter_svprogresshud/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
@@ -48,6 +51,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_svprogresshud/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  image_picker:
+    :path: ".symlinks/plugins/image_picker/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
   url_launcher:
@@ -61,6 +66,7 @@ SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_svprogresshud: ceba1e73d861459f50f602df702308c661dd7509
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
+  image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
