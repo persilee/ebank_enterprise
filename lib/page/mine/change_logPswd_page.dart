@@ -69,34 +69,22 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Column(
                       children: [
-                        InputList(
-                          S.of(context).oldPwd,
-                          S.of(context).placeOldPwd,
-                          _oldPwd,
-                          LengthLimitingTextInputFormatter(16),
-                        ),
+                        InputList(S.of(context).oldPwd,
+                            S.of(context).placeOldPwd, _oldPwd),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
-                        InputList(
-                          S.of(context).newPwd,
-                          S.of(context).placeNewPwd,
-                          _newPwd,
-                          LengthLimitingTextInputFormatter(16),
-                        ),
+                        InputList(S.of(context).newPwd,
+                            S.of(context).placeNewPwd, _newPwd),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
-                        InputList(
-                          S.of(context).confimPwd,
-                          S.of(context).placeConfimPwd,
-                          _confimPwd,
-                          LengthLimitingTextInputFormatter(16),
-                        ),
+                        InputList(S.of(context).confimPwd,
+                            S.of(context).placeConfimPwd, _confimPwd),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
@@ -275,15 +263,15 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     if (_newPwd.text != _confimPwd.text) {
       HSProgressHUD.showInfo(status: S.of(context).differentPwd);
     } else if (_oldPwd.text == _newPwd.text) {
-      HSProgressHUD.showInfo(status: S.of(context).differentOldNewPwd);
+      HSProgressHUD.showInfo(status: S.of(context).differnet_old_new_pwd);
     } else if ((_newPwd.text).contains(userAcc) == true) {
-      HSProgressHUD.showInfo(status: "密码不能包含账户名");
+      HSProgressHUD.showInfo(status: S.of(context).not_contain_password);
     } else if ((_newPwd.text).length < 8 || (_newPwd.text).length > 16) {
-      HSProgressHUD.showInfo(status: "密码8-16位");
+      HSProgressHUD.showInfo(status: S.of(context).password_8_16);
     } else if (number.hasMatch(_newPwd.text) == false ||
         letter.hasMatch(_newPwd.text) == false ||
         characters.hasMatch(_newPwd.text) == false) {
-      HSProgressHUD.showInfo(status: "密码需包含数字、大小写字母和特殊字符");
+      HSProgressHUD.showInfo(status: S.of(context).password_need_num);
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
@@ -306,11 +294,9 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
 
 // ignore: must_be_immutable
 class InputList extends StatelessWidget {
-  InputList(this.labText, this.placeholderText, this.inputValue,
-      this.textInputFormatter);
+  InputList(this.labText, this.placeholderText, this.inputValue);
   final String labText;
   final String placeholderText;
-  TextInputFormatter textInputFormatter;
   TextEditingController inputValue = TextEditingController();
 
   @override
@@ -346,7 +332,6 @@ class InputList extends StatelessWidget {
                   color: HsgColors.textHintColor,
                 ),
               ),
-              inputFormatters: <TextInputFormatter>[this.textInputFormatter],
             ),
           ),
         ],
