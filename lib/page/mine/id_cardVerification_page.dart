@@ -71,6 +71,25 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
             TextSelection.collapsed(offset: _phoneNo.text.length);
       }
     });
+    //支付密码，确认密码限制6位
+    _newPwd.addListener(() {
+      String text = _newPwd.text;
+      int length = text.length;
+      if (length > 6) {
+        _newPwd.text = text.substring(0, 6);
+        _newPwd.selection =
+            TextSelection.collapsed(offset: _newPwd.text.length);
+      }
+    });
+    _confimPwd.addListener(() {
+      String text = _confimPwd.text;
+      int length = text.length;
+      if (length > 6) {
+        _confimPwd.text = text.substring(0, 6);
+        _confimPwd.selection =
+            TextSelection.collapsed(offset: _confimPwd.text.length);
+      }
+    });
     _getUserCardList();
     _getIdCardList();
   }
