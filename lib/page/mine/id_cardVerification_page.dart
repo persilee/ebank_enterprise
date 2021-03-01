@@ -494,6 +494,11 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       Fluttertoast.showToast(msg: S.of(context).differentPwd);
       return;
     }
+    RegExp postalcode1 = new RegExp(r'^\d{6}$');
+    if (!postalcode1.hasMatch(_newPwd.text)) {
+      Fluttertoast.showToast(msg: '支付密码应为6位数字!');
+      return;
+    }
     HSProgressHUD.show();
     ChecInformantApiRepository()
         .setTransactionPassword(
