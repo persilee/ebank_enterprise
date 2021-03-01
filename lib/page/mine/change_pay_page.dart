@@ -133,10 +133,13 @@ class _ChangePayPageState extends State<ChangePayPage> {
 
   //提交按钮
   _submitData() async {
+    RegExp postalcode1 = new RegExp(r'^\d{6}$');
     if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differentPwd);
     } else if (_newPwd.text == _oldPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differnet_old_new_pwd);
+    } else if (!postalcode1.hasMatch(_newPwd.text)) {
+      Fluttertoast.showToast(msg: S.of(context).set_pay_password_prompt);
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
