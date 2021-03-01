@@ -1,38 +1,41 @@
-import 'package:ebank_mobile/data/source/model/update_login_password.dart';
+import 'dart:async';
+
+import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
+import 'package:ebank_mobile/data/source/model/modify_pwd_by_sms.dart';
 import 'package:ebank_mobile/data/source/update_login_paw_repository.dart';
 
-/// Copyright (c) 2020 深圳高阳寰球科技有限公司
-/// 修改登录密码
-/// Author: hlx
-/// Date: 2020-12-29
-
+import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/mine/change_logPswd_page.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
-import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:async';
-import 'package:ebank_mobile/data/source/model/get_verification_code.dart';
-import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 
-class ChangeLoPS extends StatefulWidget {
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+/// 忘记登录密码
+/// Author: pyk
+/// Date: 2020-02-26
+
+class ForgetPasswordPage extends StatefulWidget {
+  ForgetPasswordPage({Key key}) : super(key: key);
+
   @override
-  _ChangeLoPSState createState() => _ChangeLoPSState();
+  _ForgetPasswordPageState createState() => _ForgetPasswordPageState();
 }
 
 //表单状态
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-class _ChangeLoPSState extends State<ChangeLoPS> {
-  TextEditingController _oldPwd = TextEditingController();
+class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
+  TextEditingController _phoneNum = TextEditingController();
   TextEditingController _newPwd = TextEditingController();
   TextEditingController _confimPwd = TextEditingController();
   TextEditingController _sms = TextEditingController();
-  String userAcc;
   Timer _timer;
   int countdownTime = 0;
 
@@ -46,9 +49,10 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
         appBar: AppBar(
-          title: Text(S.of(context).setChangLoginPasd),
+          centerTitle: true,
+          title: Text(S.of(context).reset_password),
           elevation: 15.0,
         ),
         body: Container(
@@ -60,7 +64,6 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.all(10.0),
-                    child: Text(S.of(context).plaseSetPsd),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -69,13 +72,6 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Column(
                       children: [
-                        InputList(S.of(context).oldPwd,
-                            S.of(context).placeOldPwd, _oldPwd),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
                         InputList(S.of(context).newPwd,
                             S.of(context).placeNewPwd, _newPwd),
                         Divider(
@@ -85,6 +81,43 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                             endIndent: 3),
                         InputList(S.of(context).confimPwd,
                             S.of(context).placeConfimPwd, _confimPwd),
+                        // Divider(
+                        //     height: 1,
+                        //     color: HsgColors.divider,
+                        //     indent: 3,
+                        //     endIndent: 3),
+                        // InputList(S.of(context).phone_num,
+                        //     S.of(context).please_input, _phoneNum),
+                        Divider(
+                            height: 1,
+                            color: HsgColors.divider,
+                            indent: 3,
+                            endIndent: 3),
+                        Container(
+                            height: 50,
+                            child: Row(
+                              children: [
+                                Container(
+                                  // width: MediaQuery.of(context).size.width / 7,
+                                  child: Text(S.of(context).phone_num),
+                                ),
+                                Expanded(
+                                    child: Container(
+                                  child: TextField(
+                                    controller: _phoneNum,
+                                    textAlign: TextAlign.right,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: S.of(context).please_input,
+                                      hintStyle: TextStyle(
+                                        fontSize: 15,
+                                        color: HsgColors.textHintColor,
+                                      ),
+                                    ),
+                                  ),
+                                ))
+                              ],
+                            )),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
@@ -114,7 +147,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                     height: 44.0,
                     width: MediaQuery.of(context).size.width,
                     child: RaisedButton(
-                      child: Text(S.of(context).submit),
+                      child: Text(S.of(context).confirm),
                       onPressed: _submit()
                           ? () {
                               _updateLoginPassword();
@@ -147,10 +180,6 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
           color: HsgColors.textHintColor,
         ),
       ),
-      inputFormatters: <TextInputFormatter>[
-        WhitelistingTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(6)
-      ],
     );
   }
 
@@ -182,39 +211,14 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   }
 
   bool _submit() {
-    // RegExp mobile = new RegExp(
-    //     "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\"]");
-    if (_oldPwd.text != '' &&
-            _newPwd.text != '' &&
-            _confimPwd.text != '' &&
-            _sms.text != ''
-        // mobile.hasMatch(_newPwd.text)
-        // (_newPwd.text).contains(userAcc) == false &&
-        // _newPwd.text == _confimPwd.text &&
-        // _oldPwd.text != _newPwd.text
-        ) {
+    if (_phoneNum.text != '' &&
+        _newPwd.text != '' &&
+        _confimPwd.text != '' &&
+        _sms.text != '') {
       return true;
     } else {
       return false;
     }
-    // if (mobile.hasMatch(_newPwd.text) == false) {
-    //   HSProgressHUD.showInfo(status: "密码需包含数字、大写小字母和特殊字符");
-    //   return false;
-    // } else {
-    //   if ((_newPwd.text).contains(userAcc) == true) {
-    //     HSProgressHUD.showInfo(status: "密码不能包含账户名");
-    //     return false;
-    //   }
-    // }
-    // if (_newPwd.text != _confimPwd.text) {
-    //   HSProgressHUD.showInfo(status: "新密码与确认新密码不一致");
-    //   return false;
-    // }
-    // if (_oldPwd.text == _newPwd.text) {
-    //   HSProgressHUD.showInfo(status: "新密码不能与旧密码一致");
-    //   return false;
-    // }
-    // return true;
   }
 
   //倒计时方法
@@ -234,55 +238,19 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
 
   //获取验证码接口
   _getVerificationCode() async {
-    HSProgressHUD.show();
-    final prefs = await SharedPreferences.getInstance();
-    userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
-    VerificationCodeRepository()
-        .sendSmsByAccount(
-            SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
-        .then((data) {
-      _startCountdown();
-      setState(() {
-        _sms.text = '123456';
-      });
-      HSProgressHUD.dismiss();
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-      HSProgressHUD.dismiss();
-    });
-  }
-
-  //修改密码接口
-  _updateLoginPassword() async {
-    String oldPwd = EncryptUtil.aesEncode(_oldPwd.text);
-    String newPwd = EncryptUtil.aesEncode(_newPwd.text);
-    RegExp characters = new RegExp(
-        "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
-    RegExp letter = new RegExp("[a-zA-Z]");
-    RegExp number = new RegExp("[0-9]");
-    if (_newPwd.text != _confimPwd.text) {
-      HSProgressHUD.showInfo(status: S.of(context).differentPwd);
-    } else if (_oldPwd.text == _newPwd.text) {
-      HSProgressHUD.showInfo(status: S.of(context).differnet_old_new_pwd);
-    } else if ((_newPwd.text).contains(userAcc) == true) {
-      HSProgressHUD.showInfo(status: S.of(context).not_contain_password);
-    } else if ((_newPwd.text).length < 8 || (_newPwd.text).length > 16) {
-      HSProgressHUD.showInfo(status: S.of(context).password_8_16);
-    } else if (number.hasMatch(_newPwd.text) == false ||
-        letter.hasMatch(_newPwd.text) == false ||
-        characters.hasMatch(_newPwd.text) == false) {
-      HSProgressHUD.showInfo(status: S.of(context).password_need_num);
+    RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
+    if (characters.hasMatch(_phoneNum.text) == false) {
+      HSProgressHUD.showInfo(status: S.current.format_mobile_error);
     } else {
       HSProgressHUD.show();
-      final prefs = await SharedPreferences.getInstance();
-      String userID = prefs.getString(ConfigKey.USER_ID);
-      UpdateLoginPawRepository()
-          .modifyLoginPassword(
-              ModifyPasswordReq(newPwd, oldPwd, _sms.text, userID),
-              'ModifyPasswordReq')
+      VerificationCodeRepository()
+          .sendSmsByPhone(
+              SendSmsByPhoneNumberReq(_phoneNum.text, 'findPwd'), 'sendSms')
           .then((data) {
-        Fluttertoast.showToast(msg: S.current.operate_success);
-        Navigator.pop(context);
+        _startCountdown();
+        setState(() {
+          _sms.text = '123456';
+        });
         HSProgressHUD.dismiss();
       }).catchError((e) {
         Fluttertoast.showToast(msg: e.toString());
@@ -290,52 +258,47 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       });
     }
   }
-}
 
-// ignore: must_be_immutable
-class InputList extends StatelessWidget {
-  InputList(this.labText, this.placeholderText, this.inputValue);
-  final String labText;
-  final String placeholderText;
-  TextEditingController inputValue = TextEditingController();
+  //修改密码接口
+  _updateLoginPassword() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
+    RegExp characters = new RegExp(
+        "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
+    RegExp letter = new RegExp("[a-zA-Z]");
+    RegExp number = new RegExp("[0-9]");
+    if (_newPwd.text != _confimPwd.text) {
+      Fluttertoast.showToast(msg: S.of(context).differentPwd);
+    } else if ((_newPwd.text).contains(userAccount) == true) {
+      HSProgressHUD.showInfo(status: S.current.not_contain_password);
+    } else if ((_newPwd.text).length < 8 || (_newPwd.text).length > 16) {
+      HSProgressHUD.showInfo(status: S.current.password_8_16);
+    } else if (number.hasMatch(_newPwd.text) == false) {
+      HSProgressHUD.showInfo(status: S.current.password_need_num);
+    } else if (letter.hasMatch(_newPwd.text) == false) {
+      HSProgressHUD.showInfo(status: S.current.password_need_low_and_top);
+    } else if (characters.hasMatch(_newPwd.text) == false) {
+      HSProgressHUD.showInfo(status: S.current.password_need_special_font);
+    } else {
+      String password = EncryptUtil.aesEncode(_confimPwd.text);
+      HSProgressHUD.show();
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50.0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(this.labText),
-          Expanded(
-            child: TextField(
-              controller: this.inputValue,
-              maxLines: 1, //最大行数
-              autocorrect: true, //是否自动更正
-              autofocus: false, //是否自动对焦
-              obscureText: true, //是否是密码
-              textAlign: TextAlign.right, //文本对齐方式
-              onChanged: (text) {
-                //内容改变的回调
-                print('change $text');
-              },
-              onSubmitted: (text) {
-                //内容提交(按回车)的回调
-                print('submit $text');
-              },
-              enabled: true, //是否禁用
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: this.placeholderText,
-                hintStyle: TextStyle(
-                  fontSize: 14,
-                  color: HsgColors.textHintColor,
-                ),
+      UpdateLoginPawRepository()
+          .modifyPwdBySms(
+              ModifyPwdBySmsReq(
+                password,
+                _sms.text,
+                userAccount,
               ),
-            ),
-          ),
-        ],
-      ),
-    );
+              'ModifyPasswordReq')
+          .then((data) {
+        HSProgressHUD.dismiss();
+        Fluttertoast.showToast(msg: S.current.operate_success);
+        Navigator.pop(context, pageLogin);
+      }).catchError((e) {
+        Fluttertoast.showToast(msg: e.toString());
+        HSProgressHUD.dismiss();
+      });
+    }
   }
 }
