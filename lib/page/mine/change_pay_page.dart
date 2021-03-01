@@ -139,7 +139,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
     } else if (_newPwd.text == _oldPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differnet_old_new_pwd);
     } else if (!postalcode1.hasMatch(_newPwd.text)) {
-      Fluttertoast.showToast(msg: '支付密码应为6位数字!');
+      Fluttertoast.showToast(msg: S.of(context).set_pay_password_prompt);
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();

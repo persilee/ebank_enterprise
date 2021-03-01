@@ -88,6 +88,7 @@
   "select_branch_office": "选择分支行",
   "pick_branch_office_tips": "如无法选择准确的网点，建议尝试选择同城任一网点",
   "please_input_the_payment_password": "请输入支付密码",
+  "set_pay_password_prompt": "输入6位数字，需与常用软件密码不同",
   "setChangLoginPasd": "修改登录密码",
   "plaseSetPsd": "请设置登录密码",
   "transfer": "转账",

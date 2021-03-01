@@ -88,11 +88,11 @@
   "select_branch_office": "Select Branch",
   "pick_branch_office_tips": "If cannot select the appropriate branch, advise to try to select any branch of the same city",
   "please_input_the_payment_password": "Please Input The Payment Password",
+  "set_pay_password_prompt": "Enter 6 digits, which needs to be different from common software passwords",
   "hint_repayment_principal": "Please Enter The Principal",
   "setChangLoginPasd": "Set Login Password",
   "plaseSetPsd": "Please Set the Login Password",
   "transfer": "Transfer",
-
   "in_progress":"In Progress",
   "already_finished":"Finished",
   "plan_name_with_value":"Plan Title:",
