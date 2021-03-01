@@ -312,6 +312,7 @@
   "resetLoginPsw": "修改登录密码",
   "resetPayPwd": "重置支付密码",
   "changPayPws": "修改支付密码",
+  "changPwsSuccess": "修改密码成功",
   "feedback": "意见反馈",
   "aboutUs": "关于我们",
   "loginOut": "安全退出",
