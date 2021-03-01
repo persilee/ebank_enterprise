@@ -177,8 +177,10 @@ class _FeatureListPageState extends State<FeatureListPage> {
                 Navigator.pushNamed(context, pageTransfer);
               } else if (S.of(context).transfer_appointment == title) {
                 //'预约转账'
+                Navigator.pushNamed(context, pageOpenTransfer);
               } else if (S.of(context).transfer_plan == title) {
                 //'转账计划'
+                Navigator.pushNamed(context, pageTransferPlan);
               } else if (S.current.transfer_record == title) {
                 //转账记录
                 Navigator.pushNamed(context, pageTransferRecord);
@@ -193,6 +195,7 @@ class _FeatureListPageState extends State<FeatureListPage> {
                 Navigator.pushNamed(context, pageTimeDepositRecord);
               } else if (S.current.deposit_rate == title) {
                 //'利率查看'
+                Navigator.pushNamed(context, pageMyDepositRate);
               } else if (S.current.loan_apply == title) {
                 //'贷款申请'
                 Navigator.pushNamed(context, pageLoanApplication);
@@ -207,8 +210,10 @@ class _FeatureListPageState extends State<FeatureListPage> {
                 Navigator.pushNamed(context, pageForexTrading);
               } else if (S.current.exchange_rate == title) {
                 //'汇率查询'
+                Navigator.pushNamed(context, pageExchangeRateInquiry);
               } else if (S.current.electronic_statement == title) {
                 //'电子结单'
+                Navigator.pushNamed(context, pageElectronicStatement);
               }
             };
 

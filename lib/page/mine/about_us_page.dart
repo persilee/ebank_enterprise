@@ -95,8 +95,8 @@ class AboutUsPage extends StatelessWidget {
                                 Image(
                                   height: 10.0,
                                   width: 53.0,
-                                  image: AssetImage(
-                                      'images/mine/aboutUs-bg1.png'),
+                                  image:
+                                      AssetImage('images/mine/aboutUs-bg1.png'),
                                 )
                               ],
                             ),
@@ -182,7 +182,9 @@ class AboutUsPage extends StatelessWidget {
                               backgroundColor: HsgColors.aboutusCircle,
                             ),
                           ),
-                          Padding(  padding: EdgeInsets.only(left: 10),),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                          ),
                           Text(
                             '企业优势',
                             style: TextStyle(
@@ -213,7 +215,7 @@ class AboutUsPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Row(
+                      Row(
                         children: [
                           Container(
                             alignment: Alignment.center,
@@ -222,7 +224,9 @@ class AboutUsPage extends StatelessWidget {
                               backgroundColor: HsgColors.aboutusCircle,
                             ),
                           ),
-                          Padding(  padding: EdgeInsets.only(left: 10),),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                          ),
                           Text(
                             '技术优势',
                             style: TextStyle(
@@ -258,7 +262,7 @@ class AboutUsPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Row(
+                      Row(
                         children: [
                           Container(
                             alignment: Alignment.center,
@@ -267,7 +271,9 @@ class AboutUsPage extends StatelessWidget {
                               backgroundColor: HsgColors.aboutusCircle,
                             ),
                           ),
-                          Padding(  padding: EdgeInsets.only(left: 10),),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                          ),
                           Text(
                             '团队优势',
                             style: TextStyle(
@@ -298,7 +304,7 @@ class AboutUsPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Row(
+                      Row(
                         children: [
                           Container(
                             alignment: Alignment.center,
@@ -307,7 +313,9 @@ class AboutUsPage extends StatelessWidget {
                               backgroundColor: HsgColors.aboutusCircle,
                             ),
                           ),
-                          Padding(  padding: EdgeInsets.only(left: 10),),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                          ),
                           Text(
                             '服务优势',
                             style: TextStyle(
@@ -331,7 +339,7 @@ class AboutUsPage extends StatelessWidget {
               //我们的价值
               Container(
                 margin: EdgeInsets.only(
-                    top: 20.0, left: 21.0, right: 21.0, bottom: 20.0),
+                    top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
                 padding: EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
                 decoration: new BoxDecoration(
                     //背景颜色
