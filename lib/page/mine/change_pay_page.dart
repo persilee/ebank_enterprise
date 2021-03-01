@@ -270,6 +270,7 @@ class InputList extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: this.inputValue,
+              keyboardType: TextInputType.number,
               maxLines: 1, //最大行数
               autocorrect: true, //是否自动更正
               autofocus: true, //是否自动对焦
@@ -284,6 +285,9 @@ class InputList extends StatelessWidget {
                 print('submit $text');
               },
               enabled: true, //是否禁用
+              inputFormatters: <TextInputFormatter>[
+                LengthLimitingTextInputFormatter(6), //限制长度
+              ],
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: this.placeholderText,
