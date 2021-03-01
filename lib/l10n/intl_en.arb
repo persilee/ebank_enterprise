@@ -320,6 +320,7 @@
   "resetLoginPsw": "Change Login Password",
   "resetPayPwd": "Reset Pay Password",
   "changPayPws": "Change Pay Password",
+  "changPwsSuccess": "Change Password Success",
   "feedback": "Feedback",
   "aboutUs": "About Us",
   "loginOut": "Safe Exit",

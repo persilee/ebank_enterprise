@@ -150,7 +150,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
         'updateTransPassword',
       )
           .then((data) {
-        HSProgressHUD.showError(status: '密码修改成功');
+        HSProgressHUD.showError(status: S.current.changPwsSuccess);
         Navigator.pop(context);
         HSProgressHUD.dismiss();
       }).catchError((e) {
