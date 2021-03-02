@@ -6,7 +6,6 @@ import 'package:ebank_mobile/config/hsg_text_style.dart';
 /// Date: 2020-12-31
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/mine_checInformantApi.dart';
-import 'package:ebank_mobile/data/source/model/checkout_informant.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/set_transactionPassword.dart';
@@ -69,6 +68,25 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
         _phoneNo.text = text.substring(0, 11);
         _phoneNo.selection =
             TextSelection.collapsed(offset: _phoneNo.text.length);
+      }
+    });
+    //支付密码，确认密码限制6位
+    _newPwd.addListener(() {
+      String text = _newPwd.text;
+      int length = text.length;
+      if (length > 6) {
+        _newPwd.text = text.substring(0, 6);
+        _newPwd.selection =
+            TextSelection.collapsed(offset: _newPwd.text.length);
+      }
+    });
+    _confimPwd.addListener(() {
+      String text = _confimPwd.text;
+      int length = text.length;
+      if (length > 6) {
+        _confimPwd.text = text.substring(0, 6);
+        _confimPwd.selection =
+            TextSelection.collapsed(offset: _confimPwd.text.length);
       }
     });
     _getUserCardList();
@@ -473,6 +491,11 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
     String userID = prefs.getString(ConfigKey.USER_ID);
     if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differentPwd);
+      return;
+    }
+    RegExp postalcode1 = new RegExp(r'^\d{6}$');
+    if (!postalcode1.hasMatch(_newPwd.text)) {
+      Fluttertoast.showToast(msg: S.of(context).set_pay_password_prompt);
       return;
     }
     HSProgressHUD.show();

@@ -8,6 +8,7 @@ import 'package:ebank_mobile/config/hsg_styles.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
+import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -26,7 +27,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   double _opacity = 0;
-  var _changeLangBtnTltle = 'English';
+  // var _changeLangBtnTltle = 'English';
+  var _changeLangBtnTltle = S.current.language1;
   var _headPortraitUrl = ''; // 头像地址
   var _enterpriseName = ''; // 企业名称
   var _userName = '高阳银行企业用户'; // 姓名

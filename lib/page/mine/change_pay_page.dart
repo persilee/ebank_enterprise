@@ -133,10 +133,13 @@ class _ChangePayPageState extends State<ChangePayPage> {
 
   //提交按钮
   _submitData() async {
+    RegExp postalcode1 = new RegExp(r'^\d{6}$');
     if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differentPwd);
     } else if (_newPwd.text == _oldPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differnet_old_new_pwd);
+    } else if (!postalcode1.hasMatch(_newPwd.text)) {
+      Fluttertoast.showToast(msg: S.of(context).set_pay_password_prompt);
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
@@ -147,7 +150,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
         'updateTransPassword',
       )
           .then((data) {
-        HSProgressHUD.showError(status: '密码修改成功');
+        HSProgressHUD.showError(status: S.current.changPwsSuccess);
         Navigator.pop(context);
         HSProgressHUD.dismiss();
       }).catchError((e) {
@@ -270,6 +273,7 @@ class InputList extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: this.inputValue,
+              keyboardType: TextInputType.number,
               maxLines: 1, //最大行数
               autocorrect: true, //是否自动更正
               autofocus: true, //是否自动对焦
@@ -284,6 +288,9 @@ class InputList extends StatelessWidget {
                 print('submit $text');
               },
               enabled: true, //是否禁用
+              inputFormatters: <TextInputFormatter>[
+                LengthLimitingTextInputFormatter(6), //限制长度
+              ],
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: this.placeholderText,

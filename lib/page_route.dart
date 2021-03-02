@@ -168,6 +168,7 @@ var appRoutes = {
   pageDepositRecordSucceed: (context) => DepositContractSucceed(),
   //pageDepositInfo: (context) => PageDepositInfo(),
   pageInternational: (context) => TransferInternationalPage(),
+  pageFeatureList: (context) => FeatureListPage(),
   pageTransfer: (context) => TransferPage(),
   pageAuthorizationHistory: (context) => AuthorizationHistoryPage(),
   pageTransferInternal: (context) => TransferInternalPage(),
