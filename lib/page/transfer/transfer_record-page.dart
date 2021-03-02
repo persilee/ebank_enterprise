@@ -14,6 +14,7 @@ import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_dotted_line.dart';
 import 'package:flutter/cupertino.dart';
@@ -552,11 +553,17 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) {
-        return HsgBottomCardChoice(
+        return
+            // HsgBottomCardChoice(
+            //   title: intl.S.of(context).select_bank_card,
+            //   items: _cradLists,
+            //   lastSelectedPosition: _position,
+            //   imageUrl: _imageUrl,
+            // );
+            HsgBottomSingleChoice(
           title: intl.S.of(context).select_bank_card,
           items: _cradLists,
           lastSelectedPosition: _position,
-          imageUrl: _imageUrl,
         );
       },
     );
@@ -695,7 +702,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           _cradLists.clear();
           _imageUrl.clear();
           _cradLists.add(intl.S.current.all_account);
-          _imageUrl.add("images/transferIcon/transfer_wallet.png");
+          // _imageUrl.add("images/transferIcon/transfer_wallet.png");
           data.cardList.forEach((e) {
             _cradLists.add(e.cardNo);
             _imageUrl.add(e.imageUrl);

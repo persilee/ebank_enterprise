@@ -276,9 +276,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     } else if (number.hasMatch(_newPwd.text) == false) {
       HSProgressHUD.showInfo(status: S.current.password_need_num);
     } else if (letter.hasMatch(_newPwd.text) == false) {
-      HSProgressHUD.showInfo(status: S.current.password_need_low_and_top);
+      HSProgressHUD.showInfo(status: S.current.password_need_num);
     } else if (characters.hasMatch(_newPwd.text) == false) {
-      HSProgressHUD.showInfo(status: S.current.password_need_special_font);
+      HSProgressHUD.showInfo(status: S.current.password_need_num);
     } else {
       String password = EncryptUtil.aesEncode(_confimPwd.text);
       HSProgressHUD.show();
