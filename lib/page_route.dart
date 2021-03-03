@@ -4,6 +4,7 @@
 /// Date: 2020-12-07
 
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
+import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/login/forget_password_page.dart';
@@ -127,6 +128,7 @@ var pageContactCustomer = '/contact_customer_page';
 var pageTransferPlan = '/transfer_plan_page';
 var pageTransferPlanDetails = '/transfer_plan_details';
 var pageForgetPassword = '/forget_password_page';
+var pageApprovalPage = 'hsg_approval_page';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -187,6 +189,7 @@ var appRoutes = {
   pageTransferPlan: (context) => TransferPlanPage(),
   // pageTransferPlanDetails: (context) => TransferPlanDetailsPage(),
   pageForgetPassword: (context) => ForgetPasswordPage(),
+  pageApprovalPage: (context) => ApprovalPage(),
   pageFeatureList: (context) => FeatureListPage(),
 };
 onGenerateRoute(RouteSettings settings) {

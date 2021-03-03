@@ -4,6 +4,7 @@
 ///
 import 'dart:async';
 import 'package:ebank_mobile/data/source/mine_pay_pwdApi.dart';
+import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/get_verification_code.dart';
 import 'package:ebank_mobile/data/source/model/set_payment_pwd.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
@@ -216,11 +217,14 @@ class _ChangePayPageState extends State<ChangePayPage> {
   //获取验证码接口
   _getVerificationCode() async {
     HSProgressHUD.show();
-    final prefs = await SharedPreferences.getInstance();
-    String userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
+    // final prefs = await SharedPreferences.getInstance();
+    // String userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
     VerificationCodeRepository()
-        .sendSmsByAccount(
-            SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
+        // .sendSmsByAccount(
+        //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
+        // )
+        .sendSmsByPhone(
+            SendSmsByPhoneNumberReq('13411111111', 'transactionPwd'), 'sendSms')
         .then((data) {
       _startCountdown();
       setState(() {
