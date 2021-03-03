@@ -6,7 +6,6 @@ import 'package:ebank_mobile/config/hsg_text_style.dart';
 /// Date: 2020-12-31
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/mine_checInformantApi.dart';
-import 'package:ebank_mobile/data/source/model/checkout_informant.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/set_transactionPassword.dart';

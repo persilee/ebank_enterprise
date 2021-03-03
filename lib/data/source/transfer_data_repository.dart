@@ -26,7 +26,7 @@ class TransferDataRepository {
   //转账记录
   Future<GetTransferRecordResp> getTransferRecord(
       GetTransferRecordReq req, String tag) {
-    return request('/ddep/history/getTransferRecordList', req, tag,
+    return request('ddep/history/getTransferRecordList', req, tag,
         (data) => GetTransferRecordResp.fromJson(data));
   }
 

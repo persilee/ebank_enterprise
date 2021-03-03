@@ -102,7 +102,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   List<String> passwordList = []; //密码列表
 
-//支付密码
+  //支付密码
 
   var check = false;
 
@@ -122,7 +122,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     _remarkController.addListener(() {
       _transferInputChange(_remarkController.text); //金额输入框时调用
     });
-
     _loadTransferData();
   }
 
