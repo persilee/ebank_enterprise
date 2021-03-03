@@ -68,7 +68,7 @@ class _CardLimitManagerPageState extends State<CardLimitManagerPage> {
                               decoration: InputDecoration(
                                   filled: true,
                                   fillColor: Colors.white,
-                                  hintText: '0.00',
+                                  hintText: '9999',
                                   contentPadding: EdgeInsets.all(0),
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide.none)),
@@ -129,7 +129,7 @@ class _CardLimitManagerPageState extends State<CardLimitManagerPage> {
                               decoration: InputDecoration(
                                   filled: true,
                                   fillColor: Colors.white,
-                                  hintText: '0',
+                                  hintText: '0.0',
                                   contentPadding: EdgeInsets.all(0),
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide.none)),

@@ -1,11 +1,15 @@
+import 'package:ebank_mobile/data/source/bank_data_repository.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
 /// Date: 2020-11-05
 
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_bank_info_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/widget/linear_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
@@ -44,7 +48,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
     // card = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Account Management'),
+        title: Text(S.current.account_management),
         bottom: LinearLoading(
           isLoading: _isLoading,
         ),
@@ -63,13 +67,14 @@ class _CardDetailPageState extends State<CardDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Account Balance",
+                  S.current.account_balance,
                   style: TextStyle(color: Colors.grey),
                 ),
                 Container(
                   child: Row(
                     children: [
-                      Expanded(child: Text("Total Balance(CNY)")),
+                      Expanded(
+                          child: Text("${S.current.account_balance}(CNY)")),
                       Container(
                         child: Text(totalBalance,
                             style: TextStyle(color: Colors.grey)),
@@ -105,7 +110,8 @@ class _CardDetailPageState extends State<CardDetailPage> {
                     Container(
                       child: Row(
                         children: [
-                          Expanded(child: Text('Transaction Amount Limit')),
+                          Expanded(
+                              child: Text(S.current.transaction_amount_limit)),
                           Container(
                             child: Text(singleLimit,
                                 style: TextStyle(color: Colors.grey)),
@@ -120,7 +126,9 @@ class _CardDetailPageState extends State<CardDetailPage> {
                     Container(
                       child: Row(
                         children: [
-                          Expanded(child: Text('Daily Amount of Transaction')),
+                          Expanded(
+                              child:
+                                  Text(S.current.daily_amount_of_transcation)),
                           Container(
                             child: Text(dailyLimitAmt,
                                 style: TextStyle(color: Colors.grey)),
@@ -136,7 +144,9 @@ class _CardDetailPageState extends State<CardDetailPage> {
                     Container(
                       child: Row(
                         children: [
-                          Expanded(child: Text('Daily Number of Transaction')),
+                          Expanded(
+                              child:
+                                  Text(S.current.daily_number_of_transaction)),
                           Container(
                             child: Text(dailyLimit,
                                 style: TextStyle(color: Colors.grey)),
@@ -164,18 +174,21 @@ class _CardDetailPageState extends State<CardDetailPage> {
 
   _loadCardData(String cardNo) {
     Future.wait({
-      CardDataRepository()
-          .getSingleCardBal(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
+      //根据卡号获取银行卡信息
+      BankDataRepository().getBankListByCardNo(
+          GetBankInfoByCardNo(cardNo), 'GetBankInfoByCardNo'),
+      // CardDataRepository()
+      //     .getSingleCardBal(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
       CardDataRepository().getCardLimitByCardNo(
           GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq')
     }).then((value) {
       value.forEach((element) {
         if (element is GetSingleCardBalResp) {
-          setState(() {
-            totalBalance = element.totalAmt;
-            bals.clear();
-            bals.addAll(element.cardListBal);
-          });
+          // setState(() {
+          //    totalBalance = element.totalAmt;
+          //   bals.clear();
+          //   bals.addAll(element.cardListBal);
+          // });
         } else if (element is GetCardLimitByCardNoResp) {
           setState(() {
             // singleLimit = FormatUtil.formatComma3(num)
