@@ -401,6 +401,10 @@
   "password_8_16":"The password length should be 8-16 bits",
   "password_need_num":"The password should contain numbers, upper and lower case letters and special characters",
   "password_need_low_and_top":"Password should contain upper and lower case letters",
-  "password_need_special_font":"The password should contain special characters"
+  "password_need_special_font":"The password should contain special characters",
+  
+  "photo_selection":"photo selection",
+  "photos":"photo",
+  "camera":"camera"
  }
   

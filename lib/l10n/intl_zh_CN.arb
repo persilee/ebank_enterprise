@@ -397,5 +397,9 @@
   "password_8_16":"密码长度需为8-16位",
   "password_need_num":"密码需包含数字、大小写字母和特殊字符",
   "password_need_low_and_top":"密码需包含大小写字母",
-  "password_need_special_font":"密码需包含特殊字符"
+  "password_need_special_font":"密码需包含特殊字符",
+
+  "photo_selection":"照片选择",
+  "photos":"相册",
+  "camera":"相机"
 }

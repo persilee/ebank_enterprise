@@ -7,6 +7,7 @@ import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
 import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/login/forget_password_page.dart';
+import 'package:ebank_mobile/page/mine/qliyan_demo_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
 import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
@@ -127,6 +128,7 @@ var pageContactCustomer = '/contact_customer_page';
 var pageTransferPlan = '/transfer_plan_page';
 var pageTransferPlanDetails = '/transfer_plan_details';
 var pageForgetPassword = '/forget_password_page';
+var pageQianliyanDemo = '/qliyan_demo_page.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -188,6 +190,7 @@ var appRoutes = {
   // pageTransferPlanDetails: (context) => TransferPlanDetailsPage(),
   pageForgetPassword: (context) => ForgetPasswordPage(),
   pageFeatureList: (context) => FeatureListPage(),
+  pageQianliyanDemo: (context) => QianliyanDemoPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
