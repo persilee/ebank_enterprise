@@ -516,7 +516,8 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
         .then((data) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(msg: S.current.operate_success);
-      Navigator.pushNamed(context, minePage);
+      // Navigator.pushNamed(context, minePage);
+      Navigator.pop(context);
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.dismiss();
