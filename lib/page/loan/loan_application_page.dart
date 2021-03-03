@@ -315,6 +315,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         );
       },
     );
+    print(_passwordList.toString);
     if (_passwordList != null) {
       if (_passwordList.length == 6) {
         _payPassword = EncryptUtil.aesEncode(_passwordList.join());
