@@ -131,11 +131,13 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
         .then((data) {
       if (data.rows != null) {
         count = data.count;
-        setState(() {
-          finishTaskList.clear();
-          finishTaskList.addAll(data.rows);
-          list.addAll(finishTaskList);
-        });
+        if (mounted) {
+          setState(() {
+            finishTaskList.clear();
+            finishTaskList.addAll(data.rows);
+            list.addAll(finishTaskList);
+          });
+        }
       }
     });
   }

@@ -37,7 +37,6 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
 
   void initState() {
     super.initState();
-    //下拉刷新
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       refrestIndicatorKey.currentState.show();
     });
@@ -269,12 +268,12 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
       });
     }
     setState(() {
-      if (list.length < count) {
+      if (list.length >= count) {
+        loadStatus = LoadingStatus.STATUS_IDEL;
+      } else {
         page = page + 1;
         _loadData();
         loadStatus = LoadingStatus.STATUS_LOADING;
-      } else {
-        loadStatus = LoadingStatus.STATUS_IDEL;
       }
     });
   }

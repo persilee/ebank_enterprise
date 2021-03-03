@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/generated/l10n.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
@@ -36,7 +38,7 @@ class _CardListPageState extends State<CardListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Card List"),
+          title: Text(S.current.card_list),
         ),
         body: RefreshIndicator(
             key: refrestIndicatorKey,
@@ -96,7 +98,7 @@ Widget getCard(RemoteBankCard card) {
       style: TextStyle(color: Colors.white),
     ),
     subtitle: Text(
-      'Demand Deposit Account',
+      S.current.demand_deposit_account,
       style: TextStyle(color: Colors.white70),
     ),
   );
