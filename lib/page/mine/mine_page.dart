@@ -6,11 +6,16 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/get_last_version.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
+<<<<<<< HEAD
 import 'package:ebank_mobile/data/source/model/register_by_account.dart';
 import 'package:ebank_mobile/data/source/model/send_sms_register.dart';
+=======
+import 'package:ebank_mobile/data/source/model/logout.dart';
+>>>>>>> d9557e22a0b603b76cc3f9b3104536afdbdb880d
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -233,7 +238,7 @@ class _MinePageState extends State<MinePage> {
             child: FlatButton(
               height: 50.0,
               onPressed: () {
-                //调整关于我们
+                //退出登录
                 _loginOut();
               },
               child: Container(
@@ -477,17 +482,25 @@ class _MinePageState extends State<MinePage> {
   _loginOut() async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
+    // UserDataRepository()
+    //     .getUserInfo(
+    //   GetUserInfoReq(userID),
+    //   'logout',
+    // )
     UserDataRepository()
-        .getUserInfo(
-      GetUserInfoReq(userID),
-      'logout',
-    )
+        .logout(LogoutReq(userID, _userName), 'logout')
         .then((data) {
       setState(() {
         // prefs.setString(ConfigKey.USER_ACCOUNT, '');
         // prefs.setString(ConfigKey.USER_ID, '');
         // prefs.setString(ConfigKey.NET_TOKEN, '');
-        Navigator.pushNamed(context, pageLogin);
+        // Navigator.pushNamed(context, pageLogin);
+        Future.delayed(Duration.zero, () {
+          Navigator.pushAndRemoveUntil(
+              context,
+              new MaterialPageRoute(builder: (context) => new LoginPage()),
+              (route) => false);
+        });
 
         HSProgressHUD.showInfo(status: S.of(context).logoutSuccess);
         //  S.of(context).please_input_password

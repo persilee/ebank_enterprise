@@ -11,7 +11,6 @@ import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart
 import 'package:ebank_mobile/data/source/model/set_transactionPassword.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -515,7 +514,8 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
         .then((data) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(msg: S.current.operate_success);
-      Navigator.pushNamed(context, minePage);
+      // Navigator.pushNamed(context, minePage);
+      Navigator.pop(context);
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.dismiss();
