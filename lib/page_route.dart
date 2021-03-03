@@ -190,6 +190,7 @@ var appRoutes = {
   // pageTransferPlanDetails: (context) => TransferPlanDetailsPage(),
   pageForgetPassword: (context) => ForgetPasswordPage(),
   pageApprovalPage: (context) => ApprovalPage(),
+  pageFeatureList: (context) => FeatureListPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
