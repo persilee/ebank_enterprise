@@ -6,12 +6,9 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/get_last_version.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
-<<<<<<< HEAD
 import 'package:ebank_mobile/data/source/model/register_by_account.dart';
 import 'package:ebank_mobile/data/source/model/send_sms_register.dart';
-=======
 import 'package:ebank_mobile/data/source/model/logout.dart';
->>>>>>> d9557e22a0b603b76cc3f9b3104536afdbdb880d
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
