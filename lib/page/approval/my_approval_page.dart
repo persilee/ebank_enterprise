@@ -37,7 +37,6 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
 
   void initState() {
     super.initState();
-    //下拉刷新
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       refrestIndicatorKey.currentState.show();
     });
