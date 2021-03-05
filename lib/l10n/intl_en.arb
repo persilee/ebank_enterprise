@@ -402,6 +402,9 @@
   "password_need_low_and_top":"Password should contain upper and lower case letters",
   "password_need_special_font":"The password should contain special characters",
   
+  "photo_selection":"photo selection",
+  "photos":"photo",
+  "camera":"camera",
   "account_balance":"Account Balance",
   "total_balance":"Total Balance",
   "transaction_amount_limit":"Transaction Amount Limit",

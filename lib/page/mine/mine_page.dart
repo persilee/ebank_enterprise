@@ -9,6 +9,8 @@ import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/register_by_account.dart';
 import 'package:ebank_mobile/data/source/model/send_sms_register.dart';
 import 'package:ebank_mobile/data/source/model/logout.dart';
+//import 'package:ebank_mobile/data/source/model/upload_avatar.dart';
+//import 'package:ebank_mobile/data/source/upload_avatar_network.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -224,6 +226,19 @@ class _MinePageState extends State<MinePage> {
                 }),
                 _flatBtnNuitWidget(S.of(context).aboutUs, true, () {
                   Navigator.pushNamed(context, aboutUs);
+                }),
+              ],
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.only(bottom: 16),
+            color: Colors.white,
+            // padding: EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              children: [
+                _flatBtnNuitWidget('签里眼面签相关', true, () {
+                  Navigator.pushNamed(context, pageQianliyanDemo);
                 }),
               ],
             ),
@@ -449,6 +464,24 @@ class _MinePageState extends State<MinePage> {
     return imagW;
   }
 
+  //上传头像
+  _uploadAvatar() async {
+    if (_imgPath == null || _imgPath == '') {
+      HSProgressHUD.showInfo(status: '图片异常，请重新选择');
+    } else {
+      // HSProgressHUD.show();
+      // UploadAvatarRepository()
+      //     .uploadAvatar(UploadAvatarReq(), _imgPath, 'uploadAvatar')
+      //     .then((data) {
+      //   setState(() {});
+      //   HSProgressHUD.dismiss();
+      // }).catchError((e) {
+      //   Fluttertoast.showToast(msg: e.toString());
+      //   HSProgressHUD.dismiss();
+      // });
+    }
+  }
+
 //获取用户信息
   _getUser() async {
     final prefs = await SharedPreferences.getInstance();
@@ -511,13 +544,13 @@ class _MinePageState extends State<MinePage> {
 
   _headerInfoTapClick(BuildContext context) async {
     List<String> operations = [
-      '相册',
-      '相机',
+      S.of(context).photos,
+      S.of(context).camera,
     ];
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) => BottomMenu(
-              title: '照片选择', //S.current.select_language,
+              title: S.of(context).photo_selection, //S.current.select_language,
               items: operations,
             ));
     if (result != null && result != false) {
@@ -536,18 +569,20 @@ class _MinePageState extends State<MinePage> {
 
   /*拍照*/
   _takePhoto() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    var image = await ImagePicker().getImage(source: ImageSource.camera);
 
     setState(() {
       _imgPath = image.path;
+      _uploadAvatar();
     });
   }
 
   /*相册*/
   _openGallery() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
       _imgPath = image.path;
+      _uploadAvatar();
     });
   }
 
