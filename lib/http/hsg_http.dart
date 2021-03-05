@@ -12,6 +12,12 @@ Future<T> request<T>(path, data, tag, _FromJson<T> fromJson) {
       .then((value) => fromJson(value));
 }
 
+Future<T> requestFile<T>(path, data, filePath, tag, _FromJson<T> fromJson) {
+  return HsgHttp()
+      .postData(path: path, filePath: filePath, data: data, tag: tag)
+      .then((value) => fromJson(value));
+}
+
 class HsgHttp {
   var _cancelTokens = Map<String, CancelToken>();
 
@@ -54,6 +60,55 @@ class HsgHttp {
       ));
       _dio.interceptors
           .add(LogInterceptor(requestBody: true, responseBody: true));
+    }
+  }
+
+  Future postData({
+    @required path,
+    String method,
+    var filePath,
+    data,
+    Options options,
+    @required String tag,
+  }) async {
+    try {
+      final cancelToken =
+          _cancelTokens[tag] == null ? CancelToken() : _cancelTokens[tag];
+      _cancelTokens[tag] = cancelToken;
+      final baseRequest = await _createBaseRequest(data);
+      Map dataMap = baseRequest.toJson();
+      var name =
+          filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length);
+      dataMap['file'] = await MultipartFile.fromFile(filePath, filename: name);
+
+      FormData formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(filePath, filename: name),
+      });
+
+      final response = await _dio.post(
+        path,
+        data: formData, //dataMap, //baseRequest.toJson(),
+        // options: options,
+        // cancelToken: cancelToken,
+      );
+      final baseResponse = _BaseResponse.fromJson(response.data);
+      if (baseResponse.msgCd == 'KONT0000') {
+        if (baseResponse.token != null) {
+          _saveToken(baseResponse.token);
+        }
+        return Future.value(baseResponse.body);
+      } else {
+        return Future.error(HsgHttpException(
+            HsgHttpException.BUSINESS_ERROR,
+            baseResponse.msgInfo == null
+                ? baseResponse.msgCd
+                : baseResponse.msgInfo));
+      }
+    } on DioError catch (e) {
+      return Future.error(HsgHttpException.dioError(e));
+    } catch (e) {
+      return Future.error(
+          HsgHttpException(HsgHttpException.UNKNOWN, '未知异常，请联系管理员'));
     }
   }
 
