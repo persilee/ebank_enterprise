@@ -397,5 +397,17 @@
   "password_8_16":"密码长度需为8-16位",
   "password_need_num":"密码需包含数字、大小写字母和特殊字符",
   "password_need_low_and_top":"密码需包含大小写字母",
-  "password_need_special_font":"密码需包含特殊字符"
+  "password_need_special_font":"密码需包含特殊字符",
+
+  "photo_selection":"照片选择",
+  "photos":"相册",
+  "camera":"相机",
+  "account_balance":"账户余额",
+  "total_balance":"总余额",
+  "transaction_amount_limit":"交易金额限额",
+  "daily_amount_of_transcation":"日交易额",
+  "daily_number_of_transaction":"日交易量",
+  "demand_deposit_account":"活期存款帐户",
+  "account_management":"账户管理",
+  "card_list":"卡片列表"
 }
