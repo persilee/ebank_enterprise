@@ -10,6 +10,7 @@ import 'package:ebank_mobile/data/source/process_task_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
+import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../page_route.dart';
@@ -34,6 +35,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   LoadingStatus loadStatus; //加载状态
   bool _isDate = false;
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  // bool refresh;
 
   void initState() {
     super.initState();
@@ -46,6 +48,13 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
         //加载更多
         _getMore();
       }
+    });
+    NotificationCenter.instance.addObserver('refresh', (object) {
+      setState(() {
+        if (object) {
+          _loadData();
+        }
+      });
     });
   }
 
@@ -248,6 +257,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
         count = data.count;
         _isDate = true;
         setState(() {
+          list.clear();
           toDoTask.clear();
           toDoTask.addAll(data.rows);
           list.addAll(toDoTask);

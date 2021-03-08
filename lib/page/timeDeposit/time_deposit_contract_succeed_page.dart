@@ -5,6 +5,7 @@
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
 
 // import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
 
@@ -73,8 +74,9 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                     }
                     //任务审批跳转
                     if (_arguments == 'taskApproval') {
-                      Navigator.pushReplacementNamed(context, pageApprovalPage);
-                      // Navigator.pop(context);
+                      Navigator.pop(context);
+                      NotificationCenter.instance
+                          .postNotification('refresh', true);
                     }
                   },
                   color: HsgColors.accent,
