@@ -310,11 +310,17 @@ class _DetailListPageState extends State<DetailListPage> {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
-          return HsgBottomCardChoice(
-            title: intl.S.of(context).account_lsit,
+          return
+              // HsgBottomCardChoice(
+              //   title: intl.S.of(context).account_lsit,
+              //   items: _cardList,
+              //   lastSelectedPosition: _position,
+              //   imageUrl: _cardIcon,
+              // );
+              HsgBottomSingleChoice(
+            title: intl.S.of(context).select_bank_card,
             items: _cardList,
             lastSelectedPosition: _position,
-            imageUrl: _cardIcon,
           );
         });
     if (result != null && result != false) {
