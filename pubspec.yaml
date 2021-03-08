@@ -3,7 +3,7 @@ description: 企业手机网银
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -18,7 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.7.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -149,17 +149,17 @@ flutter:
     - images/transferIcon/transfer_features_icon/transfer_features_plan.png
     - images/transferIcon/transfer_features_icon/transfer_features_record.png
     - images/transferIcon/transfer_features_icon/transfer_features_timely.png
-    
+
     #转账记录页面图片
     - images/transferIcon/transfert_to.png
     - images/transferIcon/transfer_from.png
     - images/transferIcon/transfer_wallet.png
     - images/transferIcon/transfer_bank.png
     - images/transferIcon/transfer_plan.png
-    
+
     #其他
     - images/transferIcon/transfer_sample_placeholder.png
-   
+
     - images/transferIcon/transfer_features_icon/transfer_features_scan.png
     - images/transferIcon/transfer_features_icon/transfer_features_acount.png
     #其他
