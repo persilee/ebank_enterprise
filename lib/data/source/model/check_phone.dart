@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+///手机号注册
+/// Author: wangluyao
+/// Date: 2021-03-03
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'check_phone.g.dart';

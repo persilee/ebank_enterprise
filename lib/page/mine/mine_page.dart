@@ -9,8 +9,8 @@ import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/register_by_account.dart';
 import 'package:ebank_mobile/data/source/model/send_sms_register.dart';
 import 'package:ebank_mobile/data/source/model/logout.dart';
-//import 'package:ebank_mobile/data/source/model/upload_avatar.dart';
-//import 'package:ebank_mobile/data/source/upload_avatar_network.dart';
+// import 'package:ebank_mobile/data/source/model/upload_avatar.dart';
+// import 'package:ebank_mobile/data/source/upload_avatar_network.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -47,11 +47,11 @@ class _MinePageState extends State<MinePage> {
   String _userPhone = "";
   String _userType = "";
   String _register = ""; //用户是否注册
-  String _areaCode = "86"; //区号
+  String _areaCode = ""; //区号
   String _smsType = "register"; //短信类型(注册)
   String _sms = ""; //验证码
   String _password = "123456qwe~"; //密码
-  String _registerAccount = "wly2"; //手机号注册（用户账号）
+  String _registerAccount = "wly3"; //手机号注册（用户账号）
 
   @override
   // ignore: must_call_super
@@ -499,7 +499,7 @@ class _MinePageState extends State<MinePage> {
         // _lastLoginTime = data.lastLoginTime; // 上次登录时间
         _userType = data.userType; //用户类型
         _userPhone = data.userPhone; //用户手机号
-        // _areaCode = data.areaCode; //区号
+        _areaCode = data.areaCode; //区号
       });
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString());
