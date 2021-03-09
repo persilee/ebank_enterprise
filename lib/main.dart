@@ -56,6 +56,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
     HSProgressHUD.progressHudConfig();
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'HSGBank',
       theme: ThemeData(
           appBarTheme: AppBarTheme(
