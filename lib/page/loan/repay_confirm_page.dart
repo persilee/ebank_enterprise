@@ -5,6 +5,7 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'package:ebank_mobile/data/source/model/post_repayment.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
@@ -109,8 +110,8 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
 
   @override
   Widget build(BuildContext context) {
-    // message = ModalRoute.of(context).settings.arguments;
-    // Loan loanDetail = message['LoanDetail'];
+    message = ModalRoute.of(context).settings.arguments;
+    Loan loanDetail = message['LoanDetail'];
     setState(() {
       message = ModalRoute.of(context).settings.arguments;
       currency = message['Currency'];
@@ -124,7 +125,7 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
           (message['LoanBalance'] - double.parse(message['RepayPrincipal']))
               .toString();
       //请求数据
-      acNo = "50000085";
+      acNo = loanDetail.acNo;
       dueAmount = '';
       instalNo = '';
       interestAmount = repayInterest;
@@ -132,7 +133,7 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
       principalAmount = repayPrincipal;
       prodCode = 'LN000008';
       refNo = '';
-      repaymentAcNo = "6225********1235";
+      repaymentAcNo = loanDetail.repaymentAcNo;
       repaymentAcType = '';
       repaymentCiName = '';
       repaymentMethod = message['RepaymentMethod'];
@@ -227,6 +228,7 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
         return HsgPasswordDialog(
           title: S.current.input_password,
           resultPage: pageRepaySuccess,
+          arguments: message,
         );
       },
     );

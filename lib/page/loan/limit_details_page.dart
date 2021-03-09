@@ -30,72 +30,52 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
   String productCode = "";
   //机构代码
   String br = "";
-  var loanDetails = [];
-
-  //贷款本金
-  String _loanAmt = "";
-  //贷款余额
-  String _unpaidPrincipal = "";
-  //开始时间
-  String _disbDate = "";
-  //结束时间
-  String _maturityDate = "";
-  //贷款利率
-  String _intRate = "";
-  //是否到期
-  String _isMaturity = "";
-  //收款账号
-  String _payAcNo = "";
-  //还款账号
-  String _repaymentAcNo = "";
-  //还款日
-  int _repaymentDay = 0;
-  //还款方法
-  String _repaymentMethod = "";
-  //剩余期数
-  int _restPeriods = 0;
-  //期限
-  int _termValue = 0;
 
   Loan _loan1 = new Loan(
       '50000085',
       "81812",
       "50000085",
-      "0265898979",
-      "2020-03-20",
+      "0265898980",
+      "2020-01-01",
       "0.088",
-      "_isMaturity",
-      "88888.88",
-      "2020-03-20",
+      "0",
+      "6000",
+      "2020-04-01",
       "_payAcNo",
-      "_repaymentAcNo",
-      8,
-      "_repaymentMethod",
-      10,
-      24,
-      "88888.88");
+      "6252********0198",
+      1,
+      "EPI",
+      1,
+      3,
+      "6044.01");
   Loan _loan2 = new Loan(
       '50000083',
       "81813",
       "50000083",
       "0265898979",
-      "2020-03-10",
+      "2020-01-10",
       "0.088",
-      "_isMaturity",
-      "99999.99",
-      "2020-03-10",
+      "2",
+      "9000",
+      "2020-04-10",
       "_payAcNo",
-      "_repaymentAcNo",
+      "6225********0189",
       6,
-      "_repaymentMethod",
+      "EPI",
       12,
       24,
-      "99999.99");
+      "9060");
+
+  var loanDetails = [];
+  var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
-    _staticData();
+    _loadData();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      refrestIndicatorKey.currentState.show();
+    });
   }
 
   @override
@@ -106,42 +86,37 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: Container(
+      body: RefreshIndicator(
+        key: refrestIndicatorKey,
         child: _getlistViewList(context),
+        onRefresh: _loadData,
       ),
     );
   }
 
-  //静态数据
-  Future<void> _staticData() {
-    contactNo = "0265898979";
-    _loanAmt = "88888.88";
-    _unpaidPrincipal = "88888.88";
-    _disbDate = "2020-03-20";
-    _maturityDate = "2020-03-20";
-    _intRate = "0.088";
-  }
-
   Future<void> _loadData() async {
     //请求的参数
-    acNo = "";
-    ciNo = "50000085";
-    contactNo = "";
-    productCode = "";
+    // acNo = "";
+    // ciNo = "50000085";
+    // contactNo = "";
+    // productCode = "";
 
-    LoanDataRepository()
-        .getLoanList(GetLoanListReq(acNo, ciNo, contactNo, productCode),
-            'getLoanMastList')
-        .then((data) {
-      if (data.loanList != null) {
-        setState(() {
-          loanDetails.clear();
-          loanDetails.addAll(data.loanList);
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
+    // LoanDataRepository()
+    //     .getLoanList(GetLoanListReq(acNo, ciNo, contactNo, productCode),
+    //         'getLoanMastList')
+    //     .then((data) {
+    //   if (data.loanList != null) {
+    //     setState(() {
+    //       loanDetails.clear();
+    //       loanDetails.addAll(data.loanList);
+    //     });
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // });
+    loanDetails.clear();
+    loanDetails.add(_loan1);
+    loanDetails.add(_loan2);
   }
 
   //封装ListView.Builder
@@ -159,8 +134,9 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
   Widget _getlistViewList(BuildContext context) {
     List<Widget> _list = new List();
 
-    for (int i = 0; i < 2; i++) {
-      _list.add(_getListViewBuilder(_limitDetailsIcon(context)));
+    for (int i = 0; i < loanDetails.length; i++) {
+      _list
+          .add(_getListViewBuilder(_limitDetailsIcon(context, loanDetails[i])));
     }
     return new ListView(
       children: _list,
@@ -168,13 +144,13 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
   }
 
   //额度详情-封装
-  Widget _limitDetailsIcon(BuildContext context) {
+  Widget _limitDetailsIcon(BuildContext context, Loan loanDetail) {
     var titleRow = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           //合约账号
-          S.of(context).contract_account + " " + contactNo,
+          S.of(context).contract_account + " " + loanDetail.contactNo,
           style: TextStyle(fontSize: 15, color: Color(0xFF242424)),
         ),
         Icon(
@@ -185,7 +161,7 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
     var titleBox = InkWell(
       onTap: () {
         //跳转
-        _selectPage(context);
+        _selectPage(context, loanDetail);
       },
       child: SizedBox(
         height: 46,
@@ -205,17 +181,19 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
       children: [
         contentRow(
             S.of(context).loan_principal,
-            FormatUtil.formatSringToMoney(_loanAmt) + " HKD",
+            FormatUtil.formatSringToMoney(loanDetail.loanAmt) + " HKD",
             Color(0xFF1E1E1E)),
         contentRow(
             S.of(context).loan_balance2,
-            FormatUtil.formatSringToMoney(_unpaidPrincipal) + " HKD",
+            FormatUtil.formatSringToMoney(loanDetail.unpaidPrincipal) + " HKD",
             Color(0xFF1E1E1E)),
-        contentRow(S.of(context).begin_time, _disbDate, Color(0xFF1E1E1E)),
-        contentRow(S.of(context).end_time, _maturityDate, Color(0xFF1E1E1E)),
+        contentRow(
+            S.of(context).begin_time, loanDetail.disbDate, Color(0xFF1E1E1E)),
+        contentRow(
+            S.of(context).end_time, loanDetail.maturityDate, Color(0xFF1E1E1E)),
         contentRow(
             S.of(context).loan_interest_rate,
-            (double.parse(_intRate) * 100).toStringAsFixed(2) + "%",
+            (double.parse(loanDetail.intRate) * 100).toStringAsFixed(2) + "%",
             Color(0xFFF8514D)),
       ],
     );
@@ -262,7 +240,7 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
   }
 
   //跳转
-  _selectPage(BuildContext context) async {
+  _selectPage(BuildContext context, Loan loanDetail) async {
     List<String> pages = [
       S.of(context).view_details,
       S.of(context).view_repayment_plan,
@@ -271,22 +249,22 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) => BottomMenu(
-              title: S.of(context).loan_account + ' ' + contactNo,
+              title: S.of(context).loan_account + ' ' + loanDetail.contactNo,
               items: pages,
             ));
     if (result != null && result != false) {
       switch (result) {
         case 0:
           //查看详情
-          Navigator.pushNamed(context, pageloanDetails);
+          Navigator.pushNamed(context, pageloanDetails, arguments: loanDetail);
           break;
         case 1:
           //查看还款计划
-          Navigator.pushNamed(context, pageRepayPlan);
+          Navigator.pushNamed(context, pageRepayPlan, arguments: loanDetail);
           break;
         case 2:
           //提前还款
-          Navigator.pushNamed(context, pageRepayInput);
+          Navigator.pushNamed(context, pageRepayInput, arguments: loanDetail);
           break;
       }
     } else {

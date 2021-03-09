@@ -9,6 +9,7 @@ import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 
 class RepayPlanPage extends StatefulWidget {
   @override
@@ -27,13 +28,65 @@ class _RepayPlanState extends State<RepayPlanPage> {
   String pageSize;
   //还款状态
   String repaymentStatus;
-
-  String _loanAmt = "88888.88";
-  String _unpaidPrincipal = "88888.88";
+  GetLnAcScheduleRspDetlsDTOList _list1 = new GetLnAcScheduleRspDetlsDTOList(
+    "50000085",
+    "0",
+    "30",
+    0,
+    0,
+    "2020-02-01",
+    "2014.67",
+    "NORMAL",
+    "ALL",
+    "14.67",
+    "2020-03-20",
+    "200",
+    "2000",
+    "2020-03-20",
+    "2020-03-20",
+    "0",
+  );
+  GetLnAcScheduleRspDetlsDTOList _list2 = new GetLnAcScheduleRspDetlsDTOList(
+    "50000085",
+    "0",
+    "30",
+    0,
+    0,
+    "2020-03-01",
+    "2014.67",
+    "NORMAL",
+    "ALL",
+    "14.67",
+    "2020-03-20",
+    "200",
+    "2000",
+    "2020-03-20",
+    "2020-03-20",
+    "0",
+  );
+  GetLnAcScheduleRspDetlsDTOList _list3 = new GetLnAcScheduleRspDetlsDTOList(
+    "50000085",
+    "0",
+    "30",
+    0,
+    0,
+    "2020-04-01",
+    "2014.67",
+    "NORMAL",
+    "NONE",
+    "14.67",
+    "2020-03-20",
+    "200",
+    "2000",
+    "2020-03-20",
+    "2020-03-20",
+    "0",
+  );
 
   @override
   void initState() {
     super.initState();
+    _loadData();
     // 初次加载显示loading indicator, 会自动调用_loadData
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       refrestIndicatorKey.currentState.show();
@@ -41,26 +94,31 @@ class _RepayPlanState extends State<RepayPlanPage> {
   }
 
   Future<void> _loadData() async {
-    var req =
-        new GetScheduleDetailListReq(acNo, page, pageSize, repaymentStatus);
-    LoanDataRepository()
-        .getScheduleDetailList(req, 'getScheduleDetailList')
-        .then((data) {
-      if (data.getLnAcScheduleRspDetlsDTOList != null) {
-        setState(() {
-          lnScheduleList.clear();
-          lnScheduleList.addAll(data.getLnAcScheduleRspDetlsDTOList);
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
+    // var req =
+    //     new GetScheduleDetailListReq(acNo, page, pageSize, repaymentStatus);
+    // LoanDataRepository()
+    //     .getScheduleDetailList(req, 'getScheduleDetailList')
+    //     .then((data) {
+    //   if (data.getLnAcScheduleRspDetlsDTOList != null) {
+    //     setState(() {
+    //       lnScheduleList.clear();
+    //       lnScheduleList.addAll(data.getLnAcScheduleRspDetlsDTOList);
+    //     });
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // });
+    lnScheduleList.clear();
+    lnScheduleList.add(_list1);
+    lnScheduleList.add(_list2);
+    lnScheduleList.add(_list3);
   }
 
   @override
   Widget build(BuildContext context) {
+    Loan loanDetail = ModalRoute.of(context).settings.arguments;
     setState(() {
-      acNo = "50000085";
+      acNo = loanDetail.acNo;
       page = "1";
       pageSize = "1000";
       repaymentStatus = "";
@@ -87,15 +145,17 @@ class _RepayPlanState extends State<RepayPlanPage> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: Container(
+      body: RefreshIndicator(
+        key: refrestIndicatorKey,
         child: Column(
           children: [
-            _getHeader(),
+            _getHeader(loanDetail),
             Expanded(
               child: stackList,
             ),
           ],
         ),
+        onRefresh: _loadData,
       ),
     );
   }
@@ -103,8 +163,9 @@ class _RepayPlanState extends State<RepayPlanPage> {
   Widget listViewList(BuildContext context) {
     List<Widget> _list = new List();
     //按日期降序排序
-    for (int i = 4; i >= 0; i--) {
-      _list.add(getListViewBuilder(_getContent()));
+    // for (int i = lnScheduleList.length - 1; i >= 0; i--) {
+    for (int i = 0; i < lnScheduleList.length; i++) {
+      _list.add(getListViewBuilder(_getContent(lnScheduleList[i])));
     }
     return new ListView(
       children: _list,
@@ -141,17 +202,19 @@ class _RepayPlanState extends State<RepayPlanPage> {
   }
 
   //获取头部(贷款本金，贷款余额)
-  Widget _getHeader() {
+  Widget _getHeader(Loan loanDetail) {
     return Padding(
       padding: EdgeInsets.fromLTRB(15, 21, 20, 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           _getHeadBox(S.of(context).loan_principal + ":",
-              " HKD " + FormatUtil.formatSringToMoney(_loanAmt)),
+              " HKD " + FormatUtil.formatSringToMoney(loanDetail.loanAmt)),
           Padding(padding: EdgeInsets.only(top: 9)),
-          _getHeadBox(S.of(context).loan_balance2 + ":",
-              " HKD " + FormatUtil.formatSringToMoney(_unpaidPrincipal)),
+          _getHeadBox(
+              S.of(context).loan_balance2 + ":",
+              " HKD " +
+                  FormatUtil.formatSringToMoney(loanDetail.unpaidPrincipal)),
           Padding(padding: EdgeInsets.only(top: 10)),
           Container(
             height: 20,
@@ -166,12 +229,12 @@ class _RepayPlanState extends State<RepayPlanPage> {
   }
 
   //获取内容(左[日期] 中[时间轴] 右[还款详情])
-  Widget _getContent() {
-    var instalDate = "2020-04-18";
+  Widget _getContent(GetLnAcScheduleRspDetlsDTOList lnSchedule) {
+    var instalDate = lnSchedule.instalDate;
     instalDate = instalDate.trim();
     var year = instalDate.substring(0, 4);
     var day = instalDate.substring(5);
-    var instalType = "PART"; //还款状态 未还NONE、部分还款PART、全额还款ALL
+    var instalType = lnSchedule.instalType; //还款状态 未还NONE、部分还款PART、全额还款ALL
     var repay = '还款'; //还款
     switch (instalType) {
       case 'NONE':
@@ -186,14 +249,17 @@ class _RepayPlanState extends State<RepayPlanPage> {
         break;
       default:
     }
-    var instalOutstAmt = FormatUtil.formatSringToMoney("888"); //归还金额合计
-    var principalAmt = FormatUtil.formatSringToMoney("88"); //本金金额
-    var interestAmt = FormatUtil.formatSringToMoney("0.08"); //利息
+    var instalOutstAmt =
+        FormatUtil.formatSringToMoney(lnSchedule.instalOutstAmt); //归还金额合计
+    var principalAmt =
+        FormatUtil.formatSringToMoney(lnSchedule.principalAmt); //本金金额
+    var interestAmt =
+        FormatUtil.formatSringToMoney(lnSchedule.interestAmt); //利息
     var amorIntAmt = ''; //罚息
-    if (amorIntAmt == null) {
+    if (lnSchedule.amorIntAmt == null) {
       amorIntAmt = '0.00';
     } else {
-      amorIntAmt = '0.12';
+      amorIntAmt = lnSchedule.amorIntAmt;
     }
 
     var leftCont = Container(
@@ -269,19 +335,19 @@ class _RepayPlanState extends State<RepayPlanPage> {
                 instalType,
                 style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
               ),
-              InkWell(
-                onTap: () {
-                  //跳转
-                  Fluttertoast.showToast(msg: '还款中...');
-                },
-                child: Text(
-                  repay,
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFF4871FF),
-                      decoration: TextDecoration.underline),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () {
+              //     //跳转
+              //     Fluttertoast.showToast(msg: '还款中...');
+              //   },
+              //   child: Text(
+              //     repay,
+              //     style: TextStyle(
+              //         fontSize: 13,
+              //         color: Color(0xFF4871FF),
+              //         decoration: TextDecoration.underline),
+              //   ),
+              // ),
             ],
           ),
           Padding(padding: EdgeInsets.only(top: 5)),

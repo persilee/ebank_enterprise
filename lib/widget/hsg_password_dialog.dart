@@ -19,8 +19,9 @@ class HsgPasswordDialog extends StatelessWidget {
   List<String> passwordList = [];
   String password = '';
   String resultPage = '';
+  Object arguments = '';
 
-  HsgPasswordDialog({Key key, this.title, this.resultPage});
+  HsgPasswordDialog({Key key, this.title, this.resultPage, this.arguments});
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +180,7 @@ class HsgPasswordDialog extends StatelessWidget {
             if (passwordList.length == 6) {
               // password = EncryptUtil.aesEncode(passwordList.join());
               password = passwordList.join();
-              _verifyTradePaw(password, context, resultPage);
+              _verifyTradePaw(password, context, resultPage, arguments);
             }
           },
         ),
@@ -207,7 +208,7 @@ class HsgPasswordDialog extends StatelessWidget {
         if (passwordList.length == 6) {
           // password = EncryptUtil.aesEncode(passwordList.join());
           password = passwordList.join();
-          _verifyTradePaw(password, context, resultPage);
+          _verifyTradePaw(password, context, resultPage, arguments);
         }
       },
     );
@@ -230,8 +231,8 @@ class HsgPasswordDialog extends StatelessWidget {
   }
 
   //验证交易密码
-  _verifyTradePaw(
-      String payPassword, BuildContext context, String resultPage) async {
+  _verifyTradePaw(String payPassword, BuildContext context, String resultPage,
+      Object arguments) async {
     VerifyTradePawRepository()
         .verifyTransPwdNoSms(
             VerifyTransPwdNoSmsReq(payPassword), 'VerifyTransPwdNoSmsReq')
@@ -239,7 +240,7 @@ class HsgPasswordDialog extends StatelessWidget {
       if (resultPage == '') {
         Navigator.of(context)..pop()..pop();
       } else {
-        Navigator.pushNamed(context, resultPage);
+        Navigator.pushNamed(context, resultPage, arguments: arguments);
       }
     }).catchError((e) {
       // if (e.toString() == 'ECUST031') {
