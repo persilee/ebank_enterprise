@@ -122,10 +122,12 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
 
   //获取第一列元素
   Widget _getOneCloum(String name, double fontSize, double width, Color color) {
+    print(MediaQuery.of(context).size.height / 13);
     return SizedBox(
       child: Container(
         width: MediaQuery.of(context).size.width / 4,
-        height: MediaQuery.of(context).size.height / 13,
+//        height: MediaQuery.of(context).size.height / 13,
+      height: 60.0,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(width: 0.3, color: Colors.grey)),
@@ -162,7 +164,8 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
     return SizedBox(
       child: Container(
         width: MediaQuery.of(context).size.width / 4,
-        height: MediaQuery.of(context).size.height / 13,
+//        height: MediaQuery.of(context).size.height / 13,
+        height: 60.0,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(width: 0.3, color: Colors.grey)),
@@ -183,7 +186,8 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
     return SizedBox(
       child: Container(
         width: MediaQuery.of(context).size.width / 4,
-        height: MediaQuery.of(context).size.height / 13,
+//        height: MediaQuery.of(context).size.height / 13,
+        height: 60.0,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(width: 0.3, color: Colors.grey)),
