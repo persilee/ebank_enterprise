@@ -1,5 +1,5 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///
+/// 额度详情
 /// Author: zhangqirong
 /// Date: 2020-12-03
 
@@ -28,13 +28,51 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
   String contactNo = "";
   //产品号
   String productCode = "";
+  //机构代码
+  String br = "";
+
+  Loan _loan1 = new Loan(
+      '50000085',
+      "81812",
+      "50000085",
+      "0265898980",
+      "2020-01-01",
+      "0.088",
+      "0",
+      "6000",
+      "2020-04-01",
+      "_payAcNo",
+      "6252********0198",
+      1,
+      "EPI",
+      1,
+      3,
+      "6044.01");
+  Loan _loan2 = new Loan(
+      '50000083',
+      "81813",
+      "50000083",
+      "0265898979",
+      "2020-01-10",
+      "0.088",
+      "2",
+      "9000",
+      "2020-04-10",
+      "_payAcNo",
+      "6225********0189",
+      6,
+      "EPI",
+      12,
+      24,
+      "9060");
+
   var loanDetails = [];
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
-    // 初次加载显示loading indicator, 会自动调用_loadData
+    _loadData();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       refrestIndicatorKey.currentState.show();
     });
@@ -58,24 +96,27 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
 
   Future<void> _loadData() async {
     //请求的参数
-    acNo = "";
-    ciNo = "50000085";
-    contactNo = "";
-    productCode = "";
+    // acNo = "";
+    // ciNo = "50000085";
+    // contactNo = "";
+    // productCode = "";
 
-    LoanDataRepository()
-        .getLoanList(GetLoanListReq(acNo, ciNo, contactNo, productCode),
-            'getLoanMastList')
-        .then((data) {
-      if (data.loanList != null) {
-        setState(() {
-          loanDetails.clear();
-          loanDetails.addAll(data.loanList);
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
+    // LoanDataRepository()
+    //     .getLoanList(GetLoanListReq(acNo, ciNo, contactNo, productCode),
+    //         'getLoanMastList')
+    //     .then((data) {
+    //   if (data.loanList != null) {
+    //     setState(() {
+    //       loanDetails.clear();
+    //       loanDetails.addAll(data.loanList);
+    //     });
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // });
+    loanDetails.clear();
+    loanDetails.add(_loan1);
+    loanDetails.add(_loan2);
   }
 
   //封装ListView.Builder

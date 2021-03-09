@@ -243,7 +243,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   _getCardTotals(String _changedAccountTitle) {
     Future.wait({
-      CardDataRepository().getSingleCardBal(
+      CardDataRepository().getCardBalByCardNo(
           GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
       CardDataRepository().getCardLimitByCardNo(
           GetCardLimitByCardNoReq(_changedAccountTitle),
@@ -352,7 +352,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   // ignore: unused_element
   _getavaBal(String changedCcyTitle) {
     Future.wait({
-      CardDataRepository().getSingleCardBal(
+      CardDataRepository().getCardBalByCardNo(
           GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
     }).then((value) {
       value.forEach((element) {
@@ -563,8 +563,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               ),
             ),
           ),
-             //提交按钮
-             getButton(S.current.submit, _isClick),
+          //提交按钮
+          getButton(S.current.submit, _isClick),
         ],
       ),
     );
@@ -792,7 +792,9 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             //付款方姓名
             payerName = element.cardList[0].ciName;
           });
-          _getCardTotal(cardNo);
+          setState(() {
+            _getCardTotal(cardNo);
+          });
         }
       });
     });
@@ -800,8 +802,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   _getCardTotal(String cardNo) {
     Future.wait({
-      CardDataRepository()
-          .getSingleCardBal(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
+      CardDataRepository().getCardBalByCardNo(
+          GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
       CardDataRepository().getCardLimitByCardNo(
           GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
     }).then((value) {

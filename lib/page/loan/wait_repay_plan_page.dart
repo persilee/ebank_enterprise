@@ -30,10 +30,31 @@ class _WaitRepayPlanState extends State<WaitRepayPlanPage> {
   String repaymentStatus;
   //已还本金
   var paidPrincipal = '';
+  //待还本金
+  var notPaidPrincipal = '2000';
+  GetLnAcScheduleRspDetlsDTOList _list1 = new GetLnAcScheduleRspDetlsDTOList(
+    "50000085",
+    "0",
+    "30",
+    0,
+    0,
+    "2020-04-01",
+    "2000",
+    "NORMAL",
+    "NONE",
+    "14.67",
+    "2020-03-20",
+    "200",
+    "2000",
+    "2020-03-20",
+    "2020-03-20",
+    "0",
+  );
 
   @override
   void initState() {
     super.initState();
+    _loadData();
     // 初次加载显示loading indicator, 会自动调用_loadData
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       refrestIndicatorKey.currentState.show();
@@ -41,20 +62,22 @@ class _WaitRepayPlanState extends State<WaitRepayPlanPage> {
   }
 
   Future<void> _loadData() async {
-    var req =
-        new GetScheduleDetailListReq(acNo, page, pageSize, repaymentStatus);
-    LoanDataRepository()
-        .getScheduleDetailList(req, 'getScheduleDetailList')
-        .then((data) {
-      if (data.getLnAcScheduleRspDetlsDTOList != null) {
-        setState(() {
-          lnScheduleList.clear();
-          lnScheduleList.addAll(data.getLnAcScheduleRspDetlsDTOList);
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
+    // var req =
+    //     new GetScheduleDetailListReq(acNo, page, pageSize, repaymentStatus);
+    // LoanDataRepository()
+    //     .getScheduleDetailList(req, 'getScheduleDetailList')
+    //     .then((data) {
+    //   if (data.getLnAcScheduleRspDetlsDTOList != null) {
+    //     setState(() {
+    //       lnScheduleList.clear();
+    //       lnScheduleList.addAll(data.getLnAcScheduleRspDetlsDTOList);
+    //     });
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // });
+    lnScheduleList.clear();
+    lnScheduleList.add(_list1);
   }
 
   @override
@@ -92,8 +115,7 @@ class _WaitRepayPlanState extends State<WaitRepayPlanPage> {
         key: refrestIndicatorKey,
         child: Column(
           children: [
-            _getHeader(
-                loanDetail.unpaidPrincipal, loanDetail.restPeriods.toString()),
+            _getHeader(notPaidPrincipal, loanDetail.restPeriods.toString()),
             Expanded(
               child: stackList,
             ),
@@ -161,7 +183,10 @@ class _WaitRepayPlanState extends State<WaitRepayPlanPage> {
               children: [
                 //贷款余额
                 Text(
-                  S.of(context).remaining_periods + ": " + nums + S.of(context).periods,
+                  S.of(context).remaining_periods +
+                      ": " +
+                      nums +
+                      S.of(context).periods,
                   style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
                 ),
               ],
@@ -280,19 +305,19 @@ class _WaitRepayPlanState extends State<WaitRepayPlanPage> {
                 instalType,
                 style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
               ),
-              InkWell(
-                onTap: () {
-                  //跳转
-                  Fluttertoast.showToast(msg: '还款中...');
-                },
-                child: Text(
-                  repay,
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFF4871FF),
-                      decoration: TextDecoration.underline),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () {
+              //     //跳转
+              //     Fluttertoast.showToast(msg: '还款中...');
+              //   },
+              //   child: Text(
+              //     repay,
+              //     style: TextStyle(
+              //         fontSize: 13,
+              //         color: Color(0xFF4871FF),
+              //         decoration: TextDecoration.underline),
+              //   ),
+              // ),
             ],
           ),
           Padding(padding: EdgeInsets.only(top: 5)),

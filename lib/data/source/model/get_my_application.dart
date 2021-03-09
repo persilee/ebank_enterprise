@@ -109,6 +109,9 @@ class MyApplicationDetail extends Object {
   @JsonKey(name: 'createTime')
   String createTime;
 
+  // @JsonKey(name: 'startUser')
+  // String startUser;
+
   MyApplicationDetail(
     this.processId,
     this.processKey,
@@ -116,6 +119,7 @@ class MyApplicationDetail extends Object {
     this.taskId,
     this.taskName,
     this.createTime,
+    //this.startUser
   );
   factory MyApplicationDetail.fromJson(Map<String, dynamic> srcJson) =>
       _$MyApplicationDetailFromJson(srcJson);

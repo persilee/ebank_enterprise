@@ -29,11 +29,48 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
   //还款状态
   String repaymentStatus;
   //已还本金
-  var paidPrincipal = '';
+  var paidPrincipal = '4000';
+  GetLnAcScheduleRspDetlsDTOList _list1 = new GetLnAcScheduleRspDetlsDTOList(
+    "50000085",
+    "4000",
+    "30",
+    0,
+    0,
+    "2020-02-01",
+    "2014.67",
+    "NORMAL",
+    "ALL",
+    "14.67",
+    "2020-03-20",
+    "200",
+    "2000",
+    "2020-03-20",
+    "2020-03-20",
+    "4000",
+  );
+  GetLnAcScheduleRspDetlsDTOList _list2 = new GetLnAcScheduleRspDetlsDTOList(
+    "50000085",
+    "0",
+    "30",
+    0,
+    0,
+    "2020-03-01",
+    "2014.67",
+    "NORMAL",
+    "ALL",
+    "14.67",
+    "2020-03-20",
+    "200",
+    "2000",
+    "2020-03-20",
+    "2020-03-20",
+    "0",
+  );
 
   @override
   void initState() {
     super.initState();
+    _loadData();
     // 初次加载显示loading indicator, 会自动调用_loadData
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       refrestIndicatorKey.currentState.show();
@@ -41,27 +78,31 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
   }
 
   Future<void> _loadData() async {
-    var req =
-        new GetScheduleDetailListReq(acNo, page, pageSize, repaymentStatus);
-    LoanDataRepository()
-        .getScheduleDetailList(req, 'getScheduleDetailList')
-        .then((data) {
-      if (data.getLnAcScheduleRspDetlsDTOList != null) {
-        setState(() {
-          lnScheduleList.clear();
-          lnScheduleList.addAll(data.getLnAcScheduleRspDetlsDTOList);
-        });
-        double tempMoney = 0;
-        for (int i = 0; i < lnScheduleList.length; i++) {
-          if (lnScheduleList[i].instalType == 'PART'||lnScheduleList[i].instalType == 'ALL') {
-            tempMoney += double.parse(lnScheduleList[i].instalOutstAmt);
-          }
-        }
-        paidPrincipal = tempMoney.toString();
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
+    // var req =
+    //     new GetScheduleDetailListReq(acNo, page, pageSize, repaymentStatus);
+    // LoanDataRepository()
+    //     .getScheduleDetailList(req, 'getScheduleDetailList')
+    //     .then((data) {
+    //   if (data.getLnAcScheduleRspDetlsDTOList != null) {
+    //     setState(() {
+    //       lnScheduleList.clear();
+    //       lnScheduleList.addAll(data.getLnAcScheduleRspDetlsDTOList);
+    //     });
+    //     double tempMoney = 0;
+    //     for (int i = 0; i < lnScheduleList.length; i++) {
+    //       if (lnScheduleList[i].instalType == 'PART' ||
+    //           lnScheduleList[i].instalType == 'ALL') {
+    //         tempMoney += double.parse(lnScheduleList[i].instalOutstAmt);
+    //       }
+    //     }
+    //     paidPrincipal = tempMoney.toString();
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // });
+    lnScheduleList.clear();
+    lnScheduleList.add(_list1);
+    lnScheduleList.add(_list2);
   }
 
   @override
@@ -114,8 +155,10 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
     List<Widget> _list = new List();
     print(lnScheduleList.length);
     //按日期降序排序
-    for (int i = lnScheduleList.length - 1; i >= 0; i--) {
-      if (lnScheduleList[i].instalType == 'PART'||lnScheduleList[i].instalType == 'ALL') {
+    // for (int i = lnScheduleList.length - 1; i >= 0; i--) {
+    for (int i = 0; i < lnScheduleList.length; i++) {
+      if (lnScheduleList[i].instalType == 'PART' ||
+          lnScheduleList[i].instalType == 'ALL') {
         _list.add(getListViewBuilder(_getContent(lnScheduleList[i])));
       }
     }
@@ -195,9 +238,12 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
         break;
       default:
     }
-    var instalOutstAmt = FormatUtil.formatSringToMoney(lnSchedule.instalOutstAmt); //归还金额合计
-    var principalAmt = FormatUtil.formatSringToMoney(lnSchedule.principalAmt); //本金金额
-    var interestAmt = FormatUtil.formatSringToMoney(lnSchedule.interestAmt); //利息
+    var instalOutstAmt =
+        FormatUtil.formatSringToMoney(lnSchedule.instalOutstAmt); //归还金额合计
+    var principalAmt =
+        FormatUtil.formatSringToMoney(lnSchedule.principalAmt); //本金金额
+    var interestAmt =
+        FormatUtil.formatSringToMoney(lnSchedule.interestAmt); //利息
 
     var leftCont = Container(
       width: 66,
