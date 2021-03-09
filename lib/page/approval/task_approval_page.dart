@@ -265,12 +265,15 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
 
   @override
   Widget build(BuildContext context) {
-    FindUserTaskDetail application = ModalRoute.of(context).settings.arguments;
+    Map<String, dynamic> arguments = ModalRoute.of(context).settings.arguments;
+    String title = arguments['title'];
+    FindUserTaskDetail application = arguments['data'];
+
     taskId = application.taskId;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(S.current.task_approval),
+        title: Text(title),
       ),
       body: SingleChildScrollView(
         child: Column(

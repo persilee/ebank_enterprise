@@ -82,9 +82,9 @@ class _ApprovalPageState extends State<ApprovalPage>
       body: TabBarView(
         controller: tabController,
         children: [
-          MyApprovalPage(),
-          AuthorizationHistoryPage(),
-          MyApplicationPage()
+          MyApprovalPage(title: S.current.my_to_do_list),
+          AuthorizationHistoryPage(title: S.current.authorization_history),
+          MyApplicationPage(title: S.current.my_application)
         ],
       ),
     );

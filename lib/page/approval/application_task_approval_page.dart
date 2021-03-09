@@ -61,12 +61,14 @@ class _ApplicationTaskApprovalPageState
 
   @override
   Widget build(BuildContext context) {
-    MyApplicationDetail history = ModalRoute.of(context).settings.arguments;
+    Map<String, dynamic> arguments = ModalRoute.of(context).settings.arguments;
+    String title = arguments['title'];
+    MyApplicationDetail history = arguments['data'];
     processId = history.processId;
     print(processId);
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.current.task_approval),
+        title: Text(title),
         centerTitle: true,
       ),
       body: CustomScrollView(
