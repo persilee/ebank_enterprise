@@ -23,14 +23,30 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
   var rates = List<String>();
   var names = List<String>();
   var rateLists = List();
-  var flag = 0;
+  // var flag = 0;
   String language = Intl.getCurrentLocale();
 
   @override
   void initState() {
     super.initState();
 
-    _loadData();
+    // _loadData();
+    _staticData();
+  }
+
+  //静态数据
+  Future<void> _staticData() {
+    ccys = ["CNY", "HKD", "USD"];
+    if (language == 'zh_CN') {
+      names = ["高阳贷", "闪电贷", "雷电贷"];
+    } else {
+      names = ["Hisun Loan", "Lightning Loan", "Global Loan"];
+    }
+    rateLists = [
+      ["--", "8.5%", "6.7%"],
+      ["6.8%", "6.5%", "--"],
+      ["--", "5.8%", "7.6%"]
+    ];
   }
 
   Future<void> _loadData() async {
@@ -44,7 +60,7 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
         names.clear();
         rateLists.clear();
 
-        flag = 1;
+        // flag = 1;
         ccys.addAll(data.ccyList);
         for (int i = 0; i < data.prodMastList.length; i++) {
           rates = [];
@@ -79,62 +95,67 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
           centerTitle: true,
           elevation: 0,
         ),
-        body: RefreshIndicator(
-            child: ListView(
-              children: [
-                Container(
-                  child: _getContent(),
-                )
-              ],
-            ),
-            onRefresh: _loadData));
+        body:
+            // RefreshIndicator(
+            Container(
+          child: ListView(
+            children: [
+              Container(
+                child: _getContent(),
+              )
+            ],
+          ),
+          // onRefresh:
+          //     // _loadData
+          //     _staticData
+        ));
   }
 
 //显示内容
   Widget _getContent() {
-    if (flag == 0) {
-      return SizedBox();
-    } else {
-      return SizedBox(
-        child: Row(
-          children: [
-            Container(
+    // if (flag == 0) {
+    //   return SizedBox();
+    // } else {
+    return SizedBox(
+      child: Row(
+        children: [
+          Container(
+              child: Column(
+            children: [
+              //固定的第一个元素
+              Container(
+                color: Color(0xFF333450),
+                child: _getBox(S.current.loan_product_name_with_value, 16, 120,
+                    Colors.white),
+              ),
+              //固定的所有元素
+              Container(
+                child: _getCloumnBoxList(names),
+              ),
+            ],
+          )),
+          Expanded(
+              child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Container(
                 child: Column(
               children: [
-                //固定的第一个元素
+                //滚动的第一行
                 Container(
                   color: Color(0xFF333450),
-                  child: _getBox(S.current.loan_product_name_with_value, 16,
-                      120, Colors.white),
+                  child: _getRowBoxList(ccys, 16, 80, Colors.white),
                 ),
-                //固定的所有元素
+                //滚动的所有行
                 Container(
-                  child: _getCloumnBoxList(names),
-                ),
+                  child: _getAllBoxList(rateLists, 14, 80, Colors.black),
+                )
               ],
             )),
-            Expanded(
-                child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Container(
-                  child: Column(
-                children: [
-                  //滚动的第一行
-                  Container(
-                    color: Color(0xFF333450),
-                    child: _getRowBoxList(ccys, 16, 80, Colors.white),
-                  ),
-                  //滚动的所有行
-                  Container(
-                    child: _getAllBoxList(rateLists, 14, 80, Colors.black),
-                  )
-                ],
-              )),
-            )),
-          ],
-        ),
-      );
-    }
+          )),
+        ],
+      ),
+    );
+    // }
   }
 
   //获得所有滑动元素

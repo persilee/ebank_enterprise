@@ -6,6 +6,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,10 @@ class HsgPasswordDialog extends StatelessWidget {
   List<String> keyboardNum = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
   List<String> passwordList = [];
   String password = '';
+  String resultPage = '';
+  Object arguments = '';
 
-  HsgPasswordDialog({Key key, this.title});
+  HsgPasswordDialog({Key key, this.title, this.resultPage, this.arguments});
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +180,7 @@ class HsgPasswordDialog extends StatelessWidget {
             if (passwordList.length == 6) {
               // password = EncryptUtil.aesEncode(passwordList.join());
               password = passwordList.join();
-              _verifyTradePaw(password, context);
+              _verifyTradePaw(password, context, resultPage, arguments);
             }
           },
         ),
@@ -205,7 +208,7 @@ class HsgPasswordDialog extends StatelessWidget {
         if (passwordList.length == 6) {
           // password = EncryptUtil.aesEncode(passwordList.join());
           password = passwordList.join();
-          _verifyTradePaw(password, context);
+          _verifyTradePaw(password, context, resultPage, arguments);
         }
       },
     );
@@ -228,7 +231,8 @@ class HsgPasswordDialog extends StatelessWidget {
   }
 
   //验证交易密码
-  _verifyTradePaw(String payPassword, BuildContext context) async {
+  _verifyTradePaw(String payPassword, BuildContext context, String resultPage,
+      Object arguments) async {
     VerifyTradePawRepository()
         .verifyTransPwdNoSms(
             VerifyTransPwdNoSmsReq(payPassword), 'VerifyTransPwdNoSmsReq')
@@ -239,8 +243,15 @@ class HsgPasswordDialog extends StatelessWidget {
       if (e.toString() == 'ECUST031') {
         Fluttertoast.showToast(msg: '交易密码错误！请重试');
       } else {
-        Fluttertoast.showToast(msg: '未设置交易密码！');
+        Navigator.pushNamed(context, resultPage, arguments: arguments);
       }
+    }).catchError((e) {
+      // if (e.toString() == 'ECUST031') {
+      //   Fluttertoast.showToast(msg: '交易密码错误！请重试');
+      // } else {
+      //   Fluttertoast.showToast(msg: '未设置交易密码！');
+      // }
+      Fluttertoast.showToast(msg: e.toString());
       passwordList.clear();
       (context as Element).markNeedsBuild();
     });

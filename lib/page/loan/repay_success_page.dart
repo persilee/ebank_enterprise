@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/page_route.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhangqirong
@@ -36,9 +38,10 @@ class _RepaySuccessPageState extends State<RepaySuccessPage> {
       money = '￥' + t;
     }
   }
-  _changeAccount(String d){
+
+  _changeAccount(String d) {
     var lis = d.split(' ');
-    debitAccount = lis[0]+'********'+lis[1];
+    debitAccount = lis[0] + '********' + lis[1];
   }
 
   @override
@@ -49,7 +52,7 @@ class _RepaySuccessPageState extends State<RepaySuccessPage> {
       debitAccount = message['DebitAccount'];
       totalRepay = FormatUtil.formatSringToMoney(message['TotalRepay']);
       _changeMoney(currency, totalRepay);
-      _changeAccount(debitAccount);
+      // _changeAccount(debitAccount);
     });
 
     return Scaffold(
@@ -85,7 +88,10 @@ class _RepaySuccessPageState extends State<RepaySuccessPage> {
             _getPadding(0, 15, 0, 0),
             Text(
               S.of(context).repayment_succeed_p,
-              style: TextStyle(fontSize: 16, color: Color(0xFF282828),fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFF282828),
+                  fontWeight: FontWeight.bold),
             ),
           ],
         ));
@@ -115,7 +121,8 @@ class _RepaySuccessPageState extends State<RepaySuccessPage> {
         ),
         padding: EdgeInsets.fromLTRB(60, 15, 60, 15),
         onPressed: () {
-          Navigator.of(context).pop(1);
+          // Navigator.of(context).pop(1);
+          Navigator.of(context)..pop()..pop()..pop()..pop()..pop();
         },
         shape: RoundedRectangleBorder(
           side: BorderSide.none,

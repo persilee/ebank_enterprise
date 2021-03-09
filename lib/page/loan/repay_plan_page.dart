@@ -28,10 +28,65 @@ class _RepayPlanState extends State<RepayPlanPage> {
   String pageSize;
   //还款状态
   String repaymentStatus;
+  GetLnAcScheduleRspDetlsDTOList _list1 = new GetLnAcScheduleRspDetlsDTOList(
+    "50000085",
+    "0",
+    "30",
+    0,
+    0,
+    "2020-02-01",
+    "2014.67",
+    "NORMAL",
+    "ALL",
+    "14.67",
+    "2020-03-20",
+    "200",
+    "2000",
+    "2020-03-20",
+    "2020-03-20",
+    "0",
+  );
+  GetLnAcScheduleRspDetlsDTOList _list2 = new GetLnAcScheduleRspDetlsDTOList(
+    "50000085",
+    "0",
+    "30",
+    0,
+    0,
+    "2020-03-01",
+    "2014.67",
+    "NORMAL",
+    "ALL",
+    "14.67",
+    "2020-03-20",
+    "200",
+    "2000",
+    "2020-03-20",
+    "2020-03-20",
+    "0",
+  );
+  GetLnAcScheduleRspDetlsDTOList _list3 = new GetLnAcScheduleRspDetlsDTOList(
+    "50000085",
+    "0",
+    "30",
+    0,
+    0,
+    "2020-04-01",
+    "2014.67",
+    "NORMAL",
+    "NONE",
+    "14.67",
+    "2020-03-20",
+    "200",
+    "2000",
+    "2020-03-20",
+    "2020-03-20",
+    "0",
+  );
 
   @override
   void initState() {
     super.initState();
+    _loadData();
     // 初次加载显示loading indicator, 会自动调用_loadData
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       refrestIndicatorKey.currentState.show();
@@ -39,20 +94,24 @@ class _RepayPlanState extends State<RepayPlanPage> {
   }
 
   Future<void> _loadData() async {
-    var req =
-        new GetScheduleDetailListReq(acNo, page, pageSize, repaymentStatus);
-    LoanDataRepository()
-        .getScheduleDetailList(req, 'getScheduleDetailList')
-        .then((data) {
-      if (data.getLnAcScheduleRspDetlsDTOList != null) {
-        setState(() {
-          lnScheduleList.clear();
-          lnScheduleList.addAll(data.getLnAcScheduleRspDetlsDTOList);
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
+    // var req =
+    //     new GetScheduleDetailListReq(acNo, page, pageSize, repaymentStatus);
+    // LoanDataRepository()
+    //     .getScheduleDetailList(req, 'getScheduleDetailList')
+    //     .then((data) {
+    //   if (data.getLnAcScheduleRspDetlsDTOList != null) {
+    //     setState(() {
+    //       lnScheduleList.clear();
+    //       lnScheduleList.addAll(data.getLnAcScheduleRspDetlsDTOList);
+    //     });
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // });
+    lnScheduleList.clear();
+    lnScheduleList.add(_list1);
+    lnScheduleList.add(_list2);
+    lnScheduleList.add(_list3);
   }
 
   @override
@@ -104,7 +163,8 @@ class _RepayPlanState extends State<RepayPlanPage> {
   Widget listViewList(BuildContext context) {
     List<Widget> _list = new List();
     //按日期降序排序
-    for (int i = lnScheduleList.length-1; i >= 0; i--) {
+    // for (int i = lnScheduleList.length - 1; i >= 0; i--) {
+    for (int i = 0; i < lnScheduleList.length; i++) {
       _list.add(getListViewBuilder(_getContent(lnScheduleList[i])));
     }
     return new ListView(
@@ -189,13 +249,16 @@ class _RepayPlanState extends State<RepayPlanPage> {
         break;
       default:
     }
-    var instalOutstAmt = FormatUtil.formatSringToMoney(lnSchedule.instalOutstAmt); //归还金额合计
-    var principalAmt = FormatUtil.formatSringToMoney(lnSchedule.principalAmt); //本金金额
-    var interestAmt = FormatUtil.formatSringToMoney(lnSchedule.interestAmt); //利息
+    var instalOutstAmt =
+        FormatUtil.formatSringToMoney(lnSchedule.instalOutstAmt); //归还金额合计
+    var principalAmt =
+        FormatUtil.formatSringToMoney(lnSchedule.principalAmt); //本金金额
+    var interestAmt =
+        FormatUtil.formatSringToMoney(lnSchedule.interestAmt); //利息
     var amorIntAmt = ''; //罚息
     if (lnSchedule.amorIntAmt == null) {
       amorIntAmt = '0.00';
-    }else{
+    } else {
       amorIntAmt = lnSchedule.amorIntAmt;
     }
 
@@ -272,19 +335,19 @@ class _RepayPlanState extends State<RepayPlanPage> {
                 instalType,
                 style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
               ),
-              InkWell(
-                onTap: () {
-                  //跳转
-                  Fluttertoast.showToast(msg: '还款中...');
-                },
-                child: Text(
-                  repay,
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFF4871FF),
-                      decoration: TextDecoration.underline),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () {
+              //     //跳转
+              //     Fluttertoast.showToast(msg: '还款中...');
+              //   },
+              //   child: Text(
+              //     repay,
+              //     style: TextStyle(
+              //         fontSize: 13,
+              //         color: Color(0xFF4871FF),
+              //         decoration: TextDecoration.underline),
+              //   ),
+              // ),
             ],
           ),
           Padding(padding: EdgeInsets.only(top: 5)),
