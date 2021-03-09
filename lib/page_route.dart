@@ -67,6 +67,8 @@ import 'package:ebank_mobile/page/mine/change_logPswd_page.dart';
 import 'package:ebank_mobile/page/mine/change_pay_page.dart';
 import 'package:ebank_mobile/page/mine/set_pay_page.dart';
 
+import 'page/approval/static_page/static_my_approval_page.dart';
+
 var pageHome = '/';
 var pageLogin = pageHome;
 // var pageCardList = pageHome;
@@ -131,6 +133,7 @@ var pageTransferPlanDetails = '/transfer_plan_details';
 var pageForgetPassword = '/forget_password_page';
 var pageQianliyanDemo = '/qliyan_demo_page.dart';
 var pageApprovalPage = 'hsg_approval_page';
+var pageStaticApproval = '/static_my_approval_page';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -194,6 +197,7 @@ var appRoutes = {
   pageApprovalPage: (context) => ApprovalPage(),
   pageFeatureList: (context) => FeatureListPage(),
   // pageQianliyanDemo: (context) => QianliyanDemoPage(),
+  pageStaticApproval: (context) => StaticMyApprovalPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {

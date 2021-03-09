@@ -869,8 +869,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
 
   _getCardTotal(String cardNo) {
     Future.wait({
-      CardDataRepository()
-          .getSingleCardBal(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
+      CardDataRepository().getCardBalByCardNo(
+          GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
       CardDataRepository().getCardLimitByCardNo(
           GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
     }).then((value) {
@@ -939,7 +939,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
 
   _getCardTotals(String _changedAccountTitle) {
     Future.wait({
-      CardDataRepository().getSingleCardBal(
+      CardDataRepository().getCardBalByCardNo(
           GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
       CardDataRepository().getCardLimitByCardNo(
           GetCardLimitByCardNoReq(_changedAccountTitle),
@@ -996,7 +996,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   //根据货币类型拿余额
   _getavaBal(String changedCcyTitle) {
     Future.wait({
-      CardDataRepository().getSingleCardBal(
+      CardDataRepository().getCardBalByCardNo(
           GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
     }).then((value) {
       value.forEach((element) {

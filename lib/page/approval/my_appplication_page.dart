@@ -123,8 +123,11 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Column(
         children: [
+          //任务名称
+          _getRow(S.current.to_do_task_name, list[index].processTitle),
+          //发起人
           _getRow(S.current.sponsor, list[index].processId),
-          _getRow(S.current.to_do_task_name, list[index].taskName),
+          //创建时间
           _getRow(S.current.creation_time, list[index].createTime)
         ],
       ),

@@ -145,7 +145,7 @@
   "authorization_history": "处理记录",
   "my_application": "我的申请",
   "sponsor": "发起人",
-  "to_do_task_name": "待办任务名称",
+  "to_do_task_name": "任务名称",
   "creation_time": "创建时间",
   "international_transfer": "国际转账",
   "remitter_address_prompt": "*若汇款人地址有误，将可能导致汇款失败\n*汇款人地址需包含城市，街道，大厦，楼层等",

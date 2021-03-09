@@ -228,8 +228,11 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                       children: <Widget>[
                         Center(
                           child: _pad(
-                            _todoInformation(list[index], list[index].taskName,
-                                list[index].startUser, list[index].createTime),
+                            _todoInformation(
+                                list[index],
+                                list[index].processTitle,
+                                list[index].startUser,
+                                list[index].createTime),
                             t: 10.0,
                             b: 10.0,
                           ),
