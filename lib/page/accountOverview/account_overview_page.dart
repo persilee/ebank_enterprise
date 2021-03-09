@@ -6,6 +6,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/account_overview_repository.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/account_overview_all_data.dart';
 import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -28,6 +29,8 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   String ddCcy = 'HKD';
   String tdTotal = '0.00';
   String lnTotal = '0.00';
+  // List<AccountOverviewList> ddList = [];
+  // List<AccountOverviewList> tdList = [];
   List<CardListBal> ddList = [];
   List<TdConInfoList> tdList = [];
   List<LoanMastList> lnList = [];
@@ -38,6 +41,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   void initState() {
     // 网络请求
     _getCardList();
+    // _getAccountOverviewInfo();
   }
 
   @override
@@ -214,11 +218,11 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            tdList[index].conNo,
+            tdList[index].conNo, //.cardNo,
             style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
           ),
           Text(
-            tdList[index].bal + ' ' + tdList[index].ccy,
+            tdList[index].bal + ' ' + tdList[index].ccy, //avaBal
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
           )
         ],
@@ -405,8 +409,8 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
 
     // 总资产
     AccountOverviewRepository()
-        .getTotalAssets(GetTotalAssetsReq(userID, '8000000004', localCcy),
-            'GetTotalAssetsReq')
+        .getTotalAssets(
+            GetTotalAssetsReq(userID, custID, localCcy), 'GetTotalAssetsReq')
         .then((data) {
       setState(() {
         if (data.totalAssets != '0') {
@@ -427,7 +431,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     // 活期
     AccountOverviewRepository()
         .getCardListBalByUser(
-            GetCardListBalByUserReq('', localCcy, '8000000004', cardNoList),
+            GetCardListBalByUserReq('', localCcy, custID, cardNoList),
             'GetCardListBalByUserReq')
         .then((data) {
       if (data.cardListBal != null) {
@@ -436,17 +440,17 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
           if (data.totalAmt != '0') {
             ddTotal = data.totalAmt;
           }
-          ddCcy = data.defaultCcy;
+          ddCcy = data.defaultCcy == null ? localCcy : data.defaultCcy;
         });
       }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
 
-    //定期
+    // //定期
     AccountOverviewRepository()
         .getTdConInfoList(
-            GetTdConInfoListReq(ciNo: '8000000030'), 'GetTdConInfoListReq')
+            GetTdConInfoListReq(ciNo: custID), 'GetTdConInfoListReq')
         .then((data) {
       if (data.rows != null) {
         setState(() {
@@ -471,20 +475,42 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
       Fluttertoast.showToast(msg: e.toString());
     });
 
-    // 贷款
-    AccountOverviewRepository()
-        .getLoanMastList(GetLoanMastListReq(custID), 'GetLoanMastListReq')
-        .then((data) {
-      if (data.lnAcMastAppDOList != null) {
-        setState(() {
-          lnList = data.lnAcMastAppDOList;
-          if (data.totalLiability != '0') {
-            lnTotal = data.totalLiability;
-          }
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
+    // // 贷款
+    // AccountOverviewRepository()
+    //     .getLoanMastList(GetLoanMastListReq(custID), 'GetLoanMastListReq')
+    //     .then((data) {
+    //   if (data.lnAcMastAppDOList != null) {
+    //     setState(() {
+    //       lnList = data.lnAcMastAppDOList;
+    //       if (data.totalLiability != '0') {
+    //         lnTotal = data.totalLiability;
+    //       }
+    //     });
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // });
+
+    // AccountOverviewRepository()
+    //     .getCardListBalById(AccOverviewDataReq(userID, localCcy, custID, ''),
+    //         'getCardListBalById')
+    //     .then((data) {
+    //   setState(() {
+    //     ddTotal = data.ddTotalAmt;
+    //     ddList = data.cardListBal;
+    //     tdTotal = data.tdTotalAmt;
+    //     tdList = data.tedpListBal;
+    //     if (data.totalAmt != '0') {
+    //       totalAssets = data.totalAmt;
+    //     }
+    //     if (data.totalAmt != '0') {
+    //       netAssets = data.totalAmt;
+    //     }
+    //     totalLiabilities = '0.00';
+    //     localCcy = data.defaultCcy;
+    //   });
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // });
   }
 }
