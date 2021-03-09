@@ -9,7 +9,6 @@ import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 
 class RepayPlanPage extends StatefulWidget {
   @override
@@ -28,6 +27,9 @@ class _RepayPlanState extends State<RepayPlanPage> {
   String pageSize;
   //还款状态
   String repaymentStatus;
+
+  String _loanAmt = "88888.88";
+  String _unpaidPrincipal = "88888.88";
 
   @override
   void initState() {
@@ -57,9 +59,8 @@ class _RepayPlanState extends State<RepayPlanPage> {
 
   @override
   Widget build(BuildContext context) {
-    Loan loanDetail = ModalRoute.of(context).settings.arguments;
     setState(() {
-      acNo = loanDetail.acNo;
+      acNo = "50000085";
       page = "1";
       pageSize = "1000";
       repaymentStatus = "";
@@ -86,17 +87,15 @@ class _RepayPlanState extends State<RepayPlanPage> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: RefreshIndicator(
-        key: refrestIndicatorKey,
+      body: Container(
         child: Column(
           children: [
-            _getHeader(loanDetail),
+            _getHeader(),
             Expanded(
               child: stackList,
             ),
           ],
         ),
-        onRefresh: _loadData,
       ),
     );
   }
@@ -104,8 +103,8 @@ class _RepayPlanState extends State<RepayPlanPage> {
   Widget listViewList(BuildContext context) {
     List<Widget> _list = new List();
     //按日期降序排序
-    for (int i = lnScheduleList.length-1; i >= 0; i--) {
-      _list.add(getListViewBuilder(_getContent(lnScheduleList[i])));
+    for (int i = 4; i >= 0; i--) {
+      _list.add(getListViewBuilder(_getContent()));
     }
     return new ListView(
       children: _list,
@@ -142,19 +141,17 @@ class _RepayPlanState extends State<RepayPlanPage> {
   }
 
   //获取头部(贷款本金，贷款余额)
-  Widget _getHeader(Loan loanDetail) {
+  Widget _getHeader() {
     return Padding(
       padding: EdgeInsets.fromLTRB(15, 21, 20, 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           _getHeadBox(S.of(context).loan_principal + ":",
-              " HKD " + FormatUtil.formatSringToMoney(loanDetail.loanAmt)),
+              " HKD " + FormatUtil.formatSringToMoney(_loanAmt)),
           Padding(padding: EdgeInsets.only(top: 9)),
-          _getHeadBox(
-              S.of(context).loan_balance2 + ":",
-              " HKD " +
-                  FormatUtil.formatSringToMoney(loanDetail.unpaidPrincipal)),
+          _getHeadBox(S.of(context).loan_balance2 + ":",
+              " HKD " + FormatUtil.formatSringToMoney(_unpaidPrincipal)),
           Padding(padding: EdgeInsets.only(top: 10)),
           Container(
             height: 20,
@@ -169,12 +166,12 @@ class _RepayPlanState extends State<RepayPlanPage> {
   }
 
   //获取内容(左[日期] 中[时间轴] 右[还款详情])
-  Widget _getContent(GetLnAcScheduleRspDetlsDTOList lnSchedule) {
-    var instalDate = lnSchedule.instalDate;
+  Widget _getContent() {
+    var instalDate = "2020-04-18";
     instalDate = instalDate.trim();
     var year = instalDate.substring(0, 4);
     var day = instalDate.substring(5);
-    var instalType = lnSchedule.instalType; //还款状态 未还NONE、部分还款PART、全额还款ALL
+    var instalType = "PART"; //还款状态 未还NONE、部分还款PART、全额还款ALL
     var repay = '还款'; //还款
     switch (instalType) {
       case 'NONE':
@@ -189,14 +186,14 @@ class _RepayPlanState extends State<RepayPlanPage> {
         break;
       default:
     }
-    var instalOutstAmt = FormatUtil.formatSringToMoney(lnSchedule.instalOutstAmt); //归还金额合计
-    var principalAmt = FormatUtil.formatSringToMoney(lnSchedule.principalAmt); //本金金额
-    var interestAmt = FormatUtil.formatSringToMoney(lnSchedule.interestAmt); //利息
+    var instalOutstAmt = FormatUtil.formatSringToMoney("888"); //归还金额合计
+    var principalAmt = FormatUtil.formatSringToMoney("88"); //本金金额
+    var interestAmt = FormatUtil.formatSringToMoney("0.08"); //利息
     var amorIntAmt = ''; //罚息
-    if (lnSchedule.amorIntAmt == null) {
+    if (amorIntAmt == null) {
       amorIntAmt = '0.00';
-    }else{
-      amorIntAmt = lnSchedule.amorIntAmt;
+    } else {
+      amorIntAmt = '0.12';
     }
 
     var leftCont = Container(

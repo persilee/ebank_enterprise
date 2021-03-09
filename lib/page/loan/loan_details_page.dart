@@ -2,7 +2,6 @@
 ///贷款详情界面
 /// Author: fangluyao
 /// Date: 2020-12-03
-import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +15,25 @@ class LoanDetailsPage extends StatefulWidget {
 }
 
 class _LoanDetailsPageState extends State<LoanDetailsPage> {
+  //客户号
+  String _acNo = "50000085";
+  //机构代码
+  String _br = "81812";
+  String _loanAmt = "88888.88";
+  String _unpaidPrincipal = "88888.88";
+  String _termValue = "24";
+  String _intRate = "0.088";
+  String _restPeriods = "10";
+  String _disbDate = "2020-03-20";
+  String _maturityDate = "2020-03-20";
+  String _repaymentDay = "18";
+  String _repaymentAcNo = "6225********1235";
+
   @override
   Widget build(BuildContext context) {
-    Loan loanDetail = ModalRoute.of(context).settings.arguments;
     //判断业务状态
     var isMaturity = '';
-    switch (loanDetail.isMaturity) {
+    switch ('1') {
       case '0':
         isMaturity = S.current.installment_status1;
         break;
@@ -40,7 +52,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
     }
     //判断还款方式
     var repaymentMethod = '';
-    switch (loanDetail.repaymentMethod) {
+    switch (repaymentMethod) {
       case 'EPI':
         repaymentMethod = S.current.repayment_ways1;
         break;
@@ -61,17 +73,17 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
       child: Column(
         children: [
           //业务品种
-          _business(loanDetail.acNo, loanDetail.br, isMaturity),
+          _business(_acNo, _br, isMaturity),
           Divider(height: 0, color: HsgColors.textHintColor),
           Padding(
             padding: EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
             child: Row(
               children: [
                 //贷款金额
-                _loanMoney(S.current.loan_amount, loanDetail.loanAmt),
+                _loanMoney(S.current.loan_amount, _loanAmt),
                 _verticalMoulding(),
                 //贷款余额
-                _loanMoney(S.current.loan_balance2, loanDetail.unpaidPrincipal),
+                _loanMoney(S.current.loan_balance2, _unpaidPrincipal),
               ],
             ),
           ),
@@ -87,7 +99,6 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           //跳转到还款记录
           _jumpPage(
               pageRepayRecords,
-              loanDetail,
               Text(
                 S.current.repayment_record,
               ),
@@ -96,7 +107,6 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           //跳转到待还计划
           _jumpPage(
               pageWaitRepayPlan,
-              loanDetail,
               Text(
                 S.current.wait_repayment_plan,
               ),
@@ -113,36 +123,35 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
         children: [
           _getSingleBox(
             Text(S.current.loan_interest_rate_with_symbol),
-            Text((double.parse(loanDetail.intRate) * 100).toStringAsFixed(2) +
-                '%'),
+            Text((double.parse(_intRate) * 100).toStringAsFixed(2) + '%'),
           ),
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(
             Text(
               S.current.total_periods,
             ),
-            Text(loanDetail.termValue.toString()),
+            Text(_termValue.toString()),
           ),
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(
             Text(
               S.current.remaining_periods,
             ),
-            Text(loanDetail.restPeriods.toString()),
+            Text(_restPeriods.toString()),
           ),
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(
             Text(
               S.current.begin_date,
             ),
-            Text(loanDetail.disbDate),
+            Text(_disbDate),
           ),
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(
             Text(
               S.current.end_date,
             ),
-            Text(loanDetail.maturityDate),
+            Text(_maturityDate),
           ),
         ],
       ),
@@ -162,14 +171,14 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(
             Text(S.current.deduct_money_date),
-            Text(loanDetail.repaymentDay.toString() + S.current.day),
+            Text(_repaymentDay + S.current.day),
           ),
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(
               Text(
                 S.current.deduct_money_account,
               ),
-              Text(loanDetail.repaymentAcNo)),
+              Text(_repaymentAcNo)),
         ],
       ),
     );
@@ -261,10 +270,10 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
   }
 
   //页面跳转
-  Widget _jumpPage(String jumpPage, var transfer, Text text, Icon icon) {
+  Widget _jumpPage(String jumpPage, Text text, Icon icon) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, jumpPage, arguments: transfer);
+        Navigator.pushNamed(context, jumpPage);
       },
       child: _getSingleBox(text, icon),
     );

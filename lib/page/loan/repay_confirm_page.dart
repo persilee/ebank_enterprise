@@ -5,7 +5,6 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'package:ebank_mobile/data/source/model/post_repayment.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
@@ -110,8 +109,8 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
 
   @override
   Widget build(BuildContext context) {
-    message = ModalRoute.of(context).settings.arguments;
-    Loan loanDetail = message['LoanDetail'];
+    // message = ModalRoute.of(context).settings.arguments;
+    // Loan loanDetail = message['LoanDetail'];
     setState(() {
       message = ModalRoute.of(context).settings.arguments;
       currency = message['Currency'];
@@ -125,7 +124,7 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
           (message['LoanBalance'] - double.parse(message['RepayPrincipal']))
               .toString();
       //请求数据
-      acNo = loanDetail.acNo;
+      acNo = "50000085";
       dueAmount = '';
       instalNo = '';
       interestAmount = repayInterest;
@@ -133,7 +132,7 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
       principalAmount = repayPrincipal;
       prodCode = 'LN000008';
       refNo = '';
-      repaymentAcNo = loanDetail.repaymentAcNo;
+      repaymentAcNo = "6225********1235";
       repaymentAcType = '';
       repaymentCiName = '';
       repaymentMethod = message['RepaymentMethod'];
@@ -227,6 +226,7 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
       builder: (context) {
         return HsgPasswordDialog(
           title: S.current.input_password,
+          resultPage: pageRepaySuccess,
         );
       },
     );
@@ -243,9 +243,8 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
         .verifyTransPwdNoSms(
             VerifyTransPwdNoSmsReq(_payPassword), 'VerifyTransPwdNoSmsReq')
         .then((data) {
-          _loadData();
-        })
-        .catchError((e) {
+      // _loadData();
+    }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
   }

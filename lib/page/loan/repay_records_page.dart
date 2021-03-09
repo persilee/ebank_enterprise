@@ -53,7 +53,8 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
         });
         double tempMoney = 0;
         for (int i = 0; i < lnScheduleList.length; i++) {
-          if (lnScheduleList[i].instalType == 'PART'||lnScheduleList[i].instalType == 'ALL') {
+          if (lnScheduleList[i].instalType == 'PART' ||
+              lnScheduleList[i].instalType == 'ALL') {
             tempMoney += double.parse(lnScheduleList[i].instalOutstAmt);
           }
         }
@@ -66,9 +67,9 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
 
   @override
   Widget build(BuildContext context) {
-    Loan loanDetail = ModalRoute.of(context).settings.arguments;
+    // Loan loanDetail = ModalRoute.of(context).settings.arguments;
     setState(() {
-      acNo = loanDetail.acNo;
+      acNo = "50000085";
       page = "1";
       pageSize = "1000";
       repaymentStatus = "";
@@ -115,7 +116,8 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
     print(lnScheduleList.length);
     //按日期降序排序
     for (int i = lnScheduleList.length - 1; i >= 0; i--) {
-      if (lnScheduleList[i].instalType == 'PART'||lnScheduleList[i].instalType == 'ALL') {
+      if (lnScheduleList[i].instalType == 'PART' ||
+          lnScheduleList[i].instalType == 'ALL') {
         _list.add(getListViewBuilder(_getContent(lnScheduleList[i])));
       }
     }
@@ -195,9 +197,12 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
         break;
       default:
     }
-    var instalOutstAmt = FormatUtil.formatSringToMoney(lnSchedule.instalOutstAmt); //归还金额合计
-    var principalAmt = FormatUtil.formatSringToMoney(lnSchedule.principalAmt); //本金金额
-    var interestAmt = FormatUtil.formatSringToMoney(lnSchedule.interestAmt); //利息
+    var instalOutstAmt =
+        FormatUtil.formatSringToMoney(lnSchedule.instalOutstAmt); //归还金额合计
+    var principalAmt =
+        FormatUtil.formatSringToMoney(lnSchedule.principalAmt); //本金金额
+    var interestAmt =
+        FormatUtil.formatSringToMoney(lnSchedule.interestAmt); //利息
 
     var leftCont = Container(
       width: 66,
