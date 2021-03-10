@@ -907,17 +907,18 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //交易密码窗口
   void _openBottomSheet() async {
-    passwordList = await showHsgBottomSheet(
+    final passwordList = await showHsgBottomSheet(
       context: context,
       builder: (context) {
         return HsgPasswordDialog(
           title: S.current.input_password,
           resultPage: pageDepositRecordSucceed,
           arguments: 'international',
+          isDialog: true,
         );
       },
     );
-    if (passwordList != null) {
+    if (passwordList != null && passwordList == true) {
       if (passwordList.length == 6) {
         //   _tranferInternational(context);
         _showContractSucceedPage(context);

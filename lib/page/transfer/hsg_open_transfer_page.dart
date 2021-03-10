@@ -725,11 +725,13 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             title: S.current.input_password,
             resultPage: pageDepositRecordSucceed,
             arguments: 'advanceTransfer',
+            //isDialog: true,
           );
         });
     if (isPassword != null && isPassword == true) {
       _addTransferPlan();
-      Navigator.pushNamed(context, pageDepositRecordSucceed);
+      Navigator.pushNamed(context, pageDepositRecordSucceed,
+          arguments: "advanceTransfer");
     }
   }
 
