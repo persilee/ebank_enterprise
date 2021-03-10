@@ -1,5 +1,5 @@
 /**
-  @desc   重置支付密码
+  @desc   重置交易密码
   @author hlx
  */
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -15,6 +15,7 @@ class SetPayPage extends StatefulWidget {
 
 //表单状态
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
 class _SetPayPageState extends State<SetPayPage> {
   TextEditingController _newPwd = TextEditingController();
   TextEditingController _confimPwd = TextEditingController();
@@ -24,7 +25,7 @@ class _SetPayPageState extends State<SetPayPage> {
     return new Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).resetPayPsd),
-          elevation: 15.0,
+          elevation: 0,
         ),
         body: Container(
           color: HsgColors.commonBackground,
@@ -80,7 +81,8 @@ class _SetPayPageState extends State<SetPayPage> {
               )),
         ));
   }
-bool _submit() {
+
+  bool _submit() {
     if (_newPwd.text != '' && _confimPwd.text != '') {
       return true;
     } else {
@@ -88,7 +90,7 @@ bool _submit() {
     }
   }
 
- //提交按钮
+  //提交按钮
   _submitData() async {
     if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differentPwd);
@@ -113,6 +115,7 @@ bool _submit() {
     }
   }
 }
+
 //封装一行
 class InputList extends StatelessWidget {
   InputList(this.labText, this.placeholderText, this.inputValue);

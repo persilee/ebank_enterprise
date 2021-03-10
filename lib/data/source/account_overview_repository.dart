@@ -4,9 +4,17 @@
 /// Date: 2020-12-07
 
 import 'package:ebank_mobile/http/hsg_http.dart';
+import 'model/account_overview_all_data.dart';
 import 'model/get_account_overview_info.dart';
 
 class AccountOverviewRepository {
+  // 根据UserID获取用户多张卡余额（欧亚修改的账户总览接口）
+  Future<AccOverviewDataResp> getCardListBalById(
+      AccOverviewDataReq req, String tag) {
+    return request('cust/bankcard/getCardListBalByUser', req, tag,
+        (data) => AccOverviewDataResp.fromJson(data));
+  }
+
   // 总资产
   Future<GetTotalAssetsResp> getTotalAssets(GetTotalAssetsReq req, String tag) {
     return request('ddep/revenue/getTotalAssets', req, tag,

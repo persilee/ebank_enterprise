@@ -1,5 +1,5 @@
 ///
-///@desc   修改支付密码
+///@desc   修改交易密码
 ///@author hlx
 ///
 import 'dart:async';
@@ -47,7 +47,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
     return new Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).setPayPwd),
-          elevation: 15.0,
+          elevation: 0,
         ),
         body: Container(
           color: HsgColors.commonBackground,

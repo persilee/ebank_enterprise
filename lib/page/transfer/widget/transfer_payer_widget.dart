@@ -208,6 +208,8 @@ Widget _threeRowRight(
       _changedAccountTitle == '' ? cardCodeOne : _changedAccountTitle;
   _changedRateTitle = _changedRateTitle == '' ? balance : _changedRateTitle;
   _changedCcyTitles = _changedCcyTitles == '' ? ccy : _changedCcyTitles;
+  // _changedRateTitle = _changedRateTitle;
+  // _changedCcyTitles = _changedCcyTitles;
   String account = FormatUtil.formatSpace4('$_changedAccountTitle');
   var _getAccount = [
     Container(
@@ -238,7 +240,7 @@ Widget _threeRowRight(
       onTap: () {
         getcardList();
         //选择卡号
-        getCardTotals(_changedAccountTitle);
+        //  getCardTotals(_changedAccountTitle);
         print('选择账号');
       },
       child: Column(

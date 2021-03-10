@@ -49,7 +49,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     return new Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).setChangLoginPasd),
-          elevation: 15.0,
+          elevation: 0,
         ),
         body: Container(
           color: HsgColors.commonBackground,

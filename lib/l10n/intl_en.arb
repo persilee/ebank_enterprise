@@ -419,7 +419,9 @@
   "field_dialog_phone_number": "Mobile phone no.",
   "field_dialog_title": "security code check",
   "field_dialog_cancel": "cancel",
-  "field_dialog_confirm": "confirm"
- 
+  "field_dialog_confirm": "confirm",
+
+  "password_management":"Password Management"
+
  }
   

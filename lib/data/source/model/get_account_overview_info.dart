@@ -101,9 +101,17 @@ class GetCardListBalByUserResp extends Object {
   String totalAmt;
   @JsonKey(name: 'defaultCcy')
   String defaultCcy;
+  @JsonKey(name: 'ddTotalAmt')
+  String ddTotalAmt;
+  @JsonKey(name: 'tdTotalAmt')
+  String tdTotalAmt;
 
   GetCardListBalByUserResp(
     this.cardListBal,
+    this.totalAmt,
+    this.defaultCcy,
+    this.ddTotalAmt,
+    this.tdTotalAmt,
   );
 
   @override

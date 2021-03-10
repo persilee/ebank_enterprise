@@ -91,28 +91,28 @@ class _MinePageState extends State<MinePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
-              icon: Image(
-                image: AssetImage('images/home/navIcon/home_nav_service.png'),
-                width: 18.5,
-                height: 18.5,
-              ),
-              onPressed: () {
-                print('联系客服');
-                Navigator.pushNamed(context, pageContactCustomer);
-              },
-            ),
-            IconButton(
-              icon: Image(
-                image:
-                    AssetImage('images/home/navIcon/home_nav_message_has.png'),
-                width: 18.5,
-                height: 18.5,
-              ),
-              onPressed: () {
-                print('消息');
-              },
-            ),
+            // IconButton(
+            //   icon: Image(
+            //     image: AssetImage('images/home/navIcon/home_nav_service.png'),
+            //     width: 18.5,
+            //     height: 18.5,
+            //   ),
+            //   onPressed: () {
+            //     print('联系客服');
+            //     Navigator.pushNamed(context, pageContactCustomer);
+            //   },
+            // ),
+            // IconButton(
+            //   icon: Image(
+            //     image:
+            //         AssetImage('images/home/navIcon/home_nav_message_has.png'),
+            //     width: 18.5,
+            //     height: 18.5,
+            //   ),
+            //   onPressed: () {
+            //     print('消息');
+            //   },
+            // ),
             Expanded(
               child: Container(
                 alignment: Alignment.center,
@@ -163,21 +163,21 @@ class _MinePageState extends State<MinePage> {
 
   /// 中间内容的内容
   Widget _mineContendView(context) {
-    ///指纹登录开关单元widget
-    Widget touchIDUnitW = _switchUnitWidget(
-        S.of(context).fingerprintLogin, _switchZhiWen, true, (bool value) {
-      setState(() {
-        _switchZhiWen = value;
-      });
-    });
+    // ///指纹登录开关单元widget
+    // Widget touchIDUnitW = _switchUnitWidget(
+    //     S.of(context).fingerprintLogin, _switchZhiWen, true, (bool value) {
+    //   setState(() {
+    //     _switchZhiWen = value;
+    //   });
+    // });
 
-    ///人脸登录开关单元widget
-    Widget faceIDUintW = _switchUnitWidget(
-        S.of(context).faceIdlogin, _switchFaceId, true, (bool value) {
-      setState(() {
-        _switchFaceId = value;
-      });
-    });
+    // ///人脸登录开关单元widget
+    // Widget faceIDUintW = _switchUnitWidget(
+    //     S.of(context).faceIdlogin, _switchFaceId, true, (bool value) {
+    //   setState(() {
+    //     _switchFaceId = value;
+    //   });
+    // });
 
     return Container(
       child: Column(
@@ -193,7 +193,6 @@ class _MinePageState extends State<MinePage> {
 //              ],
 //            ),
 //          ),
-          //修改登录密码
           Container(
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.only(bottom: 16),
@@ -201,14 +200,11 @@ class _MinePageState extends State<MinePage> {
             // padding: EdgeInsets.only(left: 20, right: 20),
             child: Column(
               children: [
-                _flatBtnNuitWidget(S.of(context).resetLoginPsw, true, () {
-                  Navigator.pushNamed(context, changeLgPs);
+                _flatBtnNuitWidget(S.of(context).my_account, true, () {
+                  Navigator.pushNamed(context, pageCardList);
                 }),
-                _flatBtnNuitWidget(S.of(context).changPayPws, true, () {
-                  Navigator.pushNamed(context, changePayPS);
-                }),
-                _flatBtnNuitWidget(S.of(context).resetPayPwd, true, () {
-                  Navigator.pushNamed(context, iDcardVerification);
+                _flatBtnNuitWidget('密码管理', true, () {
+                  Navigator.pushNamed(context, pagePasswordManagement);
                 }),
               ],
             ),
@@ -224,25 +220,28 @@ class _MinePageState extends State<MinePage> {
                 _flatBtnNuitWidget(S.of(context).feedback, true, () {
                   Navigator.pushNamed(context, feedback);
                 }),
+                _flatBtnNuitWidget(S.of(context).customer_service, true, () {
+                  Navigator.pushNamed(context, pageContactCustomer);
+                }),
                 _flatBtnNuitWidget(S.of(context).aboutUs, true, () {
                   Navigator.pushNamed(context, aboutUs);
                 }),
               ],
             ),
           ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(bottom: 16),
-            color: Colors.white,
-            // padding: EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              children: [
-                _flatBtnNuitWidget('签里眼面签相关', true, () {
-                  Navigator.pushNamed(context, pageQianliyanDemo);
-                }),
-              ],
-            ),
-          ),
+          // Container(
+          //   width: MediaQuery.of(context).size.width,
+          //   margin: EdgeInsets.only(bottom: 16),
+          //   color: Colors.white,
+          //   // padding: EdgeInsets.only(left: 20, right: 20),
+          //   child: Column(
+          //     children: [
+          //       _flatBtnNuitWidget('签里眼面签相关', true, () {
+          //         Navigator.pushNamed(context, pageQianliyanDemo);
+          //       }),
+          //     ],
+          //   ),
+          // ),
           //退出按钮
           Container(
             height: 50,
@@ -264,17 +263,17 @@ class _MinePageState extends State<MinePage> {
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: Row(
-              children: [_version(), _checkUserPhone()],
-            ),
-          ),
-          Container(
-            child: Row(
-              children: [_smsRegister(), _registerByAccountBtn()],
-            ),
-          ),
+          // Container(
+          //   margin: EdgeInsets.only(bottom: 10),
+          //   child: Row(
+          //     children: [_version(), _checkUserPhone()],
+          //   ),
+          // ),
+          // Container(
+          //   child: Row(
+          //     children: [_smsRegister(), _registerByAccountBtn()],
+          //   ),
+          // ),
           Container(
             height: 15,
           ),
@@ -283,52 +282,52 @@ class _MinePageState extends State<MinePage> {
     );
   }
 
-  ///右侧switchp选项的单元widget
-  Widget _switchUnitWidget(String textString, bool switchValue, bool isShowLine,
-      Function(bool value) onChangedF) {
-    Widget switchUnitW;
-    switchUnitW = Container(
-      child: Column(
-        children: [
-          Container(
-            height: 50.0,
-            padding: EdgeInsets.only(left: 15, right: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  textString,
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black,
-                  ),
-                ),
-                CupertinoSwitch(
-                  activeColor: HsgColors.theme,
-                  value: switchValue,
-                  onChanged: (value) {
-                    //重新构建页面
-                    onChangedF(value);
-                  },
-                ),
-              ],
-            ),
-          ),
-          isShowLine
-              ? Container(
-                  padding: EdgeInsets.only(left: 15, right: 15),
-                  child: Divider(
-                      height: 1,
-                      color: HsgColors.divider,
-                      indent: 3,
-                      endIndent: 3),
-                )
-              : Container(),
-        ],
-      ),
-    );
-    return switchUnitW;
-  }
+  // ///右侧switchp选项的单元widget
+  // Widget _switchUnitWidget(String textString, bool switchValue, bool isShowLine,
+  //     Function(bool value) onChangedF) {
+  //   Widget switchUnitW;
+  //   switchUnitW = Container(
+  //     child: Column(
+  //       children: [
+  //         Container(
+  //           height: 50.0,
+  //           padding: EdgeInsets.only(left: 15, right: 15),
+  //           child: Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: [
+  //               Text(
+  //                 textString,
+  //                 style: TextStyle(
+  //                   fontSize: 15,
+  //                   color: Colors.black,
+  //                 ),
+  //               ),
+  //               CupertinoSwitch(
+  //                 activeColor: HsgColors.theme,
+  //                 value: switchValue,
+  //                 onChanged: (value) {
+  //                   //重新构建页面
+  //                   onChangedF(value);
+  //                 },
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         isShowLine
+  //             ? Container(
+  //                 padding: EdgeInsets.only(left: 15, right: 15),
+  //                 child: Divider(
+  //                     height: 1,
+  //                     color: HsgColors.divider,
+  //                     indent: 3,
+  //                     endIndent: 3),
+  //               )
+  //             : Container(),
+  //       ],
+  //     ),
+  //   );
+  //   return switchUnitW;
+  // }
 
   ///按钮单元格，左文字，有箭头图标
   Widget _flatBtnNuitWidget(

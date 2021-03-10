@@ -283,7 +283,7 @@ class _TransferPageState extends State<TransferPage> {
         ),
         //国际转账
         onPressed: () {
-          Navigator.pushNamed(context, pageInternational);
+          Navigator.pushNamed(context, pageTrasferInternational);
         },
       ),
     );

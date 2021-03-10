@@ -44,6 +44,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   var totalBalance = '0.0';
 
   var bals = [];
+
   var cardNo = '';
   var singleLimit = '';
 
@@ -61,7 +62,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   var ccyListOne = List<String>();
 
-  var ccyList = List();
+  var ccyList = List<String>();
 
   List<String> ccyLists = [];
 
@@ -80,6 +81,10 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   String _changedAccountTitle = '';
 
   //余额
+  var _currBal;
+
+  var _loacalCurrBal = '';
+
   String _changedRateTitle = '';
 
   String _changedCcyTitle = '';
@@ -91,7 +96,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //国家/地区
   List<String> countryList = ['中国', '中国香港'];
   //转账费用
-  List<String> transferFeeList = ['收款人支付', '本人支付', '各付各行'];
+  List<String> transferFeeList = ['收款人交易', '本人交易', '各付各行'];
   //汇款用途
   List<String> feeUse = [
     '贷款',
@@ -108,7 +113,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     '房地产投资',
     '其他',
   ];
-  List<String> ccyListPlay = ['CNY', 'HKD', 'EUR'];
+  //List<String> ccyListPlay = ['CNY', 'HKD', 'EUR'];
 
   var _countryText = S.current.please_select;
 
@@ -117,8 +122,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   var _feeUse = S.current.please_select;
 
   // var _payeeBank = S.current.please_select;
-
-  int groupValue = 0;
 
   var bankSwift = '';
 
@@ -134,7 +137,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   var payeeNameForSelects;
 
-  var accountSelect = '';
+  var _accountSelect = '';
 
   var payeeBank = '';
 
@@ -182,6 +185,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //付款方地址
   _addressChange(String address) {
     payerAddress = address;
+    print(">>>>>>>> $payerAddress");
   }
 
   //收款方地址
@@ -224,7 +228,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         context: context,
         builder: (context) {
           return HsgBottomSingleChoice(
-            title: '银行卡号',
+            title: S.current.account_lsit,
             items: cardNoList,
             lastSelectedPosition: _position,
           );
@@ -252,42 +256,44 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       value.forEach((element) {
         // 通过卡号查询余额
         if (element is GetSingleCardBalResp) {
-          setState(() {
-            bals.clear();
-            bals.addAll(element.cardListBal);
-            ccyLists.clear();
-            //通过卡号查询货币
-            //获取集合
-            List<CardBalBean> dataList = [];
-
-            for (int i = 0; i < cardBal.length; i++) {
-              CardBalBean doList = cardBal[i];
-              ccyLists.add(doList.ccy);
-
-              if (!ccyLists.contains('CNY')) {
-                CardBalBean doListNew;
-                cardBal.insert(0, doListNew);
-              }
-            }
-
-            if (!ccyLists.contains('CNY')) {
-              CardBalBean doListNew;
-              dataList.insert(0, doListNew);
-            }
-
-            dataList.forEach((element) {
-              String ccyCNY = element == null ? 'CNY' : element.ccy;
-              ccyList.add(ccyCNY);
-              String avaBAL = element == null ? '0.00' : element.avaBal;
-              totalBalances.add(avaBAL);
-            });
-            // ccyList.add(ccyLists);
-
-            // 添加余额
-            element.cardListBal.forEach((bals) {
-              totalBalances.add(bals.avaBal);
-            });
+          ccyLists.clear();
+          ccyList.clear();
+          _currBal = '';
+          _position = 0;
+          element.cardListBal.forEach((bals) {
+            totalBalances.add(bals.avaBal);
           });
+          // var cardListB = new List();
+          element.cardListBal.forEach((cardBalBean) {
+            if (cardBalBean.ccy != '') {
+              ccyList.add(cardBalBean.ccy);
+            }
+            if (_changedCcyTitle == cardBalBean.ccy) {
+              _currBal = cardBalBean.currBal.toString();
+            }
+            print('777777 $ccyList');
+          });
+          if (ccyList.length > 1) {
+            if (_changedCcyTitle == 'USD') {
+              _position = 2;
+            } else if (_changedCcyTitle == 'CNY') {
+              _position = 0;
+            }
+          } else {
+            _position = 0;
+          }
+          if (_changedCcyTitle != 'USD' &&
+              ccyList.length < 3 &&
+              ccyList.length > 0) {
+            _changedCcyTitle = 'USD';
+            _currBal = _loacalCurrBal;
+          }
+          if (element.cardListBal.length == 0) {
+            _currBal = '';
+            _changedCcyTitle = 'CNY';
+            ccyList.add('CNY');
+            _position = 0;
+          }
         }
         //查询额度
         else if (element is GetCardLimitByCardNoResp) {
@@ -306,26 +312,24 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         builder: (context) {
           return HsgSingleChoiceDialog(
             title: S.of(context).currency_choice,
-            items: ccyListPlay,
-            // ccyLists,
+            items: //ccyListPlay,
+                ccyList,
             positiveButton: S.of(context).confirm,
             negativeButton: S.of(context).cancel,
-            lastSelectedPosition: groupValue,
+            lastSelectedPosition: _position,
           );
         });
 
     if (result != null && result != false) {
       //货币种类
-      // _changedCcyTitle = ccyList[result];
-      groupValue = result;
-      _changedCcyTitle = ccyListPlay[result];
-      // //余额
-      // _changedRateTitle = totalBalances[result];
+      setState(() {
+        _position = result;
+        _changedCcyTitle = ccyList[_position];
+      });
+      //余额
+      //  _changedRateTitle = totalBalances[result];
+      _getCardTotals(_changedAccountTitle);
     }
-
-    setState(() {
-      _position = result;
-    });
   }
 
   //选择国家地区
@@ -449,7 +453,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               context,
               _limitMoney,
               _changedCcyTitle,
-              _changedRateTitle,
+              _currBal,
               _changedAccountTitle,
               ccy,
               singleLimit,
@@ -486,7 +490,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           transferPayeeWidget(
               payeeCardNo,
               payeeName,
-              accountSelect,
+              _accountSelect,
               payeeNameForSelects,
               _getImage,
               context,
@@ -800,6 +804,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
   }
 
+  //默认初始货币和余额
   _getCardTotal(String cardNo) {
     Future.wait({
       CardDataRepository().getCardBalByCardNo(
@@ -812,12 +817,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         if (element is GetSingleCardBalResp) {
           setState(() {
             //余额
-            totalBalance = element.cardListBal[0].avaBal;
-            ccy = element.cardListBal[0].ccy;
-
             element.cardListBal.forEach((element) {
               ccyListOne.clear();
               ccyListOne.add(element.ccy);
+              if (element.ccy == 'USD') {
+                _currBal = element.currBal;
+                _changedCcyTitle = 'USD';
+                _loacalCurrBal = _currBal;
+              }
             });
           });
         }
@@ -832,8 +839,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
   }
 
-  void _tranferInternational(BuildContext context) {
-    setState(() {});
+  _tranferInternational(BuildContext context) {
     HSProgressHUD.show();
     TransferDataRepository()
         .getInterNationalTransfer(
@@ -863,27 +869,26 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       HSProgressHUD.dismiss();
       _showContractSucceedPage(context);
     }).catchError((e) {
-      setState(() {});
       HSProgressHUD.showError(status: '${e.toString()}');
     });
   }
 
   //结算成功-跳转页面
   _showContractSucceedPage(BuildContext context) async {
-    setState(() {});
-    Navigator.pushNamed(context, pageDepositRecordSucceed);
+    Navigator.pushNamed(context, pageDepositRecordSucceed,
+        arguments: 'international');
   }
 
   //判断是否可以点击
   _isClick() {
     if (money > 0 &&
-        payeeName.length > 0 &&
-        payeeCardNo.length > 0 &&
-        payerAddress.length > 0 &&
+        _payeeAddressController.text.length > 0 &&
+        _companyController.text.length > 0 &&
+        _accountController.text.length > 0 &&
         _countryText != S.current.please_select &&
         _getPayeeBank != S.current.please_select &&
         _bankSwiftController.text.length > 0 &&
-        payeeAddress.length > 0 &&
+        _payerAddressController.text.length > 0 &&
         _transferFee != S.current.please_select &&
         _feeUse != S.current.please_select) {
       return () {
@@ -903,12 +908,15 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       builder: (context) {
         return HsgPasswordDialog(
           title: S.current.input_password,
+          resultPage: pageDepositRecordSucceed,
+          arguments: 'international',
         );
       },
     );
     if (passwordList != null) {
       if (passwordList.length == 6) {
-        _tranferInternational(context);
+        //   _tranferInternational(context);
+        _showContractSucceedPage(context);
         _cleanData();
       }
     }

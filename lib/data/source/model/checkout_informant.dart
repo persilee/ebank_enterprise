@@ -1,5 +1,5 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-/// desc: 重置支付密码--身份证验证
+/// desc: 重置交易密码--身份证验证
 /// Author: hlx
 /// Date: 2021-01-06
 
@@ -15,7 +15,7 @@ class CheckoutInformantReq {
   String cardNo;
   @JsonKey(name: 'certType') //证件类型
   String certType;
-   @JsonKey(name: 'phoneNo')
+  @JsonKey(name: 'phoneNo')
   String phoneNo;
   @JsonKey(name: 'realName')
   String realName;
@@ -24,15 +24,8 @@ class CheckoutInformantReq {
   @JsonKey(name: 'payPassword')
   String payPassword;
 
-  CheckoutInformantReq(
-    this.certNo,
-    this.cardNo,
-    this.certType,
-    this.phoneNo,
-    this.realName,
-    this.smsCode,
-    this.payPassword
-  );
+  CheckoutInformantReq(this.certNo, this.cardNo, this.certType, this.phoneNo,
+      this.realName, this.smsCode, this.payPassword);
 
   @override
   String toString() {

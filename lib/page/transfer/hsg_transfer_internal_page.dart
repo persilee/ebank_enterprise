@@ -3,7 +3,7 @@
 /// Author: lijiawei
 /// Date: 2020-12-09
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/forex_trading.dart';
+
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
@@ -42,7 +42,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   var totalBalance = '0.0';
 
-  var bals = [];
   var cardNo = '';
   var singleLimit = '';
 
@@ -62,7 +61,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   var ccyListOne = List<String>();
 
-  var ccyList = List<String>();
+  var ccyList = ['USD'];
 
   var _currBal;
 
@@ -89,7 +88,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   int _position = 0;
 
-  int _lastSelectedPosition = -1;
+  int _accountIndex = 0;
 
   String _limitMoney = '';
 
@@ -105,9 +104,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   var accountSelect = '';
 
+  var _loacalCurrBal = '';
+
   List<String> passwordList = []; //密码列表
 
-  //支付密码
+  //交易密码
 
   var check = false;
 
@@ -146,7 +147,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     remark = transfer;
   }
 
-  //选择账号方法
+  //选择账号弹窗
   _selectAccount() async {
     final result = await showHsgBottomSheet(
         context: context,
@@ -154,17 +155,19 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           return HsgBottomSingleChoice(
             title: S.current.account_lsit,
             items: cardNoList,
-            lastSelectedPosition: _position,
+            lastSelectedPosition: _accountIndex,
           );
         });
     if (result != null && result != false) {
-      _changedAccountTitle = cardNoList[result];
+      setState(() {
+        _accountIndex = result;
+        _changedAccountTitle = cardNoList[_accountIndex];
+      });
+      _getCardTotals(_changedAccountTitle);
     }
-    setState(() {
-      _position = result;
-    });
   }
 
+  //选择货币
   _getCardTotals(String _changedAccountTitle) {
     Future.wait({
       CardDataRepository().getCardBalByCardNo(
@@ -177,40 +180,47 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         // 通过卡号查询余额
         setState(() {
           if (element is GetSingleCardBalResp) {
-            setState(() {
-              bals.clear();
-
-              ccyLists.clear();
-
-              element.cardListBal.forEach((bals) {
-                totalBalances.add(bals.avaBal);
-              });
-
-              var cardListB = new List();
-              element.cardListBal.forEach((cardBalBean) {
-                if (cardBalBean.ccy != '') {
-                  cardListB.add(cardBalBean);
-                }
-              });
-              bool isBenBi = false;
-              for (int j = 0; j < cardListB.length; j++) {
-                if (cardListB[j].ccy == 'USD') {
-                  isBenBi = true;
-                }
-                if (isBenBi == false) {
-                  cardListB.insert(0, cardListB[j]);
-                }
-                _currBal = cardListB[j].currBal;
-                ccyList.clear();
-                ccyList.add(cardListB[j].ccy);
+            ccyLists.clear();
+            ccyList.clear();
+            _currBal = '';
+            _position = 0;
+            element.cardListBal.forEach((bals) {
+              totalBalances.add(bals.avaBal);
+            });
+            // var cardListB = new List();
+            element.cardListBal.forEach((cardBalBean) {
+              if (cardBalBean.ccy != '') {
+                ccyList.add(cardBalBean.ccy);
+              }
+              if (_changedCcyTitle == cardBalBean.ccy) {
+                _currBal = cardBalBean.currBal.toString();
               }
             });
+            if (ccyList.length > 1) {
+              if (_changedCcyTitle == 'USD') {
+                _position = 2;
+              } else if (_changedCcyTitle == 'CNY') {
+                _position = 0;
+              }
+            } else {
+              _position = 0;
+            }
+            if (_changedCcyTitle != 'USD' &&
+                ccyList.length < 3 &&
+                ccyList.length > 0) {
+              _changedCcyTitle = 'USD';
+              _currBal = _loacalCurrBal;
+            }
+            if (element.cardListBal.length == 0) {
+              _currBal = '';
+              _changedCcyTitle = 'CNY';
+              ccyList.add('CNY');
+              _position = 0;
+            }
           }
           //查询限额
           else if (element is GetCardLimitByCardNoResp) {
-            setState(() {
-              _limitMoney = element.singleLimit;
-            });
+            _limitMoney = element.singleLimit;
           }
         });
       });
@@ -225,22 +235,21 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           return HsgSingleChoiceDialog(
             title: S.current.currency_choice,
             items: ccyList,
-            positiveButton: '确定',
-            negativeButton: '取消',
-            lastSelectedPosition: _lastSelectedPosition,
+            positiveButton: S.current.confirm,
+            negativeButton: S.current.cancel,
+            lastSelectedPosition: _position,
           );
         });
 
     if (result != null && result != false) {
       //货币种类
-      _changedCcyTitle = ccyList[result];
+      setState(() {
+        _position = result;
+        _changedCcyTitle = ccyList[_position];
+      });
       //余额
-      //  _changedRateTitle = totalBalances[result];
+      _getCardTotals(_changedAccountTitle);
     }
-
-    setState(() {
-      _position = result;
-    });
   }
 
   @override
@@ -338,7 +347,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     );
   }
 
-  //拿到默认卡号
+  //默认初始卡号
   _loadTransferData() {
     Future.wait({
       CardDataRepository().getCardList('GetCardList'),
@@ -365,7 +374,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     });
   }
 
-  //默认显示货币和余额
+  //默认初始货币和余额
   _getCardTotal(String cardNo) {
     Future.wait({
       CardDataRepository().getCardBalByCardNo(
@@ -378,11 +387,14 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         if (element is GetSingleCardBalResp) {
           setState(() {
             //余额
-            totalBalance = element.cardListBal[0].currBal;
-            ccy = element.cardListBal[0].ccy;
             element.cardListBal.forEach((element) {
               ccyListOne.clear();
               ccyListOne.add(element.ccy);
+              if (element.ccy == 'USD') {
+                _currBal = element.currBal;
+                _changedCcyTitle = 'USD';
+                _loacalCurrBal = _currBal;
+              }
             });
           });
         }
@@ -399,7 +411,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   //获取验证码接口
   _getVerificationCode() async {
-    RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
+    // RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
     // if (characters.hasMatch('123456') == false) {
     //   // HSProgressHUD.showInfo(status: S.current.format_mobile_error);
     // } else {
@@ -454,9 +466,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               'getTransferByAccount')
           .then((value) {
         HSProgressHUD.dismiss();
-        _showContractSucceedPage(context);
       }).catchError((e) {
-        setState(() {});
         HSProgressHUD.showError(status: '${e.toString()}');
       });
     });
@@ -486,11 +496,15 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       builder: (context) {
         return HsgPasswordDialog(
           title: S.current.input_password,
+          resultPage: pageDepositRecordSucceed,
+          arguments: '0',
         );
       },
     );
     if (passwordList != null && passwordList == true) {
       if (passwordList.length == 6) {
+        //_tranferAccount(context);
+        _showContractSucceedPage(context);
         _clean();
       }
     }
