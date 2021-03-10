@@ -77,7 +77,10 @@ class _DetailListPageState extends State<DetailListPage> {
         centerTitle: true,
         // elevation: 0,
       ),
-      body: Column(
+      body:
+          // RefreshIndicator(
+          // child:
+          Column(
         children: [
           Container(
             height: 40,
@@ -95,6 +98,13 @@ class _DetailListPageState extends State<DetailListPage> {
           ),
         ],
       ),
+      //   onRefresh: _getListNetworkData(),
+      // )
+      // // ignore: missing_return
+      // onRefresh: () {
+      //   _page = 1;
+      //   _getRevenueByCards(_startDate, _allAccNoList);
+      // }),
     );
   }
 
@@ -358,6 +368,11 @@ class _DetailListPageState extends State<DetailListPage> {
             _transferHistoryList.clear();
           });
           Navigator.of(context).pop();
+          if (_position != 0) {
+            _getRevenueByCards(_startDate, _accNoList);
+          } else {
+            _getRevenueByCards(_startDate, _allAccNoList);
+          }
 //        Navigator.of(context).pop(_loadData());
         },
       ),
@@ -396,7 +411,8 @@ class _DetailListPageState extends State<DetailListPage> {
           ],
         ),
         onPressed: () {
-//        _timePicker(i, popcontext);
+          // _cupertinoPicker();
+          _timePicker(i, popcontext);
         },
       ),
     );
@@ -606,6 +622,44 @@ class _DetailListPageState extends State<DetailListPage> {
     );
   }
 
+  //时间选择器弹窗
+  _timePicker(int i, BuildContext popcontext) {
+    DatePicker.showDatePicker(
+      context,
+      pickerTheme: DateTimePickerTheme(
+        showTitle: true,
+        confirm: Text(
+          intl.S.current.confirm,
+          style: TRANSFER_RECORD_TIME_PICKER_TEXT_STYLE,
+        ),
+        cancel: Text(
+          intl.S.current.cancel,
+          style: TRANSFER_RECORD_TIME_PICKER_TEXT_STYLE,
+        ),
+      ),
+      minDateTime: DateTime.parse('1900-01-01'),
+      maxDateTime: DateTime.now(),
+      initialDateTime: i == 0
+          ? DateTime.parse(_startDate)
+          : DateTime.parse(_endDate), //DateTime.now(),
+      dateFormat: 'yyyy-MM-dd',
+      locale: DateTimePickerLocale.zh_cn,
+      //确定
+      onConfirm: (dateTime, List<int> index) {
+        setState(() {
+          if (i == 0) {
+            _start = formatDate(dateTime, [yyyy, mm, dd]);
+            _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(dateTime);
+          } else {
+            _end = formatDate(dateTime, [yyyy, mm, dd]);
+            _endDate = DateFormat('yyyy-MM-dd 23:59:59').format(dateTime);
+          }
+        });
+        (popcontext as Element).markNeedsBuild();
+      },
+    );
+  }
+
   //账户选择
   void _accountList() async {
     final result = await showHsgBottomSheet(
@@ -641,6 +695,11 @@ class _DetailListPageState extends State<DetailListPage> {
     Navigator.pushNamed(context, pageDetailInfo, arguments: ddFinHist);
   }
 
+  // _getListNetworkData() {
+  //   _page = 1;
+  //   // _getRevenueByCards(_startDate, _allAccNoList);
+  // }
+
   _getRevenueByCards(String localDateStart, List<String> cards) async {
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
@@ -649,7 +708,7 @@ class _DetailListPageState extends State<DetailListPage> {
     PayCollectDetailRepository()
         .getRevenueByCards(
             GetRevenueByCardsReq(
-              localDateStart: localDateStart,
+              localDateStart: '2021-01-01', //localDateStart,
               page: '1',
               pageSize: '10',
               ciNo: custID,
