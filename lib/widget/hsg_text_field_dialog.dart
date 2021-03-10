@@ -2,24 +2,30 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class HsgTextFieldDialog extends StatelessWidget {
-
   final String phoneNum;
   final TextEditingController editingController;
   final ValueChanged<String> onChanged;
   final VoidCallback confirmCallback;
   final VoidCallback sendCallback;
 
-  const HsgTextFieldDialog({Key key, this.phoneNum='134****2356', @required this.editingController, this.onChanged, this.confirmCallback, this.sendCallback}) : super(key: key);
+  const HsgTextFieldDialog(
+      {Key key,
+      this.phoneNum = '134****2356',
+      @required this.editingController,
+      this.onChanged,
+      this.confirmCallback,
+      this.sendCallback})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var field_dialog_confirm;
     return SimpleDialog(
       contentPadding: EdgeInsets.only(bottom: 0),
       title: Center(
         child: Text(
           S.current.field_dialog_title,
-          style: TextStyle(
-              fontSize: 14.0, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
         ),
       ),
       children: <Widget>[
@@ -34,14 +40,12 @@ class HsgTextFieldDialog extends StatelessWidget {
                 children: [
                   Text(
                     S.current.field_dialog_phone_number,
-                    style: TextStyle(
-                        fontSize: 14.0, color: Colors.black38),
+                    style: TextStyle(fontSize: 14.0, color: Colors.black38),
                   ),
                   Padding(padding: EdgeInsets.only(right: 10)),
                   Text(
                     this.phoneNum,
-                    style: TextStyle(
-                        fontSize: 14.0, color: Colors.black38),
+                    style: TextStyle(fontSize: 14.0, color: Colors.black38),
                   ),
                 ],
               ),
@@ -51,10 +55,8 @@ class HsgTextFieldDialog extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(
-                      color: Colors.grey.withOpacity(0.6),
-                      width: 1.0),
-                  borderRadius:
-                  BorderRadius.all(Radius.circular(6)),
+                      color: Colors.grey.withOpacity(0.6), width: 1.0),
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -92,8 +94,7 @@ class HsgTextFieldDialog extends StatelessWidget {
                         onPressed: this.sendCallback,
                         child: Text(
                           S.current.field_dialog_send,
-                          style: TextStyle(
-                              color: Colors.blueAccent),
+                          style: TextStyle(color: Colors.blueAccent),
                         ))
                   ],
                 ),
@@ -105,35 +106,32 @@ class HsgTextFieldDialog extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             border: Border(
-                top: BorderSide(color: Colors.grey.withOpacity(0.3),
-                    width: 1.0)
-            ),
+                top: BorderSide(
+                    color: Colors.grey.withOpacity(0.3), width: 1.0)),
           ),
           child: Row(
             children: [
               Expanded(
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      S.current.field_dialog_cancel,
-                      style: TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.black38),
-                    ),
-                  )),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  S.current.field_dialog_cancel,
+                  style: TextStyle(fontSize: 14.0, color: Colors.black38),
+                ),
+              )),
               Expanded(
                   child: TextButton(
-                    onPressed: this.confirmCallback,
-                    child: Text(
-                      S.current.field_dialog_confirm,
-                      style: TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.blueAccent,
-                      ),
-                    ),
-                  )),
+                onPressed: this.confirmCallback,
+                child: Text(
+                  S.current.field_dialog_confirm,
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.blueAccent,
+                  ),
+                ),
+              )),
             ],
           ),
         ),
@@ -141,4 +139,3 @@ class HsgTextFieldDialog extends StatelessWidget {
     );
   }
 }
-
