@@ -721,8 +721,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     int pageSize = 10;
     List<String> paymentCardNos = [];
     String sort = '';
-    String loginName = '18033412021';
-    String userId = '778309634589982720';
+    String loginName = '123456'; //18033412021
+    String userId = '123456'; //778309634589982720
     TransferDataRepository()
         .getTransferRecord(
             GetTransferRecordReq(ccy, _endDate, _page, pageSize, paymentCardNos,
