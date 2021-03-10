@@ -1,3 +1,5 @@
+import 'dart:math';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: lijiawei
@@ -361,6 +363,13 @@ class _TransferPageState extends State<TransferPage> {
       ),
       onPressed: () {
         print('转出');
+        if (data.transferType == '2') {
+          Navigator.pushNamed(context, pageTrasferInternational,
+              arguments: data);
+        } else if (data.transferType == '1') {
+        } else {
+          Navigator.pushNamed(context, pageTransferInternal, arguments: data);
+        }
       },
       shape: RoundedRectangleBorder(
         side: BorderSide(color: HsgColors.accent, width: 0.5),
@@ -388,7 +397,9 @@ class _TransferPageState extends State<TransferPage> {
             _transferToBtn,
           ],
         ),
-        onPressed: () {},
+        onPressed: () {
+          print('转出1');
+        },
       ),
     );
   }

@@ -31,7 +31,7 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
 
   var rates = List<String>();
 
-  var names = List<String>();
+  var names = List();
 
   @override
   void initState() {
@@ -121,13 +121,34 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
   }
 
   //获取第一列元素
-  Widget _getOneCloum(String name, double fontSize, double width, Color color) {
+  Widget _getOneCloum(List name, double fontSize, double width, Color color) {
+    String auctCale = ''; //档期
+    String accuPeriod = ''; //计提周期 1：日：2：月  3：季  4：半年  5:年
+    auctCale = name[0];
+    switch (name[1]) {
+      case '1':
+        accuPeriod = S.current.day;
+        break;
+      case '2':
+        accuPeriod = S.current.month;
+        break;
+      case '3':
+        accuPeriod = S.current.quarter;
+        break;
+      case '4':
+        auctCale = '';
+        accuPeriod = S.current.half_a_year;
+        break;
+      case '5':
+        accuPeriod = S.current.year;
+        break;
+    }
     print(MediaQuery.of(context).size.height / 13);
     return SizedBox(
       child: Container(
         width: MediaQuery.of(context).size.width / 4,
 //        height: MediaQuery.of(context).size.height / 13,
-      height: 60.0,
+        height: 60.0,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(width: 0.3, color: Colors.grey)),
@@ -147,7 +168,7 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
             ),
             Container(
               child: Text(
-                '$name ${S.current.month}',
+                auctCale + accuPeriod,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -301,10 +322,12 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
                   );
                   rateLists.add(rateList);
                 }
-
                 data.ebankInterestRateRspDTOList.forEach(
                   (element) {
-                    names.add(element.ebankInterestRateHead.auctCale);
+                    var list = List<String>();
+                    list.add(element.ebankInterestRateHead.auctCale);
+                    list.add(element.ebankInterestRateHead.accuPeriod);
+                    names.add(list);
                   },
                 );
               }
