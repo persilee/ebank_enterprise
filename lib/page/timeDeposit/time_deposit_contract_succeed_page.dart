@@ -77,6 +77,13 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                       NotificationCenter.instance
                           .postNotification('refresh', true);
                     }
+                    //提前结清跳转
+                    if (_arguments == 'timeDepositRecord') {
+                      // Navigator.pushReplacementNamed(
+                      //     context, pageTimeDepositRecord);
+                      // Navigator.pop(context);
+                      Navigator.of(context)..pop()..pop();
+                    }
                   },
                   color: HsgColors.accent,
                   child: (Text(S.current.complete,
