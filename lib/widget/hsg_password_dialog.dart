@@ -32,12 +32,11 @@ class HsgPasswordDialog extends StatelessWidget {
       this.title,
       this.resultPage,
       this.arguments,
-      this.isDialog});
+      this.isDialog = false});
 
   @override
   Widget build(BuildContext context) {
     Widget passwordBoxTitle;
-    print('isDialog1 ${this.isDialog}');
 
     if (title != null) {
       passwordBoxTitle = Row(
@@ -245,7 +244,6 @@ class HsgPasswordDialog extends StatelessWidget {
   //验证交易密码
   _verifyTradePaw(String payPassword, BuildContext context, String resultPage,
       Object arguments) async {
-    print('isDialog ${this.isDialog}');
     VerifyTradePawRepository()
         .verifyTransPwdNoSms(
             VerifyTransPwdNoSmsReq(payPassword), 'VerifyTransPwdNoSmsReq')
@@ -257,7 +255,6 @@ class HsgPasswordDialog extends StatelessWidget {
         Navigator.of(context)..pop()..pop();
       } else {
         if (this.isDialog) {
-          print(this.isDialog);
           showDialog(
               context: context,
               barrierDismissible: false,
