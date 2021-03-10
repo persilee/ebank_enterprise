@@ -83,6 +83,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //余额
   var _currBal;
 
+  var _loacalCurrBal = '';
+
   String _changedRateTitle = '';
 
   String _changedCcyTitle = '';
@@ -254,55 +256,44 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       value.forEach((element) {
         // 通过卡号查询余额
         if (element is GetSingleCardBalResp) {
-          setState(() {
-            //通过卡号查询货币
-            ccyLists.clear();
-            ccyList.clear();
-            _currBal = '';
-            if (element.cardListBal.length == 0) {
-              _currBal = '';
-            }
-            element.cardListBal.forEach((cardBalBean) {
-              if (cardBalBean.ccy != '') {
-                ccyList.add(cardBalBean.ccy);
-              }
-              if (_changedCcyTitle == cardBalBean.ccy) {
-                _currBal = cardBalBean.currBal.toString();
-              }
-              print('777777 $ccyList');
-            });
-
-            //获取集合
-            // List<CardBalBean> dataList = [];
-
-            // for (int i = 0; i < cardBal.length; i++) {
-            //   CardBalBean doList = cardBal[i];
-            //   ccyLists.add(doList.ccy);
-
-            //   if (!ccyLists.contains('CNY')) {
-            //     CardBalBean doListNew;
-            //     cardBal.insert(0, doListNew);
-            //   }
-            // }
-
-            // if (!ccyLists.contains('CNY')) {
-            //   CardBalBean doListNew;
-            //   dataList.insert(0, doListNew);
-            // }
-
-            // dataList.forEach((element) {
-            //   String ccyCNY = element == null ? 'CNY' : element.ccy;
-            //   ccyList.add(ccyCNY);
-            //   String avaBAL = element == null ? '0.00' : element.avaBal;
-            //   totalBalances.add(avaBAL);
-            // });
-            // ccyList.add(ccyLists);
-
-            // 添加余额
-            // element.cardListBal.forEach((bals) {
-            //   totalBalances.add(bals.avaBal);
-            // });
+          ccyLists.clear();
+          ccyList.clear();
+          _currBal = '';
+          _position = 0;
+          element.cardListBal.forEach((bals) {
+            totalBalances.add(bals.avaBal);
           });
+          // var cardListB = new List();
+          element.cardListBal.forEach((cardBalBean) {
+            if (cardBalBean.ccy != '') {
+              ccyList.add(cardBalBean.ccy);
+            }
+            if (_changedCcyTitle == cardBalBean.ccy) {
+              _currBal = cardBalBean.currBal.toString();
+            }
+            print('777777 $ccyList');
+          });
+          if (ccyList.length > 1) {
+            if (_changedCcyTitle == 'USD') {
+              _position = 2;
+            } else if (_changedCcyTitle == 'CNY') {
+              _position = 0;
+            }
+          } else {
+            _position = 0;
+          }
+          if (_changedCcyTitle != 'USD' &&
+              ccyList.length < 3 &&
+              ccyList.length > 0) {
+            _changedCcyTitle = 'USD';
+            _currBal = _loacalCurrBal;
+          }
+          if (element.cardListBal.length == 0) {
+            _currBal = '';
+            _changedCcyTitle = 'CNY';
+            ccyList.add('CNY');
+            _position = 0;
+          }
         }
         //查询额度
         else if (element is GetCardLimitByCardNoResp) {
@@ -316,7 +307,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //选择货币方法
   _getCcy() async {
-    int groupValue = 0;
     final result = await showDialog(
         context: context,
         builder: (context) {
@@ -326,25 +316,20 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                 ccyList,
             positiveButton: S.of(context).confirm,
             negativeButton: S.of(context).cancel,
-            lastSelectedPosition: groupValue,
+            lastSelectedPosition: _position,
           );
         });
 
     if (result != null && result != false) {
       //货币种类
-
-      _position = result;
-      _changedCcyTitle = ccyList[_position];
-      // _changedCcyTitle = ccyList[result];
-      // groupValue = result;
-      // _changedCcyTitle = ccyListPlay[result];
-      // //余额
-      // _changedRateTitle = totalBalances[result];
+      setState(() {
+        _position = result;
+        _changedCcyTitle = ccyList[_position];
+      });
+      //余额
+      //  _changedRateTitle = totalBalances[result];
+      _getCardTotals(_changedAccountTitle);
     }
-
-    setState(() {
-      _position = result;
-    });
   }
 
   //选择国家地区
@@ -819,6 +804,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
   }
 
+  //默认初始货币和余额
   _getCardTotal(String cardNo) {
     Future.wait({
       CardDataRepository().getCardBalByCardNo(
@@ -831,12 +817,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         if (element is GetSingleCardBalResp) {
           setState(() {
             //余额
-            totalBalance = element.cardListBal[0].avaBal;
-            ccy = element.cardListBal[0].ccy;
-
             element.cardListBal.forEach((element) {
               ccyListOne.clear();
               ccyListOne.add(element.ccy);
+              if (element.ccy == 'USD') {
+                _currBal = element.currBal;
+                _changedCcyTitle = 'USD';
+                _loacalCurrBal = _currBal;
+              }
             });
           });
         }
@@ -905,8 +893,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _feeUse != S.current.please_select) {
       return () {
         _openBottomSheet();
-        //_tranferInternational(context);
-        // _showContractSucceedPage(context);
+
         print('提交');
       };
     } else {
@@ -921,6 +908,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       builder: (context) {
         return HsgPasswordDialog(
           title: S.current.input_password,
+          resultPage: pageDepositRecordSucceed,
+          arguments: 'international',
         );
       },
     );

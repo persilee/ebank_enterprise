@@ -165,14 +165,10 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       });
       _getCardTotals(_changedAccountTitle);
     }
-    // setState(() {
-    //   _position = result;
-    // });
   }
 
   //选择货币
   _getCardTotals(String _changedAccountTitle) {
-    print("$_changedAccountTitle  ++++++++++");
     Future.wait({
       CardDataRepository().getCardBalByCardNo(
           GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
@@ -187,17 +183,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             ccyLists.clear();
             ccyList.clear();
             _currBal = '';
-<<<<<<< HEAD
-            if (element.cardListBal.length == 0) {
-              _currBal = '';
-            }
-=======
             _position = 0;
             element.cardListBal.forEach((bals) {
               totalBalances.add(bals.avaBal);
             });
             // var cardListB = new List();
->>>>>>> a3ce58db483f8c880c201a843769fe101558e1c3
             element.cardListBal.forEach((cardBalBean) {
               if (cardBalBean.ccy != '') {
                 ccyList.add(cardBalBean.ccy);
@@ -205,7 +195,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               if (_changedCcyTitle == cardBalBean.ccy) {
                 _currBal = cardBalBean.currBal.toString();
               }
-              print('777777 $ccyList');
             });
             if (ccyList.length > 1) {
               if (_changedCcyTitle == 'USD') {
@@ -228,18 +217,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               ccyList.add('CNY');
               _position = 0;
             }
-            // bool isBenBi = false;
-            // for (int j = 0; j < cardListB.length; j++) {
-            //   if (cardListB[j].ccy == 'USD') {
-            //     isBenBi = true;
-            //   }
-            //   if (isBenBi == false) {
-            //     cardListB.insert(0, cardListB[j]);
-            //   }
-            //   _currBal = cardListB[j].currBal;
-            //   ccyList.clear();
-            //   ccyList.add(cardListB[j].ccy);
-            // }
           }
           //查询限额
           else if (element is GetCardLimitByCardNoResp) {
@@ -252,22 +229,15 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   //选择货币方法
   _getCcy() async {
-    int groupValue = 0;
     final result = await showDialog(
         context: context,
         builder: (context) {
           return HsgSingleChoiceDialog(
             title: S.current.currency_choice,
             items: ccyList,
-<<<<<<< HEAD
-            positiveButton: S.of(context).confirm,
-            negativeButton: S.of(context).cancel,
-            lastSelectedPosition: groupValue,
-=======
             positiveButton: S.current.confirm,
             negativeButton: S.current.cancel,
             lastSelectedPosition: _position,
->>>>>>> a3ce58db483f8c880c201a843769fe101558e1c3
           );
         });
 
@@ -278,13 +248,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         _changedCcyTitle = ccyList[_position];
       });
       //余额
-      //  _changedRateTitle = totalBalances[result];
       _getCardTotals(_changedAccountTitle);
     }
-
-    // setState(() {
-    //   _position = result;
-    // });
   }
 
   @override
@@ -422,8 +387,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         if (element is GetSingleCardBalResp) {
           setState(() {
             //余额
-            // totalBalance = element.cardListBal[0].currBal;
-            // ccy = element.cardListBal[0].ccy;
             element.cardListBal.forEach((element) {
               ccyListOne.clear();
               ccyListOne.add(element.ccy);
@@ -503,9 +466,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               'getTransferByAccount')
           .then((value) {
         HSProgressHUD.dismiss();
-        _showContractSucceedPage(context);
       }).catchError((e) {
-        setState(() {});
         HSProgressHUD.showError(status: '${e.toString()}');
       });
     });
@@ -519,8 +480,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   _isClick() {
     if (money > 0 && payeeName.length > 0 && payeeCardNo.length > 0) {
       return () {
-        // _tranferAccount(context);
-        _clean();
+        //  _tranferAccount(context);
         _openBottomSheet();
       };
     } else {
@@ -535,13 +495,16 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       builder: (context) {
         return HsgPasswordDialog(
           title: S.current.input_password,
+          resultPage: pageDepositRecordSucceed,
+          arguments: '0',
         );
       },
     );
     if (passwordList != null && passwordList == true) {
       if (passwordList.length == 6) {
+        //_tranferAccount(context);
+        _showContractSucceedPage(context);
         _clean();
-        _tranferAccount(context);
       }
     }
   }
