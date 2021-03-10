@@ -7,16 +7,18 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_early_contract.dart';
-import 'package:ebank_mobile/data/source/model/get_deposit_limit_by_con_no.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_trial.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PageDepositInfo extends StatefulWidget {
   final DepositRecord deposit;
@@ -63,6 +65,14 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   var settBals = '';
 
+  var instCode = '';
+
+  var mainAc = '';
+
+  var transferAc = '';
+
+  List<CardListBal> cardList;
+
   _PageDepositInfo(this.deposit);
 
   //获取网络请求
@@ -70,6 +80,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   void initState() {
     super.initState();
     _loadDepositData(deposit.conNo, double.parse(deposit.bal));
+    _getDetail();
+    _getCardListBalByUser();
   }
 
   @override
@@ -114,14 +126,15 @@ class _PageDepositInfo extends State<PageDepositInfo> {
           Container(
             color: Colors.white,
             margin: EdgeInsets.only(bottom: 8),
-            padding: EdgeInsets.fromLTRB(16, 0, 0, 10),
+            padding: EdgeInsets.fromLTRB(16, 0, 16, 10),
             //付款账户
             child: Row(
               children: [
                 Expanded(child: Text(S.current.payment_account)),
                 Container(
                   child: Text(
-                    FormatUtil.formatSpace4('$settDbAc'),
+                    // FormatUtil.formatSpace4('$settDbAc'),
+                    '0101 2000 0017 2',
                   ),
                 )
               ],
@@ -162,10 +175,9 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                 _unit(S.current.currency, ccy, true),
                 //存入金额
                 _unit(S.current.deposit_amount,
-                    FormatUtil.formatSringToMoney('$bal'), true),
+                    FormatUtil.formatSringToMoney(bal), true),
                 //存期
-                _unit(S.current.deposit_term, '$auctCale${S.current.month}',
-                    true),
+                _unit(S.current.deposit_term, auctCale + S.current.month, true),
                 //生效日期
                 _unit(S.current.effective_date, valDate, true),
                 //到期日期
@@ -176,7 +188,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                     children: [
                       Expanded(child: Text(S.current.due_date_indicate)),
                       Container(
-                        child: Text(S.current.instruction_at_maturity_0),
+                        child: Text(instCode),
+                        // Text(S.current.instruction_at_maturity_0),
                       )
                     ],
                   ),
@@ -199,7 +212,9 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center),
-                          children: <Widget>[_DialogBox(conMatAmts, matAmts)]);
+                          children: <Widget>[
+                            _DialogBox(conMatAmts, matAmts)
+                          ]); //conMatAmts
                     },
                   );
                 },
@@ -293,71 +308,141 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   _loadDepositData(String conNo, double settBal) {
     Future.wait({
-      DepositDataRepository().getDepositLimitByConNo(
-          GetDepositLimitByConNo(conNo), 'GetDepositLimitByConNo'),
-      DepositDataRepository().getDepositTrial(
-          GetDepositTrialReq(conNo, settBal), 'GetDepositTrialReq')
+      // DepositDataRepository().getDepositLimitByConNo(
+      //     GetDepositLimitByConNo(conNo), 'GetDepositLimitByConNo'),
+      DepositDataRepository()
+          .getDepositTrial(GetDepositTrialReq(conNo), 'GetDepositTrialReq')
     }).then((value) {
       value.forEach((element) {
-        if (element is DepositByLimitConNoResp) {
-          setState(() {
-            ciNo = element.ciNo;
-            conNos = element.conNo;
-            settDbAc = element.settDdAc;
-            ccy = element.ccy;
-            bal = element.bal;
-            auctCale = element.auctCale;
-            valDate = element.valDate;
-            mtDate = element.mtDate;
-          });
-        } else if (element is DepositTrialResp) {
-          setState(() {
-            conMatAmt = element.conMatAmt;
-            matAmt = element.matAmt;
-            eryInt = element.eryInt;
-            eryRate = element.eryRate;
-            hdlFee = element.hdlFee;
-            pnltFee = element.pnltFee;
-            settBals = element.settBal;
-            settDdAc = element.settDdAc;
-          });
-        }
+        // if (element is DepositByLimitConNoResp) {
+        //   setState(() {
+        //     ciNo = element.ciNo;
+        //     conNos = element.conNo;
+        //     settDbAc = element.settDdAc;
+        //     ccy = element.ccy;
+        //     bal = element.bal;
+        //     auctCale = element.auctCale;
+        //     valDate = element.valDate;
+        //     mtDate = element.mtDate;
+        //   });
+        // } else if (element is DepositTrialResp) {
+        setState(() {
+          conMatAmt = element.conMatAmt;
+          matAmt = element.matAmt;
+          eryInt = element.eryInt;
+          eryRate = element.eryRate;
+          // hdlFee = element.hdlFee;
+          // pnltFee = element.pnltFee;
+          // settBals = element.settBal;
+          settDdAc = element.settDdAc;
+          mainAc = element.mainAc;
+        });
+        // }
       });
     });
   }
 
   _contractEarly(BuildContext context) {
-    setState(() {
-    });
+    setState(() {});
     HSProgressHUD.show();
-
     DepositDataRepository()
         .getDepositEarlyContract(
             GetDepositEarlyContractReq(
+                // conNos,
+                // double.parse(eryInt),
+                // double.parse(eryRate),
+                // double.parse(hdlFee),
+                // '',
+                // double.parse(matAmt),
+                // double.parse(pnltFee),
+                // double.parse(settBals),
+                // settDdAc,
+                // ''
                 conNos,
                 double.parse(eryInt),
                 double.parse(eryRate),
-                double.parse(hdlFee),
-                double.parse(matAmt),
-                double.parse(pnltFee),
-                double.parse(settBals),
-                settDdAc),
+                0,
+                mainAc,
+                0,
+                0,
+                0,
+                settDdAc,
+                transferAc),
             'getDepositEarlyContract')
         .then((value) {
       HSProgressHUD.dismiss();
       _showContractSucceedPage(context);
       // _cleanDeposit(context, value);
     }).catchError((e) {
-      setState(() {
-      });
+      setState(() {});
+      HSProgressHUD.showError(status: '${e.toString()}');
+    });
+  }
+
+  //获取详情
+  _getDetail() {
+    conNos = deposit.conNo;
+    ccy = deposit.ccy;
+    bal = deposit.bal;
+
+    valDate = deposit.valDate;
+    mtDate = deposit.mtDate;
+
+    switch (deposit.accuPeriod) {
+      case '2':
+        auctCale = deposit.auctCale;
+        break;
+      case '3':
+        auctCale = (double.parse(deposit.auctCale) * 3).toString();
+        break;
+      case '4':
+        auctCale = (double.parse(deposit.auctCale) * 6).toString();
+        break;
+      default:
+        {
+          auctCale = (double.parse(deposit.auctCale) * 12).toString();
+        }
+    }
+    switch (deposit.instCode) {
+      case '0':
+        instCode = S.current.instruction_at_maturity_0;
+        break;
+      case '1':
+        instCode = S.current.instruction_at_maturity_1;
+        break;
+      case '2':
+        instCode = S.current.instruction_at_maturity_2;
+        break;
+      default:
+        {
+          instCode = S.current.instruction_at_maturity_5;
+        }
+    }
+  }
+
+  _getCardListBalByUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    String ciNo = prefs.getString(ConfigKey.CUST_ID);
+    DepositDataRepository()
+        .getCardListBalByUser(
+            GetCardListBalByUserReq('', [], '', ciNo), 'getCardListBalByUser')
+        .then((value) {
+      cardList = value.cardListBal;
+      for (int i = 0; i < cardList.length; i++) {
+        if (cardList[i].ccy == ccy) {
+          transferAc = cardList[i].cardNo;
+        }
+      }
+    }).catchError((e) {
+      setState(() {});
       HSProgressHUD.showError(status: '${e.toString()}');
     });
   }
 
   //结算成功-跳转页面
   _showContractSucceedPage(BuildContext context) async {
-    setState(() {
-    });
-    Navigator.pushNamed(context, pageDepositRecordSucceed);
+    setState(() {});
+    Navigator.pushReplacementNamed(context, pageDepositRecordSucceed,
+        arguments: 'timeDepositRecord');
   }
 }

@@ -50,17 +50,18 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   var ccy = '';
   var ccyListOne = List<String>();
   var singleLimit = '';
+  var _currBal;
+  var _loacalCurrBal = '';
   var bals = [];
-  var ccyList = List();
+  var ccyList = ['USD'];
   var tranferType;
+  int _accountIndex = 0;
   var accountSelect = '';
   List<String> ccyLists = [];
   List<CardBalBean> cardBal = [];
   String payeeNameForSelects;
   List<String> totalBalances = [];
-  int _lastSelectedPosition = -1;
   String _limitMoney = '';
-  String _changedRateTitle = '';
   String _changedCcyTitle = '';
   int _position = 0;
   String _changedAccountTitle = '';
@@ -113,26 +114,23 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
         context: context,
         builder: (context) {
           return HsgSingleChoiceDialog(
-            title: '币种选择',
-            items: ccyLists,
-            positiveButton: '确定',
-            negativeButton: '取消',
-            lastSelectedPosition: _lastSelectedPosition,
+            title: S.current.currency_choice,
+            items: ccyList,
+            positiveButton: S.current.confirm,
+            negativeButton: S.current.cancel,
+            lastSelectedPosition: _position,
           );
         });
 
     if (result != null && result != false) {
       //货币种类
-      _changedCcyTitle = ccyList[result];
+      setState(() {
+        _position = result;
+        _changedCcyTitle = ccyList[_position];
+      });
       //余额
-      _changedRateTitle = totalBalances[result];
+      _getCardTotals(_changedAccountTitle);
     }
-
-    //加了这个可以立即显示
-    setState(() {
-      _position = result;
-    });
-    _getavaBal(_changedCcyTitle);
   }
 
   _nameInputChange(String name) {
@@ -580,8 +578,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                   _startValue == DateTime(0, 0, 0) ||
                   _endValue == DateTime(0, 0, 0) ||
                   (money.toString()) == '' ||
-                  payerName == '' ||
-                  _changedAccountTitle == '' ||
+                  // payerName == '' ||
+                  // _changedAccountTitle == '' ||
                   _payeeNameController.text == '' ||
                   _payeeAccountController.text == '')
               ? null
@@ -725,6 +723,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
         builder: (context) {
           return HsgPasswordDialog(
             title: S.current.input_password,
+            resultPage: pageDepositRecordSucceed,
+            arguments: 'advanceTransfer',
           );
         });
     if (isPassword != null && isPassword == true) {
@@ -781,7 +781,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               context,
               _limitMoney,
               _changedCcyTitle,
-              _changedRateTitle,
+              _currBal,
               _changedAccountTitle,
               ccy,
               singleLimit,
@@ -826,19 +826,18 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
         context: context,
         builder: (context) {
           return HsgBottomSingleChoice(
-            title: '银行卡号',
+            title: S.current.account_lsit,
             items: cardNoList,
-            lastSelectedPosition: _position,
+            lastSelectedPosition: _accountIndex,
           );
         });
     if (result != null && result != false) {
-      _changedAccountTitle = cardNoList[result];
+      setState(() {
+        _accountIndex = result;
+        _changedAccountTitle = cardNoList[_accountIndex];
+      });
+      _getCardTotals(_changedAccountTitle);
     }
-
-    setState(() {
-      _position = result;
-    });
-    _getCardTotals(_changedAccountTitle);
   }
 
   _loadTransferData() {
@@ -857,7 +856,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             //付款方银行名字
             payerBankCode = element.cardList[0].ciName;
             //付款方姓名
-            payerName = element.cardList[0].ciName;
+            //  payerName = element.cardList[0].ciName;
             //付款方卡号
             payerCardNo = element.cardList[0].ciName;
           });
@@ -879,11 +878,14 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
         if (element is GetSingleCardBalResp) {
           setState(() {
             //余额
-            totalBalance = element.cardListBal[0].avaBal;
-            ccy = element.cardListBal[0].ccy;
             element.cardListBal.forEach((element) {
               ccyListOne.clear();
               ccyListOne.add(element.ccy);
+              if (element.ccy == 'USD') {
+                _currBal = element.currBal;
+                _changedCcyTitle = 'USD';
+                _loacalCurrBal = _currBal;
+              }
             });
           });
         }
@@ -937,6 +939,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     });
   }
 
+  //选择货币和余额
   _getCardTotals(String _changedAccountTitle) {
     Future.wait({
       CardDataRepository().getCardBalByCardNo(
@@ -948,64 +951,48 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       value.forEach((element) {
         // 通过卡号查询余额
         if (element is GetSingleCardBalResp) {
-          setState(() {
-            bals.clear();
-            bals.addAll(element.cardListBal);
-            ccyLists.clear();
-            //通过卡号查询货币
-            //获取集合
-            List<CardBalBean> dataList = [];
-
-            for (int i = 0; i < cardBal.length; i++) {
-              CardBalBean doList = cardBal[i];
-              ccyLists.add(doList.ccy);
-
-              if (!ccyLists.contains('CNY')) {
-                CardBalBean doListNew;
-                cardBal.insert(0, doListNew);
-              }
-            }
-
-            if (!ccyLists.contains('CNY')) {
-              CardBalBean doListNew;
-              dataList.insert(0, doListNew);
-            }
-
-            dataList.forEach((element) {
-              String ccyCNY = element == null ? 'CNY' : element.ccy;
-              ccyList.add(ccyCNY);
-              String avaBAL = element == null ? '0.00' : element.avaBal;
-              totalBalances.add(avaBAL);
-            });
-            // 添加余额
-            element.cardListBal.forEach((bals) {
-              totalBalances.add(bals.avaBal);
-            });
+          ccyLists.clear();
+          ccyList.clear();
+          _currBal = '';
+          _position = 0;
+          element.cardListBal.forEach((bals) {
+            totalBalances.add(bals.avaBal);
           });
+          // var cardListB = new List();
+          element.cardListBal.forEach((cardBalBean) {
+            if (cardBalBean.ccy != '') {
+              ccyList.add(cardBalBean.ccy);
+            }
+            if (_changedCcyTitle == cardBalBean.ccy) {
+              _currBal = cardBalBean.currBal.toString();
+            }
+          });
+          if (ccyList.length > 1) {
+            if (_changedCcyTitle == 'USD') {
+              _position = 2;
+            } else if (_changedCcyTitle == 'CNY') {
+              _position = 0;
+            }
+          } else {
+            _position = 0;
+          }
+          if (_changedCcyTitle != 'USD' &&
+              ccyList.length < 3 &&
+              ccyList.length > 0) {
+            _changedCcyTitle = 'USD';
+            _currBal = _loacalCurrBal;
+          }
+          if (element.cardListBal.length == 0) {
+            _currBal = '';
+            _changedCcyTitle = 'CNY';
+            ccyList.add('CNY');
+            _position = 0;
+          }
         }
         //查询额度
         else if (element is GetCardLimitByCardNoResp) {
           setState(() {
             _limitMoney = element.singleLimit;
-          });
-        }
-      });
-    });
-  }
-
-  //根据货币类型拿余额
-  _getavaBal(String changedCcyTitle) {
-    Future.wait({
-      CardDataRepository().getCardBalByCardNo(
-          GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
-    }).then((value) {
-      value.forEach((element) {
-        // 通过货币查询余额
-        if (element is GetSingleCardBalResp) {
-          setState(() {
-            bals.clear();
-            bals.add(element.cardListBal);
-            if (bals.contains(changedCcyTitle)) {}
           });
         }
       });

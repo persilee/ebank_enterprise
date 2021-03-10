@@ -23,6 +23,9 @@ class GetDepositEarlyContractReq extends Object {
   @JsonKey(name: 'hdlFee')
   double hdlFee;
 
+  @JsonKey(name: 'mainAc')
+  String mainAc;
+
   @JsonKey(name: 'matAmt')
   double matAmt;
 
@@ -35,28 +38,34 @@ class GetDepositEarlyContractReq extends Object {
   @JsonKey(name: 'settDdAc')
   String settDdAc;
 
+  @JsonKey(name: 'transferAc')
+  String transferAc;
+
   GetDepositEarlyContractReq(
     this.conNo,
     this.eryInt,
     this.eryRate,
     this.hdlFee,
+    this.mainAc,
     this.matAmt,
     this.pnltFee,
     this.settBal,
     this.settDdAc,
+    this.transferAc,
   );
 
   factory GetDepositEarlyContractReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetDepositEarlyContractReqFromJson(srcJson);
+
   Map<String, dynamic> toJson() => _$GetDepositEarlyContractReqToJson(this);
 }
 
 @JsonSerializable()
-class DepositEarlyContractResp extends Object {
-  DepositEarlyContractResp();
+class GetDepositEarlyContractResp extends Object {
+  GetDepositEarlyContractResp();
 
-  factory DepositEarlyContractResp.fromJson(Map<String, dynamic> srcJson) =>
-      _$DepositEarlyContractRespFromJson(srcJson);
+  factory GetDepositEarlyContractResp.fromJson(Map<String, dynamic> srcJson) =>
+      _$GetDepositEarlyContractRespFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$DepositEarlyContractRespToJson(this);
+  Map<String, dynamic> toJson() => _$GetDepositEarlyContractRespToJson(this);
 }

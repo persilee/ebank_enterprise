@@ -4,6 +4,7 @@
  * 
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
+import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_early_contract.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_limit_by_con_no.dart';
@@ -36,22 +37,30 @@ class DepositDataRepository {
   }
 
   //拿结清订单数据
-  Future<DepositTrialResp> getDepositTrial(GetDepositTrialReq req, String tag) {
+  Future<GetDepositTrialResp> getDepositTrial(
+      GetDepositTrialReq req, String tag) {
     return request('/tdep/timeDeposit/trialTdContract', req, tag,
-        (data) => DepositTrialResp.fromJson(data));
+        (data) => GetDepositTrialResp.fromJson(data));
   }
 
   //是否提前结清
-  Future<DepositEarlyContractResp> getDepositEarlyContract(
+  Future<GetDepositEarlyContractResp> getDepositEarlyContract(
       GetDepositEarlyContractReq req, String tag) {
     return request('/tdep/timeDeposit/earlyRedTdContract', req, tag,
-        (data) => DepositEarlyContractResp.fromJson(data));
+        (data) => GetDepositEarlyContractResp.fromJson(data));
   }
 
   //查看定期利率
   Future<DepositRateResp> getDepositRate(GetDepositRate req, String tag) {
     return request('/tdep/timeDeposit/getStaticInterestRate', req, tag,
         (data) => DepositRateResp.fromJson(data));
+  }
+
+  //获取多张卡余额
+  Future<GetCardListBalByUserResp> getCardListBalByUser(
+      GetCardListBalByUserReq req, tag) {
+    return request('/cust/bankcard/getCardListBalByUser', req, tag,
+        (data) => GetCardListBalByUserResp.fromJson(data));
   }
 
   static final _instance = DepositDataRepository._internal();

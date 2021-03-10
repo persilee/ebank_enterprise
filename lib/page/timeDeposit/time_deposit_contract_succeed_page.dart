@@ -61,11 +61,14 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                 height: 45,
                 child: FlatButton(
                   onPressed: () {
-                    //行内转账跳转
-                    //pageTransfer
                     if (_arguments == '0') {
-                      Navigator.of(context).pop(pageTransferInternal);
+                      Navigator.of(context)..pop()..pop()..pop();
                     }
+                    //国际转账跳转
+                    if (_arguments == 'international') {
+                      Navigator.of(context)..pop()..pop()..pop();
+                    }
+
                     //定期开立跳转
                     if (_arguments == 'timeDepositProduct') {
                       Navigator.pushReplacementNamed(
@@ -76,6 +79,16 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                       Navigator.pop(context);
                       NotificationCenter.instance
                           .postNotification('refresh', true);
+                    }
+                    //预约转账
+                    if (_arguments == 'advanceTransfer') {
+                      Navigator.of(context)..pop()..pop()..pop();
+                    }
+
+                    //提前结清跳转
+                    if (_arguments == 'timeDepositRecord') {
+                      Navigator.pushReplacementNamed(
+                          context, pageTimeDepositRecord);
                     }
                   },
                   color: HsgColors.accent,
