@@ -15,7 +15,7 @@ class CardDataRepository {
         (data) => GetCardLimitByCardNoResp.fromJson(data));
   }
 
-  Future<GetSingleCardBalResp> getSingleCardBal(
+  Future<GetSingleCardBalResp> getCardBalByCardNo(
       GetSingleCardBalReq req, String tag) {
     return request('cust/bankcard/getCardBalByCardNo', req, tag,
         (data) => GetSingleCardBalResp.fromJson(data));

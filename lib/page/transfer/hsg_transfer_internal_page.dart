@@ -3,12 +3,15 @@
 /// Author: lijiawei
 /// Date: 2020-12-09
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
+import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
+import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_button_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
@@ -59,7 +62,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   var ccyListOne = List<String>();
 
-  var ccyList = List();
+  var ccyList = List<String>();
+
+  var _currBal;
 
   List<String> ccyLists = [];
 
@@ -77,8 +82,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   String _changedAccountTitle = '';
 
-  //余额
-  String _changedRateTitle = '';
+  // //余额
+  // String _changedRateTitle = '';
 
   String _changedCcyTitle = '';
 
@@ -154,20 +159,15 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         });
     if (result != null && result != false) {
       _changedAccountTitle = cardNoList[result];
-      // //余额
-      // _changedRateTitle = totalBalances[result];
     }
-
     setState(() {
       _position = result;
     });
-    _getCardTotals(_changedAccountTitle);
-    //_getCcy();
   }
 
   _getCardTotals(String _changedAccountTitle) {
     Future.wait({
-      CardDataRepository().getSingleCardBal(
+      CardDataRepository().getCardBalByCardNo(
           GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
       CardDataRepository().getCardLimitByCardNo(
           GetCardLimitByCardNoReq(_changedAccountTitle),
@@ -175,49 +175,44 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     }).then((value) {
       value.forEach((element) {
         // 通过卡号查询余额
-        if (element is GetSingleCardBalResp) {
-          setState(() {
-            bals.clear();
-            bals.addAll(element.cardListBal);
-            ccyLists.clear();
-            //通过卡号查询货币
-            //获取集合
-            List<CardBalBean> dataList = [];
+        setState(() {
+          if (element is GetSingleCardBalResp) {
+            setState(() {
+              bals.clear();
 
-            for (int i = 0; i < cardBal.length; i++) {
-              CardBalBean doList = cardBal[i];
-              ccyLists.add(doList.ccy);
+              ccyLists.clear();
 
-              if (!ccyLists.contains('CNY')) {
-                CardBalBean doListNew;
-                cardBal.insert(0, doListNew);
+              element.cardListBal.forEach((bals) {
+                totalBalances.add(bals.avaBal);
+              });
+
+              var cardListB = new List();
+              element.cardListBal.forEach((cardBalBean) {
+                if (cardBalBean.ccy != '') {
+                  cardListB.add(cardBalBean);
+                }
+              });
+              bool isBenBi = false;
+              for (int j = 0; j < cardListB.length; j++) {
+                if (cardListB[j].ccy == 'USD') {
+                  isBenBi = true;
+                }
+                if (isBenBi == false) {
+                  cardListB.insert(0, cardListB[j]);
+                }
+                _currBal = cardListB[j].currBal;
+                ccyList.clear();
+                ccyList.add(cardListB[j].ccy);
               }
-            }
-
-            if (!ccyLists.contains('CNY')) {
-              CardBalBean doListNew;
-              dataList.insert(0, doListNew);
-            }
-
-            dataList.forEach((element) {
-              String ccyCNY = element == null ? 'CNY' : element.ccy;
-              ccyList.add(ccyCNY);
-              String avaBAL = element == null ? '0.00' : element.avaBal;
-              totalBalances.add(avaBAL);
             });
-            // ccyList.add(ccyLists);
-            // 添加余额
-            element.cardListBal.forEach((bals) {
-              totalBalances.add(bals.avaBal);
+          }
+          //查询限额
+          else if (element is GetCardLimitByCardNoResp) {
+            setState(() {
+              _limitMoney = element.singleLimit;
             });
-          });
-        }
-        //查询额度
-        else if (element is GetCardLimitByCardNoResp) {
-          setState(() {
-            _limitMoney = element.singleLimit;
-          });
-        }
+          }
+        });
       });
     });
   }
@@ -229,7 +224,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         builder: (context) {
           return HsgSingleChoiceDialog(
             title: S.current.currency_choice,
-            items: ccyLists,
+            items: ccyList,
             positiveButton: '确定',
             negativeButton: '取消',
             lastSelectedPosition: _lastSelectedPosition,
@@ -240,39 +235,17 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       //货币种类
       _changedCcyTitle = ccyList[result];
       //余额
-      _changedRateTitle = totalBalances[result];
+      //  _changedRateTitle = totalBalances[result];
     }
 
-    //加了这个可以立即显示
     setState(() {
       _position = result;
-    });
-    _getavaBal(_changedCcyTitle);
-  }
-
-  //根据货币类型拿余额
-  _getavaBal(String changedCcyTitle) {
-    Future.wait({
-      CardDataRepository().getSingleCardBal(
-          GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
-    }).then((value) {
-      value.forEach((element) {
-        // 通过货币查询余额
-        if (element is GetSingleCardBalResp) {
-          setState(() {
-            bals.clear();
-            bals.add(element.cardListBal);
-            if (bals.contains(changedCcyTitle)) {}
-          });
-        }
-      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
     var _arguments = ModalRoute.of(context).settings.arguments;
-
     setState(() {
       if (_arguments != null && !check) {
         Rows rowPartner = _arguments;
@@ -294,11 +267,12 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       body: CustomScrollView(
         slivers: <Widget>[
           _gaySliver,
+          //拿币种和货币
           transferPayerWidget(
               context,
               _limitMoney,
               _changedCcyTitle,
-              _changedRateTitle,
+              _currBal,
               _changedAccountTitle,
               ccy,
               singleLimit,
@@ -331,7 +305,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           //第三部分
           transferOtherWidget(
               context, remark, _transferInputChange, _remarkController),
-
           //提交按钮
           getButton(S.current.submit, _isClick),
         ],
@@ -339,9 +312,12 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     );
   }
 
+  //增加转账伙伴图标
   Widget _getImage() {
     return InkWell(
       onTap: () {
+        //获取验证码
+        _getVerificationCode();
         Navigator.pushNamed(context, pageTranferPartner, arguments: '0').then(
           (value) {
             setState(() {
@@ -362,6 +338,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     );
   }
 
+  //拿到默认卡号
   _loadTransferData() {
     Future.wait({
       CardDataRepository().getCardList('GetCardList'),
@@ -388,10 +365,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     });
   }
 
+  //默认显示货币和余额
   _getCardTotal(String cardNo) {
     Future.wait({
-      CardDataRepository()
-          .getSingleCardBal(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
+      CardDataRepository().getCardBalByCardNo(
+          GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
       CardDataRepository().getCardLimitByCardNo(
           GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
     }).then((value) {
@@ -400,9 +378,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         if (element is GetSingleCardBalResp) {
           setState(() {
             //余额
-            totalBalance = element.cardListBal[0].avaBal;
+            totalBalance = element.cardListBal[0].currBal;
             ccy = element.cardListBal[0].ccy;
-
             element.cardListBal.forEach((element) {
               ccyListOne.clear();
               ccyListOne.add(element.ccy);
@@ -420,53 +397,82 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     });
   }
 
-  void _tranferAccount(BuildContext context) {
-    setState(() {});
+  //获取验证码接口
+  _getVerificationCode() async {
+    RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
+    // if (characters.hasMatch('123456') == false) {
+    //   // HSProgressHUD.showInfo(status: S.current.format_mobile_error);
+    // } else {
     HSProgressHUD.show();
-    TransferDataRepository()
-        .getTransferByAccount(
-            GetTransferByAccount(
-                //转账金额
-                money,
-                //贷方货币
-                ccy,
-                //借方货币
-                ccy,
-                //收款方银行
-                payeeBankCode,
-                //收款方卡号
-                payeeCardNo,
-                //收款方姓名
-                payeeName,
-                //付款方银行
-                payerBankCode,
-                //付款方卡号
-                cardNo,
-                //付款方姓名
-                payerName,
-                //附言
-                remark),
-            'getTransferByAccount')
-        .then((value) {
+    VerificationCodeRepository()
+        .sendSmsByPhone(
+            SendSmsByPhoneNumberReq('13411111111', 'transactionPwd'), 'sendSms')
+        .then((data) {
+      // _startCountdown();
+      setState(() {
+        var _sms = '123456';
+      });
       HSProgressHUD.dismiss();
-      _showContractSucceedPage(context);
     }).catchError((e) {
-      setState(() {});
-      HSProgressHUD.showError(status: '${e.toString()}');
+      ///  Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.dismiss();
+    });
+    // }
+  }
+
+  _tranferAccount(BuildContext context) {
+    var smsCode = '123456';
+    setState(() {
+      HSProgressHUD.show();
+      TransferDataRepository()
+          .getTransferByAccount(
+              GetTransferByAccount(
+                  //转账金额
+                  money,
+                  //贷方货币
+                  ccy,
+                  //借方货币
+                  ccy,
+                  //输入密码
+                  '123456',
+                  //收款方银行
+                  payeeBankCode,
+                  //收款方卡号
+                  payeeCardNo,
+                  //收款方姓名
+                  payeeName,
+                  //付款方银行
+                  payerBankCode,
+                  //付款方卡号
+                  cardNo,
+                  //付款方姓名
+                  payerName,
+                  //附言
+                  remark,
+                  //验证码
+                  smsCode),
+              'getTransferByAccount')
+          .then((value) {
+        HSProgressHUD.dismiss();
+        _showContractSucceedPage(context);
+      }).catchError((e) {
+        setState(() {});
+        HSProgressHUD.showError(status: '${e.toString()}');
+      });
     });
   }
 
   //结算成功-跳转页面
   _showContractSucceedPage(BuildContext context) {
-    setState(() {});
     Navigator.pushNamed(context, pageDepositRecordSucceed, arguments: '0');
   }
 
   _isClick() {
     if (money > 0 && payeeName.length > 0 && payeeCardNo.length > 0) {
       return () {
-        _openBottomSheet();
-        // _tranferAccount(context);
+        _tranferAccount(context);
+        _clean();
+        // _openBottomSheet();
       };
     } else {
       return null;
@@ -475,7 +481,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   //交易密码窗口
   void _openBottomSheet() async {
-    passwordList = await showHsgBottomSheet(
+    final passwordList = await showHsgBottomSheet(
       context: context,
       builder: (context) {
         return HsgPasswordDialog(
@@ -483,9 +489,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         );
       },
     );
-    if (passwordList != null) {
+    if (passwordList != null && passwordList == true) {
       if (passwordList.length == 6) {
-        _tranferAccount(context);
         _clean();
       }
     }
@@ -494,7 +499,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   //清空数据
   _clean() {
     setState(() {
-      ccy = 'CNY';
+      ccy = 'USD';
       _transferMoneyController.text = '';
       _nameController.text = '';
       _accountController.text = '';

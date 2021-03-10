@@ -312,10 +312,10 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
       builder: (context) {
         return HsgPasswordDialog(
           title: S.current.input_password,
+          resultPage: pageOperationResult,
         );
       },
     );
-    print(_passwordList.toString);
     if (_passwordList != null) {
       if (_passwordList.length == 6) {
         _payPassword = EncryptUtil.aesEncode(_passwordList.join());

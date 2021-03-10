@@ -13,6 +13,9 @@ class GetTransferByAccount extends Object {
   @JsonKey(name: 'debitCurrency')
   String debitCurrency;
 
+  @JsonKey(name: 'payPassword')
+  String payPassword;
+
   @JsonKey(name: 'payeeBankCode')
   String payeeBankCode;
 
@@ -33,11 +36,14 @@ class GetTransferByAccount extends Object {
 
   @JsonKey(name: 'remark')
   String remark;
+  @JsonKey(name: 'smsCode')
+  String smsCode;
 
   GetTransferByAccount(
     this.amount,
     this.creditCurrency,
     this.debitCurrency,
+    this.payPassword,
     this.payeeBankCode,
     this.payeeCardNo,
     this.payeeName,
@@ -45,6 +51,7 @@ class GetTransferByAccount extends Object {
     this.payerCardNo,
     this.payerName,
     this.remark,
+    this.smsCode,
   );
 
   factory GetTransferByAccount.fromJson(Map<String, dynamic> srcJson) =>

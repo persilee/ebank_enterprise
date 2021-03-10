@@ -227,6 +227,8 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
       builder: (context) {
         return HsgPasswordDialog(
           title: S.current.input_password,
+          resultPage: pageRepaySuccess,
+          arguments: message,
         );
       },
     );
@@ -243,9 +245,8 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
         .verifyTransPwdNoSms(
             VerifyTransPwdNoSmsReq(_payPassword), 'VerifyTransPwdNoSmsReq')
         .then((data) {
-          _loadData();
-        })
-        .catchError((e) {
+      // _loadData();
+    }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
   }
