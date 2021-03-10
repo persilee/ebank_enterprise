@@ -62,7 +62,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   var ccyListOne = List<String>();
 
-  var ccyList = List<String>();
+  var ccyList = ['USD'];
 
   var _currBal;
 
@@ -106,6 +106,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   var _accountController = TextEditingController();
 
   var accountSelect = '';
+
+  var _loacalCurrBal = '';
 
   List<String> passwordList = []; //密码列表
 
@@ -187,13 +189,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             ccyLists.clear();
             ccyList.clear();
             _currBal = '';
+            _position = 0;
             element.cardListBal.forEach((bals) {
               totalBalances.add(bals.avaBal);
             });
             // var cardListB = new List();
-            if (element.cardListBal.length == 0) {
-              _currBal = '';
-            }
             element.cardListBal.forEach((cardBalBean) {
               if (cardBalBean.ccy != '') {
                 ccyList.add(cardBalBean.ccy);
@@ -202,6 +202,27 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 _currBal = cardBalBean.currBal.toString();
               }
             });
+            if (ccyList.length > 1) {
+              if (_changedCcyTitle == 'USD') {
+                _position = 2;
+              } else if (_changedCcyTitle == 'CNY') {
+                _position = 0;
+              }
+            } else {
+              _position = 0;
+            }
+            if (_changedCcyTitle != 'USD' &&
+                ccyList.length < 3 &&
+                ccyList.length > 0) {
+              _changedCcyTitle = 'USD';
+              _currBal = _loacalCurrBal;
+            }
+            if (element.cardListBal.length == 0) {
+              _currBal = '';
+              _changedCcyTitle = 'CNY';
+              ccyList.add('CNY');
+              _position = 0;
+            }
             // bool isBenBi = false;
             // for (int j = 0; j < cardListB.length; j++) {
             //   if (cardListB[j].ccy == 'USD') {
@@ -232,9 +253,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           return HsgSingleChoiceDialog(
             title: S.current.currency_choice,
             items: ccyList,
-            positiveButton: '确定',
-            negativeButton: '取消',
-            lastSelectedPosition: _lastSelectedPosition,
+            positiveButton: S.current.confirm,
+            negativeButton: S.current.cancel,
+            lastSelectedPosition: _position,
           );
         });
 
@@ -390,10 +411,15 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           setState(() {
             //余额
             // totalBalance = element.cardListBal[0].currBal;
-            ccy = element.cardListBal[0].ccy;
+            // ccy = element.cardListBal[0].ccy;
             element.cardListBal.forEach((element) {
               ccyListOne.clear();
               ccyListOne.add(element.ccy);
+              if (element.ccy == 'USD') {
+                _currBal = element.currBal;
+                _changedCcyTitle = 'USD';
+                _loacalCurrBal = _currBal;
+              }
             });
           });
         }
