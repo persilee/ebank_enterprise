@@ -68,14 +68,14 @@ class _ChangePayPageState extends State<ChangePayPage> {
                     child: Column(
                       children: [
                         InputList(S.of(context).oldPayPwd,
-                            S.of(context).placeOldPwd, _oldPwd),
+                            S.of(context).password_need_num, _oldPwd),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
                         InputList(S.of(context).newPayPwd,
-                            S.of(context).placeNewPwd, _newPwd),
+                            S.of(context).password_need_num, _newPwd),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
