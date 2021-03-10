@@ -110,6 +110,7 @@ var pageTimeDepositRecord = '/time_deposit_record_page';
 var pageMyDepositRate = '/time_deposit_rate_page';
 var pageDepositInfo = '/time_deposit_info_page';
 var pageIndex = new MaterialPageRoute(builder: (context) => new IndexPage());
+var pageIndexName = '/hsg_index_page';
 var pageFeatureList = '/hsg_feature_list_page';
 var pageTransfer = '/hsg_transfer_page';
 var pageAuthorizationHistory = '/authorization_history_page';
@@ -137,6 +138,7 @@ var pageStaticApproval = '/static_my_approval_page';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
+  pageIndexName: (context) => IndexPage(),
   pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
   pageLoanApplication: (context) => LoanApplicationPage(),

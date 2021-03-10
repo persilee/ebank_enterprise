@@ -11,12 +11,14 @@ import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
 import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
 
@@ -35,7 +37,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String _changedAccountTitle = S.current.hint_please_select;
   String _changedTermBtnTiTle = S.current.hint_please_select;
   String _changedInstructionTitle = S.current.hint_please_select;
-  String _changedDepositTerm = '';
+  // String _changedDepositTerm = '';
   String _changedRateTitle = '';
   String accuPeriod = '0';
   String auctCale = '0';
@@ -44,6 +46,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String matAmt = '0.00';
   List<RemoteBankCard> cards = [];
   RemoteBankCard card;
+  String custID;
+  // String _ciName = '';
 
   double bal = 0.00;
   String instCode = '';
@@ -238,22 +242,23 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             //输入金额大于起存金额时进行网络请求,计算到期金额
             if (double.parse(value) >= double.parse(productList.minAmt)) {
               _loadDepositData(
-                  // accuPeriod,
-                  // auctCale,
-                  // double.parse(value),
-                  // productList.bppdCode,
-                  // productList.ccy,
-                  //  card.custId,
-                  // depositType,
-                  // '',         // tenor
-                  '2',
-                  '1',
-                  double.parse(value),
-                  'TD000001',
-                  'HKD',
-                  '8000000004',
-                  'A',
-                  '');
+                accuPeriod,
+                auctCale,
+                double.parse(value),
+                productList.bppdCode,
+                productList.ccy,
+                custID,
+                depositType,
+                '', // tenor
+                // '2',
+                // '1',
+                // double.parse(value),
+                // 'TD000001',
+                // 'HKD',
+                // '8000000004',
+                // 'A',
+                // ''
+              );
             }
           },
           keyboardType: TextInputType.number,
@@ -392,7 +397,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
-        title: '存款期限',
+        title: S.current.deposit_time_limit,
         items: terms,
       ),
     );
@@ -401,10 +406,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       if (result != null && result != false) {
         _changedTermBtnTiTle = terms[result];
         _changedRateTitle = rates[result];
-        _changedDepositTerm = depositTerms[result];
+        // _changedDepositTerm = depositTerms[result];
         accuPeriod = accuPeriods[result];
         auctCale = accuPeriods[result];
-        rate = FormatUtil.formatNum(double.parse(_changedRateTitle) * 100, 2);
+        rate = FormatUtil.formatNum(double.parse(_changedRateTitle), 2);
       } else {
         return;
       }
@@ -438,6 +443,16 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       case '2':
         _changedTermBtnTiTle = (producDTOList[0].auctCale + S.current.months);
         break;
+      case '3':
+        _changedTermBtnTiTle =
+            ((int.parse(producDTOList[0].auctCale) * 3).toString() +
+                S.current.months);
+        break;
+      case '4':
+        _changedTermBtnTiTle =
+            ((int.parse(producDTOList[0].auctCale) * 6).toString() +
+                S.current.months);
+        break;
       default:
         {
           _changedTermBtnTiTle =
@@ -445,8 +460,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                   S.current.months);
         }
     }
+    accuPeriod = producDTOList[0].accuPeriod;
+    auctCale = producDTOList[0].auctCale;
+    depositType = producDTOList[0].depositType;
     rate = FormatUtil.formatNum(
-        double.parse(producDTOList[0].annualInterestRate) * 100, 2);
+        double.parse(producDTOList[0].annualInterestRate), 2);
 
     return Column(
       children: [
@@ -470,8 +488,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   _selectAccount(BuildContext context) async {
     List<String> bankCards = [];
     List<String> accounts = [];
+    List<String> ciNames = [];
     for (RemoteBankCard card in cards) {
       bankCards.add(card.cardNo);
+      ciNames.add((card.ciName));
     }
     for (var i = 0; i < bankCards.length; i++) {
       accounts.add(FormatUtil.formatSpace4(bankCards[i]));
@@ -482,6 +502,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             BottomMenu(title: S.current.payment_account, items: accounts));
     if (result != null && result != false) {
       _changedAccountTitle = accounts[result];
+      // _ciName = ciNames[result];
     } else {
       return;
     }
@@ -560,37 +581,35 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         });
     if (isPassword != null && isPassword == true) {
       _loadContractData(
-          accuPeriod,
-          double.parse(rate),
-          auctCale,
-          bal,
-          productList.bppdCode,
-          productList.ccy,
-          card.ciName,
-          depositType,
-          instCode,
-          _changedDepositTerm,
-          _changedAccountTitle,
-          bal,
-          productList.prodType,
-          '',
-          _changedAccountTitle
-          // "5",
-          // 1.3,
-          // "1",
-          // 86,
-          // "TD000009",
-          // "HKD",
-          // "50000066",
-          // "A",
-          // "0",
-          // "112",
-          // "500000666003",
-          // 86,
-          // "MMDP",
-          // "ok",
-          // "500000666003"
-          );
+        accuPeriod,
+        auctCale,
+        bal,
+        productList.bppdCode,
+        productList.ccy,
+        custID,
+        depositType,
+        instCode,
+        _changedAccountTitle,
+        '',
+        _changedAccountTitle,
+        '',
+        '',
+        // "5",
+        // 1.3,
+        // "1",
+        // 86,
+        // "TD000009",
+        // "HKD",
+        // "50000066",
+        // "A",
+        // "0",
+        // "112",
+        // "500000666003",
+        // 86,
+        // "MMDP",
+        // "ok",
+        // "500000666003"
+      );
       Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
           arguments: 'timeDepositProduct');
     }
@@ -624,6 +643,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   }
 
   Future<void> _loadData() async {
+    final prefs = await SharedPreferences.getInstance();
+    custID = prefs.getString(ConfigKey.CUST_ID);
     CardDataRepository().getCardList('getCardList').then(
       (data) {
         if (data.cardList != null) {
@@ -663,38 +684,34 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
   Future<void> _loadContractData(
       String accuPeriod,
-      double annualInterestRate,
       String auctCale,
       double bal,
       String bppdCode,
       String ccy,
-      String custName,
+      String ciNo,
       String depositType,
       String instCode,
-      String mergeTerm,
-      String payDdAc,
-      double payDdAmt,
-      String prodType,
-      String remarks,
-      String settDdAc) async {
+      String oppAc,
+      String payPassword,
+      String settDdAc,
+      String smsCode,
+      String tenor) async {
     TimeDepositDataRepository()
         .getTimeDepositContract(
             TimeDepositContractReq(
                 accuPeriod,
-                annualInterestRate,
                 auctCale,
                 bal,
                 bppdCode,
                 ccy,
-                custName,
+                ciNo,
                 depositType,
                 instCode,
-                mergeTerm,
-                payDdAc,
-                payDdAmt,
-                prodType,
-                remarks,
-                settDdAc),
+                oppAc,
+                payPassword,
+                settDdAc,
+                smsCode,
+                tenor),
             'getTimeDepositContract')
         .then((value) {
       setState(() {
