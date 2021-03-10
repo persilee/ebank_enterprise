@@ -33,21 +33,33 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
   ScrollController _scrollController = ScrollController();
   List<FinishTaskDetail> list = []; //页面显示的待办列表
   List<FinishTaskDetail> finishTaskList = [];
+  FinishTaskDetail dataA = FinishTaskDetail("60001", "0", "一对一转账审批", "6001",
+      "transfer", "3", "776106645288648704", "2020-11-11 14:16:24");
+  FinishTaskDetail dataB = FinishTaskDetail("60002", "0", "定期开立", "6002",
+      "transfer", "3", "776106645288648704", "2020-11-11 15:46:56");
+  FinishTaskDetail dataC = FinishTaskDetail("60003", "0", "一对一转账审批", "6003",
+      "transfer", "3", "776106645288648704", "2020-11-11 15:51:18");
+  FinishTaskDetail dataD = FinishTaskDetail("60003", "0", "定期开立", "6003",
+      "transfer", "3", "776106645288648704", "2020-11-11 16:02:33");
   var _future;
   @override
   void initState() {
     super.initState();
+    list.add(dataA);
+    list.add(dataB);
+    list.add(dataC);
+    list.add(dataD);
     //网络请求
-    _loadAuthorzationRateData(page, 10);
+    // _loadAuthorzationRateData(page, 10);
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        //加载更多
-        _getMore();
-      }
-      _future = _loadAuthorzationRateData(page, 10);
-    });
+    // _scrollController.addListener(() {
+    //   if (_scrollController.position.pixels ==
+    //       _scrollController.position.maxScrollExtent) {
+    //     //加载更多
+    //     _getMore();
+    //   }
+    //   _future = _loadAuthorzationRateData(page, 10);
+    // });
   }
 
   void go2Detail(FinishTaskDetail history) {
@@ -57,31 +69,34 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool _isDate = false;
-    if (list.length != 0) {
-      _isDate = true;
-    }
-    return _isDate
-        ? ListView.builder(
-            itemCount: list.length + 1,
-            itemBuilder: (context, index) {
-              if (index == list.length) {
-                return _loadingView();
-              } else {
-                return GestureDetector(
-                  onTap: () {
-                    go2Detail(list[index]);
-                    print('选择账号');
-                  },
-                  child: Column(
-                    children: [_getColumn(index)],
-                  ),
-                );
-              }
-            },
-            controller: _scrollController,
-          )
-        : notDataContainer(context, S.current.no_data_now);
+    // bool _isDate = false;
+    // if (list.length != 0) {
+    //   _isDate = true;
+    // }
+    return
+        // _isDate
+        //     ?
+        ListView.builder(
+      // itemCount: list.length + 1,
+      itemCount: list.length,
+      itemBuilder: (context, index) {
+        // if (index == list.length) {
+        //   return _loadingView();
+        // } else {
+        return GestureDetector(
+          onTap: () {
+            go2Detail(list[index]);
+            print('选择账号');
+          },
+          child: Column(
+            children: [_getColumn(index)],
+          ),
+        );
+        // }
+      },
+      // controller: _scrollController,
+    );
+    // : notDataContainer(context, S.current.no_data_now);
   }
 
   _getRow(String leftText, String rightText) {
