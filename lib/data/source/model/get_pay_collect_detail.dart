@@ -9,6 +9,8 @@ part 'get_pay_collect_detail.g.dart';
 
 @JsonSerializable()
 class GetRevenueByCardsReq {
+  @JsonKey(name: 'ciNo')
+  String ciNo;
   @JsonKey(name: 'localDateStart')
   String localDateStart;
   @JsonKey(name: 'page')
@@ -20,8 +22,9 @@ class GetRevenueByCardsReq {
 
   GetRevenueByCardsReq({
     this.localDateStart,
+    this.ciNo,
     this.page = '0',
-    this.pageSize = '0',
+    this.pageSize = '10',
     this.cards,
   });
 

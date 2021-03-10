@@ -10,6 +10,7 @@ import 'package:ebank_mobile/data/source/model/get_pay_collect_detail.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_record.dart';
 import 'package:ebank_mobile/data/source/pay_collect_detail_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -20,6 +21,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:date_format/date_format.dart';
 import 'package:intl/intl.dart';
 import 'package:popup_window/popup_window.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
 
@@ -44,7 +46,7 @@ class _DetailListPageState extends State<DetailListPage> {
   String _time = intl.S.current.the_same_month; //时间
   int _page = 1; //几页数据
   String _endDate =
-  DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now()); //结束时间
+      DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now()); //结束时间
   String _end = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示结束时间
   String _start = formatDate(
       DateTime(DateTime.now().year, DateTime.now().month, 1),
@@ -52,12 +54,18 @@ class _DetailListPageState extends State<DetailListPage> {
   List<TransferRecord> _transferHistoryList = []; //转账记录列表
   GlobalKey _textKey = GlobalKey();
 
+  var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   // ignore: must_call_super
   void initState() {
     // 网络请求
     _getCardList();
+
+    //下拉刷新
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      refrestIndicatorKey.currentState.show();
+    });
   }
 
   @override
@@ -111,8 +119,8 @@ class _DetailListPageState extends State<DetailListPage> {
             children: <Widget>[
               _cardList.length > 0
                   ? Text(_cardList[_position] == ''
-                  ? intl.S.current.all_account
-                  : _cardList[_position])
+                      ? intl.S.current.all_account
+                      : _cardList[_position])
                   : Text(intl.S.current.all_account),
               Icon(Icons.arrow_drop_down)
             ],
@@ -349,6 +357,7 @@ class _DetailListPageState extends State<DetailListPage> {
             _page = 1;
             _transferHistoryList.clear();
           });
+          Navigator.of(context).pop();
 //        Navigator.of(context).pop(_loadData());
         },
       ),
@@ -555,13 +564,13 @@ class _DetailListPageState extends State<DetailListPage> {
     return Text(
       revenueHistoryList[section].ddFinHistDOList[row].drCrFlg == 'C'
           ? '+ ' +
-          revenueHistoryList[section].ddFinHistDOList[row].txCcy +
-          ' ' +
-          revenueHistoryList[section].ddFinHistDOList[row].txAmt
+              revenueHistoryList[section].ddFinHistDOList[row].txCcy +
+              ' ' +
+              revenueHistoryList[section].ddFinHistDOList[row].txAmt
           : '- ' +
-          revenueHistoryList[section].ddFinHistDOList[row].txCcy +
-          ' ' +
-          revenueHistoryList[section].ddFinHistDOList[row].txAmt,
+              revenueHistoryList[section].ddFinHistDOList[row].txCcy +
+              ' ' +
+              revenueHistoryList[section].ddFinHistDOList[row].txAmt,
       style: TextStyle(fontSize: 15, color: Color(0xFF222121)),
     );
   }
@@ -602,11 +611,16 @@ class _DetailListPageState extends State<DetailListPage> {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
-          return HsgBottomCardChoice(
-            title: intl.S.of(context).account_lsit,
+          // return HsgBottomCardChoice(
+          //   title: intl.S.of(context).account_lsit,
+          //   items: _cardList,
+          //   lastSelectedPosition: _position,
+          //   imageUrl: _cardIcon,
+          // );
+          return HsgBottomSingleChoice(
+            title: intl.S.of(context).select_bank_card,
             items: _cardList,
             lastSelectedPosition: _position,
-            imageUrl: _cardIcon,
           );
         });
     if (result != null && result != false) {
@@ -627,12 +641,21 @@ class _DetailListPageState extends State<DetailListPage> {
     Navigator.pushNamed(context, pageDetailInfo, arguments: ddFinHist);
   }
 
-  _getRevenueByCards(String localDateStart, List<String> cards) {
+  _getRevenueByCards(String localDateStart, List<String> cards) async {
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID);
+
     HSProgressHUD.show();
     PayCollectDetailRepository()
         .getRevenueByCards(
-        GetRevenueByCardsReq(localDateStart: localDateStart, cards: cards),
-        'GetRevenueByCardsReq')
+            GetRevenueByCardsReq(
+              localDateStart: localDateStart,
+              page: '1',
+              pageSize: '10',
+              ciNo: custID,
+              cards: cards,
+            ),
+            'GetRevenueByCardsReq')
         .then((data) {
       HSProgressHUD.dismiss();
       if (data.revenueHistoryDTOList != null) {
@@ -654,10 +677,13 @@ class _DetailListPageState extends State<DetailListPage> {
           _cardIcon.clear();
           _allAccNoList.clear();
           _cardList.add(intl.S.current.all_account);
-          _cardIcon.add("images/transferIcon/transfer_wallet.png");
+          // _cardIcon.add("images/transferIcon/transfer_wallet.png");
           data.cardList.forEach((item) {
             _allAccNoList.add(item.cardNo);
             _cardList.add(item.cardNo);
+            // String cardIconUrl = (item.imageUrl == null || item.imageUrl == '')
+            //     ? "images/transferIcon/transfer_wallet.png"
+            //     : item.imageUrl;
             _cardIcon.add(item.imageUrl);
           });
         });

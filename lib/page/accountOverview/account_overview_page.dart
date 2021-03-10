@@ -26,7 +26,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   String totalLiabilities = '0.00';
   String localCcy = '';
   String ddTotal = '0.00';
-  String ddCcy = 'HKD';
+  String ddCcy = 'USD';
   String tdTotal = '0.00';
   String lnTotal = '0.00';
   // List<AccountOverviewList> ddList = [];
@@ -177,7 +177,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
             style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
           ),
           Text(
-            lnList[index].unpaidPrincipal + ' HKD',
+            lnList[index].unpaidPrincipal + ' ' + localCcy,
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
           )
         ],
@@ -200,7 +200,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                 style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
               ),
               Text(
-                lnTotal + ' HKD',
+                lnTotal + ' ' + localCcy,
                 style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
               ),
             ],
@@ -245,7 +245,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                 style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
               ),
               Text(
-                tdTotal + ' HKD',
+                tdTotal + ' ' + localCcy,
                 style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
               ),
             ],
@@ -437,9 +437,17 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
       if (data.cardListBal != null) {
         setState(() {
           ddList = data.cardListBal;
-          if (data.totalAmt != '0') {
-            ddTotal = data.totalAmt;
+          if (data.ddTotalAmt != '0') {
+            ddTotal = data.ddTotalAmt;
           }
+          if (data.tdTotalAmt != '0') {
+            tdTotal = data.tdTotalAmt;
+          }
+          lnTotal = '1000.00';
+          lnList = [
+            LoanMastList('0101900000095007', '0101900000095007', custID,
+                '1000.00', '1000.00')
+          ];
           ddCcy = data.defaultCcy == null ? localCcy : data.defaultCcy;
         });
       }
@@ -461,19 +469,19 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
       Fluttertoast.showToast(msg: e.toString());
     });
 
-    // 定期总额
-    AccountOverviewRepository()
-        .getActiveContractByCiNo(GetActiveContractByCiNoReq(custID, userID),
-            'GetActiveContractByCiNoReq')
-        .then((data) {
-      setState(() {
-        if (data.totalAmt != '0') {
-          tdTotal = data.totalAmt;
-        }
-      });
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
+    // // 定期总额
+    // AccountOverviewRepository()
+    //     .getActiveContractByCiNo(GetActiveContractByCiNoReq(custID, userID),
+    //         'GetActiveContractByCiNoReq')
+    //     .then((data) {
+    //   setState(() {
+    //     if (data.totalAmt != '0') {
+    //       tdTotal = data.totalAmt;
+    //     }
+    //   });
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // });
 
     // // 贷款
     // AccountOverviewRepository()
