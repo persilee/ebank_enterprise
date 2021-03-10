@@ -549,6 +549,8 @@ class _DetailListPageState extends State<DetailListPage> {
       cellBuilder: _cellBuilder,
       sectionHeaderHeight: _sectionHeaderHeight,
       cellHeight: _cellHeight,
+      // listViewFatherWidgetBuilder :_noDataContainer(context),//(revenueHistoryList.length > 0) ? Container()
+      // : _noDataContainer(context),
     );
   }
 
@@ -708,7 +710,7 @@ class _DetailListPageState extends State<DetailListPage> {
     PayCollectDetailRepository()
         .getRevenueByCards(
             GetRevenueByCardsReq(
-              localDateStart: '2021-01-01', //localDateStart,
+              localDateStart: '2021-01-01', //localDateStart, //'2021-01-01', //
               page: '1',
               pageSize: '10',
               ciNo: custID,

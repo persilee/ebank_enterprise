@@ -102,17 +102,17 @@ class _MinePageState extends State<MinePage> {
                 Navigator.pushNamed(context, pageContactCustomer);
               },
             ),
-            IconButton(
-              icon: Image(
-                image:
-                    AssetImage('images/home/navIcon/home_nav_message_has.png'),
-                width: 18.5,
-                height: 18.5,
-              ),
-              onPressed: () {
-                print('消息');
-              },
-            ),
+            // IconButton(
+            //   icon: Image(
+            //     image:
+            //         AssetImage('images/home/navIcon/home_nav_message_has.png'),
+            //     width: 18.5,
+            //     height: 18.5,
+            //   ),
+            //   onPressed: () {
+            //     print('消息');
+            //   },
+            // ),
             Expanded(
               child: Container(
                 alignment: Alignment.center,
@@ -193,6 +193,19 @@ class _MinePageState extends State<MinePage> {
 //              ],
 //            ),
 //          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.only(bottom: 16),
+            color: Colors.white,
+            // padding: EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              children: [
+                _flatBtnNuitWidget(S.of(context).my_account, true, () {
+                  Navigator.pushNamed(context, pageCardList);
+                }),
+              ],
+            ),
+          ),
           //修改登录密码
           Container(
             width: MediaQuery.of(context).size.width,
@@ -230,19 +243,19 @@ class _MinePageState extends State<MinePage> {
               ],
             ),
           ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(bottom: 16),
-            color: Colors.white,
-            // padding: EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              children: [
-                _flatBtnNuitWidget('签里眼面签相关', true, () {
-                  Navigator.pushNamed(context, pageQianliyanDemo);
-                }),
-              ],
-            ),
-          ),
+          // Container(
+          //   width: MediaQuery.of(context).size.width,
+          //   margin: EdgeInsets.only(bottom: 16),
+          //   color: Colors.white,
+          //   // padding: EdgeInsets.only(left: 20, right: 20),
+          //   child: Column(
+          //     children: [
+          //       _flatBtnNuitWidget('签里眼面签相关', true, () {
+          //         Navigator.pushNamed(context, pageQianliyanDemo);
+          //       }),
+          //     ],
+          //   ),
+          // ),
           //退出按钮
           Container(
             height: 50,
@@ -264,17 +277,17 @@ class _MinePageState extends State<MinePage> {
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: Row(
-              children: [_version(), _checkUserPhone()],
-            ),
-          ),
-          Container(
-            child: Row(
-              children: [_smsRegister(), _registerByAccountBtn()],
-            ),
-          ),
+          // Container(
+          //   margin: EdgeInsets.only(bottom: 10),
+          //   child: Row(
+          //     children: [_version(), _checkUserPhone()],
+          //   ),
+          // ),
+          // Container(
+          //   child: Row(
+          //     children: [_smsRegister(), _registerByAccountBtn()],
+          //   ),
+          // ),
           Container(
             height: 15,
           ),
