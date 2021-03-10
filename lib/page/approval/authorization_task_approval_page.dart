@@ -16,7 +16,8 @@ class AuthorizationTaskApprovalPage extends StatefulWidget {
   final FinishTaskDetail history;
   final title;
 
-  AuthorizationTaskApprovalPage({Key key, this.history, this.title}) : super(key: key);
+  AuthorizationTaskApprovalPage({Key key, this.history, this.title})
+      : super(key: key);
 
   @override
   _AuthorizationTaskApprovalPageState createState() =>
