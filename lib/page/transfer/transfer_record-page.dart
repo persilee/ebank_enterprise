@@ -13,6 +13,7 @@ import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -209,8 +210,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
               child: DottedLine(),
             ),
             //转账记录金额、时间、状态
-            _transferAmount(intl.S.of(context).transfer_amount,
-                _transferHistory.amount, _transferHistory.status),
+            _transferAmount(
+                intl.S.of(context).transfer_amount,
+                FormatUtil.formatSringToMoney(_transferHistory.amount),
+                _transferHistory.status),
             _rowContent(intl.S.of(context).transfer_time,
                 _transferHistory.transactionHour),
             _rowContent(
