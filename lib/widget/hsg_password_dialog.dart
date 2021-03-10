@@ -237,17 +237,18 @@ class HsgPasswordDialog extends StatelessWidget {
         .verifyTransPwdNoSms(
             VerifyTransPwdNoSmsReq(payPassword), 'VerifyTransPwdNoSmsReq')
         .then((data) {
+      //Navigator.pushNamed(context, resultPage);
       if (resultPage == '') {
         Navigator.of(context)..pop()..pop();
       } else {
         Navigator.pushNamed(context, resultPage, arguments: arguments);
       }
     }).catchError((e) {
-      // if (e.toString() == 'ECUST031') {
-      //   Fluttertoast.showToast(msg: '交易密码错误！请重试');
-      // } else {
-      //   Fluttertoast.showToast(msg: '未设置交易密码！');
-      // }
+      if (e.toString() == 'ECUST031') {
+        Fluttertoast.showToast(msg: '交易密码错误！请重试');
+      } else {
+        Fluttertoast.showToast(msg: '未设置交易密码！');
+      }
       Fluttertoast.showToast(msg: e.toString());
       passwordList.clear();
       (context as Element).markNeedsBuild();

@@ -44,6 +44,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   var totalBalance = '0.0';
 
   var bals = [];
+
   var cardNo = '';
   var singleLimit = '';
 
@@ -61,7 +62,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   var ccyListOne = List<String>();
 
-  var ccyList = List();
+  var ccyList = List<String>();
 
   List<String> ccyLists = [];
 
@@ -80,6 +81,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   String _changedAccountTitle = '';
 
   //余额
+  var _currBal;
+
   String _changedRateTitle = '';
 
   String _changedCcyTitle = '';
@@ -108,7 +111,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     '房地产投资',
     '其他',
   ];
-  List<String> ccyListPlay = ['CNY', 'HKD', 'EUR'];
+  //List<String> ccyListPlay = ['CNY', 'HKD', 'EUR'];
 
   var _countryText = S.current.please_select;
 
@@ -252,40 +255,53 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         // 通过卡号查询余额
         if (element is GetSingleCardBalResp) {
           setState(() {
-            bals.clear();
-            bals.addAll(element.cardListBal);
-            ccyLists.clear();
             //通过卡号查询货币
-            //获取集合
-            List<CardBalBean> dataList = [];
-
-            for (int i = 0; i < cardBal.length; i++) {
-              CardBalBean doList = cardBal[i];
-              ccyLists.add(doList.ccy);
-
-              if (!ccyLists.contains('CNY')) {
-                CardBalBean doListNew;
-                cardBal.insert(0, doListNew);
+            ccyLists.clear();
+            ccyList.clear();
+            _currBal = '';
+            if (element.cardListBal.length == 0) {
+              _currBal = '';
+            }
+            element.cardListBal.forEach((cardBalBean) {
+              if (cardBalBean.ccy != '') {
+                ccyList.add(cardBalBean.ccy);
               }
-            }
-
-            if (!ccyLists.contains('CNY')) {
-              CardBalBean doListNew;
-              dataList.insert(0, doListNew);
-            }
-
-            dataList.forEach((element) {
-              String ccyCNY = element == null ? 'CNY' : element.ccy;
-              ccyList.add(ccyCNY);
-              String avaBAL = element == null ? '0.00' : element.avaBal;
-              totalBalances.add(avaBAL);
+              if (_changedCcyTitle == cardBalBean.ccy) {
+                _currBal = cardBalBean.currBal.toString();
+              }
+              print('777777 $ccyList');
             });
+
+            //获取集合
+            // List<CardBalBean> dataList = [];
+
+            // for (int i = 0; i < cardBal.length; i++) {
+            //   CardBalBean doList = cardBal[i];
+            //   ccyLists.add(doList.ccy);
+
+            //   if (!ccyLists.contains('CNY')) {
+            //     CardBalBean doListNew;
+            //     cardBal.insert(0, doListNew);
+            //   }
+            // }
+
+            // if (!ccyLists.contains('CNY')) {
+            //   CardBalBean doListNew;
+            //   dataList.insert(0, doListNew);
+            // }
+
+            // dataList.forEach((element) {
+            //   String ccyCNY = element == null ? 'CNY' : element.ccy;
+            //   ccyList.add(ccyCNY);
+            //   String avaBAL = element == null ? '0.00' : element.avaBal;
+            //   totalBalances.add(avaBAL);
+            // });
             // ccyList.add(ccyLists);
 
             // 添加余额
-            element.cardListBal.forEach((bals) {
-              totalBalances.add(bals.avaBal);
-            });
+            // element.cardListBal.forEach((bals) {
+            //   totalBalances.add(bals.avaBal);
+            // });
           });
         }
         //查询额度
@@ -306,8 +322,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         builder: (context) {
           return HsgSingleChoiceDialog(
             title: S.of(context).currency_choice,
-            items: ccyListPlay,
-            // ccyLists,
+            items: //ccyListPlay,
+                ccyList,
             positiveButton: S.of(context).confirm,
             negativeButton: S.of(context).cancel,
             lastSelectedPosition: groupValue,
@@ -316,9 +332,12 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
     if (result != null && result != false) {
       //货币种类
+
+      _position = result;
+      _changedCcyTitle = ccyList[_position];
       // _changedCcyTitle = ccyList[result];
-      groupValue = result;
-      _changedCcyTitle = ccyListPlay[result];
+      // groupValue = result;
+      // _changedCcyTitle = ccyListPlay[result];
       // //余额
       // _changedRateTitle = totalBalances[result];
     }
@@ -449,7 +468,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               context,
               _limitMoney,
               _changedCcyTitle,
-              _changedRateTitle,
+              _currBal,
               _changedAccountTitle,
               ccy,
               singleLimit,
@@ -868,8 +887,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //结算成功-跳转页面
   _showContractSucceedPage(BuildContext context) async {
-    setState(() {});
-    Navigator.pushNamed(context, pageDepositRecordSucceed);
+    Navigator.pushNamed(context, pageDepositRecordSucceed,
+        arguments: 'international');
   }
 
   //判断是否可以点击

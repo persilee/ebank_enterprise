@@ -3,7 +3,7 @@
 /// Author: lijiawei
 /// Date: 2020-12-09
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/forex_trading.dart';
+
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
@@ -87,8 +87,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   String _changedCcyTitle = '';
 
   int _position = 0;
-
-  int _lastSelectedPosition = -1;
 
   int _accountIndex = 0;
 
@@ -187,10 +185,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             ccyLists.clear();
             ccyList.clear();
             _currBal = '';
-            element.cardListBal.forEach((bals) {
-              totalBalances.add(bals.avaBal);
-            });
-            // var cardListB = new List();
             if (element.cardListBal.length == 0) {
               _currBal = '';
             }
@@ -483,9 +477,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   _isClick() {
     if (money > 0 && payeeName.length > 0 && payeeCardNo.length > 0) {
       return () {
-        _tranferAccount(context);
+        // _tranferAccount(context);
         _clean();
-        // _openBottomSheet();
+        _openBottomSheet();
       };
     } else {
       return null;
@@ -505,6 +499,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     if (passwordList != null && passwordList == true) {
       if (passwordList.length == 6) {
         _clean();
+        _tranferAccount(context);
       }
     }
   }

@@ -115,7 +115,7 @@ var pageFeatureList = '/hsg_feature_list_page';
 var pageTransfer = '/hsg_transfer_page';
 var pageAuthorizationHistory = '/authorization_history_page';
 var pageTransferInternal = '/hsg_transfer_internal_page';
-var pageInternational = '/hsg_transfer_international_page';
+var pageTrasferInternational = '/hsg_transfer_international_page';
 var pageElectronicStatement = '/electronic_statement_page';
 var pageElectronicStatementDetail = '/electronic_statement_detail_page';
 var pageTimeDepostProduct = '/time_depost_product_page';
@@ -176,7 +176,7 @@ var appRoutes = {
   pageMyDepositRate: (context) => MyDepositRatePage(),
   pageDepositRecordSucceed: (context) => DepositContractSucceed(),
   //pageDepositInfo: (context) => PageDepositInfo(),
-  pageInternational: (context) => TransferInternationalPage(),
+  pageTrasferInternational: (context) => TransferInternationalPage(),
   pageFeatureList: (context) => FeatureListPage(),
   pageTransfer: (context) => TransferPage(),
   pageAuthorizationHistory: (context) => AuthorizationHistoryPage(),
@@ -230,7 +230,10 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageAuthorizationTaskApproval) {
     return MaterialPageRoute(builder: (context) {
       Map<String, dynamic> arguments = settings.arguments;
-      return AuthorizationTaskApprovalPage(history: arguments['data'], title: arguments['title'],);
+      return AuthorizationTaskApprovalPage(
+        history: arguments['data'],
+        title: arguments['title'],
+      );
     });
   }
   if (settings.name == pageTransferPlanDetails) {

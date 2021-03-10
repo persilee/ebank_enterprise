@@ -346,7 +346,8 @@ class _TransferPartnerState extends State<TransferPartner> {
             Navigator.pushNamed(context, pageTransferInternal,
                 arguments: partner);
           } else if (partner.transferType == '2') {
-            Navigator.pushNamed(context, pageInternational, arguments: partner);
+            Navigator.pushNamed(context, pageTrasferInternational,
+                arguments: partner);
           }
         }
       },
