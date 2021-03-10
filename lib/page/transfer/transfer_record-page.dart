@@ -33,7 +33,7 @@ class TrsnsferRecordPage extends StatefulWidget {
 
 class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   List<TransferRecord> _transferHistoryList = []; //转账记录列表
-  String _card = intl.S.current.card; //银行卡
+  String _card = intl.S.current.all_account; //银行卡
   List<String> _cradLists = []; //银行卡列表
   List<String> _imageUrl = []; //银行卡图标列表
   int _position = 0;
@@ -721,12 +721,15 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     int pageSize = 10;
     List<String> paymentCardNos = [];
     String sort = '';
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+    String userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
     String loginName = '18033412021';
     String userId = '778309634589982720';
     TransferDataRepository()
         .getTransferRecord(
             GetTransferRecordReq(ccy, _endDate, _page, pageSize, paymentCardNos,
-                sort, _startDate, loginName, userId),
+                sort, _startDate, userAccount, userID),
             'getTransferRecord')
         .then((data) {
       setState(() {
