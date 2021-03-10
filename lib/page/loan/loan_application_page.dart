@@ -215,7 +215,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
               text: S.current.loan_application_agreement1,
               style: AGREEMENT_TEXT_STYLE,
             ),
-            _conetentJump(S.current.loan_application_agreement2, '99867'),
+            _conetentJump(S.current.loan_application_agreement2, '98822'),
             TextSpan(
               text: S.current.loan_application_agreement3,
               style: AGREEMENT_TEXT_STYLE,
