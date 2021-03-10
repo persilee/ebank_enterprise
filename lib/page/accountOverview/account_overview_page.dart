@@ -26,7 +26,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   String totalLiabilities = '0.00';
   String localCcy = '';
   String ddTotal = '0.00';
-  String ddCcy = 'USD';
+  String ddCcy = '';
   String tdTotal = '0.00';
   String lnTotal = '0.00';
   // List<AccountOverviewList> ddList = [];
@@ -422,7 +422,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
         if (data.totalLiability != '0') {
           totalLiabilities = data.totalLiability;
         }
-        localCcy = data.ccy;
+        // localCcy = data.ccy;
       });
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
