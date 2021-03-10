@@ -17,6 +17,7 @@ import 'hsg_text_field_dialog.dart';
 // ignore: must_be_immutable
 class HsgPasswordDialog extends StatelessWidget {
   final String title;
+  final bool isDialog;
   List<String> keyboardNum = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
   List<String> passwordList = [];
   String password = '';
@@ -26,7 +27,12 @@ class HsgPasswordDialog extends StatelessWidget {
   TextEditingController _editingController = TextEditingController();
   String inputText = '';
 
-  HsgPasswordDialog({Key key, this.title, this.resultPage, this.arguments});
+  HsgPasswordDialog(
+      {Key key,
+      this.title,
+      this.resultPage,
+      this.arguments,
+      this.isDialog = false});
 
   @override
   Widget build(BuildContext context) {
@@ -244,26 +250,30 @@ class HsgPasswordDialog extends StatelessWidget {
         .then((data) {
       Navigator.pop(context, true);
       //Navigator.of(context)..pop()..pop();
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return HsgTextFieldDialog(
-              editingController: _editingController,
-              onChanged: (value) {
-                inputText = value;
-                print(inputText);
-              },
-              confirmCallback: () {},
-              sendCallback: () {},
-            );
-          });
-
       //Navigator.pushNamed(context, resultPage);
       if (resultPage == '') {
         Navigator.of(context)..pop()..pop();
       } else {
-        Navigator.pushNamed(context, resultPage, arguments: arguments);
+        if (this.isDialog) {
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return HsgTextFieldDialog(
+                  editingController: _editingController,
+                  onChanged: (value) {
+                    inputText = value;
+                    print(inputText);
+                  },
+                  confirmCallback: () {
+                    Navigator.pushNamed(context, resultPage, arguments: arguments);
+                  },
+                  sendCallback: () {},
+                );
+              });
+        } else {
+          Navigator.pushNamed(context, resultPage, arguments: arguments);
+        }
       }
     }).catchError((e) {
       if (e.toString() == 'ECUST031') {

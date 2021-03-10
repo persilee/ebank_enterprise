@@ -131,13 +131,13 @@ class _TransferPartnerState extends State<TransferPartner> {
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            //搜索框
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.only(left: 15, right: 25),
-              margin: EdgeInsets.only(bottom: 16, top: 16),
-              child: _searchIcon(),
-            ),
+            // //搜索框
+            // Container(
+            //   color: Colors.white,
+            //   padding: EdgeInsets.only(left: 15, right: 25),
+            //   margin: EdgeInsets.only(bottom: 16, top: 16),
+            //   child: _searchIcon(),
+            // ),
             //卡号列表
             Container(
               color: Colors.white,
