@@ -1,5 +1,5 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-/// desc: 重置支付密码--身份证验证
+/// desc: 重置交易密码--身份证验证
 /// Author: hlx
 /// Date: 2021-01-06
 
@@ -19,7 +19,7 @@ class SetTransactionPasswordReq {
   String certificateType;
   @JsonKey(name: 'payPassword')
   String payPassword;
-   @JsonKey(name: 'phoneNumber')
+  @JsonKey(name: 'phoneNumber')
   String phoneNumber;
   @JsonKey(name: 'userId')
   String userId;
@@ -29,16 +29,15 @@ class SetTransactionPasswordReq {
   String smsCode;
 
   SetTransactionPasswordReq(
-    this.actualName,
-    this.cardNo,
-    this.certificateNo,
-    this.certificateType,
-    this.payPassword,
-    this.phoneNumber,
-    this.userId,
-    this.verify,
-    this.smsCode
-  );
+      this.actualName,
+      this.cardNo,
+      this.certificateNo,
+      this.certificateType,
+      this.payPassword,
+      this.phoneNumber,
+      this.userId,
+      this.verify,
+      this.smsCode);
 
   @override
   String toString() {

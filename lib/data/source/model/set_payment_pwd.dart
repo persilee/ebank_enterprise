@@ -1,5 +1,5 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-/// 设置支付密码
+/// 设置交易密码
 /// Author: hlx
 /// Date: 2020-12-02
 ///
@@ -22,17 +22,13 @@ class SetPaymentPwdReq {
   @JsonKey(name: 'verificationCode')
   String verificationCode;
 
-
-  SetPaymentPwdReq(
-    this.oldPayPassword,
-    this.newPayPassword,
-    this.userId,
-    this.verificationCode
-  );
+  SetPaymentPwdReq(this.oldPayPassword, this.newPayPassword, this.userId,
+      this.verificationCode);
   @override
   String toString() {
     return toJson().toString();
   }
+
   factory SetPaymentPwdReq.fromJson(Map<String, dynamic> srcJson) =>
       _$SetPaymentPwdReqFromJson(srcJson);
 

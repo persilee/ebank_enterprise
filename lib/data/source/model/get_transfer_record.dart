@@ -21,7 +21,7 @@ class GetTransferRecordReq extends Object {
 //页面大小
   @JsonKey(name: 'pageSize')
   int pageSize;
-//支付银行卡号收款
+//交易银行卡号收款
   @JsonKey(name: 'paymentCardNos')
   List<String> paymentCardNos;
 //排序

@@ -1,7 +1,7 @@
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-/// 重置支付密码--身份证验证
+/// 重置交易密码--身份证验证
 /// Author: hlx
 /// Date: 2020-12-31
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
@@ -69,7 +69,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
             TextSelection.collapsed(offset: _phoneNo.text.length);
       }
     });
-    //支付密码，确认密码限制6位
+    //交易密码，确认密码限制6位
     _newPwd.addListener(() {
       String text = _newPwd.text;
       int length = text.length;

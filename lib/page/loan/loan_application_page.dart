@@ -43,7 +43,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
   String _custId = ''; //客户号
   bool _isButton = false; //申请按钮是否能点击
   bool _checkBoxValue = false; //复选框默认值
-  var _payPassword = ''; //支付密码
+  var _payPassword = ''; //交易密码
   var _contactsController = new TextEditingController(); //联系人文本监听器
   var _phoneController = new TextEditingController(); //联系人手机号码文本监听器
   var _moneyController = new TextEditingController(); //申请金额文本监听器
