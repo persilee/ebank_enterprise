@@ -589,9 +589,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         custID,
         depositType,
         instCode,
-        _changedAccountTitle,
+        _changedAccountTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
         '',
-        _changedAccountTitle,
+        _changedAccountTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
         '',
         '',
         // "5",
@@ -610,8 +610,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         // "ok",
         // "500000666003"
       );
-      Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
-          arguments: 'timeDepositProduct');
     }
   }
 
@@ -715,7 +713,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             'getTimeDepositContract')
         .then((value) {
       setState(() {
-        Navigator.pushNamed(context, pageDepositRecordSucceed);
+        Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
+            arguments: 'timeDepositProduct');
       });
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());

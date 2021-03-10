@@ -7,7 +7,7 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/get_deposit_by_card_no.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -46,7 +46,11 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _getContent(rowList),
+      body: RefreshIndicator(
+          key: refrestIndicatorKey,
+          child: _getContent(rowList),
+          //下拉刷新时调用_loadDeopstData
+          onRefresh: _loadDeopstData),
     );
   }
 
@@ -209,7 +213,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     Navigator.pushNamed(context, pageDepositInfo, arguments: deposit);
   }
 
-  _loadDeopstData() async {
+  Future<void> _loadDeopstData() async {
     final prefs = await SharedPreferences.getInstance();
 
     bool excludeClosed = true;
@@ -217,14 +221,13 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     int pageSize = 10;
     // String ciNo = '50000067';
     String ciNo = prefs.getString(ConfigKey.CUST_ID);
-    String userId = '776112799108562944';
+    // String userId = '776112799108562944';
     Future.wait({
       DepositDataRepository().getDepositRecordRows(
           DepositRecordReq(ciNo, '', excludeClosed, page, pageSize, ''),
-          'getDepositRecord')
-      //     ,
-      // DepositDataRepository().getDepositByCardNo(
-      //     DepositByCardReq(ccy, ciNo, userId), 'getDepositByCardNo')
+          'getDepositRecord'),
+      DepositDataRepository().getCardListBalByUser(
+          GetCardListBalByUserReq('', [], '', ciNo), 'getCardListBalByUser')
     }).then((value) {
       value.forEach((element) {
         if (element is DepositRecordResp) {
@@ -234,12 +237,11 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
               rowList.addAll(element.rows);
             });
           }
+        } else if (element is GetCardListBalByUserResp) {
+          setState(() {
+            totalAmt = element.tdTotalAmt;
+          });
         }
-        // else if (element is DepositByCardResp) {
-        //   setState(() {
-        //     totalAmt = element.totalAmt;
-        //   });
-        // }
       });
     });
   }

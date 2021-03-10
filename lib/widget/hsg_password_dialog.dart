@@ -254,8 +254,8 @@ class HsgPasswordDialog extends StatelessWidget {
                 inputText = value;
                 print(inputText);
               },
-              confirmCallback: (){},
-              sendCallback: (){},
+              confirmCallback: () {},
+              sendCallback: () {},
             );
           });
 

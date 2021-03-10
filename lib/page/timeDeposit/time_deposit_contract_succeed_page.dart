@@ -6,7 +6,6 @@
  */
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
-import 'package:ebank_mobile/page/transfer/hsg_transfer_international_page.dart';
 
 // import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
 
@@ -62,8 +61,6 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                 height: 45,
                 child: FlatButton(
                   onPressed: () {
-                    //行内转账跳转
-                    //pageTransfer
                     if (_arguments == '0') {
                       Navigator.of(context)..pop()..pop()..pop();
                     }
@@ -86,6 +83,12 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                     //预约转账
                     if (_arguments == 'advanceTransfer') {
                       Navigator.of(context)..pop()..pop()..pop();
+                    }
+
+                    //提前结清跳转
+                    if (_arguments == 'timeDepositRecord') {
+                      Navigator.pushReplacementNamed(
+                          context, pageTimeDepositRecord);
                     }
                   },
                   color: HsgColors.accent,
