@@ -1,165 +1,87 @@
-/// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///我的申请详情页面
-/// Author: fangluyao
-/// Date: 2020-12-30
-
+/*
+ * 
+ * Created Date: Thursday, December 10th 2020, 5:34:04 pm
+ * Author: pengyikang
+ * 授权记录任务审批页面
+ * Copyright (c) 2020 深圳高阳寰球科技有限公司
+ */
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/find_user_application_task_detail.dart';
-import 'package:ebank_mobile/data/source/model/get_my_application.dart';
+import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
+import 'package:ebank_mobile/data/source/model/find_user_finished_task_detail.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-class ApplicationTaskApprovalPage extends StatefulWidget {
+class AuthorizationTaskApprovalPage extends StatefulWidget {
+  final FinishTaskDetail history;
+  final title;
+
+  AuthorizationTaskApprovalPage({Key key, this.history, this.title})
+      : super(key: key);
+
   @override
-  _ApplicationTaskApprovalPageState createState() =>
-      _ApplicationTaskApprovalPageState();
+  _AuthorizationTaskApprovalPageState createState() =>
+      _AuthorizationTaskApprovalPageState(history);
 }
 
-class _ApplicationTaskApprovalPageState
-    extends State<ApplicationTaskApprovalPage> {
-  var processId = "";
-  var commentList = [];
+class _AuthorizationTaskApprovalPageState
+    extends State<AuthorizationTaskApprovalPage> {
+  FinishTaskDetail history;
+
+  _AuthorizationTaskApprovalPageState(this.history);
+  var commentList = <CommentList>[];
   //转账信息
   bool _transfer = true;
-  var _fromAccount = "";
-  var _fromCcy = "";
-  var _payeeName = "";
+  var _fromAccount = "6001";
+  var _fromCcy = "USD";
+  var _payeeName = "Mark";
   //付款信息
-  bool _pay = true;
-  var _accountNumber = "";
-  var _accountName = "";
-  var _payBank = "";
-  var _toCcy = "";
-  var _toaccount = "";
-  var _remark = "";
+  bool _pay = false;
+  var _accountNumber = "500000617002";
+  var _accountName = "Alix";
+  var _payBank = "Hisun";
+  var _toCcy = "HKD";
+  var _toaccount = "6002";
+  var _remark = "贷款";
+  //基本信息
+  bool _base = false;
+  var _userId = "500000617001";
 
-  var _listDetail = [
-    {
-      'title': '转账信息',
-      'rowList': [
-        {'leftText': '用户账号', 'rightText': '5241548521225210'},
-        {'leftText': '付款账户', 'rightText': '5241548521225210'},
-        {'leftText': '服务', 'rightText': '5241548521225210'},
-      ]
-    },
-    {
-      'title': '付款信息',
-      'rowList': [
-        {'leftText': '用户账号11', 'rightText': '5241548521225210'},
-        {'leftText': '付款账户11', 'rightText': '5241548521225210'},
-        {'leftText': '服务11', 'rightText': '5241548521225210'},
-      ]
-    },
-  ];
+  var _processKey = "一对一转账";
+
+  var _processTitle = "Transfer";
+
+  String _servCtr = "";
 
   @override
   void initState() {
     super.initState();
-    _loadHistoryData();
+    _loadHistoryData(history.processId);
   }
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> arguments = ModalRoute.of(context).settings.arguments;
-    String title = arguments['title'];
-    MyApplicationDetail history = arguments['data'];
-    processId = history.processId;
-    print(processId);
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(widget.title),
         centerTitle: true,
       ),
       body: CustomScrollView(
         slivers: <Widget>[
-          //  _sliverFixed(),
-          _transferInfo(),
+          _baseInformation(),
+          //  _transferInfo(),
           _payInfo(),
-          _historyHeader(),
-          _historyContent(),
+          // _historyHeader(),
+          // // _historyContent(),
+          // Container(
+          //   child: Text("无审批历史"),
+          // )
         ],
       ),
     );
   }
 
-  // ignore: unused_element
-  _sliverFixed() {
-    return SliverFixedExtentList(
-      delegate: SliverChildBuilderDelegate(
-        _buildListItem,
-        childCount: _listDetail.length,
-      ),
-      itemExtent: 200.5,
-    );
-  }
-
-  ///底下列表
-  Widget _buildListItem(BuildContext context, int index) {
-    return ListTile(
-      title: _getFeatures(_listDetail[index]),
-    );
-  }
-
-  ///列表单元格
-  Widget _getFeatures(Map data) {
-    //单元格详情
-    Column _featuresDeatil = Column(
-      children: [
-        Container(
-          padding: EdgeInsets.only(left: 15, right: 15),
-          height: 50,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                data['title'],
-                style: TextStyle(
-                  color: HsgColors.firstDegreeText,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-        // _getRow(data['leftText'], data['rightText']),
-        Container(
-          // height: 200,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: _craphicBtns(data),
-          ),
-        ),
-      ],
-    );
-
-    return Container(
-      padding: EdgeInsets.only(top: 10),
-      child: Card(
-        shadowColor: Color(0x46529F2E),
-        child: _featuresDeatil,
-      ),
-    );
-  }
-
-  List<Widget> _craphicBtns(Map data) {
-    List<Widget> btns = [];
-    List dataList = data['rowList'];
-
-    for (var i = 0; i < dataList.length; i++) {
-      Map btnData = dataList[i];
-      btns.add(
-        Container(
-          child: Column(
-            children: [_getRow(btnData['leftText'], btnData['rightText'])],
-          ),
-        ),
-      );
-    }
-    return btns;
-  }
-
+  //历史记录标题
   _historyHeader() {
     return SliverToBoxAdapter(
       child: Container(
@@ -183,43 +105,83 @@ class _ApplicationTaskApprovalPageState
     );
   }
 
+  //授权历史记录
   _historyContent() {
-    return commentList.length > 0
-        ? SliverList(
+    return
+        // commentList.length > 0
+        //     ?
+        SliverList(
             delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return SizedBox(
-                child: Column(
-                  children: [
-                    Container(
-                        color: Colors.white,
-                        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                        child: Column(
-                          children: [
-                            _getHintLine(),
-                            _getRow(S.current.approver,
-                                commentList[index].userName),
-                            _getRow(S.current.approver_time,
-                                commentList[index].time),
-                            _getRow(S.current.approver_opinion,
-                                commentList[index].comment),
-                            _getRow(
-                                S.current.approver_result,
-                                commentList[index].result
-                                    ? S.current.success
-                                    : S.current.failed),
-                          ],
-                        ))
-                  ],
-                ),
-              );
-            },
-            childCount: commentList.length,
-          ))
-        : SliverToBoxAdapter();
+      (BuildContext context, int index) {
+        return SizedBox(
+          child: Column(
+            children: [
+              Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  color: Colors.white,
+                  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                  child: Column(
+                    children: [
+                      _getHintLine(),
+                      _getRow(S.current.approver, commentList[index].userName),
+                      _getRow(S.current.approver_time, commentList[index].time),
+                      _getRow(S.current.approver_opinion,
+                          commentList[index].comment),
+                      _getRow(
+                          S.current.approver_result,
+                          commentList[index].result
+                              ? S.current.success
+                              : S.current.failed),
+                    ],
+                  ))
+            ],
+          ),
+        );
+      },
+      childCount: commentList.length,
+    ));
+    // : SliverToBoxAdapter();
   }
 
-//转账信息
+  //基本信息
+  _baseInformation() {
+    return SliverToBoxAdapter(
+      child: _base
+          ? Container()
+          : Container(
+              margin: EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              color: Colors.white,
+              child: Column(
+                children: [
+                  Container(
+                      color: Colors.white,
+                      child: Row(
+                        children: [_getTitle('基本信息')],
+                      )),
+                  _getHintLine(),
+                  (_userId == "" || _userId == null)
+                      ? Container()
+                      : _getRow('用户账号', _userId),
+                  _getHintLine(),
+                  (_processKey == "" || _fromAccount == null)
+                      ? Container()
+                      : _getRow('任务名称', _processKey),
+                  _getHintLine(),
+                  (_processTitle == "" || _processTitle == null)
+                      ? Container()
+                      : _getRow('任务标题', _processTitle),
+                  (_servCtr == "" || _servCtr == null)
+                      ? Container()
+                      : _getRow('服务', _servCtr),
+                ],
+              ),
+            ),
+    );
+  }
+
+  //转账信息
+  // ignore: unused_element
   _transferInfo() {
     return SliverToBoxAdapter(
       child: _transfer
@@ -230,7 +192,11 @@ class _ApplicationTaskApprovalPageState
               color: Colors.white,
               child: Column(
                 children: [
-                  _getTitle(S.current.transfer_info),
+                  Container(
+                      color: Colors.white,
+                      child: Row(
+                        children: [_getTitle(S.current.transfer_info)],
+                      )),
                   _getHintLine(),
                   (_fromAccount == "" || _fromAccount == null)
                       ? Container()
@@ -259,7 +225,11 @@ class _ApplicationTaskApprovalPageState
               color: Colors.white,
               child: Column(
                 children: [
-                  _getTitle(S.current.payment_info),
+                  Container(
+                      color: Colors.white,
+                      child: Row(
+                        children: [_getTitle(S.current.payment_info)],
+                      )),
                   _getHintLine(),
                   (_accountNumber == "" || _accountNumber == null)
                       ? Container()
@@ -307,23 +277,17 @@ class _ApplicationTaskApprovalPageState
     );
   }
 
-  _getTitle(String title) {
+  _getTitle(title) {
     return Container(
-        color: Colors.white,
-        child: Row(
-          children: [
-            Container(
-              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )
-          ],
-        ));
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
   }
 
   _getHintLine() {
@@ -334,32 +298,38 @@ class _ApplicationTaskApprovalPageState
     ));
   }
 
-  void _loadHistoryData() {
-    Future.wait({
-      NeedToBeDealtWithRepository()
-          .findUserApplicationDetail(FindUserApplicationDetailReq('39368'),
-              'findUserApplicationDetail')
-          .then((data) {
-        setState(() {
-          if (data != null) {
-            commentList.clear();
-            commentList.addAll(data.commentList);
-          }
-          if (data.operateEndValue != null) {
-            _pay = false;
-            _transfer = false;
-            _accountNumber = data.operateEndValue.payAcNo;
-            _accountName = data.operateEndValue.payAcNo;
-            _payBank = data.operateEndValue.prdtCode;
-            _toCcy = data.operateEndValue.ccy;
-            _toaccount = data.operateEndValue.intentAmt;
-            _remark = data.operateEndValue.remark;
-            _fromAccount = data.operateEndValue.repaymentAcNo;
-            _fromCcy = data.operateEndValue.ccy;
-            _payeeName = data.operateEndValue.repaymentAcNo;
-          }
-        });
-      })
-    });
+  void _loadHistoryData(String processId) {
+    //   Future.wait({
+    //     NeedToBeDealtWithRepository()
+    //         .findUserFinishedDetail(
+    //             GetFindUserFinishedDetailReq(processId), 'findUserFinishedDetail')
+    //         .then((data) {
+    //       setState(() {
+    //         if (data != null) {
+    //           commentList.clear();
+    //           commentList.addAll(data.commentList);
+    //         }
+    //         if (data.operateEndValue != null) {
+    //           _pay = false;
+    //           _transfer = false;
+    //           // _base = false;
+    //           _accountNumber = data.operateEndValue.payerCardNo;
+    //           _accountName = data.operateEndValue.payerName;
+    //           _payBank = data.operateEndValue.payerBankCode;
+    //           _toCcy = data.operateEndValue.debitCurrency;
+    //           _toaccount = data.operateEndValue.amount;
+    //           _remark = data.operateEndValue.remark;
+    //           _fromAccount = data.operateEndValue.payeeBankCode;
+    //           _fromCcy = data.operateEndValue.debitCurrency;
+    //           _payeeName = data.operateEndValue.payeeName;
+    //           _userId = data.userId;
+    //           _processKey = data.processKey;
+    //           _processTitle = data.processTitle;
+    //           // _result = data.result;
+    //           _servCtr = data.servCtr;
+    //         }
+    //       });
+    //     })
+    //   });
   }
 }
