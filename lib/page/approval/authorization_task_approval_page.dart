@@ -16,7 +16,8 @@ class AuthorizationTaskApprovalPage extends StatefulWidget {
   final FinishTaskDetail history;
   final title;
 
-  AuthorizationTaskApprovalPage({Key key, this.history, this.title}) : super(key: key);
+  AuthorizationTaskApprovalPage({Key key, this.history, this.title})
+      : super(key: key);
 
   @override
   _AuthorizationTaskApprovalPageState createState() =>
@@ -31,24 +32,24 @@ class _AuthorizationTaskApprovalPageState
   var commentList = <CommentList>[];
   //转账信息
   bool _transfer = true;
-  var _fromAccount = "";
-  var _fromCcy = "";
-  var _payeeName = "";
+  var _fromAccount = "6001";
+  var _fromCcy = "USD";
+  var _payeeName = "Mark";
   //付款信息
-  bool _pay = true;
-  var _accountNumber = "";
-  var _accountName = "";
-  var _payBank = "";
-  var _toCcy = "";
-  var _toaccount = "";
-  var _remark = "";
+  bool _pay = false;
+  var _accountNumber = "500000617002";
+  var _accountName = "Alix";
+  var _payBank = "Hisun";
+  var _toCcy = "HKD";
+  var _toaccount = "6002";
+  var _remark = "贷款";
   //基本信息
   bool _base = false;
-  var _userId = "";
+  var _userId = "500000617001";
 
-  var _processKey = "";
+  var _processKey = "一对一转账";
 
-  var _processTitle = "";
+  var _processTitle = "Transfer";
 
   String _servCtr = "";
 
@@ -70,8 +71,11 @@ class _AuthorizationTaskApprovalPageState
           _baseInformation(),
           //  _transferInfo(),
           _payInfo(),
-          _historyHeader(),
-          _historyContent(),
+          // _historyHeader(),
+          // // _historyContent(),
+          // Container(
+          //   child: Text("无审批历史"),
+          // )
         ],
       ),
     );
@@ -103,40 +107,40 @@ class _AuthorizationTaskApprovalPageState
 
   //授权历史记录
   _historyContent() {
-    return commentList.length > 0
-        ? SliverList(
+    return
+        // commentList.length > 0
+        //     ?
+        SliverList(
             delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return SizedBox(
-                child: Column(
-                  children: [
-                    Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        color: Colors.white,
-                        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                        child: Column(
-                          children: [
-                            _getHintLine(),
-                            _getRow(S.current.approver,
-                                commentList[index].userName),
-                            _getRow(S.current.approver_time,
-                                commentList[index].time),
-                            _getRow(S.current.approver_opinion,
-                                commentList[index].comment),
-                            _getRow(
-                                S.current.approver_result,
-                                commentList[index].result
-                                    ? S.current.success
-                                    : S.current.failed),
-                          ],
-                        ))
-                  ],
-                ),
-              );
-            },
-            childCount: commentList.length,
-          ))
-        : SliverToBoxAdapter();
+      (BuildContext context, int index) {
+        return SizedBox(
+          child: Column(
+            children: [
+              Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  color: Colors.white,
+                  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                  child: Column(
+                    children: [
+                      _getHintLine(),
+                      _getRow(S.current.approver, commentList[index].userName),
+                      _getRow(S.current.approver_time, commentList[index].time),
+                      _getRow(S.current.approver_opinion,
+                          commentList[index].comment),
+                      _getRow(
+                          S.current.approver_result,
+                          commentList[index].result
+                              ? S.current.success
+                              : S.current.failed),
+                    ],
+                  ))
+            ],
+          ),
+        );
+      },
+      childCount: commentList.length,
+    ));
+    // : SliverToBoxAdapter();
   }
 
   //基本信息
@@ -295,37 +299,37 @@ class _AuthorizationTaskApprovalPageState
   }
 
   void _loadHistoryData(String processId) {
-    Future.wait({
-      NeedToBeDealtWithRepository()
-          .findUserFinishedDetail(
-              GetFindUserFinishedDetailReq(processId), 'findUserFinishedDetail')
-          .then((data) {
-        setState(() {
-          if (data != null) {
-            commentList.clear();
-            commentList.addAll(data.commentList);
-          }
-          if (data.operateEndValue != null) {
-            _pay = false;
-            _transfer = false;
-            // _base = false;
-            _accountNumber = data.operateEndValue.payerCardNo;
-            _accountName = data.operateEndValue.payerName;
-            _payBank = data.operateEndValue.payerBankCode;
-            _toCcy = data.operateEndValue.debitCurrency;
-            _toaccount = data.operateEndValue.amount;
-            _remark = data.operateEndValue.remark;
-            _fromAccount = data.operateEndValue.payeeBankCode;
-            _fromCcy = data.operateEndValue.debitCurrency;
-            _payeeName = data.operateEndValue.payeeName;
-            _userId = data.userId;
-            _processKey = data.processKey;
-            _processTitle = data.processTitle;
-            // _result = data.result;
-            _servCtr = data.servCtr;
-          }
-        });
-      })
-    });
+    //   Future.wait({
+    //     NeedToBeDealtWithRepository()
+    //         .findUserFinishedDetail(
+    //             GetFindUserFinishedDetailReq(processId), 'findUserFinishedDetail')
+    //         .then((data) {
+    //       setState(() {
+    //         if (data != null) {
+    //           commentList.clear();
+    //           commentList.addAll(data.commentList);
+    //         }
+    //         if (data.operateEndValue != null) {
+    //           _pay = false;
+    //           _transfer = false;
+    //           // _base = false;
+    //           _accountNumber = data.operateEndValue.payerCardNo;
+    //           _accountName = data.operateEndValue.payerName;
+    //           _payBank = data.operateEndValue.payerBankCode;
+    //           _toCcy = data.operateEndValue.debitCurrency;
+    //           _toaccount = data.operateEndValue.amount;
+    //           _remark = data.operateEndValue.remark;
+    //           _fromAccount = data.operateEndValue.payeeBankCode;
+    //           _fromCcy = data.operateEndValue.debitCurrency;
+    //           _payeeName = data.operateEndValue.payeeName;
+    //           _userId = data.userId;
+    //           _processKey = data.processKey;
+    //           _processTitle = data.processTitle;
+    //           // _result = data.result;
+    //           _servCtr = data.servCtr;
+    //         }
+    //       });
+    //     })
+    //   });
   }
 }
