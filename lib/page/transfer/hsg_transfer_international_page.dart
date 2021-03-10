@@ -118,8 +118,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   // var _payeeBank = S.current.please_select;
 
-  int groupValue = 0;
-
   var bankSwift = '';
 
   var payerAddress = '';
@@ -134,7 +132,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   var payeeNameForSelects;
 
-  var accountSelect = '';
+  var _accountSelect = '';
 
   var payeeBank = '';
 
@@ -182,6 +180,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //付款方地址
   _addressChange(String address) {
     payerAddress = address;
+    print(">>>>>>>> $payerAddress");
   }
 
   //收款方地址
@@ -224,7 +223,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         context: context,
         builder: (context) {
           return HsgBottomSingleChoice(
-            title: '银行卡号',
+            title: S.current.account_lsit,
             items: cardNoList,
             lastSelectedPosition: _position,
           );
@@ -301,6 +300,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //选择货币方法
   _getCcy() async {
+    int groupValue = 0;
     final result = await showDialog(
         context: context,
         builder: (context) {
@@ -486,7 +486,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           transferPayeeWidget(
               payeeCardNo,
               payeeName,
-              accountSelect,
+              _accountSelect,
               payeeNameForSelects,
               _getImage,
               context,
@@ -832,8 +832,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
   }
 
-  void _tranferInternational(BuildContext context) {
-    setState(() {});
+  _tranferInternational(BuildContext context) {
     HSProgressHUD.show();
     TransferDataRepository()
         .getInterNationalTransfer(
@@ -863,7 +862,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       HSProgressHUD.dismiss();
       _showContractSucceedPage(context);
     }).catchError((e) {
-      setState(() {});
       HSProgressHUD.showError(status: '${e.toString()}');
     });
   }
@@ -877,18 +875,19 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //判断是否可以点击
   _isClick() {
     if (money > 0 &&
-        payeeName.length > 0 &&
-        payeeCardNo.length > 0 &&
-        payerAddress.length > 0 &&
+        _payeeAddressController.text.length > 0 &&
+        _companyController.text.length > 0 &&
+        _accountController.text.length > 0 &&
         _countryText != S.current.please_select &&
         _getPayeeBank != S.current.please_select &&
         _bankSwiftController.text.length > 0 &&
-        payeeAddress.length > 0 &&
+        _payerAddressController.text.length > 0 &&
         _transferFee != S.current.please_select &&
         _feeUse != S.current.please_select) {
       return () {
         _openBottomSheet();
-
+        //_tranferInternational(context);
+        // _showContractSucceedPage(context);
         print('提交');
       };
     } else {
@@ -908,7 +907,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     );
     if (passwordList != null) {
       if (passwordList.length == 6) {
-        _tranferInternational(context);
+        //   _tranferInternational(context);
+        _showContractSucceedPage(context);
         _cleanData();
       }
     }

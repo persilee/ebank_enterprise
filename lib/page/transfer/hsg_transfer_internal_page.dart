@@ -42,7 +42,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   var totalBalance = '0.0';
 
-  var bals = [];
   var cardNo = '';
   var singleLimit = '';
 
@@ -146,7 +145,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     remark = transfer;
   }
 
-  //选择账号方法
+  //选择账号弹窗
   _selectAccount() async {
     final result = await showHsgBottomSheet(
         context: context,
@@ -157,15 +156,19 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             lastSelectedPosition: _position,
           );
         });
-    if (result != null && result != false) {
-      _changedAccountTitle = cardNoList[result];
-    }
     setState(() {
+      if (result != null && result != false) {
+        _changedAccountTitle = cardNoList[result];
+      }
+
       _position = result;
     });
+    _getCardTotals(_changedAccountTitle);
   }
 
+  //选择货币
   _getCardTotals(String _changedAccountTitle) {
+    print("$_changedAccountTitle  ++++++++++");
     Future.wait({
       CardDataRepository().getCardBalByCardNo(
           GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
@@ -178,14 +181,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         setState(() {
           if (element is GetSingleCardBalResp) {
             setState(() {
-              bals.clear();
-
               ccyLists.clear();
-
-              element.cardListBal.forEach((bals) {
-                totalBalances.add(bals.avaBal);
-              });
-
               var cardListB = new List();
               element.cardListBal.forEach((cardBalBean) {
                 if (cardBalBean.ccy != '') {
@@ -204,6 +200,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 ccyList.clear();
                 ccyList.add(cardListB[j].ccy);
               }
+              print('777777 $ccyList');
             });
           }
           //查询限额
@@ -219,20 +216,22 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   //选择货币方法
   _getCcy() async {
+    int groupValue = 0;
     final result = await showDialog(
         context: context,
         builder: (context) {
           return HsgSingleChoiceDialog(
             title: S.current.currency_choice,
             items: ccyList,
-            positiveButton: '确定',
-            negativeButton: '取消',
-            lastSelectedPosition: _lastSelectedPosition,
+            positiveButton: S.of(context).confirm,
+            negativeButton: S.of(context).cancel,
+            lastSelectedPosition: groupValue,
           );
         });
 
     if (result != null && result != false) {
       //货币种类
+      groupValue = result;
       _changedCcyTitle = ccyList[result];
       //余额
       //  _changedRateTitle = totalBalances[result];
@@ -338,7 +337,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     );
   }
 
-  //拿到默认卡号
+  //默认初始卡号
   _loadTransferData() {
     Future.wait({
       CardDataRepository().getCardList('GetCardList'),
@@ -365,7 +364,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     });
   }
 
-  //默认显示货币和余额
+  //默认初始货币和余额
   _getCardTotal(String cardNo) {
     Future.wait({
       CardDataRepository().getCardBalByCardNo(
@@ -399,7 +398,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   //获取验证码接口
   _getVerificationCode() async {
-    RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
+    // RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
     // if (characters.hasMatch('123456') == false) {
     //   // HSProgressHUD.showInfo(status: S.current.format_mobile_error);
     // } else {
