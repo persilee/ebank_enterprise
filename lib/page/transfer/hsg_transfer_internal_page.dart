@@ -3,6 +3,7 @@
 /// Author: lijiawei
 /// Date: 2020-12-09
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
@@ -163,8 +164,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         _accountIndex = result;
         _changedAccountTitle = cardNoList[_accountIndex];
       });
+      _getCardTotals(_changedAccountTitle);
     }
-    _getCardTotals(_changedAccountTitle);
     // setState(() {
     //   _position = result;
     // });
@@ -190,10 +191,10 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               totalBalances.add(bals.avaBal);
             });
             // var cardListB = new List();
+            if (element.cardListBal.length == 0) {
+              _currBal = '';
+            }
             element.cardListBal.forEach((cardBalBean) {
-              // if (cardBalBean.ccy != '') {
-              //   cardListB.add(cardBalBean);
-              // }
               if (cardBalBean.ccy != '') {
                 ccyList.add(cardBalBean.ccy);
               }
@@ -245,6 +246,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       });
       //余额
       //  _changedRateTitle = totalBalances[result];
+      _getCardTotals(_changedAccountTitle);
     }
 
     // setState(() {
@@ -387,7 +389,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         if (element is GetSingleCardBalResp) {
           setState(() {
             //余额
-            totalBalance = element.cardListBal[0].currBal;
+            // totalBalance = element.cardListBal[0].currBal;
             ccy = element.cardListBal[0].ccy;
             element.cardListBal.forEach((element) {
               ccyListOne.clear();
