@@ -16,7 +16,6 @@ import 'package:flutter/material.dart';
 import '../../page_route.dart';
 
 class AuthorizationHistoryPage extends StatefulWidget {
-
   final title;
   AuthorizationHistoryPage({Key key, this.title}) : super(key: key);
 

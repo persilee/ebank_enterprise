@@ -16,7 +16,8 @@ class AuthorizationTaskApprovalPage extends StatefulWidget {
   final FinishTaskDetail history;
   final title;
 
-  AuthorizationTaskApprovalPage({Key key, this.history, this.title}) : super(key: key);
+  AuthorizationTaskApprovalPage({Key key, this.history, this.title})
+      : super(key: key);
 
   @override
   _AuthorizationTaskApprovalPageState createState() =>
@@ -31,31 +32,31 @@ class _AuthorizationTaskApprovalPageState
   var commentList = <CommentList>[];
   //转账信息
   bool _transfer = true;
-  var _fromAccount = "";
-  var _fromCcy = "";
-  var _payeeName = "";
+  var _fromAccount = "5002";
+  var _fromCcy = "USD";
+  var _payeeName = "lucy";
   //付款信息
   bool _pay = true;
-  var _accountNumber = "";
-  var _accountName = "";
-  var _payBank = "";
-  var _toCcy = "";
-  var _toaccount = "";
+  var _accountNumber = "123";
+  var _accountName = "abc";
+  var _payBank = "10086";
+  var _toCcy = "USD";
+  var _toaccount = "5001";
   var _remark = "";
   //基本信息
   bool _base = false;
-  var _userId = "";
+  var _userId = "6001";
 
-  var _processKey = "";
+  var _processKey = "3";
 
-  var _processTitle = "";
+  var _processTitle = "一对一转账";
 
-  String _servCtr = "";
+  String _servCtr = "abc";
 
   @override
   void initState() {
     super.initState();
-    _loadHistoryData(history.processId);
+    // _loadHistoryData(history.processId);
   }
 
   @override
