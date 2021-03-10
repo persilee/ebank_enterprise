@@ -509,7 +509,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       },
     );
     if (passwordList != null && passwordList == true) {
-      if (passwordList.length == 6) {
+      if (passwordList) {
+        //}.length == 6) {
         //_tranferAccount(context);
         _showContractSucceedPage(context);
         _clean();
