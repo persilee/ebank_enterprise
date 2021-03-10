@@ -38,9 +38,9 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
   Future<void> _staticData() {
     ccys = ["CNY", "HKD", "USD"];
     if (language == 'zh_CN') {
-      names = ["高阳贷", "闪电贷", "雷电贷"];
+      names = ["兴业贷", "闪电贷", "经营贷"];
     } else {
-      names = ["Hisun Loan", "Lightning Loan", "Global Loan"];
+      names = ["Corporation Loan", "Lightning Loan", "Manage Loan"];
     }
     rateLists = [
       ["--", "8.5%", "6.7%"],
