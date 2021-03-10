@@ -238,6 +238,8 @@
   "installment_status4": "Compensatory",
   "unknown": "Unknown",
   "year": "Year",
+  "quarter": "quarter",
+  "half_a_year": "half ayear",
   "day": "Day",
   "periods": "Periods",
   "please_select": "Please Select",
