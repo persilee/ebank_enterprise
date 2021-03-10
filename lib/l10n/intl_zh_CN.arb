@@ -239,6 +239,8 @@
   "installment_status4": "代偿",
   "unknown": "未知",
   "year": "年",
+  "quarter": "季",
+  "half_a_year": "半年",
   "day": "日",
   "periods": "期",
   "please_select": "请选择",
