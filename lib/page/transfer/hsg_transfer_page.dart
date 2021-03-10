@@ -361,6 +361,7 @@ class _TransferPageState extends State<TransferPage> {
       ),
       onPressed: () {
         print('转出');
+        // if (data.transferType == )
       },
       shape: RoundedRectangleBorder(
         side: BorderSide(color: HsgColors.accent, width: 0.5),
@@ -388,7 +389,9 @@ class _TransferPageState extends State<TransferPage> {
             _transferToBtn,
           ],
         ),
-        onPressed: () {},
+        onPressed: () {
+          print('转出1');
+        },
       ),
     );
   }

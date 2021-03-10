@@ -32,13 +32,12 @@ class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
-  final TextEditingController _accountTC =
-      TextEditingController(text: 'blk101');
+  final TextEditingController _accountTC = TextEditingController(text: 'ljw');
   final TextEditingController _passwordTC =
-      TextEditingController(text: '4N0021S8');
+      TextEditingController(text: 'jl2oGCoE');
 
-  var _account = 'blk101'; //'blk101';
-  var _password = '4N0021S8'; //'4N0021S8';
+  var _account = 'ljw'; //'blk101';
+  var _password = 'jl2oGCoE'; //'4N0021S8';
 
   @override
   void initState() {
@@ -139,6 +138,17 @@ class _LoginPageState extends State<LoginPage> {
           child: UnderButtonView(
             S.of(context).login,
             _isLoading ? null : () => _login(context),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 150),
+          child: Text(
+            '@2020-2025 HSBC.com.cn.All Rights Reserved.',
+            textAlign: TextAlign.left,
+            style: TextStyle(
+                fontSize: 11.0,
+                color: Colors.white, //HsgColors.aboutusTextCon,
+                fontWeight: FontWeight.normal),
           ),
         )
       ],
