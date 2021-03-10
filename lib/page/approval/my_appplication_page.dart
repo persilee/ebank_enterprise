@@ -15,7 +15,9 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
 
 class MyApplicationPage extends StatefulWidget {
-  MyApplicationPage({Key key}) : super(key: key);
+
+  final title;
+  MyApplicationPage({Key key, this.title}) : super(key: key);
 
   @override
   _MyApplicationPageState createState() => _MyApplicationPageState();
@@ -72,7 +74,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
                 return GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, pageApplicationTaskApproval,
-                        arguments: list[index]);
+                        arguments: {"data": list[index], "title": widget.title}  );
                   },
                   child: Column(
                     children: [
@@ -123,8 +125,11 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Column(
         children: [
+          //任务名称
+          _getRow(S.current.to_do_task_name, list[index].processTitle),
+          //发起人
           _getRow(S.current.sponsor, list[index].processId),
-          _getRow(S.current.to_do_task_name, list[index].taskName),
+          //创建时间
           _getRow(S.current.creation_time, list[index].createTime)
         ],
       ),

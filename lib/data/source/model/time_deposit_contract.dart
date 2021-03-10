@@ -12,9 +12,6 @@ class TimeDepositContractReq extends Object {
   @JsonKey(name: 'accuPeriod')
   String accuPeriod;
 
-  @JsonKey(name: 'annualInterestRate')
-  double annualInterestRate;
-
   @JsonKey(name: 'auctCale')
   String auctCale;
 
@@ -27,8 +24,8 @@ class TimeDepositContractReq extends Object {
   @JsonKey(name: 'ccy')
   String ccy;
 
-  @JsonKey(name: 'custName')
-  String custName;
+  @JsonKey(name: 'ciNo')
+  String ciNo;
 
   @JsonKey(name: 'depositType')
   String depositType;
@@ -36,79 +33,49 @@ class TimeDepositContractReq extends Object {
   @JsonKey(name: 'instCode')
   String instCode;
 
-  @JsonKey(name: 'mergeTerm')
-  String mergeTerm;
+  @JsonKey(name: 'oppAc')
+  String oppAc;
 
-  @JsonKey(name: 'payDdAc')
-  String payDdAc;
-
-  @JsonKey(name: 'payDdAmt')
-  double payDdAmt;
-
-  @JsonKey(name: 'prodType')
-  String prodType;
-
-  @JsonKey(name: 'remarks')
-  String remarks;
+  @JsonKey(name: 'payPassword')
+  String payPassword;
 
   @JsonKey(name: 'settDdAc')
   String settDdAc;
 
+  @JsonKey(name: 'smsCode')
+  String smsCode;
+
+  @JsonKey(name: 'tenor')
+  String tenor;
+
   TimeDepositContractReq(
     this.accuPeriod,
-    this.annualInterestRate,
     this.auctCale,
     this.bal,
     this.bppdCode,
     this.ccy,
-    this.custName,
+    this.ciNo,
     this.depositType,
     this.instCode,
-    this.mergeTerm,
-    this.payDdAc,
-    this.payDdAmt,
-    this.prodType,
-    this.remarks,
+    this.oppAc,
+    this.payPassword,
     this.settDdAc,
+    this.smsCode,
+    this.tenor,
   );
 
   factory TimeDepositContractReq.fromJson(Map<String, dynamic> srcJson) =>
       _$TimeDepositContractReqFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$TimeDepositContractReqToJson(this);
-
-  String toString() {
-    return toJson().toString();
-  }
 }
 
 @JsonSerializable()
 class TimeDepositContractResp extends Object {
-  @JsonKey(name: 'ciName')
-  String ciName;
-
-  @JsonKey(name: 'ciNo')
-  String ciNo;
-
-  @JsonKey(name: 'conNo')
-  String conNo;
-
-  @JsonKey(name: 'prodCode')
-  String prodCode;
-
-  TimeDepositContractResp(
-    this.ciName,
-    this.ciNo,
-    this.conNo,
-    this.prodCode,
-  );
+  TimeDepositContractResp();
 
   factory TimeDepositContractResp.fromJson(Map<String, dynamic> srcJson) =>
       _$TimeDepositContractRespFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$TimeDepositContractRespToJson(this);
-
-  String toString() {
-    return toJson().toString();
-  }
 }

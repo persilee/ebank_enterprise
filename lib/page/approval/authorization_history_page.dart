@@ -16,7 +16,9 @@ import 'package:flutter/material.dart';
 import '../../page_route.dart';
 
 class AuthorizationHistoryPage extends StatefulWidget {
-  AuthorizationHistoryPage({Key key}) : super(key: key);
+
+  final title;
+  AuthorizationHistoryPage({Key key, this.title}) : super(key: key);
 
   @override
   _AuthorizationHistoryPageState createState() =>
@@ -51,7 +53,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
 
   void go2Detail(FinishTaskDetail history) {
     Navigator.pushNamed(context, pageAuthorizationTaskApproval,
-        arguments: history);
+        arguments: {"data": history, "title": widget.title});
   }
 
   @override
@@ -113,10 +115,10 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Column(
         children: [
-          //发起人
-          _getRow(S.current.sponsor, list[index].processId),
           //待办任务名称
-          _getRow(S.current.to_do_task_name, list[index].taskName),
+          _getRow(S.current.to_do_task_name, list[index].processTitle),
+          //发起人
+          _getRow(S.current.sponsor, list[index].startUser),
           //创建时间
           _getRow(S.current.creation_time, list[index].createTime)
         ],

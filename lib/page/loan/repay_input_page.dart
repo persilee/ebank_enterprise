@@ -70,7 +70,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
         repayPrincipal = _inputController.text;
         if (double.parse(repayPrincipal) == max) {
           repaymentMethod = "SETTLEMENT";
-        }else{
+        } else {
           repaymentMethod = "PART_PREPAYMENT";
         }
         _loadData();
@@ -102,24 +102,30 @@ class _RepayInputPageState extends State<RepayInputPage> {
   }
 
   Future<void> _loadData() async {
-    LoanDataRepository()
-        .getLoanCaculate(
-            GetLoanCaculateReq(acNo, instalNo, isInterestCharge, repayPrincipal,
-                repaymentMethod, rescheduleType),
-            "getLoanMoneyCaculate")
-        .then((data) {
-      if (data != null) {
-        setState(() {
-          if (data.feeAmount != null) {
-            _fine = data.feeAmount;
-          }
-          _repayInterest = data.interestAmount;
-          _totalRepay = data.repaymentAmount;
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
+    // LoanDataRepository()
+    //     .getLoanCaculate(
+    //         GetLoanCaculateReq(acNo, instalNo, isInterestCharge, repayPrincipal,
+    //             repaymentMethod, rescheduleType),
+    //         "getLoanMoneyCaculate")
+    //     .then((data) {
+    //   if (data != null) {
+    //     setState(() {
+    //       if (data.feeAmount != null) {
+    //         _fine = data.feeAmount;
+    //       }
+    //       _repayInterest = data.interestAmount;
+    //       _totalRepay = data.repaymentAmount;
+    //     });
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // });
+    _fine = '0';
+    _repayInterest =
+        (double.parse(repayPrincipal) * 8.8 / 100 / 360 * 30).toString();
+    _totalRepay = (double.parse(repayPrincipal) +
+            double.parse(repayPrincipal) * 8.8 / 100 / 360 * 30)
+        .toString();
   }
 
   @override
@@ -129,7 +135,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
       message.putIfAbsent('LoanDetail', () => loanDetail);
       acNo = loanDetail.acNo;
       instalNo = loanDetail.restPeriods.toString();
-      max = double.parse(loanDetail.unpaidPrincipal);
+      max = double.parse(loanDetail.loanAmt);
       debitAccount = FormatUtil.formatSpace4(loanDetail.repaymentAcNo);
       loanInterest =
           (double.parse(loanDetail.intRate) * 100).toStringAsFixed(2) + "%";
@@ -167,11 +173,14 @@ class _RepayInputPageState extends State<RepayInputPage> {
           //还款本金
           _repayPrincipal(loanDetail),
           //还款利息
-          _contentColumn(S.of(context).repayment_interest, FormatUtil.formatSringToMoney(_repayInterest)),
+          _contentColumn(S.of(context).repayment_interest,
+              FormatUtil.formatSringToMoney(_repayInterest)),
           //罚金
-          _contentColumn(S.of(context).fine, FormatUtil.formatSringToMoney(_fine)),
+          _contentColumn(
+              S.of(context).fine, FormatUtil.formatSringToMoney(_fine)),
           //还款总额
-          _contentColumn(S.of(context).total_repayment, FormatUtil.formatSringToMoney(_totalRepay)),
+          _contentColumn(S.of(context).total_repayment,
+              FormatUtil.formatSringToMoney(_totalRepay)),
         ],
       ),
     );

@@ -193,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _isLoading = false;
     });
-    Navigator.pushAndRemoveUntil(context, pageIndex, (route) => false);
+    Navigator.pushNamed(context, pageIndexName);
   }
 
   ///保存数据

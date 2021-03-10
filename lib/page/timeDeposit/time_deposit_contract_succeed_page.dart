@@ -64,8 +64,7 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                     //行内转账跳转
                     //pageTransfer
                     if (_arguments == '0') {
-                      Navigator.of(context)
-                          .pushReplacementNamed(pageTransferInternal);
+                      Navigator.of(context).pop(pageTransferInternal);
                     }
                     //定期开立跳转
                     if (_arguments == 'timeDepositProduct') {

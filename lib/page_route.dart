@@ -67,6 +67,8 @@ import 'package:ebank_mobile/page/mine/change_logPswd_page.dart';
 import 'package:ebank_mobile/page/mine/change_pay_page.dart';
 import 'package:ebank_mobile/page/mine/set_pay_page.dart';
 
+import 'page/approval/static_page/static_my_approval_page.dart';
+
 var pageHome = '/';
 var pageLogin = pageHome;
 // var pageCardList = pageHome;
@@ -108,6 +110,7 @@ var pageTimeDepositRecord = '/time_deposit_record_page';
 var pageMyDepositRate = '/time_deposit_rate_page';
 var pageDepositInfo = '/time_deposit_info_page';
 var pageIndex = new MaterialPageRoute(builder: (context) => new IndexPage());
+var pageIndexName = '/hsg_index_page';
 var pageFeatureList = '/hsg_feature_list_page';
 var pageTransfer = '/hsg_transfer_page';
 var pageAuthorizationHistory = '/authorization_history_page';
@@ -131,9 +134,11 @@ var pageTransferPlanDetails = '/transfer_plan_details';
 var pageForgetPassword = '/forget_password_page';
 var pageQianliyanDemo = '/qliyan_demo_page.dart';
 var pageApprovalPage = 'hsg_approval_page';
+var pageStaticApproval = '/static_my_approval_page';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
+  pageIndexName: (context) => IndexPage(),
   pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
   pageLoanApplication: (context) => LoanApplicationPage(),
@@ -194,6 +199,7 @@ var appRoutes = {
   pageApprovalPage: (context) => ApprovalPage(),
   pageFeatureList: (context) => FeatureListPage(),
   // pageQianliyanDemo: (context) => QianliyanDemoPage(),
+  pageStaticApproval: (context) => StaticMyApprovalPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
@@ -223,7 +229,8 @@ onGenerateRoute(RouteSettings settings) {
   }
   if (settings.name == pageAuthorizationTaskApproval) {
     return MaterialPageRoute(builder: (context) {
-      return AuthorizationTaskApprovalPage(history: settings.arguments);
+      Map<String, dynamic> arguments = settings.arguments;
+      return AuthorizationTaskApprovalPage(history: arguments['data'], title: arguments['title'],);
     });
   }
   if (settings.name == pageTransferPlanDetails) {
