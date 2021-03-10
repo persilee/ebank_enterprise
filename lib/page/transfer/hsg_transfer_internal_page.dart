@@ -20,6 +20,7 @@ import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_text_field_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -498,6 +499,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           title: S.current.input_password,
           resultPage: pageDepositRecordSucceed,
           arguments: '0',
+          isDialog: true,
         );
       },
     );
