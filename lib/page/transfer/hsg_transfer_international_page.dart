@@ -91,7 +91,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //国家/地区
   List<String> countryList = ['中国', '中国香港'];
   //转账费用
-  List<String> transferFeeList = ['收款人支付', '本人支付', '各付各行'];
+  List<String> transferFeeList = ['收款人交易', '本人交易', '各付各行'];
   //汇款用途
   List<String> feeUse = [
     '贷款',

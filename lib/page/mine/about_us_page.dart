@@ -12,7 +12,7 @@ class AboutUsPage extends StatelessWidget {
     return new Scaffold(
         appBar: AppBar(
           title: Text('Loaderman'),
-          elevation: 15.0,
+          elevation: 0,
         ),
         body: Container(
             color: Colors.white,
@@ -239,7 +239,7 @@ class AboutUsPage extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(top: 15, bottom: 25),
                         child: Text(
-                            '在金融及通讯领域拥有领先的技术实力，掌握领先的银行核心业务处理技术、成熟的电子银行处理技术、及完善的手机支付核心技术',
+                            '在金融及通讯领域拥有领先的技术实力，掌握领先的银行核心业务处理技术、成熟的电子银行处理技术、及完善的手机交易核心技术',
                             style: TextStyle(
                                 fontSize: 14, color: HsgColors.aboutusTextCon)),
                       )

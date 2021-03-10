@@ -111,7 +111,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   List<String> passwordList = []; //密码列表
 
-  //支付密码
+  //交易密码
 
   var check = false;
 

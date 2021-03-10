@@ -8,6 +8,7 @@ import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/login/forget_password_page.dart';
+import 'package:ebank_mobile/page/mine/password_management_page.dart';
 // import 'package:ebank_mobile/page/mine/qliyan_demo_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
@@ -135,6 +136,7 @@ var pageForgetPassword = '/forget_password_page';
 var pageQianliyanDemo = '/qliyan_demo_page.dart';
 var pageApprovalPage = 'hsg_approval_page';
 var pageStaticApproval = '/static_my_approval_page';
+var pagePasswordManagement = '/password_management_page.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -200,6 +202,7 @@ var appRoutes = {
   pageFeatureList: (context) => FeatureListPage(),
   // pageQianliyanDemo: (context) => QianliyanDemoPage(),
   pageStaticApproval: (context) => StaticMyApprovalPage(),
+  pagePasswordManagement: (context) => PasswordManagementPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
@@ -230,7 +233,10 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageAuthorizationTaskApproval) {
     return MaterialPageRoute(builder: (context) {
       Map<String, dynamic> arguments = settings.arguments;
-      return AuthorizationTaskApprovalPage(history: arguments['data'], title: arguments['title'],);
+      return AuthorizationTaskApprovalPage(
+        history: arguments['data'],
+        title: arguments['title'],
+      );
     });
   }
   if (settings.name == pageTransferPlanDetails) {

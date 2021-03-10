@@ -75,7 +75,7 @@ class _DetailListPageState extends State<DetailListPage> {
       appBar: AppBar(
         title: Text(intl.S.of(context).transaction_details),
         centerTitle: true,
-        // elevation: 0,
+        elevation: 0,
       ),
       body:
           // RefreshIndicator(
