@@ -238,7 +238,7 @@ Widget _threeRowRight(
       onTap: () {
         getcardList();
         //选择卡号
-        getCardTotals(_changedAccountTitle);
+        //  getCardTotals(_changedAccountTitle);
         print('选择账号');
       },
       child: Column(

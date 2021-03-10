@@ -3,7 +3,6 @@
 /// Author: lijiawei
 /// Date: 2020-12-09
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
@@ -91,6 +90,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   int _lastSelectedPosition = -1;
 
+  int _accountIndex = 0;
+
   String _limitMoney = '';
 
   var payeeNameForSelects = '';
@@ -154,15 +155,19 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           return HsgBottomSingleChoice(
             title: S.current.account_lsit,
             items: cardNoList,
-            lastSelectedPosition: _position,
+            lastSelectedPosition: _accountIndex,
           );
         });
     if (result != null && result != false) {
-      _changedAccountTitle = cardNoList[result];
+      setState(() {
+        _accountIndex = result;
+        _changedAccountTitle = cardNoList[_accountIndex];
+      });
     }
-    setState(() {
-      _position = result;
-    });
+    _getCardTotals(_changedAccountTitle);
+    // setState(() {
+    //   _position = result;
+    // });
   }
 
   _getCardTotals(String _changedAccountTitle) {
@@ -177,40 +182,41 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         // 通过卡号查询余额
         setState(() {
           if (element is GetSingleCardBalResp) {
-            setState(() {
-              bals.clear();
-
-              ccyLists.clear();
-
-              element.cardListBal.forEach((bals) {
-                totalBalances.add(bals.avaBal);
-              });
-
-              var cardListB = new List();
-              element.cardListBal.forEach((cardBalBean) {
-                if (cardBalBean.ccy != '') {
-                  cardListB.add(cardBalBean);
-                }
-              });
-              bool isBenBi = false;
-              for (int j = 0; j < cardListB.length; j++) {
-                if (cardListB[j].ccy == 'USD') {
-                  isBenBi = true;
-                }
-                if (isBenBi == false) {
-                  cardListB.insert(0, cardListB[j]);
-                }
-                _currBal = cardListB[j].currBal;
-                ccyList.clear();
-                ccyList.add(cardListB[j].ccy);
+            bals.clear();
+            ccyLists.clear();
+            ccyList.clear();
+            _currBal = '';
+            element.cardListBal.forEach((bals) {
+              totalBalances.add(bals.avaBal);
+            });
+            // var cardListB = new List();
+            element.cardListBal.forEach((cardBalBean) {
+              // if (cardBalBean.ccy != '') {
+              //   cardListB.add(cardBalBean);
+              // }
+              if (cardBalBean.ccy != '') {
+                ccyList.add(cardBalBean.ccy);
+              }
+              if (_changedCcyTitle == cardBalBean.ccy) {
+                _currBal = cardBalBean.currBal.toString();
               }
             });
+            // bool isBenBi = false;
+            // for (int j = 0; j < cardListB.length; j++) {
+            //   if (cardListB[j].ccy == 'USD') {
+            //     isBenBi = true;
+            //   }
+            //   if (isBenBi == false) {
+            //     cardListB.insert(0, cardListB[j]);
+            //   }
+            //   _currBal = cardListB[j].currBal;
+            //   ccyList.clear();
+            //   ccyList.add(cardListB[j].ccy);
+            // }
           }
           //查询限额
           else if (element is GetCardLimitByCardNoResp) {
-            setState(() {
-              _limitMoney = element.singleLimit;
-            });
+            _limitMoney = element.singleLimit;
           }
         });
       });
@@ -233,14 +239,17 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
     if (result != null && result != false) {
       //货币种类
-      _changedCcyTitle = ccyList[result];
+      setState(() {
+        _position = result;
+        _changedCcyTitle = ccyList[_position];
+      });
       //余额
       //  _changedRateTitle = totalBalances[result];
     }
 
-    setState(() {
-      _position = result;
-    });
+    // setState(() {
+    //   _position = result;
+    // });
   }
 
   @override
