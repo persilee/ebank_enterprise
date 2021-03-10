@@ -177,7 +177,9 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
             style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
           ),
           Text(
-            lnList[index].unpaidPrincipal + ' ' + localCcy,
+            FormatUtil.formatSringToMoney(lnList[index].unpaidPrincipal) +
+                ' ' +
+                localCcy,
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
           )
         ],
@@ -200,7 +202,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                 style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
               ),
               Text(
-                lnTotal + ' ' + localCcy,
+                FormatUtil.formatSringToMoney(lnTotal) + ' ' + localCcy,
                 style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
               ),
             ],
@@ -222,7 +224,9 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
             style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
           ),
           Text(
-            tdList[index].bal + ' ' + tdList[index].ccy, //avaBal
+            FormatUtil.formatSringToMoney(tdList[index].bal) +
+                ' ' +
+                tdList[index].ccy, //avaBal
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
           )
         ],
@@ -245,7 +249,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                 style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
               ),
               Text(
-                tdTotal + ' ' + localCcy,
+                FormatUtil.formatSringToMoney(tdTotal) + ' ' + localCcy,
                 style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
               ),
             ],
@@ -267,7 +271,9 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
             style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
           ),
           Text(
-            ddList[index].equAmt + ' ' + ddList[index].ccy,
+            FormatUtil.formatSringToMoney(ddList[index].equAmt) +
+                ' ' +
+                ddList[index].ccy,
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
           )
         ],
@@ -290,7 +296,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                 style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
               ),
               Text(
-                ddTotal + ' ' + ddCcy,
+                FormatUtil.formatSringToMoney(ddTotal) + ' ' + ddCcy,
                 style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
               ),
             ],

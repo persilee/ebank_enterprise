@@ -6,6 +6,7 @@
  */
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
+import 'package:ebank_mobile/page/transfer/hsg_transfer_international_page.dart';
 
 // import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
 
@@ -64,8 +65,13 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                     //行内转账跳转
                     //pageTransfer
                     if (_arguments == '0') {
-                      Navigator.of(context).pop(pageTransferInternal);
+                      Navigator.of(context)..pop()..pop()..pop();
                     }
+                    //国际转账跳转
+                    if (_arguments == 'international') {
+                      Navigator.of(context)..pop()..pop()..pop();
+                    }
+
                     //定期开立跳转
                     if (_arguments == 'timeDepositProduct') {
                       Navigator.pushReplacementNamed(
@@ -76,6 +82,10 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                       Navigator.pop(context);
                       NotificationCenter.instance
                           .postNotification('refresh', true);
+                    }
+                    //预约转账
+                    if (_arguments == 'advanceTransfer') {
+                      Navigator.of(context)..pop()..pop()..pop();
                     }
                   },
                   color: HsgColors.accent,

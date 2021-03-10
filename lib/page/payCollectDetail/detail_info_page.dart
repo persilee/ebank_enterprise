@@ -6,6 +6,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_pay_collect_detail.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 
 class DetailInfoPage extends StatefulWidget {
@@ -46,8 +47,14 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
                     padding: EdgeInsets.only(top: 8, bottom: 40),
                     child: Text(
                       ddFinHist.drCrFlg == 'C'
-                          ? '+ ' + ddFinHist.txCcy + ' ' + ddFinHist.txAmt
-                          : '- ' + ddFinHist.txCcy + ' ' + ddFinHist.txAmt,
+                          ? '+ ' +
+                              ddFinHist.txCcy +
+                              ' ' +
+                              FormatUtil.formatSringToMoney(ddFinHist.txAmt)
+                          : '- ' +
+                              ddFinHist.txCcy +
+                              ' ' +
+                              FormatUtil.formatSringToMoney(ddFinHist.txAmt),
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w500,
