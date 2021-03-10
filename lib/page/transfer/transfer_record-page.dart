@@ -724,8 +724,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
     String userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
-    String loginName = '18033412021';
-    String userId = '778309634589982720';
+    // String loginName = '18033412021';
+    // String userId = '778309634589982720';
     TransferDataRepository()
         .getTransferRecord(
             GetTransferRecordReq(ccy, _endDate, _page, pageSize, paymentCardNos,
