@@ -409,5 +409,12 @@
   "daily_number_of_transaction":"日交易量",
   "demand_deposit_account":"活期存款帐户",
   "account_management":"账户管理",
-  "card_list":"卡片列表"
+  "card_list":"卡片列表",
+
+  "field_dialog_send": "发送",
+  "field_dialog_hint_text": "请输入安全码",
+  "field_dialog_phone_number": "手机号",
+  "field_dialog_title": "安全码校验",
+  "field_dialog_cancel": "取消",
+  "field_dialog_confirm": "确认"
 }

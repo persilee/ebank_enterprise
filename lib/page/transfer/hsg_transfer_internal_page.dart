@@ -470,9 +470,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   _isClick() {
     if (money > 0 && payeeName.length > 0 && payeeCardNo.length > 0) {
       return () {
-        _tranferAccount(context);
+       // _tranferAccount(context);
         _clean();
-        // _openBottomSheet();
+        _openBottomSheet();
       };
     } else {
       return null;
