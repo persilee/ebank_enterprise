@@ -10,8 +10,10 @@ import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../page_route.dart';
 
 class TimeDepositRecordPage extends StatefulWidget {
@@ -207,17 +209,22 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     Navigator.pushNamed(context, pageDepositInfo, arguments: deposit);
   }
 
-  _loadDeopstData() {
+  _loadDeopstData() async {
+    final prefs = await SharedPreferences.getInstance();
+
     bool excludeClosed = true;
-    String page = '2';
-    String pageSize = '10';
-    String ciNo = '50000067';
+    int page = 2;
+    int pageSize = 10;
+    // String ciNo = '50000067';
+    String ciNo = prefs.getString(ConfigKey.CUST_ID);
     String userId = '776112799108562944';
     Future.wait({
       DepositDataRepository().getDepositRecordRows(
-          DepositRecordReq(excludeClosed, page, pageSize), 'getDepositRecord'),
-      DepositDataRepository().getDepositByCardNo(
-          DepositByCardReq(ccy, ciNo, userId), 'getDepositByCardNo')
+          DepositRecordReq(ciNo, '', excludeClosed, page, pageSize, ''),
+          'getDepositRecord')
+      //     ,
+      // DepositDataRepository().getDepositByCardNo(
+      //     DepositByCardReq(ccy, ciNo, userId), 'getDepositByCardNo')
     }).then((value) {
       value.forEach((element) {
         if (element is DepositRecordResp) {
@@ -227,11 +234,12 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
               rowList.addAll(element.rows);
             });
           }
-        } else if (element is DepositByCardResp) {
-          setState(() {
-            totalAmt = element.totalAmt;
-          });
         }
+        // else if (element is DepositByCardResp) {
+        //   setState(() {
+        //     totalAmt = element.totalAmt;
+        //   });
+        // }
       });
     });
   }

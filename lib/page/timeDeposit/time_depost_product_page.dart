@@ -1,5 +1,5 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///提交定期产品列表页面
+///定期产品列表页面
 /// Author: wangluyao
 /// Date: 2020-12-11
 
@@ -176,11 +176,13 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       SliverList(
         delegate: SliverChildBuilderDelegate((context, index) {
           //最小年利率
-          double minRate = double.parse(tdepProductList[index].minRate) * 100;
-          minRate = double.parse(FormatUtil.formatNum(minRate, 2));
+          // double minRate = double.parse(tdepProductList[index].minRate) * 100;
+          double minRate = double.parse(FormatUtil.formatNum(
+              double.parse(tdepProductList[index].minRate), 2));
           //最大年利率
-          double maxRate = double.parse(tdepProductList[index].maxRate) * 100;
-          maxRate = double.parse(FormatUtil.formatNum(maxRate, 2));
+          // double maxRate = double.parse(tdepProductList[index].maxRate) * 100;
+          double maxRate = double.parse(FormatUtil.formatNum(
+              double.parse(tdepProductList[index].maxRate), 2));
           //判断选择的语言并根据语言选择产品名称
           String name;
           if (language == 'zh_CN') {

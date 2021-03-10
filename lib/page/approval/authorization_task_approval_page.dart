@@ -14,8 +14,9 @@ import 'package:flutter/material.dart';
 
 class AuthorizationTaskApprovalPage extends StatefulWidget {
   final FinishTaskDetail history;
+  final title;
 
-  AuthorizationTaskApprovalPage({Key key, this.history}) : super(key: key);
+  AuthorizationTaskApprovalPage({Key key, this.history, this.title}) : super(key: key);
 
   @override
   _AuthorizationTaskApprovalPageState createState() =>
@@ -61,7 +62,7 @@ class _AuthorizationTaskApprovalPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.current.task_approval),
+        title: Text(widget.title),
         centerTitle: true,
       ),
       body: CustomScrollView(

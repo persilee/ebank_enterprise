@@ -16,7 +16,9 @@ import 'package:flutter/material.dart';
 import '../../page_route.dart';
 
 class AuthorizationHistoryPage extends StatefulWidget {
-  AuthorizationHistoryPage({Key key}) : super(key: key);
+
+  final title;
+  AuthorizationHistoryPage({Key key, this.title}) : super(key: key);
 
   @override
   _AuthorizationHistoryPageState createState() =>
@@ -51,7 +53,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
 
   void go2Detail(FinishTaskDetail history) {
     Navigator.pushNamed(context, pageAuthorizationTaskApproval,
-        arguments: history);
+        arguments: {"data": history, "title": widget.title});
   }
 
   @override

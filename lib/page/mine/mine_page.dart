@@ -182,17 +182,17 @@ class _MinePageState extends State<MinePage> {
     return Container(
       child: Column(
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(bottom: 16),
-            color: Colors.white,
-            child: Column(
-              children: [
-                touchIDUnitW,
-                faceIDUintW,
-              ],
-            ),
-          ),
+//          Container(
+//            width: MediaQuery.of(context).size.width,
+//            margin: EdgeInsets.only(bottom: 16),
+//            color: Colors.white,
+//            child: Column(
+//              children: [
+//                touchIDUnitW,
+//                faceIDUintW,
+//              ],
+//            ),
+//          ),
           //修改登录密码
           Container(
             width: MediaQuery.of(context).size.width,
@@ -524,6 +524,7 @@ class _MinePageState extends State<MinePage> {
         // prefs.setString(ConfigKey.USER_ACCOUNT, '');
         // prefs.setString(ConfigKey.USER_ID, '');
         // prefs.setString(ConfigKey.NET_TOKEN, '');
+        // Navigator.pushNamed(context, pageLogin);
         // Navigator.pushNamed(context, pageLogin);
         Future.delayed(Duration.zero, () {
           Navigator.pushAndRemoveUntil(

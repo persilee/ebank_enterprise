@@ -237,11 +237,8 @@ class HsgPasswordDialog extends StatelessWidget {
         .verifyTransPwdNoSms(
             VerifyTransPwdNoSmsReq(payPassword), 'VerifyTransPwdNoSmsReq')
         .then((data) {
-      Navigator.pop(context, true);
-      //Navigator.of(context)..pop()..pop();
-    }).catchError((e) {
-      if (e.toString() == 'ECUST031') {
-        Fluttertoast.showToast(msg: '交易密码错误！请重试');
+      if (resultPage == '') {
+        Navigator.of(context)..pop()..pop();
       } else {
         Navigator.pushNamed(context, resultPage, arguments: arguments);
       }

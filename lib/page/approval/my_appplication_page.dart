@@ -15,7 +15,9 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
 
 class MyApplicationPage extends StatefulWidget {
-  MyApplicationPage({Key key}) : super(key: key);
+
+  final title;
+  MyApplicationPage({Key key, this.title}) : super(key: key);
 
   @override
   _MyApplicationPageState createState() => _MyApplicationPageState();
@@ -72,7 +74,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
                 return GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, pageApplicationTaskApproval,
-                        arguments: list[index]);
+                        arguments: {"data": list[index], "title": widget.title}  );
                   },
                   child: Column(
                     children: [
