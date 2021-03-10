@@ -62,7 +62,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   var ccyListOne = List<String>();
 
-  var ccyList = List<String>();
+  var ccyList = ['CNY'];
 
   List<String> ccyLists = [];
 
@@ -94,10 +94,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   String _limitMoney = '';
 
   //国家/地区
-  List<String> countryList = [
-    '中国',
-    '中国香港',
-  ];
+  List<String> countryList = ['中国', '中国香港', '荷兰'];
   //转账费用
   List<String> transferFeeList = ['收款人交易', '本人交易', '各付各行'];
   //汇款用途
@@ -274,29 +271,28 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             if (_changedCcyTitle == cardBalBean.ccy) {
               _currBal = cardBalBean.currBal.toString();
             }
-            print('777777 $ccyList');
           });
-          if (ccyList.length > 1) {
-            if (_changedCcyTitle == 'USD') {
-              _position = 2;
-            } else if (_changedCcyTitle == 'CNY') {
-              _position = 0;
-            }
-          } else {
-            _position = 0;
-          }
-          if (_changedCcyTitle != 'USD' &&
-              ccyList.length < 3 &&
-              ccyList.length > 0) {
-            _changedCcyTitle = 'USD';
-            _currBal = _loacalCurrBal;
-          }
-          if (element.cardListBal.length == 0) {
-            _currBal = '';
-            _changedCcyTitle = 'CNY';
-            ccyList.add('CNY');
-            _position = 0;
-          }
+          // if (ccyList.length > 1) {
+          //   if (_changedCcyTitle == 'USD') {
+          //     _position = 2;
+          //   } else if (_changedCcyTitle == 'CNY') {
+          //     _position = 0;
+          //   }
+          // } else {
+          //   _position = 0;
+          // }
+          // if (_changedCcyTitle != 'USD' &&
+          //     ccyList.length < 3 &&
+          //     ccyList.length > 0) {
+          //   _changedCcyTitle = 'USD';
+          //   _currBal = _loacalCurrBal;
+          // }
+          // if (element.cardListBal.length == 0) {
+          //   _currBal = '';
+          //   _changedCcyTitle = 'CNY';
+          //   ccyList.add('CNY');
+          //   _position = 0;
+          // }
         }
         //查询额度
         else if (element is GetCardLimitByCardNoResp) {
@@ -823,9 +819,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             element.cardListBal.forEach((element) {
               ccyListOne.clear();
               ccyListOne.add(element.ccy);
-              if (element.ccy == 'USD') {
+              // if (element.ccy == 'USD') {
+              //   _currBal = element.currBal;
+              //   _changedCcyTitle = 'USD';
+              //   _loacalCurrBal = _currBal;
+              // }
+              if (element.ccy == 'CNY') {
                 _currBal = element.currBal;
-                _changedCcyTitle = 'USD';
+                _changedCcyTitle = 'CNY';
                 _loacalCurrBal = _currBal;
               }
             });
