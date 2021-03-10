@@ -208,8 +208,7 @@ Widget _threeRowRight(
       _changedAccountTitle == '' ? cardCodeOne : _changedAccountTitle;
   _changedRateTitle = _changedRateTitle == '' ? balance : _changedRateTitle;
   _changedCcyTitles = _changedCcyTitles == '' ? ccy : _changedCcyTitles;
-  // _changedRateTitle = _changedRateTitle;
-  // _changedCcyTitles = _changedCcyTitles;
+
   String account = FormatUtil.formatSpace4('$_changedAccountTitle');
   var _getAccount = [
     Container(
@@ -239,8 +238,7 @@ Widget _threeRowRight(
     child: GestureDetector(
       onTap: () {
         getcardList();
-        //选择卡号
-        //  getCardTotals(_changedAccountTitle);
+
         print('选择账号');
       },
       child: Column(
@@ -254,19 +252,25 @@ Widget _threeRowRight(
             ),
           ),
           Container(
-            height: MediaQuery.of(context).size.height / 30,
-            width: MediaQuery.of(context).size.width / 2.3,
-            child: Text(
-              //'余额:(HKD)120.05',
-              '${S.current.balance_with_value}$_changedCcyTitles ${FormatUtil.formatSringToMoney(_changedRateTitle)}',
-              // ${_changedRateTitle},
-              style: TextStyle(
-                color: HsgColors.secondDegreeText,
-                fontSize: 13,
-              ),
-              textAlign: TextAlign.left,
-            ),
-          ),
+              height: MediaQuery.of(context).size.height / 30,
+              child: Row(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 1.8,
+                    child: Text(
+                      '${S.current.balance_with_value}$_changedCcyTitles ${FormatUtil.formatSringToMoney(_changedRateTitle)}',
+                      style: TextStyle(
+                        color: HsgColors.secondDegreeText,
+                        fontSize: 13,
+                      ),
+                      textAlign: TextAlign.right,
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width / 40,
+                  )
+                ],
+              )),
         ],
       ),
     ),
