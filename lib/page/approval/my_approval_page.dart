@@ -16,7 +16,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../page_route.dart';
 
 class MyApprovalPage extends StatefulWidget {
-
   final title;
 
   MyApprovalPage({Key key, this.title}) : super(key: key);
@@ -252,7 +251,8 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
 
 //跳转并传值
   void go2Detail(FindUserTaskDetail approval) {
-    Navigator.pushNamed(context, pageTaskApproval, arguments: {"data": approval, "title": widget.title});
+    Navigator.pushNamed(context, pageTaskApproval,
+        arguments: {"data": approval, "title": widget.title});
   }
 
   Future<void> _loadData() async {

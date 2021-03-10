@@ -73,7 +73,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     child: Column(
                       children: [
                         InputList(S.of(context).newPwd,
-                            S.of(context).placeNewPwd, _newPwd),
+                            S.of(context).password_need_num, _newPwd),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
@@ -98,7 +98,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                             child: Row(
                               children: [
                                 Container(
-                                  // width: MediaQuery.of(context).size.width / 7,
                                   child: Text(S.of(context).phone_num),
                                 ),
                                 Expanded(
