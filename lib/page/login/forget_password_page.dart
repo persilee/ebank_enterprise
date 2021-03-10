@@ -53,7 +53,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(S.of(context).reset_password),
-          elevation: 15.0,
+          elevation: 0,
         ),
         body: Container(
           color: HsgColors.commonBackground,

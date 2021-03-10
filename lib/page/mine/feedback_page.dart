@@ -25,7 +25,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
     return new Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).feedback),
-          elevation: 15.0,
+          elevation: 0,
         ),
         body: Container(
             color: HsgColors.commonBackground,

@@ -38,7 +38,7 @@ class _CardListPageState extends State<CardListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(S.current.card_list),
+          title: Text(S.current.my_account),
         ),
         body: RefreshIndicator(
             key: refrestIndicatorKey,

@@ -184,17 +184,17 @@ class _HomePageState extends State<HomePage> {
                 Navigator.pushNamed(context, pageContactCustomer);
               },
             ),
-            IconButton(
-              icon: Image(
-                image:
-                    AssetImage('images/home/navIcon/home_nav_message_has.png'),
-                width: 18.5,
-                height: 18.5,
-              ),
-              onPressed: () {
-                print('消息');
-              },
-            ),
+            // IconButton(
+            //   icon: Image(
+            //     image:
+            //         AssetImage('images/home/navIcon/home_nav_message_has.png'),
+            //     width: 18.5,
+            //     height: 18.5,
+            //   ),
+            //   onPressed: () {
+            //     print('消息');
+            //   },
+            // ),
             Expanded(
               child: Container(
                 alignment: Alignment.center,

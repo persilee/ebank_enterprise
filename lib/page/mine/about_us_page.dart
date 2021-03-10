@@ -12,7 +12,7 @@ class AboutUsPage extends StatelessWidget {
     return new Scaffold(
         appBar: AppBar(
           title: Text('Loaderman'),
-          elevation: 15.0,
+          elevation: 0,
         ),
         body: Container(
             color: Colors.white,
@@ -52,9 +52,9 @@ class AboutUsPage extends StatelessWidget {
                     ),
                     Container(
                       margin:
-                          EdgeInsets.only(top: 146.0, left: 21.0, right: 21.0),
+                          EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
                       padding:
-                          EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
+                          EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
                       decoration: new BoxDecoration(
                           //背景颜色
                           color: Colors.white,
@@ -118,8 +118,8 @@ class AboutUsPage extends StatelessWidget {
               ),
               //我们的优势
               Container(
-                margin: EdgeInsets.only(top: 30.0, left: 21.0, right: 21.0),
-                padding: EdgeInsets.only(top: 5.0, left: 20.0, right: 20.0),
+                margin: EdgeInsets.only(top: 30.0, left: 15.0, right: 15.0),
+                padding: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
                 decoration: new BoxDecoration(
                     //背景颜色
                     //设置四周圆角 角度
@@ -160,8 +160,8 @@ class AboutUsPage extends StatelessWidget {
               ),
               //企业优势
               Container(
-                margin: EdgeInsets.only(top: 10.0, left: 21.0, right: 21.0),
-                padding: EdgeInsets.only(top: 5.0, left: 20.0, right: 20.0),
+                margin: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+                padding: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
                 decoration: new BoxDecoration(
                     //背景颜色
                     color: HsgColors.aboutusConTxtBg,
@@ -207,8 +207,8 @@ class AboutUsPage extends StatelessWidget {
               ),
               //技术优势
               Container(
-                margin: EdgeInsets.only(top: 10.0, left: 21.0, right: 21.0),
-                padding: EdgeInsets.only(top: 5.0, left: 20.0, right: 20.0),
+                margin: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+                padding: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
                 child: SizedBox(
                     child: Padding(
                   padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
@@ -239,7 +239,7 @@ class AboutUsPage extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(top: 15, bottom: 25),
                         child: Text(
-                            '在金融及通讯领域拥有领先的技术实力，掌握领先的银行核心业务处理技术、成熟的电子银行处理技术、及完善的手机支付核心技术',
+                            '在金融及通讯领域拥有领先的技术实力，掌握领先的银行核心业务处理技术、成熟的电子银行处理技术、及完善的手机交易核心技术',
                             style: TextStyle(
                                 fontSize: 14, color: HsgColors.aboutusTextCon)),
                       )
@@ -249,8 +249,8 @@ class AboutUsPage extends StatelessWidget {
               ),
               //团队优势
               Container(
-                margin: EdgeInsets.only(top: 10.0, left: 21.0, right: 21.0),
-                padding: EdgeInsets.only(top: 5.0, left: 20.0, right: 20.0),
+                margin: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+                padding: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
                 decoration: new BoxDecoration(
                     //背景颜色
                     color: HsgColors.aboutusConTxtBg,
@@ -296,8 +296,8 @@ class AboutUsPage extends StatelessWidget {
               ),
               //服务优势
               Container(
-                margin: EdgeInsets.only(top: 10.0, left: 21.0, right: 21.0),
-                padding: EdgeInsets.only(top: 5.0, left: 20.0, right: 20.0),
+                margin: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+                padding: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
                 child: SizedBox(
                     child: Padding(
                   padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
@@ -339,8 +339,8 @@ class AboutUsPage extends StatelessWidget {
               //我们的价值
               Container(
                 margin: EdgeInsets.only(
-                    top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
-                padding: EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
+                    top: 20.0, left: 15.0, right: 15.0, bottom: 20.0),
+                padding: EdgeInsets.only(top: 25.0, left: 10.0, right: 10.0),
                 decoration: new BoxDecoration(
                     //背景颜色
                     color: Colors.white,

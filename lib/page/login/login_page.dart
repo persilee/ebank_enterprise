@@ -10,6 +10,7 @@ import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_text_field_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ import '../../util/encrypt_util.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -140,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
             S.of(context).login,
             _isLoading ? null : () => _login(context),
           ),
-        )
+        ),
       ],
     );
 
