@@ -70,14 +70,14 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                     child: Column(
                       children: [
                         InputList(S.of(context).oldPwd,
-                            S.of(context).placeOldPwd, _oldPwd),
+                            S.of(context).password_need_num, _oldPwd),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
                         InputList(S.of(context).newPwd,
-                            S.of(context).placeNewPwd, _newPwd),
+                            S.of(context).password_need_num, _newPwd),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,

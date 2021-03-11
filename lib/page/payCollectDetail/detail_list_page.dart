@@ -10,6 +10,7 @@ import 'package:ebank_mobile/data/source/model/get_pay_collect_detail.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_record.dart';
 import 'package:ebank_mobile/data/source/pay_collect_detail_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -584,11 +585,13 @@ class _DetailListPageState extends State<DetailListPage> {
           ? '+ ' +
               revenueHistoryList[section].ddFinHistDOList[row].txCcy +
               ' ' +
-              revenueHistoryList[section].ddFinHistDOList[row].txAmt
+              FormatUtil.formatSringToMoney(
+                  revenueHistoryList[section].ddFinHistDOList[row].txAmt)
           : '- ' +
               revenueHistoryList[section].ddFinHistDOList[row].txCcy +
               ' ' +
-              revenueHistoryList[section].ddFinHistDOList[row].txAmt,
+              FormatUtil.formatSringToMoney(
+                  revenueHistoryList[section].ddFinHistDOList[row].txAmt),
       style: TextStyle(fontSize: 15, color: Color(0xFF222121)),
     );
   }
@@ -703,6 +706,122 @@ class _DetailListPageState extends State<DetailListPage> {
   // }
 
   _getRevenueByCards(String localDateStart, List<String> cards) async {
+    // setState(() {
+    //   List<RevenueHistoryDTOList> revenueHistoryDTOList;
+    //   revenueHistoryDTOList = [
+    //     RevenueHistoryDTOList.fromJson({
+    //       "transDate": "2021-01-14",
+    //       "ddFinHistDOList": [
+    //         {
+    //           "modifyTime": null,
+    //           "createTime": null,
+    //           "acDate": "2021-01-23",
+    //           "msgId": "202103101411570000044531",
+    //           "seq": 1,
+    //           "reqId": "202103101411570000000486",
+    //           "vchNo": null,
+    //           "refNo": "",
+    //           "uri": "/hbs",
+    //           "txDateTime": "2021-01-14 18:02:46",
+    //           "acNo": "0101100000133",
+    //           "txCcy": "LAK",
+    //           "txAmt": "6666.5",
+    //           "drCrFlg": "D",
+    //           "txSts": "N",
+    //           "prodCd": null,
+    //           "prdmoCd": null,
+    //           "ciNo": "810000000300",
+    //           "userId": null,
+    //           "trBank": "1",
+    //           "trBranch": null,
+    //           "trDep": null,
+    //           "othBank": "",
+    //           "othBankName": null,
+    //           "othBankAc": "",
+    //           "othBankAcName": "",
+    //           "txMmo": "CLS",
+    //           "remark": null,
+    //           "narrative": "",
+    //           "servCtr": null,
+    //           "ts": null
+    //         },
+    //         {
+    //           "modifyTime": null,
+    //           "createTime": null,
+    //           "acDate": "2021-01-23",
+    //           "msgId": "202103101411570000044531",
+    //           "seq": 1,
+    //           "reqId": "202103101411570000000486",
+    //           "vchNo": null,
+    //           "refNo": "",
+    //           "uri": "/hbs",
+    //           "txDateTime": "2021-01-14 14:12:22",
+    //           "acNo": "0101100000133",
+    //           "txCcy": "LAK",
+    //           "txAmt": "226.8",
+    //           "drCrFlg": "D",
+    //           "txSts": "N",
+    //           "prodCd": null,
+    //           "prdmoCd": null,
+    //           "ciNo": "810000000300",
+    //           "userId": null,
+    //           "trBank": "1",
+    //           "trBranch": null,
+    //           "trDep": null,
+    //           "othBank": "",
+    //           "othBankName": null,
+    //           "othBankAc": "",
+    //           "othBankAcName": "",
+    //           "txMmo": "CLS",
+    //           "remark": null,
+    //           "narrative": "",
+    //           "servCtr": null,
+    //           "ts": null
+    //         }
+    //       ]
+    //     }),
+    //     RevenueHistoryDTOList.fromJson({
+    //       "transDate": "2021-01-13",
+    //       "ddFinHistDOList": [
+    //         {
+    //           "modifyTime": null,
+    //           "createTime": null,
+    //           "acDate": "2021-01-23",
+    //           "msgId": "202103101411570000044531",
+    //           "seq": 1,
+    //           "reqId": "202103101411570000000486",
+    //           "vchNo": null,
+    //           "refNo": "",
+    //           "uri": "/hbs",
+    //           "txDateTime": "2021-01-13 17:50:28",
+    //           "acNo": "0101100000133",
+    //           "txCcy": "LAK",
+    //           "txAmt": "98989",
+    //           "drCrFlg": "D",
+    //           "txSts": "N",
+    //           "prodCd": null,
+    //           "prdmoCd": null,
+    //           "ciNo": "810000000300",
+    //           "userId": null,
+    //           "trBank": "1",
+    //           "trBranch": null,
+    //           "trDep": null,
+    //           "othBank": "",
+    //           "othBankName": null,
+    //           "othBankAc": "0101200000369",
+    //           "othBankAcName": "",
+    //           "txMmo": "TRF",
+    //           "remark": null,
+    //           "narrative": "",
+    //           "servCtr": null,
+    //           "ts": null
+    //         }
+    //       ]
+    //     })
+    //   ];
+    //   revenueHistoryList = revenueHistoryDTOList;
+    // });
+
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
 
@@ -710,7 +829,7 @@ class _DetailListPageState extends State<DetailListPage> {
     PayCollectDetailRepository()
         .getRevenueByCards(
             GetRevenueByCardsReq(
-              localDateStart: '2021-01-01', //localDateStart
+              localDateStart: '2021-01-01', //localDateStart, //'2021-01-01', //
               page: '1',
               pageSize: '10',
               ciNo: custID,

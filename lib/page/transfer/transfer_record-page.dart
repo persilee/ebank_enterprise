@@ -13,6 +13,7 @@ import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -33,7 +34,7 @@ class TrsnsferRecordPage extends StatefulWidget {
 
 class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   List<TransferRecord> _transferHistoryList = []; //转账记录列表
-  String _card = intl.S.current.card; //银行卡
+  String _card = intl.S.current.all_account; //银行卡
   List<String> _cradLists = []; //银行卡列表
   List<String> _imageUrl = []; //银行卡图标列表
   int _position = 0;
@@ -209,8 +210,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
               child: DottedLine(),
             ),
             //转账记录金额、时间、状态
-            _transferAmount(intl.S.of(context).transfer_amount,
-                _transferHistory.amount, _transferHistory.status),
+            _transferAmount(
+                intl.S.of(context).transfer_amount,
+                FormatUtil.formatSringToMoney(_transferHistory.amount),
+                _transferHistory.status),
             _rowContent(intl.S.of(context).transfer_time,
                 _transferHistory.transactionHour),
             _rowContent(
@@ -721,12 +724,15 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     int pageSize = 10;
     List<String> paymentCardNos = [];
     String sort = '';
-    String loginName = '123456'; //18033412021
-    String userId = '123456'; //778309634589982720
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+    String userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
+    // String loginName = '18033412021';
+    // String userId = '778309634589982720';
     TransferDataRepository()
         .getTransferRecord(
             GetTransferRecordReq(ccy, _endDate, _page, pageSize, paymentCardNos,
-                sort, _startDate, loginName, userId),
+                sort, _startDate, userAccount, userID),
             'getTransferRecord')
         .then((data) {
       setState(() {
