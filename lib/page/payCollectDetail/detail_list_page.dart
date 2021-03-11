@@ -37,7 +37,7 @@ class _DetailListPageState extends State<DetailListPage> {
   List<String> _accNoList = [];
   List<String> _cardList = [];
   List<String> _cardIcon = [];
-  String _startDate = DateFormat('yyyy-MM-' + '01').format(DateTime.now());
+  String _startDate = DateFormat('yyyy-MM-01').format(DateTime.now());
   int _position = 0;
   bool _isButton1 = false; //交易时间第一个按钮
   bool _isButton2 = true; //交易时间第二个按钮
@@ -612,7 +612,7 @@ class _DetailListPageState extends State<DetailListPage> {
       onConfirm: (dateTime, List<int> index) {
         //确定的时候
         setState(() {
-          _startDate = DateFormat('yyyy-MM-' + '01').format(dateTime);
+          _startDate = DateFormat('yyyy-MM-01').format(dateTime);
           _nowDate = dateTime;
         });
         if (_position != 0) {
@@ -710,7 +710,7 @@ class _DetailListPageState extends State<DetailListPage> {
     PayCollectDetailRepository()
         .getRevenueByCards(
             GetRevenueByCardsReq(
-              localDateStart: '2021-01-01', //localDateStart, //'2021-01-01', //
+              localDateStart: '2021-01-01', //localDateStart
               page: '1',
               pageSize: '10',
               ciNo: custID,
