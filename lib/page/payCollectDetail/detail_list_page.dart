@@ -38,7 +38,7 @@ class _DetailListPageState extends State<DetailListPage> {
   List<String> _accNoList = [];
   List<String> _cardList = [];
   List<String> _cardIcon = [];
-  String _startDate = DateFormat('yyyy-MM-' + '01').format(DateTime.now());
+  String _startDate = DateFormat('yyyy-MM-01').format(DateTime.now());
   int _position = 0;
   bool _isButton1 = false; //交易时间第一个按钮
   bool _isButton2 = true; //交易时间第二个按钮
@@ -615,7 +615,7 @@ class _DetailListPageState extends State<DetailListPage> {
       onConfirm: (dateTime, List<int> index) {
         //确定的时候
         setState(() {
-          _startDate = DateFormat('yyyy-MM-' + '01').format(dateTime);
+          _startDate = DateFormat('yyyy-MM-01').format(dateTime);
           _nowDate = dateTime;
         });
         if (_position != 0) {
@@ -706,147 +706,147 @@ class _DetailListPageState extends State<DetailListPage> {
   // }
 
   _getRevenueByCards(String localDateStart, List<String> cards) async {
-    setState(() {
-      List<RevenueHistoryDTOList> revenueHistoryDTOList;
-      revenueHistoryDTOList = [
-        RevenueHistoryDTOList.fromJson({
-          "transDate": "2021-01-14",
-          "ddFinHistDOList": [
-            {
-              "modifyTime": null,
-              "createTime": null,
-              "acDate": "2021-01-23",
-              "msgId": "202103101411570000044531",
-              "seq": 1,
-              "reqId": "202103101411570000000486",
-              "vchNo": null,
-              "refNo": "",
-              "uri": "/hbs",
-              "txDateTime": "2021-01-14 18:02:46",
-              "acNo": "0101100000133",
-              "txCcy": "LAK",
-              "txAmt": "6666.5",
-              "drCrFlg": "D",
-              "txSts": "N",
-              "prodCd": null,
-              "prdmoCd": null,
-              "ciNo": "810000000300",
-              "userId": null,
-              "trBank": "1",
-              "trBranch": null,
-              "trDep": null,
-              "othBank": "",
-              "othBankName": null,
-              "othBankAc": "",
-              "othBankAcName": "",
-              "txMmo": "CLS",
-              "remark": null,
-              "narrative": "",
-              "servCtr": null,
-              "ts": null
-            },
-            {
-              "modifyTime": null,
-              "createTime": null,
-              "acDate": "2021-01-23",
-              "msgId": "202103101411570000044531",
-              "seq": 1,
-              "reqId": "202103101411570000000486",
-              "vchNo": null,
-              "refNo": "",
-              "uri": "/hbs",
-              "txDateTime": "2021-01-14 14:12:22",
-              "acNo": "0101100000133",
-              "txCcy": "LAK",
-              "txAmt": "226.8",
-              "drCrFlg": "D",
-              "txSts": "N",
-              "prodCd": null,
-              "prdmoCd": null,
-              "ciNo": "810000000300",
-              "userId": null,
-              "trBank": "1",
-              "trBranch": null,
-              "trDep": null,
-              "othBank": "",
-              "othBankName": null,
-              "othBankAc": "",
-              "othBankAcName": "",
-              "txMmo": "CLS",
-              "remark": null,
-              "narrative": "",
-              "servCtr": null,
-              "ts": null
-            }
-          ]
-        }),
-        RevenueHistoryDTOList.fromJson({
-          "transDate": "2021-01-13",
-          "ddFinHistDOList": [
-            {
-              "modifyTime": null,
-              "createTime": null,
-              "acDate": "2021-01-23",
-              "msgId": "202103101411570000044531",
-              "seq": 1,
-              "reqId": "202103101411570000000486",
-              "vchNo": null,
-              "refNo": "",
-              "uri": "/hbs",
-              "txDateTime": "2021-01-13 17:50:28",
-              "acNo": "0101100000133",
-              "txCcy": "LAK",
-              "txAmt": "98989",
-              "drCrFlg": "D",
-              "txSts": "N",
-              "prodCd": null,
-              "prdmoCd": null,
-              "ciNo": "810000000300",
-              "userId": null,
-              "trBank": "1",
-              "trBranch": null,
-              "trDep": null,
-              "othBank": "",
-              "othBankName": null,
-              "othBankAc": "0101200000369",
-              "othBankAcName": "",
-              "txMmo": "TRF",
-              "remark": null,
-              "narrative": "",
-              "servCtr": null,
-              "ts": null
-            }
-          ]
-        })
-      ];
-      revenueHistoryList = revenueHistoryDTOList;
-    });
-
-    // final prefs = await SharedPreferences.getInstance();
-    // String custID = prefs.getString(ConfigKey.CUST_ID);
-
-    // HSProgressHUD.show();
-    // PayCollectDetailRepository()
-    //     .getRevenueByCards(
-    //         GetRevenueByCardsReq(
-    //           localDateStart: '2021-01-01', //localDateStart, //'2021-01-01', //
-    //           page: '1',
-    //           pageSize: '10',
-    //           ciNo: custID,
-    //           cards: cards,
-    //         ),
-    //         'GetRevenueByCardsReq')
-    //     .then((data) {
-    //   HSProgressHUD.dismiss();
-    //   if (data.revenueHistoryDTOList != null) {
-    //     setState(() {
-    //       revenueHistoryList = data.revenueHistoryDTOList;
-    //     });
-    //   }
-    // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString());
-    //   HSProgressHUD.dismiss();
+    // setState(() {
+    //   List<RevenueHistoryDTOList> revenueHistoryDTOList;
+    //   revenueHistoryDTOList = [
+    //     RevenueHistoryDTOList.fromJson({
+    //       "transDate": "2021-01-14",
+    //       "ddFinHistDOList": [
+    //         {
+    //           "modifyTime": null,
+    //           "createTime": null,
+    //           "acDate": "2021-01-23",
+    //           "msgId": "202103101411570000044531",
+    //           "seq": 1,
+    //           "reqId": "202103101411570000000486",
+    //           "vchNo": null,
+    //           "refNo": "",
+    //           "uri": "/hbs",
+    //           "txDateTime": "2021-01-14 18:02:46",
+    //           "acNo": "0101100000133",
+    //           "txCcy": "LAK",
+    //           "txAmt": "6666.5",
+    //           "drCrFlg": "D",
+    //           "txSts": "N",
+    //           "prodCd": null,
+    //           "prdmoCd": null,
+    //           "ciNo": "810000000300",
+    //           "userId": null,
+    //           "trBank": "1",
+    //           "trBranch": null,
+    //           "trDep": null,
+    //           "othBank": "",
+    //           "othBankName": null,
+    //           "othBankAc": "",
+    //           "othBankAcName": "",
+    //           "txMmo": "CLS",
+    //           "remark": null,
+    //           "narrative": "",
+    //           "servCtr": null,
+    //           "ts": null
+    //         },
+    //         {
+    //           "modifyTime": null,
+    //           "createTime": null,
+    //           "acDate": "2021-01-23",
+    //           "msgId": "202103101411570000044531",
+    //           "seq": 1,
+    //           "reqId": "202103101411570000000486",
+    //           "vchNo": null,
+    //           "refNo": "",
+    //           "uri": "/hbs",
+    //           "txDateTime": "2021-01-14 14:12:22",
+    //           "acNo": "0101100000133",
+    //           "txCcy": "LAK",
+    //           "txAmt": "226.8",
+    //           "drCrFlg": "D",
+    //           "txSts": "N",
+    //           "prodCd": null,
+    //           "prdmoCd": null,
+    //           "ciNo": "810000000300",
+    //           "userId": null,
+    //           "trBank": "1",
+    //           "trBranch": null,
+    //           "trDep": null,
+    //           "othBank": "",
+    //           "othBankName": null,
+    //           "othBankAc": "",
+    //           "othBankAcName": "",
+    //           "txMmo": "CLS",
+    //           "remark": null,
+    //           "narrative": "",
+    //           "servCtr": null,
+    //           "ts": null
+    //         }
+    //       ]
+    //     }),
+    //     RevenueHistoryDTOList.fromJson({
+    //       "transDate": "2021-01-13",
+    //       "ddFinHistDOList": [
+    //         {
+    //           "modifyTime": null,
+    //           "createTime": null,
+    //           "acDate": "2021-01-23",
+    //           "msgId": "202103101411570000044531",
+    //           "seq": 1,
+    //           "reqId": "202103101411570000000486",
+    //           "vchNo": null,
+    //           "refNo": "",
+    //           "uri": "/hbs",
+    //           "txDateTime": "2021-01-13 17:50:28",
+    //           "acNo": "0101100000133",
+    //           "txCcy": "LAK",
+    //           "txAmt": "98989",
+    //           "drCrFlg": "D",
+    //           "txSts": "N",
+    //           "prodCd": null,
+    //           "prdmoCd": null,
+    //           "ciNo": "810000000300",
+    //           "userId": null,
+    //           "trBank": "1",
+    //           "trBranch": null,
+    //           "trDep": null,
+    //           "othBank": "",
+    //           "othBankName": null,
+    //           "othBankAc": "0101200000369",
+    //           "othBankAcName": "",
+    //           "txMmo": "TRF",
+    //           "remark": null,
+    //           "narrative": "",
+    //           "servCtr": null,
+    //           "ts": null
+    //         }
+    //       ]
+    //     })
+    //   ];
+    //   revenueHistoryList = revenueHistoryDTOList;
     // });
+
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID);
+
+    HSProgressHUD.show();
+    PayCollectDetailRepository()
+        .getRevenueByCards(
+            GetRevenueByCardsReq(
+              localDateStart: '2021-02-01', //localDateStart, //'2021-01-01', //
+              page: '1',
+              pageSize: '10',
+              ciNo: custID,
+              cards: cards,
+            ),
+            'GetRevenueByCardsReq')
+        .then((data) {
+      HSProgressHUD.dismiss();
+      if (data.revenueHistoryDTOList != null) {
+        setState(() {
+          revenueHistoryList = data.revenueHistoryDTOList;
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.dismiss();
+    });
   }
 
   _getCardList() {
