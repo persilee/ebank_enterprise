@@ -829,7 +829,7 @@ class _DetailListPageState extends State<DetailListPage> {
     PayCollectDetailRepository()
         .getRevenueByCards(
             GetRevenueByCardsReq(
-              localDateStart: '2021-01-01', //localDateStart, //'2021-01-01', //
+              localDateStart: '2021-02-01', //localDateStart, //'2021-01-01', //
               page: '1',
               pageSize: '10',
               ciNo: custID,
