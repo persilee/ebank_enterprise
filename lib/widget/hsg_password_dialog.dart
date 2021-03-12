@@ -244,9 +244,10 @@ class HsgPasswordDialog extends StatelessWidget {
   //验证交易密码
   _verifyTradePaw(String payPassword, BuildContext context, String resultPage,
       Object arguments) async {
+    String password = EncryptUtil.aesEncode(payPassword);
     VerifyTradePawRepository()
         .verifyTransPwdNoSms(
-            VerifyTransPwdNoSmsReq(payPassword), 'VerifyTransPwdNoSmsReq')
+            VerifyTransPwdNoSmsReq(password), 'VerifyTransPwdNoSmsReq')
         .then((data) {
       Navigator.pop(context, true);
       //Navigator.of(context)..pop()..pop();
@@ -266,7 +267,8 @@ class HsgPasswordDialog extends StatelessWidget {
                     print(inputText);
                   },
                   confirmCallback: () {
-                    Navigator.pushNamed(context, resultPage, arguments: arguments);
+                    Navigator.pushNamed(context, resultPage,
+                        arguments: arguments);
                   },
                   sendCallback: () {},
                 );
@@ -276,6 +278,7 @@ class HsgPasswordDialog extends StatelessWidget {
         }
       }
     }).catchError((e) {
+      print(e.toString());
       if (e.toString() == 'ECUST031') {
         Fluttertoast.showToast(msg: '交易密码错误！请重试');
       } else {

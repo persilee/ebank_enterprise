@@ -316,12 +316,12 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         );
       },
     );
-    if (_passwordList != null) {
-      if (_passwordList.length == 6) {
-        _payPassword = EncryptUtil.aesEncode(_passwordList.join());
-        _submitFormData();
-      }
-    }
+    // if (_passwordList != null) {
+    //   if (_passwordList.length == 6) {
+    //     _payPassword = EncryptUtil.aesEncode(_passwordList.join());
+    //     _submitFormData();
+    //   }
+    // }
   }
 
   //提交响应数据
