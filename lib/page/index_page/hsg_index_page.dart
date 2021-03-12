@@ -15,48 +15,6 @@ class IndexPage extends StatefulWidget {
 }
 
 class _IndexPageState extends State<IndexPage> {
-  final List<BottomNavigationBarItem> bottomNavItems = [
-    BottomNavigationBarItem(
-      icon: Image(
-        image: AssetImage('images/tabbar/tabbar_home_normal.png'),
-        width: 24,
-        height: 24,
-      ),
-      activeIcon: Image(
-        image: AssetImage('images/tabbar/tabbar_home_select.png'),
-        width: 24,
-        height: 24,
-      ),
-      label: S.current.home,
-    ),
-    BottomNavigationBarItem(
-      icon: Image(
-        image: AssetImage('images/tabbar/tabbar_approval_normal.png'),
-        width: 24,
-        height: 24,
-      ),
-      activeIcon: Image(
-        image: AssetImage('images/tabbar/tabbar_approval_select.png'),
-        width: 24,
-        height: 24,
-      ),
-      label: S.current.approval,
-    ),
-    BottomNavigationBarItem(
-      icon: Image(
-        image: AssetImage('images/tabbar/tabbar_mine_normal.png'),
-        width: 24,
-        height: 24,
-      ),
-      activeIcon: Image(
-        image: AssetImage('images/tabbar/tabbar_mine_select.png'),
-        width: 24,
-        height: 24,
-      ),
-      label: S.current.mine,
-      backgroundColor: Colors.yellow,
-    )
-  ];
 
   int currentIndex;
 
@@ -74,7 +32,48 @@ class _IndexPageState extends State<IndexPage> {
       bottomNavigationBar: BottomNavigationBar(
         //iconSize: 24,//使用自定义图片无效，请在图片中设置宽高属性
         fixedColor: HsgColors.accent,
-        items: bottomNavItems,
+        items: [
+          BottomNavigationBarItem(
+            icon: Image(
+              image: AssetImage('images/tabbar/tabbar_home_normal.png'),
+              width: 24,
+              height: 24,
+            ),
+            activeIcon: Image(
+              image: AssetImage('images/tabbar/tabbar_home_select.png'),
+              width: 24,
+              height: 24,
+            ),
+            label: S.current.home,
+          ),
+          BottomNavigationBarItem(
+            icon: Image(
+              image: AssetImage('images/tabbar/tabbar_approval_normal.png'),
+              width: 24,
+              height: 24,
+            ),
+            activeIcon: Image(
+              image: AssetImage('images/tabbar/tabbar_approval_select.png'),
+              width: 24,
+              height: 24,
+            ),
+            label: S.current.approval,
+          ),
+          BottomNavigationBarItem(
+            icon: Image(
+              image: AssetImage('images/tabbar/tabbar_mine_normal.png'),
+              width: 24,
+              height: 24,
+            ),
+            activeIcon: Image(
+              image: AssetImage('images/tabbar/tabbar_mine_select.png'),
+              width: 24,
+              height: 24,
+            ),
+            label: S.current.mine,
+            backgroundColor: Colors.yellow,
+          )
+        ],
         currentIndex: currentIndex,
         type: BottomNavigationBarType.fixed,
         onTap: (index) {
