@@ -367,7 +367,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             //付款方银行名字
             payeeBankCode = element.cardList[0].ciName;
             //收款方银行姓名
-            payerBankCode = element.cardList[0].ciName;
+            // payerBankCode = element.cardList[0].ciName;
             //付款方姓名
             payerName = element.cardList[0].ciName;
           });

@@ -87,7 +87,6 @@ class CardListBal extends Object {
 
   factory CardListBal.fromJson(Map<String, dynamic> srcJson) =>
       _$CardListBalFromJson(srcJson);
-
   Map<String, dynamic> toJson() => _$CardListBalToJson(this);
 }
 
@@ -118,6 +117,5 @@ class TedpListBal extends Object {
 
   factory TedpListBal.fromJson(Map<String, dynamic> srcJson) =>
       _$TedpListBalFromJson(srcJson);
-
   Map<String, dynamic> toJson() => _$TedpListBalToJson(this);
 }

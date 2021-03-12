@@ -77,7 +77,8 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
                 ),
                 ContentRow(
                   label: S.current.remarks,
-                  item: ddFinHist.remark, //narrative,
+                  item: ddFinHist.narrative,
+                  // item: ddFinHist.remark, //narrative,
                 ),
               ],
             ),
