@@ -189,8 +189,8 @@ class HsgPasswordDialog extends StatelessWidget {
               (context as Element).markNeedsBuild();
             }
             if (passwordList.length == 6) {
-              // password = EncryptUtil.aesEncode(passwordList.join());
-              password = passwordList.join();
+              password = EncryptUtil.aesEncode(passwordList.join());
+              // password = passwordList.join();
               _verifyTradePaw(password, context, resultPage, arguments);
             }
           },
@@ -266,7 +266,8 @@ class HsgPasswordDialog extends StatelessWidget {
                     print(inputText);
                   },
                   confirmCallback: () {
-                    Navigator.pushNamed(context, resultPage, arguments: arguments);
+                    Navigator.pushNamed(context, resultPage,
+                        arguments: arguments);
                   },
                   sendCallback: () {},
                 );
