@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/get_verification_code.dart';
 import 'package:ebank_mobile/data/source/model/set_payment_pwd.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
@@ -145,9 +146,13 @@ class _ChangePayPageState extends State<ChangePayPage> {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
       String userID = prefs.getString(ConfigKey.USER_ID);
+      String oldPwd = EncryptUtil.aesEncode(_oldPwd.text);
+      String newPwd = EncryptUtil.aesEncode(_newPwd.text);
+      print(oldPwd);
+      print(newPwd);
       PaymentPwdRepository()
           .updateTransPassword(
-        SetPaymentPwdReq(_oldPwd.text, _newPwd.text, userID, _sms.text),
+        SetPaymentPwdReq(oldPwd, newPwd, userID, _sms.text),
         'updateTransPassword',
       )
           .then((data) {

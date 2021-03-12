@@ -6,9 +6,8 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
-import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
-import 'package:flutter/gestures.dart';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -189,8 +188,8 @@ class HsgPasswordDialog extends StatelessWidget {
               (context as Element).markNeedsBuild();
             }
             if (passwordList.length == 6) {
-              // password = EncryptUtil.aesEncode(passwordList.join());
-              password = passwordList.join();
+              password = EncryptUtil.aesEncode(passwordList.join());
+              // password = passwordList.join();
               _verifyTradePaw(password, context, resultPage, arguments);
             }
           },
@@ -244,9 +243,10 @@ class HsgPasswordDialog extends StatelessWidget {
   //验证交易密码
   _verifyTradePaw(String payPassword, BuildContext context, String resultPage,
       Object arguments) async {
+    String password = EncryptUtil.aesEncode(payPassword);
     VerifyTradePawRepository()
         .verifyTransPwdNoSms(
-            VerifyTransPwdNoSmsReq(payPassword), 'VerifyTransPwdNoSmsReq')
+            VerifyTransPwdNoSmsReq(password), 'VerifyTransPwdNoSmsReq')
         .then((data) {
       Navigator.pop(context, true);
       //Navigator.of(context)..pop()..pop();

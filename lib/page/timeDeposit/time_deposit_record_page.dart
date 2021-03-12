@@ -99,7 +99,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
               SliverChildBuilderDelegate((BuildContext context, int index) {
         String bal = FormatUtil.formatSringToMoney('${rows[index].bal}');
 
-        double conRate = double.parse(rows[index].conRate) * 100;
+        double conRate = double.parse(rows[index].conRate);
         conRate = double.parse(FormatUtil.formatNum(conRate, 2));
         var endTime = Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

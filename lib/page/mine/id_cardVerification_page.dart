@@ -11,6 +11,7 @@ import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart
 import 'package:ebank_mobile/data/source/model/set_transactionPassword.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -497,6 +498,8 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       Fluttertoast.showToast(msg: S.of(context).set_pay_password_prompt);
       return;
     }
+    String password = EncryptUtil.aesEncode(_confimPwd.text);
+    print(password);
     HSProgressHUD.show();
     ChecInformantApiRepository()
         .setTransactionPassword(
@@ -505,7 +508,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                 _accNo,
                 _certNo.text,
                 _certTypeKey,
-                _confimPwd.text,
+                password,
                 _phoneNo.text,
                 userID,
                 true,

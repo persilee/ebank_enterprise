@@ -579,23 +579,23 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             title: S.current.input_password,
           );
         });
-    // if (isPassword != null && isPassword == true) {
-    //   _loadContractData(
-    //     accuPeriod,
-    //     auctCale,
-    //     bal,
-    //     productList.bppdCode,
-    //     productList.ccy,
-    //     custID,
-    //     depositType,
-    //     instCode,
-    //     _changedAccountTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
-    //     '',
-    //     _changedAccountTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
-    //     '',
-    //     '',
-    //   );
-    // }
+    if (isPassword != null && isPassword == true) {
+      _loadContractData(
+        accuPeriod,
+        auctCale,
+        bal,
+        productList.bppdCode,
+        productList.ccy,
+        custID,
+        depositType,
+        instCode,
+        _changedAccountTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
+        '',
+        _changedAccountTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
+        '',
+        '',
+      );
+    }
   }
 
   @override
