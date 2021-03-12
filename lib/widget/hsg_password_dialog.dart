@@ -244,15 +244,11 @@ class HsgPasswordDialog extends StatelessWidget {
   //验证交易密码
   _verifyTradePaw(String payPassword, BuildContext context, String resultPage,
       Object arguments) async {
-    // String password = EncryptUtil.aesEncode(payPassword);
-    print(payPassword);
     VerifyTradePawRepository()
         .verifyTransPwdNoSms(
             VerifyTransPwdNoSmsReq(payPassword), 'VerifyTransPwdNoSmsReq')
         .then((data) {
       // Navigator.pop(context, true);
-      //Navigator.of(context)..pop()..pop();
-      //Navigator.pushNamed(context, resultPage);
       if (resultPage == '') {
         Navigator.of(context)..pop()..pop();
       } else {
