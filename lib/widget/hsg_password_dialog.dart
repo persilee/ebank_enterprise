@@ -188,8 +188,13 @@ class HsgPasswordDialog extends StatelessWidget {
               (context as Element).markNeedsBuild();
             }
             if (passwordList.length == 6) {
+<<<<<<< HEAD
               //  password = passwordList.join();
               password = EncryptUtil.aesEncode(passwordList.join());
+=======
+              password = EncryptUtil.aesEncode(passwordList.join());
+              // password = passwordList.join();
+>>>>>>> 5020102d62c2ef5fc35562c1fd0608a2d617bb7e
               _verifyTradePaw(password, context, resultPage, arguments);
             }
           },
