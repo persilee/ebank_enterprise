@@ -189,6 +189,7 @@ class HsgPasswordDialog extends StatelessWidget {
             }
             if (passwordList.length == 6) {
               password = EncryptUtil.aesEncode(passwordList.join());
+              print(password);
               // password = passwordList.join();
               _verifyTradePaw(password, context, resultPage, arguments);
             }
@@ -216,8 +217,8 @@ class HsgPasswordDialog extends StatelessWidget {
           (context as Element).markNeedsBuild();
         }
         if (passwordList.length == 6) {
-          // password = EncryptUtil.aesEncode(passwordList.join());
-          password = passwordList.join();
+          password = EncryptUtil.aesEncode(passwordList.join());
+          // password = passwordList.join();
           _verifyTradePaw(password, context, resultPage, arguments);
         }
       },
@@ -247,9 +248,7 @@ class HsgPasswordDialog extends StatelessWidget {
         .verifyTransPwdNoSms(
             VerifyTransPwdNoSmsReq(payPassword), 'VerifyTransPwdNoSmsReq')
         .then((data) {
-      Navigator.pop(context, true);
-      //Navigator.of(context)..pop()..pop();
-      //Navigator.pushNamed(context, resultPage);
+      // Navigator.pop(context, true);
       if (resultPage == '') {
         Navigator.of(context)..pop()..pop();
       } else {
