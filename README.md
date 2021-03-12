@@ -123,3 +123,13 @@ Future<LoginResp> login(LoginReq loginReq, String tag) {
 ]
 ```
 添加header快捷键：双击`control+option+h`(macOS)/双击`ctrl+alt+h`(windows)
+
+### Android 打包
+
+输入以下命令：
+
+```bash
+flutter build apk
+```
+
+打包完成后的输出文件(apk)目录： `<app dir>/build/app/outputs/apk/app-release.apk`
