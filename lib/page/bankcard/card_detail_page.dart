@@ -6,14 +6,19 @@ import 'package:ebank_mobile/data/source/bank_data_repository.dart';
 /// Date: 2020-11-05
 
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_bank_info_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/linear_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'card_list_page.dart';
 
@@ -76,7 +81,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
                       Expanded(
                           child: Text("${S.current.account_balance}(CNY)")),
                       Container(
-                        child: Text(totalBalance,
+                        child: Text(FormatUtil.formatSringToMoney(totalBalance),
                             style: TextStyle(color: Colors.grey)),
                       )
                     ],
@@ -113,7 +118,8 @@ class _CardDetailPageState extends State<CardDetailPage> {
                           Expanded(
                               child: Text(S.current.transaction_amount_limit)),
                           Container(
-                            child: Text(singleLimit,
+                            child: Text(
+                                FormatUtil.formatSringToMoney(singleLimit),
                                 style: TextStyle(color: Colors.grey)),
                           )
                         ],
@@ -130,7 +136,8 @@ class _CardDetailPageState extends State<CardDetailPage> {
                               child:
                                   Text(S.current.daily_amount_of_transcation)),
                           Container(
-                            child: Text(dailyLimitAmt,
+                            child: Text(
+                                FormatUtil.formatSringToMoney(dailyLimitAmt),
                                 style: TextStyle(color: Colors.grey)),
                           )
                         ],
@@ -172,7 +179,9 @@ class _CardDetailPageState extends State<CardDetailPage> {
     );
   }
 
-  _loadCardData(String cardNo) {
+  _loadCardData(String cardNo) async {
+    final prefs = await SharedPreferences.getInstance();
+    String ciNo = prefs.getString(ConfigKey.CUST_ID);
     Future.wait({
       //根据卡号获取银行卡信息
       BankDataRepository().getBankListByCardNo(
@@ -180,7 +189,9 @@ class _CardDetailPageState extends State<CardDetailPage> {
       // CardDataRepository()
       //     .getSingleCardBal(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
       CardDataRepository().getCardLimitByCardNo(
-          GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq')
+          GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
+      DepositDataRepository().getCardListBalByUser(
+          GetCardListBalByUserReq('', [], '', ciNo), 'getCardListBalByUser')
     }).then((value) {
       value.forEach((element) {
         if (element is GetSingleCardBalResp) {
@@ -195,6 +206,12 @@ class _CardDetailPageState extends State<CardDetailPage> {
             singleLimit = element.singleLimit;
             dailyLimitAmt = element.singleDayLimit;
             dailyLimit = element.singleDayCountLimit.toString();
+          });
+        } else if (element is GetCardListBalByUserResp) {
+          setState(() {
+            element.cardListBal.forEach((cardListBals) {
+              totalBalance = cardListBals.currBal;
+            });
           });
         }
       });

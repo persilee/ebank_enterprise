@@ -10,7 +10,6 @@ import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
-import 'package:ebank_mobile/widget/hsg_text_field_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -35,12 +34,12 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
   final TextEditingController _accountTC =
-      TextEditingController(text: 'fangluyao');
+      TextEditingController(text: 'blk301');
   final TextEditingController _passwordTC =
-      TextEditingController(text: 'Ab0S25X5Y');
+      TextEditingController(text: '4N0021S8');
 
-  var _account = 'blk301'; //'blk101';
-  var _password = '4N0021S8'; //'4N0021S8';
+  var _account = 'pengyikang'; //'blk101';
+  var _password = 'Aa123456@'; //'4N0021S8';
 
   @override
   void initState() {

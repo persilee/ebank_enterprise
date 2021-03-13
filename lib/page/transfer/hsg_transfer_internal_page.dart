@@ -138,10 +138,12 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   _nameInputChange(String name) {
     payeeName = name;
+    print("$payeeName ---------------");
   }
 
   _accountInputChange(String account) {
     payeeCardNo = account;
+    print("$payeeCardNo  +++++++++++++");
   }
 
   _transferInputChange(String transfer) {
@@ -365,7 +367,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             //付款方银行名字
             payeeBankCode = element.cardList[0].ciName;
             //收款方银行姓名
-            payerBankCode = element.cardList[0].ciName;
+            // payerBankCode = element.cardList[0].ciName;
             //付款方姓名
             payerName = element.cardList[0].ciName;
           });
@@ -448,11 +450,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                   //转账金额
                   money,
                   //贷方货币
-                  ccy,
+                  _changedCcyTitle,
                   //借方货币
-                  ccy,
+                  _changedCcyTitle,
                   //输入密码
-                  '123456',
+                  'L5o+WYWLFVSCqHbd0Szu4Q==',
                   //收款方银行
                   payeeBankCode,
                   //收款方卡号
@@ -486,8 +488,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   _isClick() {
     if (money > 0 && payeeName.length > 0 && payeeCardNo.length > 0) {
       return () {
-        // _tranferAccount(context);
-        _clean();
+        //_tranferAccount(context);
+
         _openBottomSheet();
       };
     } else {
@@ -511,8 +513,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     if (passwordList != null && passwordList == true) {
       if (passwordList) {
         //}.length == 6) {
-        //_tranferAccount(context);
-        _showContractSucceedPage(context);
+        _tranferAccount(context);
+        //_showContractSucceedPage(context);
         _clean();
       }
     }
