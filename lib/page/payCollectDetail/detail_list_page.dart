@@ -114,14 +114,13 @@ class _DetailListPageState extends State<DetailListPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-//        GestureDetector(
-//          onTap: _cupertinoPicker,
-//          child: Row(
-//            mainAxisAlignment: MainAxisAlignment.center,
-//            children: <Widget>[Text(_date), Icon(Icons.arrow_drop_down)],
-//          ),
-//        ),
-
+        //  GestureDetector(
+        //    onTap: _cupertinoPicker,
+        //    child: Row(
+        //      mainAxisAlignment: MainAxisAlignment.center,
+        //      children: <Widget>[Text(_date), Icon(Icons.arrow_drop_down)],
+        //    ),
+        //  ),
         _popDialog(),
         GestureDetector(
           onTap: _accountList,
@@ -454,7 +453,7 @@ class _DetailListPageState extends State<DetailListPage> {
             onTap: () {
               _goToDetail(revenueHistoryList[section].ddFinHistDOList[row]);
             },
-            child: _getContainer(section, row),
+            child: _getContainer(section, row, context),
           ),
           Padding(
             padding: EdgeInsets.only(left: 68, right: 16),
@@ -468,7 +467,11 @@ class _DetailListPageState extends State<DetailListPage> {
     );
   }
 
-  Container _getContainer(int section, int row) {
+  Container _getContainer(
+    int section,
+    int row,
+    BuildContext context,
+  ) {
     return Container(
       padding: EdgeInsets.only(left: 16, right: 16, top: 15),
       child: Row(
@@ -485,14 +488,14 @@ class _DetailListPageState extends State<DetailListPage> {
             ),
           ),
           Expanded(
-            child: _transactionInfo(section, row),
+            child: _transactionInfo(section, row, context),
           ),
         ],
       ),
     );
   }
 
-  Column _transactionInfo(int section, int row) {
+  Column _transactionInfo(int section, int row, BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -500,7 +503,7 @@ class _DetailListPageState extends State<DetailListPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width: 160,
+              width: MediaQuery.of(context).size.width / 2.4,
               padding: EdgeInsets.only(bottom: 8),
               child: Text(
                 revenueHistoryList[section].ddFinHistDOList[row].acNo,
@@ -510,7 +513,9 @@ class _DetailListPageState extends State<DetailListPage> {
               ),
             ),
             Container(
-              child: _transactionAmount(revenueHistoryList, section, row),
+              width: MediaQuery.of(context).size.width / 2.85,
+              child:
+                  _transactionAmount(revenueHistoryList, section, row, context),
             ),
           ],
         ),
@@ -578,8 +583,8 @@ class _DetailListPageState extends State<DetailListPage> {
   }
 
   //交易金额
-  Text _transactionAmount(
-      List<RevenueHistoryDTOList> revenueHistoryList, int section, int row) {
+  Text _transactionAmount(List<RevenueHistoryDTOList> revenueHistoryList,
+      int section, int row, BuildContext context) {
     return Text(
       revenueHistoryList[section].ddFinHistDOList[row].drCrFlg == 'C'
           ? '+ ' +
@@ -593,6 +598,7 @@ class _DetailListPageState extends State<DetailListPage> {
               FormatUtil.formatSringToMoney(
                   revenueHistoryList[section].ddFinHistDOList[row].txAmt),
       style: TextStyle(fontSize: 15, color: Color(0xFF222121)),
+      textAlign: TextAlign.right,
     );
   }
 
