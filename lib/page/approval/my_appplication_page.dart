@@ -72,11 +72,12 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
               } else {
                 return GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, pageApplicationTaskApproval,
-                        arguments: {
-                          "data": list[index],
-                          "title": widget.title
-                        });
+                    go2Detail(list[index]);
+                    // Navigator.pushNamed(context, pageApplicationTaskApproval,
+                    //     arguments: {
+                    //       "data": list[index],
+                    //       "title": widget.title
+                    //     });
                   },
                   child: Column(
                     children: [
@@ -95,6 +96,11 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
   void dispose() {
     super.dispose();
     _scrollController.dispose();
+  }
+
+  void go2Detail(MyApplicationDetail history) {
+    Navigator.pushNamed(context, pageApplicationTaskApproval,
+        arguments: {"data": history, "title": widget.title});
   }
 
   _getRow(String leftText, String rightText) {

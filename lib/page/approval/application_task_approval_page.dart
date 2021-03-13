@@ -11,15 +11,23 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ApplicationTaskApprovalPage extends StatefulWidget {
+  final MyApplicationDetail history;
+  final title;
+  ApplicationTaskApprovalPage({Key key, this.history, this.title})
+      : super(key: key);
+
   @override
   _ApplicationTaskApprovalPageState createState() =>
-      _ApplicationTaskApprovalPageState();
+      _ApplicationTaskApprovalPageState(history);
 }
 
 class _ApplicationTaskApprovalPageState
     extends State<ApplicationTaskApprovalPage> {
-  var processId = "";
+  MyApplicationDetail history;
+  _ApplicationTaskApprovalPageState(this.history);
   var commentList = [];
+  // var processId = "";
+
   //转账信息
   bool _transfer = true;
   var _fromAccount = "";
@@ -33,6 +41,7 @@ class _ApplicationTaskApprovalPageState
   var _toCcy = "";
   var _toaccount = "";
   var _remark = "";
+  var title = "";
 
   var _listDetail = [
     {
@@ -56,16 +65,11 @@ class _ApplicationTaskApprovalPageState
   @override
   void initState() {
     super.initState();
-    _loadHistoryData();
+    _loadHistoryData(history.processId);
   }
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> arguments = ModalRoute.of(context).settings.arguments;
-    String title = arguments['title'];
-    MyApplicationDetail history = arguments['data'];
-    processId = history.processId;
-    print(processId);
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -334,10 +338,10 @@ class _ApplicationTaskApprovalPageState
     ));
   }
 
-  void _loadHistoryData() {
+  void _loadHistoryData(String processId) {
     Future.wait({
       NeedToBeDealtWithRepository()
-          .findUserApplicationDetail(FindUserApplicationDetailReq('39368'),
+          .findUserApplicationDetail(FindUserApplicationDetailReq(processId),
               'findUserApplicationDetail')
           .then((data) {
         setState(() {
