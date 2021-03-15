@@ -129,7 +129,7 @@ class HsgHttp {
           options: options,
           cancelToken: cancelToken);
       final baseResponse = _BaseResponse.fromJson(response.data);
-      if (baseResponse.msgCd == 'KONT0000') {
+      if (baseResponse.msgCd == '0000') {
         if (baseResponse.token != null) {
           _saveToken(baseResponse.token);
         }
@@ -185,8 +185,8 @@ class HsgHttp {
 }
 
 class BaseRequest {
-  String loginName = "18033410021";
-  String userId = "773595911321288704";
+  String loginName = "";
+  String userId = "";
   dynamic body;
 
   BaseRequest(
