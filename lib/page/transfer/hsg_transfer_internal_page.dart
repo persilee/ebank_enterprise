@@ -488,7 +488,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       return () {
         //_tranferAccount(context);
 
-        _openBottomSheet();
+        // _openBottomSheet();
+        Navigator.pushNamed(context, pageTransferInternalPreview);
       };
     } else {
       return null;
