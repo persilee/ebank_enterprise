@@ -99,6 +99,7 @@
   "cancel_plan":"取消计划",
   "finished":"已结束",
   "canceled":"已取消",
+  "under_review":"审核中",
   "transfer_amount_each_time_with_value":"每次转账金额：",
   "transfer_frequency":"转账频率：",
   "first_time_of_transfer_with_value":"首次转账时间：",

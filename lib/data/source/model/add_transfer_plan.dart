@@ -87,6 +87,12 @@ class AddTransferPlanReq extends Object {
   @JsonKey(name: 'transferType')
   String transferType;
 
+  @JsonKey(name: 'payPassword')
+  String payPassword;
+
+  @JsonKey(name: 'smsCode')
+  String smsCode;
+
   AddTransferPlanReq(
     this.amount,
     this.bankSwift,
@@ -114,6 +120,8 @@ class AddTransferPlanReq extends Object {
     this.remitterAddress,
     this.startDate,
     this.transferType,
+    this.payPassword,
+    this.smsCode,
   );
 
   factory AddTransferPlanReq.fromJson(Map<String, dynamic> srcJson) =>

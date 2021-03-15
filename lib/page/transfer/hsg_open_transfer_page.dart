@@ -79,6 +79,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   var _payeeNameController = TextEditingController();
   var _payeeAccountController = TextEditingController();
   var _payeeBankCodeController = TextEditingController();
+  String _payPassword = '';
+  String _smsCode = '';
 
   //预约频率集合
   List frequency = [
@@ -268,7 +270,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           onChanged: (value) {
             planName = value;
           },
-          keyboardType: TextInputType.number,
+          keyboardType: TextInputType.text,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.all(0),
             border: InputBorder.none,
@@ -725,7 +727,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             title: S.current.input_password,
             resultPage: pageDepositRecordSucceed,
             arguments: 'advanceTransfer',
-            //isDialog: true,
+            isDialog: true,
           );
         });
     if (isPassword != null && isPassword == true) {
@@ -937,6 +939,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             '',
             _startTime,
             '0',
+            _payPassword,
+            _smsCode,
           ),
           'AddTransferPlanReq')
     }).then((value) {
