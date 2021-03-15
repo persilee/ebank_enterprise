@@ -190,7 +190,7 @@ var appRoutes = {
   pageForexTrading: (context) => ForexTradingPage(),
   pageTaskApproval: (context) => TaskApprovalPage(),
   pageApplication: (context) => MyApplicationPage(),
-  pageApplicationTaskApproval: (context) => ApplicationTaskApprovalPage(),
+  // pageApplicationTaskApproval: (context) => ApplicationTaskApprovalPage(),
   // pageAuthorizationTaskApproval: (context) => AuthorizationTaskApprovalPage(),
   pageExchangeRateInquiry: (context) => ExchangeRateInquiryPage(),
   pageOpenTransfer: (context) => OpenTransferPage(),
@@ -242,6 +242,15 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageTransferPlanDetails) {
     return MaterialPageRoute(builder: (context) {
       return TransferPlanDetailsPage(transferPlan: settings.arguments);
+    });
+  }
+  if (settings.name == pageApplicationTaskApproval) {
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return ApplicationTaskApprovalPage(
+        history: arguments['data'],
+        title: arguments['title'],
+      );
     });
   }
   return null;
