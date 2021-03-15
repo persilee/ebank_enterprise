@@ -39,9 +39,17 @@ class LoginResp {
   String headPortrait;
   String actualName;
   String userPhone;
+  String areaCode;
 
-  LoginResp(this.userId, this.custId, this.userAccount, this.headPortrait,
-      this.actualName, this.userPhone);
+  LoginResp(
+    this.userId,
+    this.custId,
+    this.userAccount,
+    this.headPortrait,
+    this.actualName,
+    this.userPhone,
+    this.areaCode,
+  );
 
   factory LoginResp.fromJson(Map<String, dynamic> srcJson) =>
       _$LoginRespFromJson(srcJson);

@@ -1,7 +1,9 @@
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/widget/hsg_otp_button.dart';
 import 'package:flutter/material.dart';
 
 class HsgTextFieldDialog extends StatelessWidget {
+  final String areaCode;
   final String phoneNum;
   final TextEditingController editingController;
   final ValueChanged<String> onChanged;
@@ -10,7 +12,8 @@ class HsgTextFieldDialog extends StatelessWidget {
 
   const HsgTextFieldDialog(
       {Key key,
-      this.phoneNum = '134****2356',
+      this.areaCode,
+      this.phoneNum,
       @required this.editingController,
       this.onChanged,
       this.confirmCallback,
@@ -20,6 +23,8 @@ class HsgTextFieldDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var field_dialog_confirm;
+    String showPhone = this.phoneNum != null ? this.phoneNum : '';
+    String showAreaCode = this.areaCode != null ? this.areaCode : '';
     return SimpleDialog(
       contentPadding: EdgeInsets.only(bottom: 0),
       title: Center(
@@ -44,7 +49,7 @@ class HsgTextFieldDialog extends StatelessWidget {
                   ),
                   Padding(padding: EdgeInsets.only(right: 10)),
                   Text(
-                    this.phoneNum,
+                    showAreaCode + showPhone,
                     style: TextStyle(fontSize: 14.0, color: Colors.black38),
                   ),
                 ],
@@ -90,6 +95,10 @@ class HsgTextFieldDialog extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(right: 14),
                     ),
+                    // HSGOTPButton(
+                    //   'sendSms',
+                    //   otpCallback: () {},
+                    // )
                     TextButton(
                         onPressed: this.sendCallback,
                         child: Text(

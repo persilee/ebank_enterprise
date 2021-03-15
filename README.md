@@ -133,3 +133,10 @@ flutter build apk
 ```
 
 打包完成后的输出文件(apk)目录： `<app dir>/build/app/outputs/apk/app-release.apk`
+
+### pub finished with exit code 78解决办法
+一、常规办法
+执行flutter packages pub run build_runner build后报code 78错误
+1、flutter packages pub run build_runner clean
+2、flutter packages pub run build_runner build --delete-conflicting-outputs
+以上方法会解决大部分错误

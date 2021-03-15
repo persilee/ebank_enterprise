@@ -107,7 +107,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   var _loacalCurrBal = '';
 
-  List<String> passwordList = []; //密码列表
+  String _inputPassword = '';
 
   //交易密码
 
@@ -328,8 +328,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   Widget _getImage() {
     return InkWell(
       onTap: () {
-        //获取验证码
-        _getVerificationCode();
         Navigator.pushNamed(context, pageTranferPartner, arguments: '0').then(
           (value) {
             setState(() {
@@ -367,7 +365,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             //付款方银行名字
             payeeBankCode = element.cardList[0].ciName;
             //收款方银行姓名
-            // payerBankCode = element.cardList[0].ciName;
+            payerBankCode = element.cardList[0].ciName;
             //付款方姓名
             payerName = element.cardList[0].ciName;
           });
@@ -507,16 +505,17 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           resultPage: pageDepositRecordSucceed,
           arguments: '0',
           isDialog: true,
+          returnPasswordFunc: (password) {
+            _inputPassword = password;
+          },
         );
       },
     );
     if (passwordList != null && passwordList == true) {
-      if (passwordList) {
-        //}.length == 6) {
-        _tranferAccount(context);
-        //_showContractSucceedPage(context);
-        _clean();
-      }
+      //}.length == 6) {
+      // _tranferAccount(context);
+      //_showContractSucceedPage(context);
+      // _clean();
     }
   }
 

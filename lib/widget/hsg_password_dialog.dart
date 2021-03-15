@@ -7,21 +7,26 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'hsg_text_field_dialog.dart';
 
 // ignore: must_be_immutable
 class HsgPasswordDialog extends StatelessWidget {
   final String title;
+
+  ///是否是需要拉起短信验证码
   final bool isDialog;
   List<String> keyboardNum = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
   List<String> passwordList = [];
   String password = '';
   String resultPage = '';
   Object arguments = '';
+  Function(String password) returnPasswordFunc;
 
   TextEditingController _editingController = TextEditingController();
   String inputText = '';
@@ -31,7 +36,8 @@ class HsgPasswordDialog extends StatelessWidget {
       this.title,
       this.resultPage,
       this.arguments,
-      this.isDialog = false});
+      this.isDialog = false,
+      this.returnPasswordFunc});
 
   @override
   Widget build(BuildContext context) {
@@ -189,7 +195,6 @@ class HsgPasswordDialog extends StatelessWidget {
             }
             if (passwordList.length == 6) {
               password = EncryptUtil.aesEncode(passwordList.join());
-              print(password);
               // password = passwordList.join();
               _verifyTradePaw(password, context, resultPage, arguments);
             }
@@ -217,8 +222,8 @@ class HsgPasswordDialog extends StatelessWidget {
           (context as Element).markNeedsBuild();
         }
         if (passwordList.length == 6) {
-          password = EncryptUtil.aesEncode(passwordList.join());
-          // password = passwordList.join();
+          // password = EncryptUtil.aesEncode(passwordList.join());
+          password = passwordList.join();
           _verifyTradePaw(password, context, resultPage, arguments);
         }
       },
@@ -244,11 +249,17 @@ class HsgPasswordDialog extends StatelessWidget {
   //验证交易密码
   _verifyTradePaw(String payPassword, BuildContext context, String resultPage,
       Object arguments) async {
+    final prefs = await SharedPreferences.getInstance();
+    String phoneNum = prefs.getString(ConfigKey.USER_PHONE);
+    String areaCodeNum = prefs.getString(ConfigKey.USER_AREACODE);
     VerifyTradePawRepository()
         .verifyTransPwdNoSms(
             VerifyTransPwdNoSmsReq(payPassword), 'VerifyTransPwdNoSmsReq')
         .then((data) {
-      // Navigator.pop(context, true);
+      returnPasswordFunc(password);
+      Navigator.pop(context, true);
+      //Navigator.of(context)..pop()..pop();
+      //Navigator.pushNamed(context, resultPage);
       if (resultPage == '') {
         Navigator.of(context)..pop()..pop();
       } else {
@@ -258,6 +269,8 @@ class HsgPasswordDialog extends StatelessWidget {
               barrierDismissible: false,
               builder: (BuildContext context) {
                 return HsgTextFieldDialog(
+                  areaCode: areaCodeNum != null ? areaCodeNum : '',
+                  phoneNum: phoneNum != null ? phoneNum : '',
                   editingController: _editingController,
                   onChanged: (value) {
                     inputText = value;
@@ -267,7 +280,9 @@ class HsgPasswordDialog extends StatelessWidget {
                     Navigator.pushNamed(context, resultPage,
                         arguments: arguments);
                   },
-                  sendCallback: () {},
+                  sendCallback: () {
+                    print('发送验证码');
+                  },
                 );
               });
         } else {
