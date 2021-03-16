@@ -5,6 +5,9 @@ import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/mine/set_pay_page.dart';
+import 'package:ebank_mobile/page/register/component/register_86.dart';
+import 'package:ebank_mobile/page/register/component/register_row.dart';
+import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 
@@ -40,90 +43,64 @@ class _RegisterPageState extends State<RegisterPage> {
           elevation: 0,
         ),
         body: Container(
-          color: HsgColors.commonBackground,
+          color: Colors.white,
           child: Form(
               //绑定状态属性
               key: _formKey,
               child: ListView(
                 children: <Widget>[
-                  //输入手机号
+                  //注册标题
+                  getRegisterTitle(),
+                  //注册手机号
+                  getRegisterRegion(context, _phoneNum),
+                  //输入用户名
+                  getRegisterRow('输入用户名'),
+                  //获取验证码
                   Container(
-                    color: Colors.white,
+                    height: MediaQuery.of(context).size.height / 15,
+                    margin: EdgeInsets.fromLTRB(30, 0, 30, 10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        color: Color(0xFFF5F7F9)),
                     child: Row(
                       children: [
                         Container(
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                color: Color.fromARGB(245, 247, 249, 1)),
-                            child: Container(
-                              child: Row(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      print('点击86');
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          alignment: Alignment.center,
-                                          margin: EdgeInsets.only(left: 20),
-                                          // color: Colors.red,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              20,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              13,
-                                          child: Text('+86'),
-                                        ),
-                                        Container(
-                                          //  color: Colors.yellow,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              20,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              14,
-                                          child: Icon(
-                                            Icons.arrow_drop_down_outlined,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 1.5,
-                                    child: TextField(
-                                      //是否自动更正
-                                      autocorrect: false,
-                                      //是否自动获得焦点
-                                      autofocus: false,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: '输入手机号',
-                                        hintStyle: TextStyle(
-                                          fontSize: 15,
-                                          color: HsgColors.textHintColor,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
+                          padding: EdgeInsets.only(left: 20),
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: TextField(
+                            //是否自动更正
+                            autocorrect: false,
+                            //是否自动获得焦点
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: '输入验证码',
+                              hintStyle: TextStyle(
+                                fontSize: 15,
+                                color: HsgColors.textHintColor,
                               ),
-                            )),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            //调用获取验证码接口
+                            _otpButton();
+                            print('获取验证码');
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width / 4,
+                            child: Text(
+                              '获取验证码',
+                              style: TextStyle(color: Colors.blue),
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(10.0),
-                  ),
+
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin: EdgeInsets.only(bottom: 16),
@@ -132,52 +109,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Column(
                       children: [
                         Container(
-                            height: 50,
-                            child: Row(
-                              children: [
-                                Container(
-                                  child: Text('用户名'),
-                                ),
-                                Expanded(
-                                    child: Container(
-                                  child: TextField(
-                                    controller: _phoneNum,
-                                    textAlign: TextAlign.right,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: S.of(context).please_input,
-                                      hintStyle: TextStyle(
-                                        fontSize: 15,
-                                        color: HsgColors.textHintColor,
-                                      ),
-                                    ),
-                                  ),
-                                ))
-                              ],
-                            )),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
-                        Container(
-                          height: 50,
-                          child: Row(
-                            children: [
-                              Text(S.of(context).sendmsm),
-                              Expanded(
-                                child: otpTextField(),
-                              ),
-                              SizedBox(
-                                width: 90,
-                                height: 32,
-                                child: _otpButton(),
-                              )
-                            ],
-                          ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 1.3,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              color: Color(0xFFF5F7F9)),
+                          margin: EdgeInsets.only(top: 75),
+                          width: MediaQuery.of(context).size.width / 1.2,
+                          height: MediaQuery.of(context).size.height / 15,
                           child: RaisedButton(
                             color: Colors.blue,
                             child: Text(
@@ -185,9 +123,11 @@ class _RegisterPageState extends State<RegisterPage> {
                               style: (TextStyle(color: Colors.white)),
                               //textDirection: Colors.white,
                             ),
-                            onPressed: () {
-                              Navigator.pushNamed(context, pageHome);
-                            },
+                            onPressed: _submit()
+                                ? () {
+                                    Navigator.pushNamed(context, pageHome);
+                                  }
+                                : null,
                           ),
                         )
                       ],
@@ -215,10 +155,12 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   bool _submit() {
-    if (_phoneNum.text != '' &&
+    if (_phoneNum.text != ''
+        // &&
         // _newPwd.text != '' &&
         // _confimPwd.text != '' &&
-        _sms.text != '') {
+        //_sms.text != ''
+        ) {
       return true;
     } else {
       return false;

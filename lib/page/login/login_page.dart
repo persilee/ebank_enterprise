@@ -33,17 +33,15 @@ class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
-  final TextEditingController _accountTC =
-      TextEditingController(text: 'blk302');
-  final TextEditingController _passwordTC =
-      TextEditingController(text: 'b0S25X5Y');
-
+  TextEditingController _accountTC = TextEditingController(text: 'blk302');
+  TextEditingController _passwordTC = TextEditingController(text: '4N0021S8');
   var _account = 'blk302'; //'blk101';
   var _password = '4N0021S8'; //'4N0021S8';
 
   @override
   void initState() {
     super.initState();
+
     // 添加监听
     _accountTC.addListener(() {
       _account = _accountTC.text;
@@ -52,6 +50,15 @@ class _LoginPageState extends State<LoginPage> {
     _passwordTC.addListener(() {
       _password = _passwordTC.text;
     });
+    if (_account == '' && _password == '') {
+      print("$_password  >>>>>>");
+      _isLoading = true;
+    }
+
+    _account = _accountTC.text;
+    print("$_account   8888888");
+    _password = _passwordTC.text;
+    print("$_password   8888888");
     Intl.defaultLocale = 'en';
   }
 
@@ -82,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Row(
             children: [
               //填充左侧，使button自适应宽度
-
+              Expanded(child: Container()),
               LanguageChangeBtn(_changeLangBtnTltle),
             ],
           ),
@@ -120,11 +127,10 @@ class _LoginPageState extends State<LoginPage> {
               //忘记用户名
               Container(
                 height: 20,
-                margin: EdgeInsets.only(top: 10, right: 0, left: 35),
+                margin: EdgeInsets.only(top: 10, right: 0, left: 170),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    //ForgetButton('忘记账户？'),
                     Container(
                       margin: EdgeInsets.only(left: 15),
                       child: ForgetButton('忘记账户', () {
@@ -137,14 +143,13 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ),
-              //忘记按钮
+              //忘记密码按钮
               Container(
                 height: 20,
                 margin: EdgeInsets.only(top: 10, right: 35, left: 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    //ForgetButton('忘记账户？'),
                     Container(
                       margin: EdgeInsets.only(left: 15),
                       child: ForgetButton(S.of(context).fotget_password_q, () {
@@ -161,17 +166,18 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
 
-        //登录按钮
         Container(
             child: Row(
           children: [
+            //注册按钮
             Container(
               margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
               child: UnderButtonView(
                 '注册',
-                _isLoading ? null : () => _regesiter(context),
+                false ? null : () => _regesiter(context),
               ),
             ),
+            //登录按钮
             Container(
               margin: EdgeInsets.only(
                 top: 40,
@@ -238,6 +244,11 @@ class _LoginPageState extends State<LoginPage> {
       _saveUserConfig(context, value);
     }).catchError((e) {
       setState(() {
+        // if (_account != '' && password != '') {
+        //   _isLoading = false;
+        // } else {
+        //   _isLoading = true;
+        // }
         _isLoading = false;
       });
       HSProgressHUD.showError(status: '${e.toString()}');
@@ -252,7 +263,7 @@ class _LoginPageState extends State<LoginPage> {
   ///登录成功-跳转操作
   _showMainPage(BuildContext context) async {
     setState(() {
-      _isLoading = false;
+      _isLoading = true;
     });
     Navigator.pushNamed(context, pageIndexName);
   }
@@ -264,10 +275,7 @@ class _LoginPageState extends State<LoginPage> {
 
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
-    //prefs.setString(ConfigKey.USER_PASSWORD, _password);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
-    prefs.setString(ConfigKey.USER_AREACODE, resp.areaCode);
-    prefs.setString(ConfigKey.USER_PHONE, resp.userPhone);
     if (resp.custId == null || resp.custId == '') {
       prefs.setString(ConfigKey.CUST_ID, '');
     } else {
