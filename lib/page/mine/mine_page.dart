@@ -203,7 +203,7 @@ class _MinePageState extends State<MinePage> {
                 _flatBtnNuitWidget(S.of(context).my_account, true, () {
                   Navigator.pushNamed(context, pageCardList);
                 }),
-                _flatBtnNuitWidget('密码管理', true, () {
+                _flatBtnNuitWidget(S.current.password_management, true, () {
                   Navigator.pushNamed(context, pagePasswordManagement);
                 }),
               ],
@@ -217,14 +217,18 @@ class _MinePageState extends State<MinePage> {
             // padding: EdgeInsets.only(left: 20, right: 20),
             child: Column(
               children: [
-                _flatBtnNuitWidget(S.of(context).feedback, true, () {
-                  Navigator.pushNamed(context, feedback);
+                _flatBtnNuitWidget(S.of(context).visa_interview, true, () {
+                  //面签通知
+                  // Navigator.pushNamed(context, aboutUs);
+                }),
+                _flatBtnNuitWidget(S.of(context).aboutUs, true, () {
+                  Navigator.pushNamed(context, aboutUs);
                 }),
                 _flatBtnNuitWidget(S.of(context).customer_service, true, () {
                   Navigator.pushNamed(context, pageContactCustomer);
                 }),
-                _flatBtnNuitWidget(S.of(context).aboutUs, true, () {
-                  Navigator.pushNamed(context, aboutUs);
+                _flatBtnNuitWidget(S.of(context).feedback, true, () {
+                  Navigator.pushNamed(context, feedback);
                 }),
               ],
             ),
