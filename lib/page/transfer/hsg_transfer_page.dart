@@ -37,7 +37,7 @@ class _TransferPageState extends State<TransferPage> {
     {
       'btnIcon':
           'images/transferIcon/transfer_features_icon/transfer_features_plan.png',
-      'btnTitle': S.current.international_transfer
+      'btnTitle': S.current.transfer_type_1
     },
     {
       'btnIcon':
@@ -50,7 +50,7 @@ class _TransferPageState extends State<TransferPage> {
   List<Map<String, Object>> _listFeatures = [
     {
       'btnIcon': '',
-      'btnTitle': S.current.transfer_type_2,
+      'btnTitle': S.current.transfer_type_1,
     },
   ];
 
@@ -115,8 +115,8 @@ class _TransferPageState extends State<TransferPage> {
                   //行内转账
                   //  go2Detail(cards[1]);
                   Navigator.pushNamed(context, pageTransferInternal);
-                } else if (S.of(context).international_transfer == title) {
-                  //'国际转账'
+                } else if (S.of(context).transfer_type_1 == title) {
+                  //'跨行转账'
                   Navigator.pushNamed(context, pageTrasferInternational);
                 } else if (S.current.transfer_record == title) {
                   //转账记录

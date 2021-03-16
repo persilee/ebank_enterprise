@@ -234,6 +234,7 @@
   "transfer_out": "转出",
   "transfer_type": "转账类型",
   "transfer_type_0": "行内转账",
+  "transfer_type_1":"跨行转账",
   "transfer_type_2": "国际转账",
   "installment_status1": "开始",
   "installment_status2": "到期",

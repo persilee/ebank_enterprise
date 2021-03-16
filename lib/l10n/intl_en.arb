@@ -233,6 +233,7 @@
   "transfer_out": "Transfer To",
   "transfer_type": "Transfer Type",
   "transfer_type_0": "Internal Transfer",
+  "transfer_type_1":"Local Bank Transfer",
   "transfer_type_2": "Overseas Bank Transfer",
   "installment_status1": "Start",
   "installment_status2": "Matured",
