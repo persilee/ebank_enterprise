@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _accountTC =
       TextEditingController(text: 'blk302');
   final TextEditingController _passwordTC =
-      TextEditingController(text: '4N0021S8');
+      TextEditingController(text: 'b0S25X5Y');
 
   var _account = 'blk302'; //'blk101';
   var _password = '4N0021S8'; //'4N0021S8';
@@ -264,7 +264,10 @@ class _LoginPageState extends State<LoginPage> {
 
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
+    //prefs.setString(ConfigKey.USER_PASSWORD, _password);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
+    prefs.setString(ConfigKey.USER_AREACODE, resp.areaCode);
+    prefs.setString(ConfigKey.USER_PHONE, resp.userPhone);
     if (resp.custId == null || resp.custId == '') {
       prefs.setString(ConfigKey.CUST_ID, '');
     } else {

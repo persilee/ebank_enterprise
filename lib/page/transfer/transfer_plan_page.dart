@@ -26,7 +26,7 @@ class TransferPlanPage extends StatefulWidget {
 
 class _TransferPlanPageState extends State<TransferPlanPage> {
   String groupValue = '0';
-  List<String> _statusList = ['P']; //转账计划状态
+  List<String> _statusList = ['P', 'A']; //转账计划状态
   List<TransferPlan> transferPlanList = [];
   String frequency = '';
   String transferType = '';
@@ -152,20 +152,22 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
       shape:
           RoundedRectangleBorder(side: borderSide, borderRadius: borderRadius),
       onPressed: () {
-        if (btnTitle == S.current.in_progress) {
-          _statusList = ['P'];
-          updateGroupValue(btnType);
-          _getTransferPlanList();
-        } else if (btnTitle == S.current.already_finished) {
-          _statusList = ['C', 'E'];
-          updateGroupValue(btnType);
-          _getTransferPlanList();
-        } else if (btnTitle == S.current.cancel_plan) {
-          _alertDialog();
-        } else {
-          _statusList = ['C', 'E'];
-          _getTransferPlanList();
-        }
+        setState(() {
+          if (btnTitle == S.current.in_progress) {
+            _statusList = ['P', 'A'];
+            updateGroupValue(btnType);
+            _getTransferPlanList();
+          } else if (btnTitle == S.current.already_finished) {
+            _statusList = ['C', 'E'];
+            updateGroupValue(btnType);
+            _getTransferPlanList();
+          } else if (btnTitle == S.current.cancel_plan) {
+            _alertDialog();
+          } else {
+            _statusList = ['C', 'E'];
+            _getTransferPlanList();
+          }
+        });
       },
       child: _textStyle(
           btnTitle, textColor, textSize, FontWeight.normal, TextAlign.center),
@@ -323,6 +325,9 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
                 } else if (transferPlanList[index].status == 'C') {
                   btnTitle = S.current.canceled;
                   btnColor = HsgColors.canceledBtn;
+                } else if (transferPlanList[index].status == 'A') {
+                  btnTitle = S.current.under_review;
+                  btnColor = Color(0xFF48b4ff);
                 } else {
                   btnTitle = S.current.finished;
                   btnColor = HsgColors.finishedBtn;
@@ -407,7 +412,7 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
   Future<void> _getTransferPlanList() async {
     TransferDataRepository()
         .getTransferPlanList(
-            GetTransferPlanListReq(1, 10, '', _statusList, '0'),
+            GetTransferPlanListReq(0, 10, '', _statusList, '0'),
             'getTransferPlanList')
         .then((value) {
       if (value is GetTransferPlanListResp) {
@@ -440,7 +445,7 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
           CancelTransferPlanReq(planId), 'deleteTransferPlan')
     }).then((data) {
       setState(() {
-        _statusList = ['P'];
+        _statusList = ['P', 'A'];
         _getTransferPlanList();
       });
     });
