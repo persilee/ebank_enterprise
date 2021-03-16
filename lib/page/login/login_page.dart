@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Row(
             children: [
               //填充左侧，使button自适应宽度
-              Expanded(child: Container()),
+
               LanguageChangeBtn(_changeLangBtnTltle),
             ],
           ),
@@ -114,34 +114,77 @@ class _LoginPageState extends State<LoginPage> {
             isCiphertext: true,
           ),
         ),
-        //忘记按钮
         Container(
-          height: 20,
-          margin: EdgeInsets.only(top: 10, right: 35, left: 35),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              //ForgetButton('忘记账户？'),
+              //忘记用户名
               Container(
-                margin: EdgeInsets.only(left: 15),
-                child: ForgetButton(S.of(context).fotget_password_q, () {
-                  setState(() {
-                    Navigator.pushNamed(context, pageForgetPassword);
-                    print('忘记密码');
-                  });
-                }),
-              )
+                height: 20,
+                margin: EdgeInsets.only(top: 10, right: 0, left: 35),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    //ForgetButton('忘记账户？'),
+                    Container(
+                      margin: EdgeInsets.only(left: 15),
+                      child: ForgetButton('忘记账户', () {
+                        setState(() {
+                          Navigator.pushNamed(context, pageForgetPassword);
+                          print('忘记密码');
+                        });
+                      }),
+                    )
+                  ],
+                ),
+              ),
+              //忘记按钮
+              Container(
+                height: 20,
+                margin: EdgeInsets.only(top: 10, right: 35, left: 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    //ForgetButton('忘记账户？'),
+                    Container(
+                      margin: EdgeInsets.only(left: 15),
+                      child: ForgetButton(S.of(context).fotget_password_q, () {
+                        setState(() {
+                          Navigator.pushNamed(context, pageForgetPassword);
+                          print('忘记密码');
+                        });
+                      }),
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
+
         //登录按钮
         Container(
-          margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
-          child: UnderButtonView(
-            S.of(context).login,
-            _isLoading ? null : () => _login(context),
-          ),
-        ),
+            child: Row(
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
+              child: UnderButtonView(
+                '注册',
+                _isLoading ? null : () => _regesiter(context),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(
+                top: 40,
+              ),
+              child: UnderButtonView(
+                S.of(context).login,
+                _isLoading ? null : () => _login(context),
+              ),
+            )
+          ],
+        )),
+        //注册按钮
+        // Container(child: UnderButtonView('注册'),),
         Container(
           margin: EdgeInsets.only(top: 150),
           child: Text(
@@ -199,6 +242,11 @@ class _LoginPageState extends State<LoginPage> {
       });
       HSProgressHUD.showError(status: '${e.toString()}');
     });
+  }
+
+  //注册
+  _regesiter(BuildContext context) {
+    Navigator.pushNamed(context, pageRegister);
   }
 
   ///登录成功-跳转操作
@@ -441,7 +489,7 @@ class _UnderButtonViewState extends State<UnderButtonView> {
   Widget build(BuildContext context) {
     return Container(
       child: MaterialButton(
-        minWidth: MediaQuery.of(context).size.width - 30.0,
+        minWidth: MediaQuery.of(context).size.width / 2.9,
         height: 44.0,
         color: HsgColors.accent,
         disabledColor: HsgColors.hintText,

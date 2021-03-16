@@ -3,7 +3,7 @@
   "last_login_time_with_value":"Last Sign In time: ",
   "simplifiedChinese": "Chinese",
   "english": "English",
-  "login_account_placeholder": "Email/Mobile Phone No./User ID",
+  "login_account_placeholder": "Mobile Phone No./User Name",
   "fotget_password_q": "Forget Password?",
   "operation_successful": "Operation Successfully",
   "operation_result": "operation Result",
