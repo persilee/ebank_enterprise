@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('WbCloudNormal-v4.0.0-9267e3d.aar'))

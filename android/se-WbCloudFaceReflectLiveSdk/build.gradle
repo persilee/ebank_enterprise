@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('WbCloudFaceReflectLiveSdk-v2.1.91-09c9fe1.aar'))

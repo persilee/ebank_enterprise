@@ -1,9 +1,12 @@
+import 'package:ebank_mobile/authentication/auth_identity.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: lijiawei
 /// Date: 2020-12-04
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
@@ -16,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -167,6 +171,15 @@ class _LoginPageState extends State<LoginPage> {
   ///登录操作
   _login(BuildContext context) {
     if (!_judgeCanLogin()) {
+      return;
+    }
+    bool bo = true;
+    if (bo) {
+      AuthIdentity()
+          .startAuth(
+            new AuthIdentityReq("DLEAED", "74283428974123", "zh", "2"),
+          )
+          .then((value) => "Fluttertoast.showToast(msg: value)");
       return;
     }
 

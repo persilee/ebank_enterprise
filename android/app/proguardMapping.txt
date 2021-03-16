@@ -5725,7 +5725,7 @@ androidx.viewpager.widget.ViewPager$ViewPositionComparator -> androidx.viewpager
     1:3:int compare(android.view.View,android.view.View):3160:3162 -> a
     4:4:int compare(android.view.View,android.view.View):3165:3165 -> a
     1:1:int compare(java.lang.Object,java.lang.Object):3157:3157 -> compare
-com.example.ebank_mobile.MainActivity -> com.example.ebank_mobile.MainActivity:
+com.example.bank.MainActivity -> com.example.bank.MainActivity:
     1:1:void <init>():5:5 -> <init>
 com.example.ebank_mobile.R$anim -> com.example.ebank_mobile.R$anim:
     1:1:void <init>():11:11 -> <init>
