@@ -13,6 +13,7 @@ import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_button_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
@@ -277,26 +278,36 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         centerTitle: true,
       ),
       body: CustomScrollView(
-        slivers: <Widget>[
+        slivers: [
           _gaySliver,
           //拿币种和货币
-          transferPayerWidget(
-              context,
-              _limitMoney,
-              _changedCcyTitle,
-              _currBal,
-              _changedAccountTitle,
-              ccy,
-              singleLimit,
-              totalBalance,
-              cardNo,
-              payeeBankCode,
-              money,
-              _amountInputChange,
-              _selectAccount,
-              _getCcy,
-              _getCardTotals,
-              _transferMoneyController),
+          TransferAccount(
+            payCcy: 'CNY',
+            payCcyList: ['USD', 'CNY'],
+            transferCcy: '请选择',
+            transferCcyList: ['USD', 'CNY'],
+            limit: '500',
+            cardNo: '123',
+            cardNoList: ['123', '456'],
+            balance: '200',
+          ),
+          // transferPayerWidget(
+          //     context,
+          //     _limitMoney,
+          //     _changedCcyTitle,
+          //     _currBal,
+          //     _changedAccountTitle,
+          //     ccy,
+          //     singleLimit,
+          //     totalBalance,
+          //     cardNo,
+          //     payeeBankCode,
+          //     money,
+          //     _amountInputChange,
+          //     _selectAccount,
+          //     _getCcy,
+          //     _getCardTotals,
+          //     _transferMoneyController),
           //拿第二部分
           transferPayeeWidget(
               payeeCardNo,

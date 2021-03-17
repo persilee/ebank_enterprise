@@ -18,7 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 忘记登录密码
-/// Author: pyk
+/// Author: pengyikang
 /// Date: 2020-02-26
 
 class ForgetPasswordPage extends StatefulWidget {
@@ -81,13 +81,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                             endIndent: 3),
                         InputList(S.of(context).confimPwd,
                             S.of(context).placeConfimPwd, _confimPwd),
-                        // Divider(
-                        //     height: 1,
-                        //     color: HsgColors.divider,
-                        //     indent: 3,
-                        //     endIndent: 3),
-                        // InputList(S.of(context).phone_num,
-                        //     S.of(context).please_input, _phoneNum),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,

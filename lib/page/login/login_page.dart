@@ -33,6 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
+<<<<<<< HEAD
   final TextEditingController _accountTC =
       TextEditingController(text: 'wangluyao');
   final TextEditingController _passwordTC =
@@ -40,10 +41,17 @@ class _LoginPageState extends State<LoginPage> {
 
   var _account = 'wangluyao'; //'blk101';
   var _password = '13w89WZ8@'; //'4N0021S8';
+=======
+  TextEditingController _accountTC = TextEditingController(text: 'blk401');
+  TextEditingController _passwordTC = TextEditingController(text: '4N0021S8');
+  var _account = 'blk401'; //'blk101';
+  var _password = '4N0021S8'; //'4N0021S8';
+>>>>>>> 1640785c0d1be4da2e96116869c55cea81f21c35
 
   @override
   void initState() {
     super.initState();
+
     // 添加监听
     _accountTC.addListener(() {
       _account = _accountTC.text;
@@ -52,6 +60,15 @@ class _LoginPageState extends State<LoginPage> {
     _passwordTC.addListener(() {
       _password = _passwordTC.text;
     });
+    if (_account == '' && _password == '') {
+      print("$_password  >>>>>>");
+      _isLoading = true;
+    }
+
+    _account = _accountTC.text;
+    print("$_account   8888888");
+    _password = _passwordTC.text;
+    print("$_password   8888888");
     Intl.defaultLocale = 'en';
   }
 
@@ -114,34 +131,76 @@ class _LoginPageState extends State<LoginPage> {
             isCiphertext: true,
           ),
         ),
-        //忘记按钮
         Container(
-          height: 20,
-          margin: EdgeInsets.only(top: 10, right: 35, left: 35),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              //ForgetButton('忘记账户？'),
+              //忘记用户名
               Container(
-                margin: EdgeInsets.only(left: 15),
-                child: ForgetButton(S.of(context).fotget_password_q, () {
-                  setState(() {
-                    Navigator.pushNamed(context, pageForgetPassword);
-                    print('忘记密码');
-                  });
-                }),
-              )
+                height: 20,
+                margin: EdgeInsets.only(top: 10, right: 0, left: 170),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 15),
+                      child: ForgetButton('忘记账户', () {
+                        setState(() {
+                          Navigator.pushNamed(context, pageForgetPassword);
+                          print('忘记密码');
+                        });
+                      }),
+                    )
+                  ],
+                ),
+              ),
+              //忘记密码按钮
+              Container(
+                height: 20,
+                margin: EdgeInsets.only(top: 10, right: 35, left: 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 15),
+                      child: ForgetButton(S.of(context).fotget_password_q, () {
+                        setState(() {
+                          Navigator.pushNamed(context, pageForgetPassword);
+                          print('忘记密码');
+                        });
+                      }),
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
-        //登录按钮
+
         Container(
-          margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
-          child: UnderButtonView(
-            S.of(context).login,
-            _isLoading ? null : () => _login(context),
-          ),
-        ),
+            child: Row(
+          children: [
+            //注册按钮
+            Container(
+              margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
+              child: UnderButtonView(
+                '注册',
+                false ? null : () => _regesiter(context),
+              ),
+            ),
+            //登录按钮
+            Container(
+              margin: EdgeInsets.only(
+                top: 40,
+              ),
+              child: UnderButtonView(
+                S.of(context).login,
+                _isLoading ? null : () => _login(context),
+              ),
+            )
+          ],
+        )),
+        //注册按钮
+        // Container(child: UnderButtonView('注册'),),
         Container(
           margin: EdgeInsets.only(top: 150),
           child: Text(
@@ -195,16 +254,26 @@ class _LoginPageState extends State<LoginPage> {
       _saveUserConfig(context, value);
     }).catchError((e) {
       setState(() {
+        // if (_account != '' && password != '') {
+        //   _isLoading = false;
+        // } else {
+        //   _isLoading = true;
+        // }
         _isLoading = false;
       });
       HSProgressHUD.showError(status: '${e.toString()}');
     });
   }
 
+  //注册
+  _regesiter(BuildContext context) {
+    Navigator.pushNamed(context, pageRegister);
+  }
+
   ///登录成功-跳转操作
   _showMainPage(BuildContext context) async {
     setState(() {
-      _isLoading = false;
+      _isLoading = true;
     });
     Navigator.pushNamed(context, pageIndexName);
   }
@@ -216,10 +285,7 @@ class _LoginPageState extends State<LoginPage> {
 
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
-    //prefs.setString(ConfigKey.USER_PASSWORD, _password);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
-    prefs.setString(ConfigKey.USER_AREACODE, resp.areaCode);
-    prefs.setString(ConfigKey.USER_PHONE, resp.userPhone);
     if (resp.custId == null || resp.custId == '') {
       prefs.setString(ConfigKey.CUST_ID, '');
     } else {
@@ -444,7 +510,7 @@ class _UnderButtonViewState extends State<UnderButtonView> {
   Widget build(BuildContext context) {
     return Container(
       child: MaterialButton(
-        minWidth: MediaQuery.of(context).size.width - 30.0,
+        minWidth: MediaQuery.of(context).size.width / 2.9,
         height: 44.0,
         color: HsgColors.accent,
         disabledColor: HsgColors.hintText,
