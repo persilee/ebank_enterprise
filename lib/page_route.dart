@@ -60,7 +60,7 @@ import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_detail_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_plan_details.dart';
 import 'package:ebank_mobile/page/transfer/transfer_plan_page.dart';
-import 'package:ebank_mobile/page/transfer/transfer_record-page.dart';
+import 'package:ebank_mobile/page/transfer/transfer_record_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_partner_page.dart';
 import 'package:ebank_mobile/page/transfer/add_partner_page.dart';
 import 'package:ebank_mobile/page/transfer/select_bank_page.dart';
