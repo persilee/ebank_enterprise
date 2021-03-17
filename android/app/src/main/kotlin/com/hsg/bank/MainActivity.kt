@@ -2,6 +2,7 @@ package com.hsg.bank
 
 import com.google.gson.Gson
 import com.hsg.bank.model.AuthIdentityReq
+import com.hsg.bank.model.AuthIdentityResp
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -18,7 +19,7 @@ class MainActivity : FlutterActivity() {
       when (call.method) {
         "startAuth" -> {
           startAuth(this, gson.fromJson(call.argument("body") as String?, AuthIdentityReq::class.java))
-          result.success("call success")
+          result.success(gson.toJson(AuthIdentityResp("invoke success")))
         }
         else -> result.notImplemented()
       }
