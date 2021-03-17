@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/config/hsg_colors.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///行内转账页面
 /// Author: lijiawei
@@ -14,17 +16,15 @@ import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_button_widget.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
+import 'package:ebank_mobile/widget/hsg_button.dart';
 
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
-import 'package:ebank_mobile/widget/hsg_text_field_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../page_route.dart';
 
@@ -83,14 +83,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   String _changedAccountTitle = '';
 
-  // //余额
-  // String _changedRateTitle = '';
-
   String _changedCcyTitle = '';
 
   int _position = 0;
-
-  int _accountIndex = 0;
 
   String _limitMoney = '';
 
@@ -110,6 +105,24 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   String _inputPassword = '';
 
+  //支付币种
+  String _payCcy = 'CNY';
+  List<String> _payCcyList = ['HKD', 'CNY', 'USD'];
+  int _payIndex = 0;
+
+  //转出币种
+  String _transferCcy = '';
+  int _transferIndex = 0;
+  List<String> _transferCcyList = ['HKD', 'CNY', 'USD'];
+
+  //账户选择
+  String _account = '1234 5678 1234';
+  List<String> _accountList = ['1234 5678 1234', '1234 5678 1234'];
+  int _accountIndex = 0;
+
+  //转账数据
+  List<String> transferData = [];
+
   //交易密码
 
   var check = false;
@@ -118,17 +131,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   void initState() {
     super.initState();
 
-    _nameController.addListener(() {
-      _nameInputChange(_nameController.text); //收款名字输入框内容改变时调用
-    });
-    _accountController.addListener(() {
-      _accountInputChange(_accountController.text); //收款账号输入框时调用
-    });
     _transferMoneyController.addListener(() {
       _amountInputChange(_transferMoneyController.text); //金额输入框时调用
-    });
-    _remarkController.addListener(() {
-      _transferInputChange(_remarkController.text); //金额输入框时调用
     });
     _loadTransferData();
   }
@@ -149,26 +153,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   _transferInputChange(String transfer) {
     remark = transfer;
-  }
-
-  //选择账号弹窗
-  _selectAccount() async {
-    final result = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return HsgBottomSingleChoice(
-            title: S.current.account_lsit,
-            items: cardNoList,
-            lastSelectedPosition: _accountIndex,
-          );
-        });
-    if (result != null && result != false) {
-      setState(() {
-        _accountIndex = result;
-        _changedAccountTitle = cardNoList[_accountIndex];
-      });
-      _getCardTotals(_changedAccountTitle);
-    }
   }
 
   //选择货币
@@ -231,31 +215,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     });
   }
 
-  //选择货币方法
-  _getCcy() async {
-    final result = await showDialog(
-        context: context,
-        builder: (context) {
-          return HsgSingleChoiceDialog(
-            title: S.current.currency_choice,
-            items: ccyList,
-            positiveButton: S.current.confirm,
-            negativeButton: S.current.cancel,
-            lastSelectedPosition: _position,
-          );
-        });
-
-    if (result != null && result != false) {
-      //货币种类
-      setState(() {
-        _position = result;
-        _changedCcyTitle = ccyList[_position];
-      });
-      //余额
-      _getCardTotals(_changedAccountTitle);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     var _arguments = ModalRoute.of(context).settings.arguments;
@@ -280,59 +239,187 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       body: CustomScrollView(
         slivers: [
           _gaySliver,
-          //拿币种和货币
+          //转账金额和币种
           TransferAccount(
-            payCcy: 'CNY',
-            payCcyList: ['USD', 'CNY'],
-            transferCcy: '请选择',
-            transferCcyList: ['USD', 'CNY'],
+            payCcy: _payCcy,
+            transferCcy: _transferCcy,
             limit: '500',
-            cardNo: '123',
-            cardNoList: ['123', '456'],
+            account: _account,
             balance: '200',
+            transferMoneyController: _transferMoneyController,
+            payCcyDialog: payCcyDialog,
+            transferCcyDialog: transferCcyDialog,
+            accountDialog: _accountDialog,
           ),
-          // transferPayerWidget(
-          //     context,
-          //     _limitMoney,
-          //     _changedCcyTitle,
-          //     _currBal,
-          //     _changedAccountTitle,
-          //     ccy,
-          //     singleLimit,
-          //     totalBalance,
-          //     cardNo,
-          //     payeeBankCode,
-          //     money,
-          //     _amountInputChange,
-          //     _selectAccount,
-          //     _getCcy,
-          //     _getCardTotals,
-          //     _transferMoneyController),
-          //拿第二部分
-          transferPayeeWidget(
-              payeeCardNo,
-              payeeName,
-              accountSelect,
-              payeeNameForSelects,
-              _getImage,
-              context,
-              S.current.receipt_side,
-              S.current.name,
-              S.current.account_num,
-              S.current.hint_input_receipt_name,
-              S.current.hint_input_receipt_account,
-              _nameInputChange,
-              _accountInputChange,
-              _nameController,
-              _accountController),
-          //第三部分
-          transferOtherWidget(
-              context, remark, _transferInputChange, _remarkController),
+          //收款方
+          _payeeWidget(),
+          //附言
+          _remarkWidget(),
           //提交按钮
-          getButton(S.current.submit, _isClick),
+          SliverToBoxAdapter(
+            child: Container(
+              margin: EdgeInsets.only(top: 100),
+              child: HsgButton.button(
+                  title: '下一步',
+                  click: _boolBut()
+                      ? () {
+                          Navigator.pushNamed(
+                              context, pageTransferInternalPreview,
+                              arguments: transferData);
+                        }
+                      : null),
+            ),
+          ),
         ],
       ),
     );
+  }
+
+//收款方
+  Widget _payeeWidget() {
+    return SliverToBoxAdapter(
+      child: Container(
+        color: Colors.white,
+        margin: EdgeInsets.only(top: 20),
+        padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+        child: Column(
+          children: [
+            _payeeName(),
+            TextFieldContainer(
+              title: '收款方名称',
+              hintText: '请输入收款方名称',
+              widget: _getImage(),
+              keyboardType: TextInputType.text,
+              controller: _nameController,
+              callback: _boolBut,
+              isWidget: true,
+            ),
+            TextFieldContainer(
+              title: '收款人账号',
+              hintText: '请输入收款人账号',
+              keyboardType: TextInputType.number,
+              controller: _accountController,
+              callback: _boolBut,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _payeeName() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          child: Text(
+            '收款方',
+            style: TextStyle(color: HsgColors.describeText, fontSize: 13),
+            textAlign: TextAlign.right,
+          ),
+        ),
+      ],
+    );
+  }
+
+  //附言
+  Widget _remarkWidget() {
+    return SliverToBoxAdapter(
+      child: Container(
+        color: Colors.white,
+        margin: EdgeInsets.only(top: 20),
+        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+        child: TextFieldContainer(
+          title: '转账附言',
+          hintText: '转账',
+          keyboardType: TextInputType.text,
+          controller: _remarkController,
+          callback: _boolBut,
+        ),
+      ),
+    );
+  }
+
+  //币种弹窗
+  Future payCcyDialog() async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) {
+        return HsgSingleChoiceDialog(
+          title: S.of(context).currency_choice,
+          items: _payCcyList,
+          positiveButton: S.of(context).confirm,
+          negativeButton: S.of(context).cancel,
+          lastSelectedPosition: _payIndex,
+        );
+      },
+    );
+    if (result != null && result != false) {
+      setState(() {
+        _payIndex = result;
+        _payCcy = _payCcyList[_payIndex];
+      });
+    }
+  }
+
+  Future transferCcyDialog() async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) {
+        return HsgSingleChoiceDialog(
+          title: S.of(context).currency_choice,
+          items: _transferCcyList,
+          positiveButton: S.of(context).confirm,
+          negativeButton: S.of(context).cancel,
+          lastSelectedPosition: _transferIndex,
+        );
+      },
+    );
+    if (result != null && result != false) {
+      setState(() {
+        _transferIndex = result;
+        _transferCcy = _transferCcyList[_transferIndex];
+      });
+    }
+  }
+
+  //账号弹窗
+  _accountDialog() async {
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return HsgBottomSingleChoice(
+            title: S.current.account_lsit,
+            items: _accountList,
+            lastSelectedPosition: _accountIndex,
+          );
+        });
+    if (result != null && result != false) {
+      setState(() {
+        _accountIndex = result;
+        _account = _accountList[_accountIndex];
+      });
+    }
+  }
+
+  //按钮是否能点击
+  _boolBut() {
+    if (_transferMoneyController.text != '' &&
+        _nameController.text != '' &&
+        _accountController.text != '' &&
+        _transferCcy != '') {
+      transferData.add(_payCcy);
+      transferData.add(_transferMoneyController.text);
+      transferData.add(_account);
+      transferData.add("121.5");
+      transferData.add(_nameController.text);
+      transferData.add(_accountController.text);
+      transferData.add(_transferCcy);
+      transferData.add(_remarkController.text);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   //增加转账伙伴图标
@@ -351,10 +438,13 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           },
         );
       },
-      child: Image(
-        image: AssetImage('images/login/login_input_account.png'),
-        width: 20,
-        height: 20,
+      child: Container(
+        margin: EdgeInsets.only(left: 5),
+        child: Image(
+          image: AssetImage('images/login/login_input_account.png'),
+          width: 20,
+          height: 20,
+        ),
       ),
     );
   }
@@ -487,24 +577,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         HSProgressHUD.showError(status: '${e.toString()}');
       });
     });
-  }
-
-  //结算成功-跳转页面
-  _showContractSucceedPage(BuildContext context) {
-    Navigator.pushNamed(context, pageDepositRecordSucceed, arguments: '0');
-  }
-
-  _isClick() {
-    if (money > 0 && payeeName.length > 0 && payeeCardNo.length > 0) {
-      return () {
-        //_tranferAccount(context);
-
-        // _openBottomSheet();
-        Navigator.pushNamed(context, pageTransferInternalPreview);
-      };
-    } else {
-      return null;
-    }
   }
 
   //交易密码窗口

@@ -63,17 +63,21 @@ class SelectInkWell extends StatelessWidget {
 class TextFieldContainer extends StatelessWidget {
   final String title;
   final String hintText;
+  final Widget widget;
   final TextInputType keyboardType;
   final TextEditingController controller;
   final VoidCallback callback;
-  TextFieldContainer(
-      {Key key,
-      @required this.title,
-      this.hintText,
-      this.keyboardType,
-      this.controller,
-      this.callback})
-      : super(key: key);
+  final bool isWidget;
+  TextFieldContainer({
+    Key key,
+    @required this.title,
+    this.hintText,
+    this.widget,
+    this.keyboardType,
+    this.controller,
+    this.callback,
+    this.isWidget = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +108,7 @@ class TextFieldContainer extends StatelessWidget {
               },
             ),
           ),
+          isWidget ? widget : Container(),
         ],
       ),
     );

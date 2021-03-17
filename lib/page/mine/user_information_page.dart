@@ -2,7 +2,7 @@ import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
-///
+/// 用户信息页面
 /// Author: zhangqirong
 /// Date: 2021-03-16
 
@@ -34,14 +34,14 @@ class _UserInformationPageState extends State<UserInformationPage> {
   @override
   void initState() {
     super.initState();
-    _userName = '高阳寰球';
-    _userPhone = "+86 13411111111";
-    _characterName = '企业管理员';
-    _enterpriseName = '高阳寰球有限公司';
   }
 
   @override
   Widget build(BuildContext context) {
+    UserInfoResp _arguments = ModalRoute.of(context).settings.arguments;
+    _data = _arguments;
+    _userPhone = _arguments.userPhone;
+    _changeUserInfoShow(_data);
     return new Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).user_information),
@@ -202,7 +202,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
   //灰色文字
   Widget _hintText(String text) {
     return Container(
-      width: 120,
+      width: 150,
       child: Text(
         text,
         textAlign: TextAlign.right,
@@ -252,6 +252,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
     setState(() {
       _changeLangBtnTltle = languages[result];
       HSGBankApp.setLocale(context, Language().getLocaleByLanguage(language));
+      _changeUserInfoShow(_data);
     });
   }
 
@@ -315,5 +316,21 @@ class _UserInformationPageState extends State<UserInformationPage> {
       //   HSProgressHUD.dismiss();
       // });
     }
+  }
+
+  void _changeUserInfoShow(UserInfoResp model) {
+    setState(() {
+      _headPortraitUrl = model.headPortrait; //头像地址
+      _enterpriseName = _language == 'zh_CN'
+          ? model.custLocalName
+          : model.custEngName; // 企业名称
+      _userName = _language == 'zh_CN'
+          ? model.localUserName
+          : model.englishUserName; // 姓名
+      _characterName = _language == 'zh_CN'
+          ? model.roleLocalName
+          : model.roleEngName; //用户角色名称
+    });
+    print(_characterName);
   }
 }
