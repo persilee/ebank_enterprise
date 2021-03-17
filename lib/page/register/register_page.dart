@@ -1,15 +1,17 @@
 import 'dart:async';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/page/mine/set_pay_page.dart';
+
 import 'package:ebank_mobile/page/register/component/register_86.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
+import 'package:flutter/gestures.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 注册页面
@@ -29,10 +31,12 @@ class RegisterPage extends StatefulWidget {
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _RegisterPageState extends State<RegisterPage> {
-  TextEditingController _sms = TextEditingController();
-  TextEditingController _phoneNum = TextEditingController();
+  TextEditingController _sms = TextEditingController(); //短信
+  TextEditingController _phoneNum = TextEditingController(); //手机号
+  TextEditingController _userName = TextEditingController(); //用户名
   Timer _timer;
   int countdownTime = 0;
+  bool _checkBoxValue = false; //复选框默认值
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +54,11 @@ class _RegisterPageState extends State<RegisterPage> {
               child: ListView(
                 children: <Widget>[
                   //注册标题
-                  getRegisterTitle(),
+                  getRegisterTitle('欢迎注册'),
                   //注册手机号
                   getRegisterRegion(context, _phoneNum),
                   //输入用户名
-                  getRegisterRow('输入用户名'),
+                  getRegisterRow('输入用户名', _userName),
                   //获取验证码
                   Container(
                     height: MediaQuery.of(context).size.height / 15,
@@ -69,9 +73,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           width: MediaQuery.of(context).size.width / 2,
                           child: TextField(
                             //是否自动更正
-                            autocorrect: false,
+                            controller: _sms,
+                            autocorrect: true,
                             //是否自动获得焦点
-                            autofocus: false,
+                            autofocus: true,
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: '输入验证码',
@@ -85,7 +90,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         InkWell(
                           onTap: () {
                             //调用获取验证码接口
-                            _otpButton();
+                            _getVerificationCode();
                             print('获取验证码');
                           },
                           child: Container(
@@ -100,7 +105,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ],
                     ),
                   ),
-
+                  //下一步按钮
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin: EdgeInsets.only(bottom: 16),
@@ -117,6 +122,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           width: MediaQuery.of(context).size.width / 1.2,
                           height: MediaQuery.of(context).size.height / 15,
                           child: RaisedButton(
+                            disabledColor: HsgColors.btnDisabled,
                             color: Colors.blue,
                             child: Text(
                               '下一步',
@@ -125,7 +131,22 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             onPressed: _submit()
                                 ? () {
-                                    Navigator.pushNamed(context, pageHome);
+                                    RegExp userName =
+                                        new RegExp("[a-zA-Z0-9]{4,16}");
+                                    //特殊字符
+                                    RegExp characters = new RegExp(
+                                        "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
+                                    if (userName.hasMatch(_userName.text) ==
+                                            false ||
+                                        characters.hasMatch(_userName.text) ==
+                                            true) {
+                                      HSProgressHUD.showInfo(
+                                          status:
+                                              '用户名只能为4-16位字符、数字或者字母，不能包含特殊字符，不能重复');
+                                    } else {
+                                      Navigator.pushNamed(
+                                          context, pageRegisterConfirm);
+                                    }
                                   }
                                 : null,
                           ),
@@ -133,34 +154,24 @@ class _RegisterPageState extends State<RegisterPage> {
                       ],
                     ),
                   ),
+                  //复选框及协议文本内容
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    padding: CONTENT_PADDING,
+                    child: Row(
+                      children: [_roundCheckBox(), _textContent()],
+                    ),
+                  ),
                 ],
               )),
         ));
   }
 
-  //验证码输入框
-  TextField otpTextField() {
-    return TextField(
-      textAlign: TextAlign.end,
-      keyboardType: TextInputType.number,
-      controller: _sms,
-      decoration: InputDecoration.collapsed(
-        hintText: S.current.please_input,
-        hintStyle: TextStyle(
-          fontSize: 14,
-          color: HsgColors.textHintColor,
-        ),
-      ),
-    );
-  }
-
   bool _submit() {
-    if (_phoneNum.text != ''
-        // &&
-        // _newPwd.text != '' &&
-        // _confimPwd.text != '' &&
-        //_sms.text != ''
-        ) {
+    if (_phoneNum.text != '' &&
+        _userName.text != '' &&
+        _sms.text != '' &&
+        _checkBoxValue) {
       return true;
     } else {
       return false;
@@ -180,6 +191,67 @@ class _RegisterPageState extends State<RegisterPage> {
       });
     };
     _timer = Timer.periodic(Duration(seconds: 1), call);
+  }
+
+//圆形复选框
+  Widget _roundCheckBox() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _checkBoxValue = !_checkBoxValue;
+          _submit();
+        });
+      },
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(15, 10, 10, 25),
+        child: _checkBoxValue
+            ? _ckeckBoxImge("images/common/check_btn_common_checked.png")
+            : _ckeckBoxImge("images/common/check_btn_common_no_check.png"),
+      ),
+    );
+  }
+
+  //圆形复选框是否选中图片
+  Widget _ckeckBoxImge(String imgurl) {
+    return Image.asset(
+      imgurl,
+      height: 16,
+      width: 16,
+    );
+  }
+
+  //协议文本内容
+  Widget _textContent() {
+    return Expanded(
+      child: RichText(
+        text: TextSpan(
+          children: <TextSpan>[
+            TextSpan(
+              text: S.current.loan_application_agreement1,
+              style: AGREEMENT_TEXT_STYLE,
+            ),
+            _conetentJump(S.current.loan_application_agreement2, '98822'),
+            TextSpan(
+              text: S.current.loan_application_agreement3,
+              style: AGREEMENT_TEXT_STYLE,
+            ),
+            _conetentJump(S.current.loan_application_agreement4, '99868'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  //协议文本跳转内容
+  _conetentJump(String text, String arguments) {
+    return TextSpan(
+      text: text,
+      style: AGREEMENT_JUMP_TEXT_STYLE,
+      recognizer: TapGestureRecognizer()
+        ..onTap = () {
+          Navigator.pushNamed(context, pageUserAgreement, arguments: arguments);
+        },
+    );
   }
 
   //获取验证码按钮

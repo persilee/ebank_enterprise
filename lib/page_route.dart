@@ -9,8 +9,14 @@ import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/login/forget_password_page.dart';
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
+import 'package:ebank_mobile/page/register/find_user_name_success.dart';
+import 'package:ebank_mobile/page/register/forget_user_name_page.dart';
 import 'package:ebank_mobile/page/register/register_confirm_page.dart';
 import 'package:ebank_mobile/page/register/register_page.dart';
+import 'package:ebank_mobile/page/register/register_success_page.dart';
+import 'package:ebank_mobile/page/register/reset_password_account_open.dart';
+import 'package:ebank_mobile/page/register/reset_password_no_account.dart';
+import 'package:ebank_mobile/page/register/reset_password_success.dart';
 // import 'package:ebank_mobile/page/mine/qliyan_demo_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
@@ -70,8 +76,6 @@ import 'package:ebank_mobile/page/mine/feedback_page.dart';
 import 'package:ebank_mobile/page/mine/change_logPswd_page.dart';
 import 'package:ebank_mobile/page/mine/change_pay_page.dart';
 import 'package:ebank_mobile/page/mine/set_pay_page.dart';
-
-import 'page/approval/static_page/static_my_approval_page.dart';
 
 var pageHome = '/';
 var pageLogin = pageHome;
@@ -143,6 +147,12 @@ var pageStaticApproval = '/static_my_approval_page';
 var pagePasswordManagement = '/password_management_page.dart';
 var pageRegister = '/register_page.dart';
 var pageRegisterConfirm = '/register_confirm_page.dart';
+var pageRegisterSuccess = 'register_success_page.dart';
+var pageForgetUserName = 'forget_user_name_page.dart';
+var pageFindUserNameSuccess = 'find_user_name_success.dart';
+var pageResetPasswordNoAccount = 'reset_password_no_account.dart';
+var pageResetPasswordSuccess = 'reset_password_success.dart';
+var pageResetPasswordOpenAccount = 'reset_password_account_open.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -208,10 +218,16 @@ var appRoutes = {
   pageApprovalPage: (context) => ApprovalPage(),
   pageFeatureList: (context) => FeatureListPage(),
   // pageQianliyanDemo: (context) => QianliyanDemoPage(),
-  pageStaticApproval: (context) => StaticMyApprovalPage(),
+
   pagePasswordManagement: (context) => PasswordManagementPage(),
   pageRegister: (context) => RegisterPage(),
   pageRegisterConfirm: (context) => RegisterConfirmPage(),
+  pageRegisterSuccess: (context) => RegisterSuccessPage(),
+  pageForgetUserName: (context) => ForgetUserName(),
+  pageFindUserNameSuccess: (context) => FindUserNameSuccess(),
+  pageResetPasswordNoAccount: (context) => ResetPasswordNoAccount(),
+  pageResetPasswordSuccess: (context) => ResetPasswordPage(),
+  pageResetPasswordOpenAccount: (context) => ResetPasswordAccountOpen()
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {

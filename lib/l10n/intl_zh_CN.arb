@@ -420,6 +420,7 @@
   "field_dialog_title": "安全码校验",
   "field_dialog_cancel": "取消",
   "field_dialog_confirm": "确认",
+  "forget_user":"忘记用户",
 
   "password_management":"密码管理"
 }

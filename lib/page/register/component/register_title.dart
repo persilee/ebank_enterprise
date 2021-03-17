@@ -4,11 +4,11 @@ import 'package:flutter/cupertino.dart';
 /// 注册页面标题
 /// Author: pengyikang
 
-Widget getRegisterTitle() {
+Widget getRegisterTitle(String title) {
   return Container(
     margin: EdgeInsets.fromLTRB(26.5, 20, 0, 34),
     child: Text(
-      '欢迎注册',
+      title,
       style: TextStyle(fontSize: 24),
     ),
   );
