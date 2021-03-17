@@ -182,7 +182,8 @@ class _HomePageState extends State<HomePage> {
               ),
               onPressed: () {
                 print('联系客服');
-                Navigator.pushNamed(context, pageContactCustomer);
+                Navigator.pushNamed(
+                    context, pageOpenAccountBasicData); //pageContactCustomer
               },
             ),
             // IconButton(
