@@ -322,7 +322,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
   //顶部弹窗内容
   Widget _popDialogContent(BuildContext popcontext) {
-    return Container(
+    return Scaffold(
+        body: Container(
       color: Colors.white,
       height: 260,
       padding: EdgeInsets.all(10),
@@ -340,7 +341,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           _amountDuration(),
         ],
       ),
-    );
+    ));
   }
 
   //时间文本
@@ -406,14 +407,13 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         color: Color(0xffECECEC),
         borderRadius: BorderRadius.circular(5),
       ),
-      // child:
-      // TextField(
-      //   // controller: controller,
-      //   autocorrect: false,
-      //   autofocus: false,
-      //   keyboardType: TextInputType.number,
-      //   onChanged: (text) {},
-      // ),
+      child: TextField(
+        // controller: controller,
+        autocorrect: false,
+        autofocus: false,
+        keyboardType: TextInputType.number,
+        onChanged: (text) {},
+      ),
     );
   }
 

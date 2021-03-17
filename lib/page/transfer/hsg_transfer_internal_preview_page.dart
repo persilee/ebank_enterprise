@@ -51,7 +51,7 @@ class _TransferInternalPreviewPageState
               children: [
                 Text('转账金额'),
                 Text(
-                  '-' + transferData[0],
+                  '— ' + transferData[0] + transferData[1],
                   style: TextStyle(color: Color(0xff232323), fontSize: 30),
                 ),
               ],
@@ -60,12 +60,13 @@ class _TransferInternalPreviewPageState
           Divider(
             color: Color(0xffE1E1E1),
           ),
-          _getRowContent("转出账号", "200"),
-          _getRowContent("支付币种", "200"),
-          _getRowContent("收款方名称", "200"),
-          _getRowContent("转入账号", "200"),
-          _getRowContent("转入币种", "200"),
-          _getRowContent("转账附言", "200"),
+          _getRowContent("转出账号", transferData[2]),
+          _getRowContent("转出金额", transferData[3]),
+          _getRowContent("支付币种", transferData[0]),
+          _getRowContent("收款方名称", transferData[4]),
+          _getRowContent("转入账号", transferData[5]),
+          _getRowContent("转入币种", transferData[6]),
+          _getRowContent("转账附言", transferData[7]),
         ],
       ),
     );
