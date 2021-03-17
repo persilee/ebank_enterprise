@@ -9,13 +9,10 @@ import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/login/forget_password_page.dart';
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
-<<<<<<< HEAD
 import 'package:ebank_mobile/page/openAccount/open_account_basic_data_page.dart';
-=======
 import 'package:ebank_mobile/page/mine/user_information_page.dart';
 import 'package:ebank_mobile/page/register/register_confirm_page.dart';
 import 'package:ebank_mobile/page/register/register_page.dart';
->>>>>>> 22375f49f3f16dcd8ae14f91e2e069f62d670647
 // import 'package:ebank_mobile/page/mine/qliyan_demo_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
@@ -147,12 +144,9 @@ var pageQianliyanDemo = '/qliyan_demo_page.dart';
 var pageApprovalPage = 'hsg_approval_page';
 var pageStaticApproval = '/static_my_approval_page';
 var pagePasswordManagement = '/password_management_page.dart';
-<<<<<<< HEAD
 var pageOpenAccountBasicData = '/open_account_basic_data_page.dart';
-=======
 var pageRegister = '/register_page.dart';
 var pageRegisterConfirm = '/register_confirm_page.dart';
->>>>>>> 22375f49f3f16dcd8ae14f91e2e069f62d670647
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -221,12 +215,9 @@ var appRoutes = {
   // pageQianliyanDemo: (context) => QianliyanDemoPage(),
   pageStaticApproval: (context) => StaticMyApprovalPage(),
   pagePasswordManagement: (context) => PasswordManagementPage(),
-<<<<<<< HEAD
   pageOpenAccountBasicData: (context) => OpenAccountBasicDataPage(),
-=======
   pageRegister: (context) => RegisterPage(),
   pageRegisterConfirm: (context) => RegisterConfirmPage(),
->>>>>>> 22375f49f3f16dcd8ae14f91e2e069f62d670647
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
