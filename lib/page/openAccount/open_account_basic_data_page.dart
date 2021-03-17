@@ -17,7 +17,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   /// 公司名称（中文）输入值
   String _companyNameCNText = '';
 
-  /// 登记增减类型输入值
+  /// 登记证件类型输入值
   String _documentTypeText = '';
 
   /// 登记证件号码输入值
@@ -162,6 +162,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               1003,
               () {
                 print('登记证件类型');
+                _selectDocumentType(context);
               },
             ),
           ),
@@ -461,8 +462,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                 // obscureText: this.isCiphertext,
                 textAlign: TextAlign.right,
                 textAlignVertical: TextAlignVertical.bottom,
-                textDirection: TextDirection.ltr,
-                maxLines: 2,
+                maxLines: 1,
                 style: TextStyle(
                   fontSize: 14,
                   color: HsgColors.firstDegreeText,
@@ -519,8 +519,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     );
   }
 
-  ///公司类别选择
-  void _selectCompanyType(BuildContext context) async {
+  /// 登记证件类型输入值
+  void _selectDocumentType(BuildContext context) async {
     List<String> documentTypes = [
       'Certificate of Incorporation 公司注册证书',
       'Business Registration Certificate 商业登记证',
@@ -529,15 +529,41 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
-        title: '公司类别选择',
+        title: '登记证件类型选择',
         items: documentTypes,
       ),
     );
 
     if (result != null && result != false) {
       setState(() {
-        _companyTypeText = documentTypes[result];
-        _isShowCompanyTypeOther = result == 2 ? true : false;
+        _documentTypeText = documentTypes[result];
+      });
+    } else {
+      return;
+    }
+  }
+
+  ///公司类别选择
+  void _selectCompanyType(BuildContext context) async {
+    List<String> companyTypes = [
+      'Limited Company 有限公司',
+      'Partnership合伙经营商号',
+      'Sole Proprietorship独资经营商号',
+      'Other (please specify)其他 (请注明)'
+    ];
+    final result = await showHsgBottomSheet(
+      context: context,
+      builder: (context) => BottomMenu(
+        title: '公司类别选择',
+        items: companyTypes,
+      ),
+    );
+
+    if (result != null && result != false) {
+      setState(() {
+        _companyTypeText = companyTypes[result];
+        _isShowCompanyTypeOther =
+            result == companyTypes.length - 1 ? true : false;
       });
     } else {
       return;
