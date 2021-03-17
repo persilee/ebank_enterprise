@@ -18,6 +18,7 @@ import 'package:ebank_mobile/page/transfer/widget/transfer_button_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
+import 'package:ebank_mobile/widget/hsg_button.dart';
 
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
@@ -90,7 +91,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   int _position = 0;
 
-  int _accountIndex = 0;
+  // int _accountIndex = 0;
 
   String _limitMoney = '';
 
@@ -109,6 +110,24 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   var _loacalCurrBal = '';
 
   String _inputPassword = '';
+
+  //支付币种
+  String _payCcy = 'CNY';
+  List<String> _payCcyList = ['HKD', 'CNY', 'USD'];
+  int _payIndex = 0;
+
+  //转出币种
+  String _transferCcy = '';
+  int _transferIndex = 0;
+  List<String> _transferCcyList = ['HKD', 'CNY', 'USD'];
+
+  //账户选择
+  String _account = '1234 5678 1234';
+  List<String> _accountList = ['1234 5678 1234', '1234 5678 1234'];
+  int _accountIndex = 0;
+
+  //转账数据
+  List<String> transferData = [];
 
   //交易密码
 
@@ -152,24 +171,24 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   }
 
   //选择账号弹窗
-  _selectAccount() async {
-    final result = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return HsgBottomSingleChoice(
-            title: S.current.account_lsit,
-            items: cardNoList,
-            lastSelectedPosition: _accountIndex,
-          );
-        });
-    if (result != null && result != false) {
-      setState(() {
-        _accountIndex = result;
-        _changedAccountTitle = cardNoList[_accountIndex];
-      });
-      _getCardTotals(_changedAccountTitle);
-    }
-  }
+  // _selectAccount() async {
+  //   final result = await showHsgBottomSheet(
+  //       context: context,
+  //       builder: (context) {
+  //         return HsgBottomSingleChoice(
+  //           title: S.current.account_lsit,
+  //           items: cardNoList,
+  //           lastSelectedPosition: _accountIndex,
+  //         );
+  //       });
+  //   if (result != null && result != false) {
+  //     setState(() {
+  //       _accountIndex = result;
+  //       _changedAccountTitle = cardNoList[_accountIndex];
+  //     });
+  //     _getCardTotals(_changedAccountTitle);
+  //   }
+  // }
 
   //选择货币
   _getCardTotals(String _changedAccountTitle) {
@@ -282,14 +301,15 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           _gaySliver,
           //拿币种和货币
           TransferAccount(
-            payCcy: 'CNY',
-            payCcyList: ['USD', 'CNY'],
-            transferCcy: '请选择',
-            transferCcyList: ['USD', 'CNY'],
+            payCcy: _payCcy,
+            transferCcy: _transferCcy,
             limit: '500',
-            cardNo: '123',
-            cardNoList: ['123', '456'],
+            account: _account,
             balance: '200',
+            transferMoneyController: _transferMoneyController,
+            payCcyDialog: payCcyDialog,
+            transferCcyDialog: transferCcyDialog,
+            accountDialog: _accountDialog,
           ),
           // transferPayerWidget(
           //     context,
@@ -329,10 +349,102 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           transferOtherWidget(
               context, remark, _transferInputChange, _remarkController),
           //提交按钮
-          getButton(S.current.submit, _isClick),
+          SliverToBoxAdapter(
+            child: Container(
+              margin: EdgeInsets.only(top: 100),
+              child: HsgButton.button(
+                  title: '下一步',
+                  click: _boolBut()
+                      ? () {
+                          Navigator.pushNamed(
+                              context, pageTransferInternalPreview,
+                              arguments: transferData);
+                        }
+                      : null),
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  //币种弹窗
+  Future payCcyDialog() async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) {
+        return HsgSingleChoiceDialog(
+          title: S.of(context).currency_choice,
+          items: _payCcyList,
+          positiveButton: S.of(context).confirm,
+          negativeButton: S.of(context).cancel,
+          lastSelectedPosition: _payIndex,
+        );
+      },
+    );
+    if (result != null && result != false) {
+      setState(() {
+        _payIndex = result;
+        _payCcy = _payCcyList[_payIndex];
+      });
+    }
+  }
+
+  Future transferCcyDialog() async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) {
+        return HsgSingleChoiceDialog(
+          title: S.of(context).currency_choice,
+          items: _transferCcyList,
+          positiveButton: S.of(context).confirm,
+          negativeButton: S.of(context).cancel,
+          lastSelectedPosition: _transferIndex,
+        );
+      },
+    );
+    if (result != null && result != false) {
+      setState(() {
+        _transferIndex = result;
+        _transferCcy = _transferCcyList[_transferIndex];
+      });
+    }
+  }
+
+  //账号弹窗
+  _accountDialog() async {
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return HsgBottomSingleChoice(
+            title: S.current.account_lsit,
+            items: _accountList,
+            lastSelectedPosition: _accountIndex,
+          );
+        });
+    if (result != null && result != false) {
+      setState(() {
+        _accountIndex = result;
+        _account = _accountList[_accountIndex];
+      });
+    }
+  }
+
+  //按钮是否能点击
+  _boolBut() {
+    if (money > 0 &&
+        payeeName.length > 0 &&
+        payeeCardNo.length > 0 &&
+        _transferCcy != '') {
+      setState(() {
+        transferData.add(_transferMoneyController.text);
+        transferData.add(_account);
+        transferData.add(_payCcy);
+      });
+      return true;
+    } else {
+      return false;
+    }
   }
 
   //增加转账伙伴图标

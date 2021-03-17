@@ -1,6 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,27 +8,32 @@ import 'package:flutter/services.dart';
 class TransferAccount extends StatelessWidget {
   //支付币种
   final String payCcy;
-  final List<String> payCcyList;
   //转出币种
   final String transferCcy;
-  final List<String> transferCcyList;
   //限额
   final String limit;
   //转出账户
-  final String cardNo;
-  final List<String> cardNoList;
+  final String account;
   //余额
   final String balance;
+  //转账金额控制器
+  final TextEditingController transferMoneyController;
+  //币种弹窗
+  final Function payCcyDialog;
+  final Function transferCcyDialog;
+  //账户弹窗
+  final Function accountDialog;
   TransferAccount({
     Key key,
     this.payCcy,
-    this.payCcyList,
     this.transferCcy,
-    this.transferCcyList,
     this.limit,
-    this.cardNo,
-    this.cardNoList,
+    this.account,
     this.balance,
+    this.transferMoneyController,
+    this.payCcyDialog,
+    this.transferCcyDialog,
+    this.accountDialog,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -57,14 +61,14 @@ class TransferAccount extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('转账金额'),
-          Row(
-            children: [
-              Text('限额：'),
-              Text(payCcy),
-              Text(limit),
-            ],
-          )
+          Text(
+            S.current.transfer_amount,
+            style: TextStyle(color: Color(0xff7A7A7A), fontSize: 13),
+          ),
+          Text(
+            S.current.tran_limit_amt_with_value + '：' + payCcy + ' ' + limit,
+            style: TextStyle(color: Color(0xff7A7A7A), fontSize: 13),
+          ),
         ],
       ),
     );
@@ -79,7 +83,7 @@ class TransferAccount extends StatelessWidget {
           Container(
             child: FlatButton(
               onPressed: () {
-                // _ccyDialog(context, payCcyList, 0,0);
+                payCcyDialog();
               },
               child: Row(
                 children: [
@@ -121,7 +125,7 @@ class TransferAccount extends StatelessWidget {
                 money.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1');
                 // moneyChanges(money);
               },
-              // controller: _transferMoneyController,
+              controller: transferMoneyController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 border: InputBorder.none,
@@ -146,10 +150,10 @@ class TransferAccount extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('转出账户'),
+          Text(S.current.transfer_from_account),
           InkWell(
             onTap: () {
-              _selectAccount(context, cardNoList, 0);
+              accountDialog();
             },
             child: Row(
               children: [
@@ -157,13 +161,19 @@ class TransferAccount extends StatelessWidget {
                   padding: EdgeInsets.only(right: 12),
                   child: Column(
                     children: [
-                      Text(cardNo),
-                      Row(
-                        children: [
-                          Text('余额'),
-                          Text(payCcy),
-                          Text(balance),
-                        ],
+                      Text(
+                        account,
+                        style:
+                            TextStyle(color: Color(0xff262626), fontSize: 14),
+                      ),
+                      Text(
+                        S.current.balance_with_value +
+                            '：' +
+                            payCcy +
+                            ' ' +
+                            balance,
+                        style:
+                            TextStyle(color: Color(0xff7A7A7A), fontSize: 13),
                       ),
                     ],
                   ),
@@ -189,47 +199,13 @@ class TransferAccount extends StatelessWidget {
       padding: EdgeInsets.only(right: 15, left: 15),
       color: Colors.white,
       child: SelectInkWell(
-        title: '转出币种',
+        title: S.current.transfer_from_ccy,
         item: transferCcy,
         onTap: () {
-          // _ccyDialog(context, transferCcyList, 0,1);
+          transferCcyDialog();
         },
       ),
     );
-  }
-
-  //币种弹窗
-  _ccyDialog(context, String ccy, List<String> ccyList, int index,
-      int ccySelect) async {
-    final result = await showDialog(
-      context: context,
-      builder: (context) {
-        return HsgSingleChoiceDialog(
-          title: S.of(context).currency_choice,
-          items: ccyList,
-          positiveButton: S.of(context).confirm,
-          negativeButton: S.of(context).cancel,
-          lastSelectedPosition: index,
-        );
-      },
-    );
-    if (result != null && result != false) {
-      // ccySelect == 0 ? ccy = ccyList[result];
-    }
-  }
-
-  //账号弹窗
-  _selectAccount(context, List<String> cardNoList, int index) async {
-    final result = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return HsgBottomSingleChoice(
-            title: S.current.account_lsit,
-            items: cardNoList,
-            lastSelectedPosition: index,
-          );
-        });
-    if (result != null && result != false) {}
   }
 
   //实线
