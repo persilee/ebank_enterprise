@@ -322,26 +322,27 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
   //顶部弹窗内容
   Widget _popDialogContent(BuildContext popcontext) {
-    return Scaffold(
-        body: Container(
+    return Container(
       color: Colors.white,
       height: 260,
       padding: EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //交易时间
-          _timeText(intl.S.of(context).transaction_time),
-          _tradingHour(),
-          //自定义时间
-          _timeText(intl.S.of(context).user_defined),
-          _userDefind(popcontext),
-          //金额
-          _timeText('金额'),
-          _amountDuration(),
-        ],
+      child: Material(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //交易时间
+            _timeText(intl.S.of(context).transaction_time),
+            _tradingHour(),
+            //自定义时间
+            _timeText(intl.S.of(context).user_defined),
+            _userDefind(popcontext),
+            //金额
+            _timeText('金额'),
+            _amountDuration(),
+          ],
+        ),
       ),
-    ));
+    );
   }
 
   //时间文本
