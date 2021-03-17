@@ -4,15 +4,18 @@
 /// Date: 2020-12-11
 
 import 'dart:math';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
 import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:popup_window/popup_window.dart';
 import '../../page_route.dart';
 
 class TimeDepostProduct extends StatefulWidget {
@@ -53,6 +56,15 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     );
   }
 
+  // Widget _lineBorderSide() {
+  //   return Container(
+  //     // color: HsgColors.divider,
+  //     color: Colors.red,
+  //     width: 0.5,
+  //     // style: BorderStyle.solid,
+  //   );
+  // }
+
   //定期产品列表上面的图片
   Widget _picture() {
     return Image.asset(
@@ -60,6 +72,181 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       width: 500.0,
       height: 120.0,
       fit: BoxFit.cover,
+    );
+  }
+
+  //右箭头图标
+  Widget _rightArrow() {
+    return Container(
+      width: 20,
+      child: Icon(
+        Icons.arrow_drop_down,
+        color: HsgColors.nextPageIcon,
+      ),
+    );
+  }
+
+//筛选条件文本
+  Widget _condition() {
+    return Container(
+      width: (MediaQuery.of(context).size.width - 56) / 5 * 2,
+      child: Text(
+        "筛选条件",
+        style: TextStyle(fontSize: 13),
+      ),
+    );
+  }
+
+//选择的筛选条件
+  Widget _checked() {
+    return Container(
+      width: (MediaQuery.of(context).size.width - 56) / 5 * 3,
+      child: Text(
+        "2,000.00  USD  6个月",
+        style: TextStyle(fontSize: 13),
+        textAlign: TextAlign.right,
+      ),
+    );
+  }
+
+//筛选条件title
+  Widget _screenTitle() {
+    return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            bottom: _lineBorderSide(),
+          ),
+        ),
+        padding: EdgeInsets.fromLTRB(18, 12, 18, 12),
+        child: Row(
+          children: [_condition(), _checked(), _rightArrow()],
+        ));
+  }
+
+  //筛选文本
+  Widget _screenText(String text) {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.only(bottom: 10),
+      width: MediaQuery.of(context).size.width - 36,
+      child: Text(
+        text,
+        style: TRANSFER_RECORD_POP_TEXT_STYLE,
+      ),
+    );
+  }
+
+//存入金额输入框
+  Widget _moneyTextFiled() {
+    return Container(
+      padding: EdgeInsets.only(bottom: 10),
+      color: Colors.white,
+      child: TextField(
+        textAlign: TextAlign.left,
+        style: TextStyle(fontSize: 13),
+        decoration: InputDecoration(
+          isCollapsed: true,
+          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide.none),
+          fillColor: Color(0xFFF5F5F5),
+          filled: true,
+          enabledBorder: null,
+          disabledBorder: null,
+          hintText: '请输入',
+          hintStyle: TextStyle(
+            color: HsgColors.hintText,
+            fontSize: 13.0,
+          ),
+        ),
+      ),
+    );
+  }
+
+//选择条件框
+  Widget _selectionBox(BuildContext popcontext) {
+    return Container(
+      color: Colors.white,
+      width: MediaQuery.of(context).size.width,
+      height: 297,
+      padding: EdgeInsets.fromLTRB(18, 10, 18, 12),
+      child: Scaffold(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            _screenText("存入金额"),
+            _moneyTextFiled(),
+            _screenText("货币"),
+            _moneyTextFiled(),
+            // _screenText("存款期限"),
+            // _moneyTextFiled(),
+            _screenBtnRow(),
+          ],
+        ),
+      ),
+    );
+  }
+
+//筛选按钮
+  Widget _screenButton() {
+    return Container(
+      margin: EdgeInsets.all(4),
+      width: 72,
+      height: 30,
+      decoration: BoxDecoration(
+        color: HsgColors.blueTextColor,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: OutlineButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        borderSide: BorderSide(color: Colors.white),
+        child: Text(
+          S.of(context).confirm,
+          style: TextStyle(fontSize: 11, color: Colors.white),
+        ),
+        onPressed: () {
+          print("筛选");
+        },
+      ),
+    );
+  }
+
+  Widget _screenBtnRow() {
+    return Container(
+      color: Colors.white,
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            child: _screenButton(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //顶部弹窗
+  Widget _screen() {
+    return CustomPopupWindowButton(
+      offset: Offset(MediaQuery.of(context).size.width / 2.3, 200),
+      buttonBuilder: (BuildContext context) {
+        return GestureDetector(
+          child: _screenTitle(),
+        );
+      },
+      windowBuilder: (BuildContext popcontext, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        return FadeTransition(
+          opacity: animation,
+          child: SizeTransition(
+            sizeFactor: animation,
+            child: _selectionBox(popcontext),
+          ),
+        );
+      },
     );
   }
 
@@ -173,6 +360,11 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       ),
     );
     section.add(
+      SliverToBoxAdapter(
+        child: _screen(),
+      ),
+    );
+    section.add(
       SliverList(
         delegate: SliverChildBuilderDelegate((context, index) {
           //最小年利率
@@ -233,6 +425,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         title: Text(S.current.time_deposit),
         actions: <Widget>[
           Container(
+            margin: EdgeInsets.only(right: 18),
             child: Text.rich(
               TextSpan(
                   text: S.current.deposit_record,
