@@ -28,9 +28,6 @@ Widget transferPayeeWidget(
   TextEditingController _nameController,
   TextEditingController _accountController,
 ]) {
-  print('$payeeNameForSelect oooooooooooooooooooooo');
-  print('$payeeName   pppppppp');
-
   return SliverToBoxAdapter(
     child: Container(
       color: Colors.white,

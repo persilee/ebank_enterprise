@@ -97,7 +97,7 @@ class _TransferPartnerState extends State<TransferPartner> {
     });
     return Scaffold(
         appBar: AppBar(
-          title: Text(S.current.transfer_partner),
+          title: Text('收款范本'),
           centerTitle: true,
           elevation: 0,
           actions: [
@@ -144,18 +144,18 @@ class _TransferPartnerState extends State<TransferPartner> {
               padding: EdgeInsets.only(left: 0, right: 0),
               child: _getAllRowsList(),
             ),
-            //说明
-            Container(
-              padding: EdgeInsets.fromLTRB(16, 15, 0, 15),
-              alignment: Alignment.centerLeft,
-              child: Text(
-                S.current.tran_out_declare,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Color(0xFFA9A8A8),
-                ),
-              ),
-            ),
+            // //说明
+            // Container(
+            //   padding: EdgeInsets.fromLTRB(16, 15, 0, 15),
+            //   alignment: Alignment.centerLeft,
+            //   child: Text(
+            //     S.current.tran_out_declare,
+            //     style: TextStyle(
+            //       fontSize: 13,
+            //       color: Color(0xFFA9A8A8),
+            //     ),
+            //   ),
+            // ),
             //加载更多
             _tempList.length >= 10 ? _loadMore() : Container(),
           ],
@@ -318,9 +318,31 @@ class _TransferPartnerState extends State<TransferPartner> {
           style: TextStyle(fontSize: 14, color: Color(0xFF232323)),
         ),
         Text(
-          '$_cardNo   ' + (partner.transferType == '0' ? '本行' : '国际'),
+          '高阳银行',
           style: TextStyle(fontSize: 13, color: HsgColors.hintText),
-        )
+        ),
+        Row(
+          children: [
+            Text(
+              '$_cardNo',
+              style: TextStyle(fontSize: 13, color: HsgColors.hintText),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10),
+              child: SizedBox(
+                width: 1,
+                height: 12,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: HsgColors.hintText),
+                ),
+              ),
+            ),
+            Text(
+              partner.transferType == '0' ? '本行' : '跨行',
+              style: TextStyle(fontSize: 13, color: HsgColors.hintText),
+            ),
+          ],
+        ),
       ],
     );
 

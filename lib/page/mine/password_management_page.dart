@@ -75,7 +75,7 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
                   Navigator.pushNamed(context, changePayPS);
                 }),
                 _flatBtnNuitWidget(S.of(context).resetPayPwd, true, () {
-                  Navigator.pushNamed(context, iDcardVerification);
+                  Navigator.pushNamed(context, pageResetPayPwdOtp);
                 }),
               ],
             ),
