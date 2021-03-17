@@ -39,9 +39,11 @@ class _UserInformationPageState extends State<UserInformationPage> {
   @override
   Widget build(BuildContext context) {
     UserInfoResp _arguments = ModalRoute.of(context).settings.arguments;
-    _data = _arguments;
-    _userPhone = _arguments.userPhone;
-    _changeUserInfoShow(_data);
+    if (_arguments != null) {
+      _data = _arguments;
+      _userPhone = _arguments.userPhone;
+      _changeUserInfoShow(_data);
+    }
     return new Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).user_information),
