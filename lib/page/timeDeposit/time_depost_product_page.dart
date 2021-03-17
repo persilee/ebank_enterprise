@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
 import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -30,6 +31,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   List<List<TdepProducDTOList>> producDTOList = [];
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
   String language = Intl.getCurrentLocale();
+  String _changedAccountTitle = S.current.hint_please_select;
+  int _settAcPosition = 0;
 
   void initState() {
     super.initState();
@@ -69,7 +72,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   Widget _picture() {
     return Image.asset(
       'images/time_depost/time_depost_product.png',
-      width: 500.0,
+      width: MediaQuery.of(context).size.width,
       height: 120.0,
       fit: BoxFit.cover,
     );
@@ -91,7 +94,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     return Container(
       width: (MediaQuery.of(context).size.width - 56) / 5 * 2,
       child: Text(
-        "筛选条件",
+        S.current.screening_conditions,
         style: TextStyle(fontSize: 13),
       ),
     );
@@ -128,7 +131,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   Widget _screenText(String text) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: 10, top: 10),
       width: MediaQuery.of(context).size.width - 36,
       child: Text(
         text,
@@ -140,7 +143,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
 //存入金额输入框
   Widget _moneyTextFiled() {
     return Container(
-      padding: EdgeInsets.only(bottom: 10),
       color: Colors.white,
       child: TextField(
         textAlign: TextAlign.left,
@@ -155,9 +157,9 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           filled: true,
           enabledBorder: null,
           disabledBorder: null,
-          hintText: '请输入',
+          hintText: S.current.please_input,
           hintStyle: TextStyle(
-            color: HsgColors.hintText,
+            color: Color(0xff262626),
             fontSize: 13.0,
           ),
         ),
@@ -170,29 +172,107 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     return Container(
       color: Colors.white,
       width: MediaQuery.of(context).size.width,
-      height: 297,
-      padding: EdgeInsets.fromLTRB(18, 10, 18, 12),
+      // height: 289,
+      padding: EdgeInsets.fromLTRB(18, 0, 18, 0),
       child: Scaffold(
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            _screenText("存入金额"),
+            _screenText(S.current.deposit_amount),
             _moneyTextFiled(),
-            _screenText("货币"),
-            _moneyTextFiled(),
-            // _screenText("存款期限"),
-            // _moneyTextFiled(),
+            _screenText(S.current.currency),
+            _checkButton(_changedAccountTitle, popcontext),
+            _screenText(S.current.deposit_time_limit),
+            // _checkButton("6个月", popcontext),
+            _checkButton(_changedAccountTitle, popcontext),
             _screenBtnRow(),
+            _bottomBox(),
           ],
         ),
       ),
     );
   }
 
+//选择按钮
+  Widget _checkButton(String name, BuildContext popcontext) {
+    return Container(
+      // margin: EdgeInsets.only(bottom: 10),
+      // color: Colors.blue,
+      padding: EdgeInsets.zero,
+      width: MediaQuery.of(context).size.width - 36,
+      height: 40,
+      decoration: BoxDecoration(
+        color: Color(0xffF5F5F5),
+        // color: Colors.redAccent,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: OutlineButton(
+        padding: EdgeInsets.only(left: 10, right: 10),
+        borderSide: BorderSide(color: Colors.white),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width - 76,
+              child: Text(
+                name,
+                style: TextStyle(fontSize: 13, color: Color(0xff262626)),
+                textAlign: TextAlign.left,
+              ),
+            ),
+            Container(
+              width: 20,
+              height: 4,
+              margin: EdgeInsets.only(bottom: 20),
+              child: Icon(
+                Icons.arrow_drop_down,
+                color: Color(0xffAAAAAA),
+              ),
+            ),
+          ],
+        ),
+        onPressed: () {
+          // _cupertinoPicker();
+          // _timePicker(i, popcontext);
+          _selectCcy(popcontext);
+        },
+      ),
+    );
+  }
+
+//弹窗
+  _selectCcy(BuildContext popcontext) async {
+    List<String> bankCards = [];
+    List<String> accounts = ['4000 0002 2203', '4000 0002 2204'];
+    List<String> ciNames = [];
+    // for (RemoteBankCard card in cards) {
+    //   bankCards.add(card.cardNo);
+    //   ciNames.add((card.ciName));
+    // }
+    // for (var i = 0; i < bankCards.length; i++) {
+    //   accounts.add(FormatUtil.formatSpace4(bankCards[i]));
+    // }
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) => HsgBottomSingleChoice(
+            title: S.current.settlement_account,
+            items: accounts,
+            lastSelectedPosition: _settAcPosition));
+    if (result != null && result != false) {
+      _settAcPosition = result;
+      _changedAccountTitle = accounts[result];
+      // _ciName = ciNames[result];
+    } else {
+      return;
+    }
+    setState(() {});
+  }
+
 //筛选按钮
   Widget _screenButton() {
     return Container(
-      margin: EdgeInsets.all(4),
+      margin: EdgeInsets.only(top: 10, bottom: 10),
       width: 72,
       height: 30,
       decoration: BoxDecoration(
@@ -207,6 +287,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           style: TextStyle(fontSize: 11, color: Colors.white),
         ),
         onPressed: () {
+          Navigator.of(context).pop();
           print("筛选");
         },
       ),
@@ -225,6 +306,15 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           ),
         ],
       ),
+    );
+  }
+
+  //弹窗底部
+  Widget _bottomBox() {
+    return Container(
+      color: Colors.white,
+      width: MediaQuery.of(context).size.width - 36,
+      height: 240,
     );
   }
 
