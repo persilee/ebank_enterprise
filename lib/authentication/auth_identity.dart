@@ -6,6 +6,7 @@ import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 /// Date: 2021-03-15
 ///
 import 'package:flutter/services.dart';
+import 'dart:convert' as convert;
 
 class AuthIdentity {
   static const _platform =
@@ -15,14 +16,14 @@ class AuthIdentity {
   factory AuthIdentity() => _instance;
   AuthIdentity._internal();
 
-  Future startAuth(AuthIdentityReq req) async {
+  Future<AuthIdentityResp> startAuth(AuthIdentityReq req) async {
     try {
-      return Future.value(
-        await _platform.invokeMethod(
-          'startAuth',
-          {"body": req.toJson().toString()},
-        ),
+      final result = await _platform.invokeMethod(
+        'startAuth',
+        {"body": req.toJson().toString()},
       );
+      final resultMap = convert.jsonDecode(result);
+      return Future.value(AuthIdentityResp.fromJson(resultMap));
     } on PlatformException catch (e) {
       return Future.error("startAuth error: '${e.message}'");
     }
