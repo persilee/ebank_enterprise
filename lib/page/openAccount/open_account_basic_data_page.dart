@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+/// 快速开户-基本信息录入
+/// Author: 李家伟
+/// Date: 2021-03-17
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -17,54 +22,79 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   /// 公司名称（中文）输入值
   String _companyNameCNText = '';
 
-  /// 登记证件类型输入值
+  /// 登记证件类型选择值
   String _documentTypeText = '';
 
   /// 登记证件号码输入值
   String _documentNumberText = '';
 
-  /// 公司类别输入值
+  /// 公司类别选择值
   String _companyTypeText = '';
 
   /// 公司类别（其他）输入值
   String _companyTypeOtherText = '';
 
-  /// 注册国家地区输入值
+  /// 注册国家地区选择值
   String _countryOrRegionText = '';
 
-  /// 商业/行业性质输入值
+  /// 商业/行业性质选择值
   String _industrialNatureText = '';
 
-  /// 下一步按钮是否能点击
+  /// 是否显示公司类别（其他）输入框
   bool _isShowCompanyTypeOther = false;
 
   /// 下一步按钮是否能点击
-  bool _nextBtnEnabled = true; //false;
+  bool _nextBtnEnabled = false;
 
-  TextEditingController textEC = TextEditingController();
-  int textFieldTag = 0;
+  ///公司名称（英文）输入监听
+  TextEditingController _companyNameEngTEC = TextEditingController();
 
+  ///公司名称（中文）输入监听
+  TextEditingController _companyNameCNTEC = TextEditingController();
+
+  ///登记证件号码输入监听
+  TextEditingController _documentNumberTEC = TextEditingController();
+
+  ///公司类别（其他）输入监听
+  TextEditingController _companyTypeOtherTEC = TextEditingController();
+  // TextEditingController _documentNumberTEC = TextEditingController();
+  // int textFieldTag = 0;
 
   @override
   void initState() {
-    textEC.addListener(() {
-      if (textFieldTag == 1001) {
-        _companyNameEngText = textEC.text;
-      }
-      if (textFieldTag == 1002) {
-        _companyNameCNText = textEC.text;
-      }
-      if (textEC.text.length == 1) {
-        setState(() {
-          _nextBtnEnabled = _judgeButtonIsEnabled();
-        });
-      } else if (textEC.text.length == 0) {
-        setState(() {
-          _nextBtnEnabled = _judgeButtonIsEnabled();
-        });
-      }
+    _companyNameEngTEC.addListener(() {
+      _companyNameEngText = _companyNameEngTEC.text;
+      setState(() {
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
+    });
+    _companyNameCNTEC.addListener(() {
+      _companyNameCNText = _companyNameCNTEC.text;
+      setState(() {
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
+    });
+    _documentNumberTEC.addListener(() {
+      _documentNumberText = _documentNumberTEC.text;
+      setState(() {
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
+    });
+    _companyTypeOtherTEC.addListener(() {
+      _companyTypeOtherText = _companyTypeOtherTEC.text;
+      setState(() {
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _companyNameEngTEC.dispose();
+    _companyNameCNTEC.dispose();
+    _companyTypeOtherTEC.dispose();
+    super.dispose();
   }
 
   @override
@@ -123,12 +153,13 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     if (_companyTypeText == null || _companyTypeText == '') {
       return false;
     }
-    if (_companyTypeOtherText == null || _companyTypeOtherText == '') {
+    if (_isShowCompanyTypeOther == true &&
+        (_companyTypeOtherText == null || _companyTypeOtherText == '')) {
       return false;
     }
-    if (_countryOrRegionText == null || _countryOrRegionText == '') {
-      return false;
-    }
+    // if (_countryOrRegionText == null || _countryOrRegionText == '') {
+    //   return false;
+    // }
     if (_industrialNatureText == null || _industrialNatureText == '') {
       return false;
     }
@@ -162,8 +193,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
             child: _twoLayerInputWidget(
               context,
               '公司名称（英文）',
-              _companyNameEngText,
               '请输入公司名称（英文）',
+              _companyNameEngTEC,
               false,
               1001,
             ),
@@ -172,8 +203,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
             child: _twoLayerInputWidget(
               context,
               '公司名称（中文）',
-              _companyNameCNText,
               '请输入公司名称（中文）',
+              _companyNameCNTEC,
               false,
               1002,
             ),
@@ -196,8 +227,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
             child: _oneLayerInputWidget(
               context,
               '登记证件号码',
-              _documentNumberText,
               '请输入登记证件号码',
+              _documentNumberTEC,
               false,
               1004,
             ),
@@ -221,8 +252,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                   child: _twoLayerInputWidget(
                     context,
                     '公司类别（其他）',
-                    _companyTypeOtherText,
                     '请输入公司类别（其他）',
+                    _companyTypeOtherTEC,
                     false,
                     1006,
                   ),
@@ -251,6 +282,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               1007,
               () {
                 print('商业/行业性质');
+                _selectIndustrialNature(context);
               },
             ),
           ),
@@ -262,13 +294,12 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   Widget _twoLayerInputWidget(
     BuildContext context,
     String titleStr,
-    String textStr,
     String placeholderStr,
+    TextEditingController textEdiC,
     bool isHiddenLine,
     int textFieldTag,
   ) {
     final size = MediaQuery.of(context).size;
-
 
     return Container(
       width: size.width - 30,
@@ -293,8 +324,9 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               autocorrect: false,
               //是否自动获得焦点
               autofocus: false,
-              controller: textEC,
+              controller: textEdiC,
               // obscureText: this.isCiphertext,
+              // onChanged: ,
               textAlign: TextAlign.right,
               textAlignVertical: TextAlignVertical.bottom,
               textDirection: TextDirection.ltr,
@@ -327,26 +359,12 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   Widget _oneLayerInputWidget(
     BuildContext context,
     String titleStr,
-    String textStr,
     String placeholderStr,
+    TextEditingController textEdiC,
     bool isHiddenLine,
     int textFieldTag,
   ) {
     final size = MediaQuery.of(context).size;
-
-    TextEditingController textEC = TextEditingController(text: textStr);
-
-    textEC.addListener(() {
-      // setState(() {
-      //   if (textFieldTag == 1001) {
-      //     _companyNameEngText = textEC.text;
-      //   }
-      //   if (textFieldTag == 1002) {
-      //     _companyNameCNText = textEC.text;
-      //   }
-      //   _nextBtnEnabled = _judgeButtonIsEnabled();
-      // });
-    });
 
     Widget _inputWidget() {
       return Container(
@@ -375,7 +393,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                 autocorrect: false,
                 //是否自动获得焦点
                 autofocus: false,
-                controller: textEC,
+                controller: textEdiC,
                 // obscureText: this.isCiphertext,
                 textAlign: TextAlign.right,
                 textAlignVertical: TextAlignVertical.bottom,
@@ -545,6 +563,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     if (result != null && result != false) {
       setState(() {
         _documentTypeText = documentTypes[result];
+        _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     } else {
       return;
@@ -572,6 +591,51 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         _companyTypeText = companyTypes[result];
         _isShowCompanyTypeOther =
             result == companyTypes.length - 1 ? true : false;
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
+    } else {
+      return;
+    }
+  }
+
+  /// 商业/行业性质选择
+  void _selectIndustrialNature(BuildContext context) async {
+    List<String> industrialNatures = [
+      'Agriculture, forestry and fishing',
+      'Mining and quarrying',
+      'Manufacturing',
+      'Electricity, gas, steam and air conditioning supply',
+      'Water supply; sewerage, waste management and remediation activities',
+      'Construction',
+      'Wholesale and retail trade; repair of motor vehicles and motorcycles',
+      'Transportation and storage',
+      'Accommodation and food service activities',
+      'Information and communication',
+      'Financial and insurance activities',
+      'Real estate activities',
+      'Professional, scientific and technical activities',
+      'Administrative and support service activities',
+      'Public administration and defence; compulsory social security',
+      'Education',
+      'Human health and social work activities',
+      'Arts, entertainment and recreation',
+      'Other service activities',
+      'Activities of households as employers; undifferentiated goods- and services-producing activities of households for own use',
+      'Activities of extraterritorial organizations and bodies',
+      'Sensitive business'
+    ];
+    final result = await showHsgBottomSheet(
+      context: context,
+      builder: (context) => BottomMenu(
+        title: '公司类别选择',
+        items: industrialNatures,
+      ),
+    );
+
+    if (result != null && result != false) {
+      setState(() {
+        _industrialNatureText = industrialNatures[result];
+        _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     } else {
       return;
