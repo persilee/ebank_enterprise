@@ -50,11 +50,17 @@ class _TransferInternalPreviewPageState
   //一行内容
   Widget _getRowContent(String leftText, String rightText) {
     return Container(
-      padding: EdgeInsets.all(10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [Text(leftText), Text(rightText)],
-      ),
-    );
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [Text(leftText), Text(rightText)],
+            ),
+            Divider(
+              color: Colors.grey,
+            )
+          ],
+        ));
   }
 }

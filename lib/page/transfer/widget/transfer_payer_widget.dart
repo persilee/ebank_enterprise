@@ -30,8 +30,8 @@ Widget transferPayerWidget(
     child: Container(
       child: Column(
         children: [
-          //获取第一行
-          _oneRow(S.current.transfer_amount, _limitMoney, singleLimit),
+          //转账金额
+          _transferAmount(S.current.transfer_amount, _limitMoney, singleLimit),
           //第二行
           _twoRow(ccy, _changedCcyTitle, money, S.current.int_input_tran_amount,
               moneyChange, _getCcy, context, _transferMoneyController),
@@ -68,7 +68,7 @@ Widget transferPayerWidget(
   );
 }
 
-Widget _oneRow(String leftText, String rightText, String singleLimits) {
+Widget _transferAmount(String leftText, String rightText, String singleLimits) {
   rightText = rightText == '' ? singleLimits : rightText;
   return Container(
     padding: EdgeInsets.all(15),

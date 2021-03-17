@@ -10,6 +10,8 @@ import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/login/forget_password_page.dart';
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
 import 'package:ebank_mobile/page/mine/user_information_page.dart';
+import 'package:ebank_mobile/page/register/register_confirm_page.dart';
+import 'package:ebank_mobile/page/register/register_page.dart';
 // import 'package:ebank_mobile/page/mine/qliyan_demo_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
@@ -141,6 +143,8 @@ var pageQianliyanDemo = '/qliyan_demo_page.dart';
 var pageApprovalPage = 'hsg_approval_page';
 var pageStaticApproval = '/static_my_approval_page';
 var pagePasswordManagement = '/password_management_page.dart';
+var pageRegister = '/register_page.dart';
+var pageRegisterConfirm = '/register_confirm_page.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -209,6 +213,8 @@ var appRoutes = {
   // pageQianliyanDemo: (context) => QianliyanDemoPage(),
   pageStaticApproval: (context) => StaticMyApprovalPage(),
   pagePasswordManagement: (context) => PasswordManagementPage(),
+  pageRegister: (context) => RegisterPage(),
+  pageRegisterConfirm: (context) => RegisterConfirmPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
