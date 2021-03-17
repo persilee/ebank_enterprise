@@ -69,8 +69,6 @@ class _MinePageState extends State<MinePage> {
 
   @override
   Widget build(BuildContext context) {
-    // _changeUserInfoShow(_userInfoResp);
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: _mineAppbar(_opacity),
@@ -549,7 +547,7 @@ class _MinePageState extends State<MinePage> {
           ),
           Container(
             constraints: BoxConstraints(
-              maxWidth: 180,
+              maxWidth: 160,
             ),
             child: Text(
               _characterName,
@@ -675,6 +673,7 @@ class _MinePageState extends State<MinePage> {
         _userPhone = data.userPhone; //用户手机号
         _areaCode = data.areaCode; //区号
       });
+      _changeUserInfoShow(_userInfoResp);
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.showError(status: e.toString());
