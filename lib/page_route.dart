@@ -9,6 +9,7 @@ import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/login/forget_password_page.dart';
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
+import 'package:ebank_mobile/page/mine/user_information_page.dart';
 import 'package:ebank_mobile/page/register/register_confirm_page.dart';
 import 'package:ebank_mobile/page/register/register_page.dart';
 // import 'package:ebank_mobile/page/mine/qliyan_demo_page.dart';
@@ -75,6 +76,7 @@ import 'page/approval/static_page/static_my_approval_page.dart';
 
 var pageHome = '/';
 var pageLogin = pageHome;
+var pageUserInformation = 'user_information_page.dart';
 // var pageCardList = pageHome;
 
 var pageSelectBranchBank = "/select_branch_bank_page.dart";
@@ -146,6 +148,7 @@ var pageRegisterConfirm = '/register_confirm_page.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
+  pageUserInformation: (context) => UserInformationPage(),
   pageIndexName: (context) => IndexPage(),
   pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),

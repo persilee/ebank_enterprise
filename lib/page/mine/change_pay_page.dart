@@ -48,6 +48,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
     return new Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).setPayPwd),
+          centerTitle: true,
           elevation: 0,
         ),
         body: Container(
