@@ -435,7 +435,10 @@ class _MinePageState extends State<MinePage> {
             onTap: () {
               //进入用户信息页面
               Navigator.pushNamed(context, pageUserInformation,
-                  arguments: _userInfoResp);
+                      arguments: _userInfoResp)
+                  .then((value) {
+                setState(() {});
+              });
             },
           ),
         ],

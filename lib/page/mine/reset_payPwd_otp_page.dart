@@ -41,7 +41,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: AppBar(
-          title: Text(S.of(context).setPayPwd),
+          title: Text(S.of(context).resetPayPsd),
           centerTitle: true,
           elevation: 0,
         ),
@@ -61,15 +61,18 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: EdgeInsets.fromLTRB(3, 10, 0, 0),
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(
                             S.of(context).plaseSetPayPsd,
                             style: TextStyle(
                                 color: Color(0xEE7A7A7A), fontSize: 13),
                           ),
                         ),
-                        InputList(S.of(context).phone_num,
-                            S.of(context).phone_num, _phoneNumber),
+                        InputList(
+                          S.of(context).phone_num,
+                          S.of(context).phone_num,
+                          _phoneNumber,
+                        ),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
@@ -179,9 +182,17 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
 
   //获取验证码接口
   _getVerificationCode() async {
-    HSProgressHUD.show();
     // final prefs = await SharedPreferences.getInstance();
     // String userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
+    RegExp postalcode = new RegExp(r'\D');
+    if (postalcode.hasMatch(_phoneNumber.text)) {
+      Fluttertoast.showToast(msg: '请输入正确的手机号!');
+      return;
+    } else if (_phoneNumber.text.length <= 0) {
+      Fluttertoast.showToast(msg: '请输入手机号!');
+      return;
+    }
+    HSProgressHUD.show();
     VerificationCodeRepository()
         // .sendSmsByAccount(
         //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
@@ -254,9 +265,9 @@ class InputList extends StatelessWidget {
                 print('submit $text');
               },
               enabled: true, //是否禁用
-              inputFormatters: <TextInputFormatter>[
-                LengthLimitingTextInputFormatter(6), //限制长度
-              ],
+              // inputFormatters: <TextInputFormatter>[
+              //   LengthLimitingTextInputFormatter(6), //限制长度
+              // ],
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: this.placeholderText,

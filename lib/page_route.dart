@@ -9,6 +9,7 @@ import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/login/forget_password_page.dart';
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
+import 'package:ebank_mobile/page/mine/pwd_operation_success_page.dart';
 import 'package:ebank_mobile/page/mine/reset_payPwd_otp_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_account_basic_data_page.dart';
 import 'package:ebank_mobile/page/mine/user_information_page.dart';
@@ -78,8 +79,9 @@ import 'page/approval/static_page/static_my_approval_page.dart';
 
 var pageHome = '/';
 var pageLogin = pageHome;
-var pageUserInformation = 'user_information_page.dart';
-var pageResetPayPwdOtp = 'reset_payPwd_otp_page.dart';
+var pageUserInformation = '/user_information_page.dart';
+var pageResetPayPwdOtp = '/reset_payPwd_otp_page.dart';
+var pagePwdOperationSuccess = '/pwd_operation_success_page.dart';
 // var pageCardList = pageHome;
 
 var pageSelectBranchBank = "/select_branch_bank_page.dart";
@@ -154,6 +156,7 @@ var appRoutes = {
   pageLogin: (context) => LoginPage(),
   pageUserInformation: (context) => UserInformationPage(),
   pageResetPayPwdOtp: (context) => ResetPayPwdPage(),
+  pagePwdOperationSuccess: (context) => PwdOperationSuccessPage(),
   pageIndexName: (context) => IndexPage(),
   pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
