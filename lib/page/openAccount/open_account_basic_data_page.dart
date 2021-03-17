@@ -41,6 +41,32 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   /// 下一步按钮是否能点击
   bool _nextBtnEnabled = true; //false;
 
+  TextEditingController textEC = TextEditingController();
+  int textFieldTag = 0;
+
+
+  @override
+  void initState() {
+    textEC.addListener(() {
+      if (textFieldTag == 1001) {
+        _companyNameEngText = textEC.text;
+      }
+      if (textFieldTag == 1002) {
+        _companyNameCNText = textEC.text;
+      }
+      if (textEC.text.length == 1) {
+        setState(() {
+          _nextBtnEnabled = _judgeButtonIsEnabled();
+        });
+      } else if (textEC.text.length == 0) {
+        setState(() {
+          _nextBtnEnabled = _judgeButtonIsEnabled();
+        });
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -243,24 +269,6 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   ) {
     final size = MediaQuery.of(context).size;
 
-    TextEditingController textEC = TextEditingController(text: textStr);
-    textEC.addListener(() {
-      if (textFieldTag == 1001) {
-        _companyNameEngText = textEC.text;
-      }
-      if (textFieldTag == 1002) {
-        _companyNameCNText = textEC.text;
-      }
-      if (textEC.text.length == 1) {
-        setState(() {
-          _nextBtnEnabled = _judgeButtonIsEnabled();
-        });
-      } else if (textEC.text.length == 0) {
-        setState(() {
-          _nextBtnEnabled = _judgeButtonIsEnabled();
-        });
-      }
-    });
 
     return Container(
       width: size.width - 30,
