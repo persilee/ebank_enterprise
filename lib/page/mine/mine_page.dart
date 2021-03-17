@@ -91,17 +91,17 @@ class _MinePageState extends State<MinePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // IconButton(
-            //   icon: Image(
-            //     image: AssetImage('images/home/navIcon/home_nav_service.png'),
-            //     width: 18.5,
-            //     height: 18.5,
-            //   ),
-            //   onPressed: () {
-            //     print('联系客服');
-            //     Navigator.pushNamed(context, pageContactCustomer);
-            //   },
-            // ),
+            IconButton(
+              icon: Image(
+                image: AssetImage('images/home/navIcon/home_nav_service.png'),
+                width: 18.5,
+                height: 18.5,
+              ),
+              onPressed: () {
+                print('联系客服');
+                Navigator.pushNamed(context, pageContactCustomer);
+              },
+            ),
             // IconButton(
             //   icon: Image(
             //     image:
@@ -206,6 +206,10 @@ class _MinePageState extends State<MinePage> {
                 _flatBtnNuitWidget(S.current.password_management, true, () {
                   Navigator.pushNamed(context, pagePasswordManagement);
                 }),
+                _flatBtnNuitWidget(S.of(context).visa_interview, true, () {
+                  //面签通知
+                  // Navigator.pushNamed(context, aboutUs);
+                }),
               ],
             ),
           ),
@@ -217,10 +221,6 @@ class _MinePageState extends State<MinePage> {
             // padding: EdgeInsets.only(left: 20, right: 20),
             child: Column(
               children: [
-                _flatBtnNuitWidget(S.of(context).visa_interview, true, () {
-                  //面签通知
-                  // Navigator.pushNamed(context, aboutUs);
-                }),
                 _flatBtnNuitWidget(S.of(context).aboutUs, true, () {
                   Navigator.pushNamed(context, aboutUs);
                 }),
@@ -378,38 +378,43 @@ class _MinePageState extends State<MinePage> {
 
 //头部信息展示
   Widget _headerInfoWidget() {
-    return GestureDetector(
-      child: Container(
-        child: Row(
-          children: [
-            Container(
+    return Container(
+      child: Row(
+        children: [
+          GestureDetector(
+            child: Container(
               margin: EdgeInsets.only(
                   top: 78.0, left: 32, right: 24.0, bottom: 78.0),
               child: _headPortrait(),
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _userName,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: HsgColors.aboutusText,
-                        fontSize: 20.0,
-                        height: 1.5),
-                  ),
-                  Text(
-                    S.of(context).lastLoginTime + _lastLoginTime,
-                    style: TextStyle(
+            onTap: () {
+              _headerInfoTapClick(context);
+            },
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _userName,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
                       color: HsgColors.aboutusText,
-                      fontSize: 12.0,
-                    ),
+                      fontSize: 20.0,
+                      height: 1.5),
+                ),
+                Text(
+                  S.of(context).lastLoginTime + _lastLoginTime,
+                  style: TextStyle(
+                    color: HsgColors.aboutusText,
+                    fontSize: 12.0,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Container(
+          ),
+          GestureDetector(
+            child: Container(
               padding: EdgeInsets.all(10),
               alignment: Alignment.centerRight,
               child: Icon(
@@ -417,12 +422,13 @@ class _MinePageState extends State<MinePage> {
                 color: Colors.white,
               ),
             ),
-          ],
-        ),
+            onTap: () {
+              //进入用户信息页面
+              Navigator.pushNamed(context, pageUserInformation);
+            },
+          ),
+        ],
       ),
-      onTap: () {
-        _headerInfoTapClick(context);
-      },
     );
   }
 

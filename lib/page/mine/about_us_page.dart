@@ -12,6 +12,7 @@ class AboutUsPage extends StatelessWidget {
     return new Scaffold(
         appBar: AppBar(
           title: Text('Loaderman'),
+          centerTitle: true,
           elevation: 0,
         ),
         body: Container(
