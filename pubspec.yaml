@@ -149,6 +149,7 @@ flutter:
     - images/transferIcon/transfer_features_icon/transfer_features_plan.png
     - images/transferIcon/transfer_features_icon/transfer_features_record.png
     - images/transferIcon/transfer_features_icon/transfer_features_timely.png
+    - images/transferIcon/transfer_features_icon/transfer_features_timely1.png
 
     #转账记录页面图片
     - images/transferIcon/transfert_to.png

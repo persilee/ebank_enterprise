@@ -590,16 +590,18 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           // getButton(S.current.submit, _isClick),
           SliverToBoxAdapter(
             child: Container(
-              margin: EdgeInsets.only(top: 100),
+              margin: EdgeInsets.only(top: 100, bottom: 50),
               child: HsgButton.button(
                   title: '下一步',
-                  click: _isClick()
-                      ? () {
-                          Navigator.pushNamed(
-                              context, pageTransferInternalPreview,
-                              arguments: transferData);
-                        }
-                      : null),
+                  click:
+                      //  _isClick()
+                      true
+                          ? () {
+                              Navigator.pushNamed(
+                                  context, pageTransferInternationalPreview,
+                                  arguments: transferData);
+                            }
+                          : null),
             ),
           ),
         ],
@@ -966,8 +968,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //判断是否可以点击
   _isClick() {
-    if (money > 0 &&
-        _payeeAddressController.text.length > 0 &&
+    if (_payeeAddressController.text.length > 0 &&
         _companyController.text.length > 0 &&
         _accountController.text.length > 0 &&
         _countryText != S.current.please_select &&
@@ -976,13 +977,9 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _payerAddressController.text.length > 0 &&
         _transferFee != S.current.please_select &&
         _feeUse != S.current.please_select) {
-      return () {
-        _openBottomSheet();
-
-        print('提交');
-      };
+      return true;
     } else {
-      return null;
+      return false;
     }
   }
 

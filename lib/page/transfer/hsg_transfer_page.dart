@@ -36,7 +36,7 @@ class _TransferPageState extends State<TransferPage> {
     },
     {
       'btnIcon':
-          'images/transferIcon/transfer_features_icon/transfer_features_plan.png',
+          'images/transferIcon/transfer_features_icon/transfer_features_timely1.png',
       'btnTitle': S.current.transfer_type_1
     },
     {
@@ -325,33 +325,50 @@ class _TransferPageState extends State<TransferPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: EdgeInsets.only(top: 17),
+            margin: EdgeInsets.only(top: 10),
             height: 20,
             child: Text(
               data.payeeName,
               style: TextStyle(
                 color: HsgColors.secondDegreeText,
-                fontSize: 15,
+                fontSize: 14,
               ),
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 6),
-            height: 20,
-            child: Text(
-              FormatUtil.formatSpace4(data.payeeCardNo),
-              style: TextStyle(
-                color: HsgColors.describeText,
-                fontSize: 13,
+          Text(
+            data.payeeBankLocalName == null ? '高阳银行' : data.payeeBankLocalName,
+            style: TextStyle(fontSize: 13, color: HsgColors.describeText),
+          ),
+          Row(
+            children: [
+              Text(
+                FormatUtil.formatSpace4(data.payeeCardNo),
+                style: TextStyle(
+                  color: HsgColors.describeText,
+                  fontSize: 13,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
-              overflow: TextOverflow.ellipsis,
-            ),
+              Container(
+                margin: EdgeInsets.only(left: 10, right: 10),
+                child: SizedBox(
+                  width: 1,
+                  height: 12,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(color: HsgColors.describeText),
+                  ),
+                ),
+              ),
+              Text(
+                data.transferType == '0' ? '本行' : '跨行',
+                style: TextStyle(fontSize: 13, color: HsgColors.describeText),
+              ),
+            ],
           ),
         ],
       ),
     );
-
     //右侧转出按钮
     FlatButton _transferToBtn = FlatButton(
       child: Text(
