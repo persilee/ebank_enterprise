@@ -385,10 +385,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         if (element is GetCardListResp) {
           setState(() {
             //付款方卡号
-            // cardNo = element.cardList[0].cardNo;
             _account = element.cardList[0].cardNo;
             element.cardList.forEach((e) {
-              // cardNoList.add(e.cardNo);
               _accountList.add(e.cardNo);
             });
             //付款方银行名字
