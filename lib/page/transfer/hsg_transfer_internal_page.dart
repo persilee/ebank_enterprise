@@ -65,8 +65,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   var ccyList = ['CNY'];
 
-  var _currBal;
-
   List<String> ccyLists = [];
 
   var payerName = '';
@@ -81,23 +79,17 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   var remark = '';
 
-  String _changedAccountTitle = '';
-
   String _changedCcyTitle = '';
-
-  int _position = 0;
-
-  String _limitMoney = '';
 
   var payeeNameForSelects = '';
 
-  var _transferMoneyController = TextEditingController();
+  var _transferMoneyController = new TextEditingController();
 
-  var _remarkController = TextEditingController();
+  var _remarkController = new TextEditingController();
 
-  var _nameController = TextEditingController();
+  var _nameController = new TextEditingController();
 
-  var _accountController = TextEditingController();
+  var _accountController = new TextEditingController();
 
   var accountSelect = '';
 
@@ -106,8 +98,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   String _inputPassword = '';
 
   //支付币种
-  String _payCcy = 'CNY';
-  List<String> _payCcyList = ['HKD', 'CNY', 'USD'];
+  String _payCcy = '';
+  List<String> _payCcyList = [];
   int _payIndex = 0;
 
   //转出币种
@@ -116,9 +108,15 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   List<String> _transferCcyList = ['HKD', 'CNY', 'USD'];
 
   //账户选择
-  String _account = '1234 5678 1234';
-  List<String> _accountList = ['1234 5678 1234', '1234 5678 1234'];
+  String _account = '';
+  List<String> _accountList = [];
   int _accountIndex = 0;
+
+  //余额
+  String _balance = '';
+
+  //限额
+  String _limit = '';
 
   //转账数据
   List<String> transferData = [];
@@ -132,87 +130,14 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     super.initState();
 
     _transferMoneyController.addListener(() {
-      _amountInputChange(_transferMoneyController.text); //金额输入框时调用
+      // _amountInputChange(_transferMoneyController.text);
+      _boolBut(); //金额输入框时调用
     });
     _loadTransferData();
   }
 
   _amountInputChange(String title) {
     money = double.parse(title);
-  }
-
-  _nameInputChange(String name) {
-    payeeName = name;
-    print("$payeeName ---------------");
-  }
-
-  _accountInputChange(String account) {
-    payeeCardNo = account;
-    print("$payeeCardNo  +++++++++++++");
-  }
-
-  _transferInputChange(String transfer) {
-    remark = transfer;
-  }
-
-  //选择货币
-  _getCardTotals(String _changedAccountTitle) {
-    Future.wait({
-      CardDataRepository().getCardBalByCardNo(
-          GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
-      CardDataRepository().getCardLimitByCardNo(
-          GetCardLimitByCardNoReq(_changedAccountTitle),
-          'GetCardLimitByCardNoReq'),
-    }).then((value) {
-      value.forEach((element) {
-        // 通过卡号查询余额
-        setState(() {
-          if (element is GetSingleCardBalResp) {
-            ccyLists.clear();
-            ccyList.clear();
-            _currBal = '';
-            _position = 0;
-            element.cardListBal.forEach((bals) {
-              totalBalances.add(bals.avaBal);
-            });
-            // var cardListB = new List();
-            element.cardListBal.forEach((cardBalBean) {
-              if (cardBalBean.ccy != '') {
-                ccyList.add(cardBalBean.ccy);
-              }
-              if (_changedCcyTitle == cardBalBean.ccy) {
-                _currBal = cardBalBean.currBal.toString();
-              }
-            });
-            // if (ccyList.length > 1) {
-            //   if (_changedCcyTitle == 'USD') {
-            //     _position = 2;
-            //   } else if (_changedCcyTitle == 'CNY') {
-            //     _position = 0;
-            //   }
-            // } else {
-            //   _position = 0;
-            // }
-            // if (_changedCcyTitle != 'USD' &&
-            //     ccyList.length < 3 &&
-            //     ccyList.length > 0) {
-            //   _changedCcyTitle = 'USD';
-            //   _currBal = _loacalCurrBal;
-            // }
-            // if (element.cardListBal.length == 0) {
-            //   _currBal = '';
-            //   _changedCcyTitle = 'CNY';
-            //   ccyList.add('CNY');
-            //   _position = 0;
-            // }
-          }
-          //查询限额
-          else if (element is GetCardLimitByCardNoResp) {
-            _limitMoney = element.singleLimit;
-          }
-        });
-      });
-    });
   }
 
   @override
@@ -243,9 +168,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           TransferAccount(
             payCcy: _payCcy,
             transferCcy: _transferCcy,
-            limit: '500',
+            limit: _limit,
             account: _account,
-            balance: '200',
+            balance: _balance,
             transferMoneyController: _transferMoneyController,
             payCcyDialog: payCcyDialog,
             transferCcyDialog: transferCcyDialog,
@@ -357,8 +282,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     if (result != null && result != false) {
       setState(() {
         _payIndex = result;
-        _payCcy = _payCcyList[_payIndex];
+        _payCcy = _payCcyList[result];
       });
+      _getCardTotal(_account);
     }
   }
 
@@ -378,7 +304,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     if (result != null && result != false) {
       setState(() {
         _transferIndex = result;
-        _transferCcy = _transferCcyList[_transferIndex];
+        _transferCcy = _transferCcyList[result];
       });
     }
   }
@@ -397,8 +323,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     if (result != null && result != false) {
       setState(() {
         _accountIndex = result;
-        _account = _accountList[_accountIndex];
+        _account = _accountList[result];
       });
+      _getCardTotal(_account);
     }
   }
 
@@ -406,8 +333,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   _boolBut() {
     if (_transferMoneyController.text != '' &&
         _nameController.text != '' &&
-        _accountController.text != '' &&
-        _transferCcy != '') {
+        _accountController.text != '') {
       transferData.add(_payCcy);
       transferData.add(_transferMoneyController.text);
       transferData.add(_account);
@@ -459,9 +385,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         if (element is GetCardListResp) {
           setState(() {
             //付款方卡号
-            cardNo = element.cardList[0].cardNo;
+            // cardNo = element.cardList[0].cardNo;
+            _account = element.cardList[0].cardNo;
             element.cardList.forEach((e) {
-              cardNoList.add(e.cardNo);
+              // cardNoList.add(e.cardNo);
+              _accountList.add(e.cardNo);
             });
             //付款方银行名字
             payeeBankCode = element.cardList[0].ciName;
@@ -470,7 +398,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             //付款方姓名
             payerName = element.cardList[0].ciName;
           });
-          _getCardTotal(cardNo);
+          _getCardTotal(_account);
         }
       });
     });
@@ -488,20 +416,19 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         // 通过卡号查询余额
         if (element is GetSingleCardBalResp) {
           setState(() {
+            //币种
+            if (_payCcy == '') {
+              _payCcy = element.cardListBal[0].ccy;
+            }
             //余额
+            _balance = element.cardListBal[0].currBal;
+            _payCcyList.clear();
             element.cardListBal.forEach((element) {
-              ccyListOne.clear();
-              ccyListOne.add(element.ccy);
-              // if (element.ccy == 'USD') {
-              //   _currBal = element.currBal;
-              //   _changedCcyTitle = 'USD';
-              //   _loacalCurrBal = _currBal;
-              // }
-              if (element.ccy == 'CNY') {
-                _currBal = element.currBal;
-                _changedCcyTitle = 'CNY';
-                _loacalCurrBal = _currBal;
+              _payCcyList.add(element.ccy);
+              if (element.ccy == _payCcy) {
+                _balance = element.currBal;
               }
+              _payCcy = element.ccy;
             });
           });
         }
@@ -509,7 +436,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         else if (element is GetCardLimitByCardNoResp) {
           setState(() {
             //单次限额
-            singleLimit = element.singleLimit;
+            _limit = element.singleLimit;
           });
         }
       });
@@ -601,17 +528,5 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       //_showContractSucceedPage(context);
       // _clean();
     }
-  }
-
-  //清空数据
-  _clean() {
-    setState(() {
-      ccy = 'USD';
-      _transferMoneyController.text = '';
-      _nameController.text = '';
-      _accountController.text = '';
-      _remarkController.text = '';
-      remark = '';
-    });
   }
 }

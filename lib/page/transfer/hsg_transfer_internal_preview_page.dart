@@ -66,7 +66,8 @@ class _TransferInternalPreviewPageState
           _getRowContent("收款方名称", transferData[4]),
           _getRowContent("转入账号", transferData[5]),
           _getRowContent("转入币种", transferData[6]),
-          _getRowContent("转账附言", transferData[7]),
+          _getRowContent(
+              "转账附言", transferData[7] == '' ? '转账' : transferData[7]),
         ],
       ),
     );
