@@ -409,6 +409,15 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         borderRadius: BorderRadius.circular(5),
       ),
       child: TextField(
+        decoration: InputDecoration(border: InputBorder.none
+            //  OutlineInputBorder(
+            //     gapPadding: 0,
+            //     borderRadius: ((BorderRadius.circular(5))),
+            //     borderSide: BorderSide(
+            //       color: Color(0xffECECEC),
+            //     ),
+            //   ),
+            ),
         // controller: controller,
         autocorrect: false,
         autofocus: false,
