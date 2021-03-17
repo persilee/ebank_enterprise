@@ -37,7 +37,7 @@ class _TransferPageState extends State<TransferPage> {
     {
       'btnIcon':
           'images/transferIcon/transfer_features_icon/transfer_features_plan.png',
-      'btnTitle': S.current.transfer_appointment
+      'btnTitle': S.current.transfer_type_1
     },
     {
       'btnIcon':
@@ -50,7 +50,7 @@ class _TransferPageState extends State<TransferPage> {
   List<Map<String, Object>> _listFeatures = [
     {
       'btnIcon': '',
-      'btnTitle': S.current.transfer_type_2,
+      'btnTitle': S.current.transfer_type_1,
     },
   ];
 
@@ -115,9 +115,9 @@ class _TransferPageState extends State<TransferPage> {
                   //行内转账
                   //  go2Detail(cards[1]);
                   Navigator.pushNamed(context, pageTransferInternal);
-                } else if (S.of(context).transfer_appointment == title) {
-                  //'预约转账'
-                  Navigator.pushNamed(context, pageOpenTransfer);
+                } else if (S.of(context).transfer_type_1 == title) {
+                  //'跨行转账'
+                  Navigator.pushNamed(context, pageTrasferInternational);
                 } else if (S.current.transfer_record == title) {
                   //转账记录
                   Navigator.pushNamed(context, pageTransferRecord);
@@ -130,16 +130,16 @@ class _TransferPageState extends State<TransferPage> {
       ),
     ));
 
-    section.add(SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (content, index) {
-          // Navigator.pushNamed(context, pageInternational);
+    // section.add(SliverList(
+    //   delegate: SliverChildBuilderDelegate(
+    //     (content, index) {
+    //       // Navigator.pushNamed(context, pageInternational);
 
-          return _featureListItemWidget('${listData[index]['btnTitle']}');
-        },
-        childCount: listData.length,
-      ),
-    ));
+    //       return _featureListItemWidget('${listData[index]['btnTitle']}');
+    //     },
+    //     childCount: listData.length,
+    //   ),
+    // ));
 
     ///最近转账账号横条
     section.add(SliverToBoxAdapter(

@@ -25,6 +25,7 @@ class _SetPayPageState extends State<SetPayPage> {
     return new Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).resetPayPsd),
+          centerTitle: true,
           elevation: 0,
         ),
         body: Container(

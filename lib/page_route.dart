@@ -9,7 +9,13 @@ import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/login/forget_password_page.dart';
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
+<<<<<<< HEAD
 import 'package:ebank_mobile/page/openAccount/open_account_basic_data_page.dart';
+=======
+import 'package:ebank_mobile/page/mine/user_information_page.dart';
+import 'package:ebank_mobile/page/register/register_confirm_page.dart';
+import 'package:ebank_mobile/page/register/register_page.dart';
+>>>>>>> 22375f49f3f16dcd8ae14f91e2e069f62d670647
 // import 'package:ebank_mobile/page/mine/qliyan_demo_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
@@ -49,6 +55,7 @@ import 'package:ebank_mobile/page/timeDeposit/time_deposit_rate_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_open_transfer_page.dart';
 
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
+import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_preview_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_international_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_detail_page.dart';
@@ -73,6 +80,7 @@ import 'page/approval/static_page/static_my_approval_page.dart';
 
 var pageHome = '/';
 var pageLogin = pageHome;
+var pageUserInformation = 'user_information_page.dart';
 // var pageCardList = pageHome;
 
 var pageSelectBranchBank = "/select_branch_bank_page.dart";
@@ -117,6 +125,7 @@ var pageFeatureList = '/hsg_feature_list_page';
 var pageTransfer = '/hsg_transfer_page';
 var pageAuthorizationHistory = '/authorization_history_page';
 var pageTransferInternal = '/hsg_transfer_internal_page';
+var pageTransferInternalPreview = '/hsg_transfer_internal_preview_page';
 var pageTrasferInternational = '/hsg_transfer_international_page';
 var pageElectronicStatement = '/electronic_statement_page';
 var pageElectronicStatementDetail = '/electronic_statement_detail_page';
@@ -138,10 +147,16 @@ var pageQianliyanDemo = '/qliyan_demo_page.dart';
 var pageApprovalPage = 'hsg_approval_page';
 var pageStaticApproval = '/static_my_approval_page';
 var pagePasswordManagement = '/password_management_page.dart';
+<<<<<<< HEAD
 var pageOpenAccountBasicData = '/open_account_basic_data_page.dart';
+=======
+var pageRegister = '/register_page.dart';
+var pageRegisterConfirm = '/register_confirm_page.dart';
+>>>>>>> 22375f49f3f16dcd8ae14f91e2e069f62d670647
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
+  pageUserInformation: (context) => UserInformationPage(),
   pageIndexName: (context) => IndexPage(),
   pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
@@ -185,6 +200,7 @@ var appRoutes = {
   pageTransfer: (context) => TransferPage(),
   pageAuthorizationHistory: (context) => AuthorizationHistoryPage(),
   pageTransferInternal: (context) => TransferInternalPage(),
+  pageTransferInternalPreview: (context) => TransferInternalPreviewPage(),
   pageElectronicStatement: (context) => ElectronicStatementPage(),
   pageElectronicStatementDetail: (context) => ElectronicStatementDetailPage(),
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
@@ -205,7 +221,12 @@ var appRoutes = {
   // pageQianliyanDemo: (context) => QianliyanDemoPage(),
   pageStaticApproval: (context) => StaticMyApprovalPage(),
   pagePasswordManagement: (context) => PasswordManagementPage(),
+<<<<<<< HEAD
   pageOpenAccountBasicData: (context) => OpenAccountBasicDataPage(),
+=======
+  pageRegister: (context) => RegisterPage(),
+  pageRegisterConfirm: (context) => RegisterConfirmPage(),
+>>>>>>> 22375f49f3f16dcd8ae14f91e2e069f62d670647
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {

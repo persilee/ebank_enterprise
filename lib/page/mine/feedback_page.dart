@@ -25,6 +25,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
     return new Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).feedback),
+          centerTitle: true,
           elevation: 0,
         ),
         body: Container(

@@ -5,13 +5,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 
 class AboutUsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: AppBar(
-          title: Text('Loaderman'),
+          title: Text(S.current.aboutUs),
+          centerTitle: true,
           elevation: 0,
         ),
         body: Container(
