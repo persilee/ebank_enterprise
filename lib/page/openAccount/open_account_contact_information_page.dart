@@ -1,89 +1,121 @@
-/// Copyright (c) 2021 深圳高阳寰球科技有限公司
-/// 快速开户-基本信息录入
-/// Author: 李家伟
-/// Date: 2021-03-17
-
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
 
-import '../../page_route.dart';
-
-class OpenAccountBasicDataPage extends StatefulWidget {
+class OpenAccountContactInformationPage extends StatefulWidget {
   @override
-  _OpenAccountBasicDataPageState createState() =>
-      _OpenAccountBasicDataPageState();
+  _OpenAccountContactInformationPageState createState() =>
+      _OpenAccountContactInformationPageState();
 }
 
-class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
-  /// 公司名称（英文）输入值
-  String _companyNameEngText = '';
+class _OpenAccountContactInformationPageState
+    extends State<OpenAccountContactInformationPage> {
+  /// 注册公司地区（省市区）
+  String _registrationAreaText = '';
 
-  /// 公司名称（中文）输入值
-  String _companyNameCNText = '';
+  /// 注册公司地址详情
+  String _registeredAddressText = '';
 
-  /// 登记证件类型选择值
-  String _documentTypeText = '';
+  /// 注册公司邮编
+  String _registrationZipCodeText = '';
 
-  /// 登记证件号码输入值
-  String _documentNumberText = '';
+  /// 营业地址是否和注册公司地址一样
+  bool _theSameForRegisterAndBusiness = false;
 
-  /// 公司类别选择值
-  String _companyTypeText = '';
+  /// 营业地区（省市区）
+  String _businessAreaText = '';
 
-  /// 公司类别（其他）输入值
-  String _companyTypeOtherText = '';
+  /// 营业地址详情
+  String _businessAddressText = '';
 
-  /// 注册国家地区选择值
-  String _countryOrRegionText = '';
+  /// 营业邮编
+  String _businessZipCodeText = '';
 
-  /// 商业/行业性质选择值
-  String _industrialNatureText = '';
+  /// 通讯地址是否和注册公司地址一样
+  bool _theSameForRegisterAndCommunication = false;
 
-  /// 是否显示公司类别（其他）输入框
-  bool _isShowCompanyTypeOther = false;
+  /// 通讯地区（省市区）
+  String _communicationAreaText = '';
+
+  /// 通讯地址详情
+  String _correspondenceAddressText = '';
+
+  /// 通讯邮编
+  String _communicationsZipCodeText = '';
+
+  /// 区号
+  String _officeAreaCodeText = '';
+
+  /// 办事处电话号码
+  String _officePhoneText = '';
 
   /// 下一步按钮是否能点击
   bool _nextBtnEnabled = true; //false;
 
-  ///公司名称（英文）输入监听
-  TextEditingController _companyNameEngTEC = TextEditingController();
+  ///注册公司地址详情输入监听
+  TextEditingController _registeredAddressTEC = TextEditingController();
 
-  ///公司名称（中文）输入监听
-  TextEditingController _companyNameCNTEC = TextEditingController();
+  ///注册公司邮编输入监听
+  TextEditingController _registrationZipCodeTEC = TextEditingController();
 
-  ///登记证件号码输入监听
-  TextEditingController _documentNumberTEC = TextEditingController();
+  ///营业地址详情输入监听
+  TextEditingController _businessAddressTEC = TextEditingController();
 
-  ///公司类别（其他）输入监听
-  TextEditingController _companyTypeOtherTEC = TextEditingController();
+  ///营业邮编输入监听
+  TextEditingController _businessZipCodeTEC = TextEditingController();
+
+  ///通讯地址详情输入监听
+  TextEditingController _correspondenceAddressTEC = TextEditingController();
+
+  ///通讯邮编输入监听
+  TextEditingController _communicationsZipCodeTEC = TextEditingController();
+
+  ///办事处电话号码输入监听
+  TextEditingController _officePhoneTEC = TextEditingController();
 
   @override
   void initState() {
-    _companyNameEngTEC.addListener(() {
-      _companyNameEngText = _companyNameEngTEC.text;
+    _registeredAddressTEC.addListener(() {
+      _registeredAddressText = _registeredAddressTEC.text;
       setState(() {
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     });
-    _companyNameCNTEC.addListener(() {
-      _companyNameCNText = _companyNameCNTEC.text;
+    _registrationZipCodeTEC.addListener(() {
+      _registrationZipCodeText = _registrationZipCodeTEC.text;
       setState(() {
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     });
-    _documentNumberTEC.addListener(() {
-      _documentNumberText = _documentNumberTEC.text;
+    _businessAddressTEC.addListener(() {
+      _businessAddressText = _businessAddressTEC.text;
       setState(() {
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     });
-    _companyTypeOtherTEC.addListener(() {
-      _companyTypeOtherText = _companyTypeOtherTEC.text;
+    _businessZipCodeTEC.addListener(() {
+      _businessZipCodeText = _businessZipCodeTEC.text;
+      setState(() {
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
+    });
+    _correspondenceAddressTEC.addListener(() {
+      _correspondenceAddressText = _correspondenceAddressTEC.text;
+      setState(() {
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
+    });
+    _communicationsZipCodeTEC.addListener(() {
+      _communicationsZipCodeText = _communicationsZipCodeTEC.text;
+      setState(() {
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
+    });
+    _officePhoneTEC.addListener(() {
+      _officePhoneText = _officePhoneTEC.text;
       setState(() {
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
@@ -93,9 +125,13 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
 
   @override
   void dispose() {
-    _companyNameEngTEC.dispose();
-    _companyNameCNTEC.dispose();
-    _companyTypeOtherTEC.dispose();
+    _registeredAddressTEC.dispose();
+    _registrationZipCodeTEC.dispose();
+    _businessAddressTEC.dispose();
+    _businessZipCodeTEC.dispose();
+    _correspondenceAddressTEC.dispose();
+    _communicationsZipCodeTEC.dispose();
+    _officePhoneTEC.dispose();
     super.dispose();
   }
 
@@ -126,8 +162,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                   title: S.of(context).next_step,
                   click: _nextBtnEnabled
                       ? () {
-                          Navigator.pushNamed(
-                              context, pageOpenAccountContactInformation);
+                          print('ssssssssssssssssss');
                         }
                       : null,
                 ),
@@ -141,29 +176,39 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
 
   ///判断下一步按钮是否能点击
   bool _judgeButtonIsEnabled() {
-    if (_companyNameEngText == null || _companyNameEngText == '') {
+    if (_registrationAreaText == null || _registrationAreaText == '') {
       return false;
     }
-    if (_companyNameCNText == null || _companyNameCNText == '') {
+    if (_registeredAddressText == null || _registeredAddressText == '') {
       return false;
     }
-    if (_documentTypeText == null || _documentTypeText == '') {
+    if (_registrationZipCodeText == null || _registrationZipCodeText == '') {
       return false;
     }
-    if (_documentNumberText == null || _documentNumberText == '') {
+    if (_businessAreaText == null || _businessAreaText == '') {
       return false;
     }
-    if (_companyTypeText == null || _companyTypeText == '') {
+    if (_businessAddressText == null || _businessAddressText == '') {
       return false;
     }
-    if (_isShowCompanyTypeOther == true &&
-        (_companyTypeOtherText == null || _companyTypeOtherText == '')) {
+    if (_businessZipCodeText == null || _businessZipCodeText == '') {
       return false;
     }
-    // if (_countryOrRegionText == null || _countryOrRegionText == '') {
-    //   return false;
-    // }
-    if (_industrialNatureText == null || _industrialNatureText == '') {
+    if (_communicationAreaText == null || _communicationAreaText == '') {
+      return false;
+    }
+    if (_correspondenceAddressText == null ||
+        _correspondenceAddressText == '') {
+      return false;
+    }
+    if (_communicationsZipCodeText == null ||
+        _communicationsZipCodeText == '') {
+      return false;
+    }
+    if (_officeAreaCodeText == null || _officeAreaCodeText == '') {
+      return false;
+    }
+    if (_officePhoneText == null || _officePhoneText == '') {
       return false;
     }
     return true;
@@ -172,132 +217,51 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   Widget _inputViewWidget(BuildContext context) {
     String _cityName = ModalRoute.of(context).settings.arguments;
     print('<><><><><><>$_cityName     ${ModalRoute.of(context).settings}');
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.only(left: 15, right: 15),
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.only(
-              top: 10,
-              bottom: 10,
-            ),
-            child: Text(
-              '基本信息',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: HsgColors.secondDegreeText,
-                fontWeight: FontWeight.normal,
-                fontSize: 13,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          color: Colors.white,
+          padding: EdgeInsets.only(left: 15, right: 15),
+          child: Column(
+            children: [
+              Container(
+                child: _oneLayerSelectWidget(
+                  context,
+                  '注册公司地址',
+                  _registrationAreaText,
+                  '省/市/区',
+                  false,
+                  1001,
+                  () {
+                    print('注册公司地址');
+                  },
+                ),
               ),
-            ),
+              Container(
+                child: _twoLayerInputWidget(
+                  context,
+                  '注册公司地址详情',
+                  '请输入',
+                  _registeredAddressTEC,
+                  false,
+                  1002,
+                ),
+              ),
+              Container(
+                child: _oneLayerInputWidget(
+                  context,
+                  '邮编',
+                  '非必填',
+                  _registrationZipCodeTEC,
+                  false,
+                  1002,
+                ),
+              ),
+            ],
           ),
-          Container(
-            child: _twoLayerInputWidget(
-              context,
-              '公司名称（英文）',
-              '请输入公司名称（英文）',
-              _companyNameEngTEC,
-              false,
-              1001,
-            ),
-          ),
-          Container(
-            child: _twoLayerInputWidget(
-              context,
-              '公司名称（中文）',
-              '请输入公司名称（中文）',
-              _companyNameCNTEC,
-              false,
-              1002,
-            ),
-          ),
-          Container(
-            child: _oneLayerSelectWidget(
-              context,
-              '登记证件类型',
-              _documentTypeText,
-              '请选择',
-              false,
-              1003,
-              () {
-                print('登记证件类型');
-                _selectDocumentType(context);
-              },
-            ),
-          ),
-          Container(
-            child: _oneLayerInputWidget(
-              context,
-              '登记证件号码',
-              '请输入登记证件号码',
-              _documentNumberTEC,
-              false,
-              1004,
-            ),
-          ),
-          Container(
-            child: _oneLayerSelectWidget(
-              context,
-              '公司类别',
-              _companyTypeText,
-              '请选择',
-              false,
-              1005,
-              () {
-                print('公司类别');
-                _selectCompanyType(context);
-              },
-            ),
-          ),
-          _isShowCompanyTypeOther == true
-              ? Container(
-                  child: _twoLayerInputWidget(
-                    context,
-                    '公司类别（其他）',
-                    '请输入公司类别（其他）',
-                    _companyTypeOtherTEC,
-                    false,
-                    1006,
-                  ),
-                )
-              : Container(),
-          Container(
-            child: _oneLayerSelectWidget(
-              context,
-              '注册国家/地区',
-              _countryOrRegionText,
-              '请选择',
-              false,
-              1002,
-              () {
-                print('注册国家/地区');
-                Navigator.pushNamed(context, countryOrRegionSelectPage).then((value) {
-                  setState(() {
-                    _countryOrRegionText = (value as CountryRegionModel).nameEN;
-                  });
-                });
-              },
-            ),
-          ),
-          Container(
-            child: _oneLayerSelectWidget(
-              context,
-              '商业/行业性质',
-              _industrialNatureText,
-              '请选择',
-              false,
-              1007,
-              () {
-                print('商业/行业性质');
-                _selectIndustrialNature(context);
-              },
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -553,102 +517,5 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               ),
       ],
     );
-  }
-
-  /// 登记证件类型输入值
-  void _selectDocumentType(BuildContext context) async {
-    List<String> documentTypes = [
-      'Certificate of Incorporation 公司注册证书',
-      'Business Registration Certificate 商业登记证',
-      'Other 其他'
-    ];
-    final result = await showHsgBottomSheet(
-      context: context,
-      builder: (context) => BottomMenu(
-        title: '登记证件类型选择',
-        items: documentTypes,
-      ),
-    );
-
-    if (result != null && result != false) {
-      setState(() {
-        _documentTypeText = documentTypes[result];
-        _nextBtnEnabled = _judgeButtonIsEnabled();
-      });
-    } else {
-      return;
-    }
-  }
-
-  ///公司类别选择
-  void _selectCompanyType(BuildContext context) async {
-    List<String> companyTypes = [
-      'Limited Company 有限公司',
-      'Partnership合伙经营商号',
-      'Sole Proprietorship独资经营商号',
-      'Other (please specify)其他 (请注明)'
-    ];
-    final result = await showHsgBottomSheet(
-      context: context,
-      builder: (context) => BottomMenu(
-        title: '公司类别选择',
-        items: companyTypes,
-      ),
-    );
-
-    if (result != null && result != false) {
-      setState(() {
-        _companyTypeText = companyTypes[result];
-        _isShowCompanyTypeOther =
-            result == companyTypes.length - 1 ? true : false;
-        _nextBtnEnabled = _judgeButtonIsEnabled();
-      });
-    } else {
-      return;
-    }
-  }
-
-  /// 商业/行业性质选择
-  void _selectIndustrialNature(BuildContext context) async {
-    List<String> industrialNatures = [
-      'Agriculture, forestry and fishing',
-      'Mining and quarrying',
-      'Manufacturing',
-      'Electricity, gas, steam and air conditioning supply',
-      'Water supply; sewerage, waste management and remediation activities',
-      'Construction',
-      'Wholesale and retail trade; repair of motor vehicles and motorcycles',
-      'Transportation and storage',
-      'Accommodation and food service activities',
-      'Information and communication',
-      'Financial and insurance activities',
-      'Real estate activities',
-      'Professional, scientific and technical activities',
-      'Administrative and support service activities',
-      'Public administration and defence; compulsory social security',
-      'Education',
-      'Human health and social work activities',
-      'Arts, entertainment and recreation',
-      'Other service activities',
-      'Activities of households as employers; undifferentiated goods- and services-producing activities of households for own use',
-      'Activities of extraterritorial organizations and bodies',
-      'Sensitive business'
-    ];
-    final result = await showHsgBottomSheet(
-      context: context,
-      builder: (context) => BottomMenu(
-        title: '公司类别选择',
-        items: industrialNatures,
-      ),
-    );
-
-    if (result != null && result != false) {
-      setState(() {
-        _industrialNatureText = industrialNatures[result];
-        _nextBtnEnabled = _judgeButtonIsEnabled();
-      });
-    } else {
-      return;
-    }
   }
 }

@@ -99,6 +99,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                               Expanded(
                                 child: otpTextField(),
                               ),
+                              Padding(padding: EdgeInsets.only(left: 10)),
                               SizedBox(
                                 width: 90,
                                 height: 32,

@@ -103,7 +103,8 @@ class _SetPayPageState extends State<SetPayPage> {
     if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differentPwd);
     } else {
-      Navigator.pushNamed(context, pagePwdOperationSuccess);
+      Navigator.of(context)..pop()..pop()..pop();
+      Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
       // HSProgressHUD.show();
       // final prefs = await SharedPreferences.getInstance();
       // String userID = prefs.getString(ConfigKey.USER_ID);

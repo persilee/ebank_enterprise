@@ -1,7 +1,13 @@
-import 'package:ebank_mobile/page_route.dart';
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+///跨行（国际）转账预览界面
+/// Author: fangluyao
+/// Date: 2021-03-17
+
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'data/transfer_international_data.dart';
 
 class TransferinternationalPreviewPage extends StatefulWidget {
   TransferinternationalPreviewPage({Key key}) : super(key: key);
@@ -15,7 +21,8 @@ class _TransferInternalPreviewPageState
     extends State<TransferinternationalPreviewPage> {
   @override
   Widget build(BuildContext context) {
-    List<String> transferData = ModalRoute.of(context).settings.arguments;
+    TransferInternationalData transferData =
+        ModalRoute.of(context).settings.arguments;
     return Scaffold(
         appBar: AppBar(
           title: Text('转账预览'),
@@ -30,7 +37,7 @@ class _TransferInternalPreviewPageState
               child: HsgButton.button(
                 title: '确认',
                 click: () {
-                  Navigator.pushNamed(context, pageTransfer);
+                  Navigator.of(context)..pop()..pop();
                 },
               ),
             ),
@@ -38,7 +45,7 @@ class _TransferInternalPreviewPageState
         ));
   }
 
-  Widget _content(List<String> transferData) {
+  Widget _content(TransferInternationalData transferData) {
     return Container(
       padding: EdgeInsets.only(left: 15, right: 15),
       child: Column(
@@ -50,7 +57,9 @@ class _TransferInternalPreviewPageState
               children: [
                 Text('转账金额'),
                 Text(
-                  '— ' + 'CNY' + '142',
+                  '— ' +
+                      transferData.transferIntoCcy +
+                      transferData.transferIntoAmount,
                   style: TextStyle(color: Color(0xff232323), fontSize: 30),
                 ),
               ],
@@ -59,21 +68,25 @@ class _TransferInternalPreviewPageState
           Divider(
             color: Color(0xffE1E1E1),
           ),
-          _getRowContent("转出账号", '5234 4423 6090'),
-          _getRowContent("转出金额", '113.2'),
-          _getRowContent("支付币种", 'CNY'),
-          _getRowContent("汇款方地址", '深圳市'),
-          _getRowContent("收款方名称", '高阳银行'),
-          _getRowContent("转入账号", '5426 6952 3698'),
-          _getRowContent("转入币种", 'HKD'),
-          _getRowContent("收款方地址", '香港'),
-          _getRowContent("国家地区", '中国'),
-          _getRowContent("收款银行", '高阳银行'),
-          _getRowContent("银行SWIFT", 'ABCDEFG'),
-          _getRowContent("中间行SWIFT", 'ABCDEFG'),
-          _getRowContent("转账费用", '23'),
-          _getRowContent("汇款用途", '无'),
-          _getRowContent("转账附言", '转账'),
+          _getRowContent("转出账号", transferData.transferOutAccount),
+          _getRowContent("转出金额", transferData.transferOutAmount),
+          _getRowContent("支付币种", transferData.transferOutCcy),
+          _getRowContent("汇款方地址", transferData.transferOutAdress),
+          _getRowContent("收款方名称", transferData.transferIntoName),
+          _getRowContent("转入账号", transferData.transferIntoAccount),
+          _getRowContent("转入币种", transferData.transferIntoCcy),
+          _getRowContent("收款方地址", transferData.transferIntoAdress),
+          _getRowContent("国家地区", transferData.nation),
+          _getRowContent("收款银行", transferData.bank),
+          _getRowContent("银行SWIFT", transferData.bankSWIFT),
+          _getRowContent("中间行SWIFT", transferData.centerSWIFI),
+          _getRowContent("转账费用", transferData.transferFee),
+          _getRowContent("汇款用途", transferData.purpose),
+          _getRowContent(
+              "转账附言",
+              transferData.transferRemark == ''
+                  ? '转账'
+                  : transferData.transferRemark),
         ],
       ),
     );
