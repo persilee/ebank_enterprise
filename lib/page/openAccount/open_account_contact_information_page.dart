@@ -3,6 +3,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OpenAccountContactInformationPage extends StatefulWidget {
@@ -143,7 +144,7 @@ class _OpenAccountContactInformationPageState
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: Text('基本信息'),
+        title: Text('联络资料'),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -162,7 +163,8 @@ class _OpenAccountContactInformationPageState
                   title: S.of(context).next_step,
                   click: _nextBtnEnabled
                       ? () {
-                          print('ssssssssssssssssss');
+                          Navigator.pushNamed(
+                              context, pageOpenAccountSelectDocumentType);
                         }
                       : null,
                 ),
@@ -222,6 +224,7 @@ class _OpenAccountContactInformationPageState
       children: [
         Container(
           color: Colors.white,
+          margin: EdgeInsets.only(top: 10),
           padding: EdgeInsets.only(left: 15, right: 15),
           child: Column(
             children: [
@@ -255,12 +258,154 @@ class _OpenAccountContactInformationPageState
                   '非必填',
                   _registrationZipCodeTEC,
                   false,
-                  1002,
+                  1003,
                 ),
               ),
             ],
           ),
         ),
+        Container(
+          color: Colors.white,
+          margin: EdgeInsets.only(top: 15),
+          padding: EdgeInsets.only(left: 15, right: 15),
+          child: Column(
+            children: [
+              Container(
+                child: _oneLayerSwitchWidget(
+                  context,
+                  '和注册公司地址相同',
+                  _theSameForRegisterAndBusiness,
+                  false,
+                  (value) {
+                    setState(() {
+                      _theSameForRegisterAndBusiness = value;
+                    });
+                  },
+                ),
+              ),
+              Container(
+                child: _oneLayerSelectWidget(
+                  context,
+                  '主要营业地址',
+                  _businessAreaText,
+                  '省/市/区',
+                  false,
+                  1004,
+                  () {
+                    print('主要营业地址');
+                  },
+                ),
+              ),
+              Container(
+                child: _twoLayerInputWidget(
+                  context,
+                  '主要营业地址详情',
+                  '请输入',
+                  _businessAddressTEC,
+                  false,
+                  1005,
+                ),
+              ),
+              Container(
+                child: _oneLayerInputWidget(
+                  context,
+                  '邮编',
+                  '非必填',
+                  _businessZipCodeTEC,
+                  false,
+                  1006,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          color: Colors.white,
+          margin: EdgeInsets.only(top: 15),
+          padding: EdgeInsets.only(left: 15, right: 15),
+          child: Column(
+            children: [
+              Container(
+                child: _oneLayerSwitchWidget(
+                  context,
+                  '和注册公司地址相同',
+                  _theSameForRegisterAndCommunication,
+                  false,
+                  (value) {
+                    setState(() {
+                      _theSameForRegisterAndCommunication = value;
+                    });
+                  },
+                ),
+              ),
+              Container(
+                child: _oneLayerSelectWidget(
+                  context,
+                  '通讯地址地址',
+                  _businessAreaText,
+                  '省/市/区',
+                  false,
+                  1007,
+                  () {
+                    print('通讯地址地址');
+                  },
+                ),
+              ),
+              Container(
+                child: _twoLayerInputWidget(
+                  context,
+                  '通讯地址详情',
+                  '请输入',
+                  _businessAddressTEC,
+                  false,
+                  1008,
+                ),
+              ),
+              Container(
+                child: _oneLayerInputWidget(
+                  context,
+                  '邮编',
+                  '非必填',
+                  _businessZipCodeTEC,
+                  false,
+                  1009,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          color: Colors.white,
+          margin: EdgeInsets.only(top: 15),
+          padding: EdgeInsets.only(left: 15, right: 15),
+          child: Column(
+            children: [
+              Container(
+                child: _oneLayerSelectWidget(
+                  context,
+                  '区号',
+                  _officeAreaCodeText,
+                  '请选择',
+                  false,
+                  1010,
+                  () {
+                    print('区号');
+                  },
+                ),
+              ),
+              Container(
+                child: _oneLayerInputWidget(
+                  context,
+                  '办事处电话号码',
+                  '请输入',
+                  _officePhoneTEC,
+                  false,
+                  1011,
+                ),
+              ),
+            ],
+          ),
+        )
       ],
     );
   }
@@ -418,18 +563,6 @@ class _OpenAccountContactInformationPageState
 
     TextEditingController textEC = TextEditingController(text: textStr);
 
-    textEC.addListener(() {
-      // setState(() {
-      //   if (textFieldTag == 1001) {
-      //     _companyNameEngText = textEC.text;
-      //   }
-      //   if (textFieldTag == 1002) {
-      //     _companyNameCNText = textEC.text;
-      //   }
-      //   _nextBtnEnabled = _judgeButtonIsEnabled();
-      // });
-    });
-
     Widget _textWidget() {
       return Container(
         width: size.width - 30,
@@ -509,6 +642,58 @@ class _OpenAccountContactInformationPageState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _selectWidget(),
+        isHiddenLine == true
+            ? Divider()
+            : Divider(
+                height: 0.5,
+                color: HsgColors.lineColor,
+              ),
+      ],
+    );
+  }
+
+  Widget _oneLayerSwitchWidget(
+    BuildContext context,
+    String titleStr,
+    bool switchValue,
+    bool isHiddenLine,
+    ValueChanged<bool> switchValueChanged,
+  ) {
+    final size = MediaQuery.of(context).size;
+
+    Widget _textWidget() {
+      return Container(
+        width: size.width - 30,
+        height: 45,
+        child: Row(
+          children: [
+            Container(
+              width: 220,
+              child: Text(
+                titleStr,
+                maxLines: 2,
+                style: TextStyle(
+                  color: HsgColors.firstDegreeText,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            Expanded(child: Container()),
+            CupertinoSwitch(
+              activeColor: HsgColors.theme,
+              value: switchValue,
+              onChanged: switchValueChanged,
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _textWidget(),
         isHiddenLine == true
             ? Divider()
             : Divider(
