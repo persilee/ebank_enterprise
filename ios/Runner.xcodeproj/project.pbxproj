@@ -198,6 +198,7 @@
 		68B784262601A2EC001F2648 /* UIButton+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+AFNetworking.m"; sourceTree = "<group>"; };
 		68B784272601A2EC001F2648 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
 		68B784282601A2EC001F2648 /* UIProgressView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIProgressView+AFNetworking.h"; sourceTree = "<group>"; };
+		68B784502601F7F3001F2648 /* UtilsMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilsMacros.h; sourceTree = "<group>"; };
 		716F3B214F9BF043DCDD56FF /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		78C3EA193CC916B6DE84C2C6 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
@@ -424,6 +425,14 @@
 			path = "UIKit+AFNetworking";
 			sourceTree = "<group>";
 		};
+		68B784512601F86F001F2648 /* Define */ = {
+			isa = PBXGroup;
+			children = (
+				68B784502601F7F3001F2648 /* UtilsMacros.h */,
+			);
+			path = Define;
+			sourceTree = "<group>";
+		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
 			isa = PBXGroup;
 			children = (
@@ -457,6 +466,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				68B784512601F86F001F2648 /* Define */,
 				686D0AD82600B3D400781075 /* QianliyanSDK */,
 				686D0A982600B3D400781075 /* third */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
@@ -792,7 +802,7 @@
 					Flutter,
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.SigningEyeDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ebank-mobile-enterprise";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -940,7 +950,7 @@
 					Flutter,
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.SigningEyeDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ebank-mobile-enterprise";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -982,7 +992,7 @@
 					Flutter,
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.SigningEyeDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.ebank-mobile-enterprise";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
