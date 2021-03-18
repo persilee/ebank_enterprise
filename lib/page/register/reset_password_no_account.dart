@@ -8,33 +8,28 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Copyright (c) 2020 深圳高阳寰球科技有限公司
-/// 注册账号输入密码页面
-/// Author: pengyikang
-
-class RegisterConfirmPage extends StatefulWidget {
-  RegisterConfirmPage({Key key}) : super(key: key);
+class ResetPasswordNoAccount extends StatefulWidget {
+  ResetPasswordNoAccount({Key key}) : super(key: key);
 
   @override
-  _RegisterConfirmPageState createState() => _RegisterConfirmPageState();
+  _ResetPasswordNoAccountState createState() => _ResetPasswordNoAccountState();
 }
 
-class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
+class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
   TextEditingController _newPassword = new TextEditingController();
   TextEditingController _oldPassword = new TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('注册'),
+        title: Text('重置密码'),
         elevation: 0,
       ),
       body: ListView(
         children: <Widget>[
           //注册标题
-          getRegisterTitle('欢迎注册'),
+          getRegisterTitle('重置密码'),
           //输入新密码
           getRegisterRow('输入新密码', _newPassword),
           //再次输入密码
@@ -86,8 +81,8 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                               HSProgressHUD.showInfo(
                                   status: S.current.password_need_num);
                             } else {
-                              Navigator.popAndPushNamed(
-                                  context, pageRegisterSuccess);
+                              Navigator.pushNamed(
+                                  context, pageResetPasswordSuccess);
                             }
                           }
                         : null,

@@ -124,44 +124,56 @@ class _LoginPageState extends State<LoginPage> {
         Container(
           child: Row(
             children: [
+              Expanded(
+                flex: 1,
+                child: Container(),
+              ),
               //忘记用户名
-              Container(
-                height: 20,
-                margin: EdgeInsets.only(top: 10, right: 0, left: 170),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 15),
-                      child: ForgetButton('忘记账户', () {
-                        setState(() {
-                          Navigator.pushNamed(context, pageForgetPassword);
-                          print('忘记密码');
-                        });
-                      }),
-                    )
-                  ],
+              Expanded(
+                flex: 2,
+                child: Container(
+                  height: 20,
+                  margin: EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: 15),
+                        child: ForgetButton('忘记用户名', () {
+                          setState(() {
+                            Navigator.pushNamed(context, pageForgetUserName);
+                            print('忘记密码');
+                          });
+                        }),
+                      )
+                    ],
+                  ),
                 ),
               ),
               //忘记密码按钮
-              Container(
-                height: 20,
-                margin: EdgeInsets.only(top: 10, right: 35, left: 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 15),
-                      child: ForgetButton(S.of(context).fotget_password_q, () {
-                        setState(() {
-                          Navigator.pushNamed(context, pageForgetPassword);
-                          print('忘记密码');
-                        });
-                      }),
-                    )
-                  ],
+              Expanded(
+                flex: 2,
+                child: Container(
+                  height: 20,
+                  margin: EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(right: 33),
+                        margin: EdgeInsets.only(left: 15),
+                        child:
+                            ForgetButton(S.of(context).fotget_password_q, () {
+                          setState(() {
+                            Navigator.pushNamed(context, pageForgetPassword);
+                            print('忘记密码');
+                          });
+                        }),
+                      )
+                    ],
+                  ),
                 ),
-              ),
+              )
             ],
           ),
         ),
