@@ -170,8 +170,6 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   }
 
   Widget _inputViewWidget(BuildContext context) {
-    String _cityName = ModalRoute.of(context).settings.arguments;
-    print('<><><><><><>$_cityName     ${ModalRoute.of(context).settings}');
     return Container(
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.only(left: 15, right: 15),
@@ -274,7 +272,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               1002,
               () {
                 print('注册国家/地区');
-                Navigator.pushNamed(context, countryOrRegionSelectPage).then((value) {
+                Navigator.pushNamed(context, countryOrRegionSelectPage)
+                    .then((value) {
                   setState(() {
                     _countryOrRegionText = (value as CountryRegionModel).nameEN;
                   });

@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -217,8 +218,6 @@ class _OpenAccountContactInformationPageState
   }
 
   Widget _inputViewWidget(BuildContext context) {
-    String _cityName = ModalRoute.of(context).settings.arguments;
-    print('<><><><><><>$_cityName     ${ModalRoute.of(context).settings}');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -390,6 +389,13 @@ class _OpenAccountContactInformationPageState
                   1010,
                   () {
                     print('区号');
+                    Navigator.pushNamed(context, countryOrRegionSelectPage)
+                        .then((value) {
+                      setState(() {
+                        _officeAreaCodeText =
+                            (value as CountryRegionModel).code;
+                      });
+                    });
                   },
                 ),
               ),
