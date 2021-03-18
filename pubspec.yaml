@@ -46,6 +46,8 @@ dependencies:
   url_launcher: ^5.1.2
   flutter_tableview: ^1.0.1
   flutter_easyrefresh: ^2.1.7
+  azlistview: ^0.1.2
+  lpinyin: ^1.0.7
   flutter_cupertino_date_picker:
     git:
       url: https://github.com/imshashank/flutter-cupertino-date-picker # Repo
@@ -71,6 +73,8 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/data/china.json
+    - assets/data/country.json
     - images/ic_launcher.png
     #common
     - images/common/check_btn_common_checked.png
@@ -169,6 +173,11 @@ flutter:
     #其他
     - images/transferIcon/transfer_sample_placeholder.png
     - images/transferIcon/transfer_bank.png
+
+    #开户
+    - images/openAccount/open_account_document_type_CN.png
+    - images/openAccount/open_account_document_type_HK.png
+    - images/openAccount/open_account_document_type_other.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

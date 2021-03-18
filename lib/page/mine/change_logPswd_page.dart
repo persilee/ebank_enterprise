@@ -45,6 +45,20 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _oldPwd.addListener(() {
+      setState(() {});
+    });
+    _newPwd.addListener(() {
+      setState(() {});
+    });
+    _confimPwd.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: AppBar(
@@ -60,25 +74,30 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
               child: ListView(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(S.of(context).plaseSetPsd),
-                  ),
-                  Container(
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(bottom: 16),
+                    margin: EdgeInsets.only(bottom: 16, top: 16),
                     color: Colors.white,
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Text(
+                            S.of(context).plaseSetPsd,
+                            style: TextStyle(
+                                color: Color(0xEE7A7A7A), fontSize: 13),
+                          ),
+                        ),
                         InputList(S.of(context).oldPwd,
-                            S.of(context).password_need_num, _oldPwd),
+                            S.of(context).placeOldPwd, _oldPwd),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
                         InputList(S.of(context).newPwd,
-                            S.of(context).password_need_num, _newPwd),
+                            S.of(context).placeNewPwd, _newPwd),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
@@ -95,7 +114,10 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                           height: 50,
                           child: Row(
                             children: [
-                              Text(S.of(context).sendmsm),
+                              Container(
+                                width: 120,
+                                child: Text(S.of(context).sendmsm),
+                              ),
                               Expanded(
                                 child: otpTextField(),
                               ),
@@ -108,6 +130,11 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                             ],
                           ),
                         ),
+                        Divider(
+                            height: 1,
+                            color: HsgColors.divider,
+                            indent: 3,
+                            endIndent: 3),
                       ],
                     ),
                   ),
@@ -142,6 +169,9 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       textAlign: TextAlign.end,
       keyboardType: TextInputType.number,
       controller: _sms,
+      onChanged: (text) {
+        setState(() {});
+      },
       decoration: InputDecoration.collapsed(
         hintText: S.current.please_input,
         hintStyle: TextStyle(
@@ -150,8 +180,8 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
         ),
       ),
       inputFormatters: <TextInputFormatter>[
-        WhitelistingTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(6)
+        FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+        LengthLimitingTextInputFormatter(6), //限制长度
       ],
     );
   }
@@ -176,7 +206,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       disabledTextColor: HsgColors.describeText,
       disabledBorderColor: HsgColors.describeText,
       child: Text(
-        countdownTime > 0 ? '${countdownTime}s' : '获取验证码',
+        countdownTime > 0 ? '${countdownTime}s' : S.current.getVerificationCode,
         style: TextStyle(fontSize: 14),
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -266,13 +296,10 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       HSProgressHUD.showInfo(status: S.of(context).differentPwd);
     } else if (_oldPwd.text == _newPwd.text) {
       HSProgressHUD.showInfo(status: S.of(context).differnet_old_new_pwd);
-    } else if ((_newPwd.text).contains(userAcc) == true) {
-      HSProgressHUD.showInfo(status: S.of(context).not_contain_password);
-    } else if ((_newPwd.text).length < 8 || (_newPwd.text).length > 16) {
-      HSProgressHUD.showInfo(status: S.of(context).password_8_16);
     } else if (number.hasMatch(_newPwd.text) == false ||
         letter.hasMatch(_newPwd.text) == false ||
-        characters.hasMatch(_newPwd.text) == false) {
+        characters.hasMatch(_newPwd.text) == false ||
+        ((_newPwd.text).length < 8 || (_newPwd.text).length > 16)) {
       HSProgressHUD.showInfo(status: S.of(context).password_need_num);
     } else {
       HSProgressHUD.show();
@@ -308,7 +335,10 @@ class InputList extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(this.labText),
+          Container(
+            width: 105,
+            child: Text(this.labText),
+          ),
           Expanded(
             child: TextField(
               controller: this.inputValue,
@@ -319,11 +349,11 @@ class InputList extends StatelessWidget {
               textAlign: TextAlign.right, //文本对齐方式
               onChanged: (text) {
                 //内容改变的回调
-                print('change $text');
+                // print('change $text');
               },
               onSubmitted: (text) {
                 //内容提交(按回车)的回调
-                print('submit $text');
+                // print('submit $text');
               },
               enabled: true, //是否禁用
               decoration: InputDecoration(

@@ -4,11 +4,14 @@
 /// Date: 2021-03-17
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
+
+import '../../page_route.dart';
 
 class OpenAccountBasicDataPage extends StatefulWidget {
   @override
@@ -167,8 +170,6 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   }
 
   Widget _inputViewWidget(BuildContext context) {
-    String _cityName = ModalRoute.of(context).settings.arguments;
-    print('<><><><><><>$_cityName     ${ModalRoute.of(context).settings}');
     return Container(
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.only(left: 15, right: 15),
@@ -271,7 +272,12 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               1002,
               () {
                 print('注册国家/地区');
-                Navigator.pushNamed(context, pageCountryRegionSelect);
+                Navigator.pushNamed(context, countryOrRegionSelectPage)
+                    .then((value) {
+                  setState(() {
+                    _countryOrRegionText = (value as CountryRegionModel).nameEN;
+                  });
+                });
               },
             ),
           ),
