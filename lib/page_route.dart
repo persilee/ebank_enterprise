@@ -11,6 +11,7 @@ import 'package:ebank_mobile/page/login/forget_password_page.dart';
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
 import 'package:ebank_mobile/page/openAccount/country_region_select_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_account_contact_information_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_account_results_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_acount_select_document_type_page.dart';
 import 'package:ebank_mobile/page/register/find_user_name_success.dart';
 import 'package:ebank_mobile/page/register/forget_user_name_page.dart';
@@ -172,6 +173,7 @@ var pageOpenAccountContactInformation =
     '/open_account_contact_information_page.dart';
 var pageOpenAccountSelectDocumentType =
     '/open_acount_select_document_type_page.dart';
+var pageOpenAccountResults = '/open_account_results_page.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -258,6 +260,7 @@ var appRoutes = {
       OpenAccountContactInformationPage(),
   pageOpenAccountSelectDocumentType: (context) =>
       OpenAccountSelectDocumentTypePage(),
+  pageOpenAccountResults: (context) => OpenAccountResultsPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {

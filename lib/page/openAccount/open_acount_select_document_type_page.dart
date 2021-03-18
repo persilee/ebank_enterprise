@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:english_words/english_words.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
 
 class OpenAccountSelectDocumentTypePage extends StatelessWidget {
@@ -61,6 +61,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
         'titleStr': '中国大陆身份证识别',
         'onClickFunction': () {
           print('中国大陆身份证识别');
+          Navigator.pushNamed(context, pageOpenAccountResults);
         },
       },
       {
