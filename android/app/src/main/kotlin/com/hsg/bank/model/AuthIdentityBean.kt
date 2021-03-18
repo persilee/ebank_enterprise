@@ -14,8 +14,10 @@ class AuthIdentityReq(
   val tenantId: String,
   val businessId: String,
   val language: String,
+  val country: String,
   // 字符串 1  大陆证件识别，2 港澳台证件识别，3 护照识别
   val type: String,
+  val tokId: String,
 )
 
 class AuthIdentityResp(

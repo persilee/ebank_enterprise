@@ -21,16 +21,26 @@ class AuthIdentityReq extends Object {
   @JsonKey(name: 'language')
   String language;
 
+  // 国家/地区 CN 中国大陆，TW,台湾繁体
+  @JsonKey(name: 'country')
+  String country;
+
   // 字符串 1  大陆证件识别，2 澳台证件识别，3 护照识别
   @JsonKey(name: 'type')
   String type;
+
+  // 话术id
+  @JsonKey(name: 'tokId')
+  String tokId;
 
   AuthIdentityReq(
     this.tenantId,
     this.businessId,
     this.language,
-    this.type,
-  );
+    this.country,
+    this.type, {
+    this.tokId = "ocr001",
+  });
 
   factory AuthIdentityReq.fromJson(Map<String, dynamic> srcJson) =>
       _$AuthIdentityReqFromJson(srcJson);

@@ -177,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
     if (bo) {
       AuthIdentity()
           .startAuth(
-            new AuthIdentityReq("DLEAED", "74283428974123", "zh", "2"),
+            new AuthIdentityReq("DLEAED", "74283428974123", "zh", "TW", "1"),
           )
           .then((value) => "Fluttertoast.showToast(msg: value.result)")
           .catchError((e) {
