@@ -45,6 +45,20 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _oldPwd.addListener(() {
+      setState(() {});
+    });
+    _newPwd.addListener(() {
+      setState(() {});
+    });
+    _confimPwd.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: AppBar(
@@ -155,6 +169,9 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       textAlign: TextAlign.end,
       keyboardType: TextInputType.number,
       controller: _sms,
+      onChanged: (text) {
+        setState(() {});
+      },
       decoration: InputDecoration.collapsed(
         hintText: S.current.please_input,
         hintStyle: TextStyle(
