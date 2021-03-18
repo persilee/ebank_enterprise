@@ -48,12 +48,18 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: AppBar(
-          title: Text(S.of(context).resetPayPsd),
-          centerTitle: true,
-          elevation: 0,
-        ),
-        body: Container(
+      appBar: AppBar(
+        title: Text(S.of(context).resetPayPsd),
+        centerTitle: true,
+        elevation: 0,
+      ),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
           color: HsgColors.commonBackground,
           child: Form(
               //绑定状态属性
@@ -128,10 +134,12 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                           borderRadius: BorderRadius.circular(5) //设置圆角
                           ),
                     ),
-                  )
+                  ),
                 ],
               )),
-        ));
+        ),
+      ),
+    );
   }
 
   //提交按钮
