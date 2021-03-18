@@ -177,16 +177,12 @@ class _LoginPageState extends State<LoginPage> {
     if (bo) {
       AuthIdentity()
           .startAuth(
-            new AuthIdentityReq("DLEAED", "74283428974123", "zh", "2"),
+            new AuthIdentityReq("DLEAED", "74283428974123", "zh", "1"),
           )
-<<<<<<< HEAD
-          .then((value) => Fluttertoast.showToast(msg: value.result));
-=======
-          .then((value) => "Fluttertoast.showToast(msg: value.result)")
+          .then((value) => Fluttertoast.showToast(msg: value.result))
           .catchError((e) {
         HSProgressHUD.showError(status: '${e.toString()}');
       });
->>>>>>> f724aaafa6d02b9451f36c554615c615d8454e49
       return;
     }
 
