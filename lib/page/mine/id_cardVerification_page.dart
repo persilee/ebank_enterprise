@@ -561,13 +561,17 @@ class InputList extends StatelessWidget {
                     autofocus: false, //是否自动对焦
                     obscureText: this.isPwd, //是否是密码
                     textAlign: TextAlign.right, //文本对齐方式
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                      LengthLimitingTextInputFormatter(11), //限制长度
+                    ],
                     onChanged: (text) {
                       //内容改变的回调
-                      print('change $text');
+                      // print('change $text');
                     },
                     onSubmitted: (text) {
                       //内容提交(按回车)的回调
-                      print('submit $text');
+                      // print('submit $text');
                     },
                     enabled: true, //是否禁用
                     decoration: InputDecoration(

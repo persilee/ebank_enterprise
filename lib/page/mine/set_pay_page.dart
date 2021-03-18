@@ -7,6 +7,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class SetPayPage extends StatefulWidget {
@@ -79,6 +80,7 @@ class _SetPayPageState extends State<SetPayPage> {
                           : null,
                       color: HsgColors.accent,
                       textColor: Colors.white,
+                      disabledTextColor: Colors.white,
                       disabledColor: Color(0xFFD1D1D1),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5) //设置圆角
@@ -140,7 +142,10 @@ class InputList extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(this.labText),
+          Container(
+            width: 180,
+            child: Text(this.labText),
+          ),
           Expanded(
             child: TextField(
               controller: this.inputValue,
@@ -149,13 +154,17 @@ class InputList extends StatelessWidget {
               autofocus: true, //是否自动对焦
               obscureText: true, //是否是密码
               textAlign: TextAlign.right, //文本对齐方式
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                LengthLimitingTextInputFormatter(6), //限制长度
+              ],
               onChanged: (text) {
                 //内容改变的回调
-                print('change $text');
+                // print('change $text');
               },
               onSubmitted: (text) {
                 //内容提交(按回车)的回调
-                print('submit $text');
+                // print('submit $text');
               },
               enabled: true, //是否禁用
               decoration: InputDecoration(

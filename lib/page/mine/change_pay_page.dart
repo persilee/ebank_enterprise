@@ -59,16 +59,21 @@ class _ChangePayPageState extends State<ChangePayPage> {
               child: ListView(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(S.of(context).plaseSetPayPsd),
-                  ),
-                  Container(
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(bottom: 16),
+                    margin: EdgeInsets.only(bottom: 16, top: 16),
                     color: Colors.white,
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Text(
+                            S.of(context).plaseSetPayPsd,
+                            style: TextStyle(
+                                color: Color(0xEE7A7A7A), fontSize: 13),
+                          ),
+                        ),
                         InputList(S.of(context).oldPayPwd,
                             S.of(context).placeOldPwd, _oldPwd),
                         Divider(
@@ -94,7 +99,10 @@ class _ChangePayPageState extends State<ChangePayPage> {
                           height: 50,
                           child: Row(
                             children: [
-                              Text(S.of(context).sendmsm),
+                              Container(
+                                width: 120,
+                                child: Text(S.of(context).sendmsm),
+                              ),
                               Expanded(
                                 child: otpTextField(),
                               ),
@@ -107,6 +115,11 @@ class _ChangePayPageState extends State<ChangePayPage> {
                             ],
                           ),
                         ),
+                        Divider(
+                            height: 1,
+                            color: HsgColors.divider,
+                            indent: 3,
+                            endIndent: 3),
                       ],
                     ),
                   ),
@@ -250,6 +263,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
       keyboardType: TextInputType.number,
       controller: _sms,
       inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
         LengthLimitingTextInputFormatter(6), //限制长度
       ],
       decoration: InputDecoration.collapsed(
@@ -279,7 +293,10 @@ class InputList extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(this.labText),
+          Container(
+            width: 180,
+            child: Text(this.labText),
+          ),
           Expanded(
             child: TextField(
               controller: this.inputValue,
@@ -289,18 +306,19 @@ class InputList extends StatelessWidget {
               autofocus: true, //是否自动对焦
               obscureText: true, //是否是密码
               textAlign: TextAlign.right, //文本对齐方式
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                LengthLimitingTextInputFormatter(6), //限制长度
+              ],
               onChanged: (text) {
                 //内容改变的回调
-                print('change $text');
+                // print('change $text');
               },
               onSubmitted: (text) {
                 //内容提交(按回车)的回调
-                print('submit $text');
+                // print('submit $text');
               },
               enabled: true, //是否禁用
-              inputFormatters: <TextInputFormatter>[
-                LengthLimitingTextInputFormatter(6), //限制长度
-              ],
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: this.placeholderText,

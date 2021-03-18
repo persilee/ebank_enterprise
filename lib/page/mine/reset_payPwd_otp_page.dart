@@ -30,6 +30,17 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   int countdownTime = 0;
 
   @override
+  void initState() {
+    super.initState();
+    _sms.addListener(() {
+      setState(() {});
+    });
+    _phoneNumber.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
   void dispose() {
     super.dispose();
     if (_timer != null) {
@@ -82,7 +93,10 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                           height: 50,
                           child: Row(
                             children: [
-                              Text(S.of(context).sendmsm),
+                              Container(
+                                width: 120,
+                                child: Text(S.of(context).sendmsm),
+                              ),
                               Expanded(
                                 child: otpTextField(),
                               ),
@@ -111,6 +125,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                           : null,
                       color: HsgColors.accent,
                       textColor: Colors.white,
+                      disabledTextColor: Colors.white,
                       disabledColor: Color(0xFFD1D1D1),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5) //设置圆角
@@ -218,6 +233,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       keyboardType: TextInputType.number,
       controller: _sms,
       inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp("[0-9]")),
         LengthLimitingTextInputFormatter(6), //限制长度
       ],
       decoration: InputDecoration.collapsed(
@@ -256,13 +272,17 @@ class InputList extends StatelessWidget {
               autofocus: true, //是否自动对焦
               obscureText: false, //是否是密码
               textAlign: TextAlign.right, //文本对齐方式
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                LengthLimitingTextInputFormatter(11), //限制长度
+              ],
               onChanged: (text) {
                 //内容改变的回调
-                print('change $text');
+                // print('change $text');
               },
               onSubmitted: (text) {
                 //内容提交(按回车)的回调
-                print('submit $text');
+                // print('submit $text');
               },
               enabled: true, //是否禁用
               // inputFormatters: <TextInputFormatter>[

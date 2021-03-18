@@ -333,6 +333,5 @@ class _UserInformationPageState extends State<UserInformationPage> {
           ? model.roleLocalName
           : model.roleEngName; //用户角色名称
     });
-    print(_characterName);
   }
 }
