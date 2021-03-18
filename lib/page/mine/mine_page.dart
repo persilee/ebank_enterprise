@@ -26,6 +26,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ebank_mobile/util/language.dart';
+import 'package:ebank_mobile/main.dart';
 
 class MinePage extends StatefulWidget {
   @override
@@ -33,6 +35,7 @@ class MinePage extends StatefulWidget {
 }
 
 class _MinePageState extends State<MinePage> {
+  String _language = Intl.getCurrentLocale();
   double _opacity = 0;
   ScrollController _sctrollController = ScrollController();
   String _lastLoginTime =
@@ -52,6 +55,10 @@ class _MinePageState extends State<MinePage> {
   String _sms = ""; //验证码
   String _password = "123456qwe~"; //密码
   String _registerAccount = "wly3"; //手机号注册（用户账号）
+  var _enterpriseName = '高阳寰球科技有限公司'; // 企业名称
+  var _characterName = ''; // 角色名称
+  var _belongCustStatus = '7'; //用户状态
+  UserInfoResp _userInfoResp;
 
   @override
   // ignore: must_call_super
@@ -91,17 +98,17 @@ class _MinePageState extends State<MinePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // IconButton(
-            //   icon: Image(
-            //     image: AssetImage('images/home/navIcon/home_nav_service.png'),
-            //     width: 18.5,
-            //     height: 18.5,
-            //   ),
-            //   onPressed: () {
-            //     print('联系客服');
-            //     Navigator.pushNamed(context, pageContactCustomer);
-            //   },
-            // ),
+            IconButton(
+              icon: Image(
+                image: AssetImage('images/home/navIcon/home_nav_service.png'),
+                width: 18.5,
+                height: 18.5,
+              ),
+              onPressed: () {
+                print('联系客服');
+                Navigator.pushNamed(context, pageContactCustomer);
+              },
+            ),
             // IconButton(
             //   icon: Image(
             //     image:
@@ -140,7 +147,7 @@ class _MinePageState extends State<MinePage> {
         children: [
           Image(
             width: MediaQuery.of(context).size.width,
-            height: 180,
+            height: 200,
             image: AssetImage(
                 'images/mine/mine-icon.png'), //'images/mine/mine-icon.png',
             fit: BoxFit.cover,
@@ -150,7 +157,7 @@ class _MinePageState extends State<MinePage> {
             children: <Widget>[
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: 180,
+                height: 200,
                 decoration: BoxDecoration(color: Color(0x90000000)),
               ),
             ],
@@ -203,8 +210,13 @@ class _MinePageState extends State<MinePage> {
                 _flatBtnNuitWidget(S.of(context).my_account, true, () {
                   Navigator.pushNamed(context, pageCardList);
                 }),
-                _flatBtnNuitWidget('密码管理', true, () {
+                _flatBtnNuitWidget(S.current.password_management, true, () {
                   Navigator.pushNamed(context, pagePasswordManagement);
+                }),
+                _flatBtnNuitWidget(S.of(context).visa_interview, true, () {
+                  //面签通知
+                  print('面签');
+                  // Navigator.pushNamed(context, aboutUs);
                 }),
               ],
             ),
@@ -217,14 +229,14 @@ class _MinePageState extends State<MinePage> {
             // padding: EdgeInsets.only(left: 20, right: 20),
             child: Column(
               children: [
-                _flatBtnNuitWidget(S.of(context).feedback, true, () {
-                  Navigator.pushNamed(context, feedback);
+                _flatBtnNuitWidget(S.of(context).aboutUs, true, () {
+                  Navigator.pushNamed(context, aboutUs);
                 }),
                 _flatBtnNuitWidget(S.of(context).customer_service, true, () {
                   Navigator.pushNamed(context, pageContactCustomer);
                 }),
-                _flatBtnNuitWidget(S.of(context).aboutUs, true, () {
-                  Navigator.pushNamed(context, aboutUs);
+                _flatBtnNuitWidget(S.of(context).feedback, true, () {
+                  Navigator.pushNamed(context, feedback);
                 }),
               ],
             ),
@@ -374,38 +386,45 @@ class _MinePageState extends State<MinePage> {
 
 //头部信息展示
   Widget _headerInfoWidget() {
-    return GestureDetector(
-      child: Container(
-        child: Row(
-          children: [
-            Container(
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      child: Row(
+        children: [
+          GestureDetector(
+            child: Container(
               margin: EdgeInsets.only(
                   top: 78.0, left: 32, right: 24.0, bottom: 78.0),
               child: _headPortrait(),
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _userName,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: HsgColors.aboutusText,
-                        fontSize: 20.0,
-                        height: 1.5),
-                  ),
-                  Text(
-                    S.of(context).lastLoginTime + _lastLoginTime,
-                    style: TextStyle(
-                      color: HsgColors.aboutusText,
-                      fontSize: 12.0,
-                    ),
-                  ),
-                ],
-              ),
+            onTap: () {
+              _headerInfoTapClick(context);
+            },
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _belongCustStatus == '7' ? _userInfo() : _userOffInfo(),
+                // Text(
+                //   _userName,
+                //   textAlign: TextAlign.start,
+                //   style: TextStyle(
+                //       color: HsgColors.aboutusText,
+                //       fontSize: 20.0,
+                //       height: 1.5),
+                // ),
+                // Text(
+                //   S.of(context).lastLoginTime + _lastLoginTime,
+                //   style: TextStyle(
+                //     color: HsgColors.aboutusText,
+                //     fontSize: 12.0,
+                //   ),
+                // ),
+              ],
             ),
-            Container(
+          ),
+          GestureDetector(
+            child: Container(
               padding: EdgeInsets.all(10),
               alignment: Alignment.centerRight,
               child: Icon(
@@ -413,12 +432,149 @@ class _MinePageState extends State<MinePage> {
                 color: Colors.white,
               ),
             ),
-          ],
+            onTap: () {
+              //进入用户信息页面
+              Navigator.pushNamed(context, pageUserInformation,
+                      arguments: _userInfoResp)
+                  .then((value) {
+                setState(() {});
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+//用户信息-未开户成功
+  Widget _userOffInfo() {
+    return Container(
+        child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _nameInfo(),
+        RaisedButton(
+          onPressed: () {
+            print('开户申请');
+          },
+          child: Text(
+            '开户申请',
+            style: TextStyle(fontSize: 15, color: Colors.white),
+          ),
+          shape: RoundedRectangleBorder(
+            side: BorderSide.none,
+            borderRadius: BorderRadius.all(Radius.circular(50)),
+          ),
+          color: Color(0xFF4871FF),
+          disabledColor: HsgColors.btnDisabled,
+        ),
+      ],
+    ));
+  }
+
+//用户信息-已开户
+  Widget _userInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _enterpriseInfo(),
+        Container(
+          margin: EdgeInsets.only(top: 7),
+          child: _nameInfo(),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 10),
+          child: _characterInfo(),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 7),
+          child: _timeInfo(),
+        )
+      ],
+    );
+  }
+
+  //企业信息
+  Widget _enterpriseInfo() {
+    return Container(
+      constraints: BoxConstraints(
+          maxWidth: (MediaQuery.of(context).size.width / 3 * 2 - 20)),
+      height: 22,
+      child: Text(
+        _enterpriseName,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
         ),
       ),
-      onTap: () {
-        _headerInfoTapClick(context);
-      },
+    );
+  }
+
+  //用户名
+  Widget _nameInfo() {
+    return Container(
+      constraints: BoxConstraints(
+          maxWidth: (MediaQuery.of(context).size.width / 3 * 2 - 160)),
+      child: Text(
+        _userName,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+        ),
+      ),
+    );
+  }
+
+  //用户角色信息
+  Widget _characterInfo() {
+    return Container(
+      height: 25,
+      decoration: BoxDecoration(
+        color: Color(0xff5662fb).withOpacity(0.66), //HsgColors.accent,
+        borderRadius: BorderRadius.circular(12.5), //
+      ),
+      padding: EdgeInsets.fromLTRB(5, 0, 12, 0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: EdgeInsets.only(left: 5, right: 5),
+            child: Icon(
+              Icons.star,
+              color: Color(0xffffbc2e),
+              size: 18,
+            ),
+          ),
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: 160,
+            ),
+            child: Text(
+              _characterName,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  //时间信息
+  Widget _timeInfo() {
+    return Text(
+      S.current.last_login_time_with_value + _lastLoginTime,
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 12,
+      ),
     );
   }
 
@@ -439,6 +595,23 @@ class _MinePageState extends State<MinePage> {
         ),
       ),
     );
+  }
+
+  //修改语言显示
+  void _changeUserInfoShow(UserInfoResp model) {
+    setState(() {
+      // _headPortraitUrl = model.headPortrait; //头像地址
+      _enterpriseName = _language == 'zh_CN'
+          ? model.custLocalName
+          : model.custEngName; // 企业名称
+      _userName = _language == 'zh_CN'
+          ? model.localUserName
+          : model.englishUserName; // 姓名
+      _characterName = _language == 'zh_CN'
+          ? model.roleLocalName
+          : model.roleEngName; //用户角色名称
+      _lastLoginTime = model.lastLoginTime; // 上次登录时间
+    });
   }
 
   //设置头像
@@ -493,13 +666,17 @@ class _MinePageState extends State<MinePage> {
     )
         .then((data) {
       setState(() {
+        _userInfoResp = data;
         _userName = data.actualName; // 姓名
         _headPortraitUrl = data.headPortrait; //头像
+        _characterName = data.roleLocalName; //角色
+        _enterpriseName = data.custLocalName; //公司名
         // _lastLoginTime = data.lastLoginTime; // 上次登录时间
         _userType = data.userType; //用户类型
         _userPhone = data.userPhone; //用户手机号
         _areaCode = data.areaCode; //区号
       });
+      _changeUserInfoShow(_userInfoResp);
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.showError(status: e.toString());

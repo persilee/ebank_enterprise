@@ -3,6 +3,7 @@
   @author hlx
  */
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -25,6 +26,7 @@ class _SetPayPageState extends State<SetPayPage> {
     return new Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).resetPayPsd),
+          centerTitle: true,
           elevation: 0,
         ),
         body: Container(
@@ -35,16 +37,21 @@ class _SetPayPageState extends State<SetPayPage> {
               child: ListView(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(S.of(context).plaseSetPayPsd),
-                  ),
-                  Container(
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(bottom: 16),
+                    margin: EdgeInsets.only(bottom: 16, top: 16),
                     color: Colors.white,
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Text(
+                            S.of(context).plaseSetPayPsd,
+                            style: TextStyle(
+                                color: Color(0xEE7A7A7A), fontSize: 13),
+                          ),
+                        ),
                         //新密码
                         InputList(S.of(context).newPayPwd,
                             S.of(context).placeNewPwd, _newPwd),
@@ -72,6 +79,7 @@ class _SetPayPageState extends State<SetPayPage> {
                           : null,
                       color: HsgColors.accent,
                       textColor: Colors.white,
+                      disabledColor: Color(0xFFD1D1D1),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5) //设置圆角
                           ),
@@ -95,7 +103,8 @@ class _SetPayPageState extends State<SetPayPage> {
     if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differentPwd);
     } else {
-      HSProgressHUD.show();
+      Navigator.pushNamed(context, pagePwdOperationSuccess);
+      // HSProgressHUD.show();
       // final prefs = await SharedPreferences.getInstance();
       // String userID = prefs.getString(ConfigKey.USER_ID);
       // PaymentPwdRepository()

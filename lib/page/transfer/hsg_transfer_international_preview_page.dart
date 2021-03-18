@@ -3,8 +3,8 @@ import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class TransferInternalPreviewPage extends StatefulWidget {
-  TransferInternalPreviewPage({Key key}) : super(key: key);
+class TransferinternationalPreviewPage extends StatefulWidget {
+  TransferinternationalPreviewPage({Key key}) : super(key: key);
 
   @override
   _TransferInternalPreviewPageState createState() =>
@@ -12,7 +12,7 @@ class TransferInternalPreviewPage extends StatefulWidget {
 }
 
 class _TransferInternalPreviewPageState
-    extends State<TransferInternalPreviewPage> {
+    extends State<TransferinternationalPreviewPage> {
   @override
   Widget build(BuildContext context) {
     List<String> transferData = ModalRoute.of(context).settings.arguments;
@@ -26,7 +26,7 @@ class _TransferInternalPreviewPageState
             _content(transferData),
             _explain(),
             Container(
-              margin: EdgeInsets.only(top: 50),
+              margin: EdgeInsets.only(top: 50, bottom: 50),
               child: HsgButton.button(
                 title: '确认',
                 click: () {
@@ -62,9 +62,17 @@ class _TransferInternalPreviewPageState
           _getRowContent("转出账号", '5234 4423 6090'),
           _getRowContent("转出金额", '113.2'),
           _getRowContent("支付币种", 'CNY'),
+          _getRowContent("汇款方地址", '深圳市'),
           _getRowContent("收款方名称", '高阳银行'),
           _getRowContent("转入账号", '5426 6952 3698'),
           _getRowContent("转入币种", 'HKD'),
+          _getRowContent("收款方地址", '香港'),
+          _getRowContent("国家地区", '中国'),
+          _getRowContent("收款银行", '高阳银行'),
+          _getRowContent("银行SWIFT", 'ABCDEFG'),
+          _getRowContent("中间行SWIFT", 'ABCDEFG'),
+          _getRowContent("转账费用", '23'),
+          _getRowContent("汇款用途", '无'),
           _getRowContent("转账附言", '转账'),
         ],
       ),
@@ -94,23 +102,24 @@ class _TransferInternalPreviewPageState
   //一行内容
   Widget _getRowContent(String leftText, String rightText) {
     return Container(
-        padding: EdgeInsets.only(top: 30),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  leftText,
-                  style: TextStyle(color: Color(0xff262626), fontSize: 14),
-                ),
-                Text(
-                  rightText,
-                  style: TextStyle(color: Color(0xff7A7A7A), fontSize: 14),
-                ),
-              ],
-            ),
-          ],
-        ));
+      padding: EdgeInsets.only(top: 30),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                leftText,
+                style: TextStyle(color: Color(0xff262626), fontSize: 14),
+              ),
+              Text(
+                rightText,
+                style: TextStyle(color: Color(0xff7A7A7A), fontSize: 14),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

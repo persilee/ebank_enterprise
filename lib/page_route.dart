@@ -11,6 +11,10 @@ import 'package:ebank_mobile/page/login/forget_password_page.dart';
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
 import 'package:ebank_mobile/page/register/find_user_name_success.dart';
 import 'package:ebank_mobile/page/register/forget_user_name_page.dart';
+import 'package:ebank_mobile/page/mine/pwd_operation_success_page.dart';
+import 'package:ebank_mobile/page/mine/reset_payPwd_otp_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_account_basic_data_page.dart';
+import 'package:ebank_mobile/page/mine/user_information_page.dart';
 import 'package:ebank_mobile/page/register/register_confirm_page.dart';
 import 'package:ebank_mobile/page/register/register_page.dart';
 import 'package:ebank_mobile/page/register/register_success_page.dart';
@@ -58,11 +62,12 @@ import 'package:ebank_mobile/page/transfer/hsg_open_transfer_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_preview_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_international_page.dart';
+import 'package:ebank_mobile/page/transfer/hsg_transfer_international_preview_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_detail_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_plan_details.dart';
 import 'package:ebank_mobile/page/transfer/transfer_plan_page.dart';
-import 'package:ebank_mobile/page/transfer/transfer_record-page.dart';
+import 'package:ebank_mobile/page/transfer/transfer_record_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_partner_page.dart';
 import 'package:ebank_mobile/page/transfer/add_partner_page.dart';
 import 'package:ebank_mobile/page/transfer/select_bank_page.dart';
@@ -79,6 +84,9 @@ import 'package:ebank_mobile/page/mine/set_pay_page.dart';
 
 var pageHome = '/';
 var pageLogin = pageHome;
+var pageUserInformation = '/user_information_page.dart';
+var pageResetPayPwdOtp = '/reset_payPwd_otp_page.dart';
+var pagePwdOperationSuccess = '/pwd_operation_success_page.dart';
 // var pageCardList = pageHome;
 
 var pageSelectBranchBank = "/select_branch_bank_page.dart";
@@ -124,6 +132,8 @@ var pageTransfer = '/hsg_transfer_page';
 var pageAuthorizationHistory = '/authorization_history_page';
 var pageTransferInternal = '/hsg_transfer_internal_page';
 var pageTransferInternalPreview = '/hsg_transfer_internal_preview_page';
+var pageTransferInternationalPreview =
+    '/hsg_transfer_international_preview_page';
 var pageTrasferInternational = '/hsg_transfer_international_page';
 var pageElectronicStatement = '/electronic_statement_page';
 var pageElectronicStatementDetail = '/electronic_statement_detail_page';
@@ -145,6 +155,7 @@ var pageQianliyanDemo = '/qliyan_demo_page.dart';
 var pageApprovalPage = 'hsg_approval_page';
 var pageStaticApproval = '/static_my_approval_page';
 var pagePasswordManagement = '/password_management_page.dart';
+var pageOpenAccountBasicData = '/open_account_basic_data_page.dart';
 var pageRegister = '/register_page.dart';
 var pageRegisterConfirm = '/register_confirm_page.dart';
 var pageRegisterSuccess = 'register_success_page.dart';
@@ -156,6 +167,9 @@ var pageResetPasswordOpenAccount = 'reset_password_account_open.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
+  pageUserInformation: (context) => UserInformationPage(),
+  pageResetPayPwdOtp: (context) => ResetPayPwdPage(),
+  pagePwdOperationSuccess: (context) => PwdOperationSuccessPage(),
   pageIndexName: (context) => IndexPage(),
   pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
@@ -200,6 +214,8 @@ var appRoutes = {
   pageAuthorizationHistory: (context) => AuthorizationHistoryPage(),
   pageTransferInternal: (context) => TransferInternalPage(),
   pageTransferInternalPreview: (context) => TransferInternalPreviewPage(),
+  pageTransferInternationalPreview: (context) =>
+      TransferinternationalPreviewPage(),
   pageElectronicStatement: (context) => ElectronicStatementPage(),
   pageElectronicStatementDetail: (context) => ElectronicStatementDetailPage(),
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
@@ -220,6 +236,7 @@ var appRoutes = {
   // pageQianliyanDemo: (context) => QianliyanDemoPage(),
 
   pagePasswordManagement: (context) => PasswordManagementPage(),
+  pageOpenAccountBasicData: (context) => OpenAccountBasicDataPage(),
   pageRegister: (context) => RegisterPage(),
   pageRegisterConfirm: (context) => RegisterConfirmPage(),
   pageRegisterSuccess: (context) => RegisterSuccessPage(),

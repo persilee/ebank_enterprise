@@ -15,11 +15,14 @@ import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_button_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
+import 'package:ebank_mobile/widget/hsg_button.dart';
 
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
@@ -161,6 +164,30 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   var check = false;
 
+  //支付币种
+  String _payCcy = '';
+  List<String> _payCcyList = [];
+  int _payIndex = 0;
+
+  //转出币种
+  String _transferCcy = '';
+  int _transferIndex = 0;
+  List<String> _transferCcyList = ['HKD', 'CNY', 'USD'];
+
+  //账户选择
+  String _account = '';
+  List<String> _accountList = [];
+  int _accountIndex = 0;
+
+  //余额
+  String _balance = '';
+
+  //限额
+  String _limit = '';
+
+  //转账数据
+  List<String> transferData = [];
+
   @override
   void initState() {
     super.initState();
@@ -222,29 +249,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     remark = transfer;
   }
 
-  //选择账号方法
-  _selectAccount() async {
-    final result = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return HsgBottomSingleChoice(
-            title: S.current.account_lsit,
-            items: cardNoList,
-            lastSelectedPosition: _position,
-          );
-        });
-    if (result != null && result != false) {
-      _changedAccountTitle = cardNoList[result];
-    }
-
-    setState(() {
-      _position = result;
-    });
-    _getCardTotals(_changedAccountTitle);
-
-    //_getCcy();
-  }
-
   _getCardTotals(String _changedAccountTitle) {
     Future.wait({
       CardDataRepository().getCardBalByCardNo(
@@ -304,30 +308,67 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
   }
 
-  //选择货币方法
-  _getCcy() async {
+  //币种弹窗
+  Future payCcyDialog() async {
     final result = await showDialog(
+      context: context,
+      builder: (context) {
+        return HsgSingleChoiceDialog(
+          title: S.of(context).currency_choice,
+          items: _payCcyList,
+          positiveButton: S.of(context).confirm,
+          negativeButton: S.of(context).cancel,
+          lastSelectedPosition: _payIndex,
+        );
+      },
+    );
+    if (result != null && result != false) {
+      setState(() {
+        _payIndex = result;
+        _payCcy = _payCcyList[result];
+      });
+      _getCardTotal(_account);
+    }
+  }
+
+  Future transferCcyDialog() async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) {
+        return HsgSingleChoiceDialog(
+          title: S.of(context).currency_choice,
+          items: _transferCcyList,
+          positiveButton: S.of(context).confirm,
+          negativeButton: S.of(context).cancel,
+          lastSelectedPosition: _transferIndex,
+        );
+      },
+    );
+    if (result != null && result != false) {
+      setState(() {
+        _transferIndex = result;
+        _transferCcy = _transferCcyList[result];
+      });
+    }
+  }
+
+  //账号弹窗
+  _accountDialog() async {
+    final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
-          return HsgSingleChoiceDialog(
-            title: S.of(context).currency_choice,
-            items: //ccyListPlay,
-                ccyList,
-            positiveButton: S.of(context).confirm,
-            negativeButton: S.of(context).cancel,
-            lastSelectedPosition: _position,
+          return HsgBottomSingleChoice(
+            title: S.current.account_lsit,
+            items: _accountList,
+            lastSelectedPosition: _accountIndex,
           );
         });
-
     if (result != null && result != false) {
-      //货币种类
       setState(() {
-        _position = result;
-        _changedCcyTitle = ccyList[_position];
+        _accountIndex = result;
+        _account = _accountList[result];
       });
-      //余额
-      //  _changedRateTitle = totalBalances[result];
-      _getCardTotals(_changedAccountTitle);
+      _getCardTotal(_account);
     }
   }
 
@@ -448,23 +489,17 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       body: CustomScrollView(
         slivers: <Widget>[
           _gaySliver,
-          transferPayerWidget(
-              context,
-              _limitMoney,
-              _changedCcyTitle,
-              _currBal,
-              _changedAccountTitle,
-              ccy,
-              singleLimit,
-              totalBalance,
-              cardNo,
-              payeeBankCode,
-              money,
-              _amountInputChange,
-              _selectAccount,
-              _getCcy,
-              _getCardTotals,
-              _transferMoneyController),
+          TransferAccount(
+            payCcy: _payCcy,
+            transferCcy: _transferCcy,
+            limit: _limit,
+            account: _account,
+            balance: _balance,
+            transferMoneyController: _transferMoneyController,
+            payCcyDialog: payCcyDialog,
+            transferCcyDialog: transferCcyDialog,
+            accountDialog: _accountDialog,
+          ),
           SliverToBoxAdapter(
             child: Container(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -486,22 +521,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               ),
             ),
           ),
-          transferPayeeWidget(
-              payeeCardNo,
-              payeeName,
-              _accountSelect,
-              payeeNameForSelects,
-              _getImage,
-              context,
-              S.current.transfer_in,
-              S.current.company_name,
-              S.current.account_num,
-              S.current.please_input,
-              S.current.please_input,
-              _nameInputChange,
-              _accountInputChange,
-              _companyController,
-              _accountController),
+          _payeeWidget(),
           SliverToBoxAdapter(
             child: Container(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -567,9 +587,72 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             ),
           ),
           //提交按钮
-          getButton(S.current.submit, _isClick),
+          // getButton(S.current.submit, _isClick),
+          SliverToBoxAdapter(
+            child: Container(
+              margin: EdgeInsets.only(top: 100, bottom: 50),
+              child: HsgButton.button(
+                  title: '下一步',
+                  click:
+                      //  _isClick()
+                      true
+                          ? () {
+                              Navigator.pushNamed(
+                                  context, pageTransferInternationalPreview,
+                                  arguments: transferData);
+                            }
+                          : null),
+            ),
+          ),
         ],
       ),
+    );
+  }
+
+  //收款方
+  Widget _payeeWidget() {
+    return SliverToBoxAdapter(
+      child: Container(
+        color: Colors.white,
+        margin: EdgeInsets.only(top: 20),
+        padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+        child: Column(
+          children: [
+            _payeeName(),
+            TextFieldContainer(
+              title: '收款方名称',
+              hintText: '请输入收款方名称',
+              widget: _getImage(),
+              keyboardType: TextInputType.text,
+              // controller: _nameController,
+              // callback: _boolBut,
+              isWidget: true,
+            ),
+            TextFieldContainer(
+              title: '收款人账号',
+              hintText: '请输入收款人账号',
+              keyboardType: TextInputType.number,
+              controller: _accountController,
+              // callback: _boolBut,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _payeeName() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          child: Text(
+            '收款方',
+            style: TextStyle(color: HsgColors.describeText, fontSize: 13),
+            textAlign: TextAlign.right,
+          ),
+        ),
+      ],
     );
   }
 
@@ -590,10 +673,13 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           },
         );
       },
-      child: Image(
-        image: AssetImage('images/login/login_input_account.png'),
-        width: 20,
-        height: 20,
+      child: Container(
+        margin: EdgeInsets.only(left: 5),
+        child: Image(
+          image: AssetImage('images/login/login_input_account.png'),
+          width: 20,
+          height: 20,
+        ),
       ),
     );
   }
@@ -784,9 +870,9 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         if (element is GetCardListResp) {
           setState(() {
             //付款方卡号
-            cardNo = element.cardList[0].cardNo;
+            _account = element.cardList[0].cardNo;
             element.cardList.forEach((e) {
-              cardNoList.add(e.cardNo);
+              _accountList.add(e.cardNo);
             });
             //付款方银行名字
             payeeBankCode = element.cardList[0].ciName;
@@ -795,9 +881,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             //付款方姓名
             payerName = element.cardList[0].ciName;
           });
-          setState(() {
-            _getCardTotal(cardNo);
-          });
+          _getCardTotal(_account);
         }
       });
     });
@@ -815,20 +899,19 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         // 通过卡号查询余额
         if (element is GetSingleCardBalResp) {
           setState(() {
+            //币种
+            if (_payCcy == '') {
+              _payCcy = element.cardListBal[0].ccy;
+            }
             //余额
+            _balance = element.cardListBal[0].currBal;
+            _payCcyList.clear();
             element.cardListBal.forEach((element) {
-              ccyListOne.clear();
-              ccyListOne.add(element.ccy);
-              // if (element.ccy == 'USD') {
-              //   _currBal = element.currBal;
-              //   _changedCcyTitle = 'USD';
-              //   _loacalCurrBal = _currBal;
-              // }
-              if (element.ccy == 'CNY') {
-                _currBal = element.currBal;
-                _changedCcyTitle = 'CNY';
-                _loacalCurrBal = _currBal;
+              _payCcyList.add(element.ccy);
+              if (element.ccy == _payCcy) {
+                _balance = element.currBal;
               }
+              _payCcy = element.ccy;
             });
           });
         }
@@ -885,8 +968,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //判断是否可以点击
   _isClick() {
-    if (money > 0 &&
-        _payeeAddressController.text.length > 0 &&
+    if (_payeeAddressController.text.length > 0 &&
         _companyController.text.length > 0 &&
         _accountController.text.length > 0 &&
         _countryText != S.current.please_select &&
@@ -895,13 +977,9 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _payerAddressController.text.length > 0 &&
         _transferFee != S.current.please_select &&
         _feeUse != S.current.please_select) {
-      return () {
-        _openBottomSheet();
-
-        print('提交');
-      };
+      return true;
     } else {
-      return null;
+      return false;
     }
   }
 

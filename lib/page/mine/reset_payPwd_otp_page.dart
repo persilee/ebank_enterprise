@@ -1,35 +1,29 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
 ///
-///@desc   修改交易密码
-///@author hlx
-///
+/// Author: zhangqirong
+/// Date: 2021-03-17
+
 import 'dart:async';
-import 'package:ebank_mobile/data/source/mine_pay_pwdApi.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
-import 'package:ebank_mobile/data/source/model/get_verification_code.dart';
-import 'package:ebank_mobile/data/source/model/set_payment_pwd.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/util/encrypt_util.dart';
-import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 
-class ChangePayPage extends StatefulWidget {
+class ResetPayPwdPage extends StatefulWidget {
   @override
-  _ChangePayPageState createState() => _ChangePayPageState();
+  _ResetPayPwdPageState createState() => _ResetPayPwdPageState();
 }
 
 //表单状态
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-class _ChangePayPageState extends State<ChangePayPage> {
-  TextEditingController _oldPwd = TextEditingController();
-  TextEditingController _newPwd = TextEditingController();
-  TextEditingController _confimPwd = TextEditingController();
+class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
+  TextEditingController _phoneNumber = TextEditingController();
   TextEditingController _sms = TextEditingController();
 
   Timer _timer;
@@ -47,7 +41,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: AppBar(
-          title: Text(S.of(context).setPayPwd),
+          title: Text(S.of(context).resetPayPsd),
           centerTitle: true,
           elevation: 0,
         ),
@@ -59,32 +53,26 @@ class _ChangePayPageState extends State<ChangePayPage> {
               child: ListView(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(S.of(context).plaseSetPayPsd),
-                  ),
-                  Container(
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(bottom: 16),
+                    margin: EdgeInsets.only(bottom: 16, top: 16),
                     color: Colors.white,
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        InputList(S.of(context).oldPayPwd,
-                            S.of(context).placeOldPwd, _oldPwd),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
-                        InputList(S.of(context).newPayPwd,
-                            S.of(context).placeNewPwd, _newPwd),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
-                        InputList(S.of(context).confimPayPwd,
-                            S.of(context).placeConfimPwd, _confimPwd),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Text(
+                            S.of(context).plaseSetPayPsd,
+                            style: TextStyle(
+                                color: Color(0xEE7A7A7A), fontSize: 13),
+                          ),
+                        ),
+                        InputList(
+                          S.of(context).phone_num,
+                          S.of(context).phone_num,
+                          _phoneNumber,
+                        ),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
@@ -115,7 +103,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
                     height: 44.0,
                     width: MediaQuery.of(context).size.width,
                     child: RaisedButton(
-                      child: Text(S.of(context).submit),
+                      child: Text(S.of(context).next_step),
                       onPressed: _submit()
                           ? () {
                               _submitData();
@@ -136,40 +124,12 @@ class _ChangePayPageState extends State<ChangePayPage> {
 
   //提交按钮
   _submitData() async {
-    RegExp postalcode1 = new RegExp(r'^\d{6}$');
-    if (_newPwd.text != _confimPwd.text) {
-      Fluttertoast.showToast(msg: S.of(context).differentPwd);
-    } else if (_newPwd.text == _oldPwd.text) {
-      Fluttertoast.showToast(msg: S.of(context).differnet_old_new_pwd);
-    } else if (!postalcode1.hasMatch(_newPwd.text)) {
-      Fluttertoast.showToast(msg: S.of(context).set_pay_password_prompt);
-    } else {
-      HSProgressHUD.show();
-      final prefs = await SharedPreferences.getInstance();
-      String userID = prefs.getString(ConfigKey.USER_ID);
-      String oldPwd = EncryptUtil.aesEncode(_oldPwd.text);
-      String newPwd = EncryptUtil.aesEncode(_newPwd.text);
-      print(oldPwd);
-      print(newPwd);
-      PaymentPwdRepository()
-          .updateTransPassword(
-        SetPaymentPwdReq(oldPwd, newPwd, userID, _sms.text),
-        'updateTransPassword',
-      )
-          .then((data) {
-        HSProgressHUD.showError(status: S.current.changPwsSuccess);
-        Navigator.pop(context);
-        HSProgressHUD.dismiss();
-      }).catchError((e) {
-        // Fluttertoast.showToast(msg: e.toString());
-        HSProgressHUD.showError(status: e.toString());
-        print('${e.toString()}');
-      });
-    }
+    //请求验证手机号验证码，成功后跳转到身份验证界面
+    Navigator.pushNamed(context, iDcardVerification);
   }
 
   bool _submit() {
-    if (_oldPwd.text != '' && _newPwd.text != '' && _confimPwd.text != '') {
+    if (_phoneNumber.text.length > 0 && _sms.text.length > 0) {
       return true;
     } else {
       return false;
@@ -222,9 +182,17 @@ class _ChangePayPageState extends State<ChangePayPage> {
 
   //获取验证码接口
   _getVerificationCode() async {
-    HSProgressHUD.show();
     // final prefs = await SharedPreferences.getInstance();
     // String userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
+    RegExp postalcode = new RegExp(r'\D');
+    if (postalcode.hasMatch(_phoneNumber.text)) {
+      Fluttertoast.showToast(msg: '请输入正确的手机号!');
+      return;
+    } else if (_phoneNumber.text.length <= 0) {
+      Fluttertoast.showToast(msg: '请输入手机号!');
+      return;
+    }
+    HSProgressHUD.show();
     VerificationCodeRepository()
         // .sendSmsByAccount(
         //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
@@ -263,7 +231,6 @@ class _ChangePayPageState extends State<ChangePayPage> {
   }
 }
 
-//封装一行
 class InputList extends StatelessWidget {
   InputList(this.labText, this.placeholderText, this.inputValue,
       {this.isShow = false});
@@ -287,7 +254,7 @@ class InputList extends StatelessWidget {
               maxLines: 1, //最大行数
               autocorrect: true, //是否自动更正
               autofocus: true, //是否自动对焦
-              obscureText: true, //是否是密码
+              obscureText: false, //是否是密码
               textAlign: TextAlign.right, //文本对齐方式
               onChanged: (text) {
                 //内容改变的回调
@@ -298,9 +265,9 @@ class InputList extends StatelessWidget {
                 print('submit $text');
               },
               enabled: true, //是否禁用
-              inputFormatters: <TextInputFormatter>[
-                LengthLimitingTextInputFormatter(6), //限制长度
-              ],
+              // inputFormatters: <TextInputFormatter>[
+              //   LengthLimitingTextInputFormatter(6), //限制长度
+              // ],
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: this.placeholderText,
