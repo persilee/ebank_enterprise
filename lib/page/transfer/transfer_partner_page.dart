@@ -97,7 +97,7 @@ class _TransferPartnerState extends State<TransferPartner> {
     });
     return Scaffold(
         appBar: AppBar(
-          title: Text('收款范本'),
+          title: Text(S.current.transfer_model),
           centerTitle: true,
           elevation: 0,
           actions: [
@@ -338,7 +338,9 @@ class _TransferPartnerState extends State<TransferPartner> {
               ),
             ),
             Text(
-              partner.transferType == '0' ? '本行' : '跨行',
+              partner.transferType == '0'
+                  ? S.current.transfer_type_0_short
+                  : S.current.transfer_type_1_short,
               style: TextStyle(fontSize: 13, color: HsgColors.hintText),
             ),
           ],

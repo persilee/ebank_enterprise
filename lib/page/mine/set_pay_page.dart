@@ -23,73 +23,93 @@ class _SetPayPageState extends State<SetPayPage> {
   TextEditingController _confimPwd = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _newPwd.addListener(() {
+      setState(() {});
+    });
+    _confimPwd.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: AppBar(
-          title: Text(S.of(context).resetPayPsd),
-          centerTitle: true,
-          elevation: 0,
-        ),
-        body: Container(
+      appBar: AppBar(
+        title: Text(S.of(context).resetPayPsd),
+        centerTitle: true,
+        elevation: 0,
+      ),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
           color: HsgColors.commonBackground,
           child: Form(
-              //绑定状态属性
-              key: _formKey,
-              child: ListView(
-                children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(bottom: 16, top: 16),
-                    color: Colors.white,
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Text(
-                            S.of(context).plaseSetPayPsd,
-                            style: TextStyle(
-                                color: Color(0xEE7A7A7A), fontSize: 13),
-                          ),
+            //绑定状态属性
+            key: _formKey,
+            child: ListView(
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.only(bottom: 16, top: 16),
+                  color: Colors.white,
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Text(
+                          S.of(context).plaseSetPayPsd,
+                          style:
+                              TextStyle(color: Color(0xEE7A7A7A), fontSize: 13),
                         ),
-                        //新密码
-                        InputList(S.of(context).newPayPwd,
-                            S.of(context).placeNewPwd, _newPwd),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
-                        //确认新密码
-                        InputList(S.of(context).confimPayPwd,
-                            S.of(context).placeConfimPwd, _confimPwd),
-                      ],
-                    ),
+                      ),
+                      //新密码
+                      InputList(S.of(context).newPayPwd,
+                          S.of(context).placeNewPwd, _newPwd),
+                      Divider(
+                          height: 1,
+                          color: HsgColors.divider,
+                          indent: 3,
+                          endIndent: 3),
+                      //确认新密码
+                      InputList(S.of(context).confimPayPwd,
+                          S.of(context).placeConfimPwd, _confimPwd),
+                    ],
                   ),
-                  Container(
-                    margin: EdgeInsets.all(40), //外边距
-                    height: 44.0,
-                    width: MediaQuery.of(context).size.width,
-                    child: RaisedButton(
-                      child: Text(S.of(context).submit),
-                      onPressed: _submit()
-                          ? () {
-                              _submitData();
-                            }
-                          : null,
-                      color: HsgColors.accent,
-                      textColor: Colors.white,
-                      disabledTextColor: Colors.white,
-                      disabledColor: Color(0xFFD1D1D1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5) //设置圆角
-                          ),
-                    ),
-                  )
-                ],
-              )),
-        ));
+                ),
+                Container(
+                  margin: EdgeInsets.all(40), //外边距
+                  height: 44.0,
+                  width: MediaQuery.of(context).size.width,
+                  child: RaisedButton(
+                    child: Text(S.of(context).submit),
+                    onPressed: _submit()
+                        ? () {
+                            _submitData();
+                          }
+                        : null,
+                    color: HsgColors.accent,
+                    textColor: Colors.white,
+                    disabledTextColor: Colors.white,
+                    disabledColor: Color(0xFFD1D1D1),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5) //设置圆角
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   bool _submit() {

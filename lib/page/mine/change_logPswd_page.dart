@@ -45,108 +45,131 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _oldPwd.addListener(() {
+      setState(() {});
+    });
+    _newPwd.addListener(() {
+      setState(() {});
+    });
+    _confimPwd.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: AppBar(
-          title: Text(S.of(context).setChangLoginPasd),
-          centerTitle: true,
-          elevation: 0,
-        ),
-        body: Container(
+      appBar: AppBar(
+        title: Text(S.of(context).setChangLoginPasd),
+        centerTitle: true,
+        elevation: 0,
+      ),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
           color: HsgColors.commonBackground,
           child: Form(
-              //绑定状态属性
-              key: _formKey,
-              child: ListView(
-                children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(bottom: 16, top: 16),
-                    color: Colors.white,
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Text(
-                            S.of(context).plaseSetPsd,
-                            style: TextStyle(
-                                color: Color(0xEE7A7A7A), fontSize: 13),
-                          ),
+            //绑定状态属性
+            key: _formKey,
+            child: ListView(
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.only(bottom: 16, top: 16),
+                  color: Colors.white,
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Text(
+                          S.of(context).plaseSetPsd,
+                          style:
+                              TextStyle(color: Color(0xEE7A7A7A), fontSize: 13),
                         ),
-                        InputList(S.of(context).oldPwd,
-                            S.of(context).placeOldPwd, _oldPwd),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
-                        InputList(S.of(context).newPwd,
-                            S.of(context).placeNewPwd, _newPwd),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
-                        InputList(S.of(context).confimPwd,
-                            S.of(context).placeConfimPwd, _confimPwd),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
-                        Container(
-                          height: 50,
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 120,
-                                child: Text(S.of(context).sendmsm),
-                              ),
-                              Expanded(
-                                child: otpTextField(),
-                              ),
-                              Padding(padding: EdgeInsets.only(left: 10)),
-                              SizedBox(
-                                width: 90,
-                                height: 32,
-                                child: _otpButton(),
-                              )
-                            ],
-                          ),
+                      ),
+                      InputList(S.of(context).oldPwd, S.of(context).placeOldPwd,
+                          _oldPwd),
+                      Divider(
+                          height: 1,
+                          color: HsgColors.divider,
+                          indent: 3,
+                          endIndent: 3),
+                      InputList(S.of(context).newPwd, S.of(context).placeNewPwd,
+                          _newPwd),
+                      Divider(
+                          height: 1,
+                          color: HsgColors.divider,
+                          indent: 3,
+                          endIndent: 3),
+                      InputList(S.of(context).confimPwd,
+                          S.of(context).placeConfimPwd, _confimPwd),
+                      Divider(
+                          height: 1,
+                          color: HsgColors.divider,
+                          indent: 3,
+                          endIndent: 3),
+                      Container(
+                        height: 50,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 120,
+                              child: Text(S.of(context).sendmsm),
+                            ),
+                            Expanded(
+                              child: otpTextField(),
+                            ),
+                            Padding(padding: EdgeInsets.only(left: 10)),
+                            SizedBox(
+                              width: 90,
+                              height: 32,
+                              child: _otpButton(),
+                            )
+                          ],
                         ),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
-                      ],
-                    ),
+                      ),
+                      Divider(
+                          height: 1,
+                          color: HsgColors.divider,
+                          indent: 3,
+                          endIndent: 3),
+                    ],
                   ),
-                  Container(
-                    margin: EdgeInsets.all(40), //外边距
-                    height: 44.0,
-                    width: MediaQuery.of(context).size.width,
-                    child: RaisedButton(
-                      child: Text(S.of(context).submit),
-                      onPressed: _submit()
-                          ? () {
-                              _updateLoginPassword();
-                            }
-                          : null,
-                      color: HsgColors.accent,
-                      textColor: Colors.white,
-                      disabledTextColor: Colors.white,
-                      disabledColor: Color(0xFFD1D1D1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5) //设置圆角
-                          ),
-                    ),
-                  )
-                ],
-              )),
-        ));
+                ),
+                Container(
+                  margin: EdgeInsets.all(40), //外边距
+                  height: 44.0,
+                  width: MediaQuery.of(context).size.width,
+                  child: RaisedButton(
+                    child: Text(S.of(context).submit),
+                    onPressed: _submit()
+                        ? () {
+                            _updateLoginPassword();
+                          }
+                        : null,
+                    color: HsgColors.accent,
+                    textColor: Colors.white,
+                    disabledTextColor: Colors.white,
+                    disabledColor: Color(0xFFD1D1D1),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5) //设置圆角
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   //验证码输入框
@@ -155,6 +178,9 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       textAlign: TextAlign.end,
       keyboardType: TextInputType.number,
       controller: _sms,
+      onChanged: (text) {
+        setState(() {});
+      },
       decoration: InputDecoration.collapsed(
         hintText: S.current.please_input,
         hintStyle: TextStyle(
@@ -170,8 +196,8 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   }
 
   //获取验证码按钮
-  OutlineButton _otpButton() {
-    return OutlineButton(
+  FlatButton _otpButton() {
+    return FlatButton(
       onPressed: countdownTime > 0
           ? null
           : () {
@@ -179,17 +205,19 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
             },
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
       padding: EdgeInsets.symmetric(horizontal: 8),
+      color: Color(0xeeEFF3FF),
       //文字颜色
       textColor: HsgColors.blueTextColor,
-      borderSide: BorderSide(color: HsgColors.blueTextColor, width: 0.5),
       //画圆角
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(50),
       ),
-      disabledTextColor: HsgColors.describeText,
-      disabledBorderColor: HsgColors.describeText,
+      disabledTextColor: HsgColors.blueTextColor,
+      disabledColor: Color(0xeeEFF3FF),
       child: Text(
-        countdownTime > 0 ? '${countdownTime}s' : S.current.getVerificationCode,
+        countdownTime > 0
+            ? '${countdownTime}s'
+            : S.of(context).getVerificationCode,
         style: TextStyle(fontSize: 14),
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

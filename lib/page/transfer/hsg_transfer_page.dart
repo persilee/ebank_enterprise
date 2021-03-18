@@ -342,7 +342,7 @@ class _TransferPageState extends State<TransferPage> {
           ),
           Row(
             children: [
-              data.payeeCardNo.length > 13
+              data.payeeCardNo.length > 12
                   ? Container(
                       width: 100,
                       child: Text(
@@ -373,7 +373,9 @@ class _TransferPageState extends State<TransferPage> {
                 ),
               ),
               Text(
-                data.transferType == '0' ? '本行' : '跨行',
+                data.transferType == '0'
+                    ? S.current.transfer_type_0_short
+                    : S.current.transfer_type_1_short,
                 style: TextStyle(fontSize: 13, color: HsgColors.describeText),
                 overflow: TextOverflow.ellipsis,
               ),
