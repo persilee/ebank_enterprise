@@ -80,6 +80,7 @@ class _SetPayPageState extends State<SetPayPage> {
                           : null,
                       color: HsgColors.accent,
                       textColor: Colors.white,
+                      disabledTextColor: Colors.white,
                       disabledColor: Color(0xFFD1D1D1),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5) //设置圆角
@@ -141,7 +142,10 @@ class InputList extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(this.labText),
+          Container(
+            width: 180,
+            child: Text(this.labText),
+          ),
           Expanded(
             child: TextField(
               controller: this.inputValue,

@@ -59,16 +59,21 @@ class _ChangePayPageState extends State<ChangePayPage> {
               child: ListView(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(S.of(context).plaseSetPayPsd),
-                  ),
-                  Container(
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(bottom: 16),
+                    margin: EdgeInsets.only(bottom: 16, top: 16),
                     color: Colors.white,
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Text(
+                            S.of(context).plaseSetPayPsd,
+                            style: TextStyle(
+                                color: Color(0xEE7A7A7A), fontSize: 13),
+                          ),
+                        ),
                         InputList(S.of(context).oldPayPwd,
                             S.of(context).placeOldPwd, _oldPwd),
                         Divider(
@@ -94,7 +99,10 @@ class _ChangePayPageState extends State<ChangePayPage> {
                           height: 50,
                           child: Row(
                             children: [
-                              Text(S.of(context).sendmsm),
+                              Container(
+                                width: 120,
+                                child: Text(S.of(context).sendmsm),
+                              ),
                               Expanded(
                                 child: otpTextField(),
                               ),
@@ -107,6 +115,11 @@ class _ChangePayPageState extends State<ChangePayPage> {
                             ],
                           ),
                         ),
+                        Divider(
+                            height: 1,
+                            color: HsgColors.divider,
+                            indent: 3,
+                            endIndent: 3),
                       ],
                     ),
                   ),
@@ -280,7 +293,10 @@ class InputList extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(this.labText),
+          Container(
+            width: 180,
+            child: Text(this.labText),
+          ),
           Expanded(
             child: TextField(
               controller: this.inputValue,

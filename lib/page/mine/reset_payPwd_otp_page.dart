@@ -93,7 +93,10 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                           height: 50,
                           child: Row(
                             children: [
-                              Text(S.of(context).sendmsm),
+                              Container(
+                                width: 120,
+                                child: Text(S.of(context).sendmsm),
+                              ),
                               Expanded(
                                 child: otpTextField(),
                               ),
