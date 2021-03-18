@@ -160,6 +160,7 @@ flutter:
 
     #其他
     - images/transferIcon/transfer_sample_placeholder.png
+    - images/transferIcon/transfer_head.png
 
     - images/transferIcon/transfer_features_icon/transfer_features_scan.png
     - images/transferIcon/transfer_features_icon/transfer_features_acount.png

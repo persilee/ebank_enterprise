@@ -107,6 +107,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   int _transferIndex = 0;
   List<String> _transferCcyList = ['HKD', 'CNY', 'USD'];
 
+  //本地币种
+  String _localeCcy = '';
+
   //账户选择
   String _account = '';
   List<String> _accountList = [];
@@ -114,6 +117,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   //余额
   String _balance = '';
+  List<String> _balanceList = [];
 
   //限额
   String _limit = '';
@@ -129,15 +133,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   void initState() {
     super.initState();
 
-    _transferMoneyController.addListener(() {
-      // _amountInputChange(_transferMoneyController.text);
-      _boolBut(); //金额输入框时调用
-    });
     _loadTransferData();
-  }
-
-  _amountInputChange(String title) {
-    money = double.parse(title);
   }
 
   @override
@@ -172,6 +168,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             account: _account,
             balance: _balance,
             transferMoneyController: _transferMoneyController,
+            callback: _boolBut,
             payCcyDialog: payCcyDialog,
             transferCcyDialog: transferCcyDialog,
             accountDialog: _accountDialog,
@@ -181,20 +178,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           //附言
           _remarkWidget(),
           //提交按钮
-          SliverToBoxAdapter(
-            child: Container(
-              margin: EdgeInsets.only(top: 100),
-              child: HsgButton.button(
-                  title: '下一步',
-                  click: _boolBut()
-                      ? () {
-                          Navigator.pushNamed(
-                              context, pageTransferInternalPreview,
-                              arguments: transferData);
-                        }
-                      : null),
-            ),
-          ),
+          _submitButton(),
         ],
       ),
     );
@@ -288,6 +272,23 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     }
   }
 
+  //提交按钮
+  Widget _submitButton() {
+    return SliverToBoxAdapter(
+      child: Container(
+        margin: EdgeInsets.only(top: 100),
+        child: HsgButton.button(
+            title: '下一步',
+            click: _boolBut()
+                ? () {
+                    Navigator.pushNamed(context, pageTransferInternalPreview,
+                        arguments: transferData);
+                  }
+                : null),
+      ),
+    );
+  }
+
   Future transferCcyDialog() async {
     final result = await showDialog(
       context: context,
@@ -333,15 +334,16 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   _boolBut() {
     if (_transferMoneyController.text != '' &&
         _nameController.text != '' &&
-        _accountController.text != '') {
-      transferData.add(_payCcy);
-      transferData.add(_transferMoneyController.text);
-      transferData.add(_account);
-      transferData.add("121.5");
-      transferData.add(_nameController.text);
-      transferData.add(_accountController.text);
-      transferData.add(_transferCcy);
-      transferData.add(_remarkController.text);
+        _accountController.text != '' &&
+        _transferCcy != '') {
+      // transferData.add(_payCcy);
+      // transferData.add(_transferMoneyController.text);
+      // transferData.add(_account);
+      // transferData.add("121.5");
+      // transferData.add(_nameController.text);
+      // transferData.add(_accountController.text);
+      // transferData.add(_transferCcy);
+      // transferData.add(_remarkController.text);
       return true;
     } else {
       return false;
@@ -419,15 +421,25 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _payCcy = element.cardListBal[0].ccy;
             }
             //余额
-            _balance = element.cardListBal[0].currBal;
+            if (_balance == '') {
+              _balance = element.cardListBal[0].currBal;
+            }
             _payCcyList.clear();
+            _balanceList.clear();
             element.cardListBal.forEach((element) {
               _payCcyList.add(element.ccy);
-              if (element.ccy == _payCcy) {
-                _balance = element.currBal;
-              }
-              _payCcy = element.ccy;
+              _balanceList.add(element.currBal);
             });
+            if (_payCcyList.length > 1) {
+              for (int i = 0; i < _payCcyList.length; i++) {
+                if (_payCcy == _payCcyList[i]) {
+                  _balance = _balanceList[i];
+                }
+              }
+            } else {
+              _payCcy = _payCcyList[0];
+              _balance = _balanceList[0];
+            }
           });
         }
         //查询额度

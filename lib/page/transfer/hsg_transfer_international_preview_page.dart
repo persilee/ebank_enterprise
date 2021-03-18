@@ -30,7 +30,7 @@ class _TransferInternalPreviewPageState
               child: HsgButton.button(
                 title: '确认',
                 click: () {
-                  Navigator.pushNamed(context, pageTransfer);
+                  Navigator.of(context)..pop()..pop();
                 },
               ),
             ),

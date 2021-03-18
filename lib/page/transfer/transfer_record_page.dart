@@ -18,7 +18,6 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_dotted_line.dart';
-import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
@@ -38,7 +37,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   List<String> _cradLists = []; //银行卡列表
   List<String> _imageUrl = []; //银行卡图标列表
   int _position = 0;
-  String _time = intl.S.current.the_same_month; //时间
+  // String _time = intl.S.current.the_same_month; //时间
+  String _time = '自定义筛选';
   String _endDate =
       DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now()); //结束时间
   String _startDate = DateFormat('yyyy-MM-dd 00:00:00')

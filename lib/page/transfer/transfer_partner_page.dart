@@ -354,8 +354,7 @@ class _TransferPartnerState extends State<TransferPartner> {
             height: 30,
           )
         : Image(
-            image: AssetImage(
-                'images/transferIcon/transfer_sample_placeholder.png'),
+            image: AssetImage('images/transferIcon/transfer_head.png'),
             width: 30,
             height: 30,
           );

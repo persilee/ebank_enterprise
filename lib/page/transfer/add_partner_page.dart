@@ -629,17 +629,17 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       if (_bankName != S.current.please_select &&
           _nameController.text.length > 0 &&
           _acountController.text.length > 0 &&
-          _smsController.text.length > 0 &&
           _transferType != S.current.please_select) {
-        if (_showInternational == true) {
-          if (_payeeAdressController.text.length > 0) {
-            _isInputed = true;
-          } else {
-            _isInputed = false;
-          }
-        } else {
-          _isInputed = true;
-        }
+        // if (_showInternational == true) {
+        //   if (_payeeAdressController.text.length > 0) {
+        //     _isInputed = true;
+        //   } else {
+        //     _isInputed = false;
+        //   }
+        // } else {
+        //   _isInputed = true;
+        // }
+        _isInputed = true;
       } else {
         _isInputed = false;
       }
