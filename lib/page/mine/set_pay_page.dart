@@ -7,6 +7,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class SetPayPage extends StatefulWidget {
@@ -149,6 +150,10 @@ class InputList extends StatelessWidget {
               autofocus: true, //是否自动对焦
               obscureText: true, //是否是密码
               textAlign: TextAlign.right, //文本对齐方式
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                LengthLimitingTextInputFormatter(6), //限制长度
+              ],
               onChanged: (text) {
                 //内容改变的回调
                 print('change $text');
