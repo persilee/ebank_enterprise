@@ -342,7 +342,7 @@ class _TransferPageState extends State<TransferPage> {
           ),
           Row(
             children: [
-              data.payeeCardNo.length > 12
+              data.payeeCardNo.length > 13
                   ? Container(
                       width: 100,
                       child: Text(

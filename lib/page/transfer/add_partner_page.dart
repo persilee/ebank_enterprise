@@ -41,6 +41,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   bool _showInternational = false; //国际转账
   var _alias = '';
   var words = 20;
+  String _countryText = '';
+  List<String> countryList = ['中国', '荷兰', '美国', '俄罗斯'];
   @override
   void initState() {
     super.initState();
@@ -375,14 +377,34 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           //国家地区
           SelectInkWell(
             title: '国家/地区',
-            item: '',
-            onTap: () {},
+            item: _countryText,
+            onTap: () {
+              _selectCountry();
+            },
           ),
           _payeeAdress(_payeeAdressController),
           Divider(height: 0.5, color: HsgColors.divider),
         ],
       ),
     );
+  }
+
+  //选择国家地区
+  _selectCountry() async {
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return BottomMenu(
+            title: '国家/地区',
+            items: countryList,
+          );
+        });
+    if (result != null && result != false) {
+      setState(() {
+        _countryText = countryList[result];
+        _check();
+      });
+    }
   }
 
   //转账类型弹窗
@@ -402,6 +424,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             _centerSwiftController.text = '';
             _payeeAdressController.text = '';
           }
+          _check();
         });
       },
     );
@@ -428,7 +451,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                 hintStyle: TextStyle(color: HsgColors.hintText, fontSize: 14),
                 border: InputBorder.none,
               ),
-              onChanged: (text) {},
+              onChanged: (text) {
+                _check();
+              },
             ),
           ),
         ),
@@ -630,16 +655,15 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           _nameController.text.length > 0 &&
           _acountController.text.length > 0 &&
           _transferType != S.current.please_select) {
-        // if (_showInternational == true) {
-        //   if (_payeeAdressController.text.length > 0) {
-        //     _isInputed = true;
-        //   } else {
-        //     _isInputed = false;
-        //   }
-        // } else {
-        //   _isInputed = true;
-        // }
-        _isInputed = true;
+        if (_showInternational) {
+          if (_payeeAdressController.text.length > 0 && _countryText != '') {
+            _isInputed = true;
+          } else {
+            _isInputed = false;
+          }
+        } else {
+          _isInputed = true;
+        }
       } else {
         _isInputed = false;
       }
