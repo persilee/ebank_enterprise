@@ -92,6 +92,12 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
     // });
     // _getUserCardList();
     _getIdCardList();
+    _realName.addListener(() {
+      setState(() {});
+    });
+    _certNo.addListener(() {
+      setState(() {});
+    });
   }
 
   //账户列表
@@ -388,7 +394,10 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   // }
 
   bool _submit() {
-    if (_realName.text.length > 0 && _certNo.text.length > 0) {
+    print(_certType);
+    if (_realName.text.length > 0 &&
+        _certNo.text.length > 0 &&
+        _certType != '') {
       return true;
     } else {
       return false;

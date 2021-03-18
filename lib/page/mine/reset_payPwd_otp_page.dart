@@ -32,9 +32,6 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   @override
   void initState() {
     super.initState();
-    _sms.addListener(() {
-      setState(() {});
-    });
     _phoneNumber.addListener(() {
       setState(() {});
     });
@@ -232,6 +229,9 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       textAlign: TextAlign.end,
       keyboardType: TextInputType.number,
       controller: _sms,
+      onChanged: (text) {
+        setState(() {});
+      },
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.allow(RegExp("[0-9]")),
         LengthLimitingTextInputFormatter(6), //限制长度

@@ -23,6 +23,17 @@ class _SetPayPageState extends State<SetPayPage> {
   TextEditingController _confimPwd = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _newPwd.addListener(() {
+      setState(() {});
+    });
+    _confimPwd.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: AppBar(

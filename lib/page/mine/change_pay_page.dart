@@ -44,6 +44,20 @@ class _ChangePayPageState extends State<ChangePayPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _oldPwd.addListener(() {
+      setState(() {});
+    });
+    _newPwd.addListener(() {
+      setState(() {});
+    });
+    _confimPwd.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: AppBar(
@@ -136,6 +150,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
                           : null,
                       color: HsgColors.accent,
                       textColor: Colors.white,
+                      disabledTextColor: Colors.white,
                       disabledColor: Color(0xFFD1D1D1),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5) //设置圆角
@@ -262,6 +277,9 @@ class _ChangePayPageState extends State<ChangePayPage> {
       textAlign: TextAlign.end,
       keyboardType: TextInputType.number,
       controller: _sms,
+      onChanged: (text) {
+        setState(() {});
+      },
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
         LengthLimitingTextInputFormatter(6), //限制长度
