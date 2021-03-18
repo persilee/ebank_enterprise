@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -25,7 +26,8 @@ class CardListPage extends StatefulWidget {
 class _CardListPageState extends State<CardListPage> {
   var cards = [];
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
-  List<bool> isShow = <bool>[];
+  List<bool> _isShow = <bool>[];
+  List<GetCardLimitByCardNoResp> _cardLimitList = <GetCardLimitByCardNoResp>[];
 
   @override
   void initState() {
@@ -63,32 +65,41 @@ class _CardListPageState extends State<CardListPage> {
       child: Column(
         children: [
           getCard(cards[position], position),
-          isShow[position] ? _cardContent(cards[position]) : Container(),
+          _isShow[position]
+              ? _cardContent(cards[position], position)
+              : Container(),
         ],
       ),
       onTap: () {
         // go2Detail(cards[position]);
         setState(() {
-          if (isShow[position] == true) {
-            isShow[position] = false;
+          if (_isShow[position] == true) {
+            _isShow[position] = false;
           } else {
-            isShow[position] = true;
+            _isShow[position] = true;
           }
         });
-        // print(isShow);
+        // print(_isShow);
       },
     );
   }
 
-  Widget _cardContent(RemoteBankCard card) {
+  Widget _cardContent(RemoteBankCard card, int position) {
     return Container(
       margin: EdgeInsets.only(top: 20, bottom: 100),
       color: Colors.white,
       child: Column(
         children: [
-          _infoFrame('单笔限额', '0.00'),
-          _infoFrame('单日限额', '0.00'),
-          _infoFrame('单日笔数', '0.00'),
+          _infoFrame(
+              S.current.single_transfer_limit,
+              FormatUtil.formatSringToMoney(
+                  _cardLimitList[position].singleLimit)),
+          _infoFrame(
+              S.current.single_day_transfer_limit,
+              FormatUtil.formatSringToMoney(
+                  _cardLimitList[position].singleDayLimit)),
+          _infoFrame(S.current.single_day_transfer_count_limit,
+              _cardLimitList[position].singleDayCountLimit.toString()),
         ],
       ),
     );
@@ -106,7 +117,7 @@ class _CardListPageState extends State<CardListPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                width: 120,
+                width: 150,
                 child: Text(
                   left,
                   style: TextStyle(
@@ -133,7 +144,7 @@ class _CardListPageState extends State<CardListPage> {
   //灰色文字
   Widget _hintText(String text) {
     return Container(
-      width: 150,
+      width: 120,
       child: Text(
         text,
         textAlign: TextAlign.right,
@@ -154,9 +165,16 @@ class _CardListPageState extends State<CardListPage> {
         setState(() {
           cards.clear();
           cards.addAll(data.cardList);
-          if (isShow.length == 0) {
+          if (_isShow.length == 0 && _cardLimitList.length == 0) {
             for (int i = 0; i < cards.length; i++) {
-              isShow.add(false);
+              RemoteBankCard card = cards[i];
+              CardDataRepository()
+                  .getCardLimitByCardNo(GetCardLimitByCardNoReq(card.cardNo),
+                      'GetCardLimitByCardNoReq')
+                  .then((limit) {
+                _cardLimitList.add(limit);
+              });
+              _isShow.add(false);
             }
           }
         });
