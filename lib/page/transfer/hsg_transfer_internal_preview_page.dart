@@ -10,6 +10,7 @@ import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../page_route.dart';
 import 'data/transfer_internal_data.dart';
 
 class TransferInternalPreviewPage extends StatefulWidget {
@@ -40,7 +41,7 @@ class _TransferInternalPreviewPageState
               child: HsgButton.button(
                 title: S.current.confirm,
                 click: () {
-                  Navigator.of(context)..pop()..pop();
+                  Navigator.pushReplacementNamed(context, pageOperationResult);
                 },
               ),
             ),
@@ -72,13 +73,18 @@ class _TransferInternalPreviewPageState
           Divider(
             color: Color(0xffE1E1E1),
           ),
-          _getRowContent(S.current.transfer_from, transferData.transferOutAccount),
+          _getRowContent(
+              S.current.transfer_from, transferData.transferOutAccount),
           _getRowContent(S.current.to_amount,
               FormatUtil.formatSringToMoney(transferData.transferOutAmount)),
-          _getRowContent(S.current.payment_currency, transferData.transferOutCcy),
-          _getRowContent(S.current.receipt_side_name, transferData.transferIntoName),
-          _getRowContent(S.current.into_account, transferData.transferIntoAccount),
-          _getRowContent(S.current.transfer_into_currency, transferData.transferIntoCcy),
+          _getRowContent(
+              S.current.payment_currency, transferData.transferOutCcy),
+          _getRowContent(
+              S.current.receipt_side_name, transferData.transferIntoName),
+          _getRowContent(
+              S.current.into_account, transferData.transferIntoAccount),
+          _getRowContent(
+              S.current.transfer_into_currency, transferData.transferIntoCcy),
           _getRowContent(
               S.current.transfer_postscript,
               transferData.transferRemark == ''

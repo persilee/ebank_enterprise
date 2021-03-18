@@ -278,7 +278,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       child: Container(
         margin: EdgeInsets.only(top: 100, bottom: 50),
         child: HsgButton.button(
-            title: '下一步',
+            title: S.current.next_step,
             click: _isClick
                 ? () {
                     Navigator.pushNamed(
@@ -418,8 +418,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     Future.wait({
       CardDataRepository().getCardBalByCardNo(
           GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
-      CardDataRepository().getCardLimitByCardNo(
-          GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
+      // CardDataRepository().getCardLimitByCardNo(
+      //     GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
     }).then((value) {
       value.forEach((element) {
         // 通过卡号查询余额
@@ -468,7 +468,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         else if (element is GetCardLimitByCardNoResp) {
           setState(() {
             //单次限额
-            _limit = element.singleLimit;
+            // _limit = element.singleLimit;
           });
         }
       });

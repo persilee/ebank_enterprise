@@ -10,6 +10,7 @@ import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../page_route.dart';
 import 'data/transfer_international_data.dart';
 
 class TransferinternationalPreviewPage extends StatefulWidget {
@@ -40,7 +41,7 @@ class _TransferInternalPreviewPageState
               child: HsgButton.button(
                 title: S.current.confirm,
                 click: () {
-                  Navigator.of(context)..pop()..pop();
+                  Navigator.pushReplacementNamed(context, pageOperationResult);
                 },
               ),
             ),

@@ -7,6 +7,7 @@
  */
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
@@ -316,21 +317,29 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //选择国家地区
-  _selectCountry() async {
-    final result = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return BottomMenu(
-            title: '国家/地区',
-            items: countryList,
-          );
-        });
-    if (result != null && result != false) {
-      _countryText = countryList[result];
-    }
+  // _selectCountry() async {
+  //   final result = await showHsgBottomSheet(
+  //       context: context,
+  //       builder: (context) {
+  //         return BottomMenu(
+  //           title: '国家/地区',
+  //           items: countryList,
+  //         );
+  //       });
+  //   if (result != null && result != false) {
+  //     _countryText = countryList[result];
+  //   }
 
-    setState(() {
-      _position = result;
+  //   setState(() {
+  //     _position = result;
+  //   });
+  // }
+  _selectCountry() {
+    // FocusScope.of(context).requestFocus(FocusNode());
+    Navigator.pushNamed(context, countryOrRegionSelectPage).then((value) {
+      setState(() {
+        _countryText = (value as CountryRegionModel).nameEN;
+      });
     });
   }
 
@@ -678,7 +687,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       child: Container(
         margin: EdgeInsets.only(top: 100, bottom: 50),
         child: HsgButton.button(
-            title: '下一步',
+            title: S.current.next_step,
             click: _isClick()
                 ? () {
                     Navigator.pushNamed(
@@ -813,7 +822,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             child: GestureDetector(
               onTap: () {
                 selectMethod();
-                print('选择账号');
               },
               child: Row(
                 children: _rightText,

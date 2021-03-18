@@ -5,6 +5,7 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/add_partner.dart';
+import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -376,10 +377,15 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           Divider(height: 0.5, color: HsgColors.divider),
           //国家地区
           SelectInkWell(
-            title: '国家/地区',
+            title: S.current.state_area,
             item: _countryText,
             onTap: () {
-              _selectCountry();
+              Navigator.pushNamed(context, countryOrRegionSelectPage)
+                  .then((value) {
+                setState(() {
+                  _countryText = (value as CountryRegionModel).nameEN;
+                });
+              });
             },
           ),
           _payeeAdress(_payeeAdressController),
