@@ -9,6 +9,8 @@ import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/login/forget_password_page.dart';
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
+import 'package:ebank_mobile/page/openAccount/country_region_select_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_account_contact_information_page.dart';
 import 'package:ebank_mobile/page/register/find_user_name_success.dart';
 import 'package:ebank_mobile/page/register/forget_user_name_page.dart';
 import 'package:ebank_mobile/page/mine/pwd_operation_success_page.dart';
@@ -164,6 +166,9 @@ var pageFindUserNameSuccess = 'find_user_name_success.dart';
 var pageResetPasswordNoAccount = 'reset_password_no_account.dart';
 var pageResetPasswordSuccess = 'reset_password_success.dart';
 var pageResetPasswordOpenAccount = 'reset_password_account_open.dart';
+var pageCountryRegionSelect = '/country_region_select_page.dart';
+var pageOpenAccountContactInformation =
+    '/open_account_contact_information_page.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -244,7 +249,10 @@ var appRoutes = {
   pageFindUserNameSuccess: (context) => FindUserNameSuccess(),
   pageResetPasswordNoAccount: (context) => ResetPasswordNoAccount(),
   pageResetPasswordSuccess: (context) => ResetPasswordPage(),
-  pageResetPasswordOpenAccount: (context) => ResetPasswordAccountOpen()
+  pageResetPasswordOpenAccount: (context) => ResetPasswordAccountOpen(),
+  pageCountryRegionSelect: (context) => CountryOrRegionSelectPage(),
+  pageOpenAccountContactInformation: (context) =>
+      OpenAccountContactInformationPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
