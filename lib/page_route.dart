@@ -9,6 +9,7 @@ import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/login/forget_password_page.dart';
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
+import 'package:ebank_mobile/page/openAccount/country_region_select_page.dart';
 import 'package:ebank_mobile/page/register/find_user_name_success.dart';
 import 'package:ebank_mobile/page/register/forget_user_name_page.dart';
 import 'package:ebank_mobile/page/mine/pwd_operation_success_page.dart';
@@ -156,6 +157,7 @@ var pageApprovalPage = 'hsg_approval_page';
 var pageStaticApproval = '/static_my_approval_page';
 var pagePasswordManagement = '/password_management_page.dart';
 var pageOpenAccountBasicData = '/open_account_basic_data_page.dart';
+var countryOrRegionSelectPage = '/country_region_select_page.dart';
 var pageRegister = '/register_page.dart';
 var pageRegisterConfirm = '/register_confirm_page.dart';
 var pageRegisterSuccess = 'register_success_page.dart';
@@ -237,6 +239,7 @@ var appRoutes = {
 
   pagePasswordManagement: (context) => PasswordManagementPage(),
   pageOpenAccountBasicData: (context) => OpenAccountBasicDataPage(),
+  countryOrRegionSelectPage: (context) => CountryOrRegionSelectPage(),
   pageRegister: (context) => RegisterPage(),
   pageRegisterConfirm: (context) => RegisterConfirmPage(),
   pageRegisterSuccess: (context) => RegisterSuccessPage(),
