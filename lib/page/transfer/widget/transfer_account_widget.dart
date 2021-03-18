@@ -18,6 +18,7 @@ class TransferAccount extends StatelessWidget {
   final String balance;
   //转账金额控制器
   final TextEditingController transferMoneyController;
+  final VoidCallback callback;
   //币种弹窗
   final Function payCcyDialog;
   final Function transferCcyDialog;
@@ -31,6 +32,7 @@ class TransferAccount extends StatelessWidget {
     this.account,
     this.balance,
     this.transferMoneyController,
+    this.callback,
     this.payCcyDialog,
     this.transferCcyDialog,
     this.accountDialog,
@@ -121,8 +123,9 @@ class TransferAccount extends StatelessWidget {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
               ],
-              onChanged: (money) {
-                money.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1');
+              onChanged: (text) {
+                callback();
+                // text.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1');
                 // moneyChanges(money);
               },
               controller: transferMoneyController,

@@ -158,6 +158,7 @@ var pageApprovalPage = 'hsg_approval_page';
 var pageStaticApproval = '/static_my_approval_page';
 var pagePasswordManagement = '/password_management_page.dart';
 var pageOpenAccountBasicData = '/open_account_basic_data_page.dart';
+var countryOrRegionSelectPage = '/country_region_select_page.dart';
 var pageRegister = '/register_page.dart';
 var pageRegisterConfirm = '/register_confirm_page.dart';
 var pageRegisterSuccess = 'register_success_page.dart';
@@ -242,6 +243,7 @@ var appRoutes = {
 
   pagePasswordManagement: (context) => PasswordManagementPage(),
   pageOpenAccountBasicData: (context) => OpenAccountBasicDataPage(),
+  countryOrRegionSelectPage: (context) => CountryOrRegionSelectPage(),
   pageRegister: (context) => RegisterPage(),
   pageRegisterConfirm: (context) => RegisterConfirmPage(),
   pageRegisterSuccess: (context) => RegisterSuccessPage(),

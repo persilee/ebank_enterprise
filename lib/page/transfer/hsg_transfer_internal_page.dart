@@ -27,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../page_route.dart';
+import 'data/transfer_internal_data.dart';
 
 class TransferInternalPage extends StatefulWidget {
   TransferInternalPage({Key key}) : super(key: key);
@@ -97,15 +98,18 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   String _inputPassword = '';
 
-  //支付币种
+  //转入币种
   String _payCcy = '';
   List<String> _payCcyList = [];
   int _payIndex = 0;
 
-  //转出币种
+  //支付币种
   String _transferCcy = '';
   int _transferIndex = 0;
-  List<String> _transferCcyList = ['HKD', 'CNY', 'USD'];
+  List<String> _transferCcyList = ['HKD', 'CNY', 'USD', 'LAK', 'EUR'];
+
+  //本地币种
+  String _localeCcy = 'CNY';
 
   //账户选择
   String _account = '';
@@ -114,30 +118,22 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   //余额
   String _balance = '';
+  List<String> _balanceList = [];
 
   //限额
   String _limit = '';
 
-  //转账数据
-  List<String> transferData = [];
+  //按钮是否能点击
+  bool _isClick = false;
 
   //交易密码
-
   var check = false;
 
   @override
   void initState() {
     super.initState();
 
-    _transferMoneyController.addListener(() {
-      // _amountInputChange(_transferMoneyController.text);
-      _boolBut(); //金额输入框时调用
-    });
     _loadTransferData();
-  }
-
-  _amountInputChange(String title) {
-    money = double.parse(title);
   }
 
   @override
@@ -172,6 +168,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             account: _account,
             balance: _balance,
             transferMoneyController: _transferMoneyController,
+            callback: _boolBut,
             payCcyDialog: payCcyDialog,
             transferCcyDialog: transferCcyDialog,
             accountDialog: _accountDialog,
@@ -181,20 +178,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           //附言
           _remarkWidget(),
           //提交按钮
-          SliverToBoxAdapter(
-            child: Container(
-              margin: EdgeInsets.only(top: 100),
-              child: HsgButton.button(
-                  title: '下一步',
-                  click: _boolBut()
-                      ? () {
-                          Navigator.pushNamed(
-                              context, pageTransferInternalPreview,
-                              arguments: transferData);
-                        }
-                      : null),
-            ),
-          ),
+          _submitButton(),
         ],
       ),
     );
@@ -288,6 +272,35 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     }
   }
 
+  //提交按钮
+  Widget _submitButton() {
+    return SliverToBoxAdapter(
+      child: Container(
+        margin: EdgeInsets.only(top: 100, bottom: 50),
+        child: HsgButton.button(
+            title: '下一步',
+            click: _isClick
+                ? () {
+                    Navigator.pushNamed(
+                      context,
+                      pageTransferInternalPreview,
+                      arguments: TransferInternalData(
+                        _account,
+                        '123',
+                        _transferCcy,
+                        _nameController.text,
+                        _accountController.text,
+                        _transferMoneyController.text,
+                        _payCcy,
+                        _remarkController.text,
+                      ),
+                    );
+                  }
+                : null),
+      ),
+    );
+  }
+
   Future transferCcyDialog() async {
     final result = await showDialog(
       context: context,
@@ -333,18 +346,15 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   _boolBut() {
     if (_transferMoneyController.text != '' &&
         _nameController.text != '' &&
-        _accountController.text != '') {
-      transferData.add(_payCcy);
-      transferData.add(_transferMoneyController.text);
-      transferData.add(_account);
-      transferData.add("121.5");
-      transferData.add(_nameController.text);
-      transferData.add(_accountController.text);
-      transferData.add(_transferCcy);
-      transferData.add(_remarkController.text);
-      return true;
+        _accountController.text != '' &&
+        _transferCcy != '') {
+      return setState(() {
+        _isClick = true;
+      });
     } else {
-      return false;
+      return setState(() {
+        _isClick = false;
+      });
     }
   }
 
@@ -359,7 +369,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 Rows rowListPartner = value;
                 _nameController.text = rowListPartner.payeeName;
                 _accountController.text = rowListPartner.payeeCardNo;
-              } else {}
+              }
+              _boolBut();
             });
           },
         );
@@ -419,15 +430,38 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _payCcy = element.cardListBal[0].ccy;
             }
             //余额
-            _balance = element.cardListBal[0].currBal;
+            if (_balance == '') {
+              _balance = element.cardListBal[0].currBal;
+            }
             _payCcyList.clear();
+            _balanceList.clear();
+            _payIndex = 0;
             element.cardListBal.forEach((element) {
               _payCcyList.add(element.ccy);
-              if (element.ccy == _payCcy) {
-                _balance = element.currBal;
-              }
-              _payCcy = element.ccy;
+              _balanceList.add(element.currBal);
             });
+            if (_payCcyList.length == 0) {
+              _payCcyList.add(_localeCcy);
+              _balanceList.add('0.0');
+            }
+            if (_payCcyList.length > 1) {
+              for (int i = 0; i < _payCcyList.length; i++) {
+                if (_payCcy == _payCcyList[i]) {
+                  _balance = _balanceList[i];
+                  break;
+                } else {
+                  _payIndex++;
+                }
+              }
+            } else {
+              _payCcy = _payCcyList[0];
+              _balance = _balanceList[0];
+            }
+            if (!_payCcyList.contains(_payCcy)) {
+              _payCcy = _payCcyList[0];
+              _balance = _balanceList[0];
+              _payIndex = 0;
+            }
           });
         }
         //查询额度

@@ -84,6 +84,8 @@ class _HSGBankAppState extends State<HSGBankApp> {
 
   _initLanguage() async {
     String language = await Language.getSaveLangage();
+
+    print('language $language');
     changeLanguage(Language().getLocaleByLanguage(language));
   }
 
