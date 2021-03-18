@@ -150,8 +150,8 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
         ),
       ),
       inputFormatters: <TextInputFormatter>[
-        WhitelistingTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(6)
+        FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+        LengthLimitingTextInputFormatter(6), //限制长度
       ],
     );
   }
@@ -319,11 +319,11 @@ class InputList extends StatelessWidget {
               textAlign: TextAlign.right, //文本对齐方式
               onChanged: (text) {
                 //内容改变的回调
-                print('change $text');
+                // print('change $text');
               },
               onSubmitted: (text) {
                 //内容提交(按回车)的回调
-                print('submit $text');
+                // print('submit $text');
               },
               enabled: true, //是否禁用
               decoration: InputDecoration(
