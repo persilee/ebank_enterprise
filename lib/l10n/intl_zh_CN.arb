@@ -178,6 +178,8 @@
   "receipts_total_amt": "存单总额",
   "time_deposit_operation_success": "定期存款操作成功",
   "payment_account": "付款账户",
+  "settlement_account":"结算账户",
+  "screening_conditions":"筛选条件",
   "receipt_detail": "存单详情",
   "deposit_taking": "整存整取(CNY)",
   "deposit_amount": "存入金额",
