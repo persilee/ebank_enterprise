@@ -196,8 +196,8 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   }
 
   //获取验证码按钮
-  OutlineButton _otpButton() {
-    return OutlineButton(
+  FlatButton _otpButton() {
+    return FlatButton(
       onPressed: countdownTime > 0
           ? null
           : () {
@@ -205,17 +205,19 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
             },
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
       padding: EdgeInsets.symmetric(horizontal: 8),
+      color: Color(0xeeEFF3FF),
       //文字颜色
       textColor: HsgColors.blueTextColor,
-      borderSide: BorderSide(color: HsgColors.blueTextColor, width: 0.5),
       //画圆角
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(50),
       ),
-      disabledTextColor: HsgColors.describeText,
-      disabledBorderColor: HsgColors.describeText,
+      disabledTextColor: HsgColors.blueTextColor,
+      disabledColor: Color(0xeeEFF3FF),
       child: Text(
-        countdownTime > 0 ? '${countdownTime}s' : S.current.getVerificationCode,
+        countdownTime > 0
+            ? '${countdownTime}s'
+            : S.of(context).getVerificationCode,
         style: TextStyle(fontSize: 14),
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
