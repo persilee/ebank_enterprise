@@ -1,7 +1,6 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
-import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +17,7 @@ class OpenAccountResultsPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: Text('申请结果'),
+        title: Text(S.of(context).openAccout_application_results),
       ),
       body: Container(
         width: size.width,
@@ -37,7 +36,7 @@ class OpenAccountResultsPage extends StatelessWidget {
             Container(
               padding: EdgeInsets.only(left: 50, right: 50, top: 60),
               child: Text(
-                '开户申请提交成功',
+                S.of(context).openAccout_application_results_title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: HsgColors.firstDegreeText,
@@ -49,7 +48,7 @@ class OpenAccountResultsPage extends StatelessWidget {
             Container(
               padding: EdgeInsets.only(left: 50, right: 50, top: 15),
               child: Text(
-                '我们将于3个工作日内完成审核，审核结果将以邮件通知您，也可以登录APP查询进度',
+                S.of(context).openAccout_application_results_content,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: HsgColors.secondDegreeText,
