@@ -438,6 +438,14 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   //验证身份信息 提交数据
   _updatePayPassword() async {
     //调用三要素验证，成功后进入人脸识别，识别成功后进入设置密码阶段
+    RegExp postalcode = new RegExp(r'\D');
+    if (postalcode.hasMatch(_certNo.text)) {
+      Fluttertoast.showToast(msg: '请输入正确的证件号!');
+      return;
+    } else if (_certNo.text.length <= 0) {
+      Fluttertoast.showToast(msg: '请输入证件号!');
+      return;
+    }
     Navigator.pushNamed(context, setPayPage);
 
     // RegExp postalcode1 =
@@ -553,13 +561,17 @@ class InputList extends StatelessWidget {
                     autofocus: false, //是否自动对焦
                     obscureText: this.isPwd, //是否是密码
                     textAlign: TextAlign.right, //文本对齐方式
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                      LengthLimitingTextInputFormatter(11), //限制长度
+                    ],
                     onChanged: (text) {
                       //内容改变的回调
-                      print('change $text');
+                      // print('change $text');
                     },
                     onSubmitted: (text) {
                       //内容提交(按回车)的回调
-                      print('submit $text');
+                      // print('submit $text');
                     },
                     enabled: true, //是否禁用
                     decoration: InputDecoration(

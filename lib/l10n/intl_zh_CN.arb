@@ -140,6 +140,9 @@
   "hint_input_receipt_account": "请输入收款人账号",
   "account_num": "账号",
   "tran_limit_amt_with_value": "限额",
+  "single_transfer_limit":"单笔限额",
+  "single_day_transfer_limit":"单日限额",
+  "single_day_transfer_count_limit":"单日笔数",
   "transfer_from": "转出账号",
   "balance_with_value": "余额",
   "receipt_side": "收款方",
@@ -409,7 +412,7 @@
   "format_mobile_error":"您输入的手机号码格式错误",
   "not_contain_password":"密码不能包含账户名",
   "password_8_16":"密码长度需为8-16位",
-  "password_need_num":"密码需包含数字、大小写字母和特殊字符",
+  "password_need_num":"密码需包含8-16位数字、大小写字母和特殊字符",
   "password_need_low_and_top":"密码需包含大小写字母",
   "password_need_special_font":"密码需包含特殊字符",
 

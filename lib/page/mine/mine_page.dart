@@ -671,6 +671,7 @@ class _MinePageState extends State<MinePage> {
         _headPortraitUrl = data.headPortrait; //头像
         _characterName = data.roleLocalName; //角色
         _enterpriseName = data.custLocalName; //公司名
+        // _belongCustStatus = data.belongCustStatus; //用户状态
         // _lastLoginTime = data.lastLoginTime; // 上次登录时间
         _userType = data.userType; //用户类型
         _userPhone = data.userPhone; //用户手机号

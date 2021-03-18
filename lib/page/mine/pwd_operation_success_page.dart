@@ -60,7 +60,7 @@ class _PwdOperationSuccessPageState extends State<PwdOperationSuccessPage> {
       height: 50,
       child: RaisedButton(
         onPressed: () {
-          Navigator.of(context)..pop()..pop()..pop()..pop();
+          Navigator.of(context)..pop();
         },
         child: Text(name),
         color: Colors.blue,

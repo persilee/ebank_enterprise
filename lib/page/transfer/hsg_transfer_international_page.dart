@@ -16,9 +16,6 @@ import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_button_widget.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -28,6 +25,7 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 
 import '../../page_route.dart';
+import 'data/transfer_international_data.dart';
 
 class TransferInternationalPage extends StatefulWidget {
   TransferInternationalPage({Key key}) : super(key: key);
@@ -172,7 +170,10 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //转出币种
   String _transferCcy = '';
   int _transferIndex = 0;
-  List<String> _transferCcyList = ['HKD', 'CNY', 'USD'];
+  List<String> _transferCcyList = ['HKD', 'CNY', 'USD', 'EUR', 'LAK'];
+
+  //本地币种
+  String _localeCcy = 'CNY';
 
   //账户选择
   String _account = '';
@@ -181,6 +182,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //余额
   String _balance = '';
+  List<String> _balanceList = [];
 
   //限额
   String _limit = '';
@@ -247,65 +249,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //转账附言
   _transferInputChange(String transfer) {
     remark = transfer;
-  }
-
-  _getCardTotals(String _changedAccountTitle) {
-    Future.wait({
-      CardDataRepository().getCardBalByCardNo(
-          GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
-      CardDataRepository().getCardLimitByCardNo(
-          GetCardLimitByCardNoReq(_changedAccountTitle),
-          'GetCardLimitByCardNoReq'),
-    }).then((value) {
-      value.forEach((element) {
-        // 通过卡号查询余额
-        if (element is GetSingleCardBalResp) {
-          ccyLists.clear();
-          ccyList.clear();
-          _currBal = '';
-          _position = 0;
-          element.cardListBal.forEach((bals) {
-            totalBalances.add(bals.avaBal);
-          });
-          // var cardListB = new List();
-          element.cardListBal.forEach((cardBalBean) {
-            if (cardBalBean.ccy != '') {
-              ccyList.add(cardBalBean.ccy);
-            }
-            if (_changedCcyTitle == cardBalBean.ccy) {
-              _currBal = cardBalBean.currBal.toString();
-            }
-          });
-          // if (ccyList.length > 1) {
-          //   if (_changedCcyTitle == 'USD') {
-          //     _position = 2;
-          //   } else if (_changedCcyTitle == 'CNY') {
-          //     _position = 0;
-          //   }
-          // } else {
-          //   _position = 0;
-          // }
-          // if (_changedCcyTitle != 'USD' &&
-          //     ccyList.length < 3 &&
-          //     ccyList.length > 0) {
-          //   _changedCcyTitle = 'USD';
-          //   _currBal = _loacalCurrBal;
-          // }
-          // if (element.cardListBal.length == 0) {
-          //   _currBal = '';
-          //   _changedCcyTitle = 'CNY';
-          //   ccyList.add('CNY');
-          //   _position = 0;
-          // }
-        }
-        //查询额度
-        else if (element is GetCardLimitByCardNoResp) {
-          setState(() {
-            _limitMoney = element.singleLimit;
-          });
-        }
-      });
-    });
   }
 
   //币种弹窗
@@ -483,7 +426,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.current.international_transfer),
+        title: Text('跨行转账'),
         centerTitle: true,
       ),
       body: CustomScrollView(
@@ -496,6 +439,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             account: _account,
             balance: _balance,
             transferMoneyController: _transferMoneyController,
+            callback: _isClick,
             payCcyDialog: payCcyDialog,
             transferCcyDialog: transferCcyDialog,
             accountDialog: _accountDialog,
@@ -586,24 +530,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               ),
             ),
           ),
-          //提交按钮
-          // getButton(S.current.submit, _isClick),
-          SliverToBoxAdapter(
-            child: Container(
-              margin: EdgeInsets.only(top: 100, bottom: 50),
-              child: HsgButton.button(
-                  title: '下一步',
-                  click:
-                      //  _isClick()
-                      true
-                          ? () {
-                              Navigator.pushNamed(
-                                  context, pageTransferInternationalPreview,
-                                  arguments: transferData);
-                            }
-                          : null),
-            ),
-          ),
+          _submitButton(),
         ],
       ),
     );
@@ -624,7 +551,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               hintText: '请输入收款方名称',
               widget: _getImage(),
               keyboardType: TextInputType.text,
-              // controller: _nameController,
+              controller: _companyController,
               // callback: _boolBut,
               isWidget: true,
             ),
@@ -741,6 +668,43 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       color: Colors.white,
       child: Column(
         children: _topRow,
+      ),
+    );
+  }
+
+//提交按钮
+  Widget _submitButton() {
+    return SliverToBoxAdapter(
+      child: Container(
+        margin: EdgeInsets.only(top: 100, bottom: 50),
+        child: HsgButton.button(
+            title: '下一步',
+            click: _isClick()
+                ? () {
+                    Navigator.pushNamed(
+                      context,
+                      pageTransferInternationalPreview,
+                      arguments: TransferInternationalData(
+                        _account,
+                        '123',
+                        _transferCcy,
+                        _payerAddressController.text,
+                        _companyController.text,
+                        _accountController.text,
+                        _transferMoneyController.text,
+                        _payCcy,
+                        _payeeAddressController.text,
+                        _countryText,
+                        _getPayeeBank,
+                        _bankSwiftController.text,
+                        _middleBankSwiftController.text,
+                        _transferFee,
+                        _feeUse,
+                        _remarkController.text,
+                      ),
+                    );
+                  }
+                : null),
       ),
     );
   }
@@ -904,15 +868,38 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               _payCcy = element.cardListBal[0].ccy;
             }
             //余额
-            _balance = element.cardListBal[0].currBal;
+            if (_balance == '') {
+              _balance = element.cardListBal[0].currBal;
+            }
             _payCcyList.clear();
+            _balanceList.clear();
+            _payIndex = 0;
             element.cardListBal.forEach((element) {
               _payCcyList.add(element.ccy);
-              if (element.ccy == _payCcy) {
-                _balance = element.currBal;
-              }
-              _payCcy = element.ccy;
+              _balanceList.add(element.currBal);
             });
+            if (_payCcyList.length == 0) {
+              _payCcyList.add(_localeCcy);
+              _balanceList.add('0.0');
+            }
+            if (_payCcyList.length > 1) {
+              for (int i = 0; i < _payCcyList.length; i++) {
+                if (_payCcy == _payCcyList[i]) {
+                  _balance = _balanceList[i];
+                  break;
+                } else {
+                  _payIndex++;
+                }
+              }
+            } else {
+              _payCcy = _payCcyList[0];
+              _balance = _balanceList[0];
+            }
+            if (!_payCcyList.contains(_payCcy)) {
+              _payCcy = _payCcyList[0];
+              _balance = _balanceList[0];
+              _payIndex = 0;
+            }
           });
         }
         //查询额度
@@ -931,26 +918,27 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     TransferDataRepository()
         .getInterNationalTransfer(
             GetInternationalTransferReq(
-                money, //转账金额
-                _bankSwiftController.text,
-                _transferFee, //转账费用
-                _changedCcyTitle, //贷方货币
-                //借方货币
-                // debitCurrency,
-                _countryText, //国家地区
-                intermediateBankSwift, //中间行swift
-                payeeAddress,
-                payeeBankCode,
-                payeeCardNo,
-                payeeName,
-                payerAddress,
-                payerBankCode,
-                //付款方卡号
-                _changedAccountTitle,
-                payerName,
-                remark,
-                //汇款用途
-                _feeUse),
+              money, //转账金额
+              _bankSwiftController.text,
+              _transferFee, //转账费用
+              _changedCcyTitle, //贷方货feiyon币
+              //借方货币
+              // debitCurrency,
+              _countryText, //国家地区
+              intermediateBankSwift, //中间行swift
+              payeeAddress,
+              payeeBankCode,
+              payeeCardNo,
+              payeeName,
+              payerAddress,
+              payerBankCode,
+              //付款方卡号
+              _changedAccountTitle,
+              payerName,
+              remark,
+              //汇款用途
+              _feeUse,
+            ),
             'getTransferByAccount')
         .then((value) {
       HSProgressHUD.dismiss();
@@ -976,6 +964,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _bankSwiftController.text.length > 0 &&
         _payerAddressController.text.length > 0 &&
         _transferFee != S.current.please_select &&
+        _transferMoneyController.text != '' &&
         _feeUse != S.current.please_select) {
       return true;
     } else {
