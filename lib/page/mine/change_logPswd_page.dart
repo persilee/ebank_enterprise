@@ -71,14 +71,14 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                     child: Column(
                       children: [
                         InputList(S.of(context).oldPwd,
-                            S.of(context).password_need_num, _oldPwd),
+                            S.of(context).placeOldPwd, _oldPwd),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
                             indent: 3,
                             endIndent: 3),
                         InputList(S.of(context).newPwd,
-                            S.of(context).password_need_num, _newPwd),
+                            S.of(context).placeNewPwd, _newPwd),
                         Divider(
                             height: 1,
                             color: HsgColors.divider,
@@ -266,13 +266,10 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       HSProgressHUD.showInfo(status: S.of(context).differentPwd);
     } else if (_oldPwd.text == _newPwd.text) {
       HSProgressHUD.showInfo(status: S.of(context).differnet_old_new_pwd);
-    } else if ((_newPwd.text).contains(userAcc) == true) {
-      HSProgressHUD.showInfo(status: S.of(context).not_contain_password);
-    } else if ((_newPwd.text).length < 8 || (_newPwd.text).length > 16) {
-      HSProgressHUD.showInfo(status: S.of(context).password_8_16);
     } else if (number.hasMatch(_newPwd.text) == false ||
         letter.hasMatch(_newPwd.text) == false ||
-        characters.hasMatch(_newPwd.text) == false) {
+        characters.hasMatch(_newPwd.text) == false ||
+        ((_newPwd.text).length < 8 || (_newPwd.text).length > 16)) {
       HSProgressHUD.showInfo(status: S.of(context).password_need_num);
     } else {
       HSProgressHUD.show();
