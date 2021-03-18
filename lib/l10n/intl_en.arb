@@ -434,6 +434,7 @@
   "field_dialog_title": "security code check",
   "field_dialog_cancel": "cancel",
   "field_dialog_confirm": "confirm",
+  "transaction_type":"Transaction type",
 
   "password_management":"Password Management"
 

@@ -21,7 +21,7 @@ import 'package:flutter_tableview/flutter_tableview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:date_format/date_format.dart';
 import 'package:intl/intl.dart';
-import 'package:popup_window/popup_window.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
@@ -180,59 +180,29 @@ class _DetailListPageState extends State<DetailListPage> {
 
   //顶部弹窗内容
   Widget _popDialogContent(BuildContext popcontext) {
-    return
-        // Scaffold(
-        //   body:
-        Container(
-      color: Colors.white,
-      height: 260,
-      padding: EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //交易时间
-          _timeText(intl.S.of(context).transaction_time),
-          _tradingHour(),
-          //自定义时间
-          _timeText(intl.S.of(context).user_defined),
-          _userDefind(popcontext),
-          //金额
-          _timeText('金额'),
-          Row(
+    return Container(
+        color: Colors.white,
+        height: 260,
+        padding: EdgeInsets.all(10),
+        child: Material(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: EdgeInsets.all(5),
-                width: 111.5,
-                height: 23.5,
-                decoration: BoxDecoration(
-                  color: Color(0xffECECEC),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                // child: TextField(
-                //   //是否自动更正
-                //   autocorrect: true,
-                //   //是否自动获得焦点
-                //   autofocus: true,
-                //   controller: _moneyController,
-                //   // textAlign: TextAlign.right,
-                //   decoration: InputDecoration(
-                //     border: InputBorder.none,
-                //     hintText: 'hintText',
-                //     hintStyle: TextStyle(
-                //       fontSize: 15,
-                //       color: HsgColors.textHintColor,
-                //     ),
-                //   ),
-                // ),
-              )
+              //交易时间
+              _timeText(intl.S.of(context).transaction_time),
+              _tradingHour(),
+              //自定义时间
+              _timeText(intl.S.of(context).user_defined),
+              _userDefind(popcontext),
+              //金额
+              _timeText('金额'),
+              _amountDuration(),
             ],
           ),
-          // _moneyDefind(popcontext)
-          //_userDefind(popcontext),
-        ],
-      ),
-      // ),
-    );
+        )
+
+        // ),
+        );
   }
 
   //时间文本
@@ -357,29 +327,6 @@ class _DetailListPageState extends State<DetailListPage> {
     );
   }
 
-  //自定义金额
-  // Widget _moneyDefind(BuildContext moneycontext) {
-  //   return Row(
-  //     children: [
-  //       //最少金额
-  //       _inputMoney(_moneyController, 0, moneycontext),
-  //       //至
-  //       Text(
-  //         intl.S.of(context).zhi,
-  //         style: TextStyle(
-  //           fontSize: 12,
-  //           color: HsgColors.aboutusTextCon,
-  //           decoration: TextDecoration.none,
-  //         ),
-  //       ),
-  //       //最大金额
-  //       _inputMoney(_moneyController, 1, moneycontext),
-  //       //确定按钮
-  //       _confimrButton(),
-  //     ],
-  //   );
-  // }
-
   //自定义时间
   Widget _userDefind(BuildContext popcontext) {
     return Row(
@@ -432,15 +379,60 @@ class _DetailListPageState extends State<DetailListPage> {
           } else {
             _getRevenueByCards(_startDate, _allAccNoList);
           }
-          //Navigator.of(context).pop(_loadData());
         },
       ),
     );
   }
 
-  //自定义金额输入框
-  Widget _inputMoney(
-      TextEditingController _moneyControlle, int i, BuildContext popcontextr) {
+  //金额
+  Widget _amountDuration() {
+    return Row(
+      children: [
+        _amountInput(),
+        Text(
+          intl.S.of(context).zhi,
+          style: TextStyle(
+            fontSize: 12,
+            color: HsgColors.aboutusTextCon,
+            decoration: TextDecoration.none,
+          ),
+        ),
+        _amountInput(),
+        _amountConfimrButton(),
+      ],
+    );
+  }
+
+  //金额确定按钮
+  Widget _amountConfimrButton() {
+    return Container(
+      margin: EdgeInsets.all(4),
+      width: 73,
+      height: 23.5,
+      decoration: BoxDecoration(
+        color: HsgColors.blueTextColor,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: OutlineButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        borderSide: BorderSide(color: Colors.white),
+        child: Text(
+          intl.S.of(context).confirm,
+          style: TextStyle(fontSize: 11, color: Colors.white),
+        ),
+        onPressed: () {
+          setState(() {
+            _transferHistoryList.clear();
+          });
+          Navigator.of(context)
+              .pop(_getRevenueByCards(_startDate, _allAccNoList));
+        },
+      ),
+    );
+  }
+
+  //金额输入框
+  Widget _amountInput() {
     return Container(
       margin: EdgeInsets.all(5),
       width: 111.5,
@@ -450,19 +442,12 @@ class _DetailListPageState extends State<DetailListPage> {
         borderRadius: BorderRadius.circular(5),
       ),
       child: TextField(
-        //是否自动更正
-        autocorrect: true,
-        //是否自动获得焦点
-        autofocus: true,
-        controller: _moneyController,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: '输入金额',
-          hintStyle: TextStyle(
-            fontSize: 15,
-            color: HsgColors.textHintColor,
-          ),
-        ),
+        decoration: InputDecoration(border: InputBorder.none),
+        // controller: controller,
+        autocorrect: false,
+        autofocus: false,
+        keyboardType: TextInputType.number,
+        onChanged: (text) {},
       ),
     );
   }
