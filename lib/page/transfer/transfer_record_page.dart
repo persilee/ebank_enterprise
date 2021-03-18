@@ -38,7 +38,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   List<String> _imageUrl = []; //银行卡图标列表
   int _position = 0;
   // String _time = intl.S.current.the_same_month; //时间
-  String _time = '自定义筛选';
+  String _time = intl.S.current.custom_autofilter;
   String _endDate =
       DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now()); //结束时间
   String _startDate = DateFormat('yyyy-MM-dd 00:00:00')
@@ -337,7 +337,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             _timeText(intl.S.of(context).user_defined),
             _userDefind(popcontext),
             //金额
-            _timeText('金额'),
+            _timeText(intl.S.current.amount),
             _amountDuration(),
           ],
         ),

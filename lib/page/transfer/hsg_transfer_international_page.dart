@@ -426,7 +426,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
     return Scaffold(
       appBar: AppBar(
-        title: Text('跨行转账'),
+        title: Text(S.current.transfer_type_1),
         centerTitle: true,
       ),
       body: CustomScrollView(
@@ -547,8 +547,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           children: [
             _payeeName(),
             TextFieldContainer(
-              title: '收款方名称',
-              hintText: '请输入收款方名称',
+              title: S.current.receipt_side_name,
+              hintText: S.current.hint_input_receipt_name,
               widget: _getImage(),
               keyboardType: TextInputType.text,
               controller: _companyController,
@@ -556,8 +556,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               isWidget: true,
             ),
             TextFieldContainer(
-              title: '收款人账号',
-              hintText: '请输入收款人账号',
+              title: S.current.receipt_side_account,
+              hintText: S.current.hint_input_receipt_account,
               keyboardType: TextInputType.number,
               controller: _accountController,
               // callback: _boolBut,
@@ -574,7 +574,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       children: [
         Container(
           child: Text(
-            '收款方',
+            S.current.receipt_side,
             style: TextStyle(color: HsgColors.describeText, fontSize: 13),
             textAlign: TextAlign.right,
           ),

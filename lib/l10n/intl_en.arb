@@ -139,7 +139,7 @@
   "hint_input_receipt_name": "Please input the beneficiary name",
   "hint_input_receipt_account": "Please input beneficiary account number",
   "account_num": "Account No.",
-  "tran_limit_amt_with_value": "Limit ：",
+  "tran_limit_amt_with_value": "Limit",
   "single_transfer_limit":"Transaction Amount Limit",
   "single_day_transfer_limit":"Daily Amount of Transaction",
   "single_day_transfer_count_limit":"Daily Number of Transaction",
@@ -160,9 +160,10 @@
   "remittance_usage":"Purpose of Remittance",
   "remittance_address":"Remittance address",
   "collection_address":"Collection address",
-  "balance_with_value": "Balance:",
+  "balance_with_value": "Balance",
   "receipt_side": "Transfer To",
   "receipt_side_name":"Transfer To Name",
+  "receipt_side_account":"Transfer To Account",
   "transfer_postscript": "Remark",
   "transfer_model": "Transfer Template",
   "time_deposiy": "Time Deposit",
@@ -438,7 +439,21 @@
   "field_dialog_cancel": "cancel",
   "field_dialog_confirm": "confirm",
 
-  "password_management":"Password Management"
+  "password_management":"Password Management",
+  "amount":"Amount",
+  "custom_autofilter":"Custom Autofilter",
+  "transfer_type_0_short":"Inner",
+  "transfer_type_1_short":"Inter",
+  "add_payee":"Add Payee",
+  "bank_name":"Bank Name",
+  "transfer_the_preview":"Transfer The Preview",
+  "payment_currency":"Payment Currency",
+  "into_account":"Into Account",
+  "transfer_into_currency":"transfer Into Currency",
+  "preview_explain1":"explain：",
+  "preview_explain2":"The specific amount transferred out shall be the amount calculated at the exchange rate at the time of transaction",
+  "remitter_address1":"Remitter's Address",
+  "receiver_address":"Receiver's address"
 
  }
   
