@@ -74,7 +74,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
                 children: <Widget>[
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(bottom: 16, top: 16),
+                    margin: EdgeInsets.only(bottom: 10, top: 16),
                     color: Colors.white,
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Column(
@@ -135,6 +135,13 @@ class _ChangePayPageState extends State<ChangePayPage> {
                             indent: 3,
                             endIndent: 3),
                       ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    child: Text(
+                      S.of(context).set_pay_password_prompt,
+                      style: TextStyle(color: HsgColors.hintText, fontSize: 13),
                     ),
                   ),
                   Container(
