@@ -183,36 +183,27 @@ class _ChangePayPageState extends State<ChangePayPage> {
 
   //提交按钮
   _submitData() async {
-    RegExp postalcode1 = new RegExp(r'^\d{6}$');
-    if (_newPwd.text != _confimPwd.text) {
-      Fluttertoast.showToast(msg: S.of(context).differentPwd);
-    } else if (_newPwd.text == _oldPwd.text) {
-      Fluttertoast.showToast(msg: S.of(context).differnet_old_new_pwd);
-    } else if (!postalcode1.hasMatch(_newPwd.text)) {
-      Fluttertoast.showToast(msg: S.of(context).set_pay_password_prompt);
-    } else {
-      HSProgressHUD.show();
-      final prefs = await SharedPreferences.getInstance();
-      String userID = prefs.getString(ConfigKey.USER_ID);
-      String oldPwd = EncryptUtil.aesEncode(_oldPwd.text);
-      String newPwd = EncryptUtil.aesEncode(_newPwd.text);
-      print(oldPwd);
-      print(newPwd);
-      PaymentPwdRepository()
-          .updateTransPassword(
-        SetPaymentPwdReq(oldPwd, newPwd, userID, _sms.text),
-        'updateTransPassword',
-      )
-          .then((data) {
-        HSProgressHUD.showError(status: S.current.changPwsSuccess);
-        Navigator.pop(context);
-        HSProgressHUD.dismiss();
-      }).catchError((e) {
-        // Fluttertoast.showToast(msg: e.toString());
-        HSProgressHUD.showError(status: e.toString());
-        print('${e.toString()}');
-      });
-    }
+    HSProgressHUD.show();
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+    String oldPwd = EncryptUtil.aesEncode(_oldPwd.text);
+    String newPwd = EncryptUtil.aesEncode(_newPwd.text);
+    print(oldPwd);
+    print(newPwd);
+    PaymentPwdRepository()
+        .updateTransPassword(
+      SetPaymentPwdReq(oldPwd, newPwd, userID, _sms.text),
+      'updateTransPassword',
+    )
+        .then((data) {
+      HSProgressHUD.showInfo(status: S.current.changPwsSuccess);
+      Navigator.pop(context);
+      HSProgressHUD.dismiss();
+    }).catchError((e) {
+      // Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.showError(status: e.toString());
+      print('${e.toString()}');
+    });
   }
 
   bool _submit() {
@@ -225,7 +216,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
 
   //倒计时方法
   _startCountdown() {
-    countdownTime = 60;
+    countdownTime = 120;
     final call = (timer) {
       setState(() {
         if (countdownTime < 1) {
@@ -289,25 +280,34 @@ class _ChangePayPageState extends State<ChangePayPage> {
 
   //获取验证码接口
   _getVerificationCode() async {
-    HSProgressHUD.show();
-    // final prefs = await SharedPreferences.getInstance();
-    // String userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
-    VerificationCodeRepository()
-        // .sendSmsByAccount(
-        //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
-        // )
-        .sendSmsByPhone(
-            SendSmsByPhoneNumberReq(_phoneNo, 'transactionPwd'), 'sendSms')
-        .then((data) {
-      _startCountdown();
-      setState(() {
-        _sms.text = '123456';
+    RegExp postalcode1 = new RegExp(r'^\d{6}$');
+    if (_newPwd.text != _confimPwd.text) {
+      HSProgressHUD.showInfo(status: S.of(context).differentPwd);
+    } else if (_newPwd.text == _oldPwd.text) {
+      HSProgressHUD.showInfo(status: S.of(context).differnet_old_new_pwd);
+    } else if (!postalcode1.hasMatch(_newPwd.text)) {
+      HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
+    } else {
+      HSProgressHUD.show();
+      // final prefs = await SharedPreferences.getInstance();
+      // String userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
+      VerificationCodeRepository()
+          // .sendSmsByAccount(
+          //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
+          // )
+          .sendSmsByPhone(
+              SendSmsByPhoneNumberReq(_phoneNo, 'transactionPwd'), 'sendSms')
+          .then((data) {
+        _startCountdown();
+        setState(() {
+          _sms.text = '123456';
+        });
+        HSProgressHUD.dismiss();
+      }).catchError((e) {
+        HSProgressHUD.showError(status: e.toString());
+        HSProgressHUD.dismiss();
       });
-      HSProgressHUD.dismiss();
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-      HSProgressHUD.dismiss();
-    });
+    }
   }
 
   //验证码输入框
@@ -324,7 +324,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
         LengthLimitingTextInputFormatter(6), //限制长度
       ],
       decoration: InputDecoration.collapsed(
-        hintText: S.current.placeSMS,
+        hintText: S.current.please_enter,
         hintStyle: TextStyle(
           fontSize: 14,
           color: HsgColors.textHintColor,

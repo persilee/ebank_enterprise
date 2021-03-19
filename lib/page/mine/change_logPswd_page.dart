@@ -182,7 +182,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
         setState(() {});
       },
       decoration: InputDecoration.collapsed(
-        hintText: S.current.please_input,
+        hintText: S.current.please_enter,
         hintStyle: TextStyle(
           fontSize: 14,
           color: HsgColors.textHintColor,
@@ -262,7 +262,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
 
   //倒计时方法
   _startCountdown() {
-    countdownTime = 60;
+    countdownTime = 120;
     final call = (timer) {
       setState(() {
         if (countdownTime < 1) {
@@ -277,28 +277,6 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
 
   //获取验证码接口
   _getVerificationCode() async {
-    HSProgressHUD.show();
-    final prefs = await SharedPreferences.getInstance();
-    userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
-    VerificationCodeRepository()
-        .sendSmsByAccount(
-            SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
-        .then((data) {
-      _startCountdown();
-      setState(() {
-        _sms.text = '123456';
-      });
-      HSProgressHUD.dismiss();
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-      HSProgressHUD.dismiss();
-    });
-  }
-
-  //修改密码接口
-  _updateLoginPassword() async {
-    String oldPwd = EncryptUtil.aesEncode(_oldPwd.text);
-    String newPwd = EncryptUtil.aesEncode(_newPwd.text);
     RegExp characters = new RegExp(
         "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
     RegExp letter = new RegExp("[a-zA-Z]");
@@ -315,21 +293,58 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
-      String userID = prefs.getString(ConfigKey.USER_ID);
-      UpdateLoginPawRepository()
-          .modifyLoginPassword(
-              ModifyPasswordReq(newPwd, oldPwd, _sms.text, userID),
-              'ModifyPasswordReq')
+      userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
+      VerificationCodeRepository()
+          .sendSmsByAccount(
+              SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
           .then((data) {
-        Fluttertoast.showToast(msg: S.current.operate_success);
-        Navigator.pop(context);
+        _startCountdown();
+        setState(() {
+          _sms.text = '123456';
+        });
         HSProgressHUD.dismiss();
       }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
+        HSProgressHUD.showError(status: e.toString());
         HSProgressHUD.dismiss();
       });
     }
   }
+
+  //修改密码接口
+  _updateLoginPassword() async {
+    String oldPwd = EncryptUtil.aesEncode(_oldPwd.text);
+    String newPwd = EncryptUtil.aesEncode(_newPwd.text);
+    // RegExp characters = new RegExp(
+    //     "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
+    // RegExp letter = new RegExp("[a-zA-Z]");
+    // RegExp number = new RegExp("[0-9]");
+    // if (_newPwd.text != _confimPwd.text) {
+    //   HSProgressHUD.showInfo(status: S.of(context).differentPwd);
+    // } else if (_oldPwd.text == _newPwd.text) {
+    //   HSProgressHUD.showInfo(status: S.of(context).differnet_old_new_pwd);
+    // } else if (number.hasMatch(_newPwd.text) == false ||
+    //     letter.hasMatch(_newPwd.text) == false ||
+    //     characters.hasMatch(_newPwd.text) == false ||
+    //     ((_newPwd.text).length < 8 || (_newPwd.text).length > 16)) {
+    //   HSProgressHUD.showInfo(status: S.of(context).password_need_num);
+    // } else {
+    HSProgressHUD.show();
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+    UpdateLoginPawRepository()
+        .modifyLoginPassword(
+            ModifyPasswordReq(newPwd, oldPwd, _sms.text, userID),
+            'ModifyPasswordReq')
+        .then((data) {
+      HSProgressHUD.showInfo(status: S.current.operate_success);
+      Navigator.pop(context);
+      HSProgressHUD.dismiss();
+    }).catchError((e) {
+      HSProgressHUD.showError(status: e.toString());
+      HSProgressHUD.dismiss();
+    });
+  }
+  // }
 }
 
 // ignore: must_be_immutable
@@ -358,6 +373,10 @@ class InputList extends StatelessWidget {
               autofocus: false, //是否自动对焦
               obscureText: true, //是否是密码
               textAlign: TextAlign.right, //文本对齐方式
+              inputFormatters: <TextInputFormatter>[
+                // FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                LengthLimitingTextInputFormatter(16), //限制长度
+              ],
               onChanged: (text) {
                 //内容改变的回调
                 // print('change $text');

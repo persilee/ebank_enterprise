@@ -573,7 +573,10 @@ class InputList extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(this.labText),
+                Container(
+                  width: 160,
+                  child: Text(this.labText),
+                ),
                 Expanded(
                   child: TextField(
                     controller: this.inputValue,
@@ -583,8 +586,8 @@ class InputList extends StatelessWidget {
                     obscureText: this.isPwd, //是否是密码
                     textAlign: TextAlign.right, //文本对齐方式
                     inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
-                      LengthLimitingTextInputFormatter(11), //限制长度
+                      // FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                      // LengthLimitingTextInputFormatter(11), //限制长度
                     ],
                     onChanged: (text) {
                       //内容改变的回调
