@@ -50,24 +50,24 @@ class _SelectBankPageState extends State<SelectBankPage> {
         setState(() {
           _totalPage = data.totalPage;
           _bankList.addAll(data.banks);
-          _tempList.clear();
-          if (_transferType != '') {
-            for (int i = 0; i < _bankList.length; i++) {
-              //如果是国际转账或者行内转账的，只显示对应类型的的银行，否则显示全部
-              if (_bankList[i].bankType == _transferType) {
-                _tempList.add(_bankList[i]);
-              }
-            }
-            //要显示的条数不足10条，继续加载下一页，直到达到最大页数
-            if (_tempList.length < 10 && _page < _totalPage) {
-              _page += 1;
-              _loadData();
-            }
-          } else {
-            _tempList.addAll(_bankList);
-          }
-          _bankList.clear();
-          _bankList.addAll(_tempList);
+          // _tempList.clear();
+          // if (_transferType != '') {
+          //   for (int i = 0; i < _bankList.length; i++) {
+          //     //如果是国际转账或者行内转账的，只显示对应类型的的银行，否则显示全部
+          //     if (_bankList[i].bankType == _transferType) {
+          //       _tempList.add(_bankList[i]);
+          //     }
+          //   }
+          //   //要显示的条数不足10条，继续加载下一页，直到达到最大页数
+          //   if (_tempList.length < 10 && _page < _totalPage) {
+          //     _page += 1;
+          //     _loadData();
+          //   }
+          // } else {
+          //   _tempList.addAll(_bankList);
+          // }
+          // _bankList.clear();
+          // _bankList.addAll(_tempList);
         });
       }
     });
@@ -197,7 +197,8 @@ class _SelectBankPageState extends State<SelectBankPage> {
             height: 30,
           )
         : Image(
-            image: AssetImage('images/transferIcon/transfer_sample_placeholder.png'),
+            image: AssetImage(
+                'images/transferIcon/transfer_sample_placeholder.png'),
             width: 30,
             height: 30,
           );

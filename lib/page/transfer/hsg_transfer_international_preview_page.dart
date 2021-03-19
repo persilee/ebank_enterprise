@@ -37,19 +37,18 @@ class _TransferInternalPreviewPageState
             _content(transferData),
             _explain(),
             Container(
-                  width: (MediaQuery.of(context).size.width - 40) / 2,
-                  child: Text(
-                    '— ' +
-                        transferData.transferIntoCcy +
-                        ' ' +
-                        FormatUtil.formatSringToMoney(
-                            transferData.transferIntoAmount),
-                    style: TextStyle(color: Color(0xff232323), fontSize: 20),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.end,
-                  ),
-                ),
+              width: (MediaQuery.of(context).size.width - 40) / 2,
+              child: Text(
+                transferData.transferIntoCcy +
+                    ' ' +
+                    FormatUtil.formatSringToMoney(
+                        transferData.transferIntoAmount),
+                style: TextStyle(color: Color(0xff232323), fontSize: 20),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.end,
+              ),
+            ),
           ],
         ));
   }
