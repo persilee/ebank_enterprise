@@ -138,6 +138,14 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _accountController.dispose();
+    _remarkController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var _arguments = ModalRoute.of(context).settings.arguments;
     setState(() {
@@ -497,6 +505,14 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _balance = _balanceList[0];
               _payIndex = 0;
             }
+            // for (int i = 0; i < _transferCcyList.length; i++) {
+            //   if (_transferCcy == _payCcy) {
+            //     _transferCcy = _payCcy;
+            //     break;
+            //   } else {
+            //     _transferIndex++;
+            //   }
+            // }
           });
         }
         //查询额度

@@ -73,8 +73,6 @@ class TransferAccount extends StatelessWidget {
           Text(
             S.current.tran_limit_amt_with_value +
                 '：' +
-                payCcy +
-                ' ' +
                 FormatUtil.formatSringToMoney(limit),
             style: TextStyle(color: Color(0xff7A7A7A), fontSize: 13),
           ),

@@ -900,7 +900,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         // 通过卡号查询余额
         if (element is GetSingleCardBalResp) {
           setState(() {
-           //初始币种和余额
+            //初始币种和余额
             if (_payCcy == '' || _balance == '') {
               _payCcy = element.cardListBal[0].ccy;
               _balance = element.cardListBal[0].currBal;

@@ -63,7 +63,6 @@ class _TransferInternalPreviewPageState
                 Container(
                   width: (MediaQuery.of(context).size.width - 40) / 2,
                   child: Text(
-                    '— ' +
                         transferData.transferIntoCcy +
                         ' ' +
                         FormatUtil.formatSringToMoney(

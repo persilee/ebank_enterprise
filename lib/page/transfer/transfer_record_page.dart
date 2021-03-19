@@ -36,6 +36,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   String _card = intl.S.current.all_account; //银行卡
   List<String> _cradLists = []; //银行卡列表
   List<String> _imageUrl = []; //银行卡图标列表
+  List<String> paymentCardNos = []; //账户
   int _position = 0;
   // String _time = intl.S.current.the_same_month; //时间
   String _time = intl.S.current.custom_autofilter;
@@ -654,8 +655,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     if (result != null && result != false) {
       setState(() {
         _position = result;
+        _card = _cradLists[result];
+        // paymentCardNos.add(_card);
       });
-      _card = _cradLists[result];
+      // _loadData();
     }
   }
 
@@ -803,7 +806,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     //请求参数
     String ccy = '';
     int pageSize = 10;
-    List<String> paymentCardNos = [];
+
     String sort = '';
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);

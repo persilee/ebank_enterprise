@@ -207,21 +207,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           ),
         ),
         Divider(height: 0.5, color: HsgColors.divider),
-        //银行
-        GestureDetector(
-          onTap: () {
-            _bankTap(context);
-          },
-          child: Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(top: 16, bottom: 16),
-            child: _inputFrame(
-              S.current.bank_name,
-              _inputSelector(_bankName, S.of(context).please_select),
-            ),
-          ),
-        ),
-        Divider(height: 0.5, color: HsgColors.divider),
+
         //分支行
         // GestureDetector(
         //   onTap: () {
@@ -357,6 +343,21 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     return Container(
       child: Column(
         children: [
+          //银行
+          GestureDetector(
+            onTap: () {
+              _bankTap(context);
+            },
+            child: Container(
+              color: Colors.white,
+              padding: EdgeInsets.only(top: 16, bottom: 16),
+              child: _inputFrame(
+                S.current.bank_name,
+                _inputSelector(_bankName, S.of(context).please_select),
+              ),
+            ),
+          ),
+          Divider(height: 0.5, color: HsgColors.divider),
           //银行SWIFT
           Container(
             padding: EdgeInsets.only(top: 16, bottom: 16),
@@ -393,24 +394,6 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         ],
       ),
     );
-  }
-
-  //选择国家地区
-  _selectCountry() async {
-    final result = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return BottomMenu(
-            title: '国家/地区',
-            items: countryList,
-          );
-        });
-    if (result != null && result != false) {
-      setState(() {
-        _countryText = countryList[result];
-        _check();
-      });
-    }
   }
 
   //转账类型弹窗
@@ -657,12 +640,13 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   //按钮可点击检查
   _check() {
     setState(() {
-      if (_bankName != S.current.please_select &&
-          _nameController.text.length > 0 &&
+      if (_nameController.text.length > 0 &&
           _acountController.text.length > 0 &&
           _transferType != S.current.please_select) {
         if (_showInternational) {
-          if (_payeeAdressController.text.length > 0 && _countryText != '') {
+          if (_bankName != S.current.please_select &&
+              _payeeAdressController.text.length > 0 &&
+              _countryText != '') {
             _isInputed = true;
           } else {
             _isInputed = false;
