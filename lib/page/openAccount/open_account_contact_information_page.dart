@@ -234,7 +234,6 @@ class _OpenAccountContactInformationPageState
                   _registrationAreaText,
                   '省/市/区',
                   false,
-                  1001,
                   () {
                     print('注册公司地址');
                   },
@@ -289,7 +288,6 @@ class _OpenAccountContactInformationPageState
                   _businessAreaText,
                   '省/市/区',
                   false,
-                  1004,
                   () {
                     print('主要营业地址');
                   },
@@ -344,7 +342,6 @@ class _OpenAccountContactInformationPageState
                   _businessAreaText,
                   '省/市/区',
                   false,
-                  1007,
                   () {
                     print('通讯地址地址');
                   },
@@ -386,14 +383,13 @@ class _OpenAccountContactInformationPageState
                   _officeAreaCodeText,
                   '请选择',
                   false,
-                  1010,
                   () {
                     print('区号');
                     Navigator.pushNamed(context, countryOrRegionSelectPage)
                         .then((value) {
                       setState(() {
                         _officeAreaCodeText =
-                            (value as CountryRegionModel).code;
+                            '+ ${(value as CountryRegionModel).code}';
                       });
                     });
                   },
@@ -450,8 +446,6 @@ class _OpenAccountContactInformationPageState
               //是否自动获得焦点
               autofocus: false,
               controller: textEdiC,
-              // obscureText: this.isCiphertext,
-              // onChanged: ,
               textAlign: TextAlign.right,
               textAlignVertical: TextAlignVertical.bottom,
               textDirection: TextDirection.ltr,
@@ -519,7 +513,6 @@ class _OpenAccountContactInformationPageState
                 //是否自动获得焦点
                 autofocus: false,
                 controller: textEdiC,
-                // obscureText: this.isCiphertext,
                 textAlign: TextAlign.right,
                 textAlignVertical: TextAlignVertical.bottom,
                 textDirection: TextDirection.ltr,
@@ -562,7 +555,6 @@ class _OpenAccountContactInformationPageState
     String textStr,
     String placeholderStr,
     bool isHiddenLine,
-    int textFieldTag,
     VoidCallback btnClick,
   ) {
     final size = MediaQuery.of(context).size;
@@ -597,10 +589,7 @@ class _OpenAccountContactInformationPageState
                 //是否自动获得焦点
                 autofocus: false,
                 controller: textEC,
-                // scrollPadding: EdgeInsets.all(0),
-                // obscureText: this.isCiphertext,
                 textAlign: TextAlign.right,
-                textAlignVertical: TextAlignVertical.bottom,
                 maxLines: 1,
                 style: TextStyle(
                   fontSize: 14,
@@ -611,7 +600,6 @@ class _OpenAccountContactInformationPageState
                   border: InputBorder.none,
                   hintText: placeholderStr,
                   hintStyle: TextStyle(
-                    // backgroundColor: Colors.yellow,
                     fontSize: 14,
                     color: HsgColors.textHintColor,
                   ),
