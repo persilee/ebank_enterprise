@@ -92,6 +92,12 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
     // });
     // _getUserCardList();
     _getIdCardList();
+    _realName.addListener(() {
+      setState(() {});
+    });
+    _certNo.addListener(() {
+      setState(() {});
+    });
   }
 
   //账户列表
@@ -193,145 +199,152 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: Container(
-        color: HsgColors.commonBackground,
-        height: double.infinity,
-        child: Form(
-          //绑定状态属性
-          key: _formKey,
-          child: SingleChildScrollView(
-            child:
-                //三元运算符
-                // isShowIdCheckout
-                //     ?
-                Column(
-              //身份证验证信息
-              children: [
-                //账号
-                // Container(
-                //   color: Colors.white,
-                //   padding: CONTENT_PADDING,
-                //   margin: EdgeInsets.only(bottom: 12),
-                //   child: SelectInkWell(
-                //     title: S.current.account_number,
-                //     item: _accNo,
-                //     onTap: _accountBottomSheet,
-                //   ),
-                // ),
-                //其他信息
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.only(bottom: 16, top: 16),
-                  padding: CONTENT_PADDING,
-                  color: Colors.white,
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.topLeft,
-                        padding: EdgeInsets.only(top: 10.0, bottom: 1.0),
-                        child: Text(
-                          S.of(context).plaseSetPayPsd,
-                          style:
-                              TextStyle(color: Color(0xEE7A7A7A), fontSize: 13),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
+          color: HsgColors.commonBackground,
+          height: double.infinity,
+          child: Form(
+            //绑定状态属性
+            key: _formKey,
+            child: SingleChildScrollView(
+              child:
+                  //三元运算符
+                  // isShowIdCheckout
+                  //     ?
+                  Column(
+                //身份证验证信息
+                children: [
+                  //账号
+                  // Container(
+                  //   color: Colors.white,
+                  //   padding: CONTENT_PADDING,
+                  //   margin: EdgeInsets.only(bottom: 12),
+                  //   child: SelectInkWell(
+                  //     title: S.current.account_number,
+                  //     item: _accNo,
+                  //     onTap: _accountBottomSheet,
+                  //   ),
+                  // ),
+                  //其他信息
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.only(bottom: 16, top: 16),
+                    padding: CONTENT_PADDING,
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.only(top: 10.0, bottom: 1.0),
+                          child: Text(
+                            S.of(context).plaseSetPayPsd,
+                            style: TextStyle(
+                                color: Color(0xEE7A7A7A), fontSize: 13),
+                          ),
                         ),
-                      ),
-                      //姓名
-                      InputList(S.of(context).name, S.of(context).placeName,
-                          _realName),
-                      //证件类型
-                      Container(
-                        child: SelectInkWell(
-                          title: S.current.idType,
-                          item: _certType,
-                          onTap: _idCardListBottomSheet,
+                        //姓名
+                        InputList(S.of(context).name, S.of(context).placeName,
+                            _realName),
+                        //证件类型
+                        Container(
+                          child: SelectInkWell(
+                            title: S.current.idType,
+                            item: _certType,
+                            onTap: _idCardListBottomSheet,
+                          ),
                         ),
-                      ),
-                      Divider(
-                        height: 0.5,
-                        color: HsgColors.divider,
-                      ),
-                      //证件号码
-                      InputList(S.of(context).IdentificationNumber,
-                          S.of(context).placeIdNumber, _certNo),
-                      //预留手机号
-                      // InputList(
-                      //     S.of(context).reservedMobilePhoneNumber,
-                      //     S.of(context).placeReveredMobilePhone,
-                      //     _phoneNo),
-                      //短信验证码
-                      // Container(
-                      //   height: 50,
-                      //   child: Row(
-                      //     children: [
-                      //       Text(S.of(context).sendmsm),
-                      //       Expanded(
-                      //         child: otpTextField(),
-                      //       ),
-                      //       Padding(
-                      //           padding:
-                      //               EdgeInsets.only(right: 10)),
-                      //       SizedBox(
-                      //         width: 90,
-                      //         height: 32,
-                      //         child: _otpButton(),
-                      //       )
-                      //     ],
-                      //   ),
-                      // ),
-                    ],
+                        Divider(
+                          height: 0.5,
+                          color: HsgColors.divider,
+                        ),
+                        //证件号码
+                        InputList(S.of(context).IdentificationNumber,
+                            S.of(context).placeIdNumber, _certNo),
+                        //预留手机号
+                        // InputList(
+                        //     S.of(context).reservedMobilePhoneNumber,
+                        //     S.of(context).placeReveredMobilePhone,
+                        //     _phoneNo),
+                        //短信验证码
+                        // Container(
+                        //   height: 50,
+                        //   child: Row(
+                        //     children: [
+                        //       Text(S.of(context).sendmsm),
+                        //       Expanded(
+                        //         child: otpTextField(),
+                        //       ),
+                        //       Padding(
+                        //           padding:
+                        //               EdgeInsets.only(right: 10)),
+                        //       SizedBox(
+                        //         width: 90,
+                        //         height: 32,
+                        //         child: _otpButton(),
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
+                      ],
+                    ),
                   ),
-                ),
-                //下一步
-                Container(
-                  margin: EdgeInsets.all(40), //外边距
-                  height: 44.0,
-                  width: MediaQuery.of(context).size.width,
-                  child: RaisedButton(
-                    child: Text(S.of(context).next_step),
-                    onPressed: _submit()
-                        ? () {
-                            _updatePayPassword();
-                          }
-                        : null,
-                    color: HsgColors.accent,
-                    textColor: Colors.white,
-                    disabledTextColor: Colors.white,
-                    disabledColor: Color(0xFFD1D1D1),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5) //设置圆角
-                        ),
-                  ),
-                )
-              ],
+                  //下一步
+                  Container(
+                    margin: EdgeInsets.all(40), //外边距
+                    height: 44.0,
+                    width: MediaQuery.of(context).size.width,
+                    child: RaisedButton(
+                      child: Text(S.of(context).next_step),
+                      onPressed: _submit()
+                          ? () {
+                              _updatePayPassword();
+                            }
+                          : null,
+                      color: HsgColors.accent,
+                      textColor: Colors.white,
+                      disabledTextColor: Colors.white,
+                      disabledColor: Color(0xFFD1D1D1),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5) //设置圆角
+                          ),
+                    ),
+                  )
+                ],
+              ),
+              //           : Container(
+              //               width: MediaQuery.of(context).size.width,
+              //               margin: EdgeInsets.only(bottom: 16),
+              //               color: Colors.white,
+              //               padding: EdgeInsets.only(
+              //                   left: 20, right: 20, bottom: 20),
+              //               child: Column(
+              //                 children: [
+              //                   //新密码
+              //                   InputList(S.of(context).newPayPwd,
+              //                       S.of(context).placeNewPwd, _newPwd,
+              //                       isPwd: true),
+              //                   //确认新密码
+              //                   InputList(S.of(context).confimPayPwd,
+              //                       S.of(context).placeConfimPwd, _confimPwd,
+              //                       isShowLine: false, isPwd: true),
+              //                   //提交
+              //                   HsgButton.button(
+              //                     title: S.current.confirm,
+              //                     click: _boolBut()
+              //                         ? () {
+              //                             submitChangePassword();
+              //                           }
+              //                         : null,
+              //                   ),
+              //                 ],
+              //               ),
+              //             ),
             ),
-            //           : Container(
-            //               width: MediaQuery.of(context).size.width,
-            //               margin: EdgeInsets.only(bottom: 16),
-            //               color: Colors.white,
-            //               padding: EdgeInsets.only(
-            //                   left: 20, right: 20, bottom: 20),
-            //               child: Column(
-            //                 children: [
-            //                   //新密码
-            //                   InputList(S.of(context).newPayPwd,
-            //                       S.of(context).placeNewPwd, _newPwd,
-            //                       isPwd: true),
-            //                   //确认新密码
-            //                   InputList(S.of(context).confimPayPwd,
-            //                       S.of(context).placeConfimPwd, _confimPwd,
-            //                       isShowLine: false, isPwd: true),
-            //                   //提交
-            //                   HsgButton.button(
-            //                     title: S.current.confirm,
-            //                     click: _boolBut()
-            //                         ? () {
-            //                             submitChangePassword();
-            //                           }
-            //                         : null,
-            //                   ),
-            //                 ],
-            //               ),
-            //             ),
           ),
         ),
       ),
@@ -388,7 +401,10 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   // }
 
   bool _submit() {
-    if (_realName.text.length > 0 && _certNo.text.length > 0) {
+    print(_certType);
+    if (_realName.text.length > 0 &&
+        _certNo.text.length > 0 &&
+        _certType != '') {
       return true;
     } else {
       return false;
@@ -561,13 +577,17 @@ class InputList extends StatelessWidget {
                     autofocus: false, //是否自动对焦
                     obscureText: this.isPwd, //是否是密码
                     textAlign: TextAlign.right, //文本对齐方式
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                      LengthLimitingTextInputFormatter(11), //限制长度
+                    ],
                     onChanged: (text) {
                       //内容改变的回调
-                      print('change $text');
+                      // print('change $text');
                     },
                     onSubmitted: (text) {
                       //内容提交(按回车)的回调
-                      print('submit $text');
+                      // print('submit $text');
                     },
                     enabled: true, //是否禁用
                     decoration: InputDecoration(

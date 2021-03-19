@@ -11,6 +11,8 @@ import 'package:ebank_mobile/page/login/forget_password_page.dart';
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
 import 'package:ebank_mobile/page/openAccount/country_region_select_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_account_contact_information_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_account_results_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_acount_select_document_type_page.dart';
 import 'package:ebank_mobile/page/register/find_user_name_success.dart';
 import 'package:ebank_mobile/page/register/forget_user_name_page.dart';
 import 'package:ebank_mobile/page/mine/pwd_operation_success_page.dart';
@@ -170,6 +172,9 @@ var pageResetPasswordOpenAccount = 'reset_password_account_open.dart';
 var pageCountryRegionSelect = '/country_region_select_page.dart';
 var pageOpenAccountContactInformation =
     '/open_account_contact_information_page.dart';
+var pageOpenAccountSelectDocumentType =
+    '/open_acount_select_document_type_page.dart';
+var pageOpenAccountResults = '/open_account_results_page.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -255,6 +260,9 @@ var appRoutes = {
   pageCountryRegionSelect: (context) => CountryOrRegionSelectPage(),
   pageOpenAccountContactInformation: (context) =>
       OpenAccountContactInformationPage(),
+  pageOpenAccountSelectDocumentType: (context) =>
+      OpenAccountSelectDocumentTypePage(),
+  pageOpenAccountResults: (context) => OpenAccountResultsPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
@@ -274,7 +282,11 @@ onGenerateRoute(RouteSettings settings) {
   }
   if (settings.name == pageDepositInfo) {
     return MaterialPageRoute(builder: (context) {
-      return PageDepositInfo(deposit: settings.arguments);
+      Map<String, dynamic> arguments = settings.arguments;
+      return PageDepositInfo(
+        deposit: arguments['deposit'],
+        cardList: arguments['cardList'],
+      );
     });
   }
   if (settings.name == pageUserAgreement) {

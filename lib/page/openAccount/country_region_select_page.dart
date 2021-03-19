@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:azlistview/azlistview.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/util/language.dart';
@@ -11,7 +10,6 @@ import 'package:flutter/material.dart';
 // import 'package:azlistview/azlistview.dart';
 import 'package:flutter/services.dart';
 
-
 class CountryOrRegionSelectPage extends StatefulWidget {
   @override
   _CountryOrRegionSelectPageState createState() =>
@@ -19,7 +17,6 @@ class CountryOrRegionSelectPage extends StatefulWidget {
 }
 
 class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
-
   List<CountryRegionModel> _cityList = List();
   List<CountryRegionModel> _hotCityList = List();
 
@@ -39,7 +36,6 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
     String language = await Language.getSaveLangage();
     print('language: $language');
     _language = language;
-
   }
 
   @override
@@ -72,22 +68,17 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
   }
 
   void loadData() async {
-
-
     //加载城市列表
     rootBundle.loadString('assets/data/country.json').then((value) {
       Map countryMap = json.decode(value);
       List list = countryMap['countryLists'];
       list.forEach((value) {
         _cityList.add(
-          CountryRegionModel(
-            nameZhCN: value['nameZhCN'],
-            nameEN: value['nameEN'],
-          ),
+          CountryRegionModel.fromJson(value),
         );
       });
-      _hotCityList.add(
-          CountryRegionModel(nameZhCN: '安哥拉', nameEN: 'Andorra', tagIndex: "★"));
+      _hotCityList.add(CountryRegionModel(
+          nameZhCN: '安哥拉', nameEN: 'Andorra', tagIndex: "★"));
       _hotCityList.add(CountryRegionModel(
           nameZhCN: '阿拉伯', nameEN: 'United Arab Emirates', tagIndex: "★"));
       _handleList(_cityList);

@@ -5,6 +5,7 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/add_partner.dart';
+import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -129,7 +130,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('添加收款人'),
+        title: Text(S.current.add_payee),
         centerTitle: true,
         elevation: 0,
       ),
@@ -175,7 +176,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         Container(
           padding: EdgeInsets.only(top: 10, bottom: 16),
           child: _inputFrame(
-            '收款方名称',
+            S.current.receipt_side_name,
             _inputField(
                 _nameController, S.current.please_input, TextInputType.text),
           ),
@@ -185,7 +186,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         Container(
           padding: EdgeInsets.only(top: 16, bottom: 16),
           child: _inputFrame(
-            '收款人账号',
+            S.current.receipt_side_account,
             _inputField(_acountController, S.current.please_input,
                 TextInputType.number),
           ),
@@ -215,7 +216,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             color: Colors.white,
             padding: EdgeInsets.only(top: 16, bottom: 16),
             child: _inputFrame(
-              '银行名称',
+              S.current.bank_name,
               _inputSelector(_bankName, S.of(context).please_select),
             ),
           ),
@@ -280,7 +281,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         Container(
           padding: EdgeInsets.only(top: 16, bottom: 16),
           child: _inputFrame(
-            '转账附言',
+            S.current.transfer_postscript,
             _inputField(
                 _aliasController, S.current.word_limit_5, TextInputType.text),
           ),
@@ -376,10 +377,15 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           Divider(height: 0.5, color: HsgColors.divider),
           //国家地区
           SelectInkWell(
-            title: '国家/地区',
+            title: S.current.state_area,
             item: _countryText,
             onTap: () {
-              _selectCountry();
+              Navigator.pushNamed(context, countryOrRegionSelectPage)
+                  .then((value) {
+                setState(() {
+                  _countryText = (value as CountryRegionModel).nameEN;
+                });
+              });
             },
           ),
           _payeeAdress(_payeeAdressController),
@@ -527,11 +533,11 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          width: 120,
+          width: 150,
           child: Text(
             left,
             style: TextStyle(color: HsgColors.firstDegreeText),
-            maxLines: 2,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
         ),

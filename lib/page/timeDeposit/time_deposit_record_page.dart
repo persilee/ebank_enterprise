@@ -9,6 +9,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
+import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,14 @@ class TimeDepositRecordPage extends StatefulWidget {
 class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   var ccy = '';
   var totalAmt = '';
+  var _defaultCcy = '';
+  List<CardListBal> cardList;
+  // DepositRecord dataA = DepositRecord('1.65', '6001', 'TAI30', '', '2', '3',
+  //     'USD', '500', '2020-01-17', '2020-07-17', '0', '0');
+  // DepositRecord dataB = DepositRecord('1.75', '6002', 'TAI30', '', '2', '3',
+  //     'HKD', '800', '2020-01-17', '2020-07-17', '0', '0');
+  // DepositRecord dataC = DepositRecord('1.50', '6003', 'TAI30', '', '2', '3',
+  //     'USD', '1000', '2020-01-17', '2020-07-17', '0', '0');
   List<DepositRecord> rowList = [];
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
@@ -41,6 +50,18 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
 
     //网络请求
     _loadDeopstData();
+    // rowList.add(dataA);
+    // rowList.add(dataB);
+    // rowList.add(dataC);
+    // rowList.add(dataA);
+
+    NotificationCenter.instance.addObserver('load', (object) {
+      setState(() {
+        if (object) {
+          _loadDeopstData();
+        }
+      });
+    });
   }
 
   @override
@@ -83,7 +104,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           color: HsgColors.primary,
           padding: EdgeInsets.only(left: 0, top: 10, bottom: 30),
           child: Text(
-            ' ${S.current.receipts_total_amt} (HKD)',
+            ' ${S.current.receipts_total_amt} (' + _defaultCcy + ')',
             textAlign: TextAlign.center,
             style: TextStyle(
                 height: 1,
@@ -193,7 +214,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         ];
         var raisedButton = RaisedButton(
             onPressed: () {
-              go2Detail(rowList[index]);
+              go2Detail(rowList[index], cardList);
             },
             padding: EdgeInsets.only(bottom: 12),
             color: Colors.white,
@@ -209,8 +230,9 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     return CustomScrollView(slivers: SliverToBoxAdapters);
   }
 
-  void go2Detail(DepositRecord deposit) {
-    Navigator.pushNamed(context, pageDepositInfo, arguments: deposit);
+  void go2Detail(DepositRecord deposit, List<CardListBal> cardList) {
+    Navigator.pushNamed(context, pageDepositInfo,
+        arguments: {'deposit': deposit, 'cardList': cardList});
   }
 
   Future<void> _loadDeopstData() async {
@@ -219,9 +241,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     bool excludeClosed = true;
     int page = 2;
     int pageSize = 10;
-    // String ciNo = '50000067';
     String ciNo = prefs.getString(ConfigKey.CUST_ID);
-    // String userId = '776112799108562944';
     Future.wait({
       DepositDataRepository().getDepositRecordRows(
           DepositRecordReq(ciNo, '', excludeClosed, page, pageSize, ''),
@@ -240,6 +260,8 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         } else if (element is GetCardListBalByUserResp) {
           setState(() {
             totalAmt = element.tdTotalAmt;
+            _defaultCcy = element.defaultCcy;
+            cardList = element.cardListBal;
           });
         }
       });

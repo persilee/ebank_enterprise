@@ -13,19 +13,19 @@ import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_trial.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
-import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PageDepositInfo extends StatefulWidget {
   final DepositRecord deposit;
-  PageDepositInfo({Key key, this.deposit}) : super(key: key);
+  final List<CardListBal> cardList;
+  PageDepositInfo({Key key, this.deposit, this.cardList}) : super(key: key);
 
   @override
-  _PageDepositInfo createState() => _PageDepositInfo(deposit);
+  _PageDepositInfo createState() => _PageDepositInfo(deposit, cardList);
 }
 
 class _PageDepositInfo extends State<PageDepositInfo> {
@@ -46,6 +46,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   var settDbAc = '';
 
   DepositRecord deposit;
+
+  List<CardListBal> cardList;
   //第二个接口所需变量
   var conMatAmt = '';
 
@@ -71,9 +73,9 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   var transferAc = '';
 
-  List<CardListBal> cardList;
+  // List<CardListBal> cardListBal;
 
-  _PageDepositInfo(this.deposit);
+  _PageDepositInfo(this.deposit, this.cardList);
 
   //获取网络请求
   @override
@@ -81,7 +83,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     super.initState();
     _loadDepositData(deposit.conNo, double.parse(deposit.bal));
     _getDetail();
-    _getCardListBalByUser();
+    // _getCardListBalByUser();
   }
 
   @override
@@ -189,7 +191,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                       Expanded(child: Text(S.current.due_date_indicate)),
                       Container(
                         child: Text(instCode),
-                        // Text(S.current.instruction_at_maturity_0),
                       )
                     ],
                   ),
@@ -207,14 +208,22 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return SimpleDialog(
-                          title: Text(S.current.confirm_to_early_settlement,
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center),
-                          children: <Widget>[
-                            _DialogBox(conMatAmts, matAmts)
-                          ]); //conMatAmts
+                      return HsgAlertDialog(
+                          title: S.current.confirm_to_early_settlement,
+                          message: S.current.contract_settlement_amt +
+                              ':$ccy$conMatAmts\n' +
+                              S.current.early_settlement_amt +
+                              ':$ccy$matAmts',
+                          positiveButton: S.current.confirm,
+                          negativeButton: S.current.cancel);
+                      // return SimpleDialog(
+                      //     title: Text(S.current.confirm_to_early_settlement,
+                      //         style: TextStyle(
+                      //             fontSize: 15, fontWeight: FontWeight.bold),
+                      //         textAlign: TextAlign.center),
+                      //     children: <Widget>[
+                      //       _DialogBox(conMatAmts, matAmts)
+                      //     ]); //conMatAmts
                     },
                   );
                 },
@@ -236,51 +245,57 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   //对话框
   // ignore: non_constant_identifier_names
-  _DialogBox(String contractMoney, String earlySettleMoney) {
-    return Container(
-        height: 105,
-        child: Column(
-          children: [
-            //预计到期总额
-            _contractSettlement(
-                S.current.contract_settlement_amt, '$ccy$contractMoney'),
+  // _DialogBox(String contractMoney, String earlySettleMoney) {
+  //   return Container(
+  //       color: Colors.blue,
+  //       // height: 105,
+  //       child: Column(
+  //         children: [
+  //           //预计到期总额
+  //           _contractSettlement(
+  //               S.current.contract_settlement_amt, '$ccy$contractMoney'),
 
-            //提前结清本息总额
-            _contractSettlement(
-                S.current.early_settlement_amt, '$ccy$earlySettleMoney'),
+  //           //提前结清本息总额
+  //           _contractSettlement(
+  //               S.current.early_settlement_amt, '$ccy$earlySettleMoney'),
 
-            Container(
-              child: Divider(),
-              margin: EdgeInsets.only(top: 3),
-            ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  //取消按钮
-                  Container(
-                      child: FlatButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(S.current.cancel),
-                    color: Colors.white,
-                  )),
-                  Container(
-                    //确定按钮
-                    child: FlatButton(
-                      onPressed: () {
-                        _contractEarly(context);
-                      },
-                      child: Text(S.current.confirm),
-                      color: Colors.white,
-                      textColor: Colors.blue,
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ));
-  }
+  //           Container(
+  //             // margin: EdgeInsets.only(top: 30),
+  //             child: Divider(),
+  //             // margin: EdgeInsets.only(top: 3),
+  //           ),
+  //           Container(
+  //             padding: EdgeInsets.zero,
+  //             color: Colors.red,
+  //             child: Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //               children: [
+  //                 //取消按钮
+  //                 Container(
+  //                     child: FlatButton(
+  //                   padding: EdgeInsets.zero,
+  //                   onPressed: () => Navigator.of(context).pop(),
+  //                   child: Text(S.current.cancel),
+  //                   color: Colors.white,
+  //                 )),
+  //                 Container(
+  //                   //确定按钮
+  //                   child: FlatButton(
+  //                     padding: EdgeInsets.zero,
+  //                     onPressed: () {
+  //                       _contractEarly(context);
+  //                     },
+  //                     child: Text(S.current.confirm),
+  //                     color: Colors.white,
+  //                     textColor: Colors.blue,
+  //                   ),
+  //                 )
+  //               ],
+  //             ),
+  //           )
+  //         ],
+  //       ));
+  // }
 
   //提前结清
   _contractSettlement(String leftText, String rightText) {
@@ -345,38 +360,29 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   _contractEarly(BuildContext context) {
     setState(() {});
     HSProgressHUD.show();
-    DepositDataRepository()
-        .getDepositEarlyContract(
-            GetDepositEarlyContractReq(
-                // conNos,
-                // double.parse(eryInt),
-                // double.parse(eryRate),
-                // double.parse(hdlFee),
-                // '',
-                // double.parse(matAmt),
-                // double.parse(pnltFee),
-                // double.parse(settBals),
-                // settDdAc,
-                // ''
-                conNos,
-                double.parse(eryInt),
-                double.parse(eryRate),
-                0,
-                mainAc,
-                0,
-                0,
-                0,
-                settDdAc,
-                transferAc),
-            'getDepositEarlyContract')
-        .then((value) {
-      HSProgressHUD.dismiss();
-      _showContractSucceedPage(context);
-      // _cleanDeposit(context, value);
-    }).catchError((e) {
-      setState(() {});
-      HSProgressHUD.showError(status: '${e.toString()}');
-    });
+    // DepositDataRepository()
+    //     .getDepositEarlyContract(
+    //         GetDepositEarlyContractReq(
+    //             conNos,
+    //             double.parse(eryInt),
+    //             double.parse(eryRate),
+    //             0,
+    //             mainAc,
+    //             0,
+    //             0,
+    //             0,
+    //             settDdAc,
+    //             transferAc),
+    //         'getDepositEarlyContract')
+    //     .then((value) {
+    //   HSProgressHUD.dismiss();
+    //   _showContractSucceedPage(context);
+    // }).catchError((e) {
+    //   setState(() {});
+    //   HSProgressHUD.showError(status: '${e.toString()}');
+    // });
+    HSProgressHUD.dismiss();
+    _showContractSucceedPage(context);
   }
 
   //获取详情
@@ -393,14 +399,14 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         auctCale = deposit.auctCale;
         break;
       case '3':
-        auctCale = (double.parse(deposit.auctCale) * 3).toString();
+        auctCale = (int.parse(deposit.auctCale) * 3).toString();
         break;
       case '4':
-        auctCale = (double.parse(deposit.auctCale) * 6).toString();
+        auctCale = (int.parse(deposit.auctCale) * 6).toString();
         break;
       default:
         {
-          auctCale = (double.parse(deposit.auctCale) * 12).toString();
+          auctCale = (int.parse(deposit.auctCale) * 12).toString();
         }
     }
     switch (deposit.instCode) {
@@ -418,26 +424,31 @@ class _PageDepositInfo extends State<PageDepositInfo> {
           instCode = S.current.instruction_at_maturity_5;
         }
     }
+    for (int i = 0; i < cardList.length; i++) {
+      if (cardList[i].ccy == ccy) {
+        transferAc = cardList[i].cardNo;
+      }
+    }
   }
 
-  _getCardListBalByUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    String ciNo = prefs.getString(ConfigKey.CUST_ID);
-    DepositDataRepository()
-        .getCardListBalByUser(
-            GetCardListBalByUserReq('', [], '', ciNo), 'getCardListBalByUser')
-        .then((value) {
-      cardList = value.cardListBal;
-      for (int i = 0; i < cardList.length; i++) {
-        if (cardList[i].ccy == ccy) {
-          transferAc = cardList[i].cardNo;
-        }
-      }
-    }).catchError((e) {
-      setState(() {});
-      HSProgressHUD.showError(status: '${e.toString()}');
-    });
-  }
+  // _getCardListBalByUser() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   String ciNo = prefs.getString(ConfigKey.CUST_ID);
+  //   DepositDataRepository()
+  //       .getCardListBalByUser(
+  //           GetCardListBalByUserReq('', [], '', ciNo), 'getCardListBalByUser')
+  //       .then((value) {
+  //     cardListBal = value.cardListBal;
+  //     for (int i = 0; i < cardListBal.length; i++) {
+  //       if (cardListBal[i].ccy == ccy) {
+  //         transferAc = cardListBal[i].cardNo;
+  //       }
+  //     }
+  //   }).catchError((e) {
+  //     setState(() {});
+  //     HSProgressHUD.showError(status: '${e.toString()}');
+  //   });
+  // }
 
   //结算成功-跳转页面
   _showContractSucceedPage(BuildContext context) async {

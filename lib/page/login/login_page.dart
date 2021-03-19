@@ -43,7 +43,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-
+    String password = EncryptUtil.aesEncode('123456Aa');
+    print("$password +++++++++++++");
     // 添加监听
     _accountTC.addListener(() {
       _account = _accountTC.text;
@@ -52,15 +53,6 @@ class _LoginPageState extends State<LoginPage> {
     _passwordTC.addListener(() {
       _password = _passwordTC.text;
     });
-    if (_account == '' && _password == '') {
-      print("$_password  >>>>>>");
-      _isLoading = true;
-    }
-
-    _account = _accountTC.text;
-    print("$_account   8888888");
-    _password = _passwordTC.text;
-    print("$_password   8888888");
     Intl.defaultLocale = 'en';
   }
 
@@ -220,14 +212,20 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     Widget contentWidget = new Scaffold(
-      backgroundColor: Colors.transparent,
-      body: SafeArea(
-        maintainBottomViewPadding: true,
-        child: SingleChildScrollView(
-          child: contentDetailWidget,
-        ),
-      ),
-    );
+        backgroundColor: Colors.transparent,
+        body: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            // 触摸收起键盘
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: SafeArea(
+            maintainBottomViewPadding: true,
+            child: SingleChildScrollView(
+              child: contentDetailWidget,
+            ),
+          ),
+        ));
 
     return MaterialApp(
       home: Stack(
@@ -258,11 +256,6 @@ class _LoginPageState extends State<LoginPage> {
       _saveUserConfig(context, value);
     }).catchError((e) {
       setState(() {
-        // if (_account != '' && password != '') {
-        //   _isLoading = false;
-        // } else {
-        //   _isLoading = true;
-        // }
         _isLoading = false;
       });
       HSProgressHUD.showError(status: '${e.toString()}');
@@ -277,7 +270,7 @@ class _LoginPageState extends State<LoginPage> {
   ///登录成功-跳转操作
   _showMainPage(BuildContext context) async {
     setState(() {
-      _isLoading = true;
+      _isLoading = false;
     });
     Navigator.pushNamed(context, pageIndexName);
   }
