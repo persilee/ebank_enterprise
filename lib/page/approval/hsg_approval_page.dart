@@ -47,7 +47,7 @@ class _ApprovalPageState extends State<ApprovalPage>
       labelStyle: TextStyle(
           fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.black),
       labelColor: Colors.black,
-      unselectedLabelColor: Colors.black,
+      unselectedLabelColor: Colors.grey,
       controller: tabController,
       indicatorWeight: 4,
       indicatorSize: TabBarIndicatorSize.label,
@@ -63,6 +63,7 @@ class _ApprovalPageState extends State<ApprovalPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(52),
           child: Container(
