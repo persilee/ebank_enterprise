@@ -44,6 +44,6 @@ class HsgColors {
   static const Color notSelectedFrequencyBtnText = Color(0xFF868686);
   static const Color lineColor = Color(0xFFD8D8D8);
   static const Color inputBackground = Color(0xFFF5F5F5);
-    static const Color iconColor = Color(0xFFAAAAAA);
+  static const Color iconColor = Color(0xFFAAAAAA);
   static const Color color38C8C8C8 = Color(0x38C8C8C8);
 }
