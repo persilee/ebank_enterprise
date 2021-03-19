@@ -900,7 +900,7 @@ class _DetailListPageState extends State<DetailListPage> {
 
     HSProgressHUD.show();
     PayCollectDetailRepository()
-        .getRevenueByCards(GetRevenueByCardsReq(1, 10, custID, '2021-01-01'),
+        .getRevenueByCards(GetRevenueByCardsReq(1, 10, custID, '2021-01-11'),
             'GetRevenueByCardsReq')
         .then((data) {
       HSProgressHUD.dismiss();

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -38,6 +39,8 @@ class _RegisterPageState extends State<RegisterPage> {
   int countdownTime = 0;
   bool _checkBoxValue = false; //复选框默认值
 
+  /// 区号
+  String _officeAreaCodeText = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +65,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     //注册标题
                     getRegisterTitle('欢迎注册'),
                     //注册手机号
-                    getRegisterRegion(context, _phoneNum),
+                    getRegisterRegion(
+                      context,
+                      _phoneNum,
+                      _officeAreaCodeText,
+                      _selectRegionCode,
+                    ),
                     //输入用户名
                     getRegisterRow('输入用户名', _userName),
                     //获取验证码
@@ -183,6 +191,16 @@ class _RegisterPageState extends State<RegisterPage> {
     } else {
       return false;
     }
+  }
+
+  //选择地区方法
+  _selectRegionCode() {
+    print('区号');
+    Navigator.pushNamed(context, countryOrRegionSelectPage).then((value) {
+      setState(() {
+        _officeAreaCodeText = (value as CountryRegionModel).code;
+      });
+    });
   }
 
   //倒计时方法

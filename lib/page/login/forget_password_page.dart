@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/modify_pwd_by_sms.dart';
 import 'package:ebank_mobile/data/source/update_login_paw_repository.dart';
@@ -40,6 +41,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   Timer _timer;
   int countdownTime = 0;
 
+  /// 区号
+  String _officeAreaCodeText = '';
   @override
   void dispose() {
     super.dispose();
@@ -69,7 +72,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   //忘记密码标题
                   getRegisterTitle('忘记密码'),
                   //手机号
-                  getRegisterRegion(context, _phoneNum),
+                  getRegisterRegion(context, _phoneNum, _officeAreaCodeText,
+                      _selectRegionCode),
                   //获取验证码
                   Container(
                     height: MediaQuery.of(context).size.height / 15,
@@ -158,6 +162,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         ),
       ),
     );
+  }
+
+  _selectRegionCode() {
+    print('区号');
+    Navigator.pushNamed(context, countryOrRegionSelectPage).then((value) {
+      setState(() {
+        _officeAreaCodeText = (value as CountryRegionModel).code;
+      });
+    });
   }
 
   //获取验证码按钮

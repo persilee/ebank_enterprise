@@ -1,6 +1,11 @@
 import 'dart:async';
 
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+/// 忘记用户名页面
+/// Author: pengyikang
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -23,6 +28,9 @@ class _ForgetUserNameState extends State<ForgetUserName> {
   TextEditingController _sms = TextEditingController();
   Timer _timer;
   int countdownTime = 0;
+
+  /// 区号
+  String _officeAreaCodeText = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +46,8 @@ class _ForgetUserNameState extends State<ForgetUserName> {
           child: ListView(
             children: [
               getRegisterTitle('忘记账号'),
-              getRegisterRegion(context, _phoneNum),
+              getRegisterRegion(
+                  context, _phoneNum, _officeAreaCodeText, _selectRegionCode),
               //获取验证码
               Container(
                 height: MediaQuery.of(context).size.height / 15,
@@ -130,6 +139,16 @@ class _ForgetUserNameState extends State<ForgetUserName> {
     } else {
       return false;
     }
+  }
+
+  //获取地区
+  _selectRegionCode() {
+    print('区号');
+    Navigator.pushNamed(context, countryOrRegionSelectPage).then((value) {
+      setState(() {
+        _officeAreaCodeText = (value as CountryRegionModel).code;
+      });
+    });
   }
 
   //获取验证码接口

@@ -8,6 +8,10 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+/// 忘记密码--未开户页面
+/// Author: pengyikang
+
 class ResetPasswordNoAccount extends StatefulWidget {
   ResetPasswordNoAccount({Key key}) : super(key: key);
 

@@ -115,33 +115,39 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                   : SliverToBoxAdapter(),
 
               // 定期
-              isTotalAsset
-                  ? SliverToBoxAdapter(
-                      child: Container(
-                        color: Colors.white,
-                        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                        child: Text(
-                          S.current.time_deposits,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: HsgColors.aboutusTextCon),
-                        ),
-                      ),
-                    )
+              (tdTotal != '0.00')
+                  ? isTotalAsset
+                      ? SliverToBoxAdapter(
+                          child: Container(
+                            color: Colors.white,
+                            padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                            child: Text(
+                              S.current.time_deposits,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  color: HsgColors.aboutusTextCon),
+                            ),
+                          ),
+                        )
+                      : SliverToBoxAdapter()
                   : SliverToBoxAdapter(),
-              isTotalAsset
-                  ? SliverToBoxAdapter(
-                      child: _tdTotalColumn(),
-                    )
+              (tdTotal != '0.00')
+                  ? isTotalAsset
+                      ? SliverToBoxAdapter(
+                          child: _tdTotalColumn(),
+                        )
+                      : SliverToBoxAdapter()
                   : SliverToBoxAdapter(),
-              isTotalAsset
-                  ? SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                        return _tdSliverList(index);
-                      }, childCount: tdList.length),
-                    )
+              (tdTotal != '0.00')
+                  ? isTotalAsset
+                      ? SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                            return _tdSliverList(index);
+                          }, childCount: tdList.length),
+                        )
+                      : SliverToBoxAdapter()
                   : SliverToBoxAdapter(),
               isTotalAsset
                   ? SliverToBoxAdapter(
@@ -152,33 +158,39 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                   : SliverToBoxAdapter(),
 
               // 贷款
-              isTotalLiabilities
-                  ? SliverToBoxAdapter(
-                      child: Container(
-                        color: Colors.white,
-                        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                        child: Text(
-                          S.current.loan,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: HsgColors.aboutusTextCon),
-                        ),
-                      ),
-                    )
+              (lnTotal != '0.00')
+                  ? isTotalLiabilities
+                      ? SliverToBoxAdapter(
+                          child: Container(
+                            color: Colors.white,
+                            padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                            child: Text(
+                              S.current.loan,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  color: HsgColors.aboutusTextCon),
+                            ),
+                          ),
+                        )
+                      : SliverToBoxAdapter()
                   : SliverToBoxAdapter(),
-              isTotalLiabilities
-                  ? SliverToBoxAdapter(
-                      child: _lnTotalColumn(),
-                    )
+              (lnTotal != '0.00')
+                  ? isTotalLiabilities
+                      ? SliverToBoxAdapter(
+                          child: _lnTotalColumn(),
+                        )
+                      : SliverToBoxAdapter()
                   : SliverToBoxAdapter(),
-              isTotalLiabilities
-                  ? SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                        return _lnSliverList(index);
-                      }, childCount: lnList.length),
-                    )
+              (lnTotal != '0.00')
+                  ? isTotalLiabilities
+                      ? SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                            return _lnSliverList(index);
+                          }, childCount: lnList.length),
+                        )
+                      : SliverToBoxAdapter()
                   : SliverToBoxAdapter(),
 
               SliverToBoxAdapter(

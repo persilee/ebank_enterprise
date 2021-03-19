@@ -10,6 +10,10 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+/// 忘记密码--已开户页面
+/// Author: pengyikang
+
 class ResetPasswordAccountOpen extends StatefulWidget {
   ResetPasswordAccountOpen({Key key}) : super(key: key);
 

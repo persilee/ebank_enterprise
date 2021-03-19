@@ -4,6 +4,10 @@ import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
 
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+/// 找回用户名成功页面
+/// Author: pengyikang
+
 class FindUserNameSuccess extends StatefulWidget {
   FindUserNameSuccess({Key key}) : super(key: key);
 
