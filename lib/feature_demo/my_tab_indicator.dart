@@ -23,8 +23,14 @@ class MyUnderlineTabIndicator extends Decoration {
   const MyUnderlineTabIndicator({
     this.borderSide = const BorderSide(width: 2.0, color: Colors.white),
     this.insets = EdgeInsets.zero,
+    this.bottomPadding = 0,
+    this.indicatorWidthPercentage = 0.36,
   })  : assert(borderSide != null),
         assert(insets != null);
+
+  final double indicatorWidthPercentage;
+
+  final double bottomPadding;
 
   /// The color and weight of the horizontal line drawn below the selected tab.
   final BorderSide borderSide;
@@ -70,11 +76,12 @@ class MyUnderlineTabIndicator extends Decoration {
     final Rect indicator = insets.resolve(textDirection).deflateRect(rect);
     double wantWidth = 30;
     double cw = (indicator.left + indicator.right) / 2;
+    print(cw);
     return Rect.fromLTWH(
-      cw - wantWidth / 2,
+      cw - (indicator.width * indicatorWidthPercentage) / 2,
       indicator.bottom - borderSide.width,
-      wantWidth,
-      borderSide.width,
+      indicator.width * indicatorWidthPercentage,
+      borderSide.width - bottomPadding,
     );
   }
 
