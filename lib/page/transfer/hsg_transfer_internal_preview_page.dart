@@ -60,12 +60,19 @@ class _TransferInternalPreviewPageState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(S.current.transfer_amount),
-                Text(
-                  '— ' +
-                      transferData.transferIntoCcy +
-                      FormatUtil.formatSringToMoney(
-                          transferData.transferIntoAmount),
-                  style: TextStyle(color: Color(0xff232323), fontSize: 30),
+                Container(
+                  width: (MediaQuery.of(context).size.width - 40) / 2,
+                  child: Text(
+                    '— ' +
+                        transferData.transferIntoCcy +
+                        ' ' +
+                        FormatUtil.formatSringToMoney(
+                            transferData.transferIntoAmount),
+                    style: TextStyle(color: Color(0xff232323), fontSize: 20),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
+                  ),
                 ),
               ],
             ),

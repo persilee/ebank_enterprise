@@ -37,14 +37,19 @@ class _TransferInternalPreviewPageState
             _content(transferData),
             _explain(),
             Container(
-              margin: EdgeInsets.only(top: 50, bottom: 50),
-              child: HsgButton.button(
-                title: S.current.confirm,
-                click: () {
-                  Navigator.pushReplacementNamed(context, pageOperationResult);
-                },
-              ),
-            ),
+                  width: (MediaQuery.of(context).size.width - 40) / 2,
+                  child: Text(
+                    '— ' +
+                        transferData.transferIntoCcy +
+                        ' ' +
+                        FormatUtil.formatSringToMoney(
+                            transferData.transferIntoAmount),
+                    style: TextStyle(color: Color(0xff232323), fontSize: 20),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
+                  ),
+                ),
           ],
         ));
   }

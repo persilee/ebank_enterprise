@@ -25,6 +25,7 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../page_route.dart';
 import 'data/transfer_internal_data.dart';
@@ -278,27 +279,49 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       child: Container(
         margin: EdgeInsets.only(top: 100, bottom: 50),
         child: HsgButton.button(
-            title: S.current.next_step,
-            click: _isClick
-                ? () {
-                    Navigator.pushNamed(
-                      context,
-                      pageTransferInternalPreview,
-                      arguments: TransferInternalData(
-                        _account,
-                        '123',
-                        _transferCcy,
-                        _nameController.text,
-                        _accountController.text,
-                        _transferMoneyController.text,
-                        _payCcy,
-                        _remarkController.text,
-                      ),
-                    );
-                  }
-                : null),
+            title: S.current.next_step, click: _isClick ? _judgeDialog : null),
       ),
     );
+  }
+
+  _judgeDialog() {
+    if (double.parse(_transferMoneyController.text) > double.parse(_limit) ||
+        double.parse(_transferMoneyController.text) > double.parse(_balance)) {
+      if (double.parse(_limit) > double.parse(_balance)) {
+        Fluttertoast.showToast(
+          msg: "余额不足",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color(0xffe74c3c),
+          textColor: Color(0xffffffff),
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: "超过限额",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color(0xffe74c3c),
+          textColor: Color(0xffffffff),
+        );
+      }
+    } else {
+      Navigator.pushNamed(
+        context,
+        pageTransferInternalPreview,
+        arguments: TransferInternalData(
+          _account,
+          '123',
+          _transferCcy,
+          _nameController.text,
+          _accountController.text,
+          _transferMoneyController.text,
+          _payCcy,
+          _remarkController.text,
+        ),
+      );
+    }
   }
 
   Future transferCcyDialog() async {

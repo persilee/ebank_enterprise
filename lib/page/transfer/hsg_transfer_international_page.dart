@@ -24,6 +24,7 @@ import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../page_route.dart';
 import 'data/transfer_international_data.dart';
@@ -688,34 +689,57 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         margin: EdgeInsets.only(top: 100, bottom: 50),
         child: HsgButton.button(
             title: S.current.next_step,
-            click: _isClick()
-                ? () {
-                    Navigator.pushNamed(
-                      context,
-                      pageTransferInternationalPreview,
-                      arguments: TransferInternationalData(
-                        _account,
-                        '123',
-                        _transferCcy,
-                        _payerAddressController.text,
-                        _companyController.text,
-                        _accountController.text,
-                        _transferMoneyController.text,
-                        _payCcy,
-                        _payeeAddressController.text,
-                        _countryText,
-                        _getPayeeBank,
-                        _bankSwiftController.text,
-                        _middleBankSwiftController.text,
-                        _transferFee,
-                        _feeUse,
-                        _remarkController.text,
-                      ),
-                    );
-                  }
-                : null),
+            click: _isClick() ? _judgeDialog : null),
       ),
     );
+  }
+
+  _judgeDialog() {
+    if (double.parse(_transferMoneyController.text) > double.parse(_limit) ||
+        double.parse(_transferMoneyController.text) > double.parse(_balance)) {
+      if (double.parse(_limit) > double.parse(_balance)) {
+        Fluttertoast.showToast(
+          msg: "余额不足",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color(0xffe74c3c),
+          textColor: Color(0xffffffff),
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: "超过限额",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color(0xffe74c3c),
+          textColor: Color(0xffffffff),
+        );
+      }
+    } else {
+      Navigator.pushNamed(
+        context,
+        pageTransferInternationalPreview,
+        arguments: TransferInternationalData(
+          _account,
+          '123',
+          _transferCcy,
+          _payerAddressController.text,
+          _companyController.text,
+          _accountController.text,
+          _transferMoneyController.text,
+          _payCcy,
+          _payeeAddressController.text,
+          _countryText,
+          _getPayeeBank,
+          _bankSwiftController.text,
+          _middleBankSwiftController.text,
+          _transferFee,
+          _feeUse,
+          _remarkController.text,
+        ),
+      );
+    }
   }
 
   //拿到虚线
