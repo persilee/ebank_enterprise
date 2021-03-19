@@ -87,8 +87,9 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
 
                     //提前结清跳转
                     if (_arguments == 'timeDepositRecord') {
-                      Navigator.pushReplacementNamed(
-                          context, pageTimeDepositRecord);
+                      Navigator.of(context)..pop()..pop();
+                      NotificationCenter.instance
+                          .postNotification('load', true);
                     }
                   },
                   color: HsgColors.accent,

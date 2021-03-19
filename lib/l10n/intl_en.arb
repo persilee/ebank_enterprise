@@ -280,7 +280,7 @@
   "instruction_at_maturity_1": "Principal Rollover With Interest to DD Account",
   "instruction_at_maturity_2": "Principal Plus Interest Rollover",
   "instruction_at_maturity_5": "Principal And Interest To DD Account",
-  "no_advance_withdrawal": "No Advance Withdrawal.",
+  "no_advance_withdrawal": "It can be withdrawn in advance, and the interest of the part withdrawn in advance shall be calculated according to the current deposit interest rate of our bank on the day of withdrawal.",
   "hint_please_select": "Please select",
   "all_account": "All Accounts",
   "account_lsit": "Accounts List",
