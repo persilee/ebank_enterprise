@@ -46,4 +46,6 @@ class HsgColors {
   static const Color inputBackground = Color(0xFFF5F5F5);
   static const Color iconColor = Color(0xFFAAAAAA);
   static const Color color38C8C8C8 = Color(0x38C8C8C8);
+  static const Color registerBtn = Color(0xFF819DFF);
+  static const Color registerNextBtn = Color(0xFFDCDCDC);
 }

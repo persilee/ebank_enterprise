@@ -55,8 +55,10 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          centerTitle: true,
-          title: Text(S.of(context).reset_password),
+          iconTheme: IconThemeData(
+            color: Colors.black, //修改颜色
+          ),
+          backgroundColor: Colors.white,
           elevation: 0,
         ),
         body: GestureDetector(
@@ -108,21 +110,25 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                                 ),
                               ),
                             ),
-                            InkWell(
-                              onTap: () {
-                                //调用获取验证码接口
-                                _getVerificationCode();
-                                print('获取验证码');
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width / 4,
-                                child: Text(
-                                  '获取验证码',
-                                  style: TextStyle(color: Colors.blue),
-                                  textAlign: TextAlign.right,
-                                ),
-                              ),
+                            Container(
+                              width: MediaQuery.of(context).size.width / 3,
+                              child: _otpButton(),
                             )
+                            // InkWell(
+                            //   onTap: () {
+                            //     //调用获取验证码接口
+                            //     _getVerificationCode();
+                            //     print('获取验证码');
+                            //   },
+                            //   child: Container(
+                            //     width: MediaQuery.of(context).size.width / 4,
+                            //     child: Text(
+                            //       '获取验证码',
+                            //       style: TextStyle(color: Colors.blue),
+                            //       textAlign: TextAlign.right,
+                            //     ),
+                            //   ),
+                            // )
                           ],
                         ),
                       ),
@@ -179,28 +185,28 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     });
   }
 
-  //获取验证码按钮
-  OutlineButton _otpButton() {
-    return OutlineButton(
+  FlatButton _otpButton() {
+    return FlatButton(
       onPressed: countdownTime > 0
           ? null
           : () {
               _getVerificationCode();
             },
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
-      padding: EdgeInsets.symmetric(horizontal: 8),
+      padding: EdgeInsets.only(left: 35),
       //文字颜色
       textColor: HsgColors.blueTextColor,
-      borderSide: BorderSide(color: HsgColors.blueTextColor, width: 0.5),
       //画圆角
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
-      ),
-      disabledTextColor: HsgColors.describeText,
-      disabledBorderColor: HsgColors.describeText,
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.circular(50),
+      // ),
+      disabledTextColor: HsgColors.blueTextColor,
       child: Text(
-        countdownTime > 0 ? '${countdownTime}s' : '获取验证码',
+        countdownTime > 0
+            ? '${countdownTime}s'
+            : S.of(context).getVerificationCode,
         style: TextStyle(fontSize: 14),
+        textAlign: TextAlign.right,
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
@@ -216,7 +222,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   //倒计时方法
   _startCountdown() {
-    countdownTime = 60;
+    countdownTime = 120;
     final call = (timer) {
       setState(() {
         if (countdownTime < 1) {
@@ -233,9 +239,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   _getVerificationCode() async {
     RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
     if (characters.hasMatch(_phoneNum.text) == false) {
-      HSProgressHUD.showInfo(status: S.current.format_mobile_error);
+      Fluttertoast.showToast(msg: S.current.format_mobile_error);
     } else {
-      HSProgressHUD.show();
       VerificationCodeRepository()
           .sendSmsByPhone(
               SendSmsByPhoneNumberReq(_phoneNum.text, 'findPwd'), 'sendSms')
@@ -263,15 +268,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(msg: S.of(context).differentPwd);
     } else if ((_newPwd.text).contains(userAccount) == true) {
-      HSProgressHUD.showInfo(status: S.current.not_contain_password);
+      Fluttertoast.showToast(msg: S.current.not_contain_password);
     } else if ((_newPwd.text).length < 8 || (_newPwd.text).length > 16) {
-      HSProgressHUD.showInfo(status: S.current.password_8_16);
+      Fluttertoast.showToast(msg: S.current.password_8_16);
     } else if (number.hasMatch(_newPwd.text) == false) {
-      HSProgressHUD.showInfo(status: S.current.password_need_num);
+      Fluttertoast.showToast(msg: S.current.password_need_num);
     } else if (letter.hasMatch(_newPwd.text) == false) {
-      HSProgressHUD.showInfo(status: S.current.password_need_num);
+      Fluttertoast.showToast(msg: S.current.password_need_num);
     } else if (characters.hasMatch(_newPwd.text) == false) {
-      HSProgressHUD.showInfo(status: S.current.password_need_num);
+      Fluttertoast.showToast(msg: S.current.password_need_num);
     } else {
       String password = EncryptUtil.aesEncode(_confimPwd.text);
       HSProgressHUD.show();

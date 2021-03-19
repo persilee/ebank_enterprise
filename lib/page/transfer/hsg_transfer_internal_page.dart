@@ -138,6 +138,14 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _accountController.dispose();
+    _remarkController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var _arguments = ModalRoute.of(context).settings.arguments;
     setState(() {
@@ -158,29 +166,36 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         title: Text(S.current.transfer_type_0),
         centerTitle: true,
       ),
-      body: CustomScrollView(
-        slivers: [
-          _gaySliver,
-          //转账金额和币种
-          TransferAccount(
-            payCcy: _payCcy,
-            transferCcy: _transferCcy,
-            limit: _limit,
-            account: _account,
-            balance: _balance,
-            transferMoneyController: _transferMoneyController,
-            callback: _boolBut,
-            payCcyDialog: payCcyDialog,
-            transferCcyDialog: transferCcyDialog,
-            accountDialog: _accountDialog,
-          ),
-          //收款方
-          _payeeWidget(),
-          //附言
-          _remarkWidget(),
-          //提交按钮
-          _submitButton(),
-        ],
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: CustomScrollView(
+          slivers: [
+            _gaySliver,
+            //转账金额和币种
+            TransferAccount(
+              payCcy: _payCcy,
+              transferCcy: _transferCcy,
+              limit: _limit,
+              account: _account,
+              balance: _balance,
+              transferMoneyController: _transferMoneyController,
+              callback: _boolBut,
+              payCcyDialog: payCcyDialog,
+              transferCcyDialog: transferCcyDialog,
+              accountDialog: _accountDialog,
+            ),
+            //收款方
+            _payeeWidget(),
+            //附言
+            _remarkWidget(),
+            //提交按钮
+            _submitButton(),
+          ],
+        ),
       ),
     );
   }
@@ -293,7 +308,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
-          backgroundColor: Color(0xffe74c3c),
+          backgroundColor: Color(0x57272727),
           textColor: Color(0xffffffff),
         );
       } else {
@@ -302,7 +317,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
-          backgroundColor: Color(0xffe74c3c),
+          backgroundColor: Color(0x57272727),
           textColor: Color(0xffffffff),
         );
       }
@@ -497,6 +512,14 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _balance = _balanceList[0];
               _payIndex = 0;
             }
+            // for (int i = 0; i < _transferCcyList.length; i++) {
+            //   if (_transferCcy == _payCcy) {
+            //     _transferCcy = _payCcy;
+            //     break;
+            //   } else {
+            //     _transferIndex++;
+            //   }
+            // }
           });
         }
         //查询额度
