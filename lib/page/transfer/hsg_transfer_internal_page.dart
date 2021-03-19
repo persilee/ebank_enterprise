@@ -431,11 +431,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             payerName = element.cardList[0].ciName;
           });
           _getCardTotal(_account);
-          _payCcyList.clear();
-          _payCcy = _localeCcy;
-          _payCcyList.add(_localeCcy);
-          _balance = '10000';
-          _limit = '5000';
+          // _payCcyList.clear();
+          // _payCcy = _localeCcy;
+          // _payCcyList.add(_localeCcy);
+          // _balance = '10000';
+          // _limit = '5000';
         }
       });
     });
@@ -453,14 +453,21 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         // 通过卡号查询余额
         if (element is GetSingleCardBalResp) {
           setState(() {
-            //币种
-            if (_payCcy == '') {
+            //初始币种和余额
+            if (_payCcy == '' || _balance == '') {
               _payCcy = element.cardListBal[0].ccy;
+              _balance = element.cardListBal[0].currBal;
+              element.cardListBal.forEach((element) {
+                if (element.ccy == _localeCcy) {
+                  _payCcy = element.ccy;
+                  _balance = element.currBal;
+                }
+              });
             }
             //余额
-            if (_balance == '') {
-              _balance = element.cardListBal[0].currBal;
-            }
+            // if (_balance == '') {
+            //   _balance = element.cardListBal[0].currBal;
+            // }
             _payCcyList.clear();
             _balanceList.clear();
             _payIndex = 0;
