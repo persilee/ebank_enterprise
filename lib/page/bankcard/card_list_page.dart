@@ -79,7 +79,6 @@ class _CardListPageState extends State<CardListPage> {
             _isShow[position] = true;
           }
         });
-        // print(_isShow);
       },
     );
   }

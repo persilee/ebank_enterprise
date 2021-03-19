@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +7,10 @@ import 'package:flutter/material.dart';
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 注册账号拿去手机地区号
 /// Author: pengyikang
-Widget getRegisterRegion(
-    BuildContext context, TextEditingController _phoneNum) {
-  print("${_phoneNum.text} >>>>>>>");
+Widget getRegisterRegion(BuildContext context, TextEditingController _phoneNum,
+    String _officeAreaCodeText, Function _selectRegionCode) {
+  _officeAreaCodeText = _officeAreaCodeText == '' ? '86' : _officeAreaCodeText;
+  print("${_phoneNum.text}");
   return Container(
     margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
     width: MediaQuery.of(context).size.width / 2,
@@ -20,7 +22,9 @@ Widget getRegisterRegion(
         children: [
           InkWell(
             onTap: () {
+              _selectRegionCode();
               print('点击86');
+              print("$_officeAreaCodeText  ++++++");
             },
             child: Row(
               children: [
@@ -28,8 +32,8 @@ Widget getRegisterRegion(
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(left: 20),
                   height: MediaQuery.of(context).size.height / 20,
-                  width: MediaQuery.of(context).size.width / 13,
-                  child: Text('+86'),
+                  width: MediaQuery.of(context).size.width / 10,
+                  child: Text('+$_officeAreaCodeText'),
                 ),
                 Container(
                   height: MediaQuery.of(context).size.height / 20,

@@ -60,12 +60,19 @@ class _TransferInternalPreviewPageState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(S.current.transfer_amount),
-                Text(
-                  '— ' +
-                      transferData.transferIntoCcy +
-                      FormatUtil.formatSringToMoney(
-                          transferData.transferIntoAmount),
-                  style: TextStyle(color: Color(0xff232323), fontSize: 30),
+                Container(
+                  width: (MediaQuery.of(context).size.width - 40) / 2,
+                  child: Text(
+                    '— ' +
+                        transferData.transferIntoCcy +
+                        ' ' +
+                        FormatUtil.formatSringToMoney(
+                            transferData.transferIntoAmount),
+                    style: TextStyle(color: Color(0xff232323), fontSize: 20),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
+                  ),
                 ),
               ],
             ),
@@ -118,23 +125,35 @@ class _TransferInternalPreviewPageState
   //一行内容
   Widget _getRowContent(String leftText, String rightText) {
     return Container(
-        padding: EdgeInsets.only(top: 30),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
+      padding: EdgeInsets.only(top: 30),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: (MediaQuery.of(context).size.width - 40) / 2,
+                child: Text(
                   leftText,
                   style: TextStyle(color: Color(0xff262626), fontSize: 14),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                Text(
+              ),
+              Container(
+                width: (MediaQuery.of(context).size.width - 40) / 2,
+                child: Text(
                   rightText,
                   style: TextStyle(color: Color(0xff7A7A7A), fontSize: 14),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.end,
                 ),
-              ],
-            ),
-          ],
-        ));
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -15,6 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/services.dart';
+import 'package:ebank_mobile/data/source/user_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_user_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 
 class ResetPayPwdPage extends StatefulWidget {
   @override
@@ -25,18 +29,20 @@ class ResetPayPwdPage extends StatefulWidget {
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
-  TextEditingController _phoneNumber = TextEditingController();
+  // TextEditingController _phoneNumber = TextEditingController();
   TextEditingController _sms = TextEditingController();
   String _officeAreaCodeText = '86';
   Timer _timer;
   int countdownTime = 0;
+  String _phone = '';
 
   @override
   void initState() {
     super.initState();
-    _phoneNumber.addListener(() {
-      setState(() {});
-    });
+    // _phoneNumber.addListener(() {
+    //   setState(() {});
+    // });
+    _getUser();
   }
 
   @override
@@ -49,6 +55,10 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
 
   @override
   Widget build(BuildContext context) {
+    String argument = ModalRoute.of(context).settings.arguments;
+    if (argument != null) {
+      _phone = argument;
+    }
     return new Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).resetPayPsd),
@@ -84,16 +94,14 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                                 color: Color(0xEE7A7A7A), fontSize: 13),
                           ),
                         ),
-                        _inputList(
-                          S.of(context).phone_num,
-                          S.of(context).phone_num,
-                          _phoneNumber,
-                        ),
-                        Divider(
-                            height: 1,
-                            color: HsgColors.divider,
-                            indent: 3,
-                            endIndent: 3),
+                        //手机号
+                        _infoFrame(S.of(context).phone_num,
+                            '+' + _officeAreaCodeText + ' ' + _phone),
+                        // _inputList(
+                        //   S.of(context).phone_num,
+                        //   S.of(context).phone_num,
+                        //   _phoneNumber,
+                        // ),
                         Container(
                           height: 50,
                           child: Row(
@@ -113,6 +121,12 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                               )
                             ],
                           ),
+                        ),
+                        Divider(
+                          height: 1,
+                          color: HsgColors.divider,
+                          indent: 3,
+                          endIndent: 3,
                         ),
                       ],
                     ),
@@ -144,6 +158,29 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
     );
   }
 
+  //获取用户信息
+  _getUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+    UserDataRepository()
+        .getUserInfo(
+      GetUserInfoReq(userID),
+      'getUserInfo',
+    )
+        .then((data) {
+      setState(() {
+        _phone = data.userPhone;
+        if (data.areaCode != null) {
+          _officeAreaCodeText = data.areaCode; //区号
+        }
+      });
+    }).catchError((e) {
+      // Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.showError(status: e.toString());
+      print('${e.toString()}');
+    });
+  }
+
   //提交按钮
   _submitData() async {
     //请求验证手机号验证码，成功后跳转到身份验证界面
@@ -151,7 +188,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   }
 
   bool _submit() {
-    if (_phoneNumber.text.length > 0 && _sms.text.length > 0) {
+    if (_sms.text.length > 0) {
       return true;
     } else {
       return false;
@@ -171,6 +208,59 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       });
     };
     _timer = Timer.periodic(Duration(seconds: 1), call);
+  }
+
+  //通用框(传入左边内容和右边文字)
+  Widget _infoFrame(String left, String right) {
+    return Column(
+      children: [
+        Container(
+          height: 50,
+          color: Colors.white,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: 150,
+                child: Text(
+                  left,
+                  style: TextStyle(
+                    color: HsgColors.firstDegreeText,
+                    fontSize: 15,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              _hintText(right),
+            ],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 15, right: 15),
+          child: Divider(
+              height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
+        ),
+      ],
+    );
+  }
+
+  //灰色文字
+  Widget _hintText(String text) {
+    return Container(
+      width: 130,
+      child: Text(
+        text,
+        textAlign: TextAlign.right,
+        style: TextStyle(
+          // color: HsgColors.hintText,
+          color: Color(0xEE7A7A7A),
+          fontSize: 15,
+        ),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
   }
 
   //获取验证码按钮
@@ -206,21 +296,21 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   _getVerificationCode() async {
     // final prefs = await SharedPreferences.getInstance();
     // String userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
-    RegExp postalcode = new RegExp(r'\D');
-    if (postalcode.hasMatch(_phoneNumber.text)) {
-      Fluttertoast.showToast(msg: '请输入正确的手机号!');
-      return;
-    } else if (_phoneNumber.text.length <= 0) {
-      Fluttertoast.showToast(msg: '请输入手机号!');
-      return;
-    }
+    // RegExp postalcode = new RegExp(r'\D');
+    // if (postalcode.hasMatch(_phoneNumber.text)) {
+    //   Fluttertoast.showToast(msg: '请输入正确的手机号!');
+    //   return;
+    // } else if (_phoneNumber.text.length <= 0) {
+    //   Fluttertoast.showToast(msg: '请输入手机号!');
+    //   return;
+    // }
     HSProgressHUD.show();
     VerificationCodeRepository()
         // .sendSmsByAccount(
         //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
         // )
         .sendSmsByPhone(
-            SendSmsByPhoneNumberReq('13411111111', 'transactionPwd'), 'sendSms')
+            SendSmsByPhoneNumberReq(_phone, 'transactionPwd'), 'sendSms')
         .then((data) {
       _startCountdown();
       setState(() {

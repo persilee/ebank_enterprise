@@ -37,14 +37,19 @@ class _TransferInternalPreviewPageState
             _content(transferData),
             _explain(),
             Container(
-              margin: EdgeInsets.only(top: 50, bottom: 50),
-              child: HsgButton.button(
-                title: S.current.confirm,
-                click: () {
-                  Navigator.pushReplacementNamed(context, pageOperationResult);
-                },
-              ),
-            ),
+                  width: (MediaQuery.of(context).size.width - 40) / 2,
+                  child: Text(
+                    '— ' +
+                        transferData.transferIntoCcy +
+                        ' ' +
+                        FormatUtil.formatSringToMoney(
+                            transferData.transferIntoAmount),
+                    style: TextStyle(color: Color(0xff232323), fontSize: 20),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
+                  ),
+                ),
           ],
         ));
   }
@@ -133,13 +138,23 @@ class _TransferInternalPreviewPageState
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                leftText,
-                style: TextStyle(color: Color(0xff262626), fontSize: 14),
+              Container(
+                width: (MediaQuery.of(context).size.width - 40) / 2,
+                child: Text(
+                  leftText,
+                  style: TextStyle(color: Color(0xff262626), fontSize: 14),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-              Text(
-                rightText,
-                style: TextStyle(color: Color(0xff7A7A7A), fontSize: 14),
+              Container(
+                width: (MediaQuery.of(context).size.width - 40) / 2,
+                child: Text(
+                  rightText,
+                  style: TextStyle(color: Color(0xff7A7A7A), fontSize: 14),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           ),
