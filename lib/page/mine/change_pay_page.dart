@@ -17,6 +17,8 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
+import 'package:ebank_mobile/data/source/user_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 
 class ChangePayPage extends StatefulWidget {
   @override
@@ -31,7 +33,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
   TextEditingController _newPwd = TextEditingController();
   TextEditingController _confimPwd = TextEditingController();
   TextEditingController _sms = TextEditingController();
-
+  String _phoneNo = '';
   Timer _timer;
   int countdownTime = 0;
 
@@ -55,6 +57,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
     _confimPwd.addListener(() {
       setState(() {});
     });
+    _getUser();
   }
 
   @override
@@ -264,6 +267,26 @@ class _ChangePayPageState extends State<ChangePayPage> {
     );
   }
 
+  //获取用户信息
+  _getUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+    UserDataRepository()
+        .getUserInfo(
+      GetUserInfoReq(userID),
+      'getUserInfo',
+    )
+        .then((data) {
+      setState(() {
+        _phoneNo = data.userPhone;
+      });
+    }).catchError((e) {
+      // Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.showError(status: e.toString());
+      print('${e.toString()}');
+    });
+  }
+
   //获取验证码接口
   _getVerificationCode() async {
     HSProgressHUD.show();
@@ -274,7 +297,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
         //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
         // )
         .sendSmsByPhone(
-            SendSmsByPhoneNumberReq('13411111111', 'transactionPwd'), 'sendSms')
+            SendSmsByPhoneNumberReq(_phoneNo, 'transactionPwd'), 'sendSms')
         .then((data) {
       _startCountdown();
       setState(() {
