@@ -54,7 +54,7 @@ class AboutUsPage extends StatelessWidget {
                     ),
                     Container(
                       margin:
-                          EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+                          EdgeInsets.only(top: 150.0, left: 15.0, right: 15.0),
                       padding:
                           EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
                       decoration: new BoxDecoration(
@@ -71,7 +71,7 @@ class AboutUsPage extends StatelessWidget {
                                 )
                           ]),
                       child: SizedBox(
-                          child: Padding(
+                          child: Container(
                         padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: Column(
                           children: [

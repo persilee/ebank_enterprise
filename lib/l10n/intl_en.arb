@@ -6,9 +6,10 @@
   "login_account_placeholder": "Mobile Phone No./User Name",
   "fotget_password_q": "Forget Password?",
   "operation_successful": "Operation Successfully",
-  "operation_result": "operation Result",
+  "operation_result": "Operation Result",
   "please_input_account": "Please input account",
   "please_input_password": "Please input password",
+  "please_enter":"Please enter",
   "home": "Home",
   "mine": "Mine",
   "approval": "Approval",
@@ -177,7 +178,7 @@
   "sign": "sign",
   "time_deposit_operation_success": "Time Deposit Operation Success",
   "month": "Month",
-  "receipts_total_amt": "Receipts Total Amt",
+  "receipts_total_amt": "Receipts Total Amount",
   "payment_account": "Payment Account",
   "settlement_account": "Settlement account",
   "screening_conditions": "Screening Conditions",
@@ -349,9 +350,9 @@
   "newPwd": "New Password",
   "confimPwd": "Confirm New Password",
   "SMS": "SMS Verification Code",
-  "placeOldPwd": "Please Enter The Old Password",
-  "placeNewPwd": "Please Enter The New Password",
-  "placeConfimPwd": "Please Enter The New Password Again",
+  "placeOldPwd": "Please enter the old password",
+  "placeNewPwd": "Please enter the new password",
+  "placeConfimPwd": "Please enter the new password again",
   "placeSMS": "Please Input SMS Verification Code",
   "setPayPwd": "Change Payment Password",
   "plaseSetPayPsd": "Please Set Payment Password",
@@ -366,9 +367,9 @@
   "idType": "Document Type",
   "IdentificationNumber": "Identification Number",
   "reservedMobilePhoneNumber": "Reserved Mobile Phone Number",
-  "placeName": "Please Enter Your Name",
-  "placeIdType": "Please Input ID Type",
-  "placeIdNumber": "Please Input ID Number",
+  "placeName": "Please enter your name",
+  "placeIdType": "Please input id type",
+  "placeIdNumber": "Please input id number",
   "placeReveredMobilePhone": "Please Enter Ehe Eeserved Mobile Phone Number",
   "task_approval_tips": "Please confirm the following information and complete the approval",
   "approval_comment": "Approval Comment",
@@ -434,7 +435,8 @@
   "field_dialog_cancel": "cancel",
   "field_dialog_confirm": "confirm",
   "transaction_type":"Transaction type",
-  "password_management":"Password Management",
+  "password_management": "Password Management",
+
   "openAccout_basicInformation": "General Information",
   "openAccount_companyNameEng": "Company Name (English)",
   "openAccount_companyNameEng_placeholder": "Please enter company name (English)",
@@ -472,7 +474,9 @@
   "preview_explain1":"explain：",
   "preview_explain2":"The specific amount transferred out shall be the amount calculated at the exchange rate at the time of transaction",
   "remitter_address1":"Remitter's Address",
-  "receiver_address":"Receiver's address"
+  "receiver_address":"Receiver's address",
+  "forget_username":"Forget UserName"
+
 
  }
   

@@ -197,7 +197,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
 
   //倒计时方法
   _startCountdown() {
-    countdownTime = 60;
+    countdownTime = 120;
     final call = (timer) {
       setState(() {
         if (countdownTime < 1) {

@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/mine_checInformantApi.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 重置交易密码--身份证验证
@@ -7,6 +8,7 @@ import 'package:ebank_mobile/config/hsg_text_style.dart';
 // import 'package:ebank_mobile/data/source/card_data_repository.dart';
 // import 'package:ebank_mobile/data/source/mine_checInformantApi.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/real_name_auth.dart';
 // import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 // import 'package:ebank_mobile/data/source/model/set_transactionPassword.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
@@ -302,7 +304,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                       child: Text(S.of(context).next_step),
                       onPressed: _submit()
                           ? () {
-                              _updatePayPassword();
+                              _realNameAuth();
                             }
                           : null,
                       color: HsgColors.accent,
@@ -452,18 +454,21 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   // }
 
   //验证身份信息 提交数据
-  _updatePayPassword() async {
+  _realNameAuth() async {
     //调用三要素验证，成功后进入人脸识别，识别成功后进入设置密码阶段
-    RegExp postalcode = new RegExp(r'\D');
-    if (postalcode.hasMatch(_certNo.text)) {
-      Fluttertoast.showToast(msg: '请输入正确的证件号!');
-      return;
-    } else if (_certNo.text.length <= 0) {
+    if (_certNo.text.length <= 0) {
       Fluttertoast.showToast(msg: '请输入证件号!');
       return;
     }
-    Navigator.pushNamed(context, setPayPage);
-
+    ChecInformantApiRepository()
+        .realNameAuth(RealNameAuthReq(_certNo.text, _certType, _realName.text),
+            'realNameAuth')
+        .then((data) {
+      print(_certNo.text + '-' + _certType + '-' + _realName.text);
+      if (data.enabled) {
+        Navigator.pushNamed(context, setPayPage);
+      }
+    });
     // RegExp postalcode1 =
     //     new RegExp(r'(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x))$');
     // if (!postalcode1.hasMatch(_certNo.text)) {
@@ -568,7 +573,10 @@ class InputList extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(this.labText),
+                Container(
+                  width: 160,
+                  child: Text(this.labText),
+                ),
                 Expanded(
                   child: TextField(
                     controller: this.inputValue,
@@ -578,8 +586,8 @@ class InputList extends StatelessWidget {
                     obscureText: this.isPwd, //是否是密码
                     textAlign: TextAlign.right, //文本对齐方式
                     inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
-                      LengthLimitingTextInputFormatter(11), //限制长度
+                      // FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                      // LengthLimitingTextInputFormatter(11), //限制长度
                     ],
                     onChanged: (text) {
                       //内容改变的回调

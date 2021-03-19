@@ -3,12 +3,13 @@
   "last_login_time_with_value": "上次登录时间：",
   "simplifiedChinese": "中文",
   "english": "英文",
-  "login_account_placeholder": "手机号/用户名",
+  "login_account_placeholder": "用户名",
   "fotget_password_q": "忘记密码？",
   "operation_successful": "操作成功",
   "operation_result": "操作结果",
   "please_input_account": "请输入账号",
   "please_input_password": "请输入密码",
+  "please_enter":"请输入",
   "home": "首页",
   "mine": "我的",
   "complete": "完成",
@@ -385,7 +386,7 @@
   "authorization_records": "授权记录",
   "customer_service": "联系客服",
   "hello": "您好，",
-  "serve_you": "高阳银行客服为您服务~",
+  "serve_you": "朗华银行客服为您服务~",
   "call": "呼叫",
   "contact": "联系人",
   "contact_phone_num": "联系人手机号码",
@@ -472,5 +473,7 @@
   "preview_explain1":"说明：",
   "preview_explain2":"具体转出金额以交易发生时的汇率计算所得金额为准",
   "remitter_address1":"汇款方地址",
-  "receiver_address":"收款方地址"
+  "receiver_address":"收款方地址",
+  "forget_username":"忘记用户名"
+
 }
