@@ -1,5 +1,6 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class TransferAccount extends StatelessWidget {
   final String balance;
   //转账金额控制器
   final TextEditingController transferMoneyController;
+  final VoidCallback callback;
   //币种弹窗
   final Function payCcyDialog;
   final Function transferCcyDialog;
@@ -31,6 +33,7 @@ class TransferAccount extends StatelessWidget {
     this.account,
     this.balance,
     this.transferMoneyController,
+    this.callback,
     this.payCcyDialog,
     this.transferCcyDialog,
     this.accountDialog,
@@ -121,8 +124,9 @@ class TransferAccount extends StatelessWidget {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
               ],
-              onChanged: (money) {
-                money.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1');
+              onChanged: (text) {
+                callback();
+                // text.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1');
                 // moneyChanges(money);
               },
               controller: transferMoneyController,
@@ -160,6 +164,7 @@ class TransferAccount extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(right: 12),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
                         account,
@@ -171,7 +176,7 @@ class TransferAccount extends StatelessWidget {
                             '：' +
                             payCcy +
                             ' ' +
-                            balance,
+                            FormatUtil.formatSringToMoney(balance),
                         style:
                             TextStyle(color: Color(0xff7A7A7A), fontSize: 13),
                       ),

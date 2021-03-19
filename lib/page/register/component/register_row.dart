@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 注册账号拿用户名
 /// Author: pengyikang
-Widget getRegisterRow(String hintText) {
+Widget getRegisterRow(String hintText, TextEditingController controlText) {
   return Container(
       margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
       padding: EdgeInsets.only(left: 20),
@@ -14,13 +14,14 @@ Widget getRegisterRow(String hintText) {
           color: Color(0xFFF5F7F9)),
       child: TextField(
         //是否自动更正
-        autocorrect: false,
+        autocorrect: true,
         //是否自动获得焦点
-        autofocus: false,
+        autofocus: true,
+        controller: controlText,
         // textAlign: TextAlign.right,
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: '输入用户名',
+          hintText: hintText,
           hintStyle: TextStyle(
             fontSize: 15,
             color: HsgColors.textHintColor,

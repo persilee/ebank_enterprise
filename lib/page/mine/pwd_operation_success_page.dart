@@ -54,13 +54,13 @@ class _PwdOperationSuccessPageState extends State<PwdOperationSuccessPage> {
   //按钮
   Widget _button(String name) {
     return Container(
-      padding: EdgeInsets.only(left: 15),
+      padding: EdgeInsets.only(left: 20, right: 20),
       margin: EdgeInsets.only(top: 40),
       width: 320,
       height: 50,
       child: RaisedButton(
         onPressed: () {
-          Navigator.of(context)..pop()..pop()..pop()..pop();
+          Navigator.of(context)..pop();
         },
         child: Text(name),
         color: Colors.blue,

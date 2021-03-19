@@ -4,10 +4,15 @@
 /// Date: 2021-03-17
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../../page_route.dart';
 
 class OpenAccountBasicDataPage extends StatefulWidget {
   @override
@@ -44,7 +49,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   bool _isShowCompanyTypeOther = false;
 
   /// 下一步按钮是否能点击
-  bool _nextBtnEnabled = false;
+  bool _nextBtnEnabled = true; //false;
 
   ///公司名称（英文）输入监听
   TextEditingController _companyNameEngTEC = TextEditingController();
@@ -57,8 +62,6 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
 
   ///公司类别（其他）输入监听
   TextEditingController _companyTypeOtherTEC = TextEditingController();
-  // TextEditingController _documentNumberTEC = TextEditingController();
-  // int textFieldTag = 0;
 
   @override
   void initState() {
@@ -105,7 +108,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: Text('基本信息'),
+        title: Text(S.of(context).openAccout_basicInformation),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -124,7 +127,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                   title: S.of(context).next_step,
                   click: _nextBtnEnabled
                       ? () {
-                          print(_companyNameEngText);
+                          Navigator.pushNamed(
+                              context, pageOpenAccountContactInformation);
                         }
                       : null,
                 ),
@@ -157,9 +161,9 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         (_companyTypeOtherText == null || _companyTypeOtherText == '')) {
       return false;
     }
-    // if (_countryOrRegionText == null || _countryOrRegionText == '') {
-    //   return false;
-    // }
+    if (_countryOrRegionText == null || _countryOrRegionText == '') {
+      return false;
+    }
     if (_industrialNatureText == null || _industrialNatureText == '') {
       return false;
     }
@@ -180,7 +184,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               bottom: 10,
             ),
             child: Text(
-              '基本信息',
+              S.of(context).openAccout_basicInformation,
               textAlign: TextAlign.left,
               style: TextStyle(
                 color: HsgColors.secondDegreeText,
@@ -192,31 +196,32 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
           Container(
             child: _twoLayerInputWidget(
               context,
-              '公司名称（英文）',
-              '请输入公司名称（英文）',
+              S.of(context).openAccount_companyNameEng,
+              S.of(context).openAccount_companyNameEng_placeholder,
               _companyNameEngTEC,
               false,
-              1001,
+              120,
+              TextInputType.text,
             ),
           ),
           Container(
             child: _twoLayerInputWidget(
               context,
-              '公司名称（中文）',
-              '请输入公司名称（中文）',
+              S.of(context).openAccount_companyNameCN,
+              S.of(context).openAccount_companyNameCN_placeholder,
               _companyNameCNTEC,
               false,
-              1002,
+              60,
+              TextInputType.text,
             ),
           ),
           Container(
             child: _oneLayerSelectWidget(
               context,
-              '登记证件类型',
+              S.of(context).openAccount_ocumentType,
               _documentTypeText,
-              '请选择',
+              S.of(context).please_select,
               false,
-              1003,
               () {
                 print('登记证件类型');
                 _selectDocumentType(context);
@@ -226,8 +231,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
           Container(
             child: _oneLayerInputWidget(
               context,
-              '登记证件号码',
-              '请输入登记证件号码',
+              S.of(context).openAccount_documentNumber,
+              S.of(context).openAccount_documentNumber_placeholder,
               _documentNumberTEC,
               false,
               1004,
@@ -236,11 +241,10 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
           Container(
             child: _oneLayerSelectWidget(
               context,
-              '公司类别',
+              S.of(context).openAccount_companyType,
               _companyTypeText,
-              '请选择',
+              S.of(context).please_select,
               false,
-              1005,
               () {
                 print('公司类别');
                 _selectCompanyType(context);
@@ -251,35 +255,41 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               ? Container(
                   child: _twoLayerInputWidget(
                     context,
-                    '公司类别（其他）',
-                    '请输入公司类别（其他）',
+                    S.of(context).openAccount_companyType_other,
+                    S.of(context).openAccount_companyType_other_placeholder,
                     _companyTypeOtherTEC,
                     false,
-                    1006,
+                    120,
+                    TextInputType.text,
                   ),
                 )
               : Container(),
           Container(
             child: _oneLayerSelectWidget(
               context,
-              '注册国家/地区',
+              S.of(context).openAccount_RegistrationCountryRegion,
               _countryOrRegionText,
-              '请选择',
+              S.of(context).please_select,
               false,
-              1002,
               () {
                 print('注册国家/地区');
+                Navigator.pushNamed(context, countryOrRegionSelectPage)
+                    .then((value) {
+                  setState(() {
+                    _countryOrRegionText = (value as CountryRegionModel).nameEN;
+                    _nextBtnEnabled = _judgeButtonIsEnabled();
+                  });
+                });
               },
             ),
           ),
           Container(
             child: _oneLayerSelectWidget(
               context,
-              '商业/行业性质',
+              S.of(context).openAccount_industryNature,
               _industrialNatureText,
-              '请选择',
+              S.of(context).please_select,
               false,
-              1007,
               () {
                 print('商业/行业性质');
                 _selectIndustrialNature(context);
@@ -297,7 +307,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     String placeholderStr,
     TextEditingController textEdiC,
     bool isHiddenLine,
-    int textFieldTag,
+    int maxLength,
+    TextInputType keyboardType,
   ) {
     final size = MediaQuery.of(context).size;
 
@@ -325,12 +336,15 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               //是否自动获得焦点
               autofocus: false,
               controller: textEdiC,
-              // obscureText: this.isCiphertext,
-              // onChanged: ,
-              textAlign: TextAlign.right,
-              textAlignVertical: TextAlignVertical.bottom,
-              textDirection: TextDirection.ltr,
+              keyboardType: keyboardType,
+              textAlign: TextAlign.end,
+              // textAlignVertical: TextAlignVertical.top,
+              // textDirection: TextDirection.ltr,
               maxLines: 2,
+              // maxLength: maxLength,
+              inputFormatters: <TextInputFormatter>[
+                LengthLimitingTextInputFormatter(maxLength) //限制长度
+              ],
               style: TextStyle(
                 fontSize: 15,
                 color: HsgColors.firstDegreeText,
@@ -396,7 +410,6 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                 controller: textEdiC,
                 // obscureText: this.isCiphertext,
                 textAlign: TextAlign.right,
-                textAlignVertical: TextAlignVertical.bottom,
                 textDirection: TextDirection.ltr,
                 style: TextStyle(
                   fontSize: 15,
@@ -437,24 +450,11 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     String textStr,
     String placeholderStr,
     bool isHiddenLine,
-    int textFieldTag,
     VoidCallback btnClick,
   ) {
     final size = MediaQuery.of(context).size;
 
     TextEditingController textEC = TextEditingController(text: textStr);
-
-    textEC.addListener(() {
-      // setState(() {
-      //   if (textFieldTag == 1001) {
-      //     _companyNameEngText = textEC.text;
-      //   }
-      //   if (textFieldTag == 1002) {
-      //     _companyNameCNText = textEC.text;
-      //   }
-      //   _nextBtnEnabled = _judgeButtonIsEnabled();
-      // });
-    });
 
     Widget _textWidget() {
       return Container(
@@ -487,7 +487,6 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                 // scrollPadding: EdgeInsets.all(0),
                 // obscureText: this.isCiphertext,
                 textAlign: TextAlign.right,
-                textAlignVertical: TextAlignVertical.bottom,
                 maxLines: 1,
                 style: TextStyle(
                   fontSize: 14,
@@ -548,14 +547,14 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   /// 登记证件类型输入值
   void _selectDocumentType(BuildContext context) async {
     List<String> documentTypes = [
-      'Certificate of Incorporation 公司注册证书',
-      'Business Registration Certificate 商业登记证',
-      'Other 其他'
+      'Certificate of Incorporation', // 公司注册证书',
+      'Business Registration Certificate', // 商业登记证',
+      'Other', // 其他'
     ];
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
-        title: '登记证件类型选择',
+        title: S.of(context).openAccount_documentType_select,
         items: documentTypes,
       ),
     );
@@ -573,15 +572,15 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   ///公司类别选择
   void _selectCompanyType(BuildContext context) async {
     List<String> companyTypes = [
-      'Limited Company 有限公司',
-      'Partnership合伙经营商号',
-      'Sole Proprietorship独资经营商号',
-      'Other (please specify)其他 (请注明)'
+      'Limited Company', // 有限公司',
+      'Partnership', //合伙经营商号',
+      'Sole Proprietorship', //独资经营商号',
+      'Other (Please Specify)', //其他 (请注明)'
     ];
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
-        title: '公司类别选择',
+        title: S.of(context).openAccount_companyType_select,
         items: companyTypes,
       ),
     );
@@ -627,7 +626,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
-        title: '公司类别选择',
+        title: S.of(context).openAccount_industryNature_select,
         items: industrialNatures,
       ),
     );

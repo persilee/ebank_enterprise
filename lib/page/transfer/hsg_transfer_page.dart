@@ -305,7 +305,7 @@ class _TransferPageState extends State<TransferPage> {
         child: (data.payeeBankImageUrl == null || data.payeeBankImageUrl == '')
             ? Image(
                 image: AssetImage(
-                  'images/transferIcon/transfer_sample_placeholder.png',
+                  'images/transferIcon/transfer_head.png',
                 ),
               )
             : FadeInImage.assetNetwork(
@@ -342,14 +342,26 @@ class _TransferPageState extends State<TransferPage> {
           ),
           Row(
             children: [
-              Text(
-                FormatUtil.formatSpace4(data.payeeCardNo),
-                style: TextStyle(
-                  color: HsgColors.describeText,
-                  fontSize: 13,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
+              data.payeeCardNo.length > 12
+                  ? Container(
+                      width: 100,
+                      child: Text(
+                        FormatUtil.formatSpace4(data.payeeCardNo),
+                        style: TextStyle(
+                          color: HsgColors.describeText,
+                          fontSize: 13,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                  : Text(
+                      FormatUtil.formatSpace4(data.payeeCardNo),
+                      style: TextStyle(
+                        color: HsgColors.describeText,
+                        fontSize: 13,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
               Container(
                 margin: EdgeInsets.only(left: 10, right: 10),
                 child: SizedBox(
@@ -361,8 +373,11 @@ class _TransferPageState extends State<TransferPage> {
                 ),
               ),
               Text(
-                data.transferType == '0' ? '本行' : '跨行',
+                data.transferType == '0'
+                    ? S.current.transfer_type_0_short
+                    : S.current.transfer_type_1_short,
                 style: TextStyle(fontSize: 13, color: HsgColors.describeText),
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

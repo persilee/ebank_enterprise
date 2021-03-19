@@ -62,7 +62,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
         children: [
           Padding(
             padding: EdgeInsets.all(6.0),
-            child: getCard(card),
+            child: getCard(card, 0),
           ),
           Container(
             margin: EdgeInsets.only(top: 10),
