@@ -41,7 +41,10 @@ class HsgAlertDialog extends StatelessWidget {
       final EdgeInsets contentPadding = EdgeInsets.fromLTRB(20, 0, 20, 20);
       contentWidget = Padding(
         padding: contentPadding,
-        child: Text(message),
+        child: Text(
+          message,
+          textAlign: TextAlign.center,
+        ),
       );
     }
 

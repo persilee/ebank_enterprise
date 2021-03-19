@@ -7,6 +7,7 @@
  */
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
@@ -316,21 +317,29 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //选择国家地区
-  _selectCountry() async {
-    final result = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return BottomMenu(
-            title: '国家/地区',
-            items: countryList,
-          );
-        });
-    if (result != null && result != false) {
-      _countryText = countryList[result];
-    }
+  // _selectCountry() async {
+  //   final result = await showHsgBottomSheet(
+  //       context: context,
+  //       builder: (context) {
+  //         return BottomMenu(
+  //           title: '国家/地区',
+  //           items: countryList,
+  //         );
+  //       });
+  //   if (result != null && result != false) {
+  //     _countryText = countryList[result];
+  //   }
 
-    setState(() {
-      _position = result;
+  //   setState(() {
+  //     _position = result;
+  //   });
+  // }
+  _selectCountry() {
+    // FocusScope.of(context).requestFocus(FocusNode());
+    Navigator.pushNamed(context, countryOrRegionSelectPage).then((value) {
+      setState(() {
+        _countryText = (value as CountryRegionModel).nameEN;
+      });
     });
   }
 
@@ -426,7 +435,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
     return Scaffold(
       appBar: AppBar(
-        title: Text('跨行转账'),
+        title: Text(S.current.transfer_type_1),
         centerTitle: true,
       ),
       body: CustomScrollView(
@@ -547,8 +556,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           children: [
             _payeeName(),
             TextFieldContainer(
-              title: '收款方名称',
-              hintText: '请输入收款方名称',
+              title: S.current.receipt_side_name,
+              hintText: S.current.hint_input_receipt_name,
               widget: _getImage(),
               keyboardType: TextInputType.text,
               controller: _companyController,
@@ -556,8 +565,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               isWidget: true,
             ),
             TextFieldContainer(
-              title: '收款人账号',
-              hintText: '请输入收款人账号',
+              title: S.current.receipt_side_account,
+              hintText: S.current.hint_input_receipt_account,
               keyboardType: TextInputType.number,
               controller: _accountController,
               // callback: _boolBut,
@@ -574,7 +583,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       children: [
         Container(
           child: Text(
-            '收款方',
+            S.current.receipt_side,
             style: TextStyle(color: HsgColors.describeText, fontSize: 13),
             textAlign: TextAlign.right,
           ),
@@ -678,7 +687,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       child: Container(
         margin: EdgeInsets.only(top: 100, bottom: 50),
         child: HsgButton.button(
-            title: '下一步',
+            title: S.current.next_step,
             click: _isClick()
                 ? () {
                     Navigator.pushNamed(
@@ -813,7 +822,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             child: GestureDetector(
               onTap: () {
                 selectMethod();
-                print('选择账号');
               },
               child: Row(
                 children: _rightText,
@@ -846,6 +854,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             payerName = element.cardList[0].ciName;
           });
           _getCardTotal(_account);
+          _payCcyList.clear();
+          _payCcy = _localeCcy;
+          _payCcyList.add(_localeCcy);
+          _balance = '10000';
+          _limit = '5000';
         }
       });
     });
@@ -910,6 +923,12 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           });
         }
       });
+    }).catchError((e) {
+      _payCcyList.clear();
+      _payCcy = _localeCcy;
+      _payCcyList.add(_localeCcy);
+      _balance = '10000';
+      _limit = '5000';
     });
   }
 

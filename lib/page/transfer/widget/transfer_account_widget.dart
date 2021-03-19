@@ -1,5 +1,6 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +69,11 @@ class TransferAccount extends StatelessWidget {
             style: TextStyle(color: Color(0xff7A7A7A), fontSize: 13),
           ),
           Text(
-            S.current.tran_limit_amt_with_value + '：' + payCcy + ' ' + limit,
+            S.current.tran_limit_amt_with_value +
+                '：' +
+                payCcy +
+                ' ' +
+                FormatUtil.formatSringToMoney(limit),
             style: TextStyle(color: Color(0xff7A7A7A), fontSize: 13),
           ),
         ],
@@ -163,6 +168,7 @@ class TransferAccount extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(right: 12),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
                         account,
@@ -174,7 +180,7 @@ class TransferAccount extends StatelessWidget {
                             '：' +
                             payCcy +
                             ' ' +
-                            balance,
+                            FormatUtil.formatSringToMoney(balance),
                         style:
                             TextStyle(color: Color(0xff7A7A7A), fontSize: 13),
                       ),
