@@ -433,6 +433,11 @@
   "field_dialog_title": "security code check",
   "field_dialog_cancel": "cancel",
   "field_dialog_confirm": "confirm",
+<<<<<<< HEAD
+  "transaction_type":"Transaction type",
+
+  "password_management":"Password Management"
+=======
   "password_management": "Password Management",
   "openAccout_basicInformation": "General Information",
   "openAccount_companyNameEng": "Company Name (English)",
@@ -472,6 +477,7 @@
   "preview_explain2":"The specific amount transferred out shall be the amount calculated at the exchange rate at the time of transaction",
   "remitter_address1":"Remitter's Address",
   "receiver_address":"Receiver's address"
+>>>>>>> 86cc3a79564725f49446a44671cfa3fd0a1e7ca1
 
  }
   

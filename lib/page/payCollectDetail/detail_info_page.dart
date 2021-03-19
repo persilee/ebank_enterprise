@@ -71,10 +71,18 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
                   label: S.current.transaction_account,
                   item: ddFinHist.acNo,
                 ),
+                //交易时间
                 ContentRow(
                   label: S.current.transaction_time,
                   item: ddFinHist.txDateTime,
                 ),
+                // 交易类型
+                ContentRow(
+                  label: '交易类型',
+                  item: ddFinHist.txMmo,
+                ),
+
+                //备注
                 ContentRow(
                   label: S.current.remarks,
                   item: ddFinHist.narrative,

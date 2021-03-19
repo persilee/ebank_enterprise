@@ -3,6 +3,10 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
 
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+/// 重置密码成功页面
+/// Author: pengyikang
+
 class ResetPasswordPage extends StatefulWidget {
   ResetPasswordPage({Key key}) : super(key: key);
 

@@ -1,6 +1,11 @@
 import 'dart:async';
 
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+/// 忘记用户名页面
+/// Author: pengyikang
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -23,99 +28,109 @@ class _ForgetUserNameState extends State<ForgetUserName> {
   TextEditingController _sms = TextEditingController();
   Timer _timer;
   int countdownTime = 0;
+
+  /// 区号
+  String _officeAreaCodeText = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('忘记用户名'),
-      ),
-      body: ListView(
-        children: [
-          getRegisterTitle('忘记账号'),
-          getRegisterRegion(context, _phoneNum),
-          //获取验证码
-          Container(
-            height: MediaQuery.of(context).size.height / 15,
-            margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                color: Color(0xFFF5F7F9)),
-            child: Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(left: 20),
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: TextField(
-                    //是否自动更正
-                    controller: _sms,
-                    autocorrect: true,
-                    //是否自动获得焦点
-                    autofocus: true,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '输入验证码',
-                      hintStyle: TextStyle(
-                        fontSize: 15,
-                        color: HsgColors.textHintColor,
+        appBar: AppBar(
+          title: Text('忘记用户名'),
+        ),
+        body: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            // 触摸收起键盘
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: ListView(
+            children: [
+              getRegisterTitle('忘记账号'),
+              getRegisterRegion(
+                  context, _phoneNum, _officeAreaCodeText, _selectRegionCode),
+              //获取验证码
+              Container(
+                height: MediaQuery.of(context).size.height / 15,
+                margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color: Color(0xFFF5F7F9)),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(left: 20),
+                      width: MediaQuery.of(context).size.width / 2,
+                      child: TextField(
+                        //是否自动更正
+                        controller: _sms,
+                        autocorrect: true,
+                        //是否自动获得焦点
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: '输入验证码',
+                          hintStyle: TextStyle(
+                            fontSize: 15,
+                            color: HsgColors.textHintColor,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    //调用获取验证码接口
-                    _getVerificationCode();
-                    print('获取验证码');
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 4,
-                    child: Text(
-                      '获取验证码',
-                      style: TextStyle(color: Colors.blue),
-                      textAlign: TextAlign.right,
+                    InkWell(
+                      onTap: () {
+                        //调用获取验证码接口
+                        _getVerificationCode();
+                        print('获取验证码');
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width / 4,
+                        child: Text(
+                          '获取验证码',
+                          style: TextStyle(color: Colors.blue),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              //下一步按钮
+              Container(
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.only(bottom: 16),
+                color: Colors.white,
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          color: Color(0xFFF5F7F9)),
+                      margin: EdgeInsets.only(top: 75),
+                      width: MediaQuery.of(context).size.width / 1.2,
+                      height: MediaQuery.of(context).size.height / 15,
+                      child: RaisedButton(
+                        disabledColor: HsgColors.btnDisabled,
+                        color: Colors.blue,
+                        child: Text(
+                          '提交',
+                          style: (TextStyle(color: Colors.white)),
+                          //textDirection: Colors.white,
+                        ),
+                        onPressed: _submit()
+                            ? () {
+                                Navigator.pushNamed(
+                                    context, pageFindUserNameSuccess);
+                              }
+                            : null,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
-          //下一步按钮
-          Container(
-            width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(bottom: 16),
-            color: Colors.white,
-            padding: EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      color: Color(0xFFF5F7F9)),
-                  margin: EdgeInsets.only(top: 75),
-                  width: MediaQuery.of(context).size.width / 1.2,
-                  height: MediaQuery.of(context).size.height / 15,
-                  child: RaisedButton(
-                    disabledColor: HsgColors.btnDisabled,
-                    color: Colors.blue,
-                    child: Text(
-                      '提交',
-                      style: (TextStyle(color: Colors.white)),
-                      //textDirection: Colors.white,
-                    ),
-                    onPressed: _submit()
-                        ? () {
-                            Navigator.pushNamed(
-                                context, pageFindUserNameSuccess);
-                          }
-                        : null,
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+        ));
   }
 
   bool _submit() {
@@ -124,6 +139,16 @@ class _ForgetUserNameState extends State<ForgetUserName> {
     } else {
       return false;
     }
+  }
+
+  //获取地区
+  _selectRegionCode() {
+    print('区号');
+    Navigator.pushNamed(context, countryOrRegionSelectPage).then((value) {
+      setState(() {
+        _officeAreaCodeText = (value as CountryRegionModel).code;
+      });
+    });
   }
 
   //获取验证码接口
