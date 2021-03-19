@@ -40,7 +40,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String _changedInstructionTitle = S.current.hint_please_select;
   int _acPosition = 0;
   int _settAcPosition = 0;
-  // String _changedDepositTerm = '';
   String _changedRateTitle = '';
   String accuPeriod = '0';
   String auctCale = '0';
@@ -50,7 +49,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   List<RemoteBankCard> cards = [];
   RemoteBankCard card;
   String custID;
-  // String _ciName = '';
 
   double bal = 0.00;
   String instCode = '';
@@ -162,79 +160,62 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   //显示选择的值
   Widget _display(String display) {
     return Container(
-        width: ((MediaQuery.of(context).size.width - 32) / 2) - 20,
-        alignment: Alignment.centerRight,
-        child: display == _changedAccountTitle
-            ? (display == S.current.hint_please_select
-                ? Text(
-                    display,
-                    style: TextStyle(
-                      color: HsgColors.hintText,
-                      fontSize: 14.0,
-                    ),
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 15),
-                        child: Text(
-                          display,
-                          style: TextStyle(
-                            color: HsgColors.aboutusTextCon,
-                            fontSize: 14.0,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(bottom: 15),
-                        child: Text(
-                          '支付 USD:2,000.00',
-                          style: TextStyle(
-                            color: HsgColors.secondDegreeText,
-                            fontSize: 13.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ))
-            : (display == S.current.hint_please_select
-                ? Text(
-                    display,
-                    style: TextStyle(
-                      color: HsgColors.hintText,
-                      fontSize: 14.0,
-                    ),
-                  )
-                : Column(
-                    children: [
-                      Text(
+      width: ((MediaQuery.of(context).size.width - 32) / 2) - 20,
+      alignment: Alignment.centerRight,
+      child: display == _changedAccountTitle
+          ? (display == S.current.hint_please_select
+              ? Text(
+                  display,
+                  style: TextStyle(
+                    color: HsgColors.hintText,
+                    fontSize: 14.0,
+                  ),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 15),
+                      child: Text(
                         display,
                         style: TextStyle(
                           color: HsgColors.aboutusTextCon,
                           fontSize: 14.0,
                         ),
                       ),
-                    ],
-                  ))
-        //  TextField(
-        //   textAlign: TextAlign.right,
-        //   enabled: false,
-        //   decoration: InputDecoration(
-        //     border: InputBorder.none,
-        //     hintText: display,
-        //     hintStyle: display == S.current.hint_please_select
-        //         ? TextStyle(
-        //             color: HsgColors.hintText,
-        //             fontSize: 14.0,
-        //           )
-        //         : TextStyle(
-        //             color: HsgColors.aboutusTextCon,
-        //             fontSize: 14.0,
-        //           ),
-        //   ),
-        // ),
-        );
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 15),
+                      child: Text(
+                        '支付 USD:2,000.00',
+                        style: TextStyle(
+                          color: HsgColors.secondDegreeText,
+                          fontSize: 13.0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ))
+          : (display == S.current.hint_please_select
+              ? Text(
+                  display,
+                  style: TextStyle(
+                    color: HsgColors.hintText,
+                    fontSize: 14.0,
+                  ),
+                )
+              : Column(
+                  children: [
+                    Text(
+                      display,
+                      style: TextStyle(
+                        color: HsgColors.aboutusTextCon,
+                        fontSize: 14.0,
+                      ),
+                    ),
+                  ],
+                )),
+    );
   }
 
   //显示币种
@@ -306,14 +287,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                 custID,
                 depositType,
                 '', // tenor
-                // '2',
-                // '1',
-                // double.parse(value),
-                // 'TD000001',
-                // 'HKD',
-                // '8000000004',
-                // 'A',
-                // ''
               );
             }
           },
@@ -481,7 +454,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       if (result != null && result != false) {
         _changedTermBtnTiTle = terms[result];
         _changedRateTitle = rates[result];
-        // _changedDepositTerm = depositTerms[result];
         accuPeriod = accuPeriods[result];
         auctCale = accuPeriods[result];
         rate = FormatUtil.formatNum(double.parse(_changedRateTitle), 2);
@@ -562,7 +534,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 //付款账户弹窗
   _selectAccount(BuildContext context) async {
     List<String> bankCards = [];
-    // List<String> accounts = ['5000 0002 2203 (USD)', '5000 0002 2204 (HKD)'];
     List<String> accounts = [];
     List<String> ciNames = [];
     for (RemoteBankCard card in cards) {
@@ -581,7 +552,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     if (result != null && result != false) {
       _acPosition = result;
       _changedAccountTitle = accounts[result];
-      // _ciName = ciNames[result];
     } else {
       return;
     }
@@ -609,7 +579,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     if (result != null && result != false) {
       _settAcPosition = result;
       _changedSettAcTitle = accounts[result];
-      // _ciName = ciNames[result];
     } else {
       return;
     }
@@ -711,7 +680,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('定期开立'),
+        title: Text(S.current.deposit_open),
       ),
       body: ListView(
         children: [
