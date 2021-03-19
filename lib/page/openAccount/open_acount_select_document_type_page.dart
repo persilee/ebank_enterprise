@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: Text('联络信息'),
+        title: Text(S.of(context).openAccout_documents_select),
       ),
       body: Container(
         width: size.width,
@@ -31,7 +32,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
                 padding:
                     EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
                 child: Text(
-                  '请选择证件识别类型',
+                  S.of(context).openAccout_documents_select_tip,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     color: HsgColors.secondDegreeText,
@@ -58,7 +59,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
     List typeList = [
       {
         'iconName': 'images/openAccount/open_account_document_type_CN.png',
-        'titleStr': '中国大陆身份证识别',
+        'titleStr': S.of(context).openAccout_documents_idCard_CN,
         'onClickFunction': () {
           print('中国大陆身份证识别');
           Navigator.pushNamed(context, pageOpenAccountResults);
@@ -66,14 +67,14 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
       },
       {
         'iconName': 'images/openAccount/open_account_document_type_HK.png',
-        'titleStr': '中国香港身份证识别',
+        'titleStr': S.of(context).openAccout_documents_idCard_HK,
         'onClickFunction': () {
           print('中国香港身份证识别');
         },
       },
       {
         'iconName': 'images/openAccount/open_account_document_type_other.png',
-        'titleStr': '护照识别 \n(港澳台地区及境外护照)',
+        'titleStr': S.of(context).openAccout_documents_passport_HK,
         'onClickFunction': () {
           print('护照识别 (港澳台地区及境外护照)');
         },

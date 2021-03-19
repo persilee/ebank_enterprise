@@ -195,8 +195,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           children: [
             _payeeName(),
             TextFieldContainer(
-              title: '收款方名称',
-              hintText: '请输入收款方名称',
+              title: S.of(context).receipt_side_name,
+              hintText: S.of(context).hint_input_receipt_name,
               widget: _getImage(),
               keyboardType: TextInputType.text,
               controller: _nameController,
@@ -204,8 +204,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               isWidget: true,
             ),
             TextFieldContainer(
-              title: '收款人账号',
-              hintText: '请输入收款人账号',
+              title: S.of(context).receipt_side_account,
+              hintText: S.of(context).hint_input_receipt_account,
               keyboardType: TextInputType.number,
               controller: _accountController,
               callback: _boolBut,
@@ -222,7 +222,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       children: [
         Container(
           child: Text(
-            '收款方',
+            S.of(context).receipt_side,
             style: TextStyle(color: HsgColors.describeText, fontSize: 13),
             textAlign: TextAlign.right,
           ),
@@ -239,8 +239,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         margin: EdgeInsets.only(top: 20),
         padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
         child: TextFieldContainer(
-          title: '转账附言',
-          hintText: '转账',
+          title: S.current.transfer_postscript,
+          hintText: S.current.transfer,
           keyboardType: TextInputType.text,
           controller: _remarkController,
           callback: _boolBut,
@@ -278,7 +278,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       child: Container(
         margin: EdgeInsets.only(top: 100, bottom: 50),
         child: HsgButton.button(
-            title: '下一步',
+            title: S.current.next_step,
             click: _isClick
                 ? () {
                     Navigator.pushNamed(
@@ -418,8 +418,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     Future.wait({
       CardDataRepository().getCardBalByCardNo(
           GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
-      CardDataRepository().getCardLimitByCardNo(
-          GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
+      // CardDataRepository().getCardLimitByCardNo(
+      //     GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
     }).then((value) {
       value.forEach((element) {
         // 通过卡号查询余额
@@ -468,7 +468,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         else if (element is GetCardLimitByCardNoResp) {
           setState(() {
             //单次限额
-            _limit = element.singleLimit;
+            // _limit = element.singleLimit;
           });
         }
       });
