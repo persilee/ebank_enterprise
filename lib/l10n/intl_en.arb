@@ -468,7 +468,7 @@
   "transfer_the_preview":"Transfer The Preview",
   "payment_currency":"Payment Currency",
   "into_account":"Into Account",
-  "transfer_into_currency":"transfer Into Currency",
+  "transfer_into_currency":"Transfer Into Currency",
   "preview_explain1":"explain：",
   "preview_explain2":"The specific amount transferred out shall be the amount calculated at the exchange rate at the time of transaction",
   "remitter_address1":"Remitter's Address",

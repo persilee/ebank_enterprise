@@ -18,6 +18,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:contact_picker/contact_picker.dart';
 import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
+import 'package:intl/intl.dart';
 
 class AddPartnerPage extends StatefulWidget {
   @override
@@ -44,6 +45,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   var words = 20;
   String _countryText = '';
   List<String> countryList = ['中国', '荷兰', '美国', '俄罗斯'];
+  String _language = Intl.getCurrentLocale();
   @override
   void initState() {
     super.initState();
@@ -134,26 +136,33 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        color: HsgColors.backgroundColor,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              //输入数据容器
-              Container(
-                color: Colors.white,
-                margin: EdgeInsets.only(top: 15),
-                padding: EdgeInsets.only(left: 15, right: 15),
-                child: formColumn(),
-              ),
-              //按钮容器
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 40, 0, 40),
-                child: HsgButton.button(
-                    title: S.current.confirm, click: _confirm()),
-              ),
-            ],
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          color: HsgColors.backgroundColor,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                //输入数据容器
+                Container(
+                  color: Colors.white,
+                  margin: EdgeInsets.only(top: 15),
+                  padding: EdgeInsets.only(left: 15, right: 15),
+                  child: formColumn(),
+                ),
+                //按钮容器
+                Container(
+                  padding: EdgeInsets.fromLTRB(0, 40, 0, 40),
+                  child: HsgButton.button(
+                      title: S.current.confirm, click: _confirm()),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -384,7 +393,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               Navigator.pushNamed(context, countryOrRegionSelectPage)
                   .then((value) {
                 setState(() {
-                  _countryText = (value as CountryRegionModel).nameEN;
+                  _countryText = _language == 'zh_CN'
+                      ? (value as CountryRegionModel).nameZhCN
+                      : (value as CountryRegionModel).nameEN;
                 });
               });
             },

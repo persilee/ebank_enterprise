@@ -37,7 +37,7 @@ class _TransferInternalPreviewPageState
             _content(transferData),
             _explain(),
             Container(
-              margin: EdgeInsets.only(top: 50),
+              margin: EdgeInsets.only(top: 50, bottom: 50),
               child: HsgButton.button(
                 title: S.current.confirm,
                 click: () {
@@ -63,7 +63,7 @@ class _TransferInternalPreviewPageState
                 Container(
                   width: (MediaQuery.of(context).size.width - 40) / 2,
                   child: Text(
-                        transferData.transferIntoCcy +
+                    transferData.transferIntoCcy +
                         ' ' +
                         FormatUtil.formatSringToMoney(
                             transferData.transferIntoAmount),
