@@ -3,7 +3,7 @@
   "last_login_time_with_value": "上次登录时间：",
   "simplifiedChinese": "中文",
   "english": "英文",
-  "login_account_placeholder": "手机号/用户名",
+  "login_account_placeholder": "用户名",
   "fotget_password_q": "忘记密码？",
   "operation_successful": "操作成功",
   "operation_result": "操作结果",
@@ -433,11 +433,7 @@
   "field_dialog_title": "安全码校验",
   "field_dialog_cancel": "取消",
   "field_dialog_confirm": "确认",
-<<<<<<< HEAD
   "transaction_type":"交易类型",
-
-  "password_management":"密码管理"
-=======
   "password_management": "密码管理",
   "openAccout_basicInformation": "一般资料",
   "openAccount_companyNameEng": "公司名称（英文）",
@@ -476,6 +472,6 @@
   "preview_explain1":"说明：",
   "preview_explain2":"具体转出金额以交易发生时的汇率计算所得金额为准",
   "remitter_address1":"汇款方地址",
-  "receiver_address":"收款方地址"
->>>>>>> 86cc3a79564725f49446a44671cfa3fd0a1e7ca1
+  "receiver_address":"收款方地址",
+  "forget_username":"忘记用户名"
 }

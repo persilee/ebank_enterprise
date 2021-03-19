@@ -38,58 +38,66 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
-        body: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            // 触摸收起键盘
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          child: ListView(
-            children: [
-              //标题
-              getRegisterTitle('忘记密码'),
-              //姓名
-              getRegisterRow('输入姓名', _userName),
-              //  证件类型
-              Container(
-                margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                padding: EdgeInsets.only(left: 20),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                    color: Color(0xFFF5F7F9)),
-                child: SelectInkWell(
-                  title: '证件类型',
-                  item: _certType,
-                  onTap: _idCardListBottomSheet,
-                ),
-              ),
-              //证件号码
-              getRegisterRow('输入证件号码', _cardNumber), //确定按钮
-              Container(
-                margin: EdgeInsets.all(40), //外边距
-                height: 44.0,
-                width: MediaQuery.of(context).size.width,
-                child: RaisedButton(
-                  child: Text(S.of(context).next_step),
-                  onPressed: _submit()
-                      ? () {
-                          Navigator.pushNamed(
-                              context, pageResetPasswordNoAccount);
-                        }
-                      : null,
-                  color: HsgColors.accent,
-                  textColor: Colors.white,
-                  disabledTextColor: Colors.white,
-                  disabledColor: Color(0xFFD1D1D1),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5) //设置圆角
-                      ),
-                ),
-              )
-            ],
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.black, //修改颜色
           ),
-        ));
+          backgroundColor: Colors.white,
+          elevation: 0,
+        ),
+        body: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              // 触摸收起键盘
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+            child: Container(
+              color: Colors.white,
+              child: ListView(
+                children: [
+                  //标题
+                  getRegisterTitle('忘记密码'),
+                  //姓名
+                  getRegisterRow('输入姓名', _userName, false),
+                  //  证件类型
+                  Container(
+                    margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                    padding: EdgeInsets.only(left: 20),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        color: Color(0xFFF5F7F9)),
+                    child: SelectInkWell(
+                      title: '证件类型',
+                      item: _certType,
+                      onTap: _idCardListBottomSheet,
+                    ),
+                  ),
+                  //证件号码
+                  getRegisterRow('输入证件号码', _cardNumber, false), //确定按钮
+                  Container(
+                    margin: EdgeInsets.all(40), //外边距
+                    height: 44.0,
+                    width: MediaQuery.of(context).size.width,
+                    child: RaisedButton(
+                      child: Text(S.of(context).next_step),
+                      onPressed: _submit()
+                          ? () {
+                              Navigator.pushNamed(
+                                  context, pageResetPasswordNoAccount);
+                            }
+                          : null,
+                      color: HsgColors.accent,
+                      textColor: Colors.white,
+                      disabledTextColor: Colors.white,
+                      disabledColor: Color(0xFFD1D1D1),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5) //设置圆角
+                          ),
+                    ),
+                  )
+                ],
+              ),
+            )));
   }
 
   //获取证件类型
@@ -131,12 +139,15 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
       setState(() {
         _certType = obj[result];
         _certTypeKey = indList[result];
+        print('$_certType>>>>>>>>>>>>>>>>>>');
       });
     }
   }
 
   bool _submit() {
-    if (_userName.text.length > 0 && _cardNumber.text.length > 0) {
+    if (_userName.text.length > 0 &&
+        _cardNumber.text.length > 0 &&
+        _certType.length > 0) {
       return true;
     } else {
       return false;
