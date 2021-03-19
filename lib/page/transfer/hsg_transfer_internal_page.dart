@@ -408,6 +408,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             payerName = element.cardList[0].ciName;
           });
           _getCardTotal(_account);
+          _payCcyList.clear();
+          _payCcy = _localeCcy;
+          _payCcyList.add(_localeCcy);
+          _balance = '10000';
+          _limit = '5000';
         }
       });
     });
@@ -418,8 +423,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     Future.wait({
       CardDataRepository().getCardBalByCardNo(
           GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
-      // CardDataRepository().getCardLimitByCardNo(
-      //     GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
+      CardDataRepository().getCardLimitByCardNo(
+          GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
     }).then((value) {
       value.forEach((element) {
         // 通过卡号查询余额
@@ -468,10 +473,16 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         else if (element is GetCardLimitByCardNoResp) {
           setState(() {
             //单次限额
-            // _limit = element.singleLimit;
+            _limit = element.singleLimit;
           });
         }
       });
+    }).catchError((e) {
+      _payCcyList.clear();
+      _payCcy = _localeCcy;
+      _payCcyList.add(_localeCcy);
+      _balance = '10000';
+      _limit = '5000';
     });
   }
 

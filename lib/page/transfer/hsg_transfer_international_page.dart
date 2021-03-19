@@ -854,6 +854,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             payerName = element.cardList[0].ciName;
           });
           _getCardTotal(_account);
+          _payCcyList.clear();
+          _payCcy = _localeCcy;
+          _payCcyList.add(_localeCcy);
+          _balance = '10000';
+          _limit = '5000';
         }
       });
     });
@@ -918,6 +923,12 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           });
         }
       });
+    }).catchError((e) {
+      _payCcyList.clear();
+      _payCcy = _localeCcy;
+      _payCcyList.add(_localeCcy);
+      _balance = '10000';
+      _limit = '5000';
     });
   }
 
