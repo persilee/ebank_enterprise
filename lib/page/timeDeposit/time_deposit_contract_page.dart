@@ -58,6 +58,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   _TimeDepositContractState(this.productList, this.producDTOList);
 
   TimeDepositContractTrialReq contractTrialReq;
+  TextEditingController inputValue = TextEditingController();
 
   void initState() {
     super.initState();
@@ -267,6 +268,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       child: Container(
         margin: EdgeInsets.only(left: 20),
         child: TextField(
+          controller: inputValue,
           autocorrect: false,
           autofocus: false,
           style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 18.0),
@@ -275,13 +277,13 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           ],
           onChanged: (value) {
             double.parse(value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
-            bal = double.parse(value);
             //输入金额大于起存金额时进行网络请求,计算到期金额
-            if (double.parse(value) >= double.parse(productList.minAmt)) {
+            if (double.parse(inputValue.text) >=
+                double.parse(productList.minAmt)) {
               _loadDepositData(
                 accuPeriod,
                 auctCale,
-                double.parse(value),
+                double.parse(inputValue.text),
                 productList.bppdCode,
                 productList.ccy,
                 custID,
@@ -485,6 +487,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
   // 本金输入框
   Widget _inputPrincipal(RemoteBankCard card) {
+    bal = (inputValue.text).length == 0 ? 0.00 : double.parse(inputValue.text);
+
     //按计提周期计算存款期限
     switch (producDTOList[0].accuPeriod) {
       case '2':
