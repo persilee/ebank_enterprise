@@ -380,6 +380,7 @@ class InputList extends StatelessWidget {
               onChanged: (text) {
                 //内容改变的回调
                 // print('change $text');
+                print("###############" + inputValue.text);
               },
               onSubmitted: (text) {
                 //内容提交(按回车)的回调

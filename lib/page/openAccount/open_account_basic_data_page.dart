@@ -97,6 +97,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     _companyNameEngTEC.dispose();
     _companyNameCNTEC.dispose();
     _companyTypeOtherTEC.dispose();
+    _companyTypeOtherTEC.dispose();
     super.dispose();
   }
 

@@ -34,6 +34,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   String _changedCcy = S.current.hint_please_select;
   String _changedTerm = S.current.hint_please_select;
   double _bal = 0.00;
+  TextEditingController inputValue = TextEditingController();
 
   void initState() {
     super.initState();
@@ -94,6 +95,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
 
 //选择的筛选条件
   Widget _checked() {
+    _bal = (inputValue.text).length == 0 ? 0.00 : double.parse(inputValue.text);
     return Container(
       width: (MediaQuery.of(context).size.width - 56) / 5 * 3,
       child: _textStyle(
@@ -160,6 +162,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     return Container(
       color: Colors.white,
       child: TextField(
+        controller: inputValue,
         textAlign: TextAlign.left,
         style: TextStyle(fontSize: 13, color: HsgColors.aboutusTextCon),
         decoration: InputDecoration(
@@ -183,7 +186,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         ],
         onChanged: (value) {
           double.parse(value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
-          _bal = double.parse(value);
+          // _bal = double.parse(value);
         },
       ),
     );

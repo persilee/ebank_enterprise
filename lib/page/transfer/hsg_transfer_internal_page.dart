@@ -25,6 +25,7 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../page_route.dart';
 import 'data/transfer_internal_data.dart';
@@ -137,6 +138,14 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _accountController.dispose();
+    _remarkController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var _arguments = ModalRoute.of(context).settings.arguments;
     setState(() {
@@ -157,29 +166,36 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         title: Text(S.current.transfer_type_0),
         centerTitle: true,
       ),
-      body: CustomScrollView(
-        slivers: [
-          _gaySliver,
-          //转账金额和币种
-          TransferAccount(
-            payCcy: _payCcy,
-            transferCcy: _transferCcy,
-            limit: _limit,
-            account: _account,
-            balance: _balance,
-            transferMoneyController: _transferMoneyController,
-            callback: _boolBut,
-            payCcyDialog: payCcyDialog,
-            transferCcyDialog: transferCcyDialog,
-            accountDialog: _accountDialog,
-          ),
-          //收款方
-          _payeeWidget(),
-          //附言
-          _remarkWidget(),
-          //提交按钮
-          _submitButton(),
-        ],
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: CustomScrollView(
+          slivers: [
+            _gaySliver,
+            //转账金额和币种
+            TransferAccount(
+              payCcy: _payCcy,
+              transferCcy: _transferCcy,
+              limit: _limit,
+              account: _account,
+              balance: _balance,
+              transferMoneyController: _transferMoneyController,
+              callback: _boolBut,
+              payCcyDialog: payCcyDialog,
+              transferCcyDialog: transferCcyDialog,
+              accountDialog: _accountDialog,
+            ),
+            //收款方
+            _payeeWidget(),
+            //附言
+            _remarkWidget(),
+            //提交按钮
+            _submitButton(),
+          ],
+        ),
       ),
     );
   }
@@ -278,27 +294,49 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       child: Container(
         margin: EdgeInsets.only(top: 100, bottom: 50),
         child: HsgButton.button(
-            title: S.current.next_step,
-            click: _isClick
-                ? () {
-                    Navigator.pushNamed(
-                      context,
-                      pageTransferInternalPreview,
-                      arguments: TransferInternalData(
-                        _account,
-                        '123',
-                        _transferCcy,
-                        _nameController.text,
-                        _accountController.text,
-                        _transferMoneyController.text,
-                        _payCcy,
-                        _remarkController.text,
-                      ),
-                    );
-                  }
-                : null),
+            title: S.current.next_step, click: _isClick ? _judgeDialog : null),
       ),
     );
+  }
+
+  _judgeDialog() {
+    if (double.parse(_transferMoneyController.text) > double.parse(_limit) ||
+        double.parse(_transferMoneyController.text) > double.parse(_balance)) {
+      if (double.parse(_limit) > double.parse(_balance)) {
+        Fluttertoast.showToast(
+          msg: "余额不足",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color(0x57272727),
+          textColor: Color(0xffffffff),
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: "超过限额",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color(0x57272727),
+          textColor: Color(0xffffffff),
+        );
+      }
+    } else {
+      Navigator.pushNamed(
+        context,
+        pageTransferInternalPreview,
+        arguments: TransferInternalData(
+          _account,
+          '123',
+          _transferCcy,
+          _nameController.text,
+          _accountController.text,
+          _transferMoneyController.text,
+          _payCcy,
+          _remarkController.text,
+        ),
+      );
+    }
   }
 
   Future transferCcyDialog() async {
@@ -408,11 +446,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             payerName = element.cardList[0].ciName;
           });
           _getCardTotal(_account);
-          _payCcyList.clear();
-          _payCcy = _localeCcy;
-          _payCcyList.add(_localeCcy);
-          _balance = '10000';
-          _limit = '5000';
+          // _payCcyList.clear();
+          // _payCcy = _localeCcy;
+          // _payCcyList.add(_localeCcy);
+          // _balance = '10000';
+          // _limit = '5000';
         }
       });
     });
@@ -430,14 +468,21 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         // 通过卡号查询余额
         if (element is GetSingleCardBalResp) {
           setState(() {
-            //币种
-            if (_payCcy == '') {
+            //初始币种和余额
+            if (_payCcy == '' || _balance == '') {
               _payCcy = element.cardListBal[0].ccy;
+              _balance = element.cardListBal[0].currBal;
+              element.cardListBal.forEach((element) {
+                if (element.ccy == _localeCcy) {
+                  _payCcy = element.ccy;
+                  _balance = element.currBal;
+                }
+              });
             }
             //余额
-            if (_balance == '') {
-              _balance = element.cardListBal[0].currBal;
-            }
+            // if (_balance == '') {
+            //   _balance = element.cardListBal[0].currBal;
+            // }
             _payCcyList.clear();
             _balanceList.clear();
             _payIndex = 0;
@@ -467,6 +512,14 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _balance = _balanceList[0];
               _payIndex = 0;
             }
+            // for (int i = 0; i < _transferCcyList.length; i++) {
+            //   if (_transferCcy == _payCcy) {
+            //     _transferCcy = _payCcy;
+            //     break;
+            //   } else {
+            //     _transferIndex++;
+            //   }
+            // }
           });
         }
         //查询额度
