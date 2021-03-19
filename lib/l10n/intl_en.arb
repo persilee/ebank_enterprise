@@ -244,8 +244,8 @@
   "no_transaction_record": "No transaction Record",
   "transfer_out": "Transfer To",
   "transfer_type": "Transfer Type",
-  "transfer_type_0": "Internal Transfer",
-  "transfer_type_1": "Local Bank Transfer",
+  "transfer_type_0": "Inner-Bank Transfer",
+  "transfer_type_1": "Inter-Bank Transfer",
   "transfer_type_2": "Overseas Bank Transfer",
   "installment_status1": "Start",
   "installment_status2": "Matured",
@@ -435,6 +435,7 @@
   "field_dialog_confirm": "confirm",
   "transaction_type":"Transaction type",
   "password_management": "Password Management",
+
   "openAccout_basicInformation": "General Information",
   "openAccount_companyNameEng": "Company Name (English)",
   "openAccount_companyNameEng_placeholder": "Please enter company name (English)",
@@ -468,12 +469,13 @@
   "transfer_the_preview":"Transfer The Preview",
   "payment_currency":"Payment Currency",
   "into_account":"Into Account",
-  "transfer_into_currency":"transfer Into Currency",
+  "transfer_into_currency":"Transfer Into Currency",
   "preview_explain1":"explain：",
   "preview_explain2":"The specific amount transferred out shall be the amount calculated at the exchange rate at the time of transaction",
   "remitter_address1":"Remitter's Address",
   "receiver_address":"Receiver's address",
   "forget_username":"Forget UserName"
+
 
  }
   

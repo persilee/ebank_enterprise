@@ -30,28 +30,29 @@ enum LoadingStatus { STATUS_LOADING, STATUS_COMPLETED, STATUS_IDEL }
 class _MyApprovalPageState extends State<MyApprovalPage> {
   List<FindUserTaskDetail> toDoTask = [];
   List<FindUserTaskDetail> list = []; //页面显示的待办列表
-  // FindUserTaskDetail dataA = FindUserTaskDetail("60001", "0", "一对一转账", "6001",
-  //     "transfer", "776108151173808128", "2020-11-12 09:12:24");
-  // FindUserTaskDetail dataB = FindUserTaskDetail("60002", "0", "定期开立", "6002",
-  //     "transfer", "776108151173808128", "2020-11-12 10:22:08");
-  // FindUserTaskDetail dataC = FindUserTaskDetail("60003", "0", "定期开立", "6003",
-  //     "transfer", "776108151173808128", "2020-11-12 11:27:11");
-  // FindUserTaskDetail approval;
+  FindUserTaskDetail dataA = FindUserTaskDetail("60001", "0", "一对一转账", "6001",
+      "transfer", "776108151173808128", "2020-11-12 09:12:24");
+  FindUserTaskDetail dataB = FindUserTaskDetail("60002", "0", "定期开立", "6002",
+      "transfer", "776108151173808128", "2020-11-12 10:22:08");
+  FindUserTaskDetail dataC = FindUserTaskDetail("60003", "0", "定期开立", "6003",
+      "transfer", "776108151173808128", "2020-11-12 11:27:11");
+  FindUserTaskDetail approval;
   ScrollController _sctrollController = ScrollController();
   int count = 0;
   int page = 1;
   LoadingStatus loadStatus; //加载状态
   bool _isDate = false;
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
   // bool refresh;
 
   void initState() {
     super.initState();
-    // list.add(dataA);
-    // list.add(dataB);
-    // list.add(dataC);
+    list.add(dataA);
+    list.add(dataB);
+    list.add(dataC);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      refrestIndicatorKey.currentState.show();
+      // refrestIndicatorKey.currentState.show();
     });
     _sctrollController.addListener(() {
       if (_sctrollController.position.pixels ==
@@ -227,60 +228,60 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   @override
   Widget build(BuildContext context) {
     return
-        // ListView.builder(
-        //   // itemCount: list.length,
-        //   itemCount: list.length+1,
-        //   itemBuilder: (context, index) {
-        //     if (index == list.length) {
-        //       return _loadingView();
-        //     } else {
-        //       return Column(
-        //         children: <Widget>[
-        //           Center(
-        //             child: _pad(
-        //               _todoInformation(list[index], list[index].processTitle,
-        //                   list[index].startUser, list[index].createTime),
-        //               t: 10.0,
-        //               b: 10.0,
-        //             ),
-        //           ),
-        //         ],
-        //       );
-        //     }
-        //   },
-        //   controller: _sctrollController,
-        // );
+        ListView.builder(
+          // itemCount: list.length,
+          itemCount: list.length+1,
+          itemBuilder: (context, index) {
+            if (index == list.length) {
+              return _loadingView();
+            } else {
+              return Column(
+                children: <Widget>[
+                  Center(
+                    child: _pad(
+                      _todoInformation(list[index], list[index].processTitle,
+                          list[index].startUser, list[index].createTime),
+                      t: 10.0,
+                      b: 10.0,
+                    ),
+                  ),
+                ],
+              );
+            }
+          },
+          controller: _sctrollController,
+        );
 
-        RefreshIndicator(
-            key: refrestIndicatorKey,
-            child: _isDate
-                ? ListView.builder(
-                    itemCount: list.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index == list.length) {
-                        return _loadingView();
-                      } else {
-                        return Column(
-                          children: <Widget>[
-                            Center(
-                              child: _pad(
-                                _todoInformation(
-                                    list[index],
-                                    list[index].processTitle,
-                                    list[index].startUser,
-                                    list[index].createTime),
-                                t: 10.0,
-                                b: 10.0,
-                              ),
-                            ),
-                          ],
-                        );
-                      }
-                    },
-                    controller: _sctrollController,
-                  )
-                : notDataContainer(context, S.current.no_data_now),
-            onRefresh: _loadData);
+        // RefreshIndicator(
+        //     key: refrestIndicatorKey,
+        //     child: _isDate
+        //         ? ListView.builder(
+        //             itemCount: list.length + 1,
+        //             itemBuilder: (context, index) {
+        //               if (index == list.length) {
+        //                 return _loadingView();
+        //               } else {
+        //                 return Column(
+        //                   children: <Widget>[
+        //                     Center(
+        //                       child: _pad(
+        //                         _todoInformation(
+        //                             list[index],
+        //                             list[index].processTitle,
+        //                             list[index].startUser,
+        //                             list[index].createTime),
+        //                         t: 10.0,
+        //                         b: 10.0,
+        //                       ),
+        //                     ),
+        //                   ],
+        //                 );
+        //               }
+        //             },
+        //             controller: _sctrollController,
+        //           )
+        //         : notDataContainer(context, S.current.no_data_now),
+        //     onRefresh: _loadData);
   }
 
 //跳转并传值
@@ -290,24 +291,24 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   }
 
   Future<void> _loadData() async {
-    ProcessTaskDataRepository()
-        .findUserToDoTask(FindUserToDoTaskReq(page, 10), 'findUserToDoTask')
-        .then((data) {
-      if (data.rows.length != 0) {
-        count = data.count;
-        _isDate = true;
-        setState(() {
-          list.clear();
-          toDoTask.clear();
-          toDoTask.addAll(data.rows);
-          list.addAll(toDoTask);
-        });
-      } else {
-        _isDate = false;
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
+    // ProcessTaskDataRepository()
+    //     .findUserToDoTask(FindUserToDoTaskReq(page, 10), 'findUserToDoTask')
+    //     .then((data) {
+    //   if (data.rows.length != 0) {
+    //     count = data.count;
+    //     _isDate = true;
+    //     setState(() {
+    //       list.clear();
+    //       toDoTask.clear();
+    //       toDoTask.addAll(data.rows);
+    //       list.addAll(toDoTask);
+    //     });
+    //   } else {
+    //     _isDate = false;
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // });
   }
 
 //加载更多
