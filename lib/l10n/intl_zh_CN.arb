@@ -487,8 +487,9 @@
   "format_mobile_error":"您输入的手机号码格式错误",
   "not_contain_password":"密码不能包含账户名",
   "password_8_16":"密码8-16位",
-  "password_need_num":"密码需包含数字",
+  "password_need_num":"密码需8-16位，包含数字，大小写字母和特殊字符",
   "password_need_low_and_top":"密码需包含大小写字母",
   "password_need_special_font":"密码需包含特殊字符",
   "differnet_old_new_pwd": "新密码和旧密码不允许一致，请重新输入"
+
 }
