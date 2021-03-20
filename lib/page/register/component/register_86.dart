@@ -3,6 +3,8 @@ import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 注册账号拿去手机地区号
@@ -47,7 +49,7 @@ Widget getRegisterRegion(BuildContext context, TextEditingController _phoneNum,
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width / 3,
+            width: MediaQuery.of(context).size.width / 1.65,
             child: TextField(
               //是否自动更正
               autocorrect: false,
@@ -56,12 +58,13 @@ Widget getRegisterRegion(BuildContext context, TextEditingController _phoneNum,
               controller: _phoneNum,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: '输入手机号',
+                hintText: S.current.please_input_mobile_num,
                 hintStyle: TextStyle(
                   fontSize: 15,
                   color: HsgColors.textHintColor,
                 ),
               ),
+              keyboardType: TextInputType.number,
             ),
           ),
         ],

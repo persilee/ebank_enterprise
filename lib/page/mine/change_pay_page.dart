@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/get_verification_code.dart';
 import 'package:ebank_mobile/data/source/model/set_payment_pwd.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -17,6 +18,8 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
+import 'package:ebank_mobile/data/source/user_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 
 class ChangePayPage extends StatefulWidget {
   @override
@@ -31,7 +34,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
   TextEditingController _newPwd = TextEditingController();
   TextEditingController _confimPwd = TextEditingController();
   TextEditingController _sms = TextEditingController();
-
+  String _phoneNo = '';
   Timer _timer;
   int countdownTime = 0;
 
@@ -55,6 +58,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
     _confimPwd.addListener(() {
       setState(() {});
     });
+    _getUser();
   }
 
   @override
@@ -180,29 +184,34 @@ class _ChangePayPageState extends State<ChangePayPage> {
 
   //提交按钮
   _submitData() async {
-    RegExp postalcode1 = new RegExp(r'^\d{6}$');
+    HSProgressHUD.show();
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+
+    String oldPwd = EncryptUtil.aesEncode(_oldPwd.text);
+    String newPwd = EncryptUtil.aesEncode(_newPwd.text);
+    print(oldPwd);
+    print(newPwd);
+    RegExp number_6 = new RegExp(r'^\d{6}$');
     if (_newPwd.text != _confimPwd.text) {
-      Fluttertoast.showToast(msg: S.of(context).differentPwd);
+      HSProgressHUD.showInfo(status: S.of(context).differentPwd);
     } else if (_newPwd.text == _oldPwd.text) {
-      Fluttertoast.showToast(msg: S.of(context).differnet_old_new_pwd);
-    } else if (!postalcode1.hasMatch(_newPwd.text)) {
-      Fluttertoast.showToast(msg: S.of(context).set_pay_password_prompt);
+      HSProgressHUD.showInfo(status: S.of(context).differnet_old_new_pwd);
+    } else if (!number_6.hasMatch(_newPwd.text)) {
+      HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
+    } else if (!number_6.hasMatch(_sms.text)) {
+      // HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
+      HSProgressHUD.showInfo(status: '请输入6位验证码');
     } else {
-      HSProgressHUD.show();
-      final prefs = await SharedPreferences.getInstance();
-      String userID = prefs.getString(ConfigKey.USER_ID);
-      String oldPwd = EncryptUtil.aesEncode(_oldPwd.text);
-      String newPwd = EncryptUtil.aesEncode(_newPwd.text);
-      print(oldPwd);
-      print(newPwd);
       PaymentPwdRepository()
           .updateTransPassword(
         SetPaymentPwdReq(oldPwd, newPwd, userID, _sms.text),
         'updateTransPassword',
       )
           .then((data) {
-        HSProgressHUD.showError(status: S.current.changPwsSuccess);
-        Navigator.pop(context);
+        HSProgressHUD.showInfo(status: S.current.changPwsSuccess);
+        Navigator.of(context)..pop();
+        Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
         HSProgressHUD.dismiss();
       }).catchError((e) {
         // Fluttertoast.showToast(msg: e.toString());
@@ -213,7 +222,10 @@ class _ChangePayPageState extends State<ChangePayPage> {
   }
 
   bool _submit() {
-    if (_oldPwd.text != '' && _newPwd.text != '' && _confimPwd.text != '') {
+    if (_oldPwd.text != '' &&
+        _newPwd.text != '' &&
+        _confimPwd.text != '' &&
+        _sms.text != '') {
       return true;
     } else {
       return false;
@@ -222,7 +234,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
 
   //倒计时方法
   _startCountdown() {
-    countdownTime = 60;
+    countdownTime = 120;
     final call = (timer) {
       setState(() {
         if (countdownTime < 1) {
@@ -235,14 +247,25 @@ class _ChangePayPageState extends State<ChangePayPage> {
     _timer = Timer.periodic(Duration(seconds: 1), call);
   }
 
+  _otpEnable() {
+    if (_oldPwd.text.length > 0 &&
+        _newPwd.text.length > 0 &&
+        _confimPwd.text.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   //获取验证码按钮
   FlatButton _otpButton() {
+    bool otpEnable = (countdownTime == 0 && _otpEnable());
     return FlatButton(
-      onPressed: countdownTime > 0
-          ? null
-          : () {
+      onPressed: otpEnable
+          ? () {
               _getVerificationCode();
-            },
+            }
+          : null,
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
       padding: EdgeInsets.symmetric(horizontal: 8),
       color: Color(0xeeEFF3FF),
@@ -252,8 +275,8 @@ class _ChangePayPageState extends State<ChangePayPage> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50),
       ),
-      disabledTextColor: HsgColors.blueTextColor,
-      disabledColor: Color(0xeeEFF3FF),
+      disabledTextColor: Colors.white,
+      disabledColor: HsgColors.hintText,
       child: Text(
         countdownTime > 0
             ? '${countdownTime}s'
@@ -262,6 +285,26 @@ class _ChangePayPageState extends State<ChangePayPage> {
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
+  }
+
+  //获取用户信息
+  _getUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+    UserDataRepository()
+        .getUserInfo(
+      GetUserInfoReq(userID),
+      'getUserInfo',
+    )
+        .then((data) {
+      setState(() {
+        _phoneNo = data.userPhone;
+      });
+    }).catchError((e) {
+      // Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.showError(status: e.toString());
+      print('${e.toString()}');
+    });
   }
 
   //获取验证码接口
@@ -274,15 +317,15 @@ class _ChangePayPageState extends State<ChangePayPage> {
         //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
         // )
         .sendSmsByPhone(
-            SendSmsByPhoneNumberReq('13411111111', 'transactionPwd'), 'sendSms')
+            SendSmsByPhoneNumberReq(_phoneNo, 'transactionPwd'), 'sendSms')
         .then((data) {
       _startCountdown();
       setState(() {
-        _sms.text = '123456';
+        // _sms.text = '123456';
       });
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.showError(status: e.toString());
       HSProgressHUD.dismiss();
     });
   }
@@ -301,7 +344,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
         LengthLimitingTextInputFormatter(6), //限制长度
       ],
       decoration: InputDecoration.collapsed(
-        hintText: S.current.placeSMS,
+        hintText: S.current.please_enter,
         hintStyle: TextStyle(
           fontSize: 14,
           color: HsgColors.textHintColor,

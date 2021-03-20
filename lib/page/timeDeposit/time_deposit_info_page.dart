@@ -6,18 +6,24 @@
  */
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_early_contract.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_trial.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 
 import 'package:ebank_mobile/widget/progressHUD.dart';
+import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PageDepositInfo extends StatefulWidget {
   final DepositRecord deposit;
@@ -77,13 +83,210 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   _PageDepositInfo(this.deposit, this.cardList);
 
+  List<RemoteBankCard> cards = [];
+
+  int _settAcPosition = 0;
+
+  String _changedSettAcTitle = '0101 2000 0017 1';
+
+  bool _checkBoxValue = false; //复选框默认值
+
   //获取网络请求
   @override
   void initState() {
     super.initState();
     _loadDepositData(deposit.conNo, double.parse(deposit.bal));
     _getDetail();
+    _loadData();
     // _getCardListBalByUser();
+  }
+
+  //右箭头图标
+  Widget _rightArrow() {
+    return Container(
+      width: 20,
+      child: Icon(
+        Icons.keyboard_arrow_right,
+        color: HsgColors.nextPageIcon,
+      ),
+    );
+  }
+
+  //到期指示按钮
+  Widget _selectInstCodeBtn(
+      String leftText, String rightText, bool isShowLine, bool isOptional) {
+    return Container(
+      padding: EdgeInsets.zero,
+      child: FlatButton(
+        padding: EdgeInsets.zero,
+        child: _unit(leftText, rightText, isShowLine, isOptional),
+        onPressed: () {
+          _selectInstruction(context);
+        },
+      ),
+    );
+  }
+
+  //结算账户按钮
+  Widget _selectSettACBtn(
+      String leftText, String rightText, bool isShowLine, bool isOptional) {
+    return Container(
+      padding: EdgeInsets.zero,
+      height: 45,
+      child: FlatButton(
+        padding: EdgeInsets.zero,
+        child: _unit(leftText, rightText, isShowLine, isOptional),
+        onPressed: () {
+          _selectSettAc(context);
+        },
+      ),
+    );
+  }
+
+  //结算账户弹窗
+  _selectSettAc(BuildContext context) async {
+    List<String> bankCards = [];
+    List<String> accounts = [];
+    List<String> ciNames = [];
+    for (RemoteBankCard card in cards) {
+      bankCards.add(card.cardNo);
+      ciNames.add((card.ciName));
+    }
+    for (var i = 0; i < bankCards.length; i++) {
+      accounts.add(FormatUtil.formatSpace4(bankCards[i]));
+    }
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) => HsgBottomSingleChoice(
+            title: S.current.settlement_account,
+            items: accounts,
+            lastSelectedPosition: _settAcPosition));
+    if (result != null && result != false) {
+      _settAcPosition = result;
+      _changedSettAcTitle = accounts[result];
+    } else {
+      return;
+    }
+    setState(() {});
+  }
+
+  Widget _unit(
+      String leftText, String rightText, bool isShowLine, bool isOptional) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  width: (MediaQuery.of(context).size.width - 42) / 7 * 2,
+                  child: Text(
+                    leftText,
+                    style: TextStyle(fontWeight: FontWeight.normal),
+                  ),
+                ),
+              ),
+              Container(
+                width: (MediaQuery.of(context).size.width - 42) / 7 * 4,
+                child: Text(
+                  rightText,
+                  style: TextStyle(fontWeight: FontWeight.normal),
+                  textAlign: TextAlign.right,
+                ),
+              ),
+              isOptional ? _rightArrow() : Container(),
+            ],
+          ),
+        ),
+        isShowLine
+            ? Container(
+                height: 1,
+                child: Divider(),
+              )
+            : Container(),
+      ],
+    );
+  }
+
+  //圆形复选框
+  Widget _roundCheckBox() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _checkBoxValue = !_checkBoxValue;
+        });
+      },
+      child: Container(
+        width: 20,
+        margin: EdgeInsets.only(left: 16, top: 2.5, right: 5),
+        child: _checkBoxValue
+            ? _ckeckBoxImge("images/common/check_btn_common_checked.png")
+            : _ckeckBoxImge("images/common/check_btn_common_no_check.png"),
+      ),
+    );
+  }
+
+  //圆形复选框是否选中图片
+  Widget _ckeckBoxImge(String imgurl) {
+    return Image.asset(
+      imgurl,
+      height: 16,
+      width: 16,
+    );
+  }
+
+  //勾选协议
+  Widget _agreement() {
+    return Container(
+      margin: EdgeInsets.only(top: 15),
+      width: MediaQuery.of(context).size.width - 32,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _roundCheckBox(),
+          Container(
+            width: MediaQuery.of(context).size.width - 52,
+            padding: EdgeInsets.zero,
+            child: Text(
+              S.current.select_content,
+              style: TextStyle(color: HsgColors.toDoDetailText, fontSize: 12),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //到期指示弹窗
+  _selectInstruction(BuildContext context) async {
+    List<String> instructions = [
+      S.current.instruction_at_maturity_0,
+      S.current.instruction_at_maturity_1,
+      S.current.instruction_at_maturity_2,
+      S.current.instruction_at_maturity_5,
+    ];
+    List<String> instructionDatas = [
+      '0',
+      '1',
+      '2',
+      '5',
+    ];
+    final result = await showHsgBottomSheet(
+      context: context,
+      builder: (context) => BottomMenu(
+        title: S.current.due_date_indicate,
+        items: instructions,
+      ),
+    );
+    setState(() {
+      if (result != null && result != false) {
+        instCode = instructions[result];
+        // instCode = instructionDatas[result];
+      } else {
+        return {instCode, instCode};
+      }
+    });
   }
 
   @override
@@ -92,153 +295,133 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     String conMatAmts = FormatUtil.formatSringToMoney('$conMatAmt');
     String matAmts = FormatUtil.formatSringToMoney('$matAmt');
 
-    Widget _unit(String leftText, String rightText, bool isShowLine) {
-      return Column(
-        children: [
-          Container(
-            child: Row(
-              children: [
-                Expanded(child: Text(leftText)),
-                Container(
-                  child: Text(rightText),
-                )
-              ],
-            ),
-          ),
-          isShowLine
-              ? Container(
-                  child: Divider(),
-                  margin: EdgeInsets.only(top: 6),
-                )
-              : Container(),
-        ],
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.receipt_detail),
         centerTitle: true,
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(4.0),
-          ),
-          Container(
-            color: Colors.white,
-            margin: EdgeInsets.only(bottom: 8),
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 10),
-            //付款账户
-            child: Row(
-              children: [
-                Expanded(child: Text(S.current.payment_account)),
-                Container(
-                  child: Text(
-                    // FormatUtil.formatSpace4('$settDbAc'),
-                    '0101 2000 0017 2',
-                  ),
-                )
-              ],
+      body: Container(
+        color: HsgColors.commonBackground,
+        child: ListView(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(4.0),
             ),
-          ),
-          //整存整取
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(15, 0, 0, 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: Text(S.current.deposit_taking,
-                              style: TextStyle(fontWeight: FontWeight.bold))),
-                      Container()
-                    ],
-                  ),
-                ),
-                Container(height: 0.5, color: HsgColors.divider),
-              ],
+            Container(
+              color: Colors.white,
+              margin: EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 10),
+              //付款账户
+              child: Row(
+                children: [
+                  Expanded(child: Text(S.current.payment_account)),
+                  Container(
+                    child: Text(
+                      // FormatUtil.formatSpace4('$settDbAc'),
+                      '0101 2000 0017 2',
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
+            //整存整取
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.fromLTRB(15, 0, 0, 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Text(S.current.deposit_taking,
+                                style: TextStyle(fontWeight: FontWeight.bold))),
+                        Container()
+                      ],
+                    ),
+                  ),
+                  Container(height: 0.5, color: HsgColors.divider),
+                ],
+              ),
+            ),
 
-          Container(
-            padding: EdgeInsets.fromLTRB(16, 3, 16, 10),
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                //合约号
-                _unit(S.current.contract_number, conNos, true),
-                //币种
-                _unit(S.current.currency, ccy, true),
-                //存入金额
-                _unit(S.current.deposit_amount,
-                    FormatUtil.formatSringToMoney(bal), true),
-                //存期
-                _unit(S.current.deposit_term, auctCale + S.current.month, true),
-                //生效日期
-                _unit(S.current.effective_date, valDate, true),
-                //到期日期
-                _unit(S.current.due_date, mtDate, true),
-                //到期指示
-                Container(
-                  child: Row(
-                    children: [
-                      Expanded(child: Text(S.current.due_date_indicate)),
-                      Container(
-                        child: Text(instCode),
-                      )
-                    ],
-                  ),
-                ),
-              ],
+            Container(
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //合约号
+                  _unit(S.current.contract_number, conNos, true, false),
+                  //币种
+                  _unit(S.current.currency, ccy, true, false),
+                  //存入金额
+                  _unit(S.current.deposit_amount,
+                      FormatUtil.formatSringToMoney(bal), true, false),
+                  //存期
+                  _unit(S.current.deposit_term, auctCale + S.current.month,
+                      true, false),
+                  //生效日期
+                  _unit(S.current.effective_date, valDate, true, false),
+                  //到期日期
+                  _unit(S.current.due_date, mtDate, true, false),
+                  //结算账户
+                  _selectSettACBtn(S.current.settlement_account,
+                      _changedSettAcTitle, true, true),
+                  //到期指示
+                  _selectInstCodeBtn(
+                      S.current.due_date_indicate, instCode, false, true),
+                ],
+              ),
             ),
-          ),
+            _agreement(),
 
-          Container(
-              width: 3,
-              height: 85,
-              padding: EdgeInsets.fromLTRB(40, 20, 40, 15),
-              child: RaisedButton(
-                onPressed: () async {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return HsgAlertDialog(
-                          title: S.current.confirm_to_early_settlement,
-                          message: S.current.contract_settlement_amt +
-                              ':$ccy$conMatAmts\n' +
-                              S.current.early_settlement_amt +
-                              ':$ccy$matAmts',
-                          positiveButton: S.current.confirm,
-                          negativeButton: S.current.cancel);
-                      // return SimpleDialog(
-                      //     title: Text(S.current.confirm_to_early_settlement,
-                      //         style: TextStyle(
-                      //             fontSize: 15, fontWeight: FontWeight.bold),
-                      //         textAlign: TextAlign.center),
-                      //     children: <Widget>[
-                      //       _DialogBox(conMatAmts, matAmts)
-                      //     ]); //conMatAmts
-                    },
-                  );
-                },
-                textColor: Colors.white,
-                color: Colors.blue[500],
-                child: (Text(S.current.repayment_type2)),
+            Container(
+                width: 3,
+                height: 85,
+                color: HsgColors.commonBackground,
+                padding: EdgeInsets.fromLTRB(40, 20, 40, 15),
+                child: RaisedButton(
+                  onPressed: _checkBoxValue
+                      ? () async {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return HsgAlertDialog(
+                                  title: S.current.confirm_to_early_settlement,
+                                  message: S.current.contract_settlement_amt +
+                                      ' $ccy $conMatAmts\n' +
+                                      S.current.early_settlement_amt +
+                                      ' $ccy $matAmts',
+                                  positiveButton: S.current.confirm,
+                                  negativeButton: S.current.cancel);
+                            },
+                          ).then(
+                            (value) {
+                              if (value == true) {
+                                _contractEarly(context);
+                              }
+                            },
+                          );
+                        }
+                      : null,
+                  textColor: Colors.white,
+                  color: HsgColors.accent,
+                  disabledColor: HsgColors.btnDisabled,
+                  child: (Text(S.current.repayment_type2)),
+                )),
+            Container(
+              color: HsgColors.commonBackground,
+              padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
+              child: (Text(
+                S.current.deposit_declare,
+                style: TextStyle(color: HsgColors.toDoDetailText, fontSize: 12),
               )),
-          Container(
-            padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
-            child: (Text(
-              S.current.deposit_declare,
-              style: TextStyle(color: Color(0xFF8D8D8D), fontSize: 12),
-            )),
-          )
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -424,11 +607,11 @@ class _PageDepositInfo extends State<PageDepositInfo> {
           instCode = S.current.instruction_at_maturity_5;
         }
     }
-    for (int i = 0; i < cardList.length; i++) {
-      if (cardList[i].ccy == ccy) {
-        transferAc = cardList[i].cardNo;
-      }
-    }
+    // for (int i = 0; i < cardList.length; i++) {
+    //   if (cardList[i].ccy == ccy) {
+    //     transferAc = cardList[i].cardNo;
+    //   }
+    // }
   }
 
   // _getCardListBalByUser() async {
@@ -449,6 +632,23 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   //     HSProgressHUD.showError(status: '${e.toString()}');
   //   });
   // }
+
+  Future<void> _loadData() async {
+    // final prefs = await SharedPreferences.getInstance();
+    // custID = prefs.getString(ConfigKey.CUST_ID);
+    CardDataRepository().getCardList('getCardList').then(
+      (data) {
+        if (data.cardList != null) {
+          setState(() {
+            cards.clear();
+            cards.addAll(data.cardList);
+          });
+        }
+      },
+    ).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
 
   //结算成功-跳转页面
   _showContractSucceedPage(BuildContext context) async {

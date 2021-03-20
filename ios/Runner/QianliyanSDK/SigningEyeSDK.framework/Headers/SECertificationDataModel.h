@@ -1,0 +1,28 @@
+//
+//  SECertificationDataModel.h
+//  SigningEyeSDK
+//
+//  Created by 张洪福 on 2021/3/18.
+//  Copyright © 2021 大锅. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface SECertificationDataModel : NSObject
+
+@property (nonatomic, assign)BOOL isSuccess;//是否成功
+@property (nonatomic, copy) NSString * positiveImage;//正面照片
+@property (nonatomic, copy) NSString * backImage;//反面照片
+@property (nonatomic, copy) NSString * videoUrl;//香港证件录制的本地视频路径
+@property (nonatomic, copy) NSString * infoStr;//证件信息
+@property (nonatomic, copy) NSString * speechFlowData;//ai对话数据
+@property (nonatomic, copy) NSString * compareImageData;//ai对比图片数据
+@property (nonatomic, assign)SECertificateType certificateType;//证件类型
+@property (nonatomic, copy) NSString * headerImg;//大头照
+@property (nonatomic, copy) NSString * fileName;//ai录制后视频名称
+
+@end
+
+NS_ASSUME_NONNULL_END

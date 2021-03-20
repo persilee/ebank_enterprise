@@ -1,11 +1,18 @@
+import 'dart:convert';
+
+import 'package:ebank_mobile/authentication/auth_identity.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_picker/flutter_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class OpenAccountContactInformationPage extends StatefulWidget {
   @override
@@ -164,8 +171,28 @@ class _OpenAccountContactInformationPageState
                   title: S.of(context).next_step,
                   click: _nextBtnEnabled
                       ? () {
-                          Navigator.pushNamed(
-                              context, pageOpenAccountSelectDocumentType);
+                          bool bo = true;
+                          if (bo) {
+                            AuthIdentity()
+                                .startAuth(
+                                  new AuthIdentityReq(
+                                      "DLEAED",
+                                      "74283428974321",
+                                      "en",
+                                      "CN",
+                                      "1"), //passport001zh  DLEAED
+                                )
+                                .then((value) => () {
+                                      Fluttertoast.showToast(msg: value.result);
+                                      Navigator.pushNamed(context,
+                                          pageOpenAccountSelectDocumentType);
+                                    })
+                                .catchError((e) {
+                              HSProgressHUD.showError(
+                                  status: '${e.toString()}');
+                            });
+                            return;
+                          }
                         }
                       : null,
                 ),
@@ -218,6 +245,91 @@ class _OpenAccountContactInformationPageState
   }
 
   Widget _inputViewWidget(BuildContext context) {
+    const PickerData = '''
+[
+    {
+        "a": [
+            {
+                "a1": [
+                    1,
+                    2,
+                    3,
+                    4
+                ]
+            },
+            {
+                "a2": [
+                    5,
+                    6,
+                    7,
+                    8
+                ]
+            },
+            {
+                "a3": [
+                    9,
+                    10,
+                    11,
+                    12
+                ]
+            }
+        ]
+    },
+    {
+        "b": [
+            {
+                "b1": [
+                    11,
+                    22,
+                    33,
+                    44
+                ]
+            },
+            {
+                "b2": [
+                    55,
+                    66,
+                    77,
+                    88
+                ]
+            },
+            {
+                "b3": [
+                    99,
+                    1010,
+                    1111,
+                    1212
+                ]
+            }
+        ]
+    },
+    {
+        "c": [
+            {
+                "c1": [
+                    "a",
+                    "b",
+                    "c"
+                ]
+            },
+            {
+                "c2": [
+                    "aa",
+                    "bb",
+                    "cc"
+                ]
+            },
+            {
+                "c3": [
+                    "aaa",
+                    "bbb",
+                    "ccc"
+                ]
+            }
+        ]
+    }
+]
+    ''';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -229,15 +341,20 @@ class _OpenAccountContactInformationPageState
             children: [
               Container(
                 child: _oneLayerSelectWidget(
-                  context,
-                  '注册公司地址',
-                  _registrationAreaText,
-                  '省/市/区',
-                  false,
-                  () {
-                    print('注册公司地址');
-                  },
-                ),
+                    context, '注册公司地址', _registrationAreaText, '省/市/区', false,
+                    () {
+                  print('注册公司地址');
+                  Picker(
+                      adapter: PickerDataAdapter<String>(
+                          pickerdata: JsonDecoder().convert(PickerData)),
+                      changeToFirst: true,
+                      hideHeader: false,
+                      selectedTextStyle: TextStyle(color: Colors.blue),
+                      onConfirm: (Picker picker, List value) {
+                        print(value.toString());
+                        print(picker.adapter.text);
+                      }).showModal(this.context); //_scaffoldKey.currentState);
+                }),
               ),
               Container(
                 child: _twoLayerInputWidget(

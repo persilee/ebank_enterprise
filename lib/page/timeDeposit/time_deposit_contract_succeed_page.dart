@@ -71,8 +71,11 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
 
                     //定期开立跳转
                     if (_arguments == 'timeDepositProduct') {
-                      Navigator.pushReplacementNamed(
-                          context, pageTimeDepostProduct);
+                      Navigator.of(context)..pop();
+                      NotificationCenter.instance
+                          .postNotification('timeDepositProduct', true);
+                      // Navigator.pushReplacementNamed(
+                      //     context, pageTimeDepostProduct);
                     }
                     //任务审批跳转
                     if (_arguments == 'taskApproval') {
@@ -87,7 +90,7 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
 
                     //提前结清跳转
                     if (_arguments == 'timeDepositRecord') {
-                      Navigator.of(context)..pop()..pop();
+                      Navigator.of(context)..pop();
                       NotificationCenter.instance
                           .postNotification('load', true);
                     }

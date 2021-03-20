@@ -33,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   var _enterpriseName = ''; // 企业名称
   var _userName = '高阳银行企业用户'; // 姓名
   var _characterName = ''; // 角色名称
+  var _belongCustStatus = '7'; //用户状态
   var _lastLoginTime = ''; // 上次登录时间
   String _language = Intl.getCurrentLocale();
   var _features = [];
@@ -93,10 +94,10 @@ class _HomePageState extends State<HomePage> {
             'btnIcon': 'images/home/listIcon/home_list_deposit_records.png',
             'btnTitle': S.current.deposit_record
           },
-          {
-            'btnIcon': 'images/home/listIcon/home_list_deposit_rates.png',
-            'btnTitle': S.current.deposit_rate
-          },
+          // {
+          //   'btnIcon': 'images/home/listIcon/home_list_deposit_rates.png',
+          //   'btnTitle': S.current.deposit_rate
+          // },
         ]
       },
       {
@@ -110,10 +111,10 @@ class _HomePageState extends State<HomePage> {
             'btnIcon': 'images/home/listIcon/home_list_loan_recoeds.png',
             'btnTitle': S.current.loan_record
           },
-          {
-            'btnIcon': 'images/home/listIcon/home_list_loan_rate.png',
-            'btnTitle': S.current.loan_rate
-          },
+          // {
+          //   'btnIcon': 'images/home/listIcon/home_list_loan_rate.png',
+          //   'btnTitle': S.current.loan_rate
+          // },
         ]
       },
 //      {
@@ -182,8 +183,7 @@ class _HomePageState extends State<HomePage> {
               ),
               onPressed: () {
                 print('联系客服');
-                Navigator.pushNamed(
-                    context, pageOpenAccountBasicData); //pageContactCustomer
+                Navigator.pushNamed(context, pageContactCustomer);
               },
             ),
             // IconButton(
@@ -302,22 +302,14 @@ class _HomePageState extends State<HomePage> {
             image: AssetImage('images/home/heaerIcon/home_header_bg.png'),
           ),
           Container(
-            child: Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 120, left: 35),
-                  child: _headPortrait(),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 20, right: 15, top: 105),
-                  child: _userInfo(),
-                )
-              ],
-            ),
+            margin: EdgeInsets.only(top: 60),
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: _headerInfoWidget(),
+            //_openAccInReview(), //_openAccRejected(), // _headerInfoWidget(),
           ),
           Container(
             width: _headerViewHeight,
-            height: 110.0,
+            height: 105.0,
             margin: EdgeInsets.only(top: 210, left: 15),
             decoration: HsgStyles.homeHeaderShadow,
             child: Row(
@@ -326,12 +318,15 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   width: _headerViewHeight / 2 - 5,
                   child: _graphicButton(
-                      S.of(context).transaction_details,
-                      'images/home/heaerIcon/home_header_payment.png',
-                      40.0, () {
-                    print('收支明细');
-                    Navigator.pushNamed(context, pageDetailList);
-                  }),
+                    S.of(context).transaction_details,
+                    'images/home/heaerIcon/home_header_payment.png',
+                    40.0,
+                    (MediaQuery.of(context).size.width - 50) / 2,
+                    () {
+                      print('收支明细');
+                      Navigator.pushNamed(context, pageDetailList);
+                    },
+                  ),
                 ),
                 Container(
                   width: 0.5,
@@ -341,12 +336,15 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   width: _headerViewHeight / 2 - 5,
                   child: _graphicButton(
-                      S.of(context).account_summary,
-                      'images/home/heaerIcon/home_header_overview.png',
-                      40.0, () {
-                    print('账户总览');
-                    Navigator.pushNamed(context, pageAccountOverview);
-                  }),
+                    S.of(context).account_summary,
+                    'images/home/heaerIcon/home_header_overview.png',
+                    40.0,
+                    (MediaQuery.of(context).size.width - 50) / 2,
+                    () {
+                      print('账户总览');
+                      Navigator.pushNamed(context, pageAccountOverview);
+                    },
+                  ),
                 ),
               ],
             ),
@@ -384,24 +382,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  //用户信息
-  Widget _userInfo() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _enterpriseInfo(),
-        Container(
-          margin: EdgeInsets.only(top: 10),
-          child: _accountInfo(),
-        ),
-        Container(
-          margin: EdgeInsets.only(top: 10),
-          child: _timeInfo(),
-        )
-      ],
-    );
-  }
-
   //企业信息
   Widget _enterpriseInfo() {
     return Container(
@@ -419,30 +399,34 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  //账号信息
-  Widget _accountInfo() {
+  //用户名
+  Widget _nameInfo() {
+    return Container(
+      constraints: BoxConstraints(
+          maxWidth: (MediaQuery.of(context).size.width / 3 * 2 - 160)),
+      child: Text(
+        _userName,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+        ),
+      ),
+    );
+  }
+
+  //用户角色信息
+  Widget _characterInfo() {
     return Container(
       height: 25,
       decoration: BoxDecoration(
         color: Color(0xff5662fb).withOpacity(0.66), //HsgColors.accent,
         borderRadius: BorderRadius.circular(12.5), //
       ),
-      padding: EdgeInsets.only(left: 15, right: 15),
+      padding: EdgeInsets.fromLTRB(5, 0, 12, 0),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            height: 20,
-            constraints: BoxConstraints(
-                maxWidth: (MediaQuery.of(context).size.width / 3 * 2 - 160)),
-            child: Text(
-              _userName,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-              ),
-            ),
-          ),
           Container(
             padding: EdgeInsets.only(left: 5, right: 5),
             child: Icon(
@@ -452,7 +436,9 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Container(
-            width: 70,
+            constraints: BoxConstraints(
+              maxWidth: 160,
+            ),
             child: Text(
               _characterName,
               style: TextStyle(
@@ -465,6 +451,169 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
+    );
+  }
+
+  //头部信息展示
+  Widget _headerInfoWidget() {
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      child: Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 25),
+            child: _headPortrait(),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width - 55 - 50 - 25,
+            child:
+                _userOffInfo(), //_belongCustStatus == '7' ? _userInfo() : _userOffInfo(),
+          ),
+        ],
+      ),
+    );
+  }
+
+//用户信息-未开户成功
+  Widget _userOffInfo() {
+    return Container(
+      margin: EdgeInsets.only(top: 0),
+      height: 110,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: _nameInfo(),
+          ),
+          RaisedButton(
+            onPressed: () {
+              print('开户申请');
+              Navigator.pushNamed(context, pageOpenAccountBasicData);
+            },
+            child: Text(
+              S.of(context).open_account_apply,
+              style: TextStyle(fontSize: 15, color: Colors.white),
+            ),
+            shape: RoundedRectangleBorder(
+              side: BorderSide.none,
+              borderRadius: BorderRadius.all(Radius.circular(50)),
+            ),
+            color: Color(0xFF4871FF),
+            disabledColor: HsgColors.btnDisabled,
+          ),
+        ],
+      ),
+    );
+  }
+
+  //审核驳回
+  Widget _openAccRejected() {
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      height: 110,
+      width: MediaQuery.of(context).size.width - 40,
+      child: Column(
+        children: [
+          Container(
+            child: Text(
+              S.of(context).open_account_rejected_tip,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 10, bottom: 15),
+            height: 35,
+            child: RaisedButton(
+              onPressed: () {
+                print('重新申请');
+              },
+              child: Text(
+                S.of(context).open_account_reapply,
+                style: TextStyle(fontSize: 14, color: Colors.white),
+              ),
+              shape: RoundedRectangleBorder(
+                side: BorderSide.none,
+                borderRadius: BorderRadius.all(Radius.circular(50)),
+              ),
+              color: Color(0xFF4871FF),
+              disabledColor: HsgColors.btnDisabled,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 7),
+            child: _timeInfo(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //审核中
+  Widget _openAccInReview() {
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      height: 110,
+      width: MediaQuery.of(context).size.width - 40,
+      child: Column(
+        children: [
+          Container(
+            child: Text(
+              S.of(context).open_account_inReview_tip,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Text(
+              S.of(context).open_account_inReview_content,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          Expanded(child: Container()),
+          Container(
+            margin: EdgeInsets.only(top: 7),
+            child: _timeInfo(),
+          ),
+        ],
+      ),
+    );
+  }
+
+//用户信息-已开户
+  Widget _userInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _enterpriseInfo(),
+        Container(
+          margin: EdgeInsets.only(top: 7),
+          child: _nameInfo(),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 10),
+          child: _characterInfo(),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 7),
+          child: _timeInfo(),
+        )
+      ],
     );
   }
 
@@ -491,50 +640,23 @@ class _HomePageState extends State<HomePage> {
 
   ///列表单元格
   Widget _getFeatures(Map data) {
-    //更多按钮
-    FlatButton _moreBtn = FlatButton(
-      height: 25,
-      color: Color(0xF3F3F3FF),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(50)),
-      ),
-      onPressed: () {
-        Navigator.pushNamed(context, pageFeatureList);
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            child: Text(
-              S.current.more,
-              style: TextStyle(
-                color: HsgColors.accent,
-                fontSize: 13,
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 8),
-            child: Image(
-              image:
-                  AssetImage('images/home/listIcon/home_list_more_arrow.png'),
-              width: 7,
-              height: 11,
-            ),
-          ),
-        ],
-      ),
-    );
-
     //单元格详情
     Column _featuresDeatil = Column(
       children: [
         Container(
-          padding: EdgeInsets.only(left: 15, right: 15),
+          padding: EdgeInsets.only(right: 15),
           height: 45,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Container(
+                width: 4,
+                height: 19,
+                margin: EdgeInsets.only(right: 15),
+                decoration: BoxDecoration(
+                  color: HsgColors.blueIcon,
+                  borderRadius: BorderRadius.circular(2.0),
+                ),
+              ),
               Text(
                 data['title'],
                 style: TextStyle(
@@ -543,7 +665,6 @@ class _HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              _moreBtn,
             ],
           ),
         ),
@@ -629,6 +750,8 @@ class _HomePageState extends State<HomePage> {
                 btnData['btnTitle'],
                 btnData['btnIcon'],
                 35.0,
+                (MediaQuery.of(context).size.width - 50) /
+                    (dataList.length > 0 ? dataList.length : 1),
                 _featureClickFunction(btnData['btnTitle']),
               ),
               Container(
@@ -649,10 +772,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   ///上图下文字的按钮
-  Widget _graphicButton(
-      String title, String iconName, double iconWidth, VoidCallback onClick) {
+  Widget _graphicButton(String title, String iconName, double iconWidth,
+      double btnWidth, VoidCallback onClick) {
     return SizedBox(
-      width: (MediaQuery.of(context).size.width - 50) / 3,
+      width: btnWidth, //(MediaQuery.of(context).size.width - 50) / 3,
       child: FlatButton(
         onPressed: onClick,
         child: Column(
@@ -724,6 +847,7 @@ class _HomePageState extends State<HomePage> {
         _characterName = _language == 'zh_CN'
             ? data.roleLocalName
             : data.roleEngName; //用户角色名称
+        // _belongCustStatus = data.belongCustStatus; //用户状态
         _lastLoginTime = data.lastLoginTime; // 上次登录时间
         _data = data;
       });

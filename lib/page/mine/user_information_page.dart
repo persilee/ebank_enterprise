@@ -96,14 +96,16 @@ class _UserInformationPageState extends State<UserInformationPage> {
     if (_imgPath != null && _imgPath != '') {
       imagW = Image(
         image: AssetImage('$_imgPath'),
+        fit: BoxFit.cover,
       );
     } else {
       imagW = (_headPortraitUrl == null || _headPortraitUrl == '')
           ? Image(
               image: AssetImage('images/home/heaerIcon/home_header_person.png'),
+              fit: BoxFit.cover,
             )
           : FadeInImage.assetNetwork(
-              fit: BoxFit.fitWidth,
+              fit: BoxFit.cover,
               image: _headPortraitUrl == null ? '' : _headPortraitUrl,
               placeholder: 'images/home/heaerIcon/home_header_person.png',
             );

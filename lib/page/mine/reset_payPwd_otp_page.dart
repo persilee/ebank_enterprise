@@ -184,7 +184,13 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   //提交按钮
   _submitData() async {
     //请求验证手机号验证码，成功后跳转到身份验证界面
-    Navigator.pushNamed(context, iDcardVerification);
+    RegExp number_6 = new RegExp(r'^\d{6}$');
+    if (!number_6.hasMatch(_sms.text)) {
+      // HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
+      HSProgressHUD.showInfo(status: '请输入6位验证码');
+    } else {
+      Navigator.pushNamed(context, iDcardVerification);
+    }
   }
 
   bool _submit() {
@@ -197,7 +203,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
 
   //倒计时方法
   _startCountdown() {
-    countdownTime = 60;
+    countdownTime = 120;
     final call = (timer) {
       setState(() {
         if (countdownTime < 1) {
@@ -266,7 +272,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   //获取验证码按钮
   FlatButton _otpButton() {
     return FlatButton(
-      onPressed: countdownTime > 0
+      onPressed: (countdownTime > 0 && _phone != '')
           ? null
           : () {
               _getVerificationCode();
@@ -280,8 +286,8 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50),
       ),
-      disabledTextColor: HsgColors.blueTextColor,
-      disabledColor: Color(0xeeEFF3FF),
+      disabledTextColor: Colors.white,
+      disabledColor: HsgColors.hintText,
       child: Text(
         countdownTime > 0
             ? '${countdownTime}s'
@@ -314,7 +320,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
         .then((data) {
       _startCountdown();
       setState(() {
-        _sms.text = '123456';
+        // _sms.text = '123456';
       });
       HSProgressHUD.dismiss();
     }).catchError((e) {
@@ -337,7 +343,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
         LengthLimitingTextInputFormatter(6), //限制长度
       ],
       decoration: InputDecoration.collapsed(
-        hintText: S.current.placeSMS,
+        hintText: S.current.please_enter,
         hintStyle: TextStyle(
           fontSize: 14,
           color: HsgColors.textHintColor,

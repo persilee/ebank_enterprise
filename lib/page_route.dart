@@ -6,14 +6,16 @@
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
 import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/approval/task_approval_page.dart';
+
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
-import 'package:ebank_mobile/page/login/forget_password_page.dart';
+
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
 import 'package:ebank_mobile/page/openAccount/country_region_select_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_account_contact_information_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_account_results_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_acount_select_document_type_page.dart';
 import 'package:ebank_mobile/page/register/find_user_name_success.dart';
+import 'package:ebank_mobile/page/register/forget_password_page.dart';
 import 'package:ebank_mobile/page/register/forget_user_name_page.dart';
 import 'package:ebank_mobile/page/mine/pwd_operation_success_page.dart';
 import 'package:ebank_mobile/page/mine/reset_payPwd_otp_page.dart';
@@ -26,6 +28,7 @@ import 'package:ebank_mobile/page/register/reset_password_account_open.dart';
 import 'package:ebank_mobile/page/register/reset_password_no_account.dart';
 import 'package:ebank_mobile/page/register/reset_password_success.dart';
 // import 'package:ebank_mobile/page/mine/qliyan_demo_page.dart';
+
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
 import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';

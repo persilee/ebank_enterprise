@@ -145,7 +145,7 @@ class _DetailListPageState extends State<DetailListPage> {
       isRelative: true,
       buttonBuilder: (BuildContext context) {
         return GestureDetector(
-          child: _headerText('自定义筛选'),
+          child: _headerText(intl.S.of(context).custom_autofilter),
         );
       },
       windowBuilder: (BuildContext popcontext, Animation<double> animation,
@@ -195,14 +195,11 @@ class _DetailListPageState extends State<DetailListPage> {
               _timeText(intl.S.of(context).user_defined),
               _userDefind(popcontext),
               //金额
-              _timeText('金额'),
+              _timeText(intl.S.of(context).amount),
               _amountDuration(),
             ],
           ),
-        )
-
-        // ),
-        );
+        ));
   }
 
   //时间文本
@@ -333,7 +330,6 @@ class _DetailListPageState extends State<DetailListPage> {
       children: [
         //开始时间按钮
         _timeButton(_start, 0, popcontext),
-
         //至
         Text(
           intl.S.of(context).zhi,

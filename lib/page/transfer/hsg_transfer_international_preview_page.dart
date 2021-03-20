@@ -61,8 +61,7 @@ class _TransferInternalPreviewPageState
               children: [
                 Text(S.current.transfer_amount),
                 Text(
-                  '— ' +
-                      transferData.transferIntoCcy +
+                  transferData.transferIntoCcy +
                       FormatUtil.formatSringToMoney(
                           transferData.transferIntoAmount),
                   style: TextStyle(color: Color(0xff232323), fontSize: 30),
@@ -149,6 +148,7 @@ class _TransferInternalPreviewPageState
                   style: TextStyle(color: Color(0xff7A7A7A), fontSize: 14),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.end,
                 ),
               ),
             ],

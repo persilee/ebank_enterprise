@@ -10,7 +10,7 @@ class HsgColors {
   static const Color btnPrimary = accent;
   static const Color btnAccent = Color(0xff3551b1);
   static const Color btnDisabled = Color(0xffd1d1d1);
-  static const Color divider = Color(0xffe9e9e9);
+  static const Color divider = Color(0xffe1e1e1);
   static const Color itemClickColor = Color(0xffdfe4f4);
   static const Color commonBackground = Color(0xffF7F7F7);
   static const Color backgroundColor = Color(0xFFF2F2F2);
@@ -44,6 +44,8 @@ class HsgColors {
   static const Color notSelectedFrequencyBtnText = Color(0xFF868686);
   static const Color lineColor = Color(0xFFD8D8D8);
   static const Color inputBackground = Color(0xFFF5F5F5);
-    static const Color iconColor = Color(0xFFAAAAAA);
+  static const Color iconColor = Color(0xFFAAAAAA);
   static const Color color38C8C8C8 = Color(0x38C8C8C8);
+  static const Color registerBtn = Color(0xFF819DFF);
+  static const Color registerNextBtn = Color(0xFFDCDCDC);
 }

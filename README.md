@@ -4,26 +4,28 @@
 
 ## 开始
 
-本文要求对Dart语法，Flutter开发有一定基础：
+本文要求对 Dart 语法，Flutter 开发有一定基础：
+
 - [Dart](https://dart.cn/guides)
 - [Flutter](https://flutter.cn/docs)
 
-如果遇到资源下载问题，可[配置Flutter镜像资源](https://flutter.cn/community/china)：
+如果遇到资源下载问题，可[配置 Flutter 镜像资源](https://flutter.cn/community/china)：
 
 ```bash
 # MacOS or Linux
  export PUB_HOSTED_URL=https://pub.flutter-io.cn
  export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
- 
+
 # Windows则新增两个环境变量
 PUB_HOSTED_URL(值：https://pub.flutter-io.cn)
 FLUTTER_STORAGE_BASE_URL(值：https://storage.flutter-io.cn)
 ```
+
 然后运行`flutter doctor`，则下次使用`flutter pub get`时，会从镜像地址下载资源。
 
-### 网络请求与Json
+### 网络请求与 Json
 
-对于每个网络请求或者其他需要用到Json序列化/反序列化的类，按以下步骤进行编写。
+对于每个网络请求或者其他需要用到 Json 序列化/反序列化的类，按以下步骤进行编写。
 
 1.进入项目根目录，在终端或命令行中运行：
 
@@ -70,28 +72,31 @@ Future<LoginResp> login(LoginReq loginReq, String tag) {
 
 ```
 
-3.另外，为了方便将json数据转换成实体类型，可以使用转换工具，比如：[点击这里](https://caijinglong.github.io/json2dart/index_ch.html)。
+3.另外，为了方便将 json 数据转换成实体类型，可以使用转换工具，比如：[点击这里](https://caijinglong.github.io/json2dart/index_ch.html)。
 
 ### 插件
 
-- Flutter Intl：用于国际化开发，在lib/l10n目录下存放(编辑)语言文件
-注意：若手动修改了 intl_en.arb 和 intl_zh_CN.arb 两个文件，末尾的逗号记得删除，保证文件格式是 JSON 格式
-
+- Flutter Intl：用于国际化开发，在 lib/l10n 目录下存放(编辑)语言文件
+  注意：若手动修改了 intl_en.arb 和 intl_zh_CN.arb 两个文件，末尾的逗号记得删除，保证文件格式是 JSON 格式
 
 ### 资源文件
 
 图片文件存放目录：项目根目录下的`images`文件夹，并在`pubspec.yaml`文件的`assets`下声明。
 
 其他资源存放目录：lib/config，有：
+
 - `hsg_colors.dart`: 颜色定义
 - `hsg_dimens.dart`: 尺寸定义
 - `hsg_styles.dart`: 样式定义
 
 ### 对话框调用
+
 参考`lib/feature_demo/dialog_demo.dart`
 
 ### 文件头配置
+
 为了方便追踪文件作者，需要配置一个通用文件头。安装`psioniq File Header`插件，配置`settings.json`文件：
+
 ```Json
 "psi-header.config": {
     "forceToTop": true,
@@ -122,7 +127,8 @@ Future<LoginResp> login(LoginReq loginReq, String tag) {
     }
 ]
 ```
-添加header快捷键：双击`control+option+h`(macOS)/双击`ctrl+alt+h`(windows)
+
+添加 header 快捷键：双击`control+option+h`(macOS)/双击`ctrl+alt+h`(windows)
 
 ### Android 打包
 
@@ -134,9 +140,10 @@ flutter build apk
 
 打包完成后的输出文件(apk)目录： `<app dir>/build/app/outputs/apk/app-release.apk`
 
-### pub finished with exit code 78解决办法
+### pub finished with exit code 78 解决办法
+
 一、常规办法
-执行flutter packages pub run build_runner build后报code 78错误
+执行 flutter packages pub run build_runner build 后报 code 78 错误
 1、flutter packages pub run build_runner clean
 2、flutter packages pub run build_runner build --delete-conflicting-outputs
 以上方法会解决大部分错误

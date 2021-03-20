@@ -7,6 +7,7 @@ import 'package:ebank_mobile/data/source/update_login_paw_repository.dart';
 /// Date: 2020-12-29
 
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -182,7 +183,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
         setState(() {});
       },
       decoration: InputDecoration.collapsed(
-        hintText: S.current.please_input,
+        hintText: S.current.please_enter,
         hintStyle: TextStyle(
           fontSize: 14,
           color: HsgColors.textHintColor,
@@ -195,14 +196,26 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     );
   }
 
+  _otpEnable() {
+    if (_oldPwd.text.length > 0 &&
+        _newPwd.text.length > 0 &&
+        _confimPwd.text.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   //获取验证码按钮
   FlatButton _otpButton() {
+    bool otpEnable = (countdownTime == 0 && _otpEnable());
+    print(otpEnable);
     return FlatButton(
-      onPressed: countdownTime > 0
-          ? null
-          : () {
+      onPressed: otpEnable
+          ? () {
               _getVerificationCode();
-            },
+            }
+          : null,
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
       padding: EdgeInsets.symmetric(horizontal: 8),
       color: Color(0xeeEFF3FF),
@@ -212,8 +225,8 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50),
       ),
-      disabledTextColor: HsgColors.blueTextColor,
-      disabledColor: Color(0xeeEFF3FF),
+      disabledTextColor: Colors.white,
+      disabledColor: HsgColors.hintText,
       child: Text(
         countdownTime > 0
             ? '${countdownTime}s'
@@ -262,7 +275,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
 
   //倒计时方法
   _startCountdown() {
-    countdownTime = 60;
+    countdownTime = 120;
     final call = (timer) {
       setState(() {
         if (countdownTime < 1) {
@@ -286,11 +299,12 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
         .then((data) {
       _startCountdown();
       setState(() {
-        _sms.text = '123456';
+        //保留setState是为了快一点刷新验证码按钮
+        // _sms.text = '123456';
       });
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.showError(status: e.toString());
       HSProgressHUD.dismiss();
     });
   }
@@ -303,6 +317,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
         "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
     RegExp letter = new RegExp("[a-zA-Z]");
     RegExp number = new RegExp("[0-9]");
+    RegExp number_6 = new RegExp(r'^\d{6}$');
     if (_newPwd.text != _confimPwd.text) {
       HSProgressHUD.showInfo(status: S.of(context).differentPwd);
     } else if (_oldPwd.text == _newPwd.text) {
@@ -312,6 +327,9 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
         characters.hasMatch(_newPwd.text) == false ||
         ((_newPwd.text).length < 8 || (_newPwd.text).length > 16)) {
       HSProgressHUD.showInfo(status: S.of(context).password_need_num);
+    } else if (!number_6.hasMatch(_sms.text)) {
+      // HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
+      HSProgressHUD.showInfo(status: '请输入6位验证码');
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
@@ -321,11 +339,12 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
               ModifyPasswordReq(newPwd, oldPwd, _sms.text, userID),
               'ModifyPasswordReq')
           .then((data) {
-        Fluttertoast.showToast(msg: S.current.operate_success);
-        Navigator.pop(context);
+        HSProgressHUD.showInfo(status: S.current.operate_success);
+        Navigator.of(context)..pop();
+        Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
         HSProgressHUD.dismiss();
       }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
+        HSProgressHUD.showError(status: e.toString());
         HSProgressHUD.dismiss();
       });
     }
@@ -358,9 +377,14 @@ class InputList extends StatelessWidget {
               autofocus: false, //是否自动对焦
               obscureText: true, //是否是密码
               textAlign: TextAlign.right, //文本对齐方式
+              inputFormatters: <TextInputFormatter>[
+                // FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                LengthLimitingTextInputFormatter(16), //限制长度
+              ],
               onChanged: (text) {
                 //内容改变的回调
                 // print('change $text');
+                print("###############" + inputValue.text);
               },
               onSubmitted: (text) {
                 //内容提交(按回车)的回调

@@ -3,9 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-/// 注册账号拿用户名
+/// 注册账号普通行
 /// Author: pengyikang
-Widget getRegisterRow(String hintText, TextEditingController controlText) {
+Widget getRegisterRow(
+    String hintText, TextEditingController controlText, bool password) {
   return Container(
       margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
       padding: EdgeInsets.only(left: 20),
@@ -18,7 +19,9 @@ Widget getRegisterRow(String hintText, TextEditingController controlText) {
         //是否自动获得焦点
         autofocus: true,
         controller: controlText,
+        obscureText: password,
         // textAlign: TextAlign.right,
+        // onChanged: ,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hintText,
