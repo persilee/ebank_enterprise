@@ -34,16 +34,17 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
      // 3.监听方法调用(会调用传入的回调函数)
      __weak typeof(self) weakSelf = self;
     [batteryChannel setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result){
-        
+        __strong __typeof(weakSelf)strongSelf = weakSelf;
+
        if ([@"startAuth" isEqualToString:call.method]) {//验证方法是否可用
            NSDictionary *bodyDictData = [call.arguments mj_JSONObject];
      
            NSString *tenantId = [bodyDictData objectForKey:@"body"];
            NSDictionary *jsonflutter = [tenantId mj_JSONObject];
-           self.bodyDictData = jsonflutter;
+           strongSelf.bodyDictData = jsonflutter;
 
            [weakSelf videoTenantID:[jsonflutter objectForKey:@"tenantId"] contractID:@"xxx2" businessID:[jsonflutter objectForKey:@"businessId"]];
-           weakSelf.resultBlock = result;
+           strongSelf.resultBlock = result;
            
        } else {
          // 3.2.如果调用的是VideoMethodCall的方法, 那么通过封装的另外一个方法实现回调
@@ -79,16 +80,7 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
     interViewData.interviewType = SEInterviewTypeCertificate;//认证
     interViewData.isShowImg = YES;
     interViewData.isAgain = YES;
-    //  1  大陆证件识别，2 澳台证件识别，3 护照识别
-//    NSString *cerType = [self.bodyDictData objectForKey:@"type"];//证件类型
-//    if (cerType.intValue == 1) {
-//        interViewData.certificateType = SECertificateMainland;
-//    }else if(cerType.intValue == 2){
-//        interViewData.certificateType = SECertificateHongKong;
-//    }else{
-//        interViewData.certificateType = SECertificatePassport;
-//    }
-    
+
     interViewData.code = [self.bodyDictData objectForKey:@"tokId"];//话术id
     interViewData.errAIcode = [self.bodyDictData objectForKey:@"tokId"];//证件识别失败10次话术id
     interViewData.statementStr = @"证件识别失败，即将进入到AI自助面签";
@@ -129,9 +121,17 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
 //视频服务结束的方法
 -(void)SEVideoServiceDidFinishedWithResult:(SEVideoResult *)videoResult{
     NSLog(@"报错信息------------%@",videoResult.error.desc);
+    NSString *resultValue;
     if (videoResult.certificationResul.length > 0) {
         NSLog(@"认证结果%@",videoResult.certificationResul);
-        NSString *resultValue = videoResult.certificationResul;
+        NSDictionary *reultDict = @{@"result":videoResult.certificationResul};
+        resultValue = [reultDict mj_JSONString];
+        
+        self.resultBlock(resultValue);
+    }else{//不成功
+        NSDictionary *reultDict = @{@"result":@"failer"};
+        resultValue = [reultDict mj_JSONString];
+        
         self.resultBlock(resultValue);
     }
 }

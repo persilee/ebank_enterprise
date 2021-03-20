@@ -488,6 +488,7 @@
   "no_data_now":"No Data",
   "phone_num":"Phone Number",
   "reset_password":"Reset Password",
+
   "format_mobile_error":"The format of the mobile phone number you entered is wrong",
   "not_contain_password":"Password cannot contain account name",
   "password_8_16":"Password 8-16 bits",
