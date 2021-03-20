@@ -177,7 +177,8 @@ class _LoginPageState extends State<LoginPage> {
     if (bo) {
       AuthIdentity()
           .startAuth(
-            new AuthIdentityReq("DLEAED", "74283428974123", "zh", "TW", "1"),
+            new AuthIdentityReq("DLEAED", "74283428974321", "en", "CN",
+                "2"), //passport001zh  DLEAED
           )
           .then((value) => Fluttertoast.showToast(msg: value.result))
           .catchError((e) {
