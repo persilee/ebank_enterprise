@@ -120,125 +120,180 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         title: Text(S.current.receipt_detail),
         centerTitle: true,
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(4.0),
-          ),
-          Container(
-            color: Colors.white,
-            margin: EdgeInsets.only(bottom: 8),
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 10),
-            //付款账户
-            child: Row(
-              children: [
-                Expanded(child: Text(S.current.payment_account)),
-                Container(
-                  child: Text(
-                    // FormatUtil.formatSpace4('$settDbAc'),
-                    '0101 2000 0017 2',
-                  ),
-                )
-              ],
+      body: Container(
+        color: HsgColors.commonBackground,
+        child: ListView(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(4.0),
             ),
-          ),
-          //整存整取
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(15, 0, 0, 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: Text(S.current.deposit_taking,
-                              style: TextStyle(fontWeight: FontWeight.bold))),
-                      Container()
-                    ],
-                  ),
-                ),
-                Container(height: 0.5, color: HsgColors.divider),
-              ],
+            Container(
+              color: Colors.white,
+              margin: EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 10),
+              //付款账户
+              child: Row(
+                children: [
+                  Expanded(child: Text(S.current.payment_account)),
+                  Container(
+                    child: Text(
+                      // FormatUtil.formatSpace4('$settDbAc'),
+                      '0101 2000 0017 2',
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
+            //整存整取
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.fromLTRB(15, 0, 0, 16),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Text(S.current.deposit_taking,
+                                style: TextStyle(fontWeight: FontWeight.bold))),
+                        Container()
+                      ],
+                    ),
+                  ),
+                  Container(height: 0.5, color: HsgColors.divider),
+                ],
+              ),
+            ),
 
-          Container(
-            padding: EdgeInsets.fromLTRB(16, 3, 16, 10),
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                //合约号
-                _unit(S.current.contract_number, conNos, true),
-                //币种
-                _unit(S.current.currency, ccy, true),
-                //存入金额
-                _unit(S.current.deposit_amount,
-                    FormatUtil.formatSringToMoney(bal), true),
-                //存期
-                _unit(S.current.deposit_term, auctCale + S.current.month, true),
-                //生效日期
-                _unit(S.current.effective_date, valDate, true),
-                //到期日期
-                _unit(S.current.due_date, mtDate, true),
-                //到期指示
-                Container(
-                  child: Row(
-                    children: [
-                      Expanded(child: Text(S.current.due_date_indicate)),
-                      Container(
-                        child: Text(instCode),
-                      )
-                    ],
+            Container(
+              padding: EdgeInsets.fromLTRB(16, 3, 16, 10),
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //合约号
+                  _unit(S.current.contract_number, conNos, true),
+                  //币种
+                  _unit(S.current.currency, ccy, true),
+                  //存入金额
+                  _unit(S.current.deposit_amount,
+                      FormatUtil.formatSringToMoney(bal), true),
+                  //存期
+                  _unit(
+                      S.current.deposit_term, auctCale + S.current.month, true),
+                  //生效日期
+                  _unit(S.current.effective_date, valDate, true),
+                  //到期日期
+                  _unit(S.current.due_date, mtDate, true),
+                  //结算账户
+                  _unit(S.current.settlement_account, '0101 2000 0017 1', true),
+                  //到期指示
+                  Container(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            width: (MediaQuery.of(context).size.width - 42) /
+                                7 *
+                                2,
+                            child: Text(S.current.due_date_indicate),
+                          ),
+                        ),
+                        Container(
+                          width:
+                              (MediaQuery.of(context).size.width - 42) / 7 * 4,
+                          child: Text(
+                            instCode,
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                        _buttonStyle(
+                            (MediaQuery.of(context).size.width - 42) / 7 * 1,
+                            "修改"),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
 
-          Container(
-              width: 3,
-              height: 85,
-              padding: EdgeInsets.fromLTRB(40, 20, 40, 15),
-              child: RaisedButton(
-                onPressed: () async {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return HsgAlertDialog(
-                          title: S.current.confirm_to_early_settlement,
-                          message: S.current.contract_settlement_amt +
-                              ':$ccy$conMatAmts\n' +
-                              S.current.early_settlement_amt +
-                              ':$ccy$matAmts',
-                          positiveButton: S.current.confirm,
-                          negativeButton: S.current.cancel);
-                      // return SimpleDialog(
-                      //     title: Text(S.current.confirm_to_early_settlement,
-                      //         style: TextStyle(
-                      //             fontSize: 15, fontWeight: FontWeight.bold),
-                      //         textAlign: TextAlign.center),
-                      //     children: <Widget>[
-                      //       _DialogBox(conMatAmts, matAmts)
-                      //     ]); //conMatAmts
-                    },
-                  );
-                },
-                textColor: Colors.white,
-                color: Colors.blue[500],
-                child: (Text(S.current.repayment_type2)),
+            Container(
+                width: 3,
+                height: 85,
+                color: HsgColors.commonBackground,
+                padding: EdgeInsets.fromLTRB(40, 20, 40, 15),
+                child: RaisedButton(
+                  onPressed: () async {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return HsgAlertDialog(
+                            title: S.current.confirm_to_early_settlement,
+                            message: S.current.contract_settlement_amt +
+                                ' $ccy $conMatAmts\n' +
+                                S.current.early_settlement_amt +
+                                ' $ccy $matAmts',
+                            positiveButton: S.current.confirm,
+                            negativeButton: S.current.cancel);
+                        // return SimpleDialog(
+                        //     title: Text(S.current.confirm_to_early_settlement,
+                        //         style: TextStyle(
+                        //             fontSize: 15, fontWeight: FontWeight.bold),
+                        //         textAlign: TextAlign.center),
+                        //     children: <Widget>[
+                        //       _DialogBox(conMatAmts, matAmts)
+                        //     ]); //conMatAmts
+                      },
+                    ).then((value) {
+                      if (value == true) {
+                        _contractEarly(context);
+                      }
+                    });
+                  },
+                  textColor: Colors.white,
+                  color: Colors.blue[500],
+                  child: (Text(S.current.repayment_type2)),
+                )),
+            Container(
+              color: HsgColors.commonBackground,
+              padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
+              child: (Text(
+                S.current.deposit_declare,
+                style: TextStyle(color: HsgColors.toDoDetailText, fontSize: 12),
               )),
-          Container(
-            padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
-            child: (Text(
-              S.current.deposit_declare,
-              style: TextStyle(color: Color(0xFF8D8D8D), fontSize: 12),
-            )),
-          )
-        ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  //按钮
+  Widget _buttonStyle(double buttonWidth, String buttonText) {
+    return Container(
+      margin: EdgeInsets.only(left: 10),
+      width: buttonWidth,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.blue, width: 0.5),
+        borderRadius: BorderRadius.circular((5)),
+      ),
+      height: 30,
+      child: FlatButton(
+        padding: EdgeInsets.all(0),
+        // disabledColor: HsgColors.btnDisabled,
+        child: Text(
+          buttonText,
+          style: TextStyle(
+            fontSize: 13,
+            color: Colors.blue,
+          ),
+        ),
+        onPressed: () {
+          print("修改");
+        },
       ),
     );
   }
@@ -424,11 +479,11 @@ class _PageDepositInfo extends State<PageDepositInfo> {
           instCode = S.current.instruction_at_maturity_5;
         }
     }
-    for (int i = 0; i < cardList.length; i++) {
-      if (cardList[i].ccy == ccy) {
-        transferAc = cardList[i].cardNo;
-      }
-    }
+    // for (int i = 0; i < cardList.length; i++) {
+    //   if (cardList[i].ccy == ccy) {
+    //     transferAc = cardList[i].cardNo;
+    //   }
+    // }
   }
 
   // _getCardListBalByUser() async {

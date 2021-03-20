@@ -178,7 +178,7 @@
   "sign": "sign",
   "time_deposit_operation_success": "Time Deposit Operation Success",
   "month": "Month",
-  "receipts_total_amt": "Receipts Total Amt",
+  "receipts_total_amt": "Receipts Total Amount",
   "payment_account": "Payment Account",
   "settlement_account": "Settlement account",
   "screening_conditions": "Screening Conditions",
@@ -435,7 +435,8 @@
   "field_dialog_cancel": "cancel",
   "field_dialog_confirm": "confirm",
   "transaction_type":"Transaction type",
-  "password_management":"Password Management",
+  "password_management": "Password Management",
+
   "openAccout_basicInformation": "General Information",
   "openAccount_companyNameEng": "Company Name (English)",
   "openAccount_companyNameEng_placeholder": "Please enter company name (English)",
@@ -473,7 +474,9 @@
   "preview_explain1":"explain：",
   "preview_explain2":"The specific amount transferred out shall be the amount calculated at the exchange rate at the time of transaction",
   "remitter_address1":"Remitter's Address",
-  "receiver_address":"Receiver's address"
+  "receiver_address":"Receiver's address",
+  "forget_username":"Forget UserName"
+
 
  }
   

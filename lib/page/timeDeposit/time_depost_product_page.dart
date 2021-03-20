@@ -575,18 +575,22 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         title: Text(S.current.time_deposit),
         actions: <Widget>[
           Container(
+            padding: EdgeInsets.only(top: language == 'zh_CN' ? 17.5 : 12),
+            width: (MediaQuery.of(context).size.width - 36) / 4,
             margin: EdgeInsets.only(right: 18),
             child: Text.rich(
               TextSpan(
                   text: S.current.deposit_record,
                   style: TextStyle(
                     fontSize: 14.0,
-                    height: 3.0,
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
                       Navigator.pushNamed(context, pageTimeDepositRecord);
                     }),
+              textAlign: TextAlign.right,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           )
         ],

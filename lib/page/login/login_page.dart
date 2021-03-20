@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,10 +35,10 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
   TextEditingController _accountTC =
-      TextEditingController(text: 'blk101'); //fangluyao
+      TextEditingController(text: 'blk401'); //fangluyao
   TextEditingController _passwordTC =
       TextEditingController(text: '4N0021S8'); //b0S25X5Y
-  var _account = 'blk101'; //'blk101';
+  var _account = 'blk401'; //'blk101';
   var _password = '4N0021S8'; //'4N0021S8';
 
   @override
@@ -66,6 +67,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    //从忘记用户名界面拿到名字
+    var _userName = ModalRoute.of(context).settings.arguments;
+    _accountTC.text = _userName;
     Widget backgroundImgWidget = new Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -111,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
           child: InputView(
             _passwordTC,
             imgName: 'images/login/login_input_password.png',
-            textFieldPlaceholder: S.of(context).please_input_password,
+            textFieldPlaceholder: S.of(context).password_need_num,
             isCiphertext: true,
           ),
         ),
@@ -169,26 +173,21 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
               child: UnderButtonView(
-                '注册',
-                false ? null : () => _regesiter(context),
-              ),
+                  '注册', false ? null : () => _regesiter(context), false),
             ),
             //登录按钮
             Container(
               margin: EdgeInsets.only(
                 top: 40,
               ),
-              child: UnderButtonView(
-                S.of(context).login,
-                _isLoading ? null : () => _login(context),
-              ),
+              child: UnderButtonView(S.of(context).login,
+                  _isLoading ? null : () => _login(context), true),
             )
           ],
         )),
-        //注册按钮
-        // Container(child: UnderButtonView('注册'),),
+
         Container(
-          margin: EdgeInsets.only(top: 150),
+          height: MediaQuery.of(context).size.height / 2.7,
           child: Text(
             '@2020-2025 HSBC.com.cn.All Rights Reserved.',
             textAlign: TextAlign.left,
@@ -197,6 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                 color: Colors.white, //HsgColors.aboutusTextCon,
                 fontWeight: FontWeight.normal),
           ),
+          alignment: Alignment.bottomCenter,
         )
       ],
     );
@@ -285,12 +285,12 @@ class _LoginPageState extends State<LoginPage> {
   ///判断是否能点击登录按钮
   bool _judgeCanLogin() {
     if (_account.toString().length == 0 || _account == null) {
-      HSProgressHUD.showInfo(status: S.of(context).please_input_account);
+      Fluttertoast.showToast(msg: S.of(context).please_input_account);
       return false;
     }
 
     if (_password.toString().length == 0 || _password == null) {
-      HSProgressHUD.showInfo(status: S.of(context).please_input_password);
+      Fluttertoast.showToast(msg: S.of(context).please_input_password);
       return false;
     }
 
@@ -329,7 +329,7 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
               child: Text(
                 title,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 14,
                 ),
               ),
@@ -337,7 +337,7 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
             Container(
               child: Icon(
                 Icons.arrow_drop_down_outlined,
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
           ],
@@ -485,8 +485,9 @@ class ForgetButton extends StatelessWidget {
 class UnderButtonView extends StatefulWidget {
   final String title;
   final void Function() loginBtnClick;
+  final bool login;
 
-  UnderButtonView(this.title, this.loginBtnClick);
+  UnderButtonView(this.title, this.loginBtnClick, this.login);
 
   @override
   _UnderButtonViewState createState() => _UnderButtonViewState();
@@ -499,7 +500,7 @@ class _UnderButtonViewState extends State<UnderButtonView> {
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width / 2.9,
         height: 44.0,
-        color: HsgColors.accent,
+        color: widget.login ? HsgColors.accent : HsgColors.registerBtn,
         disabledColor: HsgColors.hintText,
         textColor: Colors.white,
         disabledTextColor: Colors.white,
