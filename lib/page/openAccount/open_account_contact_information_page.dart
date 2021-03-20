@@ -159,7 +159,6 @@ class _OpenAccountContactInformationPageState
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
         title: Text(S.of(context).openAccout_contactInformation),
@@ -862,34 +861,6 @@ class _OpenAccountContactInformationPageState
   }
 
   void _qianliyanSDK() {
-    // bool bo = true;
-    // if (bo) {
-    //   AuthIdentity()
-    //       .startAuth(
-    //         new AuthIdentityReq("DLEAED", "74283428974321", "en", "CN",
-    //             "2"), //passport001zh  DLEAED
-    //       )
-    //       .then((value) => () {
-    //             print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${value.result}');
-    //             Fluttertoast.showToast(msg: value.result);
-    //             Navigator.pushNamed(context, pageOpenAccountResults);
-    //             // //延时500毫秒执行
-    //             // Future.delayed(
-    //             //     const Duration(milliseconds: 1000),
-    //             //     () {
-    //             //   //延时执行的代码
-    //             //   Fluttertoast.showToast(
-    //             //       msg: value.result);
-    //             //   Navigator.pushNamed(
-    //             //       context, pageOpenAccountResults);
-    //             // });
-    //           })
-    //       .catchError((e) {
-    //     HSProgressHUD.showError(status: '${e.toString()}');
-    //   });
-    //   return;
-    // }
-
     AuthIdentity()
         .startAuth(
       new AuthIdentityReq(
@@ -897,7 +868,7 @@ class _OpenAccountContactInformationPageState
     )
         .then((value) {
       Fluttertoast.showToast(msg: value.result);
-      Navigator.pushNamed(context, pageOpenAccountSelectDocumentType);
+      Navigator.pushNamed(context, pageOpenAccountResults);
     }).catchError((e) {
       HSProgressHUD.showError(status: '${e.toString()}');
     });

@@ -15,7 +15,6 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
         title: Text(S.of(context).openAccout_documents_select),
