@@ -15,7 +15,7 @@ import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
-import 'package:ebank_mobile/widget/hsg_button.dart';
+import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_dotted_line.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,7 +23,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:popup_window/popup_window.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../page_route.dart';
 
@@ -37,8 +36,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   String _card = intl.S.current.all_account; //银行卡
   List<String> _cradLists = []; //银行卡列表
   List<String> _imageUrl = []; //银行卡图标列表
+  List<String> paymentCardNos = []; //账户
   int _position = 0;
-  String _time = intl.S.current.the_same_month; //时间
+  // String _time = intl.S.current.the_same_month; //时间
+  String _time = intl.S.current.custom_autofilter;
   String _endDate =
       DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now()); //结束时间
   String _startDate = DateFormat('yyyy-MM-dd 00:00:00')
@@ -265,6 +266,11 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          //时间
+          Container(
+            width: MediaQuery.of(context).size.width / 2.5,
+            child: _popDialog(),
+          ),
           //银行卡
           GestureDetector(
             onTap: _chooseBankCard,
@@ -272,11 +278,6 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
               width: MediaQuery.of(context).size.width / 2,
               child: _headerText(_card),
             ),
-          ),
-          //时间
-          Container(
-            width: MediaQuery.of(context).size.width / 2.5,
-            child: _popDialog(),
           ),
         ],
       ),
@@ -299,8 +300,9 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
   //顶部弹窗
   Widget _popDialog() {
-    return PopupWindowButton(
-      offset: Offset(MediaQuery.of(context).size.width / 2.3, 200),
+    return CustomPopupWindowButton(
+      offset: Offset(0, 200),
+      isRelative: true,
       buttonBuilder: (BuildContext context) {
         return GestureDetector(
           child: _headerText(_time),
@@ -323,18 +325,23 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _popDialogContent(BuildContext popcontext) {
     return Container(
       color: Colors.white,
-      height: 180,
+      height: 260,
       padding: EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //交易时间
-          _timeText(intl.S.of(context).transaction_time),
-          _tradingHour(),
-          //自定义时间
-          _timeText(intl.S.of(context).user_defined),
-          _userDefind(popcontext),
-        ],
+      child: Material(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //交易时间
+            _timeText(intl.S.of(context).transaction_time),
+            _tradingHour(),
+            //自定义时间
+            _timeText(intl.S.of(context).user_defined),
+            _userDefind(popcontext),
+            //金额
+            _timeText(intl.S.current.amount),
+            _amountDuration(),
+          ],
+        ),
       ),
     );
   }
@@ -373,11 +380,86 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     );
   }
 
+  //金额
+  Widget _amountDuration() {
+    return Row(
+      children: [
+        _amountInput(),
+        Text(
+          intl.S.of(context).zhi,
+          style: TextStyle(
+            fontSize: 12,
+            color: HsgColors.aboutusTextCon,
+            decoration: TextDecoration.none,
+          ),
+        ),
+        _amountInput(),
+        _amountConfimrButton(),
+      ],
+    );
+  }
+
+  //金额输入框
+  Widget _amountInput() {
+    return Container(
+      margin: EdgeInsets.all(5),
+      width: 111.5,
+      height: 23.5,
+      decoration: BoxDecoration(
+        color: Color(0xffECECEC),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: TextField(
+        decoration: InputDecoration(border: InputBorder.none
+            //  OutlineInputBorder(
+            //     gapPadding: 0,
+            //     borderRadius: ((BorderRadius.circular(5))),
+            //     borderSide: BorderSide(
+            //       color: Color(0xffECECEC),
+            //     ),
+            //   ),
+            ),
+        // controller: controller,
+        autocorrect: false,
+        autofocus: false,
+        keyboardType: TextInputType.number,
+        onChanged: (text) {},
+      ),
+    );
+  }
+
+  //金额确定按钮
+  Widget _amountConfimrButton() {
+    return Container(
+      margin: EdgeInsets.all(4),
+      width: 74,
+      height: 23.5,
+      decoration: BoxDecoration(
+        color: HsgColors.blueTextColor,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: OutlineButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        borderSide: BorderSide(color: Colors.white),
+        child: Text(
+          intl.S.of(context).confirm,
+          style: TextStyle(fontSize: 11, color: Colors.white),
+        ),
+        onPressed: () {
+          setState(() {
+            _transferHistoryList.clear();
+          });
+          Navigator.of(context).pop(_loadData());
+        },
+      ),
+    );
+  }
+
   //确定按钮
   Widget _confimrButton() {
     return Container(
       margin: EdgeInsets.all(4),
-      width: 73,
+      width: 74,
       height: 23.5,
       decoration: BoxDecoration(
         color: HsgColors.blueTextColor,
@@ -573,8 +655,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     if (result != null && result != false) {
       setState(() {
         _position = result;
+        _card = _cradLists[result];
+        // paymentCardNos.add(_card);
       });
-      _card = _cradLists[result];
+      // _loadData();
     }
   }
 
@@ -722,7 +806,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     //请求参数
     String ccy = '';
     int pageSize = 10;
-    List<String> paymentCardNos = [];
+
     String sort = '';
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);

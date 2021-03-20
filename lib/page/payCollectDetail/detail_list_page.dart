@@ -21,7 +21,7 @@ import 'package:flutter_tableview/flutter_tableview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:date_format/date_format.dart';
 import 'package:intl/intl.dart';
-import 'package:popup_window/popup_window.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
@@ -54,6 +54,7 @@ class _DetailListPageState extends State<DetailListPage> {
       [yyyy, mm, dd]); //显示开始时间
   List<TransferRecord> _transferHistoryList = []; //转账记录列表
   GlobalKey _textKey = GlobalKey();
+  TextEditingController _moneyController = TextEditingController();
 
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
@@ -78,10 +79,7 @@ class _DetailListPageState extends State<DetailListPage> {
         centerTitle: true,
         elevation: 0,
       ),
-      body:
-          // RefreshIndicator(
-          // child:
-          Column(
+      body: Column(
         children: [
           Container(
             height: 40,
@@ -147,7 +145,7 @@ class _DetailListPageState extends State<DetailListPage> {
       isRelative: true,
       buttonBuilder: (BuildContext context) {
         return GestureDetector(
-          child: _headerText(_time),
+          child: _headerText('自定义筛选'),
         );
       },
       windowBuilder: (BuildContext popcontext, Animation<double> animation,
@@ -183,21 +181,28 @@ class _DetailListPageState extends State<DetailListPage> {
   //顶部弹窗内容
   Widget _popDialogContent(BuildContext popcontext) {
     return Container(
-      color: Colors.white,
-      height: 180,
-      padding: EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //交易时间
-          _timeText(intl.S.of(context).transaction_time),
-          _tradingHour(),
-          //自定义时间
-          _timeText(intl.S.of(context).user_defined),
-          _userDefind(popcontext),
-        ],
-      ),
-    );
+        color: Colors.white,
+        height: 260,
+        padding: EdgeInsets.all(10),
+        child: Material(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //交易时间
+              _timeText(intl.S.of(context).transaction_time),
+              _tradingHour(),
+              //自定义时间
+              _timeText(intl.S.of(context).user_defined),
+              _userDefind(popcontext),
+              //金额
+              _timeText('金额'),
+              _amountDuration(),
+            ],
+          ),
+        )
+
+        // ),
+        );
   }
 
   //时间文本
@@ -328,6 +333,7 @@ class _DetailListPageState extends State<DetailListPage> {
       children: [
         //开始时间按钮
         _timeButton(_start, 0, popcontext),
+
         //至
         Text(
           intl.S.of(context).zhi,
@@ -373,8 +379,75 @@ class _DetailListPageState extends State<DetailListPage> {
           } else {
             _getRevenueByCards(_startDate, _allAccNoList);
           }
-//        Navigator.of(context).pop(_loadData());
         },
+      ),
+    );
+  }
+
+  //金额
+  Widget _amountDuration() {
+    return Row(
+      children: [
+        _amountInput(),
+        Text(
+          intl.S.of(context).zhi,
+          style: TextStyle(
+            fontSize: 12,
+            color: HsgColors.aboutusTextCon,
+            decoration: TextDecoration.none,
+          ),
+        ),
+        _amountInput(),
+        _amountConfimrButton(),
+      ],
+    );
+  }
+
+  //金额确定按钮
+  Widget _amountConfimrButton() {
+    return Container(
+      margin: EdgeInsets.all(4),
+      width: 73,
+      height: 23.5,
+      decoration: BoxDecoration(
+        color: HsgColors.blueTextColor,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: OutlineButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        borderSide: BorderSide(color: Colors.white),
+        child: Text(
+          intl.S.of(context).confirm,
+          style: TextStyle(fontSize: 11, color: Colors.white),
+        ),
+        onPressed: () {
+          setState(() {
+            _transferHistoryList.clear();
+          });
+          Navigator.of(context)
+              .pop(_getRevenueByCards(_startDate, _allAccNoList));
+        },
+      ),
+    );
+  }
+
+  //金额输入框
+  Widget _amountInput() {
+    return Container(
+      margin: EdgeInsets.all(5),
+      width: 111.5,
+      height: 23.5,
+      decoration: BoxDecoration(
+        color: Color(0xffECECEC),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: TextField(
+        decoration: InputDecoration(border: InputBorder.none),
+        // controller: controller,
+        autocorrect: false,
+        autofocus: false,
+        keyboardType: TextInputType.number,
+        onChanged: (text) {},
       ),
     );
   }
@@ -676,12 +749,6 @@ class _DetailListPageState extends State<DetailListPage> {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
-          // return HsgBottomCardChoice(
-          //   title: intl.S.of(context).account_lsit,
-          //   items: _cardList,
-          //   lastSelectedPosition: _position,
-          //   imageUrl: _cardIcon,
-          // );
           return HsgBottomSingleChoice(
             title: intl.S.of(context).select_bank_card,
             items: _cardList,
@@ -833,7 +900,7 @@ class _DetailListPageState extends State<DetailListPage> {
 
     HSProgressHUD.show();
     PayCollectDetailRepository()
-        .getRevenueByCards(GetRevenueByCardsReq(1, 10, custID, '2021-01-01'),
+        .getRevenueByCards(GetRevenueByCardsReq(1, 10, custID, '2021-01-11'),
             'GetRevenueByCardsReq')
         .then((data) {
       HSProgressHUD.dismiss();

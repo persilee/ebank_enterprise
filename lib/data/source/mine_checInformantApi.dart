@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/data/source/model/checkout_informant.dart';
+import 'package:ebank_mobile/data/source/model/real_name_auth.dart';
 import 'package:ebank_mobile/data/source/model/set_transactionPassword.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -20,6 +21,12 @@ class ChecInformantApiRepository {
       SetTransactionPasswordReq req, String tag) {
     return request('cust/user/setTransactionPassword', req, tag,
         (data) => SetTransactionPasswordResp.fromJson(data));
+  }
+
+  //身份证验证(三步验证)
+  Future<RealNameAuthResp> realNameAuth(RealNameAuthReq req, String tag) {
+    return request('cust/verification/realNameAuth', req, tag,
+        (data) => RealNameAuthResp.fromJson(data));
   }
 
   static final _instance = ChecInformantApiRepository._internal();

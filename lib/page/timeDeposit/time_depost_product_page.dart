@@ -4,13 +4,17 @@
 /// Date: 2020-12-11
 
 import 'dart:math';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
 import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import '../../page_route.dart';
@@ -27,6 +31,10 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   List<List<TdepProducDTOList>> producDTOList = [];
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
   String language = Intl.getCurrentLocale();
+  String _changedCcy = S.current.hint_please_select;
+  String _changedTerm = S.current.hint_please_select;
+  double _bal = 0.00;
+  TextEditingController inputValue = TextEditingController();
 
   void initState() {
     super.initState();
@@ -57,9 +65,340 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   Widget _picture() {
     return Image.asset(
       'images/time_depost/time_depost_product.png',
-      width: 500.0,
+      width: MediaQuery.of(context).size.width,
       height: 120.0,
       fit: BoxFit.cover,
+    );
+  }
+
+  //右箭头图标
+  Widget _rightArrow(Color color) {
+    return Container(
+      width: 20,
+      child: Icon(
+        Icons.arrow_drop_down,
+        color: color,
+      ),
+    );
+  }
+
+//筛选条件文本
+  Widget _condition() {
+    return Container(
+      width: (MediaQuery.of(context).size.width - 56) / 5 * 2,
+      child: Text(
+        S.current.screening_conditions,
+        style: TextStyle(fontSize: 13),
+      ),
+    );
+  }
+
+//选择的筛选条件
+  Widget _checked() {
+    _bal = (inputValue.text).length == 0 ? 0.00 : double.parse(inputValue.text);
+    return Container(
+      width: (MediaQuery.of(context).size.width - 56) / 5 * 3,
+      child: _textStyle(
+          (_bal == 0.00
+                  ? ""
+                  : FormatUtil.formatSringToMoney(_bal.toString()) + "  ") +
+              (_changedCcy == S.current.hint_please_select
+                  ? ""
+                  : _changedCcy + "  ") +
+              (_changedTerm == S.current.hint_please_select
+                  ? ""
+                  : _changedTerm),
+          HsgColors.aboutusTextCon,
+          13,
+          TextAlign.right),
+    );
+  }
+
+//筛选条件title
+  Widget _screenTitle() {
+    return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            bottom: _lineBorderSide(),
+          ),
+        ),
+        padding: EdgeInsets.fromLTRB(18, 12, 18, 12),
+        child: Row(
+          children: [
+            _condition(),
+            _checked(),
+            _rightArrow(HsgColors.nextPageIcon)
+          ],
+        ));
+  }
+
+  //筛选文本
+  Widget _screenText(String text) {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.only(bottom: 10, top: 10),
+      width: MediaQuery.of(context).size.width - 36,
+      child: Text(
+        text,
+        style: TRANSFER_RECORD_POP_TEXT_STYLE,
+      ),
+    );
+  }
+
+  //文本
+  Widget _textStyle(
+      String text, Color color, double fontSize, TextAlign textAlign) {
+    return Text(
+      text,
+      style: TextStyle(
+          color: color, fontSize: fontSize, fontWeight: FontWeight.normal),
+      textAlign: textAlign,
+    );
+  }
+
+//存入金额输入框
+  Widget _moneyTextFiled() {
+    return Container(
+      color: Colors.white,
+      child: TextField(
+        controller: inputValue,
+        textAlign: TextAlign.left,
+        style: TextStyle(fontSize: 13, color: HsgColors.aboutusTextCon),
+        decoration: InputDecoration(
+          isCollapsed: true,
+          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide.none),
+          fillColor: HsgColors.inputBackground,
+          filled: true,
+          enabledBorder: null,
+          disabledBorder: null,
+          hintText: S.current.please_input,
+          hintStyle: TextStyle(
+            color: HsgColors.hintText,
+            fontSize: 13.0,
+          ),
+        ),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+        ],
+        onChanged: (value) {
+          double.parse(value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
+          // _bal = double.parse(value);
+        },
+      ),
+    );
+  }
+
+//选择条件框
+  Widget _selectionBox(BuildContext popcontext) {
+    return Container(
+      color: Colors.white,
+      width: MediaQuery.of(context).size.width,
+      // height: 289,
+      padding: EdgeInsets.fromLTRB(18, 0, 18, 0),
+      child: Scaffold(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            _screenText(S.current.deposit_amount),
+            _moneyTextFiled(),
+            _screenText(S.current.currency),
+            _checkCcyButton(_changedCcy, popcontext),
+            _screenText(S.current.deposit_time_limit),
+            _checkTermButton(_changedTerm, popcontext),
+            _screenBtnRow(),
+            _bottomBox(),
+          ],
+        ),
+      ),
+    );
+  }
+
+//币种选择按钮
+  Widget _checkCcyButton(String name, BuildContext popcontext) {
+    return Container(
+      padding: EdgeInsets.zero,
+      width: MediaQuery.of(context).size.width - 36,
+      height: 40,
+      decoration: BoxDecoration(
+        color: HsgColors.inputBackground,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: OutlineButton(
+        padding: EdgeInsets.only(left: 10, right: 10),
+        borderSide: BorderSide(color: Colors.white),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width - 76,
+              child: _textStyle(
+                  name,
+                  name == S.current.hint_please_select
+                      ? HsgColors.hintText
+                      : HsgColors.aboutusTextCon,
+                  13,
+                  TextAlign.left),
+            ),
+            _rightArrow(HsgColors.iconColor),
+          ],
+        ),
+        onPressed: () {
+          _selectCcy(popcontext);
+        },
+      ),
+    );
+  }
+
+  //存期选择按钮
+  Widget _checkTermButton(String name, BuildContext popcontext) {
+    return Container(
+      padding: EdgeInsets.zero,
+      width: MediaQuery.of(context).size.width - 36,
+      height: 40,
+      decoration: BoxDecoration(
+        color: HsgColors.inputBackground,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: OutlineButton(
+        padding: EdgeInsets.only(left: 10, right: 10),
+        borderSide: BorderSide(color: Colors.white),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width - 76,
+              child: _textStyle(
+                  name,
+                  name == S.current.hint_please_select
+                      ? HsgColors.hintText
+                      : HsgColors.aboutusTextCon,
+                  13,
+                  TextAlign.left),
+            ),
+            _rightArrow(HsgColors.iconColor),
+          ],
+        ),
+        onPressed: () {
+          _selectTerm(popcontext);
+        },
+      ),
+    );
+  }
+
+//币种弹窗
+  _selectCcy(BuildContext popcontext) async {
+    List<String> ccys = ['USD', 'HKD'];
+
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) => BottomMenu(
+              title: S.current.settlement_account,
+              items: ccys,
+            ));
+    if (result != null && result != false) {
+      setState(() {
+        if (result != null && result != false) {
+          _changedCcy = ccys[result];
+        }
+      });
+      (popcontext as Element).markNeedsBuild();
+    }
+  }
+
+  //存期弹窗
+  _selectTerm(BuildContext popcontext) async {
+    List<String> terms = ['1个月', '3个月', '6个月'];
+
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) => BottomMenu(
+              title: S.current.settlement_account,
+              items: terms,
+            ));
+    if (result != null && result != false) {
+      setState(() {
+        if (result != null && result != false) {
+          _changedTerm = terms[result];
+        }
+      });
+      (popcontext as Element).markNeedsBuild();
+    }
+  }
+
+//筛选按钮
+  Widget _screenButton() {
+    return Container(
+      margin: EdgeInsets.only(top: 10, bottom: 10),
+      width: 72,
+      height: 30,
+      decoration: BoxDecoration(
+        color: HsgColors.blueTextColor,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: OutlineButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        borderSide: BorderSide(color: Colors.white),
+        child: Text(
+          S.of(context).confirm,
+          style: TextStyle(fontSize: 11, color: Colors.white),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+          print("筛选");
+        },
+      ),
+    );
+  }
+
+  Widget _screenBtnRow() {
+    return Container(
+      color: Colors.white,
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            child: _screenButton(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //弹窗底部
+  Widget _bottomBox() {
+    return Container(
+      color: Colors.white,
+      width: MediaQuery.of(context).size.width - 36,
+      height: 240,
+    );
+  }
+
+  //顶部弹窗
+  Widget _screen() {
+    return CustomPopupWindowButton(
+      offset: Offset(MediaQuery.of(context).size.width / 2.3, 200),
+      buttonBuilder: (BuildContext context) {
+        return GestureDetector(
+          child: _screenTitle(),
+        );
+      },
+      windowBuilder: (BuildContext popcontext, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        return FadeTransition(
+          opacity: animation,
+          child: SizeTransition(
+            sizeFactor: animation,
+            child: _selectionBox(popcontext),
+          ),
+        );
+      },
     );
   }
 
@@ -173,14 +512,17 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       ),
     );
     section.add(
+      SliverToBoxAdapter(
+        child: _screen(),
+      ),
+    );
+    section.add(
       SliverList(
         delegate: SliverChildBuilderDelegate((context, index) {
           //最小年利率
-          // double minRate = double.parse(tdepProductList[index].minRate) * 100;
           double minRate = double.parse(FormatUtil.formatNum(
               double.parse(tdepProductList[index].minRate), 2));
           //最大年利率
-          // double maxRate = double.parse(tdepProductList[index].maxRate) * 100;
           double maxRate = double.parse(FormatUtil.formatNum(
               double.parse(tdepProductList[index].maxRate), 2));
           //判断选择的语言并根据语言选择产品名称
@@ -233,17 +575,22 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         title: Text(S.current.time_deposit),
         actions: <Widget>[
           Container(
+            padding: EdgeInsets.only(top: language == 'zh_CN' ? 17.5 : 12),
+            width: (MediaQuery.of(context).size.width - 36) / 4,
+            margin: EdgeInsets.only(right: 18),
             child: Text.rich(
               TextSpan(
                   text: S.current.deposit_record,
                   style: TextStyle(
                     fontSize: 14.0,
-                    height: 3.0,
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
                       Navigator.pushNamed(context, pageTimeDepositRecord);
                     }),
+              textAlign: TextAlign.right,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           )
         ],

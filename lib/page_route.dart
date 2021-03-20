@@ -7,8 +7,25 @@ import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
 import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
-import 'package:ebank_mobile/page/login/forget_password_page.dart';
+
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
+import 'package:ebank_mobile/page/openAccount/country_region_select_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_account_contact_information_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_account_results_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_acount_select_document_type_page.dart';
+import 'package:ebank_mobile/page/register/find_user_name_success.dart';
+import 'package:ebank_mobile/page/register/forget_password_page.dart';
+import 'package:ebank_mobile/page/register/forget_user_name_page.dart';
+import 'package:ebank_mobile/page/mine/pwd_operation_success_page.dart';
+import 'package:ebank_mobile/page/mine/reset_payPwd_otp_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_account_basic_data_page.dart';
+import 'package:ebank_mobile/page/mine/user_information_page.dart';
+import 'package:ebank_mobile/page/register/register_confirm_page.dart';
+import 'package:ebank_mobile/page/register/register_page.dart';
+import 'package:ebank_mobile/page/register/register_success_page.dart';
+import 'package:ebank_mobile/page/register/reset_password_account_open.dart';
+import 'package:ebank_mobile/page/register/reset_password_no_account.dart';
+import 'package:ebank_mobile/page/register/reset_password_success.dart';
 // import 'package:ebank_mobile/page/mine/qliyan_demo_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
@@ -50,11 +67,12 @@ import 'package:ebank_mobile/page/transfer/hsg_open_transfer_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_preview_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_international_page.dart';
+import 'package:ebank_mobile/page/transfer/hsg_transfer_international_preview_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_detail_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_plan_details.dart';
 import 'package:ebank_mobile/page/transfer/transfer_plan_page.dart';
-import 'package:ebank_mobile/page/transfer/transfer_record-page.dart';
+import 'package:ebank_mobile/page/transfer/transfer_record_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_partner_page.dart';
 import 'package:ebank_mobile/page/transfer/add_partner_page.dart';
 import 'package:ebank_mobile/page/transfer/select_bank_page.dart';
@@ -69,10 +87,11 @@ import 'package:ebank_mobile/page/mine/change_logPswd_page.dart';
 import 'package:ebank_mobile/page/mine/change_pay_page.dart';
 import 'package:ebank_mobile/page/mine/set_pay_page.dart';
 
-import 'page/approval/static_page/static_my_approval_page.dart';
-
 var pageHome = '/';
 var pageLogin = pageHome;
+var pageUserInformation = '/user_information_page.dart';
+var pageResetPayPwdOtp = '/reset_payPwd_otp_page.dart';
+var pagePwdOperationSuccess = '/pwd_operation_success_page.dart';
 // var pageCardList = pageHome;
 
 var pageSelectBranchBank = "/select_branch_bank_page.dart";
@@ -118,6 +137,8 @@ var pageTransfer = '/hsg_transfer_page';
 var pageAuthorizationHistory = '/authorization_history_page';
 var pageTransferInternal = '/hsg_transfer_internal_page';
 var pageTransferInternalPreview = '/hsg_transfer_internal_preview_page';
+var pageTransferInternationalPreview =
+    '/hsg_transfer_international_preview_page';
 var pageTrasferInternational = '/hsg_transfer_international_page';
 var pageElectronicStatement = '/electronic_statement_page';
 var pageElectronicStatementDetail = '/electronic_statement_detail_page';
@@ -139,9 +160,28 @@ var pageQianliyanDemo = '/qliyan_demo_page.dart';
 var pageApprovalPage = 'hsg_approval_page';
 var pageStaticApproval = '/static_my_approval_page';
 var pagePasswordManagement = '/password_management_page.dart';
+var pageOpenAccountBasicData = '/open_account_basic_data_page.dart';
+var countryOrRegionSelectPage = '/country_region_select_page.dart';
+var pageRegister = '/register_page.dart';
+var pageRegisterConfirm = '/register_confirm_page.dart';
+var pageRegisterSuccess = 'register_success_page.dart';
+var pageForgetUserName = 'forget_user_name_page.dart';
+var pageFindUserNameSuccess = 'find_user_name_success.dart';
+var pageResetPasswordNoAccount = 'reset_password_no_account.dart';
+var pageResetPasswordSuccess = 'reset_password_success.dart';
+var pageResetPasswordOpenAccount = 'reset_password_account_open.dart';
+var pageCountryRegionSelect = '/country_region_select_page.dart';
+var pageOpenAccountContactInformation =
+    '/open_account_contact_information_page.dart';
+var pageOpenAccountSelectDocumentType =
+    '/open_acount_select_document_type_page.dart';
+var pageOpenAccountResults = '/open_account_results_page.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
+  pageUserInformation: (context) => UserInformationPage(),
+  pageResetPayPwdOtp: (context) => ResetPayPwdPage(),
+  pagePwdOperationSuccess: (context) => PwdOperationSuccessPage(),
   pageIndexName: (context) => IndexPage(),
   pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
@@ -186,6 +226,8 @@ var appRoutes = {
   pageAuthorizationHistory: (context) => AuthorizationHistoryPage(),
   pageTransferInternal: (context) => TransferInternalPage(),
   pageTransferInternalPreview: (context) => TransferInternalPreviewPage(),
+  pageTransferInternationalPreview: (context) =>
+      TransferinternationalPreviewPage(),
   pageElectronicStatement: (context) => ElectronicStatementPage(),
   pageElectronicStatementDetail: (context) => ElectronicStatementDetailPage(),
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
@@ -204,8 +246,24 @@ var appRoutes = {
   pageApprovalPage: (context) => ApprovalPage(),
   pageFeatureList: (context) => FeatureListPage(),
   // pageQianliyanDemo: (context) => QianliyanDemoPage(),
-  pageStaticApproval: (context) => StaticMyApprovalPage(),
+
   pagePasswordManagement: (context) => PasswordManagementPage(),
+  pageOpenAccountBasicData: (context) => OpenAccountBasicDataPage(),
+  countryOrRegionSelectPage: (context) => CountryOrRegionSelectPage(),
+  pageRegister: (context) => RegisterPage(),
+  pageRegisterConfirm: (context) => RegisterConfirmPage(),
+  pageRegisterSuccess: (context) => RegisterSuccessPage(),
+  pageForgetUserName: (context) => ForgetUserName(),
+  pageFindUserNameSuccess: (context) => FindUserNameSuccess(),
+  pageResetPasswordNoAccount: (context) => ResetPasswordNoAccount(),
+  pageResetPasswordSuccess: (context) => ResetPasswordPage(),
+  pageResetPasswordOpenAccount: (context) => ResetPasswordAccountOpen(),
+  pageCountryRegionSelect: (context) => CountryOrRegionSelectPage(),
+  pageOpenAccountContactInformation: (context) =>
+      OpenAccountContactInformationPage(),
+  pageOpenAccountSelectDocumentType: (context) =>
+      OpenAccountSelectDocumentTypePage(),
+  pageOpenAccountResults: (context) => OpenAccountResultsPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
@@ -225,7 +283,11 @@ onGenerateRoute(RouteSettings settings) {
   }
   if (settings.name == pageDepositInfo) {
     return MaterialPageRoute(builder: (context) {
-      return PageDepositInfo(deposit: settings.arguments);
+      Map<String, dynamic> arguments = settings.arguments;
+      return PageDepositInfo(
+        deposit: arguments['deposit'],
+        cardList: arguments['cardList'],
+      );
     });
   }
   if (settings.name == pageUserAgreement) {

@@ -13,6 +13,7 @@ import 'my_approval_page.dart';
 
 class ApprovalPage extends StatefulWidget {
   ApprovalPage();
+
   @override
   _ApprovalPageState createState() => _ApprovalPageState();
 }
@@ -20,12 +21,14 @@ class ApprovalPage extends StatefulWidget {
 class _ApprovalPageState extends State<ApprovalPage>
     with SingleTickerProviderStateMixin {
   _ApprovalPageState();
+
   final List tabs = [
     S.current.my_to_do_list,
     S.current.authorization_history,
     S.current.my_application
   ];
   TabController tabController;
+
   @override
   void initState() {
     super.initState();
@@ -49,7 +52,9 @@ class _ApprovalPageState extends State<ApprovalPage>
       indicatorWeight: 4,
       indicatorSize: TabBarIndicatorSize.label,
       indicator: MyUnderlineTabIndicator(
-          borderSide: BorderSide(width: 3.0, color: HsgColors.accent)),
+        borderSide: BorderSide(width: 4.0, color: HsgColors.accent),
+        bottomPadding: 8.0,
+      ),
       tabs: tabs.map((e) => Tab(text: e)).toList(),
     );
   }

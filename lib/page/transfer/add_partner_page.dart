@@ -5,17 +5,20 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/add_partner.dart';
+import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:ebank_mobile/widget/hsg_single_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:contact_picker/contact_picker.dart';
 import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
+import 'package:intl/intl.dart';
 
 class AddPartnerPage extends StatefulWidget {
   @override
@@ -40,6 +43,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   bool _showInternational = false; //国际转账
   var _alias = '';
   var words = 20;
+  String _countryText = '';
+  List<String> countryList = ['中国', '荷兰', '美国', '俄罗斯'];
+  String _language = Intl.getCurrentLocale();
   @override
   void initState() {
     super.initState();
@@ -126,30 +132,37 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.current.add_partner),
+        title: Text(S.current.add_payee),
         centerTitle: true,
         elevation: 0,
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        color: HsgColors.backgroundColor,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              //输入数据容器
-              Container(
-                color: Colors.white,
-                margin: EdgeInsets.only(top: 15),
-                padding: EdgeInsets.only(left: 15, right: 15),
-                child: formColumn(),
-              ),
-              //按钮容器
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 40, 0, 40),
-                child: HsgButton.button(
-                    title: S.current.confirm, click: _confirm()),
-              ),
-            ],
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          color: HsgColors.backgroundColor,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                //输入数据容器
+                Container(
+                  color: Colors.white,
+                  margin: EdgeInsets.only(top: 15),
+                  padding: EdgeInsets.only(left: 15, right: 15),
+                  child: formColumn(),
+                ),
+                //按钮容器
+                Container(
+                  padding: EdgeInsets.fromLTRB(0, 40, 0, 40),
+                  child: HsgButton.button(
+                      title: S.current.confirm, click: _confirm()),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -172,7 +185,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         Container(
           padding: EdgeInsets.only(top: 10, bottom: 16),
           child: _inputFrame(
-            S.current.account_name,
+            S.current.receipt_side_name,
             _inputField(
                 _nameController, S.current.please_input, TextInputType.text),
           ),
@@ -182,7 +195,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         Container(
           padding: EdgeInsets.only(top: 16, bottom: 16),
           child: _inputFrame(
-            S.current.account_number,
+            S.current.receipt_side_account,
             _inputField(_acountController, S.current.please_input,
                 TextInputType.number),
           ),
@@ -203,81 +216,67 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           ),
         ),
         Divider(height: 0.5, color: HsgColors.divider),
-        //银行
-        GestureDetector(
-          onTap: () {
-            _bankTap(context);
-          },
-          child: Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(top: 16, bottom: 16),
-            child: _inputFrame(
-              S.current.bank,
-              _inputSelector(_bankName, S.of(context).please_select),
-            ),
-          ),
-        ),
-        Divider(height: 0.5, color: HsgColors.divider),
+
         //分支行
-        GestureDetector(
-          onTap: () {
-            if (_bankName != S.current.please_select) {
-              Navigator.pushNamed(context, pageSelectBranchBank,
-                      arguments: '招商银行')
-                  .then((data) {
-                if (data != null) {
-                  setState(() {
-                    _branch = data;
-                    _check();
-                  });
-                }
-              });
-            } else {
-              _showBankTips(context);
-            }
-          },
-          child: Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(top: 16, bottom: 16),
-            child: _inputFrame(
-              S.current.branch_office,
-              _inputSelector(_branch, S.current.optional),
-            ),
-          ),
-        ),
-        Divider(height: 0.5, color: HsgColors.divider),
+        // GestureDetector(
+        //   onTap: () {
+        //     if (_bankName != S.current.please_select) {
+        //       Navigator.pushNamed(context, pageSelectBranchBank,
+        //               arguments: '招商银行')
+        //           .then((data) {
+        //         if (data != null) {
+        //           setState(() {
+        //             _branch = data;
+        //             _check();
+        //           });
+        //         }
+        //       });
+        //     } else {
+        //       _showBankTips(context);
+        //     }
+        //   },
+        //   child: Container(
+        //     color: Colors.white,
+        //     padding: EdgeInsets.only(top: 16, bottom: 16),
+        //     child: _inputFrame(
+        //       S.current.branch_office,
+        //       _inputSelector(_branch, S.current.optional),
+        //     ),
+        //   ),
+        // ),
+        // Divider(height: 0.5, color: HsgColors.divider),
         //国际转账部分
         _showInternational ? _getInternationalPart() : Container(),
-        Divider(height: 0.5, color: HsgColors.divider),
-        //短信通知
-        Container(
-          padding: EdgeInsets.only(top: 16, bottom: 16),
-          child: _inputFrame(
-            S.current.sms_notification,
-            _inputFieldIcon(
-              _smsController,
-              InkWell(
-                onTap: () {
-                  _contact();
-                },
-                child: Image(
-                  color: HsgColors.accent,
-                  image: AssetImage(
-                      'images/transferIcon/transfer_features_icon/transfer_features_acount.png'),
-                  width: 21,
-                  height: 21,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-          ),
-        ),
-        Divider(height: 0.5, color: HsgColors.divider),
+        // Divider(height: 0.5, color: HsgColors.divider),
+        // //短信通知
+        // Container(
+        //   padding: EdgeInsets.only(top: 16, bottom: 16),
+        //   child: _inputFrame(
+        //     S.current.sms_notification,
+        //     _inputFieldIcon(
+        //       _smsController,
+        //       InkWell(
+        //         onTap: () {
+        //           _contact();
+        //         },
+        //         child: Image(
+        //           color: HsgColors.accent,
+        //           image: AssetImage(
+        //               'images/transferIcon/transfer_features_icon/transfer_features_acount.png'),
+        //           width: 21,
+        //           height: 21,
+        //           fit: BoxFit.contain,
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // Divider(height: 0.5, color: HsgColors.divider),
         //别名 (备注)
         Container(
           padding: EdgeInsets.only(top: 16, bottom: 16),
           child: _inputFrame(
-            S.current.alias,
+            S.current.transfer_postscript,
             _inputField(
                 _aliasController, S.current.word_limit_5, TextInputType.text),
           ),
@@ -353,6 +352,21 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     return Container(
       child: Column(
         children: [
+          //银行
+          GestureDetector(
+            onTap: () {
+              _bankTap(context);
+            },
+            child: Container(
+              color: Colors.white,
+              padding: EdgeInsets.only(top: 16, bottom: 16),
+              child: _inputFrame(
+                S.current.bank_name,
+                _inputSelector(_bankName, S.of(context).please_select),
+              ),
+            ),
+          ),
+          Divider(height: 0.5, color: HsgColors.divider),
           //银行SWIFT
           Container(
             padding: EdgeInsets.only(top: 16, bottom: 16),
@@ -371,6 +385,21 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             ),
           ),
           Divider(height: 0.5, color: HsgColors.divider),
+          //国家地区
+          SelectInkWell(
+            title: S.current.state_area,
+            item: _countryText,
+            onTap: () {
+              Navigator.pushNamed(context, countryOrRegionSelectPage)
+                  .then((value) {
+                setState(() {
+                  _countryText = _language == 'zh_CN'
+                      ? (value as CountryRegionModel).nameZhCN
+                      : (value as CountryRegionModel).nameEN;
+                });
+              });
+            },
+          ),
           _payeeAdress(_payeeAdressController),
           Divider(height: 0.5, color: HsgColors.divider),
         ],
@@ -395,6 +424,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             _centerSwiftController.text = '';
             _payeeAdressController.text = '';
           }
+          _check();
         });
       },
     );
@@ -421,7 +451,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                 hintStyle: TextStyle(color: HsgColors.hintText, fontSize: 14),
                 border: InputBorder.none,
               ),
-              onChanged: (text) {},
+              onChanged: (text) {
+                _check();
+              },
             ),
           ),
         ),
@@ -478,7 +510,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         decoration: InputDecoration.collapsed(
           border: InputBorder.none,
-          hintText: S.current.can_be_empty,
+          hintText: S.current.not_required,
           hintStyle: TextStyle(
             fontSize: 14,
             color: HsgColors.textHintColor,
@@ -495,7 +527,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          width: 120,
+          width: 150,
           child: Text(
             left,
             style: TextStyle(color: HsgColors.firstDegreeText),
@@ -619,13 +651,13 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   //按钮可点击检查
   _check() {
     setState(() {
-      if (_bankName != S.current.please_select &&
-          _nameController.text.length > 0 &&
+      if (_nameController.text.length > 0 &&
           _acountController.text.length > 0 &&
-          _smsController.text.length > 0 &&
           _transferType != S.current.please_select) {
-        if (_showInternational == true) {
-          if (_payeeAdressController.text.length > 0) {
+        if (_showInternational) {
+          if (_bankName != S.current.please_select &&
+              _payeeAdressController.text.length > 0 &&
+              _countryText != '') {
             _isInputed = true;
           } else {
             _isInputed = false;

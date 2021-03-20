@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,17 +34,18 @@ class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
-  final TextEditingController _accountTC =
-      TextEditingController(text: 'blk302');
-  final TextEditingController _passwordTC =
-      TextEditingController(text: 'b0S25X5Y');
-
-  var _account = 'blk302'; //'blk101';
+  TextEditingController _accountTC =
+      TextEditingController(text: 'blk401'); //fangluyao
+  TextEditingController _passwordTC =
+      TextEditingController(text: '4N0021S8'); //b0S25X5Y
+  var _account = 'blk401'; //'blk101';
   var _password = '4N0021S8'; //'4N0021S8';
 
   @override
   void initState() {
     super.initState();
+    String password = EncryptUtil.aesEncode('123456Aa');
+    print("$password +++++++++++++");
     // 添加监听
     _accountTC.addListener(() {
       _account = _accountTC.text;
@@ -65,6 +67,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    //从忘记用户名界面拿到名字
+    var _userName = ModalRoute.of(context).settings.arguments;
+    _accountTC.text = _userName;
     Widget backgroundImgWidget = new Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -110,40 +115,89 @@ class _LoginPageState extends State<LoginPage> {
           child: InputView(
             _passwordTC,
             imgName: 'images/login/login_input_password.png',
-            textFieldPlaceholder: S.of(context).please_input_password,
+            textFieldPlaceholder: S.of(context).password_need_num,
             isCiphertext: true,
           ),
         ),
-        //忘记按钮
         Container(
-          height: 20,
-          margin: EdgeInsets.only(top: 10, right: 35, left: 35),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              //ForgetButton('忘记账户？'),
-              Container(
-                margin: EdgeInsets.only(left: 15),
-                child: ForgetButton(S.of(context).fotget_password_q, () {
-                  setState(() {
-                    Navigator.pushNamed(context, pageForgetPassword);
-                    print('忘记密码');
-                  });
-                }),
+              Expanded(
+                flex: 1,
+                child: Container(),
+              ),
+              //忘记用户名
+              Expanded(
+                flex: 2,
+                child: Container(
+                  height: 20,
+                  margin: EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: 15),
+                        child: ForgetButton('忘记用户名', () {
+                          setState(() {
+                            Navigator.pushNamed(context, pageForgetUserName);
+                            print('忘记密码');
+                          });
+                        }),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              //忘记密码按钮
+              Expanded(
+                flex: 2,
+                child: Container(
+                  height: 20,
+                  margin: EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(right: 33),
+                        margin: EdgeInsets.only(left: 15),
+                        child:
+                            ForgetButton(S.of(context).fotget_password_q, () {
+                          setState(() {
+                            Navigator.pushNamed(context, pageForgetPassword);
+                            print('忘记密码');
+                          });
+                        }),
+                      )
+                    ],
+                  ),
+                ),
               )
             ],
           ),
         ),
-        //登录按钮
+
         Container(
-          margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
-          child: UnderButtonView(
-            S.of(context).login,
-            _isLoading ? null : () => _login(context),
-          ),
-        ),
+            child: Row(
+          children: [
+            //注册按钮
+            Container(
+              margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
+              child: UnderButtonView(
+                  '注册', false ? null : () => _regesiter(context), false),
+            ),
+            //登录按钮
+            Container(
+              margin: EdgeInsets.only(
+                top: 40,
+              ),
+              child: UnderButtonView(S.of(context).login,
+                  _isLoading ? null : () => _login(context), true),
+            )
+          ],
+        )),
+
         Container(
-          margin: EdgeInsets.only(top: 150),
+          height: MediaQuery.of(context).size.height / 2.7,
           child: Text(
             '@2020-2025 HSBC.com.cn.All Rights Reserved.',
             textAlign: TextAlign.left,
@@ -152,19 +206,26 @@ class _LoginPageState extends State<LoginPage> {
                 color: Colors.white, //HsgColors.aboutusTextCon,
                 fontWeight: FontWeight.normal),
           ),
+          alignment: Alignment.bottomCenter,
         )
       ],
     );
 
     Widget contentWidget = new Scaffold(
-      backgroundColor: Colors.transparent,
-      body: SafeArea(
-        maintainBottomViewPadding: true,
-        child: SingleChildScrollView(
-          child: contentDetailWidget,
-        ),
-      ),
-    );
+        backgroundColor: Colors.transparent,
+        body: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            // 触摸收起键盘
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: SafeArea(
+            maintainBottomViewPadding: true,
+            child: SingleChildScrollView(
+              child: contentDetailWidget,
+            ),
+          ),
+        ));
 
     return MaterialApp(
       home: Stack(
@@ -201,6 +262,11 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  //注册
+  _regesiter(BuildContext context) {
+    Navigator.pushNamed(context, pageRegister);
+  }
+
   ///登录成功-跳转操作
   _showMainPage(BuildContext context) async {
     setState(() {
@@ -216,10 +282,7 @@ class _LoginPageState extends State<LoginPage> {
 
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
-    //prefs.setString(ConfigKey.USER_PASSWORD, _password);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
-    prefs.setString(ConfigKey.USER_AREACODE, resp.areaCode);
-    prefs.setString(ConfigKey.USER_PHONE, resp.userPhone);
     if (resp.custId == null || resp.custId == '') {
       prefs.setString(ConfigKey.CUST_ID, '');
     } else {
@@ -232,12 +295,12 @@ class _LoginPageState extends State<LoginPage> {
   ///判断是否能点击登录按钮
   bool _judgeCanLogin() {
     if (_account.toString().length == 0 || _account == null) {
-      HSProgressHUD.showInfo(status: S.of(context).please_input_account);
+      Fluttertoast.showToast(msg: S.of(context).please_input_account);
       return false;
     }
 
     if (_password.toString().length == 0 || _password == null) {
-      HSProgressHUD.showInfo(status: S.of(context).please_input_password);
+      Fluttertoast.showToast(msg: S.of(context).please_input_password);
       return false;
     }
 
@@ -276,7 +339,7 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
               child: Text(
                 title,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 14,
                 ),
               ),
@@ -284,7 +347,7 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
             Container(
               child: Icon(
                 Icons.arrow_drop_down_outlined,
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
           ],
@@ -432,8 +495,9 @@ class ForgetButton extends StatelessWidget {
 class UnderButtonView extends StatefulWidget {
   final String title;
   final void Function() loginBtnClick;
+  final bool login;
 
-  UnderButtonView(this.title, this.loginBtnClick);
+  UnderButtonView(this.title, this.loginBtnClick, this.login);
 
   @override
   _UnderButtonViewState createState() => _UnderButtonViewState();
@@ -444,9 +508,9 @@ class _UnderButtonViewState extends State<UnderButtonView> {
   Widget build(BuildContext context) {
     return Container(
       child: MaterialButton(
-        minWidth: MediaQuery.of(context).size.width - 30.0,
+        minWidth: MediaQuery.of(context).size.width / 2.9,
         height: 44.0,
-        color: HsgColors.accent,
+        color: widget.login ? HsgColors.accent : HsgColors.registerBtn,
         disabledColor: HsgColors.hintText,
         textColor: Colors.white,
         disabledTextColor: Colors.white,

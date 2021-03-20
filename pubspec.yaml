@@ -3,7 +3,7 @@ description: 企业手机网银
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.430
@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.7.0 <3.0.0'
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -46,6 +46,8 @@ dependencies:
   url_launcher: ^5.1.2
   flutter_tableview: ^1.0.1
   flutter_easyrefresh: ^2.1.7
+  azlistview: ^0.1.2
+  lpinyin: ^1.0.7
   flutter_cupertino_date_picker:
     git:
       url: https://github.com/imshashank/flutter-cupertino-date-picker # Repo
@@ -71,6 +73,8 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/data/china.json
+    - assets/data/country.json
     - images/ic_launcher.png
     #common
     - images/common/check_btn_common_checked.png
@@ -134,6 +138,8 @@ flutter:
     - images/mine/aboutUs-icon3.png
     - images/mine/aboutUs-icon4.png
     - images/mine/mine-icon.png
+    - images/mine/card_background1.png
+    - images/mine/card_background2.png
 
     #time-depost
     - images/time_depost/time_depost_product.png
@@ -149,6 +155,7 @@ flutter:
     - images/transferIcon/transfer_features_icon/transfer_features_plan.png
     - images/transferIcon/transfer_features_icon/transfer_features_record.png
     - images/transferIcon/transfer_features_icon/transfer_features_timely.png
+    - images/transferIcon/transfer_features_icon/transfer_features_timely1.png
 
     #转账记录页面图片
     - images/transferIcon/transfert_to.png
@@ -159,12 +166,18 @@ flutter:
 
     #其他
     - images/transferIcon/transfer_sample_placeholder.png
+    - images/transferIcon/transfer_head.png
 
     - images/transferIcon/transfer_features_icon/transfer_features_scan.png
     - images/transferIcon/transfer_features_icon/transfer_features_acount.png
     #其他
     - images/transferIcon/transfer_sample_placeholder.png
     - images/transferIcon/transfer_bank.png
+
+    #开户
+    - images/openAccount/open_account_document_type_CN.png
+    - images/openAccount/open_account_document_type_HK.png
+    - images/openAccount/open_account_document_type_other.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

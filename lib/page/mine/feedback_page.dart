@@ -10,6 +10,7 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:flutter/services.dart';
 
 class FeedbackPage extends StatefulWidget {
   @override
@@ -19,15 +20,32 @@ class FeedbackPage extends StatefulWidget {
 class _FeedbackPageState extends State<FeedbackPage> {
   TextEditingController _feedbackController = TextEditingController();
   var _content = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _feedbackController.addListener(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // _feedbackController.text = '';
     return new Scaffold(
-        appBar: AppBar(
-          title: Text(S.of(context).feedback),
-          elevation: 0,
-        ),
-        body: Container(
+      appBar: AppBar(
+        title: Text(S.of(context).feedback),
+        centerTitle: true,
+        elevation: 0,
+      ),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: SingleChildScrollView(
+          child: Container(
             color: HsgColors.commonBackground,
             child: Column(
               children: [
@@ -45,6 +63,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
                       textAlign: TextAlign.start,
                       maxLines: 10,
                       maxLength: 300, //允许输入的字符长度/
+                      inputFormatters: <TextInputFormatter>[
+                        // FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                        LengthLimitingTextInputFormatter(300), //限制长度
+                      ],
                       maxLengthEnforced: false, //是否允许输入的字符长度超过限定的字符长度
                       style: TextStyle(
                         color: HsgColors.secondDegreeText, //文字的颜色
@@ -68,17 +90,49 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   width: MediaQuery.of(context).size.width,
                   child: RaisedButton(
                     child: Text(S.of(context).submit),
-                    // _content == '' ? null : _submitFeedBack(),
-                    onPressed: _submitFeedBack,
+                    onPressed: _submit()
+                        ? () {
+                            _submitFeedBack();
+                          }
+                        : null,
                     color: HsgColors.accent,
                     textColor: Colors.white,
+                    disabledTextColor: Colors.white,
+                    disabledColor: Color(0xFFD1D1D1),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5) //设置圆角
                         ),
                   ),
-                )
+                ),
+                // Container(
+                //   margin: EdgeInsets.all(40), //外边距
+                //   height: 44.0,
+                //   width: MediaQuery.of(context).size.width,
+                //   child: RaisedButton(
+                //     child: Text(S.of(context).submit),
+                //     // _content == '' ? null : _submitFeedBack(),
+                //     onPressed: _submitFeedBack,
+                //     color: HsgColors.accent,
+                //     textColor: Colors.white,
+                //     shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(5) //设置圆角
+                //         ),
+                //   ),
+                // ),
               ],
-            )));
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  bool _submit() {
+    if (_feedbackController.text != '') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   _submitFeedBack() async {
