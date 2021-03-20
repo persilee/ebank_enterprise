@@ -272,7 +272,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   //获取验证码按钮
   FlatButton _otpButton() {
     return FlatButton(
-      onPressed: countdownTime > 0
+      onPressed: (countdownTime > 0 && _phone != '')
           ? null
           : () {
               _getVerificationCode();
@@ -286,8 +286,8 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50),
       ),
-      disabledTextColor: HsgColors.blueTextColor,
-      disabledColor: Color(0xeeEFF3FF),
+      disabledTextColor: Colors.white,
+      disabledColor: HsgColors.hintText,
       child: Text(
         countdownTime > 0
             ? '${countdownTime}s'
