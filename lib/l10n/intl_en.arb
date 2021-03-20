@@ -343,6 +343,7 @@
   "aboutUs": "About Us",
   "visa_interview": "Visa Interview",
   "loginOut": "Safe Exit",
+  "exit":"Exit",
   "logoutSuccess": "Exit successful",
   "feedBackInfo": "Please input your opinion...",
   "oldPwd": "Old Password",

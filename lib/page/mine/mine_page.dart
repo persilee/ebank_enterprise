@@ -262,7 +262,7 @@ class _MinePageState extends State<MinePage> {
               height: 50.0,
               onPressed: () {
                 //退出登录
-                _loginOut();
+                _showTypeTips();
               },
               child: Container(
                 width: MediaQuery.of(context).size.width,
@@ -684,6 +684,24 @@ class _MinePageState extends State<MinePage> {
       // Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.showError(status: e.toString());
       print('${e.toString()}');
+    });
+  }
+
+  //提示弹窗(提示语句，确认事件)
+  _showTypeTips() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertDialog(
+            title: S.current.prompt,
+            message: S.current.select_transfer_type_first,
+            positiveButton: S.current.confirm,
+            negativeButton: S.current.cancel,
+          );
+        }).then((value) {
+      if (value == true) {
+        _loginOut();
+      }
     });
   }
 
