@@ -20,7 +20,6 @@ fun startAuth(act: Activity, req: AuthIdentityReq) {
   SharedCacheUtils.putString(act,"tokId",req.tokId)
   SharedCacheUtils.putString(act,"language",req.language)
   SharedCacheUtils.putString(act,"country",req.country)
-  SelectTypeActivity
   VideoUtil.startActivity(act, req.tenantId, req.businessId, req.language, req.type, object : VideoUtil.FaceRecognitionBack {
     override fun faceSuccess(p0: String?) {
 
