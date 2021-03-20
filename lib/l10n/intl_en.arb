@@ -186,6 +186,7 @@
   "deposit_taking": "Deposit Taking",
   "deposit_amount": "Principal",
   "deposit_declare": "Explanatory Note:\n1. At the time of transferring normal time deposit to savings deposit, it requires this time deposit is originated from a already matured time deposit with setup of deposit and withdrawal in lump sum, or that is already renewed but now yet to be matured time deposit with setup of deposit and withdrawal in lump sum. Otherwise please use our counter service to handle.",
+  "select_content":"*If the selected content is settled in advance, the interest shall be calculated according to the current interest rate listed on the current day.",
   "interest_rate": "Interest Rate",
   "confirm": "Confirm",
   "cancel": "Cancel",
@@ -258,7 +259,7 @@
   "day": "Day",
   "periods": "Periods",
   "please_select": "Please Select",
-  "please_input": "Please Input",
+  "please_input": "Please enter",
   "transaction_info": "Transaction Information",
   "transaction_account": "Transaction Account",
   "transaction_amount": "Transaction Amount",
@@ -413,6 +414,7 @@
   "field_dialog_title": "security code check",
   "field_dialog_cancel": "cancel",
   "field_dialog_confirm": "confirm",
+  "reset":"Reset",
   "transaction_type": "Transaction type",
   "password_management": "Password Management",
   "openAccout_basicInformation": "General Information",
@@ -439,7 +441,19 @@
   "openAccout_application_results": "Application Results",
   "openAccout_application_results_title": "Account opening application submitted successfully",
   "openAccout_application_results_content": "We will complete the review within 3 working days, and the review result will be notified to you by email, or you can log in to the APP to check the progress.",
-  "amount": "Amount",
+
+
+
+
+
+  "pay":"Pay",
+
+
+
+
+
+
+  "amount":"Amount",
   "custom_autofilter": "Custom Autofilter",
   "transfer_type_0_short": "Inner",
   "transfer_type_1_short": "Inter",

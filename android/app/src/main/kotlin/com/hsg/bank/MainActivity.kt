@@ -18,8 +18,9 @@ class MainActivity : FlutterActivity() {
     MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
       when (call.method) {
         "startAuth" -> {
-          startAuth(this, gson.fromJson(call.argument("body") as String?, AuthIdentityReq::class.java))
-          result.success(gson.toJson(AuthIdentityResp("invoke success")))
+          startAuth(this, gson.fromJson(call.argument("body") as String?, AuthIdentityReq::class.java)) {
+            result.success(gson.toJson(AuthIdentityResp(it)))
+          }
         }
         else -> result.notImplemented()
       }
