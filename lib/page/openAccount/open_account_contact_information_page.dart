@@ -180,7 +180,7 @@ class _OpenAccountContactInformationPageState
                                       "74283428974321",
                                       "en",
                                       "CN",
-                                      "2"), //passport001zh  DLEAED
+                                      "1"), //passport001zh  DLEAED
                                 )
                                 .then((value) => () {
                                       Fluttertoast.showToast(msg: value.result);
