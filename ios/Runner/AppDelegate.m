@@ -129,14 +129,10 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
 //视频服务结束的方法
 -(void)SEVideoServiceDidFinishedWithResult:(SEVideoResult *)videoResult{
     NSLog(@"报错信息------------%@",videoResult.error.desc);
-    NSDictionary *dataStr = @{@"result":@"用户手动取消"};
-    NSString *sueecssResult =  [dataStr mj_JSONString];
-    self.resultBlock(sueecssResult);
-    
     if (videoResult.certificationResul.length > 0) {
         NSLog(@"认证结果%@",videoResult.certificationResul);
         NSString *resultValue = videoResult.certificationResul;
-        NSLog(@"打印认证结果json -----%@",resultValue);
+        self.resultBlock(resultValue);
     }
 }
 
@@ -144,7 +140,6 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
 -(void)SigningESDKinitResult:(SEInitResult *)result{
     NSLog(@">>>>>result = %@", result);
 }
-
 
 #pragma mark — IQKeyboardManager配置
 - (void)keybordManager
