@@ -54,6 +54,7 @@ class _ApprovalPageState extends State<ApprovalPage>
       indicator: MyUnderlineTabIndicator(
         borderSide: BorderSide(width: 4.0, color: HsgColors.accent),
         bottomPadding: 8.0,
+        indicatorWidthPercentage: 0.46,
       ),
       tabs: tabs.map((e) => Tab(text: e)).toList(),
     );

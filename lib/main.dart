@@ -48,6 +48,13 @@ class _HSGBankAppState extends State<HSGBankApp> {
     _getPublicParameters();
   }
 
+  void hideKeyboard(BuildContext context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+      FocusManager.instance.primaryFocus.unfocus();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ///初始化progressHUD配置
@@ -85,6 +92,14 @@ class _HSGBankAppState extends State<HSGBankApp> {
         GlobalCupertinoLocalizations.delegate
       ],
       supportedLocales: S.delegate.supportedLocales,
+      builder: (context, child) => Scaffold(
+        body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
+          },
+          child: child,
+        ),
+      ),
     );
   }
 

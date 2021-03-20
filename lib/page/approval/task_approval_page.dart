@@ -1,3 +1,5 @@
+import 'dart:async';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///任务审批页面
 /// Author: wangluyao
@@ -30,6 +32,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   bool rejectToStart = true; //是否驳回至发起人
   String comment = ''; //审批意见
   var taskId = '';
+  ScrollController _controller;
 
   Map approvalInfo = {
     "转账信息": [
@@ -50,6 +53,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   @override
   void initState() {
     super.initState();
+    _controller = ScrollController();
     //监听输入框
     focusNode.addListener(() {
       bool hasFocus = focusNode.hasFocus;
@@ -57,6 +61,12 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
       bool hasListeners = focusNode.hasListeners;
       print("focusNode 兼听 hasFocus:$hasFocus  hasListeners:$hasListeners");
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 
 //签收按钮被点击时改变offstage
@@ -135,8 +145,10 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
         maxLines: 4,
         enabled: !offstage,
         decoration: InputDecoration(
-          fillColor: HsgColors.itemClickColor,
+          fillColor: Color(int.parse('0xffF7F7F7')),
           filled: offstage,
+          hintText: S.current.please_input + '...',
+          hintStyle: TextStyle(fontSize: 14.0),
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(5)),
             borderSide: BorderSide(color: HsgColors.textHintColor, width: 1),
@@ -167,17 +179,15 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   }
 
 //按钮
-  Widget _buttonStyle(double buttonWidth, String buttonText) {
+  Widget _buttonStyle(String buttonText) {
     return Container(
-      margin: EdgeInsets.only(left: 10),
-      width: buttonWidth,
       decoration: BoxDecoration(
-        color: (buttonText == S.current.examine_and_approve ||
-                buttonText == S.current.sign)
-            ? HsgColors.accent
+        color: (buttonText == S.current.approval_unlock ||
+                buttonText == S.current.approval_lock)
+            ? Color(int.parse('0xff4871FF'))
             : Colors.white,
-        border: Border.all(color: Colors.black, width: 0.5),
-        borderRadius: BorderRadius.circular((5)),
+        border: Border.all(color: Color(int.parse('0xff4871FF')), width: 0.5),
+        borderRadius: BorderRadius.circular((4)),
       ),
       height: 40,
       child: FlatButton(
@@ -187,16 +197,20 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
           buttonText,
           style: TextStyle(
             fontSize: 13,
-            color: (buttonText == S.current.examine_and_approve ||
-                    buttonText == S.current.sign)
+            color: (buttonText == S.current.approval_unlock ||
+                    buttonText == S.current.approval_lock)
                 ? Colors.white
                 : Colors.black,
           ),
         ),
         onPressed: () {
-          if (buttonText == S.current.sign) {
+          if (buttonText == S.current.approval_lock) {
             _toggle();
             _doClaimTask();
+            Timer(Duration(milliseconds: 500),
+                    () => _controller.jumpTo(_controller.position.maxScrollExtent));
+
+            _controller.animateTo(_controller.position.maxScrollExtent, duration: Duration(milliseconds: 100));
           } else {
             if (comment.length != 0) {
               if (buttonText == S.current.reject_to_sponsor ||
@@ -209,7 +223,11 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
               Navigator.pushReplacementNamed(context, pageDepositRecordSucceed,
                   arguments: 'taskApproval');
             } else {
-              _alertDialog();
+              if (buttonText == S.current.approval_unlock) {
+                Navigator.pop(context);
+              } else {
+                _alertDialog();
+              }
             }
           }
         },
@@ -222,20 +240,36 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
     if (!offstage) {
       return Container(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            _buttonStyle(120, S.current.reject_to_sponsor),
-            _buttonStyle(60, S.current.reject),
-            _buttonStyle(60, S.current.examine_and_approve),
+            Expanded(
+              flex: 2,
+              child: _buttonStyle(S.current.reject_to_sponsor),
+            ),
+            Padding(padding: EdgeInsets.only(left: 10)),
+            Expanded(
+              flex: 1,
+              child: _buttonStyle(S.current.reject),
+            ),
+            Padding(
+                padding: EdgeInsets.only(
+              left: 10,
+            )),
+            Expanded(
+              flex: 1,
+              child: _buttonStyle(S.current.approval_unlock),
+            ),
           ],
         ),
       );
     } else {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          _buttonStyle(60, S.current.sign),
-        ],
+      return Container(
+        width: 66.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            _buttonStyle(S.current.approval_lock),
+          ],
+        ),
       );
     }
   }
@@ -258,6 +292,38 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
           _inputApprovalComments(),
           //底部按钮
           _button(),
+          !offstage
+              ? Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: 14.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (comment.length != 0) {
+                        Navigator.pushReplacementNamed(
+                            context, pageDepositRecordSucceed,
+                            arguments: 'taskApproval');
+                      } else {
+                        _alertDialog();
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(
+                        int.parse('0xff4871FF'),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 11.0),
+                    ),
+                    child: Text(
+                      S.current.examine_and_approve,
+                      style: TextStyle(fontSize: 13.0),
+                    ),
+                  ),
+                )
+              : Container(),
+          !offstage
+              ? SizedBox(
+                  height: 26.0,
+                )
+              : Container(),
         ],
       ),
     );
@@ -276,6 +342,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
         title: Text(title),
       ),
       body: SingleChildScrollView(
+        controller: _controller,
         child: Column(
           children: [
             _tips(), //提示

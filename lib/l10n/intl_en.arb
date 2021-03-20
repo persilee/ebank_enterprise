@@ -472,7 +472,8 @@
   "preview_explain1":"explain：",
   "preview_explain2":"The specific amount transferred out shall be the amount calculated at the exchange rate at the time of transaction",
   "remitter_address1":"Remitter's Address",
-  "receiver_address":"Receiver's address"
-
+  "receiver_address":"Receiver's address",
+  "approval_lock":"lock",
+  "approval_unlock":"unlock"
  }
   
