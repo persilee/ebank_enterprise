@@ -47,8 +47,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    String password = EncryptUtil.aesEncode('123456Aa');
-    print("$password +++++++++++++");
+
     // 添加监听
     _accountTC.addListener(() {
       _account = _accountTC.text;
