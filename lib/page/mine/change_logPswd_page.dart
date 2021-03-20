@@ -7,6 +7,7 @@ import 'package:ebank_mobile/data/source/update_login_paw_repository.dart';
 /// Date: 2020-12-29
 
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -316,6 +317,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
         "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
     RegExp letter = new RegExp("[a-zA-Z]");
     RegExp number = new RegExp("[0-9]");
+    RegExp number_6 = new RegExp(r'^\d{6}$');
     if (_newPwd.text != _confimPwd.text) {
       HSProgressHUD.showInfo(status: S.of(context).differentPwd);
     } else if (_oldPwd.text == _newPwd.text) {
@@ -325,6 +327,9 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
         characters.hasMatch(_newPwd.text) == false ||
         ((_newPwd.text).length < 8 || (_newPwd.text).length > 16)) {
       HSProgressHUD.showInfo(status: S.of(context).password_need_num);
+    } else if (!number_6.hasMatch(_sms.text)) {
+      // HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
+      HSProgressHUD.showInfo(status: '请输入6位验证码');
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
@@ -335,7 +340,8 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
               'ModifyPasswordReq')
           .then((data) {
         HSProgressHUD.showInfo(status: S.current.operate_success);
-        Navigator.pop(context);
+        Navigator.of(context)..pop();
+        Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
         HSProgressHUD.dismiss();
       }).catchError((e) {
         HSProgressHUD.showError(status: e.toString());

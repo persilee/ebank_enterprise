@@ -262,7 +262,7 @@ class _MinePageState extends State<MinePage> {
               height: 50.0,
               onPressed: () {
                 //退出登录
-                _loginOut();
+                _showTypeTips();
               },
               child: Container(
                 width: MediaQuery.of(context).size.width,
@@ -437,7 +437,10 @@ class _MinePageState extends State<MinePage> {
               Navigator.pushNamed(context, pageUserInformation,
                       arguments: _userInfoResp)
                   .then((value) {
-                setState(() {});
+                setState(() {
+                  _language = Intl.getCurrentLocale();
+                });
+                _changeUserInfoShow(_userInfoResp);
               });
             },
           ),
@@ -459,7 +462,7 @@ class _MinePageState extends State<MinePage> {
             print('开户申请');
           },
           child: Text(
-            '开户申请',
+            S.current.open_account_apply,
             style: TextStyle(fontSize: 15, color: Colors.white),
           ),
           shape: RoundedRectangleBorder(
@@ -684,6 +687,26 @@ class _MinePageState extends State<MinePage> {
       // Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.showError(status: e.toString());
       print('${e.toString()}');
+    });
+  }
+
+  //提示弹窗(提示语句，确认事件)
+  _showTypeTips() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertDialog(
+            // title: S.current.prompt,
+            // message: S.current.select_transfer_type_first,
+            title: '退出',
+            message: '确定要退出手机银行账户吗?',
+            positiveButton: S.current.confirm,
+            negativeButton: S.current.cancel,
+          );
+        }).then((value) {
+      if (value == true) {
+        _loginOut();
+      }
     });
   }
 

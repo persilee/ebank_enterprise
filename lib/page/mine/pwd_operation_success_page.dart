@@ -21,30 +21,32 @@ class _PwdOperationSuccessPageState extends State<PwdOperationSuccessPage> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: Container(
-        child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(20),
-              ),
-              Icon(
-                Icons.check_circle,
-                color: Colors.green,
-                size: 90,
-              ),
-              Padding(
-                padding: EdgeInsets.all(10),
-              ),
-              Text(
-                S.of(context).operation_successful,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 80),
-              ),
-              _button(S.of(context).complete)
-            ],
+      body: SingleChildScrollView(
+        child: Container(
+          child: Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(20),
+                ),
+                Icon(
+                  Icons.check_circle,
+                  color: Colors.green,
+                  size: 90,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                Text(
+                  S.of(context).operation_successful,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 80),
+                ),
+                _button(S.of(context).complete)
+              ],
+            ),
           ),
         ),
       ),

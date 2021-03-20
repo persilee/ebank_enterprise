@@ -171,6 +171,7 @@ class _OpenAccountContactInformationPageState
                   title: S.of(context).next_step,
                   click: _nextBtnEnabled
                       ? () {
+<<<<<<< HEAD
                           bool bo = true;
                           if (bo) {
                             AuthIdentity()
@@ -195,6 +196,9 @@ class _OpenAccountContactInformationPageState
                             });
                             return;
                           }
+=======
+                          _authIdentity();
+>>>>>>> 9564dc731009bbac3bfe060a70d70b5f7f052a57
                         }
                       : null,
                 ),
@@ -204,6 +208,24 @@ class _OpenAccountContactInformationPageState
         ),
       ),
     );
+  }
+
+  _authIdentity() {
+    bool bo = true;
+    if (bo) {
+      AuthIdentity()
+          .startAuth(
+        new AuthIdentityReq("DLEAED", "74283428974321", "en", "CN",
+            "1"), //passport001zh  DLEAED
+      )
+          .then((value) {
+        Fluttertoast.showToast(msg: value.result);
+        Navigator.pushNamed(context, pageOpenAccountSelectDocumentType);
+      }).catchError((e) {
+        HSProgressHUD.showError(status: '${e.toString()}');
+      });
+      return;
+    }
   }
 
   ///判断下一步按钮是否能点击

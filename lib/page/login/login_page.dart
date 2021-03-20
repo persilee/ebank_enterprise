@@ -38,17 +38,16 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
   TextEditingController _accountTC =
-      TextEditingController(text: 'blk401'); //fangluyao
+      TextEditingController(text: 'wangluyao'); //fangluyao
   TextEditingController _passwordTC =
-      TextEditingController(text: '4N0021S8'); //b0S25X5Y
-  var _account = 'blk401'; //'blk101';
-  var _password = '4N0021S8'; //'4N0021S8';
+      TextEditingController(text: '13w89WZ8@'); //b0S25X5Y
+  var _account = 'wangluyao'; //'blk101';
+  var _password = '13w89WZ8@'; //'4N0021S8';
 
   @override
   void initState() {
     super.initState();
-    String password = EncryptUtil.aesEncode('123456Aa');
-    print("$password +++++++++++++");
+
     // 添加监听
     _accountTC.addListener(() {
       _account = _accountTC.text;
