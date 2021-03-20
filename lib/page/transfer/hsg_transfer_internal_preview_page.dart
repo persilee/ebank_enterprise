@@ -79,16 +79,16 @@ class _TransferInternalPreviewPageState
           Divider(
             color: Color(0xffE1E1E1),
           ),
-          _getRowContent(
-              S.current.transfer_from, transferData.transferOutAccount),
+          _getRowContent(S.current.transfer_from,
+              FormatUtil.formatSpace4(transferData.transferOutAccount)),
           _getRowContent(S.current.to_amount,
               FormatUtil.formatSringToMoney(transferData.transferOutAmount)),
           _getRowContent(
               S.current.payment_currency, transferData.transferOutCcy),
           _getRowContent(
               S.current.receipt_side_name, transferData.transferIntoName),
-          _getRowContent(
-              S.current.into_account, transferData.transferIntoAccount),
+          _getRowContent(S.current.into_account,
+              FormatUtil.formatSpace4(transferData.transferIntoAccount)),
           _getRowContent(
               S.current.transfer_into_currency, transferData.transferIntoCcy),
           _getRowContent(

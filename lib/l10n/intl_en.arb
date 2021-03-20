@@ -83,7 +83,7 @@
   "branch_office": "Branch",
   "sms_notification": "Sms Notification",
   "alias": "Remark",
-  "word_limit_5": "Within 5 Chinese Characters",
+  "word_limit_5": "Within 140 byte",
   "search": "Search",
   "select_bank": "Select Bank",
   "select_city": "Select City",
@@ -306,7 +306,7 @@
   "payee_name": "Beneficiary Name",
   "transfer_to_account": "Transfer To",
   "transfer_from_account": "Transfer From",
-  "transfer_from_ccy": "Transfer currency",
+  "transfer_from_ccy": "Payee currency",
   "remitter_address": "Remitter's Address",
   "payee_address": "Beneficiary Address",
   "state_area": "Country/Region",
@@ -475,7 +475,8 @@
   "preview_explain2":"The specific amount transferred out shall be the amount calculated at the exchange rate at the time of transaction",
   "remitter_address1":"Remitter's Address",
   "receiver_address":"Receiver's address",
-  "forget_username":"Forget UserName"
+  "forget_username":"Forget UserName",
+  "estimated_collection_amount":"Estimated Collection Amount"
 
 
  }

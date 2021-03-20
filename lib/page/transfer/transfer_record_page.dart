@@ -88,11 +88,14 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         title: Text(intl.S.of(context).transfer_record),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          _headerWidget(),
-          Expanded(child: _getlistViewList(context)),
-        ],
+      body: Container(
+        color: HsgColors.commonBackground,
+        child: Column(
+          children: [
+            _headerWidget(),
+            Expanded(child: _getlistViewList(context)),
+          ],
+        ),
       ),
     );
   }
@@ -217,6 +220,11 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                 _transferHistory.status),
             _rowContent(intl.S.of(context).transfer_time,
                 _transferHistory.transactionHour),
+            _rowContent(
+                intl.S.current.transfer_type_with_value,
+                _transferHistory.transferType == '0'
+                    ? intl.S.current.transfer_type_0_short
+                    : intl.S.current.transfer_type_1_short),
             _rowContent(
                 intl.S.of(context).transfer_status, _transferHistory.status),
           ],
