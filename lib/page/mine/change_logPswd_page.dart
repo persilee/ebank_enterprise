@@ -310,15 +310,12 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
 
   //修改密码接口
   _updateLoginPassword() async {
-<<<<<<< HEAD
-=======
     String oldPwd = EncryptUtil.aesEncode(_oldPwd.text);
     String newPwd = EncryptUtil.aesEncode(_newPwd.text);
     RegExp characters = new RegExp(
         "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
     RegExp letter = new RegExp("[a-zA-Z]");
     RegExp number = new RegExp("[0-9]");
->>>>>>> d177846efd3ff621f45333ef34be8767e716f1f5
     if (_newPwd.text != _confimPwd.text) {
       HSProgressHUD.showInfo(status: S.of(context).differentPwd);
     } else if (_oldPwd.text == _newPwd.text) {
