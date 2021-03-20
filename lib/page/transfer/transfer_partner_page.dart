@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -286,19 +287,36 @@ class _TransferPartnerState extends State<TransferPartner> {
       closeTag: LeftScrollCloseTag('row.payeeCardNo'),
       buttons: [
         LeftScrollItem(
-          text: S.current.delete,
-          color: Colors.red,
-          onTap: () {
-            LeftScrollGlobalListener.instance
-                .targetStatus(LeftScrollCloseTag('row.payeeCardNo'),
-                    Key(partner.payeeCardNo))
-                .value = false;
-            _deletePartner(partner.custId, partner.payeeCardNo);
-            HSProgressHUD.showSuccess(status: '删除成功!');
-          },
-        ),
+            text: S.current.delete,
+            color: Colors.red,
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return HsgAlertDialog(
+                      title: S.current.prompt,
+                      message: "您是否确定要删除该伙伴",
+                      negativeButton: S.current.cancel,
+                      positiveButton: S.current.confirm,
+                    );
+                  }).then((value) {
+                if (value == true) {
+                  _deleteParthner(partner);
+                }
+              });
+            }),
       ],
     );
+  }
+
+  //删除
+  _deleteParthner(Rows partner) {
+    LeftScrollGlobalListener.instance
+        .targetStatus(
+            LeftScrollCloseTag('row.payeeCardNo'), Key(partner.payeeCardNo))
+        .value = false;
+    _deletePartner(partner.custId, partner.payeeCardNo);
+    HSProgressHUD.showSuccess(status: '删除成功!');
   }
 
   //单条伙伴

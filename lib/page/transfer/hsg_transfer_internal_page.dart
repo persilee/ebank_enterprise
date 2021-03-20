@@ -8,10 +8,12 @@ import 'package:ebank_mobile/data/source/card_data_repository.dart';
 
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
+import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -107,7 +109,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   //支付币种
   String _transferCcy = '';
   int _transferIndex = 0;
-  List<String> _transferCcyList = ['HKD', 'CNY', 'USD', 'LAK', 'EUR'];
+  List<String> _transferCcyList = [];
 
   //本地币种
   String _localeCcy = 'CNY';
@@ -120,6 +122,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   //余额
   String _balance = '';
   List<String> _balanceList = [];
+
+  //预计收款金额
+  String _amount = '0';
 
   //限额
   String _limit = '';
@@ -172,29 +177,33 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           // 触摸收起键盘
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: CustomScrollView(
-          slivers: [
-            _gaySliver,
-            //转账金额和币种
-            TransferAccount(
-              payCcy: _payCcy,
-              transferCcy: _transferCcy,
-              limit: _limit,
-              account: _account,
-              balance: _balance,
-              transferMoneyController: _transferMoneyController,
-              callback: _boolBut,
-              payCcyDialog: payCcyDialog,
-              transferCcyDialog: transferCcyDialog,
-              accountDialog: _accountDialog,
-            ),
-            //收款方
-            _payeeWidget(),
-            //附言
-            _remarkWidget(),
-            //提交按钮
-            _submitButton(),
-          ],
+        child: Container(
+          color: HsgColors.commonBackground,
+          child: CustomScrollView(
+            slivers: [
+              _gaySliver,
+              //转账金额和币种
+              TransferAccount(
+                payCcy: _payCcy,
+                transferCcy: _transferCcy,
+                limit: _limit,
+                account: _account,
+                balance: _balance,
+                amount: _amount,
+                transferMoneyController: _transferMoneyController,
+                callback: _boolBut,
+                payCcyDialog: payCcyDialog,
+                transferCcyDialog: transferCcyDialog,
+                accountDialog: _accountDialog,
+              ),
+              //收款方
+              _payeeWidget(),
+              //附言
+              _remarkWidget(),
+              //提交按钮
+              _submitButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -218,6 +227,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               controller: _nameController,
               callback: _boolBut,
               isWidget: true,
+              length: 35,
             ),
             TextFieldContainer(
               title: S.of(context).receipt_side_account,
@@ -225,6 +235,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               keyboardType: TextInputType.number,
               controller: _accountController,
               callback: _boolBut,
+              length: 20,
             ),
           ],
         ),
@@ -446,6 +457,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             payerName = element.cardList[0].ciName;
           });
           _getCardTotal(_account);
+          _loadLocalCcy();
           // _payCcyList.clear();
           // _payCcy = _localeCcy;
           // _payCcyList.add(_localeCcy);
@@ -512,14 +524,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _balance = _balanceList[0];
               _payIndex = 0;
             }
-            // for (int i = 0; i < _transferCcyList.length; i++) {
-            //   if (_transferCcy == _payCcy) {
-            //     _transferCcy = _payCcy;
-            //     break;
-            //   } else {
-            //     _transferIndex++;
-            //   }
-            // }
+            _getTransferCcySamePayCcy();
           });
         }
         //查询额度
@@ -531,11 +536,43 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         }
       });
     }).catchError((e) {
-      _payCcyList.clear();
-      _payCcy = _localeCcy;
-      _payCcyList.add(_localeCcy);
-      _balance = '10000';
-      _limit = '5000';
+      // _payCcyList.clear();
+      // _payCcy = _localeCcy;
+      // _payCcyList.add(_localeCcy);
+      // _balance = '10000';
+      // _limit = '5000';
+    });
+  }
+
+//收款方币种与转账币种相同
+  _getTransferCcySamePayCcy() {
+    setState(() {
+      _transferIndex = 0;
+      for (int i = 0; i < _transferCcyList.length; i++) {
+        print(_transferCcyList.length);
+        if (_transferCcyList[i] == _payCcy) {
+          _transferCcy = _payCcy;
+          print(_transferCcy);
+          break;
+        } else {
+          _transferIndex++;
+          print(_transferIndex);
+        }
+      }
+    });
+  }
+
+  // 获取币种列表
+  Future _loadLocalCcy() async {
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _transferCcyList.clear();
+        data.publicCodeGetRedisRspDtoList.forEach((e) {
+          _transferCcyList.add(e.code);
+        });
+      }
     });
   }
 

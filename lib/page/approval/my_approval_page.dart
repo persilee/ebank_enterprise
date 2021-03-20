@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///我的待办页面
 /// Author: wangluyao
@@ -70,19 +72,6 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     });
   }
 
-//设置padding
-  Widget _pad(Widget widget, {l, t, r, b}) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        l ??= 0.0,
-        t ??= 0.0,
-        r ??= 0.0,
-        b ??= 0.0,
-      ),
-      child: widget,
-    );
-  }
-
 //加载
   Widget _loadingView() {
     var loadingIndicator = Visibility(
@@ -93,40 +82,32 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
         ),
       ),
     );
-    return _pad(
-      Row(
-        children: <Widget>[loadingIndicator],
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-      ),
-      t: 20.0,
-      b: 20.0,
+    return Row(
+      children: <Widget>[loadingIndicator],
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
     );
   }
 
 //蓝色圆点
   Widget _icon() {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.only(left: 10.0),
-          child: Icon(
-            Icons.fiber_manual_record,
-            color: HsgColors.blueIcon,
-            size: 8.0,
-          ),
-        ),
-      ],
+    return Container(
+      padding: EdgeInsets.only(right: 10.0),
+      child: Icon(
+        Icons.fiber_manual_record,
+        color: HsgColors.blueIcon,
+        size: 10.0,
+      ),
     );
   }
 
 //竖直线
   Widget _line() {
     return Container(
-      padding: EdgeInsets.only(left: 10.0, top: 10.0),
+      padding: EdgeInsets.only(right: 10.0, top: 6.0),
       child: SizedBox(
         width: 1.0,
-        height: 100.0,
+        height: 116.0,
         child: DecoratedBox(
           decoration: BoxDecoration(color: HsgColors.divider),
         ),
@@ -136,67 +117,59 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
 
 //待办任务名称
   Widget _taskName(String taskName) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        taskName,
-        textAlign: TextAlign.left,
-        style: TextStyle(
-            fontSize: 15.0,
-            color: HsgColors.aboutusTextCon,
-            fontWeight: FontWeight.bold),
-      ),
+    return Text(
+      taskName,
+      textAlign: TextAlign.left,
+      style: TextStyle(
+          fontSize: 15.0,
+          color: HsgColors.aboutusTextCon,
+          fontWeight: FontWeight.bold),
     );
   }
 
 //发起人、创建时间
   Widget _rowInformation(String leftText, String rightText) {
-    return Container(
-      padding: EdgeInsets.only(top: 15),
-      child: Row(
-        children: [
-          Container(
-            width: ((MediaQuery.of(context).size.width / 1.09) - 22) / 2,
-            child: Text(
-              leftText,
-              style: TextStyle(
-                fontSize: 14.0,
-                color: HsgColors.toDoDetailText,
-              ),
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          leftText,
+          style: TextStyle(
+            fontSize: 14.0,
+            color: HsgColors.toDoDetailText,
           ),
-          Container(
-            width: ((MediaQuery.of(context).size.width / 1.09) - 22) / 2,
-            child: Text(
-              rightText,
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                fontSize: 14.0,
-                color: HsgColors.aboutusTextCon,
-              ),
-            ),
+        ),
+        Text(
+          rightText,
+          textAlign: TextAlign.right,
+          style: TextStyle(
+            fontSize: 14.0,
+            color: HsgColors.aboutusTextCon,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   //待办列表右侧信息
   Widget _rightInfo(String taskName, String startUser, String createTime) {
-    return Container(
-      width: MediaQuery.of(context).size.width / 1.09,
-      decoration: HsgStyles.homeHeaderShadow,
-      margin: EdgeInsets.only(left: 10.0),
-      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 15.0),
-      child: Column(
-        children: [
-          //待办任务名称
-          _taskName(taskName),
-          //发起人
-          _rowInformation(intl.S.current.sponsor, startUser),
-          //创建时间
-          _rowInformation(intl.S.current.creation_time, createTime),
-        ],
+    return Card(
+      elevation: 6.0,
+      shadowColor: Colors.grey.withOpacity(0.2),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            //待办任务名称
+            _taskName(taskName),
+            //发起人
+            _rowInformation(intl.S.current.sponsor, startUser),
+            //创建时间
+            _rowInformation(intl.S.current.creation_time, createTime),
+          ],
+        ),
       ),
     );
   }
@@ -204,84 +177,114 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
 //待办列表
   Widget _todoInformation(FindUserTaskDetail approval, String taskName,
       String startUser, String createTime) {
-    return FlatButton(
-      padding: EdgeInsets.only(top: 10.0),
-      onPressed: () {
-        go2Detail(approval);
-      },
-      child: Row(
-        children: [
-          //左侧图标
-          Column(
-            children: [
-              _icon(),
-              _line(),
-            ],
-          ),
-          //右侧待办信息
-          _rightInfo(taskName, startUser, createTime),
-        ],
+    return Container(
+      height: 136.0,
+      padding: EdgeInsets.only(top: 16),
+      child: GestureDetector(
+        onTap: (){
+          go2Detail(approval);
+        },
+        child: Stack(
+          overflow: Overflow.visible,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 16.0,
+                ),
+                Expanded(child: _rightInfo(taskName, startUser, createTime)),
+              ],
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Column(
+                children: [
+                  _icon(),
+                  _line(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
+
+
+    //   FlatButton(
+    //   padding: EdgeInsets.only(top: 10.0),
+    //   onPressed: () {
+    //     go2Detail(approval);
+    //   },
+    //   child: Row(
+    //     children: [
+    //       //左侧图标
+    //       // Column(
+    //       //   children: [
+    //       //     _icon(),
+    //       //     _line(),
+    //       //   ],
+    //       // ),
+    //       //右侧待办信息
+    //       _rightInfo(taskName, startUser, createTime),
+    //     ],
+    //   ),
+    // );
   }
 
   @override
   Widget build(BuildContext context) {
-    return
-        ListView.builder(
-          // itemCount: list.length,
-          itemCount: list.length+1,
-          itemBuilder: (context, index) {
-            if (index == list.length) {
-              return _loadingView();
-            } else {
-              return Column(
-                children: <Widget>[
-                  Center(
-                    child: _pad(
-                      _todoInformation(list[index], list[index].processTitle,
-                          list[index].startUser, list[index].createTime),
-                      t: 10.0,
-                      b: 10.0,
-                    ),
-                  ),
-                ],
-              );
-            }
-          },
-          controller: _sctrollController,
-        );
+    return Container(
+      child: ListView.builder(
+        // itemCount: list.length,
+        padding: EdgeInsets.symmetric(horizontal: 12.0),
+        itemCount: list.length + 1,
+        controller: _sctrollController,
+        itemBuilder: (context, index) {
+          if (index == list.length) {
+            return _loadingView();
+          } else {
+            return _todoInformation(
+              list[index],
+              list[index].processTitle,
+              list[index].startUser,
+              list[index].createTime,
+            );
+          }
+        },
+      ),
+    );
 
-        // RefreshIndicator(
-        //     key: refrestIndicatorKey,
-        //     child: _isDate
-        //         ? ListView.builder(
-        //             itemCount: list.length + 1,
-        //             itemBuilder: (context, index) {
-        //               if (index == list.length) {
-        //                 return _loadingView();
-        //               } else {
-        //                 return Column(
-        //                   children: <Widget>[
-        //                     Center(
-        //                       child: _pad(
-        //                         _todoInformation(
-        //                             list[index],
-        //                             list[index].processTitle,
-        //                             list[index].startUser,
-        //                             list[index].createTime),
-        //                         t: 10.0,
-        //                         b: 10.0,
-        //                       ),
-        //                     ),
-        //                   ],
-        //                 );
-        //               }
-        //             },
-        //             controller: _sctrollController,
-        //           )
-        //         : notDataContainer(context, S.current.no_data_now),
-        //     onRefresh: _loadData);
+    // RefreshIndicator(
+    //     key: refrestIndicatorKey,
+    //     child: _isDate
+    //         ? ListView.builder(
+    //             itemCount: list.length + 1,
+    //             itemBuilder: (context, index) {
+    //               if (index == list.length) {
+    //                 return _loadingView();
+    //               } else {
+    //                 return Column(
+    //                   children: <Widget>[
+    //                     Center(
+    //                       child: _pad(
+    //                         _todoInformation(
+    //                             list[index],
+    //                             list[index].processTitle,
+    //                             list[index].startUser,
+    //                             list[index].createTime),
+    //                         t: 10.0,
+    //                         b: 10.0,
+    //                       ),
+    //                     ),
+    //                   ],
+    //                 );
+    //               }
+    //             },
+    //             controller: _sctrollController,
+    //           )
+    //         : notDataContainer(context, S.current.no_data_now),
+    //     onRefresh: _loadData);
   }
 
 //跳转并传值

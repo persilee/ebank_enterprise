@@ -19,8 +19,6 @@ void main(List<String> args) {
   runApp(
     HSGBankApp(),
   );
-  //状态栏字体设置白色（电池、时间、信号等信息）
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 }
 
 class HSGBankApp extends StatefulWidget {
@@ -50,10 +48,25 @@ class _HSGBankAppState extends State<HSGBankApp> {
     _getPublicParameters();
   }
 
+  void hideKeyboard(BuildContext context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+      FocusManager.instance.primaryFocus.unfocus();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ///初始化progressHUD配置
     HSProgressHUD.progressHudConfig();
+    ///这是设置状态栏的图标和字体的颜色
+    ///Brightness.light  一般都是显示为白色
+    ///Brightness.dark 一般都是显示为黑色
+    SystemUiOverlayStyle style = SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+    );
+    SystemChrome.setSystemUIOverlayStyle(style);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -79,6 +92,14 @@ class _HSGBankAppState extends State<HSGBankApp> {
         GlobalCupertinoLocalizations.delegate
       ],
       supportedLocales: S.delegate.supportedLocales,
+      builder: (context, child) => Scaffold(
+        body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
+          },
+          child: child,
+        ),
+      ),
     );
   }
 
