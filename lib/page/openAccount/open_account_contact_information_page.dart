@@ -183,11 +183,13 @@ class _OpenAccountContactInformationPageState
                                       "2"), //passport001zh  DLEAED
                                 )
                                 .then((value) => () {
+                                      print('.............${value.result}');
                                       Fluttertoast.showToast(msg: value.result);
                                       Navigator.pushNamed(context,
                                           pageOpenAccountSelectDocumentType);
                                     })
                                 .catchError((e) {
+                              print('》》》》》》》》》》》');
                               HSProgressHUD.showError(
                                   status: '${e.toString()}');
                             });
