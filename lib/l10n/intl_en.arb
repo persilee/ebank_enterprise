@@ -3,7 +3,7 @@
   "last_login_time_with_value": "Last Sign In time: ",
   "simplifiedChinese": "Chinese",
   "english": "English",
-  "login_account_placeholder": "Mobile Phone No./User Name",
+  "login_account_placeholder": "User Name",
   "fotget_password_q": "Forget Password?",
   "operation_successful": "Operation Successfully",
   "operation_result": "Operation Result",
@@ -474,8 +474,20 @@
   "preview_explain1":"explain：",
   "preview_explain2":"The specific amount transferred out shall be the amount calculated at the exchange rate at the time of transaction",
   "remitter_address1":"Remitter's Address",
+  "forget_username":"Forget Username",
+  "register":"Register",
   "receiver_address":"Receiver's address",
-  "forget_username":"Forget UserName"
+  "welcome_to_register":"Welcome To Register",
+  "please_input_mobile_num":"Please input mobile phone number",
+  "please_input_username":"Please input user name",
+  "please_input_sms":"Please input the verification code",
+  "register_success":"Register successful",
+  "find_username":"User name retrieved successfully",
+  "fotget_password":"Forget Password",
+  "please_input_name":"Please input Name",
+  "reset_password_success":"Reset password successfully"
+
+
 
 
  }

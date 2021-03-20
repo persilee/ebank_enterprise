@@ -132,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Container(
                       margin: EdgeInsets.only(left: 15),
-                      child: ForgetButton('忘记用户名', () {
+                      child: ForgetButton(S.current.forget_username, () {
                         setState(() {
                           Navigator.pushNamed(context, pageForgetUserName);
                           print('忘记密码');
@@ -172,8 +172,8 @@ class _LoginPageState extends State<LoginPage> {
             //注册按钮
             Container(
               margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
-              child: UnderButtonView(
-                  '注册', false ? null : () => _regesiter(context), false),
+              child: UnderButtonView(S.current.register,
+                  false ? null : () => _regesiter(context), false),
             ),
             //登录按钮
             Container(

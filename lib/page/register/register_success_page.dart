@@ -31,7 +31,7 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
           child: ListView(
             children: [
               //欢迎注册
-              getRegisterTitle('欢迎注册'),
+              getRegisterTitle(S.current.welcome_to_register),
               Container(
                 padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
                 child: Image.asset(
@@ -46,7 +46,7 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
                       child: Text(
-                        '注册成功',
+                        S.current.register_success,
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),

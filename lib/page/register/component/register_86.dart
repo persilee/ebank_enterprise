@@ -58,7 +58,7 @@ Widget getRegisterRegion(BuildContext context, TextEditingController _phoneNum,
               controller: _phoneNum,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: '输入手机号',
+                hintText: S.current.please_input_mobile_num,
                 hintStyle: TextStyle(
                   fontSize: 15,
                   color: HsgColors.textHintColor,
