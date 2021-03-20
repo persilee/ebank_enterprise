@@ -1,0 +1,19 @@
+{
+    "name" : "light",
+
+    "statusBarStyle":   "dark",
+
+    "navbarTintColor":  "0x333333",
+    "baseNavBarColor":  "0x0",
+    "authNavBarColor":  "0x0",
+    "imageBgColor":     "0xffffff",
+    "guideLabelColor":  "0x007eff",
+    "lightLabelColor":  "0x000000",
+
+    "lineBoarderColor": "0xd1d1d1",
+    "kalaokInitColor":  "0xb2bbc7",
+    "kalaokEndColor":   "0x007eff",
+    "dotColor":         "0x333333",
+    "bigNumColor":      "0x007eff",
+    "smallNumColor":    "0x333333",
+}
