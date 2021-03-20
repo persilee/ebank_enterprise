@@ -87,7 +87,7 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
 
                     //提前结清跳转
                     if (_arguments == 'timeDepositRecord') {
-                      Navigator.of(context)..pop()..pop();
+                      Navigator.of(context)..pop();
                       NotificationCenter.instance
                           .postNotification('load', true);
                     }

@@ -432,7 +432,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _amountConfimrButton() {
     return Container(
       margin: EdgeInsets.all(4),
-      width: 73,
+      width: 74,
       height: 23.5,
       decoration: BoxDecoration(
         color: HsgColors.blueTextColor,
@@ -459,7 +459,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _confimrButton() {
     return Container(
       margin: EdgeInsets.all(4),
-      width: 73,
+      width: 74,
       height: 23.5,
       decoration: BoxDecoration(
         color: HsgColors.blueTextColor,

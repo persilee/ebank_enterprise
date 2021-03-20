@@ -123,7 +123,7 @@ class _SetPayPageState extends State<SetPayPage> {
   //提交按钮
   _submitData() async {
     if (_newPwd.text != _confimPwd.text) {
-      Fluttertoast.showToast(msg: S.of(context).differentPwd);
+      HSProgressHUD.showInfo(status: S.of(context).differentPwd);
     } else {
       Navigator.of(context)..pop()..pop()..pop();
       Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
@@ -170,6 +170,7 @@ class InputList extends StatelessWidget {
             child: TextField(
               controller: this.inputValue,
               maxLines: 1, //最大行数
+              keyboardType: TextInputType.number,
               autocorrect: true, //是否自动更正
               autofocus: true, //是否自动对焦
               obscureText: true, //是否是密码

@@ -148,6 +148,7 @@ class _TransferInternalPreviewPageState
                   style: TextStyle(color: Color(0xff7A7A7A), fontSize: 14),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.end,
                 ),
               ),
             ],

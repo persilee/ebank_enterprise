@@ -29,12 +29,12 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   var totalAmt = '';
   var _defaultCcy = '';
   List<CardListBal> cardList;
-  // DepositRecord dataA = DepositRecord('1.65', '6001', 'TAI30', '', '2', '3',
-  //     'USD', '500', '2020-01-17', '2020-07-17', '0', '0');
-  // DepositRecord dataB = DepositRecord('1.75', '6002', 'TAI30', '', '2', '3',
-  //     'HKD', '800', '2020-01-17', '2020-07-17', '0', '0');
-  // DepositRecord dataC = DepositRecord('1.50', '6003', 'TAI30', '', '2', '3',
-  //     'USD', '1000', '2020-01-17', '2020-07-17', '0', '0');
+  DepositRecord dataA = DepositRecord('1.65', '6001', 'TAI30', '', '2', '3',
+      'USD', '500', '2020-01-17', '2020-07-17', '1', '0');
+  DepositRecord dataB = DepositRecord('1.75', '6002', 'TAI30', '', '2', '3',
+      'HKD', '800', '2020-01-17', '2020-07-17', '1', '0');
+  DepositRecord dataC = DepositRecord('1.50', '6003', 'TAI30', '', '2', '3',
+      'USD', '1000', '2020-01-17', '2020-07-17', '1', '0');
   List<DepositRecord> rowList = [];
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
@@ -49,11 +49,11 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     });
 
     //网络请求
-    _loadDeopstData();
-    // rowList.add(dataA);
-    // rowList.add(dataB);
-    // rowList.add(dataC);
-    // rowList.add(dataA);
+    // _loadDeopstData();
+    rowList.add(dataA);
+    rowList.add(dataB);
+    rowList.add(dataC);
+    rowList.add(dataA);
 
     NotificationCenter.instance.addObserver('load', (object) {
       setState(() {
@@ -127,12 +127,12 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           children: [
             Text(
               S.current.due_date,
-              style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+              style: TextStyle(fontSize: 15, color: HsgColors.toDoDetailText),
             ),
             Text(
               //到期时间
               rows[index].mtDate,
-              style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
+              style: TextStyle(fontSize: 15, color: HsgColors.aboutusTextCon),
             ),
           ],
         );
@@ -143,11 +143,11 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
             children: [
               Text(
                 S.current.deposit_amount,
-                style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+                style: TextStyle(fontSize: 15, color: HsgColors.toDoDetailText),
               ),
               Text(
                 '$bal  ${rows[index].ccy}',
-                style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
+                style: TextStyle(fontSize: 15, color: HsgColors.aboutusTextCon),
               )
             ],
           ),
@@ -157,7 +157,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
             children: [
               Text(
                 S.current.interest_rate,
-                style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+                style: TextStyle(fontSize: 15, color: HsgColors.toDoDetailText),
               ),
               Text(
                 //利率
@@ -171,12 +171,12 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
             children: [
               Text(
                 S.current.effective_date,
-                style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+                style: TextStyle(fontSize: 15, color: HsgColors.toDoDetailText),
               ),
               Text(
                 //生效时间
                 rows[index].valDate,
-                style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
+                style: TextStyle(fontSize: 15, color: HsgColors.aboutusTextCon),
               ),
             ],
           ),

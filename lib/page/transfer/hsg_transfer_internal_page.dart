@@ -133,7 +133,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   @override
   void initState() {
     super.initState();
-
     _loadTransferData();
   }
 
@@ -142,6 +141,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     _nameController.dispose();
     _accountController.dispose();
     _remarkController.dispose();
+    _transferMoneyController.dispose();
     super.dispose();
   }
 
