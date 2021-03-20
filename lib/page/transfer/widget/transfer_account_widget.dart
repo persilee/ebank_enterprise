@@ -19,6 +19,8 @@ class TransferAccount extends StatelessWidget {
   final String account;
   //余额
   final String balance;
+  //预计金额
+  final String amount;
   //转账金额控制器
   final TextEditingController transferMoneyController;
   final VoidCallback callback;
@@ -34,6 +36,7 @@ class TransferAccount extends StatelessWidget {
     this.limit,
     this.account,
     this.balance,
+    this.amount,
     this.transferMoneyController,
     this.callback,
     this.payCcyDialog,
@@ -47,11 +50,13 @@ class TransferAccount extends StatelessWidget {
         child: Column(
           children: [
             _limit(limit),
-            _transferAmount(context),
-            _fullLine(),
             _transferAccount(context),
             _fullLine(),
-            _transferCcy(context)
+            _transferAmount(context),
+            _fullLine(),
+            _transferCcy(context),
+            _fullLine(),
+            _estimatedAmount(),
           ],
         ),
       ),
@@ -86,7 +91,12 @@ class TransferAccount extends StatelessWidget {
     return Container(
       color: Colors.white,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Container(
+            padding: EdgeInsets.only(left: 15),
+            child: Text(S.current.transfer_amount),
+          ),
           Container(
             child: FlatButton(
               onPressed: () {
@@ -94,59 +104,76 @@ class TransferAccount extends StatelessWidget {
               },
               child: Row(
                 children: [
-                  Container(
-                    padding: EdgeInsets.only(right: 3),
-                    child: Text(
-                      payCcy,
-                      style: TextStyle(
-                        color: HsgColors.firstDegreeText,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Icon(
-                    Icons.arrow_drop_down_outlined,
-                    color: HsgColors.firstDegreeText,
-                  )
+                  _inputAmount(context),
+                  _ccyWidget(),
                 ],
-              ),
-            ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width / 1.4,
-            child: TextField(
-              //是否自动更正
-              autocorrect: false,
-              //是否自动获得焦点
-              autofocus: false,
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                fontSize: 18,
-                color: HsgColors.firstDegreeText,
-              ),
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
-              ],
-              onChanged: (text) {
-                callback();
-                // text.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1');
-                // moneyChanges(money);
-              },
-              controller: transferMoneyController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: S.current.int_input_tran_amount,
-                hintStyle: TextStyle(
-                  fontSize: 18,
-                  color: HsgColors.textHintColor,
-                ),
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  //金额输入
+  Widget _inputAmount(context) {
+    return Container(
+      width: MediaQuery.of(context).size.width / 2.5,
+      child: TextField(
+        //是否自动更正
+        autocorrect: false,
+        //是否自动获得焦点
+        autofocus: false,
+        textAlign: TextAlign.right,
+        style: TextStyle(
+          fontSize: 18,
+          color: HsgColors.firstDegreeText,
+        ),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+          LengthLimitingTextInputFormatter(12),
+        ],
+        controller: transferMoneyController,
+        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: S.current.int_input_tran_amount,
+          hintStyle: TextStyle(
+            fontSize: 16,
+            color: HsgColors.textHintColor,
+          ),
+        ),
+        onChanged: (text) {
+          callback();
+          // text.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1');
+          // moneyChanges(money);
+        },
+      ),
+    );
+  }
+
+  //币种
+  Widget _ccyWidget() {
+    return Row(
+      children: [
+        Container(
+          // padding: EdgeInsets.only(left: 3),
+          // margin: EdgeInsets.only(left: 3),
+          child: Text(
+            payCcy,
+            style: TextStyle(
+              color: HsgColors.firstDegreeText,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.end,
+          ),
+        ),
+        Icon(
+          Icons.arrow_drop_down_outlined,
+          color: HsgColors.firstDegreeText,
+        ),
+      ],
     );
   }
 
@@ -215,6 +242,20 @@ class TransferAccount extends StatelessWidget {
         },
       ),
     );
+  }
+
+  //预计金额
+  Widget _estimatedAmount() {
+    return Container(
+        padding: EdgeInsets.all(15),
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(S.current.estimated_collection_amount),
+            Text(FormatUtil.formatSringToMoney(amount)),
+          ],
+        ));
   }
 
   //实线

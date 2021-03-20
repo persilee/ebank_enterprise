@@ -6,6 +6,8 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/add_partner.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -33,22 +35,35 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   var _swiftAdress = '';
   var _bankCode = '';
   final String _transferType_0 = S.current.transfer_type_0;
-  final String _transferType_2 = S.current.transfer_type_2;
+  final String _transferType_1 = S.current.transfer_type_1;
   var _nameController = TextEditingController();
   var _acountController = TextEditingController();
   var _smsController = TextEditingController();
   var _aliasController = TextEditingController();
   var _centerSwiftController = TextEditingController();
   var _payeeAdressController = TextEditingController();
+  var _bankSwiftController = TextEditingController();
   bool _showInternational = false; //国际转账
   var _alias = '';
   var words = 20;
   String _countryText = '';
   List<String> countryList = ['中国', '荷兰', '美国', '俄罗斯'];
   String _language = Intl.getCurrentLocale();
+  //转账费用
+  String _transferFee = '';
+  List<String> transferFeeList = [];
+  int _transferFeeIndex = 0;
+  //汇款用途
+  String _feeUse = '';
+  List<String> feeUse = [];
+  int _feeUseIndex = 0;
+
+  bool _isSelect = true;
   @override
   void initState() {
     super.initState();
+    _getTransferFeeList();
+    _getFeeUseList();
     //备注最多输入words个文字
     _aliasController.addListener(() {
       String text = _aliasController.text;
@@ -78,6 +93,43 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     _swiftAdress = S.current.bank_swift;
   }
 
+//获取转账费用列表
+  Future _getTransferFeeList() async {
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq("PAYS_METHOD"), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        transferFeeList.clear();
+        data.publicCodeGetRedisRspDtoList.forEach((e) {
+          if (_language == 'zh_CN') {
+            transferFeeList.add(e.cname);
+          } else {
+            transferFeeList.add(e.name);
+          }
+        });
+      }
+    });
+  }
+
+  //获取汇款用途列表
+  Future _getFeeUseList() async {
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq("ROLL_IN_PURPOSE"), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        feeUse.clear();
+        data.publicCodeGetRedisRspDtoList.forEach((e) {
+          if (_language == 'zh_CN') {
+            feeUse.add(e.cname);
+          } else {
+            feeUse.add(e.name);
+          }
+        });
+      }
+    });
+  }
+
+  //加载数据
   _loadData() {
     String myTransferType;
     String _centerSwiftReq;
@@ -87,7 +139,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     _branch == S.current.optional ? _branchReq = '' : _branchReq = _branch;
     if (_transferType == _transferType_0) {
       myTransferType = '0';
-    } else if (_transferType == _transferType_2) {
+    } else if (_transferType == _transferType_1) {
       myTransferType = '2';
     }
     if (_showInternational) {
@@ -186,8 +238,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           padding: EdgeInsets.only(top: 10, bottom: 16),
           child: _inputFrame(
             S.current.receipt_side_name,
-            _inputField(
-                _nameController, S.current.please_input, TextInputType.text),
+            _inputField(_nameController, S.current.please_input,
+                TextInputType.text, 35),
           ),
         ),
         Divider(height: 0.5, color: HsgColors.divider),
@@ -197,7 +249,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           child: _inputFrame(
             S.current.receipt_side_account,
             _inputField(_acountController, S.current.please_input,
-                TextInputType.number),
+                TextInputType.number, 20),
           ),
         ),
         Divider(height: 0.5, color: HsgColors.divider),
@@ -277,8 +329,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           padding: EdgeInsets.only(top: 16, bottom: 16),
           child: _inputFrame(
             S.current.transfer_postscript,
-            _inputField(
-                _aliasController, S.current.word_limit_5, TextInputType.text),
+            _inputField(_aliasController, S.current.word_limit_5,
+                TextInputType.text, 140),
           ),
         ),
       ],
@@ -290,7 +342,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       String _type;
       if (_transferType == _transferType_0) {
         _type = '0';
-      } else if (_transferType == _transferType_2) {
+      } else if (_transferType == _transferType_1) {
         _type = '2';
       }
       Navigator.pushNamed(context, pageSelectBank, arguments: _type)
@@ -304,6 +356,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             _bankCode = _bank.bankCode;
             _check();
           });
+        } else {
+          _isSelect = false;
         }
       });
     } else {
@@ -352,39 +406,6 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     return Container(
       child: Column(
         children: [
-          //银行
-          GestureDetector(
-            onTap: () {
-              _bankTap(context);
-            },
-            child: Container(
-              color: Colors.white,
-              padding: EdgeInsets.only(top: 16, bottom: 16),
-              child: _inputFrame(
-                S.current.bank_name,
-                _inputSelector(_bankName, S.of(context).please_select),
-              ),
-            ),
-          ),
-          Divider(height: 0.5, color: HsgColors.divider),
-          //银行SWIFT
-          Container(
-            padding: EdgeInsets.only(top: 16, bottom: 16),
-            child: _inputFrame(
-              S.current.bank_swift,
-              _mutableText(_swiftAdress, S.current.bank_swift),
-            ),
-          ),
-          Divider(height: 0.5, color: HsgColors.divider),
-          //中间行SWFIT
-          Container(
-            height: 48,
-            child: _inputFrame(
-              S.current.middle_bank_swift,
-              _onlyTextField(_centerSwiftController),
-            ),
-          ),
-          Divider(height: 0.5, color: HsgColors.divider),
           //国家地区
           SelectInkWell(
             title: S.current.state_area,
@@ -400,23 +421,127 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               });
             },
           ),
+          //银行
+          // _isSelect ?
+          GestureDetector(
+            onTap: () {
+              _bankTap(context);
+            },
+            child: Container(
+              color: Colors.white,
+              padding: EdgeInsets.only(top: 16, bottom: 16),
+              child: _inputFrame(
+                S.current.bank_name,
+                _inputSelector(_bankName, S.of(context).please_select),
+              ),
+            ),
+          ),
+          // : TextFieldContainer(
+          //     title: S.current.bank_name,
+          //     keyboardType: TextInputType.text,
+          //     controller: _bankSwiftController,
+          //     callback: _check,
+          //     length: 105,
+          //   ),
+          Divider(height: 0.5, color: HsgColors.divider),
+          //银行SWIFT
+          // _isSelect ?
+          Container(
+            padding: EdgeInsets.only(top: 16, bottom: 16),
+            child: _inputFrame(
+              S.current.bank_swift,
+              _mutableText(_swiftAdress, S.current.bank_swift),
+            ),
+          ),
+          // :TextFieldContainer(
+          //     title: S.current.bank_swift,
+          //     keyboardType: TextInputType.text,
+          //     controller: _bankSwiftController,
+          //     callback: _check,
+          //     length: 11,
+          //   ),
+          Divider(height: 0.5, color: HsgColors.divider),
+          //中间行SWFIT
+          Container(
+            height: 48,
+            child: _inputFrame(
+              S.current.middle_bank_swift,
+              _onlyTextField(_centerSwiftController),
+            ),
+          ),
+          Divider(height: 0.5, color: HsgColors.divider),
           _payeeAdress(_payeeAdressController),
+          Divider(height: 0.5, color: HsgColors.divider),
+          //转账费用
+          SelectInkWell(
+            title: S.current.Transfer_fee,
+            item: _transferFee,
+            onTap: () {
+              _selectTransferFee();
+            },
+          ),
+          Divider(height: 0.5, color: HsgColors.divider),
+          //汇款用途
+          SelectInkWell(
+            title: S.current.remittance_usage,
+            item: _feeUse,
+            onTap: () {
+              _selectFeeUse();
+            },
+          ),
           Divider(height: 0.5, color: HsgColors.divider),
         ],
       ),
     );
   }
 
+  //转账费用
+  _selectTransferFee() async {
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return BottomMenu(
+            title: S.current.Transfer_fee,
+            items: transferFeeList,
+          );
+        });
+    if (result != null && result != false) {
+      _transferFee = transferFeeList[result];
+    }
+    setState(() {
+      _transferFeeIndex = result;
+    });
+  }
+
+  //汇款用途
+  _selectFeeUse() async {
+    final result = await showHsgBottomSheet(
+      context: context,
+      builder: (context) {
+        return BottomMenu(
+          title: S.current.remittance_usage,
+          items: feeUse,
+        );
+      },
+    );
+    if (result != null && result != false) {
+      _feeUse = feeUse[result];
+    }
+    setState(() {
+      _feeUseIndex = result;
+    });
+  }
+
   //转账类型弹窗
   _transferTypeDialog() {
     SinglePicker.showStringPicker(
       context,
-      data: [S.current.transfer_type_0, S.current.transfer_type_2],
+      data: [S.current.transfer_type_0, S.current.transfer_type_1],
       title: S.current.transfer_type,
       clickCallBack: (int index, var str) {
         setState(() {
           _transferType = str;
-          if (_transferType == S.current.transfer_type_2) {
+          if (_transferType == S.current.transfer_type_1) {
             _showInternational = true;
           } else if (_transferType == S.current.transfer_type_0) {
             _showInternational = false;
@@ -444,7 +569,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               controller: _inputController,
               textAlign: TextAlign.end,
               style: TextStyle(fontSize: 14, color: Colors.black87),
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 isCollapsed: true,
                 hintText: S.current.payee_address,
@@ -505,9 +630,12 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       child: TextField(
         style: TextStyle(fontSize: 14),
         textAlign: TextAlign.end,
-        keyboardType: TextInputType.number,
+        keyboardType: TextInputType.text,
         controller: _inputController,
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        inputFormatters: [
+          // FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(11),
+        ],
         decoration: InputDecoration.collapsed(
           border: InputBorder.none,
           hintText: S.current.not_required,
@@ -573,7 +701,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
 
   //通用文字输入框(传入监听器)
   Widget _inputField(TextEditingController _inputController, String hint,
-      TextInputType inputType) {
+      TextInputType inputType, int length) {
     return Expanded(
       child: TextField(
         textAlign: TextAlign.end,
@@ -586,6 +714,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             color: HsgColors.textHintColor,
           ),
         ),
+        inputFormatters: <TextInputFormatter>[
+          LengthLimitingTextInputFormatter(length),
+        ],
         onChanged: (text) {
           _check();
         },

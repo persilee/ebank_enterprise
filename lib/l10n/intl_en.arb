@@ -83,7 +83,7 @@
   "branch_office": "Branch",
   "sms_notification": "Sms Notification",
   "alias": "Remark",
-  "word_limit_5": "Within 5 Chinese Characters",
+  "word_limit_5": "Within 140 byte",
   "search": "Search",
   "select_bank": "Select Bank",
   "select_city": "Select City",
@@ -307,7 +307,7 @@
   "payee_name": "Beneficiary Name",
   "transfer_to_account": "Transfer To",
   "transfer_from_account": "Transfer From",
-  "transfer_from_ccy": "Transfer currency",
+  "transfer_from_ccy": "Payee currency",
   "remitter_address": "Remitter's Address",
   "payee_address": "Beneficiary Address",
   "state_area": "Country/Region",
@@ -441,33 +441,23 @@
   "openAccout_application_results": "Application Results",
   "openAccout_application_results_title": "Account opening application submitted successfully",
   "openAccout_application_results_content": "We will complete the review within 3 working days, and the review result will be notified to you by email, or you can log in to the APP to check the progress.",
-
-
-
-
-
-  "pay":"Pay",
-
-
-
-
-
-
   "amount":"Amount",
-  "custom_autofilter": "Custom Autofilter",
-  "transfer_type_0_short": "Inner",
-  "transfer_type_1_short": "Inter",
-  "add_payee": "Add Payee",
-  "bank_name": "Bank Name",
-  "transfer_the_preview": "Transfer The Preview",
-  "payment_currency": "Payment Currency",
-  "into_account": "Into Account",
-  "transfer_into_currency": "Transfer Into Currency",
-  "preview_explain1": "explain：",
-  "preview_explain2": "The specific amount transferred out shall be the amount calculated at the exchange rate at the time of transaction",
-  "remitter_address1": "Remitter's Address",
-  "receiver_address": "Receiver's address",
-  "forget_username": "Forget UserName",
+  "custom_autofilter":"Custom Autofilter",
+  "transfer_type_0_short":"Inner",
+  "transfer_type_1_short":"Inter",
+  "add_payee":"Add Payee",
+  "bank_name":"Bank Name",
+  "transfer_the_preview":"Transfer The Preview",
+  "payment_currency":"Payment Currency",
+  "into_account":"Into Account",
+  "transfer_into_currency":"Transfer Into Currency",
+  "preview_explain1":"explain：",
+  "preview_explain2":"The specific amount transferred out shall be the amount calculated at the exchange rate at the time of transaction",
+  "remitter_address1":"Remitter's Address",
+  "receiver_address":"Receiver's address",
+  "forget_username":"Forget UserName",
+  "estimated_collection_amount":"Estimated Collection Amount",
+  "pay":"Pay",
   "open_account_apply": "Apply Account",
   "open_account_rejected_tip": "Review Failed",
   "open_account_reapply": "Reapply",
