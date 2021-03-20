@@ -437,7 +437,10 @@ class _MinePageState extends State<MinePage> {
               Navigator.pushNamed(context, pageUserInformation,
                       arguments: _userInfoResp)
                   .then((value) {
-                setState(() {});
+                setState(() {
+                  _language = Intl.getCurrentLocale();
+                });
+                _changeUserInfoShow(_userInfoResp);
               });
             },
           ),
@@ -693,8 +696,10 @@ class _MinePageState extends State<MinePage> {
         context: context,
         builder: (context) {
           return HsgAlertDialog(
-            title: S.current.prompt,
-            message: S.current.select_transfer_type_first,
+            // title: S.current.prompt,
+            // message: S.current.select_transfer_type_first,
+            title: '退出',
+            message: '确定要退出手机银行账户吗?',
             positiveButton: S.current.confirm,
             negativeButton: S.current.cancel,
           );

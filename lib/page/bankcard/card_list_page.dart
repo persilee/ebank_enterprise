@@ -89,7 +89,8 @@ class _CardListPageState extends State<CardListPage> {
       color: Colors.white,
       child: Column(
         children: [
-          _infoFrame("${S.current.account_balance}(CNY)", '暂无'),
+          _infoFrame("${S.current.account_balance}(CNY)",
+              FormatUtil.formatSringToMoney('50000')),
           // FormatUtil.formatSringToMoney(_cardLimitList[position].totalAmt)),
           _infoFrame(
               S.current.single_transfer_limit,
