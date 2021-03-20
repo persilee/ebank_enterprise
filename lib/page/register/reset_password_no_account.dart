@@ -43,11 +43,12 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
               child: ListView(
                 children: <Widget>[
                   //注册标题
-                  getRegisterTitle('重置密码'),
+                  getRegisterTitle(S.current.reset_password),
                   //输入新密码
-                  getRegisterRow('输入新密码', _newPassword, true),
+                  getRegisterRow(
+                      S.current.password_need_num, _newPassword, true),
                   //再次输入密码
-                  getRegisterRow('再次输入新密码', _oldPassword, true),
+                  getRegisterRow(S.current.placeConfimPwd, _oldPassword, true),
                   //下一步
                   Container(
                     width: MediaQuery.of(context).size.width,

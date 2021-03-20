@@ -29,8 +29,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           color: Colors.white,
           child: ListView(
             children: [
-              //欢迎注册
-              // getRegisterTitle('修改密码成功'),
               Container(
                 padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
                 child: Image.asset(
@@ -45,7 +43,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
                       child: Text(
-                        '重置密码成功',
+                        S.current.reset_password_success,
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),

@@ -100,22 +100,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //国家/地区
   List<String> countryList = ['中国', '中国香港', '荷兰'];
   //转账费用
-  List<String> transferFeeList = ['收款人交易', '本人交易', '各付各行'];
+  List<String> transferFeeList = ['汇款方支付', '收款方支付', '各付各行'];
   //汇款用途
   List<String> feeUse = [
-    '贷款',
-    '加工费',
-    '运输费',
-    '投资款',
-    '还款/供款',
-    '学费',
-    '参与费',
-    '工资/花红/佣金',
-    '服务费',
-    '生活费',
-    '存款转移',
-    '房地产投资',
-    '其他',
+    '个人日常生活开销',
+    '地产投资',
+    '海外公司或项目投资',
+    '金融理財投资，如股票、债券、期贷、信托等',
+    '其他目的',
   ];
   //List<String> ccyListPlay = ['CNY', 'HKD', 'EUR'];
 
@@ -774,39 +766,42 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     var rightExpand = Expanded(
       child: Container(
         child: TextField(
-            //是否自动更正
-            autocorrect: false,
-            //是否自动获得焦点
-            autofocus: false,
-            controller: _controller,
-            onChanged: (payeeName) {
-              moneyChange(payeeName);
-              print("这个是 onChanged 时刻在监听，输出的信息是：$payeeName");
-            },
-            textAlign: TextAlign.right,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: righteText,
-              hintStyle: TextStyle(
-                fontSize: 14,
-                color: HsgColors.textHintColor,
-              ),
-            )),
+          //是否自动更正
+          autocorrect: false,
+          //是否自动获得焦点
+          autofocus: false,
+          controller: _controller,
+          onChanged: (payeeName) {
+            moneyChange(payeeName);
+          },
+          textAlign: TextAlign.right,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: righteText,
+            hintStyle: TextStyle(
+              fontSize: 14,
+              color: HsgColors.textHintColor,
+            ),
+          ),
+        ),
       ),
     );
     var _leftText = Container(
-      height: MediaQuery.of(context).size.width / 7,
+      // height: MediaQuery.of(context).size.width / 7,
       color: Colors.white,
       padding: EdgeInsets.only(right: 15),
       child: Row(
         children: [
           Container(
+            width: 150,
             child: Text(
               leftText,
               style: TextStyle(
                 color: HsgColors.firstDegreeText,
                 fontSize: 14,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           rightExpand

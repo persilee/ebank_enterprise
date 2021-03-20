@@ -510,7 +510,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         decoration: InputDecoration.collapsed(
           border: InputBorder.none,
-          hintText: S.current.can_be_empty,
+          hintText: S.current.not_required,
           hintStyle: TextStyle(
             fontSize: 14,
             color: HsgColors.textHintColor,
@@ -531,7 +531,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           child: Text(
             left,
             style: TextStyle(color: HsgColors.firstDegreeText),
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
         ),

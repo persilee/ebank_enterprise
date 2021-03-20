@@ -56,9 +56,9 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
               child: ListView(
                 children: [
                   //标题
-                  getRegisterTitle('忘记密码'),
+                  getRegisterTitle(S.current.fotget_password),
                   //姓名
-                  getRegisterRow('输入姓名', _userName, false),
+                  getRegisterRow(S.current.please_input_name, _userName, false),
                   //  证件类型
                   Container(
                     margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
@@ -67,13 +67,14 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         color: Color(0xFFF5F7F9)),
                     child: SelectInkWell(
-                      title: '证件类型',
+                      title: S.current.idType,
                       item: _certType,
                       onTap: _idCardListBottomSheet,
                     ),
                   ),
                   //证件号码
-                  getRegisterRow('输入证件号码', _cardNumber, false), //确定按钮
+                  getRegisterRow(
+                      S.current.placeIdNumber, _cardNumber, false), //确定按钮
                   Container(
                     margin: EdgeInsets.all(40), //外边距
                     height: 44.0,
