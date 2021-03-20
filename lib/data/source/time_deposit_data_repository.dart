@@ -10,8 +10,9 @@ import 'model/time_deposit_product.dart';
 
 class TimeDepositDataRepository {
   //获取定期产品
-  Future<List<TimeDepositProductResp>> getGetTimeDepositProduct(String tag) {
-    return request('/tdep/timeDeposit/getTdepProducts', {}, tag, (data) {
+  Future<List<TimeDepositProductResp>> getGetTimeDepositProduct(
+      String tag, TimeDepositProductReq req) {
+    return request('/tdep/timeDeposit/getTdepProducts', req, tag, (data) {
       List<TimeDepositProductResp> result = [];
       (data as List).forEach((element) {
         result.add(TimeDepositProductResp.fromJson(element));

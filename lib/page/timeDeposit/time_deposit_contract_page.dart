@@ -24,7 +24,7 @@ import '../../page_route.dart';
 
 class TimeDepositContract extends StatefulWidget {
   final TdepProducHeadDTO productList;
-  final List<TdepProducDTOList> producDTOList;
+  final List<TdepProductDTOList> producDTOList;
   TimeDepositContract({Key key, this.productList, this.producDTOList})
       : super(key: key);
 
@@ -45,7 +45,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String auctCale = '0';
   String depositType = '0';
   String rate = '0';
-  String matAmt = '0.00';
+  String matAmt = '2,000.00';
   List<RemoteBankCard> cards = [];
   RemoteBankCard card;
   String custID;
@@ -54,7 +54,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String instCode = '';
 
   TdepProducHeadDTO productList;
-  List<TdepProducDTOList> producDTOList;
+  List<TdepProductDTOList> producDTOList;
   _TimeDepositContractState(this.productList, this.producDTOList);
 
   TimeDepositContractTrialReq contractTrialReq;
@@ -159,11 +159,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   }
 
   //显示选择的值
-  Widget _display(String display) {
+  Widget _display(String display, String leftText) {
     return Container(
       width: ((MediaQuery.of(context).size.width - 32) / 2) - 20,
       alignment: Alignment.centerRight,
-      child: display == _changedAccountTitle
+      child: leftText == S.current.payment_account
           ? (display == S.current.hint_please_select
               ? Text(
                   display,
@@ -188,7 +188,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                     Container(
                       margin: EdgeInsets.only(bottom: 15),
                       child: Text(
-                        '支付 USD:2,000.00',
+                        S.current.pay + ' USD:2,000.00',
                         style: TextStyle(
                           color: HsgColors.secondDegreeText,
                           fontSize: 13.0,
@@ -325,31 +325,35 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
   // 选择存款期限按钮
   Widget _termChangeBtn(
-      BuildContext context, List<TdepProducDTOList> producDTOList) {
-    return Column(
-      children: [
-        Container(
-            child: FlatButton(
-          onPressed: () {
-            _selectTerm(context, producDTOList);
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              _leftText(S.current.deposit_time_limit),
-              _display(_changedTermBtnTiTle),
-              _rightArrow(),
-            ],
-          ),
-        )),
-        _background()
-      ],
+      BuildContext context, List<TdepProductDTOList> producDTOList) {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          Container(
+              child: FlatButton(
+            onPressed: () {
+              _selectTerm(context, producDTOList);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _leftText(S.current.deposit_time_limit),
+                _display(_changedTermBtnTiTle, S.current.deposit_time_limit),
+                _rightArrow(),
+              ],
+            ),
+          )),
+          _background()
+        ],
+      ),
     );
   }
 
 //选择付款账户按钮
   Widget _accountChangeBtn() {
     return Container(
+      color: Colors.white,
       child: FlatButton(
         onPressed: () {
           _selectAccount(context);
@@ -358,7 +362,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             _leftText(S.current.payment_account),
-            _display(_changedAccountTitle),
+            _display(_changedAccountTitle, S.current.payment_account),
             _rightArrow(),
           ],
         ),
@@ -369,6 +373,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   //选择结算账户按钮
   Widget _settAcChangeBtn() {
     return Container(
+      color: Colors.white,
       child: FlatButton(
         onPressed: () {
           _selectSettAc(context);
@@ -377,7 +382,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             _leftText(S.current.settlement_account),
-            _display(_changedSettAcTitle),
+            _display(_changedSettAcTitle, S.current.settlement_account),
             _rightArrow(),
           ],
         ),
@@ -388,6 +393,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   //选择到期指示按钮
   Widget _instructionChangeBtn() {
     return Container(
+      color: Colors.white,
       child: FlatButton(
         onPressed: () {
           _selectInstruction(context);
@@ -396,7 +402,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             _leftText(S.current.due_date_indicate),
-            _display(_changedInstructionTitle),
+            _display(_changedInstructionTitle, S.current.due_date_indicate),
             _rightArrow(),
           ],
         ),
@@ -406,41 +412,42 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
 //存款期限弹窗
   _selectTerm(
-      BuildContext context, List<TdepProducDTOList> producDTOList) async {
+      BuildContext context, List<TdepProductDTOList> producDTOList) async {
     List<String> depositTerms = [];
     List<String> terms = [];
     List<String> rates = [];
     List<String> accuPeriods = [];
     List<String> auctCales = [];
     for (var i = 0; i < producDTOList.length; i++) {
-      switch (producDTOList[i].accuPeriod) {
+      switch (producDTOList[i].minAuctCale) {
         case '2':
-          terms.add(producDTOList[i].auctCale + S.current.months);
-          depositTerms.add(producDTOList[i].auctCale);
+          terms.add(producDTOList[i].minAuctCale + S.current.months);
+          depositTerms.add(producDTOList[i].minAuctCale);
           break;
         case '3':
-          terms.add((int.parse(producDTOList[i].auctCale) * 3).toString() +
+          terms.add((int.parse(producDTOList[i].minAuctCale) * 3).toString() +
               S.current.months);
           depositTerms
-              .add((int.parse(producDTOList[i].auctCale) * 3).toString());
+              .add((int.parse(producDTOList[i].minAuctCale) * 3).toString());
           break;
         case '4':
-          terms.add((int.parse(producDTOList[i].auctCale) * 6).toString() +
+          terms.add((int.parse(producDTOList[i].minAuctCale) * 6).toString() +
               S.current.months);
           depositTerms
-              .add((int.parse(producDTOList[i].auctCale) * 6).toString());
+              .add((int.parse(producDTOList[i].minAuctCale) * 6).toString());
           break;
         default:
           {
-            terms.add((int.parse(producDTOList[i].auctCale) * 12).toString() +
-                S.current.months);
+            terms.add(
+                (int.parse(producDTOList[i].minAuctCale) * 12).toString() +
+                    S.current.months);
             depositTerms
-                .add((int.parse(producDTOList[i].auctCale) * 12).toString());
+                .add((int.parse(producDTOList[i].minAuctCale) * 12).toString());
           }
       }
-      rates.add(producDTOList[i].annualInterestRate);
-      accuPeriods.add(producDTOList[i].accuPeriod);
-      auctCales.add(producDTOList[i].auctCale);
+      rates.add(producDTOList[i].minRate);
+      accuPeriods.add(producDTOList[i].minAccuPeriod);
+      auctCales.add(producDTOList[i].minAuctCale);
       depositType = producDTOList[i].depositType;
     }
 
@@ -467,7 +474,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
   //产品名称和年利率
   Widget _titleSection(
-      TdepProducHeadDTO tdepProduct, List<TdepProducDTOList> producDTOList) {
+      TdepProducHeadDTO tdepProduct, List<TdepProductDTOList> producDTOList) {
     String name;
     String language = Intl.getCurrentLocale();
     if (language == 'zh_CN') {
@@ -475,13 +482,16 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     } else {
       name = productList.engName;
     }
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _displayColumn(S.current.product_name, name),
-        _verticalLine(),
-        _displayColumn(S.current.year_interest_rate, rate + '%'),
-      ],
+    return Container(
+      color: Colors.white,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _displayColumn(S.current.product_name, name),
+          _verticalLine(),
+          _displayColumn(S.current.year_interest_rate, rate + '%'),
+        ],
+      ),
     );
   }
 
@@ -490,48 +500,51 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     bal = (inputValue.text).length == 0 ? 0.00 : double.parse(inputValue.text);
 
     //按计提周期计算存款期限
-    switch (producDTOList[0].accuPeriod) {
+    switch (producDTOList[0].minAuctCale) {
       case '2':
-        _changedTermBtnTiTle = (producDTOList[0].auctCale + S.current.months);
+        _changedTermBtnTiTle =
+            (producDTOList[0].minAuctCale + S.current.months);
         break;
       case '3':
         _changedTermBtnTiTle =
-            ((int.parse(producDTOList[0].auctCale) * 3).toString() +
+            ((int.parse(producDTOList[0].minAuctCale) * 3).toString() +
                 S.current.months);
         break;
       case '4':
         _changedTermBtnTiTle =
-            ((int.parse(producDTOList[0].auctCale) * 6).toString() +
+            ((int.parse(producDTOList[0].minAuctCale) * 6).toString() +
                 S.current.months);
         break;
       default:
         {
           _changedTermBtnTiTle =
-              ((int.parse(producDTOList[0].auctCale) * 12).toString() +
+              ((int.parse(producDTOList[0].minAuctCale) * 12).toString() +
                   S.current.months);
         }
     }
-    accuPeriod = producDTOList[0].accuPeriod;
-    auctCale = producDTOList[0].auctCale;
+    accuPeriod = producDTOList[0].minAuctCale;
+    auctCale = producDTOList[0].minAuctCale;
     depositType = producDTOList[0].depositType;
-    rate = FormatUtil.formatNum(
-        double.parse(producDTOList[0].annualInterestRate), 2);
+    rate = FormatUtil.formatNum(double.parse(producDTOList[0].minRate), 2);
 
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.only(left: 15.0, top: 10),
-          child: Row(
-            children: [
-              _showCcy(),
-              _inputBal(),
-            ],
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.only(left: 15.0, top: 10),
+            child: Row(
+              children: [
+                _showCcy(),
+                _inputBal(),
+              ],
+            ),
           ),
-        ),
-        _line(),
-        _showMatAmt(),
-        _background(),
-      ],
+          _line(),
+          _showMatAmt(),
+          _background(),
+        ],
+      ),
     );
   }
 
@@ -565,15 +578,15 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 //结算账户弹窗
   _selectSettAc(BuildContext context) async {
     List<String> bankCards = [];
-    List<String> accounts = ['4000 0002 2203', '4000 0002 2204'];
+    List<String> accounts = [];
     List<String> ciNames = [];
-    // for (RemoteBankCard card in cards) {
-    //   bankCards.add(card.cardNo);
-    //   ciNames.add((card.ciName));
-    // }
-    // for (var i = 0; i < bankCards.length; i++) {
-    //   accounts.add(FormatUtil.formatSpace4(bankCards[i]));
-    // }
+    for (RemoteBankCard card in cards) {
+      bankCards.add(card.cardNo);
+      ciNames.add((card.ciName));
+    }
+    for (var i = 0; i < bankCards.length; i++) {
+      accounts.add(FormatUtil.formatSpace4(bankCards[i]));
+    }
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) => HsgBottomSingleChoice(
@@ -635,7 +648,23 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                   _changedInstructionTitle == S.current.hint_please_select)
               ? null
               : () {
-                  _openBottomSheet();
+                  //              _loadContractData(
+                  //   accuPeriod,
+                  //   auctCale,
+                  //   bal,
+                  //   productList.bppdCode,
+                  //   productList.ccy,
+                  //   custID,
+                  //   depositType,
+                  //   instCode,
+                  //   _changedAccountTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
+                  //   '',
+                  //   _changedSettAcTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
+                  //   '',
+                  //   '',
+                  // );
+                  Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
+                      arguments: 'timeDepositProduct');
                 },
           color: HsgColors.accent,
           disabledColor: HsgColors.btnDisabled,
@@ -649,34 +678,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         ),
       ),
     );
-  }
-
-//输入密码弹窗
-  void _openBottomSheet() async {
-    final isPassword = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return HsgPasswordDialog(
-            title: S.current.input_password,
-          );
-        });
-    if (isPassword != null && isPassword == true) {
-      _loadContractData(
-        accuPeriod,
-        auctCale,
-        bal,
-        productList.bppdCode,
-        productList.ccy,
-        custID,
-        depositType,
-        instCode,
-        _changedAccountTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
-        '',
-        _changedSettAcTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
-        '',
-        '',
-      );
-    }
   }
 
   @override

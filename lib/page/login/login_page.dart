@@ -35,11 +35,11 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
   TextEditingController _accountTC =
-      TextEditingController(text: 'pengyikang'); //fangluyao
+      TextEditingController(text: 'wangluyao'); //fangluyao
   TextEditingController _passwordTC =
-      TextEditingController(text: 'Aa123456@'); //b0S25X5Y
-  var _account = 'pengyikang'; //'blk101';
-  var _password = 'Aa123456@'; //'4N0021S8';
+      TextEditingController(text: '13w89WZ8@'); //b0S25X5Y
+  var _account = 'wangluyao'; //'blk101';
+  var _password = '13w89WZ8@'; //'4N0021S8';
 
   @override
   void initState() {
@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       Container(
                         margin: EdgeInsets.only(left: 15),
-                        child: ForgetButton('忘记用户名', () {
+                        child: ForgetButton(S.current.forget_username, () {
                           setState(() {
                             Navigator.pushNamed(context, pageForgetUserName);
                             print('忘记密码');
