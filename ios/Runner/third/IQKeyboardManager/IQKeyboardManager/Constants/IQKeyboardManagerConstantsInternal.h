@@ -1,8 +1,7 @@
 //
-//  UIImage+AFNetworking.h
-//  
-//
-//  Created by Paulo Ferreira on 08/07/15.
+// IQKeyboardManagerConstantsInternal.h
+// https://github.com/hackiftekhar/IQKeyboardManager
+// Copyright (c) 2013-16 Iftekhar Qurashi.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,14 +21,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#if TARGET_OS_IOS || TARGET_OS_TV
+#ifndef IQKeyboardManagerConstantsInternal_h
+#define IQKeyboardManagerConstantsInternal_h
 
-#import <UIKit/UIKit.h>
-
-@interface UIImage (AFNetworking)
-
-+ (UIImage*) safeImageWithData:(NSData*)data;
-
-@end
 
 #endif
