@@ -547,7 +547,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                 ),
               ),
             ),
-<<<<<<< HEAD
             _submitButton(),
           ],
         ),
@@ -583,12 +582,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             ),
           ],
         ),
-=======
-          ),
-          //提交按钮
-          getButton(S.current.submit, _isClick),
-        ],
->>>>>>> fun-qianli-sdk
       ),
     );
   }

@@ -10,11 +10,8 @@ import 'package:ebank_mobile/data/source/model/get_pay_collect_detail.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_record.dart';
 import 'package:ebank_mobile/data/source/pay_collect_detail_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
-<<<<<<< HEAD
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
-=======
->>>>>>> fun-qianli-sdk
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -51,24 +48,16 @@ class _DetailListPageState extends State<DetailListPage> {
   String _time = intl.S.current.the_same_month; //时间
   int _page = 1; //几页数据
   String _endDate =
-<<<<<<< HEAD
       DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now()); //结束时间
-=======
-  DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now()); //结束时间
->>>>>>> fun-qianli-sdk
   String _end = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示结束时间
   String _start = formatDate(
       DateTime(DateTime.now().year, DateTime.now().month, 1),
       [yyyy, mm, dd]); //显示开始时间
   List<TransferRecord> _transferHistoryList = []; //转账记录列表
   GlobalKey _textKey = GlobalKey();
-<<<<<<< HEAD
   TextEditingController _moneyController = TextEditingController();
 
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
-=======
-
->>>>>>> fun-qianli-sdk
 
   @override
   // ignore: must_call_super
@@ -124,7 +113,6 @@ class _DetailListPageState extends State<DetailListPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-<<<<<<< HEAD
         //  GestureDetector(
         //    onTap: _cupertinoPicker,
         //    child: Row(
@@ -132,16 +120,6 @@ class _DetailListPageState extends State<DetailListPage> {
         //      children: <Widget>[Text(_date), Icon(Icons.arrow_drop_down)],
         //    ),
         //  ),
-=======
-//        GestureDetector(
-//          onTap: _cupertinoPicker,
-//          child: Row(
-//            mainAxisAlignment: MainAxisAlignment.center,
-//            children: <Widget>[Text(_date), Icon(Icons.arrow_drop_down)],
-//          ),
-//        ),
-
->>>>>>> fun-qianli-sdk
         _popDialog(),
         GestureDetector(
           onTap: _accountList,
@@ -168,11 +146,7 @@ class _DetailListPageState extends State<DetailListPage> {
       isRelative: true,
       buttonBuilder: (BuildContext context) {
         return GestureDetector(
-<<<<<<< HEAD
           child: _headerText('自定义筛选'),
-=======
-          child: _headerText(_time),
->>>>>>> fun-qianli-sdk
         );
       },
       windowBuilder: (BuildContext popcontext, Animation<double> animation,
@@ -208,7 +182,6 @@ class _DetailListPageState extends State<DetailListPage> {
   //顶部弹窗内容
   Widget _popDialogContent(BuildContext popcontext) {
     return Container(
-<<<<<<< HEAD
         color: Colors.white,
         height: 260,
         padding: EdgeInsets.all(10),
@@ -231,23 +204,6 @@ class _DetailListPageState extends State<DetailListPage> {
 
         // ),
         );
-=======
-      color: Colors.white,
-      height: 180,
-      padding: EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //交易时间
-          _timeText(intl.S.of(context).transaction_time),
-          _tradingHour(),
-          //自定义时间
-          _timeText(intl.S.of(context).user_defined),
-          _userDefind(popcontext),
-        ],
-      ),
-    );
->>>>>>> fun-qianli-sdk
   }
 
   //时间文本
@@ -378,10 +334,6 @@ class _DetailListPageState extends State<DetailListPage> {
       children: [
         //开始时间按钮
         _timeButton(_start, 0, popcontext),
-<<<<<<< HEAD
-
-=======
->>>>>>> fun-qianli-sdk
         //至
         Text(
           intl.S.of(context).zhi,
@@ -399,7 +351,6 @@ class _DetailListPageState extends State<DetailListPage> {
     );
   }
 
-<<<<<<< HEAD
   Widget _confimrButton() {
     return Container(
       margin: EdgeInsets.all(4),
@@ -539,73 +490,6 @@ class _DetailListPageState extends State<DetailListPage> {
       ),
     );
   }
-=======
-Widget _confimrButton() {
-  return Container(
-    margin: EdgeInsets.all(4),
-    width: 73,
-    height: 23.5,
-    decoration: BoxDecoration(
-      color: HsgColors.blueTextColor,
-      borderRadius: BorderRadius.circular(5),
-    ),
-    child: OutlineButton(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      borderSide: BorderSide(color: Colors.white),
-      child: Text(
-        intl.S.of(context).confirm,
-        style: TextStyle(fontSize: 11, color: Colors.white),
-      ),
-      onPressed: () {
-        setState(() {
-          _time = _start + "—" + _end;
-          _page = 1;
-          _transferHistoryList.clear();
-        });
-//        Navigator.of(context).pop(_loadData());
-      },
-    ),
-  );
-}
-
-//自定义时间按钮
-Widget _timeButton(String name, int i, BuildContext popcontext) {
-  return Container(
-    margin: EdgeInsets.all(5),
-    width: 111.5,
-    height: 23.5,
-    decoration: BoxDecoration(
-      color: Color(0xffECECEC),
-      borderRadius: BorderRadius.circular(5),
-    ),
-    child: OutlineButton(
-      borderSide: BorderSide(color: Colors.white),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            name,
-            style: TextStyle(fontSize: 13, color: Color(0xff212121)),
-          ),
-          Container(
-            width: 8,
-            height: 7,
-            margin: EdgeInsets.only(bottom: 20),
-            child: Icon(
-              Icons.arrow_drop_down,
-              color: Color(0xffAAAAAA),
-            ),
-          ),
-        ],
-      ),
-      onPressed: () {
-//        _timePicker(i, popcontext);
-      },
-    ),
-  );
-}
->>>>>>> fun-qianli-sdk
 
   // Get row count.
   int _rowCountAtSection(int section) {

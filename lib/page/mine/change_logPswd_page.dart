@@ -195,14 +195,26 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     );
   }
 
+  _otpEnable() {
+    if (_oldPwd.text.length > 0 &&
+        _newPwd.text.length > 0 &&
+        _confimPwd.text.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   //获取验证码按钮
   FlatButton _otpButton() {
+    bool otpEnable = (countdownTime == 0 && _otpEnable());
+    print(otpEnable);
     return FlatButton(
-      onPressed: countdownTime > 0
-          ? null
-          : () {
+      onPressed: otpEnable
+          ? () {
               _getVerificationCode();
-            },
+            }
+          : null,
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
       padding: EdgeInsets.symmetric(horizontal: 8),
       color: Color(0xeeEFF3FF),
@@ -212,8 +224,8 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50),
       ),
-      disabledTextColor: HsgColors.blueTextColor,
-      disabledColor: Color(0xeeEFF3FF),
+      disabledTextColor: Colors.white,
+      disabledColor: HsgColors.hintText,
       child: Text(
         countdownTime > 0
             ? '${countdownTime}s'
@@ -279,25 +291,34 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   _getVerificationCode() async {
     HSProgressHUD.show();
     final prefs = await SharedPreferences.getInstance();
-    String userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
-
+    userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
     VerificationCodeRepository()
         .sendSmsByAccount(
             SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
         .then((data) {
       _startCountdown();
       setState(() {
-        _sms.text = '123456';
+        //保留setState是为了快一点刷新验证码按钮
+        // _sms.text = '123456';
       });
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.showError(status: e.toString());
       HSProgressHUD.dismiss();
     });
   }
 
   //修改密码接口
   _updateLoginPassword() async {
+<<<<<<< HEAD
+=======
+    String oldPwd = EncryptUtil.aesEncode(_oldPwd.text);
+    String newPwd = EncryptUtil.aesEncode(_newPwd.text);
+    RegExp characters = new RegExp(
+        "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
+    RegExp letter = new RegExp("[a-zA-Z]");
+    RegExp number = new RegExp("[0-9]");
+>>>>>>> d177846efd3ff621f45333ef34be8767e716f1f5
     if (_newPwd.text != _confimPwd.text) {
       HSProgressHUD.showInfo(status: S.of(context).differentPwd);
     } else if (_oldPwd.text == _newPwd.text) {
@@ -311,16 +332,13 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
       String userID = prefs.getString(ConfigKey.USER_ID);
-
       UpdateLoginPawRepository()
           .modifyLoginPassword(
-              ModifyPasswordReq(_newPwd.text, _oldPwd.text, _sms.text, userID),
+              ModifyPasswordReq(newPwd, oldPwd, _sms.text, userID),
               'ModifyPasswordReq')
           .then((data) {
-        _startCountdown();
-        setState(() {
-          _sms.text = '123456';
-        });
+        HSProgressHUD.showInfo(status: S.current.operate_success);
+        Navigator.pop(context);
         HSProgressHUD.dismiss();
       }).catchError((e) {
         HSProgressHUD.showError(status: e.toString());
@@ -328,42 +346,6 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       });
     }
   }
-
-  //修改密码接口
-  _updateLoginPassword() async {
-    String oldPwd = EncryptUtil.aesEncode(_oldPwd.text);
-    String newPwd = EncryptUtil.aesEncode(_newPwd.text);
-    // RegExp characters = new RegExp(
-    //     "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
-    // RegExp letter = new RegExp("[a-zA-Z]");
-    // RegExp number = new RegExp("[0-9]");
-    // if (_newPwd.text != _confimPwd.text) {
-    //   HSProgressHUD.showInfo(status: S.of(context).differentPwd);
-    // } else if (_oldPwd.text == _newPwd.text) {
-    //   HSProgressHUD.showInfo(status: S.of(context).differnet_old_new_pwd);
-    // } else if (number.hasMatch(_newPwd.text) == false ||
-    //     letter.hasMatch(_newPwd.text) == false ||
-    //     characters.hasMatch(_newPwd.text) == false ||
-    //     ((_newPwd.text).length < 8 || (_newPwd.text).length > 16)) {
-    //   HSProgressHUD.showInfo(status: S.of(context).password_need_num);
-    // } else {
-    HSProgressHUD.show();
-    final prefs = await SharedPreferences.getInstance();
-    String userID = prefs.getString(ConfigKey.USER_ID);
-    UpdateLoginPawRepository()
-        .modifyLoginPassword(
-            ModifyPasswordReq(newPwd, oldPwd, _sms.text, userID),
-            'ModifyPasswordReq')
-        .then((data) {
-      HSProgressHUD.showInfo(status: S.current.operate_success);
-      Navigator.pop(context);
-      HSProgressHUD.dismiss();
-    }).catchError((e) {
-      HSProgressHUD.showError(status: e.toString());
-      HSProgressHUD.dismiss();
-    });
-  }
-  // }
 }
 
 // ignore: must_be_immutable
