@@ -171,28 +171,7 @@ class _OpenAccountContactInformationPageState
                   title: S.of(context).next_step,
                   click: _nextBtnEnabled
                       ? () {
-                          bool bo = true;
-                          if (bo) {
-                            AuthIdentity()
-                                .startAuth(
-                                  new AuthIdentityReq(
-                                      "DLEAED",
-                                      "74283428974321",
-                                      "en",
-                                      "CN",
-                                      "2"), //passport001zh  DLEAED
-                                )
-                                .then((value) => () {
-                                      Fluttertoast.showToast(msg: value.result);
-                                      Navigator.pushNamed(context,
-                                          pageOpenAccountSelectDocumentType);
-                                    })
-                                .catchError((e) {
-                              HSProgressHUD.showError(
-                                  status: '${e.toString()}');
-                            });
-                            return;
-                          }
+                          _authIdentity();
                         }
                       : null,
                 ),
@@ -202,6 +181,24 @@ class _OpenAccountContactInformationPageState
         ),
       ),
     );
+  }
+
+  _authIdentity() {
+    bool bo = true;
+    if (bo) {
+      AuthIdentity()
+          .startAuth(
+        new AuthIdentityReq("DLEAED", "74283428974321", "en", "CN",
+            "1"), //passport001zh  DLEAED
+      )
+          .then((value) {
+        Fluttertoast.showToast(msg: value.result);
+        Navigator.pushNamed(context, pageOpenAccountSelectDocumentType);
+      }).catchError((e) {
+        HSProgressHUD.showError(status: '${e.toString()}');
+      });
+      return;
+    }
   }
 
   ///判断下一步按钮是否能点击
