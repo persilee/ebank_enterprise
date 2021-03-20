@@ -14,9 +14,9 @@ BoxDecoration HsgShadow(Color bgColor) {
     color: bgColor, // 底色
     boxShadow: [
       BoxShadow(
-        offset: Offset(0, 2),
-        blurRadius: 10, //阴影范围
-        spreadRadius: 0.18, //阴影浓度
+        offset: Offset(0, 7),
+        blurRadius: 9, //阴影范围
+        spreadRadius: 0.10, //阴影浓度
         color: Color(0x0F46529F), //阴影颜色
       ),
     ],
