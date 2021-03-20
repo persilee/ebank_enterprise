@@ -19,6 +19,12 @@ class PublicParametersRepository {
     return request('/platform/publicCode/getPublicCodeByType', req, tag,
         (data) => GetLocalCurrencyResp.fromJson(data));
   }
+  // //获取币种列表
+  // Future<GetLocalCurrencyResp> getLocalCurrency(
+  //     GetLocalCurrencyReq req, String tag) {
+  //   return request('/platform/publicCode/getPublicCodeByType', req, tag,
+  //       (data) => GetLocalCurrencyResp.fromJson(data));
+  // }
 
   static final _instance = PublicParametersRepository._internal();
   factory PublicParametersRepository() => _instance;
