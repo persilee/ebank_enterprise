@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/get_verification_code.dart';
 import 'package:ebank_mobile/data/source/model/set_payment_pwd.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -186,28 +187,45 @@ class _ChangePayPageState extends State<ChangePayPage> {
     HSProgressHUD.show();
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
+
     String oldPwd = EncryptUtil.aesEncode(_oldPwd.text);
     String newPwd = EncryptUtil.aesEncode(_newPwd.text);
     print(oldPwd);
     print(newPwd);
-    PaymentPwdRepository()
-        .updateTransPassword(
-      SetPaymentPwdReq(oldPwd, newPwd, userID, _sms.text),
-      'updateTransPassword',
-    )
-        .then((data) {
-      HSProgressHUD.showInfo(status: S.current.changPwsSuccess);
-      Navigator.pop(context);
-      HSProgressHUD.dismiss();
-    }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
-      HSProgressHUD.showError(status: e.toString());
-      print('${e.toString()}');
-    });
+    RegExp number_6 = new RegExp(r'^\d{6}$');
+    if (_newPwd.text != _confimPwd.text) {
+      HSProgressHUD.showInfo(status: S.of(context).differentPwd);
+    } else if (_newPwd.text == _oldPwd.text) {
+      HSProgressHUD.showInfo(status: S.of(context).differnet_old_new_pwd);
+    } else if (!number_6.hasMatch(_newPwd.text)) {
+      HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
+    } else if (!number_6.hasMatch(_sms.text)) {
+      // HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
+      HSProgressHUD.showInfo(status: '请输入6位验证码');
+    } else {
+      PaymentPwdRepository()
+          .updateTransPassword(
+        SetPaymentPwdReq(oldPwd, newPwd, userID, _sms.text),
+        'updateTransPassword',
+      )
+          .then((data) {
+        HSProgressHUD.showInfo(status: S.current.changPwsSuccess);
+        Navigator.of(context)..pop();
+        Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
+        HSProgressHUD.dismiss();
+      }).catchError((e) {
+        // Fluttertoast.showToast(msg: e.toString());
+        HSProgressHUD.showError(status: e.toString());
+        print('${e.toString()}');
+      });
+    }
   }
 
   bool _submit() {
-    if (_oldPwd.text != '' && _newPwd.text != '' && _confimPwd.text != '') {
+    if (_oldPwd.text != '' &&
+        _newPwd.text != '' &&
+        _confimPwd.text != '' &&
+        _sms.text != '') {
       return true;
     } else {
       return false;
@@ -229,14 +247,25 @@ class _ChangePayPageState extends State<ChangePayPage> {
     _timer = Timer.periodic(Duration(seconds: 1), call);
   }
 
+  _otpEnable() {
+    if (_oldPwd.text.length > 0 &&
+        _newPwd.text.length > 0 &&
+        _confimPwd.text.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   //获取验证码按钮
   FlatButton _otpButton() {
+    bool otpEnable = (countdownTime == 0 && _otpEnable());
     return FlatButton(
-      onPressed: countdownTime > 0
-          ? null
-          : () {
+      onPressed: otpEnable
+          ? () {
               _getVerificationCode();
-            },
+            }
+          : null,
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
       padding: EdgeInsets.symmetric(horizontal: 8),
       color: Color(0xeeEFF3FF),
@@ -246,8 +275,8 @@ class _ChangePayPageState extends State<ChangePayPage> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50),
       ),
-      disabledTextColor: HsgColors.blueTextColor,
-      disabledColor: Color(0xeeEFF3FF),
+      disabledTextColor: Colors.white,
+      disabledColor: HsgColors.hintText,
       child: Text(
         countdownTime > 0
             ? '${countdownTime}s'
@@ -280,34 +309,25 @@ class _ChangePayPageState extends State<ChangePayPage> {
 
   //获取验证码接口
   _getVerificationCode() async {
-    RegExp postalcode1 = new RegExp(r'^\d{6}$');
-    if (_newPwd.text != _confimPwd.text) {
-      HSProgressHUD.showInfo(status: S.of(context).differentPwd);
-    } else if (_newPwd.text == _oldPwd.text) {
-      HSProgressHUD.showInfo(status: S.of(context).differnet_old_new_pwd);
-    } else if (!postalcode1.hasMatch(_newPwd.text)) {
-      HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
-    } else {
-      HSProgressHUD.show();
-      // final prefs = await SharedPreferences.getInstance();
-      // String userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
-      VerificationCodeRepository()
-          // .sendSmsByAccount(
-          //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
-          // )
-          .sendSmsByPhone(
-              SendSmsByPhoneNumberReq(_phoneNo, 'transactionPwd'), 'sendSms')
-          .then((data) {
-        _startCountdown();
-        setState(() {
-          _sms.text = '123456';
-        });
-        HSProgressHUD.dismiss();
-      }).catchError((e) {
-        HSProgressHUD.showError(status: e.toString());
-        HSProgressHUD.dismiss();
+    HSProgressHUD.show();
+    // final prefs = await SharedPreferences.getInstance();
+    // String userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
+    VerificationCodeRepository()
+        // .sendSmsByAccount(
+        //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
+        // )
+        .sendSmsByPhone(
+            SendSmsByPhoneNumberReq(_phoneNo, 'transactionPwd'), 'sendSms')
+        .then((data) {
+      _startCountdown();
+      setState(() {
+        // _sms.text = '123456';
       });
-    }
+      HSProgressHUD.dismiss();
+    }).catchError((e) {
+      HSProgressHUD.showError(status: e.toString());
+      HSProgressHUD.dismiss();
+    });
   }
 
   //验证码输入框

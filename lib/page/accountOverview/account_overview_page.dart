@@ -1,9 +1,12 @@
+import 'package:dio/dio.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 账户总览
 /// Author: CaiTM
 /// Date: 2020-12-07
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/account_overview_repository.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/account_overview_all_data.dart';
@@ -158,8 +161,8 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                   : SliverToBoxAdapter(),
 
               // 贷款
-              (lnTotal != '0.00')
-                  ? isTotalLiabilities
+              isTotalLiabilities
+                  ? (lnTotal != '0.00')
                       ? SliverToBoxAdapter(
                           child: Container(
                             color: Colors.white,
@@ -173,7 +176,25 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                             ),
                           ),
                         )
-                      : SliverToBoxAdapter()
+                      : SliverToBoxAdapter(
+                          child: Container(
+                            height: MediaQuery.of(context).size.height / 2,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image(
+                                  image: AssetImage(
+                                      'images/noDataIcon/no_data_record.png'),
+                                  width: 160,
+                                ),
+                                Text(
+                                  S.current.no_data_now,
+                                  style: FIRST_DEGREE_TEXT_STYLE,
+                                )
+                              ],
+                            ),
+                          ),
+                        )
                   : SliverToBoxAdapter(),
               (lnTotal != '0.00')
                   ? isTotalLiabilities
@@ -347,12 +368,25 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   Column _accountOverviewColumn() {
     Color colorOne;
     Color colorTwo;
+    double bottomLeft;
+    double bottomRight;
+    Color hintColortone;
+    Color hintColortwo;
+    //isTotalAsset ? hintColor = Colors.white : Colors.white54;
     if (isTotalAsset) {
-      colorOne = Color(0xFF152153);
+      colorOne = Color(0xFF5674F5);
       colorTwo = Color(0xFF40475F);
+      bottomLeft = 40;
+      bottomRight = 0;
+      hintColortone = Colors.white;
+      hintColortwo = Colors.white54;
     } else {
       colorOne = Color(0xFF40475F);
-      colorTwo = Color(0xFF152153);
+      colorTwo = Color(0xFF5674F5);
+      bottomLeft = 0;
+      bottomRight = 40;
+      hintColortone = Colors.white54;
+      hintColortwo = Colors.white;
     }
     return Column(
       children: [
@@ -372,8 +406,8 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                   isTotalLiabilities = false;
                 });
               },
-              child: _netAssets(
-                  S.current.total_assets, localCcy, netAssets, colorOne),
+              child: _netAssets(S.current.total_assets, localCcy, netAssets,
+                  colorOne, 0, bottomRight, colorTwo, hintColortone),
             ),
 
             //总负债
@@ -385,8 +419,15 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                   print("点击总负债 $isTotalAsset");
                 });
               },
-              child: _netAssets(S.current.total_liability, localCcy,
-                  totalLiabilities, colorTwo),
+              child: _netAssets(
+                  S.current.total_liability,
+                  localCcy,
+                  totalLiabilities,
+                  colorTwo,
+                  bottomLeft,
+                  0,
+                  colorOne,
+                  hintColortwo),
             ),
 
             //_totalLiability(),
@@ -412,33 +453,53 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     );
   }
 
-  Column _netAssets(
-      String title, String localCcy, String netAssets, Color color) {
-    return Column(
-      children: [
-        //总资产
-        Container(
-          padding: EdgeInsets.only(left: 18, top: 9),
-          width: MediaQuery.of(context).size.width / 2,
-          color: color,
-          child: Text(
-            title,
-            style: TextStyle(fontSize: 13.5, color: Colors.white54),
-            textAlign: TextAlign.left,
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 18, top: 7),
-          width: MediaQuery.of(context).size.width / 2,
-          height: MediaQuery.of(context).size.height / 22,
-          color: color,
-          child: Text(
-            localCcy + ' ' + FormatUtil.formatSringToMoney(netAssets),
-            style: TextStyle(fontSize: 11, color: Colors.white),
-          ),
-        )
-      ],
-    );
+  Container _netAssets(
+      String title,
+      String localCcy,
+      String netAssets,
+      Color color,
+      double bottomleftRadius,
+      double bottomrightRadius,
+      Color backgroundColor,
+      Color hintColor) {
+    return Container(
+        decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            )),
+        child: Container(
+            decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                    bottomLeft: Radius.circular(bottomleftRadius),
+                    bottomRight: Radius.circular(bottomrightRadius))),
+            child: Column(
+              children: [
+                //总资产
+                Container(
+                  padding: EdgeInsets.only(left: 18, top: 9),
+                  width: MediaQuery.of(context).size.width / 2,
+                  //color: color,
+                  child: Text(
+                    title,
+                    style: TextStyle(fontSize: 13.5, color: Colors.white54),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 18, top: 7),
+                  width: MediaQuery.of(context).size.width / 2,
+                  height: MediaQuery.of(context).size.height / 22,
+                  child: Text(
+                      localCcy + ' ' + FormatUtil.formatSringToMoney(netAssets),
+                      style: TextStyle(fontSize: 11, color: hintColor)),
+                )
+              ],
+            )));
   }
 
 //净资产
@@ -541,7 +602,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
           if (data.tdTotalAmt != '0') {
             tdTotal = data.tdTotalAmt;
           }
-          lnTotal = '1000.00';
+          lnTotal = '0.00';
           lnList = [
             LoanMastList('0101900000095007', '0101900000095007', custID,
                 '1000.00', '1000.00')

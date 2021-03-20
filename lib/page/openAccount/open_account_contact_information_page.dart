@@ -862,32 +862,44 @@ class _OpenAccountContactInformationPageState
   }
 
   void _qianliyanSDK() {
-    bool bo = true;
-    if (bo) {
-      AuthIdentity()
-          .startAuth(
-            new AuthIdentityReq("DLEAED", "74283428974321", "en", "CN",
-                "2"), //passport001zh  DLEAED
-          )
-          .then((value) => () {
-                print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${value.result}');
-                Fluttertoast.showToast(msg: value.result);
-                Navigator.pushNamed(context, pageOpenAccountResults);
-                // //延时500毫秒执行
-                // Future.delayed(
-                //     const Duration(milliseconds: 1000),
-                //     () {
-                //   //延时执行的代码
-                //   Fluttertoast.showToast(
-                //       msg: value.result);
-                //   Navigator.pushNamed(
-                //       context, pageOpenAccountResults);
-                // });
-              })
-          .catchError((e) {
-        HSProgressHUD.showError(status: '${e.toString()}');
-      });
-      return;
-    }
+    // bool bo = true;
+    // if (bo) {
+    //   AuthIdentity()
+    //       .startAuth(
+    //         new AuthIdentityReq("DLEAED", "74283428974321", "en", "CN",
+    //             "2"), //passport001zh  DLEAED
+    //       )
+    //       .then((value) => () {
+    //             print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${value.result}');
+    //             Fluttertoast.showToast(msg: value.result);
+    //             Navigator.pushNamed(context, pageOpenAccountResults);
+    //             // //延时500毫秒执行
+    //             // Future.delayed(
+    //             //     const Duration(milliseconds: 1000),
+    //             //     () {
+    //             //   //延时执行的代码
+    //             //   Fluttertoast.showToast(
+    //             //       msg: value.result);
+    //             //   Navigator.pushNamed(
+    //             //       context, pageOpenAccountResults);
+    //             // });
+    //           })
+    //       .catchError((e) {
+    //     HSProgressHUD.showError(status: '${e.toString()}');
+    //   });
+    //   return;
+    // }
+
+    AuthIdentity()
+        .startAuth(
+      new AuthIdentityReq(
+          "DLEAED", "74283428974321", "en", "CN", "1"), //passport001zh  DLEAED
+    )
+        .then((value) {
+      Fluttertoast.showToast(msg: value.result);
+      Navigator.pushNamed(context, pageOpenAccountSelectDocumentType);
+    }).catchError((e) {
+      HSProgressHUD.showError(status: '${e.toString()}');
+    });
   }
 }

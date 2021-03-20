@@ -14,6 +14,7 @@ import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ForgetUserName extends StatefulWidget {
@@ -80,6 +81,10 @@ class _ForgetUserNameState extends State<ForgetUserName> {
                                 color: HsgColors.textHintColor,
                               ),
                             ),
+                            inputFormatters: <TextInputFormatter>[
+                              WhitelistingTextInputFormatter.digitsOnly, //只输入数字
+                              LengthLimitingTextInputFormatter(6) //限制长度
+                            ],
                           ),
                         ),
                         Container(
@@ -176,26 +181,25 @@ class _ForgetUserNameState extends State<ForgetUserName> {
 
   //获取验证码接口
   _getVerificationCode() async {
-    // RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
-    //if (characters.hasMatch(_phoneNum.text) == false) {
-    HSProgressHUD.showInfo(status: S.current.format_mobile_error);
-    //}
-    // else {
-    HSProgressHUD.show();
-    VerificationCodeRepository()
-        .sendSmsByPhone(
-            SendSmsByPhoneNumberReq(_phoneNum.text, 'findPwd'), 'sendSms')
-        .then((data) {
-      _startCountdown();
-      setState(() {
-        _sms.text = '123456';
+    RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
+    if (characters.hasMatch(_phoneNum.text) == false) {
+      HSProgressHUD.showInfo(status: S.current.format_mobile_error);
+    } else {
+      HSProgressHUD.show();
+      VerificationCodeRepository()
+          .sendSmsByPhone(
+              SendSmsByPhoneNumberReq(_phoneNum.text, 'findPwd'), 'sendSms')
+          .then((data) {
+        _startCountdown();
+        setState(() {
+          _sms.text = '123456';
+        });
+        HSProgressHUD.dismiss();
+      }).catchError((e) {
+        Fluttertoast.showToast(msg: e.toString());
+        HSProgressHUD.dismiss();
       });
-      HSProgressHUD.dismiss();
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-      HSProgressHUD.dismiss();
-    });
-    // }
+    }
   }
 
   //倒计时方法
