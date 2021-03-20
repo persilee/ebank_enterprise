@@ -78,7 +78,7 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
                 ),
                 // 交易类型
                 ContentRow(
-                  label: '交易类型',
+                  label: S.current.transaction_type,
                   item: ddFinHist.txMmo,
                 ),
 

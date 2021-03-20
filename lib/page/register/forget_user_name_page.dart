@@ -51,7 +51,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
               color: Colors.white,
               child: ListView(
                 children: [
-                  getRegisterTitle('忘记用户名'),
+                  getRegisterTitle(S.current.forget_username),
                   getRegisterRegion(context, _phoneNum, _officeAreaCodeText,
                       _selectRegionCode),
                   //获取验证码
@@ -74,7 +74,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
                             autofocus: true,
                             decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintText: '输入验证码',
+                              hintText: S.current.please_input_sms,
                               hintStyle: TextStyle(
                                 fontSize: 15,
                                 color: HsgColors.textHintColor,
@@ -109,7 +109,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
                             disabledColor: HsgColors.btnDisabled,
                             color: Colors.blue,
                             child: Text(
-                              '提交',
+                              S.current.submit,
                               style: (TextStyle(color: Colors.white)),
                               //textDirection: Colors.white,
                             ),

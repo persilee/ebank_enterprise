@@ -67,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: ListView(
                   children: <Widget>[
                     //注册标题
-                    getRegisterTitle('欢迎注册'),
+                    getRegisterTitle(S.current.welcome_to_register),
                     //注册手机号
                     getRegisterRegion(
                       context,
@@ -76,7 +76,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       _selectRegionCode,
                     ),
                     //输入用户名
-                    getRegisterRow('输入用户名', _userName, false),
+                    getRegisterRow(
+                        S.current.please_input_username, _userName, false),
                     //获取验证码
                     Container(
                       height: MediaQuery.of(context).size.height / 15,
@@ -97,7 +98,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               autofocus: true,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: '输入验证码',
+                                hintText: S.current.please_input_sms,
                                 hintStyle: TextStyle(
                                   fontSize: 15,
                                   color: HsgColors.textHintColor,

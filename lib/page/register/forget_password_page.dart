@@ -78,7 +78,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                         padding: EdgeInsets.all(10.0),
                       ),
                       //忘记密码标题
-                      getRegisterTitle('忘记密码'),
+                      getRegisterTitle(S.current.fotget_password),
                       //手机号
                       getRegisterRegion(context, _phoneNum, _officeAreaCodeText,
                           _selectRegionCode),
@@ -102,7 +102,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                                 autofocus: true,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: '输入验证码',
+                                  hintText: S.current.please_input_sms,
                                   hintStyle: TextStyle(
                                     fontSize: 15,
                                     color: HsgColors.textHintColor,
