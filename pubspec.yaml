@@ -75,6 +75,7 @@ flutter:
   assets:
     - assets/data/china.json
     - assets/data/country.json
+    - assets/data/city.json
     - images/ic_launcher.png
     #common
     - images/common/check_btn_common_checked.png
