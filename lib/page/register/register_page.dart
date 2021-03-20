@@ -21,6 +21,7 @@ import 'package:flutter/gestures.dart';
 /// Author: pengyikang
 /// Date: 2020-03-15
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -104,6 +105,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                   color: HsgColors.textHintColor,
                                 ),
                               ),
+                              inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter
+                                    .digitsOnly, //只输入数字
+                                LengthLimitingTextInputFormatter(6) //限制长度
+                              ],
                             ),
                           ),
                           Container(

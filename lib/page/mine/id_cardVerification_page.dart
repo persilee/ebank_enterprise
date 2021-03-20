@@ -18,6 +18,7 @@ import 'package:ebank_mobile/page_route.dart';
 // import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 // import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -460,15 +461,23 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       Fluttertoast.showToast(msg: '请输入证件号!');
       return;
     }
-    ChecInformantApiRepository()
-        .realNameAuth(RealNameAuthReq(_certNo.text, _certType, _realName.text),
-            'realNameAuth')
-        .then((data) {
-      print(_certNo.text + '-' + _certType + '-' + _realName.text);
-      if (data.enabled) {
-        Navigator.pushNamed(context, setPayPage);
-      }
-    });
+    Navigator.pushNamed(context, setPayPage);
+    // HSProgressHUD.show();
+    // ChecInformantApiRepository()
+    //     .realNameAuth(RealNameAuthReq(_certNo.text, _certType, _realName.text),
+    //         'realNameAuth')
+    //     .then((data) {
+    //   print(_certNo.text + '-' + _certType + '-' + _realName.text);
+    //   if (data.enabled) {
+    //     Navigator.pushNamed(context, setPayPage);
+    //   }
+    //   HSProgressHUD.dismiss();
+    // }).catchError((e) {
+    //   // Fluttertoast.showToast(msg: e.toString());
+    //   HSProgressHUD.showError(status: e.toString());
+    //   print(e.toString());
+    // });
+
     // RegExp postalcode1 =
     //     new RegExp(r'(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x))$');
     // if (!postalcode1.hasMatch(_certNo.text)) {

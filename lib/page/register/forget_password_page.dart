@@ -15,6 +15,7 @@ import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -108,6 +109,11 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                                     color: HsgColors.textHintColor,
                                   ),
                                 ),
+                                inputFormatters: <TextInputFormatter>[
+                                  WhitelistingTextInputFormatter
+                                      .digitsOnly, //只输入数字
+                                  LengthLimitingTextInputFormatter(6) //限制长度
+                                ],
                               ),
                             ),
                             Container(

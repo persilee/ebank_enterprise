@@ -21,7 +21,6 @@ import 'package:flutter_tableview/flutter_tableview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:date_format/date_format.dart';
 import 'package:intl/intl.dart';
-import 'package:popup_window/popup_window.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -200,10 +199,7 @@ class _DetailListPageState extends State<DetailListPage> {
               _amountDuration(),
             ],
           ),
-        )
-
-        // ),
-        );
+        ));
   }
 
   //时间文本
