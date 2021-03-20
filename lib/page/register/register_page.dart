@@ -139,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               disabledColor: HsgColors.btnDisabled,
                               color: Colors.blue,
                               child: Text(
-                                '下一步',
+                                S.current.next_step,
                                 style: (TextStyle(color: Colors.white)),
                               ),
                               onPressed: _submit()
