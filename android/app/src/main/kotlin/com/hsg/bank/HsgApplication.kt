@@ -1,0 +1,48 @@
+/*
+ * 版权所有(C) 2021 zhanggenhua
+ * 创建: zhanggenhua 2021-03-15
+ */
+
+package com.hsg.bank
+
+import android.util.Log
+import com.bufeng.videoSDKbase.AppApplication
+import com.hsg.bank.brillink.BuildConfig
+import io.flutter.FlutterInjector
+import timber.log.Timber
+
+/**
+ * @author zhanggenhua
+ * @date 2021-03-15
+ */
+class HsgApplication : AppApplication() {
+
+  override fun onCreate() {
+    if (BuildConfig.DEBUG) {
+      Timber.plant(Timber.DebugTree())
+    } else {
+      Timber.plant(CrashReportingTree())
+    }
+    val startTime = System.currentTimeMillis()
+    super.onCreate()
+    Timber.d("签里眼SDK初始化耗时：${System.currentTimeMillis() - startTime}")
+    FlutterInjector.instance().flutterLoader().startInitialization(this)
+  }
+
+  /** A tree which logs important information for crash reporting.  */
+  private class CrashReportingTree : Timber.Tree() {
+    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+      if (priority == Log.VERBOSE || priority == Log.DEBUG) {
+        return
+      }
+      CrashLibrary.log(priority, tag, message)
+      if (t != null) {
+        if (priority == Log.ERROR) {
+          CrashLibrary.logError(t)
+        } else if (priority == Log.WARN) {
+          CrashLibrary.logWarning(t)
+        }
+      }
+    }
+  }
+}

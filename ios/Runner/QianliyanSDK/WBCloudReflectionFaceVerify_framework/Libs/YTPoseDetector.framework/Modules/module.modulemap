@@ -1,0 +1,6 @@
+framework module YTPoseDetector {
+  umbrella header "YTPoseDetector.h"
+
+  export *
+  module * { export * }
+}
