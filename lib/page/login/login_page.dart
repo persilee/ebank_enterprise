@@ -37,22 +37,12 @@ class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
-<<<<<<< HEAD
   TextEditingController _accountTC =
       TextEditingController(text: 'blk401'); //fangluyao
   TextEditingController _passwordTC =
       TextEditingController(text: '4N0021S8'); //b0S25X5Y
   var _account = 'blk401'; //'blk101';
   var _password = '4N0021S8'; //'4N0021S8';
-=======
-  final TextEditingController _accountTC =
-      TextEditingController(text: 'pengyikang');
-  final TextEditingController _passwordTC =
-      TextEditingController(text: 'Aa123456@');
-
-  var _account = 'pengyikang'; //'18033412021';
-  var _password = 'Aa123456@'; //'123456';
->>>>>>> fun-qianli-sdk
 
   @override
   void initState() {
@@ -135,7 +125,6 @@ class _LoginPageState extends State<LoginPage> {
         Container(
           child: Row(
             children: [
-<<<<<<< HEAD
               Expanded(
                 flex: 1,
                 child: Container(),
@@ -185,17 +174,6 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-=======
-              //ForgetButton('忘记账户？'),
-              Container(
-                margin: EdgeInsets.only(left: 15),
-                child: ForgetButton(S.of(context).fotget_password_q, () {
-                  setState(() {
-                    Navigator.pushNamed(context, pageForgetPassword);
-                    print('忘记密码');
-                  });
-                }),
->>>>>>> fun-qianli-sdk
               )
             ],
           ),
