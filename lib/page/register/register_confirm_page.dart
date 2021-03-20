@@ -46,11 +46,11 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
             child: ListView(
               children: <Widget>[
                 //注册标题
-                getRegisterTitle('欢迎注册'),
+                getRegisterTitle(S.current.welcome_to_register),
                 //输入新密码
                 getRegisterRow(S.current.password_need_num, _newPassword, true),
                 //再次输入密码
-                getRegisterRow('再次输入新密码', _oldPassword, true),
+                getRegisterRow(S.current.placeConfimPwd, _oldPassword, true),
                 //下一步
                 Container(
                   width: MediaQuery.of(context).size.width,

@@ -1,3 +1,8 @@
+include ':se-WbCloudNormal'
+include ':se-WbCloudFaceReflectLiveSdk'
+include ':se-loadLibrary'
+include ':se-libspinner'
+include ':newlibrary-release'
 include ':app'
 
 def localPropertiesFile = new File(rootProject.projectDir, "local.properties")

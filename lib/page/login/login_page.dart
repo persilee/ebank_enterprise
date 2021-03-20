@@ -1,9 +1,12 @@
+import 'package:ebank_mobile/authentication/auth_identity.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: lijiawei
 /// Date: 2020-12-04
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
@@ -121,57 +124,47 @@ class _LoginPageState extends State<LoginPage> {
         ),
         Container(
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
               //忘记用户名
-              Expanded(
-                flex: 2,
-                child: Container(
-                  height: 20,
-                  margin: EdgeInsets.only(top: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(left: 15),
-                        child: ForgetButton('忘记用户名', () {
-                          setState(() {
-                            Navigator.pushNamed(context, pageForgetUserName);
-                            print('忘记密码');
-                          });
-                        }),
-                      )
-                    ],
-                  ),
+              Container(
+                height: 20,
+                margin: EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 15),
+                      child: ForgetButton(S.current.forget_username, () {
+                        setState(() {
+                          Navigator.pushNamed(context, pageForgetUserName);
+                          print('忘记密码');
+                        });
+                      }),
+                    )
+                  ],
                 ),
               ),
               //忘记密码按钮
-              Expanded(
-                flex: 2,
-                child: Container(
-                  height: 20,
-                  margin: EdgeInsets.only(top: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(right: 33),
-                        margin: EdgeInsets.only(left: 15),
-                        child:
-                            ForgetButton(S.of(context).fotget_password_q, () {
-                          setState(() {
-                            Navigator.pushNamed(context, pageForgetPassword);
-                            print('忘记密码');
-                          });
-                        }),
-                      )
-                    ],
-                  ),
+              Container(
+                height: 20,
+                margin: EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(right: 33),
+                      margin: EdgeInsets.only(left: 15),
+                      child: ForgetButton(S.of(context).fotget_password_q, () {
+                        setState(() {
+                          Navigator.pushNamed(context, pageForgetPassword);
+                          print('忘记密码');
+                        });
+                      }),
+                    )
+                  ],
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -182,8 +175,8 @@ class _LoginPageState extends State<LoginPage> {
             //注册按钮
             Container(
               margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
-              child: UnderButtonView(
-                  '注册', false ? null : () => _regesiter(context), false),
+              child: UnderButtonView(S.current.register,
+                  false ? null : () => _regesiter(context), false),
             ),
             //登录按钮
             Container(
@@ -242,6 +235,19 @@ class _LoginPageState extends State<LoginPage> {
     if (!_judgeCanLogin()) {
       return;
     }
+    // bool bo = true;
+    // if (bo) {
+    //   AuthIdentity()
+    //       .startAuth(
+    //         new AuthIdentityReq("DLEAED", "74283428974321", "en", "CN",
+    //             "2"), //passport001zh  DLEAED
+    //       )
+    //       .then((value) => Fluttertoast.showToast(msg: value.result))
+    //       .catchError((e) {
+    //     HSProgressHUD.showError(status: '${e.toString()}');
+    //   });
+    //   return;
+    // }
 
     setState(() {
       _isLoading = true;

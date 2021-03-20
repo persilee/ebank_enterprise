@@ -32,7 +32,7 @@ class _FindUserNameSuccessState extends State<FindUserNameSuccess> {
           child: ListView(
             children: [
               //欢迎注册
-              getRegisterTitle('忘记用户名'),
+              getRegisterTitle(S.current.forget_username),
               Container(
                 padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
                 child: Image.asset(
@@ -47,14 +47,14 @@ class _FindUserNameSuccessState extends State<FindUserNameSuccess> {
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
                       child: Text(
-                        '成功找回用户名',
+                        S.current.find_username,
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Container(
                       child: Text(
-                        '用户名:$_userName',
+                        '${S.current.login_account_placeholder} :$_userName',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),

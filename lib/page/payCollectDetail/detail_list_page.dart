@@ -21,6 +21,7 @@ import 'package:flutter_tableview/flutter_tableview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:date_format/date_format.dart';
 import 'package:intl/intl.dart';
+import 'package:popup_window/popup_window.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -145,7 +146,7 @@ class _DetailListPageState extends State<DetailListPage> {
       isRelative: true,
       buttonBuilder: (BuildContext context) {
         return GestureDetector(
-          child: _headerText('自定义筛选'),
+          child: _headerText(intl.S.of(context).custom_autofilter),
         );
       },
       windowBuilder: (BuildContext popcontext, Animation<double> animation,
@@ -195,7 +196,7 @@ class _DetailListPageState extends State<DetailListPage> {
               _timeText(intl.S.of(context).user_defined),
               _userDefind(popcontext),
               //金额
-              _timeText('金额'),
+              _timeText(intl.S.of(context).amount),
               _amountDuration(),
             ],
           ),
@@ -333,7 +334,6 @@ class _DetailListPageState extends State<DetailListPage> {
       children: [
         //开始时间按钮
         _timeButton(_start, 0, popcontext),
-
         //至
         Text(
           intl.S.of(context).zhi,
