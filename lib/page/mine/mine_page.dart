@@ -459,7 +459,7 @@ class _MinePageState extends State<MinePage> {
             print('开户申请');
           },
           child: Text(
-            '开户申请',
+            S.current.open_account_apply,
             style: TextStyle(fontSize: 15, color: Colors.white),
           ),
           shape: RoundedRectangleBorder(

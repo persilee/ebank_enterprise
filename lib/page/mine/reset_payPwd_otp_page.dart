@@ -184,7 +184,13 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   //提交按钮
   _submitData() async {
     //请求验证手机号验证码，成功后跳转到身份验证界面
-    Navigator.pushNamed(context, iDcardVerification);
+    RegExp number_6 = new RegExp(r'^\d{6}$');
+    if (!number_6.hasMatch(_sms.text)) {
+      // HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
+      HSProgressHUD.showInfo(status: '请输入6位验证码');
+    } else {
+      Navigator.pushNamed(context, iDcardVerification);
+    }
   }
 
   bool _submit() {
@@ -314,7 +320,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
         .then((data) {
       _startCountdown();
       setState(() {
-        _sms.text = '123456';
+        // _sms.text = '123456';
       });
       HSProgressHUD.dismiss();
     }).catchError((e) {
@@ -337,7 +343,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
         LengthLimitingTextInputFormatter(6), //限制长度
       ],
       decoration: InputDecoration.collapsed(
-        hintText: S.current.placeSMS,
+        hintText: S.current.please_enter,
         hintStyle: TextStyle(
           fontSize: 14,
           color: HsgColors.textHintColor,
