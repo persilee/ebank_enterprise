@@ -1,14 +1,18 @@
 import 'dart:convert';
 
+import 'package:ebank_mobile/authentication/auth_identity.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class OpenAccountContactInformationPage extends StatefulWidget {
   @override
@@ -167,8 +171,28 @@ class _OpenAccountContactInformationPageState
                   title: S.of(context).next_step,
                   click: _nextBtnEnabled
                       ? () {
-                          Navigator.pushNamed(
-                              context, pageOpenAccountSelectDocumentType);
+                          bool bo = true;
+                          if (bo) {
+                            AuthIdentity()
+                                .startAuth(
+                                  new AuthIdentityReq(
+                                      "DLEAED",
+                                      "74283428974321",
+                                      "en",
+                                      "CN",
+                                      "2"), //passport001zh  DLEAED
+                                )
+                                .then((value) => () {
+                                      Fluttertoast.showToast(msg: value.result);
+                                      Navigator.pushNamed(context,
+                                          pageOpenAccountSelectDocumentType);
+                                    })
+                                .catchError((e) {
+                              HSProgressHUD.showError(
+                                  status: '${e.toString()}');
+                            });
+                            return;
+                          }
                         }
                       : null,
                 ),
