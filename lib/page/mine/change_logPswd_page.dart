@@ -277,10 +277,34 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
 
   //获取验证码接口
   _getVerificationCode() async {
+<<<<<<< HEAD
     RegExp characters = new RegExp(
         "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
     RegExp letter = new RegExp("[a-zA-Z]");
     RegExp number = new RegExp("[0-9]");
+=======
+    HSProgressHUD.show();
+    final prefs = await SharedPreferences.getInstance();
+    String userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
+
+    VerificationCodeRepository()
+        .sendSmsByAccount(
+            SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
+        .then((data) {
+      _startCountdown();
+      setState(() {
+        _sms.text = '123456';
+      });
+      HSProgressHUD.dismiss();
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.dismiss();
+    });
+  }
+
+  //修改密码接口
+  _updateLoginPassword() async {
+>>>>>>> fun-qianli-sdk
     if (_newPwd.text != _confimPwd.text) {
       HSProgressHUD.showInfo(status: S.of(context).differentPwd);
     } else if (_oldPwd.text == _newPwd.text) {
@@ -293,10 +317,19 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
+<<<<<<< HEAD
       userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
       VerificationCodeRepository()
           .sendSmsByAccount(
               SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
+=======
+      String userID = prefs.getString(ConfigKey.USER_ID);
+
+      UpdateLoginPawRepository()
+          .modifyLoginPassword(
+              ModifyPasswordReq(_newPwd.text, _oldPwd.text, _sms.text, userID),
+              'ModifyPasswordReq')
+>>>>>>> fun-qianli-sdk
           .then((data) {
         _startCountdown();
         setState(() {

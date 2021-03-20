@@ -1,0 +1,6 @@
+framework module SigningEyeSDK {
+  umbrella header "SigningEyeSDK.h"
+
+  export *
+  module * { export * }
+}

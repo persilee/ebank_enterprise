@@ -6,6 +6,7 @@
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
 import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/approval/task_approval_page.dart';
+<<<<<<< HEAD
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
@@ -27,6 +28,9 @@ import 'package:ebank_mobile/page/register/reset_password_account_open.dart';
 import 'package:ebank_mobile/page/register/reset_password_no_account.dart';
 import 'package:ebank_mobile/page/register/reset_password_success.dart';
 // import 'package:ebank_mobile/page/mine/qliyan_demo_page.dart';
+=======
+import 'package:ebank_mobile/page/login/forget_password_page.dart';
+>>>>>>> fun-qianli-sdk
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
 import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
@@ -156,6 +160,7 @@ var pageContactCustomer = '/contact_customer_page';
 var pageTransferPlan = '/transfer_plan_page';
 var pageTransferPlanDetails = '/transfer_plan_details';
 var pageForgetPassword = '/forget_password_page';
+<<<<<<< HEAD
 var pageQianliyanDemo = '/qliyan_demo_page.dart';
 var pageApprovalPage = 'hsg_approval_page';
 var pageStaticApproval = '/static_my_approval_page';
@@ -176,6 +181,8 @@ var pageOpenAccountContactInformation =
 var pageOpenAccountSelectDocumentType =
     '/open_acount_select_document_type_page.dart';
 var pageOpenAccountResults = '/open_account_results_page.dart';
+=======
+>>>>>>> fun-qianli-sdk
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -243,6 +250,7 @@ var appRoutes = {
   pageTransferPlan: (context) => TransferPlanPage(),
   // pageTransferPlanDetails: (context) => TransferPlanDetailsPage(),
   pageForgetPassword: (context) => ForgetPasswordPage(),
+<<<<<<< HEAD
   pageApprovalPage: (context) => ApprovalPage(),
   pageFeatureList: (context) => FeatureListPage(),
   // pageQianliyanDemo: (context) => QianliyanDemoPage(),
@@ -264,6 +272,8 @@ var appRoutes = {
   pageOpenAccountSelectDocumentType: (context) =>
       OpenAccountSelectDocumentTypePage(),
   pageOpenAccountResults: (context) => OpenAccountResultsPage(),
+=======
+>>>>>>> fun-qianli-sdk
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {

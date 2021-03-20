@@ -1,9 +1,12 @@
+import 'package:ebank_mobile/authentication/auth_identity.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: lijiawei
 /// Date: 2020-12-04
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
@@ -34,12 +37,22 @@ class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
+<<<<<<< HEAD
   TextEditingController _accountTC =
       TextEditingController(text: 'blk401'); //fangluyao
   TextEditingController _passwordTC =
       TextEditingController(text: '4N0021S8'); //b0S25X5Y
   var _account = 'blk401'; //'blk101';
   var _password = '4N0021S8'; //'4N0021S8';
+=======
+  final TextEditingController _accountTC =
+      TextEditingController(text: 'pengyikang');
+  final TextEditingController _passwordTC =
+      TextEditingController(text: 'Aa123456@');
+
+  var _account = 'pengyikang'; //'18033412021';
+  var _password = 'Aa123456@'; //'123456';
+>>>>>>> fun-qianli-sdk
 
   @override
   void initState() {
@@ -122,6 +135,7 @@ class _LoginPageState extends State<LoginPage> {
         Container(
           child: Row(
             children: [
+<<<<<<< HEAD
               Expanded(
                 flex: 1,
                 child: Container(),
@@ -171,6 +185,17 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
+=======
+              //ForgetButton('忘记账户？'),
+              Container(
+                margin: EdgeInsets.only(left: 15),
+                child: ForgetButton(S.of(context).fotget_password_q, () {
+                  setState(() {
+                    Navigator.pushNamed(context, pageForgetPassword);
+                    print('忘记密码');
+                  });
+                }),
+>>>>>>> fun-qianli-sdk
               )
             ],
           ),
@@ -240,6 +265,19 @@ class _LoginPageState extends State<LoginPage> {
   ///登录操作
   _login(BuildContext context) {
     if (!_judgeCanLogin()) {
+      return;
+    }
+    bool bo = true;
+    if (bo) {
+      AuthIdentity()
+          .startAuth(
+            new AuthIdentityReq("DLEAED", "74283428974321", "en", "CN",
+                "2"), //passport001zh  DLEAED
+          )
+          .then((value) => Fluttertoast.showToast(msg: value.result))
+          .catchError((e) {
+        HSProgressHUD.showError(status: '${e.toString()}');
+      });
       return;
     }
 
