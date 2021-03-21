@@ -49,6 +49,9 @@ dependencies:
   azlistview: ^0.1.2
   lpinyin: ^1.0.7
   transparent_image: ^1.0.0
+  retrofit: any
+  pretty_dio_logger: ^1.1.1
+  sp_util:
   flutter_cupertino_date_picker:
     git:
       url: https://github.com/imshashank/flutter-cupertino-date-picker # Repo
@@ -61,6 +64,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  retrofit_generator: any
   build_runner: ^1.10.4
   json_serializable: ^3.5.0 #json和模型互转
 
@@ -76,6 +80,7 @@ flutter:
   assets:
     - assets/data/china.json
     - assets/data/country.json
+    - assets/images/splash.png
     - images/ic_launcher.png
     #common
     - images/common/check_btn_common_checked.png
