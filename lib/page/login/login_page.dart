@@ -231,6 +231,8 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录操作
   _login(BuildContext context) {
+    Navigator.pushNamed(context, pageIndexName);
+    return;
     if (!_judgeCanLogin()) {
       return;
     }
