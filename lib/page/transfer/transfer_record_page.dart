@@ -58,6 +58,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   int _page = 1; //几页数据
   int _totalPage = 1; //数据总页数
   bool _loadMore = false; //是否加载更多
+  TextEditingController _startAmountController = TextEditingController();
+  TextEditingController _endAmountController = TextEditingController();
 
   @override
   void initState() {
@@ -143,12 +145,13 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       if (_position == 0) {
         _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
         _isData = true;
-      } else if ((_cradLists[_position] ==
-              _transferHistoryList[i].paymentCardNo) ||
-          (_cradLists[_position] == _transferHistoryList[i].receiveCardNo)) {
-        _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
-        _isData = true;
       }
+      // else if ((_cradLists[_position] ==
+      //         _transferHistoryList[i].paymentCardNo) ||
+      //     (_cradLists[_position] == _transferHistoryList[i].receiveCardNo)) {
+      //   _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
+      //   _isData = true;
+      // }
     }
     _list.add(
       _loadMore ? _loadMoreData() : _toLoad(intl.S.current.load_more_finished),
@@ -334,7 +337,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _popDialogContent(BuildContext popcontext) {
     return Container(
       color: Colors.white,
-      height: 260,
+      height: 320,
       padding: EdgeInsets.all(10),
       child: Material(
         child: Column(
@@ -349,6 +352,14 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             //金额
             _timeText(intl.S.current.amount),
             _amountDuration(),
+            //按钮
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _resetButton(popcontext),
+                _confimrButton(),
+              ],
+            ),
           ],
         ),
       ),
@@ -366,6 +377,21 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     );
   }
 
+  //至
+  Widget _zhi() {
+    return Container(
+      margin: EdgeInsets.only(left: 10, right: 10),
+      child: Text(
+        intl.S.of(context).zhi,
+        style: TextStyle(
+          fontSize: 12,
+          color: HsgColors.aboutusTextCon,
+          decoration: TextDecoration.none,
+        ),
+      ),
+    );
+  }
+
   //自定义时间
   Widget _userDefind(BuildContext popcontext) {
     return Row(
@@ -373,18 +399,9 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         //开始时间按钮
         _timeButton(_start, 0, popcontext),
         //至
-        Text(
-          intl.S.of(context).zhi,
-          style: TextStyle(
-            fontSize: 12,
-            color: HsgColors.aboutusTextCon,
-            decoration: TextDecoration.none,
-          ),
-        ),
+        _zhi(),
         //结束时间按钮
         _timeButton(_end, 1, popcontext),
-        //确定按钮
-        _confimrButton(),
       ],
     );
   }
@@ -393,57 +410,63 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _amountDuration() {
     return Row(
       children: [
-        _amountInput(),
-        Text(
-          intl.S.of(context).zhi,
-          style: TextStyle(
-            fontSize: 12,
-            color: HsgColors.aboutusTextCon,
-            decoration: TextDecoration.none,
-          ),
-        ),
-        _amountInput(),
-        _amountConfimrButton(),
+        _amountInput(_startAmountController),
+        _zhi(),
+        _amountInput(_endAmountController),
+        // _amountConfimrButton(),
       ],
     );
   }
 
   //金额输入框
-  Widget _amountInput() {
+  Widget _amountInput(TextEditingController controller) {
     return Container(
       margin: EdgeInsets.all(5),
       // margin: EdgeInsets.only(left: 5,right: 5),
-      width: 111.5,
-      height: 23.5,
+      width: MediaQuery.of(context).size.width / 2.5,
+      height: 30,
       decoration: BoxDecoration(
         color: Color(0xffECECEC),
         borderRadius: BorderRadius.circular(5),
       ),
       child: Container(
-        margin: EdgeInsets.only(top: 9),
-        child: TextField(
-          decoration: InputDecoration(
-              hintStyle: HINET_TEXT_STYLE,
-              hintText: intl.S.current.not_required,
-              border: InputBorder.none
-              //  OutlineInputBorder(
-              //     gapPadding: 0,
-              //     borderRadius: ((BorderRadius.circular(5))),
-              //     borderSide: BorderSide(
-              //       color: Color(0xffECECEC),
-              //     ),
-              //   ),
+        // margin: EdgeInsets.only(top: 15),
+        height: 30,
+        child: Theme(
+          data: new ThemeData(
+              // primaryColor: Color(0xffECECEC),
               ),
-          // controller: controller,
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
-            LengthLimitingTextInputFormatter(12),
-          ],
-          style: TextStyle(fontSize: 13),
-          autocorrect: false,
-          autofocus: false,
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
-          onChanged: (text) {},
+          child: TextField(
+            decoration: InputDecoration(
+              hintStyle: TextStyle(
+                fontSize: 14,
+                color: HsgColors.textHintColor,
+              ),
+              hintText: intl.S.current.not_required,
+              contentPadding: EdgeInsets.all(0),
+              border:
+                  // InputBorder.none,
+                  OutlineInputBorder(
+                gapPadding: 0,
+                borderRadius: ((BorderRadius.circular(5))),
+                borderSide: BorderSide(
+                  color: Color(0xffECECEC),
+                ),
+              ),
+            ),
+            controller: controller,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+              LengthLimitingTextInputFormatter(12),
+            ],
+            style: TextStyle(
+              fontSize: 14,
+            ),
+            autocorrect: false,
+            autofocus: false,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            onChanged: (text) {},
+          ),
         ),
       ),
     );
@@ -480,8 +503,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _confimrButton() {
     return Container(
       margin: EdgeInsets.all(4),
-      width: 75,
-      height: 23.5,
+      width: 70,
+      height: 30,
       decoration: BoxDecoration(
         color: HsgColors.blueTextColor,
         borderRadius: BorderRadius.circular(5),
@@ -498,8 +521,52 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             _time = _start + "—" + _end;
             _page = 1;
             _transferHistoryList.clear();
+            _isButton2 = false;
+            _isButton1 = false;
+            _isButton3 = false;
+            _isButton4 = false;
           });
           Navigator.of(context).pop(_loadData());
+        },
+      ),
+    );
+  }
+
+  //重置按钮
+  Widget _resetButton(BuildContext popcontext) {
+    return Container(
+      width: 70,
+      height: 30,
+      margin: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Color(0x77939393), width: 0.5),
+        borderRadius: BorderRadius.circular((5)),
+      ),
+      child: FlatButton(
+        padding: EdgeInsets.all(0),
+        // disabledColor: HsgColors.btnDisabled,
+        child: Text(
+          intl.S.of(context).reset,
+          style: TextStyle(
+            fontSize: 13,
+            // color: HsgColors.accent,
+          ),
+        ),
+        onPressed: () {
+          setState(() {
+            _isButton2 = true;
+            _isButton1 = false;
+            _isButton3 = false;
+            _isButton4 = false;
+            _start = formatDate(
+                DateTime(DateTime.now().year, DateTime.now().month, 1),
+                [yyyy, mm, dd]); //显示开始时间
+            _end = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示结束时间
+            (popcontext as Element).markNeedsBuild();
+            _startAmountController.text = '';
+            _endAmountController.text = '';
+          });
         },
       ),
     );
@@ -620,8 +687,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _timeButton(String name, int i, BuildContext popcontext) {
     return Container(
       margin: EdgeInsets.all(5),
-      width: 111.5,
-      height: 23.5,
+      width: MediaQuery.of(context).size.width / 2.5,
+      height: 30,
       decoration: BoxDecoration(
         color: Color(0xffECECEC),
         borderRadius: BorderRadius.circular(5),
@@ -639,7 +706,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             Container(
               width: 8,
               height: 7,
-              margin: EdgeInsets.only(bottom: 20),
+              margin: EdgeInsets.only(bottom: 20, left: 10),
               child: Icon(
                 Icons.arrow_drop_down,
                 color: Color(0xffAAAAAA),
@@ -677,9 +744,12 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       setState(() {
         _position = result;
         _card = _cradLists[result];
-        // paymentCardNos.add(_card);
+        paymentCardNos = [];
+        paymentCardNos.add(_card);
       });
-      // _loadData();
+      print(paymentCardNos.toString());
+      print("=====================");
+      _loadData();
     }
   }
 
@@ -827,7 +897,6 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     //请求参数
     String ccy = '';
     int pageSize = 10;
-
     String sort = '';
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
