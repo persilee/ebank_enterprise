@@ -45,12 +45,17 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
           _transferAccount(_transferHistory),
           _rowWidget(S.of(context).payee_name, _transferHistory.receiveName),
           _rowWidget(S.of(context).transfer_from_account,
-              _transferHistory.receiveCardNo),
+              FormatUtil.formatSpace4(_transferHistory.receiveCardNo)),
           _rowWidget(S.of(context).transfer_to_account,
-              _transferHistory.paymentCardNo),
+              FormatUtil.formatSpace4(_transferHistory.paymentCardNo)),
           _rowWidget(
               S.of(context).transaction_time, _transferHistory.transactionHour),
           _differentContent(_transferHistory),
+          _rowWidget(
+              S.current.transfer_type_with_value,
+              _transferHistory.transferType == '0'
+                  ? S.current.transfer_type_0_short
+                  : S.current.transfer_type_1_short),
           _rowWidget(S.of(context).remark, _transferHistory.remark),
         ],
       ),
@@ -110,15 +115,22 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              left,
-              style: FIRST_DEGREE_TEXT_STYLE,
+            Container(
+              width: 160,
+              child: Text(
+                left,
+                style: FIRST_DEGREE_TEXT_STYLE,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             Expanded(
               child: Text(
                 rifht,
                 style: FIRST_DESCRIBE_TEXT_STYLE,
                 textAlign: TextAlign.right,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],

@@ -370,16 +370,23 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     Color colorTwo;
     double bottomLeft;
     double bottomRight;
+    Color hintColortone;
+    Color hintColortwo;
+    //isTotalAsset ? hintColor = Colors.white : Colors.white54;
     if (isTotalAsset) {
       colorOne = Color(0xFF5674F5);
       colorTwo = Color(0xFF40475F);
       bottomLeft = 40;
       bottomRight = 0;
+      hintColortone = Colors.white;
+      hintColortwo = Colors.white54;
     } else {
       colorOne = Color(0xFF40475F);
       colorTwo = Color(0xFF5674F5);
       bottomLeft = 0;
       bottomRight = 40;
+      hintColortone = Colors.white54;
+      hintColortwo = Colors.white;
     }
     return Column(
       children: [
@@ -400,7 +407,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                 });
               },
               child: _netAssets(S.current.total_assets, localCcy, netAssets,
-                  colorOne, 0, bottomRight, colorTwo),
+                  colorOne, 0, bottomRight, colorTwo, hintColortone),
             ),
 
             //总负债
@@ -412,8 +419,15 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                   print("点击总负债 $isTotalAsset");
                 });
               },
-              child: _netAssets(S.current.total_liability, localCcy,
-                  totalLiabilities, colorTwo, bottomLeft, 0, colorOne),
+              child: _netAssets(
+                  S.current.total_liability,
+                  localCcy,
+                  totalLiabilities,
+                  colorTwo,
+                  bottomLeft,
+                  0,
+                  colorOne,
+                  hintColortwo),
             ),
 
             //_totalLiability(),
@@ -446,7 +460,8 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
       Color color,
       double bottomleftRadius,
       double bottomrightRadius,
-      Color backgroundColor) {
+      Color backgroundColor,
+      Color hintColor) {
     return Container(
         decoration: BoxDecoration(
             color: backgroundColor,
@@ -480,9 +495,8 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                   width: MediaQuery.of(context).size.width / 2,
                   height: MediaQuery.of(context).size.height / 22,
                   child: Text(
-                    localCcy + ' ' + FormatUtil.formatSringToMoney(netAssets),
-                    style: TextStyle(fontSize: 11, color: Colors.white),
-                  ),
+                      localCcy + ' ' + FormatUtil.formatSringToMoney(netAssets),
+                      style: TextStyle(fontSize: 11, color: hintColor)),
                 )
               ],
             )));
