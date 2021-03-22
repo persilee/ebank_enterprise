@@ -25,12 +25,16 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
         title: Text(S.of(context).transfer_detail),
         centerTitle: true,
       ),
-      body: Container(
-        color: Colors.white,
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.only(top: 20),
-        child: _transfer(_transferHistory),
+      body: ListView(
+        children: [
+          Container(
+            color: Colors.white,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.only(top: 20),
+            child: _transfer(_transferHistory),
+          ),
+        ],
       ),
     );
   }

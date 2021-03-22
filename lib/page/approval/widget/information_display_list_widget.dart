@@ -10,17 +10,18 @@ import 'package:flutter/material.dart';
 informationDisplayList(BuildContext context, Map information) {
   //列表标题
   Widget _title(String title) {
-    return Row(
-      children: [
-        Container(
-          margin: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-          child: Text(
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
+      child: Row(
+        children: [
+          Text(
             title,
             style: TextStyle(
                 color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -54,6 +55,7 @@ informationDisplayList(BuildContext context, Map information) {
         Column(
           children: [
             Container(
+              color: Colors.white,
               child: Row(
                 children: <Widget>[
                   Container(

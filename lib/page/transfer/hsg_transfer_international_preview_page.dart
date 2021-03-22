@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/data/source/model/get_international_transfer.dart';
+import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 
@@ -41,7 +43,7 @@ class _TransferInternalPreviewPageState
               child: HsgButton.button(
                 title: S.current.confirm,
                 click: () {
-                  Navigator.pushReplacementNamed(context, pageOperationResult);
+                  _loadData(transferData);
                 },
               ),
             ),
@@ -55,7 +57,7 @@ class _TransferInternalPreviewPageState
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(top: 30, bottom: 30),
+            margin: EdgeInsets.only(top: 30, bottom: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -126,7 +128,7 @@ class _TransferInternalPreviewPageState
   //一行内容
   Widget _getRowContent(String leftText, String rightText) {
     return Container(
-      padding: EdgeInsets.only(top: 30),
+      padding: EdgeInsets.only(top: 20),
       child: Column(
         children: [
           Row(
@@ -156,5 +158,52 @@ class _TransferInternalPreviewPageState
         ],
       ),
     );
+  }
+
+  Future _loadData(TransferInternationalData transferData) async {
+    double amount = double.parse(transferData.transferIntoAccount);
+    String transferOutCcy = transferData.transferOutCcy;
+    String transferIntoCcy = transferData.transferIntoCcy;
+    String payeeBankCode = transferData.payeeBankCode;
+    String payeeCardNo = transferData.transferOutAccount;
+    String payeeName = transferData.payeeName;
+    String payerBankCode = transferData.payerBankCode;
+    String payerCardNo = transferData.transferIntoAccount;
+    String payerName = transferData.payerName;
+    String remark = transferData.transferRemark;
+    String costOptions = transferData.transferFee;
+    String bankSwift = transferData.bankSWIFT;
+    String remittancePurposes = transferData.purpose;
+    String district = transferData.nation;
+    String payerAddress = transferData.transferOutAdress;
+    String payeeAddress = transferData.transferIntoAdress;
+    String intermediateBankSwift = transferData.centerSWIFI;
+    TransferDataRepository()
+        .getInterNationalTransfer(
+            GetInternationalTransferReq(
+              amount,
+              bankSwift,
+              costOptions,
+              transferOutCcy,
+              transferIntoCcy,
+              district,
+              intermediateBankSwift,
+              payeeAddress,
+              payeeBankCode,
+              payeeCardNo,
+              payeeName,
+              payerAddress,
+              payerBankCode,
+              payerCardNo,
+              payerName,
+              remark,
+              remittancePurposes,
+            ),
+            'getTransferByAccount')
+        .then((value) {
+      Navigator.pushReplacementNamed(context, pageOperationResult);
+    }).catchError((e) {
+      print(e.toString());
+    });
   }
 }

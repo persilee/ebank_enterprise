@@ -69,7 +69,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
         'iconName': 'images/openAccount/open_account_document_type_CN.png',
         'titleStr': S.of(context).openAccout_documents_idCard_CN,
         'onClickFunction': () {
-          print('中国大陆身份证识别');
+          print(S.of(context).openAccout_documentType_CN);
           // Navigator.pushNamed(context, pageOpenAccountResults);
           _qianliyanSDK(context, '1');
         },
@@ -78,7 +78,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
         'iconName': 'images/openAccount/open_account_document_type_HK.png',
         'titleStr': S.of(context).openAccout_documents_idCard_HK,
         'onClickFunction': () {
-          print('中国香港身份证识别');
+          print(S.of(context).openAccout_documentType_HK);
           _qianliyanSDK(context, '2');
         },
       },
@@ -86,7 +86,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
         'iconName': 'images/openAccount/open_account_document_type_other.png',
         'titleStr': S.of(context).openAccout_documents_passport_HK,
         'onClickFunction': () {
-          print('护照识别 (港澳台地区及境外护照)');
+          print(S.of(context).openAccout_documentType_other);
           _qianliyanSDK(context, '3');
         },
       }
@@ -196,11 +196,20 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
     String _language = Intl.getCurrentLocale();
     String lang = _language == 'en' ? 'en' : 'zh';
     String countryRegions = _language == 'zh_CN' ? 'CN' : 'TW';
+    String tokId = 'passport002en';
+    if (_language == 'zh_CN') {
+      tokId = 'passport001zh';
+    } else if (_language == 'zh_HK') {
+      tokId = 'passport002ft';
+    } else {
+      tokId = 'passport002en';
+    }
 
     AuthIdentity()
         .startAuth(
-      new AuthIdentityReq("DLEAED", "74283428974321", lang, countryRegions,
-          documentType), //passport001zh  DLEAED
+      new AuthIdentityReq(
+          "DLEAED", "74283428974321", lang, countryRegions, documentType,
+          tokId: tokId), //passport001zh  DLEAED
     )
         .then((value) {
       Fluttertoast.showToast(
