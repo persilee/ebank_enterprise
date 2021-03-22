@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class OpenAccountContactInformationPage extends StatefulWidget {
   @override
@@ -552,7 +553,7 @@ class _OpenAccountContactInformationPageState
               controller: textEdiC,
               textAlign: TextAlign.right,
               textAlignVertical: TextAlignVertical.bottom,
-              textDirection: TextDirection.ltr,
+              // textDirection: TextDirection.ltr,
               maxLines: 2,
               keyboardType: keyboardType,
               inputFormatters: <TextInputFormatter>[
@@ -628,7 +629,7 @@ class _OpenAccountContactInformationPageState
                   LengthLimitingTextInputFormatter(maxLength) //限制长度
                 ],
                 textAlignVertical: TextAlignVertical.bottom,
-                textDirection: TextDirection.ltr,
+                // textDirection: TextDirection.ltr,
                 style: TextStyle(
                   fontSize: 15,
                   color: HsgColors.firstDegreeText,
@@ -787,10 +788,13 @@ class _OpenAccountContactInformationPageState
               ),
             ),
             Expanded(child: Container()),
-            CupertinoSwitch(
-              activeColor: HsgColors.theme,
-              value: switchValue,
-              onChanged: switchValueChanged,
+            Transform.scale(
+              scale: 0.8,
+              child: CupertinoSwitch(
+                activeColor: HsgColors.theme,
+                value: switchValue,
+                onChanged: switchValueChanged,
+              ),
             ),
           ],
         ),
@@ -861,16 +865,27 @@ class _OpenAccountContactInformationPageState
   }
 
   void _qianliyanSDK() {
+    String _language = Intl.getCurrentLocale();
+    String lang = _language == 'en' ? 'en' : 'zh';
+    String countryRegions = _language == 'zh_CN' ? 'CN' : 'TW';
+
     AuthIdentity()
         .startAuth(
-      new AuthIdentityReq(
-          "DLEAED", "74283428974321", "en", "CN", "1"), //passport001zh  DLEAED
+      new AuthIdentityReq("DLEAED", "74283428974321", lang, countryRegions,
+          "1"), //passport001zh  DLEAED
     )
         .then((value) {
-      Fluttertoast.showToast(msg: value.result);
+      Fluttertoast.showToast(
+        msg: value.result,
+        gravity: ToastGravity.CENTER,
+      );
       Navigator.pushNamed(context, pageOpenAccountResults);
     }).catchError((e) {
-      HSProgressHUD.showError(status: '${e.toString()}');
+      // HSProgressHUD.showError(status: '${e.toString()}');
+      Fluttertoast.showToast(
+        msg: '${e.toString()}',
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 }
