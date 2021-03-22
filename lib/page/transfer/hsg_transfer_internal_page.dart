@@ -1,3 +1,4 @@
+import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -5,6 +6,8 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 /// Author: lijiawei
 /// Date: 2020-12-09
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
+import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
@@ -17,6 +20,7 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/forexTrading/forex_trading_page.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 
@@ -139,6 +143,10 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   void initState() {
     super.initState();
     _loadTransferData();
+    _transferMoneyController.addListener(() {
+      _amount = _transferMoneyController.text;
+      // _rateCalculate();
+    });
   }
 
   @override
@@ -337,15 +345,18 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         context,
         pageTransferInternalPreview,
         arguments: TransferInternalData(
-          _account,
-          '123',
-          _transferCcy,
-          _nameController.text,
-          _accountController.text,
-          _transferMoneyController.text,
-          _payCcy,
-          _remarkController.text,
-        ),
+            _account,
+            _amount,
+            _transferCcy,
+            _nameController.text,
+            _accountController.text,
+            _transferMoneyController.text,
+            _payCcy,
+            _remarkController.text,
+            payeeBankCode,
+            payeeName,
+            payerBankCode,
+            payerName),
       );
     }
   }
@@ -573,6 +584,22 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           _transferCcyList.add(e.code);
         });
       }
+    });
+  }
+
+  //汇率换算
+  Future _rateCalculate() async {
+    double _payerAmount =
+        AiDecimalAccuracy.parse(_transferMoneyController.text).toDouble();
+    ForexTradingRepository()
+        .transferTrial(
+            TransferTrialReq(
+                amount: _payerAmount,
+                corrCcy: _payCcy,
+                defaultCcy: _transferCcy),
+            'TransferTrialReq')
+        .then((data) {
+      _amount = data.resultAmount;
     });
   }
 

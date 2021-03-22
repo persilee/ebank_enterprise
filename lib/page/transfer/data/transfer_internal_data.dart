@@ -7,6 +7,10 @@ class TransferInternalData {
   String transferIntoAmount;
   String transferIntoCcy;
   String transferRemark;
+  String payeeBankCode;
+  String payeeName;
+  String payerBankCode;
+  String payerName;
   TransferInternalData(
     this.transferOutAccount,
     this.transferOutAmount,
@@ -16,5 +20,9 @@ class TransferInternalData {
     this.transferIntoAmount,
     this.transferIntoCcy,
     this.transferRemark,
+    this.payeeBankCode,
+    this.payeeName,
+    this.payerBankCode,
+    this.payerName,
   );
 }
