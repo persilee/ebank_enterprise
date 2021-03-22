@@ -9,11 +9,11 @@ class HeaderInterceptor extends Interceptor {
     String locale = await SpUtil.getString(ConfigKey.LANGUAGE);
     String loginName = await SpUtil.getString(ConfigKey.USER_ACCOUNT);
     String userId = await SpUtil.getString(ConfigKey.USER_ID);
-    options.headers.addAll({'x-kont-appkey': '6000000514984257'});
+    options.headers.addAll({'x-kont-appkey': '6000000514984255'});
     options.headers.addAll({'x_kont_token': token});
     options.headers.addAll({'x_kont_locale': locale});
-    options.headers.addAll({'loginname': loginName});
-    options.headers.addAll({'userId': userId});
+    // options.extra.addAll({'loginname': loginName});
+    // options.extra.addAll({'userId': userId});
 
     return options;
   }

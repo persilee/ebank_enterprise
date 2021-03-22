@@ -208,10 +208,11 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
           if (buttonText == S.current.approval_lock) {
             _toggle();
             _doClaimTask();
-            Timer(Duration(milliseconds: 500),
-                    () => _controller.jumpTo(_controller.position.maxScrollExtent));
-
-            _controller.animateTo(_controller.position.maxScrollExtent, duration: Duration(milliseconds: 100));
+            _controller.animateTo(
+              _controller.position.maxScrollExtent,
+              duration: Duration(milliseconds: 100),
+              curve: Curves.linear,
+            );
           } else {
             if (comment.length != 0) {
               if (buttonText == S.current.reject_to_sponsor ||

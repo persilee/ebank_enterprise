@@ -29,9 +29,7 @@ class BaseDio {
     return dio;
   }
 
-  /**
-   * 这里封装了一个 BaseError 类，会根据后端返回的code返回不同的错误类
-   */
+  ///这里封装了一个 BaseError 类，会根据后端返回的code返回不同的错误类
   BaseError getDioError(Object obj) {
     switch (obj.runtimeType) {
       case DioError:

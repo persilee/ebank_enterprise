@@ -4,6 +4,7 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/splash_page.dart';
 import 'package:ebank_mobile/util/language.dart';
+import 'package:ebank_mobile/util/screen_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/services.dart';
@@ -71,7 +72,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
       statusBarIconBrightness: Brightness.light,
     );
     SystemChrome.setSystemUIOverlayStyle(style);
-
+    ScreenUtil.init(width: 360, height: 920, allowFontScaling: true);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'HSGBank',
@@ -97,6 +98,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
       ],
       supportedLocales: S.delegate.supportedLocales,
       builder: (context, child) => Scaffold(
+        resizeToAvoidBottomInset: false,
         body: GestureDetector(
           onTap: () {
             hideKeyboard(context);
