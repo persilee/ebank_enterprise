@@ -5,9 +5,12 @@
  * 国际转账页面
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
+import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
@@ -18,7 +21,6 @@ import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/page/forexTrading/forex_trading_page.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 
@@ -196,13 +198,16 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     _getFeeUseList();
 
     _transferMoneyController.addListener(() {
-      _amount = _transferMoneyController.text;
+      if (_payCcy == _transferCcy) {
+        _amount = _transferMoneyController.text;
+      } else {
+        _rateCalculate();
+      }
     });
   }
 
   @override
   void dispose() {
-    super.dispose();
     _transferMoneyController.dispose();
     _payerAddressController.dispose();
     _payeeAddressController.dispose();
@@ -211,6 +216,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     _bankSwiftController.dispose();
     _middleBankSwiftController.dispose();
     _remarkController.dispose();
+    super.dispose();
   }
 
   //付款方地址
@@ -1061,6 +1067,31 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         });
       }
     });
+  }
+
+  //汇率换算
+  Future _rateCalculate() async {
+    double _payerAmount = 0;
+    if (_transferMoneyController.text == '') {
+      setState(() {
+        _amount = '0';
+      });
+    } else {
+      _payerAmount =
+          AiDecimalAccuracy.parse(_transferMoneyController.text).toDouble();
+      ForexTradingRepository()
+          .transferTrial(
+              TransferTrialReq(
+                  amount: _payerAmount,
+                  corrCcy: _transferCcy,
+                  defaultCcy: _payCcy),
+              'TransferTrialReq')
+          .then((data) {
+        setState(() {
+          _amount = data.optExAmt;
+        });
+      });
+    }
   }
 
   _tranferInternational(BuildContext context) {
