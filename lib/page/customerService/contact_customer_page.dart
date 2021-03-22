@@ -35,43 +35,47 @@ class _ContactCustomerPageState extends State<ContactCustomerPage> {
                 padding: EdgeInsets.only(left: 10, top: 55),
                 child: _getTitleColumn(),
               ),
-              Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 90),
-                    padding: EdgeInsets.only(left: 30, right: 30),
-                    width: double.infinity,
-                    height: 223,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Stack(
+                  alignment: Alignment.topCenter,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 30),
+                      padding: EdgeInsets.only(left: 30, right: 30),
+                      width: double.infinity,
+                      height: 223,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                      child: _getPhoneColumn(),
                     ),
-                    child: _getPhoneColumn(),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 55),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          offset: Offset(0, 0),
-                          blurRadius: 30,
-                          spreadRadius: 1,
-                        ),
-                      ],
-                    ),
-                    child: Container(
+                    Container(
+                      // color: Colors.red,
                       margin: EdgeInsets.only(top: 40),
-                      child: Image.asset(
-                        'images/login/login_header_logo.png',
-                        height: 40,
-                        width: 150,
-                        fit: BoxFit.contain,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(0, 0),
+                            blurRadius: 30,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                      child: Container(
+                        margin: EdgeInsets.only(top: 1),
+                        child: Image.asset(
+                          'images/login/login_header_logo.png',
+                          height: 40,
+                          width: 150,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
