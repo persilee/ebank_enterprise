@@ -2,9 +2,12 @@ import 'package:ebank_mobile/authentication/auth_identity.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_picker/flutter_picker.dart';
@@ -36,8 +39,18 @@ class _RelatedIndividualsDataPageState
   /// 下一步按钮是否能点击
   bool _nextBtnEnabled = true; //false;
 
+  ///称谓请求类型
+  List<IdType> _appellationTypes = [];
+
+  ///类别请求类型
+  List<IdType> _categoryTypes = [];
+
+  ///证件类型请求类型
+  List<IdType> _documentTypes = [];
+
   @override
   void initState() {
+    _getPublicParameters();
     super.initState();
   }
 
@@ -72,7 +85,8 @@ class _RelatedIndividualsDataPageState
                   title: S.of(context).next_step,
                   click: _nextBtnEnabled
                       ? () {
-                          _qianliyanSDK();
+                          Navigator.pushNamed(
+                              context, pageOpenAccountSelectDocumentType);
                         }
                       : null,
                 ),
@@ -141,7 +155,8 @@ class _RelatedIndividualsDataPageState
           false,
           () {
             print('称谓');
-            _nextBtnEnabled = _judgeButtonIsEnabled();
+            // _nextBtnEnabled = _judgeButtonIsEnabled();
+            _selectAppellation(context);
           },
         ),
       ),
@@ -154,7 +169,8 @@ class _RelatedIndividualsDataPageState
           false,
           () {
             print('类别');
-            _nextBtnEnabled = _judgeButtonIsEnabled();
+            // _nextBtnEnabled = _judgeButtonIsEnabled();
+            _selectCategory(context);
           },
         ),
       ),
@@ -167,7 +183,8 @@ class _RelatedIndividualsDataPageState
           false,
           () {
             print('证件类型');
-            _nextBtnEnabled = _judgeButtonIsEnabled();
+            // _nextBtnEnabled = _judgeButtonIsEnabled();
+            _selectDocumentType(context);
           },
         ),
       ),
@@ -289,29 +306,146 @@ class _RelatedIndividualsDataPageState
     );
   }
 
-  void _qianliyanSDK() {
-    String _language = Intl.getCurrentLocale();
-    String lang = _language == 'en' ? 'en' : 'zh';
-    String countryRegions = _language == 'zh_CN' ? 'CN' : 'TW';
+  /// 称谓输入值
+  void _selectAppellation(BuildContext context) async {
+    List<String> appellationList = [
+      'Mr', // 先生
+      'Mrs', // 太太
+      'Miss', // 小姐
+      'Ms', // 女士
+    ];
+    if (_appellationTypes.length > 0) {
+      appellationList = [];
+      String _language = Intl.getCurrentLocale();
+      _appellationTypes.forEach((element) {
+        appellationList.add(_language == 'en' ? element.name : element.cname);
+      });
+    }
+    final result = await showHsgBottomSheet(
+      context: context,
+      builder: (context) => BottomMenu(
+        title: S.of(context).openAccount_documentType_select,
+        items: appellationList,
+      ),
+    );
 
-    AuthIdentity()
-        .startAuth(
-      new AuthIdentityReq("DLEAED", "74283428974321", lang, countryRegions,
-          "1"), //passport001zh  DLEAED
-    )
-        .then((value) {
-      Fluttertoast.showToast(
-        msg: value.result,
-        gravity: ToastGravity.CENTER,
-      );
-      Navigator.pushNamed(context,
-          pageOpenAccountIdentifySuccessfulFailure); //pageOpenAccountIdentifySuccessfulFailure//pageOpenAccountIdentifyResultsFailure
+    if (result != null && result != false) {
+      setState(() {
+        _documentTypeText = appellationList[result];
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
+    } else {
+      return;
+    }
+  }
+
+  /// 类别输入值
+  void _selectCategory(BuildContext context) async {
+    List<String> categoryList = [
+      'Sole Proprietor', // 獨資經營者
+      'Partner', // 合夥人
+      'Director', // 董事
+      'Legal Representative', //企業法人
+      'Authorised Signatory', //授權簽署人
+      'Ultimate Beneficial Owner', //最終實益擁有人
+      'Key Controller', //主要管理人
+      'Direct Appointee', //受任人
+      'Contact Person', //聯絡人
+      'Primary Users of Ebank', //網上理財主要使用者
+    ];
+    if (_categoryTypes.length > 0) {
+      categoryList = [];
+      String _language = Intl.getCurrentLocale();
+      _categoryTypes.forEach((element) {
+        categoryList.add(_language == 'en' ? element.name : element.cname);
+      });
+    }
+    final result = await showHsgBottomSheet(
+      context: context,
+      builder: (context) => BottomMenu(
+        title: S.of(context).openAccount_documentType_select,
+        items: categoryList,
+      ),
+    );
+
+    if (result != null && result != false) {
+      setState(() {
+        _documentTypeText = categoryList[result];
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
+    } else {
+      return;
+    }
+  }
+
+  /// 证件类型输入值
+  void _selectDocumentType(BuildContext context) async {
+    List<String> documentList = [
+      'Identity Card', //身分證
+      'Passport', //護照
+      'Other', //其他:
+    ];
+    if (_documentTypes.length > 0) {
+      documentList = [];
+      String _language = Intl.getCurrentLocale();
+      _documentTypes.forEach((element) {
+        documentList.add(_language == 'en' ? element.name : element.cname);
+      });
+    }
+    final result = await showHsgBottomSheet(
+      context: context,
+      builder: (context) => BottomMenu(
+        title: S.of(context).openAccount_documentType_select,
+        items: documentList,
+      ),
+    );
+
+    if (result != null && result != false) {
+      setState(() {
+        _documentTypeText = documentList[result];
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
+    } else {
+      return;
+    }
+  }
+
+  //获取公共参数
+  void _getPublicParameters() async {
+    //称谓
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq('SALUTATION'), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _appellationTypes = data.publicCodeGetRedisRspDtoList;
+        print('SALUTATION-  ${data.publicCodeGetRedisRspDtoList}');
+      }
     }).catchError((e) {
-      // HSProgressHUD.showError(status: '${e.toString()}');
-      Fluttertoast.showToast(
-        msg: '${e.toString()}',
-        gravity: ToastGravity.CENTER,
-      );
+      Fluttertoast.showToast(msg: e.toString());
+    });
+
+    //个人职位类别
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq('POSIT'), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _categoryTypes = data.publicCodeGetRedisRspDtoList;
+        print('POSIT-  ${data.publicCodeGetRedisRspDtoList}');
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+
+    //个人证件类型
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq('CERT_TYPE'), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _documentTypes = data.publicCodeGetRedisRspDtoList;
+        print('CERT_TYPE-  ${data.publicCodeGetRedisRspDtoList}');
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
     });
   }
 }

@@ -192,13 +192,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.6"
-  contact_picker:
-    dependency: "direct main"
+  contact_picker_platform_interface:
+    dependency: transitive
     description:
-      name: contact_picker
+      name: contact_picker_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.2"
+    version: "4.2.0"
+  contact_picker_web:
+    dependency: transitive
+    description:
+      name: contact_picker_web
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.2.1"
   convert:
     dependency: transitive
     description:
@@ -347,6 +354,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fluttercontactpicker:
+    dependency: "direct main"
+    description:
+      name: fluttercontactpicker
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.2.1"
   fluttertoast:
     dependency: "direct main"
     description:

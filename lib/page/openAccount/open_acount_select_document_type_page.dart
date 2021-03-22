@@ -5,10 +5,14 @@
 
 import 'dart:ui';
 
+import 'package:ebank_mobile/authentication/auth_identity.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class OpenAccountSelectDocumentTypePage extends StatelessWidget {
   const OpenAccountSelectDocumentTypePage({Key key}) : super(key: key);
@@ -66,7 +70,8 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
         'titleStr': S.of(context).openAccout_documents_idCard_CN,
         'onClickFunction': () {
           print('中国大陆身份证识别');
-          Navigator.pushNamed(context, pageOpenAccountResults);
+          // Navigator.pushNamed(context, pageOpenAccountResults);
+          _qianliyanSDK(context, '1');
         },
       },
       {
@@ -74,6 +79,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
         'titleStr': S.of(context).openAccout_documents_idCard_HK,
         'onClickFunction': () {
           print('中国香港身份证识别');
+          _qianliyanSDK(context, '2');
         },
       },
       {
@@ -81,6 +87,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
         'titleStr': S.of(context).openAccout_documents_passport_HK,
         'onClickFunction': () {
           print('护照识别 (港澳台地区及境外护照)');
+          _qianliyanSDK(context, '3');
         },
       }
     ];
@@ -183,5 +190,31 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _qianliyanSDK(BuildContext context, String documentType) {
+    String _language = Intl.getCurrentLocale();
+    String lang = _language == 'en' ? 'en' : 'zh';
+    String countryRegions = _language == 'zh_CN' ? 'CN' : 'TW';
+
+    AuthIdentity()
+        .startAuth(
+      new AuthIdentityReq("DLEAED", "74283428974321", lang, countryRegions,
+          documentType), //passport001zh  DLEAED
+    )
+        .then((value) {
+      Fluttertoast.showToast(
+        msg: value.result,
+        gravity: ToastGravity.CENTER,
+      );
+      Navigator.pushNamed(context,
+          pageOpenAccountIdentifySuccessfulFailure); //pageOpenAccountIdentifySuccessfulFailure//pageOpenAccountIdentifyResultsFailure
+    }).catchError((e) {
+      // HSProgressHUD.showError(status: '${e.toString()}');
+      Fluttertoast.showToast(
+        msg: '${e.toString()}',
+        gravity: ToastGravity.CENTER,
+      );
+    });
   }
 }
