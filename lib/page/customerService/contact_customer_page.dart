@@ -61,12 +61,13 @@ class _ContactCustomerPageState extends State<ContactCustomerPage> {
                         ),
                       ],
                     ),
-                    child: ClipOval(
+                    child: Container(
+                      margin: EdgeInsets.only(top: 40),
                       child: Image.asset(
-                        'images/ic_launcher.png',
-                        height: 75,
-                        width: 75,
-                        fit: BoxFit.cover,
+                        'images/login/login_header_logo.png',
+                        height: 40,
+                        width: 150,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),
