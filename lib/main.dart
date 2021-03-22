@@ -2,12 +2,15 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/splash_page.dart';
 import 'package:ebank_mobile/util/language.dart';
+import 'package:ebank_mobile/util/screen_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sp_util/sp_util.dart';
 import 'widget/progressHUD.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -15,7 +18,9 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 // void main() => runApp(
 //       HSGBankApp(),
 //     );
-void main(List<String> args) {
+void main(List<String> args) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SpUtil.getInstance();
   runApp(
     HSGBankApp(),
   );
@@ -67,7 +72,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
       statusBarIconBrightness: Brightness.light,
     );
     SystemChrome.setSystemUIOverlayStyle(style);
-
+    ScreenUtil.init(width: 360, height: 920, allowFontScaling: true);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'HSGBank',
@@ -93,6 +98,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
       ],
       supportedLocales: S.delegate.supportedLocales,
       builder: (context, child) => Scaffold(
+        resizeToAvoidBottomInset: false,
         body: GestureDetector(
           onTap: () {
             hideKeyboard(context);

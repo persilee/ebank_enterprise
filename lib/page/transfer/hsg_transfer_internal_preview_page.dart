@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
+import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 
@@ -41,7 +43,7 @@ class _TransferInternalPreviewPageState
               child: HsgButton.button(
                 title: S.current.confirm,
                 click: () {
-                  Navigator.pushReplacementNamed(context, pageOperationResult);
+                  _loadData(transferData);
                 },
               ),
             ),
@@ -55,7 +57,7 @@ class _TransferInternalPreviewPageState
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(top: 30, bottom: 30),
+            margin: EdgeInsets.only(top: 30, bottom: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -124,7 +126,7 @@ class _TransferInternalPreviewPageState
   //一行内容
   Widget _getRowContent(String leftText, String rightText) {
     return Container(
-      padding: EdgeInsets.only(top: 30),
+      padding: EdgeInsets.only(top: 20),
       child: Column(
         children: [
           Row(
@@ -154,5 +156,55 @@ class _TransferInternalPreviewPageState
         ],
       ),
     );
+  }
+
+  Future _loadData(TransferInternalData transferData) async {
+    double money = double.parse(transferData.transferIntoAccount);
+    String transferOutCcy = transferData.transferOutCcy;
+    String transferIntoCcy = transferData.transferIntoCcy;
+    String payeeBankCode = transferData.payeeBankCode;
+    String payeeCardNo = transferData.transferOutAccount;
+    String payeeName = transferData.payeeName;
+    String payerBankCode = transferData.payerBankCode;
+    String cardNo = transferData.transferIntoAccount;
+    String payerName = transferData.payerName;
+    String remark = transferData.transferRemark;
+    String smsCode = '';
+
+    TransferDataRepository()
+        .getTransferByAccount(
+            GetTransferByAccount(
+                //转账金额
+                money,
+                //贷方货币
+                transferOutCcy,
+                //借方货币
+                transferIntoCcy,
+                //输入密码
+                // 'L5o+WYWLFVSCqHbd0Szu4Q==',
+                '',
+                //收款方银行
+                payeeBankCode,
+                //收款方卡号
+                payeeCardNo,
+                //收款方姓名
+                payeeName,
+                //付款方银行
+                payerBankCode,
+                //付款方卡号
+                cardNo,
+                //付款方姓名
+                payerName,
+                //附言
+                remark,
+                //验证码
+                smsCode),
+            'getTransferByAccount')
+        .then((data) {
+           Navigator.pushReplacementNamed(context, pageOperationResult);
+        })
+        .catchError((e) {
+      print(e.toString());
+    });
   }
 }

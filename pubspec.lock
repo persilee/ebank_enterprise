@@ -192,13 +192,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.6"
-  contact_picker:
-    dependency: "direct main"
+  contact_picker_platform_interface:
+    dependency: transitive
     description:
-      name: contact_picker
+      name: contact_picker_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.2"
+    version: "4.2.0"
+  contact_picker_web:
+    dependency: transitive
+    description:
+      name: contact_picker_web
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.2.1"
   convert:
     dependency: transitive
     description:
@@ -347,6 +354,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fluttercontactpicker:
+    dependency: "direct main"
+    description:
+      name: fluttercontactpicker
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.2.1"
   fluttertoast:
     dependency: "direct main"
     description:
@@ -578,6 +592,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.1"
+  pretty_dio_logger:
+    dependency: "direct main"
+    description:
+      name: pretty_dio_logger
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.1"
   process:
     dependency: transitive
     description:
@@ -613,6 +634,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.5"
+  retrofit:
+    dependency: "direct main"
+    description:
+      name: retrofit
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.3.4+1"
+  retrofit_generator:
+    dependency: "direct dev"
+    description:
+      name: retrofit_generator
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.4.1+3"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -688,6 +723,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.8.0-nullsafety.2"
+  sp_util:
+    dependency: "direct main"
+    description:
+      name: sp_util
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.2"
   stack_trace:
     dependency: transitive
     description:
@@ -716,6 +758,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.0-nullsafety.1"
+  synchronized:
+    dependency: transitive
+    description:
+      name: synchronized
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.2.0+2"
   term_glyph:
     dependency: transitive
     description:
@@ -737,6 +786,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.1.1+3"
+  transparent_image:
+    dependency: "direct main"
+    description:
+      name: transparent_image
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
+  tuple:
+    dependency: transitive
+    description:
+      name: tuple
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.3"
   typed_data:
     dependency: transitive
     description:

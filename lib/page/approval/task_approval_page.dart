@@ -17,6 +17,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class TaskApprovalPage extends StatefulWidget {
   TaskApprovalPage({Key key}) : super(key: key);
@@ -207,10 +208,11 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
           if (buttonText == S.current.approval_lock) {
             _toggle();
             _doClaimTask();
-            Timer(Duration(milliseconds: 500),
-                    () => _controller.jumpTo(_controller.position.maxScrollExtent));
-
-            _controller.animateTo(_controller.position.maxScrollExtent, duration: Duration(milliseconds: 100));
+            _controller.animateTo(
+              _controller.position.maxScrollExtent,
+              duration: Duration(milliseconds: 100),
+              curve: Curves.linear,
+            );
           } else {
             if (comment.length != 0) {
               if (buttonText == S.current.reject_to_sponsor ||
@@ -350,9 +352,100 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
               //审批信息列表
               children: informationDisplayList(context, approvalInfo),
             ),
+            Padding(padding: EdgeInsets.only(top: 15)),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, pageAuthorizationTaskApprovalHistoryDetail);
+              },
+              child: _buildTitle('审批历史', true),
+            ),
+
             _myApproval(context), //我的审批
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildTitle(String title, bool isShowAvatar) {
+    return Container(
+      color: Colors.white,
+      height: 46,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.0),
+              child: Row(
+                children: [
+                  Text(
+                    title,
+                    style:
+                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  isShowAvatar
+                      ? Row(
+                    children: [
+                      _buildAvatar(
+                          'https://api.lishaoy.net/files/22/serve?size=medium',
+                          '廖珠星'),
+                      _buildAvatar(
+                          'https://api.lishaoy.net/files/169/serve?size=thumbnail',
+                          '康听白'),
+                      _buildAvatar(
+                          'https://api.lishaoy.net/files/258/serve?size=thumbnail',
+                          '冯晓霞'),
+                      Icon(
+                        Icons.chevron_right,
+                        size: 20.0,
+                      ),
+                    ],
+                  )
+                      : Container(),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            color: Colors.grey.withOpacity(0.3),
+            height: 1.0,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container _buildAvatar(String imageUrl, String name) {
+    return Container(
+      padding: EdgeInsets.only(right: 6.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ClipOval(
+                child: FadeInImage.memoryNetwork(
+                  placeholder: kTransparentImage,
+                  image: imageUrl,
+                  fit: BoxFit.cover,
+                  width: 22.0,
+                  height: 22.0,
+                ),
+              ),
+              Text(
+                name,
+                style: TextStyle(
+                  fontSize: 10,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
