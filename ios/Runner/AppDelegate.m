@@ -98,8 +98,8 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
         }
     }
     
-    interViewData.userName= @"Jason";//用户名
-    interViewData.tenantName = @"高阳寰球";//公司名
+//    interViewData.userName= @"Jason";//用户名
+//    interViewData.tenantName = @"高阳寰球";//公司名
     
     return interViewData;
 }
@@ -120,7 +120,6 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
 }
 //视频服务结束的方法
 -(void)SEVideoServiceDidFinishedWithResult:(SEVideoResult *)videoResult{
-    NSLog(@"报错信息------------%@",videoResult.error.desc);
     NSString *resultValue;
     if (videoResult.certificationResul.length > 0) {
         NSLog(@"认证结果%@",videoResult.certificationResul);
@@ -128,12 +127,15 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
         resultValue = [reultDict mj_JSONString];
         
         self.resultBlock(resultValue);
-    }else{//不成功
-        NSDictionary *reultDict = @{@"result":@"failer"};
-        resultValue = [reultDict mj_JSONString];
-        
-        self.resultBlock(resultValue);
+    }else{//用户操作失败等问题统一在这里处理
+        NSLog(@"报错信息------------%@",videoResult.error.desc);
     }
+//    else{//不成功
+//        NSDictionary *reultDict = @{@"result":@"failer"};
+//        resultValue = [reultDict mj_JSONString];
+//
+//        self.resultBlock(resultValue);
+//    }
 }
 
 #pragma mark - SigningESDKDelegate

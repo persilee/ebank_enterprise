@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy)NSString *queueID;
 @property (nonatomic, copy)NSString *userName;//不能为空。
 @property (nonatomic, copy)NSString *tenantName;//水印标签(公司名字)不能为空。
-@property (nonatomic, assign)SECertificateType certificateType;
+@property (nonatomic, assign)SECertificateType certificateType;//不传值进入选择页面
 
 //自助面签视频播放列表和朗读声明的文字都是非必填
 @property (nonatomic, copy)NSArray *videoArray;//这个是自助面签时播放的视频数组，数组中是可播放的视频地址。如果有值就播放视频，如果没有值就不播放
