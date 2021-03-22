@@ -189,7 +189,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       // HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
       HSProgressHUD.showInfo(status: S.current.sms_error);
     } else {
-      Navigator.pushNamed(context, iDcardVerification);
+      Navigator.pushNamed(context, iDcardVerification, arguments: _phone);
     }
   }
 
