@@ -187,7 +187,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
     RegExp number_6 = new RegExp(r'^\d{6}$');
     if (!number_6.hasMatch(_sms.text)) {
       // HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
-      HSProgressHUD.showInfo(status: '请输入6位验证码');
+      HSProgressHUD.showInfo(status: S.current.sms_error);
     } else {
       Navigator.pushNamed(context, iDcardVerification);
     }
