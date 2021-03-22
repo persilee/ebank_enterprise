@@ -527,6 +527,8 @@
   "password_need_num":"The password should be 8-16 bits, including numbers, uppercase and lowercase letters and special characters",
   "password_need_low_and_top":"Password should contain upper and lower case letters",
   "password_need_special_font":"The password should contain special characters",
-  "differnet_old_new_pwd": "New password and old password are not allowed to be consistent, please re-enter"
+  "differnet_old_new_pwd": "New password and old password are not allowed to be consistent, please re-enter",
+  "register_select_documents":"Please select document type"
+
 }
   
