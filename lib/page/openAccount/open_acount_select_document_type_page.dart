@@ -67,7 +67,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
     List typeList = [
       {
         'iconName': 'images/openAccount/open_account_document_type_CN.png',
-        'titleStr': S.of(context).openAccout_documents_idCard_CN,
+        'titleStr': S.of(context).openAccout_documentType_CN,
         'onClickFunction': () {
           print('中国大陆身份证识别');
           // Navigator.pushNamed(context, pageOpenAccountResults);
@@ -76,7 +76,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
       },
       {
         'iconName': 'images/openAccount/open_account_document_type_HK.png',
-        'titleStr': S.of(context).openAccout_documents_idCard_HK,
+        'titleStr': S.of(context).openAccout_documentType_HK,
         'onClickFunction': () {
           print('中国香港身份证识别');
           _qianliyanSDK(context, '2');
@@ -84,9 +84,13 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
       },
       {
         'iconName': 'images/openAccount/open_account_document_type_other.png',
-        'titleStr': S.of(context).openAccout_documents_passport_HK,
+        'titleStr': S.of(context).openAccout_documentType_other,
         'onClickFunction': () {
+<<<<<<< HEAD
           print('护照识别 (港澳台地区及境外护照)');
+=======
+          print('护照识别\n (港澳台地区及境外护照)');
+>>>>>>> 724b8235b9cd45b10536f426c6dab48c78ede6fc
           _qianliyanSDK(context, '3');
         },
       }

@@ -87,7 +87,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
                 // return _loadingView();
               } else {
                 return Container(
-                  height: 136.0,
+                  height: 156.0,
                   padding: EdgeInsets.only(top: 16),
                   child: GestureDetector(
                     onTap: () {
@@ -146,7 +146,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
       padding: EdgeInsets.only(right: 10.0, top: 6.0),
       child: SizedBox(
         width: 1.0,
-        height: 116.0,
+        height: 136.0,
         child: DecoratedBox(
           decoration: BoxDecoration(color: HsgColors.divider),
         ),
@@ -192,7 +192,9 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
             //发起人
             _getRow(S.current.sponsor, list[index].startUser),
             //创建时间
-            _getRow(S.current.creation_time, list[index].createTime)
+            _getRow(S.current.creation_time, list[index].createTime),
+            //创建时间
+            _getRow('处理状态', '成功'),
           ],
         ),
       ),
