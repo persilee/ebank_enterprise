@@ -8,9 +8,11 @@ import 'package:ebank_mobile/authentication/auth_identity.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/util/language.dart';
+import 'package:ebank_mobile/util/screen_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,10 +40,10 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
   TextEditingController _accountTC =
-      TextEditingController(text: 'blk501'); //fangluyao
+      TextEditingController(text: 'blk402'); //fangluyao
   TextEditingController _passwordTC =
       TextEditingController(text: '4N0021S8'); //b0S25X5Y
-  var _account = 'blk501'; //'blk101';
+  var _account = 'blk402'; //'blk101';
   var _password = '4N0021S8'; //'4N0021S8';
 
   @override
@@ -72,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
     //从忘记用户名界面拿到名字
     var _userName = ModalRoute.of(context).settings.arguments;
     _accountTC.text = _userName;
-    Widget backgroundImgWidget = new Container(
+    Widget backgroundImgWidget = Container(
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage('images/login/login_bg_password.png'),
@@ -81,156 +83,149 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
-    Widget contentDetailWidget = Column(
-      children: [
-        //选择语言按钮
-        Container(
-          margin: EdgeInsets.only(top: 20),
-          child: Row(
-            children: [
-              //填充左侧，使button自适应宽度
-              Expanded(child: Container()),
-              LanguageChangeBtn(_changeLangBtnTltle),
-            ],
-          ),
-        ),
-        //头部logo
-        Container(
-          margin: EdgeInsets.only(top: 45),
-          child: HeaderLogoView(),
-        ),
-        //账号输入框
-        Container(
-          height: 45,
-          margin: EdgeInsets.only(top: 36.5),
-          child: InputView(
-            _accountTC,
-            imgName: 'images/login/login_input_account.png',
-            textFieldPlaceholder: S.of(context).login_account_placeholder,
-            isCiphertext: false,
-          ),
-        ),
-        //密码输入框
-        Container(
-          height: 45,
-          margin: EdgeInsets.only(top: 16.0),
-          child: InputView(
-            _passwordTC,
-            imgName: 'images/login/login_input_password.png',
-            textFieldPlaceholder: S.of(context).password_need_num,
-            isCiphertext: true,
-          ),
-        ),
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              //忘记用户名
-              Container(
-                height: 20,
-                margin: EdgeInsets.only(top: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 15),
-                      child: ForgetButton(S.current.forget_username, () {
-                        setState(() {
-                          Navigator.pushNamed(context, pageForgetUserName);
-                          print('忘记密码');
-                        });
-                      }),
-                    )
-                  ],
-                ),
-              ),
-              //忘记密码按钮
-              Container(
-                height: 20,
-                margin: EdgeInsets.only(top: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(right: 33),
-                      margin: EdgeInsets.only(left: 15),
-                      child: ForgetButton(S.of(context).fotget_password_q, () {
-                        setState(() {
-                          Navigator.pushNamed(context, pageForgetPassword);
-                          print('忘记密码');
-                        });
-                      }),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        Container(
-            child: Row(
+    Widget contentDetailWidget = SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.only(top: ScreenUtil.instance.statusBarHeight),
+        child: Column(
           children: [
-            //注册按钮
+            //选择语言按钮
             Container(
-              margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
-              child: UnderButtonView(S.current.register,
-                  false ? null : () => _regesiter(context), false),
-            ),
-            //登录按钮
-            Container(
-              margin: EdgeInsets.only(
-                top: 40,
+              margin: EdgeInsets.only(top: 20),
+              child: Row(
+                children: [
+                  //填充左侧，使button自适应宽度
+                  Expanded(child: Container()),
+                  LanguageChangeBtn(_changeLangBtnTltle),
+                ],
               ),
-              child: UnderButtonView(S.of(context).login,
-                  _isLoading ? null : () => _login(context), true),
-            )
-          ],
-        )),
+            ),
+            //头部logo
+            Container(
+              margin: EdgeInsets.only(top: 45),
+              child: HeaderLogoView(),
+            ),
+            //账号输入框
+            Container(
+              height: 45,
+              margin: EdgeInsets.only(top: 36.5),
+              child: InputView(
+                _accountTC,
+                imgName: 'images/login/login_input_account.png',
+                textFieldPlaceholder: S.of(context).login_account_placeholder,
+                isCiphertext: false,
+              ),
+            ),
+            //密码输入框
+            Container(
+              height: 45,
+              margin: EdgeInsets.only(top: 16.0),
+              child: InputView(
+                _passwordTC,
+                imgName: 'images/login/login_input_password.png',
+                textFieldPlaceholder: S.of(context).password_need_num,
+                isCiphertext: true,
+              ),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  //忘记用户名
+                  Container(
+                    height: 20,
+                    margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(left: 15),
+                          child: ForgetButton(S.current.forget_username, () {
+                            setState(() {
+                              Navigator.pushNamed(context, pageForgetUserName);
+                              print('忘记密码');
+                            });
+                          }),
+                        )
+                      ],
+                    ),
+                  ),
+                  //忘记密码按钮
+                  Container(
+                    height: 20,
+                    margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(right: 33),
+                          margin: EdgeInsets.only(left: 15),
+                          child:
+                              ForgetButton(S.of(context).fotget_password_q, () {
+                            setState(() {
+                              Navigator.pushNamed(context, pageForgetPassword);
+                              print('忘记密码');
+                            });
+                          }),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-        Container(
-          height: MediaQuery.of(context).size.height / 2.7,
-          child: Text(
-            '@2020-2025 HSBC.com.cn.All Rights Reserved.',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-                fontSize: 11.0,
-                color: Colors.white, //HsgColors.aboutusTextCon,
-                fontWeight: FontWeight.normal),
-          ),
-          alignment: Alignment.bottomCenter,
-        )
-      ],
+            Container(
+                child: Row(
+              children: [
+                //注册按钮
+                Container(
+                  margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
+                  child: UnderButtonView(S.current.register,
+                      false ? null : () => _regesiter(context), false),
+                ),
+                //登录按钮
+                Container(
+                  margin: EdgeInsets.only(
+                    top: 40,
+                  ),
+                  child: UnderButtonView(S.of(context).login,
+                      _isLoading ? null : () => _login(context), true),
+                )
+              ],
+            )),
+
+            // Spacer(),
+          ],
+        ),
+      ),
     );
 
-    Widget contentWidget = new Scaffold(
-        backgroundColor: Colors.transparent,
-        body: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            // 触摸收起键盘
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          child: SafeArea(
-            maintainBottomViewPadding: true,
-            child: SingleChildScrollView(
-              child: contentDetailWidget,
-            ),
-          ),
-        ));
-
-    return MaterialApp(
-      home: Stack(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Stack(
         children: [
           backgroundImgWidget,
-          contentWidget,
+          contentDetailWidget,
+          Positioned(
+            bottom: 26,
+            right: 0,
+            left: 0,
+            child: Text(
+              '@2020-2025 HSBC.com.cn.All Rights Reserved.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 11.0,
+                  color: Colors.white, //HsgColors.aboutusTextCon,
+                  fontWeight: FontWeight.normal),
+            ),
+          ),
         ],
       ),
     );
   }
 
   ///登录操作
-  _login(BuildContext context) {
+  _login(BuildContext context) async {
     if (!_judgeCanLogin()) {
       return;
     }
@@ -241,6 +236,10 @@ class _LoginPageState extends State<LoginPage> {
     HSProgressHUD.show();
 
     String password = EncryptUtil.aesEncode(_password);
+
+    // LoginResp loginResp = await ApiClient()
+    //     .login(LoginReq(username: _account, password: password));
+    // print(loginResp.toJson());
     UserDataRepository()
         .login(LoginReq(username: _account, password: password), 'login')
         .then((value) {

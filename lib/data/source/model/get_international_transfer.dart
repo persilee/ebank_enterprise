@@ -13,8 +13,8 @@ class GetInternationalTransferReq extends Object {
   @JsonKey(name: 'costOptions')
   String costOptions;
 
-  // @JsonKey(name: 'creditCurrency')
-  // String creditCurrency;
+  @JsonKey(name: 'creditCurrency')
+  String creditCurrency;
 
   @JsonKey(name: 'debitCurrency')
   String debitCurrency;
@@ -62,7 +62,7 @@ class GetInternationalTransferReq extends Object {
     this.amount,
     this.bankSwift,
     this.costOptions,
-    // this.creditCurrency,
+    this.creditCurrency,
     this.debitCurrency,
     this.district,
     this.intermediateBankSwift,

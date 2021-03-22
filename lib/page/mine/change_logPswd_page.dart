@@ -318,7 +318,10 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     RegExp letter = new RegExp("[a-zA-Z]");
     RegExp number = new RegExp("[0-9]");
     RegExp number_6 = new RegExp(r'^\d{6}$');
-    if (_newPwd.text != _confimPwd.text) {
+    if (!number_6.hasMatch(_sms.text)) {
+      // HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
+      HSProgressHUD.showInfo(status: S.current.sms_error);
+    } else if (_newPwd.text != _confimPwd.text) {
       HSProgressHUD.showInfo(status: S.of(context).differentPwd);
     } else if (_oldPwd.text == _newPwd.text) {
       HSProgressHUD.showInfo(status: S.of(context).differnet_old_new_pwd);
@@ -327,9 +330,6 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
         characters.hasMatch(_newPwd.text) == false ||
         ((_newPwd.text).length < 8 || (_newPwd.text).length > 16)) {
       HSProgressHUD.showInfo(status: S.of(context).password_need_num);
-    } else if (!number_6.hasMatch(_sms.text)) {
-      // HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
-      HSProgressHUD.showInfo(status: '请输入6位验证码');
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();

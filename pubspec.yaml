@@ -39,7 +39,7 @@ dependencies:
   encrypt: ^4.0.0 #AES加解密
   flutter_picker: ^1.1.0 #选择器
   popup_window: ^1.1.1 #顶部弹窗
-  contact_picker: ^0.0.2 #获取联系人
+  fluttercontactpicker: ^4.2.1 #获取联系人
   left_scroll_actions: ^1.4.0
   webview_flutter: ^1.0.7
   date_format: ^1.0.8
@@ -48,6 +48,10 @@ dependencies:
   flutter_easyrefresh: ^2.1.7
   azlistview: ^0.1.2
   lpinyin: ^1.0.7
+  transparent_image: ^1.0.0
+  retrofit: any
+  pretty_dio_logger: ^1.1.1
+  sp_util:
   flutter_cupertino_date_picker:
     git:
       url: https://github.com/imshashank/flutter-cupertino-date-picker # Repo
@@ -60,6 +64,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  retrofit_generator: any
   build_runner: ^1.10.4
   json_serializable: ^3.5.0 #json和模型互转
 
@@ -75,6 +80,7 @@ flutter:
   assets:
     - assets/data/china.json
     - assets/data/country.json
+    - assets/images/splash.png
     - assets/data/city.json
     - images/ic_launcher.png
     #common
@@ -179,6 +185,8 @@ flutter:
     - images/openAccount/open_account_document_type_CN.png
     - images/openAccount/open_account_document_type_HK.png
     - images/openAccount/open_account_document_type_other.png
+    - images/openAccount/open_account_identify_results_failure.png
+    - images/openAccount/open_account_identify_results_successful.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

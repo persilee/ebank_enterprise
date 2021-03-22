@@ -13,6 +13,7 @@ import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 
 /// @auther zhanggenha
 /// @date 2020-12-05
@@ -24,7 +25,7 @@ class CardListPage extends StatefulWidget {
 }
 
 class _CardListPageState extends State<CardListPage> {
-  var cards = [];
+  List<RemoteBankCard> cards = <RemoteBankCard>[];
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
   List<bool> _isShow = <bool>[];
   List<GetCardLimitByCardNoResp> _cardLimitList = <GetCardLimitByCardNoResp>[];
@@ -72,13 +73,7 @@ class _CardListPageState extends State<CardListPage> {
       ),
       onTap: () {
         // go2Detail(cards[position]);
-        setState(() {
-          if (_isShow[position] == true) {
-            _isShow[position] = false;
-          } else {
-            _isShow[position] = true;
-          }
-        });
+        _loadCardLimit(cards[position].cardNo, position);
       },
     );
   }
@@ -170,12 +165,6 @@ class _CardListPageState extends State<CardListPage> {
           if (_isShow.length == 0 && _cardLimitList.length == 0) {
             for (int i = 0; i < cards.length; i++) {
               RemoteBankCard card = cards[i];
-              CardDataRepository()
-                  .getCardLimitByCardNo(GetCardLimitByCardNoReq(card.cardNo),
-                      'GetCardLimitByCardNoReq')
-                  .then((limit) {
-                _cardLimitList.add(limit);
-              });
               _isShow.add(false);
             }
           }
@@ -184,6 +173,40 @@ class _CardListPageState extends State<CardListPage> {
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
+  }
+
+  _loadCardLimit(String cardNo, int position) async {
+    if (_isShow[position] == true) {
+      setState(() {
+        _isShow[position] = false;
+      });
+    } else {
+      try {
+        String test = _cardLimitList[position].toString();
+        HSProgressHUD.show();
+        setState(() {
+          _isShow[position] = true;
+        });
+        HSProgressHUD.dismiss();
+        print(test);
+      } catch (error) {
+        HSProgressHUD.show();
+        CardDataRepository()
+            .getCardLimitByCardNo(
+                GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq')
+            .then((limit) {
+          setState(() {
+            _cardLimitList.insert(position, limit);
+            _isShow[position] = true;
+          });
+          HSProgressHUD.dismiss();
+        }).catchError((e) {
+          HSProgressHUD.dismiss();
+          HSProgressHUD.showError(status: e.toString());
+        });
+      }
+      // print(e.toString());
+    }
   }
 
   void go2Detail(RemoteBankCard card) {

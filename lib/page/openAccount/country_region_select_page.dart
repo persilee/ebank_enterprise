@@ -1,10 +1,18 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+///  国家地区、区号选择
+/// Author: 李家伟
+/// Date: 2021-03-18
+
 import 'dart:convert';
 
 import 'package:azlistview/azlistview.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lpinyin/lpinyin.dart';
 import 'package:flutter/material.dart';
 // import 'package:azlistview/azlistview.dart';
@@ -68,6 +76,17 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
   }
 
   void loadData() async {
+    // //获取国家地区类型
+    // PublicParametersRepository()
+    //     .getIdType(GetIdTypeReq('COUNTRY'), 'GetIdTypeReq')
+    //     .then((data) {
+    //   if (data.publicCodeGetRedisRspDtoList != null) {
+    //     print('COUNTRY-  ${data.publicCodeGetRedisRspDtoList}');
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // });
+
     //加载城市列表
     rootBundle.loadString('assets/data/country.json').then((value) {
       Map countryMap = json.decode(value);
@@ -156,37 +175,6 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
     );
   }
 
-  // //自定义头部
-  // Widget _buildHeader() {
-  //   List<CityInfo> hotCityList = List();
-  //   hotCityList.addAll([
-  //     CityInfo(name: "北京市"),
-  //     CityInfo(name: "上海市"),
-  //     CityInfo(name: "广州市"),
-  //     CityInfo(name: "深圳市"),
-  //     CityInfo(name: "杭州市"),
-  //     CityInfo(name: "成都市"),
-  //   ]);
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-  //     child: Wrap(
-  //       alignment: WrapAlignment.center,
-  //       runAlignment: WrapAlignment.center,
-  //       spacing: 10.0,
-  //       children: hotCityList.map((e) {
-  //         return OutlineButton(
-  //           borderSide: BorderSide(color: Colors.grey[300], width: .5),
-  //           child: Text(e.name),
-  //           onPressed: () {
-  //             print("OnItemClick: $e");
-  //             Navigator.pop(context, e.name);
-  //           },
-  //         );
-  //       }).toList(),
-  //     ),
-  //   );
-  // }
-
   static Widget getSusItem(BuildContext context, String tag,
       {double susHeight = 35}) {
     return Container(
@@ -205,82 +193,4 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
       ),
     );
   }
-
-  // //自定义tag
-  // Widget _buildSusWidget(String susTag) {
-  //   return Container(
-  //     height: _suspensionHeight.toDouble(),
-  //     padding: const EdgeInsets.only(left: 15.0),
-  //     color: Color(0xfff3f4f5),
-  //     alignment: Alignment.centerLeft,
-  //     child: Text(
-  //       '$susTag',
-  //       softWrap: false,
-  //       style: TextStyle(
-  //         fontSize: 14.0,
-  //         color: Color(0xff999999),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // //自定义item
-  // Widget _buildListItem(int index) {
-  //   CityInfo model = _cityList[index];
-  //   String susTag = model.getSuspensionTag();
-  //   return Column(
-  //     children: <Widget>[
-  //       Offstage(
-  //         offstage: model.isShowSuspension != true,
-  //         child: _buildSusWidget(susTag),
-  //       ),
-  //       SizedBox(
-  //         height: _itemHeight.toDouble(),
-  //         child: ListTile(
-  //           title: Text(model.nameZhCN),
-  //           onTap: () {
-  //             print("OnItemClick: $model");
-  //             Navigator.pop(context, model.nameZhCN);
-  //           },
-  //         ),
-  //       )
-  //     ],
-  //   );
-  // }
 }
-
-// class CityInfo extends ISuspensionBean {
-//   String nameEN;
-//   String flZh;
-//   String code;
-//   String countryCode;
-//   String flEN;
-//   String nameZhCN;
-//   String nameZhHK;
-
-//   CityInfo({
-//     this.nameEN,
-//     this.flZh,
-//     this.code,
-//     this.countryCode,
-//     this.flEN,
-//     this.nameZhCN,
-//     this.nameZhHK,
-//   });
-
-//   CityInfo.fromJson(Map<String, dynamic> json);
-
-//   Map<String, dynamic> toJson() => {
-//         'nameEN': nameEN,
-//         'flZh': flZh,
-//         'code': code,
-//         'countryCode': countryCode,
-//         'flEN': flEN,
-//         'nameZhCN': nameZhCN,
-//         'nameZhHK': nameZhHK,
-//         'isShowSuspension': isShowSuspension
-//       };
-
-//   @override
-//   String getSuspensionTag() => code;
-// }
