@@ -17,6 +17,7 @@ import '../../page_route.dart';
 
 class AuthorizationHistoryPage extends StatefulWidget {
   final title;
+
   AuthorizationHistoryPage({Key key, this.title}) : super(key: key);
 
   @override
@@ -30,36 +31,38 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
   LoadingStatus loadStatus; //加载状态
   int count = 0;
   int page = 1;
-  ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController;
   List<FinishTaskDetail> list = []; //页面显示的待办列表
   List<FinishTaskDetail> finishTaskList = [];
-  // FinishTaskDetail dataA = FinishTaskDetail("60001", "0", "一对一转账审批", "6001",
-  //     "transfer", "3", "776106645288648704", "2020-11-11 14:16:24");
-  // FinishTaskDetail dataB = FinishTaskDetail("60002", "0", "定期开立", "6002",
-  //     "transfer", "3", "776106645288648704", "2020-11-11 15:46:56");
-  // FinishTaskDetail dataC = FinishTaskDetail("60003", "0", "一对一转账审批", "6003",
-  //     "transfer", "3", "776106645288648704", "2020-11-11 15:51:18");
-  // FinishTaskDetail dataD = FinishTaskDetail("60003", "0", "定期开立", "6003",
-  //     "transfer", "3", "776106645288648704", "2020-11-11 16:02:33");
+  FinishTaskDetail dataA = FinishTaskDetail("60001", "0", "一对一转账审批", "6001",
+      "transfer", "3", "776106645288648704", "2020-11-11 14:16:24");
+  FinishTaskDetail dataB = FinishTaskDetail("60002", "0", "定期开立", "6002",
+      "transfer", "3", "776106645288648704", "2020-11-11 15:46:56");
+  FinishTaskDetail dataC = FinishTaskDetail("60003", "0", "一对一转账审批", "6003",
+      "transfer", "3", "776106645288648704", "2020-11-11 15:51:18");
+  FinishTaskDetail dataD = FinishTaskDetail("60003", "0", "定期开立", "6003",
+      "transfer", "3", "776106645288648704", "2020-11-11 16:02:33");
   var _future;
+
   @override
   void initState() {
     super.initState();
-    // list.add(dataA);
-    // list.add(dataB);
-    // list.add(dataC);
-    // list.add(dataD);
+    _scrollController = ScrollController();
+    list.add(dataA);
+    list.add(dataB);
+    list.add(dataC);
+    list.add(dataD);
     //网络请求
-    _loadAuthorzationRateData(page, 10);
+    // _loadAuthorzationRateData(page, 10);
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        //加载更多
-        _getMore();
-      }
-      _future = _loadAuthorzationRateData(page, 10);
-    });
+    // _scrollController.addListener(() {
+    //   if (_scrollController.position.pixels ==
+    //       _scrollController.position.maxScrollExtent) {
+    //     //加载更多
+    //     _getMore();
+    //   }
+    //   _future = _loadAuthorzationRateData(page, 10);
+    // });
   }
 
   void go2Detail(FinishTaskDetail history) {
@@ -75,19 +78,47 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
     }
     return _isDate
         ? ListView.builder(
+            padding: EdgeInsets.symmetric(horizontal: 12.0),
             itemCount: list.length + 1,
             // itemCount: list.length,
             itemBuilder: (context, index) {
               if (index == list.length) {
-                return _loadingView();
+                return Container();
+                // return _loadingView();
               } else {
-                return GestureDetector(
-                  onTap: () {
-                    go2Detail(list[index]);
-                    print('选择账号');
-                  },
-                  child: Column(
-                    children: [_getColumn(index)],
+                return Container(
+                  height: 136.0,
+                  padding: EdgeInsets.only(top: 16),
+                  child: GestureDetector(
+                    onTap: () {
+                      go2Detail(list[index]);
+                      print('选择账号');
+                    },
+                    child: Stack(
+                      overflow: Overflow.visible,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 16.0,
+                            ),
+                            Expanded(
+                              child: _getColumn(index),
+                            ),
+                          ],
+                        ),
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          child: Column(
+                            children: [
+                              _icon(),
+                              _line(),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }
@@ -97,44 +128,86 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
         : notDataContainer(context, S.current.no_data_now);
   }
 
-  _getRow(String leftText, String rightText) {
+  //蓝色圆点
+  Widget _icon() {
     return Container(
-      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            child: Text(leftText),
-          ),
-          Container(
-            child: Text(
-              rightText,
-              style: TextStyle(
-                color: HsgColors.secondDegreeText,
-              ),
-              textAlign: TextAlign.right,
-            ),
-          )
-        ],
+      padding: EdgeInsets.only(right: 10.0),
+      child: Icon(
+        Icons.fiber_manual_record,
+        color: HsgColors.blueIcon,
+        size: 10.0,
       ),
     );
   }
 
-  _getColumn(index) {
+//竖直线
+  Widget _line() {
     return Container(
-      color: Colors.white,
-      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: Column(
-        children: [
-          //待办任务名称
-          _getRow(S.current.to_do_task_name, list[index].processTitle),
-          //发起人
-          _getRow(S.current.sponsor, list[index].startUser),
-          //创建时间
-          _getRow(S.current.creation_time, list[index].createTime)
-        ],
+      padding: EdgeInsets.only(right: 10.0, top: 6.0),
+      child: SizedBox(
+        width: 1.0,
+        height: 116.0,
+        child: DecoratedBox(
+          decoration: BoxDecoration(color: HsgColors.divider),
+        ),
       ),
+    );
+  }
+
+  _getRow(String leftText, String rightText) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          leftText,
+          style: TextStyle(
+            fontSize: 14.0,
+            color: HsgColors.toDoDetailText,
+          ),
+        ),
+        Text(
+          rightText,
+          textAlign: TextAlign.right,
+          style: TextStyle(
+            fontSize: 14.0,
+            color: HsgColors.aboutusTextCon,
+          ),
+        ),
+      ],
+    );
+  }
+
+  _getColumn(index) {
+    return Card(
+      elevation: 6.0,
+      shadowColor: Colors.grey.withOpacity(0.2),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            //待办任务名称
+            _taskName(list[index].processTitle),
+            //发起人
+            _getRow(S.current.sponsor, list[index].startUser),
+            //创建时间
+            _getRow(S.current.creation_time, list[index].createTime)
+          ],
+        ),
+      ),
+    );
+  }
+
+  //待办任务名称
+  Widget _taskName(String taskName) {
+    return Text(
+      taskName,
+      textAlign: TextAlign.left,
+      style: TextStyle(
+          fontSize: 15.0,
+          color: HsgColors.aboutusTextCon,
+          fontWeight: FontWeight.bold),
     );
   }
 

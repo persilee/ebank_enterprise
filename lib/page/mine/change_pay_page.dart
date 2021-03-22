@@ -193,15 +193,15 @@ class _ChangePayPageState extends State<ChangePayPage> {
     print(oldPwd);
     print(newPwd);
     RegExp number_6 = new RegExp(r'^\d{6}$');
-    if (_newPwd.text != _confimPwd.text) {
+    if (!number_6.hasMatch(_sms.text)) {
+      // HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
+      HSProgressHUD.showInfo(status: S.current.sms_error);
+    } else if (_newPwd.text != _confimPwd.text) {
       HSProgressHUD.showInfo(status: S.of(context).differentPwd);
     } else if (_newPwd.text == _oldPwd.text) {
       HSProgressHUD.showInfo(status: S.of(context).differnet_old_new_pwd);
     } else if (!number_6.hasMatch(_newPwd.text)) {
       HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
-    } else if (!number_6.hasMatch(_sms.text)) {
-      // HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
-      HSProgressHUD.showInfo(status: '请输入6位验证码');
     } else {
       PaymentPwdRepository()
           .updateTransPassword(

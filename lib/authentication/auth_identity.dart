@@ -23,7 +23,6 @@ class AuthIdentity {
         {"body": jsonEncode(req)},
       );
       final resultMap = jsonDecode(result);
-      print(resultMap);
       return Future.value(AuthIdentityResp.fromJson(resultMap));
     } on PlatformException catch (e) {
       return Future.error("startAuth error: '${e.message}'");

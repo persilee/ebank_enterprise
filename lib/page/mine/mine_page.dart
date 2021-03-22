@@ -55,7 +55,7 @@ class _MinePageState extends State<MinePage> {
   String _sms = ""; //验证码
   String _password = "123456qwe~"; //密码
   String _registerAccount = "wly3"; //手机号注册（用户账号）
-  var _enterpriseName = '高阳寰球科技有限公司'; // 企业名称
+  var _enterpriseName = ''; // 企业名称
   var _characterName = ''; // 角色名称
   var _belongCustStatus = '7'; //用户状态
   UserInfoResp _userInfoResp;
@@ -696,10 +696,10 @@ class _MinePageState extends State<MinePage> {
         context: context,
         builder: (context) {
           return HsgAlertDialog(
-            // title: S.current.prompt,
-            // message: S.current.select_transfer_type_first,
-            title: '退出',
-            message: '确定要退出手机银行账户吗?',
+            title: S.current.exit,
+            message: S.current.loginOut_tips,
+            // title: '退出',
+            // message: '确定要退出手机银行账户吗?',
             positiveButton: S.current.confirm,
             negativeButton: S.current.cancel,
           );
@@ -719,9 +719,11 @@ class _MinePageState extends State<MinePage> {
     //   GetUserInfoReq(userID),
     //   'logout',
     // )
+    HSProgressHUD.show();
     UserDataRepository()
         .logout(LogoutReq(userID, _userName), 'logout')
         .then((data) {
+      HSProgressHUD.dismiss();
       setState(() {
         // prefs.setString(ConfigKey.USER_ACCOUNT, '');
         // prefs.setString(ConfigKey.USER_ID, '');
@@ -740,8 +742,9 @@ class _MinePageState extends State<MinePage> {
       });
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.dismiss();
       HSProgressHUD.showError(status: e.toString());
-      print('${e.toString()}');
+      // print(e.toString());
     });
   }
 
