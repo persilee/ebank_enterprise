@@ -18,7 +18,7 @@ import 'package:ebank_mobile/widget/hsg_single_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:contact_picker/contact_picker.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
 import 'package:intl/intl.dart';
 
@@ -168,7 +168,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                 _bankCode,
                 _swiftAdressReq,
                 "",
-                _branchReq,
+                _countryText,
                 _centerSwiftReq,
                 _payeeAdressReq,
                 _acountController.text,
@@ -177,11 +177,12 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                 "",
                 "",
                 _smsController.text,
+                _bankName,
                 _aliasController.text,
                 myTransferType),
             'addPartner')
         .then((data) {
-      print(data.toString());
+      print(_bankName + "==================");
       if (data != null) {
         Fluttertoast.showToast(msg: '添加成功');
         Navigator.of(context).pop();
@@ -685,7 +686,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       children: [
         Container(
           padding: EdgeInsets.only(right: 9),
-          width: 170,
+          width: 150,
           child: TextField(
             style: TextStyle(fontSize: 14),
             textAlign: TextAlign.end,
@@ -776,17 +777,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
 
   //获取联系人
   _contact() async {
-    ContactPicker _contactPicker = new ContactPicker();
-    Contact contact = await _contactPicker.selectContact();
+    final PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+    print(contact);
     setState(() {
-      String text = contact.phoneNumber.toString();
-      if (text.startsWith('+')) {
-        text = text.substring(text.indexOf(' '), text.indexOf(' ('));
-      } else {
-        text = text.substring(0, text.indexOf(' ('));
-      }
-      text = text.replaceAll(new RegExp(r"\s+\b|\b\s"), "");
-      _smsController.text = text;
+      _smsController.text = contact.phoneNumber.number;
     });
   }
 
