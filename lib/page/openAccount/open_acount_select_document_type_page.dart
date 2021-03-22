@@ -71,7 +71,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
         'onClickFunction': () {
           print('中国大陆身份证识别');
           // Navigator.pushNamed(context, pageOpenAccountResults);
-          _qianliyanSDK(context);
+          _qianliyanSDK(context, '1');
         },
       },
       {
@@ -79,7 +79,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
         'titleStr': S.of(context).openAccout_documents_idCard_HK,
         'onClickFunction': () {
           print('中国香港身份证识别');
-          _qianliyanSDK(context);
+          _qianliyanSDK(context, '2');
         },
       },
       {
@@ -87,7 +87,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
         'titleStr': S.of(context).openAccout_documents_passport_HK,
         'onClickFunction': () {
           print('护照识别 (港澳台地区及境外护照)');
-          _qianliyanSDK(context);
+          _qianliyanSDK(context, '3');
         },
       }
     ];
@@ -192,7 +192,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
     );
   }
 
-  void _qianliyanSDK(BuildContext context) {
+  void _qianliyanSDK(BuildContext context, String documentType) {
     String _language = Intl.getCurrentLocale();
     String lang = _language == 'en' ? 'en' : 'zh';
     String countryRegions = _language == 'zh_CN' ? 'CN' : 'TW';
@@ -200,7 +200,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
     AuthIdentity()
         .startAuth(
       new AuthIdentityReq("DLEAED", "74283428974321", lang, countryRegions,
-          "1"), //passport001zh  DLEAED
+          documentType), //passport001zh  DLEAED
     )
         .then((value) {
       Fluttertoast.showToast(
