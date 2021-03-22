@@ -1,6 +1,6 @@
 import 'package:ebank_mobile/data/source/model/checkout_informant.dart';
-import 'package:ebank_mobile/data/source/model/real_name_auth.dart';
 import 'package:ebank_mobile/data/source/model/set_transactionPassword.dart';
+import 'package:ebank_mobile/data/source/model/real_name_auth_by_three_factor.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// desc: 重置交易密码--身份证验证
@@ -24,9 +24,10 @@ class ChecInformantApiRepository {
   }
 
   //身份证验证(三步验证)
-  Future<RealNameAuthResp> realNameAuth(RealNameAuthReq req, String tag) {
-    return request('cust/verification/realNameAuth', req, tag,
-        (data) => RealNameAuthResp.fromJson(data));
+  Future<RealNameAuthByThreeFactorResp> realNameAuth(
+      RealNameAuthByThreeFactorReq req, String tag) {
+    return request('cust/verification/realNameAuthByThreeFactor', req, tag,
+        (data) => RealNameAuthByThreeFactorResp.fromJson(data));
   }
 
   static final _instance = ChecInformantApiRepository._internal();
