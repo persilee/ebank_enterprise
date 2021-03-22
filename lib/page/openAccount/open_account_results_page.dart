@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+/// 开户结果页面
+/// Author: 李家伟
+/// Date: 2021-03-19
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
