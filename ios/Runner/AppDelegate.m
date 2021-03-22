@@ -80,10 +80,11 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
     interViewData.interviewType = SEInterviewTypeCertificate;//认证
     interViewData.isShowImg = YES;
     interViewData.isAgain = YES;
-
+    
+    interViewData.certificateType = [[self.bodyDictData objectForKey:@"type"] intValue];//证件类型
+    
     interViewData.code = [self.bodyDictData objectForKey:@"tokId"];//话术id
     interViewData.errAIcode = [self.bodyDictData objectForKey:@"tokId"];//证件识别失败10次话术id
-    interViewData.statementStr = @"证件识别失败，即将进入到AI自助面签";
     
     NSString *language = [self.bodyDictData objectForKey:@"language"];// 语言  zh 中文，en 英文
     if (NOTNULLString(language) && [language isEqualToString:@"en"]) {//语言类型 必传
