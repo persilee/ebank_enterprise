@@ -31,32 +31,35 @@ class AboutUsPage extends StatelessWidget {
                         //height: 196.0,
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 41.0, left: 24.0),
-                      child: Text(
-                        '全球银行业综合服务商',
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: HsgColors.aboutusText,
+                    Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 35.0, left: 24.0),
+                          child: Text(
+                            S.current.about_us_title,
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: HsgColors.aboutusText,
+                            ),
+                          ),
                         ),
-                      ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: 6.0, left: 24.0, right: 59.0),
+                          child: Text(
+                            S.current.about_us_subhead,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: HsgColors.aboutusText,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     Container(
                       margin:
-                          EdgeInsets.only(top: 86.0, left: 24.0, right: 59.0),
-                      child: Text(
-                        '专业提供银行IT系统产品、解决方案及全面的开发实施服务',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: HsgColors.aboutusText,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin:
-                          EdgeInsets.only(top: 150.0, left: 15.0, right: 15.0),
-                      padding:
-                          EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
+                          EdgeInsets.only(top: 160.0, left: 15.0, right: 15.0),
+                      padding: EdgeInsets.only(top: 5.0, left: 9.0, right: 9.0),
                       decoration: new BoxDecoration(
                           //背景颜色
                           color: Colors.white,
@@ -74,23 +77,31 @@ class AboutUsPage extends StatelessWidget {
                           child: Container(
                         padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                Text(
-                                  '企业介绍',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: HsgColors.aboutusTextCon,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  '/ INTROTUCE',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: HsgColors.aboutusTextCon),
-                                ),
-                              ],
+                            Container(
+                              child: Flex(
+                                direction: Axis.horizontal,
+                                children: [
+                                  Text(
+                                    S.current.company_introduction,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: HsgColors.aboutusTextCon,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      '/ INTROTUCE',
+                                      overflow: TextOverflow.values[1],
+                                      // overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: HsgColors.aboutusTextCon),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             Row(
                               children: [
@@ -105,7 +116,7 @@ class AboutUsPage extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(top: 30, bottom: 42),
                               child: Text(
-                                '高阳寰球是一家专注服务银行业的科技公司专业提供银行IT系统产品、解决方案及全面的开发实施服务。曾获金融行业最佳产品奖、案例遍布5大洲、获中国方案商百强荣誉称号。',
+                                S.current.company_introduction_content,
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: HsgColors.aboutusTextCon),
@@ -134,7 +145,7 @@ class AboutUsPage extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            '我们的优势',
+                            S.current.our_advantage,
                             style: TextStyle(
                                 fontSize: 20,
                                 color: HsgColors.aboutusTextCon,
@@ -188,7 +199,7 @@ class AboutUsPage extends StatelessWidget {
                             padding: EdgeInsets.only(left: 10),
                           ),
                           Text(
-                            '企业优势',
+                            S.current.inputprise_strength,
                             style: TextStyle(
                                 fontSize: 17,
                                 color: HsgColors.aboutusTextCon,
@@ -198,8 +209,7 @@ class AboutUsPage extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 15, bottom: 25),
-                        child: Text(
-                            '有丰富的全球银行服务经验，熟悉全球法规、市场惯例和工作文化；100%项目实施成功率，在全球IT建设领域拥有丰富经验和良好口碑。',
+                        child: Text(S.current.inputprise_strength_content,
                             style: TextStyle(
                                 fontSize: 14, color: HsgColors.aboutusTextCon)),
                       )
@@ -230,7 +240,7 @@ class AboutUsPage extends StatelessWidget {
                             padding: EdgeInsets.only(left: 10),
                           ),
                           Text(
-                            '技术优势',
+                            S.current.technical_strength,
                             style: TextStyle(
                                 fontSize: 17,
                                 color: HsgColors.aboutusTextCon,
@@ -240,8 +250,7 @@ class AboutUsPage extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 15, bottom: 25),
-                        child: Text(
-                            '在金融及通讯领域拥有领先的技术实力，掌握领先的银行核心业务处理技术、成熟的电子银行处理技术、及完善的手机交易核心技术',
+                        child: Text(S.current.technical_strength_content,
                             style: TextStyle(
                                 fontSize: 14, color: HsgColors.aboutusTextCon)),
                       )
@@ -277,7 +286,7 @@ class AboutUsPage extends StatelessWidget {
                             padding: EdgeInsets.only(left: 10),
                           ),
                           Text(
-                            '团队优势',
+                            S.current.team_strength,
                             style: TextStyle(
                                 fontSize: 17,
                                 color: HsgColors.aboutusTextCon,
@@ -287,8 +296,7 @@ class AboutUsPage extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 15, bottom: 25),
-                        child: Text(
-                            '我们拥有众多顶级的金融业务专家和技术专家，每位专家在细分的业务领域内都具有20年以上的经验积累',
+                        child: Text(S.current.team_strength_content,
                             style: TextStyle(
                                 fontSize: 14, color: HsgColors.aboutusTextCon)),
                       )
@@ -319,7 +327,7 @@ class AboutUsPage extends StatelessWidget {
                             padding: EdgeInsets.only(left: 10),
                           ),
                           Text(
-                            '服务优势',
+                            S.current.service_strength,
                             style: TextStyle(
                                 fontSize: 17,
                                 color: HsgColors.aboutusTextCon,
@@ -329,8 +337,7 @@ class AboutUsPage extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 15, bottom: 25),
-                        child: Text(
-                            '为客户提供提供全面的银行系统产品和服务：顾问服务、系统规划、需求分析、产品设计与开发、项目实施、业务运营与维护',
+                        child: Text(S.current.service_strength_content,
                             style: TextStyle(
                                 fontSize: 14, color: HsgColors.aboutusTextCon)),
                       )
@@ -356,7 +363,7 @@ class AboutUsPage extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            '我们的价值',
+                            S.current.our_value,
                             style: TextStyle(
                                 fontSize: 20,
                                 color: HsgColors.aboutusTextCon,
@@ -394,11 +401,13 @@ class AboutUsPage extends StatelessWidget {
                                 Container(
                                   width: 20.0,
                                 ),
-                                Text(
-                                  '即时响应式服务,全程为开发加速',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: HsgColors.aboutusTextCon,
+                                Expanded(
+                                  child: Text(
+                                    S.current.our_value_content1,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: HsgColors.aboutusTextCon,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -419,11 +428,13 @@ class AboutUsPage extends StatelessWidget {
                                 Container(
                                   width: 20.0,
                                 ),
-                                Text(
-                                  '强大团队 高效实施',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: HsgColors.aboutusTextCon,
+                                Expanded(
+                                  child: Text(
+                                    S.current.our_value_content2,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: HsgColors.aboutusTextCon,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -444,11 +455,13 @@ class AboutUsPage extends StatelessWidget {
                                 Container(
                                   width: 20.0,
                                 ),
-                                Text(
-                                  '灵活配置 可扩充可维护',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: HsgColors.aboutusTextCon,
+                                Expanded(
+                                  child: Text(
+                                    S.current.our_value_content3,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: HsgColors.aboutusTextCon,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -469,11 +482,13 @@ class AboutUsPage extends StatelessWidget {
                                 Container(
                                   width: 20.0,
                                 ),
-                                Text(
-                                  '7*24小时 技术支持',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: HsgColors.aboutusTextCon,
+                                Expanded(
+                                  child: Text(
+                                    S.current.our_value_content4,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: HsgColors.aboutusTextCon,
+                                    ),
                                   ),
                                 ),
                               ],
