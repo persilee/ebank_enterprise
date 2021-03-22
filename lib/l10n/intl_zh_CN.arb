@@ -365,6 +365,7 @@
   "newPwd": "新密码",
   "confimPwd": "确认新密码",
   "SMS": "短信验证码",
+  "sms_error": "请输入6位验证码!",
   "placeOldPwd": "请输入旧密码",
   "placeNewPwd": "请输入新密码",
   "placeConfimPwd": "请再次输入新密码",

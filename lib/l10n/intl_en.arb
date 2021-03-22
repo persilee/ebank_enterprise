@@ -371,6 +371,7 @@
   "newPwd": "New Password",
   "confimPwd": "Confirm New Password",
   "SMS": "SMS Verification Code",
+  "sms_error": "Please enter a 6 digit verification code!",
   "placeOldPwd": "Please enter the old password",
   "placeNewPwd": "Please enter the new password",
   "placeConfimPwd": "Please enter the new password again",
