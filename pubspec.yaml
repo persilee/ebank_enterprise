@@ -179,6 +179,8 @@ flutter:
     - images/openAccount/open_account_document_type_CN.png
     - images/openAccount/open_account_document_type_HK.png
     - images/openAccount/open_account_document_type_other.png
+    - images/openAccount/open_account_identify_results_failure.png
+    - images/openAccount/open_account_identify_results_successful.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
