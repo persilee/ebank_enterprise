@@ -41,6 +41,8 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
       'HKD', '800', '2020-01-17', '2020-07-17', '1', '0');
   DepositRecord dataC = DepositRecord('1.50', '6003', 'TAI30', '', '2', '3',
       'USD', '1000', '2020-01-17', '2020-07-17', '1', '0');
+  DepositRecord dataD = DepositRecord('1.45', '6003', 'TAI30', '', '2', '3',
+      'USD', '5000', '2020-01-17', '2020-07-17', '1', '0');
   List<DepositRecord> rowList = [];
   List<DepositRecord> list = []; //页面显示的记录列表
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
@@ -66,7 +68,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     rowList.add(dataA);
     rowList.add(dataB);
     rowList.add(dataC);
-    rowList.add(dataA);
+    rowList.add(dataD);
 
     NotificationCenter.instance.addObserver('load', (object) {
       setState(() {
@@ -132,6 +134,39 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     );
   }
 
+  //存单总额（币种）
+  Widget _totalCcy() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(left: 0, top: 10, bottom: 30),
+      child: Text(
+        ' ${S.current.receipts_total_amt} (' + _defaultCcy + ')',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            height: 1,
+            fontSize: 15,
+            backgroundColor: HsgColors.primary,
+            color: Colors.white54),
+      ),
+    );
+  }
+
+  //存单总额
+  Widget _totalAmt() {
+    return Container(
+      padding: EdgeInsets.only(left: 0, top: 30, bottom: 10),
+      child: Text(
+        FormatUtil.formatSringToMoney(totalAmt),
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            height: 1,
+            fontSize: 40,
+            backgroundColor: HsgColors.primary,
+            color: Colors.white),
+      ),
+    );
+  }
+
   Widget _getContent(List<DepositRecord> rows) {
     // ignore: non_constant_identifier_names
     var SliverToBoxAdapters = <Widget>[
@@ -142,32 +177,13 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
       ),
       SliverToBoxAdapter(
         child: Container(
+          width: MediaQuery.of(context).size.width,
           color: HsgColors.primary,
-          padding: EdgeInsets.only(left: 0, top: 30, bottom: 10),
-          child: Text(
-            FormatUtil.formatSringToMoney(totalAmt),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                height: 1,
-                fontSize: 40,
-                backgroundColor: HsgColors.primary,
-                color: Colors.white),
-          ),
-        ),
-      ),
-      SliverToBoxAdapter(
-        child: Container(
-          margin: EdgeInsets.only(bottom: 12),
-          color: HsgColors.primary,
-          padding: EdgeInsets.only(left: 0, top: 10, bottom: 30),
-          child: Text(
-            ' ${S.current.receipts_total_amt} (' + _defaultCcy + ')',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                height: 1,
-                fontSize: 15,
-                backgroundColor: HsgColors.primary,
-                color: Colors.white54),
+          child: Column(
+            children: [
+              _totalAmt(),
+              _totalCcy(),
+            ],
           ),
         ),
       ),
