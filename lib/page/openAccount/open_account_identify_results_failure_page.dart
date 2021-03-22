@@ -102,8 +102,8 @@ class OpenAccountIdentifyResultsFailurePage extends StatelessWidget {
 
     AuthIdentity()
         .startAuth(
-      new AuthIdentityReq("DLEAED", "74283428974321", lang, countryRegions,
-          "1"), //passport001zh  DLEAED
+      new AuthIdentityReq("passport001en", "74283428974321", lang,
+          countryRegions, "1"), //passport001zh  DLEAED
     )
         .then((value) {
       Fluttertoast.showToast(
