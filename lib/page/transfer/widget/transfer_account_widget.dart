@@ -158,7 +158,7 @@ class TransferAccount extends StatelessWidget {
       children: [
         Container(
           // padding: EdgeInsets.only(left: 3),
-          // margin: EdgeInsets.only(left: 3),
+          margin: EdgeInsets.only(left: 2),
           child: Text(
             payCcy,
             style: TextStyle(

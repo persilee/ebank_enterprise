@@ -20,6 +20,7 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_dotted_line.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -411,27 +412,39 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _amountInput() {
     return Container(
       margin: EdgeInsets.all(5),
+      // margin: EdgeInsets.only(left: 5,right: 5),
       width: 111.5,
       height: 23.5,
       decoration: BoxDecoration(
         color: Color(0xffECECEC),
         borderRadius: BorderRadius.circular(5),
       ),
-      child: TextField(
-        decoration: InputDecoration(border: InputBorder.none
-            //  OutlineInputBorder(
-            //     gapPadding: 0,
-            //     borderRadius: ((BorderRadius.circular(5))),
-            //     borderSide: BorderSide(
-            //       color: Color(0xffECECEC),
-            //     ),
-            //   ),
-            ),
-        // controller: controller,
-        autocorrect: false,
-        autofocus: false,
-        keyboardType: TextInputType.number,
-        onChanged: (text) {},
+      child: Container(
+        margin: EdgeInsets.only(top: 9),
+        child: TextField(
+          decoration: InputDecoration(
+              hintStyle: HINET_TEXT_STYLE,
+              hintText: intl.S.current.not_required,
+              border: InputBorder.none
+              //  OutlineInputBorder(
+              //     gapPadding: 0,
+              //     borderRadius: ((BorderRadius.circular(5))),
+              //     borderSide: BorderSide(
+              //       color: Color(0xffECECEC),
+              //     ),
+              //   ),
+              ),
+          // controller: controller,
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+            LengthLimitingTextInputFormatter(12),
+          ],
+          style: TextStyle(fontSize: 13),
+          autocorrect: false,
+          autofocus: false,
+          keyboardType: TextInputType.numberWithOptions(decimal: true),
+          onChanged: (text) {},
+        ),
       ),
     );
   }
@@ -440,7 +453,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _amountConfimrButton() {
     return Container(
       margin: EdgeInsets.all(4),
-      width: 74,
+      width: 75,
       height: 23.5,
       decoration: BoxDecoration(
         color: HsgColors.blueTextColor,
@@ -467,7 +480,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _confimrButton() {
     return Container(
       margin: EdgeInsets.all(4),
-      width: 74,
+      width: 75,
       height: 23.5,
       decoration: BoxDecoration(
         color: HsgColors.blueTextColor,

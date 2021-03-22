@@ -4,6 +4,7 @@
 /// Date: 2020-12-24
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/delete_partner.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
@@ -13,7 +14,6 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:left_scroll_actions/cupertinoLeftScroll.dart';
 import 'package:left_scroll_actions/leftScroll.dart';
 import 'package:left_scroll_actions/left_scroll_actions.dart';
@@ -31,8 +31,9 @@ class _TransferPartnerState extends State<TransferPartner> {
   ScrollController _scrollController = ScrollController();
   var _showmore = false;
   var _page = 1;
-  var _totalPage = 0;
+  var _totalPage = 1;
   var _transferType = '';
+  bool _load = false; //是否加载更多
   @override
   void initState() {
     super.initState();
@@ -43,7 +44,10 @@ class _TransferPartnerState extends State<TransferPartner> {
             _scrollController.position.maxScrollExtent) {
           if (_page < _totalPage) {
             _showmore = true;
+            _load = true;
           }
+          _page++;
+          _loadData();
         }
       });
     });
@@ -97,33 +101,41 @@ class _TransferPartnerState extends State<TransferPartner> {
       }
     });
     return Scaffold(
-        appBar: AppBar(
-          title: Text(S.current.transfer_model),
-          centerTitle: true,
-          elevation: 0,
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, pageAddPartner).then((value) {
-                  setState(() {
-                    _partnerListData.clear();
-                    _page = 1;
-                  });
-                  //跳回顶部
-                  _scrollController
-                      .jumpTo(_scrollController.position.minScrollExtent);
-                  _loadData();
+      appBar: AppBar(
+        title: Text(S.current.transfer_model),
+        centerTitle: true,
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, pageAddPartner).then((value) {
+                setState(() {
+                  _partnerListData.clear();
+                  _page = 1;
                 });
-              },
-              padding: EdgeInsets.only(right: 15),
-              icon: Icon(Icons.add),
-            ),
-          ],
-        ),
-        body: Container(
-            height: MediaQuery.of(context).size.height,
-            color: HsgColors.backgroundColor,
-            child: _myColumn()));
+                //跳回顶部
+                _scrollController
+                    .jumpTo(_scrollController.position.minScrollExtent);
+                _loadData();
+              });
+            },
+            padding: EdgeInsets.only(right: 15),
+            icon: Icon(Icons.add),
+          ),
+        ],
+      ),
+      // body: Container(
+      //     height: MediaQuery.of(context).size.height,
+      //     color: HsgColors.backgroundColor,
+      //     child: _myColumn()));
+      body: Column(
+        children: [
+          Expanded(
+            child: _myColumn(),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _myColumn() {
@@ -132,56 +144,57 @@ class _TransferPartnerState extends State<TransferPartner> {
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            // //搜索框
-            // Container(
-            //   color: Colors.white,
-            //   padding: EdgeInsets.only(left: 15, right: 25),
-            //   margin: EdgeInsets.only(bottom: 16, top: 16),
-            //   child: _searchIcon(),
-            // ),
             //卡号列表
             Container(
               color: Colors.white,
               padding: EdgeInsets.only(left: 0, right: 0),
               child: _getAllRowsList(),
             ),
-            // //说明
-            // Container(
-            //   padding: EdgeInsets.fromLTRB(16, 15, 0, 15),
-            //   alignment: Alignment.centerLeft,
-            //   child: Text(
-            //     S.current.tran_out_declare,
-            //     style: TextStyle(
-            //       fontSize: 13,
-            //       color: Color(0xFFA9A8A8),
-            //     ),
-            //   ),
-            // ),
             //加载更多
-            _tempList.length >= 10 ? _loadMore() : Container(),
+            _tempList.length >= 10 ? _loadMore() : _toLoad(),
           ],
         ));
+  }
+
+//加载完毕
+  Widget _toLoad() {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Text(
+        S.current.load_more_finished,
+        style: FIRST_DESCRIBE_TEXT_STYLE,
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 
   //底部加载更多
   Widget _loadMore() {
     return _showmore
-        ? InkWell(
-            onTap: () {
-              _page += 1;
-              _loadData();
-            },
+        ?
+        // InkWell(
+        //     onTap: () {
+        //       _page += 1;
+        //       _loadData();
+        //     },
+        //     child: Container(
+        //       height: 50,
+        //       alignment: Alignment.center,
+        //       child: Text(
+        //         S.current.click_to_load_more,
+        //         style: TextStyle(
+        //           fontSize: 13,
+        //           color: Color(0xFFA9A8A8),
+        //         ),
+        //       ),
+        //     ))
+        Center(
             child: Container(
-              height: 50,
-              alignment: Alignment.center,
-              child: Text(
-                S.current.click_to_load_more,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Color(0xFFA9A8A8),
-                ),
-              ),
-            ))
+              width: 15,
+              height: 15,
+              child: CircularProgressIndicator(),
+            ),
+          )
         : Container(
             height: 50,
             alignment: Alignment.center,
@@ -193,61 +206,6 @@ class _TransferPartnerState extends State<TransferPartner> {
               ),
             ),
           );
-  }
-
-  //搜索框(通过关键字搜索，为空则检索全部)
-  Widget _searchIcon() {
-    return TextField(
-      controller: _searchController,
-      textAlign: TextAlign.start,
-      keyboardType: TextInputType.text,
-      style: TextStyle(fontSize: 15, color: Colors.black87),
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.only(top: 16),
-        icon: Icon(
-          Icons.search,
-          color: HsgColors.hintText,
-        ),
-        suffixIcon: GestureDetector(
-          onTap: () {
-            String text = _searchController.text;
-            setState(() {
-              if (text.isEmpty) {
-                _tempList.clear();
-                _tempList.addAll(_partnerListData);
-              } else {
-                _tempList.clear();
-                _partnerListData.forEach((e) {
-                  if (e.payeeName.contains(text)) {
-                    _tempList.add(e);
-                  }
-                });
-                if (_tempList.isEmpty) {
-                  _searchController.text = '';
-                  Fluttertoast.showToast(msg: '没有找到相关银行!');
-                }
-              }
-            });
-          },
-          child: Container(
-            width: 50,
-            height: 20,
-            alignment: Alignment.centerRight,
-            child: Text(
-              S.current.search,
-              style: TextStyle(color: HsgColors.blueTextColor),
-            ),
-          ),
-        ),
-        border: InputBorder.none,
-        hintText: '银行名/账户/户名/手机号',
-        hintStyle: TextStyle(
-          fontSize: 15,
-          color: HsgColors.hintText,
-        ),
-      ),
-      onChanged: (text) {},
-    );
   }
 
   //删除请求
@@ -273,10 +231,13 @@ class _TransferPartnerState extends State<TransferPartner> {
     for (int i = 0; i < _tempList.length; i++) {
       _list.add(_getDeleteBuilder(_allContentRow(_tempList[i]), _tempList[i]));
     }
-    return new ListView(
-      children: _list,
-      shrinkWrap: true, //解决无限高度问题
-      physics: NeverScrollableScrollPhysics(), //禁用滑动事件
+    return RefreshIndicator(
+      onRefresh: () => _loadData(),
+      child: ListView(
+        children: _list,
+        shrinkWrap: true, //解决无限高度问题
+        physics: NeverScrollableScrollPhysics(), //禁用滑动事件
+      ),
     );
   }
 
@@ -336,7 +297,9 @@ class _TransferPartnerState extends State<TransferPartner> {
           style: TextStyle(fontSize: 14, color: Color(0xFF232323)),
         ),
         Text(
-          '高阳银行',
+          partner.payeeBankLocalName == null
+              ? '朗华银行'
+              : partner.payeeBankLocalName,
           style: TextStyle(fontSize: 13, color: HsgColors.hintText),
         ),
         Row(

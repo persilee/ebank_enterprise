@@ -168,7 +168,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                 _bankCode,
                 _swiftAdressReq,
                 "",
-                _branchReq,
+                _countryText,
                 _centerSwiftReq,
                 _payeeAdressReq,
                 _acountController.text,
@@ -177,11 +177,12 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                 "",
                 "",
                 _smsController.text,
+                _bankName,
                 _aliasController.text,
                 myTransferType),
             'addPartner')
         .then((data) {
-      print(data.toString());
+      print(_bankName + "==================");
       if (data != null) {
         Fluttertoast.showToast(msg: '添加成功');
         Navigator.of(context).pop();
