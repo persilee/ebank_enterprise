@@ -1,15 +1,4 @@
-/*
- * 
- * Created Date: Thursday, December 10th 2020, 5:34:04 pm
- * Author: pengyikang
- * 授权记录任务审批页面
- * Copyright (c) 2020 深圳高阳寰球科技有限公司
- */
-import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
-import 'package:ebank_mobile/data/source/model/find_user_finished_task_detail.dart';
-import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
-import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AuthorizationTaskApprovalPage extends StatefulWidget {
@@ -21,312 +10,184 @@ class AuthorizationTaskApprovalPage extends StatefulWidget {
 
   @override
   _AuthorizationTaskApprovalPageState createState() =>
-      _AuthorizationTaskApprovalPageState(history);
+      _AuthorizationTaskApprovalPageState();
 }
 
 class _AuthorizationTaskApprovalPageState
     extends State<AuthorizationTaskApprovalPage> {
-  FinishTaskDetail history;
+  ScrollController _scrollController;
+  List<Widget> _contents = [];
+  List<Widget> _contentItems = [];
 
-  _AuthorizationTaskApprovalPageState(this.history);
-  var commentList = <CommentList>[];
-  //转账信息
-  bool _transfer = true;
-  var _fromAccount = "";
-  var _fromCcy = "";
-  var _payeeName = "";
-  //付款信息
-  bool _pay = true;
-  var _accountNumber = "";
-  var _accountName = "";
-  var _payBank = "";
-  var _toCcy = "";
-  var _toaccount = "";
-  var _remark = "";
-  //基本信息
-  bool _base = false;
-  var _userId = "";
-
-  var _processKey = "";
-
-  var _processTitle = "";
-
-  String _servCtr = "";
+  var historyRegular = {
+    "data": [
+      {
+        "title": "基本信息",
+        "content": [
+          {
+            "name": "产品",
+            "value": "整取整存",
+          },
+          {
+            "name": "存款期限",
+            "value": "11-12月",
+          },
+          {
+            "name": "金额",
+            "value": "200",
+          },
+          {
+            "name": "年利率",
+            "value": "1.3%",
+          },
+          {
+            "name": "存单货币",
+            "value": "HKD-港元",
+          },
+          {
+            "name": "到期指示",
+            "value": "0-等待客户指示",
+          },
+          {
+            "name": "结算账户",
+            "value": "5000000066003",
+          },
+          {
+            "name": "扣款账户",
+            "value": "5000000066003",
+          },
+        ]
+      },
+      {
+        "title": "审批历史",
+        "content": [
+          {
+            "name": "审批人",
+            "value": "50006147456464",
+          },
+          {
+            "name": "审批时间",
+            "value": "2021-03-02 19:31:33",
+          },
+          {
+            "name": "审批意见",
+            "value": "Yes",
+          },
+          {
+            "name": "审批结果",
+            "value": "成功",
+          },
+        ]
+      }
+    ],
+  };
 
   @override
   void initState() {
+    _scrollController = ScrollController();
+    _getContent();
     super.initState();
-    _loadHistoryData(history.processId);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _getContent() {
+    _contents.add(_buildContent());
+    historyRegular['data'].forEach((e) {
+      _contentItems.add(_buildTitle(e['title']));
+      (e['content'] as List).forEach((element) {
+        _contentItems.add(_buildContentItem(element['name'], element['value']));
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
         centerTitle: true,
+        title: Text(widget.title),
       ),
-      body: CustomScrollView(
-        slivers: <Widget>[
-          _baseInformation(),
-          //  _transferInfo(),
-          _payInfo(),
-          _historyHeader(),
-          _historyContent(),
-        ],
-      ),
-    );
-  }
-
-  //历史记录标题
-  _historyHeader() {
-    return SliverToBoxAdapter(
-      child: Container(
-        color: Colors.white,
-        margin: EdgeInsets.only(top: 10),
-        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-        child: Row(
-          children: [
-            Container(
-              child: Text(
-                S.current.approval_histroy,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Container(
+          color: Color(int.parse('0xffF7F7F7')),
+          child: _buildContent(),
         ),
       ),
     );
   }
 
-  //授权历史记录
-  _historyContent() {
-    return commentList.length > 0
-        ? SliverList(
-            delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return SizedBox(
-                child: Column(
-                  children: [
-                    Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        color: Colors.white,
-                        padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                        child: Column(
-                          children: [
-                            _getHintLine(),
-                            _getRow(S.current.approver,
-                                commentList[index].userName),
-                            _getRow(S.current.approver_time,
-                                commentList[index].time),
-                            _getRow(S.current.approver_opinion,
-                                commentList[index].comment),
-                            _getRow(
-                                S.current.approver_result,
-                                commentList[index].result
-                                    ? S.current.success
-                                    : S.current.failed),
-                          ],
-                        ))
-                  ],
-                ),
-              );
-            },
-            childCount: commentList.length,
-          ))
-        : SliverToBoxAdapter();
-  }
-
-  //基本信息
-  _baseInformation() {
-    return SliverToBoxAdapter(
-      child: _base
-          ? Container()
-          : Container(
-              margin: EdgeInsets.only(bottom: 10),
-              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-              color: Colors.white,
-              child: Column(
-                children: [
-                  Container(
-                      color: Colors.white,
-                      child: Row(
-                        children: [_getTitle('基本信息')],
-                      )),
-                  _getHintLine(),
-                  (_userId == "" || _userId == null)
-                      ? Container()
-                      : _getRow('用户账号', _userId),
-                  _getHintLine(),
-                  (_processKey == "" || _fromAccount == null)
-                      ? Container()
-                      : _getRow('任务名称', _processKey),
-                  _getHintLine(),
-                  (_processTitle == "" || _processTitle == null)
-                      ? Container()
-                      : _getRow('任务标题', _processTitle),
-                  (_servCtr == "" || _servCtr == null)
-                      ? Container()
-                      : _getRow('服务', _servCtr),
-                ],
-              ),
-            ),
+  Widget _buildContent() {
+    return Column(
+      children: _contentItems,
     );
   }
 
-  //转账信息
-  // ignore: unused_element
-  _transferInfo() {
-    return SliverToBoxAdapter(
-      child: _transfer
-          ? Container()
-          : Container(
-              margin: EdgeInsets.only(bottom: 10),
-              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-              color: Colors.white,
-              child: Column(
-                children: [
-                  Container(
-                      color: Colors.white,
-                      child: Row(
-                        children: [_getTitle(S.current.transfer_info)],
-                      )),
-                  _getHintLine(),
-                  (_fromAccount == "" || _fromAccount == null)
-                      ? Container()
-                      : _getRow(S.current.transfer_to_account, _fromAccount),
-                  _getHintLine(),
-                  (_payeeName == "" || _payeeName == null)
-                      ? Container()
-                      : _getRow(S.current.userName, _payeeName),
-                  _getHintLine(),
-                  (_fromCcy == "" || _fromCcy == null)
-                      ? Container()
-                      : _getRow(S.current.from_ccy, _fromCcy),
-                ],
-              ),
-            ),
-    );
-  }
-
-//付款信息
-  _payInfo() {
-    return SliverToBoxAdapter(
-      child: _pay
-          ? Container()
-          : Container(
-              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-              color: Colors.white,
-              child: Column(
-                children: [
-                  Container(
-                      color: Colors.white,
-                      child: Row(
-                        children: [_getTitle(S.current.payment_info)],
-                      )),
-                  _getHintLine(),
-                  (_accountNumber == "" || _accountNumber == null)
-                      ? Container()
-                      : _getRow(S.current.payment_account, _accountNumber),
-                  _getHintLine(),
-                  (_accountName == "" || _accountName == null)
-                      ? Container()
-                      : _getRow(S.current.userName, _accountName),
-                  _getHintLine(),
-                  (_payBank == "" || _payBank == null)
-                      ? Container()
-                      : _getRow(S.current.payment_bank, _payBank),
-                  _getHintLine(),
-                  (_toCcy == "" || _toCcy == null)
-                      ? Container()
-                      : _getRow(S.current.to_ccy, _toCcy),
-                  _getHintLine(),
-                  (_toaccount == "" || _toaccount == null)
-                      ? Container()
-                      : _getRow(S.current.to_amount, _toaccount),
-                  _getHintLine(),
-                  (_remark == "" || _remark == null)
-                      ? Container()
-                      : _getRow(S.current.postscript, _remark),
-                ],
-              ),
-            ),
-    );
-  }
-
-  _getRow(String leftText, String rightText) {
+  Widget _buildTitle(String title) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      height: 46,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            child: Text(leftText),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.0),
+              child: Row(
+                children: [
+                  Text(
+                    title,
+                    style:
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
           ),
           Container(
-            child: Text(rightText),
-          )
+            color: Colors.grey.withOpacity(0.3),
+            height: 1.0,
+          ),
         ],
       ),
     );
   }
 
-  _getTitle(title) {
+  Widget _buildContentItem(String name, String value) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
+      height: 46,
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    name,
+                    style: TextStyle(fontSize: 13.0),
+                  ),
+                  Text(
+                    value,
+                    style: TextStyle(
+                        fontSize: 13.0, color: Color(int.parse('0xff7A7A7A'))),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            color: Colors.grey.withOpacity(0.3),
+            height: 1.0,
+          ),
+        ],
       ),
     );
-  }
-
-  _getHintLine() {
-    return Container(
-        child: Divider(
-      color: HsgColors.divider,
-      height: 0.5,
-    ));
-  }
-
-  void _loadHistoryData(String processId) {
-    Future.wait({
-      NeedToBeDealtWithRepository()
-          .findUserFinishedDetail(
-              GetFindUserFinishedDetailReq(processId), 'findUserFinishedDetail')
-          .then((data) {
-        setState(() {
-          if (data != null) {
-            commentList.clear();
-            commentList.addAll(data.commentList);
-          }
-          if (data.operateEndValue != null) {
-            _pay = false;
-            _transfer = false;
-            // _base = false;
-            _accountNumber = data.operateEndValue.payerCardNo;
-            _accountName = data.operateEndValue.payerName;
-            _payBank = data.operateEndValue.payerBankCode;
-            _toCcy = data.operateEndValue.debitCurrency;
-            _toaccount = data.operateEndValue.amount;
-            _remark = data.operateEndValue.remark;
-            _fromAccount = data.operateEndValue.payeeBankCode;
-            _fromCcy = data.operateEndValue.debitCurrency;
-            _payeeName = data.operateEndValue.payeeName;
-            _userId = data.userId;
-            _processKey = data.processKey;
-            _processTitle = data.processTitle;
-            // _result = data.result;
-            _servCtr = data.servCtr;
-          }
-        });
-      })
-    });
   }
 }

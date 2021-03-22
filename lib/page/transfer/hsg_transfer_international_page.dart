@@ -425,11 +425,16 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         Rows listPartner = _arguments;
         _companyController.text = listPartner.payeeName;
         _accountController.text = listPartner.payeeCardNo;
-        // _countryText = listPartner.district;
-        // _getPayeeBank = listPartner.payeeBankLocalName;
+        _countryText = listPartner.district;
+        _getPayeeBank = listPartner.payeeBankLocalName == null
+            ? ""
+            : listPartner.payeeBankLocalName;
         _bankSwiftController.text = listPartner.bankSwift;
         _payeeAddressController.text = listPartner.payeeAddress;
         check = false;
+        print("===================================");
+        print(listPartner.payeeBankLocalName);
+        print(listPartner.district);
       }
     });
     return Scaffold(
@@ -628,7 +633,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   Rows rowListPartner = value;
                   _companyController.text = rowListPartner.payeeName;
                   _accountController.text = rowListPartner.payeeCardNo;
-                  // _countryText = rowListPartner.district;
+                  _countryText = rowListPartner.district;
                   // _getPayeeBank = rowListPartner.payeeBankLocalName;
                   _bankSwiftController.text = rowListPartner.bankSwift;
                   _payeeAddressController.text = rowListPartner.payeeAddress;

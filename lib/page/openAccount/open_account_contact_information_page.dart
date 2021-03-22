@@ -11,8 +11,10 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class OpenAccountContactInformationPage extends StatefulWidget {
   @override
@@ -63,6 +65,12 @@ class _OpenAccountContactInformationPageState
 
   /// 下一步按钮是否能点击
   bool _nextBtnEnabled = true; //false;
+
+  /// 城市数据列表
+  List _cityDataList = [];
+
+  /// 城市数据列表
+  List _cityShowList = [];
 
   ///注册公司地址详情输入监听
   TextEditingController _registeredAddressTEC = TextEditingController();
@@ -129,6 +137,9 @@ class _OpenAccountContactInformationPageState
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     });
+
+    _getCityData();
+
     super.initState();
   }
 
@@ -149,10 +160,9 @@ class _OpenAccountContactInformationPageState
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: Text('联络资料'),
+        title: Text(S.of(context).openAccout_contactInformation),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -171,7 +181,7 @@ class _OpenAccountContactInformationPageState
                   title: S.of(context).next_step,
                   click: _nextBtnEnabled
                       ? () {
-                          _authIdentity();
+                          _qianliyanSDK();
                         }
                       : null,
                 ),
@@ -181,24 +191,6 @@ class _OpenAccountContactInformationPageState
         ),
       ),
     );
-  }
-
-  _authIdentity() {
-    bool bo = true;
-    if (bo) {
-      AuthIdentity()
-          .startAuth(
-        new AuthIdentityReq("DLEAED", "74283428974321", "en", "CN",
-            "1"), //passport001zh  DLEAED
-      )
-          .then((value) {
-        Fluttertoast.showToast(msg: value.result);
-        Navigator.pushNamed(context, pageOpenAccountSelectDocumentType);
-      }).catchError((e) {
-        HSProgressHUD.showError(status: '${e.toString()}');
-      });
-      return;
-    }
   }
 
   ///判断下一步按钮是否能点击
@@ -212,25 +204,29 @@ class _OpenAccountContactInformationPageState
     if (_registrationZipCodeText == null || _registrationZipCodeText == '') {
       return false;
     }
-    if (_businessAreaText == null || _businessAreaText == '') {
-      return false;
+    if (_theSameForRegisterAndBusiness == false) {
+      if (_businessAreaText == null || _businessAreaText == '') {
+        return false;
+      }
+      if (_businessAddressText == null || _businessAddressText == '') {
+        return false;
+      }
+      if (_businessZipCodeText == null || _businessZipCodeText == '') {
+        return false;
+      }
     }
-    if (_businessAddressText == null || _businessAddressText == '') {
-      return false;
-    }
-    if (_businessZipCodeText == null || _businessZipCodeText == '') {
-      return false;
-    }
-    if (_communicationAreaText == null || _communicationAreaText == '') {
-      return false;
-    }
-    if (_correspondenceAddressText == null ||
-        _correspondenceAddressText == '') {
-      return false;
-    }
-    if (_communicationsZipCodeText == null ||
-        _communicationsZipCodeText == '') {
-      return false;
+    if (_theSameForRegisterAndCommunication == false) {
+      if (_communicationAreaText == null || _communicationAreaText == '') {
+        return false;
+      }
+      if (_correspondenceAddressText == null ||
+          _correspondenceAddressText == '') {
+        return false;
+      }
+      if (_communicationsZipCodeText == null ||
+          _communicationsZipCodeText == '') {
+        return false;
+      }
     }
     if (_officeAreaCodeText == null || _officeAreaCodeText == '') {
       return false;
@@ -242,91 +238,6 @@ class _OpenAccountContactInformationPageState
   }
 
   Widget _inputViewWidget(BuildContext context) {
-    const PickerData = '''
-[
-    {
-        "a": [
-            {
-                "a1": [
-                    1,
-                    2,
-                    3,
-                    4
-                ]
-            },
-            {
-                "a2": [
-                    5,
-                    6,
-                    7,
-                    8
-                ]
-            },
-            {
-                "a3": [
-                    9,
-                    10,
-                    11,
-                    12
-                ]
-            }
-        ]
-    },
-    {
-        "b": [
-            {
-                "b1": [
-                    11,
-                    22,
-                    33,
-                    44
-                ]
-            },
-            {
-                "b2": [
-                    55,
-                    66,
-                    77,
-                    88
-                ]
-            },
-            {
-                "b3": [
-                    99,
-                    1010,
-                    1111,
-                    1212
-                ]
-            }
-        ]
-    },
-    {
-        "c": [
-            {
-                "c1": [
-                    "a",
-                    "b",
-                    "c"
-                ]
-            },
-            {
-                "c2": [
-                    "aa",
-                    "bb",
-                    "cc"
-                ]
-            },
-            {
-                "c3": [
-                    "aaa",
-                    "bbb",
-                    "ccc"
-                ]
-            }
-        ]
-    }
-]
-    ''';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -334,195 +245,274 @@ class _OpenAccountContactInformationPageState
           color: Colors.white,
           margin: EdgeInsets.only(top: 10),
           padding: EdgeInsets.only(left: 15, right: 15),
-          child: Column(
-            children: [
-              Container(
-                child: _oneLayerSelectWidget(
-                    context, '注册公司地址', _registrationAreaText, '省/市/区', false,
-                    () {
-                  print('注册公司地址');
-                  Picker(
-                      adapter: PickerDataAdapter<String>(
-                          pickerdata: JsonDecoder().convert(PickerData)),
-                      changeToFirst: true,
-                      hideHeader: false,
-                      selectedTextStyle: TextStyle(color: Colors.blue),
-                      onConfirm: (Picker picker, List value) {
-                        print(value.toString());
-                        print(picker.adapter.text);
-                      }).showModal(this.context); //_scaffoldKey.currentState);
-                }),
-              ),
-              Container(
-                child: _twoLayerInputWidget(
-                  context,
-                  '注册公司地址详情',
-                  '请输入',
-                  _registeredAddressTEC,
-                  false,
-                  1002,
-                ),
-              ),
-              Container(
-                child: _oneLayerInputWidget(
-                  context,
-                  '邮编',
-                  '非必填',
-                  _registrationZipCodeTEC,
-                  false,
-                  1003,
-                ),
-              ),
-            ],
-          ),
+          child: _registeredAddressColumn(context),
         ),
         Container(
           color: Colors.white,
           margin: EdgeInsets.only(top: 15),
           padding: EdgeInsets.only(left: 15, right: 15),
-          child: Column(
-            children: [
-              Container(
-                child: _oneLayerSwitchWidget(
-                  context,
-                  '和注册公司地址相同',
-                  _theSameForRegisterAndBusiness,
-                  false,
-                  (value) {
-                    setState(() {
-                      _theSameForRegisterAndBusiness = value;
-                    });
-                  },
-                ),
-              ),
-              Container(
-                child: _oneLayerSelectWidget(
-                  context,
-                  '主要营业地址',
-                  _businessAreaText,
-                  '省/市/区',
-                  false,
-                  () {
-                    print('主要营业地址');
-                  },
-                ),
-              ),
-              Container(
-                child: _twoLayerInputWidget(
-                  context,
-                  '主要营业地址详情',
-                  '请输入',
-                  _businessAddressTEC,
-                  false,
-                  1005,
-                ),
-              ),
-              Container(
-                child: _oneLayerInputWidget(
-                  context,
-                  '邮编',
-                  '非必填',
-                  _businessZipCodeTEC,
-                  false,
-                  1006,
-                ),
-              ),
-            ],
-          ),
+          child: _businessColumn(context),
         ),
         Container(
           color: Colors.white,
           margin: EdgeInsets.only(top: 15),
           padding: EdgeInsets.only(left: 15, right: 15),
-          child: Column(
-            children: [
-              Container(
-                child: _oneLayerSwitchWidget(
-                  context,
-                  '和注册公司地址相同',
-                  _theSameForRegisterAndCommunication,
-                  false,
-                  (value) {
-                    setState(() {
-                      _theSameForRegisterAndCommunication = value;
-                    });
-                  },
-                ),
-              ),
-              Container(
-                child: _oneLayerSelectWidget(
-                  context,
-                  '通讯地址地址',
-                  _businessAreaText,
-                  '省/市/区',
-                  false,
-                  () {
-                    print('通讯地址地址');
-                  },
-                ),
-              ),
-              Container(
-                child: _twoLayerInputWidget(
-                  context,
-                  '通讯地址详情',
-                  '请输入',
-                  _businessAddressTEC,
-                  false,
-                  1008,
-                ),
-              ),
-              Container(
-                child: _oneLayerInputWidget(
-                  context,
-                  '邮编',
-                  '非必填',
-                  _businessZipCodeTEC,
-                  false,
-                  1009,
-                ),
-              ),
-            ],
-          ),
+          child: _communicationColumn(context),
         ),
         Container(
           color: Colors.white,
           margin: EdgeInsets.only(top: 15),
           padding: EdgeInsets.only(left: 15, right: 15),
-          child: Column(
-            children: [
-              Container(
-                child: _oneLayerSelectWidget(
-                  context,
-                  '区号',
-                  _officeAreaCodeText,
-                  '请选择',
-                  false,
-                  () {
-                    print('区号');
-                    Navigator.pushNamed(context, countryOrRegionSelectPage)
-                        .then((value) {
-                      setState(() {
-                        _officeAreaCodeText =
-                            '+ ${(value as CountryRegionModel).code}';
-                      });
-                    });
-                  },
-                ),
-              ),
-              Container(
-                child: _oneLayerInputWidget(
-                  context,
-                  '办事处电话号码',
-                  '请输入',
-                  _officePhoneTEC,
-                  false,
-                  1011,
-                ),
-              ),
-            ],
-          ),
+          child: _officePhoneColumn(context),
         )
       ],
+    );
+  }
+
+  ///注册公司地址区域
+  Widget _registeredAddressColumn(BuildContext context) {
+    List<Widget> children = [
+      Container(
+        child: _oneLayerSelectWidget(
+          context,
+          S.of(context).openAccout_registeredAddress,
+          _registrationAreaText,
+          S.of(context).openAccout_provinceCityArea,
+          false,
+          () {
+            print('注册公司地址');
+            _selectCity((Picker picker, List value) {
+              print('${_cityDataList[value[0]]} \n\n' +
+                  '${_cityDataList[value[0]]['children'][value[1]]}\n\n' +
+                  '${_cityDataList[value[0]]['children'][value[1]]['children'][value[2]]}');
+              setState(() {
+                String dataStr = picker.adapter.text;
+                dataStr = dataStr.replaceAll('[', '');
+                dataStr = dataStr.replaceAll(']', '');
+                dataStr = dataStr.replaceAll(',', '/');
+                _registrationAreaText = dataStr;
+                _nextBtnEnabled = _judgeButtonIsEnabled();
+              });
+            });
+          },
+        ),
+      ),
+      Container(
+        child: _twoLayerInputWidget(
+          context,
+          S.of(context).openAccout_registeredAddress_details,
+          S.of(context).please_enter,
+          _registeredAddressTEC,
+          false,
+          105,
+          TextInputType.text,
+        ),
+      ),
+      Container(
+        child: _oneLayerInputWidget(
+          context,
+          S.of(context).openAccout_zipCode,
+          S.of(context).not_required,
+          _registrationZipCodeTEC,
+          false,
+          6,
+          TextInputType.number,
+        ),
+      ),
+    ];
+
+    return Column(
+      children: children,
+    );
+  }
+
+  ///主要营业地址区域
+  Widget _businessColumn(BuildContext context) {
+    List<Widget> children = [
+      Container(
+        child: _oneLayerSwitchWidget(
+          context,
+          S.of(context).openAccout_theSameForRegister,
+          _theSameForRegisterAndBusiness,
+          false,
+          (value) {
+            setState(() {
+              _theSameForRegisterAndBusiness = value;
+              _nextBtnEnabled = _judgeButtonIsEnabled();
+            });
+          },
+        ),
+      ),
+      Container(
+        child: _oneLayerSelectWidget(
+          context,
+          S.of(context).openAccout_businessAddress,
+          _businessAreaText,
+          S.of(context).openAccout_provinceCityArea,
+          false,
+          () {
+            print('主要营业地址');
+            _selectCity((Picker picker, List value) {
+              print('${_cityDataList[value[0]]} \n\n' +
+                  '${_cityDataList[value[0]]['children'][value[1]]}\n\n' +
+                  '${_cityDataList[value[0]]['children'][value[1]]['children'][value[2]]}');
+              setState(() {
+                String dataStr = picker.adapter.text;
+                dataStr = dataStr.replaceAll('[', '');
+                dataStr = dataStr.replaceAll(']', '');
+                dataStr = dataStr.replaceAll(',', '/');
+                _businessAreaText = dataStr;
+                _nextBtnEnabled = _judgeButtonIsEnabled();
+              });
+            });
+          },
+        ),
+      ),
+      Container(
+        child: _twoLayerInputWidget(
+          context,
+          S.of(context).openAccout_businessAddress_details,
+          S.of(context).please_enter,
+          _businessAddressTEC,
+          false,
+          105,
+          TextInputType.text,
+        ),
+      ),
+      Container(
+        child: _oneLayerInputWidget(
+          context,
+          S.of(context).openAccout_zipCode,
+          S.of(context).not_required,
+          _businessZipCodeTEC,
+          false,
+          6,
+          TextInputType.number,
+        ),
+      ),
+    ];
+
+    if (_theSameForRegisterAndBusiness) {
+      children = [children[0]];
+    }
+
+    return Column(
+      children: children,
+    );
+  }
+
+  ///通讯地址区域
+  Widget _communicationColumn(BuildContext context) {
+    List<Widget> children = [
+      Container(
+        child: _oneLayerSwitchWidget(
+          context,
+          S.of(context).openAccout_theSameForRegister,
+          _theSameForRegisterAndCommunication,
+          false,
+          (value) {
+            setState(() {
+              _theSameForRegisterAndCommunication = value;
+              _nextBtnEnabled = _judgeButtonIsEnabled();
+            });
+          },
+        ),
+      ),
+      Container(
+        child: _oneLayerSelectWidget(
+          context,
+          S.of(context).openAccout_mailingAddress,
+          _communicationAreaText,
+          S.of(context).openAccout_provinceCityArea,
+          false,
+          () {
+            print('通讯地址');
+            _selectCity((Picker picker, List value) {
+              print('${_cityDataList[value[0]]} \n\n' +
+                  '${_cityDataList[value[0]]['children'][value[1]]}\n\n' +
+                  '${_cityDataList[value[0]]['children'][value[1]]['children'][value[2]]}');
+              setState(() {
+                String dataStr = picker.adapter.text;
+                dataStr = dataStr.replaceAll('[', '');
+                dataStr = dataStr.replaceAll(']', '');
+                dataStr = dataStr.replaceAll(',', '/');
+                _communicationAreaText = dataStr;
+                _nextBtnEnabled = _judgeButtonIsEnabled();
+              });
+            });
+          },
+        ),
+      ),
+      Container(
+        child: _twoLayerInputWidget(
+          context,
+          S.of(context).openAccout_mailingAddress_details,
+          S.of(context).please_enter,
+          _correspondenceAddressTEC,
+          false,
+          105,
+          TextInputType.text,
+        ),
+      ),
+      Container(
+        child: _oneLayerInputWidget(
+          context,
+          S.of(context).openAccout_zipCode,
+          S.of(context).not_required,
+          _communicationsZipCodeTEC,
+          false,
+          6,
+          TextInputType.number,
+        ),
+      ),
+    ];
+
+    if (_theSameForRegisterAndCommunication) {
+      children = [children[0]];
+    }
+
+    return Column(
+      children: children,
+    );
+  }
+
+  ///办公电话区域
+  Widget _officePhoneColumn(BuildContext context) {
+    List<Widget> children = [
+      Container(
+        child: _oneLayerSelectWidget(
+          context,
+          S.of(context).openAccout_areaCode,
+          _officeAreaCodeText,
+          S.of(context).please_select,
+          false,
+          () {
+            print('区号');
+            Navigator.pushNamed(context, countryOrRegionSelectPage)
+                .then((value) {
+              setState(() {
+                _officeAreaCodeText = '+ ${(value as CountryRegionModel).code}';
+                _nextBtnEnabled = _judgeButtonIsEnabled();
+              });
+            });
+          },
+        ),
+      ),
+      Container(
+        child: _oneLayerInputWidget(
+          context,
+          S.of(context).openAccout_officePhoneNo,
+          S.of(context).please_enter,
+          _officePhoneTEC,
+          false,
+          11,
+          TextInputType.number,
+        ),
+      ),
+    ];
+
+    return Column(
+      children: children,
     );
   }
 
@@ -532,7 +522,8 @@ class _OpenAccountContactInformationPageState
     String placeholderStr,
     TextEditingController textEdiC,
     bool isHiddenLine,
-    int textFieldTag,
+    int maxLength,
+    TextInputType keyboardType,
   ) {
     final size = MediaQuery.of(context).size;
 
@@ -562,8 +553,12 @@ class _OpenAccountContactInformationPageState
               controller: textEdiC,
               textAlign: TextAlign.right,
               textAlignVertical: TextAlignVertical.bottom,
-              textDirection: TextDirection.ltr,
+              // textDirection: TextDirection.ltr,
               maxLines: 2,
+              keyboardType: keyboardType,
+              inputFormatters: <TextInputFormatter>[
+                LengthLimitingTextInputFormatter(maxLength) //限制长度
+              ],
               style: TextStyle(
                 fontSize: 15,
                 color: HsgColors.firstDegreeText,
@@ -595,7 +590,8 @@ class _OpenAccountContactInformationPageState
     String placeholderStr,
     TextEditingController textEdiC,
     bool isHiddenLine,
-    int textFieldTag,
+    int maxLength,
+    TextInputType keyboardType,
   ) {
     final size = MediaQuery.of(context).size;
 
@@ -628,8 +624,12 @@ class _OpenAccountContactInformationPageState
                 autofocus: false,
                 controller: textEdiC,
                 textAlign: TextAlign.right,
+                keyboardType: keyboardType,
+                inputFormatters: <TextInputFormatter>[
+                  LengthLimitingTextInputFormatter(maxLength) //限制长度
+                ],
                 textAlignVertical: TextAlignVertical.bottom,
-                textDirection: TextDirection.ltr,
+                // textDirection: TextDirection.ltr,
                 style: TextStyle(
                   fontSize: 15,
                   color: HsgColors.firstDegreeText,
@@ -788,10 +788,13 @@ class _OpenAccountContactInformationPageState
               ),
             ),
             Expanded(child: Container()),
-            CupertinoSwitch(
-              activeColor: HsgColors.theme,
-              value: switchValue,
-              onChanged: switchValueChanged,
+            Transform.scale(
+              scale: 0.8,
+              child: CupertinoSwitch(
+                activeColor: HsgColors.theme,
+                value: switchValue,
+                onChanged: switchValueChanged,
+              ),
             ),
           ],
         ),
@@ -810,5 +813,79 @@ class _OpenAccountContactInformationPageState
               ),
       ],
     );
+  }
+
+  void _getCityData() async {
+    //加载城市列表
+    rootBundle.loadString('assets/data/city.json').then((value) {
+      _cityDataList = json.decode(value);
+      List provinceList = json.decode(value);
+      List<Map<String, List<Map<String, List<String>>>>> provinceShowList = [];
+      provinceList.forEach((province) {
+        List cityList = province['children'];
+        List<Map<String, List<String>>> cityShowList = [];
+        cityList.forEach((city) {
+          List areaList = city['children'];
+          List<String> areaShowList = [];
+          areaList.forEach((area) {
+            areaShowList.add(area['name']);
+          });
+          cityShowList.add({city['name']: areaShowList});
+        });
+        provinceShowList.add({province['name']: cityShowList});
+      });
+      _cityShowList = provinceShowList;
+    });
+  }
+
+  void _selectCity(PickerConfirmCallback onConfirm) {
+    Picker(
+      adapter: PickerDataAdapter<String>(
+        pickerdata: _cityShowList,
+      ),
+      changeToFirst: true,
+      hideHeader: false,
+      selectedTextStyle: TextStyle(
+        color: HsgColors.theme,
+      ),
+      cancelText: S.of(context).cancel,
+      cancelTextStyle: TextStyle(
+        color: Colors.red,
+        fontWeight: FontWeight.normal,
+        fontSize: 15,
+      ),
+      confirmText: S.of(context).confirm,
+      confirmTextStyle: TextStyle(
+        color: HsgColors.theme,
+        fontWeight: FontWeight.bold,
+        fontSize: 16,
+      ),
+      onConfirm: onConfirm,
+    ).showModal(this.context);
+  }
+
+  void _qianliyanSDK() {
+    String _language = Intl.getCurrentLocale();
+    String lang = _language == 'en' ? 'en' : 'zh';
+    String countryRegions = _language == 'zh_CN' ? 'CN' : 'TW';
+
+    AuthIdentity()
+        .startAuth(
+      new AuthIdentityReq("DLEAED", "74283428974321", lang, countryRegions,
+          "1"), //passport001zh  DLEAED
+    )
+        .then((value) {
+      Fluttertoast.showToast(
+        msg: value.result,
+        gravity: ToastGravity.CENTER,
+      );
+      Navigator.pushNamed(context, pageOpenAccountResults);
+    }).catchError((e) {
+      // HSProgressHUD.showError(status: '${e.toString()}');
+      Fluttertoast.showToast(
+        msg: '${e.toString()}',
+        gravity: ToastGravity.CENTER,
+      );
+    });
   }
 }

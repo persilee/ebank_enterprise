@@ -42,7 +42,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   var _aliasController = TextEditingController();
   var _centerSwiftController = TextEditingController();
   var _payeeAdressController = TextEditingController();
-  var _bankSwiftController = TextEditingController();
+  // var _bankSwiftController = TextEditingController();
   bool _showInternational = false; //国际转账
   var _alias = '';
   var words = 20;
@@ -91,6 +91,17 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     _branch = S.current.optional;
     _transferType = S.current.please_select;
     _swiftAdress = S.current.bank_swift;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _acountController.dispose();
+    _smsController.dispose();
+    _aliasController.dispose();
+    _centerSwiftController.dispose();
+    _payeeAdressController.dispose();
   }
 
 //获取转账费用列表

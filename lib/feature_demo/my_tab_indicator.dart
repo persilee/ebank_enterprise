@@ -76,7 +76,6 @@ class MyUnderlineTabIndicator extends Decoration {
     final Rect indicator = insets.resolve(textDirection).deflateRect(rect);
     double wantWidth = 30;
     double cw = (indicator.left + indicator.right) / 2;
-    print(cw);
     return Rect.fromLTWH(
       cw - (indicator.width * indicatorWidthPercentage) / 2,
       indicator.bottom - borderSide.width,
