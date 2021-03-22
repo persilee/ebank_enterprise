@@ -39,7 +39,7 @@ dependencies:
   encrypt: ^4.0.0 #AES加解密
   flutter_picker: ^1.1.0 #选择器
   popup_window: ^1.1.1 #顶部弹窗
-  contact_picker: ^0.0.2 #获取联系人
+  fluttercontactpicker: ^4.2.1 #获取联系人
   left_scroll_actions: ^1.4.0
   webview_flutter: ^1.0.7
   date_format: ^1.0.8
@@ -179,6 +179,8 @@ flutter:
     - images/openAccount/open_account_document_type_CN.png
     - images/openAccount/open_account_document_type_HK.png
     - images/openAccount/open_account_document_type_other.png
+    - images/openAccount/open_account_identify_results_failure.png
+    - images/openAccount/open_account_identify_results_successful.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
