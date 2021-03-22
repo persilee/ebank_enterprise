@@ -3,13 +3,12 @@
 /// Author: zhangqirong
 /// Date: 2020-12-28
 
-import 'package:json_annotation/json_annotation.dart'; 
-  
+import 'package:json_annotation/json_annotation.dart';
+
 part 'add_partner.g.dart';
 
 @JsonSerializable()
-  class AddPartnerReq extends Object {
-
+class AddPartnerReq extends Object {
   @JsonKey(name: 'bankCode')
   String bankCode;
 
@@ -46,27 +45,45 @@ part 'add_partner.g.dart';
   @JsonKey(name: 'phoneNo')
   String phoneNo;
 
+  @JsonKey(name: 'payeeBankName')
+  String payeeBankName;
+
   @JsonKey(name: 'remark')
   String remark;
 
   @JsonKey(name: 'transferType')
   String transferType;
 
-  AddPartnerReq(this.bankCode,this.bankSwift,this.city,this.district,this.midBankSwift,this.payeeAddress,this.payeeCardNo,this.payeeName,this.payerBankCode,this.payerCardNo,this.payerName,this.phoneNo,this.remark,this.transferType,);
+  AddPartnerReq(
+    this.bankCode,
+    this.bankSwift,
+    this.city,
+    this.district,
+    this.midBankSwift,
+    this.payeeAddress,
+    this.payeeCardNo,
+    this.payeeName,
+    this.payerBankCode,
+    this.payerCardNo,
+    this.payerName,
+    this.phoneNo,
+    this.payeeBankName,
+    this.remark,
+    this.transferType,
+  );
 
-  factory AddPartnerReq.fromJson(Map<String, dynamic> srcJson) => _$AddPartnerReqFromJson(srcJson);
+  factory AddPartnerReq.fromJson(Map<String, dynamic> srcJson) =>
+      _$AddPartnerReqFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$AddPartnerReqToJson(this);
-
 }
 
 @JsonSerializable()
-  class AddPartnerResp extends Object {
-
+class AddPartnerResp extends Object {
   AddPartnerResp();
 
-  factory AddPartnerResp.fromJson(Map<String, dynamic> srcJson) => _$AddPartnerRespFromJson(srcJson);
+  factory AddPartnerResp.fromJson(Map<String, dynamic> srcJson) =>
+      _$AddPartnerRespFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$AddPartnerRespToJson(this);
-
 }

@@ -4,6 +4,7 @@
 /// Date: 2020-12-07
 
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
+import 'package:ebank_mobile/page/approval/authorization_task_approval_history_detail.dart';
 import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 
@@ -157,6 +158,7 @@ var pageUserAgreement = '/user_agreement_page';
 var pageApplication = '/my_appplication_page';
 var pageApplicationTaskApproval = '/application_task_approval_page';
 var pageAuthorizationTaskApproval = '/authorization_task_approval_page';
+var pageAuthorizationTaskApprovalHistoryDetail = '/authorization_task_approval_history_detail';
 var pageContactCustomer = '/contact_customer_page';
 var pageTransferPlan = '/transfer_plan_page';
 var pageTransferPlanDetails = '/transfer_plan_details';
@@ -319,6 +321,12 @@ onGenerateRoute(RouteSettings settings) {
         history: arguments['data'],
         title: arguments['title'],
       );
+    });
+  }
+  if (settings.name == pageAuthorizationTaskApprovalHistoryDetail) {
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return AuthorizationTaskApprovalHistoryDetail();
     });
   }
   if (settings.name == pageTransferPlanDetails) {

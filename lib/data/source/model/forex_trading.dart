@@ -108,14 +108,14 @@ class TransferTrialReq {
 
 @JsonSerializable()
 class TransferTrialResp {
-  @JsonKey(name: 'rate')
-  String rate;
-  @JsonKey(name: 'resultAmount')
-  String resultAmount;
+  @JsonKey(name: 'optExRate')
+  String optExRate;
+  @JsonKey(name: 'optExAmt')
+  String optExAmt;
 
   TransferTrialResp(
-    this.rate,
-    this.resultAmount,
+    this.optExRate,
+    this.optExAmt,
   );
 
   @override

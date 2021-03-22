@@ -1,5 +1,8 @@
 import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
+
+import '../../page_route.dart';
 
 class AuthorizationTaskApprovalPage extends StatefulWidget {
   final FinishTaskDetail history;
@@ -16,76 +19,10 @@ class AuthorizationTaskApprovalPage extends StatefulWidget {
 class _AuthorizationTaskApprovalPageState
     extends State<AuthorizationTaskApprovalPage> {
   ScrollController _scrollController;
-  List<Widget> _contents = [];
-  List<Widget> _contentItems = [];
-
-  var historyRegular = {
-    "data": [
-      {
-        "title": "基本信息",
-        "content": [
-          {
-            "name": "产品",
-            "value": "整取整存",
-          },
-          {
-            "name": "存款期限",
-            "value": "11-12月",
-          },
-          {
-            "name": "金额",
-            "value": "200",
-          },
-          {
-            "name": "年利率",
-            "value": "1.3%",
-          },
-          {
-            "name": "存单货币",
-            "value": "HKD-港元",
-          },
-          {
-            "name": "到期指示",
-            "value": "0-等待客户指示",
-          },
-          {
-            "name": "结算账户",
-            "value": "5000000066003",
-          },
-          {
-            "name": "扣款账户",
-            "value": "5000000066003",
-          },
-        ]
-      },
-      {
-        "title": "审批历史",
-        "content": [
-          {
-            "name": "审批人",
-            "value": "50006147456464",
-          },
-          {
-            "name": "审批时间",
-            "value": "2021-03-02 19:31:33",
-          },
-          {
-            "name": "审批意见",
-            "value": "Yes",
-          },
-          {
-            "name": "审批结果",
-            "value": "成功",
-          },
-        ]
-      }
-    ],
-  };
 
   @override
   void initState() {
     _scrollController = ScrollController();
-    _getContent();
     super.initState();
   }
 
@@ -93,16 +30,6 @@ class _AuthorizationTaskApprovalPageState
   void dispose() {
     _scrollController.dispose();
     super.dispose();
-  }
-
-  void _getContent() {
-    _contents.add(_buildContent());
-    historyRegular['data'].forEach((e) {
-      _contentItems.add(_buildTitle(e['title']));
-      (e['content'] as List).forEach((element) {
-        _contentItems.add(_buildContentItem(element['name'], element['value']));
-      });
-    });
   }
 
   @override
@@ -115,20 +42,34 @@ class _AuthorizationTaskApprovalPageState
       body: SingleChildScrollView(
         child: Container(
           color: Color(int.parse('0xffF7F7F7')),
-          child: _buildContent(),
+          child: Column(
+            children: [
+              Padding(padding: EdgeInsets.only(top: 15)),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, pageAuthorizationTaskApprovalHistoryDetail);
+                },
+                child: _buildTitle('审批历史', true),
+              ),
+              Padding(padding: EdgeInsets.only(top: 15)),
+              _buildTitle('基本信息', false),
+              _buildContentItem('存款期限', '11-12月'),
+              _buildContentItem('金额', '200'),
+              _buildContentItem('年利率', '1.3%'),
+              _buildContentItem('存单货币', 'HKD-港元'),
+              _buildContentItem('到期指示', '0-等待客户指示'),
+              _buildContentItem('结算账户', '5000000066003'),
+              _buildContentItem('扣款账户', '5000000066003'),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildContent() {
-    return Column(
-      children: _contentItems,
-    );
-  }
-
-  Widget _buildTitle(String title) {
+  Widget _buildTitle(String title, bool isShowAvatar) {
     return Container(
+      color: Colors.white,
       height: 46,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,6 +85,26 @@ class _AuthorizationTaskApprovalPageState
                     style:
                         TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                   ),
+                  Spacer(),
+                  isShowAvatar
+                      ? Row(
+                          children: [
+                            _buildAvatar(
+                                'https://api.lishaoy.net/files/22/serve?size=medium',
+                                '廖珠星'),
+                            _buildAvatar(
+                                'https://api.lishaoy.net/files/169/serve?size=thumbnail',
+                                '康听白'),
+                            _buildAvatar(
+                                'https://api.lishaoy.net/files/258/serve?size=thumbnail',
+                                '冯晓霞'),
+                            Icon(
+                              Icons.chevron_right,
+                              size: 20.0,
+                            ),
+                          ],
+                        )
+                      : Container(),
                 ],
               ),
             ),
@@ -157,9 +118,42 @@ class _AuthorizationTaskApprovalPageState
     );
   }
 
+  Container _buildAvatar(String imageUrl, String name) {
+    return Container(
+      padding: EdgeInsets.only(right: 6.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ClipOval(
+                child: FadeInImage.memoryNetwork(
+                  placeholder: kTransparentImage,
+                  image: imageUrl,
+                  fit: BoxFit.cover,
+                  width: 22.0,
+                  height: 22.0,
+                ),
+              ),
+              Text(
+                name,
+                style: TextStyle(
+                  fontSize: 10,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildContentItem(String name, String value) {
     return Container(
       height: 46,
+      color: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
