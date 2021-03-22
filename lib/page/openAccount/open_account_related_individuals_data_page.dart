@@ -1,6 +1,4 @@
-import 'package:ebank_mobile/authentication/auth_identity.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
@@ -9,8 +7,6 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_picker/flutter_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
@@ -66,7 +62,8 @@ class _RelatedIndividualsDataPageState
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        title: Text('有关人士信息预填'),
+        title:
+            Text(S.of(context).openAccout_details_of_connected_parties_title),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -137,7 +134,7 @@ class _RelatedIndividualsDataPageState
           top: 10,
         ),
         child: Text(
-          '有关人士信息',
+          S.of(context).openAccout_details_of_connected_parties,
           textAlign: TextAlign.left,
           style: TextStyle(
             color: HsgColors.secondDegreeText,
@@ -149,7 +146,7 @@ class _RelatedIndividualsDataPageState
       Container(
         child: _oneLayerSelectWidget(
           context,
-          '称谓',
+          S.of(context).openAccout_appellation,
           _appellationText,
           S.of(context).please_select,
           false,
@@ -163,7 +160,7 @@ class _RelatedIndividualsDataPageState
       Container(
         child: _oneLayerSelectWidget(
           context,
-          '类别',
+          S.of(context).openAccout_capacity,
           _categoryText,
           S.of(context).please_select,
           false,
@@ -177,7 +174,7 @@ class _RelatedIndividualsDataPageState
       Container(
         child: _oneLayerSelectWidget(
           context,
-          '证件类型',
+          S.of(context).openAccout_documentType,
           _documentTypeText,
           S.of(context).please_select,
           false,
@@ -191,13 +188,20 @@ class _RelatedIndividualsDataPageState
       Container(
         child: _oneLayerSelectWidget(
           context,
-          '国籍（国家地区）',
+          S.of(context).openAccout_nationality,
           _nationalityText,
           S.of(context).please_select,
           false,
           () {
             print('国籍（国家地区）');
-            _nextBtnEnabled = _judgeButtonIsEnabled();
+            // _nextBtnEnabled = _judgeButtonIsEnabled();
+            Navigator.pushNamed(context, countryOrRegionSelectPage)
+                .then((value) {
+              setState(() {
+                _nationalityText = (value as CountryRegionModel).nameEN;
+                _nextBtnEnabled = _judgeButtonIsEnabled();
+              });
+            });
           },
         ),
       ),
