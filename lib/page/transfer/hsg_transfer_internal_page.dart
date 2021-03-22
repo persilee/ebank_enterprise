@@ -20,7 +20,6 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/page/forexTrading/forex_trading_page.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 
@@ -144,8 +143,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     super.initState();
     _loadTransferData();
     _transferMoneyController.addListener(() {
-      _amount = _transferMoneyController.text;
-      // _rateCalculate();
+      if (_payCcy == _transferCcy) {
+        _amount = _transferMoneyController.text;
+      } else {
+        _rateCalculate();
+      }
     });
   }
 
@@ -589,18 +591,27 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   //汇率换算
   Future _rateCalculate() async {
-    double _payerAmount =
-        AiDecimalAccuracy.parse(_transferMoneyController.text).toDouble();
-    ForexTradingRepository()
-        .transferTrial(
-            TransferTrialReq(
-                amount: _payerAmount,
-                corrCcy: _payCcy,
-                defaultCcy: _transferCcy),
-            'TransferTrialReq')
-        .then((data) {
-      _amount = data.resultAmount;
-    });
+    double _payerAmount = 0;
+    if (_transferMoneyController.text == '') {
+      setState(() {
+        _amount = '0';
+      });
+    } else {
+      _payerAmount =
+          AiDecimalAccuracy.parse(_transferMoneyController.text).toDouble();
+      ForexTradingRepository()
+          .transferTrial(
+              TransferTrialReq(
+                  amount: _payerAmount,
+                  corrCcy: _transferCcy,
+                  defaultCcy: _payCcy),
+              'TransferTrialReq')
+          .then((data) {
+        setState(() {
+          _amount = data.optExAmt;
+        });
+      });
+    }
   }
 
   //获取验证码接口
