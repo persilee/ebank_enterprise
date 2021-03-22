@@ -182,6 +182,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
   _loadCardData(String cardNo) async {
     final prefs = await SharedPreferences.getInstance();
     String ciNo = prefs.getString(ConfigKey.CUST_ID);
+    print(ciNo);
     Future.wait({
       //根据卡号获取银行卡信息
       BankDataRepository().getBankListByCardNo(
