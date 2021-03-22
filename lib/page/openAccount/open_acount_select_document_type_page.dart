@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+/// 选择证件类型页面
+/// Author: 李家伟
+/// Date: 2021-03-18
+
 import 'dart:ui';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';

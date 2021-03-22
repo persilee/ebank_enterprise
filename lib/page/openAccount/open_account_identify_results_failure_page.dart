@@ -1,16 +1,16 @@
-/// Copyright (c) 2021 深圳高阳寰球科技有限公司
-/// 开户结果页面
-/// Author: 李家伟
-/// Date: 2021-03-19
-
+import 'package:ebank_mobile/authentication/auth_identity.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
-class OpenAccountResultsPage extends StatelessWidget {
-  const OpenAccountResultsPage({Key key}) : super(key: key);
+class OpenAccountIdentifyResultsFailurePage extends StatelessWidget {
+  const OpenAccountIdentifyResultsFailurePage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,18 +29,18 @@ class OpenAccountResultsPage extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: 70),
+              margin: EdgeInsets.only(top: 60),
               child: Image(
                 image: AssetImage(
-                    'images/time_depost/time_deposit_contract_succeed.png'),
-                width: 65,
-                height: 65,
+                    'images/openAccount/open_account_identify_results_failure.png'),
+                width: 138,
+                height: 118,
               ),
             ),
             Container(
               padding: EdgeInsets.only(left: 50, right: 50, top: 60),
               child: Text(
-                S.of(context).openAccout_application_results_title,
+                '有关人士信息识别失败',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: HsgColors.firstDegreeText,
@@ -52,7 +52,7 @@ class OpenAccountResultsPage extends StatelessWidget {
             Container(
               padding: EdgeInsets.only(left: 50, right: 50, top: 15),
               child: Text(
-                S.of(context).openAccout_application_results_content,
+                '',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: HsgColors.secondDegreeText,
@@ -63,8 +63,17 @@ class OpenAccountResultsPage extends StatelessWidget {
             ),
             Container(
               margin: EdgeInsets.only(top: 40),
-              child: HsgButton.button(
-                title: S.of(context).complete,
+              child: HsgButton.defaultButton(
+                title: '重新识别',
+                click: () {
+                  _qianliyanSDK(context);
+                },
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 15),
+              child: HsgButton.whiteButton(
+                title: '退出开户',
                 click: () {
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (BuildContext context) {
@@ -79,10 +88,35 @@ class OpenAccountResultsPage extends StatelessWidget {
                   });
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void _qianliyanSDK(BuildContext context) {
+    String _language = Intl.getCurrentLocale();
+    String lang = _language == 'en' ? 'en' : 'zh';
+    String countryRegions = _language == 'zh_CN' ? 'CN' : 'TW';
+
+    AuthIdentity()
+        .startAuth(
+      new AuthIdentityReq("DLEAED", "74283428974321", lang, countryRegions,
+          "1"), //passport001zh  DLEAED
+    )
+        .then((value) {
+      Fluttertoast.showToast(
+        msg: value.result,
+        gravity: ToastGravity.CENTER,
+      );
+      Navigator.pushNamed(context, pageOpenAccountIdentifyResultsFailure);
+    }).catchError((e) {
+      // HSProgressHUD.showError(status: '${e.toString()}');
+      Fluttertoast.showToast(
+        msg: '${e.toString()}',
+        gravity: ToastGravity.CENTER,
+      );
+    });
   }
 }

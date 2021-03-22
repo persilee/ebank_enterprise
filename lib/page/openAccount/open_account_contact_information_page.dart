@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+/// 联系信息填入页面
+/// Author: 李家伟
+/// Date: 2021-03-20
+
 import 'dart:convert';
 
 import 'package:ebank_mobile/authentication/auth_identity.dart';
@@ -14,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class OpenAccountContactInformationPage extends StatefulWidget {
   @override
@@ -180,7 +186,8 @@ class _OpenAccountContactInformationPageState
                   title: S.of(context).next_step,
                   click: _nextBtnEnabled
                       ? () {
-                          _qianliyanSDK();
+                          Navigator.pushNamed(
+                              context, pageOpenAccountRelatedIndividualsData);
                         }
                       : null,
                 ),
@@ -272,6 +279,20 @@ class _OpenAccountContactInformationPageState
   Widget _registeredAddressColumn(BuildContext context) {
     List<Widget> children = [
       Container(
+        padding: EdgeInsets.only(
+          top: 10,
+        ),
+        child: Text(
+          S.of(context).openAccout_registeredAddress,
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            color: HsgColors.secondDegreeText,
+            fontWeight: FontWeight.normal,
+            fontSize: 13,
+          ),
+        ),
+      ),
+      Container(
         child: _oneLayerSelectWidget(
           context,
           S.of(context).openAccout_registeredAddress,
@@ -321,6 +342,7 @@ class _OpenAccountContactInformationPageState
     ];
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: children,
     );
   }
@@ -328,6 +350,20 @@ class _OpenAccountContactInformationPageState
   ///主要营业地址区域
   Widget _businessColumn(BuildContext context) {
     List<Widget> children = [
+      Container(
+        padding: EdgeInsets.only(
+          top: 10,
+        ),
+        child: Text(
+          S.of(context).openAccout_businessAddress,
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            color: HsgColors.secondDegreeText,
+            fontWeight: FontWeight.normal,
+            fontSize: 13,
+          ),
+        ),
+      ),
       Container(
         child: _oneLayerSwitchWidget(
           context,
@@ -392,10 +428,11 @@ class _OpenAccountContactInformationPageState
     ];
 
     if (_theSameForRegisterAndBusiness) {
-      children = [children[0]];
+      children = [children[0], children[1]];
     }
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: children,
     );
   }
@@ -403,6 +440,20 @@ class _OpenAccountContactInformationPageState
   ///通讯地址区域
   Widget _communicationColumn(BuildContext context) {
     List<Widget> children = [
+      Container(
+        padding: EdgeInsets.only(
+          top: 10,
+        ),
+        child: Text(
+          S.of(context).openAccout_mailingAddress,
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            color: HsgColors.secondDegreeText,
+            fontWeight: FontWeight.normal,
+            fontSize: 13,
+          ),
+        ),
+      ),
       Container(
         child: _oneLayerSwitchWidget(
           context,
@@ -467,10 +518,11 @@ class _OpenAccountContactInformationPageState
     ];
 
     if (_theSameForRegisterAndCommunication) {
-      children = [children[0]];
+      children = [children[0], children[1]];
     }
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: children,
     );
   }
@@ -552,7 +604,7 @@ class _OpenAccountContactInformationPageState
               controller: textEdiC,
               textAlign: TextAlign.right,
               textAlignVertical: TextAlignVertical.bottom,
-              textDirection: TextDirection.ltr,
+              // textDirection: TextDirection.ltr,
               maxLines: 2,
               keyboardType: keyboardType,
               inputFormatters: <TextInputFormatter>[
@@ -597,7 +649,7 @@ class _OpenAccountContactInformationPageState
     Widget _inputWidget() {
       return Container(
         width: size.width - 30,
-        height: 45,
+        height: 50,
         child: Row(
           children: [
             Container(
@@ -613,7 +665,7 @@ class _OpenAccountContactInformationPageState
               ),
             ),
             Container(
-              height: 45,
+              height: 50,
               width: size.width - 30 - 125,
               margin: EdgeInsets.only(left: 5),
               child: TextField(
@@ -628,7 +680,7 @@ class _OpenAccountContactInformationPageState
                   LengthLimitingTextInputFormatter(maxLength) //限制长度
                 ],
                 textAlignVertical: TextAlignVertical.bottom,
-                textDirection: TextDirection.ltr,
+                // textDirection: TextDirection.ltr,
                 style: TextStyle(
                   fontSize: 15,
                   color: HsgColors.firstDegreeText,
@@ -677,7 +729,7 @@ class _OpenAccountContactInformationPageState
     Widget _textWidget() {
       return Container(
         width: size.width - 30,
-        height: 45,
+        height: 50,
         child: Row(
           children: [
             Container(
@@ -693,7 +745,7 @@ class _OpenAccountContactInformationPageState
               ),
             ),
             Container(
-              height: 45,
+              height: 50,
               width: size.width - 30 - 125 - 13,
               padding: EdgeInsets.only(left: 5, right: 5, top: 0, bottom: 0),
               child: TextField(
@@ -771,7 +823,7 @@ class _OpenAccountContactInformationPageState
     Widget _textWidget() {
       return Container(
         width: size.width - 30,
-        height: 45,
+        height: 50,
         child: Row(
           children: [
             Container(
@@ -787,10 +839,13 @@ class _OpenAccountContactInformationPageState
               ),
             ),
             Expanded(child: Container()),
-            CupertinoSwitch(
-              activeColor: HsgColors.theme,
-              value: switchValue,
-              onChanged: switchValueChanged,
+            Transform.scale(
+              scale: 0.8,
+              child: CupertinoSwitch(
+                activeColor: HsgColors.theme,
+                value: switchValue,
+                onChanged: switchValueChanged,
+              ),
             ),
           ],
         ),
@@ -858,19 +913,5 @@ class _OpenAccountContactInformationPageState
       ),
       onConfirm: onConfirm,
     ).showModal(this.context);
-  }
-
-  void _qianliyanSDK() {
-    AuthIdentity()
-        .startAuth(
-      new AuthIdentityReq(
-          "DLEAED", "74283428974321", "en", "CN", "1"), //passport001zh  DLEAED
-    )
-        .then((value) {
-      Fluttertoast.showToast(msg: value.result);
-      Navigator.pushNamed(context, pageOpenAccountResults);
-    }).catchError((e) {
-      HSProgressHUD.showError(status: '${e.toString()}');
-    });
   }
 }
