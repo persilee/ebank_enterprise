@@ -13,6 +13,9 @@ import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
 import 'package:ebank_mobile/page/openAccount/country_region_select_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_account_contact_information_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_account_identify_results_failure_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_account_identify_results_successful_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_account_related_individuals_data_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_account_results_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_acount_select_document_type_page.dart';
 import 'package:ebank_mobile/page/register/find_user_name_success.dart';
@@ -180,6 +183,12 @@ var pageOpenAccountContactInformation =
 var pageOpenAccountSelectDocumentType =
     '/open_acount_select_document_type_page.dart';
 var pageOpenAccountResults = '/open_account_results_page.dart';
+var pageOpenAccountRelatedIndividualsData =
+    '/open_account_related_individuals_data_page.dart';
+var pageOpenAccountIdentifyResultsFailure =
+    '/open_account_identify_results_failure_page.dart';
+var pageOpenAccountIdentifySuccessfulFailure =
+    '/open_account_identify_results_successful_page.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -268,6 +277,12 @@ var appRoutes = {
   pageOpenAccountSelectDocumentType: (context) =>
       OpenAccountSelectDocumentTypePage(),
   pageOpenAccountResults: (context) => OpenAccountResultsPage(),
+  pageOpenAccountRelatedIndividualsData: (context) =>
+      RelatedIndividualsDataPage(),
+  pageOpenAccountIdentifyResultsFailure: (context) =>
+      OpenAccountIdentifyResultsFailurePage(),
+  pageOpenAccountIdentifySuccessfulFailure: (context) =>
+      OpenAccountIdentifyResultsSuccessfulPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {

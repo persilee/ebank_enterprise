@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+/// 选择证件类型页面
+/// Author: 李家伟
+/// Date: 2021-03-18
+
 import 'dart:ui';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -15,7 +20,6 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
         title: Text(S.of(context).openAccout_documents_select),
