@@ -34,7 +34,8 @@ class AboutUsPage extends StatelessWidget {
                     Column(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(top: 35.0, left: 24.0),
+                          alignment: Alignment.centerLeft,
+                          margin: EdgeInsets.only(top: 20.0, left: 24.0),
                           child: Text(
                             S.current.about_us_title,
                             style: TextStyle(
@@ -45,7 +46,7 @@ class AboutUsPage extends StatelessWidget {
                         ),
                         Container(
                           margin: EdgeInsets.only(
-                              top: 6.0, left: 24.0, right: 59.0),
+                              top: 15.0, left: 24.0, right: 59.0),
                           child: Text(
                             S.current.about_us_subhead,
                             style: TextStyle(
@@ -58,8 +59,9 @@ class AboutUsPage extends StatelessWidget {
                     ),
                     Container(
                       margin:
-                          EdgeInsets.only(top: 160.0, left: 15.0, right: 15.0),
-                      padding: EdgeInsets.only(top: 5.0, left: 9.0, right: 9.0),
+                          EdgeInsets.only(top: 150.0, left: 15.0, right: 15.0),
+                      padding:
+                          EdgeInsets.only(top: 15.0, left: 9.0, right: 9.0),
                       decoration: new BoxDecoration(
                           //背景颜色
                           color: Colors.white,
@@ -114,7 +116,7 @@ class AboutUsPage extends StatelessWidget {
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: 30, bottom: 42),
+                              padding: EdgeInsets.only(top: 20, bottom: 32),
                               child: Text(
                                 S.current.company_introduction_content,
                                 style: TextStyle(
