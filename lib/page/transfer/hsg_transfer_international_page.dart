@@ -212,12 +212,12 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
     _middleBankSwiftController.addListener(() {
       setState(() {
-        _middleBankSwift = _middleBankSwiftController.text;
-        _middleBankSwiftController.text = _middleBankSwift.toUpperCase();
+        _middleBankSwift = _middleBankSwiftController.text.toUpperCase();
+        _middleBankSwiftController.text.toUpperCase();
       });
-      print(_middleBankSwift + "===========================");
+      print(_middleBankSwiftController.text + "===========================");
+      print("===========================" + _middleBankSwift);
     });
-    print("===========================" + _middleBankSwift);
   }
 
   @override

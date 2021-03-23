@@ -185,6 +185,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       appBar: AppBar(
         title: Text(S.current.transfer_type_0),
         centerTitle: true,
+        // backgroundColor: Color(0xffF8F8F8),
+        // textTheme: TextTheme(),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,

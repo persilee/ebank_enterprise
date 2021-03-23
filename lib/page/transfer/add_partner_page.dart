@@ -664,6 +664,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         textAlign: TextAlign.end,
         keyboardType: TextInputType.text,
         controller: _inputController,
+        // textCapitalization: TextCapitalization.characters,
         inputFormatters: [
           // FilteringTextInputFormatter.digitsOnly,
           LengthLimitingTextInputFormatter(11),

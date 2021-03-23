@@ -13,6 +13,14 @@ class HsgButton {
   }) {
     return Container(
       padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+      // margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
+      // decoration: BoxDecoration(
+      //   gradient: LinearGradient(colors: [
+      //     Color(0xFF1775BA),
+      //     Color(0xFF3A9ED1),
+      //   ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+      //   borderRadius: BorderRadius.circular(5),
+      // ),
       child: ButtonTheme(
         minWidth: double.infinity,
         height: 45,
@@ -23,7 +31,10 @@ class HsgButton {
             style: TextStyle(fontSize: 16, color: Colors.white),
             textAlign: TextAlign.center,
           ),
-          color: HsgColors.blueTextColor,
+          color: Color(0xFF3A9ED1),
+          // color: Colors.transparent,
+          // elevation: 0, // 正常时阴影隐藏
+          // highlightElevation: 0, // 点击时阴影隐藏
           disabledColor: HsgColors.btnDisabled,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         ),
