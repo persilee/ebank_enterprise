@@ -82,8 +82,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   var transferAc = '';
 
-  // List<CardListBal> cardListBal;
-
   _PageDepositInfo(this.deposit, this.cardList);
 
   List<RemoteBankCard> cards = [];
@@ -92,14 +90,11 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   String _changedSettAcTitle = '0101 2000 0017 1';
 
+  String _paymentAc = '';
+
   bool _checkBoxValue = false; //复选框默认值
 
-  List<String> instructions = [
-    // S.current.instruction_at_maturity_0,
-    // S.current.instruction_at_maturity_1,
-    // S.current.instruction_at_maturity_2,
-    // S.current.instruction_at_maturity_5,
-  ];
+  List<String> instructions = [];
 
   String language = Intl.getCurrentLocale();
 
@@ -107,12 +102,10 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   @override
   void initState() {
     super.initState();
-    _loadDepositData(deposit.conNo, double.parse(deposit.bal));
+    _loadDepositData(deposit.conNo);
     _getInsCode();
     _getDetail();
     _loadData();
-
-    // _getCardListBalByUser();
   }
 
   //右箭头图标
@@ -161,13 +154,14 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   _selectSettAc(BuildContext context) async {
     List<String> bankCards = [];
     List<String> accounts = [];
-    List<String> ciNames = [];
     for (RemoteBankCard card in cards) {
       bankCards.add(card.cardNo);
-      ciNames.add((card.ciName));
     }
     for (var i = 0; i < bankCards.length; i++) {
       accounts.add(FormatUtil.formatSpace4(bankCards[i]));
+      if (_changedSettAcTitle == bankCards[i]) {
+        _settAcPosition = i;
+      }
     }
     final result = await showHsgBottomSheet(
         context: context,
@@ -274,12 +268,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   //到期指示弹窗
   _selectInstruction(BuildContext context) async {
-    // List<String> instructions = [
-    // S.current.instruction_at_maturity_0,
-    // S.current.instruction_at_maturity_1,
-    // S.current.instruction_at_maturity_2,
-    // S.current.instruction_at_maturity_5,
-    // ];
     List<String> instructionDatas = [
       '0',
       '1',
@@ -298,7 +286,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         instCode = instructions[result];
         // instCode = instructionDatas[result];
       } else {
-        return {instCode, instCode};
+        // return {instCode, instCode};
       }
     });
   }
@@ -331,8 +319,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                   Expanded(child: Text(S.current.payment_account)),
                   Container(
                     child: Text(
-                      // FormatUtil.formatSpace4('$settDbAc'),
-                      '0101 2000 0017 2',
+                      FormatUtil.formatSpace4(_paymentAc),
                     ),
                   )
                 ],
@@ -440,60 +427,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     );
   }
 
-  //对话框
-  // ignore: non_constant_identifier_names
-  // _DialogBox(String contractMoney, String earlySettleMoney) {
-  //   return Container(
-  //       color: Colors.blue,
-  //       // height: 105,
-  //       child: Column(
-  //         children: [
-  //           //预计到期总额
-  //           _contractSettlement(
-  //               S.current.contract_settlement_amt, '$ccy$contractMoney'),
-
-  //           //提前结清本息总额
-  //           _contractSettlement(
-  //               S.current.early_settlement_amt, '$ccy$earlySettleMoney'),
-
-  //           Container(
-  //             // margin: EdgeInsets.only(top: 30),
-  //             child: Divider(),
-  //             // margin: EdgeInsets.only(top: 3),
-  //           ),
-  //           Container(
-  //             padding: EdgeInsets.zero,
-  //             color: Colors.red,
-  //             child: Row(
-  //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //               children: [
-  //                 //取消按钮
-  //                 Container(
-  //                     child: FlatButton(
-  //                   padding: EdgeInsets.zero,
-  //                   onPressed: () => Navigator.of(context).pop(),
-  //                   child: Text(S.current.cancel),
-  //                   color: Colors.white,
-  //                 )),
-  //                 Container(
-  //                   //确定按钮
-  //                   child: FlatButton(
-  //                     padding: EdgeInsets.zero,
-  //                     onPressed: () {
-  //                       _contractEarly(context);
-  //                     },
-  //                     child: Text(S.current.confirm),
-  //                     color: Colors.white,
-  //                     textColor: Colors.blue,
-  //                   ),
-  //                 )
-  //               ],
-  //             ),
-  //           )
-  //         ],
-  //       ));
-  // }
-
   //提前结清
   _contractSettlement(String leftText, String rightText) {
     return Container(
@@ -518,38 +451,19 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     );
   }
 
-  _loadDepositData(String conNo, double settBal) {
+  _loadDepositData(String conNo) {
     Future.wait({
-      // DepositDataRepository().getDepositLimitByConNo(
-      //     GetDepositLimitByConNo(conNo), 'GetDepositLimitByConNo'),
       DepositDataRepository()
           .getDepositTrial(GetDepositTrialReq(conNo), 'GetDepositTrialReq')
     }).then((value) {
       value.forEach((element) {
-        // if (element is DepositByLimitConNoResp) {
-        //   setState(() {
-        //     ciNo = element.ciNo;
-        //     conNos = element.conNo;
-        //     settDbAc = element.settDdAc;
-        //     ccy = element.ccy;
-        //     bal = element.bal;
-        //     auctCale = element.auctCale;
-        //     valDate = element.valDate;
-        //     mtDate = element.mtDate;
-        //   });
-        // } else if (element is DepositTrialResp) {
         setState(() {
           conMatAmt = element.conMatAmt;
           matAmt = element.matAmt;
           eryInt = element.eryInt;
           eryRate = element.eryRate;
-          // hdlFee = element.hdlFee;
-          // pnltFee = element.pnltFee;
-          // settBals = element.settBal;
-          settDdAc = element.settDdAc;
           mainAc = element.mainAc;
         });
-        // }
       });
     });
   }
@@ -557,29 +471,29 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   _contractEarly(BuildContext context) {
     setState(() {});
     HSProgressHUD.show();
-    // DepositDataRepository()
-    //     .getDepositEarlyContract(
-    //         GetDepositEarlyContractReq(
-    //             conNos,
-    //             double.parse(eryInt),
-    //             double.parse(eryRate),
-    //             0,
-    //             mainAc,
-    //             0,
-    //             0,
-    //             0,
-    //             settDdAc,
-    //             transferAc),
-    //         'getDepositEarlyContract')
-    //     .then((value) {
-    //   HSProgressHUD.dismiss();
-    //   _showContractSucceedPage(context);
-    // }).catchError((e) {
-    //   setState(() {});
-    //   HSProgressHUD.showError(status: '${e.toString()}');
-    // });
-    HSProgressHUD.dismiss();
-    _showContractSucceedPage(context);
+    DepositDataRepository()
+        .getDepositEarlyContract(
+            GetDepositEarlyContractReq(
+                conNos,
+                double.parse(eryInt),
+                double.parse(eryRate),
+                0,
+                mainAc,
+                0,
+                0,
+                0,
+                _paymentAc,
+                _changedSettAcTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), "")),
+            'getDepositEarlyContract')
+        .then((value) {
+      HSProgressHUD.dismiss();
+      _showContractSucceedPage(context);
+    }).catchError((e) {
+      setState(() {});
+      HSProgressHUD.showError(status: '${e.toString()}');
+    });
+    // HSProgressHUD.dismiss();
+    // _showContractSucceedPage(context);
   }
 
   //获取详情
@@ -587,6 +501,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     conNos = deposit.conNo;
     ccy = deposit.ccy;
     bal = deposit.bal;
+    _paymentAc = deposit.settDdAc;
 
     valDate = deposit.valDate;
     mtDate = deposit.mtDate;
@@ -628,28 +543,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     // }
   }
 
-  // _getCardListBalByUser() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   String ciNo = prefs.getString(ConfigKey.CUST_ID);
-  //   DepositDataRepository()
-  //       .getCardListBalByUser(
-  //           GetCardListBalByUserReq('', [], '', ciNo), 'getCardListBalByUser')
-  //       .then((value) {
-  //     cardListBal = value.cardListBal;
-  //     for (int i = 0; i < cardListBal.length; i++) {
-  //       if (cardListBal[i].ccy == ccy) {
-  //         transferAc = cardListBal[i].cardNo;
-  //       }
-  //     }
-  //   }).catchError((e) {
-  //     setState(() {});
-  //     HSProgressHUD.showError(status: '${e.toString()}');
-  //   });
-  // }
-
   Future<void> _loadData() async {
-    // final prefs = await SharedPreferences.getInstance();
-    // custID = prefs.getString(ConfigKey.CUST_ID);
     CardDataRepository().getCardList('getCardList').then(
       (data) {
         if (data.cardList != null) {

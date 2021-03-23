@@ -136,6 +136,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   //存单总额（币种）
   Widget _totalCcy() {
     return Container(
+      color: HsgColors.primary,
       margin: EdgeInsets.only(bottom: 12),
       padding: EdgeInsets.only(left: 0, top: 10, bottom: 30),
       child: Text(
@@ -153,6 +154,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   //存单总额
   Widget _totalAmt() {
     return Container(
+      color: HsgColors.primary,
       padding: EdgeInsets.only(left: 0, top: 30, bottom: 10),
       child: Text(
         FormatUtil.formatSringToMoney(totalAmt),
