@@ -1,10 +1,10 @@
-import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
-
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
 /// Date: 2021-03-15
 ///
+
+import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 
@@ -23,10 +23,9 @@ class AuthIdentity {
         {"body": jsonEncode(req)},
       );
       final resultMap = jsonDecode(result);
-      print(resultMap);
       return Future.value(AuthIdentityResp.fromJson(resultMap));
     } on PlatformException catch (e) {
-      return Future.error("startAuth error: '${e.message}'");
+      return Future.error(e);
     }
   }
 }

@@ -2,12 +2,15 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/splash_page.dart';
 import 'package:ebank_mobile/util/language.dart';
+import 'package:ebank_mobile/util/screen_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sp_util/sp_util.dart';
 import 'widget/progressHUD.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -15,12 +18,12 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 // void main() => runApp(
 //       HSGBankApp(),
 //     );
-void main(List<String> args) {
+void main(List<String> args) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SpUtil.getInstance();
   runApp(
     HSGBankApp(),
   );
-  //状态栏字体设置白色（电池、时间、信号等信息）
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 }
 
 class HSGBankApp extends StatefulWidget {
@@ -50,11 +53,26 @@ class _HSGBankAppState extends State<HSGBankApp> {
     _getPublicParameters();
   }
 
+  void hideKeyboard(BuildContext context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+      FocusManager.instance.primaryFocus.unfocus();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ///初始化progressHUD配置
     HSProgressHUD.progressHudConfig();
-
+    ///这是设置状态栏的图标和字体的颜色
+    ///Brightness.light  一般都是显示为白色
+    ///Brightness.dark 一般都是显示为黑色
+    SystemUiOverlayStyle style = SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+    );
+    SystemChrome.setSystemUIOverlayStyle(style);
+    ScreenUtil.init(width: 360, height: 920, allowFontScaling: true);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'HSGBank',
@@ -79,6 +97,15 @@ class _HSGBankAppState extends State<HSGBankApp> {
         GlobalCupertinoLocalizations.delegate
       ],
       supportedLocales: S.delegate.supportedLocales,
+      builder: (context, child) => Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
+          },
+          child: child,
+        ),
+      ),
     );
   }
 

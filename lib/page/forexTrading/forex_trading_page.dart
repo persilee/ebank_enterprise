@@ -339,8 +339,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
               'TransferTrialReq')
           .then((data) {
         setState(() {
-          _rate = data.rate;
-          _incomeAmt = data.resultAmount;
+          // _rate = data.rate;
+          // _incomeAmt = data.resultAmount;
         });
       }).catchError((e) {
         Fluttertoast.showToast(msg: e.toString());

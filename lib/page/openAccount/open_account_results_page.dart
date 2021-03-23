@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+/// 开户结果页面
+/// Author: 李家伟
+/// Date: 2021-03-19
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
@@ -14,7 +19,6 @@ class OpenAccountResultsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
         title: Text(S.of(context).openAccout_application_results),
@@ -64,8 +68,8 @@ class OpenAccountResultsPage extends StatelessWidget {
                 click: () {
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (BuildContext context) {
-                        return IndexPage();
-                      }), (Route route) {
+                    return IndexPage();
+                  }), (Route route) {
                     //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
                     print(route.settings?.name);
                     if (route.settings?.name == "/") {

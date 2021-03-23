@@ -8,7 +8,7 @@ import 'package:ebank_mobile/data/source/mine_checInformantApi.dart';
 // import 'package:ebank_mobile/data/source/card_data_repository.dart';
 // import 'package:ebank_mobile/data/source/mine_checInformantApi.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
-import 'package:ebank_mobile/data/source/model/real_name_auth.dart';
+import 'package:ebank_mobile/data/source/model/real_name_auth_by_three_factor.dart';
 // import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 // import 'package:ebank_mobile/data/source/model/set_transactionPassword.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
@@ -49,6 +49,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   // TextEditingController _confimPwd = TextEditingController(); //确认新密码
 
   String _certType = ''; //证件类型
+  String _userPhone = '';
   bool isShowIdCheckout = true; //显示第一步身份证验证信息
   String _certTypeKey; //身份校验的key
   // Timer _timer;
@@ -126,7 +127,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   //获取证件类型
   _getIdCardList() async {
     PublicParametersRepository()
-        .getIdType(GetIdTypeReq('CICID'), 'GetIdTypeReq')
+        .getIdType(GetIdTypeReq('FIRM_CERT'), 'GetIdTypeReq')
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         print('data.publicCodeGetRedisRspDtoList222222');
@@ -196,6 +197,10 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
 
   @override
   Widget build(BuildContext context) {
+    String argument = ModalRoute.of(context).settings.arguments;
+    if (argument != null) {
+      _userPhone = argument;
+    }
     return new Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).resetPayPsd),
@@ -461,22 +466,30 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       Fluttertoast.showToast(msg: '请输入证件号!');
       return;
     }
-    Navigator.pushNamed(context, setPayPage);
-    // HSProgressHUD.show();
-    // ChecInformantApiRepository()
-    //     .realNameAuth(RealNameAuthReq(_certNo.text, _certType, _realName.text),
-    //         'realNameAuth')
-    //     .then((data) {
-    //   print(_certNo.text + '-' + _certType + '-' + _realName.text);
-    //   if (data.enabled) {
-    //     Navigator.pushNamed(context, setPayPage);
-    //   }
-    //   HSProgressHUD.dismiss();
-    // }).catchError((e) {
-    //   // Fluttertoast.showToast(msg: e.toString());
-    //   HSProgressHUD.showError(status: e.toString());
-    //   print(e.toString());
-    // });
+    // Navigator.pushNamed(context, setPayPage);
+    HSProgressHUD.show();
+    ChecInformantApiRepository()
+        .realNameAuth(
+            RealNameAuthByThreeFactorReq(
+                _certNo.text, _certType, _userPhone, _realName.text),
+            'realNameAuthByThreeFactor')
+        .then((data) {
+      print(_certNo.text +
+          '-' +
+          _certType +
+          '-' +
+          _userPhone +
+          '-' +
+          _realName.text);
+      if (data.enabled) {
+        Navigator.pushNamed(context, setPayPage);
+      }
+      HSProgressHUD.dismiss();
+    }).catchError((e) {
+      // Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.showError(status: e.toString());
+      print(e.toString());
+    });
 
     // RegExp postalcode1 =
     //     new RegExp(r'(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x))$');

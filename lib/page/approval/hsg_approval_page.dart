@@ -47,13 +47,14 @@ class _ApprovalPageState extends State<ApprovalPage>
       labelStyle: TextStyle(
           fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.black),
       labelColor: Colors.black,
-      unselectedLabelColor: Colors.black,
+      unselectedLabelColor: Colors.grey,
       controller: tabController,
       indicatorWeight: 4,
       indicatorSize: TabBarIndicatorSize.label,
       indicator: MyUnderlineTabIndicator(
         borderSide: BorderSide(width: 4.0, color: HsgColors.accent),
         bottomPadding: 8.0,
+        indicatorWidthPercentage: 0.46,
       ),
       tabs: tabs.map((e) => Tab(text: e)).toList(),
     );
@@ -63,6 +64,7 @@ class _ApprovalPageState extends State<ApprovalPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(52),
           child: Container(

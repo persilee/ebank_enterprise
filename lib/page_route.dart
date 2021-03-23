@@ -4,6 +4,7 @@
 /// Date: 2020-12-07
 
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
+import 'package:ebank_mobile/page/approval/authorization_task_approval_history_detail.dart';
 import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 
@@ -12,6 +13,9 @@ import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
 import 'package:ebank_mobile/page/openAccount/country_region_select_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_account_contact_information_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_account_identify_results_failure_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_account_identify_results_successful_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_account_related_individuals_data_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_account_results_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_acount_select_document_type_page.dart';
 import 'package:ebank_mobile/page/register/find_user_name_success.dart';
@@ -154,6 +158,7 @@ var pageUserAgreement = '/user_agreement_page';
 var pageApplication = '/my_appplication_page';
 var pageApplicationTaskApproval = '/application_task_approval_page';
 var pageAuthorizationTaskApproval = '/authorization_task_approval_page';
+var pageAuthorizationTaskApprovalHistoryDetail = '/authorization_task_approval_history_detail';
 var pageContactCustomer = '/contact_customer_page';
 var pageTransferPlan = '/transfer_plan_page';
 var pageTransferPlanDetails = '/transfer_plan_details';
@@ -178,6 +183,12 @@ var pageOpenAccountContactInformation =
 var pageOpenAccountSelectDocumentType =
     '/open_acount_select_document_type_page.dart';
 var pageOpenAccountResults = '/open_account_results_page.dart';
+var pageOpenAccountRelatedIndividualsData =
+    '/open_account_related_individuals_data_page.dart';
+var pageOpenAccountIdentifyResultsFailure =
+    '/open_account_identify_results_failure_page.dart';
+var pageOpenAccountIdentifySuccessfulFailure =
+    '/open_account_identify_results_successful_page.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -266,6 +277,12 @@ var appRoutes = {
   pageOpenAccountSelectDocumentType: (context) =>
       OpenAccountSelectDocumentTypePage(),
   pageOpenAccountResults: (context) => OpenAccountResultsPage(),
+  pageOpenAccountRelatedIndividualsData: (context) =>
+      RelatedIndividualsDataPage(),
+  pageOpenAccountIdentifyResultsFailure: (context) =>
+      OpenAccountIdentifyResultsFailurePage(),
+  pageOpenAccountIdentifySuccessfulFailure: (context) =>
+      OpenAccountIdentifyResultsSuccessfulPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
@@ -304,6 +321,12 @@ onGenerateRoute(RouteSettings settings) {
         history: arguments['data'],
         title: arguments['title'],
       );
+    });
+  }
+  if (settings.name == pageAuthorizationTaskApprovalHistoryDetail) {
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return AuthorizationTaskApprovalHistoryDetail();
     });
   }
   if (settings.name == pageTransferPlanDetails) {

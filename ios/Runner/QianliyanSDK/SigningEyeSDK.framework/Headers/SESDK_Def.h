@@ -177,9 +177,9 @@ typedef NS_ENUM(NSInteger, SEFaceVerifyResultType){
  面签的方式
  */
 typedef NS_ENUM(NSInteger, SECertificateType){
-    SECertificateMainland = 1 << 0,     //大陆居民身份证
-    SECertificateHongKong = 1 << 1,       //香港居民身份证
-    SECertificatePassport = 1 << 2,        //护照
+    SECertificateMainland = 1,     //大陆居民身份证
+    SECertificateHongKong,       //香港居民身份证
+    SECertificatePassport        //护照
 
 };
 

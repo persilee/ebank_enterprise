@@ -20,6 +20,10 @@ class TransferInternationalData {
   String transferFee;
   String purpose;
   String transferRemark;
+  String payeeBankCode;
+  String payeeName;
+  String payerBankCode;
+  String payerName;
   TransferInternationalData(
     this.transferOutAccount,
     this.transferOutAmount,
@@ -37,5 +41,9 @@ class TransferInternationalData {
     this.transferFee,
     this.purpose,
     this.transferRemark,
+    this.payeeBankCode,
+    this.payeeName,
+    this.payerBankCode,
+    this.payerName,
   );
 }

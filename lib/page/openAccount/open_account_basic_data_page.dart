@@ -5,12 +5,17 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
 
@@ -63,6 +68,15 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   ///公司类别（其他）输入监听
   TextEditingController _companyTypeOtherTEC = TextEditingController();
 
+  ///登记注册文件请求类型
+  List<IdType> _documentTypes = [];
+
+  ///公司类别请求类型
+  List<IdType> _companyTypes = [];
+
+  ///商业行业性质请求类型
+  List<IdType> _industrialNatures = [];
+
   @override
   void initState() {
     _companyNameEngTEC.addListener(() {
@@ -89,6 +103,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     });
+
+    _getPublicParameters();
     super.initState();
   }
 
@@ -106,7 +122,6 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
         title: Text(S.of(context).openAccout_basicInformation),
@@ -384,7 +399,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     Widget _inputWidget() {
       return Container(
         width: size.width - 30,
-        height: 45,
+        height: 50,
         child: Row(
           children: [
             Container(
@@ -400,7 +415,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               ),
             ),
             Container(
-              height: 45,
+              height: 50,
               width: size.width - 30 - 125,
               margin: EdgeInsets.only(left: 5),
               child: TextField(
@@ -411,7 +426,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                 controller: textEdiC,
                 // obscureText: this.isCiphertext,
                 textAlign: TextAlign.right,
-                textDirection: TextDirection.ltr,
+                // textDirection: TextDirection.ltr,
                 style: TextStyle(
                   fontSize: 15,
                   color: HsgColors.firstDegreeText,
@@ -460,7 +475,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     Widget _textWidget() {
       return Container(
         width: size.width - 30,
-        height: 45,
+        height: 50,
         child: Row(
           children: [
             Container(
@@ -476,7 +491,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               ),
             ),
             Container(
-              height: 45,
+              height: 50,
               width: size.width - 30 - 125 - 13,
               padding: EdgeInsets.only(left: 5, right: 5, top: 0, bottom: 0),
               child: TextField(
@@ -547,22 +562,29 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
 
   /// 登记证件类型输入值
   void _selectDocumentType(BuildContext context) async {
-    List<String> documentTypes = [
+    List<String> documentList = [
       'Certificate of Incorporation', // 公司注册证书',
       'Business Registration Certificate', // 商业登记证',
       'Other', // 其他'
     ];
+    if (_documentTypes.length > 0) {
+      documentList = [];
+      String _language = Intl.getCurrentLocale();
+      _documentTypes.forEach((element) {
+        documentList.add(_language == 'en' ? element.name : element.cname);
+      });
+    }
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
         title: S.of(context).openAccount_documentType_select,
-        items: documentTypes,
+        items: documentList,
       ),
     );
 
     if (result != null && result != false) {
       setState(() {
-        _documentTypeText = documentTypes[result];
+        _documentTypeText = documentList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     } else {
@@ -572,25 +594,32 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
 
   ///公司类别选择
   void _selectCompanyType(BuildContext context) async {
-    List<String> companyTypes = [
+    List<String> companyList = [
       'Limited Company', // 有限公司',
       'Partnership', //合伙经营商号',
       'Sole Proprietorship', //独资经营商号',
       'Other (Please Specify)', //其他 (请注明)'
     ];
+    if (_companyTypes.length > 0) {
+      companyList = [];
+      String _language = Intl.getCurrentLocale();
+      _companyTypes.forEach((element) {
+        companyList.add(_language == 'en' ? element.name : element.cname);
+      });
+    }
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
         title: S.of(context).openAccount_companyType_select,
-        items: companyTypes,
+        items: companyList,
       ),
     );
 
     if (result != null && result != false) {
       setState(() {
-        _companyTypeText = companyTypes[result];
+        _companyTypeText = companyList[result];
         _isShowCompanyTypeOther =
-            result == companyTypes.length - 1 ? true : false;
+            result == companyList.length - 1 ? true : false;
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     } else {
@@ -600,7 +629,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
 
   /// 商业/行业性质选择
   void _selectIndustrialNature(BuildContext context) async {
-    List<String> industrialNatures = [
+    List<String> industrialList = [
       'Agriculture, forestry and fishing',
       'Mining and quarrying',
       'Manufacturing',
@@ -624,21 +653,69 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       'Activities of extraterritorial organizations and bodies',
       'Sensitive business'
     ];
+
+    if (_industrialNatures.length > 0) {
+      industrialList = [];
+      String _language = Intl.getCurrentLocale();
+      _industrialNatures.forEach((element) {
+        industrialList.add(_language == 'en' ? element.name : element.cname);
+      });
+    }
+
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
         title: S.of(context).openAccount_industryNature_select,
-        items: industrialNatures,
+        items: industrialList,
       ),
     );
 
     if (result != null && result != false) {
       setState(() {
-        _industrialNatureText = industrialNatures[result];
+        _industrialNatureText = industrialList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     } else {
       return;
     }
+  }
+
+  //获取公共参数
+  void _getPublicParameters() async {
+    //获取登记注册文件类型
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq('FIRM_CERT'), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _documentTypes = data.publicCodeGetRedisRspDtoList;
+        print('FIRM_CERT-  ${data.publicCodeGetRedisRspDtoList}');
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+
+    //获取公司类别类型
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq('ET'), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _companyTypes = data.publicCodeGetRedisRspDtoList;
+        print('ET-  ${data.publicCodeGetRedisRspDtoList}');
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+
+    //获取商业行业性质类型
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq('BIZ_IDU'), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _industrialNatures = data.publicCodeGetRedisRspDtoList;
+        print('BIZ_IDU-  ${data.publicCodeGetRedisRspDtoList}');
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
   }
 }

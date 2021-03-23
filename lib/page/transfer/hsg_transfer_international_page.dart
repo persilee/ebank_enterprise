@@ -5,9 +5,12 @@
  * 国际转账页面
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
+import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
@@ -176,6 +179,9 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   String _balance = '';
   List<String> _balanceList = [];
 
+  //预计收款金额
+  String _amount = '0';
+
   //限额
   String _limit = '';
 
@@ -187,27 +193,21 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   @override
   void initState() {
     super.initState();
-    _companyController.addListener(() {
-      _nameInputChange(_companyController.text); //公司名输入框内容改变时调用
-    });
-    _accountController.addListener(() {
-      _accountInputChange(_accountController.text); //账号输入框内容改变时调用
-    });
-    _transferMoneyController.addListener(() {
-      _amountInputChange(_transferMoneyController.text); //金额输入框内容改变时调用
-    });
-    _bankSwiftController.addListener(() {
-      // _bankSwiftController.text.toUpperCase();
-    });
-
     _loadTransferData();
     _getTransferFeeList();
     _getFeeUseList();
+
+    _transferMoneyController.addListener(() {
+      if (_payCcy == _transferCcy) {
+        _amount = _transferMoneyController.text;
+      } else {
+        _rateCalculate();
+      }
+    });
   }
 
   @override
   void dispose() {
-    super.dispose();
     _transferMoneyController.dispose();
     _payerAddressController.dispose();
     _payeeAddressController.dispose();
@@ -216,11 +216,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     _bankSwiftController.dispose();
     _middleBankSwiftController.dispose();
     _remarkController.dispose();
-  }
-
-  //转账金额
-  _amountInputChange(String title) {
-    money = double.parse(title);
+    super.dispose();
   }
 
   //付款方地址
@@ -241,20 +237,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //银行Swift
   _bankSwift(String bankSwifts) {
     bankSwift = bankSwifts;
-  }
-
-  //公司名
-  _nameInputChange(String name) {
-    setState(() {
-      payeeName = name;
-    });
-  }
-
-  //账号
-  _accountInputChange(String account) {
-    setState(() {
-      payeeCardNo = account;
-    });
   }
 
   //转账附言
@@ -459,6 +441,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                 limit: _limit,
                 account: _account,
                 balance: _balance,
+                amount: _amount,
                 transferMoneyController: _transferMoneyController,
                 callback: _isClick,
                 payCcyDialog: payCcyDialog,
@@ -679,7 +662,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             margin: EdgeInsets.only(top: 15),
             child: Text(
               topText,
-              style: TextStyle(fontSize: 13),
+              style: TextStyle(fontSize: 15),
               textAlign: TextAlign.right,
             ),
           ),
@@ -702,7 +685,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               border: InputBorder.none,
               hintText: inputText,
               hintStyle: TextStyle(
-                fontSize: 13.5,
+                fontSize: 15,
                 color: HsgColors.textHintColor,
               ),
             ),
@@ -759,7 +742,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         pageTransferInternationalPreview,
         arguments: TransferInternationalData(
           _account,
-          '123',
+          _amount,
           _transferCcy,
           _payerAddressController.text,
           _companyController.text,
@@ -774,6 +757,10 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           _transferFee,
           _feeUse,
           _remarkController.text,
+          payeeBankCode,
+          payeeName,
+          payerBankCode,
+          payerName,
         ),
       );
     }
@@ -807,11 +794,12 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           inputFormatters: <TextInputFormatter>[
             LengthLimitingTextInputFormatter(length),
           ],
+          textCapitalization: TextCapitalization.characters,
           decoration: InputDecoration(
             border: InputBorder.none,
             hintText: righteText,
             hintStyle: TextStyle(
-              fontSize: 14,
+              fontSize: 15,
               color: HsgColors.textHintColor,
             ),
           ),
@@ -830,7 +818,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               leftText,
               style: TextStyle(
                 color: HsgColors.firstDegreeText,
-                fontSize: 14,
+                fontSize: 15,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -855,11 +843,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           style: righText == S.current.please_select
               ? TextStyle(
                   color: Color(0xffCCCCCC),
-                  fontSize: 14,
+                  fontSize: 15,
                 )
               : TextStyle(
                   color: HsgColors.firstDegreeText,
-                  fontSize: 14,
+                  fontSize: 15,
                 ),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
@@ -887,7 +875,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             width: MediaQuery.of(context).size.width / 2.5,
             child: Text(
               leftText,
-              style: TextStyle(color: HsgColors.firstDegreeText, fontSize: 14),
+              style: TextStyle(color: HsgColors.firstDegreeText, fontSize: 15),
             ),
           ),
           Container(
@@ -1081,6 +1069,31 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     });
   }
 
+  //汇率换算
+  Future _rateCalculate() async {
+    double _payerAmount = 0;
+    if (_transferMoneyController.text == '') {
+      setState(() {
+        _amount = '0';
+      });
+    } else {
+      _payerAmount =
+          AiDecimalAccuracy.parse(_transferMoneyController.text).toDouble();
+      ForexTradingRepository()
+          .transferTrial(
+              TransferTrialReq(
+                  amount: _payerAmount,
+                  corrCcy: _transferCcy,
+                  defaultCcy: _payCcy),
+              'TransferTrialReq')
+          .then((data) {
+        setState(() {
+          _amount = data.optExAmt;
+        });
+      });
+    }
+  }
+
   _tranferInternational(BuildContext context) {
     HSProgressHUD.show();
     TransferDataRepository()
@@ -1091,7 +1104,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               _transferFee, //转账费用
               _changedCcyTitle, //贷方货feiyon币
               //借方货币
-              // debitCurrency,
+              '',
               _countryText, //国家地区
               intermediateBankSwift, //中间行swift
               payeeAddress,
