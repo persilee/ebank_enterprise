@@ -78,16 +78,18 @@ class _HSGBankAppState extends State<HSGBankApp> {
       debugShowCheckedModeBanner: false,
       title: 'HSGBank',
       theme: ThemeData(
-          appBarTheme: AppBarTheme(
-              textTheme: TextTheme(
+        appBarTheme: AppBarTheme(
+          textTheme: TextTheme(
             headline6: TextStyle(fontStyle: FontStyle.normal, fontSize: 18),
-          )),
-          splashColor: HsgColors.itemClickColor,
-          primaryColor: HsgColors.primary,
-          primaryColorDark: HsgColors.primaryDark,
-          backgroundColor: HsgColors.commonBackground,
-          dividerTheme:
-              DividerThemeData(thickness: 0.7, color: HsgColors.divider)),
+          ),
+        ),
+        splashColor: HsgColors.itemClickColor,
+        primaryColor: HsgColors.primary,
+        primaryColorDark: HsgColors.primaryDark,
+        backgroundColor: HsgColors.commonBackground,
+        dividerTheme:
+            DividerThemeData(thickness: 0.7, color: HsgColors.divider),
+      ),
       initialRoute: pageHome,
       routes: appRoutes,
       onGenerateRoute: (settings) => onGenerateRoute(settings),

@@ -471,6 +471,7 @@
   "loan_application_agreement2": "\"Enterprise User Services and Licensing Agreement\"",
   "loan_application_agreement3": " and ",
   "loan_application_agreement4": "\"User Service Agreement and Privacy Policy\"",
+  "fangluyao_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>方璐瑶（转账）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "three_month": "Three Months",
   "six_month": "Six Months",
   "nine_month": "Nine Months",
@@ -488,27 +489,17 @@
   "password_need_low_and_top": "Password should contain upper and lower case letters",
   "password_need_special_font": "The password should contain special characters",
   "differnet_old_new_pwd": "New password and old password are not allowed to be consistent, please re-enter",
-
-
-  
-
-
-  "fangluyao_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>方璐瑶国际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
-  "fangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<方璐瑶国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-
-  "wangluyao_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>王璐瑶国际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
-  "wangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<王璐瑶国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-
-  "zhangqirong_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>张其荣际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
-  "zhangqirong_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<张其荣国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-
-  "pengyikang_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>彭逸康国际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
-  "pengyikang_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<彭逸康国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-
-  "lishaoying_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李少颖际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
-  "lishaoying_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李少颖国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-
-  "lijiawei_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李家伟际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+  "fangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<方璐瑶（转账）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
+  "wangluyao_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>王璐瑶（定期）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+  "register_select_documents": "Please select document type",
+  "wangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<王璐瑶（定期）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
+  "zhangqirong_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>张其荣（我的）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+  "zhangqirong_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<张其荣（我的）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
+  "pengyikang_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>彭逸康（登录注册收支明细账户总览）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+  "pengyikang_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<彭逸康（登录注册收支明细账户总览）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
+  "lishaoying_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李少颖（待办）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+  "lishaoying_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李少颖（待办）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
+  "lijiawei_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李家伟（开户）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "openAccout_basicInformation": "General Information",
   "openAccount_companyNameEng": "Company Name (English)",
   "openAccount_companyNameEng_placeholder": "Please enter company name (English)",
@@ -556,5 +547,12 @@
   "openAccout_documentType_CN": "Chinese ID Card Recognition",
   "openAccout_documentType_HK": "Hong Kong ID Card Recognition",
   "openAccout_documentType_other": "Passport identification\n (Hong Kong, Macau, Taiwan and Overseas Passports)",
-  "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+  "openAccout_identify_results": "Identify Results",
+  "openAccout_identify_results_successful": "Identify The Successful",
+  "openAccout_identify_results_successful_tip": "Click Finish to upload the identified user information to complete the bank account opening.",
+  "openAccout_identify_results_failure": "Identification of Failure",
+  "openAccout_identify_again": "Re-identify",
+  "openAccout_exit": "Cancel",
+  "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+  
 }

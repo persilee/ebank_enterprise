@@ -125,6 +125,14 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         elevation: 0,
         centerTitle: true,
         title: Text(S.of(context).openAccout_basicInformation),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              Color(0xFF0018EB),
+              Color(0xFF01C1D9),
+            ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+          ),
+        ),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
