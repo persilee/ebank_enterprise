@@ -1,9 +1,6 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/register_by_account.dart';
-<<<<<<< HEAD
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
-=======
->>>>>>> 20683ab5010cf729094b1bea4737b75e371a1a3a
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
