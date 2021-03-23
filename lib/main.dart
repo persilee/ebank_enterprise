@@ -64,6 +64,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
   Widget build(BuildContext context) {
     ///初始化progressHUD配置
     HSProgressHUD.progressHudConfig();
+
     ///这是设置状态栏的图标和字体的颜色
     ///Brightness.light  一般都是显示为白色
     ///Brightness.dark 一般都是显示为黑色
