@@ -190,8 +190,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //转账数据
   List<String> transferData = [];
 
-  String _middleBankSwift = '';
-
   String _language = Intl.getCurrentLocale();
 
   @override
@@ -210,14 +208,13 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _rateCalculate();
       }
     });
-    _middleBankSwiftController.addListener(() {
-      setState(() {
-        _middleBankSwift = _middleBankSwiftController.text.toUpperCase();
-        _middleBankSwiftController.text.toUpperCase();
-      });
-      print(_middleBankSwiftController.text + "===========================");
-      print("===========================" + _middleBankSwift);
-    });
+    // _middleBankSwiftController.addListener(() {
+    //   setState(() {
+    //     _middleBankSwiftController.text =
+    //         _middleBankSwiftController.text.toUpperCase();
+    //   });
+    //   print(_middleBankSwiftController.text + "===========================");
+    // });
   }
 
   @override
@@ -796,7 +793,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           controller: _controller,
           onChanged: (text) {},
           textAlign: TextAlign.right,
-          textCapitalization: TextCapitalization.characters,
+          // textCapitalization: TextCapitalization.characters,
           inputFormatters: <TextInputFormatter>[
             LengthLimitingTextInputFormatter(length),
             isRegExp

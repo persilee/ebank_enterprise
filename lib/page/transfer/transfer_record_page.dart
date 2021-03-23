@@ -337,7 +337,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _popDialogContent(BuildContext popcontext) {
     return Container(
       color: Colors.white,
-      height: 310,
+      height: 320,
       padding: EdgeInsets.all(10),
       child: Material(
         color: Colors.white,
