@@ -19,6 +19,10 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ///业务编号
+    String _businessId = ModalRoute.of(context).settings.arguments;
+    print('$_businessId');
+
     final size = MediaQuery.of(context).size;
 
     return Scaffold(

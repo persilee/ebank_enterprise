@@ -1,12 +1,15 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
+import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
@@ -20,6 +23,12 @@ class RelatedIndividualsDataPage extends StatefulWidget {
 
 class _RelatedIndividualsDataPageState
     extends State<RelatedIndividualsDataPage> {
+  ///数据上传请求体
+  OpenAccountQuickSubmitDataReq _dataReq = new OpenAccountQuickSubmitDataReq();
+
+  ///有关人士请求体
+  Partner _partner = new Partner();
+
   /// 称谓
   String _appellationText = '';
 
@@ -29,11 +38,17 @@ class _RelatedIndividualsDataPageState
   /// 证件类型
   String _documentTypeText = '';
 
+  /// 登记证件号码输入值
+  String _documentNumberText = '';
+
   /// 国籍（国家地区）
   String _nationalityText = '';
 
   /// 下一步按钮是否能点击
   bool _nextBtnEnabled = true; //false;
+
+  ///登记证件号码输入监听
+  TextEditingController _documentNumberTEC = TextEditingController();
 
   ///称谓请求类型
   List<IdType> _appellationTypes = [];
@@ -47,16 +62,26 @@ class _RelatedIndividualsDataPageState
   @override
   void initState() {
     _getPublicParameters();
+
+    _documentNumberTEC.addListener(() {
+      _documentNumberText = _documentNumberTEC.text;
+      _partner.idNo = _documentNumberText;
+      setState(() {
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
+    });
     super.initState();
   }
 
   @override
   void dispose() {
+    _documentNumberTEC.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    _dataReq = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -82,8 +107,11 @@ class _RelatedIndividualsDataPageState
                   title: S.of(context).next_step,
                   click: _nextBtnEnabled
                       ? () {
-                          Navigator.pushNamed(
-                              context, pageOpenAccountSelectDocumentType);
+                          List<Partner> partnerList = [_partner];
+                          _dataReq.partnerList = partnerList;
+                          print('>>>>${_dataReq.toString()}');
+
+                          _openAccountQuickSubmitData();
                         }
                       : null,
                 ),
@@ -104,6 +132,9 @@ class _RelatedIndividualsDataPageState
       return false;
     }
     if (_documentTypeText == null || _documentTypeText == '') {
+      return false;
+    }
+    if (_documentNumberText == null || _documentNumberText == '') {
       return false;
     }
     if (_nationalityText == null || _nationalityText == '') {
@@ -152,7 +183,6 @@ class _RelatedIndividualsDataPageState
           false,
           () {
             print('称谓');
-            // _nextBtnEnabled = _judgeButtonIsEnabled();
             _selectAppellation(context);
           },
         ),
@@ -166,7 +196,6 @@ class _RelatedIndividualsDataPageState
           false,
           () {
             print('类别');
-            // _nextBtnEnabled = _judgeButtonIsEnabled();
             _selectCategory(context);
           },
         ),
@@ -180,9 +209,18 @@ class _RelatedIndividualsDataPageState
           false,
           () {
             print('证件类型');
-            // _nextBtnEnabled = _judgeButtonIsEnabled();
             _selectDocumentType(context);
           },
+        ),
+      ),
+      Container(
+        child: _oneLayerInputWidget(
+          context,
+          S.of(context).openAccount_documentNumber,
+          S.of(context).openAccount_documentNumber_placeholder,
+          _documentNumberTEC,
+          false,
+          30,
         ),
       ),
       Container(
@@ -194,11 +232,22 @@ class _RelatedIndividualsDataPageState
           false,
           () {
             print('国籍（国家地区）');
-            // _nextBtnEnabled = _judgeButtonIsEnabled();
             Navigator.pushNamed(context, countryOrRegionSelectPage)
                 .then((value) {
+              String _language = Intl.getCurrentLocale();
+              CountryRegionModel data = value;
+              String showText = '';
+              if (_language == 'zh_CN') {
+                showText = data.nameZhCN;
+              } else if (_language == 'zh_HK') {
+                showText = data.nameZhHK;
+              } else {
+                showText = data.nameEN;
+              }
+
+              _partner.nationality = data.countryCode;
               setState(() {
-                _nationalityText = (value as CountryRegionModel).nameEN;
+                _nationalityText = showText;
                 _nextBtnEnabled = _judgeButtonIsEnabled();
               });
             });
@@ -210,6 +259,82 @@ class _RelatedIndividualsDataPageState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: children,
+    );
+  }
+
+  Widget _oneLayerInputWidget(
+    BuildContext context,
+    String titleStr,
+    String placeholderStr,
+    TextEditingController textEdiC,
+    bool isHiddenLine,
+    int maxLength,
+  ) {
+    final size = MediaQuery.of(context).size;
+
+    Widget _inputWidget() {
+      return Container(
+        width: size.width - 30,
+        height: 50,
+        child: Row(
+          children: [
+            Container(
+              width: 120,
+              child: Text(
+                titleStr,
+                maxLines: 2,
+                style: TextStyle(
+                  color: HsgColors.firstDegreeText,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            Container(
+              height: 50,
+              width: size.width - 30 - 125,
+              margin: EdgeInsets.only(left: 5),
+              child: TextField(
+                //是否自动更正
+                autocorrect: false,
+                //是否自动获得焦点
+                autofocus: false,
+                controller: textEdiC,
+                // obscureText: this.isCiphertext,
+                textAlign: TextAlign.right,
+                inputFormatters: <TextInputFormatter>[
+                  LengthLimitingTextInputFormatter(maxLength) //限制长度
+                ],
+                style: TextStyle(
+                  fontSize: 15,
+                  color: HsgColors.firstDegreeText,
+                ),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: placeholderStr,
+                  hintStyle: TextStyle(
+                    fontSize: 15,
+                    color: HsgColors.textHintColor,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _inputWidget(),
+        isHiddenLine == true
+            ? Divider()
+            : Divider(
+                height: 0.5,
+                color: HsgColors.lineColor,
+              ),
+      ],
     );
   }
 
@@ -334,8 +459,10 @@ class _RelatedIndividualsDataPageState
     );
 
     if (result != null && result != false) {
+      IdType data = _documentTypes[result];
+      _partner.appellation = data.code;
       setState(() {
-        _documentTypeText = appellationList[result];
+        _appellationText = appellationList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     } else {
@@ -373,8 +500,10 @@ class _RelatedIndividualsDataPageState
     );
 
     if (result != null && result != false) {
+      IdType data = _documentTypes[result];
+      _partner.partnerType = data.code;
       setState(() {
-        _documentTypeText = categoryList[result];
+        _categoryText = categoryList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     } else {
@@ -405,6 +534,8 @@ class _RelatedIndividualsDataPageState
     );
 
     if (result != null && result != false) {
+      IdType data = _documentTypes[result];
+      _partner.idType = data.code;
       setState(() {
         _documentTypeText = documentList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
@@ -451,5 +582,29 @@ class _RelatedIndividualsDataPageState
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
+  }
+
+  //提交快速开户录入的数据
+  void _openAccountQuickSubmitData() async {
+    //称谓
+    OpenAccountRepository().quickAccountOpening(_dataReq, 'GetIdTypeReq').then(
+      (value) {
+        print(value);
+        if (value.businessId.length > 0) {
+          Navigator.pushNamed(
+            context,
+            pageOpenAccountSelectDocumentType,
+            arguments: value.businessId,
+          );
+        } else {}
+      },
+    ).catchError(
+      (e) {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+      },
+    );
   }
 }

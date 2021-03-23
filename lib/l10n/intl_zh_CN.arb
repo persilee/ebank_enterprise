@@ -553,6 +553,8 @@
   "openAccout_identify_results_failure": "有关人士信息识别失败",
   "openAccout_identify_again": "重新识别",
   "openAccout_exit": "取消开户",
+  "hot_countries": "热门国家",
+  "select_country": "选择国家",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }
