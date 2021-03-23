@@ -1,11 +1,3 @@
-import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
-import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
-import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
-import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/util/small_data_store.dart';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
@@ -18,7 +10,10 @@ import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
+import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 
 /// @auther zhanggenha
 /// @date 2020-12-05
@@ -89,7 +84,11 @@ class _CardListPageState extends State<CardListPage> {
     return Container(
       padding: EdgeInsets.only(left: 10),
       child: Text(
-        "共" + _cardsLength.toString() + "个账户",
+        S.current.in_all +
+            ' ' +
+            _cardsLength.toString() +
+            ' ' +
+            S.current.accounts,
         style: TextStyle(
           color: HsgColors.hintText,
           fontSize: 13,
