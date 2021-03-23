@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/model/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
-import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
+
 import 'package:ebank_mobile/data/source/model/send_sms_register.dart';
-import 'package:ebank_mobile/data/source/verification_code_repository.dart';
+
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 
@@ -13,7 +14,7 @@ import 'package:ebank_mobile/page/register/component/register_86.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
-import 'package:ebank_mobile/widget/progressHUD.dart';
+
 import 'package:flutter/gestures.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -44,6 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Timer _timer;
   int countdownTime = 0;
   bool _checkBoxValue = false; //复选框默认值
+  bool _isRegister = false;
 
   /// 区号
   String _officeAreaCodeText = '';
@@ -147,15 +149,23 @@ class _RegisterPageState extends State<RegisterPage> {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                color: HsgColors.registerNextBtn),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Color(0xFF1775BA),
+                                  Color(0xFF3A9ED1),
+                                ],
+                              ),
+                            ),
                             margin: EdgeInsets.only(top: 75),
                             width: MediaQuery.of(context).size.width / 1.2,
                             height: MediaQuery.of(context).size.height / 15,
-                            child: RaisedButton(
+                            child: FlatButton(
                               disabledColor: HsgColors.btnDisabled,
-                              color: Colors.blue,
+                              //color: Colors.blue,
                               child: Text(
                                 S.current.next_step,
                                 style: (TextStyle(color: Colors.white)),
@@ -172,6 +182,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                           characters.hasMatch(_userName.text) ==
                                               true) {
                                         Fluttertoast.showToast(
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
                                             msg:
                                                 '用户名只能为4-16位字符、数字或者字母，不能包含特殊字符，不能重复');
                                       } else {
@@ -181,11 +194,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                           'sms': _smsListen,
                                           'phone': _phoneNumListen
                                         };
-                                        // listData = [
-                                        //   _userNameListen,
-                                        //   _smsListen,
-                                        //   _phoneNumListen
-                                        // ];
 
                                         Navigator.pushNamed(
                                             context, pageRegisterConfirm,
@@ -309,11 +317,43 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  //检验用户是否注册
+  _checkRegister() {
+    RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
+    if (characters.hasMatch(_phoneNum.text) == false) {
+      Fluttertoast.showToast(
+        msg: S.current.format_mobile_error,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
+    } else {
+      VersionDataRepository()
+          .checkPhone(CheckPhoneReq(_phoneNum.text, '1'), 'checkPhoneReq')
+          .then((data) {
+        setState(() {
+          _isRegister = data.register;
+          _sendSmsRegister(_isRegister);
+        });
+      }).catchError((e) {
+        Fluttertoast.showToast(msg: e.toString());
+      });
+    }
+  }
+
   //获取注册发送短信验证码接口
-  _sendSmsRegister() async {
+  _sendSmsRegister(bool _isRegister) async {
+    print('$_isRegister>>>>>>>>');
     RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
     if (characters.hasMatch(_phoneNum.text) == false) {
       Fluttertoast.showToast(msg: S.current.format_mobile_error);
+    } else if (_isRegister) {
+      Fluttertoast.showToast(
+        msg: "此手机号已被注册",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
     } else {
       VersionDataRepository()
           .sendSmsRegister(SendSmsRegisterReq('', _phoneNum.text, 'register'),
@@ -334,7 +374,7 @@ class _RegisterPageState extends State<RegisterPage> {
       onPressed: countdownTime > 0
           ? null
           : () {
-              _sendSmsRegister();
+              _checkRegister();
             },
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
       padding: EdgeInsets.only(left: 35),

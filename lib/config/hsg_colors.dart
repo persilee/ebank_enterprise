@@ -6,7 +6,7 @@ class HsgColors {
   /// 主色调
   static const Color primary = Color(0xff2f323e);
   static const Color primaryDark = Color(0xff282b36);
-  static const Color accent = Color(0xff4871ff);
+  static const Color accent = Color(0xFF3394D4);
   static const Color btnPrimary = accent;
   static const Color btnAccent = Color(0xff3551b1);
   static const Color btnDisabled = Color(0xffd1d1d1);
@@ -46,6 +46,6 @@ class HsgColors {
   static const Color inputBackground = Color(0xFFF5F5F5);
   static const Color iconColor = Color(0xFFAAAAAA);
   static const Color color38C8C8C8 = Color(0x38C8C8C8);
-  static const Color registerBtn = Color(0xFF819DFF);
+  static const Color registerBtn = Color(0xFF62B2E7);
   static const Color registerNextBtn = Color(0xFFDCDCDC);
 }

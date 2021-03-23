@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 Widget getRegisterRegion(BuildContext context, TextEditingController _phoneNum,
     String _officeAreaCodeText, Function _selectRegionCode) {
   _officeAreaCodeText = _officeAreaCodeText == '' ? '86' : _officeAreaCodeText;
-  print("${_phoneNum.text}");
+  // print("${_phoneNum.text}");
   return Container(
     margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
     width: MediaQuery.of(context).size.width / 2,

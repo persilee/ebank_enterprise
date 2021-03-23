@@ -58,12 +58,18 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   margin: EdgeInsets.only(left: 37.5, right: 37.5, top: 125),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
-                    color: HsgColors.accent,
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFF1775BA),
+                        Color(0xFF3A9ED1),
+                      ],
+                    ),
                   ),
                   child: Column(
                     children: [
                       Container(
-                        decoration: BoxDecoration(),
                         child: FlatButton(
                           child: Text(
                             S.current.complete,

@@ -68,14 +68,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         color: Color(0xFFF5F7F9)),
                     child: Container(
-                      child:
-                          // SelectInkWell(
-                          //   title: S.current.idType,
-                          //   item: _certType,
-                          //   onTap: _idCardListBottomSheet,
-                          //   isRegister: true,
-                          // ),
-                          InkWell(
+                      child: InkWell(
                         onTap: _idCardListBottomSheet,
                         child: Container(
                           height: 50,
@@ -89,7 +82,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                             children: [
                               _certType == ''
                                   ? Text(
-                                      S.current.openAccout_documents_select,
+                                      S.current.register_select_documents,
                                     )
                                   : Text(_certType),
                               Row(
@@ -113,11 +106,23 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                   //证件号码
                   getRegisterRow(
                       S.current.placeIdNumber, _cardNumber, false), //确定按钮
+                  //按钮
                   Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFF1775BA),
+                          Color(0xFF3A9ED1),
+                        ],
+                      ),
+                    ),
                     margin: EdgeInsets.all(40), //外边距
                     height: 44.0,
                     width: MediaQuery.of(context).size.width,
-                    child: RaisedButton(
+                    child: FlatButton(
                       child: Text(S.of(context).next_step),
                       onPressed: _submit()
                           ? () {
@@ -125,13 +130,9 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                                   context, pageResetPasswordNoAccount);
                             }
                           : null,
-                      color: HsgColors.accent,
                       textColor: Colors.white,
                       disabledTextColor: Colors.white,
                       disabledColor: Color(0xFFD1D1D1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5) //设置圆角
-                          ),
                     ),
                   )
                 ],

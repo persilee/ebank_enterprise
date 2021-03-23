@@ -60,15 +60,21 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                              color: Color(0xFFF5F7F9)),
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Color(0xFF1775BA),
+                                Color(0xFF3A9ED1),
+                              ],
+                            ),
+                          ),
                           margin: EdgeInsets.only(top: 75),
                           width: MediaQuery.of(context).size.width / 1.2,
                           height: MediaQuery.of(context).size.height / 15,
-                          child: RaisedButton(
+                          child: FlatButton(
                             disabledColor: HsgColors.btnDisabled,
-                            color: Colors.blue,
                             child: Text(
                               S.current.confirm,
                               style: (TextStyle(color: Colors.white)),

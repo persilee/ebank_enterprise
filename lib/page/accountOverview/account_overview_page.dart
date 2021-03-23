@@ -73,8 +73,17 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                 // 头部
                 SliverToBoxAdapter(
                   child: Container(
-                    padding: EdgeInsets.fromLTRB(0, 19, 0, 0),
-                    color: HsgColors.primary,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFF1775BA),
+                          Color(0xFF3A9ED1),
+                        ],
+                      ),
+                    ),
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: _accountOverviewColumn(),
                   ),
                 ),
@@ -382,21 +391,27 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     double bottomRight;
     Color hintColortone;
     Color hintColortwo;
+    bool shoDowOne;
+    bool shoDowTwo;
     //isTotalAsset ? hintColor = Colors.white : Colors.white54;
     if (isTotalAsset) {
-      colorOne = Color(0xFF5674F5);
-      colorTwo = Color(0xFF40475F);
+      colorOne = Color(0xFF3A9ED1);
+      colorTwo = Color(0xFF2080C0);
       bottomLeft = 20;
       bottomRight = 0;
       hintColortone = Colors.white;
       hintColortwo = Colors.white54;
+      shoDowOne = true;
+      shoDowTwo = false;
     } else {
-      colorOne = Color(0xFF40475F);
-      colorTwo = Color(0xFF5674F5);
+      colorOne = Color(0xFF2080C0);
+      colorTwo = Color(0xFF3A9ED1);
       bottomLeft = 0;
       bottomRight = 20;
       hintColortone = Colors.white54;
       hintColortwo = Colors.white;
+      shoDowOne = false;
+      shoDowTwo = true;
     }
     return Column(
       children: [
@@ -416,8 +431,17 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                   isTotalLiabilities = false;
                 });
               },
-              child: _netAssets(S.current.total_assets, localCcy, netAssets,
-                  colorOne, 0, bottomRight, colorTwo, hintColortone),
+              child: _netAssets(
+                  S.current.total_assets,
+                  localCcy,
+                  netAssets,
+                  colorOne,
+                  0,
+                  bottomRight,
+                  colorTwo,
+                  hintColortone,
+                  shoDowOne,
+                  true),
             ),
 
             //总负债
@@ -437,7 +461,9 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                   bottomLeft,
                   0,
                   colorOne,
-                  hintColortwo),
+                  hintColortwo,
+                  shoDowTwo,
+                  false),
             ),
 
             //_totalLiability(),
@@ -464,52 +490,68 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   }
 
   Container _netAssets(
-      String title,
-      String localCcy,
-      String netAssets,
-      Color color,
-      double bottomleftRadius,
-      double bottomrightRadius,
-      Color backgroundColor,
-      Color hintColor) {
+    String title,
+    String localCcy,
+    String netAssets, //金额
+    Color color, //根据资产和负债传入颜色
+    double bottomleftRadius, //底部左边距圆角
+    double bottomrightRadius, //底部右边距圆角
+    Color backgroundColor, //大的container背景色
+    Color hintColor, //字体颜色
+    bool isboxShadow,
+    bool isflex, //阴影偏移量
+  ) {
     return Container(
+      decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          )),
+      child: Container(
         decoration: BoxDecoration(
-            color: backgroundColor,
+            boxShadow: [
+              isboxShadow
+                  ? BoxShadow(
+                      color: Color(0XFF192A56),
+                      offset: isflex
+                          ? Offset(-10.0, 0.0)
+                          : Offset(20.0, 0.0), //阴影xy轴偏移量
+                      blurRadius: 10.0, //阴影模糊程度
+                    )
+                  : BoxShadow(color: Color(0xFF2F323E), blurRadius: 0.0)
+            ],
+            color: color,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
-            )),
-        child: Container(
-            decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                    bottomLeft: Radius.circular(bottomleftRadius),
-                    bottomRight: Radius.circular(bottomrightRadius))),
-            child: Column(
-              children: [
-                //总资产
-                Container(
-                  padding: EdgeInsets.only(left: 18, top: 9),
-                  width: MediaQuery.of(context).size.width / 2,
-                  //color: color,
-                  child: Text(
-                    title,
-                    style: TextStyle(fontSize: 13.5, color: Colors.white54),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 18, top: 7),
-                  width: MediaQuery.of(context).size.width / 2,
-                  height: MediaQuery.of(context).size.height / 22,
-                  child: Text(
-                      localCcy + ' ' + FormatUtil.formatSringToMoney(netAssets),
-                      style: TextStyle(fontSize: 11, color: hintColor)),
-                )
-              ],
-            )));
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+                bottomLeft: Radius.circular(bottomleftRadius),
+                bottomRight: Radius.circular(bottomrightRadius))),
+        child: Column(
+          children: [
+            //总资产
+            Container(
+              padding: EdgeInsets.only(left: 18, top: 9),
+              width: MediaQuery.of(context).size.width / 2,
+              //color: color,
+              child: Text(
+                title,
+                style: TextStyle(fontSize: 13.5, color: Colors.white54),
+                textAlign: TextAlign.left,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 18, top: 7),
+              width: MediaQuery.of(context).size.width / 2,
+              height: MediaQuery.of(context).size.height / 22,
+              child: Text(
+                  localCcy + ' ' + FormatUtil.formatSringToMoney(netAssets),
+                  style: TextStyle(fontSize: 11, color: hintColor)),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
 //净资产
