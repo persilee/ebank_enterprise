@@ -13,6 +13,8 @@ import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_early_contract.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_trial.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -23,6 +25,7 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PageDepositInfo extends StatefulWidget {
@@ -91,13 +94,24 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   bool _checkBoxValue = false; //复选框默认值
 
+  List<String> instructions = [
+    // S.current.instruction_at_maturity_0,
+    // S.current.instruction_at_maturity_1,
+    // S.current.instruction_at_maturity_2,
+    // S.current.instruction_at_maturity_5,
+  ];
+
+  String language = Intl.getCurrentLocale();
+
   //获取网络请求
   @override
   void initState() {
     super.initState();
     _loadDepositData(deposit.conNo, double.parse(deposit.bal));
+    _getInsCode();
     _getDetail();
     _loadData();
+
     // _getCardListBalByUser();
   }
 
@@ -260,12 +274,12 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   //到期指示弹窗
   _selectInstruction(BuildContext context) async {
-    List<String> instructions = [
-      S.current.instruction_at_maturity_0,
-      S.current.instruction_at_maturity_1,
-      S.current.instruction_at_maturity_2,
-      S.current.instruction_at_maturity_5,
-    ];
+    // List<String> instructions = [
+    // S.current.instruction_at_maturity_0,
+    // S.current.instruction_at_maturity_1,
+    // S.current.instruction_at_maturity_2,
+    // S.current.instruction_at_maturity_5,
+    // ];
     List<String> instructionDatas = [
       '0',
       '1',
@@ -647,6 +661,25 @@ class _PageDepositInfo extends State<PageDepositInfo> {
       },
     ).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+
+//获取到期指示列表
+  Future _getInsCode() async {
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq("EXP_IN"), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        data.publicCodeGetRedisRspDtoList.forEach((element) {
+          setState(() {
+            if (language == 'zh_CN') {
+              instructions.add(element.cname);
+            } else {
+              instructions.add(element.name);
+            }
+          });
+        });
+      }
     });
   }
 

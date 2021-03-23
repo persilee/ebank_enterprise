@@ -466,12 +466,15 @@
   "find_username": "成功找回用户名",
   "fotget_password": "忘记密码",
   "please_input_name": "请输入姓名",
-  "reset_password_success": "重置密码成功",
   "not_required": "非必填",
   "loan_application_agreement1": "本人已阅读并同意签署",
   "loan_application_agreement2": "《企业用户服务及授权协议》",
   "loan_application_agreement3": "和",
   "loan_application_agreement4": "《用户服务协议及隐私政策》",
+  
+
+
+  "fangluyao_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>方璐瑶（转账）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "three_month": "三个月",
   "six_month": "六个月",
   "nine_month": "九个月",
@@ -489,14 +492,10 @@
   "password_need_num": "密码需8-16位，包含数字，大小写字母和特殊字符",
   "password_need_low_and_top": "密码需包含大小写字母",
   "password_need_special_font": "密码需包含特殊字符",
-  
-
-
-
-  "fangluyao_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>方璐瑶（转账）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "fangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<方璐瑶（转账）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
 
   "wangluyao_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>王璐瑶（定期）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+  "register_select_documents":"请选择证件类型",
   "wangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<王璐瑶（定期）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
 
   "zhangqirong_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>张其荣（我的）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
