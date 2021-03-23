@@ -86,11 +86,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
         'iconName': 'images/openAccount/open_account_document_type_other.png',
         'titleStr': S.of(context).openAccout_documentType_other,
         'onClickFunction': () {
-<<<<<<< HEAD
-          print('护照识别 (港澳台地区及境外护照)');
-=======
           print('护照识别\n (港澳台地区及境外护照)');
->>>>>>> 724b8235b9cd45b10536f426c6dab48c78ede6fc
           _qianliyanSDK(context, '3');
         },
       }
