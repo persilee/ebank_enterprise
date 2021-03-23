@@ -17,7 +17,7 @@ class OpenAccountIdentifyResultsSuccessfulPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        title: Text(S.of(context).openAccout_application_results),
+        title: Text(S.of(context).openAccout_identify_results),
       ),
       body: Container(
         width: size.width,
@@ -36,7 +36,7 @@ class OpenAccountIdentifyResultsSuccessfulPage extends StatelessWidget {
             Container(
               padding: EdgeInsets.only(left: 50, right: 50, top: 60),
               child: Text(
-                '有关人士信息识别成功',
+                S.of(context).openAccout_identify_results_successful,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: HsgColors.firstDegreeText,
@@ -48,7 +48,7 @@ class OpenAccountIdentifyResultsSuccessfulPage extends StatelessWidget {
             Container(
               padding: EdgeInsets.only(left: 50, right: 50, top: 15),
               child: Text(
-                '点击完成，上传识别出的用户信息，用于完成银行的账户开立.',
+                S.of(context).openAccout_identify_results_successful_tip,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: HsgColors.secondDegreeText,
