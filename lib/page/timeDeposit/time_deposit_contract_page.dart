@@ -704,19 +704,40 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     });
   }
 
+  _ifClick() {
+    if (matAmt == '0.00' ||
+        _changedTermBtnTiTle == S.current.hint_please_select ||
+        _changedAccountTitle == S.current.hint_please_select ||
+        _changedSettAcTitle == S.current.hint_please_select ||
+        _changedInstructionTitle == S.current.hint_please_select) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   //确认按钮
   Widget _submitButton() {
     return Container(
-      padding: EdgeInsets.fromLTRB(30, 40, 30, 0),
+      height: 45,
+      margin: EdgeInsets.fromLTRB(30, 40, 30, 0),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: _ifClick()
+              ? [
+                  Color(0xFF1775BA),
+                  Color(0xFF3A9ED1),
+                ]
+              : [HsgColors.btnDisabled, HsgColors.btnDisabled],
+        ),
+        borderRadius: BorderRadius.circular(5),
+      ),
       child: ButtonTheme(
-        minWidth: 5,
         height: 45,
         child: FlatButton(
-          onPressed: (matAmt == '0.00' ||
-                  _changedTermBtnTiTle == S.current.hint_please_select ||
-                  _changedAccountTitle == S.current.hint_please_select ||
-                  _changedSettAcTitle == S.current.hint_please_select ||
-                  _changedInstructionTitle == S.current.hint_please_select)
+          onPressed: !_ifClick()
               ? null
               : () {
                   _loadContractData(
@@ -737,7 +758,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                     '',
                   );
                 },
-          color: HsgColors.accent,
+          // padding: EdgeInsets.only(top: 1),
+          // color: HsgColors.accent,
           disabledColor: HsgColors.btnDisabled,
           child: Text(
             S.current.deposit_now,

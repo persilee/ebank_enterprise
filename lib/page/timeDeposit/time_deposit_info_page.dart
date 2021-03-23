@@ -380,11 +380,24 @@ class _PageDepositInfo extends State<PageDepositInfo> {
             _agreement(),
 
             Container(
-                width: 3,
-                height: 85,
-                color: HsgColors.commonBackground,
-                padding: EdgeInsets.fromLTRB(40, 20, 40, 15),
-                child: RaisedButton(
+              height: 45,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: !_checkBoxValue
+                      ? [HsgColors.btnDisabled, HsgColors.btnDisabled]
+                      : [
+                          Color(0xFF1775BA),
+                          Color(0xFF3A9ED1),
+                        ],
+                ),
+                borderRadius: BorderRadius.circular(2.5),
+              ),
+              margin: EdgeInsets.fromLTRB(40, 20, 40, 15),
+              child: ButtonTheme(
+                height: 45,
+                child: FlatButton(
                   onPressed: _checkBoxValue
                       ? () async {
                           showDialog(
@@ -409,10 +422,11 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                         }
                       : null,
                   textColor: Colors.white,
-                  color: HsgColors.accent,
                   disabledColor: HsgColors.btnDisabled,
                   child: (Text(S.current.repayment_type2)),
-                )),
+                ),
+              ),
+            ),
             Container(
               color: HsgColors.commonBackground,
               padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
