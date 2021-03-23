@@ -1,6 +1,10 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
+import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
@@ -14,6 +18,7 @@ import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// @auther zhanggenha
 /// @date 2020-12-05
@@ -29,6 +34,7 @@ class _CardListPageState extends State<CardListPage> {
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
   List<bool> _isShow = <bool>[];
   List<GetCardLimitByCardNoResp> _cardLimitList = <GetCardLimitByCardNoResp>[];
+  List<Map> _totalbal = <Map>[];
 
   @override
   void initState() {
@@ -79,13 +85,21 @@ class _CardListPageState extends State<CardListPage> {
   }
 
   Widget _cardContent(RemoteBankCard card, int position) {
+    String ccy = '';
+    String totalAmt = '';
+    if (_totalbal[position]["ccy"] != null) {
+      ccy = _totalbal[position]["ccy"];
+    }
+    if (_totalbal[position]["currBal"] != null) {
+      totalAmt = _totalbal[position]["currBal"];
+    }
     return Container(
       margin: EdgeInsets.only(top: 20, bottom: 100),
       color: Colors.white,
       child: Column(
         children: [
-          _infoFrame("${S.current.account_balance}(CNY)",
-              FormatUtil.formatSringToMoney('50000')),
+          _infoFrame("${S.current.account_balance}(${ccy})",
+              FormatUtil.formatSringToMoney(totalAmt)),
           // FormatUtil.formatSringToMoney(_cardLimitList[position].totalAmt)),
           _infoFrame(
               S.current.single_transfer_limit,
@@ -191,14 +205,29 @@ class _CardListPageState extends State<CardListPage> {
         print(test);
       } catch (error) {
         HSProgressHUD.show();
-        CardDataRepository()
-            .getCardLimitByCardNo(
-                GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq')
-            .then((limit) {
-          setState(() {
-            _cardLimitList.insert(position, limit);
+        Future.wait({
+          CardDataRepository().getCardLimitByCardNo(
+              GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
+          CardDataRepository().getCardBalByCardNo(
+              GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
+        }).then((data) {
+          data.forEach((element) {
+            if (element is GetCardLimitByCardNoResp) {
+              setState(() {
+                _cardLimitList.insert(position, element);
+              });
+            } else if (element is GetSingleCardBalResp) {
+              setState(() {
+                Map map = <String, String>{};
+                map["currBal"] = element.cardListBal[0].currBal;
+                map["ccy"] = element.cardListBal[0].ccy;
+                _totalbal.insert(position, map);
+                print(_totalbal.toString());
+              });
+            }
             _isShow[position] = true;
           });
+
           HSProgressHUD.dismiss();
         }).catchError((e) {
           HSProgressHUD.dismiss();
