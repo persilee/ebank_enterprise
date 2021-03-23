@@ -1,11 +1,3 @@
-import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
-import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
-import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
-import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/util/small_data_store.dart';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
@@ -18,7 +10,10 @@ import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
+import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 
 /// @auther zhanggenha
 /// @date 2020-12-05
@@ -33,8 +28,13 @@ class _CardListPageState extends State<CardListPage> {
   List<RemoteBankCard> cards = <RemoteBankCard>[];
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
   List<bool> _isShow = <bool>[];
-  List<GetCardLimitByCardNoResp> _cardLimitList = <GetCardLimitByCardNoResp>[];
-  List<Map> _totalbal = <Map>[];
+
+  // List<GetCardLimitByCardNoResp> _cardLimitList = <GetCardLimitByCardNoResp>[];
+  // List<Map> _totalbal = <Map>[];
+
+  Map _cardLimitMap = <int, GetCardLimitByCardNoResp>{};
+  Map _totalbalMap = <int, CardBalBean>{};
+  int _cardsLength = 0;
 
   @override
   void initState() {
@@ -58,13 +58,54 @@ class _CardListPageState extends State<CardListPage> {
             child: Container(
               color: Colors.white,
               padding: EdgeInsets.all(6.0),
-              child: ListView.builder(
-                  itemCount: cards.length,
-                  itemBuilder: (BuildContext context, int position) {
-                    return getRow(context, position);
-                  }),
+              child: _getlistViewList(context),
+              // ListView.builder(
+              //     itemCount: cards.length,
+              //     itemBuilder: (BuildContext context, int position) {
+              //       return getRow(context, position);
+              //     }),
             ),
             onRefresh: _loadData));
+  }
+
+//生成ListView
+  Widget _getlistViewList(BuildContext context) {
+    List<Widget> _list = new List();
+    _list.add(_getListViewBuilder(_getHeader()));
+    for (int i = 0; i < cards.length; i++) {
+      _list.add(_getListViewBuilder(getRow(context, i)));
+    }
+    return new ListView(
+      children: _list,
+    );
+  }
+
+  Widget _getHeader() {
+    return Container(
+      padding: EdgeInsets.only(left: 10),
+      child: Text(
+        S.current.in_all +
+            ' ' +
+            _cardsLength.toString() +
+            ' ' +
+            S.current.accounts,
+        style: TextStyle(
+          color: HsgColors.hintText,
+          fontSize: 13,
+        ),
+      ),
+    );
+  }
+
+  //封装ListView.Builder
+  Widget _getListViewBuilder(Widget function) {
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: 1,
+        itemBuilder: (BuildContext context, int position) {
+          return function;
+        });
   }
 
   Widget getRow(BuildContext context, int position) {
@@ -78,8 +119,8 @@ class _CardListPageState extends State<CardListPage> {
         ],
       ),
       onTap: () {
-        // go2Detail(cards[position]);
-        _loadCardLimit(cards[position].cardNo, position);
+        // _showContent(cards[position].cardNo, position);
+        _loadAndShowContent(cards[position].cardNo, position);
       },
     );
   }
@@ -87,11 +128,11 @@ class _CardListPageState extends State<CardListPage> {
   Widget _cardContent(RemoteBankCard card, int position) {
     String ccy = '';
     String totalAmt = '';
-    if (_totalbal[position]["ccy"] != null) {
-      ccy = _totalbal[position]["ccy"];
+    if (_totalbalMap[position].ccy != null) {
+      ccy = _totalbalMap[position].ccy;
     }
-    if (_totalbal[position]["currBal"] != null) {
-      totalAmt = _totalbal[position]["currBal"];
+    if (_totalbalMap[position].currBal != null) {
+      totalAmt = _totalbalMap[position].currBal;
     }
     return Container(
       margin: EdgeInsets.only(top: 20, bottom: 100),
@@ -104,13 +145,13 @@ class _CardListPageState extends State<CardListPage> {
           _infoFrame(
               S.current.single_transfer_limit,
               FormatUtil.formatSringToMoney(
-                  _cardLimitList[position].singleLimit)),
+                  _cardLimitMap[position].singleLimit)),
           _infoFrame(
               S.current.single_day_transfer_limit,
               FormatUtil.formatSringToMoney(
-                  _cardLimitList[position].singleDayLimit)),
+                  _cardLimitMap[position].singleDayLimit)),
           _infoFrame(S.current.single_day_transfer_count_limit,
-              _cardLimitList[position].singleDayCountLimit.toString()),
+              _cardLimitMap[position].singleDayCountLimit.toString()),
         ],
       ),
     );
@@ -176,11 +217,10 @@ class _CardListPageState extends State<CardListPage> {
         setState(() {
           cards.clear();
           cards.addAll(data.cardList);
-          if (_isShow.length == 0 && _cardLimitList.length == 0) {
-            for (int i = 0; i < cards.length; i++) {
-              RemoteBankCard card = cards[i];
-              _isShow.add(false);
-            }
+          _cardsLength = cards.length;
+          if (_isShow.length == 0) {
+            _isShow = new List.filled(_cardsLength, false);
+            // print(_isShow.toString());
           }
         });
       }
@@ -189,21 +229,69 @@ class _CardListPageState extends State<CardListPage> {
     });
   }
 
-  _loadCardLimit(String cardNo, int position) async {
+  // _showContent(String cardNo, int position) {
+  //   if (_isShow[position] == true) {
+  //     setState(() {
+  //       _isShow[position] = false;
+  //     });
+  //   } else {
+  //     _loadContent(cardNo, position);
+  //     setState(() {
+  //       _isShow[position] = true;
+  //     });
+  //   }
+  // }
+
+  // _loadContent(String cardNo, int position) {
+  //   HSProgressHUD.show();
+  //   //如果没有请求过数据，则请求一遍
+  //   if (_totalbal.length == 0) {
+  //     for (int i = 0; i < cards.length; i++) {
+  //       Future.wait({
+  //         CardDataRepository().getCardLimitByCardNo(
+  //             GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
+  //         CardDataRepository().getCardBalByCardNo(
+  //             GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
+  //       }).then((data) {
+  //         data.forEach((element) {
+  //           if (element is GetCardLimitByCardNoResp) {
+  //             setState(() {
+  //               _cardLimitList.insert(position, element);
+  //             });
+  //           } else if (element is GetSingleCardBalResp) {
+  //             setState(() {
+  //               Map map = <String, String>{};
+  //               map["currBal"] = element.cardListBal[0].currBal;
+  //               map["ccy"] = element.cardListBal[0].ccy;
+  //               _totalbal.insert(position, map);
+  //               print(_totalbal.toString());
+  //             });
+  //           }
+  //         });
+  //       });
+  //     }
+  //   }
+  //   HSProgressHUD.dismiss();
+  // }
+
+  _loadAndShowContent(String cardNo, int position) async {
     if (_isShow[position] == true) {
       setState(() {
         _isShow[position] = false;
       });
     } else {
-      try {
-        String test = _cardLimitList[position].toString();
+      //判断position是否加载过数据，加载过直接显示
+      GetCardLimitByCardNoResp data = _cardLimitMap[position];
+      // print(data);
+      // print(data != null);
+      if (data != null) {
         HSProgressHUD.show();
         setState(() {
           _isShow[position] = true;
         });
         HSProgressHUD.dismiss();
-        print(test);
-      } catch (error) {
+      } else {
+        //没有加载过就进入这一步
         HSProgressHUD.show();
         Future.wait({
           CardDataRepository().getCardLimitByCardNo(
@@ -211,30 +299,33 @@ class _CardListPageState extends State<CardListPage> {
           CardDataRepository().getCardBalByCardNo(
               GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
         }).then((data) {
+          print(data);
           data.forEach((element) {
             if (element is GetCardLimitByCardNoResp) {
               setState(() {
-                _cardLimitList.insert(position, element);
+                //额度详情
+                _cardLimitMap[position] = element;
+                // _cardLimitList.insert(position, element);
               });
             } else if (element is GetSingleCardBalResp) {
               setState(() {
-                Map map = <String, String>{};
-                map["currBal"] = element.cardListBal[0].currBal;
-                map["ccy"] = element.cardListBal[0].ccy;
-                _totalbal.insert(position, map);
-                print(_totalbal.toString());
+                //余额+币种
+                _totalbalMap[position] = element.cardListBal[0];
+                // _totalbalMap[position].currBal;
+                // Map map = <String, String>{};
+                // map["currBal"] = element.cardListBal[0].currBal;
+                // map["ccy"] = element.cardListBal[0].ccy;
+                // _totalbal.insert(position, map);
               });
             }
-            _isShow[position] = true;
           });
-
+          _isShow[position] = true;
           HSProgressHUD.dismiss();
         }).catchError((e) {
           HSProgressHUD.dismiss();
           HSProgressHUD.showError(status: e.toString());
         });
       }
-      // print(e.toString());
     }
   }
 
