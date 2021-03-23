@@ -117,6 +117,18 @@ class UserInfoResp extends Object {
   @JsonKey(name: 'processId')
   String processId;
 
+/**
+ * 用户开户激活状态(
+ * 0 - 未开户
+ * 1 - 审核中
+ * 2 - 被驳回
+ * 3 - 开立客户号失败
+ * 4 - 开立账户失败
+ * 5 - 未激活
+ * 6 - 已激活
+ * 7 - 锁定)
+ * 8 - 待审核
+*/
   @JsonKey(name: 'belongCustStatus')
   String belongCustStatus;
 
