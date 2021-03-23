@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_home_page.dart';
-//import 'package:ebank_mobile/page/mine/hsg_mine_page.dart';
 
 class IndexPage extends StatefulWidget {
   IndexPage({Key key}) : super(key: key);
@@ -80,7 +79,10 @@ class _IndexPageState extends State<IndexPage> {
           _changePage(index);
         },
       ),
-      body: pages[currentIndex],
+      body: IndexedStack(
+        index: currentIndex,
+        children: pages,
+      ),
     );
   }
 
