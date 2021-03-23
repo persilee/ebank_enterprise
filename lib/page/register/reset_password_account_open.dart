@@ -56,20 +56,58 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
               child: ListView(
                 children: [
                   //标题
-                  getRegisterTitle(S.current.fotget_password),
+                  getRegisterTitle(
+                      '${S.current.fotget_password}-${S.current.placeIdNumber}'),
                   //姓名
                   getRegisterRow(S.current.please_input_name, _userName, false),
                   //  证件类型
                   Container(
                     margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                    padding: EdgeInsets.only(left: 20),
+                    padding: EdgeInsets.only(left: 20, right: 20),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         color: Color(0xFFF5F7F9)),
-                    child: SelectInkWell(
-                      title: S.current.idType,
-                      item: _certType,
-                      onTap: _idCardListBottomSheet,
+                    child: Container(
+                      child:
+                          // SelectInkWell(
+                          //   title: S.current.idType,
+                          //   item: _certType,
+                          //   onTap: _idCardListBottomSheet,
+                          //   isRegister: true,
+                          // ),
+                          InkWell(
+                        onTap: _idCardListBottomSheet,
+                        child: Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    color: HsgColors.divider, width: 0.5)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _certType == ''
+                                  ? Text(
+                                      S.current.openAccout_documents_select,
+                                    )
+                                  : Text(_certType),
+                              Row(
+                                children: [
+                                  Padding(
+                                      padding: EdgeInsets.only(right: 12),
+                                      child: Text('')),
+                                  Container(
+                                      child: Icon(
+                                    Icons.expand_more,
+                                    color: Colors.black,
+                                  )),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   //证件号码

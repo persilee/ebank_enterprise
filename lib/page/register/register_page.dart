@@ -36,14 +36,31 @@ GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _sms = TextEditingController(); //短信
+  String _smsListen;
   TextEditingController _phoneNum = TextEditingController(); //手机号
+  String _phoneNumListen;
   TextEditingController _userName = TextEditingController(); //用户名
+  String _userNameListen;
   Timer _timer;
   int countdownTime = 0;
   bool _checkBoxValue = false; //复选框默认值
 
   /// 区号
   String _officeAreaCodeText = '';
+  @override
+  // ignore: must_call_super
+  void initState() {
+    _phoneNum.addListener(() {
+      _phoneNumListen = _phoneNum.text;
+    });
+    _sms.addListener(() {
+      _smsListen = _sms.text;
+    });
+    _userName.addListener(() {
+      _userNameListen = _userName.text;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,6 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                           Container(
+                            alignment: Alignment.center,
                             width: MediaQuery.of(context).size.width / 3,
                             child: _otpButton(),
                           )
@@ -157,8 +175,21 @@ class _RegisterPageState extends State<RegisterPage> {
                                             msg:
                                                 '用户名只能为4-16位字符、数字或者字母，不能包含特殊字符，不能重复');
                                       } else {
-                                        Navigator.popAndPushNamed(
-                                            context, pageRegisterConfirm);
+                                        Map listData = new Map();
+                                        listData = {
+                                          'accountName': _userNameListen,
+                                          'sms': _smsListen,
+                                          'phone': _phoneNumListen
+                                        };
+                                        // listData = [
+                                        //   _userNameListen,
+                                        //   _smsListen,
+                                        //   _phoneNumListen
+                                        // ];
+
+                                        Navigator.pushNamed(
+                                            context, pageRegisterConfirm,
+                                            arguments: listData);
                                       }
                                     }
                                   : null,
@@ -182,9 +213,9 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   bool _submit() {
-    if (_phoneNum.text != '' &&
-        _userName.text != '' &&
-        _sms.text != '' &&
+    if (_phoneNumListen != '' &&
+        _userNameListen != '' &&
+        _smsListen != '' &&
         _checkBoxValue) {
       return true;
     } else {
@@ -290,7 +321,7 @@ class _RegisterPageState extends State<RegisterPage> {
           .then((value) {
         setState(() {
           _startCountdown();
-          _sms.text = "123456";
+          //  _sms.text = "123456";
         });
       }).catchError((e) {
         Fluttertoast.showToast(msg: e.toString());
@@ -314,6 +345,7 @@ class _RegisterPageState extends State<RegisterPage> {
       //   borderRadius: BorderRadius.circular(50),
       // ),
       disabledTextColor: HsgColors.blueTextColor,
+
       child: Text(
         countdownTime > 0
             ? '${countdownTime}s'
@@ -321,30 +353,8 @@ class _RegisterPageState extends State<RegisterPage> {
         style: TextStyle(fontSize: 14),
         textAlign: TextAlign.right,
       ),
+
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
-  }
-
-  //获取验证码接口
-  _getVerificationCode() async {
-    RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
-    if (characters.hasMatch(_phoneNum.text) == false) {
-      Fluttertoast.showToast(msg: S.current.format_mobile_error);
-    } else {
-      HSProgressHUD.show();
-      VerificationCodeRepository()
-          .sendSmsByPhone(
-              SendSmsByPhoneNumberReq(_phoneNum.text, 'findPwd'), 'sendSms')
-          .then((data) {
-        _startCountdown();
-        setState(() {
-          _sms.text = '123456';
-        });
-        HSProgressHUD.dismiss();
-      }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
-        HSProgressHUD.dismiss();
-      });
-    }
   }
 }

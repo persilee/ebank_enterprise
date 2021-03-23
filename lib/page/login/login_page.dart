@@ -38,11 +38,11 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
   TextEditingController _accountTC =
-      TextEditingController(text: 'blk501'); //fangluyao
+      TextEditingController(text: 'pengyikang'); //fangluyao
   TextEditingController _passwordTC =
-      TextEditingController(text: '4N0021S8'); //b0S25X5Y
-  var _account = 'blk501'; //'blk101';
-  var _password = '4N0021S8'; //'4N0021S8';
+      TextEditingController(text: 'Aa123456@'); //b0S25X5Y
+  var _account = 'pengyikang'; //'blk101';
+  var _password = 'Aa123456@'; //'4N0021S8';
 
   @override
   void initState() {
@@ -187,9 +187,15 @@ class _LoginPageState extends State<LoginPage> {
             )
           ],
         )),
-
+        // SizedBox(
+        //   height: 250,
+        // ),
+        // Expanded(
+        //   child: Container(),
+        // ),
         Container(
-          height: MediaQuery.of(context).size.height / 2.7,
+          // margin: EdgeInsets.only(bottom: 30),
+          alignment: Alignment.bottomCenter,
           child: Text(
             '@2020-2025 HSBC.com.cn.All Rights Reserved.',
             textAlign: TextAlign.left,
@@ -198,8 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                 color: Colors.white, //HsgColors.aboutusTextCon,
                 fontWeight: FontWeight.normal),
           ),
-          alignment: Alignment.bottomCenter,
-        )
+        ),
       ],
     );
 

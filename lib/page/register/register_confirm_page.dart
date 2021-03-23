@@ -1,8 +1,11 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/register_by_account.dart';
+import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 
 import 'package:flutter/material.dart';
@@ -23,9 +26,20 @@ class RegisterConfirmPage extends StatefulWidget {
 class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
   TextEditingController _newPassword = new TextEditingController();
   TextEditingController _oldPassword = new TextEditingController();
-
+  Map listData = new Map();
+  String _registerAccount;
+  String _userPhone;
+  String _sms;
   @override
   Widget build(BuildContext context) {
+    listData = ModalRoute.of(context).settings.arguments;
+    _registerAccount = listData['accountName'];
+    _sms = listData['sms'];
+    _userPhone = listData['phone'];
+    print('$_registerAccount---------');
+    print('$_sms---------');
+    print('$_userPhone---------');
+//_registerAccount =
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -46,9 +60,11 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
             child: ListView(
               children: <Widget>[
                 //注册标题
-                getRegisterTitle(S.current.welcome_to_register),
+                getRegisterTitle(
+                    '${S.current.welcome_to_register}-${S.current.please_input_password}'),
                 //输入新密码
-                getRegisterRow(S.current.password_need_num, _newPassword, true),
+                getRegisterRow(
+                    S.of(context).password_need_num, _newPassword, true),
                 //再次输入密码
                 getRegisterRow(S.current.placeConfimPwd, _oldPassword, true),
                 //下一步
@@ -103,8 +119,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                                     Fluttertoast.showToast(
                                         msg: S.current.password_need_num);
                                   } else {
-                                    Navigator.popAndPushNamed(
-                                        context, pageRegisterSuccess);
+                                    _registerByAccount();
                                   }
                                 }
                               : null,
@@ -121,6 +136,23 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
     );
   }
 
+  //手机号注册接口
+  _registerByAccount() async {
+    String userType = "1";
+    String password = EncryptUtil.aesEncode(_newPassword.text);
+    VersionDataRepository()
+        .registerByAccount(
+            RegisterByAccountReq(
+                '', password, _registerAccount, _userPhone, userType, _sms),
+            'registerByAccount')
+        .then((value) {
+      Navigator.popAndPushNamed(context, pageRegisterSuccess);
+      setState(() {});
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+
   bool _submit() {
     if (_newPassword.text.length > 0 && _oldPassword.text.length > 0) {
       return true;
@@ -129,3 +161,5 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
     }
   }
 }
+
+class _password {}

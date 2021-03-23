@@ -9,24 +9,36 @@ part 'get_pay_collect_detail.g.dart';
 
 @JsonSerializable()
 class GetRevenueByCardsReq extends Object {
+  @JsonKey(name: 'acNo')
+  String acNo;
+
+  @JsonKey(name: 'ccy')
+  String ccy;
+
+  @JsonKey(name: 'ciNo')
+  String ciNo;
+
+  @JsonKey(name: 'localDateEnd')
+  String localDateEnd;
+
+  @JsonKey(name: 'localDateStart')
+  String localDateStart;
+
   @JsonKey(name: 'page')
   int page;
 
   @JsonKey(name: 'pageSize')
   int pageSize;
 
-  @JsonKey(name: 'ciNo')
-  String ciNo;
-
-  @JsonKey(name: 'localDateStart')
-  String localDateStart;
-
   GetRevenueByCardsReq(
-    this.page,
-    this.pageSize,
-    this.ciNo,
+    this.ccy,
+    this.localDateEnd,
     this.localDateStart,
-  );
+    this.page,
+    this.pageSize, {
+    this.acNo,
+    this.ciNo,
+  });
 
   factory GetRevenueByCardsReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetRevenueByCardsReqFromJson(srcJson);

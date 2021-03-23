@@ -43,7 +43,8 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
               child: ListView(
                 children: <Widget>[
                   //注册标题
-                  getRegisterTitle(S.current.reset_password),
+                  getRegisterTitle(
+                      '${S.current.reset_password}-${S.current.please_input_password}'),
                   //输入新密码
                   getRegisterRow(
                       S.current.password_need_num, _newPassword, true),
@@ -103,7 +104,7 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                                       HSProgressHUD.showInfo(
                                           status: S.current.password_need_num);
                                     } else {
-                                      Navigator.pushNamed(
+                                      Navigator.popAndPushNamed(
                                           context, pageResetPasswordSuccess);
                                     }
                                   }
