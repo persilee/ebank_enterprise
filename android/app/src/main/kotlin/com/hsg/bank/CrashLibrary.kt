@@ -12,11 +12,11 @@ package com.hsg.bank
 object CrashLibrary {
 
   fun log(priority: Int, tag: String?, message: String) {
-    when (priority) {
-      /*Log.INFO -> BuglyLog.i(tag ?: "Crash", message)
+    /*when (priority) {
+      Log.INFO -> BuglyLog.i(tag ?: "Crash", message)
       Log.WARN -> BuglyLog.w(tag ?: "Crash", message)
-      Log.ERROR -> BuglyLog.e(tag ?: "Crash", message)*/
-    }
+      Log.ERROR -> BuglyLog.e(tag ?: "Crash", message)
+    }*/
   }
 
   fun logWarning(t: Throwable) {

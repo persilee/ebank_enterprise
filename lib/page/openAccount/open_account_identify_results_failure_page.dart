@@ -107,7 +107,7 @@ class OpenAccountIdentifyResultsFailurePage extends StatelessWidget {
     )
         .then((value) {
       Fluttertoast.showToast(
-        msg: value.result,
+        msg: value.isSuccess.toString(),
         gravity: ToastGravity.CENTER,
       );
       Navigator.pushNamed(context, pageOpenAccountIdentifyResultsFailure);

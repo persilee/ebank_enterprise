@@ -35,24 +35,16 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   var totalAmt = '';
   var _defaultCcy = '';
   List<CardListBal> cardList;
-  // DepositRecord dataA = DepositRecord('1.65', '6001', 'TAI30', '', '2', '3',
-  //     'USD', '500', '2020-01-17', '2020-07-17', '1', '0');
-  // DepositRecord dataB = DepositRecord('1.75', '6002', 'TAI30', '', '2', '3',
-  //     'HKD', '800', '2020-01-17', '2020-07-17', '1', '0');
-  // DepositRecord dataC = DepositRecord('1.50', '6003', 'TAI30', '', '2', '3',
-  //     'USD', '1000', '2020-01-17', '2020-07-17', '1', '0');
-  // DepositRecord dataD = DepositRecord('1.45', '6003', 'TAI30', '', '2', '3',
-  //     'USD', '5000', '2020-01-17', '2020-07-17', '1', '0');
   List<DepositRecord> rowList = [];
   List<DepositRecord> list = []; //页面显示的记录列表
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   double conRate;
-  bool _isDate = true; //false
+  bool _isDate = false; //false
   LoadingStatus loadStatus; //加载状态
   int page = 1;
   int count = 0;
-  // ScrollController _sctrollController = ScrollController();
+  ScrollController _sctrollController = ScrollController();
 
   @override
   void initState() {
@@ -65,11 +57,6 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     //网络请求
     _loadCardListBal();
 
-    // rowList.add(dataA);
-    // rowList.add(dataB);
-    // rowList.add(dataC);
-    // rowList.add(dataD);
-
     NotificationCenter.instance.addObserver('load', (object) {
       setState(() {
         if (object) {
@@ -79,13 +66,13 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
       });
     });
 
-    // _sctrollController.addListener(() {
-    //   if (_sctrollController.position.pixels ==
-    //       _sctrollController.position.maxScrollExtent) {
-    //     //加载更多
-    //     _getMore();
-    //   }
-    // });
+    _sctrollController.addListener(() {
+      if (_sctrollController.position.pixels ==
+          _sctrollController.position.maxScrollExtent) {
+        //加载更多
+        _getMore();
+      }
+    });
   }
 
   @override
@@ -141,11 +128,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
       child: Text(
         ' ${S.current.receipts_total_amt} (' + _defaultCcy + ')',
         textAlign: TextAlign.center,
-        style: TextStyle(
-            height: 1,
-            fontSize: 15,
-            backgroundColor: HsgColors.primary,
-            color: Colors.white54),
+        style: TextStyle(height: 1, fontSize: 15, color: Colors.white54),
       ),
     );
   }
@@ -157,11 +140,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
       child: Text(
         FormatUtil.formatSringToMoney(totalAmt),
         textAlign: TextAlign.center,
-        style: TextStyle(
-            height: 1,
-            fontSize: 40,
-            backgroundColor: HsgColors.primary,
-            color: Colors.white),
+        style: TextStyle(height: 1, fontSize: 40, color: Colors.white),
       ),
     );
   }
@@ -173,11 +152,28 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         pinned: true,
         title: Text(S.current.deposit_record),
         centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              Color(0xFF1775BA),
+              Color(0xFF3A9ED1),
+            ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+          ),
+        ),
       ),
       SliverToBoxAdapter(
         child: Container(
           width: MediaQuery.of(context).size.width,
-          color: HsgColors.primary,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF1775BA),
+                Color(0xFF3A9ED1),
+              ],
+            ),
+          ),
           child: Column(
             children: [
               _totalAmt(),
@@ -304,15 +300,15 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: taking,
                     ));
-                // if (index == list.length) {
-                //   // return _loadingView();
-                //   return Container();
-                // } else {
-
-                return Container(
-                    margin: EdgeInsets.only(bottom: 12), child: raisedButton);
-                // }
-              }, childCount: rowList.length),
+                if (index == list.length) {
+                  return _loadingView();
+                  // return Container();
+                } else {
+                  return raisedButton;
+                  // Container(
+                  //     margin: EdgeInsets.only(bottom: 12), child: raisedButton);
+                }
+              }, childCount: list.length),
             )
           : SliverToBoxAdapter(
               child: Container(
@@ -345,6 +341,8 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           setState(() {
             rowList.clear();
             rowList.addAll(element.rows);
+            list.clear();
+            list.addAll(rowList);
           });
         } else {
           _isDate = false;
@@ -382,7 +380,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         loadStatus = LoadingStatus.STATUS_IDEL;
       } else {
         page = page + 1;
-        // _loadDeopstData();
+        _loadDeopstData();
         loadStatus = LoadingStatus.STATUS_LOADING;
       }
     });
