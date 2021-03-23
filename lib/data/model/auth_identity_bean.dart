@@ -50,7 +50,6 @@ class AuthIdentityReq {
 
 @JsonSerializable()
 class AuthIdentityResp {
-
   @JsonKey(name: 'certificateType')
   String certificateType;
 
@@ -81,17 +80,27 @@ class AuthIdentityResp {
   @JsonKey(name: 'isSuccess')
   bool isSuccess;
 
-  AuthIdentityResp(this.certificateType,this.fileName,this.speechFlowData,this.infoStr,this.headerImg,this.positiveImage,this.videoUrl,this.compareImageData,this.backImage,this.isSuccess,);
+  AuthIdentityResp(
+    this.certificateType,
+    this.fileName,
+    this.speechFlowData,
+    this.infoStr,
+    this.headerImg,
+    this.positiveImage,
+    this.videoUrl,
+    this.compareImageData,
+    this.backImage,
+    this.isSuccess,
+  );
 
-  factory AuthIdentityResp.fromJson(Map<String, dynamic> srcJson) => _$AuthIdentityRespFromJson(srcJson);
+  factory AuthIdentityResp.fromJson(Map<String, dynamic> srcJson) =>
+      _$AuthIdentityRespFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$AuthIdentityRespToJson(this);
-
 }
 
 @JsonSerializable()
 class SpeechFlowData {
-
   @JsonKey(name: 'problem')
   String problem;
 
@@ -101,28 +110,73 @@ class SpeechFlowData {
   @JsonKey(name: 'answerArr')
   List<String> answerArr;
 
-  SpeechFlowData(this.problem,this.timer,this.answerArr,);
+  SpeechFlowData(
+    this.problem,
+    this.timer,
+    this.answerArr,
+  );
 
-  factory SpeechFlowData.fromJson(Map<String, dynamic> srcJson) => _$SpeechFlowDataFromJson(srcJson);
+  factory SpeechFlowData.fromJson(Map<String, dynamic> srcJson) =>
+      _$SpeechFlowDataFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$SpeechFlowDataToJson(this);
-
 }
 
 @JsonSerializable()
 class InfoStr {
+  @JsonKey(name: 'Nation')
+  String nation;
 
-  @JsonKey(name: 'DateOfExpiration')
-  String dateOfExpiration;
+  @JsonKey(name: 'IdNum')
+  String idNum;
 
   @JsonKey(name: 'Sex')
   String sex;
 
-  @JsonKey(name: 'DateOfBirth')
-  String dateOfBirth;
+  @JsonKey(name: 'Authority')
+  String authority;
+
+  @JsonKey(name: 'Address')
+  String address;
+
+  @JsonKey(name: 'Birth')
+  String birth;
 
   @JsonKey(name: 'Name')
   String name;
+
+  @JsonKey(name: 'ValidDate')
+  String validDate;
+
+  @JsonKey(name: 'Symbol')
+  String symbol;
+
+  @JsonKey(name: 'Birthday')
+  String birthday;
+
+  @JsonKey(name: 'EnName')
+  String enName;
+
+  @JsonKey(name: 'TelexCode')
+  String telexCode;
+
+  @JsonKey(name: 'CnName')
+  String cnName;
+
+  @JsonKey(name: 'CurrentIssueDate')
+  String currentIssueDate;
+
+  @JsonKey(name: 'FirstIssueDate')
+  String firstIssueDate;
+
+  @JsonKey(name: 'Permanent')
+  String permanent;
+
+  @JsonKey(name: 'DateOfExpiration')
+  String dateOfExpiration;
+
+  @JsonKey(name: 'DateOfBirth')
+  String dateOfBirth;
 
   @JsonKey(name: 'Nationality')
   String nationality;
@@ -133,24 +187,45 @@ class InfoStr {
   @JsonKey(name: 'IssuingCountry')
   String issuingCountry;
 
-  InfoStr(this.dateOfExpiration,this.sex,this.dateOfBirth,this.name,this.nationality,this.iD,this.issuingCountry,);
-
-  factory InfoStr.fromJson(Map<String, dynamic> srcJson) => _$InfoStrFromJson(srcJson);
-
+  InfoStr(
+    this.nation,
+    this.idNum,
+    this.sex,
+    this.authority,
+    this.address,
+    this.birth,
+    this.name,
+    this.validDate,
+    this.symbol,
+    this.birthday,
+    this.enName,
+    this.telexCode,
+    this.cnName,
+    this.currentIssueDate,
+    this.firstIssueDate,
+    this.permanent,
+    this.dateOfExpiration,
+    this.dateOfBirth,
+    this.nationality,
+    this.iD,
+    this.issuingCountry,
+  );
+  factory InfoStr.fromJson(Map<String, dynamic> srcJson) =>
+      _$InfoStrFromJson(srcJson);
   Map<String, dynamic> toJson() => _$InfoStrToJson(this);
-
 }
 
 @JsonSerializable()
 class CompareImageData {
-
   @JsonKey(name: 'xx')
   String xx;
 
-  CompareImageData(this.xx,);
+  CompareImageData(
+    this.xx,
+  );
 
-  factory CompareImageData.fromJson(Map<String, dynamic> srcJson) => _$CompareImageDataFromJson(srcJson);
+  factory CompareImageData.fromJson(Map<String, dynamic> srcJson) =>
+      _$CompareImageDataFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$CompareImageDataToJson(this);
-
 }
