@@ -25,7 +25,7 @@
         android:name="com.hsg.bank.HsgApplication"
         android:label="HSG Bank"
         android:theme="@style/NormalTheme"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon_launcher"
         android:appComponentFactory="hisun"
         tools:replace="android:label,android:appComponentFactory">
         <activity

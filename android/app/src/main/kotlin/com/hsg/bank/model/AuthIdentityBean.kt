@@ -19,7 +19,3 @@ class AuthIdentityReq(
   val type: String,
   val tokId: String,
 )
-
-class AuthIdentityResp(
-  val result: String
-)
