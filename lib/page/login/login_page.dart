@@ -34,10 +34,10 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
   TextEditingController _accountTC =
-      TextEditingController(text: 'blk502'); //fangluyao
+      TextEditingController(text: 'blk401'); //fangluyao
   TextEditingController _passwordTC =
       TextEditingController(text: '4N0021S8'); //b0S25X5Y
-  var _account = 'blk502'; //'blk402';
+  var _account = 'blk401'; //'blk101';
   var _password = '4N0021S8'; //'4N0021S8';
 
   @override
@@ -227,6 +227,9 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
     HSProgressHUD.show();
+    //登录以输入框的值为准
+    _account = _accountTC.text;
+    _password = _passwordTC.text;
 
     String password = EncryptUtil.aesEncode(_password);
 
