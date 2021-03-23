@@ -8,7 +8,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'auth_identity_bean.g.dart';
 
 @JsonSerializable()
-class AuthIdentityReq extends Object {
+class AuthIdentityReq {
   // 企业id
   @JsonKey(name: 'tenantId')
   String tenantId;
@@ -49,16 +49,108 @@ class AuthIdentityReq extends Object {
 }
 
 @JsonSerializable()
-class AuthIdentityResp extends Object {
-  @JsonKey(name: 'result')
-  String result;
+class AuthIdentityResp {
 
-  AuthIdentityResp(
-    this.result,
-  );
+  @JsonKey(name: 'certificateType')
+  String certificateType;
 
-  factory AuthIdentityResp.fromJson(Map<String, dynamic> srcJson) =>
-      _$AuthIdentityRespFromJson(srcJson);
+  @JsonKey(name: 'fileName')
+  String fileName;
+
+  @JsonKey(name: 'speechFlowData')
+  List<SpeechFlowData> speechFlowData;
+
+  @JsonKey(name: 'infoStr')
+  dynamic infoStr;
+
+  @JsonKey(name: 'headerImg')
+  String headerImg;
+
+  @JsonKey(name: 'positiveImage')
+  String positiveImage;
+
+  @JsonKey(name: 'videoUrl')
+  String videoUrl;
+
+  @JsonKey(name: 'compareImageData')
+  List<CompareImageData> compareImageData;
+
+  @JsonKey(name: 'backImage')
+  String backImage;
+
+  @JsonKey(name: 'isSuccess')
+  bool isSuccess;
+
+  AuthIdentityResp(this.certificateType,this.fileName,this.speechFlowData,this.infoStr,this.headerImg,this.positiveImage,this.videoUrl,this.compareImageData,this.backImage,this.isSuccess,);
+
+  factory AuthIdentityResp.fromJson(Map<String, dynamic> srcJson) => _$AuthIdentityRespFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$AuthIdentityRespToJson(this);
+
+}
+
+@JsonSerializable()
+class SpeechFlowData {
+
+  @JsonKey(name: 'problem')
+  String problem;
+
+  @JsonKey(name: 'timer')
+  String timer;
+
+  @JsonKey(name: 'answerArr')
+  List<String> answerArr;
+
+  SpeechFlowData(this.problem,this.timer,this.answerArr,);
+
+  factory SpeechFlowData.fromJson(Map<String, dynamic> srcJson) => _$SpeechFlowDataFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$SpeechFlowDataToJson(this);
+
+}
+
+@JsonSerializable()
+class InfoStr {
+
+  @JsonKey(name: 'DateOfExpiration')
+  String dateOfExpiration;
+
+  @JsonKey(name: 'Sex')
+  String sex;
+
+  @JsonKey(name: 'DateOfBirth')
+  String dateOfBirth;
+
+  @JsonKey(name: 'Name')
+  String name;
+
+  @JsonKey(name: 'Nationality')
+  String nationality;
+
+  @JsonKey(name: 'ID')
+  String iD;
+
+  @JsonKey(name: 'IssuingCountry')
+  String issuingCountry;
+
+  InfoStr(this.dateOfExpiration,this.sex,this.dateOfBirth,this.name,this.nationality,this.iD,this.issuingCountry,);
+
+  factory InfoStr.fromJson(Map<String, dynamic> srcJson) => _$InfoStrFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$InfoStrToJson(this);
+
+}
+
+@JsonSerializable()
+class CompareImageData {
+
+  @JsonKey(name: 'xx')
+  String xx;
+
+  CompareImageData(this.xx,);
+
+  factory CompareImageData.fromJson(Map<String, dynamic> srcJson) => _$CompareImageDataFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$CompareImageDataToJson(this);
+
 }
