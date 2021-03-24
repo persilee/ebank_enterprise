@@ -34,6 +34,7 @@ class _TransferPartnerState extends State<TransferPartner> {
   var _totalPage = 1;
   var _transferType = '';
   bool _load = false; //是否加载更多
+  bool _isData = false;
   @override
   void initState() {
     super.initState();
@@ -63,6 +64,7 @@ class _TransferPartnerState extends State<TransferPartner> {
         .then((data) {
       setState(() {
         if (data.rows != null) {
+          _isData = true;
           _totalPage = data.totalPage;
           _partnerListData.addAll(data.rows);
           _tempList.clear();
@@ -131,7 +133,7 @@ class _TransferPartnerState extends State<TransferPartner> {
       body: Column(
         children: [
           Expanded(
-            child: _myColumn(),
+            child: _isData ? _myColumn() : _noDataWidget(),
           ),
         ],
       ),
@@ -164,6 +166,35 @@ class _TransferPartnerState extends State<TransferPartner> {
         S.current.load_more_finished,
         style: FIRST_DESCRIBE_TEXT_STYLE,
         textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  //没数据显示页面
+  Widget _noDataWidget() {
+    return Container(
+      width: (MediaQuery.of(context).size.width),
+      height: 270,
+      color: Colors.white,
+      child: Column(
+        children: [
+          Container(
+            margin:
+                EdgeInsets.only(top: MediaQuery.of(context).size.height / 4),
+            child: Image(
+              image: AssetImage('images/noDataIcon/no_data_person.png'),
+              width: 159,
+              height: 128,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            child: Text(
+              S.of(context).no_recent_transfer_account,
+              style: TextStyle(color: HsgColors.describeText, fontSize: 15.0),
+            ),
+          ),
+        ],
       ),
     );
   }
