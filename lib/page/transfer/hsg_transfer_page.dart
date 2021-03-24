@@ -1,5 +1,3 @@
-import 'dart:math';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: lijiawei
@@ -9,6 +7,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/home/hsg_home_page.dart';
 
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -32,7 +31,7 @@ class _TransferPageState extends State<TransferPage> {
     {
       'btnIcon':
           'images/transferIcon/transfer_features_icon/transfer_features_timely.png',
-      'btnTitle': S.current.transfer_type_0
+      'btnTitle': S.current.transfer_type_0,
     },
     {
       'btnIcon':
@@ -63,8 +62,17 @@ class _TransferPageState extends State<TransferPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
+      // appBar: _appBar(),
+      // AppBar(
       //   title: Text('转账功能'),
+      //   flexibleSpace: Container(
+      //     decoration: BoxDecoration(
+      //       gradient: LinearGradient(colors: [
+      //         Color(0xFF1775BA),
+      //         Color(0xFF3A9ED1),
+      //       ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+      //     ),
+      //   ),
       // ),
       body: Stack(
         children: [
@@ -83,14 +91,35 @@ class _TransferPageState extends State<TransferPage> {
     );
   }
 
+  Widget _appBar() {
+    return XAppBar(
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [
+            Color(0xFF1775BA),
+            Color(0xFF3A9ED1),
+          ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+        ),
+        child: Column(
+          children: [
+            // Text(S.of(context).transfer_features),
+          ],
+        ),
+      ),
+    );
+  }
+
   List<Widget> _sliversSection(List gridData, List listData) {
     List<Widget> section = [];
 
-    ///导航栏
-    section.add(SliverAppBar(
-      pinned: true,
-      title: Text(S.of(context).transfer_features),
-    ));
+    //导航栏
+    section.add(
+      SliverAppBar(
+        pinned: true,
+        title: Text(S.of(context).transfer_features),
+        backgroundColor: Color(0xFF1775BA),
+      ),
+    );
 
     ///功能网格
     section.add(SliverGrid(
@@ -103,7 +132,13 @@ class _TransferPageState extends State<TransferPage> {
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           return Container(
-            color: HsgColors.primary,
+            color: Color(0xFF1775BA),
+            // decoration: BoxDecoration(
+            //   gradient: LinearGradient(colors: [
+            //     Color(0xFF1775BA),
+            //     Color(0xFF3A9ED1),
+            //   ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+            // ),
             height: 110,
             child: _graphicButton(
               gridData[index]['btnTitle'],
@@ -249,7 +284,7 @@ class _TransferPageState extends State<TransferPage> {
               title,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: HsgColors.describeText,
+                color: Colors.white,
                 fontSize: 12,
               ),
             ),
@@ -337,7 +372,7 @@ class _TransferPageState extends State<TransferPage> {
             ),
           ),
           Text(
-            data.payeeBankLocalName == null ? '高阳银行' : data.payeeBankLocalName,
+            data.payeeBankLocalName == null ? '朗华银行' : data.payeeBankLocalName,
             style: TextStyle(fontSize: 13, color: HsgColors.describeText),
           ),
           Row(
@@ -389,7 +424,7 @@ class _TransferPageState extends State<TransferPage> {
       child: Text(
         S.of(context).transfer_out,
         style: TextStyle(
-          color: HsgColors.accent,
+          color: Color(0xff3394D4),
           fontSize: 13,
         ),
       ),
@@ -404,7 +439,7 @@ class _TransferPageState extends State<TransferPage> {
         }
       },
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: HsgColors.accent, width: 0.5),
+        side: BorderSide(color: Color(0xff3394D4), width: 0.5),
         borderRadius: BorderRadius.all(Radius.circular(5)),
       ),
     );

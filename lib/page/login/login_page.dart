@@ -1,16 +1,14 @@
-import 'package:ebank_mobile/authentication/auth_identity.dart';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: lijiawei
 /// Date: 2020-12-04
-
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
+import 'package:ebank_mobile/data/source/model/login.dart';
+import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client.dart';
-import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
+import 'package:ebank_mobile/main.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/screen_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -18,15 +16,11 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ebank_mobile/data/source/user_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/login.dart';
-import 'package:ebank_mobile/page_route.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../widget/progressHUD.dart';
 import '../../util/encrypt_util.dart';
+import '../../widget/progressHUD.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
@@ -40,10 +34,10 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = 'English'; // S.current.english;
 
   TextEditingController _accountTC =
-      TextEditingController(text: 'blk201 '); //fangluyao
+      TextEditingController(text: 'blk401'); //fangluyao
   TextEditingController _passwordTC =
       TextEditingController(text: '4N0021S8'); //b0S25X5Y
-  var _account = 'blk201 '; //'blk101';
+  var _account = 'blk401'; //'blk101';
   var _password = '4N0021S8'; //'4N0021S8';
 
   @override
@@ -57,7 +51,6 @@ class _LoginPageState extends State<LoginPage> {
     _passwordTC.addListener(() {
       _password = _passwordTC.text;
     });
-    Intl.defaultLocale = 'en';
   }
 
   @override
@@ -233,6 +226,9 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
     HSProgressHUD.show();
+    //登录以输入框的值为准
+    _account = _accountTC.text;
+    _password = _passwordTC.text;
 
     String password = EncryptUtil.aesEncode(_password);
 

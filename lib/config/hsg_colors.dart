@@ -48,4 +48,5 @@ class HsgColors {
   static const Color color38C8C8C8 = Color(0x38C8C8C8);
   static const Color registerBtn = Color(0xFF62B2E7);
   static const Color registerNextBtn = Color(0xFFDCDCDC);
+  static const Color plainBtn = Color(0xFF3394D4);
 }

@@ -19,6 +19,10 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ///业务编号
+    String _businessId = ModalRoute.of(context).settings.arguments;
+    print('$_businessId');
+
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -196,15 +200,24 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
     String _language = Intl.getCurrentLocale();
     String lang = _language == 'en' ? 'en' : 'zh';
     String countryRegions = _language == 'zh_CN' ? 'CN' : 'TW';
+    String tokId = 'passport002en';
+    if (_language == 'zh_CN') {
+      tokId = 'passport001zh';
+    } else if (_language == 'zh_HK') {
+      tokId = 'passport002ft';
+    } else {
+      tokId = 'passport002en';
+    }
 
     AuthIdentity()
         .startAuth(
-      new AuthIdentityReq("DLEAED", "74283428974321", lang, countryRegions,
-          documentType), //passport001zh  DLEAED
+      new AuthIdentityReq(
+          "DLEAED", "74283428974321", lang, countryRegions, documentType,
+          tokId: tokId), //passport001zh  DLEAED
     )
         .then((value) {
       Fluttertoast.showToast(
-        msg: value.result,
+        msg: value.isSuccess.toString(),
         gravity: ToastGravity.CENTER,
       );
       Navigator.pushNamed(context,
