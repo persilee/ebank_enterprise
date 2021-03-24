@@ -200,7 +200,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         ),
         inputFormatters: [
           // FilteringTextInputFormatter.allow(RegExp('[0-9]|\\.|[0-9]')),
-          FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+          FilteringTextInputFormatter.allow(
+              RegExp('([1-9]\d*\.?\d*)|(0\.?\d*[1-9])?')),
         ],
         onChanged: (value) {
           // double.parse(value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
