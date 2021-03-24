@@ -535,6 +535,7 @@ class _MinePageState extends State<MinePage> {
 
   //用户角色信息
   Widget _characterInfo() {
+    String characterNameShowStr = _characterName == null ? '' : _characterName;
     return Container(
       height: 25,
       decoration: BoxDecoration(
@@ -558,7 +559,7 @@ class _MinePageState extends State<MinePage> {
               maxWidth: 160,
             ),
             child: Text(
-              _characterName,
+              characterNameShowStr,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 14,
