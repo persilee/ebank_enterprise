@@ -245,7 +245,12 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   _getVerificationCode() async {
     RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
     if (characters.hasMatch(_phoneNum.text) == false) {
-      Fluttertoast.showToast(msg: S.current.format_mobile_error);
+      Fluttertoast.showToast(
+        msg: S.current.format_mobile_error,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
     } else {
       VerificationCodeRepository()
           .sendSmsByPhone(
@@ -272,21 +277,50 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     RegExp letter = new RegExp("[a-zA-Z]");
     RegExp number = new RegExp("[0-9]");
     if (_newPwd.text != _confimPwd.text) {
-      Fluttertoast.showToast(msg: S.of(context).differentPwd);
+      Fluttertoast.showToast(
+        msg: S.of(context).differentPwd,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
     } else if ((_newPwd.text).contains(userAccount) == true) {
-      Fluttertoast.showToast(msg: S.current.not_contain_password);
+      Fluttertoast.showToast(
+        msg: S.current.not_contain_password,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
     } else if ((_newPwd.text).length < 8 || (_newPwd.text).length > 16) {
-      Fluttertoast.showToast(msg: S.current.password_8_16);
+      Fluttertoast.showToast(
+        msg: S.current.password_8_16,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
     } else if (number.hasMatch(_newPwd.text) == false) {
-      Fluttertoast.showToast(msg: S.current.password_need_num);
+      Fluttertoast.showToast(
+        msg: S.current.password_need_num,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
     } else if (letter.hasMatch(_newPwd.text) == false) {
-      Fluttertoast.showToast(msg: S.current.password_need_num);
+      Fluttertoast.showToast(
+        msg: S.current.password_need_num,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
     } else if (characters.hasMatch(_newPwd.text) == false) {
-      Fluttertoast.showToast(msg: S.current.password_need_num);
+      Fluttertoast.showToast(
+        msg: S.current.password_need_num,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
     } else {
       String password = EncryptUtil.aesEncode(_confimPwd.text);
       HSProgressHUD.show();
-
       UpdateLoginPawRepository()
           .modifyPwdBySms(
               ModifyPwdBySmsReq(
@@ -297,7 +331,12 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               'ModifyPasswordReq')
           .then((data) {
         HSProgressHUD.dismiss();
-        Fluttertoast.showToast(msg: S.current.operate_success);
+        Fluttertoast.showToast(
+          msg: S.current.operate_success,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+        );
         Navigator.pop(context, pageLogin);
       }).catchError((e) {
         Fluttertoast.showToast(msg: e.toString());

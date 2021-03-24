@@ -23,7 +23,7 @@ FLUTTER_STORAGE_BASE_URL(值：https://storage.flutter-io.cn)
 
 然后运行`flutter doctor`，则下次使用`flutter pub get`时，会从镜像地址下载资源。
 
-### 网络请求与 Json
+###  JSON数据的序列化与反序列化
 
 对于每个网络请求或者其他需要用到 Json 序列化/反序列化的类，按以下步骤进行编写。
 
@@ -36,6 +36,17 @@ flutter pub run build_runner build
 # 持续生成
 flutter packages pub run build_runner watch
 ```
+
+若执行 `flutter pub run build_runner build `后报 **code 78** 错误，则运行可运行以下命令(二选一)：
+
+```bash
+# 1.
+flutter packages pub run build_runner clean
+
+# 2.
+flutter packages pub run build_runner build --delete-conflicting-outputs
+```
+以上方法会解决大部分错误。
 
 2.定义完实体和属性，对类声明注解`@JsonSerializable()`，然后手动编写序列化与序列化代码，调用插件生成的方法，序列化调用`_$XXXToJson()`方法，反序列化调用`_$XXXFromJson()`方法。如：
 
@@ -72,12 +83,13 @@ Future<LoginResp> login(LoginReq loginReq, String tag) {
 
 ```
 
-3.另外，为了方便将 json 数据转换成实体类型，可以使用转换工具，比如：[点击这里](https://caijinglong.github.io/json2dart/index_ch.html)。
+3.另外，为了方便将 json 数据转换成实体类型，可以使用**转换工具**，比如：[点击这里](https://caijinglong.github.io/json2dart/index_ch.html)。
 
-### 插件
+### 国际化
 
-- Flutter Intl：用于国际化开发，在 lib/l10n 目录下存放(编辑)语言文件
-  注意：若手动修改了 intl_en.arb 和 intl_zh_CN.arb 两个文件，末尾的逗号记得删除，保证文件格式是 JSON 格式
+为方便国际化开发，我们需要下载使用`Flutter Intl`插件。使用插件初始化国际化，会在 lib/l10n 目录下生成(编辑)语言文件，并且可简单**新增/删除**国际化语言。
+
+**注意：**若手动修改了 intl_en.arb 和 intl_zh_CN.arb 两个文件，末尾的逗号记得删除，保证文件格式是 JSON 格式
 
 ### 资源文件
 
@@ -89,7 +101,7 @@ Future<LoginResp> login(LoginReq loginReq, String tag) {
 - `hsg_dimens.dart`: 尺寸定义
 - `hsg_styles.dart`: 样式定义
 
-### 对话框调用
+### 对话框
 
 参考`lib/feature_demo/dialog_demo.dart`
 
@@ -139,11 +151,3 @@ flutter build apk
 ```
 
 打包完成后的输出文件(apk)目录： `<app dir>/build/app/outputs/apk/app-release.apk`
-
-### pub finished with exit code 78 解决办法
-
-一、常规办法
-执行 flutter packages pub run build_runner build 后报 code 78 错误
-1、flutter packages pub run build_runner clean
-2、flutter packages pub run build_runner build --delete-conflicting-outputs
-以上方法会解决大部分错误

@@ -457,6 +457,9 @@
   "receiver_address": "收款方地址",
   "forget_username": "忘记用户名",
   "estimated_collection_amount": "预计收款金额",
+
+
+
   "register": "注册",
   "welcome_to_register": "欢迎注册",
   "please_input_mobile_num": "请输入手机号",
@@ -551,6 +554,7 @@
   "openAccout_businessAddress_details": "主要营业地址详情",
   "openAccout_mailingAddress": "通讯地址",
   "openAccout_mailingAddress_details": "通讯地址详情",
+ 
   "register_select_documents":"请选择证件类型",
   "openAccout_details_of_connected_parties_title": "有关人士信息预填",
   "openAccout_details_of_connected_parties": "有关人士信息",

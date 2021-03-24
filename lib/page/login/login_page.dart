@@ -31,7 +31,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
-  var _changeLangBtnTltle = 'English'; // S.current.english;
+  var _changeLangBtnTltle = S.current.language1; // S.current.english;
 
   TextEditingController _accountTC =
       TextEditingController(text: 'blk401'); //fangluyao
@@ -43,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-
     // 添加监听
     _accountTC.addListener(() {
       _account = _accountTC.text;
