@@ -246,23 +246,43 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           ),
         ),
         //户名
-        Container(
-          padding: EdgeInsets.only(top: 10, bottom: 16),
-          child: _inputFrame(
-            S.current.receipt_side_name,
-            _inputField(_nameController, S.current.please_input,
-                TextInputType.text, 35),
-          ),
+        // Container(
+        //   padding: EdgeInsets.only(top: 10, bottom: 16),
+        //   child: _inputFrame(
+        //     S.current.receipt_side_name,
+        //     _inputField(_nameController, S.current.please_input,
+        //         TextInputType.text, 35),
+        //   ),
+        // ),
+        TextFieldContainer(
+          title: S.current.receipt_side_name,
+          hintText: S.current.please_input,
+          keyboardType: TextInputType.text,
+          controller: _nameController,
+          callback: _check,
+          length: 35,
+          isRegEXp: true,
+          regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
         ),
         Divider(height: 0.5, color: HsgColors.divider),
         //账号
-        Container(
-          padding: EdgeInsets.only(top: 16, bottom: 16),
-          child: _inputFrame(
-            S.current.receipt_side_account,
-            _inputField(_acountController, S.current.please_input,
-                TextInputType.number, 20),
-          ),
+        // Container(
+        //   padding: EdgeInsets.only(top: 16, bottom: 16),
+        //   child: _inputFrame(
+        //     S.current.receipt_side_account,
+        //     _inputField(_acountController, S.current.please_input,
+        //         TextInputType.number, 20),
+        //   ),
+        // ),
+        TextFieldContainer(
+          title: S.current.receipt_side_account,
+          hintText: S.current.please_input,
+          keyboardType: TextInputType.number,
+          controller: _acountController,
+          callback: _check,
+          length: 20,
+          isRegEXp: true,
+          regExp: '[0-9]',
         ),
         Divider(height: 0.5, color: HsgColors.divider),
         //转账类型
@@ -644,6 +664,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         textAlign: TextAlign.end,
         keyboardType: TextInputType.text,
         controller: _inputController,
+        // textCapitalization: TextCapitalization.characters,
         inputFormatters: [
           // FilteringTextInputFormatter.digitsOnly,
           LengthLimitingTextInputFormatter(11),

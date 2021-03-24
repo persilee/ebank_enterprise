@@ -6,6 +6,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -26,6 +27,9 @@ class OpenAccountBasicDataPage extends StatefulWidget {
 }
 
 class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
+  ///数据上传请求体
+  OpenAccountQuickSubmitDataReq _dataReq = new OpenAccountQuickSubmitDataReq();
+
   /// 公司名称（英文）输入值
   String _companyNameEngText = '';
 
@@ -81,24 +85,28 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   void initState() {
     _companyNameEngTEC.addListener(() {
       _companyNameEngText = _companyNameEngTEC.text;
+      _dataReq.custNameEng = _companyNameEngText;
       setState(() {
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     });
     _companyNameCNTEC.addListener(() {
       _companyNameCNText = _companyNameCNTEC.text;
+      _dataReq.custNameLoc = _companyNameCNText;
       setState(() {
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     });
     _documentNumberTEC.addListener(() {
       _documentNumberText = _documentNumberTEC.text;
+      _dataReq.idNo = _documentNumberText;
       setState(() {
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     });
     _companyTypeOtherTEC.addListener(() {
       _companyTypeOtherText = _companyTypeOtherTEC.text;
+      _dataReq.otherCategory = _companyTypeOtherText;
       setState(() {
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
@@ -112,7 +120,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   void dispose() {
     _companyNameEngTEC.dispose();
     _companyNameCNTEC.dispose();
-    _companyTypeOtherTEC.dispose();
+    _documentNumberTEC.dispose();
     _companyTypeOtherTEC.dispose();
     super.dispose();
   }
@@ -125,14 +133,14 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         elevation: 0,
         centerTitle: true,
         title: Text(S.of(context).openAccout_basicInformation),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-              Color(0xFF0018EB),
-              Color(0xFF01C1D9),
-            ], begin: Alignment.centerLeft, end: Alignment.centerRight),
-          ),
-        ),
+        // flexibleSpace: Container(
+        //   decoration: BoxDecoration(
+        //     gradient: LinearGradient(colors: [
+        //       Color(0xFF0018EB),
+        //       Color(0xFF01C1D9),
+        //     ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+        //   ),
+        // ),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -152,7 +160,10 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                   click: _nextBtnEnabled
                       ? () {
                           Navigator.pushNamed(
-                              context, pageOpenAccountContactInformation);
+                            context,
+                            pageOpenAccountContactInformation,
+                            arguments: _dataReq,
+                          );
                         }
                       : null,
                 ),
@@ -299,8 +310,20 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                 print('注册国家/地区');
                 Navigator.pushNamed(context, countryOrRegionSelectPage)
                     .then((value) {
+                  String _language = Intl.getCurrentLocale();
+                  CountryRegionModel data = value;
+                  String showText = '';
+                  if (_language == 'zh_CN') {
+                    showText = data.nameZhCN;
+                  } else if (_language == 'zh_HK') {
+                    showText = data.nameZhHK;
+                  } else {
+                    showText = data.nameEN;
+                  }
+
+                  _dataReq.idIssuePlace = data.countryCode;
                   setState(() {
-                    _countryOrRegionText = (value as CountryRegionModel).nameEN;
+                    _countryOrRegionText = showText;
                     _nextBtnEnabled = _judgeButtonIsEnabled();
                   });
                 });
@@ -591,6 +614,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     );
 
     if (result != null && result != false) {
+      IdType data = _documentTypes[result];
+      _dataReq.idType = data.code;
       setState(() {
         _documentTypeText = documentList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
@@ -624,6 +649,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     );
 
     if (result != null && result != false) {
+      IdType data = _companyTypes[result];
+      _dataReq.custCategory = data.code;
       setState(() {
         _companyTypeText = companyList[result];
         _isShowCompanyTypeOther =
@@ -679,6 +706,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     );
 
     if (result != null && result != false) {
+      IdType data = _industrialNatures[result];
+      _dataReq.corporatinAttributes = data.code;
       setState(() {
         _industrialNatureText = industrialList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();

@@ -56,30 +56,73 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
               child: ListView(
                 children: [
                   //标题
-                  getRegisterTitle(S.current.fotget_password),
+                  getRegisterTitle(
+                      '${S.current.fotget_password}-${S.current.placeIdNumber}'),
                   //姓名
                   getRegisterRow(S.current.please_input_name, _userName, false),
                   //  证件类型
                   Container(
                     margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                    padding: EdgeInsets.only(left: 20),
+                    padding: EdgeInsets.only(left: 20, right: 20),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         color: Color(0xFFF5F7F9)),
-                    child: SelectInkWell(
-                      title: S.current.idType,
-                      item: _certType,
-                      onTap: _idCardListBottomSheet,
+                    child: Container(
+                      child: InkWell(
+                        onTap: _idCardListBottomSheet,
+                        child: Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    color: HsgColors.divider, width: 0.5)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _certType == ''
+                                  ? Text(
+                                      S.current.register_select_documents,
+                                    )
+                                  : Text(_certType),
+                              Row(
+                                children: [
+                                  Padding(
+                                      padding: EdgeInsets.only(right: 12),
+                                      child: Text('')),
+                                  Container(
+                                      child: Icon(
+                                    Icons.expand_more,
+                                    color: Colors.black,
+                                  )),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   //证件号码
                   getRegisterRow(
                       S.current.placeIdNumber, _cardNumber, false), //确定按钮
+                  //按钮
                   Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFF1775BA),
+                          Color(0xFF3A9ED1),
+                        ],
+                      ),
+                    ),
                     margin: EdgeInsets.all(40), //外边距
                     height: 44.0,
                     width: MediaQuery.of(context).size.width,
-                    child: RaisedButton(
+                    child: FlatButton(
                       child: Text(S.of(context).next_step),
                       onPressed: _submit()
                           ? () {
@@ -87,13 +130,9 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                                   context, pageResetPasswordNoAccount);
                             }
                           : null,
-                      color: HsgColors.accent,
                       textColor: Colors.white,
                       disabledTextColor: Colors.white,
                       disabledColor: Color(0xFFD1D1D1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5) //设置圆角
-                          ),
                     ),
                   )
                 ],

@@ -85,6 +85,8 @@ class TextFieldContainer extends StatelessWidget {
   final VoidCallback callback;
   final bool isWidget;
   final int length;
+  final bool isRegEXp;
+  final String regExp;
   TextFieldContainer({
     Key key,
     @required this.title,
@@ -95,6 +97,8 @@ class TextFieldContainer extends StatelessWidget {
     this.callback,
     this.isWidget = false,
     this.length = 140,
+    this.isRegEXp = false,
+    this.regExp,
   }) : super(key: key);
 
   @override
@@ -126,6 +130,9 @@ class TextFieldContainer extends StatelessWidget {
               ),
               inputFormatters: <TextInputFormatter>[
                 LengthLimitingTextInputFormatter(length),
+                isRegEXp
+                    ? FilteringTextInputFormatter.allow(RegExp(regExp))
+                    : LengthLimitingTextInputFormatter(length),
               ],
               onChanged: (text) {
                 callback();

@@ -21,6 +21,7 @@ import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -31,6 +32,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
 import 'data/transfer_internal_data.dart';
@@ -115,7 +118,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   List<String> _transferCcyList = [];
 
   //本地币种
-  String _localeCcy = 'CNY';
+  String _localeCcy = '';
 
   //账户选择
   String _account = '';
@@ -137,6 +140,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   //交易密码
   var check = false;
+
+  String _language = Intl.getCurrentLocale();
 
   @override
   void initState() {
@@ -180,6 +185,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       appBar: AppBar(
         title: Text(S.current.transfer_type_0),
         centerTitle: true,
+        // backgroundColor: Color(0xffF8F8F8),
+        // textTheme: TextTheme(),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -238,6 +245,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               callback: _boolBut,
               isWidget: true,
               length: 35,
+              isRegEXp: true,
+              regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
             ),
             TextFieldContainer(
               title: S.of(context).receipt_side_account,
@@ -246,6 +255,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               controller: _accountController,
               callback: _boolBut,
               length: 20,
+              isRegEXp: true,
+              regExp: '[0-9]',
             ),
           ],
         ),
@@ -449,7 +460,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   }
 
   //默认初始卡号
-  _loadTransferData() {
+  _loadTransferData() async {
+    final prefs = await SharedPreferences.getInstance();
+    _localeCcy = prefs.getString(ConfigKey.LOCAL_CCY);
     Future.wait({
       CardDataRepository().getCardList('GetCardList'),
     }).then((value) {

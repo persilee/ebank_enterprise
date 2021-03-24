@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
   var _enterpriseName = ''; // 企业名称
   var _userName = '高阳银行企业用户'; // 姓名
   var _characterName = ''; // 角色名称
-  var _belongCustStatus = '7'; //用户状态
+  var _belongCustStatus = '0'; //用户状态
   var _lastLoginTime = ''; // 上次登录时间
   String _language = Intl.getCurrentLocale();
   var _features = [];
@@ -294,6 +294,28 @@ class _HomePageState extends State<HomePage> {
   Widget _homeHeaderView() {
     final double _headerViewHeight = MediaQuery.of(context).size.width - 30.0;
 
+    Widget headerShowWidget = Container();
+    switch (_belongCustStatus) {
+      case '0': //未开户
+      case '3': //开立客户号失败
+      case '4': //开立账户失败
+        headerShowWidget = _headerInfoWidget();
+        break;
+      case '1': //审核中
+      case '8': //待审核
+        headerShowWidget = _openAccInReview();
+        break;
+      case '2': //已驳回
+        headerShowWidget = _openAccRejected();
+        break;
+      case '5': //未激活
+      case '6': //已激活
+      case '7': //锁定
+        headerShowWidget = _headerInfoWidget();
+        break;
+      default:
+    }
+
     return Container(
       child: Stack(
         children: [
@@ -304,7 +326,7 @@ class _HomePageState extends State<HomePage> {
           Container(
             margin: EdgeInsets.only(top: 60),
             padding: EdgeInsets.only(left: 20, right: 20),
-            child: _headerInfoWidget(),
+            child: headerShowWidget,
             //_openAccInReview(), //_openAccRejected(), // _headerInfoWidget(),
           ),
           Container(
@@ -323,7 +345,6 @@ class _HomePageState extends State<HomePage> {
                     40.0,
                     (MediaQuery.of(context).size.width - 50) / 2,
                     () {
-                      print('收支明细');
                       Navigator.pushNamed(context, pageDetailList);
                     },
                   ),
@@ -456,6 +477,20 @@ class _HomePageState extends State<HomePage> {
 
   //头部信息展示
   Widget _headerInfoWidget() {
+    Widget infoWidget = Container();
+    switch (_belongCustStatus) {
+      case '0': //未开户
+      case '3': //开立客户号失败
+      case '4': //开立账户失败
+        infoWidget = _userOffInfo();
+        break;
+      case '5': //未激活
+      case '6': //已激活
+      case '7': //锁定
+        infoWidget = _userInfo();
+        break;
+      default:
+    }
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: Row(
@@ -466,8 +501,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Container(
             width: MediaQuery.of(context).size.width - 55 - 50 - 25,
-            child:
-                _userOffInfo(), //_belongCustStatus == '7' ? _userInfo() : _userOffInfo(),
+            child: infoWidget,
           ),
         ],
       ),
@@ -847,7 +881,7 @@ class _HomePageState extends State<HomePage> {
         _characterName = _language == 'zh_CN'
             ? data.roleLocalName
             : data.roleEngName; //用户角色名称
-        // _belongCustStatus = data.belongCustStatus; //用户状态
+        _belongCustStatus = data.belongCustStatus; //用户状态
         _lastLoginTime = data.lastLoginTime; // 上次登录时间
         _data = data;
       });
