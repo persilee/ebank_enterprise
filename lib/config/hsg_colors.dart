@@ -5,6 +5,7 @@ class HsgColors {
 
   /// 主色调
   static const Color primary = Color(0xff2f323e);
+  static const Color primaryNew = Color(0xffF8F8F8);
   static const Color primaryDark = Color(0xff282b36);
   static const Color accent = Color(0xff4871ff);
   static const Color btnPrimary = accent;
@@ -49,4 +50,5 @@ class HsgColors {
   static const Color registerBtn = Color(0xFF819DFF);
   static const Color registerNextBtn = Color(0xFFDCDCDC);
   static const Color plainBtn = Color(0xFF3394D4);
+  static const Color homeMask = Color(0x42032136);
 }

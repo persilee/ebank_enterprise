@@ -132,6 +132,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
+        // backgroundColor: HsgColors.primaryNew,
         title: Text(S.of(context).openAccout_basicInformation),
         // flexibleSpace: Container(
         //   decoration: BoxDecoration(
