@@ -199,8 +199,10 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           ),
         ),
         inputFormatters: [
-          // FilteringTextInputFormatter.allow(RegExp('[0-9]|\\.|[0-9]')),
           FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+          // FilteringTextInputFormatter.allow(RegExp('[0-9]|\\.|[0-9]')),
+          // FilteringTextInputFormatter.allow(
+          //     RegExp('([1-9]\d*\.?\d*)|(0\.?\d*[1-9])?')),
         ],
         onChanged: (value) {
           // double.parse(value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
@@ -216,8 +218,9 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       color: Colors.white,
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.fromLTRB(18, 0, 18, 0),
-      child: Scaffold(
-        body: Column(
+      height: 300.0,
+      child: Material(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             _screenText(S.current.deposit_amount),
@@ -227,7 +230,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
             _screenText(S.current.deposit_time_limit),
             _checkTermButton(_changedTerm, popcontext),
             _screenBtnRow(popcontext),
-            _bottomBox(),
           ],
         ),
       ),
@@ -437,15 +439,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     );
   }
 
-  //弹窗底部
-  Widget _bottomBox() {
-    return Container(
-      color: Colors.white,
-      width: MediaQuery.of(context).size.width - 36,
-      height: 240,
-    );
-  }
-
   //顶部弹窗
   Widget _screen() {
     return CustomPopupWindowButton(
@@ -645,9 +638,11 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
         title: Text(S.current.time_deposit),
+        elevation: 1,
         actions: <Widget>[
           Container(
             padding: EdgeInsets.only(top: language == 'zh_CN' ? 17.5 : 12),

@@ -500,12 +500,14 @@ class _MinePageState extends State<MinePage> {
 
   //企业信息
   Widget _enterpriseInfo() {
+    String enterpriseNameShowStr =
+        _enterpriseName == null ? '' : _enterpriseName;
     return Container(
       constraints: BoxConstraints(
           maxWidth: (MediaQuery.of(context).size.width / 3 * 2 - 20)),
       height: 22,
       child: Text(
-        _enterpriseName,
+        enterpriseNameShowStr,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: Colors.white,
@@ -533,6 +535,7 @@ class _MinePageState extends State<MinePage> {
 
   //用户角色信息
   Widget _characterInfo() {
+    String characterNameShowStr = _characterName == null ? '' : _characterName;
     return Container(
       height: 25,
       decoration: BoxDecoration(
@@ -556,7 +559,7 @@ class _MinePageState extends State<MinePage> {
               maxWidth: 160,
             ),
             child: Text(
-              _characterName,
+              characterNameShowStr,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 14,
