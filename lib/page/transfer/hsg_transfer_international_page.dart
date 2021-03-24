@@ -192,6 +192,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   String _language = Intl.getCurrentLocale();
 
+  String middleBankSwift = '';
+
   @override
   void initState() {
     super.initState();
@@ -208,13 +210,12 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _rateCalculate();
       }
     });
-    // _middleBankSwiftController.addListener(() {
-    //   setState(() {
-    //     _middleBankSwiftController.text =
-    //         _middleBankSwiftController.text.toUpperCase();
-    //   });
-    //   print(_middleBankSwiftController.text + "===========================");
-    // });
+    _middleBankSwiftController.addListener(() {
+      setState(() {
+        middleBankSwift = _middleBankSwiftController.text.toUpperCase();
+      });
+      print(middleBankSwift + "===========================");
+    });
   }
 
   @override
@@ -417,9 +418,9 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _companyController.text = listPartner.payeeName;
         _accountController.text = listPartner.payeeCardNo;
         _countryText = listPartner.district;
-        _getPayeeBank = listPartner.payeeBankLocalName == null
-            ? ""
-            : listPartner.payeeBankLocalName;
+        // _getPayeeBank = listPartner.payeeBankLocalName == null
+        //     ? ""
+        //     : listPartner.payeeBankLocalName;
         _bankSwiftController.text = listPartner.bankSwift;
         _payeeAddressController.text = listPartner.payeeAddress;
         check = false;
