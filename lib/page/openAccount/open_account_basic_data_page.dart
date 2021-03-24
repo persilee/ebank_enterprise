@@ -132,16 +132,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       appBar: AppBar(
         elevation: 1,
         centerTitle: true,
-        // backgroundColor: HsgColors.primaryNew,
         title: Text(S.of(context).openAccout_basicInformation),
-        // flexibleSpace: Container(
-        //   decoration: BoxDecoration(
-        //     gradient: LinearGradient(colors: [
-        //       Color(0xFF0018EB),
-        //       Color(0xFF01C1D9),
-        //     ], begin: Alignment.centerLeft, end: Alignment.centerRight),
-        //   ),
-        // ),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -236,7 +227,12 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               S.of(context).openAccount_companyNameEng_placeholder,
               _companyNameEngTEC,
               false,
-              120,
+              <TextInputFormatter>[
+                LengthLimitingTextInputFormatter(140),
+                // FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')), //只允许输入字母
+                FilteringTextInputFormatter.deny(
+                    RegExp("[\u4e00-\u9fa5]")), //不允许输入汉字
+              ],
               TextInputType.text,
             ),
           ),
@@ -247,7 +243,10 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               S.of(context).openAccount_companyNameCN_placeholder,
               _companyNameCNTEC,
               false,
-              60,
+              <TextInputFormatter>[
+                LengthLimitingTextInputFormatter(35),
+                // FilteringTextInputFormatter.allow(RegExp("[\u4e00-\u9fa5]")),
+              ],
               TextInputType.text,
             ),
           ),
@@ -271,7 +270,11 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               S.of(context).openAccount_documentNumber_placeholder,
               _documentNumberTEC,
               false,
-              1004,
+              <TextInputFormatter>[
+                LengthLimitingTextInputFormatter(140),
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z0-9]')), //只允许输入字母
+              ],
             ),
           ),
           Container(
@@ -295,7 +298,9 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                     S.of(context).openAccount_companyType_other_placeholder,
                     _companyTypeOtherTEC,
                     false,
-                    120,
+                    <TextInputFormatter>[
+                      LengthLimitingTextInputFormatter(35),
+                    ],
                     TextInputType.text,
                   ),
                 )
@@ -355,7 +360,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     String placeholderStr,
     TextEditingController textEdiC,
     bool isHiddenLine,
-    int maxLength,
+    List<TextInputFormatter> inputFormatters,
     TextInputType keyboardType,
   ) {
     final size = MediaQuery.of(context).size;
@@ -389,10 +394,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               // textAlignVertical: TextAlignVertical.top,
               // textDirection: TextDirection.ltr,
               maxLines: 2,
-              // maxLength: maxLength,
-              inputFormatters: <TextInputFormatter>[
-                LengthLimitingTextInputFormatter(maxLength) //限制长度
-              ],
+              inputFormatters: inputFormatters,
               style: TextStyle(
                 fontSize: 15,
                 color: HsgColors.firstDegreeText,
@@ -424,7 +426,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     String placeholderStr,
     TextEditingController textEdiC,
     bool isHiddenLine,
-    int textFieldTag,
+    List<TextInputFormatter> inputFormatters,
   ) {
     final size = MediaQuery.of(context).size;
 
@@ -458,7 +460,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                 controller: textEdiC,
                 // obscureText: this.isCiphertext,
                 textAlign: TextAlign.right,
-                // textDirection: TextDirection.ltr,
+                inputFormatters: inputFormatters,
                 style: TextStyle(
                   fontSize: 15,
                   color: HsgColors.firstDegreeText,

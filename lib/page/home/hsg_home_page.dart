@@ -27,8 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   double _opacity = 0;
-  // var _changeLangBtnTltle = 'English';
-  var _changeLangBtnTltle = S.current.language1;
+  var _changeLangBtnTltle = '';
   var _headPortraitUrl = ''; // 头像地址
   var _enterpriseName = ''; // 企业名称
   var _userName = '高阳银行企业用户'; // 姓名
@@ -65,6 +64,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    String _language = Intl.getCurrentLocale();
+    if (_language == 'zh_CN') {
+      _changeLangBtnTltle = '中文（简体）';
+    } else if (_language == 'zh_HK') {
+      _changeLangBtnTltle = '中文（繁體）';
+    } else {
+      _changeLangBtnTltle = 'English';
+    }
+
     _features = [
       {
         'title': S.current.transfer_collection,
@@ -250,7 +258,8 @@ class _HomePageState extends State<HomePage> {
   _selectLanguage(BuildContext context) async {
     List<String> languages = [
       'English',
-      '中文',
+      '中文（简体）',
+      '中文（繁體）',
     ];
     final result = await showHsgBottomSheet(
         context: context,
@@ -271,6 +280,12 @@ class _HomePageState extends State<HomePage> {
           language = Language.ZH_CN;
           setState(() {
             _language = 'zh_CN';
+          });
+          break;
+        case 2:
+          language = Language.ZH_HK;
+          setState(() {
+            _language = 'zh_Hk';
           });
           break;
       }

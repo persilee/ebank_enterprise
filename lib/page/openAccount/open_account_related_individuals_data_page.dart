@@ -221,7 +221,9 @@ class _RelatedIndividualsDataPageState
           S.of(context).openAccount_documentNumber_placeholder,
           _documentNumberTEC,
           false,
-          30,
+          <TextInputFormatter>[
+            LengthLimitingTextInputFormatter(30) //限制长度
+          ],
         ),
       ),
       Container(
@@ -269,7 +271,7 @@ class _RelatedIndividualsDataPageState
     String placeholderStr,
     TextEditingController textEdiC,
     bool isHiddenLine,
-    int maxLength,
+    List<TextInputFormatter> inputFormatters,
   ) {
     final size = MediaQuery.of(context).size;
 
@@ -303,9 +305,7 @@ class _RelatedIndividualsDataPageState
                 controller: textEdiC,
                 // obscureText: this.isCiphertext,
                 textAlign: TextAlign.right,
-                inputFormatters: <TextInputFormatter>[
-                  LengthLimitingTextInputFormatter(maxLength) //限制长度
-                ],
+                inputFormatters: inputFormatters,
                 style: TextStyle(
                   fontSize: 15,
                   color: HsgColors.firstDegreeText,
