@@ -441,7 +441,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       height: 25,
       decoration: BoxDecoration(
-        color: Color(0xff5662fb).withOpacity(0.66), //HsgColors.accent,
+        color: Color(0xff3394D4).withOpacity(0.64), //HsgColors.accent,
         borderRadius: BorderRadius.circular(12.5), //
       ),
       padding: EdgeInsets.fromLTRB(5, 0, 12, 0),

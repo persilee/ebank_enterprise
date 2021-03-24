@@ -51,6 +51,7 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 1,
         title: Text(
           S.of(context).select_country,
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

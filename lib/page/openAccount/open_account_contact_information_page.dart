@@ -103,7 +103,7 @@ class _OpenAccountContactInformationPageState
   String _officePhoneText = '';
 
   /// 下一步按钮是否能点击
-  bool _nextBtnEnabled = true; //false;
+  bool _nextBtnEnabled = false;
 
   /// 城市数据列表
   List _cityDataList = [];
@@ -220,7 +220,7 @@ class _OpenAccountContactInformationPageState
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        elevation: 0,
+        elevation: 1,
         centerTitle: true,
         title: Text(S.of(context).openAccout_contactInformation),
       ),

@@ -500,12 +500,14 @@ class _MinePageState extends State<MinePage> {
 
   //企业信息
   Widget _enterpriseInfo() {
+    String enterpriseNameShowStr =
+        _enterpriseName == null ? '' : _enterpriseName;
     return Container(
       constraints: BoxConstraints(
           maxWidth: (MediaQuery.of(context).size.width / 3 * 2 - 20)),
       height: 22,
       child: Text(
-        _enterpriseName,
+        enterpriseNameShowStr,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: Colors.white,
