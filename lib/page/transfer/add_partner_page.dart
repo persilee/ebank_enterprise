@@ -198,7 +198,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       appBar: AppBar(
         title: Text(S.current.add_payee),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,

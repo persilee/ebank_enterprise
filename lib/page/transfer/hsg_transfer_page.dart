@@ -91,24 +91,6 @@ class _TransferPageState extends State<TransferPage> {
     );
   }
 
-  Widget _appBar() {
-    return XAppBar(
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-            Color(0xFF1775BA),
-            Color(0xFF3A9ED1),
-          ], begin: Alignment.centerLeft, end: Alignment.centerRight),
-        ),
-        child: Column(
-          children: [
-            // Text(S.of(context).transfer_features),
-          ],
-        ),
-      ),
-    );
-  }
-
   List<Widget> _sliversSection(List gridData, List listData) {
     List<Widget> section = [];
 
@@ -126,6 +108,14 @@ class _TransferPageState extends State<TransferPage> {
         backgroundColor: Colors.yellowAccent[300],
         floating: true,
         expandedHeight: 170.0,
+        iconTheme: IconThemeData(color: Color(0xffFEFEFE)),
+        textTheme: TextTheme(
+          headline6: TextStyle(
+            color: Color(0xffFEFEFE),
+            fontSize: 18,
+            fontStyle: FontStyle.normal,
+          ),
+        ),
         // bottom: PreferredSizeWidget(),
         flexibleSpace: FlexibleSpaceBar(
           // title: Text(S.of(context).transfer_features),

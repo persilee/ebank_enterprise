@@ -91,6 +91,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       appBar: AppBar(
         title: Text(intl.S.of(context).transfer_record),
         centerTitle: true,
+        elevation: 1,
       ),
       body: Container(
         color: HsgColors.commonBackground,

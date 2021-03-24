@@ -433,6 +433,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       appBar: AppBar(
         title: Text(S.current.transfer_type_1),
         centerTitle: true,
+        elevation: 1,
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,

@@ -104,7 +104,7 @@ class _TransferPartnerState extends State<TransferPartner> {
       appBar: AppBar(
         title: Text(S.current.transfer_model),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
         actions: [
           IconButton(
             onPressed: () {
