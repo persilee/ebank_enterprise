@@ -218,8 +218,9 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       color: Colors.white,
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.fromLTRB(18, 0, 18, 0),
-      child: Scaffold(
-        body: Column(
+      height: 300.0,
+      child: Material(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             _screenText(S.current.deposit_amount),
@@ -229,7 +230,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
             _screenText(S.current.deposit_time_limit),
             _checkTermButton(_changedTerm, popcontext),
             _screenBtnRow(popcontext),
-            _bottomBox(),
+            // _bottomBox(),
           ],
         ),
       ),
@@ -647,6 +648,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
         title: Text(S.current.time_deposit),
