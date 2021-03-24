@@ -5,7 +5,9 @@
 
 import 'dart:math';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
+import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
@@ -39,9 +41,11 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   TextEditingController inputValue = TextEditingController();
   int page = 1;
   bool _isDate = false;
+  List<String> terms = []; //存款期限
 
   void initState() {
     super.initState();
+    _getTerm();
     //下拉刷新
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       refrestIndicatorKey.currentState.show();
@@ -195,11 +199,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           ),
         ),
         inputFormatters: [
+          // FilteringTextInputFormatter.allow(RegExp('[0-9]|\\.|[0-9]')),
           FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
-          // FilteringTextInputFormatter.allow(
-          //     RegExp("^[0-9]{1,12}([0-9]{1,2})")),
-          // FilteringTextInputFormatter.allow(
-          //     RegExp('^([0-9]{0,8})(\.{0,2}[0-9])?')),
         ],
         onChanged: (value) {
           // double.parse(value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
@@ -214,7 +215,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     return Container(
       color: Colors.white,
       width: MediaQuery.of(context).size.width,
-      // height: 289,
       padding: EdgeInsets.fromLTRB(18, 0, 18, 0),
       child: Scaffold(
         body: Column(
@@ -310,12 +310,21 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
 
 //币种弹窗
   _selectCcy(BuildContext popcontext) async {
-    List<String> ccys = ['USD', 'HKD'];
+    List<String> ccys = [];
+
+    for (List<TdepProductDTOList> dtoList in producDTOList) {
+      for (TdepProductDTOList tdProduct in dtoList) {
+        bool isContainer = ccys.contains(tdProduct.ccy);
+        if (!isContainer) {
+          ccys.add(tdProduct.ccy);
+        }
+      }
+    }
 
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) => BottomMenu(
-              title: S.current.settlement_account,
+              title: S.current.currency,
               items: ccys,
             ));
     if (result != null && result != false) {
@@ -330,12 +339,10 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
 
   //存期弹窗
   _selectTerm(BuildContext popcontext) async {
-    List<String> terms = ['1个月', '3个月', '6个月'];
-
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) => BottomMenu(
-              title: S.current.settlement_account,
+              title: S.current.deposit_time_limit,
               items: terms,
             ));
     if (result != null && result != false) {
@@ -392,7 +399,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       ),
       child: FlatButton(
         padding: EdgeInsets.all(0),
-        // disabledColor: HsgColors.btnDisabled,
         child: Text(
           S.of(context).reset,
           style: TextStyle(
@@ -672,12 +678,12 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
               slivers: _titleSection(productList, producDTOList),
             ),
           ),
-
           //下拉刷新时调用_loadData
           onRefresh: _loadData),
     );
   }
 
+// String accuPeriod, String auctCale, String ccy, double minAmt, int page, int pageSize, String sort
   Future<void> _loadData() async {
     TimeDepositDataRepository()
         .getGetTimeDepositProduct('getGetTimeDepositProduct',
@@ -698,6 +704,25 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       }
     }).catchError(() {
       Fluttertoast.showToast(msg: "${e.toString()}");
+    });
+  }
+
+  //获取存款期限列表
+  Future _getTerm() async {
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq("AUCT"), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        data.publicCodeGetRedisRspDtoList.forEach((element) {
+          setState(() {
+            if (language == 'zh_CN') {
+              terms.add(element.cname);
+            } else {
+              terms.add(element.name);
+            }
+          });
+        });
+      }
     });
   }
 
