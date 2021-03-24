@@ -35,7 +35,6 @@ Widget getRegisterRegion(BuildContext context, TextEditingController _phoneNum,
                     width: MediaQuery.of(context).size.width / 6.8,
                     child: Text('+$_officeAreaCodeText')),
                 Container(
-                  //  color: Colors.blue,
                   height: MediaQuery.of(context).size.height / 20,
                   width: MediaQuery.of(context).size.width / 18,
                   child: Icon(
@@ -54,6 +53,9 @@ Widget getRegisterRegion(BuildContext context, TextEditingController _phoneNum,
               autocorrect: false,
               //是否自动获得焦点
               autofocus: true,
+              onChanged: (value) {
+                value = _phoneNum.text;
+              },
               controller: _phoneNum,
               decoration: InputDecoration(
                 border: InputBorder.none,

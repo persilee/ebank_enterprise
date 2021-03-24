@@ -16,6 +16,7 @@ import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_tableview/flutter_tableview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -56,6 +57,8 @@ class _DetailListPageState extends State<DetailListPage> {
   GlobalKey _textKey = GlobalKey();
   TextEditingController _moneyController = TextEditingController();
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>(); //下拉刷新
+  TextEditingController _startAmountController = TextEditingController();
+  TextEditingController _endAmountController = TextEditingController();
 
   @override
   // ignore: must_call_super
@@ -181,7 +184,7 @@ class _DetailListPageState extends State<DetailListPage> {
   Widget _popDialogContent(BuildContext popcontext) {
     return Container(
         color: Colors.white,
-        height: 260,
+        height: 320,
         padding: EdgeInsets.all(10),
         child: Material(
           child: Column(
@@ -196,6 +199,14 @@ class _DetailListPageState extends State<DetailListPage> {
               //金额
               _timeText(intl.S.of(context).amount),
               _amountDuration(),
+              //按钮
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  _resetButton(popcontext),
+                  _confimrButton(context),
+                ],
+              ),
             ],
           ),
         ));
@@ -340,8 +351,6 @@ class _DetailListPageState extends State<DetailListPage> {
         ),
         //结束时间按钮
         _timeButton(_end, 1, popcontext),
-        //确定按钮
-        _confimrButton(context),
       ],
     );
   }
@@ -383,7 +392,7 @@ class _DetailListPageState extends State<DetailListPage> {
   Widget _amountDuration() {
     return Row(
       children: [
-        _amountInput(context),
+        _amountInput(context, _startAmountController),
         Text(
           intl.S.of(context).zhi,
           style: TextStyle(
@@ -392,8 +401,8 @@ class _DetailListPageState extends State<DetailListPage> {
             decoration: TextDecoration.none,
           ),
         ),
-        _amountInput(context),
-        _amountConfimrButton(context),
+        _amountInput(context, _endAmountController),
+        //  _amountConfimrButton(context),
       ],
     );
   }
@@ -426,26 +435,96 @@ class _DetailListPageState extends State<DetailListPage> {
     );
   }
 
-  //金额输入框
-  Widget _amountInput(BuildContext context) {
+  //重置按钮
+  Widget _resetButton(BuildContext popcontext) {
     return Container(
-      //   constraints: BoxConstraints(maxHeight: 100),
-      margin: EdgeInsets.all(3),
-      width: MediaQuery.of(context).size.width / 3.23,
-      height: 23.5,
+      width: 70,
+      height: 30,
+      margin: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Color(0x77939393), width: 0.5),
+        borderRadius: BorderRadius.circular((5)),
+      ),
+      child: FlatButton(
+        padding: EdgeInsets.all(0),
+        // disabledColor: HsgColors.btnDisabled,
+        child: Text(
+          intl.S.of(context).reset,
+          style: TextStyle(
+            fontSize: 13,
+            // color: HsgColors.accent,
+          ),
+        ),
+        onPressed: () {
+          setState(() {
+            _isButton2 = true;
+            _isButton1 = false;
+            _isButton3 = false;
+            _isButton4 = false;
+            _start = formatDate(
+                DateTime(DateTime.now().year, DateTime.now().month, 1),
+                [yyyy, mm, dd]); //显示开始时间
+            _end = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示结束时间
+            (popcontext as Element).markNeedsBuild();
+            _startAmountController.text = '';
+            _endAmountController.text = '';
+          });
+        },
+      ),
+    );
+  }
+
+  //金额输入框
+  Widget _amountInput(BuildContext context, TextEditingController controller) {
+    return Container(
+      margin: EdgeInsets.all(5),
+      // margin: EdgeInsets.only(left: 5,right: 5),
+      width: MediaQuery.of(context).size.width / 2.5,
+      height: 30,
       decoration: BoxDecoration(
         color: Color(0xffECECEC),
         borderRadius: BorderRadius.circular(5),
       ),
-      child: TextField(
-        decoration: InputDecoration(border: InputBorder.none),
-        // controller: controller,
-        autocorrect: false,
-        autofocus: false,
-        // maxLines: 2,
-        // keyboardType: TextInputType.multiline,
-        keyboardType: TextInputType.number,
-        onChanged: (text) {},
+      child: Container(
+        // margin: EdgeInsets.only(top: 15),
+        //height: 30,
+        child: Theme(
+          data: new ThemeData(
+              // primaryColor: Color(0xffECECEC),
+              ),
+          child: TextField(
+            decoration: InputDecoration(
+              hintStyle: TextStyle(
+                fontSize: 14,
+                color: HsgColors.textHintColor,
+              ),
+              hintText: intl.S.current.not_required,
+              contentPadding: EdgeInsets.all(0),
+              border:
+                  // InputBorder.none,
+                  OutlineInputBorder(
+                gapPadding: 0,
+                borderRadius: ((BorderRadius.circular(5))),
+                borderSide: BorderSide(
+                  color: Color(0xffECECEC),
+                ),
+              ),
+            ),
+            controller: controller,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+              LengthLimitingTextInputFormatter(12),
+            ],
+            style: TextStyle(
+              fontSize: 14,
+            ),
+            autocorrect: false,
+            autofocus: false,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            onChanged: (text) {},
+          ),
+        ),
       ),
     );
   }
@@ -453,9 +532,9 @@ class _DetailListPageState extends State<DetailListPage> {
 //自定义时间按钮
   Widget _timeButton(String name, int i, BuildContext popcontext) {
     return Container(
-      margin: EdgeInsets.all(3),
-      width: MediaQuery.of(context).size.width / 3.23,
-      height: 23.5,
+      margin: EdgeInsets.all(5),
+      width: MediaQuery.of(context).size.width / 2.5,
+      height: 30,
       decoration: BoxDecoration(
         color: Color(0xffECECEC),
         borderRadius: BorderRadius.circular(5),
@@ -473,7 +552,7 @@ class _DetailListPageState extends State<DetailListPage> {
             Container(
               width: 8,
               height: 7,
-              margin: EdgeInsets.only(bottom: 20),
+              margin: EdgeInsets.only(bottom: 20, left: 10),
               child: Icon(
                 Icons.arrow_drop_down,
                 color: Color(0xffAAAAAA),
@@ -482,7 +561,6 @@ class _DetailListPageState extends State<DetailListPage> {
           ],
         ),
         onPressed: () {
-          // _cupertinoPicker();
           _timePicker(i, popcontext);
         },
       ),

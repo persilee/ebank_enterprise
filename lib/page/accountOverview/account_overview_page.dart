@@ -63,6 +63,14 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
         title: Text(S.of(context).account_overview),
         centerTitle: true,
         elevation: 0,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              Color(0xFF1775BA),
+              Color(0xFF3A9ED1),
+            ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+          ),
+        ),
       ),
       body: RefreshIndicator(
           key: refrestIndicatorKey,
@@ -465,8 +473,6 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                   shoDowTwo,
                   false),
             ),
-
-            //_totalLiability(),
           ],
         ),
       ],
@@ -515,9 +521,9 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                   ? BoxShadow(
                       color: Color(0XFF192A56),
                       offset: isflex
-                          ? Offset(-10.0, 0.0)
-                          : Offset(20.0, 0.0), //阴影xy轴偏移量
-                      blurRadius: 10.0, //阴影模糊程度
+                          ? Offset(0.0, 0.0)
+                          : Offset(5.0, 0.0), //阴影xy轴偏移量
+                      blurRadius: 3.0, //阴影模糊程度
                     )
                   : BoxShadow(color: Color(0xFF2F323E), blurRadius: 0.0)
             ],
