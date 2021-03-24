@@ -406,28 +406,12 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   @override
   Widget build(BuildContext context) {
     var _arguments = ModalRoute.of(context).settings.arguments;
-
-    setState(() {
-      if (_arguments != null && !check) {
-        Rows listPartner = _arguments;
-        _companyController.text = listPartner.payeeName;
-        _accountController.text = listPartner.payeeCardNo;
-        _countryText = listPartner.district;
-        // _getPayeeBank = listPartner.payeeBankLocalName == null
-        //     ? ""
-        //     : listPartner.payeeBankLocalName;
-        _bankSwiftController.text = listPartner.bankSwift;
-        _payeeAddressController.text = listPartner.payeeAddress;
-        check = false;
-        print("===================================");
-        print(listPartner.payeeBankLocalName);
-        print(listPartner.district);
-      }
-    });
+    _getTransferData(_arguments);
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.transfer_type_1),
         centerTitle: true,
+        elevation: 1,
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -463,6 +447,34 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         ),
       ),
     );
+  }
+
+  //获取信息
+  _getTransferData(_arguments) {
+    if (_arguments != null && !check) {
+      setState(() {
+        Rows listPartner = _arguments;
+        _companyController.text = listPartner.payeeName;
+        _accountController.text = listPartner.payeeCardNo;
+        _countryText = listPartner.district;
+        // _getPayeeBank = listPartner.payeeBankLocalName == null
+        //     ? ""
+        //     : listPartner.payeeBankLocalName;
+        _getPayeeBank = _language == 'zh_CN'
+            ? listPartner.payeeBankLocalName
+            : listPartner.payeeBankEngName;
+        _bankSwiftController.text = listPartner.bankSwift;
+        _middleBankSwiftController.text = listPartner.midBankSwift;
+        // _transferFee = listPartner.
+        _payeeAddressController.text = listPartner.payeeAddress;
+        _remarkController.text = listPartner.remark;
+        // _companyController.selection = TextSelection.collapsed(
+        //   affinity: TextAffinity.downstream,
+        //   offset: _companyController.text.length,
+        // );
+        check = false;
+      });
+    }
   }
 
   //汇款地址
@@ -545,12 +557,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             _getLine(),
             //银行SWIFT
             _getInputColumn(S.current.bank_swift, S.current.please_input, 11,
-                true, "[a-zA-Z]", _bankSwiftController),
+                true, "[a-zA-Z]", _bankSwiftController,
+                isUpperCase: true),
             _getLine(),
 
             //中间行
             _getInputColumn(S.current.middle_bank_swift, S.current.not_required,
-                11, true, "[a-zA-Z]", _middleBankSwiftController, isUpperCase: true),
+                11, true, "[a-zA-Z]", _middleBankSwiftController,
+                isUpperCase: true),
             _getLine(),
             //收款地址
             _getAddress(S.current.collection_address, S.current.please_input,
@@ -622,9 +636,15 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   _accountController.text = rowListPartner.payeeCardNo;
                   _countryText = rowListPartner.district;
                   // _getPayeeBank = rowListPartner.payeeBankLocalName;
+                  _getPayeeBank = _language == 'zh_CN'
+                      ? rowListPartner.payeeBankLocalName
+                      : rowListPartner.payeeBankEngName;
                   _bankSwiftController.text = rowListPartner.bankSwift;
                   _payeeAddressController.text = rowListPartner.payeeAddress;
-                } else {}
+                  _bankSwiftController.text = rowListPartner.bankSwift;
+                  _payeeAddressController.text = rowListPartner.payeeAddress;
+                }
+                _isClick();
               },
             );
           },
@@ -778,7 +798,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //获取输入行
   _getInputColumn(String leftText, String righteText, int length, bool isRegExp,
-      String regExp, TextEditingController _controller, {bool isUpperCase = false}) {
+      String regExp, TextEditingController _controller,
+      {bool isUpperCase = false}) {
     var rightExpand = Expanded(
       child: Container(
         child: TextField(
@@ -795,8 +816,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             isRegExp
                 ? FilteringTextInputFormatter.allow(RegExp(regExp))
                 : LengthLimitingTextInputFormatter(length),
-            if(isUpperCase)
-            UpperCaseTextFormatter(),
+            if (isUpperCase) UpperCaseTextFormatter(),
           ],
           decoration: InputDecoration(
             border: InputBorder.none,

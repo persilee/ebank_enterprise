@@ -215,8 +215,7 @@ class _MinePageState extends State<MinePage> {
                 }),
                 _flatBtnNuitWidget(S.of(context).visa_interview, true, () {
                   //面签通知
-                  print('面签');
-                  // Navigator.pushNamed(context, aboutUs);
+                  Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
                 }),
               ],
             ),

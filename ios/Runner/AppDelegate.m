@@ -18,9 +18,7 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
 
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  
-    [[SigningESDK sharedInstance] initSDK];
-    [SigningESDK sharedInstance].delegate = self;
+
     
     [self keybordManager];
     // 1.获取FlutterViewController(是应用程序的默认Controller)
@@ -35,7 +33,9 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
      __weak typeof(self) weakSelf = self;
     [batteryChannel setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result){
         __strong __typeof(weakSelf)strongSelf = weakSelf;
-
+        [[SigningESDK sharedInstance] initSDK];
+        [SigningESDK sharedInstance].delegate = self;
+        
        if ([@"startAuth" isEqualToString:call.method]) {//验证方法是否可用
            NSDictionary *bodyDictData = [call.arguments mj_JSONObject];
      
