@@ -68,6 +68,7 @@ class _HomePageState extends State<HomePage> {
     _features = [
       {
         'title': S.current.transfer_collection,
+        'bgColor': Color(0xFFF0F6F7),
         'btnList': [
           {
             'btnIcon': 'images/home/listIcon/home_list_transfer.png',
@@ -85,6 +86,7 @@ class _HomePageState extends State<HomePage> {
       },
       {
         'title': S.current.deposit_service,
+        'bgColor': Color(0xFFF7F5F0),
         'btnList': [
           {
             'btnIcon': 'images/home/listIcon/home_list_time_deposit.png',
@@ -102,6 +104,7 @@ class _HomePageState extends State<HomePage> {
       },
       {
         'title': S.current.loan_service,
+        'bgColor': Color(0xFFF2F0F7),
         'btnList': [
           {
             'btnIcon': 'images/home/listIcon/home_list_loan_apply.png',
@@ -135,33 +138,66 @@ class _HomePageState extends State<HomePage> {
 //        ]
 //      }
     ];
+    List<Widget> slivers = [
+      SliverToBoxAdapter(
+        child: _homeHeaderView(),
+      ),
+    ];
+    slivers.addAll(_getFeaturesNew(_features));
+    slivers.add(
+      SliverToBoxAdapter(
+        child: Container(
+          height: 20,
+        ),
+      ),
+    );
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: _homeAppbar(_opacity, _changeLangBtnTltle),
       body: Container(
         child: CustomScrollView(
           controller: _sctrollController,
-          slivers: [
-            SliverToBoxAdapter(
-              child: _homeHeaderView(),
-            ),
-            _characterName != "企业复核员" &&
-                    _characterName != "Enterprise Auditor" &&
-                    _characterName != ""
-                ? SliverFixedExtentList(
-                    delegate: SliverChildBuilderDelegate(
-                      _buildListItem,
-                      childCount: _features.length,
-                    ),
-                    itemExtent: 168.5,
-                  )
-                : SliverToBoxAdapter(),
-            SliverToBoxAdapter(
-              child: Container(
-                height: 20,
-              ),
-            ),
-          ],
+          slivers: slivers,
+          // [
+          //   SliverToBoxAdapter(
+          //     child: _homeHeaderView(),
+          //   ),
+          //   // _characterName != "企业复核员" &&
+          //   //         _characterName != "Enterprise Auditor" &&
+          //   //         _characterName != ""
+          //   //     ? SliverFixedExtentList(
+          //   //         delegate: SliverChildBuilderDelegate(
+          //   //           _buildListItem,
+          //   //           childCount: _features.length,
+          //   //         ),
+          //   //         itemExtent: 168.5,
+          //   //       )
+          //   //     : SliverToBoxAdapter(),
+          //   // SliverGrid(
+          //   //   delegate: SliverChildBuilderDelegate(
+          //   //     (BuildContext context, int index) {
+          //   //       return Container(
+          //   //         alignment: Alignment.center,
+          //   //         color: Colors.teal[100 * (index % 9)],
+          //   //         child: Text('Grid Item $index'),
+          //   //       );
+          //   //     },
+          //   //     childCount: 4,
+          //   //   ),
+          //   //   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          //   //     maxCrossAxisExtent: 200.0,
+          //   //     mainAxisSpacing: 10.0,
+          //   //     crossAxisSpacing: 10.0,
+          //   //     childAspectRatio: 4.0,
+          //   //   ),
+          //   // ),
+          //   // _getFeaturesNew(_features);
+          //   SliverToBoxAdapter(
+          //     child: Container(
+          //       height: 20,
+          //     ),
+          //   ),
+          // ],
         ),
       ),
     );
@@ -323,6 +359,10 @@ class _HomePageState extends State<HomePage> {
             width: MediaQuery.of(context).size.width,
             image: AssetImage('images/home/heaerIcon/home_header_bg.png'),
           ),
+          // Container(
+          //   width: MediaQuery.of(context).size.width,
+          //   color: HsgColors.homeMask,
+          // ),
           Container(
             margin: EdgeInsets.only(top: 60),
             padding: EdgeInsets.only(left: 20, right: 20),
@@ -342,7 +382,7 @@ class _HomePageState extends State<HomePage> {
                   child: _graphicButton(
                     S.of(context).transaction_details,
                     'images/home/heaerIcon/home_header_payment.png',
-                    40.0,
+                    25.0,
                     (MediaQuery.of(context).size.width - 50) / 2,
                     () {
                       Navigator.pushNamed(context, pageDetailList);
@@ -359,7 +399,7 @@ class _HomePageState extends State<HomePage> {
                   child: _graphicButton(
                     S.of(context).account_summary,
                     'images/home/heaerIcon/home_header_overview.png',
-                    40.0,
+                    25.0,
                     (MediaQuery.of(context).size.width - 50) / 2,
                     () {
                       print('账户总览');
@@ -680,26 +720,13 @@ class _HomePageState extends State<HomePage> {
         Container(
           padding: EdgeInsets.only(right: 15),
           height: 45,
-          child: Row(
-            children: [
-              Container(
-                width: 4,
-                height: 19,
-                margin: EdgeInsets.only(right: 15),
-                decoration: BoxDecoration(
-                  color: HsgColors.blueIcon,
-                  borderRadius: BorderRadius.circular(2.0),
-                ),
-              ),
-              Text(
-                data['title'],
-                style: TextStyle(
-                  color: HsgColors.firstDegreeText,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+          child: Text(
+            data['title'],
+            style: TextStyle(
+              color: HsgColors.firstDegreeText,
+              fontSize: 15.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         Container(
@@ -723,6 +750,51 @@ class _HomePageState extends State<HomePage> {
         child: _featuresDeatil,
       ),
     );
+  }
+
+  List<Widget> _getFeaturesNew(List data) {
+    List<Widget> _grids = [];
+    data.forEach((element) {
+      List<Map> btnList = element['btnList'];
+      SliverToBoxAdapter adapter = SliverToBoxAdapter(
+        child: Container(
+          padding: EdgeInsets.only(left: 18, right: 18, top: 25, bottom: 15),
+          child: Text(
+            element['title'],
+            style: TextStyle(
+              color: HsgColors.firstDegreeText,
+              fontSize: 17.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      );
+      SliverGrid grid = SliverGrid(
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            return _cellButton(
+              btnList[index],
+              element['bgColor'],
+            );
+          },
+          childCount: btnList.length,
+        ),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 5.0,
+          childAspectRatio: 3.5,
+        ),
+      );
+      SliverPadding padding = SliverPadding(
+        padding: EdgeInsets.only(left: 15, right: 15),
+        sliver: grid,
+      );
+      _grids.add(adapter);
+      _grids.add(padding);
+    });
+
+    return _grids;
   }
 
   //功能点击事件
@@ -832,8 +904,51 @@ class _HomePageState extends State<HomePage> {
                 title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: HsgColors.describeText,
-                  fontSize: 13,
+                  color: HsgColors.firstDegreeText,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _cellButton(
+    Map data,
+    Color bgColor,
+  ) {
+    return Container(
+      // margin: EdgeInsets.only(left: 15, right: 15),
+      // padding: EdgeInsets.only(left: 5, right: 5),
+      decoration: new BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+        color: bgColor,
+      ),
+      child: FlatButton(
+        onPressed: _featureClickFunction(data['btnTitle']),
+        child: Row(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: 13),
+              child: Image(
+                image: AssetImage(data['btnIcon']),
+                width: 24,
+                height: 24,
+              ),
+            ),
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(left: 15, right: 5),
+                child: Text(
+                  data['btnTitle'],
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: HsgColors.firstDegreeText,
+                    fontSize: 15,
+                  ),
                 ),
               ),
             ),
