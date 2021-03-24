@@ -92,6 +92,7 @@ import 'package:ebank_mobile/page/mine/feedback_page.dart';
 import 'package:ebank_mobile/page/mine/change_logPswd_page.dart';
 import 'package:ebank_mobile/page/mine/change_pay_page.dart';
 import 'package:ebank_mobile/page/mine/set_pay_page.dart';
+import 'package:ebank_mobile/page/openAccount/open_account_get_face_sign.dart';
 
 var pageHome = '/';
 var pageLogin = pageHome;
@@ -158,7 +159,8 @@ var pageUserAgreement = '/user_agreement_page';
 var pageApplication = '/my_appplication_page';
 var pageApplicationTaskApproval = '/application_task_approval_page';
 var pageAuthorizationTaskApproval = '/authorization_task_approval_page';
-var pageAuthorizationTaskApprovalHistoryDetail = '/authorization_task_approval_history_detail';
+var pageAuthorizationTaskApprovalHistoryDetail =
+    '/authorization_task_approval_history_detail';
 var pageContactCustomer = '/contact_customer_page';
 var pageTransferPlan = '/transfer_plan_page';
 var pageTransferPlanDetails = '/transfer_plan_details';
@@ -189,6 +191,7 @@ var pageOpenAccountIdentifyResultsFailure =
     '/open_account_identify_results_failure_page.dart';
 var pageOpenAccountIdentifySuccessfulFailure =
     '/open_account_identify_results_successful_page.dart';
+var pageOpenAccountGetFaceSign = '/open_account_get_face_sign.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -283,6 +286,7 @@ var appRoutes = {
       OpenAccountIdentifyResultsFailurePage(),
   pageOpenAccountIdentifySuccessfulFailure: (context) =>
       OpenAccountIdentifyResultsSuccessfulPage(),
+  pageOpenAccountGetFaceSign: (context) => OpenAccountGetFaceSignPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
