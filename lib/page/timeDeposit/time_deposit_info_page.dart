@@ -301,6 +301,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
       appBar: AppBar(
         title: Text(S.current.receipt_detail),
         centerTitle: true,
+        elevation: 1,
       ),
       body: Container(
         color: HsgColors.commonBackground,
