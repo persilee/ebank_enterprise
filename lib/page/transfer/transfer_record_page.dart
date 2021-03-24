@@ -18,6 +18,7 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_dotted_line.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -105,6 +106,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
   //没有数据时显示页面
   Container _noDataContainer(BuildContext context) {
+    HSProgressHUD.show();
+    Future.delayed(Duration(seconds: 1), () {
+      HSProgressHUD.dismiss();
+    });
     return Container(
       color: HsgColors.backgroundColor,
       width: MediaQuery.of(context).size.width,
@@ -143,8 +148,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     //添加转账记录
     for (int i = 0; i < _transferHistoryList.length; i++) {
       if (_position == 0) {
-        _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
         _isData = true;
+        _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
       }
       // else if ((_cradLists[_position] ==
       //         _transferHistoryList[i].paymentCardNo) ||
@@ -750,7 +755,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         _position = result;
         _card = _cradLists[result];
         paymentCardNos = [];
-        paymentCardNos.add(_card);
+        // paymentCardNos.add(_card);
       });
       print(paymentCardNos.toString());
       print("=====================");
@@ -775,7 +780,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       ),
       minDateTime: DateTime.parse('1900-01-01'),
       maxDateTime: DateTime.now(),
-      initialDateTime: DateTime.now(),
+      initialDateTime:
+          i == 0 ? DateTime.parse(_startDate) : DateTime.parse(_endDate),
       dateFormat: 'yyyy-MM-dd',
       locale: DateTimePickerLocale.zh_cn,
       //确定
@@ -908,6 +914,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     String userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
     // String loginName = '18033412021';
     // String userId = '778309634589982720';
+    // HSProgressHUD.show();
     TransferDataRepository()
         .getTransferRecord(
             GetTransferRecordReq(ccy, _endDate, _page, pageSize, paymentCardNos,
@@ -921,6 +928,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         }
         _loadMore = false;
       });
+      // HSProgressHUD.dismiss();
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
