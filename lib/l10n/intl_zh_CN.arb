@@ -570,6 +570,11 @@
   "openAccout_exit": "取消开户",
   "hot_countries": "热门国家",
   "select_country": "选择国家",
+  "face_sign_navTitle": "面签",
+   "face_sign_attention_regulations": "",
+  "face_sign_placeholdText":"请输入6位数字或字母的组合",
+  "face_sign_Interviews": "面签号码",
+  "face_sign_TipsTitle":"注意事项：\n1、“面签号码”于视频面签过程中，由朗华提供；\n2、面签前，请务必依照通知邮件指示，准备相关开户资料；\n3、请在光线充足、环境安静、网络稳定的地方进行面签；",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }

@@ -567,6 +567,11 @@
   "openAccout_exit": "Cancel",
   "hot_countries": "Hot Countries",
   "select_country": "Select Country",
+  "face_sign_navTitle": "Interviews",
+  "face_sign_attention_regulations":"",
+  "face_sign_placeholdText":"Please enter a combination of 6 digits or letters",
+  "face_sign_Interviews": "Interview number",
+  "face_sign_TipsTitle":"Note: \n1. The \"interview number\" will be provided by Longhua during the video interview process; \n2. Before the interview, please make sure to prepare the relevant account opening documents according to the instructions in the notification email; \n3. Please conduct the interview in a place with sufficient light, quiet environment and stable network.",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }
