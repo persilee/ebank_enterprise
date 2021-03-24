@@ -52,15 +52,29 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   // ignore: must_call_super
   void initState() {
-    _phoneNum.addListener(() {
-      _phoneNumListen = _phoneNum.text;
+    super.initState();
+    setState(() {
+      _phoneNum.addListener(() {
+        setState(() {
+          _phoneNumListen = _phoneNum.text;
+        });
+      });
+      _sms.addListener(() {
+        setState(() {
+          _smsListen = _sms.text;
+        });
+      });
+      _userName.addListener(() {
+        setState(() {
+          _userNameListen = _userName.text;
+        });
+        print("$_userNameListen>>>>>>>>>");
+      });
     });
-    _sms.addListener(() {
-      _smsListen = _sms.text;
-    });
-    _userName.addListener(() {
-      _userNameListen = _userName.text;
-    });
+  }
+
+  _phoneNumberChange(String phoneNumber) {
+    _phoneNumListen = phoneNumber;
   }
 
   @override
@@ -89,12 +103,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     //注册标题
                     getRegisterTitle(S.current.welcome_to_register),
                     //注册手机号
-                    getRegisterRegion(
-                      context,
-                      _phoneNum,
-                      _officeAreaCodeText,
-                      _selectRegionCode,
-                    ),
+                    getRegisterRegion(context, _phoneNum, _officeAreaCodeText,
+                        _selectRegionCode),
                     //输入用户名
                     getRegisterRow(
                         S.current.please_input_username, _userName, false),
@@ -221,6 +231,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   bool _submit() {
+    print('$_userNameListen--------------');
     if (_phoneNumListen != '' &&
         _userNameListen != '' &&
         _smsListen != '' &&

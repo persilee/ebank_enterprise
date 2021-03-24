@@ -39,6 +39,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   TextEditingController _newPwd = TextEditingController();
   TextEditingController _confimPwd = TextEditingController();
   TextEditingController _sms = TextEditingController();
+  String _phoneNumListen;
+  String _smsListen;
   Timer _timer;
   int countdownTime = 0;
 
@@ -50,6 +52,24 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     if (_timer != null) {
       _timer.cancel();
     }
+  }
+
+  @override
+  // ignore: must_call_super
+  void initState() {
+    super.initState();
+    setState(() {
+      _phoneNum.addListener(() {
+        setState(() {
+          _phoneNumListen = _phoneNum.text;
+        });
+      });
+      _sms.addListener(() {
+        setState(() {
+          _smsListen = _sms.text;
+        });
+      });
+    });
   }
 
   @override
@@ -219,7 +239,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   }
 
   bool _submit() {
-    if (_phoneNum.text != '' && _sms.text != '') {
+    if (_smsListen != '' && _phoneNumListen != '') {
       return true;
     } else {
       return false;

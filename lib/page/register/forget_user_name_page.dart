@@ -29,6 +29,8 @@ class ForgetUserName extends StatefulWidget {
 class _ForgetUserNameState extends State<ForgetUserName> {
   TextEditingController _phoneNum = TextEditingController();
   TextEditingController _sms = TextEditingController();
+  String _phoneNumListen;
+  String _smsListen;
   Timer _timer;
   int countdownTime = 0;
   String _accountName;
@@ -36,6 +38,25 @@ class _ForgetUserNameState extends State<ForgetUserName> {
 
   /// 区号
   String _officeAreaCodeText = '';
+
+  @override
+  // ignore: must_call_super
+  void initState() {
+    super.initState();
+    setState(() {
+      _phoneNum.addListener(() {
+        setState(() {
+          _phoneNumListen = _phoneNum.text;
+        });
+      });
+      _sms.addListener(() {
+        setState(() {
+          _smsListen = _sms.text;
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

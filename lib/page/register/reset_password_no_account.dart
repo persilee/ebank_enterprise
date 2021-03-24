@@ -22,6 +22,25 @@ class ResetPasswordNoAccount extends StatefulWidget {
 class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
   TextEditingController _newPassword = new TextEditingController();
   TextEditingController _oldPassword = new TextEditingController();
+  String _newPasswordListen;
+  String _oldPasswordListen;
+  @override
+  // ignore: must_call_super
+  void initState() {
+    setState(() {
+      _newPassword.addListener(() {
+        setState(() {
+          _newPasswordListen = _newPassword.text;
+        });
+      });
+      _oldPassword.addListener(() {
+        setState(() {
+          _oldPasswordListen = _oldPassword.text;
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,7 +145,7 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
   }
 
   bool _submit() {
-    if (_newPassword.text.length > 0 && _oldPassword.text.length > 0) {
+    if (_oldPasswordListen != '' && _newPasswordListen != '') {
       return true;
     } else {
       return false;

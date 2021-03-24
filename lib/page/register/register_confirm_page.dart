@@ -39,10 +39,14 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
   void initState() {
     setState(() {
       _newPassword.addListener(() {
-        _newPasswordListen = _newPassword.text;
+        setState(() {
+          _newPasswordListen = _newPassword.text;
+        });
       });
       _oldPassword.addListener(() {
-        _oldPasswordListen = _oldPassword.text;
+        setState(() {
+          _oldPasswordListen = _oldPassword.text;
+        });
       });
     });
   }

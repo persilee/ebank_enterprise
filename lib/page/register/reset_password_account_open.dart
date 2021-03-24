@@ -25,12 +25,26 @@ class ResetPasswordAccountOpen extends StatefulWidget {
 class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
   TextEditingController _userName = TextEditingController();
   TextEditingController _cardNumber = TextEditingController();
+  String _userNameListen;
+  String _cardNumberListen;
   String _certType = '';
   List<IdType> idInformationList = []; //证件类型信息
   String _certTypeKey; //身份校验的key
 
   @override
   void initState() {
+    setState(() {
+      _userName.addListener(() {
+        setState(() {
+          _userNameListen = _userName.text;
+        });
+      });
+      _cardNumber.addListener(() {
+        setState(() {
+          _cardNumberListen = _cardNumber.text;
+        });
+      });
+    });
     super.initState();
     _getIdCardList();
   }
@@ -185,8 +199,8 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
   }
 
   bool _submit() {
-    if (_userName.text.length > 0 &&
-        _cardNumber.text.length > 0 &&
+    if (_userNameListen != '' &&
+        _cardNumberListen != '' &&
         _certType.length > 0) {
       return true;
     } else {
