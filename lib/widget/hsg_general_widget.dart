@@ -6,6 +6,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/format_text_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -87,6 +88,7 @@ class TextFieldContainer extends StatelessWidget {
   final int length;
   final bool isRegEXp;
   final String regExp;
+  final bool isUpperCase;
   TextFieldContainer({
     Key key,
     @required this.title,
@@ -99,6 +101,7 @@ class TextFieldContainer extends StatelessWidget {
     this.length = 140,
     this.isRegEXp = false,
     this.regExp,
+    this.isUpperCase = false,
   }) : super(key: key);
 
   @override
@@ -133,6 +136,7 @@ class TextFieldContainer extends StatelessWidget {
                 isRegEXp
                     ? FilteringTextInputFormatter.allow(RegExp(regExp))
                     : LengthLimitingTextInputFormatter(length),
+                if (isUpperCase) UpperCaseTextFormatter(),
               ],
               onChanged: (text) {
                 callback();

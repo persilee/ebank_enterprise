@@ -58,7 +58,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   bool _isShowCompanyTypeOther = false;
 
   /// 下一步按钮是否能点击
-  bool _nextBtnEnabled = true; //false;
+  bool _nextBtnEnabled = false;
 
   ///公司名称（英文）输入监听
   TextEditingController _companyNameEngTEC = TextEditingController();
@@ -130,8 +130,9 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        elevation: 0,
+        elevation: 1,
         centerTitle: true,
+        // backgroundColor: HsgColors.primaryNew,
         title: Text(S.of(context).openAccout_basicInformation),
         // flexibleSpace: Container(
         //   decoration: BoxDecoration(

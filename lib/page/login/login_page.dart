@@ -6,6 +6,9 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/base_body.dart';
+import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -31,19 +34,18 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
-  var _changeLangBtnTltle = 'English'; // S.current.english;
+  var _changeLangBtnTltle = S.current.language1; // S.current.english;
 
   TextEditingController _accountTC =
-      TextEditingController(text: 'blk401'); //fangluyao
+      TextEditingController(text: 'blk501'); //fangluyao
   TextEditingController _passwordTC =
       TextEditingController(text: '4N0021S8'); //b0S25X5Y
-  var _account = 'blk401'; //'blk101';
+  var _account = 'blk501'; //'blk101';
   var _password = '4N0021S8'; //'4N0021S8';
 
   @override
   void initState() {
     super.initState();
-
     // 添加监听
     _accountTC.addListener(() {
       _account = _accountTC.text;
@@ -232,10 +234,6 @@ class _LoginPageState extends State<LoginPage> {
     _password = _passwordTC.text;
 
     String password = EncryptUtil.aesEncode(_password);
-
-    // LoginResp loginResp = await ApiClient()
-    //     .login(LoginReq(username: _account, password: password));
-    // print(loginResp.toJson());
     UserDataRepository()
         .login(LoginReq(username: _account, password: password), 'login')
         .then((value) {

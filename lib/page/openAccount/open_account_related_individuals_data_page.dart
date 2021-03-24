@@ -8,6 +8,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -45,7 +46,7 @@ class _RelatedIndividualsDataPageState
   String _nationalityText = '';
 
   /// 下一步按钮是否能点击
-  bool _nextBtnEnabled = true; //false;
+  bool _nextBtnEnabled = false;
 
   ///登记证件号码输入监听
   TextEditingController _documentNumberTEC = TextEditingController();
@@ -85,7 +86,7 @@ class _RelatedIndividualsDataPageState
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        elevation: 0,
+        elevation: 1,
         centerTitle: true,
         title:
             Text(S.of(context).openAccout_details_of_connected_parties_title),
@@ -501,7 +502,7 @@ class _RelatedIndividualsDataPageState
 
     if (result != null && result != false) {
       IdType data = _documentTypes[result];
-      _partner.partnerType = data.code;
+      _partner.partnerType = '001'; //data.code;
       setState(() {
         _categoryText = categoryList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
@@ -586,10 +587,12 @@ class _RelatedIndividualsDataPageState
 
   //提交快速开户录入的数据
   void _openAccountQuickSubmitData() async {
+    HSProgressHUD.show();
     //称谓
     OpenAccountRepository().quickAccountOpening(_dataReq, 'GetIdTypeReq').then(
       (value) {
         print(value);
+        HSProgressHUD.dismiss();
         if (value.businessId.length > 0) {
           Navigator.pushNamed(
             context,
@@ -600,6 +603,7 @@ class _RelatedIndividualsDataPageState
       },
     ).catchError(
       (e) {
+        HSProgressHUD.dismiss();
         Fluttertoast.showToast(
           msg: e.toString(),
           gravity: ToastGravity.CENTER,

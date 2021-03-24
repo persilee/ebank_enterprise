@@ -1,5 +1,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/home/hsg_home_page.dart';
+import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
 
@@ -56,19 +58,36 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   margin: EdgeInsets.only(left: 37.5, right: 37.5, top: 125),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
-                    color: HsgColors.accent,
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFF1775BA),
+                        Color(0xFF3A9ED1),
+                      ],
+                    ),
                   ),
                   child: Column(
                     children: [
                       Container(
-                        decoration: BoxDecoration(),
                         child: FlatButton(
                           child: Text(
                             S.current.complete,
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            Navigator.popAndPushNamed(context, pageHome);
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                              return LoginPage();
+                            }), (Route route) {
+                              //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
+                              print(route.settings?.name);
+                              if (route.settings?.name == "/") {
+                                return true; //停止关闭
+                              }
+                              return false; //继续关闭
+                            });
                           },
                         ),
                       )

@@ -22,6 +22,7 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
+import 'package:ebank_mobile/util/format_text_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 
@@ -192,6 +193,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   String _language = Intl.getCurrentLocale();
 
+  String middleBankSwift = '';
+
   @override
   void initState() {
     super.initState();
@@ -208,13 +211,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _rateCalculate();
       }
     });
-    // _middleBankSwiftController.addListener(() {
-    //   setState(() {
-    //     _middleBankSwiftController.text =
-    //         _middleBankSwiftController.text.toUpperCase();
-    //   });
-    //   print(_middleBankSwiftController.text + "===========================");
-    // });
   }
 
   @override
@@ -417,21 +413,29 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _companyController.text = listPartner.payeeName;
         _accountController.text = listPartner.payeeCardNo;
         _countryText = listPartner.district;
-        _getPayeeBank = listPartner.payeeBankLocalName == null
-            ? ""
-            : listPartner.payeeBankLocalName;
+        // _getPayeeBank = listPartner.payeeBankLocalName == null
+        //     ? ""
+        //     : listPartner.payeeBankLocalName;
+        _getPayeeBank = _language == 'zh_CN'
+            ? listPartner.payeeBankLocalName
+            : listPartner.payeeBankEngName;
         _bankSwiftController.text = listPartner.bankSwift;
+        _middleBankSwiftController.text = listPartner.midBankSwift;
+        // _transferFee = listPartner.
         _payeeAddressController.text = listPartner.payeeAddress;
+        _remarkController.text = listPartner.remark;
+        // _companyController.selection = TextSelection.collapsed(
+        //   affinity: TextAffinity.downstream,
+        //   offset: _companyController.text.length,
+        // );
         check = false;
-        print("===================================");
-        print(listPartner.payeeBankLocalName);
-        print(listPartner.district);
       }
     });
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.transfer_type_1),
         centerTitle: true,
+        elevation: 1,
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -549,12 +553,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             _getLine(),
             //银行SWIFT
             _getInputColumn(S.current.bank_swift, S.current.please_input, 11,
-                true, "[a-zA-Z]", _bankSwiftController),
+                true, "[a-zA-Z]", _bankSwiftController,
+                isUpperCase: true),
             _getLine(),
 
             //中间行
             _getInputColumn(S.current.middle_bank_swift, S.current.not_required,
-                11, true, "[a-zA-Z]", _middleBankSwiftController),
+                11, true, "[a-zA-Z]", _middleBankSwiftController,
+                isUpperCase: true),
             _getLine(),
             //收款地址
             _getAddress(S.current.collection_address, S.current.please_input,
@@ -626,6 +632,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   _accountController.text = rowListPartner.payeeCardNo;
                   _countryText = rowListPartner.district;
                   // _getPayeeBank = rowListPartner.payeeBankLocalName;
+                  _getPayeeBank = _language == 'zh_CN'
+                      ? rowListPartner.payeeBankLocalName
+                      : rowListPartner.payeeBankEngName;
+                  _bankSwiftController.text = rowListPartner.bankSwift;
+                  _payeeAddressController.text = rowListPartner.payeeAddress;
                   _bankSwiftController.text = rowListPartner.bankSwift;
                   _payeeAddressController.text = rowListPartner.payeeAddress;
                 } else {}
@@ -782,7 +793,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //获取输入行
   _getInputColumn(String leftText, String righteText, int length, bool isRegExp,
-      String regExp, TextEditingController _controller) {
+      String regExp, TextEditingController _controller,
+      {bool isUpperCase = false}) {
     var rightExpand = Expanded(
       child: Container(
         child: TextField(
@@ -799,6 +811,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             isRegExp
                 ? FilteringTextInputFormatter.allow(RegExp(regExp))
                 : LengthLimitingTextInputFormatter(length),
+            if (isUpperCase) UpperCaseTextFormatter(),
           ],
           decoration: InputDecoration(
             border: InputBorder.none,

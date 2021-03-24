@@ -68,6 +68,7 @@ class _HomePageState extends State<HomePage> {
     _features = [
       {
         'title': S.current.transfer_collection,
+        'bgColor': Color(0xFFF0F6F7),
         'btnList': [
           {
             'btnIcon': 'images/home/listIcon/home_list_transfer.png',
@@ -85,6 +86,7 @@ class _HomePageState extends State<HomePage> {
       },
       {
         'title': S.current.deposit_service,
+        'bgColor': Color(0xFFF7F5F0),
         'btnList': [
           {
             'btnIcon': 'images/home/listIcon/home_list_time_deposit.png',
@@ -102,6 +104,7 @@ class _HomePageState extends State<HomePage> {
       },
       {
         'title': S.current.loan_service,
+        'bgColor': Color(0xFFF2F0F7),
         'btnList': [
           {
             'btnIcon': 'images/home/listIcon/home_list_loan_apply.png',
@@ -135,33 +138,26 @@ class _HomePageState extends State<HomePage> {
 //        ]
 //      }
     ];
+    List<Widget> slivers = [
+      SliverToBoxAdapter(
+        child: _homeHeaderView(),
+      ),
+    ];
+    slivers.addAll(_getFeaturesNew(_features));
+    slivers.add(
+      SliverToBoxAdapter(
+        child: Container(
+          height: 30,
+        ),
+      ),
+    );
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: _homeAppbar(_opacity, _changeLangBtnTltle),
       body: Container(
         child: CustomScrollView(
           controller: _sctrollController,
-          slivers: [
-            SliverToBoxAdapter(
-              child: _homeHeaderView(),
-            ),
-            _characterName != "企业复核员" &&
-                    _characterName != "Enterprise Auditor" &&
-                    _characterName != ""
-                ? SliverFixedExtentList(
-                    delegate: SliverChildBuilderDelegate(
-                      _buildListItem,
-                      childCount: _features.length,
-                    ),
-                    itemExtent: 168.5,
-                  )
-                : SliverToBoxAdapter(),
-            SliverToBoxAdapter(
-              child: Container(
-                height: 20,
-              ),
-            ),
-          ],
+          slivers: slivers,
         ),
       ),
     );
@@ -323,6 +319,10 @@ class _HomePageState extends State<HomePage> {
             width: MediaQuery.of(context).size.width,
             image: AssetImage('images/home/heaerIcon/home_header_bg.png'),
           ),
+          // Container(
+          //   width: MediaQuery.of(context).size.width,
+          //   color: HsgColors.homeMask,
+          // ),
           Container(
             margin: EdgeInsets.only(top: 60),
             padding: EdgeInsets.only(left: 20, right: 20),
@@ -342,10 +342,9 @@ class _HomePageState extends State<HomePage> {
                   child: _graphicButton(
                     S.of(context).transaction_details,
                     'images/home/heaerIcon/home_header_payment.png',
-                    40.0,
+                    25.0,
                     (MediaQuery.of(context).size.width - 50) / 2,
                     () {
-                      print('收支明细');
                       Navigator.pushNamed(context, pageDetailList);
                     },
                   ),
@@ -360,7 +359,7 @@ class _HomePageState extends State<HomePage> {
                   child: _graphicButton(
                     S.of(context).account_summary,
                     'images/home/heaerIcon/home_header_overview.png',
-                    40.0,
+                    25.0,
                     (MediaQuery.of(context).size.width - 50) / 2,
                     () {
                       print('账户总览');
@@ -442,7 +441,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       height: 25,
       decoration: BoxDecoration(
-        color: Color(0xff5662fb).withOpacity(0.66), //HsgColors.accent,
+        color: Color(0xff3394D4).withOpacity(0.64), //HsgColors.accent,
         borderRadius: BorderRadius.circular(12.5), //
       ),
       padding: EdgeInsets.fromLTRB(5, 0, 12, 0),
@@ -664,66 +663,49 @@ class _HomePageState extends State<HomePage> {
   }
 
   ///底下列表
-  Widget _buildListItem(BuildContext context, int index) {
-    return ListTile(
-      title: _getFeatures(_features[index]),
-      onTap: () {
-        print('listView的单元格被点击了');
-      },
-    );
-  }
-
-  ///列表单元格
-  Widget _getFeatures(Map data) {
-    //单元格详情
-    Column _featuresDeatil = Column(
-      children: [
-        Container(
-          padding: EdgeInsets.only(right: 15),
-          height: 45,
-          child: Row(
-            children: [
-              Container(
-                width: 4,
-                height: 19,
-                margin: EdgeInsets.only(right: 15),
-                decoration: BoxDecoration(
-                  color: HsgColors.blueIcon,
-                  borderRadius: BorderRadius.circular(2.0),
-                ),
-              ),
-              Text(
-                data['title'],
-                style: TextStyle(
-                  color: HsgColors.firstDegreeText,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+  List<Widget> _getFeaturesNew(List data) {
+    List<Widget> _grids = [];
+    data.forEach((element) {
+      List<Map> btnList = element['btnList'];
+      SliverToBoxAdapter adapter = SliverToBoxAdapter(
+        child: Container(
+          padding: EdgeInsets.only(left: 18, right: 18, top: 25, bottom: 15),
+          child: Text(
+            element['title'],
+            style: TextStyle(
+              color: HsgColors.firstDegreeText,
+              fontSize: 17.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-        Container(
-          color: HsgColors.divider,
-          height: 0.5,
+      );
+      SliverGrid grid = SliverGrid(
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            return _cellButton(
+              btnList[index],
+              element['bgColor'],
+            );
+          },
+          childCount: btnList.length,
         ),
-        Container(
-          height: 100,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: _craphicBtns(data),
-          ),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 5.0,
+          childAspectRatio: 3.5,
         ),
-      ],
-    );
+      );
+      SliverPadding padding = SliverPadding(
+        padding: EdgeInsets.only(left: 15, right: 15),
+        sliver: grid,
+      );
+      _grids.add(adapter);
+      _grids.add(padding);
+    });
 
-    return Container(
-      padding: EdgeInsets.only(top: 10),
-      child: Card(
-        shadowColor: Color(0x46529F2E),
-        child: _featuresDeatil,
-      ),
-    );
+    return _grids;
   }
 
   //功能点击事件
@@ -770,42 +752,6 @@ class _HomePageState extends State<HomePage> {
     };
   }
 
-  ///列表单元格的下面三个按钮和两条线
-  List<Widget> _craphicBtns(Map data) {
-    List<Widget> btns = [];
-    List dataList = data['btnList'];
-
-    for (var i = 0; i < dataList.length; i++) {
-      Map btnData = dataList[i];
-      btns.add(
-        Container(
-          child: Row(
-            children: [
-              _graphicButton(
-                btnData['btnTitle'],
-                btnData['btnIcon'],
-                35.0,
-                (MediaQuery.of(context).size.width - 50) /
-                    (dataList.length > 0 ? dataList.length : 1),
-                _featureClickFunction(btnData['btnTitle']),
-              ),
-              Container(
-                //假装没有第三条竖线
-                color: (i < dataList.length - 1)
-                    ? HsgColors.divider
-                    : Colors.white,
-                height: 23,
-                width: 0.5,
-              )
-            ],
-          ),
-        ),
-      );
-    }
-
-    return btns;
-  }
-
   ///上图下文字的按钮
   Widget _graphicButton(String title, String iconName, double iconWidth,
       double btnWidth, VoidCallback onClick) {
@@ -833,8 +779,54 @@ class _HomePageState extends State<HomePage> {
                 title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: HsgColors.describeText,
-                  fontSize: 13,
+                  color: HsgColors.firstDegreeText,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  ///网格单元按钮
+  Widget _cellButton(
+    Map data,
+    Color bgColor,
+  ) {
+    return Container(
+      // margin: EdgeInsets.only(left: 15, right: 15),
+      // padding: EdgeInsets.only(left: 5, right: 5),
+      decoration: new BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+        color: bgColor,
+      ),
+      child: FlatButton(
+        onPressed: _featureClickFunction(data['btnTitle']),
+        child: Row(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: 8),
+              child: Image(
+                image: AssetImage(data['btnIcon']),
+                width: 24,
+                height: 24,
+              ),
+            ),
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(left: 12, right: 5),
+                child: Text(
+                  data['btnTitle'],
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: HsgColors.firstDegreeText,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ),

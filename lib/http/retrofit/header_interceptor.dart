@@ -7,13 +7,11 @@ class HeaderInterceptor extends Interceptor {
   Future onRequest(RequestOptions options) async {
     String token = await SpUtil.getString(ConfigKey.NET_TOKEN);
     String locale = await SpUtil.getString(ConfigKey.LANGUAGE);
-    String loginName = await SpUtil.getString(ConfigKey.USER_ACCOUNT);
-    String userId = await SpUtil.getString(ConfigKey.USER_ID);
+    // String loginName =  SpUtil.getString(ConfigKey.USER_ACCOUNT);
+    // String userId = SpUtil.getString(ConfigKey.USER_ID);
     options.headers.addAll({'x-kont-appkey': '6000000514984255'});
     options.headers.addAll({'x_kont_token': token});
     options.headers.addAll({'x_kont_locale': locale});
-    // options.extra.addAll({'loginname': loginName});
-    // options.extra.addAll({'userId': userId});
 
     return options;
   }
