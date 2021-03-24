@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
     _features = [
       {
         'title': S.current.transfer_collection,
-        'bgColor': Colors.yellow,
+        'bgColor': Color(0xFFF0F6F7),
         'btnList': [
           {
             'btnIcon': 'images/home/listIcon/home_list_transfer.png',
@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
       },
       {
         'title': S.current.deposit_service,
-        'bgColor': Colors.yellow,
+        'bgColor': Color(0xFFF7F5F0),
         'btnList': [
           {
             'btnIcon': 'images/home/listIcon/home_list_time_deposit.png',
@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
       },
       {
         'title': S.current.loan_service,
-        'bgColor': Colors.yellow,
+        'bgColor': Color(0xFFF2F0F7),
         'btnList': [
           {
             'btnIcon': 'images/home/listIcon/home_list_loan_apply.png',
@@ -758,13 +758,12 @@ class _HomePageState extends State<HomePage> {
       List<Map> btnList = element['btnList'];
       SliverToBoxAdapter adapter = SliverToBoxAdapter(
         child: Container(
-          padding: EdgeInsets.only(left: 18, right: 18, top: 25),
-          height: 45,
+          padding: EdgeInsets.only(left: 18, right: 18, top: 25, bottom: 15),
           child: Text(
             element['title'],
             style: TextStyle(
               color: HsgColors.firstDegreeText,
-              fontSize: 15.0,
+              fontSize: 17.0,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -780,15 +779,19 @@ class _HomePageState extends State<HomePage> {
           },
           childCount: btnList.length,
         ),
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200.0,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
           mainAxisSpacing: 10.0,
-          crossAxisSpacing: 10.0,
-          childAspectRatio: 4.0,
+          crossAxisSpacing: 5.0,
+          childAspectRatio: 3.5,
         ),
       );
+      SliverPadding padding = SliverPadding(
+        padding: EdgeInsets.only(left: 15, right: 15),
+        sliver: grid,
+      );
       _grids.add(adapter);
-      _grids.add(grid);
+      _grids.add(padding);
     });
 
     return _grids;
@@ -916,32 +919,41 @@ class _HomePageState extends State<HomePage> {
     Map data,
     Color bgColor,
   ) {
-    return FlatButton(
-      onPressed: _featureClickFunction(data['btnTitle']),
-      color: bgColor,
-      child: Row(
-        // mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: 13),
-            child: Image(
-              image: AssetImage(data['btnIcon']),
-              width: 24,
-              height: 24,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 15, right: 13),
-            child: Text(
-              data['btnTitle'],
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: HsgColors.firstDegreeText,
-                fontSize: 15,
+    return Container(
+      // margin: EdgeInsets.only(left: 15, right: 15),
+      // padding: EdgeInsets.only(left: 5, right: 5),
+      decoration: new BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+        color: bgColor,
+      ),
+      child: FlatButton(
+        onPressed: _featureClickFunction(data['btnTitle']),
+        child: Row(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: 13),
+              child: Image(
+                image: AssetImage(data['btnIcon']),
+                width: 24,
+                height: 24,
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(left: 15, right: 5),
+                child: Text(
+                  data['btnTitle'],
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: HsgColors.firstDegreeText,
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
