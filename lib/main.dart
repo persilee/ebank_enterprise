@@ -80,11 +80,15 @@ class _HSGBankAppState extends State<HSGBankApp> {
       theme: ThemeData(
         appBarTheme: AppBarTheme(
           textTheme: TextTheme(
-            headline6: TextStyle(fontStyle: FontStyle.normal, fontSize: 18),
+            headline6: TextStyle(
+              fontStyle: FontStyle.normal,
+              fontSize: 18,
+              color: Color(0xff262626),
+            ),
           ),
         ),
         splashColor: HsgColors.itemClickColor,
-        primaryColor: HsgColors.primary,
+        primaryColor: HsgColors.primaryLight,
         primaryColorDark: HsgColors.primaryDark,
         backgroundColor: HsgColors.commonBackground,
         dividerTheme:
