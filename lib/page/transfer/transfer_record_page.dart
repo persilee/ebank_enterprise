@@ -340,6 +340,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       height: 320,
       padding: EdgeInsets.all(10),
       child: Material(
+        color: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -353,12 +354,15 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             _timeText(intl.S.current.amount),
             _amountDuration(),
             //按钮
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                _resetButton(popcontext),
-                _confimrButton(),
-              ],
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  _resetButton(popcontext),
+                  _confimrButton(),
+                ],
+              ),
             ),
           ],
         ),
@@ -443,7 +447,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                 color: HsgColors.textHintColor,
               ),
               hintText: intl.S.current.not_required,
-              contentPadding: EdgeInsets.all(0),
+              contentPadding: EdgeInsets.fromLTRB(5, 5, 0, 0),
+              // contentPadding: EdgeInsets.all(0),
               border:
                   // InputBorder.none,
                   OutlineInputBorder(
@@ -502,8 +507,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   //确定按钮
   Widget _confimrButton() {
     return Container(
-      margin: EdgeInsets.all(4),
-      width: 70,
+      margin: EdgeInsets.all(5),
+      width: 75,
       height: 30,
       decoration: BoxDecoration(
         color: HsgColors.blueTextColor,
@@ -535,7 +540,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   //重置按钮
   Widget _resetButton(BuildContext popcontext) {
     return Container(
-      width: 70,
+      width: 75,
       height: 30,
       margin: EdgeInsets.all(5),
       decoration: BoxDecoration(

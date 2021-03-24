@@ -1,4 +1,7 @@
-import 'dart:ffi';
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+///转账金额和账号部分
+/// Author: fangluyao
+/// Date: 2021-03-16
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -118,7 +121,7 @@ class TransferAccount extends StatelessWidget {
   //金额输入
   Widget _inputAmount(context) {
     return Container(
-      width: MediaQuery.of(context).size.width / 2.5,
+      width: MediaQuery.of(context).size.width / 2.7,
       child: TextField(
         //是否自动更正
         autocorrect: false,
@@ -185,7 +188,14 @@ class TransferAccount extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(S.current.transfer_from_account),
+          Container(
+            width: 120,
+            child: Text(
+              S.current.transfer_from_account,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
           InkWell(
             onTap: () {
               accountDialog();
@@ -252,7 +262,14 @@ class TransferAccount extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(S.current.estimated_collection_amount),
+            Container(
+              width: 150,
+              child: Text(
+                S.current.estimated_collection_amount,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
             Text(FormatUtil.formatSringToMoney(amount)),
           ],
         ));

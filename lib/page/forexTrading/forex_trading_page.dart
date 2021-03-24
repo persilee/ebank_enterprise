@@ -401,12 +401,14 @@ class SelectInkWell extends StatelessWidget {
                       style: TextStyle(color: HsgColors.textHintColor))
                   : Text(item),
             ),
-            Image(
-              color: HsgColors.firstDegreeText,
-              image:
-                  AssetImage('images/home/listIcon/home_list_more_arrow.png'),
-              width: 7,
-              height: 10,
+            Container(
+              child: Image(
+                color: HsgColors.firstDegreeText,
+                image:
+                    AssetImage('images/home/listIcon/home_list_more_arrow.png'),
+                width: 7,
+                height: 10,
+              ),
             ),
           ],
         ),

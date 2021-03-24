@@ -22,6 +22,7 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -32,6 +33,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
 import 'data/transfer_international_data.dart';
@@ -168,7 +170,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   List<String> _transferCcyList = [];
 
   //本地币种
-  String _localeCcy = 'CNY';
+  String _localeCcy = '';
 
   //账户选择
   String _account = '';
@@ -199,11 +201,20 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
     _transferMoneyController.addListener(() {
       if (_payCcy == _transferCcy) {
-        _amount = _transferMoneyController.text;
+        setState(() {
+          _amount = _transferMoneyController.text;
+        });
       } else {
         _rateCalculate();
       }
     });
+    // _middleBankSwiftController.addListener(() {
+    //   setState(() {
+    //     _middleBankSwiftController.text =
+    //         _middleBankSwiftController.text.toUpperCase();
+    //   });
+    //   print(_middleBankSwiftController.text + "===========================");
+    // });
   }
 
   @override
@@ -219,30 +230,30 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     super.dispose();
   }
 
-  //付款方地址
-  _addressChange(String address) {
-    payerAddress = address;
-  }
+  // //付款方地址
+  // _addressChange(String address) {
+  //   payerAddress = address;
+  // }
 
-  //收款方地址
-  _addressTwoChange(String addressTwo) {
-    payeeAddress = addressTwo;
-  }
+  // //收款方地址
+  // _addressTwoChange(String addressTwo) {
+  //   payeeAddress = addressTwo;
+  // }
 
-  //中间行Swift
-  _middleSwift(String middleSwift) {
-    intermediateBankSwift = middleSwift;
-  }
+  // //中间行Swift
+  // _middleSwift(String middleSwift) {
+  //   intermediateBankSwift = middleSwift;
+  // }
 
-  //银行Swift
-  _bankSwift(String bankSwifts) {
-    bankSwift = bankSwifts;
-  }
+  // //银行Swift
+  // _bankSwift(String bankSwifts) {
+  //   bankSwift = bankSwifts;
+  // }
 
-  //转账附言
-  _transferInputChange(String transfer) {
-    remark = transfer;
-  }
+  // //转账附言
+  // _transferInputChange(String transfer) {
+  //   remark = transfer;
+  // }
 
   //币种弹窗
   Future payCcyDialog() async {
@@ -321,25 +332,23 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //根据货币类型拿余额
-
-  // ignore: unused_element
-  _getavaBal(String changedCcyTitle) {
-    Future.wait({
-      CardDataRepository().getCardBalByCardNo(
-          GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
-    }).then((value) {
-      value.forEach((element) {
-        // 通过货币查询余额
-        if (element is GetSingleCardBalResp) {
-          setState(() {
-            bals.clear();
-            bals.add(element.cardListBal);
-            if (bals.contains(changedCcyTitle)) {}
-          });
-        }
-      });
-    });
-  }
+  // _getavaBal(String changedCcyTitle) {
+  //   Future.wait({
+  //     CardDataRepository().getCardBalByCardNo(
+  //         GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
+  //   }).then((value) {
+  //     value.forEach((element) {
+  //       // 通过货币查询余额
+  //       if (element is GetSingleCardBalResp) {
+  //         setState(() {
+  //           bals.clear();
+  //           bals.add(element.cardListBal);
+  //           if (bals.contains(changedCcyTitle)) {}
+  //         });
+  //       }
+  //     });
+  //   });
+  // }
 
   //选择收款银行
   _selectBank() {
@@ -433,7 +442,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         child: Container(
           color: HsgColors.commonBackground,
           child: CustomScrollView(
-            slivers: <Widget>[
+            slivers: [
               _gaySliver,
               TransferAccount(
                 payCcy: _payCcy,
@@ -448,109 +457,35 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                 transferCcyDialog: transferCcyDialog,
                 accountDialog: _accountDialog,
               ),
-              SliverToBoxAdapter(
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  margin: EdgeInsets.only(top: 20),
-                  color: Colors.white,
-                  child: Column(
-                    children: [
-                      _getAddress(
-                          S.current.remittance_address,
-                          S.current.please_input,
-                          _addressChange,
-                          _payerAddressController),
-                      _getLine(),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: _getRedText(S.current.remitter_address_prompt),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              _payerAddress(),
               _payeeWidget(),
-              SliverToBoxAdapter(
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  color: Colors.white,
-                  margin: EdgeInsets.only(bottom: 20),
-                  child: Column(
-                    children: [
-                      _getRedText(
-                          S.current.international_transfer_account_prompt),
-                      //国家地区
-                      _getSelectColumn(
-                          S.current.state_area, _countryText, _selectCountry),
-                      _getLine(),
-                      //收款银行
-                      _getSelectColumn(
-                          S.current.receipt_bank, _getPayeeBank, _selectBank),
-                      _getLine(),
-                      //银行SWIFT
-                      _getInputColumn(
-                          S.current.bank_swift,
-                          S.current.please_input,
-                          _bankSwift,
-                          11,
-                          _bankSwiftController),
-                      _getLine(),
-
-                      //中间行
-                      _getInputColumn(
-                          S.current.middle_bank_swift,
-                          S.current.not_required,
-                          _middleSwift,
-                          11,
-                          _middleBankSwiftController),
-                      _getLine(),
-                      //收款地址
-                      _getAddress(
-                          S.current.collection_address,
-                          S.current.please_input,
-                          _addressTwoChange,
-                          _payeeAddressController),
-                      _getLine(),
-                    ],
-                  ),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  child: Column(
-                    children: [
-                      //转账费用
-                      _getSelectColumn(S.current.Transfer_fee, _transferFee,
-                          _selectTransferFee),
-                      _getLine(),
-                      //汇款用途
-                      _getSelectColumn(
-                          S.current.remittance_usage, _feeUse, _selectFeeUse),
-                      // SelectInkWell(
-                      //   title: S.current.remittance_usage,
-                      //   item: _feeUse,
-                      //   onTap: () {
-                      //     _selectFeeUse();
-                      //   },
-                      // ),
-                      _getLine(),
-                      //转账附言
-                      _getInputColumn(
-                          S.current.transfer_postscript,
-                          S.current.not_required,
-                          _transferInputChange,
-                          140,
-                          _remarkController),
-                      _getLine()
-                    ],
-                  ),
-                ),
-              ),
+              _fourWidget(),
+              _fiveWidget(),
               _submitButton(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  //汇款地址
+  Widget _payerAddress() {
+    return SliverToBoxAdapter(
+      child: Container(
+        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+        margin: EdgeInsets.only(top: 20),
+        color: Colors.white,
+        child: Column(
+          children: [
+            _getAddress(S.current.remittance_address, S.current.please_input,
+                _payerAddressController),
+            _getLine(),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              child: _getRedText(S.current.remitter_address_prompt),
+            ),
+          ],
         ),
       ),
     );
@@ -575,6 +510,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               // callback: _boolBut,
               isWidget: true,
               length: 35,
+              isRegEXp: true,
+              regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
             ),
             TextFieldContainer(
               title: S.current.receipt_side_account,
@@ -583,7 +520,78 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               controller: _accountController,
               // callback: _boolBut,
               length: 20,
+              isRegEXp: true,
+              regExp: '[0-9]',
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  //第四部分
+  Widget _fourWidget() {
+    return SliverToBoxAdapter(
+      child: Container(
+        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+        color: Colors.white,
+        margin: EdgeInsets.only(bottom: 20),
+        child: Column(
+          children: [
+            _getRedText(S.current.international_transfer_account_prompt),
+            //国家地区
+            _getSelectColumn(
+                S.current.state_area, _countryText, _selectCountry),
+            _getLine(),
+            //收款银行
+            _getSelectColumn(
+                S.current.receipt_bank, _getPayeeBank, _selectBank),
+            _getLine(),
+            //银行SWIFT
+            _getInputColumn(S.current.bank_swift, S.current.please_input, 11,
+                true, "[a-zA-Z]", _bankSwiftController),
+            _getLine(),
+
+            //中间行
+            _getInputColumn(S.current.middle_bank_swift, S.current.not_required,
+                11, true, "[a-zA-Z]", _middleBankSwiftController),
+            _getLine(),
+            //收款地址
+            _getAddress(S.current.collection_address, S.current.please_input,
+                _payeeAddressController),
+            _getLine(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  //第五部分
+  Widget _fiveWidget() {
+    return SliverToBoxAdapter(
+      child: Container(
+        color: Colors.white,
+        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+        child: Column(
+          children: [
+            //转账费用
+            _getSelectColumn(
+                S.current.Transfer_fee, _transferFee, _selectTransferFee),
+            _getLine(),
+            //汇款用途
+            _getSelectColumn(
+                S.current.remittance_usage, _feeUse, _selectFeeUse),
+            _getLine(),
+            //转账附言
+            _getInputColumn(
+              S.current.transfer_postscript,
+              S.current.not_required,
+              140,
+              false,
+              '',
+              _remarkController,
+            ),
+            _getLine()
           ],
         ),
       ),
@@ -649,10 +657,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //获取地址
-  _getAddress(
-      String topText,
-      String inputText,
-      Function(String inputStr) nameChange,
+  _getAddress(String topText, String inputText,
       TextEditingController _payerAddressController) {
     var _topRow = [
       Container(
@@ -776,9 +781,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   //获取输入行
-  _getInputColumn(String leftText, String righteText,
-      Function(String inputStr) moneyChange, int length,
-      [TextEditingController _controller]) {
+  _getInputColumn(String leftText, String righteText, int length, bool isRegExp,
+      String regExp, TextEditingController _controller) {
     var rightExpand = Expanded(
       child: Container(
         child: TextField(
@@ -787,14 +791,15 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           //是否自动获得焦点
           autofocus: false,
           controller: _controller,
-          onChanged: (payeeName) {
-            moneyChange(payeeName);
-          },
+          onChanged: (text) {},
           textAlign: TextAlign.right,
+          // textCapitalization: TextCapitalization.characters,
           inputFormatters: <TextInputFormatter>[
             LengthLimitingTextInputFormatter(length),
+            isRegExp
+                ? FilteringTextInputFormatter.allow(RegExp(regExp))
+                : LengthLimitingTextInputFormatter(length),
           ],
-          textCapitalization: TextCapitalization.characters,
           decoration: InputDecoration(
             border: InputBorder.none,
             hintText: righteText,
@@ -893,7 +898,10 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     );
   }
 
-  _loadTransferData() {
+  _loadTransferData() async {
+    final prefs = await SharedPreferences.getInstance();
+    _localeCcy = prefs.getString(ConfigKey.LOCAL_CCY);
+
     Future.wait({
       CardDataRepository().getCardList('GetCardList'),
     }).then((value) {
