@@ -230,7 +230,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
             _screenText(S.current.deposit_time_limit),
             _checkTermButton(_changedTerm, popcontext),
             _screenBtnRow(popcontext),
-            // _bottomBox(),
           ],
         ),
       ),
@@ -437,15 +436,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           ),
         ],
       ),
-    );
-  }
-
-  //弹窗底部
-  Widget _bottomBox() {
-    return Container(
-      color: Colors.white,
-      width: MediaQuery.of(context).size.width - 36,
-      height: 240,
     );
   }
 
