@@ -114,10 +114,49 @@ class _TransferPageState extends State<TransferPage> {
 
     //导航栏
     section.add(
+      // SliverAppBar(
+      //   pinned: true,
+      //   title: Text(S.of(context).transfer_features),
+      //   backgroundColor: Color(0xFF1775BA),
+      // ),
       SliverAppBar(
-        pinned: true,
         title: Text(S.of(context).transfer_features),
-        backgroundColor: Color(0xFF1775BA),
+        pinned: true,
+        backgroundColor: Colors.yellowAccent[300],
+        floating: true,
+        expandedHeight: 175.0,
+        flexibleSpace: FlexibleSpaceBar(
+          // title: Text(S.of(context).transfer_features),
+          background: Container(
+            // color: Color(0xFF1775BA),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [
+                Color(0xFF1775BA),
+                Color(0xFF3A9ED1),
+              ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+            ),
+            height: 110,
+            child: _graphicButton(
+              gridData[0]['btnTitle'],
+              gridData[0]['btnIcon'],
+              35,
+                  () {
+                String title = gridData[0]['btnTitle'];
+                if (S.current.transfer_type_0 == title) {
+                  //行内转账
+                  //  go2Detail(cards[1]);
+                  Navigator.pushNamed(context, pageTransferInternal);
+                } else if (S.of(context).transfer_type_1 == title) {
+                  //'跨行转账'
+                  Navigator.pushNamed(context, pageTrasferInternational);
+                } else if (S.current.transfer_record == title) {
+                  //转账记录
+                  Navigator.pushNamed(context, pageTransferRecord);
+                }
+              },
+            ),
+          ),
+        ),
       ),
     );
 
@@ -132,7 +171,7 @@ class _TransferPageState extends State<TransferPage> {
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           return Container(
-            color: Color(0xFF1775BA),
+            // color: Color(0xFF1775BA),
             // decoration: BoxDecoration(
             //   gradient: LinearGradient(colors: [
             //     Color(0xFF1775BA),

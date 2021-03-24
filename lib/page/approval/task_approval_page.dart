@@ -55,6 +55,9 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   void initState() {
     super.initState();
     _controller = ScrollController();
+    _controller.addListener(() {
+      print(_controller.position);
+    });
     //监听输入框
     focusNode.addListener(() {
       bool hasFocus = focusNode.hasFocus;
@@ -208,11 +211,15 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
           if (buttonText == S.current.approval_lock) {
             _toggle();
             _doClaimTask();
-            _controller.animateTo(
-              _controller.position.maxScrollExtent,
-              duration: Duration(milliseconds: 100),
-              curve: Curves.linear,
-            );
+            print(_controller.position.maxScrollExtent);
+            WidgetsBinding.instance.addPostFrameCallback((callback){
+              print("addPostFrameCallback be invoke");
+              _controller.animateTo(
+                _controller.position.maxScrollExtent,
+                duration: Duration(milliseconds: 500),
+                curve: Curves.linear,
+              );
+            });
           } else {
             if (comment.length != 0) {
               if (buttonText == S.current.reject_to_sponsor ||
