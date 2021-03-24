@@ -22,6 +22,7 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
+import 'package:ebank_mobile/util/format_text_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 
@@ -208,13 +209,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _rateCalculate();
       }
     });
-    // _middleBankSwiftController.addListener(() {
-    //   setState(() {
-    //     _middleBankSwiftController.text =
-    //         _middleBankSwiftController.text.toUpperCase();
-    //   });
-    //   print(_middleBankSwiftController.text + "===========================");
-    // });
   }
 
   @override
@@ -554,7 +548,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
             //中间行
             _getInputColumn(S.current.middle_bank_swift, S.current.not_required,
-                11, true, "[a-zA-Z]", _middleBankSwiftController),
+                11, true, "[a-zA-Z]", _middleBankSwiftController, isUpperCase: true),
             _getLine(),
             //收款地址
             _getAddress(S.current.collection_address, S.current.please_input,
@@ -782,7 +776,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //获取输入行
   _getInputColumn(String leftText, String righteText, int length, bool isRegExp,
-      String regExp, TextEditingController _controller) {
+      String regExp, TextEditingController _controller, {bool isUpperCase = false}) {
     var rightExpand = Expanded(
       child: Container(
         child: TextField(
@@ -799,6 +793,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             isRegExp
                 ? FilteringTextInputFormatter.allow(RegExp(regExp))
                 : LengthLimitingTextInputFormatter(length),
+            if(isUpperCase)
+            UpperCaseTextFormatter(),
           ],
           decoration: InputDecoration(
             border: InputBorder.none,
