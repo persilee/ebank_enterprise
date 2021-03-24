@@ -406,31 +406,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   @override
   Widget build(BuildContext context) {
     var _arguments = ModalRoute.of(context).settings.arguments;
-
-    setState(() {
-      if (_arguments != null && !check) {
-        Rows listPartner = _arguments;
-        _companyController.text = listPartner.payeeName;
-        _accountController.text = listPartner.payeeCardNo;
-        _countryText = listPartner.district;
-        // _getPayeeBank = listPartner.payeeBankLocalName == null
-        //     ? ""
-        //     : listPartner.payeeBankLocalName;
-        _getPayeeBank = _language == 'zh_CN'
-            ? listPartner.payeeBankLocalName
-            : listPartner.payeeBankEngName;
-        _bankSwiftController.text = listPartner.bankSwift;
-        _middleBankSwiftController.text = listPartner.midBankSwift;
-        // _transferFee = listPartner.
-        _payeeAddressController.text = listPartner.payeeAddress;
-        _remarkController.text = listPartner.remark;
-        // _companyController.selection = TextSelection.collapsed(
-        //   affinity: TextAffinity.downstream,
-        //   offset: _companyController.text.length,
-        // );
-        check = false;
-      }
-    });
+    _getTransferData(_arguments);
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.transfer_type_1),
@@ -471,6 +447,34 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         ),
       ),
     );
+  }
+
+  //获取信息
+  _getTransferData(_arguments) {
+    if (_arguments != null && !check) {
+      setState(() {
+        Rows listPartner = _arguments;
+        _companyController.text = listPartner.payeeName;
+        _accountController.text = listPartner.payeeCardNo;
+        _countryText = listPartner.district;
+        // _getPayeeBank = listPartner.payeeBankLocalName == null
+        //     ? ""
+        //     : listPartner.payeeBankLocalName;
+        _getPayeeBank = _language == 'zh_CN'
+            ? listPartner.payeeBankLocalName
+            : listPartner.payeeBankEngName;
+        _bankSwiftController.text = listPartner.bankSwift;
+        _middleBankSwiftController.text = listPartner.midBankSwift;
+        // _transferFee = listPartner.
+        _payeeAddressController.text = listPartner.payeeAddress;
+        _remarkController.text = listPartner.remark;
+        // _companyController.selection = TextSelection.collapsed(
+        //   affinity: TextAffinity.downstream,
+        //   offset: _companyController.text.length,
+        // );
+        check = false;
+      });
+    }
   }
 
   //汇款地址
@@ -639,7 +643,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   _payeeAddressController.text = rowListPartner.payeeAddress;
                   _bankSwiftController.text = rowListPartner.bankSwift;
                   _payeeAddressController.text = rowListPartner.payeeAddress;
-                } else {}
+                }
+                _isClick();
               },
             );
           },
