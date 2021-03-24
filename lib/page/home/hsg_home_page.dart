@@ -345,7 +345,6 @@ class _HomePageState extends State<HomePage> {
                     40.0,
                     (MediaQuery.of(context).size.width - 50) / 2,
                     () {
-                      print('收支明细');
                       Navigator.pushNamed(context, pageDetailList);
                     },
                   ),

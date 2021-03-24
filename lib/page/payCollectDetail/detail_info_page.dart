@@ -86,7 +86,6 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
                 ContentRow(
                   label: S.current.remarks,
                   item: ddFinHist.narrative,
-                  // item: ddFinHist.remark, //narrative,
                 ),
               ],
             ),
@@ -111,7 +110,7 @@ class ContentRow extends StatelessWidget {
             Border(bottom: BorderSide(color: HsgColors.divider, width: 0.5)),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Container(
             child: Text(
@@ -119,11 +118,15 @@ class ContentRow extends StatelessWidget {
               style: TextStyle(color: HsgColors.aboutusTextCon),
             ),
           ),
-          Container(
+          Expanded(
             child: Text(
               item != '' && item != null ? item : '',
               style: TextStyle(color: HsgColors.describeText),
+              maxLines: 3,
+              textAlign: TextAlign.right,
             ),
+
+            //  alignment: Alignment.centerRight,
           ),
         ],
       ),

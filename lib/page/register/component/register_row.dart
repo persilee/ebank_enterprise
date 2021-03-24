@@ -18,6 +18,9 @@ Widget getRegisterRow(
         autocorrect: true,
         //是否自动获得焦点
         autofocus: true,
+        onChanged: (value) {
+          value = controlText.text;
+        },
         controller: controlText,
         obscureText: password,
         // textAlign: TextAlign.right,

@@ -16,6 +16,7 @@ import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_tableview/flutter_tableview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -55,8 +56,9 @@ class _DetailListPageState extends State<DetailListPage> {
   List<TransferRecord> _transferHistoryList = []; //转账记录列表
   GlobalKey _textKey = GlobalKey();
   TextEditingController _moneyController = TextEditingController();
-
-  var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>(); //下拉刷新
+  TextEditingController _startAmountController = TextEditingController();
+  TextEditingController _endAmountController = TextEditingController();
 
   @override
   // ignore: must_call_super
@@ -182,7 +184,7 @@ class _DetailListPageState extends State<DetailListPage> {
   Widget _popDialogContent(BuildContext popcontext) {
     return Container(
         color: Colors.white,
-        height: 260,
+        height: 320,
         padding: EdgeInsets.all(10),
         child: Material(
           child: Column(
@@ -197,6 +199,14 @@ class _DetailListPageState extends State<DetailListPage> {
               //金额
               _timeText(intl.S.of(context).amount),
               _amountDuration(),
+              //按钮
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  _resetButton(popcontext),
+                  _confimrButton(context),
+                ],
+              ),
             ],
           ),
         ));
@@ -341,16 +351,14 @@ class _DetailListPageState extends State<DetailListPage> {
         ),
         //结束时间按钮
         _timeButton(_end, 1, popcontext),
-        //确定按钮
-        _confimrButton(),
       ],
     );
   }
 
-  Widget _confimrButton() {
+  Widget _confimrButton(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(4),
-      width: 73,
+      margin: EdgeInsets.all(2),
+      width: MediaQuery.of(context).size.width / 4.4,
       height: 23.5,
       decoration: BoxDecoration(
         color: HsgColors.blueTextColor,
@@ -384,7 +392,7 @@ class _DetailListPageState extends State<DetailListPage> {
   Widget _amountDuration() {
     return Row(
       children: [
-        _amountInput(),
+        _amountInput(context, _startAmountController),
         Text(
           intl.S.of(context).zhi,
           style: TextStyle(
@@ -393,17 +401,17 @@ class _DetailListPageState extends State<DetailListPage> {
             decoration: TextDecoration.none,
           ),
         ),
-        _amountInput(),
-        _amountConfimrButton(),
+        _amountInput(context, _endAmountController),
+        //  _amountConfimrButton(context),
       ],
     );
   }
 
   //金额确定按钮
-  Widget _amountConfimrButton() {
+  Widget _amountConfimrButton(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(4),
-      width: 73,
+      margin: EdgeInsets.all(2),
+      width: MediaQuery.of(context).size.width / 4.4,
       height: 23.5,
       decoration: BoxDecoration(
         color: HsgColors.blueTextColor,
@@ -427,23 +435,96 @@ class _DetailListPageState extends State<DetailListPage> {
     );
   }
 
+  //重置按钮
+  Widget _resetButton(BuildContext popcontext) {
+    return Container(
+      width: 70,
+      height: 30,
+      margin: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Color(0x77939393), width: 0.5),
+        borderRadius: BorderRadius.circular((5)),
+      ),
+      child: FlatButton(
+        padding: EdgeInsets.all(0),
+        // disabledColor: HsgColors.btnDisabled,
+        child: Text(
+          intl.S.of(context).reset,
+          style: TextStyle(
+            fontSize: 13,
+            // color: HsgColors.accent,
+          ),
+        ),
+        onPressed: () {
+          setState(() {
+            _isButton2 = true;
+            _isButton1 = false;
+            _isButton3 = false;
+            _isButton4 = false;
+            _start = formatDate(
+                DateTime(DateTime.now().year, DateTime.now().month, 1),
+                [yyyy, mm, dd]); //显示开始时间
+            _end = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示结束时间
+            (popcontext as Element).markNeedsBuild();
+            _startAmountController.text = '';
+            _endAmountController.text = '';
+          });
+        },
+      ),
+    );
+  }
+
   //金额输入框
-  Widget _amountInput() {
+  Widget _amountInput(BuildContext context, TextEditingController controller) {
     return Container(
       margin: EdgeInsets.all(5),
-      width: 111.5,
-      height: 23.5,
+      // margin: EdgeInsets.only(left: 5,right: 5),
+      width: MediaQuery.of(context).size.width / 2.5,
+      height: 30,
       decoration: BoxDecoration(
         color: Color(0xffECECEC),
         borderRadius: BorderRadius.circular(5),
       ),
-      child: TextField(
-        decoration: InputDecoration(border: InputBorder.none),
-        // controller: controller,
-        autocorrect: false,
-        autofocus: false,
-        keyboardType: TextInputType.number,
-        onChanged: (text) {},
+      child: Container(
+        // margin: EdgeInsets.only(top: 15),
+        //height: 30,
+        child: Theme(
+          data: new ThemeData(
+              // primaryColor: Color(0xffECECEC),
+              ),
+          child: TextField(
+            decoration: InputDecoration(
+              hintStyle: TextStyle(
+                fontSize: 14,
+                color: HsgColors.textHintColor,
+              ),
+              hintText: intl.S.current.not_required,
+              contentPadding: EdgeInsets.all(0),
+              border:
+                  // InputBorder.none,
+                  OutlineInputBorder(
+                gapPadding: 0,
+                borderRadius: ((BorderRadius.circular(5))),
+                borderSide: BorderSide(
+                  color: Color(0xffECECEC),
+                ),
+              ),
+            ),
+            controller: controller,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+              LengthLimitingTextInputFormatter(12),
+            ],
+            style: TextStyle(
+              fontSize: 14,
+            ),
+            autocorrect: false,
+            autofocus: false,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            onChanged: (text) {},
+          ),
+        ),
       ),
     );
   }
@@ -452,8 +533,8 @@ class _DetailListPageState extends State<DetailListPage> {
   Widget _timeButton(String name, int i, BuildContext popcontext) {
     return Container(
       margin: EdgeInsets.all(5),
-      width: 111.5,
-      height: 23.5,
+      width: MediaQuery.of(context).size.width / 2.5,
+      height: 30,
       decoration: BoxDecoration(
         color: Color(0xffECECEC),
         borderRadius: BorderRadius.circular(5),
@@ -471,7 +552,7 @@ class _DetailListPageState extends State<DetailListPage> {
             Container(
               width: 8,
               height: 7,
-              margin: EdgeInsets.only(bottom: 20),
+              margin: EdgeInsets.only(bottom: 20, left: 10),
               child: Icon(
                 Icons.arrow_drop_down,
                 color: Color(0xffAAAAAA),
@@ -480,7 +561,6 @@ class _DetailListPageState extends State<DetailListPage> {
           ],
         ),
         onPressed: () {
-          // _cupertinoPicker();
           _timePicker(i, popcontext);
         },
       ),
@@ -769,134 +849,22 @@ class _DetailListPageState extends State<DetailListPage> {
     Navigator.pushNamed(context, pageDetailInfo, arguments: ddFinHist);
   }
 
-  // _getListNetworkData() {
-  //   _page = 1;
-  //   // _getRevenueByCards(_startDate, _allAccNoList);
-  // }
-
   _getRevenueByCards(String localDateStart, List<String> cards) async {
-    // setState(() {
-    //   List<RevenueHistoryDTOList> revenueHistoryDTOList;
-    //   revenueHistoryDTOList = [
-    //     RevenueHistoryDTOList.fromJson({
-    //       "transDate": "2021-01-14",
-    //       "ddFinHistDOList": [
-    //         {
-    //           "modifyTime": null,
-    //           "createTime": null,
-    //           "acDate": "2021-01-23",
-    //           "msgId": "202103101411570000044531",
-    //           "seq": 1,
-    //           "reqId": "202103101411570000000486",
-    //           "vchNo": null,
-    //           "refNo": "",
-    //           "uri": "/hbs",
-    //           "txDateTime": "2021-01-14 18:02:46",
-    //           "acNo": "0101100000133",
-    //           "txCcy": "LAK",
-    //           "txAmt": "6666.5",
-    //           "drCrFlg": "D",
-    //           "txSts": "N",
-    //           "prodCd": null,
-    //           "prdmoCd": null,
-    //           "ciNo": "810000000300",
-    //           "userId": null,
-    //           "trBank": "1",
-    //           "trBranch": null,
-    //           "trDep": null,
-    //           "othBank": "",
-    //           "othBankName": null,
-    //           "othBankAc": "",
-    //           "othBankAcName": "",
-    //           "txMmo": "CLS",
-    //           "remark": null,
-    //           "narrative": "",
-    //           "servCtr": null,
-    //           "ts": null
-    //         },
-    //         {
-    //           "modifyTime": null,
-    //           "createTime": null,
-    //           "acDate": "2021-01-23",
-    //           "msgId": "202103101411570000044531",
-    //           "seq": 1,
-    //           "reqId": "202103101411570000000486",
-    //           "vchNo": null,
-    //           "refNo": "",
-    //           "uri": "/hbs",
-    //           "txDateTime": "2021-01-14 14:12:22",
-    //           "acNo": "0101100000133",
-    //           "txCcy": "LAK",
-    //           "txAmt": "226.8",
-    //           "drCrFlg": "D",
-    //           "txSts": "N",
-    //           "prodCd": null,
-    //           "prdmoCd": null,
-    //           "ciNo": "810000000300",
-    //           "userId": null,
-    //           "trBank": "1",
-    //           "trBranch": null,
-    //           "trDep": null,
-    //           "othBank": "",
-    //           "othBankName": null,
-    //           "othBankAc": "",
-    //           "othBankAcName": "",
-    //           "txMmo": "CLS",
-    //           "remark": null,
-    //           "narrative": "",
-    //           "servCtr": null,
-    //           "ts": null
-    //         }
-    //       ]
-    //     }),
-    //     RevenueHistoryDTOList.fromJson({
-    //       "transDate": "2021-01-13",
-    //       "ddFinHistDOList": [
-    //         {
-    //           "modifyTime": null,
-    //           "createTime": null,
-    //           "acDate": "2021-01-23",
-    //           "msgId": "202103101411570000044531",
-    //           "seq": 1,
-    //           "reqId": "202103101411570000000486",
-    //           "vchNo": null,
-    //           "refNo": "",
-    //           "uri": "/hbs",
-    //           "txDateTime": "2021-01-13 17:50:28",
-    //           "acNo": "0101100000133",
-    //           "txCcy": "LAK",
-    //           "txAmt": "98989",
-    //           "drCrFlg": "D",
-    //           "txSts": "N",
-    //           "prodCd": null,
-    //           "prdmoCd": null,
-    //           "ciNo": "810000000300",
-    //           "userId": null,
-    //           "trBank": "1",
-    //           "trBranch": null,
-    //           "trDep": null,
-    //           "othBank": "",
-    //           "othBankName": null,
-    //           "othBankAc": "0101200000369",
-    //           "othBankAcName": "",
-    //           "txMmo": "TRF",
-    //           "remark": null,
-    //           "narrative": "",
-    //           "servCtr": null,
-    //           "ts": null
-    //         }
-    //       ]
-    //     })
-    //   ];
-    //   revenueHistoryList = revenueHistoryDTOList;
-    // });
-
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
-
+    print(">>>>>>>>$_cardList");
+    print(">>>>>>>$custID");
     HSProgressHUD.show();
     PayCollectDetailRepository()
-        .getRevenueByCards(GetRevenueByCardsReq(1, 10, custID, '2021-01-11'),
+        .getRevenueByCards(
+            GetRevenueByCardsReq(
+                'CNY',
+                '2021-03-11', //结束时间
+                '2020-03-11', //开始时间
+                0, //分页
+                0, //分页
+                acNo: '0101200000172',
+                ciNo: '810000000229'),
             'GetRevenueByCardsReq')
         .then((data) {
       HSProgressHUD.dismiss();
@@ -911,7 +879,7 @@ class _DetailListPageState extends State<DetailListPage> {
     });
   }
 
-  _getCardList() {
+  Future<void> _getCardList() async {
     CardDataRepository().getCardList('getCardList').then((data) {
       if (data.cardList != null) {
         setState(() {
