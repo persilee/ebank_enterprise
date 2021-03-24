@@ -64,6 +64,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
   Widget build(BuildContext context) {
     ///初始化progressHUD配置
     HSProgressHUD.progressHudConfig();
+
     ///这是设置状态栏的图标和字体的颜色
     ///Brightness.light  一般都是显示为白色
     ///Brightness.dark 一般都是显示为黑色
@@ -77,16 +78,18 @@ class _HSGBankAppState extends State<HSGBankApp> {
       debugShowCheckedModeBanner: false,
       title: 'HSGBank',
       theme: ThemeData(
-          appBarTheme: AppBarTheme(
-              textTheme: TextTheme(
+        appBarTheme: AppBarTheme(
+          textTheme: TextTheme(
             headline6: TextStyle(fontStyle: FontStyle.normal, fontSize: 18),
-          )),
-          splashColor: HsgColors.itemClickColor,
-          primaryColor: HsgColors.primary,
-          primaryColorDark: HsgColors.primaryDark,
-          backgroundColor: HsgColors.commonBackground,
-          dividerTheme:
-              DividerThemeData(thickness: 0.7, color: HsgColors.divider)),
+          ),
+        ),
+        splashColor: HsgColors.itemClickColor,
+        primaryColor: HsgColors.primary,
+        primaryColorDark: HsgColors.primaryDark,
+        backgroundColor: HsgColors.commonBackground,
+        dividerTheme:
+            DividerThemeData(thickness: 0.7, color: HsgColors.divider),
+      ),
       initialRoute: pageHome,
       routes: appRoutes,
       onGenerateRoute: (settings) => onGenerateRoute(settings),

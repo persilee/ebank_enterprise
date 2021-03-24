@@ -9,6 +9,7 @@ import 'package:azlistview/azlistview.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,7 +52,7 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '选择国家',
+          S.of(context).select_country,
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
@@ -136,7 +137,7 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
     if (_language == null) return Container();
     String name = _language == 'zh_cn' ? model.nameZhCN : model.nameEN;
     String susTag = model.getSuspensionTag();
-    susTag = (susTag == "★" ? "热门国家" : susTag);
+    susTag = (susTag == "★" ? S.of(context).hot_countries : susTag);
     return Column(
       children: <Widget>[
         Offstage(
@@ -158,7 +159,7 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
   }
 
   Widget _buildSusWidget(String susTag) {
-    susTag = (susTag == "★" ? "热门城市" : susTag);
+    susTag = (susTag == "★" ? S.of(context).hot_countries : susTag);
     return Container(
       height: _suspensionHeight.toDouble(),
       padding: const EdgeInsets.only(left: 15.0),

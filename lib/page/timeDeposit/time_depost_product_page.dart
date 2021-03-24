@@ -197,9 +197,9 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
           // FilteringTextInputFormatter.allow(
-          //     RegExp("^[0-9]{1,12}(\.)([0-9]{1,2})")),
+          //     RegExp("^[0-9]{1,12}([0-9]{1,2})")),
           // FilteringTextInputFormatter.allow(
-          //     RegExp('^([0-9]{1,12})+(.[0-9]{2})?')),
+          //     RegExp('^([0-9]{0,8})(\.{0,2}[0-9])?')),
         ],
         onChanged: (value) {
           // double.parse(value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
@@ -355,7 +355,14 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       width: 72,
       height: 30,
       decoration: BoxDecoration(
-        color: HsgColors.blueTextColor,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF1775BA),
+            Color(0xFF3A9ED1),
+          ],
+        ),
         borderRadius: BorderRadius.circular(5),
       ),
       child: OutlineButton(
@@ -380,7 +387,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       height: 30,
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(color: HsgColors.accent, width: 0.5),
+        border: Border.all(color: HsgColors.plainBtn, width: 0.5),
         borderRadius: BorderRadius.circular((5)),
       ),
       child: FlatButton(
@@ -390,7 +397,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           S.of(context).reset,
           style: TextStyle(
             fontSize: 13,
-            color: HsgColors.accent,
+            color: HsgColors.plainBtn,
           ),
         ),
         onPressed: () {

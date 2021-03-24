@@ -16,9 +16,11 @@ class FindUserNameSuccess extends StatefulWidget {
 }
 
 class _FindUserNameSuccessState extends State<FindUserNameSuccess> {
-  String _userName = 'a123456';
+  String _userName;
   @override
   Widget build(BuildContext context) {
+    _userName = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
@@ -67,7 +69,14 @@ class _FindUserNameSuccessState extends State<FindUserNameSuccess> {
                   margin: EdgeInsets.only(left: 37.5, right: 37.5, top: 125),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
-                    color: HsgColors.accent,
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFF1775BA),
+                        Color(0xFF3A9ED1),
+                      ],
+                    ),
                   ),
                   child: Column(
                     children: [

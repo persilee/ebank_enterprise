@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 Widget getRegisterRegion(BuildContext context, TextEditingController _phoneNum,
     String _officeAreaCodeText, Function _selectRegionCode) {
   _officeAreaCodeText = _officeAreaCodeText == '' ? '86' : _officeAreaCodeText;
-  print("${_phoneNum.text}");
+  // print("${_phoneNum.text}");
   return Container(
     margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
     width: MediaQuery.of(context).size.width / 2,
@@ -26,22 +26,19 @@ Widget getRegisterRegion(BuildContext context, TextEditingController _phoneNum,
             onTap: () {
               _selectRegionCode();
               print('点击86');
-              print("$_officeAreaCodeText  ++++++");
             },
             child: Row(
               children: [
                 Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(left: 20),
-                  height: MediaQuery.of(context).size.height / 20,
-                  width: MediaQuery.of(context).size.width / 10,
-                  child: Text('+$_officeAreaCodeText'),
-                ),
+                    alignment: Alignment.centerRight,
+                    height: MediaQuery.of(context).size.height / 20,
+                    width: MediaQuery.of(context).size.width / 6.8,
+                    child: Text('+$_officeAreaCodeText')),
                 Container(
                   height: MediaQuery.of(context).size.height / 20,
-                  width: MediaQuery.of(context).size.width / 14,
+                  width: MediaQuery.of(context).size.width / 18,
                   child: Icon(
-                    Icons.arrow_drop_down_outlined,
+                    Icons.expand_more,
                     color: Colors.black,
                   ),
                 ),
@@ -49,12 +46,16 @@ Widget getRegisterRegion(BuildContext context, TextEditingController _phoneNum,
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width / 1.65,
+            width: MediaQuery.of(context).size.width / 1.8,
+            padding: EdgeInsets.only(left: 5),
             child: TextField(
               //是否自动更正
               autocorrect: false,
               //是否自动获得焦点
               autofocus: true,
+              onChanged: (value) {
+                value = _phoneNum.text;
+              },
               controller: _phoneNum,
               decoration: InputDecoration(
                 border: InputBorder.none,

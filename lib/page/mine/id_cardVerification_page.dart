@@ -127,7 +127,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   //获取证件类型
   _getIdCardList() async {
     PublicParametersRepository()
-        .getIdType(GetIdTypeReq('FIRM_CERT'), 'GetIdTypeReq')
+        .getIdType(GetIdTypeReq('FIRM_CERT'), 'GetIdTypeReq') //CICID
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         print('data.publicCodeGetRedisRspDtoList222222');
@@ -466,17 +466,24 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       Fluttertoast.showToast(msg: '请输入证件号!');
       return;
     }
+    print(_certNo.text +
+        '-' +
+        _certTypeKey +
+        '-' +
+        _userPhone +
+        '-' +
+        _realName.text);
     // Navigator.pushNamed(context, setPayPage);
     HSProgressHUD.show();
     ChecInformantApiRepository()
         .realNameAuth(
             RealNameAuthByThreeFactorReq(
-                _certNo.text, _certType, _userPhone, _realName.text),
+                _certNo.text, _certTypeKey, _userPhone, _realName.text),
             'realNameAuthByThreeFactor')
         .then((data) {
       print(_certNo.text +
           '-' +
-          _certType +
+          _certTypeKey +
           '-' +
           _userPhone +
           '-' +

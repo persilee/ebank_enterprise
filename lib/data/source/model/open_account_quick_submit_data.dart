@@ -1,0 +1,199 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'open_account_quick_submit_data.g.dart';
+
+@JsonSerializable()
+class OpenAccountQuickSubmitDataReq {
+  ///商业/行业性质
+  @JsonKey(name: 'corporatinAttributes')
+  String corporatinAttributes;
+
+  ///公司类别
+  @JsonKey(name: 'custCategory')
+  String custCategory;
+
+  ///客户名称(英文)
+  @JsonKey(name: 'custNameEng')
+  String custNameEng;
+
+  ///客户名称(本地)
+  @JsonKey(name: 'custNameLoc')
+  String custNameLoc;
+
+  ///证件签发国家
+  @JsonKey(name: 'idIssuePlace')
+  String idIssuePlace;
+
+  ///证件号
+  @JsonKey(name: 'idNo')
+  String idNo;
+
+  ///证件类型
+  @JsonKey(name: 'idType')
+  String idType;
+
+  ///其他证件类型，选择其他后才需要输入
+  @JsonKey(name: 'otherCategory')
+  String otherCategory;
+
+  ///地址信息列表
+  @JsonKey(name: 'addressList')
+  List<Address> addressList;
+
+  ///办事处电话号码区号
+  @JsonKey(name: 'telCountryCode')
+  String telCountryCode;
+
+  ///办事处电话号码
+  @JsonKey(name: 'telNumber')
+  String telNumber;
+
+  ///相关人士信息列表
+  @JsonKey(name: 'partnerList')
+  List<Partner> partnerList;
+
+  OpenAccountQuickSubmitDataReq({
+    this.corporatinAttributes,
+    this.custCategory,
+    this.custNameEng,
+    this.custNameLoc,
+    this.idIssuePlace,
+    this.idNo,
+    this.idType,
+    this.otherCategory,
+    this.addressList,
+    this.telCountryCode,
+    this.telNumber,
+    this.partnerList,
+  });
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  factory OpenAccountQuickSubmitDataReq.fromJson(
+          Map<String, dynamic> srcJson) =>
+      _$OpenAccountQuickSubmitDataReqFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$OpenAccountQuickSubmitDataReqToJson(this);
+}
+
+///地址信息列表
+@JsonSerializable()
+class Address {
+  ///商业/行业性质
+  ///R:Registered Office Addres 注册公司地址
+  ///P:Principal Business Address 主要营业地址
+  ///C:Correspondence Address  通讯地址
+  @JsonKey(name: 'addressType')
+  String addressType;
+
+  ///国家
+  @JsonKey(name: 'country')
+  String country;
+
+  ///省
+  @JsonKey(name: 'province')
+  String province;
+
+  ///市
+  @JsonKey(name: 'city')
+  String city;
+
+  ///地址详情
+  @JsonKey(name: 'detail')
+  String detail;
+
+  ///邮编
+  @JsonKey(name: 'postCode')
+  String postCode;
+
+  Address({
+    this.addressType,
+    this.country,
+    this.province,
+    this.city,
+    this.detail,
+    this.postCode,
+  });
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  factory Address.fromJson(Map<String, dynamic> srcJson) =>
+      _$AddressFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$AddressToJson(this);
+}
+
+///相关人士信息列表
+@JsonSerializable()
+class Partner {
+  ///称呼
+  @JsonKey(name: 'appellation')
+  String appellation;
+
+  ///证件类型
+  @JsonKey(name: 'idType')
+  String idType;
+
+  ///国籍
+  @JsonKey(name: 'nationality')
+  String nationality;
+
+  ///类别
+  @JsonKey(name: 'partnerType')
+  String partnerType;
+
+  ///名称（中文）
+  @JsonKey(name: 'fullNameLoc')
+  String fullNameLoc;
+
+  ///名称（英文）
+  @JsonKey(name: 'fullNameEng')
+  String fullNameEng;
+
+  ///证件号码
+  @JsonKey(name: 'idNo')
+  String idNo;
+
+  Partner({
+    this.appellation,
+    this.idType,
+    this.nationality,
+    this.partnerType,
+    this.fullNameLoc,
+    this.fullNameEng,
+    this.idNo,
+  });
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  factory Partner.fromJson(Map<String, dynamic> srcJson) =>
+      _$PartnerFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$PartnerToJson(this);
+}
+
+@JsonSerializable()
+class OpenAccountQuickSubmitDataResp {
+  ///业务编号
+  @JsonKey(name: 'businessId')
+  String businessId;
+
+  OpenAccountQuickSubmitDataResp(
+    this.businessId,
+  );
+
+  factory OpenAccountQuickSubmitDataResp.fromJson(
+          Map<String, dynamic> srcJson) =>
+      _$OpenAccountQuickSubmitDataRespFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$OpenAccountQuickSubmitDataRespToJson(this);
+}

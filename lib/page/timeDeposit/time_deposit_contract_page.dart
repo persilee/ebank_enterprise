@@ -1,19 +1,25 @@
+import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///定期开立购买页面
 /// Author: wangluyao
 /// Date: 2020-12-14
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
+import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_contract.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_contract_trial.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
+import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
-import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -40,15 +46,22 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String _changedInstructionTitle = S.current.hint_please_select;
   int _acPosition = 0;
   int _settAcPosition = 0;
+  int _ccyPosition = 0;
   String _changedRateTitle = '';
   String accuPeriod = '0';
   String auctCale = '0';
   String depositType = '0';
+  String ccy = '';
   String rate = '0';
-  String matAmt = '2,000.00';
+  String matAmt = '0.00';
   List<RemoteBankCard> cards = [];
   RemoteBankCard card;
   String custID;
+  String _cardCcy = S.current.hint_please_select;
+  String _cardBal = '';
+  List<String> _cardCcyList = [];
+  List<String> _cardBalList = [];
+  List<List<CardBalBean>> myCardListBal;
 
   double bal = 0.00;
   String instCode = '';
@@ -60,10 +73,17 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   TimeDepositContractTrialReq contractTrialReq;
   TextEditingController inputValue = TextEditingController();
 
+  String _amount = '0.00';
+  String language = Intl.getCurrentLocale();
+  List<String> instructions = [];
+
   void initState() {
     super.initState();
+
     //网络请求
     _loadData();
+    _first();
+    _getInsCode();
   }
 
 //背景色
@@ -150,7 +170,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 //弹窗按钮左侧文本
   Widget _leftText(String leftText) {
     return Container(
-      width: (MediaQuery.of(context).size.width - 32) / 2,
+      width: leftText == S.current.tdContract_estimated_payment_amount
+          ? ((MediaQuery.of(context).size.width - 12) / 2) - 10
+          : ((MediaQuery.of(context).size.width - 32) / 2) - 10,
       child: Text(
         leftText,
         style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 14.0),
@@ -161,7 +183,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   //显示选择的值
   Widget _display(String display, String leftText) {
     return Container(
-      width: ((MediaQuery.of(context).size.width - 32) / 2) - 20,
+      width: leftText == S.current.tdContract_estimated_payment_amount
+          ? ((MediaQuery.of(context).size.width - 12) / 2) - 10
+          : ((MediaQuery.of(context).size.width - 32) / 2) - 10,
       alignment: Alignment.centerRight,
       child: leftText == S.current.payment_account
           ? (display == S.current.hint_please_select
@@ -188,7 +212,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                     Container(
                       margin: EdgeInsets.only(bottom: 15),
                       child: Text(
-                        S.current.pay + ' USD:2,000.00',
+                        S.current.balance_with_value +
+                            " " +
+                            _cardCcy +
+                            ":" +
+                            FormatUtil.formatSringToMoney(_cardBal),
                         style: TextStyle(
                           color: HsgColors.secondDegreeText,
                           fontSize: 13.0,
@@ -223,7 +251,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   Widget _showCcy() {
     return Container(
       child: Text(
-        productList.ccy,
+        ccy,
         textAlign: TextAlign.center,
         style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 18.0),
       ),
@@ -250,7 +278,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           ),
           Container(
             child: Text(
-              productList.ccy + ":" + matAmt,
+              ccy + ":" + matAmt,
               style: TextStyle(
                 color: HsgColors.secondDegreeText,
                 fontSize: 13.0,
@@ -285,11 +313,22 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                 auctCale,
                 double.parse(inputValue.text),
                 productList.bppdCode,
-                productList.ccy,
+                ccy,
                 custID,
                 depositType,
                 '', // tenor
               );
+              //获取预计支付金额
+              inputValue.addListener(() {
+                if (_cardCcy == ccy) {
+                  _amount = inputValue.text;
+                } else {
+                  _rateCalculate();
+                }
+              });
+            } else {
+              matAmt = '0.00';
+              _amount = '0.00';
             }
           },
           keyboardType: TextInputType.number,
@@ -331,20 +370,45 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       child: Column(
         children: [
           Container(
-              child: FlatButton(
-            onPressed: () {
-              _selectTerm(context, producDTOList);
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                _leftText(S.current.deposit_time_limit),
-                _display(_changedTermBtnTiTle, S.current.deposit_time_limit),
-                _rightArrow(),
-              ],
+            child: FlatButton(
+              onPressed: () {
+                _selectTerm(context, producDTOList);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  _leftText(S.current.deposit_time_limit),
+                  _display(_changedTermBtnTiTle, S.current.deposit_time_limit),
+                  _rightArrow(),
+                ],
+              ),
             ),
-          )),
-          _background()
+          ),
+          _background(),
+        ],
+      ),
+    );
+  }
+
+  //预计支付金额
+  Widget _expectedPayment() {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          Container(
+            child: FlatButton(
+              onPressed: null,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  _leftText(S.current.tdContract_estimated_payment_amount),
+                  _display(
+                      _amount, S.current.tdContract_estimated_payment_amount),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -363,6 +427,26 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           children: [
             _leftText(S.current.payment_account),
             _display(_changedAccountTitle, S.current.payment_account),
+            _rightArrow(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  //选择支付币种按钮
+  Widget _ccyChangeBtn() {
+    return Container(
+      color: Colors.white,
+      child: FlatButton(
+        onPressed: () {
+          _selectCcy(context);
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _leftText(S.current.tdContract_payment_currency),
+            _display(_cardCcy, S.current.tdContract_payment_currency),
             _rightArrow(),
           ],
         ),
@@ -418,8 +502,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     List<String> rates = [];
     List<String> accuPeriods = [];
     List<String> auctCales = [];
+
     for (var i = 0; i < producDTOList.length; i++) {
-      switch (producDTOList[i].minAuctCale) {
+      switch (producDTOList[i].minAccuPeriod) {
         case '2':
           terms.add(producDTOList[i].minAuctCale + S.current.months);
           depositTerms.add(producDTOList[i].minAuctCale);
@@ -448,7 +533,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       rates.add(producDTOList[i].minRate);
       accuPeriods.add(producDTOList[i].minAccuPeriod);
       auctCales.add(producDTOList[i].minAuctCale);
-      depositType = producDTOList[i].depositType;
     }
 
     final result = await showHsgBottomSheet(
@@ -464,7 +548,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         _changedTermBtnTiTle = terms[result];
         _changedRateTitle = rates[result];
         accuPeriod = accuPeriods[result];
-        auctCale = accuPeriods[result];
+        auctCale = auctCales[result];
+        depositType = producDTOList[result].depositType;
+        ccy = producDTOList[result].ccy;
         rate = FormatUtil.formatNum(double.parse(_changedRateTitle), 2);
       } else {
         return;
@@ -498,34 +584,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   // 本金输入框
   Widget _inputPrincipal(RemoteBankCard card) {
     bal = (inputValue.text).length == 0 ? 0.00 : double.parse(inputValue.text);
-
-    //按计提周期计算存款期限
-    switch (producDTOList[0].minAuctCale) {
-      case '2':
-        _changedTermBtnTiTle =
-            (producDTOList[0].minAuctCale + S.current.months);
-        break;
-      case '3':
-        _changedTermBtnTiTle =
-            ((int.parse(producDTOList[0].minAuctCale) * 3).toString() +
-                S.current.months);
-        break;
-      case '4':
-        _changedTermBtnTiTle =
-            ((int.parse(producDTOList[0].minAuctCale) * 6).toString() +
-                S.current.months);
-        break;
-      default:
-        {
-          _changedTermBtnTiTle =
-              ((int.parse(producDTOList[0].minAuctCale) * 12).toString() +
-                  S.current.months);
-        }
-    }
-    accuPeriod = producDTOList[0].minAuctCale;
-    auctCale = producDTOList[0].minAuctCale;
-    depositType = producDTOList[0].depositType;
-    rate = FormatUtil.formatNum(double.parse(producDTOList[0].minRate), 2);
 
     return Container(
       color: Colors.white,
@@ -569,10 +627,29 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     if (result != null && result != false) {
       _acPosition = result;
       _changedAccountTitle = accounts[result];
+      _getCardBal(accounts[result].replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
     } else {
       return;
     }
     setState(() {});
+  }
+
+//支付币种弹窗
+  _selectCcy(BuildContext context) async {
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) => BottomMenu(
+              title: S.current.tdContract_payment_currency,
+              items: _cardCcyList,
+            ));
+    if (result != null && result != false) {
+      _cardCcy = _cardCcyList[result];
+      _cardBal = _cardBalList[result];
+    } else {
+      return;
+    }
+    setState(() {});
+    (context as Element).markNeedsBuild();
   }
 
 //结算账户弹窗
@@ -604,12 +681,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
 //到期指示弹窗
   _selectInstruction(BuildContext context) async {
-    List<String> instructions = [
-      S.current.instruction_at_maturity_0,
-      S.current.instruction_at_maturity_1,
-      S.current.instruction_at_maturity_2,
-      S.current.instruction_at_maturity_5,
-    ];
     List<String> instructionDatas = [
       '0',
       '1',
@@ -633,40 +704,62 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     });
   }
 
+  _ifClick() {
+    if (matAmt == '0.00' ||
+        _changedTermBtnTiTle == S.current.hint_please_select ||
+        _changedAccountTitle == S.current.hint_please_select ||
+        _changedSettAcTitle == S.current.hint_please_select ||
+        _changedInstructionTitle == S.current.hint_please_select) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   //确认按钮
   Widget _submitButton() {
     return Container(
-      padding: EdgeInsets.fromLTRB(30, 40, 30, 0),
+      height: 45,
+      margin: EdgeInsets.fromLTRB(30, 40, 30, 0),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: _ifClick()
+              ? [
+                  Color(0xFF1775BA),
+                  Color(0xFF3A9ED1),
+                ]
+              : [HsgColors.btnDisabled, HsgColors.btnDisabled],
+        ),
+        borderRadius: BorderRadius.circular(5),
+      ),
       child: ButtonTheme(
-        minWidth: 5,
         height: 45,
         child: FlatButton(
-          onPressed: (matAmt == '0.00' ||
-                  _changedTermBtnTiTle == S.current.hint_please_select ||
-                  _changedAccountTitle == S.current.hint_please_select ||
-                  _changedSettAcTitle == S.current.hint_please_select ||
-                  _changedInstructionTitle == S.current.hint_please_select)
+          onPressed: !_ifClick()
               ? null
               : () {
-                  //              _loadContractData(
-                  //   accuPeriod,
-                  //   auctCale,
-                  //   bal,
-                  //   productList.bppdCode,
-                  //   productList.ccy,
-                  //   custID,
-                  //   depositType,
-                  //   instCode,
-                  //   _changedAccountTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
-                  //   '',
-                  //   _changedSettAcTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
-                  //   '',
-                  //   '',
-                  // );
-                  Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
-                      arguments: 'timeDepositProduct');
+                  _loadContractData(
+                    accuPeriod,
+                    auctCale,
+                    bal,
+                    productList.bppdCode,
+                    ccy,
+                    custID,
+                    depositType,
+                    instCode,
+                    _changedAccountTitle.replaceAll(
+                        new RegExp(r"\s+\b|\b\s"), ""),
+                    '',
+                    _changedSettAcTitle.replaceAll(
+                        new RegExp(r"\s+\b|\b\s"), ""),
+                    '',
+                    '',
+                  );
                 },
-          color: HsgColors.accent,
+          // padding: EdgeInsets.only(top: 1),
+          // color: HsgColors.accent,
           disabledColor: HsgColors.btnDisabled,
           child: Text(
             S.current.deposit_now,
@@ -700,6 +793,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           _inputPrincipal(card), // 本金输入框
           _accountChangeBtn(), //选择付款账户
           _line(),
+          _ccyChangeBtn(), //选择支付币种
+          _line(),
+          _expectedPayment(),
+          _line(),
           _settAcChangeBtn(), //结算账户
           _line(),
           _instructionChangeBtn(), //选择到期指示
@@ -709,6 +806,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     );
   }
 
+//获取卡列表
   Future<void> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
     custID = prefs.getString(ConfigKey.CUST_ID);
@@ -718,12 +816,72 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           setState(() {
             cards.clear();
             cards.addAll(data.cardList);
+            _changedAccountTitle = FormatUtil.formatSpace4(cards[0].cardNo);
+            _getCardBal(
+                cards[0].cardNo.replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
           });
         }
       },
     ).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
+  }
+
+  //汇率换算
+  Future _rateCalculate() async {
+    double _payerAmount = 0;
+    if ((inputValue.text).length == 0 ||
+        double.parse(inputValue.text) < double.parse(productList.minAmt)) {
+      setState(() {
+        _amount = '0.00';
+      });
+    } else {
+      _payerAmount = AiDecimalAccuracy.parse(inputValue.text).toDouble();
+      ForexTradingRepository()
+          .transferTrial(
+              TransferTrialReq(
+                  amount: _payerAmount, corrCcy: ccy, defaultCcy: _cardCcy),
+              'TransferTrialReq')
+          .then((data) {
+        setState(() {
+          _amount = data.optExAmt;
+        });
+      });
+    }
+  }
+
+  //数据初值
+  void _first() {
+    //按计提周期计算存款期限
+    switch (producDTOList[0].minAccuPeriod) {
+      case '2':
+        _changedTermBtnTiTle =
+            (producDTOList[0].minAuctCale + S.current.months);
+        break;
+      case '3':
+        _changedTermBtnTiTle =
+            ((int.parse(producDTOList[0].minAuctCale) * 3).toString() +
+                S.current.months);
+        break;
+      case '4':
+        _changedTermBtnTiTle =
+            ((int.parse(producDTOList[0].minAuctCale) * 6).toString() +
+                S.current.months);
+        break;
+      default:
+        {
+          _changedTermBtnTiTle =
+              ((int.parse(producDTOList[0].minAuctCale) * 12).toString() +
+                  S.current.months);
+        }
+    }
+    accuPeriod = producDTOList[0].minAccuPeriod;
+    auctCale = producDTOList[0].minAuctCale;
+    depositType = producDTOList[0].depositType;
+    ccy = producDTOList[0].ccy;
+    rate = FormatUtil.formatNum(double.parse(producDTOList[0].minRate), 2);
+    // _cardCcy = _cardCcyList[0];
+    // _cardBal = _cardBalList[0];
   }
 
   Future<void> _loadDepositData(
@@ -742,10 +900,52 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             'getTimeDepositContractTrial')
         .then((value) {
       setState(() {
-        matAmt = (value.matAmt).toString();
+        matAmt = FormatUtil.formatSringToMoney((value.matAmt).toString());
       });
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+
+  //获取付款账户余额
+  _getCardBal(String cardNo) {
+    Future.wait({
+      CardDataRepository().getCardBalByCardNo(
+          GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
+    }).then((value) {
+      value.forEach((element) {
+        setState(() {
+          if (_cardBal == '' || _cardCcy == S.current.hint_please_select) {
+            _cardBal = element.cardListBal[0].currBal;
+            _cardCcy = element.cardListBal[0].ccy;
+          }
+          _cardBalList.clear();
+          _cardCcyList.clear();
+          element.cardListBal.forEach((element) {
+            _cardCcyList.add(element.ccy);
+            _cardBalList.add(element.currBal);
+          });
+        });
+      });
+    }).catchError((e) {});
+  }
+
+  //获取到期指示列表
+  Future _getInsCode() async {
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq("EXP_IN"), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        data.publicCodeGetRedisRspDtoList.forEach((element) {
+          setState(() {
+            if (language == 'zh_CN') {
+              instructions.add(element.cname);
+            } else {
+              instructions.add(element.name);
+            }
+          });
+        });
+      }
     });
   }
 
