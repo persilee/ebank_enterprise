@@ -286,7 +286,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         children: [
           //时间
           Container(
-            width: MediaQuery.of(context).size.width / 2.5,
+            width: MediaQuery.of(context).size.width / 2,
             child: _popDialog(),
           ),
           //银行卡
@@ -343,30 +343,43 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _popDialogContent(BuildContext popcontext) {
     return Container(
       color: Colors.white,
-      height: 320,
-      padding: EdgeInsets.all(10),
+      height: 335,
+      // padding: EdgeInsets.all(10),
       child: Material(
         color: Colors.white,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //交易时间
-            _timeText(intl.S.of(context).transaction_time),
-            _tradingHour(),
-            //自定义时间
-            _timeText(intl.S.of(context).user_defined),
-            _userDefind(popcontext),
-            //金额
-            _timeText(intl.S.current.amount),
-            _amountDuration(),
-            //按钮
             Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+              margin: EdgeInsets.only(top: 5),
+              width: MediaQuery.of(context).size.width,
+              height: 12,
+              color: Color(0xffF7F7F7),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _resetButton(popcontext),
-                  _confimrButton(),
+                  //交易时间
+                  _timeText(intl.S.of(context).transaction_time),
+                  _tradingHour(),
+                  //自定义时间
+                  _timeText(intl.S.of(context).user_defined),
+                  _userDefind(popcontext),
+                  //金额
+                  _timeText(intl.S.current.amount),
+                  _amountDuration(),
+                  //按钮
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        _resetButton(popcontext),
+                        _confimrButton(),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

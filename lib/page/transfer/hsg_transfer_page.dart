@@ -13,6 +13,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TransferPage extends StatefulWidget {
   TransferPage({Key key}) : super(key: key);
@@ -24,6 +25,7 @@ class TransferPage extends StatefulWidget {
 class _TransferPageState extends State<TransferPage> {
   var _partnerListData = [];
   var cards = [];
+  String _language = Intl.getCurrentLocale();
   //是否显示无数据页面 true显示
   bool _isShowNoDataWidget = false;
   //顶部网格数据
@@ -419,7 +421,14 @@ class _TransferPageState extends State<TransferPage> {
             ),
           ),
           Text(
-            data.payeeBankLocalName == null ? '朗华银行' : data.payeeBankLocalName,
+            _language == 'zh_CN'
+                ? data.payeeBankLocalName == null
+                    ? '朗华银行'
+                    : data.payeeBankLocalName
+                : data.payeeBankEngName == null
+                    ? 'Brillink bank'
+                    : data.payeeBankEngName,
+            // data.payeeBankLocalName == null ? '朗华银行' : data.payeeBankLocalName,
             style: TextStyle(fontSize: 13, color: HsgColors.describeText),
           ),
           Row(

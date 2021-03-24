@@ -14,6 +14,7 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:left_scroll_actions/cupertinoLeftScroll.dart';
 import 'package:left_scroll_actions/leftScroll.dart';
 import 'package:left_scroll_actions/left_scroll_actions.dart';
@@ -35,6 +36,8 @@ class _TransferPartnerState extends State<TransferPartner> {
   var _transferType = '';
   bool _load = false; //是否加载更多
   bool _isData = false;
+  var _bankName = '';
+  String _language = Intl.getCurrentLocale();
   @override
   void initState() {
     super.initState();
@@ -172,6 +175,10 @@ class _TransferPartnerState extends State<TransferPartner> {
 
   //没数据显示页面
   Widget _noDataWidget() {
+    HSProgressHUD.show();
+    Future.delayed(Duration(seconds: 1), () {
+      HSProgressHUD.dismiss();
+    });
     return Container(
       width: (MediaQuery.of(context).size.width),
       height: 270,
@@ -328,9 +335,16 @@ class _TransferPartnerState extends State<TransferPartner> {
           style: TextStyle(fontSize: 14, color: Color(0xFF232323)),
         ),
         Text(
-          partner.payeeBankLocalName == null
-              ? '朗华银行'
-              : partner.payeeBankLocalName,
+          _language == 'zh_CN'
+              ? partner.payeeBankLocalName == null
+                  ? '朗华银行'
+                  : partner.payeeBankLocalName
+              : partner.payeeBankEngName == null
+                  ? 'Brillink bank'
+                  : partner.payeeBankEngName,
+          // _bankName = _language == 'zh_CN'
+          //     ? partner.payeeBankLocalName
+          //     : partner.payeeBankEngName,
           style: TextStyle(fontSize: 13, color: HsgColors.hintText),
         ),
         Row(

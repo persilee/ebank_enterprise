@@ -173,6 +173,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         Rows rowPartner = _arguments;
         _nameController.text = rowPartner.payeeName;
         _accountController.text = rowPartner.payeeCardNo;
+        _remarkController.text = rowPartner.remark;
         _nameController.selection = TextSelection.collapsed(
             affinity: TextAffinity.downstream,
             offset: _nameController.text.length);
@@ -446,6 +447,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 Rows rowListPartner = value;
                 _nameController.text = rowListPartner.payeeName;
                 _accountController.text = rowListPartner.payeeCardNo;
+                _remarkController.text = rowListPartner.remark;
               }
               _boolBut();
             });
