@@ -29,6 +29,8 @@ class ForgetUserName extends StatefulWidget {
 class _ForgetUserNameState extends State<ForgetUserName> {
   TextEditingController _phoneNum = TextEditingController();
   TextEditingController _sms = TextEditingController();
+  String _phoneNumListen;
+  String _smsListen;
   Timer _timer;
   int countdownTime = 0;
   String _accountName;
@@ -36,6 +38,25 @@ class _ForgetUserNameState extends State<ForgetUserName> {
 
   /// 区号
   String _officeAreaCodeText = '';
+
+  @override
+  // ignore: must_call_super
+  void initState() {
+    super.initState();
+    setState(() {
+      _phoneNum.addListener(() {
+        setState(() {
+          _phoneNumListen = _phoneNum.text;
+        });
+      });
+      _sms.addListener(() {
+        setState(() {
+          _smsListen = _sms.text;
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -224,7 +245,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
       HSProgressHUD.showInfo(status: S.current.format_mobile_error);
     } else if (!_isRegister) {
       Fluttertoast.showToast(
-        msg: "该手机号还未注册，请先注册账号",
+        msg: S.current.num_not_is_register,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,

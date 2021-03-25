@@ -39,7 +39,7 @@ class _SetPayPageState extends State<SetPayPage> {
       appBar: AppBar(
         title: Text(S.of(context).resetPayPsd),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,

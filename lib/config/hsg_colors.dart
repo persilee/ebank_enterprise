@@ -31,7 +31,7 @@ class HsgColors {
   static const Color aboutusCircle = Color(0xFFFA9B1CE);
   static const Color nextPageIcon = Color(0xFF282828);
   static const Color redTextColor = Color(0xFFC33838);
-  static const Color blueTextColor = Color(0xFF4871FF);
+  static const Color blueTextColor = Color(0xFF3394D4);
   static const Color blueBGColor = Color(0xFFEFF3FF);
   static const Color detailText = Color(0xFF9A9A9A);
   static const Color notSelectedBtn = Color(0xFF8B8B8B);
@@ -52,4 +52,8 @@ class HsgColors {
   static const Color registerNextBtn = Color(0xFFDCDCDC);
   static const Color plainBtn = Color(0xFF3394D4);
   static const Color homeMask = Color(0x42032136);
+  static const Color mineHeadBackground = Color(0xffc6d4de);
+  static const Color mineInfoText = Color(0xff262626);
+  static const Color mineInfoIcon = Color(0xff262626);
+  static const Color mineCharacterBackground = Color(0xff3394d4);
 }
