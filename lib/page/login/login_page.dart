@@ -36,12 +36,19 @@ class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
   var _changeLangBtnTltle = S.current.language1; // S.current.english;
 
+  // TextEditingController _accountTC =
+  //     TextEditingController(text: 'ljw124'); //fangluyao
+  // TextEditingController _passwordTC =
+  //     TextEditingController(text: 'Aa123456@'); //b0S25X5Y
+  // var _account = 'ljw124'; //'blk101';
+  // var _password = 'Aa123456@'; //'4N0021S8';
+
   TextEditingController _accountTC =
-      TextEditingController(text: 'ljw124'); //fangluyao
+  TextEditingController(text: 'blk503'); //fangluyao
   TextEditingController _passwordTC =
-      TextEditingController(text: 'Aa123456@'); //b0S25X5Y
-  var _account = 'ljw124'; //'blk101';
-  var _password = 'Aa123456@'; //'4N0021S8';
+  TextEditingController(text: '4N0021S8'); //b0S25X5Y
+  var _account = 'blk503'; //'blk101';
+  var _password = '4N0021S8'; //'4N0021S8';
 
   @override
   void initState() {
@@ -234,6 +241,10 @@ class _LoginPageState extends State<LoginPage> {
     _password = _passwordTC.text;
 
     String password = EncryptUtil.aesEncode(_password);
+
+    // LoginResp loginResp = await ApiClient().login(BaseBody(body: LoginReq(username: _account, password: password).toJson()));
+    // print(loginResp.toJson());
+
     UserDataRepository()
         .login(LoginReq(username: _account, password: password), 'login')
         .then((value) {
