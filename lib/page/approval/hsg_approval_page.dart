@@ -7,6 +7,10 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/feature_demo/my_tab_indicator.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/approval/authorization_history_page.dart';
+import 'package:ebank_mobile/util/screen_util.dart';
+import 'package:ebank_mobile/util/status_bar_util.dart';
+import 'package:ebank_mobile/util/widget_util.dart';
+import 'package:ebank_mobile/widget/custom_tabs.dart' as CustomTabBar;
 import 'package:flutter/material.dart';
 import 'my_appplication_page.dart';
 import 'my_approval_page.dart';
@@ -27,12 +31,10 @@ class _ApprovalPageState extends State<ApprovalPage>
     S.current.authorization_history,
     S.current.my_application
   ];
-  TabController tabController;
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: tabs.length, vsync: this);
   }
 
   @override
@@ -42,63 +44,76 @@ class _ApprovalPageState extends State<ApprovalPage>
 
 //顶部切换
   Widget _tabBar(BuildContext context) {
-    return TabBar(
-      isScrollable: true,
-      labelStyle: TextStyle(
-          fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.black),
-      labelColor: Colors.black,
-      unselectedLabelColor: Colors.grey,
-      controller: tabController,
-      indicatorWeight: 4,
-      indicatorSize: TabBarIndicatorSize.label,
-      indicator: MyUnderlineTabIndicator(
-        borderSide: BorderSide(width: 4.0, color: HsgColors.accent),
-        bottomPadding: 8.0,
-        indicatorWidthPercentage: 0.46,
+    return Container(
+      width: ScreenUtil.instance.width,
+      color: Colors.white,
+      alignment: Alignment.center,
+      child: CustomTabBar.TabBar(
+        isScrollable: true,
+        labelStyle: TextStyle(
+            fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.black),
+        unselectedLabelStyle:
+            TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+        labelColor: Colors.black,
+        unselectedLabelColor: Colors.grey,
+        indicatorWeight: 4,
+        indicatorSize: CustomTabBar.TabBarIndicatorSize.label,
+        indicator: MyUnderlineTabIndicator(
+          borderSide: BorderSide(width: 4.0, color: HsgColors.accent),
+          bottomPadding: 8.0,
+          indicatorWidthPercentage: 0.46,
+        ),
+        tabs: tabs.map((e) => Tab(text: e)).toList(),
       ),
-      tabs: tabs.map((e) => Tab(text: e)).toList(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(52),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            color: Colors.white,
-            child: Center(
-              child: Theme(
-                data: ThemeData(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent),
-                child: _tabBar(context),
-              ),
+    StatusBarUtil.setStatusBar(Brightness.dark, color: Colors.transparent);
+    return DefaultTabController(
+      length: tabs.length,
+      initialIndex: 0,
+      child: Builder(builder: (BuildContext context) {
+        final TabController tabController = DefaultTabController.of(context);
+        tabController.addListener(() {
+          print(tabController.indexIsChanging);
+        });
+        return Scaffold(
+          body: Container(
+            padding: EdgeInsets.only(top: ScreenUtil.instance.statusBarHeight),
+            color: Color(int.parse('0xffF8F8F8')),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text(S.of(context).approval, style: TextStyle(fontSize: 17.0),),
+                ),
+                Divider(
+                  thickness: 0,
+                  height: 1,
+                  color: Color(int.parse('0xffD9D9D9')),
+                ),
+                _tabBar(context),
+                Expanded(
+                  child: Container(
+                    color: Colors.white,
+                    child: CustomTabBar.TabBarView(
+                      controller: tabController,
+                      children: [
+                        MyApprovalPage(title: S.current.my_to_do_list),
+                        AuthorizationHistoryPage(
+                            title: S.current.authorization_history),
+                        MyApplicationPage(title: S.current.my_application)
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-        centerTitle: true,
-        title: Text(
-          S.of(context).approval,
-        ),
-        elevation: 0,
-      ),
-      body: TabBarView(
-        controller: tabController,
-        children: [
-          MyApprovalPage(title: S.current.my_to_do_list),
-          AuthorizationHistoryPage(title: S.current.authorization_history),
-          MyApplicationPage(title: S.current.my_application)
-        ],
-      ),
+        );
+      }),
     );
-  }
-
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
   }
 }
