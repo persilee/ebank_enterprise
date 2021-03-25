@@ -567,8 +567,9 @@
   "face_sign_placeholdText": "Please enter a combination of 6 digits or letters",
   "face_sign_Interviews": "Interview number",
   "face_sign_TipsTitle": "Note: \n1. The \"interview number\" will be provided by Longhua during the video interview process; \n2. Before the interview, please make sure to prepare the relevant account opening documents according to the instructions in the notification email; \n3. Please conduct the interview in a place with sufficient light, quiet environment and stable network.",
-  "openAccount_notOpen_tips": "Warm Tips",
-   "openAccount_notOpen_content": "You have not opened an account yet, to perform this operation, please complete the remote account opening process first!",
+  "warm_prompt": "Warm Tips",
+  "openAccount_notOpen_content": "You have not opened an account yet, to perform this operation, please complete the remote account opening process first!",
+  "not_set_tranPassword_content": "You have not set a transaction password, please go to set a transaction password.",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }

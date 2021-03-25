@@ -511,7 +511,9 @@ class _HomePageState extends State<HomePage> {
             child: _nameInfo(),
           ),
           RaisedButton(
-            onPressed: _openAccountClickFunction(context),
+            onPressed: () {
+              _openAccountClickFunction(context);
+            },
             child: Text(
               S.of(context).open_account_apply,
               style: TextStyle(fontSize: 15, color: Colors.white),
@@ -551,7 +553,9 @@ class _HomePageState extends State<HomePage> {
             margin: EdgeInsets.only(top: 10, bottom: 15),
             height: 35,
             child: RaisedButton(
-              onPressed: _openAccountClickFunction(context),
+              onPressed: () {
+                _openAccountClickFunction(context);
+              },
               child: Text(
                 S.of(context).open_account_reapply,
                 style: TextStyle(fontSize: 14, color: Colors.white),
@@ -697,16 +701,15 @@ class _HomePageState extends State<HomePage> {
   //功能点击事件
   VoidCallback _featureClickFunction(BuildContext context, String title) {
     return () {
-      // if (_belongCustStatus == '0' ||
-      //     _belongCustStatus == '1' ||
-      //     _belongCustStatus == '2' ||
-      //     _belongCustStatus == '3' ||
-      //     _belongCustStatus == '4') {
-      //   HsgShowTip.loginTip(
-      //       context: context,
-      //       click: (value) {
-      //         print('>>>>$value');
-      //       });
+      // if (['0', '1', '2', '3', '4'].contains(_belongCustStatus)) {
+      //   HsgShowTip.notOpenAccountTip(
+      //     context: context,
+      //     click: (value) {
+      //       if (value == true) {
+      //         _openAccountClickFunction(context);
+      //       }
+      //     },
+      //   );
       //   return;
       // }
       if (S.current.transaction_details == title) {
@@ -757,19 +760,34 @@ class _HomePageState extends State<HomePage> {
   }
 
   //开户点击事件
-  VoidCallback _openAccountClickFunction(BuildContext context) {
-    return () {
-      if (_inviteeStatus == '0') {
-        //前往填写面签码
-        // Navigator.pushNamed(context, pageOpenAccountBasicData);
-        Fluttertoast.showToast(
-            msg: '前往填写面签码，开发中', gravity: ToastGravity.CENTER);
-        print('前往填写面签码');
-      } else {
-        //前往快速开户
-        Navigator.pushNamed(context, pageOpenAccountBasicData);
-      }
-    };
+  void _openAccountClickFunction(BuildContext context) {
+    if (_inviteeStatus == '0') {
+      //前往填写面签码
+      // Navigator.pushNamed(context, pageOpenAccountBasicData);
+      Fluttertoast.showToast(msg: '前往填写面签码，开发中', gravity: ToastGravity.CENTER);
+      print('前往填写面签码');
+    } else {
+      //前往快速开户
+      Navigator.pushNamed(context, pageOpenAccountBasicData);
+    }
+  }
+
+  //校验是否提示设置交易密码
+  void _verifyGotoTranPassword(BuildContext context, bool passwordEnabled) {
+    if (passwordEnabled == true ||
+        (['5', '6', '7'].contains(_belongCustStatus))) {
+      //已经设置交易密码，或者用户未开户，不做操作
+      return;
+    }
+    HsgShowTip.shouldSetTranPasswordTip(
+      context: context,
+      click: (value) {
+        if (value == true) {
+          //前往设置交易密码
+          Navigator.pushNamed(context, pageResetPayPwdOtp);
+        }
+      },
+    );
   }
 
   ///上图下文字的按钮
@@ -884,9 +902,11 @@ class _HomePageState extends State<HomePage> {
     )
         .then((data) {
       print('$data');
-      if (data.belongCustStatus == '0' || data.belongCustStatus == '2') {
+      if (['0', '2'].contains(data.belongCustStatus)) {
         _getInviteeStatusByPhoneNetwork();
       }
+
+      _verifyGotoTranPassword(context, data.passwordEnabled);
 
       setState(() {
         _headPortraitUrl = data.headPortrait; //头像地址
