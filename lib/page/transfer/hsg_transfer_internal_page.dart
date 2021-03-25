@@ -147,9 +147,12 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   void initState() {
     super.initState();
     _loadTransferData();
+
     _transferMoneyController.addListener(() {
       if (_payCcy == _transferCcy) {
-        _amount = _transferMoneyController.text;
+        setState(() {
+          _amount = _transferMoneyController.text;
+        });
       } else {
         _rateCalculate();
       }
@@ -187,11 +190,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         title: Text(S.current.transfer_type_0),
         centerTitle: true,
         elevation: 1,
-        // backgroundColor: Color(0xffF7F7F7),
-        // textTheme: TextTheme(
-        //   title: TextStyle(color: Colors.black, fontSize: 17),
-        //   button: TextStyle(color: Colors.black, fontSize: 17),
-        // ),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -397,6 +395,13 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         _transferIndex = result;
         _transferCcy = _transferCcyList[result];
       });
+      if (_payCcy == _transferCcy) {
+        setState(() {
+          _amount = _transferMoneyController.text;
+        });
+      } else {
+        _rateCalculate();
+      }
     }
   }
 
@@ -440,6 +445,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   Widget _getImage() {
     return InkWell(
       onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
         Navigator.pushNamed(context, pageTranferPartner, arguments: '0').then(
           (value) {
             setState(() {
@@ -557,6 +563,13 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _payIndex = 0;
             }
             _getTransferCcySamePayCcy();
+            if (_payCcy == _transferCcy) {
+              setState(() {
+                _amount = _transferMoneyController.text;
+              });
+            } else {
+              _rateCalculate();
+            }
           });
         }
         //查询额度
@@ -626,9 +639,14 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                   defaultCcy: _payCcy),
               'TransferTrialReq')
           .then((data) {
+        print("====================");
+        print(data.optExAmt);
+        print(data);
         setState(() {
           _amount = data.optExAmt;
         });
+      }).catchError((e) {
+        print(e.toString());
       });
     }
   }

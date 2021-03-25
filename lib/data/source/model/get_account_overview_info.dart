@@ -65,7 +65,7 @@ class GetTotalAssetsResp extends Object {
 
 // 活期
 @JsonSerializable()
-class GetCardListBalByUserReq {
+class GetCardListBalByUserReqToGetAccount {
   @JsonKey(name: 'accountType')
   String accountType;
   @JsonKey(name: 'ccy')
@@ -75,7 +75,7 @@ class GetCardListBalByUserReq {
   @JsonKey(name: 'cardNoList')
   List<String> cardNoList;
 
-  GetCardListBalByUserReq(
+  GetCardListBalByUserReqToGetAccount(
     this.accountType,
     this.ccy,
     this.ciNo,
@@ -87,16 +87,18 @@ class GetCardListBalByUserReq {
     return toJson().toString();
   }
 
-  factory GetCardListBalByUserReq.fromJson(Map<String, dynamic> srcJson) =>
-      _$GetCardListBalByUserReqFromJson(srcJson);
+  factory GetCardListBalByUserReqToGetAccount.fromJson(
+          Map<String, dynamic> srcJson) =>
+      _$GetCardListBalByUserReqToGetAccountFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$GetCardListBalByUserReqToJson(this);
+  Map<String, dynamic> toJson() =>
+      _$GetCardListBalByUserReqToGetAccountToJson(this);
 }
 
 @JsonSerializable()
 class GetCardListBalByUserResp extends Object {
-  @JsonKey(name: 'cardListBal')
-  List<CardListBal> cardListBal;
+  @JsonKey(name: 'cardListBalByAccount')
+  List<CardListBalByAccount> cardListBal;
   @JsonKey(name: 'totalAmt')
   String totalAmt;
   @JsonKey(name: 'defaultCcy')
@@ -126,7 +128,7 @@ class GetCardListBalByUserResp extends Object {
 }
 
 @JsonSerializable()
-class CardListBal extends Object {
+class CardListBalByAccount extends Object {
   @JsonKey(name: 'cardNo')
   String cardNo;
   @JsonKey(name: 'ccy')
@@ -138,7 +140,7 @@ class CardListBal extends Object {
   @JsonKey(name: 'equAmt')
   String equAmt;
 
-  CardListBal(
+  CardListBalByAccount(
     this.cardNo,
     this.ccy,
     this.currBal,
@@ -151,10 +153,10 @@ class CardListBal extends Object {
     return toJson().toString();
   }
 
-  factory CardListBal.fromJson(Map<String, dynamic> srcJson) =>
-      _$CardListBalFromJson(srcJson);
+  factory CardListBalByAccount.fromJson(Map<String, dynamic> srcJson) =>
+      _$CardListBalByAccountFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$CardListBalToJson(this);
+  Map<String, dynamic> toJson() => _$CardListBalByAccountToJson(this);
 }
 
 // 定期

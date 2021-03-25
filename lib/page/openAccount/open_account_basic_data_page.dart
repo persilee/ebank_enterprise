@@ -130,7 +130,6 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        elevation: 1,
         centerTitle: true,
         title: Text(S.of(context).openAccout_basicInformation),
       ),

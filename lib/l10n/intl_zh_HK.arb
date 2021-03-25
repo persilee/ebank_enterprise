@@ -457,9 +457,6 @@
   "receiver_address": "收款方地址",
   "forget_username": "忘記用戶名",
   "estimated_collection_amount": "預計收款金額",
-
-
-
   "register": "註冊",
   "welcome_to_register": "歡迎註冊",
   "please_input_mobile_num": "請輸入手機號",
@@ -474,9 +471,6 @@
   "loan_application_agreement2": "《企業用戶服務及授權協議》",
   "loan_application_agreement3": "和",
   "loan_application_agreement4": "《用戶服務協議及隱私政策》",
-
-  
-
   "fangluyao_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>方璐瑤國際化代碼寫在這裏>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "three_month": "三個月",
   "six_month": "六個月",
@@ -496,26 +490,21 @@
   "password_need_low_and_top": "密碼需包含大小寫字母",
   "password_need_special_font": "密碼需包含特殊字符",
   "fangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<方璐瑤國際化代碼寫在這裏<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-
   "wangluyao_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>王璐瑤國際化代碼寫在這裏>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
-  "tdContract_estimated_payment_amount":"預計支付金額",
-  "tdContract_payment_currency":"支付幣種",
+  "tdContract_estimated_payment_amount": "預計支付金額",
+  "tdContract_payment_currency": "支付幣種",
   "wangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<王璐瑤國際化代碼寫在這裏<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-
   "zhangqirong_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>張其榮際化代碼寫在這裏>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
-  "in_all":"共",
+  "in_all": "共",
   "accounts": "個賬戶",
   "zhangqirong_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<張其榮國際化代碼寫在這裏<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-
   "pengyikang_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>彭逸康國際化代碼寫在這裏>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
-  "register_check_username":"用戶名只能為4-16位字符、數字或者字母，不能包含特殊字符，不能重復",
-  "num_is_register":"此手機號已被註冊",
-  "num_not_is_register":"該手機號還未註冊，請先註冊賬號",
+  "register_check_username": "用戶名只能為4-16位字符、數字或者字母，不能包含特殊字符，不能重復",
+  "num_is_register": "此手機號已被註冊",
+  "num_not_is_register": "該手機號還未註冊，請先註冊賬號",
   "pengyikang_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<彭逸康國際化代碼寫在這裏<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-
   "lishaoying_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李少穎際化代碼寫在這裏>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "lishaoying_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李少穎國際化代碼寫在這裏<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-
   "lijiawei_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李家偉際化代碼寫在這裏>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "openAccout_basicInformation": "一般資料",
   "openAccount_companyNameEng": "公司名稱（英文）",
@@ -554,8 +543,7 @@
   "openAccout_businessAddress_details": "主要營業地址詳情",
   "openAccout_mailingAddress": "通訊地址",
   "openAccout_mailingAddress_details": "通訊地址詳情",
- 
-  "register_select_documents":"請選擇證件類型",
+  "register_select_documents": "請選擇證件類型",
   "openAccout_details_of_connected_parties_title": "有關人士信息預填",
   "openAccout_details_of_connected_parties": "有關人士信息",
   "openAccout_appellation": "稱謂",
@@ -575,10 +563,13 @@
   "hot_countries": "熱門國家",
   "select_country": "選擇國家",
   "face_sign_navTitle": "面簽",
-   "face_sign_attention_regulations": "",
-  "face_sign_placeholdText":"請輸入6位數字或字母的組合",
+  "face_sign_attention_regulations": "",
+  "face_sign_placeholdText": "請輸入6位數字或字母的組合",
   "face_sign_Interviews": "面簽號碼",
-  "face_sign_TipsTitle":"註意事項：\n1、“面簽號碼”於視頻面簽過程中，由朗華提供；\n2、面簽前，請務必依照通知郵件指示，準備相關開戶資料；\n3、請在光線充足、環境安靜、網絡穩定的地方進行面簽；",
+  "face_sign_TipsTitle": "註意事項：\n1、“面簽號碼”於視頻面簽過程中，由朗華提供；\n2、面簽前，請務必依照通知郵件指示，準備相關開戶資料；\n3、請在光線充足、環境安靜、網絡穩定的地方進行面簽；",
+  "warm_prompt": "溫馨提示",
+  "openAccount_notOpen_content": "您還未開戶，請先開戶再進行本操作！",
+  "not_set_tranPassword_content": "您還未設置交易密碼，請前往設置交易密碼。",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家偉（開戶）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }

@@ -22,7 +22,7 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
       appBar: AppBar(
         title: Text(S.of(context).password_management),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
       ),
       body: Container(
         child: CustomScrollView(
