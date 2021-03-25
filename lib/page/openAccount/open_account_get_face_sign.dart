@@ -1,10 +1,17 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/face_sign_businessid.dart';
+import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../page_route.dart';
 
 class OpenAccountGetFaceSignPage extends StatefulWidget {
   @override
@@ -21,7 +28,7 @@ class _OpenAccountGetFaceSignPageState
     final size = MediaQuery.of(context).size; //获取屏幕的尺寸
     return Scaffold(
       resizeToAvoidBottomInset: false, //防止像素进行溢出
-      backgroundColor: Colors.white, //
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
@@ -90,12 +97,11 @@ class _OpenAccountGetFaceSignPageState
               child: HsgButton.defaultButton(
                 title: S.of(context).field_dialog_confirm,
                 click: () {
-                  print(_codeSignTextF.text);
+                  _didFaceSignCommit();
                 },
               ),
             ),
             Container(
-              height: 300,
               padding: EdgeInsets.only(left: 30, right: 30, top: 55),
               child: Column(
                 // mainAxisAlignment: MainAxisAlignment.start,
@@ -117,7 +123,40 @@ class _OpenAccountGetFaceSignPageState
     );
   }
 
-  void _didFaceSignCommit(String inputText) {
-    print(inputText);
+  void _didFaceSignCommit() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString(ConfigKey.USER_PHONE);
+
+    if (_codeSignTextF.text.length > 0 && userName.length > 0) {
+      //根据电话以及输入文本这里去请求businessId
+      print('..........$userName');
+      HSProgressHUD.show();
+      OpenAccountRepository()
+          .getFaceSignBusiness(
+              FaceSignIDReq(userName, _codeSignTextF.text), 'face_Sign')
+          .then(
+        (value) {
+          HSProgressHUD.dismiss();
+          if (value.businessId != '' || value.businessId != null) {
+            //跳转证件选择界面
+            Navigator.pushNamed(
+              context,
+              pageOpenAccountSelectDocumentType,
+              arguments: value.businessId,
+            );
+          } else {
+            //弹窗提示
+
+          }
+          print(value);
+        },
+      ).catchError((e) {
+        HSProgressHUD.dismiss();
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+      });
+    }
   }
 }
