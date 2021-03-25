@@ -46,6 +46,7 @@ class _TransferInternalPreviewPageState
                 click: () {
                   _loadData(transferData);
                 },
+                isColor: true,
               ),
             ),
           ],

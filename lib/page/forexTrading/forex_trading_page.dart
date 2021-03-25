@@ -94,6 +94,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
                           _openBottomSheet();
                         }
                       : null,
+                  isColor: _boolBut(),
                 ),
               ),
             ],
