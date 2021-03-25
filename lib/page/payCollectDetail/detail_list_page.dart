@@ -605,7 +605,7 @@ class _DetailListPageState extends State<DetailListPage> {
           color: Colors.white,
           //交易时间
           //  child: Text(ddFinHisDTOList[section].transDate),
-          child: Text(ddFinHisDTOList[section].txDateTime),
+          //   child: Text(ddFinHisDTOList[section].txDateTime),
         ),
       ],
     );
@@ -694,7 +694,7 @@ class _DetailListPageState extends State<DetailListPage> {
             Container(
               width: 160,
               child: Text(
-                ddFinHisDTOList[section].txDateTime,
+                ddFinHisDTOList[section].acDate,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 12, color: Color(0xFFACACAC)),

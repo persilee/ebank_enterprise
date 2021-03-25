@@ -56,7 +56,7 @@ class DepositDataRepository {
         (data) => DepositRateResp.fromJson(data));
   }
 
-  //获取多张卡余额
+  //获取多张卡余额 ----账户汇总
   Future<GetCardListBalByUserResp> getCardListBalByUser(
       GetCardListBalByUserReq req, tag) {
     return request('/cust/bankcard/getCardListBalByUser', req, tag,

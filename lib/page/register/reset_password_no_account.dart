@@ -177,14 +177,15 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
         "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
     RegExp letter = new RegExp("[a-zA-Z]");
     RegExp number = new RegExp("[0-9]");
-    if (_newPassword.text != _confirmPassword.text) {
-      Fluttertoast.showToast(
-        msg: S.of(context).differentPwd,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-      );
-    } else if ((_newPassword.text).contains(userAccount) == true) {
+    // if (_newPassword.text != _confirmPassword.text) {
+    //   Fluttertoast.showToast(
+    //     msg: S.of(context).differentPwd,
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.CENTER,
+    //     timeInSecForIosWeb: 1,
+    //   );
+    // }
+    if ((_newPassword.text).contains(userAccount) == true) {
       Fluttertoast.showToast(
         msg: S.current.not_contain_password,
         toastLength: Toast.LENGTH_SHORT,
@@ -241,7 +242,13 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
         );
-        Navigator.popAndPushNamed(context, pageResetPasswordSuccess);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          pageResetPasswordSuccess,
+          ModalRoute.withName("/"), //清除旧栈需要保留的栈 不清除就不写这句
+          // arguments: listDataLogin //传值
+        );
+
+        //   Navigator.popAndPushNamed(context, pageResetPasswordSuccess);
       }).catchError((e) {
         Fluttertoast.showToast(msg: e.toString());
         HSProgressHUD.dismiss();

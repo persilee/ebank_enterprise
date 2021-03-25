@@ -34,6 +34,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
   String _registerAccount;
   String _userPhone;
   String _sms;
+  String _areaCode;
   @override
   // ignore: must_call_super
   void initState() {
@@ -55,6 +56,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
     _registerAccount = listData['accountName'];
     _sms = listData['sms'];
     _userPhone = listData['phone'];
+    _areaCode = listData['areaCode'];
 
 //_registerAccount =
     return Scaffold(
@@ -172,12 +174,13 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
   _registerByAccount() async {
     String userType = "1";
     String password = EncryptUtil.aesEncode(_newPassword.text);
-    print("$password");
-    print("$_newPassword.text");
+
+    print("$_areaCode>>>>>>>>>>>>>>");
+
     VersionDataRepository()
         .registerByAccount(
-            RegisterByAccountReq(
-                '', password, _registerAccount, _userPhone, userType, _sms),
+            RegisterByAccountReq(_areaCode, password, _registerAccount,
+                _userPhone, userType, _sms),
             'registerByAccount')
         .then((value) {
       Map listDataLogin = new Map();

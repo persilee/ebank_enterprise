@@ -77,7 +77,7 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
                 //交易时间
                 ContentRow(
                   label: S.current.transaction_time,
-                  item: ddFinHist.txDateTime,
+                  // item: ddFinHist.txDateTime,
                 ),
                 // 交易类型
                 ContentRow(

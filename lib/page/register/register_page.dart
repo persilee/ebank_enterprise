@@ -46,9 +46,10 @@ class _RegisterPageState extends State<RegisterPage> {
   int countdownTime = 0;
   bool _checkBoxValue = false; //复选框默认值
   bool _isRegister = false;
+  String _areaCode;
 
   /// 区号
-  String _officeAreaCodeText = '';
+  String _officeAreaCodeText = '86';
   @override
   // ignore: must_call_super
   void initState() {
@@ -203,7 +204,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                         listData = {
                                           'accountName': _userNameListen,
                                           'sms': _smsListen,
-                                          'phone': _phoneNumListen
+                                          'phone': _phoneNumListen,
+                                          'areaCode': _officeAreaCodeText
                                         };
 
                                         Navigator.pushNamed(
