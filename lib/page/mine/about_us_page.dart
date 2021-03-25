@@ -14,7 +14,7 @@ class AboutUsPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(S.current.aboutUs),
           centerTitle: true,
-          elevation: 0,
+          elevation: 1,
         ),
         body: Container(
             color: Colors.white,

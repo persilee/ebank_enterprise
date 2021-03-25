@@ -33,6 +33,7 @@ class _TransferInternalPreviewPageState
         appBar: AppBar(
           title: Text(S.current.transfer_the_preview),
           centerTitle: true,
+          elevation: 1,
         ),
         body: ListView(
           children: [
@@ -201,9 +202,8 @@ class _TransferInternalPreviewPageState
                 smsCode),
             'getTransferByAccount')
         .then((data) {
-           Navigator.pushReplacementNamed(context, pageOperationResult);
-        })
-        .catchError((e) {
+      Navigator.pushReplacementNamed(context, pageOperationResult);
+    }).catchError((e) {
       print(e.toString());
     });
   }

@@ -42,6 +42,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   var _aliasController = TextEditingController();
   var _centerSwiftController = TextEditingController();
   var _payeeAdressController = TextEditingController();
+  var _bankSwiftController = TextEditingController();
   // var _bankSwiftController = TextEditingController();
   bool _showInternational = false; //国际转账
   var _alias = '';
@@ -198,7 +199,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       appBar: AppBar(
         title: Text(S.current.add_payee),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -288,6 +289,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         //转账类型
         GestureDetector(
           onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
             _transferTypeDialog();
           },
           child: Container(
@@ -385,6 +387,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             _bank = data;
             _bankName = _bank.localName;
             _swiftAdress = _bank.bankSwift;
+            _bankSwiftController.text = _bank.bankSwift;
             _bankCode = _bank.bankCode;
             _check();
           });
@@ -443,6 +446,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             title: S.current.state_area,
             item: _countryText,
             onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               Navigator.pushNamed(context, countryOrRegionSelectPage)
                   .then((value) {
                 setState(() {
@@ -457,6 +461,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           // _isSelect ?
           GestureDetector(
             onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _bankTap(context);
             },
             child: Container(
@@ -478,28 +483,33 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           Divider(height: 0.5, color: HsgColors.divider),
           //银行SWIFT
           // _isSelect ?
-          Container(
-            padding: EdgeInsets.only(top: 16, bottom: 16),
-            child: _inputFrame(
-              S.current.bank_swift,
-              _mutableText(_swiftAdress, S.current.bank_swift),
-            ),
-          ),
-          // :TextFieldContainer(
-          //     title: S.current.bank_swift,
-          //     keyboardType: TextInputType.text,
-          //     controller: _bankSwiftController,
-          //     callback: _check,
-          //     length: 11,
+          // Container(
+          //   padding: EdgeInsets.only(top: 16, bottom: 16),
+          //   child: _inputFrame(
+          //     S.current.bank_swift,
+          //     _mutableText(_swiftAdress, S.current.bank_swift),
           //   ),
+          // ),
+          // :
+          TextFieldContainer(
+            title: S.current.bank_swift,
+            hintText: S.current.please_input,
+            keyboardType: TextInputType.text,
+            controller: _bankSwiftController,
+            callback: _check,
+            length: 11,
+            isUpperCase: true,
+          ),
           Divider(height: 0.5, color: HsgColors.divider),
           //中间行SWFIT
-          Container(
-            height: 48,
-            child: _inputFrame(
-              S.current.middle_bank_swift,
-              _onlyTextField(_centerSwiftController),
-            ),
+          TextFieldContainer(
+            title: S.current.middle_bank_swift,
+            hintText: S.current.not_required,
+            keyboardType: TextInputType.text,
+            controller: _centerSwiftController,
+            callback: _check,
+            length: 11,
+            isUpperCase: true,
           ),
           Divider(height: 0.5, color: HsgColors.divider),
           _payeeAdress(_payeeAdressController),
@@ -509,6 +519,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             title: S.current.Transfer_fee,
             item: _transferFee,
             onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _selectTransferFee();
             },
           ),
@@ -518,6 +529,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             title: S.current.remittance_usage,
             item: _feeUse,
             onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _selectFeeUse();
             },
           ),
@@ -542,6 +554,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     }
     setState(() {
       _transferFeeIndex = result;
+      _check();
     });
   }
 
@@ -561,6 +574,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     }
     setState(() {
       _feeUseIndex = result;
+      _check();
     });
   }
 
@@ -814,7 +828,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         if (_showInternational) {
           if (_bankName != S.current.please_select &&
               _payeeAdressController.text.length > 0 &&
-              _countryText != '') {
+              _countryText != '' &&
+              _transferFee != '' &&
+              _feeUse != '') {
             _isInputed = true;
           } else {
             _isInputed = false;

@@ -301,6 +301,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
       appBar: AppBar(
         title: Text(S.current.receipt_detail),
         centerTitle: true,
+        elevation: 1,
       ),
       body: Container(
         color: HsgColors.commonBackground,
@@ -312,7 +313,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
             Container(
               color: Colors.white,
               margin: EdgeInsets.only(bottom: 10),
-              padding: EdgeInsets.fromLTRB(16, 0, 16, 10),
+              padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
               //付款账户
               child: Row(
                 children: [

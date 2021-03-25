@@ -22,7 +22,7 @@ class UserInformationPage extends StatefulWidget {
 
 class _UserInformationPageState extends State<UserInformationPage> {
   String _language = Intl.getCurrentLocale();
-  var _changeLangBtnTltle = S.current.language1;
+  var _changeLangBtnTltle = '';
   String _headPortraitUrl = ""; //头像地址
   var _imgPath;
   var _enterpriseName = ''; // 企业名称
@@ -38,6 +38,15 @@ class _UserInformationPageState extends State<UserInformationPage> {
 
   @override
   Widget build(BuildContext context) {
+    String _language = Intl.getCurrentLocale();
+    if (_language == 'zh_CN') {
+      _changeLangBtnTltle = '中文（简体）';
+    } else if (_language == 'zh_HK') {
+      _changeLangBtnTltle = '中文（繁體）';
+    } else {
+      _changeLangBtnTltle = 'English';
+    }
+
     UserInfoResp _arguments = ModalRoute.of(context).settings.arguments;
     if (_arguments != null) {
       _data = _arguments;
@@ -48,7 +57,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
       appBar: AppBar(
         title: Text(S.of(context).user_information),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -224,7 +233,8 @@ class _UserInformationPageState extends State<UserInformationPage> {
   _selectLanguage(BuildContext context) async {
     List<String> languages = [
       'English',
-      '中文',
+      '中文（简体）',
+      '中文（繁體）',
     ];
     final result = await showHsgBottomSheet(
         context: context,
@@ -245,6 +255,12 @@ class _UserInformationPageState extends State<UserInformationPage> {
           language = Language.ZH_CN;
           setState(() {
             _language = 'zh_CN';
+          });
+          break;
+        case 2:
+          language = Language.ZH_HK;
+          setState(() {
+            _language = 'zh_Hk';
           });
           break;
       }

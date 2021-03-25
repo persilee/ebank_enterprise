@@ -79,6 +79,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
       title: 'HSGBank',
       theme: ThemeData(
         appBarTheme: AppBarTheme(
+          elevation: 1,
           textTheme: TextTheme(
             headline6: TextStyle(
               fontStyle: FontStyle.normal,
@@ -152,4 +153,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
       Fluttertoast.showToast(msg: e.toString());
     });
   }
+
+  //获取币种列表
+
 }

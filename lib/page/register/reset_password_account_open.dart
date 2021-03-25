@@ -23,20 +23,39 @@ class ResetPasswordAccountOpen extends StatefulWidget {
 }
 
 class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
-  TextEditingController _userName = TextEditingController();
+  TextEditingController _userName = TextEditingController(); //用户真实姓名
   TextEditingController _cardNumber = TextEditingController();
+  String _userNameListen;
+  String _cardNumberListen;
   String _certType = '';
   List<IdType> idInformationList = []; //证件类型信息
   String _certTypeKey; //身份校验的key
+  String _accountName; //前面传过来用户登录名
 
+  Map listData = new Map();
   @override
   void initState() {
+    setState(() {
+      _userName.addListener(() {
+        setState(() {
+          _userNameListen = _userName.text;
+        });
+      });
+      _cardNumber.addListener(() {
+        setState(() {
+          _cardNumberListen = _cardNumber.text;
+        });
+      });
+    });
     super.initState();
     _getIdCardList();
   }
 
   @override
   Widget build(BuildContext context) {
+    listData = ModalRoute.of(context).settings.arguments;
+    _accountName = listData['userAccount'];
+    print("$_accountName>>>>>>>>>>>>>>>>>>>>>>");
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
@@ -127,7 +146,8 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                       onPressed: _submit()
                           ? () {
                               Navigator.pushNamed(
-                                  context, pageResetPasswordNoAccount);
+                                  context, pageResetPasswordNoAccount,
+                                  arguments: listData);
                             }
                           : null,
                       textColor: Colors.white,
@@ -185,8 +205,8 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
   }
 
   bool _submit() {
-    if (_userName.text.length > 0 &&
-        _cardNumber.text.length > 0 &&
+    if (_userNameListen != '' &&
+        _cardNumberListen != '' &&
         _certType.length > 0) {
       return true;
     } else {

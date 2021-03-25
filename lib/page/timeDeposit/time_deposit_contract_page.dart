@@ -779,6 +779,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(S.current.deposit_open),
+        elevation: 1,
       ),
       body: ListView(
         children: [

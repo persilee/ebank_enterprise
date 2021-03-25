@@ -1,5 +1,5 @@
 import 'package:ebank_mobile/data/source/model/checkout_informant.dart';
-import 'package:ebank_mobile/data/source/model/set_transactionPassword.dart';
+import 'package:ebank_mobile/data/source/model/set_transaction_password.dart';
 import 'package:ebank_mobile/data/source/model/real_name_auth_by_three_factor.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -16,7 +16,7 @@ class ChecInformantApiRepository {
         (data) => CheckoutInformantResp.fromJson(data));
   }
 
-  //身份证验证
+  //设置交易密码
   Future<SetTransactionPasswordResp> setTransactionPassword(
       SetTransactionPasswordReq req, String tag) {
     return request('cust/user/setTransactionPassword', req, tag,

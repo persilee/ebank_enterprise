@@ -33,6 +33,7 @@ class _TransferInternalPreviewPageState
         appBar: AppBar(
           title: Text(S.current.transfer_the_preview),
           centerTitle: true,
+          elevation: 1,
         ),
         body: ListView(
           children: [

@@ -20,6 +20,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../util/encrypt_util.dart';
@@ -34,7 +35,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
-  var _changeLangBtnTltle = S.current.language1; // S.current.english;
+  var _changeLangBtnTltle = '';
 
   // TextEditingController _accountTC =
   //     TextEditingController(text: 'ljw124'); //fangluyao
@@ -44,10 +45,10 @@ class _LoginPageState extends State<LoginPage> {
   // var _password = 'Aa123456@'; //'4N0021S8';
 
   TextEditingController _accountTC =
-  TextEditingController(text: 'blk503'); //fangluyao
+      TextEditingController(text: 'blk501'); //fangluyao
   TextEditingController _passwordTC =
-  TextEditingController(text: '4N0021S8'); //b0S25X5Y
-  var _account = 'blk503'; //'blk101';
+      TextEditingController(text: '4N0021S8'); //b0S25X5Y
+  var _account = 'blk501'; //'blk101';
   var _password = '4N0021S8'; //'4N0021S8';
 
   @override
@@ -73,6 +74,15 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    String _language = Intl.getCurrentLocale();
+    if (_language == 'zh_CN') {
+      _changeLangBtnTltle = '中文（简体）';
+    } else if (_language == 'zh_HK') {
+      _changeLangBtnTltle = '中文（繁體）';
+    } else {
+      _changeLangBtnTltle = 'English';
+    }
+
     //从忘记用户名界面拿到名字
     var _userName = ModalRoute.of(context).settings.arguments;
     _accountTC.text = _userName;
@@ -279,6 +289,8 @@ class _LoginPageState extends State<LoginPage> {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
+    prefs.setString(ConfigKey.USER_PHONE, resp.userPhone);
+    prefs.setString(ConfigKey.USER_AREACODE, resp.areaCode);
     if (resp.custId == null || resp.custId == '') {
       prefs.setString(ConfigKey.CUST_ID, '');
     } else {
@@ -355,7 +367,8 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
   _selectLanguage(BuildContext context) async {
     List<String> languages = [
       'English',
-      '中文',
+      '中文（简体）',
+      '中文（繁體）',
     ];
     final result = await showHsgBottomSheet(
         context: context,
@@ -371,6 +384,9 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
           break;
         case 1:
           language = Language.ZH_CN;
+          break;
+        case 2:
+          language = Language.ZH_HK;
           break;
       }
     } else {

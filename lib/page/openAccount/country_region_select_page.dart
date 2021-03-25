@@ -53,7 +53,6 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
       appBar: AppBar(
         title: Text(
           S.of(context).select_country,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
       body: Column(
