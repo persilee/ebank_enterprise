@@ -172,7 +172,6 @@ class _TransferInternalPreviewPageState
     String payerName = transferData.payerName;
     String remark = transferData.transferRemark;
     String smsCode = '';
-
     TransferDataRepository()
         .getTransferByAccount(
             GetTransferByAccount(

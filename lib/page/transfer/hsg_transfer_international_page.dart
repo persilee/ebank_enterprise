@@ -162,6 +162,12 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _middleBankSwiftController.text = listPartner.midBankSwift;
         _payeeAddressController.text = listPartner.payeeAddress;
         _remarkController.text = listPartner.remark;
+        //付款方银行
+        payeeBankCode = listPartner.bankCode;
+        //收款方银行
+        payerBankCode = listPartner.payerBankCode;
+        payeeName = listPartner.payeeName;
+        payerName = listPartner.payerName;
         check = true;
       }
     });
@@ -750,12 +756,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             element.cardList.forEach((e) {
               _accountList.add(e.cardNo);
             });
-            //付款方银行名字
-            payeeBankCode = element.cardList[0].ciName;
-            //收款方银行姓名
-            payerBankCode = element.cardList[0].ciName;
             //付款方姓名
-            payerName = element.cardList[0].ciName;
+            // payerName = element.cardList[0].ciName;
           });
           _getCcyList();
           _getCardTotal(_account);
