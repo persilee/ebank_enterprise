@@ -567,8 +567,9 @@
   "face_sign_placeholdText": "请输入6位数字或字母的组合",
   "face_sign_Interviews": "面签号码",
   "face_sign_TipsTitle": "注意事项：\n1、“面签号码”于视频面签过程中，由朗华提供；\n2、面签前，请务必依照通知邮件指示，准备相关开户资料；\n3、请在光线充足、环境安静、网络稳定的地方进行面签；",
-  "openAccount_notOpen_tips": "温馨提示",
+  "warm_prompt": "温馨提示",
   "openAccount_notOpen_content": "您还未开户，请先开户再进行本操作！",
+  "not_set_tranPassword_content": "您还未设置交易密码，请前往设置交易密码。",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }

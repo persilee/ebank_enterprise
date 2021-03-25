@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+/// 获取通过手机号用户的邀请状态数据模型
+/// Author: 李家伟
+/// Date: 2021-03-25
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'get_invitee_status_by_phone.g.dart';
