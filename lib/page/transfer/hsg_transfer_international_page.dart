@@ -620,6 +620,13 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _transferCcy = _transferCcyList[result];
       });
     }
+    if (_payCcy == _transferCcy) {
+      setState(() {
+        _amount = _transferMoneyController.text;
+      });
+    } else {
+      _rateCalculate();
+    }
   }
 
   //账号弹窗
@@ -807,6 +814,13 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               _payIndex = 0;
             }
             _getTransferCcySamePayCcy();
+            if (_payCcy == _transferCcy) {
+              setState(() {
+                _amount = _transferMoneyController.text;
+              });
+            } else {
+              _rateCalculate();
+            }
           });
         }
         //查询额度

@@ -147,9 +147,12 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   void initState() {
     super.initState();
     _loadTransferData();
+
     _transferMoneyController.addListener(() {
       if (_payCcy == _transferCcy) {
-        _amount = _transferMoneyController.text;
+        setState(() {
+          _amount = _transferMoneyController.text;
+        });
       } else {
         _rateCalculate();
       }
@@ -392,6 +395,13 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         _transferIndex = result;
         _transferCcy = _transferCcyList[result];
       });
+      if (_payCcy == _transferCcy) {
+        setState(() {
+          _amount = _transferMoneyController.text;
+        });
+      } else {
+        _rateCalculate();
+      }
     }
   }
 
@@ -553,6 +563,13 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _payIndex = 0;
             }
             _getTransferCcySamePayCcy();
+            if (_payCcy == _transferCcy) {
+              setState(() {
+                _amount = _transferMoneyController.text;
+              });
+            } else {
+              _rateCalculate();
+            }
           });
         }
         //查询额度
@@ -622,9 +639,14 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                   defaultCcy: _payCcy),
               'TransferTrialReq')
           .then((data) {
+        print("====================");
+        print(data.optExAmt);
+        print(data);
         setState(() {
           _amount = data.optExAmt;
         });
+      }).catchError((e) {
+        print(e.toString());
       });
     }
   }
