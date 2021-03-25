@@ -191,12 +191,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                               false ||
                                           characters.hasMatch(_userName.text) ==
                                               true) {
+                                        //校验用户名
                                         Fluttertoast.showToast(
                                             toastLength: Toast.LENGTH_SHORT,
                                             gravity: ToastGravity.CENTER,
                                             timeInSecForIosWeb: 1,
-                                            msg:
-                                                '用户名只能为4-16位字符、数字或者字母，不能包含特殊字符，不能重复');
+                                            msg: S.current
+                                                .register_check_username);
                                       } else {
                                         Map listData = new Map();
                                         listData = {
@@ -360,7 +361,7 @@ class _RegisterPageState extends State<RegisterPage> {
       Fluttertoast.showToast(msg: S.current.format_mobile_error);
     } else if (_isRegister) {
       Fluttertoast.showToast(
-        msg: "此手机号已被注册",
+        msg: S.current.num_is_register,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,

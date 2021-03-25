@@ -15,12 +15,12 @@ Widget getRegisterRow(
         color: Color(0xFFF5F7F9)),
     child: TextField(
       //是否自动更正
-      autocorrect: true,
-      //是否自动获得焦点
-      autofocus: true,
-      onChanged: (value) {
-        value = controlText.text;
-      },
+      // autocorrect: true,
+      // //是否自动获得焦点
+      // autofocus: true,
+      // onChanged: (value) {
+      //   value = controlText.text;
+      // },
       controller: controlText,
       obscureText: password,
       // textAlign: TextAlign.right,

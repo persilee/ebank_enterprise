@@ -245,7 +245,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
       HSProgressHUD.showInfo(status: S.current.format_mobile_error);
     } else if (!_isRegister) {
       Fluttertoast.showToast(
-        msg: "该手机号还未注册，请先注册账号",
+        msg: S.current.num_not_is_register,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,

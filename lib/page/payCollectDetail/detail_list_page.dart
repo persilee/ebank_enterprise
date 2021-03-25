@@ -33,7 +33,7 @@ class DetailListPage extends StatefulWidget {
 }
 
 class _DetailListPageState extends State<DetailListPage> {
-  List<RevenueHistoryDTOList> revenueHistoryList = [];
+  List<DdFinHisDTOList> ddFinHisDTOList = [];
   DateTime _nowDate = DateTime.now(); //当前日期
   List<String> _allAccNoList = [];
   List<String> _accNoList = [];
@@ -92,7 +92,7 @@ class _DetailListPageState extends State<DetailListPage> {
           Expanded(
             child: RefreshIndicator(
               onRefresh: () => _getCardList(),
-              child: revenueHistoryList.length > 0
+              child: ddFinHisDTOList.length > 0
                   ? _buildFlutterTableView()
                   : _noDataContainer(context),
             ),
@@ -114,13 +114,6 @@ class _DetailListPageState extends State<DetailListPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        //  GestureDetector(
-        //    onTap: _cupertinoPicker,
-        //    child: Row(
-        //      mainAxisAlignment: MainAxisAlignment.center,
-        //      children: <Widget>[Text(_date), Icon(Icons.arrow_drop_down)],
-        //    ),
-        //  ),
         _popDialog(),
         GestureDetector(
           onTap: _accountList,
@@ -155,9 +148,16 @@ class _DetailListPageState extends State<DetailListPage> {
         return FadeTransition(
           opacity: animation,
           child: SizeTransition(
-            sizeFactor: animation,
-            child: _popDialogContent(popcontext),
-          ),
+              sizeFactor: animation,
+              child: Column(
+                children: [
+                  Container(
+                    color: Color(0xFFF8F8F8),
+                    height: 10,
+                  ),
+                  _popDialogContent(popcontext),
+                ],
+              )),
         );
       },
     );
@@ -169,7 +169,7 @@ class _DetailListPageState extends State<DetailListPage> {
     print(overlay);
     print(overlay.size);
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(
           text,
@@ -187,27 +187,34 @@ class _DetailListPageState extends State<DetailListPage> {
         height: 320,
         padding: EdgeInsets.all(10),
         child: Material(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //交易时间
-              _timeText(intl.S.of(context).transaction_time),
-              _tradingHour(),
-              //自定义时间
-              _timeText(intl.S.of(context).user_defined),
-              _userDefind(popcontext),
-              //金额
-              _timeText(intl.S.of(context).amount),
-              _amountDuration(),
-              //按钮
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  _resetButton(popcontext),
-                  _confimrButton(context),
-                ],
-              ),
-            ],
+          child: Container(
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Container(
+                //   height: 20,
+                //   color: Color(0xFFF7F7F7),
+                // ),
+                //交易时间
+                _timeText(intl.S.of(context).transaction_time),
+                _tradingHour(),
+                //自定义时间
+                _timeText(intl.S.of(context).user_defined),
+                _userDefind(popcontext),
+                //金额
+                _timeText(intl.S.of(context).amount),
+                _amountDuration(),
+                //按钮
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    _resetButton(popcontext),
+                    _confimrButton(context),
+                  ],
+                ),
+              ],
+            ),
           ),
         ));
   }
@@ -215,7 +222,7 @@ class _DetailListPageState extends State<DetailListPage> {
   //时间文本
   Widget _timeText(String text) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(2.5, 12, 0, 12),
+      padding: EdgeInsets.fromLTRB(10, 12, 0, 12),
       child: Text(
         text,
         style: TRANSFER_RECORD_POP_TEXT_STYLE,
@@ -225,21 +232,23 @@ class _DetailListPageState extends State<DetailListPage> {
 
   //交易时间
   Widget _tradingHour() {
-    return Row(
-      children: [
-        _trandingHourButton(1, _isButton1, intl.S.current.the_same_day),
-        _trandingHourButton(2, _isButton2, intl.S.current.the_same_month),
-        _trandingHourButton(3, _isButton3, intl.S.current.last_three_month),
-        _trandingHourButton(4, _isButton4, intl.S.current.last_half_year),
-      ],
-    );
+    return Container(
+        margin: EdgeInsets.only(left: 10, right: 10),
+        child: Row(
+          children: [
+            _trandingHourButton(1, _isButton1, intl.S.current.the_same_day),
+            _trandingHourButton(2, _isButton2, intl.S.current.the_same_month),
+            _trandingHourButton(3, _isButton3, intl.S.current.last_three_month),
+            _trandingHourButton(4, _isButton4, intl.S.current.last_half_year),
+          ],
+        ));
   }
 
   //交易时间按钮
   Widget _trandingHourButton(int i, bool isButton, String time) {
     return Container(
       margin: EdgeInsets.all(3),
-      width: 78,
+      width: 73,
       height: 30,
       child: OutlineButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -337,6 +346,7 @@ class _DetailListPageState extends State<DetailListPage> {
   //自定义时间
   Widget _userDefind(BuildContext popcontext) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         //开始时间按钮
         _timeButton(_start, 0, popcontext),
@@ -355,13 +365,21 @@ class _DetailListPageState extends State<DetailListPage> {
     );
   }
 
+  //确定按钮
   Widget _confimrButton(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(2),
-      width: MediaQuery.of(context).size.width / 4.4,
-      height: 23.5,
+      margin: EdgeInsets.fromLTRB(5, 5, 10, 5),
+      width: 70,
+      height: 30,
       decoration: BoxDecoration(
-        color: HsgColors.blueTextColor,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF1775BA),
+            Color(0xFF3A9ED1),
+          ],
+        ),
         borderRadius: BorderRadius.circular(5),
       ),
       child: OutlineButton(
@@ -391,6 +409,7 @@ class _DetailListPageState extends State<DetailListPage> {
   //金额
   Widget _amountDuration() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         _amountInput(context, _startAmountController),
         Text(
@@ -478,9 +497,8 @@ class _DetailListPageState extends State<DetailListPage> {
   //金额输入框
   Widget _amountInput(BuildContext context, TextEditingController controller) {
     return Container(
-      margin: EdgeInsets.all(5),
-      // margin: EdgeInsets.only(left: 5,right: 5),
-      width: MediaQuery.of(context).size.width / 2.5,
+      margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+      width: MediaQuery.of(context).size.width / 2.7,
       height: 30,
       decoration: BoxDecoration(
         color: Color(0xffECECEC),
@@ -532,8 +550,8 @@ class _DetailListPageState extends State<DetailListPage> {
 //自定义时间按钮
   Widget _timeButton(String name, int i, BuildContext popcontext) {
     return Container(
-      margin: EdgeInsets.all(5),
-      width: MediaQuery.of(context).size.width / 2.5,
+      margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+      width: MediaQuery.of(context).size.width / 2.7,
       height: 30,
       decoration: BoxDecoration(
         color: Color(0xffECECEC),
@@ -569,7 +587,7 @@ class _DetailListPageState extends State<DetailListPage> {
 
   // Get row count.
   int _rowCountAtSection(int section) {
-    return revenueHistoryList[section].ddFinHistDOList.length;
+    return ddFinHisDTOList.length;
   }
 
   // Section header widget builder.
@@ -585,7 +603,9 @@ class _DetailListPageState extends State<DetailListPage> {
           alignment: Alignment.centerLeft,
           padding: EdgeInsets.only(left: 16),
           color: Colors.white,
-          child: Text(revenueHistoryList[section].transDate),
+          //交易时间
+          //  child: Text(ddFinHisDTOList[section].transDate),
+          child: Text(ddFinHisDTOList[section].txDateTime),
         ),
       ],
     );
@@ -600,7 +620,7 @@ class _DetailListPageState extends State<DetailListPage> {
         children: [
           InkWell(
             onTap: () {
-              _goToDetail(revenueHistoryList[section].ddFinHistDOList[row]);
+              _goToDetail(ddFinHisDTOList[section]);
             },
             child: _getContainer(section, row, context),
           ),
@@ -655,7 +675,8 @@ class _DetailListPageState extends State<DetailListPage> {
               width: MediaQuery.of(context).size.width / 2.4,
               padding: EdgeInsets.only(bottom: 8),
               child: Text(
-                revenueHistoryList[section].ddFinHistDOList[row].acNo,
+                //账号
+                ddFinHisDTOList[section].acNo,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 15, color: Color(0xFF222121)),
@@ -663,8 +684,7 @@ class _DetailListPageState extends State<DetailListPage> {
             ),
             Container(
               width: MediaQuery.of(context).size.width / 2.85,
-              child:
-                  _transactionAmount(revenueHistoryList, section, row, context),
+              child: _transactionAmount(ddFinHisDTOList, section, row, context),
             ),
           ],
         ),
@@ -674,7 +694,7 @@ class _DetailListPageState extends State<DetailListPage> {
             Container(
               width: 160,
               child: Text(
-                revenueHistoryList[section].ddFinHistDOList[row].txDateTime,
+                ddFinHisDTOList[section].txDateTime,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 12, color: Color(0xFFACACAC)),
@@ -698,13 +718,13 @@ class _DetailListPageState extends State<DetailListPage> {
 
   FlutterTableView _buildFlutterTableView() {
     return FlutterTableView(
-      sectionCount: revenueHistoryList.length,
+      sectionCount: ddFinHisDTOList.length,
       rowCountAtSection: _rowCountAtSection,
       sectionHeaderBuilder: _sectionHeaderBuilder,
       cellBuilder: _cellBuilder,
       sectionHeaderHeight: _sectionHeaderHeight,
       cellHeight: _cellHeight,
-      // listViewFatherWidgetBuilder :_noDataContainer(context),//(revenueHistoryList.length > 0) ? Container()
+      // listViewFatherWidgetBuilder :_noDataContainer(context),//( ddFinHisDTOList.length > 0) ? Container()
       // : _noDataContainer(context),
     );
   }
@@ -732,20 +752,18 @@ class _DetailListPageState extends State<DetailListPage> {
   }
 
   //交易金额
-  Text _transactionAmount(List<RevenueHistoryDTOList> revenueHistoryList,
-      int section, int row, BuildContext context) {
+  Text _transactionAmount(List<DdFinHisDTOList> ddFinHisDTOList, int section,
+      int row, BuildContext context) {
     return Text(
-      revenueHistoryList[section].ddFinHistDOList[row].drCrFlg == 'C'
+      ddFinHisDTOList[section].drCrFlg == 'C'
           ? '+ ' +
-              revenueHistoryList[section].ddFinHistDOList[row].txCcy +
+              ddFinHisDTOList[section].txCcy +
               ' ' +
-              FormatUtil.formatSringToMoney(
-                  revenueHistoryList[section].ddFinHistDOList[row].txAmt)
+              FormatUtil.formatSringToMoney(ddFinHisDTOList[section].txAmt)
           : '- ' +
-              revenueHistoryList[section].ddFinHistDOList[row].txCcy +
+              ddFinHisDTOList[section].txCcy +
               ' ' +
-              FormatUtil.formatSringToMoney(
-                  revenueHistoryList[section].ddFinHistDOList[row].txAmt),
+              FormatUtil.formatSringToMoney(ddFinHisDTOList[section].txAmt),
       style: TextStyle(fontSize: 15, color: Color(0xFF222121)),
       textAlign: TextAlign.right,
     );
@@ -845,7 +863,7 @@ class _DetailListPageState extends State<DetailListPage> {
     }
   }
 
-  void _goToDetail(DdFinHistDOList ddFinHist) {
+  void _goToDetail(DdFinHisDTOList ddFinHist) {
     Navigator.pushNamed(context, pageDetailInfo, arguments: ddFinHist);
   }
 
@@ -859,18 +877,20 @@ class _DetailListPageState extends State<DetailListPage> {
         .getRevenueByCards(
             GetRevenueByCardsReq(
                 'CNY',
-                '2021-03-11', //结束时间
-                '2020-03-11', //开始时间
+                '2021-02-20', //结束时间
+                '2021-02-02', //开始时间
                 0, //分页
                 0, //分页
-                acNo: '0101200000172',
-                ciNo: '810000000229'),
+                // acNo:
+                '0101208000001528',
+                //ciNo:
+                '818000000113'),
             'GetRevenueByCardsReq')
         .then((data) {
       HSProgressHUD.dismiss();
-      if (data.revenueHistoryDTOList != null) {
+      if (data.ddFinHisDTOList != null) {
         setState(() {
-          revenueHistoryList = data.revenueHistoryDTOList;
+          ddFinHisDTOList = data.ddFinHisDTOList;
         });
       }
     }).catchError((e) {
@@ -891,9 +911,7 @@ class _DetailListPageState extends State<DetailListPage> {
           data.cardList.forEach((item) {
             _allAccNoList.add(item.cardNo);
             _cardList.add(item.cardNo);
-            // String cardIconUrl = (item.imageUrl == null || item.imageUrl == '')
-            //     ? "images/transferIcon/transfer_wallet.png"
-            //     : item.imageUrl;
+
             _cardIcon.add(item.imageUrl);
           });
         });

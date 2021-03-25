@@ -9,14 +9,8 @@ part 'get_pay_collect_detail.g.dart';
 
 @JsonSerializable()
 class GetRevenueByCardsReq extends Object {
-  @JsonKey(name: 'acNo')
-  String acNo;
-
   @JsonKey(name: 'ccy')
   String ccy;
-
-  @JsonKey(name: 'ciNo')
-  String ciNo;
 
   @JsonKey(name: 'localDateEnd')
   String localDateEnd;
@@ -29,16 +23,21 @@ class GetRevenueByCardsReq extends Object {
 
   @JsonKey(name: 'pageSize')
   int pageSize;
+  @JsonKey(name: 'acNo')
+  String acNo;
+
+  @JsonKey(name: 'ciNo')
+  String ciNo;
 
   GetRevenueByCardsReq(
     this.ccy,
     this.localDateEnd,
     this.localDateStart,
     this.page,
-    this.pageSize, {
+    this.pageSize,
     this.acNo,
     this.ciNo,
-  });
+  );
 
   factory GetRevenueByCardsReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetRevenueByCardsReqFromJson(srcJson);
@@ -48,38 +47,20 @@ class GetRevenueByCardsReq extends Object {
 
 @JsonSerializable()
 class GetRevenueByCardsResp extends Object {
-  @JsonKey(name: 'revenueHistoryDTOList')
-  List<RevenueHistoryDTOList> revenueHistoryDTOList;
+  @JsonKey(name: 'ddFinHisDTOList')
+  List<DdFinHisDTOList> ddFinHisDTOList;
 
   GetRevenueByCardsResp(
-    this.revenueHistoryDTOList,
+    this.ddFinHisDTOList,
   );
+  Map<String, dynamic> toJson() => _$GetRevenueByCardsRespToJson(this);
 
   factory GetRevenueByCardsResp.fromJson(Map<String, dynamic> srcJson) =>
       _$GetRevenueByCardsRespFromJson(srcJson);
-  Map<String, dynamic> toJson() => _$GetRevenueByCardsRespToJson(this);
 }
 
 @JsonSerializable()
-class RevenueHistoryDTOList extends Object {
-  @JsonKey(name: 'transDate')
-  String transDate;
-
-  @JsonKey(name: 'ddFinHistDOList')
-  List<DdFinHistDOList> ddFinHistDOList;
-
-  RevenueHistoryDTOList(
-    this.transDate,
-    this.ddFinHistDOList,
-  );
-
-  factory RevenueHistoryDTOList.fromJson(Map<String, dynamic> srcJson) =>
-      _$RevenueHistoryDTOListFromJson(srcJson);
-  Map<String, dynamic> toJson() => _$RevenueHistoryDTOListToJson(this);
-}
-
-@JsonSerializable()
-class DdFinHistDOList extends Object {
+class DdFinHisDTOList extends Object {
   @JsonKey(name: 'acDate')
   String acDate;
 
@@ -97,9 +78,6 @@ class DdFinHistDOList extends Object {
 
   @JsonKey(name: 'uri')
   String uri;
-
-  @JsonKey(name: 'txDateTime')
-  String txDateTime;
 
   @JsonKey(name: 'acNo')
   String acNo;
@@ -137,29 +115,32 @@ class DdFinHistDOList extends Object {
   @JsonKey(name: 'narrative')
   String narrative;
 
-  DdFinHistDOList(
-    this.acDate,
-    this.msgId,
-    this.seq,
-    this.reqId,
-    this.refNo,
-    this.uri,
-    this.txDateTime,
-    this.acNo,
-    this.txCcy,
-    this.txAmt,
-    this.drCrFlg,
-    this.txSts,
-    this.ciNo,
-    this.trBank,
-    this.othBank,
-    this.othBankAc,
-    this.othBankAcName,
-    this.txMmo,
-    this.narrative,
-  );
+  //交易时间
+  @JsonKey(name: 'txDateTime')
+  String txDateTime;
 
-  factory DdFinHistDOList.fromJson(Map<String, dynamic> srcJson) =>
-      _$DdFinHistDOListFromJson(srcJson);
-  Map<String, dynamic> toJson() => _$DdFinHistDOListToJson(this);
+  DdFinHisDTOList(
+      this.acDate,
+      this.msgId,
+      this.seq,
+      this.reqId,
+      this.refNo,
+      this.uri,
+      this.acNo,
+      this.txCcy,
+      this.txAmt,
+      this.drCrFlg,
+      this.txSts,
+      this.ciNo,
+      this.trBank,
+      this.othBank,
+      this.othBankAc,
+      this.othBankAcName,
+      this.txMmo,
+      this.narrative,
+      this.txDateTime);
+  Map<String, dynamic> toJson() => _$DdFinHisDTOListToJson(this);
+
+  factory DdFinHisDTOList.fromJson(Map<String, dynamic> srcJson) =>
+      _$DdFinHisDTOListFromJson(srcJson);
 }

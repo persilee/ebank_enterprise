@@ -509,6 +509,17 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   ) {
     return Container(
       decoration: BoxDecoration(
+          // boxShadow: [
+          //   isboxShadow
+          //       ? BoxShadow(
+          //           color: Color(0XFF192A56),
+          //           offset: isflex
+          //               ? Offset(-4.0, 0.0)
+          //               : Offset(6.0, 0.0), //阴影xy轴偏移量
+          //           blurRadius: 3.0, //阴影模糊程度
+          //         )
+          //       : BoxShadow(color: Color(0xFF2F323E), blurRadius: 0.0)
+          // ],
           color: backgroundColor,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30),
@@ -522,7 +533,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                       color: Color(0XFF192A56),
                       offset: isflex
                           ? Offset(0.0, 0.0)
-                          : Offset(5.0, 0.0), //阴影xy轴偏移量
+                          : Offset(6.0, 0.0), //阴影xy轴偏移量
                       blurRadius: 3.0, //阴影模糊程度
                     )
                   : BoxShadow(color: Color(0xFF2F323E), blurRadius: 0.0)

@@ -53,10 +53,10 @@ Widget getRegisterRegion(
             width: MediaQuery.of(context).size.width / 1.8,
             padding: EdgeInsets.only(left: 5),
             child: TextField(
-              //是否自动更正
-              autocorrect: false,
-              //是否自动获得焦点
-              autofocus: true,
+              // //是否自动更正
+              // autocorrect: false,
+              // //是否自动获得焦点
+              // autofocus: true,
 
               controller: _phoneNum,
               decoration: InputDecoration(
