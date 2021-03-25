@@ -224,9 +224,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                 Container(
                   padding: EdgeInsets.fromLTRB(0, 40, 0, 40),
                   child: HsgButton.button(
-                      title: S.current.confirm,
-                      click: _confirm(),
-                      isColor: _isInputed),
+                    title: S.current.confirm,
+                    click: _confirm(),
+                    isColor: _isInputed,
+                  ),
                 ),
               ],
             ),

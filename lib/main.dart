@@ -153,7 +153,4 @@ class _HSGBankAppState extends State<HSGBankApp> {
       Fluttertoast.showToast(msg: e.toString());
     });
   }
-
-  //获取币种列表
-
 }
