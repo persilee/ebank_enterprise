@@ -19,7 +19,7 @@ class _PwdOperationSuccessPageState extends State<PwdOperationSuccessPage> {
       appBar: AppBar(
         title: Text(S.of(context).operation_result),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
       ),
       body: SingleChildScrollView(
         child: Container(

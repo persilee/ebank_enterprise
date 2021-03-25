@@ -65,7 +65,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       appBar: AppBar(
         title: Text(S.of(context).setChangLoginPasd),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,

@@ -57,7 +57,7 @@ class _MinePageState extends State<MinePage> {
   String _registerAccount = "wly3"; //手机号注册（用户账号）
   var _enterpriseName = ''; // 企业名称
   var _characterName = ''; // 角色名称
-  var _belongCustStatus = '7'; //用户状态
+  var _belongCustStatus = '0'; //用户状态
   UserInfoResp _userInfoResp;
 
   @override
@@ -103,6 +103,7 @@ class _MinePageState extends State<MinePage> {
                 image: AssetImage('images/home/navIcon/home_nav_service.png'),
                 width: 18.5,
                 height: 18.5,
+                color: Color(0xff262626),
               ),
               onPressed: () {
                 print('联系客服');
@@ -145,20 +146,20 @@ class _MinePageState extends State<MinePage> {
     return Container(
       child: Stack(
         children: [
-          Image(
-            width: MediaQuery.of(context).size.width,
-            height: 200,
-            image: AssetImage(
-                'images/mine/mine-icon.png'), //'images/mine/mine-icon.png',
-            fit: BoxFit.cover,
-          ),
+          // Image(
+          //   width: MediaQuery.of(context).size.width,
+          //   height: 200,
+          //   image: AssetImage(
+          //       'images/mine/mine-icon.png'), //'images/mine/mine-icon.png',
+          //   fit: BoxFit.cover,
+          // ),
           Stack(
             alignment: AlignmentDirectional.bottomStart,
             children: <Widget>[
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: 200,
-                decoration: BoxDecoration(color: Color(0x90000000)),
+                height: 210,
+                decoration: BoxDecoration(color: HsgColors.mineHeadBackground),
               ),
             ],
           ),
@@ -214,7 +215,7 @@ class _MinePageState extends State<MinePage> {
                   Navigator.pushNamed(context, pagePasswordManagement);
                 }),
                 _flatBtnNuitWidget(S.of(context).visa_interview, true, () {
-                  //面签通知
+                  //面签
                   Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
                 }),
               ],
@@ -392,7 +393,7 @@ class _MinePageState extends State<MinePage> {
           GestureDetector(
             child: Container(
               margin: EdgeInsets.only(
-                  top: 78.0, left: 32, right: 24.0, bottom: 78.0),
+                  top: 75.0, left: 32, right: 24.0, bottom: 75.0),
               child: _headPortrait(),
             ),
             onTap: () {
@@ -403,7 +404,7 @@ class _MinePageState extends State<MinePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _belongCustStatus == '7' ? _userInfo() : _userOffInfo(),
+                _belongCustStatus == '0' ? _userInfo() : _userOffInfo(),
                 // Text(
                 //   _userName,
                 //   textAlign: TextAlign.start,
@@ -428,7 +429,7 @@ class _MinePageState extends State<MinePage> {
               alignment: Alignment.centerRight,
               child: Icon(
                 Icons.navigate_next,
-                color: Colors.white,
+                color: HsgColors.mineInfoIcon,
               ),
             ),
             onTap: () {
@@ -509,7 +510,8 @@ class _MinePageState extends State<MinePage> {
         enterpriseNameShowStr,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: Colors.white,
+          color: HsgColors.mineInfoText,
+          fontWeight: FontWeight.bold,
           fontSize: 18,
         ),
       ),
@@ -525,7 +527,7 @@ class _MinePageState extends State<MinePage> {
         _userName,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: Colors.white,
+          color: HsgColors.mineInfoText,
           fontSize: 14,
         ),
       ),
@@ -538,7 +540,7 @@ class _MinePageState extends State<MinePage> {
     return Container(
       height: 25,
       decoration: BoxDecoration(
-        color: Color(0xff5662fb).withOpacity(0.66), //HsgColors.accent,
+        color: Color(0xff3394d4).withOpacity(0.66), //HsgColors.accent,
         borderRadius: BorderRadius.circular(12.5), //
       ),
       padding: EdgeInsets.fromLTRB(5, 0, 12, 0),
@@ -577,8 +579,8 @@ class _MinePageState extends State<MinePage> {
     return Text(
       S.current.last_login_time_with_value + _lastLoginTime,
       style: TextStyle(
-        color: Colors.white,
-        fontSize: 12,
+        color: HsgColors.mineInfoText,
+        fontSize: 11,
       ),
     );
   }
@@ -678,11 +680,11 @@ class _MinePageState extends State<MinePage> {
         _headPortraitUrl = data.headPortrait; //头像
         _characterName = data.roleLocalName; //角色
         _enterpriseName = data.custLocalName; //公司名
-        // _belongCustStatus = data.belongCustStatus; //用户状态
-        // _lastLoginTime = data.lastLoginTime; // 上次登录时间
-        _userType = data.userType; //用户类型
-        _userPhone = data.userPhone; //用户手机号
-        _areaCode = data.areaCode; //区号
+        _belongCustStatus = data.belongCustStatus; //用户状态
+        _lastLoginTime = data.lastLoginTime; // 上次登录时间
+        // _userType = data.userType; //用户类型
+        // _userPhone = data.userPhone; //用户手机号
+        // _areaCode = data.areaCode; //区号
       });
       _changeUserInfoShow(_userInfoResp);
     }).catchError((e) {
