@@ -5,13 +5,14 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_styles.dart';
+import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
-import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   var _userName = '高阳银行企业用户'; // 姓名
   var _characterName = ''; // 角色名称
   var _belongCustStatus = '0'; //用户状态
+  var _inviteeStatus = '0'; //用户受邀状态，是否是走快速开户，默认为0，不走
   var _lastLoginTime = ''; // 上次登录时间
   String _language = Intl.getCurrentLocale();
   var _features = [];
@@ -151,7 +153,7 @@ class _HomePageState extends State<HomePage> {
         child: _homeHeaderView(),
       ),
     ];
-    slivers.addAll(_getFeaturesNew(_features));
+    slivers.addAll(_getFeaturesNew(context, _features));
     slivers.add(
       SliverToBoxAdapter(
         child: Container(
@@ -187,7 +189,8 @@ class _HomePageState extends State<HomePage> {
               ),
               onPressed: () {
                 print('联系客服');
-                Navigator.pushNamed(context, pageContactCustomer);
+                Navigator.pushNamed(context,
+                    pageOpenAccountSelectDocumentType); //pageContactCustomer
               },
             ),
             // IconButton(
@@ -201,19 +204,19 @@ class _HomePageState extends State<HomePage> {
             //     print('消息');
             //   },
             // ),
-            Expanded(
-              child: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  S.of(context).home,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.white.withOpacity(opacity),
-                  ),
-                ),
-              ),
-            ),
+            // Expanded(
+            //   child: Container(
+            //     alignment: Alignment.center,
+            //     child: Text(
+            //       S.of(context).home,
+            //       style: TextStyle(
+            //         fontSize: 18,
+            //         fontWeight: FontWeight.normal,
+            //         color: Colors.white.withOpacity(opacity),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             _languageChangeBtn(),
             //LanguageChangeBtn(changeLangBtnTltle),
           ],
@@ -360,7 +363,8 @@ class _HomePageState extends State<HomePage> {
                     25.0,
                     (MediaQuery.of(context).size.width - 50) / 2,
                     () {
-                      Navigator.pushNamed(context, pageDetailList);
+                      _featureClickFunction(
+                          context, S.of(context).transaction_details);
                     },
                   ),
                 ),
@@ -378,7 +382,8 @@ class _HomePageState extends State<HomePage> {
                     (MediaQuery.of(context).size.width - 50) / 2,
                     () {
                       print('账户总览');
-                      Navigator.pushNamed(context, pageAccountOverview);
+                      _featureClickFunction(
+                          context, S.of(context).account_summary);
                     },
                   ),
                 ),
@@ -678,7 +683,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   ///底下列表
-  List<Widget> _getFeaturesNew(List data) {
+  List<Widget> _getFeaturesNew(BuildContext buildContext, List data) {
     List<Widget> _grids = [];
     data.forEach((element) {
       List<Map> btnList = element['btnList'];
@@ -701,6 +706,7 @@ class _HomePageState extends State<HomePage> {
             return _cellButton(
               btnList[index],
               element['bgColor'],
+              buildContext,
             );
           },
           childCount: btnList.length,
@@ -724,9 +730,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   //功能点击事件
-  VoidCallback _featureClickFunction(String title) {
+  VoidCallback _featureClickFunction(BuildContext context, String title) {
     return () {
-      if (S.current.transfer == title) {
+      if (_belongCustStatus == '0' ||
+          _belongCustStatus == '1' ||
+          _belongCustStatus == '2' ||
+          _belongCustStatus == '3' ||
+          _belongCustStatus == '4') {
+        HsgShowTip.loginTip(
+            context: context,
+            click: (value) {
+              print('>>>>$value');
+            });
+        return;
+      }
+      if (S.current.transaction_details == title) {
+        //收支明细
+        Navigator.pushNamed(context, pageDetailList);
+      } else if (S.current.account_summary == title) {
+        //账户总览
+        Navigator.pushNamed(context, pageAccountOverview);
+      } else if (S.current.transfer == title) {
         //转账
         Navigator.pushNamed(context, pageTransfer);
       } else if (S.current.transfer_record == title) {
@@ -809,6 +833,7 @@ class _HomePageState extends State<HomePage> {
   Widget _cellButton(
     Map data,
     Color bgColor,
+    BuildContext context,
   ) {
     return Container(
       // margin: EdgeInsets.only(left: 15, right: 15),
@@ -818,7 +843,7 @@ class _HomePageState extends State<HomePage> {
         color: bgColor,
       ),
       child: FlatButton(
-        onPressed: _featureClickFunction(data['btnTitle']),
+        onPressed: _featureClickFunction(context, data['btnTitle']),
         child: Row(
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -878,6 +903,10 @@ class _HomePageState extends State<HomePage> {
     )
         .then((data) {
       print('$data');
+      if (data.belongCustStatus == '0' || data.belongCustStatus == '2') {
+        _getInviteeStatusByPhoneNetwork();
+      }
+
       setState(() {
         _headPortraitUrl = data.headPortrait; //头像地址
         _enterpriseName = _language == 'zh_CN'
@@ -892,6 +921,27 @@ class _HomePageState extends State<HomePage> {
         _belongCustStatus = data.belongCustStatus; //用户状态
         _lastLoginTime = data.lastLoginTime; // 上次登录时间
         _data = data;
+      });
+    }).catchError((e) {
+      // Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.showError(status: e.toString());
+      print('${e.toString()}');
+    });
+  }
+
+  Future<void> _getInviteeStatusByPhoneNetwork() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userAreaCode = prefs.getString(ConfigKey.USER_AREACODE);
+    String userPhone = prefs.getString(ConfigKey.USER_PHONE);
+
+    UserDataRepository()
+        .getInviteeStatusByPhone(
+      GetInviteeStatusByPhoneReq(userAreaCode, userPhone),
+      'getInviteeStatusByPhone',
+    )
+        .then((data) {
+      setState(() {
+        _inviteeStatus = data.inviteeStatus;
       });
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString());

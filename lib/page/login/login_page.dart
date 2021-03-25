@@ -38,11 +38,11 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = '';
 
   TextEditingController _accountTC =
-      TextEditingController(text: 'blk501'); //fangluyao
+      TextEditingController(text: 'ljw125'); //fangluyao
   TextEditingController _passwordTC =
-      TextEditingController(text: '4N0021S8'); //b0S25X5Y
-  var _account = 'blk501'; //'blk101';
-  var _password = '4N0021S8'; //'4N0021S8';
+      TextEditingController(text: 'Aa123456@'); //b0S25X5Y
+  var _account = 'ljw125'; //'blk101';
+  var _password = 'Aa123456@'; //'4N0021S8';
 
   @override
   void initState() {
@@ -278,6 +278,8 @@ class _LoginPageState extends State<LoginPage> {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
+    prefs.setString(ConfigKey.USER_PHONE, resp.userPhone);
+    prefs.setString(ConfigKey.USER_AREACODE, resp.areaCode);
     if (resp.custId == null || resp.custId == '') {
       prefs.setString(ConfigKey.CUST_ID, '');
     } else {

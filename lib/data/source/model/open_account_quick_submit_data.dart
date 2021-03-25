@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+/// 快速开户上传公司信息模型（第一次数据提交）
+/// Author: 李家伟
+/// Date: 2021-03-23
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'open_account_quick_submit_data.g.dart';
