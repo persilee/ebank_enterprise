@@ -490,7 +490,11 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
           '-' +
           _realName.text);
       if (data.enabled) {
-        Navigator.pushNamed(context, setPayPage);
+        Map map = new Map();
+        map['certificateNo'] = _certNo.text;
+        map['certificateType'] = _certTypeKey;
+        map['phoneNumber'] = _userPhone;
+        Navigator.pushNamed(context, setPayPage, arguments: map);
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {

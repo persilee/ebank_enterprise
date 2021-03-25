@@ -5,22 +5,22 @@ import 'package:sp_util/sp_util.dart';
 
 class BaseBody {
   String userId;
-  String userAccount;
+  String loginName;
   dynamic body;
 
-  BaseBody({@required this.body, this.userId, this.userAccount}) {
+  BaseBody({@required this.body, this.userId, this.loginName}) {
     this.userId = SpUtil.getString(ConfigKey.USER_ID);
-    this.userAccount = SpUtil.getString(ConfigKey.USER_ACCOUNT);
+    this.loginName = SpUtil.getString(ConfigKey.USER_ACCOUNT);
   }
 
   BaseBody.fromJson(dynamic json) {
     userId = json["userId"];
-    userAccount = json["userAccount"];
+    loginName = json["loginName"];
     body = json["body"];
   }
 
   Map<String, dynamic> toJson() => {
-        "userAccount": userAccount,
+        "loginName": loginName,
         "userId": userId,
         "body": body,
       };
