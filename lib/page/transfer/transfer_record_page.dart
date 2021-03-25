@@ -18,6 +18,7 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_dotted_line.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -90,6 +91,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       appBar: AppBar(
         title: Text(intl.S.of(context).transfer_record),
         centerTitle: true,
+        elevation: 1,
       ),
       body: Container(
         color: HsgColors.commonBackground,
@@ -105,6 +107,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
   //没有数据时显示页面
   Container _noDataContainer(BuildContext context) {
+    HSProgressHUD.show();
+    Future.delayed(Duration(seconds: 1), () {
+      HSProgressHUD.dismiss();
+    });
     return Container(
       color: HsgColors.backgroundColor,
       width: MediaQuery.of(context).size.width,
@@ -143,8 +149,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     //添加转账记录
     for (int i = 0; i < _transferHistoryList.length; i++) {
       if (_position == 0) {
-        _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
         _isData = true;
+        _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
       }
       // else if ((_cradLists[_position] ==
       //         _transferHistoryList[i].paymentCardNo) ||
@@ -280,7 +286,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         children: [
           //时间
           Container(
-            width: MediaQuery.of(context).size.width / 2.5,
+            width: MediaQuery.of(context).size.width / 2,
             child: _popDialog(),
           ),
           //银行卡
@@ -337,30 +343,43 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _popDialogContent(BuildContext popcontext) {
     return Container(
       color: Colors.white,
-      height: 320,
-      padding: EdgeInsets.all(10),
+      height: 335,
+      // padding: EdgeInsets.all(10),
       child: Material(
         color: Colors.white,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //交易时间
-            _timeText(intl.S.of(context).transaction_time),
-            _tradingHour(),
-            //自定义时间
-            _timeText(intl.S.of(context).user_defined),
-            _userDefind(popcontext),
-            //金额
-            _timeText(intl.S.current.amount),
-            _amountDuration(),
-            //按钮
             Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+              margin: EdgeInsets.only(top: 5),
+              width: MediaQuery.of(context).size.width,
+              height: 12,
+              color: Color(0xffF7F7F7),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _resetButton(popcontext),
-                  _confimrButton(),
+                  //交易时间
+                  _timeText(intl.S.of(context).transaction_time),
+                  _tradingHour(),
+                  //自定义时间
+                  _timeText(intl.S.of(context).user_defined),
+                  _userDefind(popcontext),
+                  //金额
+                  _timeText(intl.S.current.amount),
+                  _amountDuration(),
+                  //按钮
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        _resetButton(popcontext),
+                        _confimrButton(),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -750,7 +769,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         _position = result;
         _card = _cradLists[result];
         paymentCardNos = [];
-        paymentCardNos.add(_card);
+        // paymentCardNos.add(_card);
       });
       print(paymentCardNos.toString());
       print("=====================");
@@ -775,7 +794,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       ),
       minDateTime: DateTime.parse('1900-01-01'),
       maxDateTime: DateTime.now(),
-      initialDateTime: DateTime.now(),
+      initialDateTime:
+          i == 0 ? DateTime.parse(_startDate) : DateTime.parse(_endDate),
       dateFormat: 'yyyy-MM-dd',
       locale: DateTimePickerLocale.zh_cn,
       //确定
@@ -908,6 +928,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     String userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
     // String loginName = '18033412021';
     // String userId = '778309634589982720';
+    // HSProgressHUD.show();
     TransferDataRepository()
         .getTransferRecord(
             GetTransferRecordReq(ccy, _endDate, _page, pageSize, paymentCardNos,
@@ -921,6 +942,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         }
         _loadMore = false;
       });
+      // HSProgressHUD.dismiss();
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });

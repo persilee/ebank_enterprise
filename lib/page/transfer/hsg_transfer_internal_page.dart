@@ -173,6 +173,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         Rows rowPartner = _arguments;
         _nameController.text = rowPartner.payeeName;
         _accountController.text = rowPartner.payeeCardNo;
+        _remarkController.text = rowPartner.remark;
         _nameController.selection = TextSelection.collapsed(
             affinity: TextAffinity.downstream,
             offset: _nameController.text.length);
@@ -185,8 +186,12 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       appBar: AppBar(
         title: Text(S.current.transfer_type_0),
         centerTitle: true,
-        // backgroundColor: Color(0xffF8F8F8),
-        // textTheme: TextTheme(),
+        elevation: 1,
+        // backgroundColor: Color(0xffF7F7F7),
+        // textTheme: TextTheme(
+        //   title: TextStyle(color: Colors.black, fontSize: 17),
+        //   button: TextStyle(color: Colors.black, fontSize: 17),
+        // ),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -442,6 +447,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 Rows rowListPartner = value;
                 _nameController.text = rowListPartner.payeeName;
                 _accountController.text = rowListPartner.payeeCardNo;
+                _remarkController.text = rowListPartner.remark;
               }
               _boolBut();
             });

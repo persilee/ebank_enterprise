@@ -10,9 +10,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Language {
   static const String EN = 'en';
   static const String ZH_CN = 'zh_cn';
+  static const String ZH_HK = 'zh_hk';
   static const Locale EN_LOCALE = Locale.fromSubtags(languageCode: 'en');
   static const Locale ZH_CN_LOCALE =
       Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN');
+  static const Locale ZH_HK_LOCALE =
+      Locale.fromSubtags(languageCode: 'zh', countryCode: 'HK');
 
   final Map<String, Locale> languageMap = Map<String, Locale>();
 
@@ -22,6 +25,7 @@ class Language {
   Language._internal() {
     languageMap[EN] = EN_LOCALE;
     languageMap[ZH_CN] = ZH_CN_LOCALE;
+    languageMap[ZH_HK] = ZH_HK_LOCALE;
   }
 
   Locale getLocaleByLanguage(String lang) {

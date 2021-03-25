@@ -29,6 +29,7 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
       appBar: AppBar(
         title: Text(S.current.operation_successful),
         centerTitle: true,
+        elevation: 1,
       ),
       body: ListView(
         children: [

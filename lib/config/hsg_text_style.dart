@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 const FIRST_DEGREE_TEXT_STYLE =
     TextStyle(fontSize: 14, color: HsgColors.firstDegreeText);
 const SECOND_DEGREE_TEXT_STYLE =
-    TextStyle(fontSize: 12, color: HsgColors.aboutusTextCon);
+    TextStyle(fontSize: 13, color: HsgColors.aboutusTextCon);
 const FIRST_DESCRIBE_TEXT_STYLE =
     TextStyle(fontSize: 14, color: HsgColors.describeText);
 const SECOND_DESCRIBE_TEXT_STYLE =

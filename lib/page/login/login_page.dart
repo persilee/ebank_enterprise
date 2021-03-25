@@ -6,6 +6,9 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/base_body.dart';
+import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -17,6 +20,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../util/encrypt_util.dart';
@@ -31,13 +35,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
-  var _changeLangBtnTltle = S.current.language1; // S.current.english;
+  var _changeLangBtnTltle = '';
 
   TextEditingController _accountTC =
-      TextEditingController(text: 'blk201'); //fangluyao
+      TextEditingController(text: 'blk501'); //fangluyao
   TextEditingController _passwordTC =
       TextEditingController(text: '4N0021S8'); //b0S25X5Y
-  var _account = 'blk201'; //'blk101';
+  var _account = 'blk501'; //'blk101';
   var _password = '4N0021S8'; //'4N0021S8';
 
   @override
@@ -63,6 +67,15 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    String _language = Intl.getCurrentLocale();
+    if (_language == 'zh_CN') {
+      _changeLangBtnTltle = '中文（简体）';
+    } else if (_language == 'zh_HK') {
+      _changeLangBtnTltle = '中文（繁體）';
+    } else {
+      _changeLangBtnTltle = 'English';
+    }
+
     //从忘记用户名界面拿到名字
     var _userName = ModalRoute.of(context).settings.arguments;
     _accountTC.text = _userName;
@@ -231,10 +244,6 @@ class _LoginPageState extends State<LoginPage> {
     _password = _passwordTC.text;
 
     String password = EncryptUtil.aesEncode(_password);
-
-    // LoginResp loginResp = await ApiClient()
-    //     .login(LoginReq(username: _account, password: password));
-    // print(loginResp.toJson());
     UserDataRepository()
         .login(LoginReq(username: _account, password: password), 'login')
         .then((value) {
@@ -345,7 +354,8 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
   _selectLanguage(BuildContext context) async {
     List<String> languages = [
       'English',
-      '中文',
+      '中文（简体）',
+      '中文（繁體）',
     ];
     final result = await showHsgBottomSheet(
         context: context,
@@ -361,6 +371,9 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
           break;
         case 1:
           language = Language.ZH_CN;
+          break;
+        case 2:
+          language = Language.ZH_HK;
           break;
       }
     } else {

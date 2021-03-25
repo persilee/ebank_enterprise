@@ -103,7 +103,7 @@ class _OpenAccountContactInformationPageState
   String _officePhoneText = '';
 
   /// 下一步按钮是否能点击
-  bool _nextBtnEnabled = true; //false;
+  bool _nextBtnEnabled = false;
 
   /// 城市数据列表
   List _cityDataList = [];
@@ -220,7 +220,7 @@ class _OpenAccountContactInformationPageState
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        elevation: 0,
+        elevation: 1,
         centerTitle: true,
         title: Text(S.of(context).openAccout_contactInformation),
       ),
@@ -408,7 +408,9 @@ class _OpenAccountContactInformationPageState
           S.of(context).please_enter,
           _registeredAddressTEC,
           false,
-          105,
+          <TextInputFormatter>[
+            LengthLimitingTextInputFormatter(120),
+          ],
           TextInputType.text,
         ),
       ),
@@ -419,7 +421,10 @@ class _OpenAccountContactInformationPageState
           S.of(context).not_required,
           _registrationZipCodeTEC,
           false,
-          6,
+          <TextInputFormatter>[
+            LengthLimitingTextInputFormatter(6),
+            FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+          ],
           TextInputType.number,
         ),
       ),
@@ -518,7 +523,9 @@ class _OpenAccountContactInformationPageState
           S.of(context).please_enter,
           _businessAddressTEC,
           false,
-          105,
+          <TextInputFormatter>[
+            LengthLimitingTextInputFormatter(120),
+          ],
           TextInputType.text,
         ),
       ),
@@ -529,7 +536,10 @@ class _OpenAccountContactInformationPageState
           S.of(context).not_required,
           _businessZipCodeTEC,
           false,
-          6,
+          <TextInputFormatter>[
+            LengthLimitingTextInputFormatter(6),
+            FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+          ],
           TextInputType.number,
         ),
       ),
@@ -632,7 +642,9 @@ class _OpenAccountContactInformationPageState
           S.of(context).please_enter,
           _correspondenceAddressTEC,
           false,
-          105,
+          <TextInputFormatter>[
+            LengthLimitingTextInputFormatter(120),
+          ],
           TextInputType.text,
         ),
       ),
@@ -643,7 +655,10 @@ class _OpenAccountContactInformationPageState
           S.of(context).not_required,
           _communicationsZipCodeTEC,
           false,
-          6,
+          <TextInputFormatter>[
+            LengthLimitingTextInputFormatter(6),
+            FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+          ],
           TextInputType.number,
         ),
       ),
@@ -690,7 +705,10 @@ class _OpenAccountContactInformationPageState
           S.of(context).please_enter,
           _officePhoneTEC,
           false,
-          11,
+          <TextInputFormatter>[
+            LengthLimitingTextInputFormatter(11),
+            FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+          ],
           TextInputType.number,
         ),
       ),
@@ -707,7 +725,7 @@ class _OpenAccountContactInformationPageState
     String placeholderStr,
     TextEditingController textEdiC,
     bool isHiddenLine,
-    int maxLength,
+    List<TextInputFormatter> inputFormatters,
     TextInputType keyboardType,
   ) {
     final size = MediaQuery.of(context).size;
@@ -741,9 +759,10 @@ class _OpenAccountContactInformationPageState
               // textDirection: TextDirection.ltr,
               maxLines: 2,
               keyboardType: keyboardType,
-              inputFormatters: <TextInputFormatter>[
-                LengthLimitingTextInputFormatter(maxLength) //限制长度
-              ],
+              inputFormatters: inputFormatters,
+              // <TextInputFormatter>[
+              //   LengthLimitingTextInputFormatter(maxLength) //限制长度
+              // ],
               style: TextStyle(
                 fontSize: 15,
                 color: HsgColors.firstDegreeText,
@@ -775,7 +794,7 @@ class _OpenAccountContactInformationPageState
     String placeholderStr,
     TextEditingController textEdiC,
     bool isHiddenLine,
-    int maxLength,
+    List<TextInputFormatter> inputFormatters,
     TextInputType keyboardType,
   ) {
     final size = MediaQuery.of(context).size;
@@ -810,9 +829,10 @@ class _OpenAccountContactInformationPageState
                 controller: textEdiC,
                 textAlign: TextAlign.right,
                 keyboardType: keyboardType,
-                inputFormatters: <TextInputFormatter>[
-                  LengthLimitingTextInputFormatter(maxLength) //限制长度
-                ],
+                inputFormatters: inputFormatters,
+                // <TextInputFormatter>[
+                //   LengthLimitingTextInputFormatter(maxLength) //限制长度
+                // ],
                 textAlignVertical: TextAlignVertical.bottom,
                 // textDirection: TextDirection.ltr,
                 style: TextStyle(

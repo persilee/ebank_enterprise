@@ -14,6 +14,7 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:left_scroll_actions/cupertinoLeftScroll.dart';
 import 'package:left_scroll_actions/leftScroll.dart';
 import 'package:left_scroll_actions/left_scroll_actions.dart';
@@ -34,6 +35,9 @@ class _TransferPartnerState extends State<TransferPartner> {
   var _totalPage = 1;
   var _transferType = '';
   bool _load = false; //是否加载更多
+  bool _isData = false;
+  var _bankName = '';
+  String _language = Intl.getCurrentLocale();
   @override
   void initState() {
     super.initState();
@@ -63,6 +67,7 @@ class _TransferPartnerState extends State<TransferPartner> {
         .then((data) {
       setState(() {
         if (data.rows != null) {
+          _isData = true;
           _totalPage = data.totalPage;
           _partnerListData.addAll(data.rows);
           _tempList.clear();
@@ -104,7 +109,7 @@ class _TransferPartnerState extends State<TransferPartner> {
       appBar: AppBar(
         title: Text(S.current.transfer_model),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
         actions: [
           IconButton(
             onPressed: () {
@@ -131,7 +136,7 @@ class _TransferPartnerState extends State<TransferPartner> {
       body: Column(
         children: [
           Expanded(
-            child: _myColumn(),
+            child: _isData ? _myColumn() : _noDataWidget(),
           ),
         ],
       ),
@@ -164,6 +169,39 @@ class _TransferPartnerState extends State<TransferPartner> {
         S.current.load_more_finished,
         style: FIRST_DESCRIBE_TEXT_STYLE,
         textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  //没数据显示页面
+  Widget _noDataWidget() {
+    HSProgressHUD.show();
+    Future.delayed(Duration(seconds: 1), () {
+      HSProgressHUD.dismiss();
+    });
+    return Container(
+      width: (MediaQuery.of(context).size.width),
+      height: 270,
+      color: Colors.white,
+      child: Column(
+        children: [
+          Container(
+            margin:
+                EdgeInsets.only(top: MediaQuery.of(context).size.height / 4),
+            child: Image(
+              image: AssetImage('images/noDataIcon/no_data_person.png'),
+              width: 159,
+              height: 128,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            child: Text(
+              S.of(context).no_recent_transfer_account,
+              style: TextStyle(color: HsgColors.describeText, fontSize: 15.0),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -297,9 +335,16 @@ class _TransferPartnerState extends State<TransferPartner> {
           style: TextStyle(fontSize: 14, color: Color(0xFF232323)),
         ),
         Text(
-          partner.payeeBankLocalName == null
-              ? '朗华银行'
-              : partner.payeeBankLocalName,
+          _language == 'zh_CN'
+              ? partner.payeeBankLocalName == null
+                  ? '朗华银行'
+                  : partner.payeeBankLocalName
+              : partner.payeeBankEngName == null
+                  ? 'Brillink bank'
+                  : partner.payeeBankEngName,
+          // _bankName = _language == 'zh_CN'
+          //     ? partner.payeeBankLocalName
+          //     : partner.payeeBankEngName,
           style: TextStyle(fontSize: 13, color: HsgColors.hintText),
         ),
         Row(
