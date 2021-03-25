@@ -103,6 +103,7 @@ class TransferAccount extends StatelessWidget {
           Container(
             child: FlatButton(
               onPressed: () {
+                FocusScope.of(context).requestFocus(FocusNode());
                 payCcyDialog();
               },
               child: Row(
@@ -248,6 +249,7 @@ class TransferAccount extends StatelessWidget {
         title: S.current.transfer_from_ccy,
         item: transferCcy,
         onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
           transferCcyDialog();
         },
       ),

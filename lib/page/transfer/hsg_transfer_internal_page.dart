@@ -187,11 +187,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         title: Text(S.current.transfer_type_0),
         centerTitle: true,
         elevation: 1,
-        // backgroundColor: Color(0xffF7F7F7),
-        // textTheme: TextTheme(
-        //   title: TextStyle(color: Colors.black, fontSize: 17),
-        //   button: TextStyle(color: Colors.black, fontSize: 17),
-        // ),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -440,6 +435,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   Widget _getImage() {
     return InkWell(
       onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
         Navigator.pushNamed(context, pageTranferPartner, arguments: '0').then(
           (value) {
             setState(() {
