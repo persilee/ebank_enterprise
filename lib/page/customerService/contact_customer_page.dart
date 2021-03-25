@@ -22,8 +22,16 @@ class _ContactCustomerPageState extends State<ContactCustomerPage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          elevation: 0,
           centerTitle: true,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Color(0xffFEFEFE)),
+          textTheme: TextTheme(
+            headline6: TextStyle(
+              color: Color(0xffFEFEFE),
+              fontSize: 18,
+              fontStyle: FontStyle.normal,
+            ),
+          ),
           title: Text(S.current.customer_service),
         ),
         body: Container(

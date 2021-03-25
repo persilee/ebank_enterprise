@@ -28,21 +28,24 @@ class RegisterConfirmPage extends StatefulWidget {
 class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
   TextEditingController _newPassword = new TextEditingController();
   String _newPasswordListen;
-  TextEditingController _oldPassword = new TextEditingController();
-  String _oldPasswordListen;
+  TextEditingController _confirmPassword = new TextEditingController();
+  String _confirmPasswordListen;
   Map listData = new Map();
   String _registerAccount;
   String _userPhone;
   String _sms;
+  String _areaCode;
   @override
   // ignore: must_call_super
   void initState() {
-    setState(() {
-      _newPassword.addListener(() {
+    _newPassword.addListener(() {
+      setState(() {
         _newPasswordListen = _newPassword.text;
       });
-      _oldPassword.addListener(() {
-        _oldPasswordListen = _oldPassword.text;
+    });
+    _confirmPassword.addListener(() {
+      setState(() {
+        _confirmPasswordListen = _confirmPassword.text;
       });
     });
   }
@@ -53,9 +56,8 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
     _registerAccount = listData['accountName'];
     _sms = listData['sms'];
     _userPhone = listData['phone'];
-    print('$_registerAccount---------');
-    print('$_sms---------');
-    print('$_userPhone---------');
+    _areaCode = listData['areaCode'];
+
 //_registerAccount =
     return Scaffold(
       appBar: AppBar(
@@ -83,7 +85,8 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                 getRegisterRow(
                     S.of(context).password_need_num, _newPassword, true),
                 //再次输入密码
-                getRegisterRow(S.current.placeConfimPwd, _oldPassword, true),
+                getRegisterRow(
+                    S.current.placeConfimPwd, _confirmPassword, true),
                 //下一步
                 Container(
                   width: MediaQuery.of(context).size.width,
@@ -127,7 +130,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                                   RegExp letter = new RegExp("[a-zA-Z]");
                                   RegExp number = new RegExp("[0-9]");
                                   if ((_newPassword.text !=
-                                      _oldPassword.text)) {
+                                      _confirmPassword.text)) {
                                     Fluttertoast.showToast(
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.CENTER,
@@ -171,12 +174,13 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
   _registerByAccount() async {
     String userType = "1";
     String password = EncryptUtil.aesEncode(_newPassword.text);
-    print("$password");
-    print("$_newPassword.text");
+
+    print("$_areaCode>>>>>>>>>>>>>>");
+
     VersionDataRepository()
         .registerByAccount(
-            RegisterByAccountReq(
-                '', password, _registerAccount, _userPhone, userType, _sms),
+            RegisterByAccountReq(_areaCode, password, _registerAccount,
+                _userPhone, userType, _sms),
             'registerByAccount')
         .then((value) {
       Map listDataLogin = new Map();
@@ -199,7 +203,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
   }
 
   bool _submit() {
-    if (_newPasswordListen != '' && _oldPasswordListen != '') {
+    if (_newPassword.text != '' && _confirmPassword.text != '') {
       return true;
     } else {
       return false;

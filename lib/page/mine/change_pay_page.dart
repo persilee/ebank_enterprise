@@ -67,7 +67,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
       appBar: AppBar(
         title: Text(S.of(context).setPayPwd),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,

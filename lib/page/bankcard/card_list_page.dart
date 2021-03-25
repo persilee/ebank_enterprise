@@ -51,7 +51,7 @@ class _CardListPageState extends State<CardListPage> {
         appBar: AppBar(
           title: Text(S.current.my_account),
           centerTitle: true,
-          elevation: 0,
+          elevation: 1,
         ),
         body: RefreshIndicator(
             key: refrestIndicatorKey,

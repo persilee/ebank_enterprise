@@ -36,7 +36,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
       appBar: AppBar(
         title: Text(S.of(context).feedback),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
