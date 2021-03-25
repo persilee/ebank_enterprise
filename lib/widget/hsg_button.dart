@@ -23,8 +23,8 @@ class HsgButton {
       ),
       child: ButtonTheme(
         minWidth: double.infinity,
-        height: 50,
-        child: RaisedButton(
+        height: 45,
+        child: FlatButton(
           onPressed: click,
           child: Text(
             title,
@@ -33,8 +33,8 @@ class HsgButton {
           ),
           // color: Color(0xFF3A9ED1),
           color: Colors.transparent,
-          elevation: 0, // 正常时阴影隐藏
-          highlightElevation: 0, // 点击时阴影隐藏
+          // elevation: 0, // 正常时阴影隐藏
+          // highlightElevation: 0, // 点击时阴影隐藏
           disabledColor: HsgColors.btnDisabled,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         ),
