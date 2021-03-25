@@ -183,6 +183,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       setState(() {
         _certType = obj[result];
         _certTypeKey = indList[result];
+        FocusScope.of(context).requestFocus(FocusNode());
       });
     }
   }

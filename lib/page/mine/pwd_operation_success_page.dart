@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -65,7 +66,7 @@ class _PwdOperationSuccessPageState extends State<PwdOperationSuccessPage> {
           Navigator.of(context)..pop();
         },
         child: Text(name),
-        color: Colors.blue,
+        color: HsgColors.accent,
         textColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       ),
