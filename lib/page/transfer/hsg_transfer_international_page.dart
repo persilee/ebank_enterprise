@@ -151,15 +151,17 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     var _arguments = ModalRoute.of(context).settings.arguments;
     setState(() {
       if (_arguments != null && !check) {
-        Rows rowPartner = _arguments;
-        _companyController.text = rowPartner.payeeName;
-        _accountController.text = rowPartner.payeeCardNo;
-        //   _remarkController.text = rowPartner.remark;
-        //   _nameController.selection = TextSelection.collapsed(
-        //       affinity: TextAffinity.downstream,
-        //       offset: _nameController.text.length);
-        //   _accountController.selection =
-        //       TextSelection.collapsed(offset: _accountController.text.length);
+        Rows listPartner = _arguments;
+        _companyController.text = listPartner.payeeName;
+        _accountController.text = listPartner.payeeCardNo;
+        _countryText = listPartner.district;
+        _getPayeeBank = _language == 'zh_CN'
+            ? listPartner.payeeBankLocalName
+            : listPartner.payeeBankEngName;
+        _bankSwiftController.text = listPartner.bankSwift;
+        _middleBankSwiftController.text = listPartner.midBankSwift;
+        _payeeAddressController.text = listPartner.payeeAddress;
+        _remarkController.text = listPartner.remark;
         check = true;
       }
     });
