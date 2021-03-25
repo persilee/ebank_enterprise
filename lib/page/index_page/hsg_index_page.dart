@@ -14,7 +14,6 @@ class IndexPage extends StatefulWidget {
 }
 
 class _IndexPageState extends State<IndexPage> {
-
   int currentIndex;
 
   final pages = [HomePage(), ApprovalPage(), MinePage()];
@@ -79,10 +78,11 @@ class _IndexPageState extends State<IndexPage> {
           _changePage(index);
         },
       ),
-      body: IndexedStack(
-        index: currentIndex,
-        children: pages,
-      ),
+      body: pages[currentIndex],
+      // body: IndexedStack(
+      //   index: currentIndex,
+      //   children: pages,
+      // ),
     );
   }
 
