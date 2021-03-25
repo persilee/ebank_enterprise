@@ -1,3 +1,5 @@
+import 'dart:math';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: lijiawei
@@ -15,6 +17,7 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
@@ -193,32 +196,7 @@ class _HomePageState extends State<HomePage> {
                     pageOpenAccountSelectDocumentType); //pageContactCustomer
               },
             ),
-            // IconButton(
-            //   icon: Image(
-            //     image:
-            //         AssetImage('images/home/navIcon/home_nav_message_has.png'),
-            //     width: 18.5,
-            //     height: 18.5,
-            //   ),
-            //   onPressed: () {
-            //     print('消息');
-            //   },
-            // ),
-            // Expanded(
-            //   child: Container(
-            //     alignment: Alignment.center,
-            //     child: Text(
-            //       S.of(context).home,
-            //       style: TextStyle(
-            //         fontSize: 18,
-            //         fontWeight: FontWeight.normal,
-            //         color: Colors.white.withOpacity(opacity),
-            //       ),
-            //     ),
-            //   ),
-            // ),
             _languageChangeBtn(),
-            //LanguageChangeBtn(changeLangBtnTltle),
           ],
         ),
       ),
@@ -229,7 +207,6 @@ class _HomePageState extends State<HomePage> {
   //语言选择按钮
   Widget _languageChangeBtn() {
     return Container(
-      // margin: EdgeInsets.only(right: 15),
       child: FlatButton(
         onPressed: () {
           _selectLanguage(context);
@@ -345,7 +322,6 @@ class _HomePageState extends State<HomePage> {
             margin: EdgeInsets.only(top: 60),
             padding: EdgeInsets.only(left: 20, right: 20),
             child: headerShowWidget,
-            //_openAccInReview(), //_openAccRejected(), // _headerInfoWidget(),
           ),
           Container(
             width: _headerViewHeight,
@@ -362,10 +338,8 @@ class _HomePageState extends State<HomePage> {
                     'images/home/heaerIcon/home_header_payment.png',
                     25.0,
                     (MediaQuery.of(context).size.width - 50) / 2,
-                    () {
-                      _featureClickFunction(
-                          context, S.of(context).transaction_details);
-                    },
+                    _featureClickFunction(
+                        context, S.of(context).transaction_details),
                   ),
                 ),
                 Container(
@@ -380,11 +354,8 @@ class _HomePageState extends State<HomePage> {
                     'images/home/heaerIcon/home_header_overview.png',
                     25.0,
                     (MediaQuery.of(context).size.width - 50) / 2,
-                    () {
-                      print('账户总览');
-                      _featureClickFunction(
-                          context, S.of(context).account_summary);
-                    },
+                    _featureClickFunction(
+                        context, S.of(context).account_summary),
                   ),
                 ),
               ],
@@ -398,7 +369,6 @@ class _HomePageState extends State<HomePage> {
   //头像
   Widget _headPortrait() {
     return Container(
-      // color: Colors.white,
       width: 55,
       height: 55,
       decoration: BoxDecoration(
@@ -461,8 +431,8 @@ class _HomePageState extends State<HomePage> {
     return Container(
       height: 25,
       decoration: BoxDecoration(
-        color: Color(0xff3394D4).withOpacity(0.64), //HsgColors.accent,
-        borderRadius: BorderRadius.circular(12.5), //
+        color: Color(0xff3394D4).withOpacity(0.64),
+        borderRadius: BorderRadius.circular(12.5),
       ),
       padding: EdgeInsets.fromLTRB(5, 0, 12, 0),
       child: Row(
@@ -541,10 +511,7 @@ class _HomePageState extends State<HomePage> {
             child: _nameInfo(),
           ),
           RaisedButton(
-            onPressed: () {
-              print('开户申请');
-              Navigator.pushNamed(context, pageOpenAccountBasicData);
-            },
+            onPressed: _openAccountClickFunction(context),
             child: Text(
               S.of(context).open_account_apply,
               style: TextStyle(fontSize: 15, color: Colors.white),
@@ -584,9 +551,7 @@ class _HomePageState extends State<HomePage> {
             margin: EdgeInsets.only(top: 10, bottom: 15),
             height: 35,
             child: RaisedButton(
-              onPressed: () {
-                print('重新申请');
-              },
+              onPressed: _openAccountClickFunction(context),
               child: Text(
                 S.of(context).open_account_reapply,
                 style: TextStyle(fontSize: 14, color: Colors.white),
@@ -732,18 +697,18 @@ class _HomePageState extends State<HomePage> {
   //功能点击事件
   VoidCallback _featureClickFunction(BuildContext context, String title) {
     return () {
-      if (_belongCustStatus == '0' ||
-          _belongCustStatus == '1' ||
-          _belongCustStatus == '2' ||
-          _belongCustStatus == '3' ||
-          _belongCustStatus == '4') {
-        HsgShowTip.loginTip(
-            context: context,
-            click: (value) {
-              print('>>>>$value');
-            });
-        return;
-      }
+      // if (_belongCustStatus == '0' ||
+      //     _belongCustStatus == '1' ||
+      //     _belongCustStatus == '2' ||
+      //     _belongCustStatus == '3' ||
+      //     _belongCustStatus == '4') {
+      //   HsgShowTip.loginTip(
+      //       context: context,
+      //       click: (value) {
+      //         print('>>>>$value');
+      //       });
+      //   return;
+      // }
       if (S.current.transaction_details == title) {
         //收支明细
         Navigator.pushNamed(context, pageDetailList);
@@ -787,6 +752,22 @@ class _HomePageState extends State<HomePage> {
       } else if (S.current.electronic_statement == title) {
         //'电子结单'
         Navigator.pushNamed(context, pageElectronicStatement);
+      }
+    };
+  }
+
+  //开户点击事件
+  VoidCallback _openAccountClickFunction(BuildContext context) {
+    return () {
+      if (_inviteeStatus == '0') {
+        //前往填写面签码
+        // Navigator.pushNamed(context, pageOpenAccountBasicData);
+        Fluttertoast.showToast(
+            msg: '前往填写面签码，开发中', gravity: ToastGravity.CENTER);
+        print('前往填写面签码');
+      } else {
+        //前往快速开户
+        Navigator.pushNamed(context, pageOpenAccountBasicData);
       }
     };
   }
@@ -923,8 +904,8 @@ class _HomePageState extends State<HomePage> {
         _data = data;
       });
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
-      HSProgressHUD.showError(status: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      // HSProgressHUD.showError(status: e.toString());
       print('${e.toString()}');
     });
   }
@@ -944,8 +925,8 @@ class _HomePageState extends State<HomePage> {
         _inviteeStatus = data.inviteeStatus;
       });
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
-      HSProgressHUD.showError(status: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      // HSProgressHUD.showError(status: e.toString());
       print('${e.toString()}');
     });
   }
