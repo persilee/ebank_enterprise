@@ -116,30 +116,29 @@ class DdFinHisDTOList extends Object {
   String narrative;
 
   //交易时间---后台暂时为null
-  // @JsonKey(name: 'txDateTime')
-  // String txDateTime;
+  @JsonKey(name: 'txDateTime')
+  String txDateTime;
 
   DdFinHisDTOList(
-    this.acDate,
-    this.msgId,
-    this.seq,
-    this.reqId,
-    this.refNo,
-    this.uri,
-    this.acNo,
-    this.txCcy,
-    this.txAmt,
-    this.drCrFlg,
-    this.txSts,
-    this.ciNo,
-    this.trBank,
-    this.othBank,
-    this.othBankAc,
-    this.othBankAcName,
-    this.txMmo,
-    this.narrative,
-    // this.txDateTime
-  );
+      this.acDate,
+      this.msgId,
+      this.seq,
+      this.reqId,
+      this.refNo,
+      this.uri,
+      this.acNo,
+      this.txCcy,
+      this.txAmt,
+      this.drCrFlg,
+      this.txSts,
+      this.ciNo,
+      this.trBank,
+      this.othBank,
+      this.othBankAc,
+      this.othBankAcName,
+      this.txMmo,
+      this.narrative,
+      this.txDateTime);
   Map<String, dynamic> toJson() => _$DdFinHisDTOListToJson(this);
 
   factory DdFinHisDTOList.fromJson(Map<String, dynamic> srcJson) =>

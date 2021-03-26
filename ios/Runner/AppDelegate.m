@@ -67,8 +67,8 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
     SEFaceVerifyData *faceData = [[SEFaceVerifyData alloc]init];
 //hasFaceVerFunc  没有标注说明
     faceData.hasFaceVerFunc = NO;
-    faceData.idNo = @"身份证号";
-    faceData.name = @"姓名";
+//    faceData.idNo = @"身份证号";
+//    faceData.name = @"姓名";
 //    faceData.sourcePhotoStr = @"";
     return faceData;
 }
@@ -129,7 +129,7 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
         
         self.resultBlock(resultValue);
     }else{//用户操作失败等问题统一在这里处理
-        NSLog(@"报错信息------------%@",videoResult.error.desc);
+        NSLog(@"报错信息------------%@  %u",videoResult.error.desc, videoResult.error.errorType);
     }
 //    else{//不成功
 //        NSDictionary *reultDict = @{@"result":@"failer"};

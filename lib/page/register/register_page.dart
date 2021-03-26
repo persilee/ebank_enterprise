@@ -14,6 +14,7 @@ import 'package:ebank_mobile/page/register/component/register_86.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 
 import 'package:flutter/gestures.dart';
 
@@ -46,7 +47,6 @@ class _RegisterPageState extends State<RegisterPage> {
   int countdownTime = 0;
   bool _checkBoxValue = false; //复选框默认值
   bool _isRegister = false;
-  String _areaCode;
 
   /// 区号
   String _officeAreaCodeText = '86';
@@ -342,12 +342,14 @@ class _RegisterPageState extends State<RegisterPage> {
         timeInSecForIosWeb: 1,
       );
     } else {
+      HSProgressHUD.show();
       VersionDataRepository()
           .checkPhone(CheckPhoneReq(_phoneNum.text, '1'), 'checkPhoneReq')
           .then((data) {
         setState(() {
           _isRegister = data.register;
           _sendSmsRegister(_isRegister);
+          HSProgressHUD.dismiss();
         });
       }).catchError((e) {
         Fluttertoast.showToast(msg: e.toString());
