@@ -605,7 +605,7 @@ class _DetailListPageState extends State<DetailListPage> {
           color: Colors.white,
           //交易时间
           //  child: Text(ddFinHisDTOList[section].transDate),
-          //   child: Text(ddFinHisDTOList[section].txDateTime),
+          child: Text(ddFinHisDTOList[section].txDateTime),
         ),
       ],
     );
@@ -877,8 +877,8 @@ class _DetailListPageState extends State<DetailListPage> {
         .getRevenueByCards(
             GetRevenueByCardsReq(
                 'CNY',
-                '2021-02-20', //结束时间
-                '2021-02-02', //开始时间
+                '2021-03-29', //结束时间
+                '2021-01-02', //开始时间
                 0, //分页
                 0, //分页
                 // acNo:

@@ -1,5 +1,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/mine_checInformantApi.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/real_name_auth_by_three_factor.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/forexTrading/forex_trading_page.dart';
@@ -7,6 +9,7 @@ import 'package:ebank_mobile/page/register/component/register_row.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -28,6 +31,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
   String _userNameListen;
   String _cardNumberListen;
   String _certType = '';
+  String _userPhone;
   List<IdType> idInformationList = []; //证件类型信息
   String _certTypeKey; //身份校验的key
   String _accountName; //前面传过来用户登录名
@@ -55,6 +59,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
   Widget build(BuildContext context) {
     listData = ModalRoute.of(context).settings.arguments;
     _accountName = listData['userAccount'];
+    _userPhone = listData['userPhone'];
     print("$_accountName>>>>>>>>>>>>>>>>>>>>>>");
     return Scaffold(
         appBar: AppBar(
@@ -145,9 +150,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                       child: Text(S.of(context).next_step),
                       onPressed: _submit()
                           ? () {
-                              Navigator.pushNamed(
-                                  context, pageResetPasswordNoAccount,
-                                  arguments: listData);
+                              _realNameAuth();
                             }
                           : null,
                       textColor: Colors.white,
@@ -204,9 +207,51 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
     }
   }
 
+  //验证身份信息 提交数据
+  _realNameAuth() async {
+    print('$_cardNumberListen>>>>>>>>>>>>>>>>>');
+    //调用三要素验证，成功后进入人脸识别，识别成功后进入设置密码阶段
+    if (_cardNumber.text.length <= 0) {
+      Fluttertoast.showToast(msg: '请输入证件号!');
+      return;
+    }
+    print(_cardNumber.text +
+        '-' +
+        _certTypeKey +
+        '-' +
+        _userPhone +
+        '-' +
+        _userName.text);
+    // Navigator.pushNamed(context, setPayPage);
+    HSProgressHUD.show();
+    ChecInformantApiRepository()
+        .realNameAuth(
+            RealNameAuthByThreeFactorReq(
+                _cardNumber.text, _certTypeKey, _userPhone, _userName.text),
+            'realNameAuthByThreeFactor')
+        .then((data) {
+      print(_cardNumber.text +
+          '-' +
+          _certTypeKey +
+          '-' +
+          _userPhone +
+          '-' +
+          _userName.text);
+      if (data.enabled) {
+        Navigator.pushNamed(context, pageResetPasswordNoAccount,
+            arguments: listData);
+      }
+      HSProgressHUD.dismiss();
+    }).catchError((e) {
+      // Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.showError(status: e.toString());
+      print(e.toString());
+    });
+  }
+
   bool _submit() {
-    if (_userNameListen != '' &&
-        _cardNumberListen != '' &&
+    if (_userName.text != '' &&
+        _cardNumber.text != '' &&
         _certType.length > 0) {
       return true;
     } else {

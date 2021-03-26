@@ -7,7 +7,6 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/page/home/hsg_home_page.dart';
 
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -130,6 +129,7 @@ class _TransferPageState extends State<TransferPage> {
               ], begin: Alignment.centerLeft, end: Alignment.centerRight),
             ),
             height: 110,
+            //渐变内容
             child: Container(
               margin: EdgeInsets.only(top: 70),
               child: Row(
