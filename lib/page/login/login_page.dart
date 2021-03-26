@@ -37,6 +37,13 @@ class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
   var _changeLangBtnTltle = '';
 
+  // TextEditingController _accountTC =
+  //     TextEditingController(text: 'ljw124'); //fangluyao
+  // TextEditingController _passwordTC =
+  //     TextEditingController(text: 'Aa123456@'); //b0S25X5Y
+  // var _account = 'ljw124'; //'blk101';
+  // var _password = 'Aa123456@'; //'4N0021S8';
+
   TextEditingController _accountTC =
       TextEditingController(text: 'blk302'); //fangluyao
   TextEditingController _passwordTC =
@@ -244,6 +251,10 @@ class _LoginPageState extends State<LoginPage> {
     _password = _passwordTC.text;
 
     String password = EncryptUtil.aesEncode(_password);
+
+    // LoginResp loginResp = await ApiClient().login(BaseBody(body: LoginReq(username: _account, password: password).toJson()));
+    // print(loginResp.toJson());
+
     UserDataRepository()
         .login(LoginReq(username: _account, password: password), 'login')
         .then((value) {
@@ -278,6 +289,8 @@ class _LoginPageState extends State<LoginPage> {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
     prefs.setString(ConfigKey.USER_ID, resp.userId);
+    prefs.setString(ConfigKey.USER_PHONE, resp.userPhone);
+    prefs.setString(ConfigKey.USER_AREACODE, resp.areaCode);
     if (resp.custId == null || resp.custId == '') {
       prefs.setString(ConfigKey.CUST_ID, '');
     } else {

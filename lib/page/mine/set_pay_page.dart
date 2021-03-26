@@ -1,14 +1,19 @@
+import 'package:ebank_mobile/data/source/mine_checInformantApi.dart';
+import 'package:ebank_mobile/data/source/model/set_transaction_password.dart';
 /**
   @desc   重置交易密码
   @author hlx
  */
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/encrypt_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SetPayPage extends StatefulWidget {
   @override
@@ -21,6 +26,12 @@ GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 class _SetPayPageState extends State<SetPayPage> {
   TextEditingController _newPwd = TextEditingController();
   TextEditingController _confimPwd = TextEditingController();
+
+  var _certificateNo = '';
+  var _certificateType = '';
+  var _phoneNumber = '';
+  var _userId = '';
+  var _userAccount = '';
 
   @override
   void initState() {
@@ -35,11 +46,17 @@ class _SetPayPageState extends State<SetPayPage> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      Map map = ModalRoute.of(context).settings.arguments;
+      _certificateNo = map['certificateNo'];
+      _certificateType = map['certificateType'];
+      _phoneNumber = map['phoneNumber'];
+    });
     return new Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).resetPayPsd),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -125,25 +142,37 @@ class _SetPayPageState extends State<SetPayPage> {
     if (_newPwd.text != _confimPwd.text) {
       HSProgressHUD.showInfo(status: S.of(context).differentPwd);
     } else {
-      Navigator.of(context)..pop()..pop()..pop();
-      Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
-      // HSProgressHUD.show();
-      // final prefs = await SharedPreferences.getInstance();
-      // String userID = prefs.getString(ConfigKey.USER_ID);
-      // PaymentPwdRepository()
-      //     .updateTransPassword(
-      //   SetPaymentPwdReq(_oldPwd.text, _newPwd.text, userID, _sms.text),
-      //   'updateTransPassword',
-      // )
-      //     .then((data) {
-      //   HSProgressHUD.showError(status: '密码修改成功');
-      //   Navigator.pop(context);
-      //   HSProgressHUD.dismiss();
-      // }).catchError((e) {
-      //   // Fluttertoast.showToast(msg: e.toString());
-      //   HSProgressHUD.showError(status: e.toString());
-      //   print('${e.toString()}');
-      // });
+      // Navigator.of(context)..pop()..pop()..pop();
+      // Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
+      HSProgressHUD.show();
+      final prefs = await SharedPreferences.getInstance();
+      _userId = prefs.getString(ConfigKey.USER_ID);
+      _userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
+      String password = EncryptUtil.aesEncode(_confimPwd.text);
+      print(password);
+      HSProgressHUD.show();
+      ChecInformantApiRepository()
+          .setTransactionPassword(
+              SetTransactionPasswordReq(
+                  _certificateNo,
+                  _certificateType,
+                  password,
+                  _phoneNumber,
+                  _userId,
+                  _userAccount,
+                  false,
+                  '123456',
+                  '',
+                  ''),
+              'setTransactionPassword')
+          .then((data) {
+        HSProgressHUD.dismiss();
+        Navigator.of(context)..pop()..pop()..pop();
+        Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
+      }).catchError((e) {
+        HSProgressHUD.showError(status: e.toString());
+        HSProgressHUD.dismiss();
+      });
     }
   }
 }

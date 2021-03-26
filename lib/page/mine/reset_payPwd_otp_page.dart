@@ -63,7 +63,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       appBar: AppBar(
         title: Text(S.of(context).resetPayPsd),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -145,7 +145,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                       color: HsgColors.accent,
                       textColor: Colors.white,
                       disabledTextColor: Colors.white,
-                      disabledColor: Color(0xFFD1D1D1),
+                      disabledColor: HsgColors.btnDisabled,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5) //设置圆角
                           ),

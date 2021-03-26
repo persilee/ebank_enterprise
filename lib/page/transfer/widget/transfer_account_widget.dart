@@ -149,8 +149,6 @@ class TransferAccount extends StatelessWidget {
         ),
         onChanged: (text) {
           callback();
-          // text.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1');
-          // moneyChanges(money);
         },
       ),
     );
@@ -199,6 +197,7 @@ class TransferAccount extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               accountDialog();
             },
             child: Row(

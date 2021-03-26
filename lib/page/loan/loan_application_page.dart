@@ -117,6 +117,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
                 child: HsgButton.button(
                   title: S.current.apply,
                   click: _isButton ? _openBottomSheet : null,
+                  isColor: _isButton,
                 ),
               ),
             ],

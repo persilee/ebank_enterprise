@@ -24,114 +24,144 @@ class GetUserInfoReq extends Object {
 
 @JsonSerializable()
 class UserInfoResp extends Object {
+  /// 用户编号
   @JsonKey(name: 'userId')
   String userId;
 
+  /// 客户号
   @JsonKey(name: 'custId')
   String custId;
 
+  /// 用户账号
   @JsonKey(name: 'userAccount')
   String userAccount;
 
+  /// 用户名称(本地)
   @JsonKey(name: 'localUserName')
   String localUserName;
 
+  /// 用户名称(英文)
   @JsonKey(name: 'englishUserName')
   String englishUserName;
 
+  /// 客户名称(本地)
   @JsonKey(name: 'custLocalName')
   String custLocalName;
 
+  /// 客户名称(英文)
   @JsonKey(name: 'custEngName')
   String custEngName;
 
+  /// 邮箱地址
   @JsonKey(name: 'userEmail')
   String userEmail;
 
+  /// 手机号码
   @JsonKey(name: 'userPhone')
   String userPhone;
 
+  /// 头像
   @JsonKey(name: 'headPortrait')
   String headPortrait;
 
+  /// 交易密码标识
   @JsonKey(name: 'passwordEnabled')
   bool passwordEnabled;
 
+  /// 绑卡标记
   @JsonKey(name: 'tiedCardMark')
   bool tiedCardMark;
 
+  /// 实名认证标识
   @JsonKey(name: 'certification')
   bool certification;
 
+  /// 证件类型(0:身份证 1:护照 9:其他)
   @JsonKey(name: 'certificateType')
   String certificateType;
 
+  /// 证件号码
   @JsonKey(name: 'certificateNo')
   String certificateNo;
 
+  /// 证件姓名
   @JsonKey(name: 'actualName')
   String actualName;
 
+  /// 用户状态
   @JsonKey(name: 'userStatus')
   String userStatus;
 
+  /// 密码错误次数
   @JsonKey(name: 'passwordErrors')
   int passwordErrors;
 
+  /// 用户被锁
   @JsonKey(name: 'lockEnabled')
   bool lockEnabled;
 
+  /// 用户类型(1：个人用户 2：企业用户 3：金融机构)
   @JsonKey(name: 'userType')
   String userType;
 
+  /// 平台类型(1-手机，2-网银)
   @JsonKey(name: 'platType')
   String platType;
 
+  /// 最后一次登录时间
   @JsonKey(name: 'lastLoginTime')
   String lastLoginTime;
 
+  /// 创建人
   @JsonKey(name: 'createBy')
   String createBy;
 
+  /// 修改人
   @JsonKey(name: 'modifyBy')
   String modifyBy;
 
+  /// 创建时间
   @JsonKey(name: 'createTime')
   String createTime;
 
+  /// 修时间
   @JsonKey(name: 'modifyTime')
   String modifyTime;
 
+  /// 是否第一次登陆
   @JsonKey(name: 'firstLanding')
   bool firstLanding;
 
+  /// 角色本地名称
   @JsonKey(name: 'roleLocalName')
   String roleLocalName;
 
+  /// 角色英文名称
   @JsonKey(name: 'roleEngName')
   String roleEngName;
 
+  /// 角色代码
   @JsonKey(name: 'roleCode')
   String roleCode;
 
+  /// 工作流流程ID
   @JsonKey(name: 'processId')
   String processId;
 
-/**
- * 用户开户激活状态(
- * 0 - 未开户
- * 1 - 审核中
- * 2 - 被驳回
- * 3 - 开立客户号失败
- * 4 - 开立账户失败
- * 5 - 未激活
- * 6 - 已激活
- * 7 - 锁定)
- * 8 - 待审核
-*/
+  /// 用户开户激活状态(
+  /// 0 - 未开户
+  /// 1 - 审核中
+  /// 2 - 被驳回
+  /// 3 - 开立客户号失败
+  /// 4 - 开立账户失败
+  /// 5 - 未激活
+  /// 6 - 已激活
+  /// 7 - 锁定)
+  /// 8 - 待审核
   @JsonKey(name: 'belongCustStatus')
   String belongCustStatus;
 
+  /// 区号
   @JsonKey(name: 'areaCode')
   String areaCode;
 

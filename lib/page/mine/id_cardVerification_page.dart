@@ -183,6 +183,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       setState(() {
         _certType = obj[result];
         _certTypeKey = indList[result];
+        FocusScope.of(context).requestFocus(FocusNode());
       });
     }
   }
@@ -205,7 +206,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       appBar: AppBar(
         title: Text(S.of(context).resetPayPsd),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -489,7 +490,11 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
           '-' +
           _realName.text);
       if (data.enabled) {
-        Navigator.pushNamed(context, setPayPage);
+        Map map = new Map();
+        map['certificateNo'] = _certNo.text;
+        map['certificateType'] = _certTypeKey;
+        map['phoneNumber'] = _userPhone;
+        Navigator.pushNamed(context, setPayPage, arguments: map);
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {

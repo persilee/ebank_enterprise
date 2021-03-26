@@ -731,8 +731,10 @@ class _TransferInternationalOldPageState
       child: Container(
         margin: EdgeInsets.only(top: 100, bottom: 50),
         child: HsgButton.button(
-            title: S.current.next_step,
-            click: _isClick() ? _judgeDialog : null),
+          title: S.current.next_step,
+          click: _isClick() ? _judgeDialog : null,
+          isColor: _isClick(),
+        ),
       ),
     );
   }
