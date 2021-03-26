@@ -177,11 +177,10 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         _nameController.text = rowPartner.payeeName;
         _accountController.text = rowPartner.payeeCardNo;
         _remarkController.text = rowPartner.remark;
-        _nameController.selection = TextSelection.collapsed(
-            affinity: TextAffinity.downstream,
-            offset: _nameController.text.length);
-        _accountController.selection =
-            TextSelection.collapsed(offset: _accountController.text.length);
+        payeeBankCode = rowPartner.bankCode;
+        payerBankCode = rowPartner.payerBankCode;
+        payeeName = rowPartner.payeeName;
+        payerName = rowPartner.payerName;
         check = true;
       }
     });
@@ -329,7 +328,10 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       child: Container(
         margin: EdgeInsets.only(top: 100, bottom: 50),
         child: HsgButton.button(
-            title: S.current.next_step, click: _isClick ? _judgeDialog : null),
+          title: S.current.next_step,
+          click: _isClick ? _judgeDialog : null,
+          isColor: _isClick,
+        ),
       ),
     );
   }
@@ -488,11 +490,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _accountList.add(e.cardNo);
             });
             //付款方银行名字
-            payeeBankCode = element.cardList[0].ciName;
+            // payeeBankCode = element.cardList[0].ciName;
             //收款方银行姓名
-            payerBankCode = element.cardList[0].ciName;
+            // payerBankCode = element.cardList[0].ciName;
             //付款方姓名
-            payerName = element.cardList[0].ciName;
+            // payerName = element.cardList[0].ciName;
           });
           _getCardTotal(_account);
           _loadLocalCcy();

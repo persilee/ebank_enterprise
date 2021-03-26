@@ -8,9 +8,13 @@ import 'dart:ffi';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_styles.dart';
 import 'package:ebank_mobile/data/source/model/find_user_to_do_task.dart';
+import 'package:ebank_mobile/data/source/model/find_user_todo_task_body.dart';
+import 'package:ebank_mobile/data/source/model/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/process_task_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
 import 'package:flutter/material.dart';
@@ -31,14 +35,14 @@ enum LoadingStatus { STATUS_LOADING, STATUS_COMPLETED, STATUS_IDEL }
 
 class _MyApprovalPageState extends State<MyApprovalPage> {
   List<FindUserTaskDetail> toDoTask = [];
-  List<FindUserTaskDetail> list = []; //页面显示的待办列表
-  FindUserTaskDetail dataA = FindUserTaskDetail("60001", "0", "一对一转账", "6001",
-      "transfer", "776108151173808128", "2020-11-12 09:12:24");
-  FindUserTaskDetail dataB = FindUserTaskDetail("60002", "0", "定期开立", "6002",
-      "transfer", "776108151173808128", "2020-11-12 10:22:08");
-  FindUserTaskDetail dataC = FindUserTaskDetail("60003", "0", "定期开立", "6003",
-      "transfer", "776108151173808128", "2020-11-12 11:27:11");
-  FindUserTaskDetail approval;
+  List<Rows> _listData = []; //页面显示的待办列表
+  // FindUserTaskDetail dataA = FindUserTaskDetail("60001", "0", "一对一转账", "6001",
+  //     "transfer", "776108151173808128", "2020-11-12 09:12:24");
+  // FindUserTaskDetail dataB = FindUserTaskDetail("60002", "0", "定期开立", "6002",
+  //     "transfer", "776108151173808128", "2020-11-12 10:22:08");
+  // FindUserTaskDetail dataC = FindUserTaskDetail("60003", "0", "定期开立", "6003",
+  //     "transfer", "776108151173808128", "2020-11-12 11:27:11");
+  // FindUserTaskDetail approval;
   ScrollController _sctrollController = ScrollController();
   int count = 0;
   int page = 1;
@@ -46,30 +50,33 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   bool _isDate = false;
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
+
   // bool refresh;
 
+  @override
   void initState() {
     super.initState();
-    list.add(dataA);
-    list.add(dataB);
-    list.add(dataC);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      // refrestIndicatorKey.currentState.show();
-    });
-    _sctrollController.addListener(() {
-      if (_sctrollController.position.pixels ==
-          _sctrollController.position.maxScrollExtent) {
-        //加载更多
-        _getMore();
-      }
-    });
-    NotificationCenter.instance.addObserver('refresh', (object) {
-      setState(() {
-        if (object) {
-          _loadData();
-        }
-      });
-    });
+    // list.add(dataA);
+    // list.add(dataB);
+    // list.add(dataC);
+    _loadData();
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   // refrestIndicatorKey.currentState.show();
+    // });
+    // _sctrollController.addListener(() {
+    //   if (_sctrollController.position.pixels ==
+    //       _sctrollController.position.maxScrollExtent) {
+    //     //加载更多
+    //     _getMore();
+    //   }
+    // });
+    // NotificationCenter.instance.addObserver('refresh', (object) {
+    //   setState(() {
+    //     if (object) {
+    //       _loadData();
+    //     }
+    //   });
+    // });
   }
 
 //加载
@@ -95,7 +102,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
       padding: EdgeInsets.only(right: 10.0),
       child: Icon(
         Icons.fiber_manual_record,
-        color: HsgColors.blueIcon,
+        color: Color(int.parse('0xff3394D4')),
         size: 10.0,
       ),
     );
@@ -152,7 +159,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   }
 
   //待办列表右侧信息
-  Widget _rightInfo(String taskName, String startUser, String createTime) {
+  Widget _rightInfo(Rows rows) {
     return Card(
       elevation: 6.0,
       shadowColor: Colors.grey.withOpacity(0.2),
@@ -163,11 +170,11 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             //待办任务名称
-            _taskName(taskName),
+            _taskName(rows.taskName),
             //发起人
-            _rowInformation(intl.S.current.sponsor, startUser),
+            _rowInformation(intl.S.current.sponsor, rows.startUser),
             //创建时间
-            _rowInformation(intl.S.current.creation_time, createTime),
+            _rowInformation(intl.S.current.creation_time, rows.createTime),
           ],
         ),
       ),
@@ -175,14 +182,13 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   }
 
 //待办列表
-  Widget _todoInformation(FindUserTaskDetail approval, String taskName,
-      String startUser, String createTime) {
+  Widget _todoInformation(Rows rows) {
     return Container(
       height: 136.0,
       padding: EdgeInsets.only(top: 16),
       child: GestureDetector(
         onTap: (){
-          go2Detail(approval);
+          go2Detail(rows);
         },
         child: Stack(
           overflow: Overflow.visible,
@@ -192,7 +198,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                 Container(
                   width: 16.0,
                 ),
-                Expanded(child: _rightInfo(taskName, startUser, createTime)),
+                Expanded(child: _rightInfo(rows)),
               ],
             ),
             Positioned(
@@ -238,80 +244,34 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
       child: ListView.builder(
         // itemCount: list.length,
         padding: EdgeInsets.symmetric(horizontal: 12.0),
-        itemCount: list.length + 1,
+        itemCount: _listData.length,
         controller: _sctrollController,
         itemBuilder: (context, index) {
-          if (index == list.length) {
-            return _loadingView();
-          } else {
-            return _todoInformation(
-              list[index],
-              list[index].processTitle,
-              list[index].startUser,
-              list[index].createTime,
-            );
-          }
-        },
+          return _todoInformation(_listData[index]);
+          },
       ),
     );
-
-    // RefreshIndicator(
-    //     key: refrestIndicatorKey,
-    //     child: _isDate
-    //         ? ListView.builder(
-    //             itemCount: list.length + 1,
-    //             itemBuilder: (context, index) {
-    //               if (index == list.length) {
-    //                 return _loadingView();
-    //               } else {
-    //                 return Column(
-    //                   children: <Widget>[
-    //                     Center(
-    //                       child: _pad(
-    //                         _todoInformation(
-    //                             list[index],
-    //                             list[index].processTitle,
-    //                             list[index].startUser,
-    //                             list[index].createTime),
-    //                         t: 10.0,
-    //                         b: 10.0,
-    //                       ),
-    //                     ),
-    //                   ],
-    //                 );
-    //               }
-    //             },
-    //             controller: _sctrollController,
-    //           )
-    //         : notDataContainer(context, S.current.no_data_now),
-    //     onRefresh: _loadData);
   }
 
 //跳转并传值
-  void go2Detail(FindUserTaskDetail approval) {
+  void go2Detail(Rows rows) {
     Navigator.pushNamed(context, pageTaskApproval,
-        arguments: {"data": approval, "title": widget.title});
+        arguments: {"data": rows, "title": widget.title});
   }
 
   Future<void> _loadData() async {
-    // ProcessTaskDataRepository()
-    //     .findUserToDoTask(FindUserToDoTaskReq(page, 10), 'findUserToDoTask')
-    //     .then((data) {
-    //   if (data.rows.length != 0) {
-    //     count = data.count;
-    //     _isDate = true;
-    //     setState(() {
-    //       list.clear();
-    //       toDoTask.clear();
-    //       toDoTask.addAll(data.rows);
-    //       list.addAll(toDoTask);
-    //     });
-    //   } else {
-    //     _isDate = false;
-    //   }
-    // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString());
-    // });
+    FindUserTodoTaskModel findUserTodoTaskModel = await ApiClient().findUserTodoTask(BaseBody(body: FindUserTodoTaskBody(
+      page: 1,
+      pageSize: 10,
+      tenantId: 'EB',
+      custId: '818000000113'
+    ).toJson()));
+
+    setState(() {
+      _listData.addAll(findUserTodoTaskModel.body.rows);
+    });
+
+    print('findUserTodoTaskResponse: ${findUserTodoTaskModel.toJson()}');
   }
 
 //加载更多
@@ -322,7 +282,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
       });
     }
     setState(() {
-      if (list.length >= count) {
+      if (_listData.length >= count) {
         loadStatus = LoadingStatus.STATUS_IDEL;
       } else {
         page = page + 1;
@@ -332,6 +292,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     });
   }
 
+  @override
   void dispose() {
     super.dispose();
     _sctrollController.dispose();

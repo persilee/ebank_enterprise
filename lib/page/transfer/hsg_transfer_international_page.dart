@@ -151,15 +151,23 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     var _arguments = ModalRoute.of(context).settings.arguments;
     setState(() {
       if (_arguments != null && !check) {
-        Rows rowPartner = _arguments;
-        _companyController.text = rowPartner.payeeName;
-        _accountController.text = rowPartner.payeeCardNo;
-        //   _remarkController.text = rowPartner.remark;
-        //   _nameController.selection = TextSelection.collapsed(
-        //       affinity: TextAffinity.downstream,
-        //       offset: _nameController.text.length);
-        //   _accountController.selection =
-        //       TextSelection.collapsed(offset: _accountController.text.length);
+        Rows listPartner = _arguments;
+        _companyController.text = listPartner.payeeName;
+        _accountController.text = listPartner.payeeCardNo;
+        _countryText = listPartner.district;
+        _getPayeeBank = _language == 'zh_CN'
+            ? listPartner.payeeBankLocalName
+            : listPartner.payeeBankEngName;
+        _bankSwiftController.text = listPartner.bankSwift;
+        _middleBankSwiftController.text = listPartner.midBankSwift;
+        _payeeAddressController.text = listPartner.payeeAddress;
+        _remarkController.text = listPartner.remark;
+        //付款方银行
+        payeeBankCode = listPartner.bankCode;
+        //收款方银行
+        payerBankCode = listPartner.payerBankCode;
+        payeeName = listPartner.payeeName;
+        payerName = listPartner.payerName;
         check = true;
       }
     });
@@ -656,7 +664,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         margin: EdgeInsets.only(top: 100, bottom: 50),
         child: HsgButton.button(
             title: S.current.next_step,
-            click: _isClick() ? _judgeDialog : null),
+            click: _isClick() ? _judgeDialog : null,
+            isColor: _isClick()),
       ),
     );
   }
@@ -747,12 +756,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             element.cardList.forEach((e) {
               _accountList.add(e.cardNo);
             });
-            //付款方银行名字
-            payeeBankCode = element.cardList[0].ciName;
-            //收款方银行姓名
-            payerBankCode = element.cardList[0].ciName;
             //付款方姓名
-            payerName = element.cardList[0].ciName;
+            // payerName = element.cardList[0].ciName;
           });
           _getCcyList();
           _getCardTotal(_account);

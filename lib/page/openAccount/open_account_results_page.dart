@@ -78,6 +78,7 @@ class OpenAccountResultsPage extends StatelessWidget {
                     return false; //继续关闭
                   });
                 },
+                isColor: true,
               ),
             )
           ],

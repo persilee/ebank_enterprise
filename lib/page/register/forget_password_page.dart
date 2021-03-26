@@ -149,10 +149,21 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
                 //下一步按钮
                 Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFF1775BA),
+                        Color(0xFF3A9ED1),
+                      ],
+                    ),
+                  ),
                   margin: EdgeInsets.all(40), //外边距
                   height: 44.0,
                   width: MediaQuery.of(context).size.width,
-                  child: RaisedButton(
+                  child: FlatButton(
                     child: Text(S.of(context).next_step),
                     onPressed: _submit()
                         ? () {
@@ -167,7 +178,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                                 arguments: listData);
                           }
                         : null,
-                    color: HsgColors.accent,
+                    // color: HsgColors.accent,
                     textColor: Colors.white,
                     disabledTextColor: Colors.white,
                     disabledColor: Color(0xFFD1D1D1),
@@ -237,7 +248,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   }
 
   bool _submit() {
-    if (_smsListen != '' && _phoneNumListen != '') {
+    if (_sms.text != '' && _phoneNum.text != '') {
       return true;
     } else {
       return false;
@@ -255,12 +266,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         timeInSecForIosWeb: 1,
       );
     } else {
+      HSProgressHUD.show();
+
       VersionDataRepository()
           .checkPhone(CheckPhoneReq(_phoneNum.text, '1'), 'checkPhoneReq')
           .then((data) {
         setState(() {
           _isRegister = data.register;
           _userAccount = data.userAccount;
+          HSProgressHUD.dismiss();
 
           //发送短信
           _getVerificationCode();

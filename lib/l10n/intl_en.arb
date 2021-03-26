@@ -570,6 +570,7 @@
   "warm_prompt": "Warm Tips",
   "openAccount_notOpen_content": "You have not opened an account yet, to perform this operation, please complete the remote account opening process first!",
   "not_set_tranPassword_content": "You have not set a transaction password, please go to set a transaction password.",
+  "face_sign_NotBusiness_content":"The interview code is not consistent with the use of cell phone number, please confirm whether your information is filled in correctly, and contact the data entry party",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }

@@ -157,6 +157,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                           );
                         }
                       : null,
+                  isColor: _nextBtnEnabled,
                 ),
               )
             ],

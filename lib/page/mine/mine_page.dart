@@ -457,20 +457,33 @@ class _MinePageState extends State<MinePage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _nameInfo(),
-        RaisedButton(
-          onPressed: () {
-            print('开户申请');
-          },
-          child: Text(
-            S.current.open_account_apply,
-            style: TextStyle(fontSize: 15, color: Colors.white),
+        Container(
+          height: 40,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(50)), //设置圆角
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0Xff1775ba),
+                    Color(0Xff3a9ed1),
+                  ])),
+          child: FlatButton(
+            onPressed: () {
+              print('开户申请');
+              Navigator.pushNamed(context, pageOpenAccountBasicData);
+            },
+            child: Text(
+              S.current.open_account_apply,
+              style: TextStyle(fontSize: 15, color: Colors.white),
+            ),
+            shape: RoundedRectangleBorder(
+              side: BorderSide.none,
+              borderRadius: BorderRadius.all(Radius.circular(50)),
+            ),
+            // color: Color(0xFF4871FF),
+            disabledColor: HsgColors.btnDisabled,
           ),
-          shape: RoundedRectangleBorder(
-            side: BorderSide.none,
-            borderRadius: BorderRadius.all(Radius.circular(50)),
-          ),
-          color: Color(0xFF4871FF),
-          disabledColor: HsgColors.btnDisabled,
         ),
       ],
     ));

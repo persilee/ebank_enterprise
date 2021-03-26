@@ -58,4 +58,23 @@ class HsgShowTip {
       click(value);
     });
   }
+
+  ///面签码返回错误的提示
+  static void notFaceSignBusinessTip({
+    BuildContext context,
+    Function(dynamic value) click,
+  }) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertDialog(
+            title: S.of(context).warm_prompt,
+            message: S.of(context).face_sign_NotBusiness_content,
+            positiveButton: S.current.confirm,
+            negativeButton: S.current.cancel,
+          );
+        }).then((value) {
+      click(value);
+    });
+  }
 }

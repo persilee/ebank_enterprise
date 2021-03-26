@@ -9,6 +9,7 @@ import 'package:ebank_mobile/page/register/register_success_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -176,27 +177,27 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
     String password = EncryptUtil.aesEncode(_newPassword.text);
 
     print("$_areaCode>>>>>>>>>>>>>>");
-
+    HSProgressHUD.show();
     VersionDataRepository()
         .registerByAccount(
             RegisterByAccountReq(_areaCode, password, _registerAccount,
                 _userPhone, userType, _sms),
             'registerByAccount')
         .then((value) {
-      Map listDataLogin = new Map();
-      //传用户名和密码到成功页面已用于调用登录接口跳转至首页
-      listDataLogin = {
-        'accountName': _registerAccount,
-        'password': password,
-      };
-      // Navigator.popAndPushNamed(context, pageRegisterSuccess,
-      //     arguments: listDataLogin);
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          pageRegisterSuccess, ModalRoute.withName("/"), //清除旧栈需要保留的栈 不清除就不写这句
-          arguments: listDataLogin //传值
-          );
+      setState(() {
+        Map listDataLogin = new Map();
+        //传用户名和密码到成功页面已用于调用登录接口跳转至首页
+        listDataLogin = {
+          'accountName': _registerAccount,
+          'password': password,
+        };
 
-      setState(() {});
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            pageRegisterSuccess, ModalRoute.withName("/"), //清除旧栈需要保留的栈 不清除就不写这句
+            arguments: listDataLogin //传值
+            );
+        HSProgressHUD.dismiss();
+      });
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });

@@ -255,6 +255,7 @@ class _OpenAccountContactInformationPageState
                           );
                         }
                       : null,
+                  isColor: _nextBtnEnabled,
                 ),
               )
             ],
