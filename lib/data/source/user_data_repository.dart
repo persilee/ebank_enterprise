@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart';
 import 'package:ebank_mobile/data/source/model/logout.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
@@ -12,6 +13,12 @@ class UserDataRepository {
   Future<UserInfoResp> getUserInfo(GetUserInfoReq req, String tag) {
     return request(
         '/cust/user/getUser', req, tag, (data) => UserInfoResp.fromJson(data));
+  }
+
+  Future<GetInviteeStatusByPhoneResp> getInviteeStatusByPhone(
+      GetInviteeStatusByPhoneReq req, String tag) {
+    return request('/agent/inviteManage/getInviteeStatusByPhone', req, tag,
+        (data) => GetInviteeStatusByPhoneResp.fromJson(data));
   }
 
   //退出

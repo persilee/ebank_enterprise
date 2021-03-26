@@ -17,7 +17,7 @@ class DetailInfoPage extends StatefulWidget {
 }
 
 class _DetailInfoPageState extends State<DetailInfoPage> {
-  DdFinHistDOList ddFinHist;
+  DdFinHisDTOList ddFinHist;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +46,7 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
                   child: Padding(
                     padding: EdgeInsets.only(top: 8, bottom: 40),
                     child: Text(
+                      //交易金额
                       ddFinHist.drCrFlg == 'C'
                           ? '+ ' +
                               ddFinHist.txCcy +
@@ -63,10 +64,12 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
                     ),
                   ),
                 ),
+                //交易流水号
                 ContentRow(
                   label: S.current.msgId,
                   item: ddFinHist.msgId,
                 ),
+                //交易账号
                 ContentRow(
                   label: S.current.transaction_account,
                   item: ddFinHist.acNo,
@@ -74,7 +77,7 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
                 //交易时间
                 ContentRow(
                   label: S.current.transaction_time,
-                  item: ddFinHist.txDateTime,
+                  // item: ddFinHist.txDateTime,
                 ),
                 // 交易类型
                 ContentRow(

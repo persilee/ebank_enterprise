@@ -224,7 +224,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                 Container(
                   padding: EdgeInsets.fromLTRB(0, 40, 0, 40),
                   child: HsgButton.button(
-                      title: S.current.confirm, click: _confirm()),
+                    title: S.current.confirm,
+                    click: _confirm(),
+                    isColor: _isInputed,
+                  ),
                 ),
               ],
             ),
@@ -289,6 +292,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         //转账类型
         GestureDetector(
           onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
             _transferTypeDialog();
           },
           child: Container(
@@ -445,6 +449,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             title: S.current.state_area,
             item: _countryText,
             onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               Navigator.pushNamed(context, countryOrRegionSelectPage)
                   .then((value) {
                 setState(() {
@@ -459,6 +464,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           // _isSelect ?
           GestureDetector(
             onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _bankTap(context);
             },
             child: Container(
@@ -499,16 +505,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           ),
           Divider(height: 0.5, color: HsgColors.divider),
           //中间行SWFIT
-          // Container(
-          //   height: 48,
-          //   child: _inputFrame(
-          //     S.current.middle_bank_swift,
-          //     _onlyTextField(_centerSwiftController),
-          //   ),
-          // ),
           TextFieldContainer(
             title: S.current.middle_bank_swift,
-            hintText: S.current.please_input,
+            hintText: S.current.not_required,
             keyboardType: TextInputType.text,
             controller: _centerSwiftController,
             callback: _check,
@@ -523,6 +522,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             title: S.current.Transfer_fee,
             item: _transferFee,
             onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _selectTransferFee();
             },
           ),
@@ -532,6 +532,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             title: S.current.remittance_usage,
             item: _feeUse,
             onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _selectFeeUse();
             },
           ),

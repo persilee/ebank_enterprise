@@ -147,9 +147,12 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   void initState() {
     super.initState();
     _loadTransferData();
+
     _transferMoneyController.addListener(() {
       if (_payCcy == _transferCcy) {
-        _amount = _transferMoneyController.text;
+        setState(() {
+          _amount = _transferMoneyController.text;
+        });
       } else {
         _rateCalculate();
       }
@@ -174,11 +177,10 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         _nameController.text = rowPartner.payeeName;
         _accountController.text = rowPartner.payeeCardNo;
         _remarkController.text = rowPartner.remark;
-        _nameController.selection = TextSelection.collapsed(
-            affinity: TextAffinity.downstream,
-            offset: _nameController.text.length);
-        _accountController.selection =
-            TextSelection.collapsed(offset: _accountController.text.length);
+        payeeBankCode = rowPartner.bankCode;
+        payerBankCode = rowPartner.payerBankCode;
+        payeeName = rowPartner.payeeName;
+        payerName = rowPartner.payerName;
         check = true;
       }
     });
@@ -187,11 +189,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         title: Text(S.current.transfer_type_0),
         centerTitle: true,
         elevation: 1,
-        // backgroundColor: Color(0xffF7F7F7),
-        // textTheme: TextTheme(
-        //   title: TextStyle(color: Colors.black, fontSize: 17),
-        //   button: TextStyle(color: Colors.black, fontSize: 17),
-        // ),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -331,7 +328,10 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       child: Container(
         margin: EdgeInsets.only(top: 100, bottom: 50),
         child: HsgButton.button(
-            title: S.current.next_step, click: _isClick ? _judgeDialog : null),
+          title: S.current.next_step,
+          click: _isClick ? _judgeDialog : null,
+          isColor: _isClick,
+        ),
       ),
     );
   }
@@ -397,6 +397,13 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         _transferIndex = result;
         _transferCcy = _transferCcyList[result];
       });
+      if (_payCcy == _transferCcy) {
+        setState(() {
+          _amount = _transferMoneyController.text;
+        });
+      } else {
+        _rateCalculate();
+      }
     }
   }
 
@@ -440,6 +447,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   Widget _getImage() {
     return InkWell(
       onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
         Navigator.pushNamed(context, pageTranferPartner, arguments: '0').then(
           (value) {
             setState(() {
@@ -482,11 +490,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _accountList.add(e.cardNo);
             });
             //付款方银行名字
-            payeeBankCode = element.cardList[0].ciName;
+            // payeeBankCode = element.cardList[0].ciName;
             //收款方银行姓名
-            payerBankCode = element.cardList[0].ciName;
+            // payerBankCode = element.cardList[0].ciName;
             //付款方姓名
-            payerName = element.cardList[0].ciName;
+            // payerName = element.cardList[0].ciName;
           });
           _getCardTotal(_account);
           _loadLocalCcy();
@@ -557,6 +565,13 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               _payIndex = 0;
             }
             _getTransferCcySamePayCcy();
+            if (_payCcy == _transferCcy) {
+              setState(() {
+                _amount = _transferMoneyController.text;
+              });
+            } else {
+              _rateCalculate();
+            }
           });
         }
         //查询额度
@@ -626,9 +641,14 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                   defaultCcy: _payCcy),
               'TransferTrialReq')
           .then((data) {
+        print("====================");
+        print(data.optExAmt);
+        print(data);
         setState(() {
           _amount = data.optExAmt;
         });
+      }).catchError((e) {
+        print(e.toString());
       });
     }
   }

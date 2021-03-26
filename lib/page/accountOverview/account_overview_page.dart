@@ -7,10 +7,13 @@ import 'package:dio/dio.dart';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
-import 'package:ebank_mobile/data/source/account_overview_repository.dart';
+//import 'package:ebank_mobile/data/source/account_overview_repository.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/account_overview_all_data.dart';
+import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
+//import 'package:ebank_mobile/data/source/model/account_overview_all_data.dart';
+//import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -35,7 +38,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   // List<AccountOverviewList> ddList = [];
   // List<AccountOverviewList> tdList = [];
   List<CardListBal> ddList = [];
-  List<TdConInfoList> tdList = [];
+  List<TedpListBal> tdList = [];
   List<LoanMastList> lnList = [];
   List<String> cardNoList = [];
   //判断是否是总资产
@@ -306,11 +309,11 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            tdList[index].conNo, //.cardNo,
+            tdList[index].cardNo, //.cardNo,
             style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
           ),
           Text(
-            FormatUtil.formatSringToMoney(tdList[index].bal) +
+            FormatUtil.formatSringToMoney(tdList[index].avaBal) +
                 ' ' +
                 tdList[index].ccy, //avaBal
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
@@ -509,6 +512,17 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   ) {
     return Container(
       decoration: BoxDecoration(
+          // boxShadow: [
+          //   isboxShadow
+          //       ? BoxShadow(
+          //           color: Color(0XFF192A56),
+          //           offset: isflex
+          //               ? Offset(-4.0, 0.0)
+          //               : Offset(6.0, 0.0), //阴影xy轴偏移量
+          //           blurRadius: 3.0, //阴影模糊程度
+          //         )
+          //       : BoxShadow(color: Color(0xFF2F323E), blurRadius: 0.0)
+          // ],
           color: backgroundColor,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30),
@@ -522,7 +536,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                       color: Color(0XFF192A56),
                       offset: isflex
                           ? Offset(0.0, 0.0)
-                          : Offset(5.0, 0.0), //阴影xy轴偏移量
+                          : Offset(6.0, 0.0), //阴影xy轴偏移量
                       blurRadius: 3.0, //阴影模糊程度
                     )
                   : BoxShadow(color: Color(0xFF2F323E), blurRadius: 0.0)
@@ -620,47 +634,59 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
     String custID = prefs.getString(ConfigKey.CUST_ID);
+
     setState(() {
       localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
     });
 
     // 总资产
-    AccountOverviewRepository()
-        .getTotalAssets(
-            GetTotalAssetsReq(userID, custID, localCcy), 'GetTotalAssetsReq')
-        .then((data) {
-      setState(() {
-        if (data.totalAssets != '0') {
-          totalAssets = data.totalAssets;
-        }
-        if (data.netAssets != '0') {
-          netAssets = data.netAssets;
-        }
-        if (data.totalLiability != '0') {
-          totalLiabilities = data.totalLiability;
-        }
-        // localCcy = data.ccy;
-      });
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
-
-    // 活期
-    AccountOverviewRepository()
+    // AccountOverviewRepository()
+    //     .getTotalAssets(
+    //         GetTotalAssetsReq(userID, custID, localCcy), 'GetTotalAssetsReq')
+    //     .then((data) {
+    //   setState(() {
+    //     if (data.totalAssets != '0') {
+    //       totalAssets = data.totalAssets;
+    //     }
+    //     if (data.netAssets != '0') {
+    //       netAssets = data.netAssets;
+    //     }
+    //     if (data.totalLiability != '0') {
+    //       totalLiabilities = data.totalLiability;
+    //     }
+    //     // localCcy = data.ccy;
+    //   });
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // });
+    // print("$custID>>>>>>>>>>>>");
+    // 一个接口拿活期，定期总额
+    DepositDataRepository()
         .getCardListBalByUser(
-            GetCardListBalByUserReq('', localCcy, custID, cardNoList),
+            GetCardListBalByUserReq(
+              '',
+              cardNoList,
+              localCcy,
+              custID,
+            ),
             'GetCardListBalByUserReq')
         .then((data) {
       if (data.cardListBal != null) {
         setState(() {
+          //活期列表
           ddList = data.cardListBal;
           if (data.ddTotalAmt != '0') {
+            //活期合计
             ddTotal = data.ddTotalAmt;
           }
+          //定期列表
+          tdList = data.tedpListBal;
           if (data.tdTotalAmt != '0') {
+            //定期合计
             tdTotal = data.tdTotalAmt;
           }
           lnTotal = '0.00';
+          //贷款列表
           lnList = [
             LoanMastList('0101900000095007', '0101900000095007', custID,
                 '1000.00', '1000.00')
@@ -673,17 +699,17 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     });
 
     // //定期
-    AccountOverviewRepository()
-        .getTdConInfoList(
-            GetTdConInfoListReq(ciNo: custID), 'GetTdConInfoListReq')
-        .then((data) {
-      if (data.rows != null) {
-        setState(() {
-          tdList = data.rows;
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
+    // AccountOverviewRepository()
+    //     .getTdConInfoList(
+    //         GetTdConInfoListReq(ciNo: custID), 'GetTdConInfoListReq')
+    //     .then((data) {
+    //   if (data.rows != null) {
+    //     setState(() {
+    //       tdList = data.rows;
+    //     });
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // });
   }
 }

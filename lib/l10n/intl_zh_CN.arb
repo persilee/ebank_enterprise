@@ -457,9 +457,6 @@
   "receiver_address": "收款方地址",
   "forget_username": "忘记用户名",
   "estimated_collection_amount": "预计收款金额",
-
-
-
   "register": "注册",
   "welcome_to_register": "欢迎注册",
   "please_input_mobile_num": "请输入手机号",
@@ -474,9 +471,6 @@
   "loan_application_agreement2": "《企业用户服务及授权协议》",
   "loan_application_agreement3": "和",
   "loan_application_agreement4": "《用户服务协议及隐私政策》",
-
-  
-
   "fangluyao_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>方璐瑶国际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "three_month": "三个月",
   "six_month": "六个月",
@@ -496,7 +490,6 @@
   "password_need_low_and_top": "密码需包含大小写字母",
   "password_need_special_font": "密码需包含特殊字符",
   "fangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<方璐瑶国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-
   "wangluyao_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>王璐瑶国际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "tdContract_estimated_payment_amount":"预计支付金额",
   "tdContract_payment_currency":"支付币种",
@@ -505,21 +498,17 @@
   "tdEarlyRed_modify_expiration_instruction":"是否修改到期指示",
   "tdEarlyRed_modify_expiration_instruction_determine":"请确认是否修改到期指示为：",
   "wangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<王璐瑶国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-
   "zhangqirong_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>张其荣际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
-  "in_all":"共",
+  "in_all": "共",
   "accounts": "个账户",
   "zhangqirong_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<张其荣国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-
   "pengyikang_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>彭逸康国际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
-  "register_check_username":"用户名只能为4-16位字符、数字或者字母，不能包含特殊字符，不能重复",
-  "num_is_register":"此手机号已被注册",
-  "num_not_is_register":"该手机号还未注册，请先注册账号",
+  "register_check_username": "用户名只能为4-16位字符、数字或者字母，不能包含特殊字符，不能重复",
+  "num_is_register": "此手机号已被注册",
+  "num_not_is_register": "该手机号还未注册，请先注册账号",
   "pengyikang_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<彭逸康国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-
   "lishaoying_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李少颖际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "lishaoying_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李少颖国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-
   "lijiawei_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李家伟际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "openAccout_basicInformation": "一般资料",
   "openAccount_companyNameEng": "公司名称（英文）",
@@ -558,8 +547,7 @@
   "openAccout_businessAddress_details": "主要营业地址详情",
   "openAccout_mailingAddress": "通讯地址",
   "openAccout_mailingAddress_details": "通讯地址详情",
- 
-  "register_select_documents":"请选择证件类型",
+  "register_select_documents": "请选择证件类型",
   "openAccout_details_of_connected_parties_title": "有关人士信息预填",
   "openAccout_details_of_connected_parties": "有关人士信息",
   "openAccout_appellation": "称谓",
@@ -579,10 +567,14 @@
   "hot_countries": "热门国家",
   "select_country": "选择国家",
   "face_sign_navTitle": "面签",
-   "face_sign_attention_regulations": "",
-  "face_sign_placeholdText":"请输入6位数字或字母的组合",
+  "face_sign_attention_regulations": "",
+  "face_sign_placeholdText": "请输入6位数字或字母的组合",
   "face_sign_Interviews": "面签号码",
-  "face_sign_TipsTitle":"注意事项：\n1、“面签号码”于视频面签过程中，由朗华提供；\n2、面签前，请务必依照通知邮件指示，准备相关开户资料；\n3、请在光线充足、环境安静、网络稳定的地方进行面签；",
+  "face_sign_TipsTitle": "注意事项：\n1、“面签号码”于视频面签过程中，由朗华提供；\n2、面签前，请务必依照通知邮件指示，准备相关开户资料；\n3、请在光线充足、环境安静、网络稳定的地方进行面签；",
+  "warm_prompt": "温馨提示",
+  "openAccount_notOpen_content": "您还未开户，请先开户再进行本操作！",
+  "not_set_tranPassword_content": "您还未设置交易密码，请前往设置交易密码。",
+  "face_sign_NotBusiness_content":"面签码与使用手机号码不一致，请确认您的资料是否填写正确，并联系资料录入方",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }

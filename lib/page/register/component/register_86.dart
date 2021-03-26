@@ -9,8 +9,12 @@ import 'package:intl/intl.dart';
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 注册账号拿去手机地区号
 /// Author: pengyikang
-Widget getRegisterRegion(BuildContext context, TextEditingController _phoneNum,
-    String _officeAreaCodeText, Function _selectRegionCode) {
+Widget getRegisterRegion(
+  BuildContext context,
+  TextEditingController _phoneNum,
+  String _officeAreaCodeText,
+  Function _selectRegionCode,
+) {
   _officeAreaCodeText = _officeAreaCodeText == '' ? '86' : _officeAreaCodeText;
   // print("${_phoneNum.text}");
   return Container(
@@ -53,9 +57,7 @@ Widget getRegisterRegion(BuildContext context, TextEditingController _phoneNum,
               autocorrect: false,
               //是否自动获得焦点
               autofocus: true,
-              onChanged: (value) {
-                value = _phoneNum.text;
-              },
+
               controller: _phoneNum,
               decoration: InputDecoration(
                 border: InputBorder.none,

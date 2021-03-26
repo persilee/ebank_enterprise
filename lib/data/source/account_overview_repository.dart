@@ -23,7 +23,7 @@ class AccountOverviewRepository {
 
   // 活期
   Future<GetCardListBalByUserResp> getCardListBalByUser(
-      GetCardListBalByUserReq req, String tag) {
+      GetCardListBalByUserReqToGetAccount req, String tag) {
     return request('cust/bankcard/getCardListBalByUser', req, tag,
         (data) => GetCardListBalByUserResp.fromJson(data));
   }

@@ -8,7 +8,7 @@ class GetCardListBalByUserReq extends Object {
   String accountType;
 
   @JsonKey(name: 'cardNoList')
-  List<dynamic> cardNoList;
+  List<String> cardNoList;
 
   @JsonKey(name: 'ccy')
   String ccy;
