@@ -107,6 +107,7 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
   _login() {
     print('$_account >>>>>>>>>loginMethodaccount');
     print('$password >>>>>>>>>loginMethodpassword');
+    HSProgressHUD.show();
     UserDataRepository()
         .login(LoginReq(username: _account, password: password), 'login')
         .then((value) {

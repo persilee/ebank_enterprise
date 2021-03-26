@@ -381,7 +381,7 @@
   "iDCardVerification": "身份验证",
   "pleaseFillInTheBankInformation": "请填写银行预留信息完成身份验证",
   "idType": "证件类型",
-  "IdentificationNumber": "证件号码",
+  "identificationNumber": "证件号码",
   "reservedMobilePhoneNumber": "预留手机号",
   "placeName": "请输入名字",
   "placeIdType": "请输入证件类型",
@@ -570,6 +570,7 @@
   "warm_prompt": "温馨提示",
   "openAccount_notOpen_content": "您还未开户，请先开户再进行本操作！",
   "not_set_tranPassword_content": "您还未设置交易密码，请前往设置交易密码。",
+  "face_sign_NotBusiness_content":"面签码与使用手机号码不一致，请确认您的资料是否填写正确，并联系资料录入方",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }

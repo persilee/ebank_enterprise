@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -8,11 +9,24 @@ import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:flutter/material.dart';
 
-class OpenAccountIdentifyResultsSuccessfulPage extends StatelessWidget {
+class OpenAccountIdentifyResultsSuccessfulPage extends StatefulWidget {
   const OpenAccountIdentifyResultsSuccessfulPage({Key key}) : super(key: key);
 
   @override
+  _OpenAccountIdentifyResultsSuccessfulPageState createState() =>
+      _OpenAccountIdentifyResultsSuccessfulPageState();
+}
+
+class _OpenAccountIdentifyResultsSuccessfulPageState
+    extends State<OpenAccountIdentifyResultsSuccessfulPage> {
+  AuthIdentityResp _valueData;
+
+  @override
   Widget build(BuildContext context) {
+    Map data = ModalRoute.of(context).settings.arguments;
+    _valueData = data['valueData'];
+    print('${_valueData.toJson()}');
+
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -75,7 +89,6 @@ class OpenAccountIdentifyResultsSuccessfulPage extends StatelessWidget {
     );
   }
 
-  //提示弹窗(提示语句，确认事件)
   void _showTypeTips(BuildContext context) {
     HsgShowTip.openAccountSuccessfulTip(
       context,

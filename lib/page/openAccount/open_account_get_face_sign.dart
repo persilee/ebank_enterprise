@@ -4,6 +4,7 @@ import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
+import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -125,11 +126,11 @@ class _OpenAccountGetFaceSignPageState
 
   void _didFaceSignCommit() async {
     final prefs = await SharedPreferences.getInstance();
-    String userName = prefs.getString(ConfigKey.USER_PHONE);
+    String userName = '13111112222'; //prefs.getString(ConfigKey.USER_PHONE);
 
     if (_codeSignTextF.text.length > 0 && userName.length > 0) {
       //根据电话以及输入文本这里去请求businessId
-      print('..........$userName');
+
       HSProgressHUD.show();
       OpenAccountRepository()
           .getFaceSignBusiness(
@@ -137,7 +138,7 @@ class _OpenAccountGetFaceSignPageState
           .then(
         (value) {
           HSProgressHUD.dismiss();
-          if (value.businessId != '' || value.businessId != null) {
+          if (value.businessId != '' && value.businessId != null) {
             //跳转证件选择界面
             Navigator.pushNamed(
               context,
@@ -145,10 +146,14 @@ class _OpenAccountGetFaceSignPageState
               arguments: value.businessId,
             );
           } else {
-            //弹窗提示
-
+            HsgShowTip.notFaceSignBusinessTip(
+              //弹窗提示
+              context: context,
+              click: (value) {
+                if (value == true) {}
+              },
+            );
           }
-          print(value);
         },
       ).catchError((e) {
         HSProgressHUD.dismiss();

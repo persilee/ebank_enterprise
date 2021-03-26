@@ -272,7 +272,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                           color: HsgColors.divider,
                         ),
                         //证件号码
-                        InputList(S.of(context).IdentificationNumber,
+                        InputList(S.of(context).identificationNumber,
                             S.of(context).placeIdNumber, _certNo),
                         //预留手机号
                         // InputList(
