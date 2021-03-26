@@ -10,18 +10,30 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class OpenAccountSelectDocumentTypePage extends StatelessWidget {
+class OpenAccountSelectDocumentTypePage extends StatefulWidget {
   const OpenAccountSelectDocumentTypePage({Key key}) : super(key: key);
+
+  @override
+  _OpenAccountSelectDocumentTypePageState createState() =>
+      _OpenAccountSelectDocumentTypePageState();
+}
+
+class _OpenAccountSelectDocumentTypePageState
+    extends State<OpenAccountSelectDocumentTypePage> {
+  ///业务编号
+  String _businessId = '';
 
   @override
   Widget build(BuildContext context) {
     ///业务编号
-    String _businessId = ModalRoute.of(context).settings.arguments;
-    print('$_businessId');
+    _businessId = ModalRoute.of(context).settings.arguments;
 
     final size = MediaQuery.of(context).size;
 
@@ -196,7 +208,7 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
     );
   }
 
-  void _qianliyanSDK(BuildContext context, String documentType) {
+  void _qianliyanSDK(BuildContext context, String documentType) async {
     String _language = Intl.getCurrentLocale();
     String lang = _language == 'en' ? 'en' : 'zh';
     String countryRegions = _language == 'zh_CN' ? 'CN' : 'TW';
@@ -208,25 +220,40 @@ class OpenAccountSelectDocumentTypePage extends StatelessWidget {
     } else {
       tokId = 'passport002en';
     }
+    final prefs = await SharedPreferences.getInstance();
+    String userPhone = prefs.getString(ConfigKey.USER_PHONE);
+    String businessId = _businessId + '&' + userPhone;
+
+    // HSProgressHUD.show();
 
     AuthIdentity()
         .startAuth(
       new AuthIdentityReq(
-          "DLEAED", "74283428974321", lang, countryRegions, documentType,
-          tokId: tokId), //passport001zh  DLEAED
+          "DLEAED", businessId, lang, countryRegions, documentType,
+          tokId: tokId),
     )
         .then((value) {
+      print(value.toJson());
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
-        msg: value.isSuccess.toString(),
+        msg: value.toString(),
         gravity: ToastGravity.CENTER,
       );
-      Navigator.pushNamed(context,
-          pageOpenAccountIdentifySuccessfulFailure); //pageOpenAccountIdentifySuccessfulFailure//pageOpenAccountIdentifyResultsFailure
+      Navigator.pushNamed(
+        context,
+        pageOpenAccountIdentifySuccessfulFailure,
+        arguments: {'valueData': value},
+      );
     }).catchError((e) {
-      // HSProgressHUD.showError(status: '${e.toString()}');
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: '${e.toString()}',
         gravity: ToastGravity.CENTER,
+      );
+      Navigator.pushNamed(
+        context,
+        pageOpenAccountIdentifyResultsFailure,
+        arguments: {'businessId': _businessId, 'documentType': documentType},
       );
     });
   }

@@ -4,16 +4,36 @@ import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class OpenAccountIdentifyResultsFailurePage extends StatelessWidget {
+class OpenAccountIdentifyResultsFailurePage extends StatefulWidget {
   const OpenAccountIdentifyResultsFailurePage({Key key}) : super(key: key);
 
   @override
+  _OpenAccountIdentifyResultsFailurePageState createState() =>
+      _OpenAccountIdentifyResultsFailurePageState();
+}
+
+class _OpenAccountIdentifyResultsFailurePageState
+    extends State<OpenAccountIdentifyResultsFailurePage> {
+  ///业务编号
+  String _businessId = '';
+
+  ///证件类型
+  String _documentType = '';
+
+  @override
   Widget build(BuildContext context) {
+    Map data = ModalRoute.of(context).settings.arguments;
+    _businessId = data['businessId'];
+    _documentType = data['documentType'];
+
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -95,27 +115,51 @@ class OpenAccountIdentifyResultsFailurePage extends StatelessWidget {
     );
   }
 
-  void _qianliyanSDK(BuildContext context) {
+  void _qianliyanSDK(BuildContext context) async {
     String _language = Intl.getCurrentLocale();
     String lang = _language == 'en' ? 'en' : 'zh';
     String countryRegions = _language == 'zh_CN' ? 'CN' : 'TW';
+    String tokId = 'passport002en';
+    if (_language == 'zh_CN') {
+      tokId = 'passport001zh';
+    } else if (_language == 'zh_HK') {
+      tokId = 'passport002ft';
+    } else {
+      tokId = 'passport002en';
+    }
+    final prefs = await SharedPreferences.getInstance();
+    String userPhone = prefs.getString(ConfigKey.USER_PHONE);
+    String businessId = _businessId + '&' + userPhone;
+
+    HSProgressHUD.show();
 
     AuthIdentity()
         .startAuth(
-      new AuthIdentityReq("passport001en", "74283428974321", lang,
-          countryRegions, "1"), //passport001zh  DLEAED
+      new AuthIdentityReq(
+          "DLEAED", businessId, lang, countryRegions, _documentType,
+          tokId: tokId),
     )
         .then((value) {
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
-        msg: value.isSuccess.toString(),
+        msg: value.toString(),
         gravity: ToastGravity.CENTER,
       );
-      Navigator.pushNamed(context, pageOpenAccountIdentifyResultsFailure);
+      Navigator.pushNamed(
+        context,
+        pageOpenAccountIdentifySuccessfulFailure,
+        arguments: {'valueData': value},
+      );
     }).catchError((e) {
-      // HSProgressHUD.showError(status: '${e.toString()}');
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: '${e.toString()}',
         gravity: ToastGravity.CENTER,
+      );
+      Navigator.pushNamed(
+        context,
+        pageOpenAccountIdentifyResultsFailure,
+        arguments: _businessId,
       );
     });
   }

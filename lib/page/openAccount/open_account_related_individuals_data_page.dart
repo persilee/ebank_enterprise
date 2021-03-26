@@ -205,7 +205,7 @@ class _RelatedIndividualsDataPageState
       Container(
         child: _oneLayerSelectWidget(
           context,
-          S.of(context).openAccout_documentType,
+          S.of(context).identificationNumber,
           _documentTypeText,
           S.of(context).please_select,
           false,

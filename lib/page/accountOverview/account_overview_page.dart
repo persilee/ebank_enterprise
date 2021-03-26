@@ -35,12 +35,12 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   String ddCcy = '';
   String tdTotal = '0.00';
   String lnTotal = '0.00';
-  // List<AccountOverviewList> ddList = [];
-  // List<AccountOverviewList> tdList = [];
+
   List<CardListBal> ddList = [];
   List<TedpListBal> tdList = [];
-  List<LoanMastList> lnList = [];
+  List<LnListBal> lnList = [];
   List<String> cardNoList = [];
+
   //判断是否是总资产
   bool isTotalAsset = true;
   //判断是否为总负债
@@ -62,195 +62,229 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).account_overview),
-        centerTitle: true,
-        elevation: 0,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-              Color(0xFF1775BA),
-              Color(0xFF3A9ED1),
-            ], begin: Alignment.centerLeft, end: Alignment.centerRight),
-          ),
-        ),
-      ),
-      body: RefreshIndicator(
-          key: refrestIndicatorKey,
-          child: Container(
-            color: HsgColors.commonBackground,
-            child: CustomScrollView(
-              slivers: [
-                // 头部
-                SliverToBoxAdapter(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFF1775BA),
-                          Color(0xFF3A9ED1),
-                        ],
+      // appBar: AppBar(
+      //   title: Text(S.of(context).account_overview),
+      //   centerTitle: true,
+      //   elevation: 0,
+      //   flexibleSpace: Container(
+      //     decoration: BoxDecoration(
+      //       gradient: LinearGradient(colors: [
+      //         Color(0xFF1775BA),
+      //         Color(0xFF3A9ED1),
+      //       ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+      //     ),
+      //   ),
+      // ),
+      body: Stack(
+        children: [
+          RefreshIndicator(
+              key: refrestIndicatorKey,
+              child: Container(
+                color: HsgColors.commonBackground,
+                child: CustomScrollView(
+                  slivers: [
+                    // 头部
+                    SliverAppBar(
+                      title: Text(S.of(context).account_overview),
+                      centerTitle: true,
+                      pinned: true,
+                      backgroundColor: Colors.yellowAccent[300],
+                      floating: true,
+                      expandedHeight: 214.3,
+                      iconTheme: IconThemeData(color: Color(0xffFEFEFE)),
+                      textTheme: TextTheme(
+                        headline6: TextStyle(
+                          color: Color(0xffFEFEFE),
+                          fontSize: 18,
+                          fontStyle: FontStyle.normal,
+                        ),
                       ),
-                    ),
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: _accountOverviewColumn(),
-                  ),
-                ),
-
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 12,
-                  ),
-                ),
-
-                // 活期
-                isTotalAsset
-                    ? SliverToBoxAdapter(
-                        child: Container(
-                          color: Colors.white,
-                          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                          child: Text(
-                            S.current.demand_deposit,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: HsgColors.aboutusTextCon),
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [
+                                  Color(0xFF1775BA),
+                                  Color(0xFF3A9ED1),
+                                ],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight),
                           ),
-                        ),
-                      )
-                    : SliverToBoxAdapter(),
-                //活期合计
-                isTotalAsset
-                    ? SliverToBoxAdapter(
-                        child: _ddTotalColumn(),
-                      )
-                    : SliverToBoxAdapter(),
-                //活期列表
-                isTotalAsset
-                    ? SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
-                          return _ddSliverList(index);
-                        }, childCount: ddList.length),
-                      )
-                    : SliverToBoxAdapter(),
-                isTotalAsset
-                    ? SliverToBoxAdapter(
-                        child: Container(
-                          height: 12,
-                        ),
-                      )
-                    : SliverToBoxAdapter(),
 
-                // 定期
-                (tdTotal != '0.00')
-                    ? isTotalAsset
-                        ? SliverToBoxAdapter(
-                            child: Container(
-                              color: Colors.white,
-                              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                              child: Text(
-                                S.current.time_deposits,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                    color: HsgColors.aboutusTextCon),
-                              ),
-                            ),
-                          )
-                        : SliverToBoxAdapter()
-                    : SliverToBoxAdapter(),
-                (tdTotal != '0.00')
-                    ? isTotalAsset
-                        ? SliverToBoxAdapter(
-                            child: _tdTotalColumn(),
-                          )
-                        : SliverToBoxAdapter()
-                    : SliverToBoxAdapter(),
-                (tdTotal != '0.00')
-                    ? isTotalAsset
-                        ? SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                              return _tdSliverList(index);
-                            }, childCount: tdList.length),
-                          )
-                        : SliverToBoxAdapter()
-                    : SliverToBoxAdapter(),
-                isTotalAsset
-                    ? SliverToBoxAdapter(
-                        child: Container(
-                          height: 12,
-                        ),
-                      )
-                    : SliverToBoxAdapter(),
-
-                // 贷款
-                isTotalLiabilities
-                    ? (lnTotal != '0.00')
-                        ? SliverToBoxAdapter(
-                            child: Container(
-                              color: Colors.white,
-                              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                              child: Text(
-                                S.current.loan,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                    color: HsgColors.aboutusTextCon),
-                              ),
-                            ),
-                          )
-                        : SliverToBoxAdapter(
-                            child: Container(
-                              height: MediaQuery.of(context).size.height / 2,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image(
-                                    image: AssetImage(
-                                        'images/noDataIcon/no_data_record.png'),
-                                    width: 160,
-                                  ),
-                                  Text(
-                                    S.current.no_data_now,
-                                    style: FIRST_DEGREE_TEXT_STYLE,
-                                  )
+                          //头部--内容开始
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Color(0xFF1775BA),
+                                  Color(0xFF3A9ED1),
                                 ],
                               ),
                             ),
-                          )
-                    : SliverToBoxAdapter(),
-                (lnTotal != '0.00')
-                    ? isTotalLiabilities
+                            padding: EdgeInsets.fromLTRB(0, 100, 0, 0),
+                            child: _accountOverviewColumn(),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    SliverToBoxAdapter(
+                      child: Container(
+                        height: 12,
+                      ),
+                    ),
+
+                    // 活期
+                    isTotalAsset
                         ? SliverToBoxAdapter(
-                            child: _lnTotalColumn(),
+                            child: Container(
+                              color: Colors.white,
+                              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                              child: Text(
+                                S.current.demand_deposit,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: HsgColors.aboutusTextCon),
+                              ),
+                            ),
                           )
-                        : SliverToBoxAdapter()
-                    : SliverToBoxAdapter(),
-                (lnTotal != '0.00')
-                    ? isTotalLiabilities
+                        : SliverToBoxAdapter(),
+                    //活期合计
+                    isTotalAsset
+                        ? SliverToBoxAdapter(
+                            child: _ddTotalColumn(),
+                          )
+                        : SliverToBoxAdapter(),
+                    //活期列表
+                    isTotalAsset
                         ? SliverList(
                             delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
-                              return _lnSliverList(index);
-                            }, childCount: lnList.length),
+                              return _ddSliverList(index);
+                            }, childCount: ddList.length),
                           )
-                        : SliverToBoxAdapter()
-                    : SliverToBoxAdapter(),
+                        : SliverToBoxAdapter(),
+                    isTotalAsset
+                        ? SliverToBoxAdapter(
+                            child: Container(
+                              height: 12,
+                            ),
+                          )
+                        : SliverToBoxAdapter(),
 
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 20,
-                  ),
+                    // 定期
+                    (tdTotal != '0.00')
+                        ? isTotalAsset
+                            ? SliverToBoxAdapter(
+                                child: Container(
+                                  color: Colors.white,
+                                  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                                  child: Text(
+                                    S.current.time_deposits,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        color: HsgColors.aboutusTextCon),
+                                  ),
+                                ),
+                              )
+                            : SliverToBoxAdapter()
+                        : SliverToBoxAdapter(),
+                    (tdTotal != '0.00')
+                        ? isTotalAsset
+                            ? SliverToBoxAdapter(
+                                child: _tdTotalColumn(),
+                              )
+                            : SliverToBoxAdapter()
+                        : SliverToBoxAdapter(),
+                    (tdTotal != '0.00')
+                        ? isTotalAsset
+                            ? SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                    (BuildContext context, int index) {
+                                  return _tdSliverList(index);
+                                }, childCount: tdList.length),
+                              )
+                            : SliverToBoxAdapter()
+                        : SliverToBoxAdapter(),
+                    isTotalAsset
+                        ? SliverToBoxAdapter(
+                            child: Container(
+                              height: 12,
+                            ),
+                          )
+                        : SliverToBoxAdapter(),
+
+                    // 贷款
+                    isTotalLiabilities
+                        ? (lnTotal != '0.00')
+                            ? SliverToBoxAdapter(
+                                child: Container(
+                                  color: Colors.white,
+                                  padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                                  child: Text(
+                                    S.current.loan,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        color: HsgColors.aboutusTextCon),
+                                  ),
+                                ),
+                              )
+                            : SliverToBoxAdapter(
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height / 2,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image(
+                                        image: AssetImage(
+                                            'images/noDataIcon/no_data_record.png'),
+                                        width: 160,
+                                      ),
+                                      Text(
+                                        S.current.no_data_now,
+                                        style: FIRST_DEGREE_TEXT_STYLE,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                        : SliverToBoxAdapter(),
+                    (lnTotal != '0.00')
+                        ? isTotalLiabilities
+                            ? SliverToBoxAdapter(
+                                child: _lnTotalColumn(),
+                              )
+                            : SliverToBoxAdapter()
+                        : SliverToBoxAdapter(),
+                    (lnTotal != '0.00')
+                        ? isTotalLiabilities
+                            ? SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                    (BuildContext context, int index) {
+                                  return _lnSliverList(index);
+                                }, childCount: lnList.length),
+                              )
+                            : SliverToBoxAdapter()
+                        : SliverToBoxAdapter(),
+
+                    SliverToBoxAdapter(
+                      child: Container(
+                        height: 20,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          //下拉刷新时调用
-          onRefresh: _getCardList),
+              ),
+              //下拉刷新时调用
+              onRefresh: _getCardList),
+        ],
+      ),
     );
   }
 
@@ -262,11 +296,13 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            lnList[index].acNo,
+            lnList[index].cardNo,
+            //acNo
             style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
           ),
           Text(
-            FormatUtil.formatSringToMoney(lnList[index].unpaidPrincipal) +
+            //unpaidPrincipal
+            FormatUtil.formatSringToMoney(lnList[index].currBal) +
                 ' ' +
                 localCcy,
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
@@ -313,9 +349,9 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
             style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
           ),
           Text(
-            FormatUtil.formatSringToMoney(tdList[index].avaBal) +
+            FormatUtil.formatSringToMoney(tdList[index].currBal) +
                 ' ' +
-                tdList[index].ccy, //avaBal
+                tdList[index].ccy, //currbal
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
           )
         ],
@@ -427,7 +463,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.only(bottom: 18),
+          padding: EdgeInsets.only(bottom: 27),
           child: _totalAssets(),
         ),
         Row(
@@ -445,7 +481,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
               child: _netAssets(
                   S.current.total_assets,
                   localCcy,
-                  netAssets,
+                  netAssets, //总资产金额
                   colorOne,
                   0,
                   bottomRight,
@@ -467,7 +503,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
               child: _netAssets(
                   S.current.total_liability,
                   localCcy,
-                  totalLiabilities,
+                  lnTotal, //总负债金额
                   colorTwo,
                   bottomLeft,
                   0,
@@ -512,17 +548,6 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   ) {
     return Container(
       decoration: BoxDecoration(
-          // boxShadow: [
-          //   isboxShadow
-          //       ? BoxShadow(
-          //           color: Color(0XFF192A56),
-          //           offset: isflex
-          //               ? Offset(-4.0, 0.0)
-          //               : Offset(6.0, 0.0), //阴影xy轴偏移量
-          //           blurRadius: 3.0, //阴影模糊程度
-          //         )
-          //       : BoxShadow(color: Color(0xFF2F323E), blurRadius: 0.0)
-          // ],
           color: backgroundColor,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30),
@@ -567,14 +592,14 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
               child: Text(
                   localCcy + ' ' + FormatUtil.formatSringToMoney(netAssets),
                   style: TextStyle(fontSize: 11, color: hintColor)),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-//净资产
+  //净资产
   Column _totalAssets() {
     return Column(
       children: [
@@ -639,27 +664,6 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
       localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
     });
 
-    // 总资产
-    // AccountOverviewRepository()
-    //     .getTotalAssets(
-    //         GetTotalAssetsReq(userID, custID, localCcy), 'GetTotalAssetsReq')
-    //     .then((data) {
-    //   setState(() {
-    //     if (data.totalAssets != '0') {
-    //       totalAssets = data.totalAssets;
-    //     }
-    //     if (data.netAssets != '0') {
-    //       netAssets = data.netAssets;
-    //     }
-    //     if (data.totalLiability != '0') {
-    //       totalLiabilities = data.totalLiability;
-    //     }
-    //     // localCcy = data.ccy;
-    //   });
-    // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString());
-    // });
-    // print("$custID>>>>>>>>>>>>");
     // 一个接口拿活期，定期总额
     DepositDataRepository()
         .getCardListBalByUser(
@@ -673,6 +677,8 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
         .then((data) {
       if (data.cardListBal != null) {
         setState(() {
+          //总资产
+          netAssets = data.totalAmt;
           //活期列表
           ddList = data.cardListBal;
           if (data.ddTotalAmt != '0') {
@@ -685,31 +691,21 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
             //定期合计
             tdTotal = data.tdTotalAmt;
           }
-          lnTotal = '0.00';
+          //总负债
+          lnTotal = data.lnTotalAmt;
           //贷款列表
-          lnList = [
-            LoanMastList('0101900000095007', '0101900000095007', custID,
-                '1000.00', '1000.00')
-          ];
+          lnList = data.lnListBal;
+
           ddCcy = data.defaultCcy == null ? localCcy : data.defaultCcy;
+          //净资产
+          var netAssetCompute = double.parse(netAssets);
+          var lnTotalCompute = double.parse(lnTotal);
+          double totalAssetsCompute = netAssetCompute - lnTotalCompute;
+          totalAssets = totalAssetsCompute.toStringAsFixed(2);
         });
       }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
-
-    // //定期
-    // AccountOverviewRepository()
-    //     .getTdConInfoList(
-    //         GetTdConInfoListReq(ciNo: custID), 'GetTdConInfoListReq')
-    //     .then((data) {
-    //   if (data.rows != null) {
-    //     setState(() {
-    //       tdList = data.rows;
-    //     });
-    //   }
-    // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString());
-    // });
   }
 }
