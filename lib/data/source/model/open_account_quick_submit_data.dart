@@ -153,6 +153,10 @@ class Partner {
   @JsonKey(name: 'partnerType')
   String partnerType;
 
+  ///手机号
+  @JsonKey(name: 'phone')
+  String phone;
+
   ///名称（中文）
   @JsonKey(name: 'fullNameLoc')
   String fullNameLoc;
@@ -170,9 +174,10 @@ class Partner {
     this.idType,
     this.nationality,
     this.partnerType,
-    this.fullNameLoc,
-    this.fullNameEng,
-    this.idNo,
+    this.phone,
+    // this.fullNameLoc,
+    // this.fullNameEng,
+    // this.idNo,
   });
 
   @override

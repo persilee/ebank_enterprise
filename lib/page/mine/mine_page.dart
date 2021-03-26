@@ -1,3 +1,5 @@
+import 'dart:io';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// desc: 个人中心
 /// Author: hlx
@@ -14,6 +16,7 @@ import 'package:ebank_mobile/data/source/model/logout.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
@@ -673,6 +676,10 @@ class _MinePageState extends State<MinePage> {
       //   Fluttertoast.showToast(msg: e.toString());
       //   HSProgressHUD.dismiss();
       // });
+
+      // File flie = File(_imgPath);
+      // var resultData = await ApiClient().uploadAvatar(flie);
+      // print(resultData);
     }
   }
 

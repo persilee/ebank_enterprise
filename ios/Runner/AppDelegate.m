@@ -124,8 +124,10 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
     NSString *resultValue;
     if (videoResult.certificationResul.length > 0) {
         NSLog(@"认证结果%@",videoResult.certificationResul);
-        NSDictionary *reultDict = @{@"result":videoResult.certificationResul};
-        resultValue = [reultDict mj_JSONString];
+//        NSDictionary *reultDict = @{@"result":videoResult.certificationResul};
+        resultValue = [videoResult.certificationResul mj_JSONString];
+        
+        NSLog(@"认证结果转换------------%@",resultValue);
         
         self.resultBlock(resultValue);
     }else{//用户操作失败等问题统一在这里处理

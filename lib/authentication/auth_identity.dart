@@ -15,7 +15,6 @@ class AuthIdentity {
   static final _instance = AuthIdentity._internal();
   factory AuthIdentity() => _instance;
   AuthIdentity._internal();
-
   Future<AuthIdentityResp> startAuth(AuthIdentityReq req) async {
     try {
       final result = await _platform.invokeMethod(
