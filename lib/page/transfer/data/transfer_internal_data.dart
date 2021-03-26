@@ -11,6 +11,7 @@ class TransferInternalData {
   String payeeName;
   String payerBankCode;
   String payerName;
+  String xRate;
   TransferInternalData(
     this.transferOutAccount,
     this.transferOutAmount,
@@ -24,5 +25,6 @@ class TransferInternalData {
     this.payeeName,
     this.payerBankCode,
     this.payerName,
+    this.xRate,
   );
 }

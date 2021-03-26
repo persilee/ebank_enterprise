@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/data/source/model/get_international_transfer.dart';
+import 'package:ebank_mobile/data/source/model/get_international_transfer_new.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -163,7 +164,7 @@ class _TransferInternalPreviewPageState
   }
 
   Future _loadData(TransferInternationalData transferData) async {
-    double amount = double.parse(transferData.transferIntoAccount);
+    String amount = transferData.transferIntoAccount;
     String transferOutCcy = transferData.transferOutCcy;
     String transferIntoCcy = transferData.transferIntoCcy;
     String payeeBankCode = transferData.payeeBankCode;
@@ -180,41 +181,79 @@ class _TransferInternalPreviewPageState
     String payerAddress = transferData.transferOutAdress;
     String payeeAddress = transferData.transferIntoAdress;
     String intermediateBankSwift = transferData.centerSWIFI;
-    print(payeeBankCode +
-        "=================" +
-        payeeName +
-        "-==-=-=-=--==--" +
-        payerBankCode +
-        "---------------" +
-        payerName +
-        "~~~~~~~~~~~~~~~~~" +
-        amount.toString());
+    String countryCode = transferData.countryCode;
     TransferDataRepository()
-        .getInterNationalTransfer(
-            GetInternationalTransferReq(
+        .getInternationalTransferNew(
+            GetInternationalTransferNewReq(
               amount,
+              "",
+              "1,997,923.00",
               bankSwift,
+              "1",
               costOptions,
               transferOutCcy,
+              "818000000113",
               transferIntoCcy,
-              district,
+              countryCode,
+              "100",
+              "",
+              "",
               intermediateBankSwift,
+              "0.00",
+              "L5o+WYWLFVSCqHbd0Szu4Q==",
               payeeAddress,
               payeeBankCode,
+              "朗华银行",
+              "朗华银行",
               payeeCardNo,
               payeeName,
+              "",
+              "",
+              "",
               payerAddress,
               payerBankCode,
               payerCardNo,
               payerName,
+              "3",
+              "",
               remark,
-              remittancePurposes,
+              "",
+              "123456",
+              "123.00",
+              "0",
             ),
-            'getTransferByAccount')
-        .then((value) {
+            'getInternationalTransferNew')
+        .then((data) {
       Navigator.pushReplacementNamed(context, pageOperationResult);
     }).catchError((e) {
       print(e.toString());
     });
+    // TransferDataRepository()
+    //     .getInterNationalTransfer(
+    //         GetInternationalTransferReq(
+    //           amount,
+    //           bankSwift,
+    //           costOptions,
+    //           transferOutCcy,
+    //           transferIntoCcy,
+    //           district,
+    //           intermediateBankSwift,
+    //           payeeAddress,
+    //           payeeBankCode,
+    //           payeeCardNo,
+    //           payeeName,
+    //           payerAddress,
+    //           payerBankCode,
+    //           payerCardNo,
+    //           payerName,
+    //           remark,
+    //           remittancePurposes,
+    //         ),
+    //         'getTransferByAccount')
+    //     .then((value) {
+    //   Navigator.pushReplacementNamed(context, pageOperationResult);
+    // }).catchError((e) {
+    //   print(e.toString());
+    // });
   }
 }

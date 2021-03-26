@@ -62,6 +62,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   var _countryText = '';
 
+  var _countryCode = '';
+
   var _transferFee = '';
 
   var _feeUse = '';
@@ -104,6 +106,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //预计收款金额
   String _amount = '0';
+  String _rate = '';
 
   //限额
   String _limit = '';
@@ -199,6 +202,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                 account: _account,
                 balance: _balance,
                 amount: _amount,
+                rate: _rate,
                 transferMoneyController: _transferMoneyController,
                 callback: _isClick,
                 payCcyDialog: payCcyDialog,
@@ -540,6 +544,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _countryText = _language == 'zh_CN'
             ? (value as CountryRegionModel).nameZhCN
             : (value as CountryRegionModel).nameEN;
+        _countryCode = (value as CountryRegionModel).countryCode;
       });
     });
   }
@@ -717,6 +722,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           payeeName,
           payerBankCode,
           payerName,
+          _countryCode,
         ),
       );
     }

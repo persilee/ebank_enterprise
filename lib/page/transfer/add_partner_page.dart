@@ -48,7 +48,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   var _alias = '';
   var words = 20;
   String _countryText = '';
-  List<String> countryList = ['中国', '荷兰', '美国', '俄罗斯'];
+  String _countryCode = '';
+  List<String> countryList = [];
   String _language = Intl.getCurrentLocale();
   //转账费用
   String _transferFee = '';
@@ -456,6 +457,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                   _countryText = _language == 'zh_CN'
                       ? (value as CountryRegionModel).nameZhCN
                       : (value as CountryRegionModel).nameEN;
+                  _countryCode = (value as CountryRegionModel).countryCode;
                 });
               });
             },
