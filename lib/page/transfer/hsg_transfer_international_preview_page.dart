@@ -3,6 +3,7 @@ import 'package:ebank_mobile/data/source/model/get_international_transfer_new.da
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
 ///跨行（国际）转账预览界面
@@ -12,6 +13,7 @@ import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
 import 'data/transfer_international_data.dart';
@@ -164,6 +166,9 @@ class _TransferInternalPreviewPageState
   }
 
   Future _loadData(TransferInternationalData transferData) async {
+    final prefs = await SharedPreferences.getInstance();
+    String custId = prefs.getString(ConfigKey.CUST_ID);
+    print(custId + "============");
     String amount = transferData.transferIntoAccount;
     String transferOutCcy = transferData.transferOutCcy;
     String transferIntoCcy = transferData.transferIntoCcy;
@@ -192,7 +197,7 @@ class _TransferInternalPreviewPageState
               "1",
               costOptions,
               transferOutCcy,
-              "818000000113",
+              custId,
               transferIntoCcy,
               countryCode,
               "100",
@@ -210,14 +215,11 @@ class _TransferInternalPreviewPageState
               "",
               "",
               "",
-              payerAddress,
               payerBankCode,
               payerCardNo,
-              payerName,
               "3",
               "",
               remark,
-              "",
               "123456",
               "123.00",
               "0",

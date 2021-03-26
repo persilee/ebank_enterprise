@@ -107,10 +107,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
   //没有数据时显示页面
   Container _noDataContainer(BuildContext context) {
-    HSProgressHUD.show();
-    Future.delayed(Duration(seconds: 1), () {
-      HSProgressHUD.dismiss();
-    });
+    // HSProgressHUD.show();
+    // Future.delayed(Duration(seconds: 1), () {
+    //   HSProgressHUD.dismiss();
+    // });
     return Container(
       color: HsgColors.backgroundColor,
       width: MediaQuery.of(context).size.width,
@@ -343,7 +343,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _popDialogContent(BuildContext popcontext) {
     return Container(
       color: Colors.white,
-      height: 335,
+      // height: 335,
+      height: 260,
       // padding: EdgeInsets.all(10),
       child: Material(
         color: Colors.white,
@@ -362,13 +363,13 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                 children: [
                   //交易时间
                   _timeText(intl.S.of(context).transaction_time),
-                  _tradingHour(),
+                  _tradingHour(popcontext),
                   //自定义时间
                   _timeText(intl.S.of(context).user_defined),
                   _userDefind(popcontext),
                   //金额
-                  _timeText(intl.S.current.amount),
-                  _amountDuration(),
+                  // _timeText(intl.S.current.amount),
+                  // _amountDuration(),
                   //按钮
                   Container(
                     margin: EdgeInsets.only(top: 10),
@@ -597,19 +598,23 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   }
 
   //交易时间
-  Widget _tradingHour() {
+  Widget _tradingHour(popcontext) {
     return Row(
       children: [
-        _trandingHourButton(1, _isButton1, intl.S.current.the_same_day),
-        _trandingHourButton(2, _isButton2, intl.S.current.the_same_month),
-        _trandingHourButton(3, _isButton3, intl.S.current.last_three_month),
-        _trandingHourButton(4, _isButton4, intl.S.current.last_half_year),
+        _trandingHourButton(
+            1, _isButton1, intl.S.current.the_same_day, popcontext),
+        _trandingHourButton(
+            2, _isButton2, intl.S.current.the_same_month, popcontext),
+        _trandingHourButton(
+            3, _isButton3, intl.S.current.last_three_month, popcontext),
+        _trandingHourButton(
+            4, _isButton4, intl.S.current.last_half_year, popcontext),
       ],
     );
   }
 
 //交易时间按钮
-  Widget _trandingHourButton(int i, bool isButton, String time) {
+  Widget _trandingHourButton(int i, bool isButton, String time, popcontext) {
     return Container(
       margin: EdgeInsets.all(3),
       width: 78,
@@ -701,7 +706,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                 break;
             }
           });
-          Navigator.of(context).pop(_loadData());
+          // Navigator.of(context).pop(_loadData());
+          (popcontext as Element).markNeedsBuild();
         },
       ),
     );
