@@ -775,7 +775,7 @@ class _HomePageState extends State<HomePage> {
   //校验是否提示设置交易密码
   void _verifyGotoTranPassword(BuildContext context, bool passwordEnabled) {
     if (passwordEnabled == true ||
-        (['5', '6', '7'].contains(_belongCustStatus))) {
+        (['0', '1', '2', '3', '4'].contains(_belongCustStatus))) {
       //已经设置交易密码，或者用户未开户，不做操作
       return;
     }

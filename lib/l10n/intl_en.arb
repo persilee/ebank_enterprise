@@ -387,7 +387,7 @@
   "iDCardVerification": "ID Card Verification",
   "pleaseFillInTheBankInformation": "Please Fill In The Bank Reservation Information To Complete The Identity Verification",
   "idType": "Document Type",
-  "IdentificationNumber": "Identification Number",
+  "identificationNumber": "Identification Number",
   "reservedMobilePhoneNumber": "Reserved Mobile Phone Number",
   "placeName": "Please enter your name",
   "placeIdType": "Please input id type",
