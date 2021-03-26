@@ -679,12 +679,6 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
         setState(() {
           //总资产
           netAssets = data.totalAmt;
-          //净资产
-          var netAssetCompute = double.parse(netAssets);
-          var lnTotalCompute = double.parse(lnTotal);
-          double totalAssetsCompute = netAssetCompute - lnTotalCompute;
-          totalAssets = totalAssetsCompute.toStringAsFixed(2);
-
           //活期列表
           ddList = data.cardListBal;
           if (data.ddTotalAmt != '0') {
@@ -703,6 +697,11 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
           lnList = data.lnListBal;
 
           ddCcy = data.defaultCcy == null ? localCcy : data.defaultCcy;
+          //净资产
+          var netAssetCompute = double.parse(netAssets);
+          var lnTotalCompute = double.parse(lnTotal);
+          double totalAssetsCompute = netAssetCompute - lnTotalCompute;
+          totalAssets = totalAssetsCompute.toStringAsFixed(2);
         });
       }
     }).catchError((e) {

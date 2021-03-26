@@ -878,7 +878,7 @@ class _DetailListPageState extends State<DetailListPage> {
             GetRevenueByCardsReq(
                 'CNY',
                 '2021-03-29', //结束时间
-                '2021-01-02', //开始时间
+                '2020-01-02', //开始时间
                 0, //分页
                 0, //分页
                 // acNo:
