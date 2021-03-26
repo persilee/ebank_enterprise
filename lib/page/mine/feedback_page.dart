@@ -89,59 +89,13 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   margin: EdgeInsets.all(40),
                   text: Text(
                     S.of(context).submit,
-                    // style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white),
                   ),
-                  isOutline: false,
                   isEnable: _submit(),
                   clickCallback: () {
                     _submitFeedBack();
                   },
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)), //设置圆角
-                      gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Color(0Xff1775ba),
-                            Color(0Xff3a9ed1),
-                          ])),
-                  margin: EdgeInsets.all(40), //外边距
-                  height: 44.0,
-                  width: MediaQuery.of(context).size.width,
-                  child: RaisedButton(
-                    child: Text(S.of(context).submit),
-                    onPressed: _submit()
-                        ? () {
-                            _submitFeedBack();
-                          }
-                        : null,
-                    elevation: 1, // 正常时阴影隐藏
-                    // color: HsgColors.accent,
-                    textColor: Colors.white,
-                    disabledTextColor: Colors.white,
-                    disabledColor: Color(0xFFD1D1D1),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5) //设置圆角
-                        ),
-                  ),
-                ),
-                // Container(
-                //   margin: EdgeInsets.all(40), //外边距
-                //   height: 44.0,
-                //   width: MediaQuery.of(context).size.width,
-                //   child: RaisedButton(
-                //     child: Text(S.of(context).submit),
-                //     // _content == '' ? null : _submitFeedBack(),
-                //     onPressed: _submitFeedBack,
-                //     color: HsgColors.accent,
-                //     textColor: Colors.white,
-                //     shape: RoundedRectangleBorder(
-                //         borderRadius: BorderRadius.circular(5) //设置圆角
-                //         ),
-                //   ),
-                // ),
               ],
             ),
           ),
