@@ -1,6 +1,7 @@
 import 'package:ebank_mobile/data/source/mine_feedbackApi.dart';
 import 'package:ebank_mobile/data/source/model/getFeedback.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -84,7 +85,28 @@ class _FeedbackPageState extends State<FeedbackPage> {
                     ),
                   ),
                 ),
+                CustomButton(
+                  margin: EdgeInsets.all(40),
+                  text: Text(
+                    S.of(context).submit,
+                    // style: TextStyle(color: Colors.white),
+                  ),
+                  isOutline: false,
+                  isEnable: _submit(),
+                  clickCallback: () {
+                    _submitFeedBack();
+                  },
+                ),
                 Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)), //设置圆角
+                      gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Color(0Xff1775ba),
+                            Color(0Xff3a9ed1),
+                          ])),
                   margin: EdgeInsets.all(40), //外边距
                   height: 44.0,
                   width: MediaQuery.of(context).size.width,
@@ -95,7 +117,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
                             _submitFeedBack();
                           }
                         : null,
-                    color: HsgColors.accent,
+                    elevation: 1, // 正常时阴影隐藏
+                    // color: HsgColors.accent,
                     textColor: Colors.white,
                     disabledTextColor: Colors.white,
                     disabledColor: Color(0xFFD1D1D1),
