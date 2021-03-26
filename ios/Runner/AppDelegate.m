@@ -67,8 +67,8 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
     SEFaceVerifyData *faceData = [[SEFaceVerifyData alloc]init];
 //hasFaceVerFunc  没有标注说明
     faceData.hasFaceVerFunc = NO;
-    faceData.idNo = @"身份证号";
-    faceData.name = @"姓名";
+//    faceData.idNo = @"身份证号";
+//    faceData.name = @"姓名";
 //    faceData.sourcePhotoStr = @"";
     return faceData;
 }

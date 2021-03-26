@@ -169,7 +169,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
               Text(
                 S.current.deduct_money_account,
               ),
-              Text(loanDetail.repaymentAcNo)),
+              Text(loanDetail.repaymentAcNo.toString())),
         ],
       ),
     );
