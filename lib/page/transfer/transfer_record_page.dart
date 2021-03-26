@@ -636,7 +636,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           setState(() {
             _time = time;
             _page = 1;
-            _transferHistoryList.clear();
+            // _transferHistoryList.clear();
             _endDate = DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now());
             _end = formatDate(DateTime.now(), [yyyy, mm, dd]);
             switch (i) {
