@@ -57,7 +57,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   List<RemoteBankCard> cards = [];
   RemoteBankCard card;
   String custID;
-  String _cardCcy = S.current.hint_please_select;
+  String _cardCcy = '';
   String _cardBal = '';
   List<String> _cardCcyList = [];
   List<String> _cardBalList = [];
@@ -321,7 +321,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
               //获取预计支付金额
               inputValue.addListener(() {
                 if (_cardCcy == ccy) {
-                  _amount = inputValue.text;
+                  _amount = FormatUtil.formatSringToMoney(
+                      (inputValue.text).toString());
                 } else {
                   _rateCalculate();
                 }
@@ -841,11 +842,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       ForexTradingRepository()
           .transferTrial(
               TransferTrialReq(
-                  amount: _payerAmount, corrCcy: ccy, defaultCcy: _cardCcy),
+                  amount: _payerAmount, corrCcy: _cardCcy, defaultCcy: ccy),
               'TransferTrialReq')
           .then((data) {
         setState(() {
-          _amount = data.optExAmt;
+          _amount = FormatUtil.formatSringToMoney((data.optExAmt).toString());
         });
       });
     }
@@ -916,10 +917,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     }).then((value) {
       value.forEach((element) {
         setState(() {
-          if (_cardBal == '' || _cardCcy == S.current.hint_please_select) {
-            _cardBal = element.cardListBal[0].currBal;
-            _cardCcy = element.cardListBal[0].ccy;
-          }
+          // if (_cardBal == '' || _cardCcy == S.current.hint_please_select) {
+          _cardBal = element.cardListBal[0].currBal;
+          _cardCcy = element.cardListBal[0].ccy;
+          // }
           _cardBalList.clear();
           _cardCcyList.clear();
           element.cardListBal.forEach((element) {

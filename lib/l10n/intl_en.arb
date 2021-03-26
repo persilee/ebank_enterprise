@@ -495,6 +495,10 @@
   "wangluyao_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>王璐瑶（定期）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "tdContract_estimated_payment_amount":"Estimated payment amount",
   "tdContract_payment_currency":"Payment Currency",
+  "tdEarlyRed_modify_settlement_account":"Modify settlement account",
+  "tdEarlyRed_modify_settlement_account_determine":"Please confirm whether to modify the settlement account as:",
+  "tdEarlyRed_modify_expiration_instruction":"Modify expiration instruction",
+  "tdEarlyRed_modify_expiration_instruction_determine":"Please confirm whether to modify the expiration instruction as follows：",
   "wangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<王璐瑶（定期）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
 
   "zhangqirong_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>张其荣（我的）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",

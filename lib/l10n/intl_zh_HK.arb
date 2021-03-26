@@ -500,6 +500,10 @@
   "wangluyao_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>王璐瑤國際化代碼寫在這裏>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "tdContract_estimated_payment_amount":"預計支付金額",
   "tdContract_payment_currency":"支付幣種",
+  "tdEarlyRed_modify_settlement_account":"是否修改結算賬戶",
+  "tdEarlyRed_modify_settlement_account_determine":"請確認是否修改結算賬戶為：",
+  "tdEarlyRed_modify_expiration_instruction":"是否修改到期指示",
+  "tdEarlyRed_modify_expiration_instruction_determine":"請確認是否修改到期指示為：",
   "wangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<王璐瑤國際化代碼寫在這裏<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
 
   "zhangqirong_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>張其榮際化代碼寫在這裏>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",

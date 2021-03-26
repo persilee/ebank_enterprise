@@ -42,6 +42,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   int page = 1;
   bool _isDate = false;
   List<String> terms = []; //存款期限
+  String accuPeriod; //计提周期
+  String auctCale; //档期
 
   void initState() {
     super.initState();
@@ -697,7 +699,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       } else {
         _isDate = false;
       }
-    }).catchError(() {
+    }).catchError((e) {
       Fluttertoast.showToast(msg: "${e.toString()}");
     });
   }
@@ -719,6 +721,80 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         });
       }
     });
+  }
+
+  //根据存期判断计提周期和档期
+  _judge(IdType depositTerm) {
+    switch (depositTerm.code) {
+      case 'M001':
+        accuPeriod = '2';
+        auctCale = '1';
+        break;
+      case 'M002':
+        accuPeriod = '2';
+        auctCale = '2';
+        break;
+      case 'M003':
+        accuPeriod = '2';
+        auctCale = '2';
+        break;
+      case 'M004':
+        accuPeriod = '2';
+        auctCale = '4';
+        break;
+      case 'M005':
+        accuPeriod = '2';
+        auctCale = '5';
+        break;
+      case 'M006':
+        accuPeriod = '2';
+        auctCale = '6';
+        break;
+      case 'M007':
+        accuPeriod = '2';
+        auctCale = '7';
+        break;
+      case 'M008':
+        accuPeriod = '2';
+        auctCale = '8';
+        break;
+      case 'M009':
+        accuPeriod = '2';
+        auctCale = '9';
+        break;
+      case 'M010':
+        accuPeriod = '2';
+        auctCale = '10';
+        break;
+      case 'M011':
+        accuPeriod = '2';
+        auctCale = '11';
+        break;
+      case 'Y001':
+        accuPeriod = '5';
+        auctCale = '1';
+        break;
+      case 'Y002':
+        accuPeriod = '5';
+        auctCale = '2';
+        break;
+      case 'Y003':
+        accuPeriod = '5';
+        auctCale = '3';
+        break;
+      case 'Y004':
+        accuPeriod = '5';
+        auctCale = '4';
+        break;
+      case 'Y005':
+        accuPeriod = '5';
+        auctCale = '5';
+        break;
+      case 'Y006':
+        accuPeriod = '5';
+        auctCale = '6';
+        break;
+    }
   }
 
 //页面跳转传值
