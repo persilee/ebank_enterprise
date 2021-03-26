@@ -46,6 +46,7 @@ class _TransferInternalPreviewPageState
                 click: () {
                   _loadData(transferData);
                 },
+                isColor: true,
               ),
             ),
           ],
@@ -179,6 +180,15 @@ class _TransferInternalPreviewPageState
     String payerAddress = transferData.transferOutAdress;
     String payeeAddress = transferData.transferIntoAdress;
     String intermediateBankSwift = transferData.centerSWIFI;
+    print(payeeBankCode +
+        "=================" +
+        payeeName +
+        "-==-=-=-=--==--" +
+        payerBankCode +
+        "---------------" +
+        payerName +
+        "~~~~~~~~~~~~~~~~~" +
+        amount.toString());
     TransferDataRepository()
         .getInterNationalTransfer(
             GetInternationalTransferReq(

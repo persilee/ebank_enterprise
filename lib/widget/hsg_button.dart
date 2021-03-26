@@ -10,20 +10,26 @@ class HsgButton {
   static Widget button({
     String title,
     Function click,
+    bool isColor,
   }) {
     return Container(
       // padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
       margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [
-          Color(0xFF1775BA),
-          Color(0xFF3A9ED1),
-        ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+        gradient: LinearGradient(
+            colors: isColor
+                ? [
+                    Color(0xFF1775BA),
+                    Color(0xFF3A9ED1),
+                  ]
+                : [HsgColors.btnDisabled, HsgColors.btnDisabled],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight),
         borderRadius: BorderRadius.circular(5),
       ),
       child: ButtonTheme(
         minWidth: double.infinity,
-        height: 50,
+        height: 45,
         child: RaisedButton(
           onPressed: click,
           child: Text(
