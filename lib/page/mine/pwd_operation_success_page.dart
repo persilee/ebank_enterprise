@@ -1,5 +1,6 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
@@ -45,7 +46,7 @@ class _PwdOperationSuccessPageState extends State<PwdOperationSuccessPage> {
                 Padding(
                   padding: EdgeInsets.only(top: 80),
                 ),
-                _button(S.of(context).complete)
+                _button(),
               ],
             ),
           ),
@@ -54,22 +55,17 @@ class _PwdOperationSuccessPageState extends State<PwdOperationSuccessPage> {
     );
   }
 
-  //按钮
-  Widget _button(String name) {
-    return Container(
-      padding: EdgeInsets.only(left: 20, right: 20),
-      margin: EdgeInsets.only(top: 40),
-      width: 320,
-      height: 50,
-      child: RaisedButton(
-        onPressed: () {
-          Navigator.of(context)..pop();
-        },
-        child: Text(name),
-        color: HsgColors.accent,
-        textColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+  //完成按钮
+  Widget _button() {
+    return CustomButton(
+      margin: EdgeInsets.all(40),
+      text: Text(
+        S.of(context).complete,
+        style: TextStyle(color: Colors.white),
       ),
+      clickCallback: () {
+        Navigator.of(context)..pop();
+      },
     );
   }
 }

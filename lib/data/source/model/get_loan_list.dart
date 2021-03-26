@@ -9,7 +9,7 @@ part 'get_loan_list.g.dart';
 
 @JsonSerializable()
 class GetLoanListReq extends Object {
-  //贷款账号
+  // 贷款账号
   @JsonKey(name: 'acNo')
   String acNo;
 
@@ -17,11 +17,11 @@ class GetLoanListReq extends Object {
   @JsonKey(name: 'ciNo')
   String ciNo;
 
-  //合约编号
+  // //合约编号
   @JsonKey(name: 'contactNo')
   String contactNo;
 
-  //产品号
+  // //产品号
   @JsonKey(name: 'productCode')
   String productCode;
 
