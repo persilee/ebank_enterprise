@@ -42,6 +42,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   String taskId = '';
   String _title = '';
   String _processId = '';
+  String _processKey = '';
   ScrollController _controller;
   FindToDoTaskDetailModel _doTaskDetailModel;
 
@@ -65,6 +66,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
     Map<String, dynamic> arguments = ModalRoute.of(context).settings.arguments;
     _title = arguments['title'];
     _processId = (arguments['data'] as Rows).processId;
+    _processKey = (arguments['data'] as Rows).processKey;
     print('_processId: ${_processId}');
     _loadData();
   }
@@ -76,9 +78,11 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   }
 
   void _loadData() async {
-    _doTaskDetailModel = await ApiClient().findToDoTaskDetail(
-        BaseBody(body: FindTodoTaskDetailBody(processId: _processId)));
-    print(_doTaskDetailModel);
+    if(_processKey == 'openTdContractApproval' || _processKey == 'earlyRedTdContractApproval') {
+      _doTaskDetailModel = await ApiClient().findToDoTaskDetail(
+          BaseBody(body: FindTodoTaskDetailBody(processId: _processId)));
+      print(_doTaskDetailModel);
+    }
   }
 
 //签收按钮被点击时改变offstage
@@ -157,7 +161,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
         maxLines: 4,
         enabled: !offstage,
         decoration: InputDecoration(
-          fillColor: Color(int.parse('0xffF7F7F7')),
+          fillColor: Color(0xffF7F7F7),
           filled: offstage,
           hintText: S.current.please_input + '...',
           hintStyle: TextStyle(fontSize: 14.0),
@@ -316,7 +320,22 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            _buttonStyle(S.current.approval_lock),
+            CustomButton(
+              margin: EdgeInsets.all(0),
+              text: Text(S.current.approval_lock, style: TextStyle(color: Colors.white, fontSize: 14.0),),
+              clickCallback: (){
+                _toggle();
+                // _doClaimTask();
+                WidgetsBinding.instance.addPostFrameCallback((callback) {
+                  _controller.animateTo(
+                    _controller.position.maxScrollExtent,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.linear,
+                  );
+                });
+              },
+            ),
+            // _buttonStyle(S.current.approval_lock),
           ],
         ),
       );

@@ -10,6 +10,7 @@ import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -131,25 +132,16 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                       ],
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.all(40), //外边距
-                    height: 44.0,
-                    width: MediaQuery.of(context).size.width,
-                    child: RaisedButton(
-                      child: Text(S.of(context).next_step),
-                      onPressed: _submit()
-                          ? () {
-                              _submitData();
-                            }
-                          : null,
-                      color: HsgColors.accent,
-                      textColor: Colors.white,
-                      disabledTextColor: Colors.white,
-                      disabledColor: HsgColors.btnDisabled,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5) //设置圆角
-                          ),
+                  CustomButton(
+                    margin: EdgeInsets.all(40),
+                    text: Text(
+                      S.of(context).next_step,
+                      style: TextStyle(color: Colors.white),
                     ),
+                    isEnable: _submit(),
+                    clickCallback: () {
+                      _submitData();
+                    },
                   ),
                 ],
               )),

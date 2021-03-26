@@ -21,6 +21,7 @@ import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
@@ -407,7 +408,7 @@ class _MinePageState extends State<MinePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _belongCustStatus == '0' ? _userInfo() : _userOffInfo(),
+                _belongCustStatus == '1' ? _userInfo() : _userOffInfo(),
                 // Text(
                 //   _userName,
                 //   textAlign: TextAlign.start,
@@ -460,33 +461,18 @@ class _MinePageState extends State<MinePage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _nameInfo(),
-        Container(
+        CustomButton(
+          margin: EdgeInsets.all(0),
           height: 40,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(50)), //设置圆角
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0Xff1775ba),
-                    Color(0Xff3a9ed1),
-                  ])),
-          child: FlatButton(
-            onPressed: () {
-              print('开户申请');
-              Navigator.pushNamed(context, pageOpenAccountBasicData);
-            },
-            child: Text(
-              S.current.open_account_apply,
-              style: TextStyle(fontSize: 15, color: Colors.white),
-            ),
-            shape: RoundedRectangleBorder(
-              side: BorderSide.none,
-              borderRadius: BorderRadius.all(Radius.circular(50)),
-            ),
-            // color: Color(0xFF4871FF),
-            disabledColor: HsgColors.btnDisabled,
+          borderRadius: BorderRadius.circular(50.0),
+          text: Text(
+            S.current.open_account_apply,
+            style: TextStyle(fontSize: 14, color: Colors.white),
           ),
+          clickCallback: () {
+            print('开户申请');
+            Navigator.pushNamed(context, pageOpenAccountBasicData);
+          },
         ),
       ],
     ));
