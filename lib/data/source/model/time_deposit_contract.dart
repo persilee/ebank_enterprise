@@ -12,6 +12,9 @@ class TimeDepositContractReq extends Object {
   @JsonKey(name: 'accuPeriod')
   String accuPeriod;
 
+  @JsonKey(name: 'annualInterestRate')
+  String annualInterestRate;
+
   @JsonKey(name: 'auctCale')
   String auctCale;
 
@@ -39,6 +42,9 @@ class TimeDepositContractReq extends Object {
   @JsonKey(name: 'payPassword')
   String payPassword;
 
+  @JsonKey(name: 'prodName')
+  String prodName;
+
   @JsonKey(name: 'settDdAc')
   String settDdAc;
 
@@ -50,6 +56,7 @@ class TimeDepositContractReq extends Object {
 
   TimeDepositContractReq(
     this.accuPeriod,
+    this.annualInterestRate,
     this.auctCale,
     this.bal,
     this.bppdCode,
@@ -59,6 +66,7 @@ class TimeDepositContractReq extends Object {
     this.instCode,
     this.oppAc,
     this.payPassword,
+    this.prodName,
     this.settDdAc,
     this.smsCode,
     this.tenor,
