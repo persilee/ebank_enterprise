@@ -269,13 +269,15 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   _startCountdown() {
     countdownTime = 120;
     final call = (timer) {
-      setState(() {
-        if (countdownTime < 1) {
-          _timer.cancel();
-        } else {
-          countdownTime -= 1;
-        }
-      });
+      if (this.mounted) {
+        setState(() {
+          if (countdownTime < 1) {
+            _timer.cancel();
+          } else {
+            countdownTime -= 1;
+          }
+        });
+      }
     };
     _timer = Timer.periodic(Duration(seconds: 1), call);
   }
@@ -290,10 +292,12 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
             SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
         .then((data) {
       _startCountdown();
-      setState(() {
-        //保留setState是为了快一点刷新验证码按钮
-        // _sms.text = '123456';
-      });
+      if (this.mounted) {
+        setState(() {
+          //保留setState是为了快一点刷新验证码按钮
+          // _sms.text = '123456';
+        });
+      }
       HSProgressHUD.dismiss();
     }).catchError((e) {
       HSProgressHUD.showError(status: e.toString());
