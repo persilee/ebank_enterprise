@@ -12,6 +12,7 @@ import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 
 import 'model/get_international_transfer.dart';
+import 'model/get_international_transfer_new.dart';
 import 'model/get_transfer_plan_details.dart';
 import 'model/get_transfer_plan_list.dart';
 import 'model/get_transfer_record.dart';
@@ -54,6 +55,13 @@ class TransferDataRepository {
       GetInternationalTransferReq req, String tag) {
     return request('/ddep/transfer/doInternationalTransfer', req, tag,
         (data) => InternationalTransferResp.fromJson(data));
+  }
+
+  //跨行转账
+  Future<GetInternationalTransferNewResp> getInternationalTransferNew(
+      GetInternationalTransferNewReq req, String tag) {
+    return request('/ddep/transfer/doInternationalTransfer', req, tag,
+        (data) => GetInternationalTransferNewResp.fromJson(data));
   }
 
   //预约转账

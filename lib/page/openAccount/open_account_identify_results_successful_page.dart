@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -91,9 +92,9 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
                 click: () {
                   // _showTypeTips(context);
                   if (_state == 1) {
-                    _openAccountQuickSubmitData();
-                  } else {
                     _quickAccountOpening();
+                  } else {
+                    _openAccountQuickSubmitData();
                   }
                 },
               ),
@@ -105,6 +106,9 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   }
 
   void _showTypeTips(BuildContext context) {
+    EventBusUtils.getInstance()
+        .fire(GetUserEvent(msg: "通知重新获取用户信息getUser", state: 200));
+
     HsgShowTip.openAccountSuccessfulTip(
       context,
       (value) {
