@@ -405,7 +405,7 @@ class _MinePageState extends State<MinePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _belongCustStatus == '1' ? _userInfo() : _userOffInfo(),
+                _belongCustStatus == '0' ? _userInfo() : _userOffInfo(),
                 // Text(
                 //   _userName,
                 //   textAlign: TextAlign.start,
@@ -460,7 +460,7 @@ class _MinePageState extends State<MinePage> {
         _nameInfo(),
         CustomButton(
           margin: EdgeInsets.all(0),
-          height: 40,
+          height: 35,
           borderRadius: BorderRadius.circular(50.0),
           text: Text(
             S.current.open_account_apply,
