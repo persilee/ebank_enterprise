@@ -79,11 +79,11 @@ class _CardListPageState extends State<CardListPage> {
                       _refreshController.loadNoData();
                     },
                     onRefresh: () {
-                      //刷新完成
-                      _refreshController.refreshCompleted();
-                      _refreshController.footerMode.value =
-                          LoadStatus.canLoading;
                       _loadData();
+                      //刷新完成
+                      // _refreshController.refreshCompleted();
+                      // _refreshController.footerMode.value =
+                      //     LoadStatus.canLoading;
                       print("刷新完成");
                     },
                     content: _getlistViewList(context),
@@ -237,7 +237,7 @@ class _CardListPageState extends State<CardListPage> {
     );
   }
 
-  Future<void> _loadData() async {
+  _loadData() {
     if (_cardsLength == 0) {
       _isLoading = true;
     }
@@ -259,6 +259,8 @@ class _CardListPageState extends State<CardListPage> {
               }
             }
           }
+          _refreshController.refreshCompleted();
+          _refreshController.footerMode.value = LoadStatus.canLoading;
           _isLoading = false;
         });
       }
