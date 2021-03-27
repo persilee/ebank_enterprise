@@ -130,7 +130,7 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
             ),
             Expanded(
               child: Text(
-                rifht,
+                rifht == null ? '' : rifht,
                 style: FIRST_DESCRIBE_TEXT_STYLE,
                 textAlign: TextAlign.right,
                 maxLines: 2,
