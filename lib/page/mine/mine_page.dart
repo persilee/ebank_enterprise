@@ -408,7 +408,7 @@ class _MinePageState extends State<MinePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _belongCustStatus == '0' ? _userInfo() : _userOffInfo(),
+                _belongCustStatus == '6' ? _userInfo() : _userOffInfo(),
                 // Text(
                 //   _userName,
                 //   textAlign: TextAlign.start,
@@ -696,7 +696,7 @@ class _MinePageState extends State<MinePage> {
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.showError(status: e.toString());
-      print('${e.toString()}');
+      // print('${e.toString()}');
     });
   }
 
