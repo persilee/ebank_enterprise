@@ -38,29 +38,109 @@ class GetTotalAssetsReq {
 class GetTotalAssetsResp extends Object {
   @JsonKey(name: 'ccy')
   String ccy;
+
   @JsonKey(name: 'totalAssets')
   String totalAssets;
+
   @JsonKey(name: 'totalLiability')
   String totalLiability;
+
   @JsonKey(name: 'netAssets')
   String netAssets;
+
+  @JsonKey(name: 'tdTotal')
+  String tdTotal;
+
+  @JsonKey(name: 'cardListBal')
+  List<TotalAssetsCardListBal> cardListBal;
+
+  @JsonKey(name: 'tedpListBal')
+  List<TotalAssetsTedpListBal> tedpListBal;
 
   GetTotalAssetsResp(
     this.ccy,
     this.totalAssets,
     this.totalLiability,
     this.netAssets,
+    this.tdTotal,
+    this.cardListBal,
+    this.tedpListBal,
   );
-
-  @override
-  String toString() {
-    return toJson().toString();
-  }
 
   factory GetTotalAssetsResp.fromJson(Map<String, dynamic> srcJson) =>
       _$GetTotalAssetsRespFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$GetTotalAssetsRespToJson(this);
+}
+
+@JsonSerializable()
+class TotalAssetsCardListBal extends Object {
+  @JsonKey(name: 'accountType')
+  String accountType;
+
+  @JsonKey(name: 'cardNo')
+  String cardNo;
+
+  @JsonKey(name: 'ccy')
+  String ccy;
+
+  @JsonKey(name: 'currBal')
+  String currBal;
+
+  @JsonKey(name: 'avaBal')
+  String avaBal;
+
+  @JsonKey(name: 'equAmt')
+  String equAmt;
+
+  TotalAssetsCardListBal(
+    this.accountType,
+    this.cardNo,
+    this.ccy,
+    this.currBal,
+    this.avaBal,
+    this.equAmt,
+  );
+
+  factory TotalAssetsCardListBal.fromJson(Map<String, dynamic> srcJson) =>
+      _$TotalAssetsCardListBalFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$TotalAssetsCardListBalToJson(this);
+}
+
+@JsonSerializable()
+class TotalAssetsTedpListBal extends Object {
+  @JsonKey(name: 'accountType')
+  String accountType;
+
+  @JsonKey(name: 'cardNo')
+  String cardNo;
+
+  @JsonKey(name: 'ccy')
+  String ccy;
+
+  @JsonKey(name: 'currBal')
+  String currBal;
+
+  @JsonKey(name: 'avaBal')
+  String avaBal;
+
+  @JsonKey(name: 'equAmt')
+  String equAmt;
+
+  TotalAssetsTedpListBal(
+    this.accountType,
+    this.cardNo,
+    this.ccy,
+    this.currBal,
+    this.avaBal,
+    this.equAmt,
+  );
+
+  factory TotalAssetsTedpListBal.fromJson(Map<String, dynamic> srcJson) =>
+      _$TotalAssetsTedpListBalFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$TotalAssetsTedpListBalToJson(this);
 }
 
 // 活期

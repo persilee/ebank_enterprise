@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 /// Date: 2021-01-15
 notDataContainer(BuildContext context, String noDateText) {
   return Container(
-    color: Colors.white,
     width: MediaQuery.of(context).size.width,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,

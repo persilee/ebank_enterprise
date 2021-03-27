@@ -8,8 +8,9 @@
 import 'dart:math';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/account_overview_repository.dart';
 import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
+import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
@@ -34,7 +35,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   var ccy = '';
   var totalAmt = '';
   var _defaultCcy = '';
-  List<CardListBal> cardList;
+  List<TotalAssetsCardListBal> cardList;
   List<DepositRecord> rowList = [];
   List<DepositRecord> list = []; //页面显示的记录列表
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
@@ -55,14 +56,16 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     });
 
     //网络请求
-    _loadCardListBal();
+    // _loadCardListBal();
+    _loadTotalAssets();
 
     NotificationCenter.instance.addObserver('load', (object) {
       if (mounted) {
         setState(() {
           if (object) {
             _loadDeopstData();
-            _loadCardListBal();
+            // _loadCardListBal();
+            _loadTotalAssets();
           }
         });
       }
@@ -325,7 +328,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     return CustomScrollView(slivers: SliverToBoxAdapters);
   }
 
-  void go2Detail(DepositRecord deposit, List<CardListBal> cardList) {
+  void go2Detail(DepositRecord deposit, List<TotalAssetsCardListBal> cardList) {
     Navigator.pushNamed(context, pageDepositInfo,
         arguments: {'deposit': deposit, 'cardList': cardList});
   }
@@ -339,34 +342,53 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           DepositRecordReq(ciNo, '', excludeClosed, page, 10, ''),
           'getDepositRecord')
     }).then((value) {
-      value.forEach((element) {
-        if (element.rows.length != 0) {
-          count = element.count;
-          _isDate = true;
-          setState(() {
+      setState(() {
+        value.forEach((element) {
+          if (element.rows.length != 0) {
+            count = element.count;
+            _isDate = true;
+
             rowList.clear();
             rowList.addAll(element.rows);
             list.clear();
             list.addAll(rowList);
-          });
-        } else {
-          _isDate = false;
-        }
+          } else {
+            _isDate = false;
+          }
+        });
       });
     });
   }
 
-  Future<void> _loadCardListBal() async {
+  // Future<void> _loadCardListBal() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   String ciNo = prefs.getString(ConfigKey.CUST_ID);
+  //   Future.wait({
+  //     DepositDataRepository().getCardListBalByUser(
+  //         GetCardListBalByUserReq('', [], '', ciNo), 'getCardListBalByUser')
+  //   }).then((value) {
+  //     value.forEach((element) {
+  //       setState(() {
+  //         totalAmt = element.tdTotalAmt;
+  //         _defaultCcy = element.defaultCcy;
+  //         cardList = element.cardListBal;
+  //       });
+  //     });
+  //   });
+  // }
+
+  Future<void> _loadTotalAssets() async {
     final prefs = await SharedPreferences.getInstance();
     String ciNo = prefs.getString(ConfigKey.CUST_ID);
+    String userId = prefs.getString(ConfigKey.USER_ID);
     Future.wait({
-      DepositDataRepository().getCardListBalByUser(
-          GetCardListBalByUserReq('', [], '', ciNo), 'getCardListBalByUser')
+      AccountOverviewRepository()
+          .getTotalAssets(GetTotalAssetsReq(userId, ciNo, ''), 'getTotalAssets')
     }).then((value) {
       value.forEach((element) {
         setState(() {
-          totalAmt = element.tdTotalAmt;
-          _defaultCcy = element.defaultCcy;
+          totalAmt = element.tdTotal;
+          _defaultCcy = element.ccy;
           cardList = element.cardListBal;
         });
       });
