@@ -235,15 +235,23 @@ class _OpenAccountSelectDocumentTypePageState
         .then((value) {
       print(value.toJson());
       HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: value.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      Navigator.pushNamed(
-        context,
-        pageOpenAccountIdentifySuccessfulFailure,
-        arguments: {'valueData': value},
-      );
+
+      ///通过判断证件号码不为空来判断是否识别正确
+      if (value.infoStr != null &&
+          value.infoStr['IdNum'] != null &&
+          value.infoStr['IdNum'] != '') {
+        Navigator.pushNamed(
+          context,
+          pageOpenAccountIdentifySuccessfulFailure,
+          arguments: {'valueData': value},
+        );
+      } else {
+        Navigator.pushNamed(
+          context,
+          pageOpenAccountIdentifyResultsFailure,
+          arguments: {'businessId': _businessId, 'documentType': documentType},
+        );
+      }
     }).catchError((e) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(

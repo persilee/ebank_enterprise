@@ -50,6 +50,14 @@ class AuthIdentityReq {
 
 @JsonSerializable()
 class AuthIdentityResp {
+  ///租户编号
+  @JsonKey(name: 'tenant_id')
+  String tenantId;
+
+  ///业务编号
+  @JsonKey(name: 'business_id')
+  String businessId;
+
   ///选择的面签类型1大陆2港澳台3护照
   @JsonKey(name: 'certificateType')
   String certificateType;
@@ -91,6 +99,8 @@ class AuthIdentityResp {
   bool isSuccess;
 
   AuthIdentityResp(
+    this.tenantId,
+    this.businessId,
     this.certificateType,
     this.fileName,
     this.speechFlowData,
@@ -159,11 +169,11 @@ class InfoStrForCN {
   @JsonKey(name: 'Address')
   String address;
 
-  ///签发机关
+  ///有效期
   @JsonKey(name: 'ValidDate')
   String validDate;
 
-  ///有效期
+  ///签发机关
   @JsonKey(name: 'Authority')
   String authority;
 
@@ -284,11 +294,17 @@ class InfoStrForPassport {
 
 @JsonSerializable()
 class CompareImageData {
-  @JsonKey(name: 'xx')
-  String xx;
+  ///base串
+  @JsonKey(name: 'faceImgUrl')
+  String faceImgUrl;
+
+  ///相识度
+  @JsonKey(name: 'score')
+  String score;
 
   CompareImageData(
-    this.xx,
+    this.faceImgUrl,
+    this.score,
   );
 
   factory CompareImageData.fromJson(Map<String, dynamic> srcJson) =>

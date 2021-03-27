@@ -1,4 +1,4 @@
-
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/data/source/model/find_to_do_task_detail_model.dart';
@@ -30,5 +30,8 @@ abstract class ApiClient {
   @POST('/wkfl/processTask/findToDoTaskDetail')
   Future<FindToDoTaskDetailModel> findToDoTaskDetail(@Body() BaseBody baseBody);
 
-
+  /// 上传头像（开户图片上传暂时共用）
+  @POST('/cust/user/uploadAvatar')
+  // Future<FindToDoTaskDetailModel> uploadAvatar(@Body() BaseBody baseBody);
+  Future<dynamic> uploadAvatar(@Body() File file);
 }
