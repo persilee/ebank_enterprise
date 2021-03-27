@@ -75,10 +75,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     _getCardList();
 
     //滚动监听
-    // _controller.addListener(() {
+    // _scrollController.addListener(() {
     //   setState(() {
-    //     if (_controller.position.pixels ==
-    //         _controller.position.maxScrollExtent) {
+    //     if (_scrollController.position.pixels ==
+    //         _scrollController.position.maxScrollExtent) {
     //       if (_page < _totalPage) {
     //         _loadMore = true;
     //       }
@@ -118,18 +118,21 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                           ? CustomRefresh(
                               controller: _refreshController,
                               onLoading: () {
-                                //加载更多完成
                                 if (_page < _totalPage) {
                                   _loadMore = true;
+                                  _page++;
                                 }
-                                _page++;
-                                _loadData();
-                                !_loadMore ?? _refreshController.loadComplete();
-                                //显示没有更多数据
-                                _refreshController.loadNoData();
+                                //加载更多完成
+                                if (_loadMore) {
+                                  _loadData();
+                                } else {
+                                  //显示没有更多数据
+                                  _refreshController.loadNoData();
+                                }
                               },
                               onRefresh: () {
                                 //刷新完成
+                                _page = 1;
                                 _loadData();
                                 _refreshController.refreshCompleted();
                                 _refreshController.footerMode.value =
@@ -209,7 +212,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     //       ? ListView(controller: _controller, children: _list)
     //       : _noDataContainer(context),
     // );
-    return ListView(controller: _scrollController, children: _list);
+    return ListView(children: _list);
   }
 
   //加载完毕
@@ -990,6 +993,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         }
         _loadMore = false;
         _isLoading = false;
+        _refreshController.loadComplete();
       });
       // HSProgressHUD.dismiss();
     }).catchError((e) {
