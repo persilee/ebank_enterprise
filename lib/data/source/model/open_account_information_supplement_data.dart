@@ -124,7 +124,7 @@ class ChinaMainlandCertificateInfoDTO {
   @JsonKey(name: 'idDueDate')
   String idDueDate;
 
-  ChinaMainlandCertificateInfoDTO(
+  ChinaMainlandCertificateInfoDTO({
     this.fullNameLoc,
     this.idNo,
     this.gender,
@@ -134,7 +134,7 @@ class ChinaMainlandCertificateInfoDTO {
     this.issuingAuthority,
     this.idIssueDate,
     this.idDueDate,
-  );
+  });
   factory ChinaMainlandCertificateInfoDTO.fromJson(
           Map<String, dynamic> srcJson) =>
       _$ChinaMainlandCertificateInfoDTOFromJson(srcJson);
@@ -181,7 +181,7 @@ class HKCertificateInfoDTO {
   @JsonKey(name: 'currentIssueDate')
   String currentIssueDate;
 
-  HKCertificateInfoDTO(
+  HKCertificateInfoDTO({
     this.fullNameLoc,
     this.idNo,
     this.fullNameEng,
@@ -191,7 +191,7 @@ class HKCertificateInfoDTO {
     this.birthdate,
     this.firthIssueDate,
     this.currentIssueDate,
-  );
+  });
   factory HKCertificateInfoDTO.fromJson(Map<String, dynamic> srcJson) =>
       _$HKCertificateInfoDTOFromJson(srcJson);
   Map<String, dynamic> toJson() => _$HKCertificateInfoDTOToJson(this);
@@ -232,7 +232,7 @@ class PassportInfoDTO {
   @JsonKey(name: 'idDueDate')
   String idDueDate;
 
-  PassportInfoDTO(
+  PassportInfoDTO({
     this.fullNameLoc,
     this.idNo,
     this.gender,
@@ -241,7 +241,7 @@ class PassportInfoDTO {
     this.issuingCountry,
     // this.idIssueDate,
     this.idDueDate,
-  );
+  });
   factory PassportInfoDTO.fromJson(Map<String, dynamic> srcJson) =>
       _$PassportInfoDTOFromJson(srcJson);
   Map<String, dynamic> toJson() => _$PassportInfoDTOToJson(this);
@@ -251,10 +251,10 @@ class PassportInfoDTO {
 class OpenAccountInformationSupplementDataResp {
   ///状态
   @JsonKey(name: 'state')
-  String businessId;
+  int state;
 
   OpenAccountInformationSupplementDataResp(
-    this.businessId,
+    this.state,
   );
 
   factory OpenAccountInformationSupplementDataResp.fromJson(
