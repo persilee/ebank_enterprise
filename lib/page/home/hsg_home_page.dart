@@ -44,28 +44,37 @@ class _HomePageState extends State<HomePage> {
   var _features = [];
   UserInfoResp _data;
 
-  ScrollController _sctrollController = ScrollController();
+  ScrollController _sctrollController;
 
   @override
   // ignore: must_call_super
   void initState() {
+    _sctrollController = ScrollController();
     // 监听滚动
     _sctrollController.addListener(
       () {
-        setState(() {
-          num opacity = _sctrollController.offset / 120;
-          _opacity = opacity.abs();
-          if (_opacity > 1) {
-            _opacity = 1;
-          } else if (_opacity < 0) {
-            _opacity = 0;
-          }
-        });
+        if (this.mounted) {
+          setState(() {
+            num opacity = _sctrollController.offset / 120;
+            _opacity = opacity.abs();
+            if (_opacity > 1) {
+              _opacity = 1;
+            } else if (_opacity < 0) {
+              _opacity = 0;
+            }
+          });
+        }
       },
     );
 
     // 网络请求
     _loadData();
+  }
+
+  @override
+  void dispose() {
+    _sctrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -275,11 +284,13 @@ class _HomePageState extends State<HomePage> {
     }
 
     Language.saveSelectedLanguage(language);
-    setState(() {
-      _changeLangBtnTltle = languages[result];
-      HSGBankApp.setLocale(context, Language().getLocaleByLanguage(language));
-      _changeUserInfoShow(_data);
-    });
+    if (this.mounted) {
+      setState(() {
+        _changeLangBtnTltle = languages[result];
+        HSGBankApp.setLocale(context, Language().getLocaleByLanguage(language));
+        _changeUserInfoShow(_data);
+      });
+    }
   }
 
   ///scrollview的顶部view，包含背景图、登录信息、账户总览和收支明细
@@ -875,20 +886,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _changeUserInfoShow(UserInfoResp model) {
-    setState(() {
-      _headPortraitUrl = model.headPortrait; //头像地址
-      _enterpriseName = _language == 'zh_CN'
-          ? model.custLocalName
-          : model.custEngName; // 企业名称
-      _userName = _language == 'zh_CN'
-          ? model.localUserName
-          : model.englishUserName; // 姓名
-      _userName = _userName == null ? model.userAccount : _userName;
-      _characterName = _language == 'zh_CN'
-          ? model.roleLocalName
-          : model.roleEngName; //用户角色名称
-      _lastLoginTime = model.lastLoginTime; // 上次登录时间
-    });
+    if (this.mounted) {
+      setState(() {
+        _headPortraitUrl = model.headPortrait; //头像地址
+        _enterpriseName = _language == 'zh_CN'
+            ? model.custLocalName
+            : model.custEngName; // 企业名称
+        _userName = _language == 'zh_CN'
+            ? model.localUserName
+            : model.englishUserName; // 姓名
+        _userName = _userName == null ? model.userAccount : _userName;
+        _characterName = _language == 'zh_CN'
+            ? model.roleLocalName
+            : model.roleEngName; //用户角色名称
+        _lastLoginTime = model.lastLoginTime; // 上次登录时间
+      });
+    }
   }
 
   Future<void> _loadData() async {
@@ -908,21 +921,23 @@ class _HomePageState extends State<HomePage> {
 
       _verifyGotoTranPassword(context, data.passwordEnabled);
 
-      setState(() {
-        _headPortraitUrl = data.headPortrait; //头像地址
-        _enterpriseName = _language == 'zh_CN'
-            ? data.custLocalName
-            : data.custEngName; // 企业名称
-        _userName = _language == 'zh_CN'
-            ? data.localUserName
-            : data.englishUserName; // 姓名
-        _characterName = _language == 'zh_CN'
-            ? data.roleLocalName
-            : data.roleEngName; //用户角色名称
-        _belongCustStatus = data.belongCustStatus; //用户状态
-        _lastLoginTime = data.lastLoginTime; // 上次登录时间
-        _data = data;
-      });
+      if (this.mounted) {
+        setState(() {
+          _headPortraitUrl = data.headPortrait; //头像地址
+          _enterpriseName = _language == 'zh_CN'
+              ? data.custLocalName
+              : data.custEngName; // 企业名称
+          _userName = _language == 'zh_CN'
+              ? data.localUserName
+              : data.englishUserName; // 姓名
+          _characterName = _language == 'zh_CN'
+              ? data.roleLocalName
+              : data.roleEngName; //用户角色名称
+          _belongCustStatus = data.belongCustStatus; //用户状态
+          _lastLoginTime = data.lastLoginTime; // 上次登录时间
+          _data = data;
+        });
+      }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
       // HSProgressHUD.showError(status: e.toString());
@@ -941,10 +956,11 @@ class _HomePageState extends State<HomePage> {
       'getInviteeStatusByPhone',
     )
         .then((data) {
-      print(data.inviteeStatus);
-      setState(() {
-        _inviteeStatus = data.inviteeStatus;
-      });
+      if (this.mounted) {
+        setState(() {
+          _inviteeStatus = data.inviteeStatus;
+        });
+      }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
       // HSProgressHUD.showError(status: e.toString());

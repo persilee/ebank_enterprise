@@ -7,8 +7,12 @@ class GetDepositTrialReq extends Object {
   @JsonKey(name: 'conNo')
   String conNo;
 
+  @JsonKey(name: 'settBal')
+  String settBal;
+
   GetDepositTrialReq(
     this.conNo,
+    this.settBal,
   );
 
   factory GetDepositTrialReq.fromJson(Map<String, dynamic> srcJson) =>
@@ -58,9 +62,6 @@ class GetDepositTrialResp extends Object {
   @JsonKey(name: 'matAmt')
   String matAmt;
 
-  @JsonKey(name: 'settDdAc')
-  String settDdAc;
-
   @JsonKey(name: 'terms')
   String terms;
 
@@ -78,7 +79,6 @@ class GetDepositTrialResp extends Object {
     this.eryRate,
     this.eryInt,
     this.matAmt,
-    this.settDdAc,
     this.terms,
   );
 

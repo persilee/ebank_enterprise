@@ -234,7 +234,6 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   bool _submit() {
-    print('$_userNameListen--------------');
     if (_phoneNumListen != '' &&
         _userNameListen != '' &&
         _smsListen != '' &&
@@ -333,37 +332,44 @@ class _RegisterPageState extends State<RegisterPage> {
 
   //检验用户是否注册
   _checkRegister() {
-    RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
-    if (characters.hasMatch(_phoneNum.text) == false) {
+    // RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
+    // if (characters.hasMatch(_phoneNum.text) == false) {
+    //   Fluttertoast.showToast(
+    //     msg: S.current.format_mobile_error,
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.CENTER,
+    //     timeInSecForIosWeb: 1,
+    //   );
+    // } else {
+    HSProgressHUD.show();
+    VersionDataRepository()
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '1'), 'checkPhoneReq')
+        .then((data) {
+      setState(() {
+        _isRegister = data.register;
+        _sendSmsRegister(_isRegister);
+        HSProgressHUD.dismiss();
+      });
+    }).catchError((e) {
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
-        msg: S.current.format_mobile_error,
+        msg: e.toString(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
       );
-    } else {
-      HSProgressHUD.show();
-      VersionDataRepository()
-          .checkPhone(CheckPhoneReq(_phoneNum.text, '1'), 'checkPhoneReq')
-          .then((data) {
-        setState(() {
-          _isRegister = data.register;
-          _sendSmsRegister(_isRegister);
-          HSProgressHUD.dismiss();
-        });
-      }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
-      });
-    }
+    });
+    // }
   }
 
   //获取注册发送短信验证码接口
   _sendSmsRegister(bool _isRegister) async {
     print('$_isRegister>>>>>>>>');
-    RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
-    if (characters.hasMatch(_phoneNum.text) == false) {
-      Fluttertoast.showToast(msg: S.current.format_mobile_error);
-    } else if (_isRegister) {
+    // RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
+    // if (characters.hasMatch(_phoneNum.text) == false) {
+    //   Fluttertoast.showToast(msg: S.current.format_mobile_error);
+    // } else
+    if (_isRegister) {
       Fluttertoast.showToast(
         msg: S.current.num_is_register,
         toastLength: Toast.LENGTH_SHORT,
@@ -380,7 +386,13 @@ class _RegisterPageState extends State<RegisterPage> {
           //  _sms.text = "123456";
         });
       }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+        );
+        HSProgressHUD.dismiss();
       });
     }
   }

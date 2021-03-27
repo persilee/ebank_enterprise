@@ -26,7 +26,9 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      curve: Curves.linear,
+      duration: Duration(milliseconds: 360),
       height: height,
       margin: margin ?? EdgeInsets.fromLTRB(16, 8, 16, 0),
       decoration: isEnable
@@ -47,7 +49,7 @@ class CustomButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius ?? BorderRadius.circular(5.0),
           ),
-          primary: isOutline ? Colors.transparent : Colors.transparent, // 设为透明色
+          primary: Colors.transparent, // 设为透明色
           onPrimary: Colors.blue.withOpacity(0.36),
           elevation: 1, // 正常时阴影隐藏
           shadowColor: Colors.transparent,

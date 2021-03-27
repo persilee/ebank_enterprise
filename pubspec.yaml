@@ -51,6 +51,8 @@ dependencies:
   transparent_image: ^1.0.0
   retrofit: any
   pretty_dio_logger: ^1.1.1
+  pull_to_refresh: 1.6.3
+  lottie: ^0.7.0+1
   sp_util:
   flutter_cupertino_date_picker:
     git:
@@ -84,6 +86,7 @@ flutter:
     - assets/images/splash.png
     - assets/data/city.json
     - images/ic_launcher.png
+    - assets/json/loading2.json
     #common
     - images/common/check_btn_common_checked.png
     - images/common/check_btn_common_no_check.png
