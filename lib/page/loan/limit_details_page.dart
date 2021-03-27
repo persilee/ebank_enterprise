@@ -7,11 +7,13 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LimitDetailsPage extends StatefulWidget {
   LimitDetailsPage({Key key}) : super(key: key);
@@ -30,41 +32,6 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
   String productCode = "";
   //机构代码
   String br = "";
-
-  Loan _loan1 = new Loan(
-      '50000085',
-      "81812",
-      "50000085",
-      "0265898980",
-      "2020-01-01",
-      "0.088",
-      "0",
-      "6000",
-      "2020-04-01",
-      "_payAcNo",
-      "6252********0198",
-      1,
-      "EPI",
-      1,
-      3,
-      "6044.01");
-  Loan _loan2 = new Loan(
-      '50000083',
-      "81813",
-      "50000083",
-      "0265898979",
-      "2020-01-10",
-      "0.088",
-      "2",
-      "9000",
-      "2020-04-10",
-      "_payAcNo",
-      "6225********0189",
-      6,
-      "EPI",
-      12,
-      24,
-      "9060");
 
   var loanDetails = [];
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
@@ -96,27 +63,29 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
 
   Future<void> _loadData() async {
     //请求的参数
-    // acNo = "";
-    // ciNo = "50000085";
-    // contactNo = "";
-    // productCode = "";
+    acNo = "";
 
-    // LoanDataRepository()
-    //     .getLoanList(GetLoanListReq(acNo, ciNo, contactNo, productCode),
-    //         'getLoanMastList')
-    //     .then((data) {
-    //   if (data.loanList != null) {
-    //     setState(() {
-    //       loanDetails.clear();
-    //       loanDetails.addAll(data.loanList);
-    //     });
-    //   }
-    // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString());
-    // });
+    final prefs = await SharedPreferences.getInstance();
+    String cino = prefs.getString(ConfigKey.CUST_ID);
+    ciNo = cino;
+
+    contactNo = "";
+    productCode = "";
+
+    LoanDataRepository()
+        .getLoanList(GetLoanListReq(acNo, ciNo, contactNo, productCode),
+            'getLoanMastList')
+        .then((data) {
+      if (data.loanList != null) {
+        setState(() {
+          loanDetails.clear();
+          loanDetails.addAll(data.loanList);
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
     loanDetails.clear();
-    loanDetails.add(_loan1);
-    loanDetails.add(_loan2);
   }
 
   //封装ListView.Builder
@@ -253,6 +222,7 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
               items: pages,
             ));
     if (result != null && result != false) {
+      print('详情数据----$loanDetail.');
       switch (result) {
         case 0:
           //查看详情

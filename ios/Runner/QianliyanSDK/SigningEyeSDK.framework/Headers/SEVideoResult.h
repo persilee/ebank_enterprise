@@ -44,12 +44,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
 认证结果
-{@"positive":positiveStr,@"back":backStr,@"icon":@"",@"isSuccess":@"1"};
-positive 正面  图片base64
- back 反面   图片base64
- icon 人脸   图片base64
- videoUrl 录制视频路径
- isSuccess 是否成功  0失败 1 成功  2正在审核
+{“isSuccess”:”//是否成功”,
+“positiveImage”:”正面照片”,
+“backImage”:”/反面照片”,
+“videoUrl”:”香港证件录制的本地视频路径”,
+“infoStr”:”证件信息”,
+speechFlowData://ai对话数据
+compareImageData;//ai对比图片数据
+certificateType;//证件类型 1大陆2香港3护照
+headerImg;//大头照
+fileName;//ai录制后视频名称
+tenant_id;//租户id
+business_id;//业务编号
+}
  */
 @property (nonatomic, copy, readonly) NSString * certificationResul;
 

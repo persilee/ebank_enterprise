@@ -381,7 +381,7 @@
   "iDCardVerification": "身份验证",
   "pleaseFillInTheBankInformation": "请填写银行预留信息完成身份验证",
   "idType": "证件类型",
-  "IdentificationNumber": "证件号码",
+  "identificationNumber": "证件号码",
   "reservedMobilePhoneNumber": "预留手机号",
   "placeName": "请输入名字",
   "placeIdType": "请输入证件类型",

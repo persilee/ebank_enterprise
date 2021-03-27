@@ -49,8 +49,13 @@ class _UserInformationPageState extends State<UserInformationPage> {
 
     UserInfoResp _arguments = ModalRoute.of(context).settings.arguments;
     if (_arguments != null) {
-      _data = _arguments;
-      _userPhone = _arguments.userPhone;
+      setState(() {
+        _data = _arguments;
+        _userPhone = _arguments.userPhone != null ? _arguments.userPhone : '';
+        _headPortraitUrl = _arguments.headPortrait != null
+            ? _arguments.headPortrait
+            : ''; //头像地址
+      });
       _changeUserInfoShow(_data);
     }
     return new Scaffold(
@@ -340,16 +345,27 @@ class _UserInformationPageState extends State<UserInformationPage> {
 
   void _changeUserInfoShow(UserInfoResp model) {
     setState(() {
-      _headPortraitUrl = model.headPortrait; //头像地址
       _enterpriseName = _language == 'zh_CN'
-          ? model.custLocalName
-          : model.custEngName; // 企业名称
+          ? model.custLocalName != null
+              ? model.custLocalName
+              : ''
+          : model.custEngName != null
+              ? model.custEngName
+              : ''; // 企业名称
       _userName = _language == 'zh_CN'
-          ? model.localUserName
-          : model.englishUserName; // 姓名
+          ? model.localUserName != null
+              ? model.localUserName
+              : ''
+          : model.englishUserName != null
+              ? model.englishUserName
+              : ''; // 姓名
       _characterName = _language == 'zh_CN'
-          ? model.roleLocalName
-          : model.roleEngName; //用户角色名称
+          ? model.roleLocalName != null
+              ? model.roleLocalName
+              : ''
+          : model.roleEngName != null
+              ? model.roleEngName
+              : ''; //用户角色名称
     });
   }
 }

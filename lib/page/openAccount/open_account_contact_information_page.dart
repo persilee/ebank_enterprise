@@ -461,6 +461,7 @@ class _OpenAccountContactInformationPageState
           _theSameForRegisterAndBusiness,
           false,
           (value) {
+            FocusScope.of(context).requestFocus(FocusNode());
             if (_theSameForRegisterAndBusiness == true) {
               _businessAddress.detail = _registeredAddressText;
               _businessAddress.postCode = _registrationZipCodeText;
@@ -580,6 +581,7 @@ class _OpenAccountContactInformationPageState
           _theSameForRegisterAndCommunication,
           false,
           (value) {
+            FocusScope.of(context).requestFocus(FocusNode());
             if (_theSameForRegisterAndCommunication == true) {
               _communicationAddress.detail = _registeredAddressText;
               _communicationAddress.postCode = _registrationZipCodeText;

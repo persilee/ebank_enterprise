@@ -1,6 +1,7 @@
 import 'package:ebank_mobile/data/source/mine_feedbackApi.dart';
 import 'package:ebank_mobile/data/source/model/getFeedback.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -84,41 +85,17 @@ class _FeedbackPageState extends State<FeedbackPage> {
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.all(40), //外边距
-                  height: 44.0,
-                  width: MediaQuery.of(context).size.width,
-                  child: RaisedButton(
-                    child: Text(S.of(context).submit),
-                    onPressed: _submit()
-                        ? () {
-                            _submitFeedBack();
-                          }
-                        : null,
-                    color: HsgColors.accent,
-                    textColor: Colors.white,
-                    disabledTextColor: Colors.white,
-                    disabledColor: Color(0xFFD1D1D1),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5) //设置圆角
-                        ),
+                CustomButton(
+                  margin: EdgeInsets.all(40),
+                  text: Text(
+                    S.of(context).submit,
+                    style: TextStyle(color: Colors.white),
                   ),
+                  isEnable: _submit(),
+                  clickCallback: () {
+                    _submitFeedBack();
+                  },
                 ),
-                // Container(
-                //   margin: EdgeInsets.all(40), //外边距
-                //   height: 44.0,
-                //   width: MediaQuery.of(context).size.width,
-                //   child: RaisedButton(
-                //     child: Text(S.of(context).submit),
-                //     // _content == '' ? null : _submitFeedBack(),
-                //     onPressed: _submitFeedBack,
-                //     color: HsgColors.accent,
-                //     textColor: Colors.white,
-                //     shape: RoundedRectangleBorder(
-                //         borderRadius: BorderRadius.circular(5) //设置圆角
-                //         ),
-                //   ),
-                // ),
               ],
             ),
           ),
