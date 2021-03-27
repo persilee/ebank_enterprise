@@ -16,8 +16,10 @@ import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
+import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_dotted_line.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../page_route.dart';
 
@@ -59,13 +62,14 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   int _page = 1; //几页数据
   int _totalPage = 1; //数据总页数
   bool _loadMore = false; //是否加载更多
+  bool _isLoading = false; //加载状态
   TextEditingController _startAmountController = TextEditingController();
   TextEditingController _endAmountController = TextEditingController();
-
+  RefreshController _refreshController;
   @override
   void initState() {
     super.initState();
-
+    _refreshController = RefreshController();
     _actualNameReqData();
     _loadData();
     _getCardList();
@@ -86,6 +90,12 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -98,7 +108,28 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         child: Column(
           children: [
             _headerWidget(),
-            Expanded(child: _getlistViewList(context)),
+            Expanded(
+              child:
+                  // _getlistViewList(context),
+                  _isLoading
+                      ? HsgLoading()
+                      : _transferHistoryList.length > 0
+                          ? CustomRefresh(
+                              controller: _refreshController,
+                              onLoading: () {
+                                //加载更多完成
+                                _refreshController.loadComplete();
+                              },
+                              onRefresh: () {
+                                //刷新完成
+                                _refreshController.refreshCompleted();
+                                _refreshController.footerMode.value =
+                                    LoadStatus.canLoading;
+                              },
+                              content: _getlistViewList(context),
+                            )
+                          : _noDataContainer(context),
+            ),
           ],
         ),
       ),
@@ -163,12 +194,13 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       // _loadMore ? Container() : _toLoad(intl.S.current.load_more_finished),
     );
 
-    return RefreshIndicator(
-      onRefresh: () => _loadData(),
-      child: _isData
-          ? ListView(controller: _controller, children: _list)
-          : _noDataContainer(context),
-    );
+    // return RefreshIndicator(
+    //   onRefresh: () => _loadData(),
+    //   child: _isData
+    //       ? ListView(controller: _controller, children: _list)
+    //       : _noDataContainer(context),
+    // );
+    return ListView(controller: _controller, children: _list);
   }
 
   //加载完毕
@@ -925,6 +957,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
   //转账记录
   Future _loadData() async {
+    _isLoading = true;
     //请求参数
     String ccy = '';
     int pageSize = 10;
@@ -947,11 +980,15 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           _transferHistoryList.addAll(data.transferRecord);
         }
         _loadMore = false;
+        _isLoading = false;
       });
       // HSProgressHUD.dismiss();
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      // Fluttertoast.showToast(msg: e.toString());
       // HSProgressHUD.dismiss();
+      setState(() {
+        _isLoading = false;
+      });
     });
   }
 }
