@@ -1,7 +1,7 @@
 
 
 import 'package:dio/dio.dart';
-import 'package:ebank_mobile/data/source/model/find_to_do_task_detail_model.dart';
+import 'package:ebank_mobile/data/source/model/find_to_do_task_detail_contract_model.dart';
 import 'package:ebank_mobile/data/source/model/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
@@ -28,7 +28,7 @@ abstract class ApiClient {
 
   /// 根据流程id查询待办任务详细信息
   @POST('/wkfl/processTask/findToDoTaskDetail')
-  Future<FindToDoTaskDetailModel> findToDoTaskDetail(@Body() BaseBody baseBody);
+  Future<FindToDoTaskDetailContractModel> findToDoTaskDetail(@Body() BaseBody baseBody);
 
 
 }
