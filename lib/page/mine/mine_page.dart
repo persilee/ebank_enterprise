@@ -478,7 +478,7 @@ class _MinePageState extends State<MinePage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _nameInfo((MediaQuery.of(context).size.width / 3 * 2 - 130)),
+        _nameInfo((MediaQuery.of(context).size.width / 3 * 2 - 140)),
         CustomButton(
           margin: EdgeInsets.all(0),
           height: 35,
@@ -541,6 +541,7 @@ class _MinePageState extends State<MinePage> {
   //用户名
   Widget _nameInfo(double maxWidth) {
     return Container(
+      color: Colors.red,
       constraints: BoxConstraints(
         maxWidth: maxWidth,
       ),
