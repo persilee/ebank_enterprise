@@ -234,9 +234,9 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   bool _submit() {
-    if (_phoneNumListen != '' &&
-        _userNameListen != '' &&
-        _smsListen != '' &&
+    if (_phoneNum.text != '' &&
+        _userName.text != '' &&
+        _sms.text != '' &&
         _checkBoxValue) {
       return true;
     } else {

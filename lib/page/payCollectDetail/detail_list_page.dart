@@ -514,8 +514,6 @@ class _DetailListPageState extends State<DetailListPage> {
         borderRadius: BorderRadius.circular(5),
       ),
       child: Container(
-        // margin: EdgeInsets.only(top: 15),
-        //height: 30,
         child: Theme(
           data: new ThemeData(
             primaryColor: Color(0xffECECEC),
@@ -600,7 +598,11 @@ class _DetailListPageState extends State<DetailListPage> {
   }
 
   // Section header widget builder.
+  //交易时间 --头标题
   Widget _sectionHeaderBuilder(BuildContext context, int section) {
+    //String _titileTime =  DateFormat('yyyy-MM-dd').format(dateTime);
+    RegExp characters = new RegExp("/\d{4}-\d{1,2}-\d{1,2}/g");
+    //var newDate=/\d{4}-\d{1,2}-\d{1,2}/g.exec(date)
     return Column(
       children: [
         Container(
@@ -614,7 +616,7 @@ class _DetailListPageState extends State<DetailListPage> {
           color: Colors.white,
           //交易时间
           //  child: Text(ddFinHisDTOList[section].transDate),
-          child: Text(ddFinHisDTOList[section].acDate),
+          child: Text(ddFinHisDTOList[section].txDateTime.substring(0, 10)),
         ),
       ],
     );

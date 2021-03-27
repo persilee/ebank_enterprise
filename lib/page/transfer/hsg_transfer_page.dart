@@ -78,10 +78,10 @@ class _TransferPageState extends State<TransferPage> {
       body: Stack(
         children: [
           //为了下拉后顶部三个选项和导航栏不出现颜色断层（正常下拉，如果下拉超过220高度同样会断层）
-          Container(
-            color: HsgColors.primary,
-            height: 220,
-          ),
+          // Container(
+          //   color: HsgColors.primary,
+          //   height: 220,
+          // ),
           Container(
             child: CustomScrollView(
               slivers: _sliversSection(_gridFeatures, _listFeatures),
