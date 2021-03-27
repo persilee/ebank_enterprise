@@ -60,6 +60,7 @@ dependencies:
     git:
       url: https://github.com/pdliuw/ai_decimal_accuracy.git
   image_picker: ^0.6.7+22 #选择相册加拍照
+  event_bus: ^1.1.1
 
 dev_dependencies:
   flutter_test:

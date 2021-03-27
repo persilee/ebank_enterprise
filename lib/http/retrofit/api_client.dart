@@ -32,6 +32,5 @@ abstract class ApiClient {
 
   /// 上传头像（开户图片上传暂时共用）
   @POST('/cust/user/uploadAvatar')
-  // Future<FindToDoTaskDetailModel> uploadAvatar(@Body() BaseBody baseBody);
-  Future<dynamic> uploadAvatar(@Body() File file);
+  Future<dynamic> uploadAvatar(@Body() File file, BaseBody baseBody);
 }
