@@ -1,7 +1,7 @@
 import 'dart:math';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///
+/// 首页
 /// Author: lijiawei
 /// Date: 2020-12-04
 
@@ -13,6 +13,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -34,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   var _changeLangBtnTltle = '';
   var _headPortraitUrl = ''; // 头像地址
   var _enterpriseName = ''; // 企业名称
-  var _userName = '高阳银行企业用户'; // 姓名
+  var _userName = ''; // 姓名
   var _characterName = ''; // 角色名称
   var _belongCustStatus = '0'; //用户状态
   var _inviteeStatus = '0'; //用户受邀状态，是否是走快速开户，默认为0，不走
@@ -52,7 +53,7 @@ class _HomePageState extends State<HomePage> {
     // 监听滚动
     _sctrollController.addListener(
       () {
-        if(this.mounted) {
+        if (this.mounted) {
           setState(() {
             num opacity = _sctrollController.offset / 120;
             _opacity = opacity.abs();
@@ -283,7 +284,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     Language.saveSelectedLanguage(language);
-    if(this.mounted) {
+    if (this.mounted) {
       setState(() {
         _changeLangBtnTltle = languages[result];
         HSGBankApp.setLocale(context, Language().getLocaleByLanguage(language));
@@ -509,7 +510,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-//用户信息-未开户成功
+//用户信息-未开户
   Widget _userOffInfo() {
     return Container(
       margin: EdgeInsets.only(top: 0),
@@ -521,20 +522,18 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: _nameInfo(),
           ),
-          RaisedButton(
-            onPressed: () {
+          CustomButton(
+            margin: EdgeInsets.all(0),
+            height: 40,
+            borderRadius: BorderRadius.circular(50.0),
+            text: Text(
+              S.current.open_account_apply,
+              style: TextStyle(fontSize: 14, color: Colors.white),
+            ),
+            clickCallback: () {
+              print('开户申请');
               _openAccountClickFunction(context);
             },
-            child: Text(
-              S.of(context).open_account_apply,
-              style: TextStyle(fontSize: 15, color: Colors.white),
-            ),
-            shape: RoundedRectangleBorder(
-              side: BorderSide.none,
-              borderRadius: BorderRadius.all(Radius.circular(50)),
-            ),
-            color: Color(0xFF4871FF),
-            disabledColor: HsgColors.btnDisabled,
           ),
         ],
       ),
@@ -887,7 +886,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _changeUserInfoShow(UserInfoResp model) {
-    if(this.mounted) {
+    if (this.mounted) {
       setState(() {
         _headPortraitUrl = model.headPortrait; //头像地址
         _enterpriseName = _language == 'zh_CN'
@@ -896,6 +895,7 @@ class _HomePageState extends State<HomePage> {
         _userName = _language == 'zh_CN'
             ? model.localUserName
             : model.englishUserName; // 姓名
+        _userName = _userName == null ? model.userAccount : _userName;
         _characterName = _language == 'zh_CN'
             ? model.roleLocalName
             : model.roleEngName; //用户角色名称
@@ -921,7 +921,7 @@ class _HomePageState extends State<HomePage> {
 
       _verifyGotoTranPassword(context, data.passwordEnabled);
 
-      if(this.mounted) {
+      if (this.mounted) {
         setState(() {
           _headPortraitUrl = data.headPortrait; //头像地址
           _enterpriseName = _language == 'zh_CN'
@@ -956,7 +956,7 @@ class _HomePageState extends State<HomePage> {
       'getInviteeStatusByPhone',
     )
         .then((data) {
-      if(this.mounted) {
+      if (this.mounted) {
         setState(() {
           _inviteeStatus = data.inviteeStatus;
         });

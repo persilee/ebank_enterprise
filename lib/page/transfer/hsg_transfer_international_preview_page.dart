@@ -1,7 +1,9 @@
 import 'package:ebank_mobile/data/source/model/get_international_transfer.dart';
+import 'package:ebank_mobile/data/source/model/get_international_transfer_new.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
 ///跨行（国际）转账预览界面
@@ -11,6 +13,7 @@ import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
 import 'data/transfer_international_data.dart';
@@ -163,7 +166,10 @@ class _TransferInternalPreviewPageState
   }
 
   Future _loadData(TransferInternationalData transferData) async {
-    double amount = double.parse(transferData.transferIntoAccount);
+    final prefs = await SharedPreferences.getInstance();
+    String custId = prefs.getString(ConfigKey.CUST_ID);
+    // String amount = transferData.transferIntoAmount;
+    double amount = double.parse(transferData.transferIntoAmount);
     String transferOutCcy = transferData.transferOutCcy;
     String transferIntoCcy = transferData.transferIntoCcy;
     String payeeBankCode = transferData.payeeBankCode;
@@ -180,35 +186,75 @@ class _TransferInternalPreviewPageState
     String payerAddress = transferData.transferOutAdress;
     String payeeAddress = transferData.transferIntoAdress;
     String intermediateBankSwift = transferData.centerSWIFI;
-    print(payeeBankCode +
-        "=================" +
-        payeeName +
-        "-==-=-=-=--==--" +
-        payerBankCode +
-        "---------------" +
-        payerName +
-        "~~~~~~~~~~~~~~~~~" +
-        amount.toString());
+    String countryCode = transferData.countryCode;
+    print(costOptions + "===============" + district);
+    // TransferDataRepository()
+    //     .getInternationalTransferNew(
+    //         GetInternationalTransferNewReq(
+    //           amount,
+    //           "",
+    //           "1,997,923.00",
+    //           bankSwift,
+    //           "1",
+    //           costOptions,
+    //           transferOutCcy,
+    //           custId,
+    //           transferIntoCcy,
+    //           countryCode,
+    //           "100",
+    //           "0",
+    //           "",
+    //           intermediateBankSwift,
+    //           "0.00",
+    //           "L5o+WYWLFVSCqHbd0Szu4Q==",
+    //           payeeAddress,
+    //           payeeBankCode,
+    //           "朗华银行",
+    //           "朗华银行",
+    //           payeeCardNo,
+    //           payeeName,
+    //           "",
+    //           "",
+    //           "",
+    //           payerAddress,
+    //           payerBankCode,
+    //           payerCardNo,
+    //           payerName,
+    //           "3",
+    //           "",
+    //           remark,
+    //           "",
+    //           "123456",
+    //           "123.00",
+    //           "0",
+    //         ),
+    //         'getInternationalTransferNew')
+    //     .then((data) {
+    //   Navigator.pushReplacementNamed(context, pageOperationResult);
+    // }).catchError((e) {
+    //   print(e.toString());
+    // });
     TransferDataRepository()
         .getInterNationalTransfer(
             GetInternationalTransferReq(
               amount,
-              bankSwift,
-              costOptions,
               transferOutCcy,
               transferIntoCcy,
-              district,
-              intermediateBankSwift,
-              payeeAddress,
+              "",
               payeeBankCode,
               payeeCardNo,
               payeeName,
-              payerAddress,
               payerBankCode,
               payerCardNo,
               payerName,
               remark,
-              remittancePurposes,
+              "",
+              "0",
+              payeeAddress,
+              bankSwift,
+              "uS",
+              custId,
+              "1",
             ),
             'getTransferByAccount')
         .then((value) {

@@ -125,7 +125,6 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                                 ],
                               ),
                             ),
-                            padding: EdgeInsets.fromLTRB(0, 100, 0, 0),
                             child: _accountOverviewColumn(),
                           ),
                         ),
@@ -463,7 +462,9 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
       shoDowTwo = true;
     }
     return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
+        //净资产
         Padding(
           padding: EdgeInsets.only(bottom: 30),
           child: _totalAssets(),

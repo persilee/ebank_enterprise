@@ -148,16 +148,20 @@ class UserInfoResp extends Object {
   @JsonKey(name: 'processId')
   String processId;
 
-  /// 用户开户激活状态(
-  /// 0 - 未开户
-  /// 1 - 审核中
-  /// 2 - 被驳回
-  /// 3 - 开立客户号失败
-  /// 4 - 开立账户失败
-  /// 5 - 未激活
-  /// 6 - 已激活
-  /// 7 - 锁定)
-  /// 8 - 待审核
+  /// 用户开户状态(
+  /// 0 - 已发送快速开户邀请
+  /// 1 - 资料提交企服商Maker审核
+  /// 2 - 企服商Maker通过审核
+  /// 3 - 企服商Maker拒绝
+  /// 4 - 企服商Checker通过审核
+  /// 5 - 企服商Checker拒绝
+  /// 6 - 客户经理Maker通过审核
+  /// 7 - 客户经理Maker拒绝
+  /// 8 - 客户经理Checker通过审核
+  /// 9 - 客户经理Checker拒绝
+  /// 10 - 核心开客户失败
+  /// 11 - 核心开账户失败
+  /// 12 - 正常
   @JsonKey(name: 'belongCustStatus')
   String belongCustStatus;
 

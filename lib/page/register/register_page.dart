@@ -275,8 +275,8 @@ class _RegisterPageState extends State<RegisterPage> {
       onTap: () {
         setState(() {
           _checkBoxValue = !_checkBoxValue;
-          _submit();
         });
+        //_submit();
       },
       child: Padding(
         padding: EdgeInsets.fromLTRB(15, 10, 10, 25),
@@ -382,17 +382,18 @@ class _RegisterPageState extends State<RegisterPage> {
               'sendSmsRegister')
           .then((value) {
         setState(() {
+          HSProgressHUD.dismiss();
           _startCountdown();
           //  _sms.text = "123456";
         });
       }).catchError((e) {
+        HSProgressHUD.dismiss();
         Fluttertoast.showToast(
           msg: e.toString(),
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
         );
-        HSProgressHUD.dismiss();
       });
     }
   }
