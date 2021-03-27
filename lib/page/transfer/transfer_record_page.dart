@@ -16,8 +16,10 @@ import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
+import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_dotted_line.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../page_route.dart';
 
@@ -55,34 +58,42 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   bool _isButton2 = true; //交易时间第二个按钮
   bool _isButton3 = false; //交易时间第三个按钮
   bool _isButton4 = false; //交易时间第四个按钮
-  ScrollController _controller = ScrollController(); //滚动监听
+  ScrollController _scrollController = ScrollController(); //滚动监听
   int _page = 1; //几页数据
   int _totalPage = 1; //数据总页数
   bool _loadMore = false; //是否加载更多
+  bool _isLoading = false; //加载状态
   TextEditingController _startAmountController = TextEditingController();
   TextEditingController _endAmountController = TextEditingController();
-
+  RefreshController _refreshController;
   @override
   void initState() {
     super.initState();
-
+    _refreshController = RefreshController();
     _actualNameReqData();
     _loadData();
     _getCardList();
 
     //滚动监听
-    _controller.addListener(() {
-      setState(() {
-        if (_controller.position.pixels ==
-            _controller.position.maxScrollExtent) {
-          if (_page < _totalPage) {
-            _loadMore = true;
-          }
-          _page++;
-          _loadData();
-        }
-      });
-    });
+    // _controller.addListener(() {
+    //   setState(() {
+    //     if (_controller.position.pixels ==
+    //         _controller.position.maxScrollExtent) {
+    //       if (_page < _totalPage) {
+    //         _loadMore = true;
+    //       }
+    //       _page++;
+    //       _loadData();
+    //     }
+    //   });
+    // });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
+    _scrollController.dispose();
   }
 
   @override
@@ -98,7 +109,36 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         child: Column(
           children: [
             _headerWidget(),
-            Expanded(child: _getlistViewList(context)),
+            Expanded(
+              child:
+                  // _getlistViewList(context),
+                  _isLoading
+                      ? HsgLoading()
+                      : _transferHistoryList.length > 0
+                          ? CustomRefresh(
+                              controller: _refreshController,
+                              onLoading: () {
+                                //加载更多完成
+                                if (_page < _totalPage) {
+                                  _loadMore = true;
+                                }
+                                _page++;
+                                _loadData();
+                                !_loadMore ?? _refreshController.loadComplete();
+                                //显示没有更多数据
+                                _refreshController.loadNoData();
+                              },
+                              onRefresh: () {
+                                //刷新完成
+                                _loadData();
+                                _refreshController.refreshCompleted();
+                                _refreshController.footerMode.value =
+                                    LoadStatus.canLoading;
+                              },
+                              content: _getlistViewList(context),
+                            )
+                          : _noDataContainer(context),
+            ),
           ],
         ),
       ),
@@ -107,10 +147,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
   //没有数据时显示页面
   Container _noDataContainer(BuildContext context) {
-    HSProgressHUD.show();
-    Future.delayed(Duration(seconds: 1), () {
-      HSProgressHUD.dismiss();
-    });
+    // HSProgressHUD.show();
+    // Future.delayed(Duration(seconds: 1), () {
+    //   HSProgressHUD.dismiss();
+    // });
     return Container(
       color: HsgColors.backgroundColor,
       width: MediaQuery.of(context).size.width,
@@ -151,24 +191,25 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       if (_position == 0) {
         _isData = true;
         _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
+      } else if ((_cradLists[_position] ==
+              _transferHistoryList[i].paymentCardNo) ||
+          (_cradLists[_position] == _transferHistoryList[i].receiveCardNo)) {
+        _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
+        _isData = true;
       }
-      // else if ((_cradLists[_position] ==
-      //         _transferHistoryList[i].paymentCardNo) ||
-      //     (_cradLists[_position] == _transferHistoryList[i].receiveCardNo)) {
-      //   _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
-      //   _isData = true;
-      // }
     }
-    _list.add(
-      _loadMore ? _loadMoreData() : _toLoad(intl.S.current.load_more_finished),
-    );
+    // _list.add(
+    //   _loadMore ? _loadMoreData() : _toLoad(intl.S.current.load_more_finished),
+    //   // _loadMore ? Container() : _toLoad(intl.S.current.load_more_finished),
+    // );
 
-    return RefreshIndicator(
-      onRefresh: () => _loadData(),
-      child: _isData
-          ? ListView(controller: _controller, children: _list)
-          : _noDataContainer(context),
-    );
+    // return RefreshIndicator(
+    //   onRefresh: () => _loadData(),
+    //   child: _isData
+    //       ? ListView(controller: _controller, children: _list)
+    //       : _noDataContainer(context),
+    // );
+    return ListView(controller: _scrollController, children: _list);
   }
 
   //加载完毕
@@ -343,7 +384,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _popDialogContent(BuildContext popcontext) {
     return Container(
       color: Colors.white,
-      height: 335,
+      // height: 335,
+      height: 260,
       // padding: EdgeInsets.all(10),
       child: Material(
         color: Colors.white,
@@ -362,13 +404,13 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                 children: [
                   //交易时间
                   _timeText(intl.S.of(context).transaction_time),
-                  _tradingHour(),
+                  _tradingHour(popcontext),
                   //自定义时间
                   _timeText(intl.S.of(context).user_defined),
                   _userDefind(popcontext),
                   //金额
-                  _timeText(intl.S.current.amount),
-                  _amountDuration(),
+                  // _timeText(intl.S.current.amount),
+                  // _amountDuration(),
                   //按钮
                   Container(
                     margin: EdgeInsets.only(top: 10),
@@ -597,19 +639,23 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   }
 
   //交易时间
-  Widget _tradingHour() {
+  Widget _tradingHour(popcontext) {
     return Row(
       children: [
-        _trandingHourButton(1, _isButton1, intl.S.current.the_same_day),
-        _trandingHourButton(2, _isButton2, intl.S.current.the_same_month),
-        _trandingHourButton(3, _isButton3, intl.S.current.last_three_month),
-        _trandingHourButton(4, _isButton4, intl.S.current.last_half_year),
+        _trandingHourButton(
+            1, _isButton1, intl.S.current.the_same_day, popcontext),
+        _trandingHourButton(
+            2, _isButton2, intl.S.current.the_same_month, popcontext),
+        _trandingHourButton(
+            3, _isButton3, intl.S.current.last_three_month, popcontext),
+        _trandingHourButton(
+            4, _isButton4, intl.S.current.last_half_year, popcontext),
       ],
     );
   }
 
 //交易时间按钮
-  Widget _trandingHourButton(int i, bool isButton, String time) {
+  Widget _trandingHourButton(int i, bool isButton, String time, popcontext) {
     return Container(
       margin: EdgeInsets.all(3),
       width: 78,
@@ -631,7 +677,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           setState(() {
             _time = time;
             _page = 1;
-            _transferHistoryList.clear();
+            // _transferHistoryList.clear();
             _endDate = DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now());
             _end = formatDate(DateTime.now(), [yyyy, mm, dd]);
             switch (i) {
@@ -701,7 +747,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                 break;
             }
           });
-          Navigator.of(context).pop(_loadData());
+          // Navigator.of(context).pop(_loadData());
+          (popcontext as Element).markNeedsBuild();
         },
       ),
     );
@@ -919,6 +966,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
   //转账记录
   Future _loadData() async {
+    _isLoading = true;
     //请求参数
     String ccy = '';
     int pageSize = 10;
@@ -941,10 +989,15 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           _transferHistoryList.addAll(data.transferRecord);
         }
         _loadMore = false;
+        _isLoading = false;
       });
       // HSProgressHUD.dismiss();
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      // Fluttertoast.showToast(msg: e.toString());
+      // HSProgressHUD.dismiss();
+      setState(() {
+        _isLoading = false;
+      });
     });
   }
 }

@@ -38,11 +38,11 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = '';
 
   TextEditingController _accountTC =
-      TextEditingController(text: 'ljw127'); //fangluyao
+      TextEditingController(text: 'blk501'); //fangluyao
   TextEditingController _passwordTC =
-      TextEditingController(text: 'Aa123456@'); //b0S25X5Y
-  var _account = 'ljw127'; //'blk101';
-  var _password = 'Aa123456@'; //'4N0021S8';
+      TextEditingController(text: '4N0021S8'); //b0S25X5Y
+  var _account = ''; //'blk101';
+  var _password = ''; //'4N0021S8';
 
   // TextEditingController _accountTC =
   //     TextEditingController(text: 'blk302'); //fangluyao

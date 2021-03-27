@@ -146,6 +146,12 @@ class Rows extends Object {
   @JsonKey(name: 'modifyTime')
   String modifyTime;
 
+  @JsonKey(name: 'paysMethod')
+  String paysMethod;
+
+  @JsonKey(name: 'rollInPurpose')
+  String rollInPurpose;
+
   Rows(
     this.payeeCardNo,
     this.custId,
@@ -168,6 +174,8 @@ class Rows extends Object {
     this.city,
     this.createTime,
     this.modifyTime,
+    this.paysMethod,
+    this.rollInPurpose,
   );
 
   factory Rows.fromJson(Map<String, dynamic> srcJson) =>
