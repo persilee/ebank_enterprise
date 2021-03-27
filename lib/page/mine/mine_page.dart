@@ -426,7 +426,7 @@ class _MinePageState extends State<MinePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _belongCustStatus == '0' ? _userInfo() : _userOffInfo(),
+                _belongCustStatus == '6' ? _userInfo() : _userOffInfo(),
                 // Text(
                 //   _userName,
                 //   textAlign: TextAlign.start,
