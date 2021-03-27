@@ -778,9 +778,7 @@ class _HomePageState extends State<HomePage> {
   void _openAccountClickFunction(BuildContext context) {
     if (_inviteeStatus == '0') {
       //前往填写面签码
-      // Navigator.pushNamed(context, pageOpenAccountBasicData);
-      Fluttertoast.showToast(msg: '前往填写面签码，开发中', gravity: ToastGravity.CENTER);
-      print('前往填写面签码');
+      Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
     } else {
       //前往快速开户
       Navigator.pushNamed(context, pageOpenAccountBasicData);
@@ -920,7 +918,7 @@ class _HomePageState extends State<HomePage> {
     )
         .then((data) {
       print('$data');
-      if (['0', '2'].contains(data.belongCustStatus)) {
+      if (['0', '1', '3'].contains(data.belongCustStatus)) {
         _getInviteeStatusByPhoneNetwork();
       }
 
