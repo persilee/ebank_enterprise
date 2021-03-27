@@ -152,6 +152,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     _loadTransferData();
 
     _transferMoneyController.addListener(() {
+      if (_transferMoneyController.text.length == 0) {
+        _amount = '0';
+      }
       if (_payCcy == _transferCcy) {
         setState(() {
           _amount = _transferMoneyController.text;
