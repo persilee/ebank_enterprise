@@ -46,7 +46,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String _changedInstructionTitle = S.current.hint_please_select;
   int _acPosition = 0;
   int _settAcPosition = 0;
-  int _ccyPosition = 0;
   String _changedRateTitle = '';
   String accuPeriod = '0';
   String auctCale = '0';
@@ -76,6 +75,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String _amount = '0.00';
   String language = Intl.getCurrentLocale();
   List<String> instructions = [];
+  String _checkAmount = '0.00';
+  List<String> instructionDatas = [];
 
   void initState() {
     super.initState();
@@ -321,8 +322,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
               //获取预计支付金额
               inputValue.addListener(() {
                 if (_cardCcy == ccy) {
-                  _amount = FormatUtil.formatSringToMoney(
-                      (inputValue.text).toString());
+                  _amount = inputValue.text;
                 } else {
                   _rateCalculate();
                 }
@@ -646,6 +646,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     if (result != null && result != false) {
       _cardCcy = _cardCcyList[result];
       _cardBal = _cardBalList[result];
+      // _rateCalculate();
     } else {
       return;
     }
@@ -682,12 +683,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
 //到期指示弹窗
   _selectInstruction(BuildContext context) async {
-    List<String> instructionDatas = [
-      '0',
-      '1',
-      '2',
-      '5',
-    ];
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
@@ -741,26 +736,35 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           onPressed: !_ifClick()
               ? null
               : () {
-                  _loadContractData(
-                    accuPeriod,
-                    auctCale,
-                    bal,
-                    productList.bppdCode,
-                    ccy,
-                    custID,
-                    depositType,
-                    instCode,
-                    _changedAccountTitle.replaceAll(
-                        new RegExp(r"\s+\b|\b\s"), ""),
-                    '',
-                    _changedSettAcTitle.replaceAll(
-                        new RegExp(r"\s+\b|\b\s"), ""),
-                    '',
-                    '',
-                  );
+                  if (double.parse(_cardBal) < double.parse(_checkAmount)) {
+                    Fluttertoast.showToast(
+                      msg: S.current.tdContract_balance_insufficient,
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                    );
+                  } else {
+                    _loadContractData(
+                      accuPeriod,
+                      rate,
+                      auctCale,
+                      bal,
+                      productList.bppdCode,
+                      ccy,
+                      custID,
+                      depositType,
+                      instCode,
+                      _changedAccountTitle.replaceAll(
+                          new RegExp(r"\s+\b|\b\s"), ""),
+                      '',
+                      productList.engName,
+                      _changedSettAcTitle.replaceAll(
+                          new RegExp(r"\s+\b|\b\s"), ""),
+                      '',
+                      '',
+                    );
+                  }
                 },
-          // padding: EdgeInsets.only(top: 1),
-          // color: HsgColors.accent,
           disabledColor: HsgColors.btnDisabled,
           child: Text(
             S.current.deposit_now,
@@ -837,6 +841,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       setState(() {
         _amount = '0.00';
       });
+    } else if (_cardCcy == ccy) {
+      _amount = FormatUtil.formatSringToMoney((inputValue.text).toString());
     } else {
       _payerAmount = AiDecimalAccuracy.parse(inputValue.text).toDouble();
       ForexTradingRepository()
@@ -847,6 +853,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           .then((data) {
         setState(() {
           _amount = FormatUtil.formatSringToMoney((data.optExAmt).toString());
+          _checkAmount = data.optExAmt;
         });
       });
     }
@@ -927,6 +934,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             _cardCcyList.add(element.ccy);
             _cardBalList.add(element.currBal);
           });
+          _rateCalculate();
         });
       });
     }).catchError((e) {});
@@ -945,6 +953,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             } else {
               instructions.add(element.name);
             }
+            instructionDatas.add(element.code);
           });
         });
       }
@@ -953,6 +962,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
   Future<void> _loadContractData(
       String accuPeriod,
+      String annualInterestRate,
       String auctCale,
       double bal,
       String bppdCode,
@@ -962,6 +972,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       String instCode,
       String oppAc,
       String payPassword,
+      String prodName,
       String settDdAc,
       String smsCode,
       String tenor) async {
@@ -969,6 +980,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         .getTimeDepositContract(
             TimeDepositContractReq(
                 accuPeriod,
+                annualInterestRate,
                 auctCale,
                 bal,
                 bppdCode,
@@ -978,6 +990,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                 instCode,
                 oppAc,
                 payPassword,
+                prodName,
                 settDdAc,
                 smsCode,
                 tenor),

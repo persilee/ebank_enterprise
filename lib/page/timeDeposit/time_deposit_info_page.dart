@@ -294,12 +294,12 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   //到期指示弹窗
   _selectInstruction(BuildContext context) async {
-    List<String> instructionDatas = [
-      '0',
-      '1',
-      '2',
-      '5',
-    ];
+    // List<String> instructionDatas = [
+    //   '0',
+    //   '1',
+    //   '2',
+    //   '5',
+    // ];
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
@@ -505,6 +505,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
       _showContractSucceedPage(context);
     }).catchError((e) {
       setState(() {});
+      HSProgressHUD.dismiss();
       HSProgressHUD.showError(status: '${e.toString()}');
     });
     // HSProgressHUD.dismiss();
@@ -559,9 +560,9 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   }
 
   void _select(String leftText) {
-    if (leftText == '是否修改结算账户') {
+    if (leftText == S.current.tdEarlyRed_modify_settlement_account) {
       _loadData();
-    } else if (leftText == '是否修改到期指示') {
+    } else if (leftText == S.current.tdEarlyRed_modify_expiration_instruction) {
       _getInsCode();
     } else {
       _contractEarly(context);
