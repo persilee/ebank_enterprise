@@ -24,6 +24,8 @@ class TransferAccount extends StatelessWidget {
   final String balance;
   //预计金额
   final String amount;
+  //汇率
+  final String rate;
   //转账金额控制器
   final TextEditingController transferMoneyController;
   final VoidCallback callback;
@@ -40,6 +42,7 @@ class TransferAccount extends StatelessWidget {
     this.account,
     this.balance,
     this.amount,
+    this.rate,
     this.transferMoneyController,
     this.callback,
     this.payCcyDialog,
@@ -275,6 +278,40 @@ class TransferAccount extends StatelessWidget {
           ],
         ));
   }
+
+  //预计金额
+  // Widget _estimatedAmount() {
+  //   return Container(
+  //     padding: EdgeInsets.all(15),
+  //     color: Colors.white,
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       children: [
+  //         Container(
+  //           width: 120,
+  //           child: Text(
+  //             S.current.estimated_collection_amount,
+  //             maxLines: 2,
+  //             overflow: TextOverflow.ellipsis,
+  //           ),
+  //         ),
+  //         Column(
+  //           crossAxisAlignment: CrossAxisAlignment.end,
+  //           children: [
+  //             Text(
+  //               FormatUtil.formatSringToMoney(amount),
+  //               style: TextStyle(color: Color(0xff262626), fontSize: 14),
+  //             ),
+  //             Text(
+  //               S.current.rate_of_exchange + '：' + rate,
+  //               style: TextStyle(color: Color(0xff7A7A7A), fontSize: 13),
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   //实线
   _fullLine() {

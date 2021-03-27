@@ -135,6 +135,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   //限额
   String _limit = '';
 
+  //汇率
+  String _xRate = '';
+
   //按钮是否能点击
   bool _isClick = false;
 
@@ -152,6 +155,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       if (_payCcy == _transferCcy) {
         setState(() {
           _amount = _transferMoneyController.text;
+          _xRate = '1';
         });
       } else {
         _rateCalculate();
@@ -209,6 +213,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 account: _account,
                 balance: _balance,
                 amount: _amount,
+                rate: _xRate,
                 transferMoneyController: _transferMoneyController,
                 callback: _boolBut,
                 payCcyDialog: payCcyDialog,
@@ -363,18 +368,20 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         context,
         pageTransferInternalPreview,
         arguments: TransferInternalData(
-            _account,
-            _amount,
-            _transferCcy,
-            _nameController.text,
-            _accountController.text,
-            _transferMoneyController.text,
-            _payCcy,
-            _remarkController.text,
-            payeeBankCode,
-            payeeName,
-            payerBankCode,
-            payerName),
+          _account,
+          _amount,
+          _transferCcy,
+          _nameController.text,
+          _accountController.text,
+          _transferMoneyController.text,
+          _payCcy,
+          _remarkController.text,
+          payeeBankCode,
+          payeeName,
+          payerBankCode,
+          payerName,
+          _xRate,
+        ),
       );
     }
   }
@@ -400,6 +407,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       if (_payCcy == _transferCcy) {
         setState(() {
           _amount = _transferMoneyController.text;
+          _xRate = '1';
         });
       } else {
         _rateCalculate();
@@ -568,6 +576,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             if (_payCcy == _transferCcy) {
               setState(() {
                 _amount = _transferMoneyController.text;
+                _xRate = '1';
               });
             } else {
               _rateCalculate();
@@ -596,14 +605,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     setState(() {
       _transferIndex = 0;
       for (int i = 0; i < _transferCcyList.length; i++) {
-        print(_transferCcyList.length);
         if (_transferCcyList[i] == _payCcy) {
           _transferCcy = _payCcy;
-          print(_transferCcy);
           break;
         } else {
           _transferIndex++;
-          print(_transferIndex);
         }
       }
     });
@@ -641,11 +647,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                   defaultCcy: _payCcy),
               'TransferTrialReq')
           .then((data) {
-        print("====================");
-        print(data.optExAmt);
-        print(data);
         setState(() {
           _amount = data.optExAmt;
+          _xRate = data.optExRate;
         });
       }).catchError((e) {
         print(e.toString());
@@ -683,30 +687,32 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       TransferDataRepository()
           .getTransferByAccount(
               GetTransferByAccount(
-                  //转账金额
-                  money,
-                  //贷方货币
-                  _changedCcyTitle,
-                  //借方货币
-                  _changedCcyTitle,
-                  //输入密码
-                  'L5o+WYWLFVSCqHbd0Szu4Q==',
-                  //收款方银行
-                  payeeBankCode,
-                  //收款方卡号
-                  payeeCardNo,
-                  //收款方姓名
-                  payeeName,
-                  //付款方银行
-                  payerBankCode,
-                  //付款方卡号
-                  cardNo,
-                  //付款方姓名
-                  payerName,
-                  //附言
-                  remark,
-                  //验证码
-                  smsCode),
+                //转账金额
+                money,
+                //贷方货币
+                _changedCcyTitle,
+                //借方货币
+                _changedCcyTitle,
+                //输入密码
+                'L5o+WYWLFVSCqHbd0Szu4Q==',
+                //收款方银行
+                payeeBankCode,
+                //收款方卡号
+                payeeCardNo,
+                //收款方姓名
+                payeeName,
+                //付款方银行
+                payerBankCode,
+                //付款方卡号
+                cardNo,
+                //付款方姓名
+                payerName,
+                //附言
+                remark,
+                //验证码
+                smsCode,
+                _xRate,
+              ),
               'getTransferByAccount')
           .then((value) {
         HSProgressHUD.dismiss();

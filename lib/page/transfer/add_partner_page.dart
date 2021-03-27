@@ -48,7 +48,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   var _alias = '';
   var words = 20;
   String _countryText = '';
-  List<String> countryList = ['中国', '荷兰', '美国', '俄罗斯'];
+  String _countryCode = '';
+  List<String> countryList = [];
   String _language = Intl.getCurrentLocale();
   //转账费用
   String _transferFee = '';
@@ -166,24 +167,26 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     TransferDataRepository()
         .addPartner(
             AddPartnerReq(
-                _bankCode,
-                _swiftAdressReq,
-                "",
-                _countryText,
-                _centerSwiftReq,
-                _payeeAdressReq,
-                _acountController.text,
-                _nameController.text,
-                "",
-                "",
-                "",
-                _smsController.text,
-                _bankName,
-                _aliasController.text,
-                myTransferType),
+              _bankCode,
+              _swiftAdressReq,
+              "",
+              _countryText,
+              _centerSwiftReq,
+              _payeeAdressReq,
+              _acountController.text,
+              _nameController.text,
+              "",
+              "",
+              "",
+              _smsController.text,
+              _bankName,
+              _aliasController.text,
+              myTransferType,
+              _transferFeeIndex.toString(),
+              _feeUseIndex.toString(),
+            ),
             'addPartner')
         .then((data) {
-      print(_bankName + "==================");
       if (data != null) {
         Fluttertoast.showToast(msg: '添加成功');
         Navigator.of(context).pop();
@@ -456,6 +459,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                   _countryText = _language == 'zh_CN'
                       ? (value as CountryRegionModel).nameZhCN
                       : (value as CountryRegionModel).nameEN;
+                  _countryCode = (value as CountryRegionModel).countryCode;
                 });
               });
             },

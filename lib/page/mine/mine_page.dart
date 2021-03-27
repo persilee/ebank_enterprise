@@ -18,6 +18,7 @@ import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
@@ -151,38 +152,37 @@ class _MinePageState extends State<MinePage> {
     return Container(
       child: Stack(
         children: [
-          Image(
-            width: MediaQuery.of(context).size.width,
-            height: 200,
-            image: AssetImage(
-                'images/mine/mine-icon.png'), //'images/mine/mine-icon.png',
-            fit: BoxFit.cover,
-          ),
+          // Image(
+          //   width: MediaQuery.of(context).size.width,
+          //   height: 200,
+          //   image: AssetImage(
+          //       'images/mine/mine-icon.png'), //'images/mine/mine-icon.png',
+          //   fit: BoxFit.cover,
+          // ),
           Stack(
             alignment: AlignmentDirectional.bottomStart,
             children: <Widget>[
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 200,
-                decoration: BoxDecoration(color: Color(0x99000000)),
-                // decoration: BoxDecoration(color: HsgColors.mineHeadBackground),
+                // decoration: BoxDecoration(color: Color(0xAA000000)),
+                decoration: BoxDecoration(color: HsgColors.mineHeadBackground),
               ),
             ],
           ),
-          ClipRect(
-            //使图片模糊区域仅在子组件区域中
-            child: BackdropFilter(
-              //背景过滤器
-              filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0), //设置图片模糊度
-              // filter: ImageFilter.matrix(matrix4), //设置图片模糊度
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 200,
-                // margin: EdgeInsets.only(bottom: 20),
-                child: _headerInfoWidget(),
-              ),
-            ),
+          // ClipRect(
+          //   //使图片模糊区域仅在子组件区域中
+          //   child: BackdropFilter(
+          //     //背景过滤器
+          //     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0), //设置图片模糊度
+          //     child:
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 200,
+            child: _headerInfoWidget(),
           ),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -682,9 +682,14 @@ class _MinePageState extends State<MinePage> {
       //   HSProgressHUD.dismiss();
       // });
 
-      // File flie = File(_imgPath);
-      // var resultData = await ApiClient().uploadAvatar(flie);
+      File file = File(_imgPath);
+      // var resultData = await ApiClient().uploadAvatar(file);
       // print(resultData);
+      ApiClient().uploadAvatar(file, BaseBody(body: {})).then((value) {
+        print(value);
+      }).catchError((e) {
+        Fluttertoast.showToast(msg: e.toString());
+      });
     }
   }
 

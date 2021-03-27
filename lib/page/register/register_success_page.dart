@@ -113,6 +113,7 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
         .login(LoginReq(username: _account, password: password), 'login')
         .then((value) {
       setState(() {
+        HSProgressHUD.dismiss();
         //跳转至首页，并关闭前面页面
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) {
@@ -127,7 +128,6 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
           return false; //继续关闭
         });
       });
-      HSProgressHUD.dismiss();
     }).catchError((e) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
