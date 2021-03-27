@@ -11,6 +11,7 @@ import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart'
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
+import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
@@ -69,6 +70,15 @@ class _HomePageState extends State<HomePage> {
 
     // 网络请求
     _loadData();
+
+    EventBusUtils.getInstance().on<GetUserEvent>().listen((event) {
+      print("event bus msg is =" +
+          event.msg +
+          "   state info is  = " +
+          event.state.toString());
+    });
+
+    super.initState();
   }
 
   @override

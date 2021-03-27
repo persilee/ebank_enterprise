@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,17 +17,12 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchScreen_bottomImg" translatesAutoresizingMaskIntoConstraints="NO" id="hhh-lO-bH6">
-                                <rect key="frame" x="137.5" y="800" width="139.5" height="32"/>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchScreen_topImg" translatesAutoresizingMaskIntoConstraints="NO" id="KcK-Fv-Seu">
-                                <rect key="frame" x="118" y="158" width="178" height="86"/>
+                                <rect key="frame" x="137" y="801.5" width="140.5" height="30.5"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kFC-ah-fpU"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="KcK-Fv-Seu" firstAttribute="centerX" secondItem="kFC-ah-fpU" secondAttribute="centerX" id="FtS-Gl-VaJ"/>
-                            <constraint firstItem="KcK-Fv-Seu" firstAttribute="top" secondItem="kFC-ah-fpU" secondAttribute="top" constant="114" id="cWK-pJ-Y1R"/>
                             <constraint firstItem="hhh-lO-bH6" firstAttribute="centerX" secondItem="kFC-ah-fpU" secondAttribute="centerX" id="cnY-Va-dcu"/>
                             <constraint firstItem="kFC-ah-fpU" firstAttribute="bottom" secondItem="hhh-lO-bH6" secondAttribute="bottom" constant="30" id="ksL-pL-48a"/>
                         </constraints>
@@ -39,7 +34,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="launchScreen_bottomImg" width="139.5" height="31.5"/>
-        <image name="launchScreen_topImg" width="178" height="86.5"/>
+        <image name="launchScreen_bottomImg" width="140.5" height="30.5"/>
     </resources>
 </document>
