@@ -4,15 +4,15 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'over_scroll_behavior.dart';
 
-
 class CustomRefresh extends StatelessWidget {
-
   final RefreshController controller;
   final VoidCallback onRefresh;
   final VoidCallback onLoading;
   final Widget content;
 
-  const CustomRefresh({Key key, this.controller, this.onRefresh, this.onLoading, this.content}) : super(key: key);
+  const CustomRefresh(
+      {Key key, this.controller, this.onRefresh, this.onLoading, this.content})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class CustomRefresh extends StatelessWidget {
                         SizedBox(
                           child: CircularProgressIndicator(
                             valueColor:
-                            AlwaysStoppedAnimation<Color>(Colors.grey),
+                                AlwaysStoppedAnimation<Color>(Colors.grey),
                             strokeWidth: 1.6,
                           ),
                           width: 16,
