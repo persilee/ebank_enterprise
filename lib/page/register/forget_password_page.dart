@@ -272,6 +272,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     VersionDataRepository()
         .checkPhone(CheckPhoneReq(_phoneNum.text, '1'), 'checkPhoneReq')
         .then((data) {
+      HSProgressHUD.dismiss();
+
       setState(() {
         _isRegister = data.register;
         _userAccount = data.userAccount;
@@ -329,6 +331,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
           .sendSmsByPhone(
               SendSmsByPhoneNumberReq(_phoneNum.text, 'findPwd'), 'sendSms')
           .then((data) {
+        HSProgressHUD.dismiss();
         _startCountdown();
         setState(() {});
         HSProgressHUD.dismiss();
@@ -340,7 +343,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
         );
-        HSProgressHUD.dismiss();
       });
     }
   }

@@ -184,6 +184,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                 _userPhone, userType, _sms),
             'registerByAccount')
         .then((value) {
+      HSProgressHUD.dismiss();
       setState(() {
         Map listDataLogin = new Map();
         //传用户名和密码到成功页面已用于调用登录接口跳转至首页
@@ -196,7 +197,6 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
             pageRegisterSuccess, ModalRoute.withName("/"), //清除旧栈需要保留的栈 不清除就不写这句
             arguments: listDataLogin //传值
             );
-        HSProgressHUD.dismiss();
       });
     }).catchError((e) {
       HSProgressHUD.dismiss();
