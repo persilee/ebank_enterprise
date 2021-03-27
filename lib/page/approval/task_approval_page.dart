@@ -7,7 +7,7 @@ import 'dart:async';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/do_claim_task.dart';
-import 'package:ebank_mobile/data/source/model/find_to_do_task_detail_model.dart';
+import 'package:ebank_mobile/data/source/model/find_to_do_task_detail_contract_model.dart';
 import 'package:ebank_mobile/data/source/model/find_todo_task_detail_body.dart';
 import 'package:ebank_mobile/data/source/model/find_user_to_do_task.dart';
 import 'package:ebank_mobile/data/source/model/find_user_todo_task_body.dart';
@@ -27,7 +27,11 @@ import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class TaskApprovalPage extends StatefulWidget {
-  TaskApprovalPage({Key key}) : super(key: key);
+
+  final Rows data;
+  final String title;
+
+  TaskApprovalPage({Key key, this.data, this.title}) : super(key: key);
 
   @override
   _TaskApprovalPageState createState() => _TaskApprovalPageState();
@@ -40,16 +44,14 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   bool rejectToStart = true; //是否驳回至发起人
   String comment = ''; //审批意见
   String taskId = '';
-  String _title = '';
-  String _processId = '';
-  String _processKey = '';
   ScrollController _controller;
-  FindToDoTaskDetailModel _doTaskDetailModel;
+  List<Widget> _contractList = [];
+  List<Widget> _transferList = [];
+  FindToDoTaskDetailContractModel _doTaskDetailContractModel;
 
   @override
   void initState() {
     super.initState();
-    _loadData();
     _controller = ScrollController();
     //监听输入框
     focusNode.addListener(() {
@@ -58,17 +60,8 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
       bool hasListeners = focusNode.hasListeners;
       print("focusNode 兼听 hasFocus:$hasFocus  hasListeners:$hasListeners");
     });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    Map<String, dynamic> arguments = ModalRoute.of(context).settings.arguments;
-    _title = arguments['title'];
-    _processId = (arguments['data'] as Rows).processId;
-    _processKey = (arguments['data'] as Rows).processKey;
-    print('_processId: ${_processId}');
     _loadData();
+    print('aaaa');
   }
 
   @override
@@ -78,10 +71,54 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   }
 
   void _loadData() async {
+    String _processId = widget.data.processId;
+    String _processKey = widget.data.processKey;
+    print('_processId: $_processId');
     if(_processKey == 'openTdContractApproval' || _processKey == 'earlyRedTdContractApproval') {
-      _doTaskDetailModel = await ApiClient().findToDoTaskDetail(
+      _doTaskDetailContractModel = await ApiClient().findToDoTaskDetail(
           BaseBody(body: FindTodoTaskDetailBody(processId: _processId)));
-      print(_doTaskDetailModel);
+      _contractList.add(_buildTitle('基本信息'));
+      _contractList.add(_buildContentItem('产品', ''));
+      _contractList.add(_buildContentItem('存款期限',
+          _doTaskDetailContractModel?.body?.operateEndValue?.tenor ?? ''));
+      _contractList.add(_buildContentItem('金额',
+          _doTaskDetailContractModel?.body?.operateEndValue?.bal ?? ''));
+      _contractList.add(_buildContentItem('年利率', ''));
+      _contractList.add(_buildContentItem('存单货币',
+          _doTaskDetailContractModel?.body?.operateEndValue?.ccy ?? ''));
+      _contractList.add(_buildContentItem('到期指示',
+          _doTaskDetailContractModel?.body?.operateEndValue?.instCode ?? ''));
+      _contractList.add(_buildContentItem('结算账户',
+          _doTaskDetailContractModel?.body?.operateEndValue?.settDdAc ?? ''));
+      _contractList.add(_buildContentItem('扣款账户',
+          _doTaskDetailContractModel?.body?.operateEndValue?.oppAc ?? ''));
+      setState(() {});
+    } else {
+      _transferList.add(_buildTitle('转账计划信息'));
+      _transferList.add(_buildContentItem('计划名称', ''));
+      _transferList.add(_buildContentItem('预约频率',
+          _doTaskDetailContractModel?.body?.operateEndValue?.tenor ?? ''));
+      _transferList.add(_buildContentItem('首次转账时间',
+          _doTaskDetailContractModel?.body?.operateEndValue?.bal ?? ''));
+      _transferList.add(_buildContentItem('截止时间', ''));
+      _transferList.add(Padding(padding: EdgeInsets.only(top: 15)));
+      _transferList.add(_buildTitle('付款方信息'));
+      _transferList.add(_buildContentItem('付款账号',
+          _doTaskDetailContractModel?.body?.operateEndValue?.ccy ?? ''));
+      _transferList.add(_buildContentItem('账户名称',
+          _doTaskDetailContractModel?.body?.operateEndValue?.instCode ?? ''));
+      _transferList.add(Padding(padding: EdgeInsets.only(top: 15)),);
+      _transferList.add(_buildTitle('收款方信息'));
+      _transferList.add(_buildContentItem('付款账号',
+          _doTaskDetailContractModel?.body?.operateEndValue?.settDdAc ?? ''));
+      _transferList.add(_buildContentItem('账户名称',
+          _doTaskDetailContractModel?.body?.operateEndValue?.oppAc ?? ''));
+      _transferList.add(_buildContentItem('货币',
+          _doTaskDetailContractModel?.body?.operateEndValue?.oppAc ?? ''));
+      _transferList.add(_buildContentItem('金额',
+          _doTaskDetailContractModel?.body?.operateEndValue?.oppAc ?? ''));
+      _transferList.add(_buildContentItem('附言',
+          _doTaskDetailContractModel?.body?.operateEndValue?.oppAc ?? ''));
     }
   }
 
@@ -120,22 +157,6 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
           );
         });
   }
-
-//审批信息列表标题
-//   Widget _buildTitle(String title) {
-//     return Row(
-//       children: [
-//         Container(
-//           margin: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-//           child: Text(
-//             title,
-//             style: TextStyle(
-//                 color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
 
 //审批意见
   Widget _approvalComments() {
@@ -191,68 +212,6 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
       width: MediaQuery.of(context).size.width - 30,
       margin: EdgeInsets.only(top: 20, bottom: 15),
       child: _getToggleChild(),
-    );
-  }
-
-//按钮
-  Widget _buttonStyle(String buttonText) {
-    return Container(
-      decoration: BoxDecoration(
-        color: (buttonText == S.current.approval_unlock ||
-                buttonText == S.current.approval_lock)
-            ? Color(int.parse('0xff4871FF'))
-            : Colors.white,
-        border: Border.all(color: Color(int.parse('0xff4871FF')), width: 0.5),
-        borderRadius: BorderRadius.circular((4)),
-      ),
-      height: 40,
-      child: FlatButton(
-        padding: EdgeInsets.all(0),
-        disabledColor: HsgColors.btnDisabled,
-        child: Text(
-          buttonText,
-          style: TextStyle(
-            fontSize: 13,
-            color: (buttonText == S.current.approval_unlock ||
-                    buttonText == S.current.approval_lock)
-                ? Colors.white
-                : Colors.black,
-          ),
-        ),
-        onPressed: () {
-          if (buttonText == S.current.approval_lock) {
-            _toggle();
-            _doClaimTask();
-            print(_controller.position.maxScrollExtent);
-            WidgetsBinding.instance.addPostFrameCallback((callback) {
-              print("addPostFrameCallback be invoke");
-              _controller.animateTo(
-                _controller.position.maxScrollExtent,
-                duration: Duration(milliseconds: 500),
-                curve: Curves.linear,
-              );
-            });
-          } else {
-            if (comment.length != 0) {
-              if (buttonText == S.current.reject_to_sponsor ||
-                  buttonText == S.current.reject) {
-                approveResult = false;
-              }
-              _getTaskApproval(buttonText == S.current.reject_to_sponsor
-                  ? rejectToStart
-                  : null);
-              Navigator.pushReplacementNamed(context, pageDepositRecordSucceed,
-                  arguments: 'taskApproval');
-            } else {
-              if (buttonText == S.current.approval_unlock) {
-                Navigator.pop(context);
-              } else {
-                _alertDialog();
-              }
-            }
-          }
-        },
-      ),
     );
   }
 
@@ -389,15 +348,13 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> arguments = ModalRoute.of(context).settings.arguments;
-    String title = arguments['title'];
-    Rows application = arguments['data'];
 
-    taskId = application.taskId;
+    print(_doTaskDetailContractModel?.body?.operateEndValue?.matAmt);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(_title),
+        title: Text(widget.title),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -410,9 +367,8 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
               // children: informationDisplayList(context, approvalInfo),
               children: [
                 Padding(padding: EdgeInsets.only(top: 15)),
-                _buildTitle('基本信息'),
-                _buildContentItem('产品',
-                    _doTaskDetailModel?.body?.operateEndValue?.bppdCode ?? ''),
+                ..._contractList,
+                ..._transferList,
               ],
             ),
             Padding(padding: EdgeInsets.only(top: 15)),

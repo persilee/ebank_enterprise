@@ -1,10 +1,10 @@
-/// requestId : "202103251430590000173858"
-/// msgId : "202103251430590000145929"
-/// spanId : "98af1617317646c08d956f3cc2de9f1e"
+/// requestId : "202103260939370000191925"
+/// msgId : "202103260939370000159477"
+/// spanId : "c740136b5b324c158f086c877281e4a9"
 /// parentSpanId : null
 /// accDate : "2021-01-23"
-/// startDateTime : "2021-03-25 14:30:59"
-/// endDateTime : "2021-03-25 14:30:59"
+/// startDateTime : "2021-03-26 09:39:37"
+/// endDateTime : "2021-03-26 09:39:37"
 /// locale : "zh_HK"
 /// routeInfo : "hbs-ebank-wkfl-service"
 /// userId : "989185387615485958"
@@ -19,12 +19,12 @@
 /// serviceId : null
 /// sourceChannel : null
 /// seq : 1
-/// body : {"userId":"989185387615485956","userName":null,"assignee":null,"processTitle":"openTdContractApprovalTitle","processKey":"openTdContractApproval","businessKey":null,"tenantId":null,"operateBeforeValue":null,"operateEndValue":{"ciNo":"818000000113","bppdCode":"TDRBCBNF","tenor":"M001","auctCale":"1","accuPeriod":"2","depositType":"A","ccy":"USD","bal":"1500","settDdAc":"0101238000001758","oppAc":"0101238000001758","instCode":"1","payPassword":"","smsCode":""},"servCtr":"hbs-ebank-general-service","custId":null,"commentList":[],"result":true,"taskKey":"TASK1","taskCount":1}
+/// body : {"userId":"989185387615485956","userName":null,"assignee":null,"processTitle":"openTdContractApprovalTitle","processKey":"openTdContractApproval","businessKey":null,"tenantId":null,"operateBeforeValue":null,"operateEndValue":{"conNo":"01018580000007680001","mainAc":"0101858000000768","transferAc":"0101208000001528","settBal":"0","eryRate":"0","eryInt":"0","hdlFee":"0","pnltFee":"0","settDdAc":"0101238000001538","matAmt":"0","ciNo":"818000000113","bppdCode":"TDRBCBNF","tenor":"M001","auctCale":"1","accuPeriod":"2","depositType":"A","ccy":"USD","bal":"5000","oppAc":"0101208000001528","instCode":"1","payPassword":"","smsCode":""},"servCtr":"hbs-ebank-general-service","custId":null,"commentList":[],"result":true,"taskKey":"TASK1","taskCount":1}
 /// msgCd : "0000"
 /// msgInfo : "Success"
 /// msgType : "N"
 
-class FindToDoTaskDetailModel {
+class FindToDoTaskDetailContractModel {
   String _requestId;
   String _msgId;
   String _spanId;
@@ -77,7 +77,7 @@ class FindToDoTaskDetailModel {
   String get msgInfo => _msgInfo;
   String get msgType => _msgType;
 
-  FindToDoTaskDetailModel({
+  FindToDoTaskDetailContractModel({
       String requestId, 
       String msgId, 
       String spanId, 
@@ -130,7 +130,7 @@ class FindToDoTaskDetailModel {
     _msgType = msgType;
 }
 
-  FindToDoTaskDetailModel.fromJson(dynamic json) {
+  FindToDoTaskDetailContractModel.fromJson(dynamic json) {
     _requestId = json["requestId"];
     _msgId = json["msgId"];
     _spanId = json["spanId"];
@@ -200,7 +200,7 @@ class FindToDoTaskDetailModel {
 /// businessKey : null
 /// tenantId : null
 /// operateBeforeValue : null
-/// operateEndValue : {"ciNo":"818000000113","bppdCode":"TDRBCBNF","tenor":"M001","auctCale":"1","accuPeriod":"2","depositType":"A","ccy":"USD","bal":"1500","settDdAc":"0101238000001758","oppAc":"0101238000001758","instCode":"1","payPassword":"","smsCode":""}
+/// operateEndValue : {"conNo":"01018580000007680001","mainAc":"0101858000000768","transferAc":"0101208000001528","settBal":"0","eryRate":"0","eryInt":"0","hdlFee":"0","pnltFee":"0","settDdAc":"0101238000001538","matAmt":"0","ciNo":"818000000113","bppdCode":"TDRBCBNF","tenor":"M001","auctCale":"1","accuPeriod":"2","depositType":"A","ccy":"USD","bal":"5000","oppAc":"0101208000001528","instCode":"1","payPassword":"","smsCode":""}
 /// servCtr : "hbs-ebank-general-service"
 /// custId : null
 /// commentList : []
@@ -289,7 +289,7 @@ class DataBody {
     if (json["commentList"] != null) {
       _commentList = [];
       json["commentList"].forEach((v) {
-        // _commentList.add([].fromJson(v));
+        // _commentList.add(dynamic.fromJson(v));
       });
     }
     _result = json["result"];
@@ -323,6 +323,16 @@ class DataBody {
 
 }
 
+/// conNo : "01018580000007680001"
+/// mainAc : "0101858000000768"
+/// transferAc : "0101208000001528"
+/// settBal : "0"
+/// eryRate : "0"
+/// eryInt : "0"
+/// hdlFee : "0"
+/// pnltFee : "0"
+/// settDdAc : "0101238000001538"
+/// matAmt : "0"
 /// ciNo : "818000000113"
 /// bppdCode : "TDRBCBNF"
 /// tenor : "M001"
@@ -330,14 +340,23 @@ class DataBody {
 /// accuPeriod : "2"
 /// depositType : "A"
 /// ccy : "USD"
-/// bal : "1500"
-/// settDdAc : "0101238000001758"
-/// oppAc : "0101238000001758"
+/// bal : "5000"
+/// oppAc : "0101208000001528"
 /// instCode : "1"
 /// payPassword : ""
 /// smsCode : ""
 
 class OperateEndValue {
+  String _conNo;
+  String _mainAc;
+  String _transferAc;
+  String _settBal;
+  String _eryRate;
+  String _eryInt;
+  String _hdlFee;
+  String _pnltFee;
+  String _settDdAc;
+  String _matAmt;
   String _ciNo;
   String _bppdCode;
   String _tenor;
@@ -346,12 +365,21 @@ class OperateEndValue {
   String _depositType;
   String _ccy;
   String _bal;
-  String _settDdAc;
   String _oppAc;
   String _instCode;
   String _payPassword;
   String _smsCode;
 
+  String get conNo => _conNo;
+  String get mainAc => _mainAc;
+  String get transferAc => _transferAc;
+  String get settBal => _settBal;
+  String get eryRate => _eryRate;
+  String get eryInt => _eryInt;
+  String get hdlFee => _hdlFee;
+  String get pnltFee => _pnltFee;
+  String get settDdAc => _settDdAc;
+  String get matAmt => _matAmt;
   String get ciNo => _ciNo;
   String get bppdCode => _bppdCode;
   String get tenor => _tenor;
@@ -360,13 +388,22 @@ class OperateEndValue {
   String get depositType => _depositType;
   String get ccy => _ccy;
   String get bal => _bal;
-  String get settDdAc => _settDdAc;
   String get oppAc => _oppAc;
   String get instCode => _instCode;
   String get payPassword => _payPassword;
   String get smsCode => _smsCode;
 
   OperateEndValue({
+      String conNo, 
+      String mainAc, 
+      String transferAc, 
+      String settBal, 
+      String eryRate, 
+      String eryInt, 
+      String hdlFee, 
+      String pnltFee, 
+      String settDdAc, 
+      String matAmt, 
       String ciNo, 
       String bppdCode, 
       String tenor, 
@@ -375,11 +412,20 @@ class OperateEndValue {
       String depositType, 
       String ccy, 
       String bal, 
-      String settDdAc, 
       String oppAc, 
       String instCode, 
       String payPassword, 
       String smsCode}){
+    _conNo = conNo;
+    _mainAc = mainAc;
+    _transferAc = transferAc;
+    _settBal = settBal;
+    _eryRate = eryRate;
+    _eryInt = eryInt;
+    _hdlFee = hdlFee;
+    _pnltFee = pnltFee;
+    _settDdAc = settDdAc;
+    _matAmt = matAmt;
     _ciNo = ciNo;
     _bppdCode = bppdCode;
     _tenor = tenor;
@@ -388,7 +434,6 @@ class OperateEndValue {
     _depositType = depositType;
     _ccy = ccy;
     _bal = bal;
-    _settDdAc = settDdAc;
     _oppAc = oppAc;
     _instCode = instCode;
     _payPassword = payPassword;
@@ -396,6 +441,16 @@ class OperateEndValue {
 }
 
   OperateEndValue.fromJson(dynamic json) {
+    _conNo = json["conNo"];
+    _mainAc = json["mainAc"];
+    _transferAc = json["transferAc"];
+    _settBal = json["settBal"];
+    _eryRate = json["eryRate"];
+    _eryInt = json["eryInt"];
+    _hdlFee = json["hdlFee"];
+    _pnltFee = json["pnltFee"];
+    _settDdAc = json["settDdAc"];
+    _matAmt = json["matAmt"];
     _ciNo = json["ciNo"];
     _bppdCode = json["bppdCode"];
     _tenor = json["tenor"];
@@ -404,7 +459,6 @@ class OperateEndValue {
     _depositType = json["depositType"];
     _ccy = json["ccy"];
     _bal = json["bal"];
-    _settDdAc = json["settDdAc"];
     _oppAc = json["oppAc"];
     _instCode = json["instCode"];
     _payPassword = json["payPassword"];
@@ -413,6 +467,16 @@ class OperateEndValue {
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
+    map["conNo"] = _conNo;
+    map["mainAc"] = _mainAc;
+    map["transferAc"] = _transferAc;
+    map["settBal"] = _settBal;
+    map["eryRate"] = _eryRate;
+    map["eryInt"] = _eryInt;
+    map["hdlFee"] = _hdlFee;
+    map["pnltFee"] = _pnltFee;
+    map["settDdAc"] = _settDdAc;
+    map["matAmt"] = _matAmt;
     map["ciNo"] = _ciNo;
     map["bppdCode"] = _bppdCode;
     map["tenor"] = _tenor;
@@ -421,7 +485,6 @@ class OperateEndValue {
     map["depositType"] = _depositType;
     map["ccy"] = _ccy;
     map["bal"] = _bal;
-    map["settDdAc"] = _settDdAc;
     map["oppAc"] = _oppAc;
     map["instCode"] = _instCode;
     map["payPassword"] = _payPassword;
