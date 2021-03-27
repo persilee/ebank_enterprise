@@ -426,7 +426,7 @@ class _MinePageState extends State<MinePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _belongCustStatus == '0' ? _userInfo() : _userOffInfo(),
+                _belongCustStatus == '6' ? _userInfo() : _userOffInfo(),
                 // Text(
                 //   _userName,
                 //   textAlign: TextAlign.start,
@@ -478,7 +478,7 @@ class _MinePageState extends State<MinePage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _nameInfo((MediaQuery.of(context).size.width / 3 * 2 - 130)),
+        _nameInfo((MediaQuery.of(context).size.width / 3 * 2 - 140)),
         CustomButton(
           margin: EdgeInsets.all(0),
           height: 35,

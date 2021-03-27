@@ -149,6 +149,7 @@ class UserInfoResp extends Object {
   String processId;
 
   /// 用户开户状态(
+  /// -1 - 非受邀为开户客户
   /// 0 - 已发送快速开户邀请
   /// 1 - 资料提交企服商Maker审核
   /// 2 - 企服商Maker通过审核
@@ -162,6 +163,14 @@ class UserInfoResp extends Object {
   /// 10 - 核心开客户失败
   /// 11 - 核心开账户失败
   /// 12 - 正常
+  /// 13 - 受限客户
+  /// 后台更新状态
+  /// 0 - 受邀客户未开户
+  /// 1 - 非受邀客户
+  /// 2 - 审核中
+  /// 3 - 已驳回
+  /// 4 - 正常受限客户
+  /// 5 - 正常正式客户
   @JsonKey(name: 'belongCustStatus')
   String belongCustStatus;
 

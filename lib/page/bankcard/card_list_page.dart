@@ -31,11 +31,7 @@ class CardListPage extends StatefulWidget {
 
 class _CardListPageState extends State<CardListPage> {
   List<RemoteBankCard> cards = <RemoteBankCard>[];
-  // var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
   List<bool> _isShow = <bool>[];
-
-  // List<GetCardLimitByCardNoResp> _cardLimitList = <GetCardLimitByCardNoResp>[];
-  // List<Map> _totalbal = <Map>[];
 
   Map _cardLimitMap = <int, GetCardLimitByCardNoResp>{};
   Map _totalbalMap = <int, CardBalBean>{};
@@ -51,10 +47,13 @@ class _CardListPageState extends State<CardListPage> {
     _refreshController = RefreshController();
     _scrollController = ScrollController();
     _loadData();
-    // 初次加载显示loading indicator, 会自动调用_loadData
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   refrestIndicatorKey.currentState.show();
-    // });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+    _refreshController.dispose();
   }
 
   @override
@@ -68,23 +67,26 @@ class _CardListPageState extends State<CardListPage> {
       body: _isLoading
           ? HsgLoading()
           : _cardsLength > 0
-              ? CustomRefresh(
-                  controller: _refreshController,
-                  onLoading: () {
-                    //加载更多完成
-                    _refreshController.loadComplete();
-                    //显示没有更多数据
-                    _refreshController.loadNoData();
-                  },
-                  onRefresh: () {
-                    //刷新完成
-                    _refreshController.refreshCompleted();
-                    _refreshController.footerMode.value = LoadStatus.canLoading;
-                  },
-                  content: Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.all(6.0),
-                    child: _getlistViewList(context),
+              ? Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.all(6.0),
+                  child: CustomRefresh(
+                    controller: _refreshController,
+                    onLoading: () {
+                      //加载更多完成
+                      // _refreshController.loadComplete();
+                      //显示没有更多数据
+                      _refreshController.loadNoData();
+                    },
+                    onRefresh: () {
+                      _loadData();
+                      //刷新完成
+                      // _refreshController.refreshCompleted();
+                      // _refreshController.footerMode.value =
+                      //     LoadStatus.canLoading;
+                      print("刷新完成");
+                    },
+                    content: _getlistViewList(context),
                   ),
                 )
               : notDataContainer(context, S.current.no_data_now),
@@ -123,6 +125,7 @@ class _CardListPageState extends State<CardListPage> {
   //封装ListView.Builder
   Widget _getListViewBuilder(Widget function) {
     return ListView.builder(
+        controller: _scrollController,
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         itemCount: 1,
@@ -234,22 +237,35 @@ class _CardListPageState extends State<CardListPage> {
     );
   }
 
-  Future<void> _loadData() async {
-    _isLoading = true;
+  _loadData() {
+    if (_cardsLength == 0) {
+      _isLoading = true;
+    }
     CardDataRepository().getCardList('getCardList').then((data) {
       if (data.cardList != null) {
         setState(() {
           cards.clear();
+          _totalbalMap.clear();
+          _cardLimitMap.clear();
           cards.addAll(data.cardList);
           _cardsLength = cards.length;
           if (_isShow.length == 0) {
             _isShow = new List.filled(_cardsLength, false);
             // print(_isShow.toString());
+          } else {
+            for (int i = 0; i < _isShow.length; i++) {
+              if (_isShow[i] == true) {
+                _isShow[i] = false;
+              }
+            }
           }
+          _refreshController.refreshCompleted();
+          _refreshController.footerMode.value = LoadStatus.canLoading;
           _isLoading = false;
         });
       }
     }).catchError((e) {
+      _isLoading = false;
       Fluttertoast.showToast(msg: e.toString());
     });
   }
