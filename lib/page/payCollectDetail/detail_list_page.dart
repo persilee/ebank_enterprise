@@ -60,6 +60,7 @@ class _DetailListPageState extends State<DetailListPage> {
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>(); //下拉刷新
   TextEditingController _startAmountController = TextEditingController();
   TextEditingController _endAmountController = TextEditingController();
+  String selectAccNo;
 
   @override
   // ignore: must_call_super
@@ -860,6 +861,7 @@ class _DetailListPageState extends State<DetailListPage> {
     if (result != null && result != false) {
       setState(() {
         _position = result;
+        selectAccNo = _cardList[result];
       });
       if (_position != 0) {
         _accNoList.clear();
@@ -878,7 +880,12 @@ class _DetailListPageState extends State<DetailListPage> {
   _getRevenueByCards(String localDateStart, List<String> cards) async {
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
+    String accNo = _accNoList.toString();
+    selectAccNo = selectAccNo == _cardList[0] ? '' : selectAccNo;
+
     print(">>>>>>>>$_cardList");
+    print(">>>>>>one>$selectAccNo");
+
     print(">>>>>>>$custID");
     print(">>>>>>>>$_endDate");
     print(">>>>>>>$_startDate");
@@ -888,12 +895,12 @@ class _DetailListPageState extends State<DetailListPage> {
         .getRevenueByCards(
             GetRevenueByCardsReq(
                 'CNY',
-                '2021-03-29', //结束时间     _endDate
-                '2020-01-02', //开始时间     _start
+                '$_endDate', //结束时间     '$_endDate'
+                '$_startDate', //开始时间   '$_startDate'
                 0, //分页
                 0, //分页
-                //acNo: '0101208000001528',
-                ciNo: '818000000113'),
+                acNo: '$selectAccNo', //''
+                ciNo: '$custID'), //'818000000113'
             'GetRevenueByCardsReq')
         .then((data) {
       HSProgressHUD.dismiss();
@@ -903,7 +910,12 @@ class _DetailListPageState extends State<DetailListPage> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
       HSProgressHUD.dismiss();
     });
   }

@@ -351,7 +351,7 @@ class _RegisterPageState extends State<RegisterPage> {
         HSProgressHUD.dismiss();
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
         toastLength: Toast.LENGTH_SHORT,

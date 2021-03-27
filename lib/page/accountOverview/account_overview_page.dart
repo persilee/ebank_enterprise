@@ -17,6 +17,7 @@ import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,10 +32,10 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   String netAssets = '0.00';
   String totalLiabilities = '0.00';
   String localCcy = '';
-  String ddTotal = '0.00';
+  String ddTotal = '0';
   String ddCcy = '';
-  String tdTotal = '0.00';
-  String lnTotal = '0.00';
+  String tdTotal = '0';
+  String lnTotal = '0';
 
   List<CardListBal> ddList = [];
   List<TedpListBal> tdList = [];
@@ -90,7 +91,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                       pinned: true,
                       backgroundColor: Colors.yellowAccent[300],
                       floating: true,
-                      expandedHeight: 214.3,
+                      expandedHeight: MediaQuery.of(context).size.height / 3.4,
                       iconTheme: IconThemeData(color: Color(0xffFEFEFE)),
                       textTheme: TextTheme(
                         headline6: TextStyle(
@@ -113,6 +114,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
 
                           //头部--内容开始
                           child: Container(
+                            height: MediaQuery.of(context).size.height,
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 begin: Alignment.topLeft,
@@ -463,7 +465,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.only(bottom: 27),
+          padding: EdgeInsets.only(bottom: 30),
           child: _totalAssets(),
         ),
         Row(
@@ -663,7 +665,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     setState(() {
       localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
     });
-
+    HSProgressHUD.show();
     // 一个接口拿活期，定期总额
     DepositDataRepository()
         .getCardListBalByUser(
@@ -703,9 +705,16 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
           double totalAssetsCompute = netAssetCompute - lnTotalCompute;
           totalAssets = totalAssetsCompute.toStringAsFixed(2);
         });
+        HSProgressHUD.dismiss();
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
     });
   }
 }
