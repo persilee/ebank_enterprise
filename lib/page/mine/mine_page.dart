@@ -627,19 +627,21 @@ class _MinePageState extends State<MinePage> {
 
   //修改语言显示
   void _changeUserInfoShow(UserInfoResp model) {
-    setState(() {
-      // _headPortraitUrl = model.headPortrait; //头像地址
-      _enterpriseName = _language == 'zh_CN'
-          ? model.custLocalName
-          : model.custEngName; // 企业名称
-      _userName = _language == 'zh_CN'
-          ? model.localUserName
-          : model.englishUserName; // 姓名
-      _characterName = _language == 'zh_CN'
-          ? model.roleLocalName
-          : model.roleEngName; //用户角色名称
-      _lastLoginTime = model.lastLoginTime; // 上次登录时间
-    });
+    if (this.mounted) {
+      setState(() {
+        // _headPortraitUrl = model.headPortrait; //头像地址
+        _enterpriseName = _language == 'zh_CN'
+            ? model.custLocalName
+            : model.custEngName; // 企业名称
+        _userName = _language == 'zh_CN'
+            ? model.localUserName
+            : model.englishUserName; // 姓名
+        _characterName = _language == 'zh_CN'
+            ? model.roleLocalName
+            : model.roleEngName; //用户角色名称
+        _lastLoginTime = model.lastLoginTime; // 上次登录时间
+      });
+    }
   }
 
   //设置头像
@@ -704,19 +706,21 @@ class _MinePageState extends State<MinePage> {
       'getUserInfo',
     )
         .then((data) {
-      setState(() {
-        _userInfoResp = data;
-        _userName = data.actualName; // 姓名
-        _headPortraitUrl = data.headPortrait; //头像
-        _characterName = data.roleLocalName; //角色
-        _enterpriseName = data.custLocalName; //公司名
-        _belongCustStatus = data.belongCustStatus; //用户状态
-        _lastLoginTime = data.lastLoginTime; // 上次登录时间
-        print(_userName);
-        // _userType = data.userType; //用户类型
-        // _userPhone = data.userPhone; //用户手机号
-        // _areaCode = data.areaCode; //区号
-      });
+      if (this.mounted) {
+        setState(() {
+          _userInfoResp = data;
+          _userName = data.actualName; // 姓名
+          _headPortraitUrl = data.headPortrait; //头像
+          _characterName = data.roleLocalName; //角色
+          _enterpriseName = data.custLocalName; //公司名
+          _belongCustStatus = data.belongCustStatus; //用户状态
+          _lastLoginTime = data.lastLoginTime; // 上次登录时间
+          print(_userName);
+          // _userType = data.userType; //用户类型
+          // _userPhone = data.userPhone; //用户手机号
+          // _areaCode = data.areaCode; //区号
+        });
+      }
       _changeUserInfoShow(_userInfoResp);
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString());
@@ -759,22 +763,24 @@ class _MinePageState extends State<MinePage> {
         .logout(LogoutReq(userID, _userName), 'logout')
         .then((data) {
       HSProgressHUD.dismiss();
-      setState(() {
-        // prefs.setString(ConfigKey.USER_ACCOUNT, '');
-        // prefs.setString(ConfigKey.USER_ID, '');
-        // prefs.setString(ConfigKey.NET_TOKEN, '');
-        // Navigator.pushNamed(context, pageLogin);
-        // Navigator.pushNamed(context, pageLogin);
-        Future.delayed(Duration.zero, () {
-          Navigator.pushAndRemoveUntil(
-              context,
-              new MaterialPageRoute(builder: (context) => new LoginPage()),
-              (route) => false);
-        });
+      if (this.mounted) {
+        setState(() {
+          // prefs.setString(ConfigKey.USER_ACCOUNT, '');
+          // prefs.setString(ConfigKey.USER_ID, '');
+          // prefs.setString(ConfigKey.NET_TOKEN, '');
+          // Navigator.pushNamed(context, pageLogin);
+          // Navigator.pushNamed(context, pageLogin);
+          Future.delayed(Duration.zero, () {
+            Navigator.pushAndRemoveUntil(
+                context,
+                new MaterialPageRoute(builder: (context) => new LoginPage()),
+                (route) => false);
+          });
 
-        HSProgressHUD.showInfo(status: S.of(context).logoutSuccess);
-        //  S.of(context).please_input_password
-      });
+          HSProgressHUD.showInfo(status: S.of(context).logoutSuccess);
+          //  S.of(context).please_input_password
+        });
+      }
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.dismiss();

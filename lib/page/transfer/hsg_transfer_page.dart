@@ -532,6 +532,7 @@ class _TransferPageState extends State<TransferPage> {
   // }
 
   Future<void> _loadData() async {
+    HSProgressHUD.show();
     TransferDataRepository()
         .getTransferPartnerList(
       GetTransferPartnerListReq(1, 10),
@@ -539,18 +540,22 @@ class _TransferPageState extends State<TransferPage> {
     )
         .then((data) {
       print('$data');
-      setState(() {
-        if (data.rows != null) {
+      // setState(() {
+      if (data.rows != null) {
+        if (this.mounted) {
           setState(() {
             _partnerListData.clear();
             _partnerListData.addAll(data.rows);
             _isShowNoDataWidget = _partnerListData.length > 0 ? false : true;
           });
         }
-      });
+        HSProgressHUD.dismiss();
+      }
+      // });
     }).catchError((e) {
-      HSProgressHUD.showError(status: e.toString());
+      // HSProgressHUD.showError(status: e.toString());
       print('${e.toString()}');
+      HSProgressHUD.dismiss();
     });
   }
 }

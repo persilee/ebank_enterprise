@@ -33,6 +33,7 @@ class _SetPayPageState extends State<SetPayPage> {
   var _phoneNumber = '';
   var _userId = '';
   var _userAccount = '';
+  var _belongCustStatus = '0'; //用户状态
 
   @override
   void initState() {
@@ -49,9 +50,12 @@ class _SetPayPageState extends State<SetPayPage> {
   Widget build(BuildContext context) {
     setState(() {
       Map map = ModalRoute.of(context).settings.arguments;
-      _certificateNo = map['certificateNo'];
-      _certificateType = map['certificateType'];
-      _phoneNumber = map['phoneNumber'];
+      if (map != null) {
+        _certificateNo = map['certificateNo'];
+        _certificateType = map['certificateType'];
+        _phoneNumber = map['phoneNumber'];
+        _belongCustStatus = map['belongCustStatus'];
+      }
     });
     return new Scaffold(
       appBar: AppBar(
@@ -160,7 +164,11 @@ class _SetPayPageState extends State<SetPayPage> {
               'setTransactionPassword')
           .then((data) {
         HSProgressHUD.dismiss();
-        Navigator.of(context)..pop()..pop()..pop();
+        if (_belongCustStatus == '6') {
+          Navigator.of(context)..pop()..pop()..pop();
+        } else {
+          Navigator.of(context)..pop()..pop();
+        }
         Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
       }).catchError((e) {
         HSProgressHUD.showError(status: e.toString());

@@ -36,6 +36,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   Timer _timer;
   int countdownTime = 0;
   String _phone = '';
+  var _belongCustStatus = '0'; //用户状态
 
   @override
   void initState() {
@@ -160,12 +161,16 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       'getUserInfo',
     )
         .then((data) {
-      setState(() {
-        _phone = data.userPhone;
-        if (data.areaCode != null) {
-          _officeAreaCodeText = data.areaCode; //区号
-        }
-      });
+      if (this.mounted) {
+        setState(() {
+          _belongCustStatus =
+              data.belongCustStatus != null ? data.belongCustStatus : '';
+          _phone = data.userPhone != null ? data.userPhone : '';
+          if (data.areaCode != null) {
+            _officeAreaCodeText = data.areaCode; //区号
+          }
+        });
+      }
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.showError(status: e.toString());
@@ -184,7 +189,14 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       //请求
       HSProgressHUD.show();
       //请求成功后跳转
-      Navigator.pushNamed(context, iDcardVerification, arguments: _phone);
+      Map map = new Map();
+      map['certificateNo'] = '0';
+      map['certificateType'] = '0';
+      map['phoneNumber'] = _phone;
+      map['belongCustStatus'] = _belongCustStatus;
+      _belongCustStatus == '6'
+          ? Navigator.pushNamed(context, iDcardVerification, arguments: _phone)
+          : Navigator.pushNamed(context, setPayPage, arguments: map);
       //请求结束
       HSProgressHUD.dismiss();
     }
@@ -202,13 +214,15 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   _startCountdown() {
     countdownTime = 120;
     final call = (timer) {
-      setState(() {
-        if (countdownTime < 1) {
-          _timer.cancel();
-        } else {
-          countdownTime -= 1;
-        }
-      });
+      if (this.mounted) {
+        setState(() {
+          if (countdownTime < 1) {
+            _timer.cancel();
+          } else {
+            countdownTime -= 1;
+          }
+        });
+      }
     };
     _timer = Timer.periodic(Duration(seconds: 1), call);
   }
@@ -316,9 +330,11 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
             SendSmsByPhoneNumberReq(_phone, 'transactionPwd'), 'sendSms')
         .then((data) {
       _startCountdown();
-      setState(() {
-        // _sms.text = '123456';
-      });
+      if (this.mounted) {
+        setState(() {
+          // _sms.text = '123456';
+        });
+      }
       HSProgressHUD.dismiss();
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
