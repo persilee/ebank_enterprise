@@ -151,38 +151,37 @@ class _MinePageState extends State<MinePage> {
     return Container(
       child: Stack(
         children: [
-          Image(
-            width: MediaQuery.of(context).size.width,
-            height: 200,
-            image: AssetImage(
-                'images/mine/mine-icon.png'), //'images/mine/mine-icon.png',
-            fit: BoxFit.cover,
-          ),
+          // Image(
+          //   width: MediaQuery.of(context).size.width,
+          //   height: 200,
+          //   image: AssetImage(
+          //       'images/mine/mine-icon.png'), //'images/mine/mine-icon.png',
+          //   fit: BoxFit.cover,
+          // ),
           Stack(
             alignment: AlignmentDirectional.bottomStart,
             children: <Widget>[
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 200,
-                decoration: BoxDecoration(color: Color(0x99000000)),
-                // decoration: BoxDecoration(color: HsgColors.mineHeadBackground),
+                // decoration: BoxDecoration(color: Color(0xAA000000)),
+                decoration: BoxDecoration(color: HsgColors.mineHeadBackground),
               ),
             ],
           ),
-          ClipRect(
-            //使图片模糊区域仅在子组件区域中
-            child: BackdropFilter(
-              //背景过滤器
-              filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0), //设置图片模糊度
-              // filter: ImageFilter.matrix(matrix4), //设置图片模糊度
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 200,
-                // margin: EdgeInsets.only(bottom: 20),
-                child: _headerInfoWidget(),
-              ),
-            ),
+          // ClipRect(
+          //   //使图片模糊区域仅在子组件区域中
+          //   child: BackdropFilter(
+          //     //背景过滤器
+          //     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0), //设置图片模糊度
+          //     child:
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 200,
+            child: _headerInfoWidget(),
           ),
+          //   ),
+          // ),
         ],
       ),
     );
