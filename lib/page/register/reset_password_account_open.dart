@@ -168,6 +168,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
     PublicParametersRepository()
         .getIdType(GetIdTypeReq('CICID'), 'GetIdTypeReq')
         .then((data) {
+    
       if (data.publicCodeGetRedisRspDtoList != null) {
         print('data.publicCodeGetRedisRspDtoList222222');
         print(data);
@@ -236,6 +237,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                 _cardNumber.text, _certTypeKey, _userPhone, _userName.text),
             'realNameAuthByThreeFactor')
         .then((data) {
+      HSProgressHUD.dismiss();
       print(_cardNumber.text +
           '-' +
           _certTypeKey +
