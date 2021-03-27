@@ -238,6 +238,9 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录操作
   _login(BuildContext context) async {
+    //登录以输入框的值为准
+    _account = _accountTC.text;
+    _password = _passwordTC.text;
     if (!_judgeCanLogin()) {
       return;
     }
@@ -246,9 +249,6 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
     HSProgressHUD.show();
-    //登录以输入框的值为准
-    _account = _accountTC.text;
-    _password = _passwordTC.text;
 
     String password = EncryptUtil.aesEncode(_password);
 
