@@ -541,7 +541,6 @@ class _MinePageState extends State<MinePage> {
   //用户名
   Widget _nameInfo(double maxWidth) {
     return Container(
-      color: Colors.red,
       constraints: BoxConstraints(
         maxWidth: maxWidth,
       ),
