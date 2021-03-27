@@ -228,13 +228,15 @@ class _ChangePayPageState extends State<ChangePayPage> {
   _startCountdown() {
     countdownTime = 120;
     final call = (timer) {
-      setState(() {
-        if (countdownTime < 1) {
-          _timer.cancel();
-        } else {
-          countdownTime -= 1;
-        }
-      });
+      if (this.mounted) {
+        setState(() {
+          if (countdownTime < 1) {
+            _timer.cancel();
+          } else {
+            countdownTime -= 1;
+          }
+        });
+      }
     };
     _timer = Timer.periodic(Duration(seconds: 1), call);
   }
@@ -312,9 +314,11 @@ class _ChangePayPageState extends State<ChangePayPage> {
             SendSmsByPhoneNumberReq(_phoneNo, 'transactionPwd'), 'sendSms')
         .then((data) {
       _startCountdown();
-      setState(() {
-        // _sms.text = '123456';
-      });
+      if (this.mounted) {
+        setState(() {
+          // _sms.text = '123456';
+        });
+      }
       HSProgressHUD.dismiss();
     }).catchError((e) {
       HSProgressHUD.showError(status: e.toString());

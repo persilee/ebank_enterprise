@@ -243,26 +243,28 @@ class _CardListPageState extends State<CardListPage> {
     }
     CardDataRepository().getCardList('getCardList').then((data) {
       if (data.cardList != null) {
-        setState(() {
-          cards.clear();
-          _totalbalMap.clear();
-          _cardLimitMap.clear();
-          cards.addAll(data.cardList);
-          _cardsLength = cards.length;
-          if (_isShow.length == 0) {
-            _isShow = new List.filled(_cardsLength, false);
-            // print(_isShow.toString());
-          } else {
-            for (int i = 0; i < _isShow.length; i++) {
-              if (_isShow[i] == true) {
-                _isShow[i] = false;
+        if (this.mounted) {
+          setState(() {
+            cards.clear();
+            _totalbalMap.clear();
+            _cardLimitMap.clear();
+            cards.addAll(data.cardList);
+            _cardsLength = cards.length;
+            if (_isShow.length == 0) {
+              _isShow = new List.filled(_cardsLength, false);
+              // print(_isShow.toString());
+            } else {
+              for (int i = 0; i < _isShow.length; i++) {
+                if (_isShow[i] == true) {
+                  _isShow[i] = false;
+                }
               }
             }
-          }
-          _refreshController.refreshCompleted();
-          _refreshController.footerMode.value = LoadStatus.canLoading;
-          _isLoading = false;
-        });
+            _refreshController.refreshCompleted();
+            _refreshController.footerMode.value = LoadStatus.canLoading;
+            _isLoading = false;
+          });
+        }
       }
     }).catchError((e) {
       _isLoading = false;
@@ -343,21 +345,25 @@ class _CardListPageState extends State<CardListPage> {
           print(data);
           data.forEach((element) {
             if (element is GetCardLimitByCardNoResp) {
-              setState(() {
-                //额度详情
-                _cardLimitMap[position] = element;
-                // _cardLimitList.insert(position, element);
-              });
+              if (this.mounted) {
+                setState(() {
+                  //额度详情
+                  _cardLimitMap[position] = element;
+                  // _cardLimitList.insert(position, element);
+                });
+              }
             } else if (element is GetSingleCardBalResp) {
-              setState(() {
-                //余额+币种
-                _totalbalMap[position] = element.cardListBal[0];
-                // _totalbalMap[position].currBal;
-                // Map map = <String, String>{};
-                // map["currBal"] = element.cardListBal[0].currBal;
-                // map["ccy"] = element.cardListBal[0].ccy;
-                // _totalbal.insert(position, map);
-              });
+              if (this.mounted) {
+                setState(() {
+                  //余额+币种
+                  _totalbalMap[position] = element.cardListBal[0];
+                  // _totalbalMap[position].currBal;
+                  // Map map = <String, String>{};
+                  // map["currBal"] = element.cardListBal[0].currBal;
+                  // map["ccy"] = element.cardListBal[0].ccy;
+                  // _totalbal.insert(position, map);
+                });
+              }
             }
           });
           _isShow[position] = true;
