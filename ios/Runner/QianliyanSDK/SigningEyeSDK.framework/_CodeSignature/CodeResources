@@ -10,7 +10,7 @@
 		</data>
 		<key>Headers/SECertificationDataModel.h</key>
 		<data>
-		kIX8rYjuglUTEpygV35EuRd1NcI=
+		qGFJJqsGeATAXsAEMbhE0isZqVQ=
 		</data>
 		<key>Headers/SEFaceError.h</key>
 		<data>
@@ -46,7 +46,7 @@
 		</data>
 		<key>Headers/SEVideoResult.h</key>
 		<data>
-		JinEobHMoLZe9GI5nHw+pNOEfpE=
+		PKuVXCvNBK9ukDtl0nW2aYoEm5c=
 		</data>
 		<key>Headers/SigningESDK.h</key>
 		<data>
@@ -58,7 +58,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		TVoDfkHqE+a3q0/jRqjj3iKzte8=
+		q5HlJ2fkP5Vn+Y1pgGzB2vrMMCk=
 		</data>
 		<key>MSWeakTimer-LICENSE</key>
 		<data>
@@ -419,11 +419,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			kIX8rYjuglUTEpygV35EuRd1NcI=
+			qGFJJqsGeATAXsAEMbhE0isZqVQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			eEe3zAqW3XJ0yzwJ+9gp7RTOaIn8Aidy5StaoarM/to=
+			o+eNqNYMop4tvRQuHZWpUXGL0hBchR+ItlB3IuBXj/A=
 			</data>
 		</dict>
 		<key>Headers/SEFaceError.h</key>
@@ -518,11 +518,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			JinEobHMoLZe9GI5nHw+pNOEfpE=
+			PKuVXCvNBK9ukDtl0nW2aYoEm5c=
 			</data>
 			<key>hash2</key>
 			<data>
-			V4/IR2dQFBc23T+ZS/aKiYyddivGbFKQuZZQqy5rbbM=
+			DaUdNfBRTJj8ePwOa89LLb8Dva1G6MI97LpSiiZ6BLg=
 			</data>
 		</dict>
 		<key>Headers/SigningESDK.h</key>

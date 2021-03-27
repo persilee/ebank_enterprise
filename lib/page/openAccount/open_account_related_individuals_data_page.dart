@@ -6,6 +6,7 @@ import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RelatedIndividualsDataPage extends StatefulWidget {
   RelatedIndividualsDataPage({Key key}) : super(key: key);
@@ -107,7 +109,11 @@ class _RelatedIndividualsDataPageState
                 child: HsgButton.button(
                   title: S.of(context).next_step,
                   click: _nextBtnEnabled
-                      ? () {
+                      ? () async {
+                          final prefs = await SharedPreferences.getInstance();
+                          String phoneStr =
+                              prefs.getString(ConfigKey.USER_PHONE);
+                          _partner.phone = phoneStr == null ? '' : phoneStr;
                           List<Partner> partnerList = [_partner];
                           _dataReq.partnerList = partnerList;
                           print('>>>>${_dataReq.toString()}');
@@ -136,9 +142,9 @@ class _RelatedIndividualsDataPageState
     if (_documentTypeText == null || _documentTypeText == '') {
       return false;
     }
-    if (_documentNumberText == null || _documentNumberText == '') {
-      return false;
-    }
+    // if (_documentNumberText == null || _documentNumberText == '') {
+    //   return false;
+    // }
     if (_nationalityText == null || _nationalityText == '') {
       return false;
     }
@@ -205,7 +211,7 @@ class _RelatedIndividualsDataPageState
       Container(
         child: _oneLayerSelectWidget(
           context,
-          S.of(context).openAccout_documentType,
+          S.of(context).identificationNumber,
           _documentTypeText,
           S.of(context).please_select,
           false,
@@ -215,18 +221,18 @@ class _RelatedIndividualsDataPageState
           },
         ),
       ),
-      Container(
-        child: _oneLayerInputWidget(
-          context,
-          S.of(context).openAccount_documentNumber,
-          S.of(context).openAccount_documentNumber_placeholder,
-          _documentNumberTEC,
-          false,
-          <TextInputFormatter>[
-            LengthLimitingTextInputFormatter(30) //限制长度
-          ],
-        ),
-      ),
+      // Container(
+      //   child: _oneLayerInputWidget(
+      //     context,
+      //     S.of(context).openAccount_documentNumber,
+      //     S.of(context).openAccount_documentNumber_placeholder,
+      //     _documentNumberTEC,
+      //     false,
+      //     <TextInputFormatter>[
+      //       LengthLimitingTextInputFormatter(30) //限制长度
+      //     ],
+      //   ),
+      // ),
       Container(
         child: _oneLayerSelectWidget(
           context,
@@ -589,8 +595,10 @@ class _RelatedIndividualsDataPageState
   //提交快速开户录入的数据
   void _openAccountQuickSubmitData() async {
     HSProgressHUD.show();
-    //称谓
-    OpenAccountRepository().quickAccountOpening(_dataReq, 'GetIdTypeReq').then(
+
+    OpenAccountRepository()
+        .submitQuickCustTempInfo(_dataReq, 'GetIdTypeReq')
+        .then(
       (value) {
         print(value);
         HSProgressHUD.dismiss();

@@ -50,37 +50,57 @@ class AuthIdentityReq {
 
 @JsonSerializable()
 class AuthIdentityResp {
+  ///租户编号
+  @JsonKey(name: 'tenant_id')
+  String tenantId;
+
+  ///业务编号
+  @JsonKey(name: 'business_id')
+  String businessId;
+
+  ///选择的面签类型1大陆2港澳台3护照
   @JsonKey(name: 'certificateType')
   String certificateType;
 
+  ///ai录制后视频名称
   @JsonKey(name: 'fileName')
   String fileName;
 
+  ///ai会话中对话数据
   @JsonKey(name: 'speechFlowData')
   List<SpeechFlowData> speechFlowData;
 
+  ///证件识别信息
   @JsonKey(name: 'infoStr')
   dynamic infoStr;
 
+  ///大头照
   @JsonKey(name: 'headerImg')
   String headerImg;
 
+  ///正面照片
   @JsonKey(name: 'positiveImage')
   String positiveImage;
 
+  ///港澳台识别录制视频
   @JsonKey(name: 'videoUrl')
   String videoUrl;
 
+  ///ai对比图片数据
   @JsonKey(name: 'compareImageData')
   List<CompareImageData> compareImageData;
 
+  ///反面照片
   @JsonKey(name: 'backImage')
   String backImage;
 
+  ///识别结果 人脸对比 isSuccess 为true识别成功，错误和识别失败为false
   @JsonKey(name: 'isSuccess')
   bool isSuccess;
 
   AuthIdentityResp(
+    this.tenantId,
+    this.businessId,
     this.certificateType,
     this.fileName,
     this.speechFlowData,
@@ -122,106 +142,169 @@ class SpeechFlowData {
   Map<String, dynamic> toJson() => _$SpeechFlowDataToJson(this);
 }
 
+///中国大陆身份证
 @JsonSerializable()
-class InfoStr {
-  @JsonKey(name: 'Nation')
-  String nation;
-
-  @JsonKey(name: 'IdNum')
-  String idNum;
-
-  @JsonKey(name: 'Sex')
-  String sex;
-
-  @JsonKey(name: 'Authority')
-  String authority;
-
-  @JsonKey(name: 'Address')
-  String address;
-
-  @JsonKey(name: 'Birth')
-  String birth;
-
+class InfoStrForCN {
+  ///姓名
   @JsonKey(name: 'Name')
   String name;
 
+  ///证件号
+  @JsonKey(name: 'IdNum')
+  String idNum;
+
+  ///性别
+  @JsonKey(name: 'Sex')
+  String sex;
+
+  ///民族
+  @JsonKey(name: 'Nation')
+  String nation;
+
+  ///出生
+  @JsonKey(name: 'Birth')
+  String birth;
+
+  ///地址
+  @JsonKey(name: 'Address')
+  String address;
+
+  ///有效期
   @JsonKey(name: 'ValidDate')
   String validDate;
 
-  @JsonKey(name: 'Symbol')
-  String symbol;
+  ///签发机关
+  @JsonKey(name: 'Authority')
+  String authority;
 
-  @JsonKey(name: 'Birthday')
-  String birthday;
+  InfoStrForCN(
+    this.name,
+    this.idNum,
+    this.sex,
+    this.nation,
+    this.birth,
+    this.address,
+    this.validDate,
+    this.authority,
+  );
+  factory InfoStrForCN.fromJson(Map<String, dynamic> srcJson) =>
+      _$InfoStrForCNFromJson(srcJson);
+  Map<String, dynamic> toJson() => _$InfoStrForCNToJson(this);
+}
 
+///中国港澳台身份证
+@JsonSerializable()
+class InfoStrForHK {
+  ///中文名称
+  @JsonKey(name: 'Name')
+  String name;
+
+  ///身份证号
+  @JsonKey(name: 'IdNum')
+  String idNum;
+
+  ///英文名称
   @JsonKey(name: 'EnName')
   String enName;
 
+  ///姓名电码
   @JsonKey(name: 'TelexCode')
   String telexCode;
 
-  @JsonKey(name: 'CnName')
-  String cnName;
+  ///性别
+  @JsonKey(name: 'Sex')
+  String sex;
 
-  @JsonKey(name: 'CurrentIssueDate')
-  String currentIssueDate;
+  ///证件符号
+  @JsonKey(name: 'Symbol')
+  String symbol;
 
+  ///出生日期
+  @JsonKey(name: 'Birthday')
+  String birthday;
+
+  ///首次签发日期
   @JsonKey(name: 'FirstIssueDate')
   String firstIssueDate;
 
-  @JsonKey(name: 'Permanent')
-  String permanent;
+  ///最近领取日期
+  @JsonKey(name: 'CurrentIssueDate')
+  String currentIssueDate;
 
-  @JsonKey(name: 'DateOfExpiration')
-  String dateOfExpiration;
+  InfoStrForHK(
+    this.name,
+    this.idNum,
+    this.enName,
+    this.telexCode,
+    this.sex,
+    this.symbol,
+    this.birthday,
+    this.firstIssueDate,
+    this.currentIssueDate,
+  );
+  factory InfoStrForHK.fromJson(Map<String, dynamic> srcJson) =>
+      _$InfoStrForHKFromJson(srcJson);
+  Map<String, dynamic> toJson() => _$InfoStrForHKToJson(this);
+}
 
-  @JsonKey(name: 'DateOfBirth')
-  String dateOfBirth;
+///护照
+@JsonSerializable()
+class InfoStrForPassport {
+  ///姓名
+  @JsonKey(name: 'Name')
+  String name;
 
+  ///护照id
+  @JsonKey(name: 'IdNum')
+  String idNum;
+
+  ///性别
+  @JsonKey(name: 'Sex')
+  String sex;
+
+  ///国籍
   @JsonKey(name: 'Nationality')
   String nationality;
 
-  @JsonKey(name: 'ID')
-  String iD;
+  ///出生日期
+  @JsonKey(name: 'DateOfBirth')
+  String dateOfBirth;
 
+  ///发行国
   @JsonKey(name: 'IssuingCountry')
   String issuingCountry;
 
-  InfoStr(
-    this.nation,
+  ///有效日期
+  @JsonKey(name: 'DateOfExpiration')
+  String dateOfExpiration;
+
+  InfoStrForPassport(
+    this.name,
     this.idNum,
     this.sex,
-    this.authority,
-    this.address,
-    this.birth,
-    this.name,
-    this.validDate,
-    this.symbol,
-    this.birthday,
-    this.enName,
-    this.telexCode,
-    this.cnName,
-    this.currentIssueDate,
-    this.firstIssueDate,
-    this.permanent,
-    this.dateOfExpiration,
-    this.dateOfBirth,
     this.nationality,
-    this.iD,
+    this.dateOfBirth,
     this.issuingCountry,
+    this.dateOfExpiration,
   );
-  factory InfoStr.fromJson(Map<String, dynamic> srcJson) =>
-      _$InfoStrFromJson(srcJson);
-  Map<String, dynamic> toJson() => _$InfoStrToJson(this);
+  factory InfoStrForPassport.fromJson(Map<String, dynamic> srcJson) =>
+      _$InfoStrForPassportFromJson(srcJson);
+  Map<String, dynamic> toJson() => _$InfoStrForPassportToJson(this);
 }
 
 @JsonSerializable()
 class CompareImageData {
-  @JsonKey(name: 'xx')
-  String xx;
+  ///base串
+  @JsonKey(name: 'faceImgUrl')
+  String faceImgUrl;
+
+  ///相识度
+  @JsonKey(name: 'score')
+  String score;
 
   CompareImageData(
-    this.xx,
+    this.faceImgUrl,
+    this.score,
   );
 
   factory CompareImageData.fromJson(Map<String, dynamic> srcJson) =>

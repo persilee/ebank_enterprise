@@ -37,19 +37,19 @@ class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
   var _changeLangBtnTltle = '';
 
-  // TextEditingController _accountTC =
-  //     TextEditingController(text: 'ljw124'); //fangluyao
-  // TextEditingController _passwordTC =
-  //     TextEditingController(text: 'Aa123456@'); //b0S25X5Y
-  // var _account = 'ljw124'; //'blk101';
-  // var _password = 'Aa123456@'; //'4N0021S8';
-
   TextEditingController _accountTC =
-      TextEditingController(text: 'blk501'); //fangluyao
+      TextEditingController(text: 'HSG20'); //fangluyao
   TextEditingController _passwordTC =
-      TextEditingController(text: '4N0021S8'); //b0S25X5Y
-  var _account = 'blk501'; //'blk101';
-  var _password = '4N0021S8'; //'4N0021S8';
+      TextEditingController(text: 'Qwe123456~'); //b0S25X5Y
+  var _account = ''; //'blk101';
+  var _password = ''; //'4N0021S8';
+
+  // TextEditingController _accountTC =
+  //     TextEditingController(text: 'blk302'); //fangluyao
+  // TextEditingController _passwordTC =
+  //     TextEditingController(text: '4N0021S8'); //b0S25X5Y
+  // var _account = 'blk302'; //'blk101';
+  // var _password = '4N0021S8'; //'4N0021S8';
 
   @override
   void initState() {
@@ -238,6 +238,9 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录操作
   _login(BuildContext context) async {
+    //登录以输入框的值为准
+    _account = _accountTC.text;
+    _password = _passwordTC.text;
     if (!_judgeCanLogin()) {
       return;
     }
@@ -246,9 +249,6 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
     HSProgressHUD.show();
-    //登录以输入框的值为准
-    _account = _accountTC.text;
-    _password = _passwordTC.text;
 
     String password = EncryptUtil.aesEncode(_password);
 
