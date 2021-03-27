@@ -174,7 +174,13 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
         idInformationList = data.publicCodeGetRedisRspDtoList;
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
     });
   }
 
@@ -243,8 +249,13 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
-      HSProgressHUD.showError(status: e.toString());
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
       print(e.toString());
     });
   }

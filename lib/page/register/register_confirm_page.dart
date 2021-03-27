@@ -173,10 +173,10 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
 
   //手机号注册接口
   _registerByAccount() async {
-    String userType = "1";
+    String userType = "2";
     String password = EncryptUtil.aesEncode(_newPassword.text);
 
-    print("$_areaCode>>>>>>>>>>>>>>");
+    print("$_registerAccount>>>>>>>>>>>>>>");
     HSProgressHUD.show();
     VersionDataRepository()
         .registerByAccount(
@@ -199,7 +199,13 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
         HSProgressHUD.dismiss();
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
     });
   }
 

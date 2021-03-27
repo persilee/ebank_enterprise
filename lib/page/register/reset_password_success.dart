@@ -1,8 +1,5 @@
-import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/page/home/hsg_home_page.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
-import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司

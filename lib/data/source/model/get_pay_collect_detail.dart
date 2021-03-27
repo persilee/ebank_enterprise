@@ -34,10 +34,10 @@ class GetRevenueByCardsReq extends Object {
     this.localDateEnd,
     this.localDateStart,
     this.page,
-    this.pageSize,
+    this.pageSize, {
     this.acNo,
     this.ciNo,
-  );
+  });
 
   factory GetRevenueByCardsReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetRevenueByCardsReqFromJson(srcJson);
