@@ -543,20 +543,21 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         items: terms,
       ),
     );
-
-    setState(() {
-      if (result != null && result != false) {
-        _changedTermBtnTiTle = terms[result];
-        _changedRateTitle = rates[result];
-        accuPeriod = accuPeriods[result];
-        auctCale = auctCales[result];
-        depositType = producDTOList[result].depositType;
-        ccy = producDTOList[result].ccy;
-        rate = FormatUtil.formatNum(double.parse(_changedRateTitle), 2);
-      } else {
-        return;
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (result != null && result != false) {
+          _changedTermBtnTiTle = terms[result];
+          _changedRateTitle = rates[result];
+          accuPeriod = accuPeriods[result];
+          auctCale = auctCales[result];
+          depositType = producDTOList[result].depositType;
+          ccy = producDTOList[result].ccy;
+          rate = FormatUtil.formatNum(double.parse(_changedRateTitle), 2);
+        } else {
+          return;
+        }
+      });
+    }
   }
 
   //产品名称和年利率
@@ -690,14 +691,16 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         items: instructions,
       ),
     );
-    setState(() {
-      if (result != null && result != false) {
-        _changedInstructionTitle = instructions[result];
-        instCode = instructionDatas[result];
-      } else {
-        return {_changedInstructionTitle, instCode};
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (result != null && result != false) {
+          _changedInstructionTitle = instructions[result];
+          instCode = instructionDatas[result];
+        } else {
+          return {_changedInstructionTitle, instCode};
+        }
+      });
+    }
   }
 
   _ifClick() {
@@ -819,13 +822,15 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     CardDataRepository().getCardList('getCardList').then(
       (data) {
         if (data.cardList != null) {
-          setState(() {
-            cards.clear();
-            cards.addAll(data.cardList);
-            _changedAccountTitle = FormatUtil.formatSpace4(cards[0].cardNo);
-            _getCardBal(
-                cards[0].cardNo.replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
-          });
+          if (mounted) {
+            setState(() {
+              cards.clear();
+              cards.addAll(data.cardList);
+              _changedAccountTitle = FormatUtil.formatSpace4(cards[0].cardNo);
+              _getCardBal(
+                  cards[0].cardNo.replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
+            });
+          }
         }
       },
     ).catchError((e) {
@@ -838,9 +843,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     double _payerAmount = 0;
     if ((inputValue.text).length == 0 ||
         double.parse(inputValue.text) < double.parse(productList.minAmt)) {
-      setState(() {
-        _amount = '0.00';
-      });
+      if (mounted) {
+        setState(() {
+          _amount = '0.00';
+        });
+      }
     } else if (_cardCcy == ccy) {
       _amount = FormatUtil.formatSringToMoney((inputValue.text).toString());
     } else {
@@ -851,10 +858,12 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                   amount: _payerAmount, corrCcy: _cardCcy, defaultCcy: ccy),
               'TransferTrialReq')
           .then((data) {
-        setState(() {
-          _amount = FormatUtil.formatSringToMoney((data.optExAmt).toString());
-          _checkAmount = data.optExAmt;
-        });
+        if (mounted) {
+          setState(() {
+            _amount = FormatUtil.formatSringToMoney((data.optExAmt).toString());
+            _checkAmount = data.optExAmt;
+          });
+        }
       });
     }
   }
@@ -908,9 +917,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                 ccy, ciNo, depositType, tenor),
             'getTimeDepositContractTrial')
         .then((value) {
-      setState(() {
-        matAmt = FormatUtil.formatSringToMoney((value.matAmt).toString());
-      });
+      if (mounted) {
+        setState(() {
+          matAmt = FormatUtil.formatSringToMoney((value.matAmt).toString());
+        });
+      }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
@@ -923,19 +934,21 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
     }).then((value) {
       value.forEach((element) {
-        setState(() {
-          // if (_cardBal == '' || _cardCcy == S.current.hint_please_select) {
-          _cardBal = element.cardListBal[0].currBal;
-          _cardCcy = element.cardListBal[0].ccy;
-          // }
-          _cardBalList.clear();
-          _cardCcyList.clear();
-          element.cardListBal.forEach((element) {
-            _cardCcyList.add(element.ccy);
-            _cardBalList.add(element.currBal);
+        if (mounted) {
+          setState(() {
+            // if (_cardBal == '' || _cardCcy == S.current.hint_please_select) {
+            _cardBal = element.cardListBal[0].currBal;
+            _cardCcy = element.cardListBal[0].ccy;
+            // }
+            _cardBalList.clear();
+            _cardCcyList.clear();
+            element.cardListBal.forEach((element) {
+              _cardCcyList.add(element.ccy);
+              _cardBalList.add(element.currBal);
+            });
+            _rateCalculate();
           });
-          _rateCalculate();
-        });
+        }
       });
     }).catchError((e) {});
   }
@@ -947,14 +960,16 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         data.publicCodeGetRedisRspDtoList.forEach((element) {
-          setState(() {
-            if (language == 'zh_CN') {
-              instructions.add(element.cname);
-            } else {
-              instructions.add(element.name);
-            }
-            instructionDatas.add(element.code);
-          });
+          if (mounted) {
+            setState(() {
+              if (language == 'zh_CN') {
+                instructions.add(element.cname);
+              } else {
+                instructions.add(element.name);
+              }
+              instructionDatas.add(element.code);
+            });
+          }
         });
       }
     });
@@ -996,10 +1011,12 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                 tenor),
             'getTimeDepositContract')
         .then((value) {
-      setState(() {
-        Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
-            arguments: 'timeDepositProduct');
-      });
+      if (mounted) {
+        setState(() {
+          Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
+              arguments: 'timeDepositProduct');
+        });
+      }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });

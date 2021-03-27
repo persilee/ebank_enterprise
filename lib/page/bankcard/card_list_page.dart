@@ -238,21 +238,32 @@ class _CardListPageState extends State<CardListPage> {
   }
 
   Future<void> _loadData() async {
-    _isLoading = true;
+    if (_cardsLength == 0) {
+      _isLoading = true;
+    }
     CardDataRepository().getCardList('getCardList').then((data) {
       if (data.cardList != null) {
         setState(() {
           cards.clear();
+          _totalbalMap.clear();
+          _cardLimitMap.clear();
           cards.addAll(data.cardList);
           _cardsLength = cards.length;
           if (_isShow.length == 0) {
             _isShow = new List.filled(_cardsLength, false);
             // print(_isShow.toString());
+          } else {
+            for (int i = 0; i < _isShow.length; i++) {
+              if (_isShow[i] == true) {
+                _isShow[i] = false;
+              }
+            }
           }
           _isLoading = false;
         });
       }
     }).catchError((e) {
+      _isLoading = false;
       Fluttertoast.showToast(msg: e.toString());
     });
   }

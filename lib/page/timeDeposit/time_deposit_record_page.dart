@@ -159,7 +159,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         centerTitle: true,
         backgroundColor: Colors.yellowAccent[300],
         floating: true,
-        expandedHeight: 198.0,
+        expandedHeight: 202.0,
         iconTheme: IconThemeData(color: Color(0xffFEFEFE)),
         textTheme: TextTheme(
           headline6: TextStyle(
