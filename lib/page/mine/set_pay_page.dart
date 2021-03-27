@@ -8,6 +8,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -101,25 +102,17 @@ class _SetPayPageState extends State<SetPayPage> {
                     ],
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.all(40), //外边距
-                  height: 44.0,
-                  width: MediaQuery.of(context).size.width,
-                  child: RaisedButton(
-                    child: Text(S.of(context).submit),
-                    onPressed: _submit()
-                        ? () {
-                            _submitData();
-                          }
-                        : null,
-                    color: HsgColors.accent,
-                    textColor: Colors.white,
-                    disabledTextColor: Colors.white,
-                    disabledColor: Color(0xFFD1D1D1),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5) //设置圆角
-                        ),
+                //提交
+                CustomButton(
+                  margin: EdgeInsets.all(40),
+                  text: Text(
+                    S.of(context).next_step,
+                    style: TextStyle(color: Colors.white),
                   ),
+                  isEnable: _submit(),
+                  clickCallback: () {
+                    _submitData();
+                  },
                 ),
               ],
             ),

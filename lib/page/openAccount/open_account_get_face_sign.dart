@@ -126,7 +126,7 @@ class _OpenAccountGetFaceSignPageState
 
   void _didFaceSignCommit() async {
     final prefs = await SharedPreferences.getInstance();
-    String userName = '13111112222'; //prefs.getString(ConfigKey.USER_PHONE);
+    String userName = prefs.getString(ConfigKey.USER_PHONE);
 
     if (_codeSignTextF.text.length > 0 && userName.length > 0) {
       //根据电话以及输入文本这里去请求businessId

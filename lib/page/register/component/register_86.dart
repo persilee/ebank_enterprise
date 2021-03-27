@@ -16,7 +16,6 @@ Widget getRegisterRegion(
   Function _selectRegionCode,
 ) {
   _officeAreaCodeText = _officeAreaCodeText == '' ? '86' : _officeAreaCodeText;
-  // print("${_phoneNum.text}");
   return Container(
     margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
     width: MediaQuery.of(context).size.width / 2,

@@ -411,7 +411,7 @@ class _HomePageState extends State<HomePage> {
           maxWidth: (MediaQuery.of(context).size.width / 3 * 2 - 20)),
       height: 22,
       child: Text(
-        _enterpriseName,
+        _enterpriseName == null ? '' : _enterpriseName,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: Colors.white,
@@ -427,7 +427,7 @@ class _HomePageState extends State<HomePage> {
       constraints: BoxConstraints(
           maxWidth: (MediaQuery.of(context).size.width / 3 * 2 - 160)),
       child: Text(
-        _userName,
+        _userName == null ? '' : _userName,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: Colors.white,
@@ -462,7 +462,7 @@ class _HomePageState extends State<HomePage> {
               maxWidth: 160,
             ),
             child: Text(
-              _characterName,
+              _characterName == null ? '' : _characterName,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 14,

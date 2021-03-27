@@ -136,7 +136,8 @@ class _RepayInputPageState extends State<RepayInputPage> {
       acNo = loanDetail.acNo;
       instalNo = loanDetail.restPeriods.toString();
       max = double.parse(loanDetail.loanAmt);
-      debitAccount = FormatUtil.formatSpace4(loanDetail.repaymentAcNo);
+      debitAccount =
+          FormatUtil.formatSpace4(loanDetail.repaymentAcNo.toString()); //扣款帐号
       loanInterest =
           (double.parse(loanDetail.intRate) * 100).toStringAsFixed(2) + "%";
     });
