@@ -8,8 +8,8 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
-import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_early_contract.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_trial.dart';
@@ -27,7 +27,7 @@ import 'package:intl/intl.dart';
 
 class PageDepositInfo extends StatefulWidget {
   final DepositRecord deposit;
-  final List<CardListBal> cardList;
+  final List<TotalAssetsCardListBal> cardList;
   PageDepositInfo({Key key, this.deposit, this.cardList}) : super(key: key);
 
   @override
@@ -53,7 +53,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   DepositRecord deposit;
 
-  List<CardListBal> cardList;
+  List<TotalAssetsCardListBal> cardList;
   //第二个接口所需变量
   var conMatAmt = '';
 
@@ -153,11 +153,13 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   _selectSettAc(BuildContext context) async {
     List<String> bankCards = [];
     List<String> accounts = [];
+    List<String> cardNo = [];
     for (RemoteBankCard card in cards) {
       bankCards.add(card.cardNo);
     }
     for (var i = 0; i < bankCards.length; i++) {
       accounts.add(FormatUtil.formatSpace4(bankCards[i]));
+      cardNo.add(bankCards[i]);
       if (_changedSettAcTitle == bankCards[i]) {
         _settAcPosition = i;
       }
@@ -170,12 +172,12 @@ class _PageDepositInfo extends State<PageDepositInfo> {
             lastSelectedPosition: _settAcPosition));
     if (result != null && result != false) {
       _settAcPosition = result;
-      _changedSettAcTitle = accounts[result];
+      _changedSettAcTitle = cardNo[result];
       _verificationDialog(
           S.current.tdEarlyRed_modify_settlement_account,
           S.current.tdEarlyRed_modify_settlement_account_determine +
               '\n' +
-              _changedSettAcTitle,
+              FormatUtil.formatSpace4(_changedSettAcTitle),
           _select);
     } else {
       return;
