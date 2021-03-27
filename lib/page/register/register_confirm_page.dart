@@ -199,7 +199,13 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
         HSProgressHUD.dismiss();
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
     });
   }
 

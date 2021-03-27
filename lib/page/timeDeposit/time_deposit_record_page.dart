@@ -58,12 +58,14 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     _loadCardListBal();
 
     NotificationCenter.instance.addObserver('load', (object) {
-      setState(() {
-        if (object) {
-          _loadDeopstData();
-          _loadCardListBal();
-        }
-      });
+      if (mounted) {
+        setState(() {
+          if (object) {
+            _loadDeopstData();
+            _loadCardListBal();
+          }
+        });
+      }
     });
 
     _sctrollController.addListener(() {
@@ -152,33 +154,36 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         pinned: true,
         title: Text(S.current.deposit_record),
         centerTitle: true,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-              Color(0xFF1775BA),
-              Color(0xFF3A9ED1),
-            ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+        backgroundColor: Colors.yellowAccent[300],
+        floating: true,
+        expandedHeight: 198.0,
+        iconTheme: IconThemeData(color: Color(0xffFEFEFE)),
+        textTheme: TextTheme(
+          headline6: TextStyle(
+            color: Color(0xffFEFEFE),
+            fontSize: 18,
+            fontStyle: FontStyle.normal,
           ),
         ),
-      ),
-      SliverToBoxAdapter(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
+        flexibleSpace: FlexibleSpaceBar(
+          background: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [
                 Color(0xFF1775BA),
                 Color(0xFF3A9ED1),
-              ],
+              ], begin: Alignment.centerLeft, end: Alignment.centerRight),
             ),
-          ),
-          child: Column(
-            children: [
-              _totalAmt(),
-              _totalCcy(),
-            ],
+            // height: 110,
+            child: Container(
+              margin: EdgeInsets.only(top: 80),
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  _totalAmt(),
+                  _totalCcy(),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -270,7 +275,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
                         Padding(
                           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: Text(
-                            S.current.deposit_taking,
+                            rows[index].engName,
                             style: TextStyle(fontSize: 15, color: Colors.black),
                           ),
                         ),

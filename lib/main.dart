@@ -10,6 +10,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sp_util/sp_util.dart';
 import 'widget/progressHUD.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -74,44 +75,59 @@ class _HSGBankAppState extends State<HSGBankApp> {
     );
     SystemChrome.setSystemUIOverlayStyle(style);
     ScreenUtil.init(width: 360, height: 920, allowFontScaling: true);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'HSGBank',
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          elevation: 1,
-          textTheme: TextTheme(
-            headline6: TextStyle(
-              fontStyle: FontStyle.normal,
-              fontSize: 18,
-              color: Color(0xff262626),
+    return RefreshConfiguration(
+      footerTriggerDistance: 15,
+      headerTriggerDistance: 90.0,
+      maxOverScrollExtent: 100,
+      dragSpeedRatio: 0.91,
+      headerBuilder: () => MaterialClassicHeader(),
+      footerBuilder: () => ClassicFooter(),
+      enableLoadingWhenNoData: false,
+      enableRefreshVibrate: false,
+      enableLoadMoreVibrate: false,
+      hideFooterWhenNotFull: true,
+      shouldFooterFollowWhenNotFull: (state) {
+        return false;
+      },
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'HSGBank',
+        theme: ThemeData(
+          appBarTheme: AppBarTheme(
+            elevation: 1,
+            textTheme: TextTheme(
+              headline6: TextStyle(
+                fontStyle: FontStyle.normal,
+                fontSize: 18,
+                color: Color(0xff262626),
+              ),
             ),
           ),
+          splashColor: HsgColors.itemClickColor,
+          primaryColor: HsgColors.primaryLight,
+          primaryColorDark: HsgColors.primaryDark,
+          backgroundColor: HsgColors.commonBackground,
+          dividerTheme:
+              DividerThemeData(thickness: 0.7, color: HsgColors.divider),
         ),
-        splashColor: HsgColors.itemClickColor,
-        primaryColor: HsgColors.primaryLight,
-        primaryColorDark: HsgColors.primaryDark,
-        backgroundColor: HsgColors.commonBackground,
-        dividerTheme:
-            DividerThemeData(thickness: 0.7, color: HsgColors.divider),
-      ),
-      initialRoute: pageHome,
-      routes: appRoutes,
-      onGenerateRoute: (settings) => onGenerateRoute(settings),
-      localizationsDelegates: [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      builder: (context, child) => Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: GestureDetector(
-          onTap: () {
-            hideKeyboard(context);
-          },
-          child: child,
+        initialRoute: pageHome,
+        routes: appRoutes,
+        onGenerateRoute: (settings) => onGenerateRoute(settings),
+        localizationsDelegates: [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        builder: (context, child) => Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: GestureDetector(
+            onTap: () {
+              hideKeyboard(context);
+            },
+            child: child,
+          ),
         ),
       ),
     );
