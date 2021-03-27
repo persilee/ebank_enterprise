@@ -28,11 +28,12 @@ class _SetPayPageState extends State<SetPayPage> {
   TextEditingController _newPwd = TextEditingController();
   TextEditingController _confimPwd = TextEditingController();
 
-  var _certificateNo = '0';
-  var _certificateType = '0';
-  var _phoneNumber = '0';
+  var _certificateNo = '';
+  var _certificateType = '';
+  var _phoneNumber = '';
   var _userId = '';
   var _userAccount = '';
+  var _belongCustStatus = '0'; //用户状态
 
   @override
   void initState() {
@@ -53,6 +54,7 @@ class _SetPayPageState extends State<SetPayPage> {
         _certificateNo = map['certificateNo'];
         _certificateType = map['certificateType'];
         _phoneNumber = map['phoneNumber'];
+        _belongCustStatus = map['belongCustStatus'];
       }
     });
     return new Scaffold(
@@ -162,7 +164,11 @@ class _SetPayPageState extends State<SetPayPage> {
               'setTransactionPassword')
           .then((data) {
         HSProgressHUD.dismiss();
-        Navigator.of(context)..pop()..pop()..pop();
+        if (_belongCustStatus == '6') {
+          Navigator.of(context)..pop()..pop()..pop();
+        } else {
+          Navigator.of(context)..pop()..pop();
+        }
         Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
       }).catchError((e) {
         HSProgressHUD.showError(status: e.toString());

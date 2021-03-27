@@ -189,9 +189,14 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       //请求
       HSProgressHUD.show();
       //请求成功后跳转
+      Map map = new Map();
+      map['certificateNo'] = '0';
+      map['certificateType'] = '0';
+      map['phoneNumber'] = _phone;
+      map['belongCustStatus'] = _belongCustStatus;
       _belongCustStatus == '6'
           ? Navigator.pushNamed(context, iDcardVerification, arguments: _phone)
-          : Navigator.pushNamed(context, setPayPage);
+          : Navigator.pushNamed(context, setPayPage, arguments: map);
       //请求结束
       HSProgressHUD.dismiss();
     }
