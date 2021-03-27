@@ -17,6 +17,7 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_tableview/flutter_tableview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -47,8 +48,8 @@ class _DetailListPageState extends State<DetailListPage> {
   bool _isButton4 = false; //交易时间第四个按钮
   String _time = intl.S.current.the_same_month; //时间
   int _page = 1; //几页数据
-  String _endDate =
-      DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now()); //结束时间
+  String _endDate = DateFormat('yyyy-MM-dd').format(DateTime.now()); //结束时间
+
   String _end = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示结束时间
   String _start = formatDate(
       DateTime(DateTime.now().year, DateTime.now().month, 1),
@@ -148,16 +149,17 @@ class _DetailListPageState extends State<DetailListPage> {
         return FadeTransition(
           opacity: animation,
           child: SizeTransition(
-              sizeFactor: animation,
-              child: Column(
-                children: [
-                  Container(
-                    color: Color(0xFFF8F8F8),
-                    height: 10,
-                  ),
-                  _popDialogContent(popcontext),
-                ],
-              )),
+            sizeFactor: animation,
+            child: Column(
+              children: [
+                Container(
+                  color: Color(0xFFF8F8F8),
+                  height: 10,
+                ),
+                _popDialogContent(popcontext),
+              ],
+            ),
+          ),
         );
       },
     );
@@ -183,40 +185,41 @@ class _DetailListPageState extends State<DetailListPage> {
   //顶部弹窗内容
   Widget _popDialogContent(BuildContext popcontext) {
     return Container(
-        color: Colors.white,
-        height: 320,
-        padding: EdgeInsets.all(10),
-        child: Material(
-          child: Container(
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Container(
-                //   height: 20,
-                //   color: Color(0xFFF7F7F7),
-                // ),
-                //交易时间
-                _timeText(intl.S.of(context).transaction_time),
-                _tradingHour(),
-                //自定义时间
-                _timeText(intl.S.of(context).user_defined),
-                _userDefind(popcontext),
-                //金额
-                _timeText(intl.S.of(context).amount),
-                _amountDuration(),
-                //按钮
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    _resetButton(popcontext),
-                    _confimrButton(context),
-                  ],
-                ),
-              ],
-            ),
+      color: Colors.white,
+      height: 230,
+      padding: EdgeInsets.all(10),
+      child: Material(
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Container(
+              //   height: 20,
+              //   color: Color(0xFFF7F7F7),
+              // ),
+              //交易时间
+              _timeText(intl.S.of(context).transaction_time),
+              _tradingHour(popcontext),
+              //自定义时间
+              _timeText(intl.S.of(context).user_defined),
+              _userDefind(popcontext),
+              //金额
+              // _timeText(intl.S.of(context).amount),
+              // _amountDuration(),
+              //按钮
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  _resetButton(popcontext),
+                  _confimrButton(context),
+                ],
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   //时间文本
@@ -231,21 +234,25 @@ class _DetailListPageState extends State<DetailListPage> {
   }
 
   //交易时间
-  Widget _tradingHour() {
+  Widget _tradingHour(popcontext) {
     return Container(
         margin: EdgeInsets.only(left: 10, right: 10),
         child: Row(
           children: [
-            _trandingHourButton(1, _isButton1, intl.S.current.the_same_day),
-            _trandingHourButton(2, _isButton2, intl.S.current.the_same_month),
-            _trandingHourButton(3, _isButton3, intl.S.current.last_three_month),
-            _trandingHourButton(4, _isButton4, intl.S.current.last_half_year),
+            _trandingHourButton(
+                1, _isButton1, intl.S.current.the_same_day, popcontext),
+            _trandingHourButton(
+                2, _isButton2, intl.S.current.the_same_month, popcontext),
+            _trandingHourButton(
+                3, _isButton3, intl.S.current.last_three_month, popcontext),
+            _trandingHourButton(
+                4, _isButton4, intl.S.current.last_half_year, popcontext),
           ],
         ));
   }
 
   //交易时间按钮
-  Widget _trandingHourButton(int i, bool isButton, String time) {
+  Widget _trandingHourButton(int i, bool isButton, String time, popcontext) {
     return Container(
       margin: EdgeInsets.all(3),
       width: 73,
@@ -268,7 +275,7 @@ class _DetailListPageState extends State<DetailListPage> {
             _time = time;
             _page = 1;
             _transferHistoryList.clear();
-            _endDate = DateFormat('yyyy-MM-dd 23:59:59').format(DateTime.now());
+            _endDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
             _end = formatDate(DateTime.now(), [yyyy, mm, dd]);
             switch (i) {
               case 1:
@@ -276,8 +283,7 @@ class _DetailListPageState extends State<DetailListPage> {
                 _isButton2 = false;
                 _isButton3 = false;
                 _isButton4 = false;
-                _startDate =
-                    DateFormat('yyyy-MM-dd 00:00:00').format(DateTime.now());
+                _startDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
                 _start = formatDate(DateTime.now(), [yyyy, mm, dd]);
                 break;
               case 2:
@@ -285,7 +291,7 @@ class _DetailListPageState extends State<DetailListPage> {
                 _isButton2 = true;
                 _isButton3 = false;
                 _isButton4 = false;
-                _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(
+                _startDate = DateFormat('yyyy-MM-dd').format(
                   DateTime(DateTime.now().year, DateTime.now().month, 1),
                 );
                 _start = formatDate(
@@ -298,7 +304,7 @@ class _DetailListPageState extends State<DetailListPage> {
                 _isButton2 = false;
                 _isButton3 = true;
                 _isButton4 = false;
-                _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(
+                _startDate = DateFormat('yyyy-MM-dd').format(
                   DateTime(
                     DateTime.now().year,
                     DateTime.now().month - 3,
@@ -319,7 +325,7 @@ class _DetailListPageState extends State<DetailListPage> {
                 _isButton2 = false;
                 _isButton3 = false;
                 _isButton4 = true;
-                _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(
+                _startDate = DateFormat('yyyy-MM-dd').format(
                   DateTime(
                     DateTime.now().year,
                     DateTime.now().month - 6,
@@ -337,7 +343,9 @@ class _DetailListPageState extends State<DetailListPage> {
                 break;
             }
           });
-          Navigator.of(context).pop();
+          //Navigator.of(context).pushNamed(pageAccountOverview);
+          // Navigator.of(context).pop();
+          (popcontext as Element).markNeedsBuild();
         },
       ),
     );
@@ -509,8 +517,8 @@ class _DetailListPageState extends State<DetailListPage> {
         //height: 30,
         child: Theme(
           data: new ThemeData(
-              // primaryColor: Color(0xffECECEC),
-              ),
+            primaryColor: Color(0xffECECEC),
+          ),
           child: TextField(
             decoration: InputDecoration(
               hintStyle: TextStyle(
@@ -605,7 +613,7 @@ class _DetailListPageState extends State<DetailListPage> {
           color: Colors.white,
           //交易时间
           //  child: Text(ddFinHisDTOList[section].transDate),
-          child: Text(ddFinHisDTOList[section].txDateTime),
+          child: Text(ddFinHisDTOList[section].acDate),
         ),
       ],
     );
@@ -694,7 +702,7 @@ class _DetailListPageState extends State<DetailListPage> {
             Container(
               width: 160,
               child: Text(
-                ddFinHisDTOList[section].acDate,
+                ddFinHisDTOList[section].txDateTime,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 12, color: Color(0xFFACACAC)),
@@ -827,10 +835,10 @@ class _DetailListPageState extends State<DetailListPage> {
         setState(() {
           if (i == 0) {
             _start = formatDate(dateTime, [yyyy, mm, dd]);
-            _startDate = DateFormat('yyyy-MM-dd 00:00:00').format(dateTime);
+            _startDate = DateFormat('yyyy-MM-dd').format(dateTime);
           } else {
             _end = formatDate(dateTime, [yyyy, mm, dd]);
-            _endDate = DateFormat('yyyy-MM-dd 23:59:59').format(dateTime);
+            _endDate = DateFormat('yyyy-MM-dd').format(dateTime);
           }
         });
         (popcontext as Element).markNeedsBuild();
@@ -872,19 +880,20 @@ class _DetailListPageState extends State<DetailListPage> {
     String custID = prefs.getString(ConfigKey.CUST_ID);
     print(">>>>>>>>$_cardList");
     print(">>>>>>>$custID");
+    print(">>>>>>>>$_endDate");
+    print(">>>>>>>$_startDate");
+
     HSProgressHUD.show();
     PayCollectDetailRepository()
         .getRevenueByCards(
             GetRevenueByCardsReq(
                 'CNY',
-                '2021-03-29', //结束时间
-                '2020-01-02', //开始时间
+                '2021-03-29', //结束时间     _endDate
+                '2020-01-02', //开始时间     _start
                 0, //分页
                 0, //分页
-                // acNo:
-                '0101208000001528',
-                //ciNo:
-                '818000000113'),
+                //acNo: '0101208000001528',
+                ciNo: '818000000113'),
             'GetRevenueByCardsReq')
         .then((data) {
       HSProgressHUD.dismiss();

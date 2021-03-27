@@ -11,6 +11,7 @@ import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RegisterSuccessPage extends StatefulWidget {
   RegisterSuccessPage({Key key}) : super(key: key);
@@ -128,7 +129,13 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
       });
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.showError(status: '${e.toString()}');
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
     });
   }
 }

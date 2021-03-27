@@ -176,7 +176,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                         : SliverToBoxAdapter(),
 
                     // 定期
-                    (tdTotal != '0.00')
+                    (tdTotal != '0')
                         ? isTotalAsset
                             ? SliverToBoxAdapter(
                                 child: Container(
@@ -193,14 +193,14 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                               )
                             : SliverToBoxAdapter()
                         : SliverToBoxAdapter(),
-                    (tdTotal != '0.00')
+                    (tdTotal != '0')
                         ? isTotalAsset
                             ? SliverToBoxAdapter(
                                 child: _tdTotalColumn(),
                               )
                             : SliverToBoxAdapter()
                         : SliverToBoxAdapter(),
-                    (tdTotal != '0.00')
+                    (tdTotal != '0')
                         ? isTotalAsset
                             ? SliverList(
                                 delegate: SliverChildBuilderDelegate(
@@ -220,7 +220,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
 
                     // 贷款
                     isTotalLiabilities
-                        ? (lnTotal != '0.00')
+                        ? (lnTotal != '0')
                             ? SliverToBoxAdapter(
                                 child: Container(
                                   color: Colors.white,
@@ -255,15 +255,15 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
                                 ),
                               )
                         : SliverToBoxAdapter(),
-                    (lnTotal != '0.00')
-                        ? isTotalLiabilities
+                    isTotalLiabilities
+                        ? (lnTotal != '0')
                             ? SliverToBoxAdapter(
                                 child: _lnTotalColumn(),
                               )
                             : SliverToBoxAdapter()
                         : SliverToBoxAdapter(),
-                    (lnTotal != '0.00')
-                        ? isTotalLiabilities
+                    isTotalLiabilities
+                        ? (lnTotal != '0')
                             ? SliverList(
                                 delegate: SliverChildBuilderDelegate(
                                     (BuildContext context, int index) {
@@ -687,10 +687,10 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
           }
           //定期列表
           tdList = data.tedpListBal;
-          if (data.tdTotalAmt != '0') {
-            //定期合计
-            tdTotal = data.tdTotalAmt;
-          }
+          // if (data.tdTotalAmt != '0') {
+          //定期合计
+          tdTotal = data.tdTotalAmt;
+          //  }
           //总负债
           lnTotal = data.lnTotalAmt;
           //贷款列表
