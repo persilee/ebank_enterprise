@@ -44,9 +44,6 @@ class DepositRecordReq {
 
 @JsonSerializable()
 class DepositRecordResp extends Object {
-  @JsonKey(name: 'sort')
-  String sort;
-
   @JsonKey(name: 'page')
   int page;
 
@@ -63,7 +60,6 @@ class DepositRecordResp extends Object {
   List<DepositRecord> rows;
 
   DepositRecordResp(
-    this.sort,
     this.page,
     this.pageSize,
     this.count,
@@ -79,14 +75,8 @@ class DepositRecordResp extends Object {
 
 @JsonSerializable()
 class DepositRecord extends Object {
-  @JsonKey(name: 'erstFlg')
-  String erstFlg;
-
   @JsonKey(name: 'engName')
   String engName;
-
-  @JsonKey(name: 'lclName')
-  String lclName;
 
   @JsonKey(name: 'conRate')
   String conRate;
@@ -94,14 +84,11 @@ class DepositRecord extends Object {
   @JsonKey(name: 'settDdAc')
   String settDdAc;
 
+  @JsonKey(name: 'openDrAc')
+  String openDrAc;
+
   @JsonKey(name: 'conNo')
   String conNo;
-
-  @JsonKey(name: 'serNo')
-  String serNo;
-
-  @JsonKey(name: 'ciNo')
-  String ciNo;
 
   @JsonKey(name: 'prdCode')
   String prdCode;
@@ -130,21 +117,15 @@ class DepositRecord extends Object {
   @JsonKey(name: 'instCode')
   String instCode;
 
-  @JsonKey(name: 'instFlg')
-  String instFlg;
-
   @JsonKey(name: 'conSts')
   String conSts;
 
   DepositRecord(
-    this.erstFlg,
     this.engName,
-    this.lclName,
     this.conRate,
     this.settDdAc,
+    this.openDrAc,
     this.conNo,
-    this.serNo,
-    this.ciNo,
     this.prdCode,
     this.tenor,
     this.auctCale,
@@ -154,7 +135,6 @@ class DepositRecord extends Object {
     this.valDate,
     this.mtDate,
     this.instCode,
-    this.instFlg,
     this.conSts,
   );
 

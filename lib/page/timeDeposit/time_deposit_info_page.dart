@@ -85,7 +85,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   int _settAcPosition = 0;
 
-  String _changedSettAcTitle = '0101 2000 0017 1';
+  String _changedSettAcTitle = '';
 
   String _paymentAc = '';
 
@@ -403,7 +403,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                   _unit(S.current.due_date, mtDate, true, false),
                   //结算账户
                   _selectSettACBtn(S.current.settlement_account,
-                      _changedSettAcTitle, true, true),
+                      FormatUtil.formatSpace4(_changedSettAcTitle), true, true),
                   //到期指示
                   _selectInstCodeBtn(
                       S.current.due_date_indicate, instCode, false, true),
@@ -517,7 +517,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     conNos = deposit.conNo;
     ccy = deposit.ccy;
     bal = deposit.bal;
-    _paymentAc = deposit.settDdAc;
+    _paymentAc = deposit.openDrAc;
+    _changedSettAcTitle = deposit.settDdAc;
     valDate = deposit.valDate;
     mtDate = deposit.mtDate;
     productName = deposit.engName;
