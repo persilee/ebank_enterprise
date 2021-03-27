@@ -28,9 +28,9 @@ class _SetPayPageState extends State<SetPayPage> {
   TextEditingController _newPwd = TextEditingController();
   TextEditingController _confimPwd = TextEditingController();
 
-  var _certificateNo = '';
-  var _certificateType = '';
-  var _phoneNumber = '';
+  var _certificateNo = '0';
+  var _certificateType = '0';
+  var _phoneNumber = '0';
   var _userId = '';
   var _userAccount = '';
 
@@ -49,9 +49,11 @@ class _SetPayPageState extends State<SetPayPage> {
   Widget build(BuildContext context) {
     setState(() {
       Map map = ModalRoute.of(context).settings.arguments;
-      _certificateNo = map['certificateNo'];
-      _certificateType = map['certificateType'];
-      _phoneNumber = map['phoneNumber'];
+      if (map != null) {
+        _certificateNo = map['certificateNo'];
+        _certificateType = map['certificateType'];
+        _phoneNumber = map['phoneNumber'];
+      }
     });
     return new Scaffold(
       appBar: AppBar(

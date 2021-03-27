@@ -36,6 +36,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   Timer _timer;
   int countdownTime = 0;
   String _phone = '';
+  var _belongCustStatus = '0'; //用户状态
 
   @override
   void initState() {
@@ -162,7 +163,9 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
         .then((data) {
       if (this.mounted) {
         setState(() {
-          _phone = data.userPhone;
+          _belongCustStatus =
+              data.belongCustStatus != null ? data.belongCustStatus : '';
+          _phone = data.userPhone != null ? data.userPhone : '';
           if (data.areaCode != null) {
             _officeAreaCodeText = data.areaCode; //区号
           }
@@ -186,7 +189,9 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       //请求
       HSProgressHUD.show();
       //请求成功后跳转
-      Navigator.pushNamed(context, iDcardVerification, arguments: _phone);
+      _belongCustStatus == '6'
+          ? Navigator.pushNamed(context, iDcardVerification, arguments: _phone)
+          : Navigator.pushNamed(context, setPayPage);
       //请求结束
       HSProgressHUD.dismiss();
     }
