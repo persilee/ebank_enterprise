@@ -79,8 +79,8 @@ class GetInternationalTransferNewReq extends Object {
   @JsonKey(name: 'payeeName4')
   String payeeName4;
 
-  // @JsonKey(name: 'payerAddress')
-  // String payerAddress;
+  @JsonKey(name: 'payerAddress')
+  String payerAddress;
 
   @JsonKey(name: 'payerBankCode')
   String payerBankCode;
@@ -88,8 +88,8 @@ class GetInternationalTransferNewReq extends Object {
   @JsonKey(name: 'payerCardNo')
   String payerCardNo;
 
-  // @JsonKey(name: 'payerName')
-  // String payerName;
+  @JsonKey(name: 'payerName')
+  String payerName;
 
   @JsonKey(name: 'paymentMethod')
   String paymentMethod;
@@ -100,8 +100,8 @@ class GetInternationalTransferNewReq extends Object {
   @JsonKey(name: 'remark')
   String remark;
 
-  // @JsonKey(name: 'remittancePurposes')
-  // String remittancePurposes;
+  @JsonKey(name: 'remittancePurposes')
+  String remittancePurposes;
 
   @JsonKey(name: 'smsCode')
   String smsCode;
@@ -138,14 +138,14 @@ class GetInternationalTransferNewReq extends Object {
     this.payeeName2,
     this.payeeName3,
     this.payeeName4,
-    // this.payerAddress,
+    this.payerAddress,
     this.payerBankCode,
     this.payerCardNo,
-    // this.payerName,
+    this.payerName,
     this.paymentMethod,
     this.phone,
     this.remark,
-    // this.remittancePurposes,
+    this.remittancePurposes,
     this.smsCode,
     this.toCreditAmount,
     this.xRate,
@@ -235,8 +235,8 @@ class GetInternationalTransferNewResp extends Object {
   @JsonKey(name: 'payeeName4')
   String payeeName4;
 
-  // @JsonKey(name: 'payerAddress')
-  // String payerAddress;
+  @JsonKey(name: 'payerAddress')
+  String payerAddress;
 
   @JsonKey(name: 'payerBankCode')
   String payerBankCode;
@@ -244,8 +244,8 @@ class GetInternationalTransferNewResp extends Object {
   @JsonKey(name: 'payerCardNo')
   String payerCardNo;
 
-  // @JsonKey(name: 'payerName')
-  // String payerName;
+  @JsonKey(name: 'payerName')
+  String payerName;
 
   @JsonKey(name: 'paymentMethod')
   String paymentMethod;
@@ -256,8 +256,8 @@ class GetInternationalTransferNewResp extends Object {
   @JsonKey(name: 'remark')
   String remark;
 
-  // @JsonKey(name: 'remittancePurposes')
-  // String remittancePurposes;
+  @JsonKey(name: 'remittancePurposes')
+  String remittancePurposes;
 
   @JsonKey(name: 'smsCode')
   String smsCode;
@@ -294,14 +294,14 @@ class GetInternationalTransferNewResp extends Object {
     this.payeeName2,
     this.payeeName3,
     this.payeeName4,
-    // this.payerAddress,
+    this.payerAddress,
     this.payerBankCode,
     this.payerCardNo,
-    // this.payerName,
+    this.payerName,
     this.paymentMethod,
     this.phone,
     this.remark,
-    // this.remittancePurposes,
+    this.remittancePurposes,
     this.smsCode,
     this.toCreditAmount,
     this.xRate,

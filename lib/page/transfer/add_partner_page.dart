@@ -167,24 +167,26 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     TransferDataRepository()
         .addPartner(
             AddPartnerReq(
-                _bankCode,
-                _swiftAdressReq,
-                "",
-                _countryText,
-                _centerSwiftReq,
-                _payeeAdressReq,
-                _acountController.text,
-                _nameController.text,
-                "",
-                "",
-                "",
-                _smsController.text,
-                _bankName,
-                _aliasController.text,
-                myTransferType),
+              _bankCode,
+              _swiftAdressReq,
+              "",
+              _countryText,
+              _centerSwiftReq,
+              _payeeAdressReq,
+              _acountController.text,
+              _nameController.text,
+              "",
+              "",
+              "",
+              _smsController.text,
+              _bankName,
+              _aliasController.text,
+              myTransferType,
+              _transferFeeIndex.toString(),
+              _feeUseIndex.toString(),
+            ),
             'addPartner')
         .then((data) {
-      print(_bankName + "==================");
       if (data != null) {
         Fluttertoast.showToast(msg: '添加成功');
         Navigator.of(context).pop();

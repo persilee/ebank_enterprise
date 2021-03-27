@@ -7,26 +7,14 @@ class GetInternationalTransferReq extends Object {
   @JsonKey(name: 'amount')
   double amount;
 
-  @JsonKey(name: 'bankSwift')
-  String bankSwift;
-
-  @JsonKey(name: 'costOptions')
-  String costOptions;
-
   @JsonKey(name: 'creditCurrency')
   String creditCurrency;
 
   @JsonKey(name: 'debitCurrency')
   String debitCurrency;
 
-  @JsonKey(name: 'district')
-  String district;
-
-  @JsonKey(name: 'intermediateBankSwift')
-  String intermediateBankSwift;
-
-  @JsonKey(name: 'payeeAddress')
-  String payeeAddress;
+  @JsonKey(name: 'payPassword')
+  String payPassword;
 
   @JsonKey(name: 'payeeBankCode')
   String payeeBankCode;
@@ -37,9 +25,6 @@ class GetInternationalTransferReq extends Object {
   @JsonKey(name: 'payeeName')
   String payeeName;
 
-  @JsonKey(name: 'payerAddress')
-  String payerAddress;
-
   @JsonKey(name: 'payerBankCode')
   String payerBankCode;
 
@@ -49,34 +34,49 @@ class GetInternationalTransferReq extends Object {
   @JsonKey(name: 'payerName')
   String payerName;
 
-  // @JsonKey(name: 'phone')
-  // String phone;
-
   @JsonKey(name: 'remark')
   String remark;
 
-  @JsonKey(name: 'remittancePurposes')
-  String remittancePurposes;
+  @JsonKey(name: 'smsCode')
+  String smsCode;
+
+  @JsonKey(name: 'exchangeRate')
+  String exchangeRate;
+
+  @JsonKey(name: 'payeeAddress')
+  String payeeAddress;
+
+  @JsonKey(name: 'bankSwift')
+  String bankSwift;
+
+  @JsonKey(name: 'district')
+  String district;
+
+  @JsonKey(name: 'custId')
+  String custId;
+
+  @JsonKey(name: 'costOptions')
+  String costOptions;
 
   GetInternationalTransferReq(
     this.amount,
-    this.bankSwift,
-    this.costOptions,
     this.creditCurrency,
     this.debitCurrency,
-    this.district,
-    this.intermediateBankSwift,
-    this.payeeAddress,
+    this.payPassword,
     this.payeeBankCode,
     this.payeeCardNo,
     this.payeeName,
-    this.payerAddress,
     this.payerBankCode,
     this.payerCardNo,
     this.payerName,
-    // this.phone,
     this.remark,
-    this.remittancePurposes,
+    this.smsCode,
+    this.exchangeRate,
+    this.payeeAddress,
+    this.bankSwift,
+    this.district,
+    this.custId,
+    this.costOptions,
   );
 
   factory GetInternationalTransferReq.fromJson(Map<String, dynamic> srcJson) =>

@@ -56,8 +56,10 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   List<String> countryList = [];
   //转账费用
   List<String> transferFeeList = [];
+  int _transferFeeIndex = 0;
   //汇款用途
   List<String> feeUse = [];
+  int _feeUseIndex = 0;
   //List<String> ccyListPlay = ['CNY', 'HKD', 'EUR'];
 
   var _countryText = '';
@@ -171,6 +173,18 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         payerBankCode = listPartner.payerBankCode;
         payeeName = listPartner.payeeName;
         payerName = listPartner.payerName;
+        if (listPartner.paysMethod != null) {
+          // _transferFeeIndex = int.parse(listPartner.paysMethod);
+          _transferFee =
+              listPartner.paysMethod == '' ? '' : listPartner.paysMethod;
+        }
+        if (listPartner.rollInPurpose != null) {
+          // _feeUseIndex = int.parse(listPartner.rollInPurpose);
+          _feeUse =
+              listPartner.rollInPurpose == '' ? '' : listPartner.rollInPurpose;
+        }
+        // _transferFee = listPartner.paysMethod;
+        // _feeUse = listPartner.rollInPurpose;
         check = true;
       }
     });
@@ -442,9 +456,27 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                       ? rowListPartner.payeeBankLocalName
                       : rowListPartner.payeeBankEngName;
                   _bankSwiftController.text = rowListPartner.bankSwift;
+                  _middleBankSwiftController.text = rowListPartner.midBankSwift;
                   _payeeAddressController.text = rowListPartner.payeeAddress;
-                  _bankSwiftController.text = rowListPartner.bankSwift;
-                  _payeeAddressController.text = rowListPartner.payeeAddress;
+                  _remarkController.text = rowListPartner.remark;
+                  //付款方银行
+                  payeeBankCode = rowListPartner.bankCode;
+                  //收款方银行
+                  payerBankCode = rowListPartner.payerBankCode;
+                  payeeName = rowListPartner.payeeName;
+                  payerName = rowListPartner.payerName;
+                  if (rowListPartner.paysMethod != null) {
+                    // _transferFeeIndex = int.parse(rowListPartner.paysMethod);
+                    _transferFee = rowListPartner.paysMethod == ''
+                        ? ''
+                        : rowListPartner.paysMethod;
+                  }
+                  if (rowListPartner.rollInPurpose != null) {
+                    // _feeUseIndex = int.parse(rowListPartner.rollInPurpose);
+                    _feeUse = rowListPartner.rollInPurpose == ''
+                        ? ''
+                        : rowListPartner.rollInPurpose;
+                  }
                 }
                 _isClick();
               },
@@ -490,11 +522,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           );
         });
     if (result != null && result != false) {
-      _transferFee = transferFeeList[result];
+      setState(() {
+        _transferFeeIndex = result;
+        _transferFee = transferFeeList[result];
+      });
     }
-    setState(() {
-      _position = result;
-    });
   }
 
   //汇款用途
@@ -509,11 +541,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       },
     );
     if (result != null && result != false) {
-      _feeUse = feeUse[result];
+      setState(() {
+        _feeUseIndex = result;
+        _feeUse = feeUse[result];
+      });
     }
-    setState(() {
-      _position = result;
-    });
   }
 
   //选择收款银行
@@ -891,6 +923,9 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             transferFeeList.add(e.name);
           }
         });
+        // setState(() {
+        //   _transferFee = transferFeeList[_transferFeeIndex];
+        // });
       }
     });
   }
@@ -909,6 +944,9 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             feeUse.add(e.name);
           }
         });
+        // setState(() {
+        //   _feeUse = feeUse[_feeUseIndex];
+        // });
       }
     });
   }

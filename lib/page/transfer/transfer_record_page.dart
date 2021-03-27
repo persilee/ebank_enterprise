@@ -151,16 +151,16 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       if (_position == 0) {
         _isData = true;
         _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
+      } else if ((_cradLists[_position] ==
+              _transferHistoryList[i].paymentCardNo) ||
+          (_cradLists[_position] == _transferHistoryList[i].receiveCardNo)) {
+        _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
+        _isData = true;
       }
-      // else if ((_cradLists[_position] ==
-      //         _transferHistoryList[i].paymentCardNo) ||
-      //     (_cradLists[_position] == _transferHistoryList[i].receiveCardNo)) {
-      //   _list.add(_getListViewBuilder(_contentWidget(_transferHistoryList[i])));
-      //   _isData = true;
-      // }
     }
     _list.add(
       _loadMore ? _loadMoreData() : _toLoad(intl.S.current.load_more_finished),
+      // _loadMore ? Container() : _toLoad(intl.S.current.load_more_finished),
     );
 
     return RefreshIndicator(
@@ -951,6 +951,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       // HSProgressHUD.dismiss();
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
+      // HSProgressHUD.dismiss();
     });
   }
 }

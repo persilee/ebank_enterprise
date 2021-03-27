@@ -605,14 +605,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     setState(() {
       _transferIndex = 0;
       for (int i = 0; i < _transferCcyList.length; i++) {
-        print(_transferCcyList.length);
         if (_transferCcyList[i] == _payCcy) {
           _transferCcy = _payCcy;
-          print(_transferCcy);
           break;
         } else {
           _transferIndex++;
-          print(_transferIndex);
         }
       }
     });
