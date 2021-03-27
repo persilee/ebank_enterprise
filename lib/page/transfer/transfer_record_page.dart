@@ -58,7 +58,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   bool _isButton2 = true; //交易时间第二个按钮
   bool _isButton3 = false; //交易时间第三个按钮
   bool _isButton4 = false; //交易时间第四个按钮
-  ScrollController _controller = ScrollController(); //滚动监听
+  ScrollController _scrollController = ScrollController(); //滚动监听
   int _page = 1; //几页数据
   int _totalPage = 1; //数据总页数
   bool _loadMore = false; //是否加载更多
@@ -75,24 +75,25 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     _getCardList();
 
     //滚动监听
-    _controller.addListener(() {
-      setState(() {
-        if (_controller.position.pixels ==
-            _controller.position.maxScrollExtent) {
-          if (_page < _totalPage) {
-            _loadMore = true;
-          }
-          _page++;
-          _loadData();
-        }
-      });
-    });
+    // _controller.addListener(() {
+    //   setState(() {
+    //     if (_controller.position.pixels ==
+    //         _controller.position.maxScrollExtent) {
+    //       if (_page < _totalPage) {
+    //         _loadMore = true;
+    //       }
+    //       _page++;
+    //       _loadData();
+    //     }
+    //   });
+    // });
   }
 
   @override
   void dispose() {
     super.dispose();
     _refreshController.dispose();
+    _scrollController.dispose();
   }
 
   @override
@@ -118,10 +119,18 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                               controller: _refreshController,
                               onLoading: () {
                                 //加载更多完成
-                                _refreshController.loadComplete();
+                                if (_page < _totalPage) {
+                                  _loadMore = true;
+                                }
+                                _page++;
+                                _loadData();
+                                !_loadMore ?? _refreshController.loadComplete();
+                                //显示没有更多数据
+                                _refreshController.loadNoData();
                               },
                               onRefresh: () {
                                 //刷新完成
+                                _loadData();
                                 _refreshController.refreshCompleted();
                                 _refreshController.footerMode.value =
                                     LoadStatus.canLoading;
@@ -189,10 +198,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         _isData = true;
       }
     }
-    _list.add(
-      _loadMore ? _loadMoreData() : _toLoad(intl.S.current.load_more_finished),
-      // _loadMore ? Container() : _toLoad(intl.S.current.load_more_finished),
-    );
+    // _list.add(
+    //   _loadMore ? _loadMoreData() : _toLoad(intl.S.current.load_more_finished),
+    //   // _loadMore ? Container() : _toLoad(intl.S.current.load_more_finished),
+    // );
 
     // return RefreshIndicator(
     //   onRefresh: () => _loadData(),
@@ -200,7 +209,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     //       ? ListView(controller: _controller, children: _list)
     //       : _noDataContainer(context),
     // );
-    return ListView(controller: _controller, children: _list);
+    return ListView(controller: _scrollController, children: _list);
   }
 
   //加载完毕
