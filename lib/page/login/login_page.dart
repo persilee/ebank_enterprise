@@ -235,6 +235,8 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录操作
   _login(BuildContext context) async {
+    Navigator.pushNamed(context, pageIndexName);
+    return;
     //登录以输入框的值为准
     _account = _accountTC.text;
     _password = _passwordTC.text;
