@@ -736,8 +736,6 @@ class _MinePageState extends State<MinePage> {
           return HsgAlertDialog(
             title: S.current.exit,
             message: S.current.loginOut_tips,
-            // title: '退出',
-            // message: '确定要退出手机银行账户吗?',
             positiveButton: S.current.confirm,
             negativeButton: S.current.cancel,
           );
