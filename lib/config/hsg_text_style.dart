@@ -25,5 +25,5 @@ const AGREEMENT_TEXT_STYLE =
 const AGREEMENT_JUMP_TEXT_STYLE =
     TextStyle(fontSize: 13, color: HsgColors.accent);
 const HINET_TEXT_STYLE =
-    TextStyle(fontSize: 14, color: HsgColors.textHintColor);
+    TextStyle(fontSize: 15, color: HsgColors.textHintColor);
 const CONTENT_PADDING = EdgeInsets.only(left: 15, right: 15);

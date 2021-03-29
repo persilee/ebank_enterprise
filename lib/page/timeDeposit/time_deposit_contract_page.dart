@@ -20,6 +20,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -543,7 +544,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         items: terms,
       ),
     );
-    if (mounted) {
+    if (this.mounted) {
       setState(() {
         if (result != null && result != false) {
           _changedTermBtnTiTle = terms[result];
@@ -633,7 +634,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     } else {
       return;
     }
-    setState(() {});
+    if (this.mounted) {
+      setState(() {});
+    }
   }
 
 //支付币种弹窗
@@ -651,7 +654,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     } else {
       return;
     }
-    setState(() {});
+    if (this.mounted) {
+      setState(() {});
+    }
     (context as Element).markNeedsBuild();
   }
 
@@ -679,7 +684,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     } else {
       return;
     }
-    setState(() {});
+    if (this.mounted) {
+      setState(() {});
+    }
   }
 
 //到期指示弹窗
@@ -691,7 +698,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         items: instructions,
       ),
     );
-    if (mounted) {
+    if (this.mounted) {
       setState(() {
         if (result != null && result != false) {
           _changedInstructionTitle = instructions[result];
@@ -719,7 +726,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   Widget _submitButton() {
     return Container(
       height: 45,
-      margin: EdgeInsets.fromLTRB(30, 40, 30, 0),
+      margin: EdgeInsets.fromLTRB(30, 40, 30, 30),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -789,28 +796,35 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         title: Text(S.current.deposit_open),
         elevation: 1,
       ),
-      body: ListView(
-        children: [
-          _background(),
-          _titleSection(
-            //产品名称和年利率
-            productList,
-            producDTOList,
-          ),
-          _remark(), // 产品描述
-          _termChangeBtn(context, producDTOList), // 选择存款期限
-          _inputPrincipal(card), // 本金输入框
-          _accountChangeBtn(), //选择付款账户
-          _line(),
-          _ccyChangeBtn(), //选择支付币种
-          _line(),
-          _expectedPayment(),
-          _line(),
-          _settAcChangeBtn(), //结算账户
-          _line(),
-          _instructionChangeBtn(), //选择到期指示
-          _submitButton(),
-        ],
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: ListView(
+          children: [
+            _background(),
+            _titleSection(
+              //产品名称和年利率
+              productList,
+              producDTOList,
+            ),
+            _remark(), // 产品描述
+            _termChangeBtn(context, producDTOList), // 选择存款期限
+            _inputPrincipal(card), // 本金输入框
+            _accountChangeBtn(), //选择付款账户
+            _line(),
+            _ccyChangeBtn(), //选择支付币种
+            _line(),
+            _expectedPayment(),
+            _line(),
+            _settAcChangeBtn(), //结算账户
+            _line(),
+            _instructionChangeBtn(), //选择到期指示
+            _submitButton(),
+          ],
+        ),
       ),
     );
   }
@@ -822,7 +836,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     CardDataRepository().getCardList('getCardList').then(
       (data) {
         if (data.cardList != null) {
-          if (mounted) {
+          if (this.mounted) {
             setState(() {
               cards.clear();
               cards.addAll(data.cardList);
@@ -843,7 +857,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     double _payerAmount = 0;
     if ((inputValue.text).length == 0 ||
         double.parse(inputValue.text) < double.parse(productList.minAmt)) {
-      if (mounted) {
+      if (this.mounted) {
         setState(() {
           _amount = '0.00';
         });
@@ -858,7 +872,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                   amount: _payerAmount, corrCcy: _cardCcy, defaultCcy: ccy),
               'TransferTrialReq')
           .then((data) {
-        if (mounted) {
+        if (this.mounted) {
           setState(() {
             _amount = FormatUtil.formatSringToMoney((data.optExAmt).toString());
             _checkAmount = data.optExAmt;
@@ -917,7 +931,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                 ccy, ciNo, depositType, tenor),
             'getTimeDepositContractTrial')
         .then((value) {
-      if (mounted) {
+      if (this.mounted) {
         setState(() {
           matAmt = FormatUtil.formatSringToMoney((value.matAmt).toString());
         });
@@ -934,7 +948,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
     }).then((value) {
       value.forEach((element) {
-        if (mounted) {
+        if (this.mounted) {
           setState(() {
             // if (_cardBal == '' || _cardCcy == S.current.hint_please_select) {
             _cardBal = element.cardListBal[0].currBal;
@@ -960,7 +974,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         data.publicCodeGetRedisRspDtoList.forEach((element) {
-          if (mounted) {
+          if (this.mounted) {
             setState(() {
               if (language == 'zh_CN') {
                 instructions.add(element.cname);
@@ -991,6 +1005,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       String settDdAc,
       String smsCode,
       String tenor) async {
+    if (this.mounted) {
+      setState(() {});
+    }
+    HSProgressHUD.show();
+
     TimeDepositDataRepository()
         .getTimeDepositContract(
             TimeDepositContractReq(
@@ -1011,13 +1030,18 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                 tenor),
             'getTimeDepositContract')
         .then((value) {
-      if (mounted) {
+      if (this.mounted) {
         setState(() {
+          HSProgressHUD.dismiss();
           Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
               arguments: 'timeDepositProduct');
         });
       }
     }).catchError((e) {
+      if (this.mounted) {
+        setState(() {});
+      }
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(msg: e.toString());
     });
   }
