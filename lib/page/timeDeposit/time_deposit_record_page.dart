@@ -61,15 +61,15 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
 
     //网络请求
     // _loadCardListBal();
-    _loadTotalAssets();
+    // _loadTotalAssets();
 
     NotificationCenter.instance.addObserver('load', (object) {
-      if (mounted) {
+      if (this.mounted) {
         setState(() {
           if (object) {
             _loadDeopstData();
             // _loadCardListBal();
-            _loadTotalAssets();
+            // _loadTotalAssets();
           }
         });
       }
@@ -280,12 +280,12 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
                     //整存整取
                     var taking = [
                       SizedBox(
-                        height: 37,
+                        // height: 37,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
-                              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
                               child: Text(
                                 rows[index].engName,
                                 style: TextStyle(
@@ -309,7 +309,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
                     ];
                     var raisedButton = RaisedButton(
                         onPressed: () {
-                          go2Detail(rowList[index], cardList);
+                          go2Detail(rowList[index]);
                         },
                         padding: EdgeInsets.only(bottom: 12),
                         color: Colors.white,
@@ -338,9 +338,8 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     return CustomScrollView(slivers: SliverToBoxAdapters);
   }
 
-  void go2Detail(DepositRecord deposit, List<TotalAssetsCardListBal> cardList) {
-    Navigator.pushNamed(context, pageDepositInfo,
-        arguments: {'deposit': deposit, 'cardList': cardList});
+  void go2Detail(DepositRecord deposit) {
+    Navigator.pushNamed(context, pageDepositInfo, arguments: deposit);
   }
 
   Future<void> _loadDeopstData() async {
@@ -353,13 +352,14 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           DepositRecordReq(ciNo, '', excludeClosed, page, 10, ''),
           'getDepositRecord')
     }).then((value) {
-      if (mounted) {
+      if (this.mounted) {
         setState(() {
           value.forEach((element) {
             if (element.rows.length != 0) {
               count = element.count;
               _isDate = true;
-
+              totalAmt = element.totalAmt;
+              _defaultCcy = element.defaultCcy;
               rowList.clear();
               rowList.addAll(element.rows);
               list.clear();
@@ -374,59 +374,26 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     });
   }
 
-  // Future<void> _loadCardListBal() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   String ciNo = prefs.getString(ConfigKey.CUST_ID);
-  //   Future.wait({
-  //     DepositDataRepository().getCardListBalByUser(
-  //         GetCardListBalByUserReq('', [], '', ciNo), 'getCardListBalByUser')
-  //   }).then((value) {
-  //     value.forEach((element) {
-  //       setState(() {
-  //         totalAmt = element.tdTotalAmt;
-  //         _defaultCcy = element.defaultCcy;
-  //         cardList = element.cardListBal;
-  //       });
-  //     });
-  //   });
-  // }
-
-  Future<void> _loadTotalAssets() async {
-    final prefs = await SharedPreferences.getInstance();
-    String ciNo = prefs.getString(ConfigKey.CUST_ID);
-    String userId = prefs.getString(ConfigKey.USER_ID);
-    Future.wait({
-      AccountOverviewRepository()
-          .getTotalAssets(GetTotalAssetsReq(userId, ciNo, ''), 'getTotalAssets')
-    }).then((value) {
-      value.forEach((element) {
-        if (mounted) {
-          setState(() {
-            totalAmt = element.tdTotal;
-            _defaultCcy = element.ccy;
-            cardList = element.cardListBal;
-          });
-        }
-      });
-    });
-  }
-
   //加载更多
   _getMore() {
     if (loadStatus == LoadingStatus.STATUS_IDEL) {
+      if (this.mounted) {
+        setState(() {
+          loadStatus = LoadingStatus.STATUS_LOADING;
+        });
+      }
+    }
+    if (this.mounted) {
       setState(() {
-        loadStatus = LoadingStatus.STATUS_LOADING;
+        if (list.length >= count) {
+          loadStatus = LoadingStatus.STATUS_IDEL;
+        } else {
+          page = page + 1;
+          _loadDeopstData();
+          loadStatus = LoadingStatus.STATUS_LOADING;
+        }
       });
     }
-    setState(() {
-      if (list.length >= count) {
-        loadStatus = LoadingStatus.STATUS_IDEL;
-      } else {
-        page = page + 1;
-        _loadDeopstData();
-        loadStatus = LoadingStatus.STATUS_LOADING;
-      }
-    });
   }
 
   @override

@@ -62,11 +62,13 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     // });
 
     NotificationCenter.instance.addObserver('timeDepositProduct', (object) {
-      setState(() {
-        if (object) {
-          _loadData();
-        }
-      });
+      if (this.mounted) {
+        setState(() {
+          if (object) {
+            _loadData();
+          }
+        });
+      }
     });
   }
 
@@ -227,7 +229,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     return Container(
       color: Colors.white,
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.fromLTRB(18, 0, 18, 0),
+      padding: EdgeInsets.fromLTRB(18, 0, 18, 27),
       height: 300.0,
       child: Material(
         child: Column(
@@ -329,11 +331,14 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
               items: ccyList,
             ));
     if (result != null && result != false) {
-      setState(() {
-        if (result != null && result != false) {
-          _changedCcy = ccyList[result];
-        }
-      });
+      if (this.mounted) {
+        setState(() {
+          if (result != null && result != false) {
+            _changedCcy = ccyList[result];
+          }
+        });
+      }
+
       (popcontext as Element).markNeedsBuild();
     }
   }
@@ -347,12 +352,15 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
               items: terms,
             ));
     if (result != null && result != false) {
-      setState(() {
-        if (result != null && result != false) {
-          _changedTerm = terms[result];
-          _judge(termCodes[result]);
-        }
-      });
+      if (this.mounted) {
+        setState(() {
+          if (result != null && result != false) {
+            _changedTerm = terms[result];
+            _judge(termCodes[result]);
+          }
+        });
+      }
+
       (popcontext as Element).markNeedsBuild();
     }
   }
@@ -409,13 +417,15 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           ),
         ),
         onPressed: () {
-          setState(() {
-            inputValue.text = '';
-            _changedCcy = S.current.hint_please_select;
-            _changedTerm = S.current.hint_please_select;
-            (popcontext as Element).markNeedsBuild();
-            _loadData();
-          });
+          if (this.mounted) {
+            setState(() {
+              inputValue.text = '';
+              _changedCcy = S.current.hint_please_select;
+              _changedTerm = S.current.hint_please_select;
+              (popcontext as Element).markNeedsBuild();
+              _loadData();
+            });
+          }
         },
       ),
     );
@@ -565,85 +575,56 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   List<Widget> _titleSection(List<TdepProducHeadDTO> tdepProductList,
       List<List<TdepProductDTOList>> tdepProducDTOList) {
     List<Widget> section = [];
+
     section.add(
-      SliverToBoxAdapter(
-        child: _picture(),
-      ),
-    );
-    section.add(
-      SliverToBoxAdapter(
-        child: _screen(),
-      ),
-    );
-    _isLoading
-        ? section.add(
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.only(
-                    top: (MediaQuery.of(context).size.height - 180) / 4),
-                child: HsgLoading(),
-              ),
-            ),
-          )
-        : _isDate
-            ? section.add(
-                SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    //最小年利率
-                    double minRate = double.parse(FormatUtil.formatNum(
-                        double.parse(tdepProductList[index].minRate), 2));
-                    //最大年利率
-                    double maxRate = double.parse(FormatUtil.formatNum(
-                        double.parse(tdepProductList[index].maxRate), 2));
-                    //判断选择的语言并根据语言选择产品名称
-                    String name;
-                    if (language == 'zh_CN') {
-                      name = tdepProductList[index].lclName;
-                    } else {
-                      name = tdepProductList[index].engName;
-                    }
-                    //定期产品信息
-                    return FlatButton(
-                      padding: EdgeInsets.all(0),
-                      onPressed: () {
-                        go2Detail(
-                            tdepProductList[index], tdepProducDTOList[index]);
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _background(),
-                          Container(
-                            padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border(
-                                top: _lineBorderSide(),
-                                bottom: _lineBorderSide(),
-                              ),
-                            ),
-                            child: _productInfo(
-                                name,
-                                minRate,
-                                maxRate,
-                                tdepProductList[index].remark,
-                                tdepProductList[index].minAmt),
-                          ),
-                        ],
-                      ),
-                    );
-                  }, childCount: tdepProductList.length),
-                ),
-              )
-            : section.add(
-                SliverToBoxAdapter(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 100),
-                    child: notDataContainer(context, S.current.no_data_now),
+      SliverList(
+        delegate: SliverChildBuilderDelegate((context, index) {
+          //最小年利率
+          double minRate = double.parse(FormatUtil.formatNum(
+              double.parse(tdepProductList[index].minRate), 2));
+          //最大年利率
+          double maxRate = double.parse(FormatUtil.formatNum(
+              double.parse(tdepProductList[index].maxRate), 2));
+          //判断选择的语言并根据语言选择产品名称
+          String name;
+          if (language == 'zh_CN') {
+            name = tdepProductList[index].lclName;
+          } else {
+            name = tdepProductList[index].engName;
+          }
+          //定期产品信息
+          return FlatButton(
+            padding: EdgeInsets.all(0),
+            onPressed: () {
+              go2Detail(tdepProductList[index], tdepProducDTOList[index]);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _background(),
+                Container(
+                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      top: _lineBorderSide(),
+                      bottom: _lineBorderSide(),
+                    ),
                   ),
+                  child: _productInfo(
+                      name,
+                      minRate,
+                      maxRate,
+                      tdepProductList[index].remark,
+                      tdepProductList[index].minAmt),
                 ),
-              );
-    return section;
+              ],
+            ),
+          );
+        }, childCount: tdepProductList.length),
+      ),
+    );
+    return _isDate ? section : notDataContainer(context, S.current.no_data_now);
   }
 
   @override
@@ -676,10 +657,47 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           )
         ],
       ),
-      body: Container(
-        color: HsgColors.commonBackground,
-        child: CustomScrollView(
-          slivers: _titleSection(productList, producDTOList),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
+          color: HsgColors.commonBackground,
+          child: Column(
+            children: [
+              _picture(),
+              _screen(),
+              Expanded(
+                child: _isLoading
+                    ? HsgLoading()
+                    : productList.length > 0
+                        ? CustomRefresh(
+                            controller: _refreshController,
+                            onLoading: () {
+                              //加载更多完成
+                              _refreshController.loadComplete();
+                              //显示没有更多数据
+                              // _refreshController.loadNoData();
+                            },
+                            onRefresh: () {
+                              //刷新完成
+                              _refreshController.refreshCompleted();
+                              _refreshController.footerMode.value =
+                                  LoadStatus.canLoading;
+                            },
+                            content: Container(
+                              child: CustomScrollView(
+                                slivers:
+                                    _titleSection(productList, producDTOList),
+                              ),
+                            ),
+                          )
+                        : notDataContainer(context, S.current.no_data_now),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -690,9 +708,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     TimeDepositDataRepository()
         .getGetTimeDepositProduct(
             'getGetTimeDepositProduct',
-            // _isEmpty()
-            //     ? TimeDepositProductReq('', '', '', null, page, 10, '')
-            //     :
             TimeDepositProductReq(
                 _accuPeriod == '' ? null : _accuPeriod,
                 _auctCale == '' ? null : _auctCale,
@@ -766,6 +781,14 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   //根据存期判断计提周期和档期
   _judge(String code) {
     switch (code) {
+      case 'D001':
+        _accuPeriod = '1';
+        _auctCale = '1';
+        break;
+      case 'D007':
+        _accuPeriod = '1';
+        _auctCale = '7';
+        break;
       case 'M001':
         _accuPeriod = '2';
         _auctCale = '1';
@@ -809,6 +832,10 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       case 'M011':
         _accuPeriod = '2';
         _auctCale = '11';
+        break;
+      case 'M015':
+        _accuPeriod = '2';
+        _auctCale = '15';
         break;
       case 'Y001':
         _accuPeriod = '5';

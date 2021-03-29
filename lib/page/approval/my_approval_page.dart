@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -10,6 +11,7 @@ import 'package:ebank_mobile/config/hsg_styles.dart';
 import 'package:ebank_mobile/data/source/model/find_user_to_do_task.dart';
 import 'package:ebank_mobile/data/source/model/find_user_todo_task_body.dart';
 import 'package:ebank_mobile/data/source/model/find_user_todo_task_model.dart';
+import 'package:ebank_mobile/data/source/model/my_approval_data.dart';
 import 'package:ebank_mobile/data/source/process_task_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -20,6 +22,7 @@ import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -44,6 +47,11 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   bool _isDate = false;
   RefreshController _refreshController;
 
+  ///////////////
+  List<Data> _testListData = [];
+  int _testPageIndex = 1;
+  bool _isMoreData = false;
+
   // bool refresh;
 
   @override
@@ -51,19 +59,35 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     super.initState();
     _refreshController = RefreshController();
     _scrollController = ScrollController();
-    _loadData();
+    // _loadData();
+    _testLoadData(false);
   }
 
-//加载
-  Widget _loadingView() {
-    return Center(
-      child: Lottie.asset(
-        'assets/json/loading2.json',
-        width: 126,
-        fit: BoxFit.cover,
-        alignment: Alignment.center,
-      ),
-    );
+  void _testLoadData(bool isLoadMore) async {
+    if (isLoadMore) {
+      _testPageIndex++;
+    } else {
+      _testPageIndex = 1;
+    }
+    _isLoading = true;
+    if (!isLoadMore) await Future.delayed(Duration(seconds: 2));
+    rootBundle.loadString('assets/json/my_approval.json').then((value) {
+      Map map = json.decode(value);
+      MyApprovalData data = MyApprovalData.fromJson(map);
+      print(data.toJson());
+      _isLoading = true;
+      if (this.mounted) {
+        setState(() {
+          if (_testPageIndex == 1) {
+            _testListData.addAll(data.data.sublist(0, 9));
+          } else if (_testPageIndex == 2) {
+            _testListData.addAll(data.data.sublist(9, data.data.length));
+            _isMoreData = true;
+          }
+          _isLoading = false;
+        });
+      }
+    });
   }
 
 //蓝色圆点
@@ -72,7 +96,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
       padding: EdgeInsets.only(right: 10.0),
       child: Icon(
         Icons.fiber_manual_record,
-        color: Color(int.parse('0xff3394D4')),
+        color: Color(0xff3394D4),
         size: 10.0,
       ),
     );
@@ -129,10 +153,19 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   }
 
   //待办列表右侧信息
-  Widget _rightInfo(Rows rows) {
-    return Card(
-      elevation: 6.0,
-      shadowColor: Colors.grey.withOpacity(0.2),
+  Widget _rightInfo(Data rows) {
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xff46529F).withOpacity(0.1),
+            spreadRadius: 1.0,
+            blurRadius: 10.0,
+          ),
+        ],
+        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+        color: Colors.white,
+      ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 15.0),
         child: Column(
@@ -152,7 +185,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   }
 
 //待办列表
-  Widget _todoInformation(Rows rows) {
+  Widget _todoInformation(Data rows) {
     return Container(
       height: 136.0,
       padding: EdgeInsets.only(top: 16),
@@ -166,7 +199,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
             Row(
               children: [
                 Container(
-                  width: 16.0,
+                  width: 20.0,
                 ),
                 Expanded(child: _rightInfo(rows)),
               ],
@@ -191,27 +224,31 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   Widget build(BuildContext context) {
     return _isLoading
         ? HsgLoading()
-        : _listData.length > 0
+        : _testListData.length > 0
             ? CustomRefresh(
                 controller: _refreshController,
-                onLoading: () {
+                onLoading: () async {
+                  await Future.delayed(Duration(seconds: 1));
+                  _testLoadData(true);
                   //加载更多完成
                   _refreshController.loadComplete();
                   //显示没有更多数据
+                  if (_isMoreData) _refreshController.loadNoData();
                   // _refreshController.loadNoData();
                 },
                 onRefresh: () {
+                  _testLoadData(false);
                   //刷新完成
                   _refreshController.refreshCompleted();
                   _refreshController.footerMode.value = LoadStatus.canLoading;
                 },
                 content: ListView.builder(
                   // itemCount: list.length,
-                  padding: EdgeInsets.symmetric(horizontal: 12.0),
-                  itemCount: _listData.length,
+                  padding: EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
+                  itemCount: _testListData.length,
                   controller: _scrollController,
                   itemBuilder: (context, index) {
-                    return _todoInformation(_listData[index]);
+                    return _todoInformation(_testListData[index]);
                   },
                 ),
               )
@@ -219,7 +256,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   }
 
 //跳转并传值
-  void go2Detail(Rows rows) {
+  void go2Detail(Data rows) {
     Navigator.pushNamed(context, pageTaskApproval,
         arguments: {"data": rows, "title": widget.title});
   }
@@ -235,7 +272,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                     custId: '818000000113')
                 .toJson()));
 
-    if(this.mounted) {
+    if (this.mounted) {
       setState(() {
         _listData.addAll(findUserTodoTaskModel.body.rows);
         _isLoading = false;
@@ -255,5 +292,3 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     _refreshController.dispose();
   }
 }
-
-

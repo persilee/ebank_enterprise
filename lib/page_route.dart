@@ -312,11 +312,7 @@ onGenerateRoute(RouteSettings settings) {
   }
   if (settings.name == pageDepositInfo) {
     return MaterialPageRoute(builder: (context) {
-      Map<String, dynamic> arguments = settings.arguments;
-      return PageDepositInfo(
-        deposit: arguments['deposit'],
-        cardList: arguments['cardList'],
-      );
+      return PageDepositInfo(deposit: settings.arguments);
     });
   }
   if (settings.name == pageUserAgreement) {
@@ -328,7 +324,7 @@ onGenerateRoute(RouteSettings settings) {
     return MaterialPageRoute(builder: (context) {
       Map<String, dynamic> arguments = settings.arguments;
       return AuthorizationTaskApprovalPage(
-        history: arguments['data'],
+        data: arguments['data'],
         title: arguments['title'],
       );
     });
