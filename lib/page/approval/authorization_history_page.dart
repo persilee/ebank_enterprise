@@ -6,12 +6,19 @@
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
 
+import 'dart:convert';
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
+import 'package:ebank_mobile/data/source/model/my_approval_data.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
+import 'package:ebank_mobile/widget/custom_refresh.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../page_route.dart';
 
@@ -44,14 +51,18 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
       "transfer", "3", "776106645288648704", "2020-11-11 16:02:33");
   var _future;
 
+  bool _isLoading = false;
+  RefreshController _refreshController;
+
+  ////////////
+  List<Data> _testListData = [];
+
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    list.add(dataA);
-    list.add(dataB);
-    list.add(dataC);
-    list.add(dataD);
+    _refreshController = RefreshController();
+    _testLoadData();
     //网络请求
     // _loadAuthorzationRateData(page, 10);
 
@@ -65,67 +76,87 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
     // });
   }
 
-  void go2Detail(FinishTaskDetail history) {
+  void _testLoadData() async {
+    _isLoading = true;
+    await Future.delayed(Duration(seconds: 2));
+    rootBundle.loadString('assets/json/my_history_approval.json').then((value) {
+      Map map = json.decode(value);
+      MyApprovalData data = MyApprovalData.fromJson(map);
+      print(data.toJson());
+      if (this.mounted) {
+        setState(() {
+          _testListData.addAll(data.data);
+          _isLoading = false;
+        });
+      }
+    });
+  }
+
+  void go2Detail(Data history) {
     Navigator.pushNamed(context, pageAuthorizationTaskApproval,
         arguments: {"data": history, "title": widget.title});
   }
 
   @override
   Widget build(BuildContext context) {
-    bool _isDate = false;
-    if (list.length != 0) {
-      _isDate = true;
-    }
-    return _isDate
-        ? ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 12.0),
-            itemCount: list.length + 1,
-            // itemCount: list.length,
-            itemBuilder: (context, index) {
-              if (index == list.length) {
-                return Container();
-                // return _loadingView();
-              } else {
-                return Container(
-                  height: 156.0,
-                  padding: EdgeInsets.only(top: 16),
-                  child: GestureDetector(
-                    onTap: () {
-                      go2Detail(list[index]);
-                      print('选择账号');
-                    },
-                    child: Stack(
-                      overflow: Overflow.visible,
-                      children: [
-                        Row(
+    return _isLoading
+        ? HsgLoading()
+        : _testListData.length > 0
+            ? CustomRefresh(
+                controller: _refreshController,
+                onRefresh: () async {
+                  await Future.delayed(Duration(seconds: 1));
+                  //刷新完成
+                  _refreshController.refreshCompleted();
+                  _refreshController.footerMode.value = LoadStatus.canLoading;
+                },
+                onLoading: () async {
+                  await Future.delayed(Duration(seconds: 1));
+                  _refreshController.loadNoData();
+                },
+                content: ListView.builder(
+                  padding: EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
+                  itemCount: _testListData.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      height: 156.0,
+                      padding: EdgeInsets.only(top: 16),
+                      child: GestureDetector(
+                        onTap: () {
+                          go2Detail(_testListData[index]);
+                        },
+                        child: Stack(
+                          overflow: Overflow.visible,
                           children: [
-                            Container(
-                              width: 16.0,
+                            Row(
+                              children: [
+                                Container(
+                                  width: 20.0,
+                                ),
+                                Expanded(
+                                  child: _getColumn(index),
+                                ),
+                              ],
                             ),
-                            Expanded(
-                              child: _getColumn(index),
+                            Positioned(
+                              top: 0,
+                              left: 0,
+                              child: Column(
+                                children: [
+                                  _icon(),
+                                  _line(),
+                                ],
+                              ),
                             ),
                           ],
                         ),
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          child: Column(
-                            children: [
-                              _icon(),
-                              _line(),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }
-            },
-            controller: _scrollController,
-          )
-        : notDataContainer(context, S.current.no_data_now);
+                      ),
+                    );
+                  },
+                  controller: _scrollController,
+                ),
+              )
+            : notDataContainer(context, S.current.no_data_now);
   }
 
   //蓝色圆点
@@ -134,7 +165,7 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
       padding: EdgeInsets.only(right: 10.0),
       child: Icon(
         Icons.fiber_manual_record,
-        color: HsgColors.blueIcon,
+        color: Color(0xff3394D4),
         size: 10.0,
       ),
     );
@@ -178,9 +209,18 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
   }
 
   _getColumn(index) {
-    return Card(
-      elevation: 6.0,
-      shadowColor: Colors.grey.withOpacity(0.2),
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xff46529F).withOpacity(0.1),
+            spreadRadius: 1.0,
+            blurRadius: 10.0,
+          ),
+        ],
+        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+        color: Colors.white,
+      ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 15.0),
         child: Column(
@@ -188,11 +228,11 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             //待办任务名称
-            _taskName(list[index].processTitle),
+            _taskName(_testListData[index].taskName),
             //发起人
-            _getRow(S.current.sponsor, list[index].startUser),
+            _getRow(S.current.sponsor, _testListData[index].startUser),
             //创建时间
-            _getRow(S.current.creation_time, list[index].createTime),
+            _getRow(S.current.creation_time, _testListData[index].createTime),
             //创建时间
             _getRow('处理状态', '成功'),
           ],
@@ -233,42 +273,12 @@ class _AuthorizationHistoryPageState extends State<AuthorizationHistoryPage> {
 
   //加载更多
   _getMore() {
-    if (loadStatus == LoadingStatus.STATUS_IDEL) {
-      setState(() {
-        loadStatus = LoadingStatus.STATUS_LOADING;
-      });
-    }
-    setState(() {
-      if (list.length < count) {
-        page = page + 1;
-        _loadAuthorzationRateData(page, 10);
-        loadStatus = LoadingStatus.STATUS_IDEL;
-      } else {
-        loadStatus = LoadingStatus.STATUS_LOADING;
-      }
-    });
-  }
-
-//加载
-  Widget _loadingView() {
-    var loadingIndicator = Visibility(
-      visible: loadStatus == LoadingStatus.STATUS_LOADING ? false : true,
-      child: SizedBox(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation(Colors.blue),
-        ),
-      ),
-    );
-    return Row(
-      children: <Widget>[loadingIndicator],
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-    );
   }
 
   //销毁
   void dispose() {
     super.dispose();
     _scrollController.dispose();
+    _refreshController.dispose();
   }
 }
