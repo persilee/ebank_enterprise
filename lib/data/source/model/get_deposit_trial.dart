@@ -4,6 +4,9 @@ part 'get_deposit_trial.g.dart';
 
 @JsonSerializable()
 class GetDepositTrialReq extends Object {
+  @JsonKey(name: 'bal')
+  String bal;
+
   @JsonKey(name: 'conNo')
   String conNo;
 
@@ -11,6 +14,7 @@ class GetDepositTrialReq extends Object {
   String settBal;
 
   GetDepositTrialReq(
+    this.bal,
     this.conNo,
     this.settBal,
   );
@@ -44,6 +48,15 @@ class GetDepositTrialResp extends Object {
   @JsonKey(name: 'bal')
   String bal;
 
+  @JsonKey(name: 'matBal')
+  String matBal;
+
+  @JsonKey(name: 'clsRate')
+  String clsRate;
+
+  @JsonKey(name: 'clsInt')
+  String clsInt;
+
   @JsonKey(name: 'conMatAmt')
   String conMatAmt;
 
@@ -59,6 +72,12 @@ class GetDepositTrialResp extends Object {
   @JsonKey(name: 'eryInt')
   String eryInt;
 
+  @JsonKey(name: 'hdlFee')
+  String hdlFee;
+
+  @JsonKey(name: 'pnltFee')
+  String pnltFee;
+
   @JsonKey(name: 'matAmt')
   String matAmt;
 
@@ -73,11 +92,16 @@ class GetDepositTrialResp extends Object {
     this.mtDate,
     this.intRate,
     this.bal,
+    this.matBal,
+    this.clsRate,
+    this.clsInt,
     this.conMatAmt,
     this.conRate,
     this.conInt,
     this.eryRate,
     this.eryInt,
+    this.hdlFee,
+    this.pnltFee,
     this.matAmt,
     this.terms,
   );

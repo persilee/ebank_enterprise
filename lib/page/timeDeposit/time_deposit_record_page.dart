@@ -64,7 +64,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     _loadTotalAssets();
 
     NotificationCenter.instance.addObserver('load', (object) {
-      if (mounted) {
+      if (this.mounted) {
         setState(() {
           if (object) {
             _loadDeopstData();
@@ -280,12 +280,12 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
                     //整存整取
                     var taking = [
                       SizedBox(
-                        height: 37,
+                        // height: 37,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
-                              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
                               child: Text(
                                 rows[index].engName,
                                 style: TextStyle(
@@ -353,7 +353,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           DepositRecordReq(ciNo, '', excludeClosed, page, 10, ''),
           'getDepositRecord')
     }).then((value) {
-      if (mounted) {
+      if (this.mounted) {
         setState(() {
           value.forEach((element) {
             if (element.rows.length != 0) {
@@ -400,7 +400,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           .getTotalAssets(GetTotalAssetsReq(userId, ciNo, ''), 'getTotalAssets')
     }).then((value) {
       value.forEach((element) {
-        if (mounted) {
+        if (this.mounted) {
           setState(() {
             totalAmt = element.tdTotal;
             _defaultCcy = element.ccy;
@@ -414,19 +414,23 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   //加载更多
   _getMore() {
     if (loadStatus == LoadingStatus.STATUS_IDEL) {
+      if (this.mounted) {
+        setState(() {
+          loadStatus = LoadingStatus.STATUS_LOADING;
+        });
+      }
+    }
+    if (this.mounted) {
       setState(() {
-        loadStatus = LoadingStatus.STATUS_LOADING;
+        if (list.length >= count) {
+          loadStatus = LoadingStatus.STATUS_IDEL;
+        } else {
+          page = page + 1;
+          _loadDeopstData();
+          loadStatus = LoadingStatus.STATUS_LOADING;
+        }
       });
     }
-    setState(() {
-      if (list.length >= count) {
-        loadStatus = LoadingStatus.STATUS_IDEL;
-      } else {
-        page = page + 1;
-        _loadDeopstData();
-        loadStatus = LoadingStatus.STATUS_LOADING;
-      }
-    });
   }
 
   @override

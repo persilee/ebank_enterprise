@@ -597,9 +597,9 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   /// 登记证件类型输入值
   void _selectDocumentType(BuildContext context) async {
     List<String> documentList = [
-      'Certificate of Incorporation', // 公司注册证书',
-      'Business Registration Certificate', // 商业登记证',
-      'Other', // 其他'
+      // 'Certificate of Incorporation', // 公司注册证书',
+      // 'Business Registration Certificate', // 商业登记证',
+      // 'Other', // 其他'
     ];
     if (_documentTypes.length > 0) {
       documentList = [];
@@ -631,10 +631,10 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   ///公司类别选择
   void _selectCompanyType(BuildContext context) async {
     List<String> companyList = [
-      'Limited Company', // 有限公司',
-      'Partnership', //合伙经营商号',
-      'Sole Proprietorship', //独资经营商号',
-      'Other (Please Specify)', //其他 (请注明)'
+      // 'Limited Company', // 有限公司',
+      // 'Partnership', //合伙经营商号',
+      // 'Sole Proprietorship', //独资经营商号',
+      // 'Other (Please Specify)', //其他 (请注明)'
     ];
     if (_companyTypes.length > 0) {
       companyList = [];
@@ -668,28 +668,28 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   /// 商业/行业性质选择
   void _selectIndustrialNature(BuildContext context) async {
     List<String> industrialList = [
-      'Agriculture, forestry and fishing',
-      'Mining and quarrying',
-      'Manufacturing',
-      'Electricity, gas, steam and air conditioning supply',
-      'Water supply; sewerage, waste management and remediation activities',
-      'Construction',
-      'Wholesale and retail trade; repair of motor vehicles and motorcycles',
-      'Transportation and storage',
-      'Accommodation and food service activities',
-      'Information and communication',
-      'Financial and insurance activities',
-      'Real estate activities',
-      'Professional, scientific and technical activities',
-      'Administrative and support service activities',
-      'Public administration and defence; compulsory social security',
-      'Education',
-      'Human health and social work activities',
-      'Arts, entertainment and recreation',
-      'Other service activities',
-      'Activities of households as employers; undifferentiated goods- and services-producing activities of households for own use',
-      'Activities of extraterritorial organizations and bodies',
-      'Sensitive business'
+      // 'Agriculture, forestry and fishing',
+      // 'Mining and quarrying',
+      // 'Manufacturing',
+      // 'Electricity, gas, steam and air conditioning supply',
+      // 'Water supply; sewerage, waste management and remediation activities',
+      // 'Construction',
+      // 'Wholesale and retail trade; repair of motor vehicles and motorcycles',
+      // 'Transportation and storage',
+      // 'Accommodation and food service activities',
+      // 'Information and communication',
+      // 'Financial and insurance activities',
+      // 'Real estate activities',
+      // 'Professional, scientific and technical activities',
+      // 'Administrative and support service activities',
+      // 'Public administration and defence; compulsory social security',
+      // 'Education',
+      // 'Human health and social work activities',
+      // 'Arts, entertainment and recreation',
+      // 'Other service activities',
+      // 'Activities of households as employers; undifferentiated goods- and services-producing activities of households for own use',
+      // 'Activities of extraterritorial organizations and bodies',
+      // 'Sensitive business'
     ];
 
     if (_industrialNatures.length > 0) {

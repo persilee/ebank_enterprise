@@ -373,7 +373,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       windowBuilder: (BuildContext popcontext, Animation<double> animation,
           Animation<double> secondaryAnimation) {
         return FadeTransition(
-          opacity: animation,
+          opacity: animation, //animation
+          // alwaysIncludeSemantics: true,
           child: SizeTransition(
             sizeFactor: animation,
             child: _popDialogContent(popcontext),
