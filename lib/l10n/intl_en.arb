@@ -499,6 +499,7 @@
   "tdEarlyRed_modify_expiration_instruction":"Modify expiration instruction",
   "tdEarlyRed_modify_expiration_instruction_determine":"Please confirm whether to modify the expiration instruction as follows：",
   "tdContract_balance_insufficient":"Your balance is insufficient",
+  "tdContract_day":"Day",
   "wangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<王璐瑶（定期）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "zhangqirong_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>张其荣（我的）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "in_all": "There are",

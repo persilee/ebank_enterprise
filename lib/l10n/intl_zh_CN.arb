@@ -498,6 +498,7 @@
   "tdEarlyRed_modify_expiration_instruction":"是否修改到期指示",
   "tdEarlyRed_modify_expiration_instruction_determine":"请确认是否修改到期指示为：",
   "tdContract_balance_insufficient":"您的余额不足",
+  "tdContract_day":"天",
   "wangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<王璐瑶国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "zhangqirong_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>张其荣际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "in_all": "共",
