@@ -94,6 +94,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   ),
                   isEnable: _submit(),
                   clickCallback: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
                     _submitFeedBack();
                   },
                 ),

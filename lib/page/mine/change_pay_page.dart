@@ -163,6 +163,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
                   ),
                   isEnable: _submit(),
                   clickCallback: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
                     _submitData();
                   },
                 ),
@@ -261,6 +262,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
     return FlatButton(
       onPressed: otpEnable
           ? () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _getVerificationCode();
             }
           : null,

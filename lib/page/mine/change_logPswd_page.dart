@@ -154,6 +154,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                   ),
                   isEnable: _submit(),
                   clickCallback: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
                     _updateLoginPassword();
                   },
                 ),
@@ -205,6 +206,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     return FlatButton(
       onPressed: otpEnable
           ? () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _getVerificationCode();
             }
           : null,

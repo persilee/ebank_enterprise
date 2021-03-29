@@ -128,6 +128,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                     ),
                     isEnable: _submit(),
                     clickCallback: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
                       _submitData();
                     },
                   ),
@@ -276,6 +277,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       onPressed: (countdownTime > 0 || _phone == '')
           ? null
           : () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _getVerificationCode();
             },
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间

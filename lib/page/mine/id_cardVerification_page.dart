@@ -312,6 +312,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                     ),
                     isEnable: _submit(),
                     clickCallback: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
                       _realNameAuth();
                     },
                   ),

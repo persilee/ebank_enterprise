@@ -115,6 +115,7 @@ class _SetPayPageState extends State<SetPayPage> {
                   ),
                   isEnable: _submit(),
                   clickCallback: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
                     _submitData();
                   },
                 ),
