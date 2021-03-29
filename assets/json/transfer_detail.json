@@ -1,0 +1,94 @@
+{
+  "transferList":[
+    {
+      "index": 1,
+      "dAc": "50006147456464",
+      "dAcName": "MIKE",
+      "oppAc": "50006147456464",
+      "oppAcName": "MIKE",
+      "bal": "1500.00",
+      "ccy": "USD",
+      "postscript": "转账"
+    },
+    {
+      "index": 3,
+      "dAc": "50006147456464",
+      "dAcName": "MIKE",
+      "oppAc": "50006147456464",
+      "oppAcName": "MIKE",
+      "bal": "1500.00",
+      "ccy": "USD",
+      "postscript": "转账"
+    },
+    {
+      "index": 4,
+      "dAc": "50006147456464",
+      "dAcName": "MIKE",
+      "oppAc": "50006147456464",
+      "oppAcName": "MIKE",
+      "bal": "1500.00",
+      "ccy": "USD",
+      "postscript": "转账"
+    },
+    {
+      "index": 7,
+      "dAc": "50006147456464",
+      "dAcName": "MIKE",
+      "oppAc": "50006147456464",
+      "oppAcName": "MIKE",
+      "bal": "1500.00",
+      "ccy": "USD",
+      "postscript": "转账"
+    },
+    {
+      "index": 9,
+      "dAc": "50006147456464",
+      "dAcName": "MIKE",
+      "oppAc": "50006147456464",
+      "oppAcName": "MIKE",
+      "bal": "1500.00",
+      "ccy": "USD",
+      "postscript": "转账"
+    },
+    {
+      "index": 10,
+      "dAc": "50006147456464",
+      "dAcName": "MIKE",
+      "oppAc": "50006147456464",
+      "oppAcName": "MIKE",
+      "bal": "1500.00",
+      "ccy": "USD",
+      "postscript": "转账"
+    },
+    {
+      "index": 12,
+      "dAc": "50006147456464",
+      "dAcName": "MIKE",
+      "oppAc": "50006147456464",
+      "oppAcName": "MIKE",
+      "bal": "1500.00",
+      "ccy": "USD",
+      "postscript": "转账"
+    },
+    {
+      "index": 13,
+      "dAc": "50006147456464",
+      "dAcName": "MIKE",
+      "oppAc": "50006147456464",
+      "oppAcName": "MIKE",
+      "bal": "1500.00",
+      "ccy": "USD",
+      "postscript": "转账"
+    },
+    {
+      "index": 14,
+      "dAc": "50006147456464",
+      "dAcName": "MIKE",
+      "oppAc": "50006147456464",
+      "oppAcName": "MIKE",
+      "bal": "1500.00",
+      "ccy": "USD",
+      "postscript": "转账"
+    }
+  ]
+}
