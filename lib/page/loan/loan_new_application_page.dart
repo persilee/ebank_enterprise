@@ -1,6 +1,8 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/loan_application.dart';
@@ -10,6 +12,7 @@ import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -20,6 +23,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,10 +36,14 @@ class LoanNewApplicationPage extends StatefulWidget {
 
 class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   int _ccyId = 0; //币种下标
+
   int _index = 3; //贷款期限对应的几个月
   String _deadLine = ''; //贷款期限
   String _goal = ""; //贷款目的
   String _currency = ""; //币种
+  String _loanProductName = ""; //贷款产品名称
+  String _rateValue = ""; //利率
+
   String _inputs = S.current.please_input; //请输入提示
   String _notRequired = S.current.not_required; //非必填提示
   String _custId = ''; //客户号
@@ -50,13 +58,21 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   var _moneyController = new TextEditingController(); //申请金额文本监听器
   var _remarkController = new TextEditingController(); //备注文本监听器
 
-  List<String> _loanProductLists = []; //贷款产品
   List<String> _passwordList = []; //密码列表
   List<String> _ccyList = []; //币种列表、
   List<String> _deadLineLists = []; //贷款期限列表
   List<String> _goalLists = []; //贷款目的列表
-  List<String> _loanAccountLists = []; //放款帐号
-  List<String> _repaymentAccLists = []; //还款帐号
+
+  String _loanAccount = ''; //放款帐号
+  int _loanAccountIndex = 0; //放款款索引
+
+  String _repayAccount = ''; //还款帐号
+  int _repayAccountIndex = 0; //还款索引
+  List<RemoteBankCard> _totalAccoutList = []; //总帐号
+
+  String _custID; //用户ID
+
+  String _reimburseStr = ''; //还款方式
   List<String> _reimburseTypeLists = []; //还款方式
 
   get w500 => null; //还款方式
@@ -69,6 +85,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     _getCcyList(); //获取币种
     _getLoanPurposeList(); //贷款目的
     _getLoanTimeList(); //获取贷款期限
+    _loadTotalAccountData(); //获取贷款账户列表
+    _getLoanRepayTypeList();
   }
 
 // 获取币种列表
@@ -121,6 +139,24 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     });
   }
 
+//还款方式
+  Future _getLoanRepayTypeList() async {
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq("REPAY_TYPE"), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _reimburseTypeLists.clear();
+        data.publicCodeGetRedisRspDtoList.forEach((e) {
+          if (_language == 'zh_CN') {
+            _reimburseTypeLists.add(e.cname);
+          } else {
+            _reimburseTypeLists.add(e.name);
+          }
+        });
+      }
+    });
+  }
+
   //获取客户号
   Future<void> _custIdReqData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -136,13 +172,35 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     });
   }
 
+  //获取放款以及还款帐号列表
+  Future<void> _loadTotalAccountData() async {
+    SVProgressHUD.show();
+    final prefs = await SharedPreferences.getInstance();
+    _custID = prefs.getString(ConfigKey.CUST_ID);
+    CardDataRepository().getCardList('getCardList').then(
+      (data) {
+        SVProgressHUD.dismiss();
+        if (data.cardList != null) {
+          // if (mounted) {
+          setState(() {
+            _totalAccoutList.clear();
+            _totalAccoutList.addAll(data.cardList);
+          });
+        }
+      },
+    ).catchError((e) {
+      SVProgressHUD.dismiss();
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).loan_apply),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
       ),
       body: Container(
         color: HsgColors.commonBackground,
@@ -170,7 +228,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
                 ),
               ),
               Container(
-                //第二组
+                //第二组横线
                 height: 20,
                 color: HsgColors.commonBackground,
               ),
@@ -235,10 +293,17 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
           SelectInkWell(
             //贷款产品
             title: S.current.loan_New_product_column,
-            item: _currency,
+            item: _loanProductName,
             onTap: () {
-              //点击回调的方法
-              // _showDialog(_ccyId, _ccyList);
+              FocusScope.of(context).requestFocus(FocusNode());
+              //点击跳转回调的方法
+              Navigator.pushNamed(context, pageLoanProductlistNav)
+                  .then((value) {
+                setState(() {
+                  Map map = value;
+                  _loanProductName = map['pro_name'];
+                });
+              });
             },
           ),
           TextFieldContainer(
@@ -246,14 +311,15 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
             title: S.current.apply_amount,
             hintText: _inputs,
             keyboardType: TextInputType.emailAddress,
-            controller: _contactsController,
+            controller: _moneyController,
             callback: _checkloanIsClick,
           ),
           SelectInkWell(
             //贷款期限
             title: S.current.loan_duration,
-            item: _currency,
+            item: _deadLine,
             onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _select(S.current.loan_duration, _deadLineLists, 0);
             },
           ),
@@ -262,39 +328,45 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
             title: S.current.debit_currency,
             item: _currency,
             onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _showDialog(_ccyId, _ccyList);
             },
           ),
           SelectInkWell(
             //贷款目的
             title: S.current.loan_purpose,
-            item: _currency,
+            item: _goal,
             onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _select(S.current.loan_purpose, _goalLists, 1);
             },
           ),
           SelectInkWell(
             //放款帐号
             title: S.current.loan_Disbursement_Account_column,
-            item: _currency,
+            item: _loanAccount,
             onTap: () {
-              // _showDialog(_ccyId, _ccyList);
+              FocusScope.of(context).requestFocus(FocusNode());
+              _selectAccount(0);
             },
           ),
           SelectInkWell(
             //还款帐号
             title: S.current.loan_Repayment_account_column,
-            item: _currency,
+            item: _repayAccount,
             onTap: () {
-              // _showDialog(_ccyId, _ccyList);
+              FocusScope.of(context).requestFocus(FocusNode());
+              _selectAccount(1);
             },
           ),
           SelectInkWell(
             //还款方式
             title: S.current.loan_Repayment_method_column,
-            item: _currency,
+            item: _reimburseStr,
             onTap: () {
-              // _showDialog(_ccyId, _ccyList);
+              FocusScope.of(context).requestFocus(FocusNode());
+              _select(S.current.loan_Repayment_method_column,
+                  _reimburseTypeLists, 2);
             },
           ),
           Container(
@@ -308,7 +380,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
                   textAlign: TextAlign.start,
                 ),
                 Text(
-                  '1222',
+                  '1%',
                   style: TextStyle(),
                   textAlign: TextAlign.end,
                 ),
@@ -327,11 +399,6 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
       color: Colors.white,
       child: Column(
         children: [
-          // Container(
-          //   // margin: EdgeInsets.only(left: -15, right: ),
-          //   color: HsgColors.commonBackground,
-          //   height: 20,
-          // ),
           TextFieldContainer(
             //联系人
             title: S.current.contact,
@@ -360,32 +427,17 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     );
   }
 
-  // //创建list数据
-  // Column _loanFormColumn() {
-  //   return Column(
-  //     children: [
-  //       //构建子类列表
-  //       Container(
-  //         color: Colors.white,
-  //         child: Padding(
-  //             padding: EdgeInsets.symmetric(horizontal: 10),
-  //             child: Text("申请信息")),
-  //       ),
-  //     ],
-  //   );
-  // }
-
 //交易密码窗口
   void _openBottomSheet() async {
-    _passwordList = await showHsgBottomSheet(
-      context: context,
-      builder: (context) {
-        return HsgPasswordDialog(
-          title: S.current.input_password,
-          resultPage: pageOperationResult,
-        );
-      },
-    );
+    // _passwordList = await showHsgBottomSheet(
+    //   context: context,
+    //   builder: (context) {
+    //     return HsgPasswordDialog(
+    //       title: S.current.input_password,
+    //       resultPage: pageOperationResult,
+    //     );
+    //   },
+    // );
   }
 
   //协议文本内容
@@ -422,7 +474,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     );
   }
 
-  //币种中间部分弹窗内容
+  //币种弹窗内容
   _showDialog(int index, List<String> list) async {
     final result = await showDialog(
       context: context,
@@ -472,7 +524,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     );
   }
 
-  //底部弹窗内容选择
+  //期限，目的底部弹窗内容选择
   _select(String title, List list, int i) {
     SinglePicker.showStringPicker(
       context,
@@ -480,12 +532,56 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
       title: title,
       clickCallBack: (int index, var str) {
         setState(() {
-          i == 0 ? _deadLine = str : _goal = str;
+          //贷款期限，贷款目的, 还款方式
+          if (i == 0) {
+            _deadLine = str;
+          } else if (i == 1) {
+            _goal = str;
+          } else {
+            _reimburseStr = str;
+          }
           _index = _index * (index + 1);
           _checkloanIsClick();
         });
       },
     );
+  }
+
+  //账号弹窗
+//付款账户弹窗
+  _selectAccount(int index) async {
+    List<String> bankCards = [];
+    List<String> accounts = [];
+    List<String> ciNames = [];
+    for (RemoteBankCard cards in _totalAccoutList) {
+      //便利拿出帐号
+      bankCards.add(cards.cardNo);
+      ciNames.add((cards.ciName));
+    }
+    for (var i = 0; i < bankCards.length; i++) {
+      accounts.add(FormatUtil.formatSpace4(bankCards[i]));
+    }
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) => HsgBottomSingleChoice(
+            title: S.current.payment_account,
+            items: accounts,
+            lastSelectedPosition:
+                index == 0 ? _loanAccountIndex : _repayAccountIndex));
+    if (result != null && result != false) {
+      setState(() {
+        if (index == 0) {
+          //返回拿到的索引值
+          _loanAccount = accounts[result];
+          _loanAccountIndex = result;
+        } else {
+          _repayAccount = accounts[result];
+          _repayAccountIndex = result;
+        }
+      });
+    } else {
+      return;
+    }
   }
 
   //判断按钮能否使用
@@ -496,7 +592,11 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         _moneyController.text != '' &&
         _deadLine != '' &&
         _goal != '' &&
-        _currency != '') {
+        _currency != '' &&
+        _loanProductName != '' &&
+        _loanAccount != '' &&
+        _repayAccount != '' &&
+        _reimburseStr != '') {
       return setState(() {
         _isButton = true;
       });
