@@ -345,11 +345,13 @@ class _RegisterPageState extends State<RegisterPage> {
     VersionDataRepository()
         .checkPhone(CheckPhoneReq(_phoneNum.text, '1'), 'checkPhoneReq')
         .then((data) {
-      setState(() {
-        _isRegister = data.register;
-        _sendSmsRegister(_isRegister);
-        HSProgressHUD.dismiss();
-      });
+      if (mounted) {
+        setState(() {
+          _isRegister = data.register;
+          _sendSmsRegister(_isRegister);
+          HSProgressHUD.dismiss();
+        });
+      }
     }).catchError((e) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
@@ -381,11 +383,13 @@ class _RegisterPageState extends State<RegisterPage> {
           .sendSmsRegister(SendSmsRegisterReq('', _phoneNum.text, 'register'),
               'sendSmsRegister')
           .then((value) {
-        setState(() {
-          HSProgressHUD.dismiss();
-          _startCountdown();
-          //  _sms.text = "123456";
-        });
+        if (mounted) {
+          setState(() {
+            HSProgressHUD.dismiss();
+            _startCountdown();
+            //  _sms.text = "123456";
+          });
+        }
       }).catchError((e) {
         HSProgressHUD.dismiss();
         Fluttertoast.showToast(

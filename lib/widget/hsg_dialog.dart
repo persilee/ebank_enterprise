@@ -439,7 +439,7 @@ class HsgBottomSingleChoice extends StatelessWidget {
         ),
       );
     }
-
+    //取消按钮
     final actionChildren = [
       Expanded(
         child: FlatButton(
@@ -502,6 +502,7 @@ class HsgBottomSingleChoice extends StatelessWidget {
     );
   }
 
+  //图片剪裁
   Widget _getItemRow(int position, BuildContext context, int selectedPosition) {
     List<Widget> rowChildren = [
       Container(
