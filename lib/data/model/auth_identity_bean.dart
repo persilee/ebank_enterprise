@@ -300,7 +300,7 @@ class CompareImageData {
 
   ///相识度
   @JsonKey(name: 'score')
-  String score;
+  double score;
 
   CompareImageData(
     this.faceImgUrl,

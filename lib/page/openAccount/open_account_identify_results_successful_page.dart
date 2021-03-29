@@ -303,4 +303,45 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
 
     return dataReq;
   }
+
+  List<String> _changeTimeData(String dateStr, bool isSplit) {
+    List<String> resultDataList = [];
+    if (isSplit == true) {
+      if (dateStr.contains('-')) {
+        List dataList = dateStr.split('-');
+        if (dataList.length > 1) {
+          resultDataList.add(_changeTimeString(dataList[0]));
+          resultDataList.add(_changeTimeString(dataList[1]));
+        } else {
+          resultDataList.add(_changeTimeString(dateStr));
+        }
+      } else {
+        resultDataList.add(_changeTimeString(dateStr));
+      }
+    } else {
+      resultDataList.add(_changeTimeString(dateStr));
+    }
+    return resultDataList;
+  }
+
+  String _changeTimeString(String dateStr) {
+    String dateString = dateStr.replaceAll('.', '-');
+    dateString = dateStr.replaceAll('/', '-');
+    if (dateString.contains('-')) {
+      List<String> dataList = dateString.split('-');
+      if (dataList.length > 2) {
+        String year = dataList[0];
+        String month = dataList[1];
+        String day = dataList[2];
+        if (month.length == 1) {
+          month = '0' + month;
+        }
+        if (day.length == 1) {
+          day = '0' + day;
+        }
+        dateString = year + '-' + month + '-' + day;
+      }
+    }
+    return dateString;
+  }
 }

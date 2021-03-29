@@ -50,8 +50,8 @@ class _MinePageState extends State<MinePage> {
   String _headPortraitUrl = "";
   var _imgPath;
   // var _headPortraitUrl = ''; // 头像地址
-  bool _switchZhiWen = true; //指纹登录
-  bool _switchFaceId = false; //faceID登录
+  // bool _switchZhiWen = true; //指纹登录
+  // bool _switchFaceId = false; //faceID登录
   String lastVersionName = ""; //版本号
   String _userPhone = "";
   String _userType = "";
