@@ -136,7 +136,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
         idInformationList = data.publicCodeGetRedisRspDtoList;
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
     });
   }
 
@@ -456,7 +456,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   _realNameAuth() async {
     //调用三要素验证，成功后进入人脸识别，识别成功后进入设置密码阶段
     if (_certNo.text.length <= 0) {
-      Fluttertoast.showToast(msg: '请输入证件号!');
+      Fluttertoast.showToast(msg: '请输入证件号!', gravity: ToastGravity.CENTER);
       return;
     }
     print(_certNo.text +
@@ -491,8 +491,8 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
-      HSProgressHUD.showError(status: e.toString());
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
       print(e.toString());
     });
 

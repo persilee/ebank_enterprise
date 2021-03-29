@@ -137,10 +137,9 @@ class _SetPayPageState extends State<SetPayPage> {
   //提交按钮
   _submitData() async {
     if (_newPwd.text != _confimPwd.text) {
-      HSProgressHUD.showInfo(status: S.of(context).differentPwd);
+      Fluttertoast.showToast(
+          msg: S.of(context).differentPwd, gravity: ToastGravity.CENTER);
     } else {
-      // Navigator.of(context)..pop()..pop()..pop();
-      // Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
       _userId = prefs.getString(ConfigKey.USER_ID);
@@ -171,7 +170,7 @@ class _SetPayPageState extends State<SetPayPage> {
         }
         Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
       }).catchError((e) {
-        HSProgressHUD.showError(status: e.toString());
+        Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
         HSProgressHUD.dismiss();
       });
     }

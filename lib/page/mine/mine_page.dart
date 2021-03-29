@@ -671,7 +671,7 @@ class _MinePageState extends State<MinePage> {
   //上传头像
   _uploadAvatar() async {
     if (_imgPath == null || _imgPath == '') {
-      HSProgressHUD.showInfo(status: '图片异常，请重新选择');
+      Fluttertoast.showToast(msg: '图片异常，请重新选择', gravity: ToastGravity.CENTER);
     } else {
       // HSProgressHUD.show();
       // UploadAvatarRepository()
@@ -690,7 +690,7 @@ class _MinePageState extends State<MinePage> {
       ApiClient().uploadAvatar(file, BaseBody(body: {})).then((value) {
         print(value);
       }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
+        Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
       });
     }
   }
@@ -723,9 +723,8 @@ class _MinePageState extends State<MinePage> {
       }
       _changeUserInfoShow(_userInfoResp);
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
-      HSProgressHUD.showError(status: e.toString());
-      // print('${e.toString()}');
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      print('${e.toString()}');
     });
   }
 
@@ -776,15 +775,13 @@ class _MinePageState extends State<MinePage> {
                 new MaterialPageRoute(builder: (context) => new LoginPage()),
                 (route) => false);
           });
-
-          HSProgressHUD.showInfo(status: S.of(context).logoutSuccess);
-          //  S.of(context).please_input_password
+          Fluttertoast.showToast(
+              msg: S.of(context).logoutSuccess, gravity: ToastGravity.CENTER);
         });
       }
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
       HSProgressHUD.dismiss();
-      HSProgressHUD.showError(status: e.toString());
       // print(e.toString());
     });
   }
@@ -866,7 +863,7 @@ class _MinePageState extends State<MinePage> {
         lastVersionName = value.versionName;
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
     });
   }
 
@@ -902,7 +899,7 @@ class _MinePageState extends State<MinePage> {
         _register = (value.register).toString();
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
     });
   }
 
@@ -940,7 +937,7 @@ class _MinePageState extends State<MinePage> {
         _sms = "123456";
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
     });
   }
 
@@ -979,7 +976,7 @@ class _MinePageState extends State<MinePage> {
         .then((value) {
       setState(() {});
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
     });
   }
 }
