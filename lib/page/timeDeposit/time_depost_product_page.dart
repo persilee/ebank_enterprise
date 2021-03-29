@@ -62,11 +62,13 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     // });
 
     NotificationCenter.instance.addObserver('timeDepositProduct', (object) {
-      setState(() {
-        if (object) {
-          _loadData();
-        }
-      });
+      if (this.mounted) {
+        setState(() {
+          if (object) {
+            _loadData();
+          }
+        });
+      }
     });
   }
 
@@ -227,7 +229,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     return Container(
       color: Colors.white,
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.fromLTRB(18, 0, 18, 0),
+      padding: EdgeInsets.fromLTRB(18, 0, 18, 11),
       height: 300.0,
       child: Material(
         child: Column(
@@ -329,11 +331,14 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
               items: ccyList,
             ));
     if (result != null && result != false) {
-      setState(() {
-        if (result != null && result != false) {
-          _changedCcy = ccyList[result];
-        }
-      });
+      if (this.mounted) {
+        setState(() {
+          if (result != null && result != false) {
+            _changedCcy = ccyList[result];
+          }
+        });
+      }
+
       (popcontext as Element).markNeedsBuild();
     }
   }
@@ -347,12 +352,15 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
               items: terms,
             ));
     if (result != null && result != false) {
-      setState(() {
-        if (result != null && result != false) {
-          _changedTerm = terms[result];
-          _judge(termCodes[result]);
-        }
-      });
+      if (this.mounted) {
+        setState(() {
+          if (result != null && result != false) {
+            _changedTerm = terms[result];
+            _judge(termCodes[result]);
+          }
+        });
+      }
+
       (popcontext as Element).markNeedsBuild();
     }
   }
@@ -409,13 +417,15 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           ),
         ),
         onPressed: () {
-          setState(() {
-            inputValue.text = '';
-            _changedCcy = S.current.hint_please_select;
-            _changedTerm = S.current.hint_please_select;
-            (popcontext as Element).markNeedsBuild();
-            _loadData();
-          });
+          if (this.mounted) {
+            setState(() {
+              inputValue.text = '';
+              _changedCcy = S.current.hint_please_select;
+              _changedTerm = S.current.hint_please_select;
+              (popcontext as Element).markNeedsBuild();
+              _loadData();
+            });
+          }
         },
       ),
     );
@@ -676,10 +686,17 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           )
         ],
       ),
-      body: Container(
-        color: HsgColors.commonBackground,
-        child: CustomScrollView(
-          slivers: _titleSection(productList, producDTOList),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
+          color: HsgColors.commonBackground,
+          child: CustomScrollView(
+            slivers: _titleSection(productList, producDTOList),
+          ),
         ),
       ),
     );

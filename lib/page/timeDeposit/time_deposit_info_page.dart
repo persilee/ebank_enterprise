@@ -101,7 +101,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   @override
   void initState() {
     super.initState();
-    _loadDepositData();
     _getInsCode();
     _getDetail();
     _loadData();
@@ -182,7 +181,9 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     } else {
       return;
     }
-    setState(() {});
+    if (this.mounted) {
+      setState(() {});
+    }
   }
 
 //弹窗
@@ -249,9 +250,12 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   Widget _roundCheckBox() {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          _checkBoxValue = !_checkBoxValue;
-        });
+        if (this.mounted) {
+          setState(() {
+            _loadDepositData();
+            _checkBoxValue = !_checkBoxValue;
+          });
+        }
       },
       child: Container(
         width: 20,
@@ -309,20 +313,22 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         items: instructions,
       ),
     );
-    setState(() {
-      if (result != null && result != false) {
-        instCode = instructions[result];
-        // instCode = instructionDatas[result];
-        _verificationDialog(
-            S.current.tdEarlyRed_modify_expiration_instruction,
-            S.current.tdEarlyRed_modify_expiration_instruction_determine +
-                '\n' +
-                instCode,
-            _select);
-      } else {
-        // return {instCode, instCode};
-      }
-    });
+    if (this.mounted) {
+      setState(() {
+        if (result != null && result != false) {
+          instCode = instructions[result];
+          // instCode = instructionDatas[result];
+          _verificationDialog(
+              S.current.tdEarlyRed_modify_expiration_instruction,
+              S.current.tdEarlyRed_modify_expiration_instruction_determine +
+                  '\n' +
+                  instCode,
+              _select);
+        } else {
+          // return {instCode, instCode};
+        }
+      });
+    }
   }
 
   @override
@@ -468,23 +474,28 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   _loadDepositData() {
     Future.wait({
       DepositDataRepository().getDepositTrial(
-          GetDepositTrialReq(deposit.conNo, deposit.bal), 'GetDepositTrialReq')
+          GetDepositTrialReq(bal, conNos, bal), 'GetDepositTrialReq')
     }).then((value) {
       value.forEach((element) {
-        setState(() {
-          conMatAmt = element.conMatAmt;
-          matAmt = element.matAmt;
-          eryInt = element.eryInt;
-          eryRate = element.eryRate;
-          mainAc = element.mainAc;
-        });
+        if (this.mounted) {
+          setState(() {
+            conMatAmt = element.conMatAmt;
+            matAmt = element.matAmt;
+            eryInt = element.eryInt;
+            eryRate = element.eryRate;
+            mainAc = element.mainAc;
+          });
+        }
       });
     });
   }
 
 // 提前结清
   _contractEarly(BuildContext context) {
-    setState(() {});
+    if (this.mounted) {
+      setState(() {});
+    }
+
     HSProgressHUD.show();
     DepositDataRepository()
         .getDepositEarlyContract(
@@ -506,7 +517,9 @@ class _PageDepositInfo extends State<PageDepositInfo> {
       HSProgressHUD.dismiss();
       _showContractSucceedPage(context);
     }).catchError((e) {
-      setState(() {});
+      if (this.mounted) {
+        setState(() {});
+      }
       HSProgressHUD.dismiss();
       HSProgressHUD.showError(status: '${e.toString()}');
     });
@@ -576,10 +589,12 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     CardDataRepository().getCardList('getCardList').then(
       (data) {
         if (data.cardList != null) {
-          setState(() {
-            cards.clear();
-            cards.addAll(data.cardList);
-          });
+          if (this.mounted) {
+            setState(() {
+              cards.clear();
+              cards.addAll(data.cardList);
+            });
+          }
         }
       },
     ).catchError((e) {
@@ -594,13 +609,15 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         data.publicCodeGetRedisRspDtoList.forEach((element) {
-          setState(() {
-            if (language == 'zh_CN') {
-              instructions.add(element.cname);
-            } else {
-              instructions.add(element.name);
-            }
-          });
+          if (this.mounted) {
+            setState(() {
+              if (language == 'zh_CN') {
+                instructions.add(element.cname);
+              } else {
+                instructions.add(element.name);
+              }
+            });
+          }
         });
       }
     });
@@ -608,7 +625,10 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   //结算成功-跳转页面
   _showContractSucceedPage(BuildContext context) async {
-    setState(() {});
+    if (this.mounted) {
+      setState(() {});
+    }
+
     Navigator.pushReplacementNamed(context, pageDepositRecordSucceed,
         arguments: 'timeDepositRecord');
   }
