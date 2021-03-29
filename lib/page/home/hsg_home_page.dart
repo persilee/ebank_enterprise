@@ -23,6 +23,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
+import 'package:ebank_mobile/util/status_bar_util.dart';
+import 'package:ebank_mobile/util/screen_util.dart';
+import 'package:ebank_mobile/widget/custom_tabs.dart' as CustomTabBar;
+import 'package:ebank_mobile/feature_demo/my_tab_indicator.dart';
 
 import '../../page_route.dart';
 
@@ -44,8 +48,9 @@ class _HomePageState extends State<HomePage> {
   String _language = Intl.getCurrentLocale();
   var _features = [];
   UserInfoResp _data;
-
   ScrollController _sctrollController;
+
+  final List tabs = [];
 
   @override
   // ignore: must_call_super
@@ -67,7 +72,6 @@ class _HomePageState extends State<HomePage> {
         }
       },
     );
-
     // 网络请求
     _loadData();
 
@@ -87,8 +91,35 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  //顶部切换
+  Widget _tabBar(BuildContext context) {
+    return Container(
+      width: ScreenUtil.instance.width,
+      color: Colors.white,
+      alignment: Alignment.center,
+      child: CustomTabBar.TabBar(
+        isScrollable: true,
+        labelStyle: TextStyle(
+            fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.black),
+        unselectedLabelStyle:
+            TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+        labelColor: Colors.black,
+        unselectedLabelColor: Colors.grey,
+        indicatorWeight: 4,
+        indicatorSize: CustomTabBar.TabBarIndicatorSize.label,
+        indicator: MyUnderlineTabIndicator(
+          borderSide: BorderSide(width: 4.0, color: HsgColors.accent),
+          bottomPadding: 8.0,
+          indicatorWidthPercentage: 0.46,
+        ),
+        tabs: tabs.map((e) => Tab(text: e)).toList(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    StatusBarUtil.setStatusBar(Brightness.dark, color: Colors.transparent);
     String _language = Intl.getCurrentLocale();
     if (_language == 'zh_CN') {
       _changeLangBtnTltle = '中文（简体）';
