@@ -1,0 +1,36 @@
+{
+  "data": [
+    {
+      "index": 1,
+      "taskName": "行内转账",
+      "type": "oneToOneTransferApproval",
+      "startUser": "989185387615485957",
+      "createTime": "2021-03-29 13:22:16",
+      "status": "完成"
+    },
+    {
+      "index": 2,
+      "taskName": "开立定期存单",
+      "type": "openTdContractApproval",
+      "startUser": "0703658663",
+      "createTime": "2021-03-29 13:22:16",
+      "status": "完成"
+    },
+    {
+      "index": 3,
+      "taskName": "定期提前结清",
+      "type": "earlyRedTdContractApproval",
+      "startUser": "0703658663",
+      "createTime": "2021-03-29 13:22:10",
+      "status": "完成"
+    },
+    {
+      "index": 4,
+      "taskName": "国际汇款",
+      "type": "internationalTransferApproval",
+      "startUser": "0703658789",
+      "createTime": "2021-03-27 18:24:50",
+      "status": "完成"
+    }
+  ]
+}

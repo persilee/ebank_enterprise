@@ -31,7 +31,10 @@ class _TransferPageState extends State<TransferPage> {
   //是否显示无数据页面 true显示
   bool _isShowNoDataWidget = false;
   bool _isLoading = false;
+  bool _headColor = true;
   RefreshController _refreshController;
+  ScrollController _scrollController;
+
   //顶部网格数据
   List<Map<String, Object>> _gridFeatures = [
     {
@@ -63,7 +66,19 @@ class _TransferPageState extends State<TransferPage> {
   void initState() {
     super.initState();
     _refreshController = RefreshController();
+    _scrollController = ScrollController();
     _loadData();
+    //滚动监听
+    _scrollController.addListener(() {
+      setState(() {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          _headColor = false;
+        } else {
+          _headColor = true;
+        }
+      });
+    });
   }
 
   @override
@@ -74,6 +89,7 @@ class _TransferPageState extends State<TransferPage> {
           Container(
             child: CustomScrollView(
               slivers: _sliversSection(_gridFeatures, _listFeatures),
+              controller: _scrollController,
             ),
           ),
         ],
@@ -93,10 +109,12 @@ class _TransferPageState extends State<TransferPage> {
         backgroundColor: Colors.yellowAccent[300],
         floating: true,
         expandedHeight: 170.0,
-        iconTheme: IconThemeData(color: Color(0xffFEFEFE)),
+        elevation: 1,
+        iconTheme: IconThemeData(
+            color: _headColor ? Color(0xffFEFEFE) : Color(0xff262626)),
         textTheme: TextTheme(
           headline6: TextStyle(
-            color: Color(0xffFEFEFE),
+            color: _headColor ? Color(0xffFEFEFE) : Color(0xff262626),
             fontSize: 18,
             fontStyle: FontStyle.normal,
           ),
@@ -252,6 +270,30 @@ class _TransferPageState extends State<TransferPage> {
                 childCount: _partnerListData.length,
               ),
             ),
+      // : SliverToBoxAdapter(
+      //     child: CustomRefresh(
+      //       controller: _refreshController,
+      //       onLoading: () {
+      //         //加载更多完成
+      //         _refreshController.loadComplete();
+      //         //显示没有更多数据
+      //         // _refreshController.loadNoData();
+      //       },
+      //       onRefresh: () {
+      //         //刷新完成
+      //         _refreshController.refreshCompleted();
+      //         _refreshController.footerMode.value = LoadStatus.canLoading;
+      //       },
+      //       content: SliverList(
+      //         delegate: SliverChildBuilderDelegate(
+      //           (content, index) {
+      //             return _partnerListItemWidget(_partnerListData[index]);
+      //           },
+      //           childCount: _partnerListData.length,
+      //         ),
+      //       ),
+      //     ),
+      //   ),
     );
 
     //没数据显示页面
