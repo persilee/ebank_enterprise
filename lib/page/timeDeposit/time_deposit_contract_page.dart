@@ -46,7 +46,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String _changedInstructionTitle = S.current.hint_please_select;
   int _acPosition = 0;
   int _settAcPosition = 0;
-  int _ccyPosition = 0;
   String _changedRateTitle = '';
   String accuPeriod = '0';
   String auctCale = '0';
@@ -57,7 +56,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   List<RemoteBankCard> cards = [];
   RemoteBankCard card;
   String custID;
-  String _cardCcy = S.current.hint_please_select;
+  String _cardCcy = '';
   String _cardBal = '';
   List<String> _cardCcyList = [];
   List<String> _cardBalList = [];
@@ -76,6 +75,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String _amount = '0.00';
   String language = Intl.getCurrentLocale();
   List<String> instructions = [];
+  String _checkAmount = '0.00';
+  List<String> instructionDatas = [];
 
   void initState() {
     super.initState();
@@ -542,20 +543,21 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         items: terms,
       ),
     );
-
-    setState(() {
-      if (result != null && result != false) {
-        _changedTermBtnTiTle = terms[result];
-        _changedRateTitle = rates[result];
-        accuPeriod = accuPeriods[result];
-        auctCale = auctCales[result];
-        depositType = producDTOList[result].depositType;
-        ccy = producDTOList[result].ccy;
-        rate = FormatUtil.formatNum(double.parse(_changedRateTitle), 2);
-      } else {
-        return;
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (result != null && result != false) {
+          _changedTermBtnTiTle = terms[result];
+          _changedRateTitle = rates[result];
+          accuPeriod = accuPeriods[result];
+          auctCale = auctCales[result];
+          depositType = producDTOList[result].depositType;
+          ccy = producDTOList[result].ccy;
+          rate = FormatUtil.formatNum(double.parse(_changedRateTitle), 2);
+        } else {
+          return;
+        }
+      });
+    }
   }
 
   //产品名称和年利率
@@ -645,6 +647,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     if (result != null && result != false) {
       _cardCcy = _cardCcyList[result];
       _cardBal = _cardBalList[result];
+      // _rateCalculate();
     } else {
       return;
     }
@@ -681,12 +684,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
 //到期指示弹窗
   _selectInstruction(BuildContext context) async {
-    List<String> instructionDatas = [
-      '0',
-      '1',
-      '2',
-      '5',
-    ];
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
@@ -694,14 +691,16 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         items: instructions,
       ),
     );
-    setState(() {
-      if (result != null && result != false) {
-        _changedInstructionTitle = instructions[result];
-        instCode = instructionDatas[result];
-      } else {
-        return {_changedInstructionTitle, instCode};
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (result != null && result != false) {
+          _changedInstructionTitle = instructions[result];
+          instCode = instructionDatas[result];
+        } else {
+          return {_changedInstructionTitle, instCode};
+        }
+      });
+    }
   }
 
   _ifClick() {
@@ -740,26 +739,35 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           onPressed: !_ifClick()
               ? null
               : () {
-                  _loadContractData(
-                    accuPeriod,
-                    auctCale,
-                    bal,
-                    productList.bppdCode,
-                    ccy,
-                    custID,
-                    depositType,
-                    instCode,
-                    _changedAccountTitle.replaceAll(
-                        new RegExp(r"\s+\b|\b\s"), ""),
-                    '',
-                    _changedSettAcTitle.replaceAll(
-                        new RegExp(r"\s+\b|\b\s"), ""),
-                    '',
-                    '',
-                  );
+                  if (double.parse(_cardBal) < double.parse(_checkAmount)) {
+                    Fluttertoast.showToast(
+                      msg: S.current.tdContract_balance_insufficient,
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                    );
+                  } else {
+                    _loadContractData(
+                      accuPeriod,
+                      rate,
+                      auctCale,
+                      bal,
+                      productList.bppdCode,
+                      ccy,
+                      custID,
+                      depositType,
+                      instCode,
+                      _changedAccountTitle.replaceAll(
+                          new RegExp(r"\s+\b|\b\s"), ""),
+                      '',
+                      productList.engName,
+                      _changedSettAcTitle.replaceAll(
+                          new RegExp(r"\s+\b|\b\s"), ""),
+                      '',
+                      '',
+                    );
+                  }
                 },
-          // padding: EdgeInsets.only(top: 1),
-          // color: HsgColors.accent,
           disabledColor: HsgColors.btnDisabled,
           child: Text(
             S.current.deposit_now,
@@ -814,13 +822,15 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     CardDataRepository().getCardList('getCardList').then(
       (data) {
         if (data.cardList != null) {
-          setState(() {
-            cards.clear();
-            cards.addAll(data.cardList);
-            _changedAccountTitle = FormatUtil.formatSpace4(cards[0].cardNo);
-            _getCardBal(
-                cards[0].cardNo.replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
-          });
+          if (mounted) {
+            setState(() {
+              cards.clear();
+              cards.addAll(data.cardList);
+              _changedAccountTitle = FormatUtil.formatSpace4(cards[0].cardNo);
+              _getCardBal(
+                  cards[0].cardNo.replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
+            });
+          }
         }
       },
     ).catchError((e) {
@@ -833,20 +843,27 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     double _payerAmount = 0;
     if ((inputValue.text).length == 0 ||
         double.parse(inputValue.text) < double.parse(productList.minAmt)) {
-      setState(() {
-        _amount = '0.00';
-      });
+      if (mounted) {
+        setState(() {
+          _amount = '0.00';
+        });
+      }
+    } else if (_cardCcy == ccy) {
+      _amount = FormatUtil.formatSringToMoney((inputValue.text).toString());
     } else {
       _payerAmount = AiDecimalAccuracy.parse(inputValue.text).toDouble();
       ForexTradingRepository()
           .transferTrial(
               TransferTrialReq(
-                  amount: _payerAmount, corrCcy: ccy, defaultCcy: _cardCcy),
+                  amount: _payerAmount, corrCcy: _cardCcy, defaultCcy: ccy),
               'TransferTrialReq')
           .then((data) {
-        setState(() {
-          _amount = data.optExAmt;
-        });
+        if (mounted) {
+          setState(() {
+            _amount = FormatUtil.formatSringToMoney((data.optExAmt).toString());
+            _checkAmount = data.optExAmt;
+          });
+        }
       });
     }
   }
@@ -900,9 +917,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                 ccy, ciNo, depositType, tenor),
             'getTimeDepositContractTrial')
         .then((value) {
-      setState(() {
-        matAmt = FormatUtil.formatSringToMoney((value.matAmt).toString());
-      });
+      if (mounted) {
+        setState(() {
+          matAmt = FormatUtil.formatSringToMoney((value.matAmt).toString());
+        });
+      }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
@@ -915,18 +934,21 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
     }).then((value) {
       value.forEach((element) {
-        setState(() {
-          if (_cardBal == '' || _cardCcy == S.current.hint_please_select) {
+        if (mounted) {
+          setState(() {
+            // if (_cardBal == '' || _cardCcy == S.current.hint_please_select) {
             _cardBal = element.cardListBal[0].currBal;
             _cardCcy = element.cardListBal[0].ccy;
-          }
-          _cardBalList.clear();
-          _cardCcyList.clear();
-          element.cardListBal.forEach((element) {
-            _cardCcyList.add(element.ccy);
-            _cardBalList.add(element.currBal);
+            // }
+            _cardBalList.clear();
+            _cardCcyList.clear();
+            element.cardListBal.forEach((element) {
+              _cardCcyList.add(element.ccy);
+              _cardBalList.add(element.currBal);
+            });
+            _rateCalculate();
           });
-        });
+        }
       });
     }).catchError((e) {});
   }
@@ -938,13 +960,16 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         data.publicCodeGetRedisRspDtoList.forEach((element) {
-          setState(() {
-            if (language == 'zh_CN') {
-              instructions.add(element.cname);
-            } else {
-              instructions.add(element.name);
-            }
-          });
+          if (mounted) {
+            setState(() {
+              if (language == 'zh_CN') {
+                instructions.add(element.cname);
+              } else {
+                instructions.add(element.name);
+              }
+              instructionDatas.add(element.code);
+            });
+          }
         });
       }
     });
@@ -952,6 +977,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
   Future<void> _loadContractData(
       String accuPeriod,
+      String annualInterestRate,
       String auctCale,
       double bal,
       String bppdCode,
@@ -961,6 +987,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       String instCode,
       String oppAc,
       String payPassword,
+      String prodName,
       String settDdAc,
       String smsCode,
       String tenor) async {
@@ -968,6 +995,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         .getTimeDepositContract(
             TimeDepositContractReq(
                 accuPeriod,
+                annualInterestRate,
                 auctCale,
                 bal,
                 bppdCode,
@@ -977,15 +1005,18 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                 instCode,
                 oppAc,
                 payPassword,
+                prodName,
                 settDdAc,
                 smsCode,
                 tenor),
             'getTimeDepositContract')
         .then((value) {
-      setState(() {
-        Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
-            arguments: 'timeDepositProduct');
-      });
+      if (mounted) {
+        setState(() {
+          Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
+              arguments: 'timeDepositProduct');
+        });
+      }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });

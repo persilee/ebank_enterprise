@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:ebank_mobile/data/source/model/find_to_do_task_detail_model.dart';
+import 'package:ebank_mobile/data/source/model/find_to_do_task_detail_contract_model.dart';
 import 'package:ebank_mobile/data/source/model/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
@@ -28,10 +28,9 @@ abstract class ApiClient {
 
   /// 根据流程id查询待办任务详细信息
   @POST('/wkfl/processTask/findToDoTaskDetail')
-  Future<FindToDoTaskDetailModel> findToDoTaskDetail(@Body() BaseBody baseBody);
+  Future<FindToDoTaskDetailContractModel> findToDoTaskDetail(@Body() BaseBody baseBody);
 
   /// 上传头像（开户图片上传暂时共用）
   @POST('/cust/user/uploadAvatar')
-  // Future<FindToDoTaskDetailModel> uploadAvatar(@Body() BaseBody baseBody);
-  Future<dynamic> uploadAvatar(@Body() File file);
+  Future<dynamic> uploadAvatar(@Body() File file, BaseBody baseBody);
 }

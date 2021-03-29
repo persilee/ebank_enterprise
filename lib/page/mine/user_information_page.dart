@@ -28,6 +28,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
   var _enterpriseName = ''; // 企业名称
   var _userName = '高阳银行企业用户'; // 姓名
   var _characterName = ''; // 角色名称
+  var _belongCustStatus = ''; //用户状态
   String _userPhone = "";
   UserInfoResp _data;
 
@@ -47,14 +48,16 @@ class _UserInformationPageState extends State<UserInformationPage> {
       _changeLangBtnTltle = 'English';
     }
 
-    UserInfoResp _arguments = ModalRoute.of(context).settings.arguments;
-    if (_arguments != null) {
+    UserInfoResp arguments = ModalRoute.of(context).settings.arguments;
+    if (arguments != null) {
       setState(() {
-        _data = _arguments;
-        _userPhone = _arguments.userPhone != null ? _arguments.userPhone : '';
-        _headPortraitUrl = _arguments.headPortrait != null
-            ? _arguments.headPortrait
-            : ''; //头像地址
+        _data = arguments;
+        _userPhone = arguments.userPhone != null ? arguments.userPhone : '';
+        _headPortraitUrl =
+            arguments.headPortrait != null ? arguments.headPortrait : ''; //头像地址
+        _belongCustStatus = arguments.belongCustStatus != null
+            ? arguments.belongCustStatus
+            : '';
       });
       _changeUserInfoShow(_data);
     }
@@ -74,8 +77,12 @@ class _UserInformationPageState extends State<UserInformationPage> {
             }, 70),
             _infoFrame(S.current.user_name, _userName),
             _infoFrame(S.current.phone_num, _userPhone),
-            _infoFrame(S.current.character, _characterName),
-            _infoFrame(S.current.company_name, _enterpriseName),
+            _belongCustStatus == '6'
+                ? _infoFrame(S.current.character, _characterName)
+                : Container(),
+            _belongCustStatus == '6'
+                ? _infoFrame(S.current.company_name, _enterpriseName)
+                : Container(),
             selectFrame(
                 S.current.language_switch, _hintText(_changeLangBtnTltle), () {
               _selectLanguage(context);

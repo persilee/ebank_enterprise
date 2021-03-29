@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// desc: 个人中心
@@ -17,6 +18,7 @@ import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
@@ -107,7 +109,7 @@ class _MinePageState extends State<MinePage> {
                 image: AssetImage('images/home/navIcon/home_nav_service.png'),
                 width: 18.5,
                 height: 18.5,
-                color: Color(0xff262626),
+                color: HsgColors.mineInfoIcon,
               ),
               onPressed: () {
                 print('联系客服');
@@ -162,12 +164,25 @@ class _MinePageState extends State<MinePage> {
             children: <Widget>[
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: 210,
+                height: 200,
+                // decoration: BoxDecoration(color: Color(0xAA000000)),
                 decoration: BoxDecoration(color: HsgColors.mineHeadBackground),
               ),
             ],
           ),
-          _headerInfoWidget(),
+          // ClipRect(
+          //   //使图片模糊区域仅在子组件区域中
+          //   child: BackdropFilter(
+          //     //背景过滤器
+          //     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0), //设置图片模糊度
+          //     child:
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 200,
+            child: _headerInfoWidget(),
+          ),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -192,6 +207,7 @@ class _MinePageState extends State<MinePage> {
     // });
 
     return Container(
+      margin: EdgeInsets.only(top: 12),
       child: Column(
         children: [
 //          Container(
@@ -391,13 +407,14 @@ class _MinePageState extends State<MinePage> {
 //头部信息展示
   Widget _headerInfoWidget() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      height: 200,
+      alignment: Alignment.center,
+      margin: EdgeInsets.only(top: 50),
       child: Row(
         children: [
           GestureDetector(
             child: Container(
-              margin: EdgeInsets.only(
-                  top: 75.0, left: 32, right: 24.0, bottom: 75.0),
+              margin: EdgeInsets.only(left: 32, right: 24.0),
               child: _headPortrait(),
             ),
             onTap: () {
@@ -407,8 +424,9 @@ class _MinePageState extends State<MinePage> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _belongCustStatus == '1' ? _userInfo() : _userOffInfo(),
+                _belongCustStatus == '6' ? _userInfo() : _userOffInfo(),
                 // Text(
                 //   _userName,
                 //   textAlign: TextAlign.start,
@@ -460,10 +478,10 @@ class _MinePageState extends State<MinePage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _nameInfo(),
+        _nameInfo((MediaQuery.of(context).size.width / 3 * 2 - 160)),
         CustomButton(
           margin: EdgeInsets.all(0),
-          height: 40,
+          height: 35,
           borderRadius: BorderRadius.circular(50.0),
           text: Text(
             S.current.open_account_apply,
@@ -486,7 +504,7 @@ class _MinePageState extends State<MinePage> {
         _enterpriseInfo(),
         Container(
           margin: EdgeInsets.only(top: 7),
-          child: _nameInfo(),
+          child: _nameInfo((MediaQuery.of(context).size.width / 3 * 2 - 20)),
         ),
         Container(
           margin: EdgeInsets.only(top: 10),
@@ -521,10 +539,11 @@ class _MinePageState extends State<MinePage> {
   }
 
   //用户名
-  Widget _nameInfo() {
+  Widget _nameInfo(double maxWidth) {
     return Container(
       constraints: BoxConstraints(
-          maxWidth: (MediaQuery.of(context).size.width / 3 * 2 - 160)),
+        maxWidth: maxWidth,
+      ),
       child: Text(
         _userName,
         overflow: TextOverflow.ellipsis,
@@ -542,7 +561,8 @@ class _MinePageState extends State<MinePage> {
     return Container(
       height: 25,
       decoration: BoxDecoration(
-        color: Color(0xff3394d4).withOpacity(0.66), //HsgColors.accent,
+        // color: Color(0xff3394d4).withOpacity(0.66), //HsgColors.accent,
+        color: HsgColors.mineCharacterBackground, //HsgColors.accent,
         borderRadius: BorderRadius.circular(12.5), //
       ),
       padding: EdgeInsets.fromLTRB(5, 0, 12, 0),
@@ -559,8 +579,7 @@ class _MinePageState extends State<MinePage> {
           ),
           Container(
             constraints: BoxConstraints(
-              maxWidth: 160,
-            ),
+                maxWidth: (MediaQuery.of(context).size.width / 3 * 2 - 100)),
             child: Text(
               characterNameShowStr,
               style: TextStyle(
@@ -608,19 +627,21 @@ class _MinePageState extends State<MinePage> {
 
   //修改语言显示
   void _changeUserInfoShow(UserInfoResp model) {
-    setState(() {
-      // _headPortraitUrl = model.headPortrait; //头像地址
-      _enterpriseName = _language == 'zh_CN'
-          ? model.custLocalName
-          : model.custEngName; // 企业名称
-      _userName = _language == 'zh_CN'
-          ? model.localUserName
-          : model.englishUserName; // 姓名
-      _characterName = _language == 'zh_CN'
-          ? model.roleLocalName
-          : model.roleEngName; //用户角色名称
-      _lastLoginTime = model.lastLoginTime; // 上次登录时间
-    });
+    if (this.mounted) {
+      setState(() {
+        // _headPortraitUrl = model.headPortrait; //头像地址
+        _enterpriseName = _language == 'zh_CN'
+            ? model.custLocalName
+            : model.custEngName; // 企业名称
+        _userName = _language == 'zh_CN'
+            ? model.localUserName
+            : model.englishUserName; // 姓名
+        _characterName = _language == 'zh_CN'
+            ? model.roleLocalName
+            : model.roleEngName; //用户角色名称
+        _lastLoginTime = model.lastLoginTime; // 上次登录时间
+      });
+    }
   }
 
   //设置头像
@@ -663,9 +684,14 @@ class _MinePageState extends State<MinePage> {
       //   HSProgressHUD.dismiss();
       // });
 
-      // File flie = File(_imgPath);
-      // var resultData = await ApiClient().uploadAvatar(flie);
+      File file = File(_imgPath);
+      // var resultData = await ApiClient().uploadAvatar(file);
       // print(resultData);
+      ApiClient().uploadAvatar(file, BaseBody(body: {})).then((value) {
+        print(value);
+      }).catchError((e) {
+        Fluttertoast.showToast(msg: e.toString());
+      });
     }
   }
 
@@ -680,23 +706,26 @@ class _MinePageState extends State<MinePage> {
       'getUserInfo',
     )
         .then((data) {
-      setState(() {
-        _userInfoResp = data;
-        _userName = data.actualName; // 姓名
-        _headPortraitUrl = data.headPortrait; //头像
-        _characterName = data.roleLocalName; //角色
-        _enterpriseName = data.custLocalName; //公司名
-        _belongCustStatus = data.belongCustStatus; //用户状态
-        _lastLoginTime = data.lastLoginTime; // 上次登录时间
-        // _userType = data.userType; //用户类型
-        // _userPhone = data.userPhone; //用户手机号
-        // _areaCode = data.areaCode; //区号
-      });
+      if (this.mounted) {
+        setState(() {
+          _userInfoResp = data;
+          _userName = data.actualName; // 姓名
+          _headPortraitUrl = data.headPortrait; //头像
+          _characterName = data.roleLocalName; //角色
+          _enterpriseName = data.custLocalName; //公司名
+          _belongCustStatus = data.belongCustStatus; //用户状态
+          _lastLoginTime = data.lastLoginTime; // 上次登录时间
+          print(_userName);
+          // _userType = data.userType; //用户类型
+          // _userPhone = data.userPhone; //用户手机号
+          // _areaCode = data.areaCode; //区号
+        });
+      }
       _changeUserInfoShow(_userInfoResp);
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.showError(status: e.toString());
-      print('${e.toString()}');
+      // print('${e.toString()}');
     });
   }
 
@@ -734,22 +763,24 @@ class _MinePageState extends State<MinePage> {
         .logout(LogoutReq(userID, _userName), 'logout')
         .then((data) {
       HSProgressHUD.dismiss();
-      setState(() {
-        // prefs.setString(ConfigKey.USER_ACCOUNT, '');
-        // prefs.setString(ConfigKey.USER_ID, '');
-        // prefs.setString(ConfigKey.NET_TOKEN, '');
-        // Navigator.pushNamed(context, pageLogin);
-        // Navigator.pushNamed(context, pageLogin);
-        Future.delayed(Duration.zero, () {
-          Navigator.pushAndRemoveUntil(
-              context,
-              new MaterialPageRoute(builder: (context) => new LoginPage()),
-              (route) => false);
-        });
+      if (this.mounted) {
+        setState(() {
+          // prefs.setString(ConfigKey.USER_ACCOUNT, '');
+          // prefs.setString(ConfigKey.USER_ID, '');
+          // prefs.setString(ConfigKey.NET_TOKEN, '');
+          // Navigator.pushNamed(context, pageLogin);
+          // Navigator.pushNamed(context, pageLogin);
+          Future.delayed(Duration.zero, () {
+            Navigator.pushAndRemoveUntil(
+                context,
+                new MaterialPageRoute(builder: (context) => new LoginPage()),
+                (route) => false);
+          });
 
-        HSProgressHUD.showInfo(status: S.of(context).logoutSuccess);
-        //  S.of(context).please_input_password
-      });
+          HSProgressHUD.showInfo(status: S.of(context).logoutSuccess);
+          //  S.of(context).please_input_password
+        });
+      }
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.dismiss();

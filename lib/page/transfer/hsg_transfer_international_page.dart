@@ -56,11 +56,15 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   List<String> countryList = [];
   //转账费用
   List<String> transferFeeList = [];
+  int _transferFeeIndex = 0;
   //汇款用途
   List<String> feeUse = [];
+  int _feeUseIndex = 0;
   //List<String> ccyListPlay = ['CNY', 'HKD', 'EUR'];
 
   var _countryText = '';
+
+  var _countryCode = '';
 
   var _transferFee = '';
 
@@ -104,6 +108,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //预计收款金额
   String _amount = '0';
+  String _rate = '';
 
   //限额
   String _limit = '';
@@ -123,6 +128,9 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     _getFeeUseList();
 
     _transferMoneyController.addListener(() {
+      if (_transferMoneyController.text.length == 0) {
+        _amount = '0';
+      }
       if (_payCcy == _transferCcy) {
         setState(() {
           _amount = _transferMoneyController.text;
@@ -168,6 +176,18 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         payerBankCode = listPartner.payerBankCode;
         payeeName = listPartner.payeeName;
         payerName = listPartner.payerName;
+        if (listPartner.paysMethod != null) {
+          // _transferFeeIndex = int.parse(listPartner.paysMethod);
+          _transferFee =
+              listPartner.paysMethod == '' ? '' : listPartner.paysMethod;
+        }
+        if (listPartner.rollInPurpose != null) {
+          // _feeUseIndex = int.parse(listPartner.rollInPurpose);
+          _feeUse =
+              listPartner.rollInPurpose == '' ? '' : listPartner.rollInPurpose;
+        }
+        // _transferFee = listPartner.paysMethod;
+        // _feeUse = listPartner.rollInPurpose;
         check = true;
       }
     });
@@ -199,6 +219,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                 account: _account,
                 balance: _balance,
                 amount: _amount,
+                rate: _rate,
                 transferMoneyController: _transferMoneyController,
                 callback: _isClick,
                 payCcyDialog: payCcyDialog,
@@ -438,9 +459,27 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                       ? rowListPartner.payeeBankLocalName
                       : rowListPartner.payeeBankEngName;
                   _bankSwiftController.text = rowListPartner.bankSwift;
+                  _middleBankSwiftController.text = rowListPartner.midBankSwift;
                   _payeeAddressController.text = rowListPartner.payeeAddress;
-                  _bankSwiftController.text = rowListPartner.bankSwift;
-                  _payeeAddressController.text = rowListPartner.payeeAddress;
+                  _remarkController.text = rowListPartner.remark;
+                  //付款方银行
+                  payeeBankCode = rowListPartner.bankCode;
+                  //收款方银行
+                  payerBankCode = rowListPartner.payerBankCode;
+                  payeeName = rowListPartner.payeeName;
+                  payerName = rowListPartner.payerName;
+                  if (rowListPartner.paysMethod != null) {
+                    // _transferFeeIndex = int.parse(rowListPartner.paysMethod);
+                    _transferFee = rowListPartner.paysMethod == ''
+                        ? ''
+                        : rowListPartner.paysMethod;
+                  }
+                  if (rowListPartner.rollInPurpose != null) {
+                    // _feeUseIndex = int.parse(rowListPartner.rollInPurpose);
+                    _feeUse = rowListPartner.rollInPurpose == ''
+                        ? ''
+                        : rowListPartner.rollInPurpose;
+                  }
                 }
                 _isClick();
               },
@@ -486,11 +525,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           );
         });
     if (result != null && result != false) {
-      _transferFee = transferFeeList[result];
+      setState(() {
+        _transferFeeIndex = result;
+        _transferFee = transferFeeList[result];
+      });
     }
-    setState(() {
-      _position = result;
-    });
   }
 
   //汇款用途
@@ -505,11 +544,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       },
     );
     if (result != null && result != false) {
-      _feeUse = feeUse[result];
+      setState(() {
+        _feeUseIndex = result;
+        _feeUse = feeUse[result];
+      });
     }
-    setState(() {
-      _position = result;
-    });
   }
 
   //选择收款银行
@@ -540,6 +579,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _countryText = _language == 'zh_CN'
             ? (value as CountryRegionModel).nameZhCN
             : (value as CountryRegionModel).nameEN;
+        _countryCode = (value as CountryRegionModel).countryCode;
       });
     });
   }
@@ -717,6 +757,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           payeeName,
           payerBankCode,
           payerName,
+          _countryCode,
         ),
       );
     }
@@ -750,15 +791,17 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       value.forEach((element) {
         //通过绑定手机号查询卡列表接口POST
         if (element is GetCardListResp) {
-          setState(() {
-            //付款方卡号
-            _account = element.cardList[0].cardNo;
-            element.cardList.forEach((e) {
-              _accountList.add(e.cardNo);
+          if (this.mounted) {
+            setState(() {
+              //付款方卡号
+              _account = element.cardList[0].cardNo;
+              element.cardList.forEach((e) {
+                _accountList.add(e.cardNo);
+              });
+              //付款方姓名
+              // payerName = element.cardList[0].ciName;
             });
-            //付款方姓名
-            // payerName = element.cardList[0].ciName;
-          });
+          }
           _getCcyList();
           _getCardTotal(_account);
         }
@@ -777,63 +820,67 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       value.forEach((element) {
         // 通过卡号查询余额
         if (element is GetSingleCardBalResp) {
-          setState(() {
-            //初始币种和余额
-            if (_payCcy == '' || _balance == '') {
-              _payCcy = element.cardListBal[0].ccy;
-              _balance = element.cardListBal[0].currBal;
-              element.cardListBal.forEach((element) {
-                if (element.ccy == _localeCcy) {
-                  _payCcy = element.ccy;
-                  _balance = element.currBal;
-                }
-              });
-            }
-            _payCcyList.clear();
-            _balanceList.clear();
-            _payIndex = 0;
-            element.cardListBal.forEach((element) {
-              _payCcyList.add(element.ccy);
-              _balanceList.add(element.currBal);
-            });
-            if (_payCcyList.length == 0) {
-              _payCcyList.add(_localeCcy);
-              _balanceList.add('0.0');
-            }
-            if (_payCcyList.length > 1) {
-              for (int i = 0; i < _payCcyList.length; i++) {
-                if (_payCcy == _payCcyList[i]) {
-                  _balance = _balanceList[i];
-                  break;
-                } else {
-                  _payIndex++;
-                }
+          if (this.mounted) {
+            setState(() {
+              //初始币种和余额
+              if (_payCcy == '' || _balance == '') {
+                _payCcy = element.cardListBal[0].ccy;
+                _balance = element.cardListBal[0].currBal;
+                element.cardListBal.forEach((element) {
+                  if (element.ccy == _localeCcy) {
+                    _payCcy = element.ccy;
+                    _balance = element.currBal;
+                  }
+                });
               }
-            } else {
-              _payCcy = _payCcyList[0];
-              _balance = _balanceList[0];
-            }
-            if (!_payCcyList.contains(_payCcy)) {
-              _payCcy = _payCcyList[0];
-              _balance = _balanceList[0];
+              _payCcyList.clear();
+              _balanceList.clear();
               _payIndex = 0;
-            }
-            _getTransferCcySamePayCcy();
-            if (_payCcy == _transferCcy) {
-              setState(() {
-                _amount = _transferMoneyController.text;
+              element.cardListBal.forEach((element) {
+                _payCcyList.add(element.ccy);
+                _balanceList.add(element.currBal);
               });
-            } else {
-              _rateCalculate();
-            }
-          });
+              if (_payCcyList.length == 0) {
+                _payCcyList.add(_localeCcy);
+                _balanceList.add('0.0');
+              }
+              if (_payCcyList.length > 1) {
+                for (int i = 0; i < _payCcyList.length; i++) {
+                  if (_payCcy == _payCcyList[i]) {
+                    _balance = _balanceList[i];
+                    break;
+                  } else {
+                    _payIndex++;
+                  }
+                }
+              } else {
+                _payCcy = _payCcyList[0];
+                _balance = _balanceList[0];
+              }
+              if (!_payCcyList.contains(_payCcy)) {
+                _payCcy = _payCcyList[0];
+                _balance = _balanceList[0];
+                _payIndex = 0;
+              }
+              _getTransferCcySamePayCcy();
+              if (_payCcy == _transferCcy) {
+                setState(() {
+                  _amount = _transferMoneyController.text;
+                });
+              } else {
+                _rateCalculate();
+              }
+            });
+          }
         }
         //查询额度
         else if (element is GetCardLimitByCardNoResp) {
-          setState(() {
-            //单次限额
-            _limit = element.singleLimit;
-          });
+          if (this.mounted) {
+            setState(() {
+              //单次限额
+              _limit = element.singleLimit;
+            });
+          }
         }
       });
     }).catchError((e) {});
@@ -847,11 +894,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         print(_transferCcyList.length);
         if (_transferCcyList[i] == _payCcy) {
           _transferCcy = _payCcy;
-          print(_transferCcy);
+          // print(_transferCcy);
           break;
         } else {
           _transferIndex++;
-          print(_transferIndex);
+          // print(_transferIndex);
         }
       }
     });
@@ -885,6 +932,9 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             transferFeeList.add(e.name);
           }
         });
+        // setState(() {
+        //   _transferFee = transferFeeList[_transferFeeIndex];
+        // });
       }
     });
   }
@@ -903,6 +953,9 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             feeUse.add(e.name);
           }
         });
+        // setState(() {
+        //   _feeUse = feeUse[_feeUseIndex];
+        // });
       }
     });
   }
@@ -911,9 +964,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   Future _rateCalculate() async {
     double _payerAmount = 0;
     if (_transferMoneyController.text == '') {
-      setState(() {
-        _amount = '0';
-      });
+      if (this.mounted) {
+        setState(() {
+          _amount = '0';
+        });
+      }
     } else {
       _payerAmount =
           AiDecimalAccuracy.parse(_transferMoneyController.text).toDouble();
@@ -925,9 +980,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   defaultCcy: _payCcy),
               'TransferTrialReq')
           .then((data) {
-        setState(() {
-          _amount = data.optExAmt;
-        });
+        if (this.mounted) {
+          setState(() {
+            _amount = data.optExAmt;
+          });
+        }
       });
     }
   }

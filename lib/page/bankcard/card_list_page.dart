@@ -1,3 +1,7 @@
+import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
+import 'package:ebank_mobile/widget/custom_refresh.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
@@ -14,6 +18,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 /// @auther zhanggenha
 /// @date 2020-12-05
@@ -26,46 +31,66 @@ class CardListPage extends StatefulWidget {
 
 class _CardListPageState extends State<CardListPage> {
   List<RemoteBankCard> cards = <RemoteBankCard>[];
-  var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
   List<bool> _isShow = <bool>[];
-
-  // List<GetCardLimitByCardNoResp> _cardLimitList = <GetCardLimitByCardNoResp>[];
-  // List<Map> _totalbal = <Map>[];
 
   Map _cardLimitMap = <int, GetCardLimitByCardNoResp>{};
   Map _totalbalMap = <int, CardBalBean>{};
   int _cardsLength = 0;
+  bool _isLoading = false; //加载状态
+
+  RefreshController _refreshController;
+  ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-    // 初次加载显示loading indicator, 会自动调用_loadData
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      refrestIndicatorKey.currentState.show();
-    });
+    _refreshController = RefreshController();
+    _scrollController = ScrollController();
+    _loadData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+    _refreshController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(S.current.my_account),
-          centerTitle: true,
-          elevation: 1,
-        ),
-        body: RefreshIndicator(
-            key: refrestIndicatorKey,
-            child: Container(
-              color: Colors.white,
-              padding: EdgeInsets.all(6.0),
-              child: _getlistViewList(context),
-              // ListView.builder(
-              //     itemCount: cards.length,
-              //     itemBuilder: (BuildContext context, int position) {
-              //       return getRow(context, position);
-              //     }),
-            ),
-            onRefresh: _loadData));
+      appBar: AppBar(
+        title: Text(S.current.my_account),
+        centerTitle: true,
+        elevation: 1,
+      ),
+      body: _isLoading
+          ? HsgLoading()
+          : _cardsLength > 0
+              ? Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.all(6.0),
+                  child: CustomRefresh(
+                    controller: _refreshController,
+                    onLoading: () {
+                      //加载更多完成
+                      // _refreshController.loadComplete();
+                      //显示没有更多数据
+                      _refreshController.loadNoData();
+                    },
+                    onRefresh: () {
+                      _loadData();
+                      //刷新完成
+                      // _refreshController.refreshCompleted();
+                      // _refreshController.footerMode.value =
+                      //     LoadStatus.canLoading;
+                      print("刷新完成");
+                    },
+                    content: _getlistViewList(context),
+                  ),
+                )
+              : notDataContainer(context, S.current.no_data_now),
+    );
   }
 
 //生成ListView
@@ -100,6 +125,7 @@ class _CardListPageState extends State<CardListPage> {
   //封装ListView.Builder
   Widget _getListViewBuilder(Widget function) {
     return ListView.builder(
+        controller: _scrollController,
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         itemCount: 1,
@@ -211,20 +237,37 @@ class _CardListPageState extends State<CardListPage> {
     );
   }
 
-  Future<void> _loadData() async {
+  _loadData() {
+    if (_cardsLength == 0) {
+      _isLoading = true;
+    }
     CardDataRepository().getCardList('getCardList').then((data) {
       if (data.cardList != null) {
-        setState(() {
-          cards.clear();
-          cards.addAll(data.cardList);
-          _cardsLength = cards.length;
-          if (_isShow.length == 0) {
-            _isShow = new List.filled(_cardsLength, false);
-            // print(_isShow.toString());
-          }
-        });
+        if (this.mounted) {
+          setState(() {
+            cards.clear();
+            _totalbalMap.clear();
+            _cardLimitMap.clear();
+            cards.addAll(data.cardList);
+            _cardsLength = cards.length;
+            if (_isShow.length == 0) {
+              _isShow = new List.filled(_cardsLength, false);
+              // print(_isShow.toString());
+            } else {
+              for (int i = 0; i < _isShow.length; i++) {
+                if (_isShow[i] == true) {
+                  _isShow[i] = false;
+                }
+              }
+            }
+            _refreshController.refreshCompleted();
+            _refreshController.footerMode.value = LoadStatus.canLoading;
+            _isLoading = false;
+          });
+        }
       }
     }).catchError((e) {
+      _isLoading = false;
       Fluttertoast.showToast(msg: e.toString());
     });
   }
@@ -302,21 +345,25 @@ class _CardListPageState extends State<CardListPage> {
           print(data);
           data.forEach((element) {
             if (element is GetCardLimitByCardNoResp) {
-              setState(() {
-                //额度详情
-                _cardLimitMap[position] = element;
-                // _cardLimitList.insert(position, element);
-              });
+              if (this.mounted) {
+                setState(() {
+                  //额度详情
+                  _cardLimitMap[position] = element;
+                  // _cardLimitList.insert(position, element);
+                });
+              }
             } else if (element is GetSingleCardBalResp) {
-              setState(() {
-                //余额+币种
-                _totalbalMap[position] = element.cardListBal[0];
-                // _totalbalMap[position].currBal;
-                // Map map = <String, String>{};
-                // map["currBal"] = element.cardListBal[0].currBal;
-                // map["ccy"] = element.cardListBal[0].ccy;
-                // _totalbal.insert(position, map);
-              });
+              if (this.mounted) {
+                setState(() {
+                  //余额+币种
+                  _totalbalMap[position] = element.cardListBal[0];
+                  // _totalbalMap[position].currBal;
+                  // Map map = <String, String>{};
+                  // map["currBal"] = element.cardListBal[0].currBal;
+                  // map["ccy"] = element.cardListBal[0].ccy;
+                  // _totalbal.insert(position, map);
+                });
+              }
             }
           });
           _isShow[position] = true;

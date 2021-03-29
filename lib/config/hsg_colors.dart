@@ -56,4 +56,7 @@ class HsgColors {
   static const Color mineInfoText = Color(0xff262626);
   static const Color mineInfoIcon = Color(0xff262626);
   static const Color mineCharacterBackground = Color(0xff3394d4);
+  // static const Color mineInfoText = Color(0xffffffff);
+  // static const Color mineInfoIcon = Color(0xffffffff);
+  // static const Color mineCharacterBackground = Color(0xBB4866FF);
 }

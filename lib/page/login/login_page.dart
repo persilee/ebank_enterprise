@@ -6,11 +6,8 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client.dart';
-import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
-import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/screen_util.dart';
@@ -38,16 +35,16 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = '';
 
   TextEditingController _accountTC =
-      TextEditingController(text: 'lzq101'); //fangluyao
+      TextEditingController(text: 'blk703'); //fangluyao
   TextEditingController _passwordTC =
       TextEditingController(text: '4N0021S8'); //b0S25X5Y
-  var _account = 'lzq101'; //'blk101';
-  var _password = '4N0021S8'; //'4N0021S8';
+  var _account = ''; //'blk101';HSG20
+  var _password = ''; //'4N0021S8';Qwe123456~
 
   // TextEditingController _accountTC =
-  //     TextEditingController(text: 'blk302'); //fangluyao
+  //     TextEditingController(text: 'blk302'); //HSG20
   // TextEditingController _passwordTC =
-  //     TextEditingController(text: '4N0021S8'); //b0S25X5Y
+  //     TextEditingController(text: '4N0021S8'); //Qwe123456~
   // var _account = 'blk302'; //'blk101';
   // var _password = '4N0021S8'; //'4N0021S8';
 
@@ -192,8 +189,8 @@ class _LoginPageState extends State<LoginPage> {
                 //注册按钮
                 Container(
                   margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
-                  child: UnderButtonView(S.current.register,
-                      false ? null : () => _regesiter(context), false),
+                  child: UnderButtonView(
+                      S.current.register, () => _regesiter(context), false),
                 ),
                 //登录按钮
                 Container(
@@ -238,6 +235,9 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录操作
   _login(BuildContext context) async {
+    //登录以输入框的值为准
+    _account = _accountTC.text;
+    _password = _passwordTC.text;
     if (!_judgeCanLogin()) {
       return;
     }
@@ -246,9 +246,6 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
     HSProgressHUD.show();
-    //登录以输入框的值为准
-    _account = _accountTC.text;
-    _password = _passwordTC.text;
 
     String password = EncryptUtil.aesEncode(_password);
 

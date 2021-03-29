@@ -9,6 +9,7 @@ import 'package:ebank_mobile/util/format_util.dart';
 /// Date: 2021-03-15
 
 import 'package:ebank_mobile/widget/hsg_button.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -172,39 +173,45 @@ class _TransferInternalPreviewPageState
     String payerName = transferData.payerName;
     String remark = transferData.transferRemark;
     String smsCode = '';
+    String xRate = transferData.xRate;
+    HSProgressHUD.show();
     TransferDataRepository()
         .getTransferByAccount(
             GetTransferByAccount(
-                //转账金额
-                money,
-                //贷方货币
-                transferOutCcy,
-                //借方货币
-                transferIntoCcy,
-                //输入密码
-                // 'L5o+WYWLFVSCqHbd0Szu4Q==',
-                '',
-                //收款方银行
-                payeeBankCode,
-                //收款方卡号
-                payeeCardNo,
-                //收款方姓名
-                payeeName,
-                //付款方银行
-                payerBankCode,
-                //付款方卡号
-                cardNo,
-                //付款方姓名
-                payerName,
-                //附言
-                remark,
-                //验证码
-                smsCode),
+              //转账金额
+              money,
+              //贷方货币
+              transferOutCcy,
+              //借方货币
+              transferIntoCcy,
+              //输入密码
+              // 'L5o+WYWLFVSCqHbd0Szu4Q==',
+              '',
+              //收款方银行
+              payeeBankCode,
+              //收款方卡号
+              payeeCardNo,
+              //收款方姓名
+              payeeName,
+              //付款方银行
+              payerBankCode,
+              //付款方卡号
+              cardNo,
+              //付款方姓名
+              payerName,
+              //附言
+              remark,
+              //验证码
+              smsCode,
+              xRate,
+            ),
             'getTransferByAccount')
         .then((data) {
+      HSProgressHUD.dismiss();
       Navigator.pushReplacementNamed(context, pageOperationResult);
     }).catchError((e) {
       print(e.toString());
+      HSProgressHUD.dismiss();
     });
   }
 }

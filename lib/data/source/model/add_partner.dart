@@ -54,6 +54,12 @@ class AddPartnerReq extends Object {
   @JsonKey(name: 'transferType')
   String transferType;
 
+  @JsonKey(name: 'paysMethod')
+  String paysMethod;
+
+  @JsonKey(name: 'rollInPurpose')
+  String rollInPurpose;
+
   AddPartnerReq(
     this.bankCode,
     this.bankSwift,
@@ -70,6 +76,8 @@ class AddPartnerReq extends Object {
     this.payeeBankName,
     this.remark,
     this.transferType,
+    this.paysMethod,
+    this.rollInPurpose,
   );
 
   factory AddPartnerReq.fromJson(Map<String, dynamic> srcJson) =>

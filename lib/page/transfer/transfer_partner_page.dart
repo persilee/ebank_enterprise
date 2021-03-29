@@ -10,7 +10,9 @@ import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -19,6 +21,7 @@ import 'package:left_scroll_actions/cupertinoLeftScroll.dart';
 import 'package:left_scroll_actions/leftScroll.dart';
 import 'package:left_scroll_actions/left_scroll_actions.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TransferPartner extends StatefulWidget {
   @override
@@ -38,61 +41,84 @@ class _TransferPartnerState extends State<TransferPartner> {
   bool _isData = false;
   var _bankName = '';
   String _language = Intl.getCurrentLocale();
+  RefreshController _refreshController;
+  bool _isLoading = false; //加载状态
   @override
   void initState() {
     super.initState();
+    _refreshController = RefreshController();
     //滚动监听
-    _scrollController.addListener(() {
-      setState(() {
-        if (_scrollController.position.pixels ==
-            _scrollController.position.maxScrollExtent) {
-          if (_page < _totalPage) {
-            _showmore = true;
-            _load = true;
-          }
-          _page++;
-          _loadData();
-        }
-      });
-    });
+    // _scrollController.addListener(() {
+    //   setState(() {
+    //     if (_scrollController.position.pixels ==
+    //         _scrollController.position.maxScrollExtent) {
+    //       if (_page < _totalPage) {
+    //         _showmore = true;
+    //         _load = true;
+    //       }
+    //       _page++;
+    //       _loadData();
+    //     }
+    //   });
+    // });
     _loadData();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
+    _scrollController.dispose();
+  }
+
   _loadData() {
+    _isLoading = true;
     TransferDataRepository()
         .getTransferPartnerList(
       GetTransferPartnerListReq(_page, 10),
       'getTransferPartnerList',
     )
         .then((data) {
-      setState(() {
-        if (data.rows != null) {
-          _isData = true;
-          _totalPage = data.totalPage;
-          _partnerListData.addAll(data.rows);
-          _tempList.clear();
-          if (_transferType != '') {
-            for (int i = 0; i < _partnerListData.length; i++) {
-              //如果是国际转账或者行内转账跳过来的，只显示对应类型的的伙伴，否则显示全部
-              if (_partnerListData[i].transferType == _transferType) {
-                _tempList.add(_partnerListData[i]);
+      if (this.mounted) {
+        setState(() {
+          if (data.rows != null) {
+            _isData = true;
+            _totalPage = data.totalPage;
+            _partnerListData.clear();
+            _partnerListData.addAll(data.rows);
+            _tempList.clear();
+            if (_transferType != '') {
+              for (int i = 0; i < _partnerListData.length; i++) {
+                //如果是国际转账或者行内转账跳过来的，只显示对应类型的的伙伴，否则显示全部
+                if (_partnerListData[i].transferType == _transferType) {
+                  _tempList.add(_partnerListData[i]);
+                }
               }
+              // //要显示的条数不足10条，继续加载下一页，直到达到最大页数
+              // if (_tempList.length < 10 && _page < _totalPage) {
+              //   _page += 1;
+              //   _loadData();
+              // }
+            } else {
+              _tempList.addAll(_partnerListData);
             }
-            //要显示的条数不足10条，继续加载下一页，直到达到最大页数
-            if (_tempList.length < 10 && _page < _totalPage) {
-              _page += 1;
-              _loadData();
-            }
-          } else {
-            _tempList.addAll(_partnerListData);
           }
-        }
-        _partnerListData.clear();
-        _partnerListData.addAll(_tempList);
-        _showmore = false;
-      });
+          _partnerListData.clear();
+          _partnerListData.addAll(_tempList);
+          _showmore = false;
+          _isLoading = false;
+          _load = false;
+          _refreshController.loadComplete();
+        });
+      }
     }).catchError((e) {
-      HSProgressHUD.showError(status: e.toString());
+      // HSProgressHUD.showError(status: e.toString());
+
+      if (this.mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     });
   }
 
@@ -119,8 +145,8 @@ class _TransferPartnerState extends State<TransferPartner> {
                   _page = 1;
                 });
                 //跳回顶部
-                _scrollController
-                    .jumpTo(_scrollController.position.minScrollExtent);
+                // _scrollController
+                //     .jumpTo(_scrollController.position.minScrollExtent);
                 _loadData();
               });
             },
@@ -133,13 +159,41 @@ class _TransferPartnerState extends State<TransferPartner> {
       //     height: MediaQuery.of(context).size.height,
       //     color: HsgColors.backgroundColor,
       //     child: _myColumn()));
-      body: Column(
-        children: [
-          Expanded(
-            child: _isData ? _myColumn() : _noDataWidget(),
-          ),
-        ],
-      ),
+      // body: Column(
+      //   children: [
+      //     Expanded(
+      //       child: _isData ? _myColumn() : _noDataWidget(),
+      //     ),
+      //   ],
+      // ),
+      body: _isLoading
+          ? HsgLoading()
+          : _partnerListData.length > 0
+              ? CustomRefresh(
+                  controller: _refreshController,
+                  onLoading: () {
+                    if (_page < _totalPage) {
+                      _load = true;
+                      _page++;
+                    }
+                    //加载更多完成
+                    if (_load) {
+                      _loadData();
+                    } else {
+                      //显示没有更多数据
+                      _refreshController.loadNoData();
+                    }
+                  },
+                  onRefresh: () {
+                    //刷新完成
+                    _page = 1;
+                    _loadData();
+                    _refreshController.refreshCompleted();
+                    _refreshController.footerMode.value = LoadStatus.canLoading;
+                  },
+                  content: _getAllRowsList(),
+                )
+              : _noDataWidget(),
     );
   }
 
@@ -175,13 +229,13 @@ class _TransferPartnerState extends State<TransferPartner> {
 
   //没数据显示页面
   Widget _noDataWidget() {
-    HSProgressHUD.show();
-    Future.delayed(Duration(seconds: 1), () {
-      HSProgressHUD.dismiss();
-    });
+    // HSProgressHUD.show();
+    // Future.delayed(Duration(seconds: 1), () {
+    //   HSProgressHUD.dismiss();
+    // });
     return Container(
       width: (MediaQuery.of(context).size.width),
-      height: 270,
+      // height: 270,
       color: Colors.white,
       child: Column(
         children: [
@@ -269,13 +323,15 @@ class _TransferPartnerState extends State<TransferPartner> {
     for (int i = 0; i < _tempList.length; i++) {
       _list.add(_getDeleteBuilder(_allContentRow(_tempList[i]), _tempList[i]));
     }
-    return RefreshIndicator(
-      onRefresh: () => _loadData(),
-      child: ListView(
-        children: _list,
-        shrinkWrap: true, //解决无限高度问题
-        physics: NeverScrollableScrollPhysics(), //禁用滑动事件
-      ),
+    // return RefreshIndicator(
+    //   onRefresh: () => _loadData(),
+    //   child: ListView(
+    //     children: _list,
+    //     shrinkWrap: true, //解决无限高度问题
+    //     physics: NeverScrollableScrollPhysics(), //禁用滑动事件
+    //   ),
+    return ListView(
+      children: _list,
     );
   }
 

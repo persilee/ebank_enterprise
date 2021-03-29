@@ -226,6 +226,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
           ? null
           : () {
               _checkRegister();
+              FocusScope.of(context).requestFocus(FocusNode());
             },
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
       padding: EdgeInsets.only(left: 35),
@@ -258,31 +259,40 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   //检验用户是否注册
   _checkRegister() {
     RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
-    if (characters.hasMatch(_phoneNum.text) == false) {
+    // if (characters.hasMatch(_phoneNum.text) == false) {
+    //   Fluttertoast.showToast(
+    //     msg: S.current.format_mobile_error,
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.CENTER,
+    //     timeInSecForIosWeb: 1,
+    //   );
+    // }
+    // if {
+    HSProgressHUD.show();
+
+    VersionDataRepository()
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
+        .then((data) {
+      HSProgressHUD.dismiss();
+
+      setState(() {
+        _isRegister = data.register;
+        _userAccount = data.userAccount;
+        HSProgressHUD.dismiss();
+
+        //发送短信
+        _getVerificationCode();
+      });
+    }).catchError((e) {
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
-        msg: S.current.format_mobile_error,
+        msg: e.toString(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
       );
-    } else {
-      HSProgressHUD.show();
-
-      VersionDataRepository()
-          .checkPhone(CheckPhoneReq(_phoneNum.text, '1'), 'checkPhoneReq')
-          .then((data) {
-        setState(() {
-          _isRegister = data.register;
-          _userAccount = data.userAccount;
-          HSProgressHUD.dismiss();
-
-          //发送短信
-          _getVerificationCode();
-        });
-      }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
-      });
-    }
+    });
+    // }
   }
 
   //倒计时方法
@@ -322,12 +332,18 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
           .sendSmsByPhone(
               SendSmsByPhoneNumberReq(_phoneNum.text, 'findPwd'), 'sendSms')
           .then((data) {
+        HSProgressHUD.dismiss();
         _startCountdown();
         setState(() {});
         HSProgressHUD.dismiss();
       }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
         HSProgressHUD.dismiss();
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+        );
       });
     }
   }

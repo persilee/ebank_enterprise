@@ -3,7 +3,6 @@
 /// Author: wangluyao
 /// Date: 2020-12-11
 
-import 'dart:math';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
@@ -37,11 +36,15 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   String language = Intl.getCurrentLocale();
   String _changedCcy = S.current.hint_please_select;
   String _changedTerm = S.current.hint_please_select;
-  double _bal = 0.00;
+  double _bal = 0.0;
   TextEditingController inputValue = TextEditingController();
   int page = 1;
   bool _isDate = false;
   List<String> terms = []; //存款期限
+  List<String> termCodes = [];
+  String _accuPeriod = ''; //计提周期
+  String _auctCale = ''; //档期
+  List<String> ccyList = []; //币种列表
 
   void initState() {
     super.initState();
@@ -111,11 +114,11 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
 
 //选择的筛选条件
   Widget _checked() {
-    _bal = (inputValue.text).length == 0 ? 0.00 : double.parse(inputValue.text);
+    _bal = (inputValue.text).length == 0 ? 0.0 : double.parse(inputValue.text);
     return Container(
       width: (MediaQuery.of(context).size.width - 56) / 5 * 3,
       child: _textStyle(
-          (_bal == 0.00
+          (_bal == 0.0
                   ? ""
                   : FormatUtil.formatSringToMoney(_bal.toString()) + "  ") +
               (_changedCcy == S.current.hint_please_select
@@ -312,27 +315,16 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
 
 //币种弹窗
   _selectCcy(BuildContext popcontext) async {
-    List<String> ccys = [];
-
-    for (List<TdepProductDTOList> dtoList in producDTOList) {
-      for (TdepProductDTOList tdProduct in dtoList) {
-        bool isContainer = ccys.contains(tdProduct.ccy);
-        if (!isContainer) {
-          ccys.add(tdProduct.ccy);
-        }
-      }
-    }
-
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) => BottomMenu(
               title: S.current.currency,
-              items: ccys,
+              items: ccyList,
             ));
     if (result != null && result != false) {
       setState(() {
         if (result != null && result != false) {
-          _changedCcy = ccys[result];
+          _changedCcy = ccyList[result];
         }
       });
       (popcontext as Element).markNeedsBuild();
@@ -351,6 +343,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       setState(() {
         if (result != null && result != false) {
           _changedTerm = terms[result];
+          _judge(termCodes[result]);
         }
       });
       (popcontext as Element).markNeedsBuild();
@@ -382,8 +375,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           style: TextStyle(fontSize: 11, color: Colors.white),
         ),
         onPressed: () {
+          _loadData();
           Navigator.of(context).pop();
-          print("筛选");
         },
       ),
     );
@@ -413,8 +406,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
             inputValue.text = '';
             _changedCcy = S.current.hint_please_select;
             _changedTerm = S.current.hint_please_select;
-            print("重置");
             (popcontext as Element).markNeedsBuild();
+            _loadData();
           });
         },
       ),
@@ -666,25 +659,39 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         ],
       ),
       body: RefreshIndicator(
-          key: refrestIndicatorKey,
-          child: Container(
-            color: HsgColors.commonBackground,
-            child: CustomScrollView(
-              slivers: _titleSection(productList, producDTOList),
-            ),
+        key: refrestIndicatorKey,
+        child: Container(
+          color: HsgColors.commonBackground,
+          child: CustomScrollView(
+            slivers: _titleSection(productList, producDTOList),
           ),
-          //下拉刷新时调用_loadData
-          onRefresh: _loadData),
+        ),
+        //下拉刷新时调用_loadData
+        onRefresh: _loadData,
+      ),
     );
   }
 
-// String accuPeriod, String auctCale, String ccy, double minAmt, int page, int pageSize, String sort
   Future<void> _loadData() async {
     TimeDepositDataRepository()
-        .getGetTimeDepositProduct('getGetTimeDepositProduct',
-            TimeDepositProductReq('', '', '', null, page, 10, ''))
+        .getGetTimeDepositProduct(
+            'getGetTimeDepositProduct',
+            // _isEmpty()
+            //     ? TimeDepositProductReq('', '', '', null, page, 10, '')
+            //     :
+            TimeDepositProductReq(
+                _accuPeriod == '' ? null : _accuPeriod,
+                _auctCale == '' ? null : _auctCale,
+                _changedCcy == S.current.hint_please_select
+                    ? null
+                    : _changedCcy,
+                _bal == 0.0 ? null : _bal,
+                page,
+                10,
+                ''))
         .then((data) {
       if (data.length != 0) {
+        List ccys = [];
         _isDate = true;
         setState(() {
           productList.clear();
@@ -692,13 +699,28 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           data.forEach((element) {
             productList.add(element.tdepProducHeadDTO);
             producDTOList.add(element.tdepProductDTOList);
+            element.tdepProductDTOList.forEach((data) {
+              ccys.add(data.ccy);
+              bool isContainer = ccyList.contains(data.ccy);
+              if (!isContainer) {
+                ccyList.add(data.ccy);
+              }
+            });
           });
         });
       } else {
         _isDate = false;
       }
-    }).catchError(() {
+    }).catchError((e) {
       Fluttertoast.showToast(msg: "${e.toString()}");
+      inputValue.text = '';
+      _changedCcy = S.current.hint_please_select;
+      _changedTerm = S.current.hint_please_select;
+      _bal = 0.0;
+      _accuPeriod = '';
+      _auctCale = '';
+      (context as Element).markNeedsBuild();
+      _loadData();
     });
   }
 
@@ -715,10 +737,85 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
             } else {
               terms.add(element.name);
             }
+            termCodes.add(element.code);
           });
         });
       }
     });
+  }
+
+  //根据存期判断计提周期和档期
+  _judge(String code) {
+    switch (code) {
+      case 'M001':
+        _accuPeriod = '2';
+        _auctCale = '1';
+        break;
+      case 'M002':
+        _accuPeriod = '2';
+        _auctCale = '2';
+        break;
+      case 'M003':
+        _accuPeriod = '2';
+        _auctCale = '3';
+        break;
+      case 'M004':
+        _accuPeriod = '2';
+        _auctCale = '4';
+        break;
+      case 'M005':
+        _accuPeriod = '2';
+        _auctCale = '5';
+        break;
+      case 'M006':
+        _accuPeriod = '2';
+        _auctCale = '6';
+        break;
+      case 'M007':
+        _accuPeriod = '2';
+        _auctCale = '7';
+        break;
+      case 'M008':
+        _accuPeriod = '2';
+        _auctCale = '8';
+        break;
+      case 'M009':
+        _accuPeriod = '2';
+        _auctCale = '9';
+        break;
+      case 'M010':
+        _accuPeriod = '2';
+        _auctCale = '10';
+        break;
+      case 'M011':
+        _accuPeriod = '2';
+        _auctCale = '11';
+        break;
+      case 'Y001':
+        _accuPeriod = '5';
+        _auctCale = '1';
+        break;
+      case 'Y002':
+        _accuPeriod = '5';
+        _auctCale = '2';
+        break;
+      case 'Y003':
+        _accuPeriod = '5';
+        _auctCale = '3';
+        break;
+      case 'Y004':
+        _accuPeriod = '5';
+        _auctCale = '4';
+        break;
+      case 'Y005':
+        _accuPeriod = '5';
+        _auctCale = '5';
+        break;
+      case 'Y006':
+        _accuPeriod = '5';
+        _auctCale = '6';
+        break;
+    }
   }
 
 //页面跳转传值

@@ -129,8 +129,12 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                                     RegExp number = new RegExp("[0-9]");
                                     if ((_newPassword.text !=
                                         _confirmPassword.text)) {
-                                      HSProgressHUD.showInfo(
-                                          status: S.of(context).differentPwd);
+                                      Fluttertoast.showToast(
+                                        msg: S.of(context).differentPwd,
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                      );
                                     } else if (characters
                                                 .hasMatch(_newPassword.text) ==
                                             false ||
@@ -143,8 +147,12 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                                             true) ||
                                         (_newPassword.text.length < 8 ||
                                             _newPassword.text.length > 16)) {
-                                      HSProgressHUD.showInfo(
-                                          status: S.current.password_need_num);
+                                      Fluttertoast.showToast(
+                                        msg: S.current.password_need_num,
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                      );
                                     } else {
                                       _updateLoginPassword();
                                     }
@@ -173,10 +181,10 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
     final prefs = await SharedPreferences.getInstance();
     String userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
     print('$userAccount>>>>>>>>>>>>>>>>>>>>>>>');
-    RegExp characters = new RegExp(
-        "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
-    RegExp letter = new RegExp("[a-zA-Z]");
-    RegExp number = new RegExp("[0-9]");
+    // RegExp characters = new RegExp(
+    //     "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
+    // RegExp letter = new RegExp("[a-zA-Z]");
+    // RegExp number = new RegExp("[0-9]");
     // if (_newPassword.text != _confirmPassword.text) {
     //   Fluttertoast.showToast(
     //     msg: S.of(context).differentPwd,
@@ -185,74 +193,79 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
     //     timeInSecForIosWeb: 1,
     //   );
     // }
-    if ((_newPassword.text).contains(userAccount) == true) {
+    // if ((_newPassword.text).contains(userAccount) == true) {
+    //   Fluttertoast.showToast(
+    //     msg: S.current.not_contain_password,
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.CENTER,
+    //     timeInSecForIosWeb: 1,
+    //   );
+    // } else if ((_newPassword.text).length < 8 ||
+    //     (_newPassword.text).length > 16) {
+    //   Fluttertoast.showToast(
+    //     msg: S.current.password_8_16,
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.CENTER,
+    //     timeInSecForIosWeb: 1,
+    //   );
+    // } else if (number.hasMatch(_newPassword.text) == false) {
+    //   Fluttertoast.showToast(
+    //     msg: S.current.password_need_num,
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.CENTER,
+    //     timeInSecForIosWeb: 1,
+    //   );
+    // } else if (letter.hasMatch(_newPassword.text) == false) {
+    //   Fluttertoast.showToast(
+    //     msg: S.current.password_need_num,
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.CENTER,
+    //     timeInSecForIosWeb: 1,
+    //   );
+    // } else if (characters.hasMatch(_newPassword.text) == false) {
+    //   Fluttertoast.showToast(
+    //     msg: S.current.password_need_num,
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.CENTER,
+    //     timeInSecForIosWeb: 1,
+    //   );
+    // } else {
+    String confirmPassword = EncryptUtil.aesEncode(_confirmPasswordListen);
+    // String newPassword = EncryptUtil.aesEncode(_newPasswordListen);
+    print('');
+    HSProgressHUD.show();
+    UpdateLoginPawRepository()
+        .modifyPwdBySms(
+            ModifyPwdBySmsReq(
+              confirmPassword,
+              _sms,
+              _accountName,
+            ),
+            'ModifyPasswordReq')
+        .then((data) {
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
-        msg: S.current.not_contain_password,
+        msg: S.current.operate_success,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
       );
-    } else if ((_newPassword.text).length < 8 ||
-        (_newPassword.text).length > 16) {
-      Fluttertoast.showToast(
-        msg: S.current.password_8_16,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        pageResetPasswordSuccess,
+        ModalRoute.withName("/"), //清除旧栈需要保留的栈 不清除就不写这句
+        // arguments: listDataLogin //传值
       );
-    } else if (number.hasMatch(_newPassword.text) == false) {
-      Fluttertoast.showToast(
-        msg: S.current.password_need_num,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-      );
-    } else if (letter.hasMatch(_newPassword.text) == false) {
-      Fluttertoast.showToast(
-        msg: S.current.password_need_num,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-      );
-    } else if (characters.hasMatch(_newPassword.text) == false) {
-      Fluttertoast.showToast(
-        msg: S.current.password_need_num,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-      );
-    } else {
-      String confirmPassword = EncryptUtil.aesEncode(_confirmPasswordListen);
-      // String newPassword = EncryptUtil.aesEncode(_newPasswordListen);
-      print('');
-      HSProgressHUD.show();
-      UpdateLoginPawRepository()
-          .modifyPwdBySms(
-              ModifyPwdBySmsReq(
-                confirmPassword,
-                _sms,
-                _accountName,
-              ),
-              'ModifyPasswordReq')
-          .then((data) {
-        HSProgressHUD.dismiss();
-        Fluttertoast.showToast(
-          msg: S.current.operate_success,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-        );
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          pageResetPasswordSuccess,
-          ModalRoute.withName("/"), //清除旧栈需要保留的栈 不清除就不写这句
-          // arguments: listDataLogin //传值
-        );
 
-        //   Navigator.popAndPushNamed(context, pageResetPasswordSuccess);
-      }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
-        HSProgressHUD.dismiss();
-      });
-    }
+      //   Navigator.popAndPushNamed(context, pageResetPasswordSuccess);
+    }).catchError((e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
+      HSProgressHUD.dismiss();
+    });
   }
+//}
 }

@@ -1,7 +1,7 @@
 import 'dart:math';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///
+/// 首页
 /// Author: lijiawei
 /// Date: 2020-12-04
 
@@ -11,8 +11,10 @@ import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart'
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
+import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -34,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   var _changeLangBtnTltle = '';
   var _headPortraitUrl = ''; // 头像地址
   var _enterpriseName = ''; // 企业名称
-  var _userName = '高阳银行企业用户'; // 姓名
+  var _userName = ''; // 姓名
   var _characterName = ''; // 角色名称
   var _belongCustStatus = '0'; //用户状态
   var _inviteeStatus = '0'; //用户受邀状态，是否是走快速开户，默认为0，不走
@@ -43,28 +45,46 @@ class _HomePageState extends State<HomePage> {
   var _features = [];
   UserInfoResp _data;
 
-  ScrollController _sctrollController = ScrollController();
+  ScrollController _sctrollController;
 
   @override
   // ignore: must_call_super
   void initState() {
+    _sctrollController = ScrollController();
     // 监听滚动
     _sctrollController.addListener(
       () {
-        setState(() {
-          num opacity = _sctrollController.offset / 120;
-          _opacity = opacity.abs();
-          if (_opacity > 1) {
-            _opacity = 1;
-          } else if (_opacity < 0) {
-            _opacity = 0;
-          }
-        });
+        if (this.mounted) {
+          setState(() {
+            num opacity = _sctrollController.offset / 120;
+            _opacity = opacity.abs();
+            if (_opacity > 1) {
+              _opacity = 1;
+            } else if (_opacity < 0) {
+              _opacity = 0;
+            }
+          });
+        }
       },
     );
 
     // 网络请求
     _loadData();
+
+    EventBusUtils.getInstance().on<GetUserEvent>().listen((event) {
+      print("event bus msg is =" +
+          event.msg +
+          "   state info is  = " +
+          event.state.toString());
+    });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _sctrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -274,11 +294,13 @@ class _HomePageState extends State<HomePage> {
     }
 
     Language.saveSelectedLanguage(language);
-    setState(() {
-      _changeLangBtnTltle = languages[result];
-      HSGBankApp.setLocale(context, Language().getLocaleByLanguage(language));
-      _changeUserInfoShow(_data);
-    });
+    if (this.mounted) {
+      setState(() {
+        _changeLangBtnTltle = languages[result];
+        HSGBankApp.setLocale(context, Language().getLocaleByLanguage(language));
+        _changeUserInfoShow(_data);
+      });
+    }
   }
 
   ///scrollview的顶部view，包含背景图、登录信息、账户总览和收支明细
@@ -288,20 +310,17 @@ class _HomePageState extends State<HomePage> {
     Widget headerShowWidget = Container();
     switch (_belongCustStatus) {
       case '0': //未开户
-      case '3': //开立客户号失败
-      case '4': //开立账户失败
+      case '1': //未开户
         headerShowWidget = _headerInfoWidget();
         break;
-      case '1': //审核中
-      case '8': //待审核
+      case '2': //审核中
         headerShowWidget = _openAccInReview();
         break;
-      case '2': //已驳回
+      case '3': //已驳回
         headerShowWidget = _openAccRejected();
         break;
-      case '5': //未激活
-      case '6': //已激活
-      case '7': //锁定
+      case '4': //受限已开户
+      case '5': //正常已开户
         headerShowWidget = _headerInfoWidget();
         break;
       default:
@@ -469,14 +488,12 @@ class _HomePageState extends State<HomePage> {
   Widget _headerInfoWidget() {
     Widget infoWidget = Container();
     switch (_belongCustStatus) {
-      case '0': //未开户
-      case '3': //开立客户号失败
-      case '4': //开立账户失败
+      case '0': //受邀客户未开户
+      case '1': //非受邀客户未开户
         infoWidget = _userOffInfo();
         break;
-      case '5': //未激活
-      case '6': //已激活
-      case '7': //锁定
+      case '4': //正常受限客户
+      case '5': //正常正式客户
         infoWidget = _userInfo();
         break;
       default:
@@ -498,7 +515,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-//用户信息-未开户成功
+//用户信息-未开户
   Widget _userOffInfo() {
     return Container(
       margin: EdgeInsets.only(top: 0),
@@ -510,20 +527,18 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: _nameInfo(),
           ),
-          RaisedButton(
-            onPressed: () {
+          CustomButton(
+            margin: EdgeInsets.all(0),
+            height: 40,
+            borderRadius: BorderRadius.circular(50.0),
+            text: Text(
+              S.current.open_account_apply,
+              style: TextStyle(fontSize: 14, color: Colors.white),
+            ),
+            clickCallback: () {
+              print('开户申请');
               _openAccountClickFunction(context);
             },
-            child: Text(
-              S.of(context).open_account_apply,
-              style: TextStyle(fontSize: 15, color: Colors.white),
-            ),
-            shape: RoundedRectangleBorder(
-              side: BorderSide.none,
-              borderRadius: BorderRadius.all(Radius.circular(50)),
-            ),
-            color: Color(0xFF4871FF),
-            disabledColor: HsgColors.btnDisabled,
           ),
         ],
       ),
@@ -550,7 +565,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 10, bottom: 15),
+            margin: EdgeInsets.only(top: 10, bottom: 12),
             height: 35,
             child: RaisedButton(
               onPressed: () {
@@ -569,7 +584,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 7),
+            margin: EdgeInsets.only(top: 5),
             child: _timeInfo(),
           ),
         ],
@@ -701,7 +716,7 @@ class _HomePageState extends State<HomePage> {
   //功能点击事件
   VoidCallback _featureClickFunction(BuildContext context, String title) {
     return () {
-      // if (['0', '1', '2', '3', '4'].contains(_belongCustStatus)) {
+      // if (['0', '1', '2', '3'].contains(_belongCustStatus)) {
       //   HsgShowTip.notOpenAccountTip(
       //     context: context,
       //     click: (value) {
@@ -764,9 +779,7 @@ class _HomePageState extends State<HomePage> {
   void _openAccountClickFunction(BuildContext context) {
     if (_inviteeStatus == '0') {
       //前往填写面签码
-      // Navigator.pushNamed(context, pageOpenAccountBasicData);
-      Fluttertoast.showToast(msg: '前往填写面签码，开发中', gravity: ToastGravity.CENTER);
-      print('前往填写面签码');
+      Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
     } else {
       //前往快速开户
       Navigator.pushNamed(context, pageOpenAccountBasicData);
@@ -776,7 +789,7 @@ class _HomePageState extends State<HomePage> {
   //校验是否提示设置交易密码
   void _verifyGotoTranPassword(BuildContext context, bool passwordEnabled) {
     if (passwordEnabled == true ||
-        (['0', '1', '2', '3', '4'].contains(_belongCustStatus))) {
+        (['0', '1', '2', '3'].contains(_belongCustStatus))) {
       //已经设置交易密码，或者用户未开户，不做操作
       return;
     }
@@ -877,19 +890,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _changeUserInfoShow(UserInfoResp model) {
-    setState(() {
-      _headPortraitUrl = model.headPortrait; //头像地址
-      _enterpriseName = _language == 'zh_CN'
-          ? model.custLocalName
-          : model.custEngName; // 企业名称
-      _userName = _language == 'zh_CN'
-          ? model.localUserName
-          : model.englishUserName; // 姓名
-      _characterName = _language == 'zh_CN'
-          ? model.roleLocalName
-          : model.roleEngName; //用户角色名称
-      _lastLoginTime = model.lastLoginTime; // 上次登录时间
-    });
+    if (this.mounted) {
+      setState(() {
+        _headPortraitUrl = model.headPortrait; //头像地址
+        _enterpriseName = _language == 'zh_CN'
+            ? model.custLocalName
+            : model.custEngName; // 企业名称
+        _userName = _language == 'zh_CN'
+            ? model.localUserName
+            : model.englishUserName; // 姓名
+        _userName = _userName == null ? model.userAccount : _userName;
+        _characterName = _language == 'zh_CN'
+            ? model.roleLocalName
+            : model.roleEngName; //用户角色名称
+        _lastLoginTime = model.lastLoginTime; // 上次登录时间
+      });
+    }
   }
 
   Future<void> _loadData() async {
@@ -903,27 +919,29 @@ class _HomePageState extends State<HomePage> {
     )
         .then((data) {
       print('$data');
-      if (['0', '2'].contains(data.belongCustStatus)) {
+      if (['0', '1', '3'].contains(data.belongCustStatus)) {
         _getInviteeStatusByPhoneNetwork();
       }
 
       _verifyGotoTranPassword(context, data.passwordEnabled);
 
-      setState(() {
-        _headPortraitUrl = data.headPortrait; //头像地址
-        _enterpriseName = _language == 'zh_CN'
-            ? data.custLocalName
-            : data.custEngName; // 企业名称
-        _userName = _language == 'zh_CN'
-            ? data.localUserName
-            : data.englishUserName; // 姓名
-        _characterName = _language == 'zh_CN'
-            ? data.roleLocalName
-            : data.roleEngName; //用户角色名称
-        _belongCustStatus = data.belongCustStatus; //用户状态
-        _lastLoginTime = data.lastLoginTime; // 上次登录时间
-        _data = data;
-      });
+      if (this.mounted) {
+        setState(() {
+          _headPortraitUrl = data.headPortrait; //头像地址
+          _enterpriseName = _language == 'zh_CN'
+              ? data.custLocalName
+              : data.custEngName; // 企业名称
+          _userName = _language == 'zh_CN'
+              ? data.localUserName
+              : data.englishUserName; // 姓名
+          _characterName = _language == 'zh_CN'
+              ? data.roleLocalName
+              : data.roleEngName; //用户角色名称
+          _belongCustStatus = data.belongCustStatus; //用户状态
+          _lastLoginTime = data.lastLoginTime; // 上次登录时间
+          _data = data;
+        });
+      }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
       // HSProgressHUD.showError(status: e.toString());
@@ -942,10 +960,11 @@ class _HomePageState extends State<HomePage> {
       'getInviteeStatusByPhone',
     )
         .then((data) {
-      print(data.inviteeStatus);
-      setState(() {
-        _inviteeStatus = data.inviteeStatus;
-      });
+      if (this.mounted) {
+        setState(() {
+          _inviteeStatus = data.inviteeStatus;
+        });
+      }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
       // HSProgressHUD.showError(status: e.toString());

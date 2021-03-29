@@ -251,7 +251,7 @@ var appRoutes = {
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
   // pageTimeDepositContract: (context) => TimeDepositContract(),
   pageForexTrading: (context) => ForexTradingPage(),
-  pageTaskApproval: (context) => TaskApprovalPage(),
+  // pageTaskApproval: (context) => TaskApprovalPage(),
   pageApplication: (context) => MyApplicationPage(),
   // pageApplicationTaskApproval: (context) => ApplicationTaskApprovalPage(),
   // pageAuthorizationTaskApproval: (context) => AuthorizationTaskApprovalPage(),
@@ -346,6 +346,15 @@ onGenerateRoute(RouteSettings settings) {
       Map<String, dynamic> arguments = settings.arguments;
       return ApplicationTaskApprovalPage(
         history: arguments['data'],
+        title: arguments['title'],
+      );
+    });
+  }
+  if (settings.name == pageTaskApproval) {
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return TaskApprovalPage(
+        data: arguments['data'],
         title: arguments['title'],
       );
     });

@@ -191,6 +191,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
           ? null
           : () {
               _checkRegister();
+              FocusScope.of(context).requestFocus(FocusNode());
             },
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
       padding: EdgeInsets.only(left: 35),
@@ -214,36 +215,44 @@ class _ForgetUserNameState extends State<ForgetUserName> {
 
   //检验用户是否注册
   _checkRegister() {
-    RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
-    if (characters.hasMatch(_phoneNum.text) == false) {
+    // RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
+    // if (characters.hasMatch(_phoneNum.text) == false) {
+    //   Fluttertoast.showToast(
+    //     msg: S.current.format_mobile_error,
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.CENTER,
+    //     timeInSecForIosWeb: 1,
+    //   );
+    // } else {
+    VersionDataRepository()
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
+        .then((data) {
+      HSProgressHUD.dismiss();
+      setState(() {
+        _accountName = data.userAccount;
+        _isRegister = data.register;
+        _getVerificationCode();
+      });
+    }).catchError((e) {
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
-        msg: S.current.format_mobile_error,
+        msg: e.toString(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
       );
-    } else {
-      VersionDataRepository()
-          .checkPhone(CheckPhoneReq(_phoneNum.text, '1'), 'checkPhoneReq')
-          .then((data) {
-        setState(() {
-          _accountName = data.userAccount;
-          _isRegister = data.register;
-          _getVerificationCode();
-        });
-      }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
-      });
-    }
+    });
+    // }
   }
 
   //获取验证码接口
   _getVerificationCode() async {
     print(">>>>>>>>>>>>>>>$_accountName");
-    RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
-    if (characters.hasMatch(_phoneNum.text) == false) {
-      HSProgressHUD.showInfo(status: S.current.format_mobile_error);
-    } else if (!_isRegister) {
+    // RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
+    // if (characters.hasMatch(_phoneNum.text) == false) {
+    //   HSProgressHUD.showInfo(status: S.current.format_mobile_error);
+    // } else
+    if (!_isRegister) {
       Fluttertoast.showToast(
         msg: S.current.num_not_is_register,
         toastLength: Toast.LENGTH_SHORT,
@@ -256,14 +265,19 @@ class _ForgetUserNameState extends State<ForgetUserName> {
           .sendSmsByPhone(
               SendSmsByPhoneNumberReq(_phoneNum.text, 'findAccount'), 'sendSms')
           .then((data) {
+        HSProgressHUD.dismiss();
         _startCountdown();
         setState(() {
           // _sms.text = '123456';
         });
-        HSProgressHUD.dismiss();
       }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
         HSProgressHUD.dismiss();
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+        );
       });
     }
   }
