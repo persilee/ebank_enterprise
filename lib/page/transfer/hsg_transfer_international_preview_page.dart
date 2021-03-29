@@ -11,8 +11,10 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 /// Date: 2021-03-17
 
 import 'package:ebank_mobile/widget/hsg_button.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
@@ -187,7 +189,7 @@ class _TransferInternalPreviewPageState
     String payeeAddress = transferData.transferIntoAdress;
     String intermediateBankSwift = transferData.centerSWIFI;
     String countryCode = transferData.countryCode;
-    print(costOptions + "===============" + district);
+    String rate = transferData.rate;
     // TransferDataRepository()
     //     .getInternationalTransferNew(
     //         GetInternationalTransferNewReq(
@@ -234,6 +236,7 @@ class _TransferInternalPreviewPageState
     // }).catchError((e) {
     //   print(e.toString());
     // });
+    HSProgressHUD.show();
     TransferDataRepository()
         .getInterNationalTransfer(
             GetInternationalTransferReq(
@@ -249,7 +252,7 @@ class _TransferInternalPreviewPageState
               payerName,
               remark,
               "",
-              "0",
+              rate,
               payeeAddress,
               bankSwift,
               "uS",
@@ -258,9 +261,19 @@ class _TransferInternalPreviewPageState
             ),
             'getTransferByAccount')
         .then((value) {
+      HSProgressHUD.dismiss();
       Navigator.pushReplacementNamed(context, pageOperationResult);
     }).catchError((e) {
       print(e.toString());
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Color(0x57272727),
+        textColor: Color(0xffffffff),
+      );
     });
   }
 }

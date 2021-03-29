@@ -2,6 +2,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/electronic_statement_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_electronic_statement.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -15,12 +16,12 @@ class ElectronicStatementPage extends StatefulWidget {
 
 class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
   var dataList = [
-    {'date': '2020-07'},
-    {'date': '2020-08'},
-    {'date': '2020-09'},
-    {'date': '2020-10'},
-    {'date': '2020-11'},
     {'date': '2020-12'},
+    {'date': '2020-11'},
+    {'date': '2020-10'},
+    {'date': '2020-09'},
+    {'date': '2020-08'},
+    {'date': '2020-07'},
   ];
 
   @override
@@ -84,13 +85,17 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
   }
 
   _getFilePath(String date) {
+    HSProgressHUD.show();
     RlectronicStatementRepository()
         .getFilePath(GetFilePathReq(), 'GetFilePathReq')
         .then((data) {
+      HSProgressHUD.dismiss();
+
       Navigator.pushNamed(context, pageElectronicStatementDetail,
           arguments: {'filePath': data.filePath, 'date': date});
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
     });
   }
 }

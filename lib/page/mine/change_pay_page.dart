@@ -163,6 +163,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
                   ),
                   isEnable: _submit(),
                   clickCallback: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
                     _submitData();
                   },
                 ),
@@ -176,7 +177,6 @@ class _ChangePayPageState extends State<ChangePayPage> {
 
   //提交按钮
   _submitData() async {
-    HSProgressHUD.show();
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
 
@@ -186,28 +186,33 @@ class _ChangePayPageState extends State<ChangePayPage> {
     print(newPwd);
     RegExp number_6 = new RegExp(r'^\d{6}$');
     if (!number_6.hasMatch(_sms.text)) {
-      // HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
-      HSProgressHUD.showInfo(status: S.current.sms_error);
+      Fluttertoast.showToast(
+          msg: S.current.sms_error, gravity: ToastGravity.CENTER);
     } else if (_newPwd.text != _confimPwd.text) {
-      HSProgressHUD.showInfo(status: S.of(context).differentPwd);
+      Fluttertoast.showToast(
+          msg: S.current.differentPwd, gravity: ToastGravity.CENTER);
     } else if (_newPwd.text == _oldPwd.text) {
-      HSProgressHUD.showInfo(status: S.of(context).differnet_old_new_pwd);
+      Fluttertoast.showToast(
+          msg: S.current.differnet_old_new_pwd, gravity: ToastGravity.CENTER);
     } else if (!number_6.hasMatch(_newPwd.text)) {
-      HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
+      Fluttertoast.showToast(
+          msg: S.current.set_pay_password_prompt, gravity: ToastGravity.CENTER);
     } else {
+      HSProgressHUD.show();
       PaymentPwdRepository()
           .updateTransPassword(
         SetPaymentPwdReq(oldPwd, newPwd, userID, _sms.text),
         'updateTransPassword',
       )
           .then((data) {
-        HSProgressHUD.showInfo(status: S.current.changPwsSuccess);
+        Fluttertoast.showToast(
+            msg: S.current.changPwsSuccess, gravity: ToastGravity.CENTER);
         Navigator.of(context)..pop();
         Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
         HSProgressHUD.dismiss();
       }).catchError((e) {
-        // Fluttertoast.showToast(msg: e.toString());
-        HSProgressHUD.showError(status: e.toString());
+        HSProgressHUD.dismiss();
+        Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
         print('${e.toString()}');
       });
     }
@@ -228,13 +233,15 @@ class _ChangePayPageState extends State<ChangePayPage> {
   _startCountdown() {
     countdownTime = 120;
     final call = (timer) {
-      setState(() {
-        if (countdownTime < 1) {
-          _timer.cancel();
-        } else {
-          countdownTime -= 1;
-        }
-      });
+      if (this.mounted) {
+        setState(() {
+          if (countdownTime < 1) {
+            _timer.cancel();
+          } else {
+            countdownTime -= 1;
+          }
+        });
+      }
     };
     _timer = Timer.periodic(Duration(seconds: 1), call);
   }
@@ -255,6 +262,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
     return FlatButton(
       onPressed: otpEnable
           ? () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _getVerificationCode();
             }
           : null,
@@ -289,12 +297,13 @@ class _ChangePayPageState extends State<ChangePayPage> {
       'getUserInfo',
     )
         .then((data) {
-      setState(() {
-        _phoneNo = data.userPhone;
-      });
+      if (this.mounted) {
+        setState(() {
+          _phoneNo = data.userPhone;
+        });
+      }
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
-      HSProgressHUD.showError(status: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
       print('${e.toString()}');
     });
   }
@@ -312,12 +321,14 @@ class _ChangePayPageState extends State<ChangePayPage> {
             SendSmsByPhoneNumberReq(_phoneNo, 'transactionPwd'), 'sendSms')
         .then((data) {
       _startCountdown();
-      setState(() {
-        // _sms.text = '123456';
-      });
+      if (this.mounted) {
+        setState(() {
+          // _sms.text = '123456';
+        });
+      }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.showError(status: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
       HSProgressHUD.dismiss();
     });
   }

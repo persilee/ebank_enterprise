@@ -154,6 +154,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                   ),
                   isEnable: _submit(),
                   clickCallback: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
                     _updateLoginPassword();
                   },
                 ),
@@ -205,6 +206,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     return FlatButton(
       onPressed: otpEnable
           ? () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _getVerificationCode();
             }
           : null,
@@ -230,52 +232,29 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   }
 
   bool _submit() {
-    // RegExp mobile = new RegExp(
-    //     "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\"]");
     if (_oldPwd.text != '' &&
-            _newPwd.text != '' &&
-            _confimPwd.text != '' &&
-            _sms.text != ''
-        // mobile.hasMatch(_newPwd.text)
-        // (_newPwd.text).contains(userAcc) == false &&
-        // _newPwd.text == _confimPwd.text &&
-        // _oldPwd.text != _newPwd.text
-        ) {
+        _newPwd.text != '' &&
+        _confimPwd.text != '' &&
+        _sms.text != '') {
       return true;
     } else {
       return false;
     }
-    // if (mobile.hasMatch(_newPwd.text) == false) {
-    //   HSProgressHUD.showInfo(status: "密码需包含数字、大写小字母和特殊字符");
-    //   return false;
-    // } else {
-    //   if ((_newPwd.text).contains(userAcc) == true) {
-    //     HSProgressHUD.showInfo(status: "密码不能包含账户名");
-    //     return false;
-    //   }
-    // }
-    // if (_newPwd.text != _confimPwd.text) {
-    //   HSProgressHUD.showInfo(status: "新密码与确认新密码不一致");
-    //   return false;
-    // }
-    // if (_oldPwd.text == _newPwd.text) {
-    //   HSProgressHUD.showInfo(status: "新密码不能与旧密码一致");
-    //   return false;
-    // }
-    // return true;
   }
 
   //倒计时方法
   _startCountdown() {
     countdownTime = 120;
     final call = (timer) {
-      setState(() {
-        if (countdownTime < 1) {
-          _timer.cancel();
-        } else {
-          countdownTime -= 1;
-        }
-      });
+      if (this.mounted) {
+        setState(() {
+          if (countdownTime < 1) {
+            _timer.cancel();
+          } else {
+            countdownTime -= 1;
+          }
+        });
+      }
     };
     _timer = Timer.periodic(Duration(seconds: 1), call);
   }
@@ -290,13 +269,15 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
             SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
         .then((data) {
       _startCountdown();
-      setState(() {
-        //保留setState是为了快一点刷新验证码按钮
-        // _sms.text = '123456';
-      });
+      if (this.mounted) {
+        setState(() {
+          //保留setState是为了快一点刷新验证码按钮
+          // _sms.text = '123456';
+        });
+      }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.showError(status: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
       HSProgressHUD.dismiss();
     });
   }
@@ -311,17 +292,20 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     RegExp number = new RegExp("[0-9]");
     RegExp number_6 = new RegExp(r'^\d{6}$');
     if (!number_6.hasMatch(_sms.text)) {
-      // HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
-      HSProgressHUD.showInfo(status: S.current.sms_error);
+      Fluttertoast.showToast(
+          msg: S.current.sms_error, gravity: ToastGravity.CENTER);
     } else if (_newPwd.text != _confimPwd.text) {
-      HSProgressHUD.showInfo(status: S.of(context).differentPwd);
+      Fluttertoast.showToast(
+          msg: S.current.differentPwd, gravity: ToastGravity.CENTER);
     } else if (_oldPwd.text == _newPwd.text) {
-      HSProgressHUD.showInfo(status: S.of(context).differnet_old_new_pwd);
+      Fluttertoast.showToast(
+          msg: S.current.differnet_old_new_pwd, gravity: ToastGravity.CENTER);
     } else if (number.hasMatch(_newPwd.text) == false ||
         letter.hasMatch(_newPwd.text) == false ||
         characters.hasMatch(_newPwd.text) == false ||
         ((_newPwd.text).length < 8 || (_newPwd.text).length > 16)) {
-      HSProgressHUD.showInfo(status: S.of(context).password_need_num);
+      Fluttertoast.showToast(
+          msg: S.current.password_need_num, gravity: ToastGravity.CENTER);
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
@@ -331,12 +315,13 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
               ModifyPasswordReq(newPwd, oldPwd, _sms.text, userID),
               'ModifyPasswordReq')
           .then((data) {
-        HSProgressHUD.showInfo(status: S.current.operate_success);
+        Fluttertoast.showToast(
+            msg: S.current.operate_success, gravity: ToastGravity.CENTER);
         Navigator.of(context)..pop();
         Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
         HSProgressHUD.dismiss();
       }).catchError((e) {
-        HSProgressHUD.showError(status: e.toString());
+        Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
         HSProgressHUD.dismiss();
       });
     }

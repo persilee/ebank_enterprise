@@ -39,6 +39,9 @@ class _OpenAccountContactInformationPageState
   /// 注册公司地区（省市区）
   String _registrationAreaText = '';
 
+  /// 注册公司地区（省市区选中index）
+  List<int> _registrationAreaIndex = [0, 0, 0];
+
   /// 注册地区（省市区）一级选择
   String _registrationAreaOneText = '';
 
@@ -60,6 +63,9 @@ class _OpenAccountContactInformationPageState
   /// 营业地区（省市区）
   String _businessAreaText = '';
 
+  /// 营业地区（省市区选中index）
+  List<int> _businessAreaIndex = [0, 0, 0];
+
   /// 营业地区（省市区）一级选择
   String _businessAreaOneText = '';
 
@@ -80,6 +86,9 @@ class _OpenAccountContactInformationPageState
 
   /// 通讯地区（省市区）
   String _communicationAreaText = '';
+
+  /// 通讯地区（省市区选中index）
+  List<int> _communicationAreaIndex = [0, 0, 0];
 
   /// 通讯地区（省市区）一级选择
   String _communicationAreaOneText = '';
@@ -367,11 +376,13 @@ class _OpenAccountContactInformationPageState
           false,
           () {
             print('注册公司地址');
-            _selectCity((Picker picker, List value) {
+            _selectCity(_registrationAreaIndex, (Picker picker, List value) {
               String oneLevelStr = _cityDataList[value[0]]['name'];
               String twoLevelStr =
                   _cityDataList[value[0]]['children'][value[1]]['name'];
               // String threeLevelStr = _cityDataList[value[0]]['children'][value[1]]['children'][value[2]]['name'];
+
+              _registrationAreaIndex = value;
               _registrationAreaOneText = 'CN';
               _registrationAreaTwoText = oneLevelStr;
               _registrationAreaThreeText = twoLevelStr;
@@ -493,11 +504,13 @@ class _OpenAccountContactInformationPageState
           false,
           () {
             print('主要营业地址');
-            _selectCity((Picker picker, List value) {
+            _selectCity(_businessAreaIndex, (Picker picker, List value) {
               String oneLevelStr = _cityDataList[value[0]]['name'];
               String twoLevelStr =
                   _cityDataList[value[0]]['children'][value[1]]['name'];
               // String threeLevelStr = _cityDataList[value[0]]['children'][value[1]]['children'][value[2]]['name'];
+
+              _businessAreaIndex = value;
               _businessAreaOneText = 'CN';
               _businessAreaTwoText = oneLevelStr;
               _businessAreaThreeText = twoLevelStr;
@@ -613,11 +626,13 @@ class _OpenAccountContactInformationPageState
           false,
           () {
             print('通讯地址');
-            _selectCity((Picker picker, List value) {
+            _selectCity(_communicationAreaIndex, (Picker picker, List value) {
               String oneLevelStr = _cityDataList[value[0]]['name'];
               String twoLevelStr =
                   _cityDataList[value[0]]['children'][value[1]]['name'];
               // String threeLevelStr = _cityDataList[value[0]]['children'][value[1]]['children'][value[2]]['name'];
+
+              _communicationAreaIndex = value;
               _communicationAreaOneText = 'CN';
               _communicationAreaTwoText = oneLevelStr;
               _communicationAreaThreeText = twoLevelStr;
@@ -1046,8 +1061,9 @@ class _OpenAccountContactInformationPageState
     });
   }
 
-  void _selectCity(PickerConfirmCallback onConfirm) {
+  void _selectCity(List selectValue, PickerConfirmCallback onConfirm) {
     Picker(
+      selecteds: selectValue,
       adapter: PickerDataAdapter<String>(
         pickerdata: _cityShowList,
       ),

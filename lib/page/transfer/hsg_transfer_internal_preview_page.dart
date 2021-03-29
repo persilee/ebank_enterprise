@@ -9,8 +9,10 @@ import 'package:ebank_mobile/util/format_util.dart';
 /// Date: 2021-03-15
 
 import 'package:ebank_mobile/widget/hsg_button.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../page_route.dart';
 import 'data/transfer_internal_data.dart';
@@ -173,6 +175,7 @@ class _TransferInternalPreviewPageState
     String remark = transferData.transferRemark;
     String smsCode = '';
     String xRate = transferData.xRate;
+    HSProgressHUD.show();
     TransferDataRepository()
         .getTransferByAccount(
             GetTransferByAccount(
@@ -205,9 +208,19 @@ class _TransferInternalPreviewPageState
             ),
             'getTransferByAccount')
         .then((data) {
+      HSProgressHUD.dismiss();
       Navigator.pushReplacementNamed(context, pageOperationResult);
     }).catchError((e) {
       print(e.toString());
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Color(0x57272727),
+        textColor: Color(0xffffffff),
+      );
     });
   }
 }

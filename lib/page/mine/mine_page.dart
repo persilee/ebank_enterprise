@@ -32,6 +32,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/main.dart';
 
@@ -50,8 +51,8 @@ class _MinePageState extends State<MinePage> {
   String _headPortraitUrl = "";
   var _imgPath;
   // var _headPortraitUrl = ''; // 头像地址
-  bool _switchZhiWen = true; //指纹登录
-  bool _switchFaceId = false; //faceID登录
+  // bool _switchZhiWen = true; //指纹登录
+  // bool _switchFaceId = false; //faceID登录
   String lastVersionName = ""; //版本号
   String _userPhone = "";
   String _userType = "";
@@ -65,6 +66,7 @@ class _MinePageState extends State<MinePage> {
   var _characterName = ''; // 角色名称
   var _belongCustStatus = '0'; //用户状态
   UserInfoResp _userInfoResp;
+  var _inviteeStatus = '0'; //用户受邀状态，是否是走快速开户，默认为0，不走
 
   @override
   // ignore: must_call_super
@@ -232,11 +234,15 @@ class _MinePageState extends State<MinePage> {
                   Navigator.pushNamed(context, pageCardList);
                 }),
                 _flatBtnNuitWidget(S.current.password_management, true, () {
-                  Navigator.pushNamed(context, pagePasswordManagement);
+                  Navigator.pushNamed(context, pagePasswordManagement,
+                      arguments: _belongCustStatus);
                 }),
                 _flatBtnNuitWidget(S.of(context).visa_interview, true, () {
                   //面签
                   Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+                  // _inviteeStatus == '0'
+                  //     ? Navigator.pushNamed(context, pageOpenAccountGetFaceSign)
+                  //     : Navigator.pushNamed(context, pageOpenAccountBasicData);
                 }),
               ],
             ),
@@ -471,7 +477,7 @@ class _MinePageState extends State<MinePage> {
     );
   }
 
-//用户信息-未开户成功
+//用户信息-未开户
   Widget _userOffInfo() {
     return Container(
         child: Row(
@@ -489,11 +495,46 @@ class _MinePageState extends State<MinePage> {
           ),
           clickCallback: () {
             print('开户申请');
+            //判断受邀状态进入不同页面
+            // _openAccountClickFunction(context);
             Navigator.pushNamed(context, pageOpenAccountBasicData);
           },
         ),
       ],
     ));
+  }
+
+  //开户点击事件
+  void _openAccountClickFunction(BuildContext context) {
+    if (_inviteeStatus == '0') {
+      //前往填写面签码
+      Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+    } else {
+      //前往快速开户
+      Navigator.pushNamed(context, pageOpenAccountBasicData);
+    }
+  }
+
+  Future<void> _getInviteeStatusByPhoneNetwork() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userAreaCode = prefs.getString(ConfigKey.USER_AREACODE);
+    String userPhone = prefs.getString(ConfigKey.USER_PHONE);
+
+    UserDataRepository()
+        .getInviteeStatusByPhone(
+      GetInviteeStatusByPhoneReq(userAreaCode, userPhone),
+      'getInviteeStatusByPhone',
+    )
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          _inviteeStatus = data.inviteeStatus;
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      print('${e.toString()}');
+    });
   }
 
 //用户信息-已开户
@@ -627,19 +668,21 @@ class _MinePageState extends State<MinePage> {
 
   //修改语言显示
   void _changeUserInfoShow(UserInfoResp model) {
-    setState(() {
-      // _headPortraitUrl = model.headPortrait; //头像地址
-      _enterpriseName = _language == 'zh_CN'
-          ? model.custLocalName
-          : model.custEngName; // 企业名称
-      _userName = _language == 'zh_CN'
-          ? model.localUserName
-          : model.englishUserName; // 姓名
-      _characterName = _language == 'zh_CN'
-          ? model.roleLocalName
-          : model.roleEngName; //用户角色名称
-      _lastLoginTime = model.lastLoginTime; // 上次登录时间
-    });
+    if (this.mounted) {
+      setState(() {
+        // _headPortraitUrl = model.headPortrait; //头像地址
+        _enterpriseName = _language == 'zh_CN'
+            ? model.custLocalName
+            : model.custEngName; // 企业名称
+        _userName = _language == 'zh_CN'
+            ? model.localUserName
+            : model.englishUserName; // 姓名
+        _characterName = _language == 'zh_CN'
+            ? model.roleLocalName
+            : model.roleEngName; //用户角色名称
+        _lastLoginTime = model.lastLoginTime; // 上次登录时间
+      });
+    }
   }
 
   //设置头像
@@ -669,7 +712,7 @@ class _MinePageState extends State<MinePage> {
   //上传头像
   _uploadAvatar() async {
     if (_imgPath == null || _imgPath == '') {
-      HSProgressHUD.showInfo(status: '图片异常，请重新选择');
+      Fluttertoast.showToast(msg: '图片异常，请重新选择', gravity: ToastGravity.CENTER);
     } else {
       // HSProgressHUD.show();
       // UploadAvatarRepository()
@@ -688,7 +731,7 @@ class _MinePageState extends State<MinePage> {
       ApiClient().uploadAvatar(file, BaseBody(body: {})).then((value) {
         print(value);
       }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
+        Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
       });
     }
   }
@@ -704,24 +747,28 @@ class _MinePageState extends State<MinePage> {
       'getUserInfo',
     )
         .then((data) {
-      setState(() {
-        _userInfoResp = data;
-        _userName = data.actualName; // 姓名
-        _headPortraitUrl = data.headPortrait; //头像
-        _characterName = data.roleLocalName; //角色
-        _enterpriseName = data.custLocalName; //公司名
-        _belongCustStatus = data.belongCustStatus; //用户状态
-        _lastLoginTime = data.lastLoginTime; // 上次登录时间
-        print(_userName);
-        // _userType = data.userType; //用户类型
-        // _userPhone = data.userPhone; //用户手机号
-        // _areaCode = data.areaCode; //区号
-      });
+      if (this.mounted) {
+        setState(() {
+          _userInfoResp = data;
+          _userName = data.actualName; // 姓名
+          _headPortraitUrl = data.headPortrait; //头像
+          _characterName = data.roleLocalName; //角色
+          _enterpriseName = data.custLocalName; //公司名
+          _belongCustStatus = data.belongCustStatus; //用户状态
+          _lastLoginTime = data.lastLoginTime; // 上次登录时间
+          print(_userName);
+          // _userType = data.userType; //用户类型
+          // _userPhone = data.userPhone; //用户手机号
+          // _areaCode = data.areaCode; //区号
+        });
+      }
       _changeUserInfoShow(_userInfoResp);
+      if (['0', '1', '3'].contains(data.belongCustStatus)) {
+        _getInviteeStatusByPhoneNetwork();
+      }
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
-      HSProgressHUD.showError(status: e.toString());
-      // print('${e.toString()}');
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      print('${e.toString()}');
     });
   }
 
@@ -733,8 +780,6 @@ class _MinePageState extends State<MinePage> {
           return HsgAlertDialog(
             title: S.current.exit,
             message: S.current.loginOut_tips,
-            // title: '退出',
-            // message: '确定要退出手机银行账户吗?',
             positiveButton: S.current.confirm,
             negativeButton: S.current.cancel,
           );
@@ -759,26 +804,26 @@ class _MinePageState extends State<MinePage> {
         .logout(LogoutReq(userID, _userName), 'logout')
         .then((data) {
       HSProgressHUD.dismiss();
-      setState(() {
-        // prefs.setString(ConfigKey.USER_ACCOUNT, '');
-        // prefs.setString(ConfigKey.USER_ID, '');
-        // prefs.setString(ConfigKey.NET_TOKEN, '');
-        // Navigator.pushNamed(context, pageLogin);
-        // Navigator.pushNamed(context, pageLogin);
-        Future.delayed(Duration.zero, () {
-          Navigator.pushAndRemoveUntil(
-              context,
-              new MaterialPageRoute(builder: (context) => new LoginPage()),
-              (route) => false);
+      if (this.mounted) {
+        setState(() {
+          // prefs.setString(ConfigKey.USER_ACCOUNT, '');
+          // prefs.setString(ConfigKey.USER_ID, '');
+          // prefs.setString(ConfigKey.NET_TOKEN, '');
+          // Navigator.pushNamed(context, pageLogin);
+          // Navigator.pushNamed(context, pageLogin);
+          Future.delayed(Duration.zero, () {
+            Navigator.pushAndRemoveUntil(
+                context,
+                new MaterialPageRoute(builder: (context) => new LoginPage()),
+                (route) => false);
+          });
+          Fluttertoast.showToast(
+              msg: S.of(context).logoutSuccess, gravity: ToastGravity.CENTER);
         });
-
-        HSProgressHUD.showInfo(status: S.of(context).logoutSuccess);
-        //  S.of(context).please_input_password
-      });
+      }
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
       HSProgressHUD.dismiss();
-      HSProgressHUD.showError(status: e.toString());
       // print(e.toString());
     });
   }
@@ -860,7 +905,7 @@ class _MinePageState extends State<MinePage> {
         lastVersionName = value.versionName;
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
     });
   }
 
@@ -896,7 +941,7 @@ class _MinePageState extends State<MinePage> {
         _register = (value.register).toString();
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
     });
   }
 
@@ -934,7 +979,7 @@ class _MinePageState extends State<MinePage> {
         _sms = "123456";
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
     });
   }
 
@@ -973,7 +1018,7 @@ class _MinePageState extends State<MinePage> {
         .then((value) {
       setState(() {});
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
     });
   }
 }

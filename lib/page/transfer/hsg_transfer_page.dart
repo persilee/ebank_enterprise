@@ -10,9 +10,12 @@ import 'package:ebank_mobile/generated/l10n.dart';
 
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/widget/custom_refresh.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TransferPage extends StatefulWidget {
   TransferPage({Key key}) : super(key: key);
@@ -27,6 +30,11 @@ class _TransferPageState extends State<TransferPage> {
   String _language = Intl.getCurrentLocale();
   //是否显示无数据页面 true显示
   bool _isShowNoDataWidget = false;
+  bool _isLoading = false;
+  bool _headColor = true;
+  RefreshController _refreshController;
+  ScrollController _scrollController;
+
   //顶部网格数据
   List<Map<String, Object>> _gridFeatures = [
     {
@@ -57,34 +65,31 @@ class _TransferPageState extends State<TransferPage> {
   @override
   void initState() {
     super.initState();
+    _refreshController = RefreshController();
+    _scrollController = ScrollController();
     _loadData();
+    //滚动监听
+    _scrollController.addListener(() {
+      setState(() {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          _headColor = false;
+        } else {
+          _headColor = true;
+        }
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: _appBar(),
-      // AppBar(
-      //   title: Text('转账功能'),
-      //   flexibleSpace: Container(
-      //     decoration: BoxDecoration(
-      //       gradient: LinearGradient(colors: [
-      //         Color(0xFF1775BA),
-      //         Color(0xFF3A9ED1),
-      //       ], begin: Alignment.centerLeft, end: Alignment.centerRight),
-      //     ),
-      //   ),
-      // ),
       body: Stack(
         children: [
-          //为了下拉后顶部三个选项和导航栏不出现颜色断层（正常下拉，如果下拉超过220高度同样会断层）
-          // Container(
-          //   color: HsgColors.primary,
-          //   height: 220,
-          // ),
           Container(
             child: CustomScrollView(
               slivers: _sliversSection(_gridFeatures, _listFeatures),
+              controller: _scrollController,
             ),
           ),
         ],
@@ -97,11 +102,6 @@ class _TransferPageState extends State<TransferPage> {
 
     //导航栏
     section.add(
-      // SliverAppBar(
-      //   pinned: true,
-      //   title: Text(S.of(context).transfer_features),
-      //   backgroundColor: Color(0xFF1775BA),
-      // ),
       SliverAppBar(
         title: Text(S.of(context).transfer),
         centerTitle: true,
@@ -109,19 +109,18 @@ class _TransferPageState extends State<TransferPage> {
         backgroundColor: Colors.yellowAccent[300],
         floating: true,
         expandedHeight: 170.0,
-        iconTheme: IconThemeData(color: Color(0xffFEFEFE)),
+        elevation: 1,
+        iconTheme: IconThemeData(
+            color: _headColor ? Color(0xffFEFEFE) : Color(0xff262626)),
         textTheme: TextTheme(
           headline6: TextStyle(
-            color: Color(0xffFEFEFE),
+            color: _headColor ? Color(0xffFEFEFE) : Color(0xff262626),
             fontSize: 18,
             fontStyle: FontStyle.normal,
           ),
         ),
-        // bottom: PreferredSizeWidget(),
         flexibleSpace: FlexibleSpaceBar(
-          // title: Text(S.of(context).transfer_features),
           background: Container(
-            // color: Color(0xFF1775BA),
             decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
                 Color(0xFF1775BA),
@@ -258,14 +257,44 @@ class _TransferPageState extends State<TransferPage> {
     ));
 
     ///转账范本列表
-    section.add(SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (content, index) {
-          return _partnerListItemWidget(_partnerListData[index]);
-        },
-        childCount: _partnerListData.length,
-      ),
-    ));
+    section.add(
+      _isLoading
+          ? SliverToBoxAdapter(
+              child: HsgLoading(),
+            )
+          : SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (content, index) {
+                  return _partnerListItemWidget(_partnerListData[index]);
+                },
+                childCount: _partnerListData.length,
+              ),
+            ),
+      // : SliverToBoxAdapter(
+      //     child: CustomRefresh(
+      //       controller: _refreshController,
+      //       onLoading: () {
+      //         //加载更多完成
+      //         _refreshController.loadComplete();
+      //         //显示没有更多数据
+      //         // _refreshController.loadNoData();
+      //       },
+      //       onRefresh: () {
+      //         //刷新完成
+      //         _refreshController.refreshCompleted();
+      //         _refreshController.footerMode.value = LoadStatus.canLoading;
+      //       },
+      //       content: SliverList(
+      //         delegate: SliverChildBuilderDelegate(
+      //           (content, index) {
+      //             return _partnerListItemWidget(_partnerListData[index]);
+      //           },
+      //           childCount: _partnerListData.length,
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+    );
 
     //没数据显示页面
     Widget _noDataWidget = Container(
@@ -532,6 +561,8 @@ class _TransferPageState extends State<TransferPage> {
   // }
 
   Future<void> _loadData() async {
+    _isLoading = true;
+    // HSProgressHUD.show();
     TransferDataRepository()
         .getTransferPartnerList(
       GetTransferPartnerListReq(1, 10),
@@ -539,18 +570,24 @@ class _TransferPageState extends State<TransferPage> {
     )
         .then((data) {
       print('$data');
-      setState(() {
-        if (data.rows != null) {
+      // setState(() {
+      if (data.rows != null) {
+        if (this.mounted) {
           setState(() {
             _partnerListData.clear();
             _partnerListData.addAll(data.rows);
             _isShowNoDataWidget = _partnerListData.length > 0 ? false : true;
+            _isLoading = false;
           });
         }
-      });
+        // HSProgressHUD.dismiss();
+      }
+      // });
     }).catchError((e) {
-      HSProgressHUD.showError(status: e.toString());
+      // HSProgressHUD.showError(status: e.toString());
       print('${e.toString()}');
+      // HSProgressHUD.dismiss();
+      _isLoading = false;
     });
   }
 }

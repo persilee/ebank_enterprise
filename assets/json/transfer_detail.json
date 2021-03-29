@@ -1,0 +1,94 @@
+{
+  "transferList":[
+    {
+      "index": 1,
+      "dAc": "0101208000001878",
+      "dAcName": "blk302",
+      "oppAc": "0101208000001528",
+      "oppAcName": "朗华银行",
+      "bal": "1500.00",
+      "ccy": "CNY",
+      "postscript": "行内转账"
+    },
+    {
+      "index": 3,
+      "dAc": "0101208000001878",
+      "dAcName": "blk302",
+      "oppAc": "0101208000001528",
+      "oppAcName": "朗华银行",
+      "bal": "600.00",
+      "ccy": "CNY",
+      "postscript": "行内转账"
+    },
+    {
+      "index": 4,
+      "dAc": "0101208000001878",
+      "dAcName": "blk302",
+      "oppAc": "0101208000001528",
+      "oppAcName": "朗华银行",
+      "bal": "6666.00",
+      "ccy": "CNY",
+      "postscript": "国际汇款"
+    },
+    {
+      "index": 7,
+      "dAc": "0101208000001878",
+      "dAcName": "blk302",
+      "oppAc": "0101208000001528",
+      "oppAcName": "朗华银行",
+      "bal": "10000.00",
+      "ccy": "CNY",
+      "postscript": "国际汇款"
+    },
+    {
+      "index": 9,
+      "dAc": "0101208000001878",
+      "dAcName": "blk302",
+      "oppAc": "0101208000001528",
+      "oppAcName": "朗华银行",
+      "bal": "100000.00",
+      "ccy": "CNY",
+      "postscript": "行内转账"
+    },
+    {
+      "index": 10,
+      "dAc": "0101208000001878",
+      "dAcName": "blk302",
+      "oppAc": "0101208000001528",
+      "oppAcName": "朗华银行",
+      "bal": "8888.00",
+      "ccy": "CNY",
+      "postscript": "国际汇款"
+    },
+    {
+      "index": 12,
+      "dAc": "0101208000001878",
+      "dAcName": "blk302",
+      "oppAc": "0101208000001528",
+      "oppAcName": "朗华银行",
+      "bal": "3600.00",
+      "ccy": "CNY",
+      "postscript": "国际汇款"
+    },
+    {
+      "index": 13,
+      "dAc": "0101208000001878",
+      "dAcName": "blk302",
+      "oppAc": "0101208000001528",
+      "oppAcName": "朗华银行",
+      "bal": "100.00",
+      "ccy": "CNY",
+      "postscript": "行内转账"
+    },
+    {
+      "index": 14,
+      "dAc": "0101208000001878",
+      "dAcName": "blk302",
+      "oppAc": "0101208000001528",
+      "oppAcName": "朗华银行",
+      "bal": "500.00",
+      "ccy": "CNY",
+      "postscript": "行内转账"
+    }
+  ]
+}

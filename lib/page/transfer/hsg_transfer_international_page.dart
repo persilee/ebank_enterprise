@@ -131,13 +131,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       if (_transferMoneyController.text.length == 0) {
         _amount = '0';
       }
-      if (_payCcy == _transferCcy) {
-        setState(() {
-          _amount = _transferMoneyController.text;
-        });
-      } else {
-        _rateCalculate();
-      }
+      // if (_payCcy == _transferCcy) {
+      //   setState(() {
+      //     _amount = _transferMoneyController.text;
+      //   });
+      // } else {
+      //   _rateCalculate();
+      // }
+      _rateCalculate();
     });
   }
 
@@ -367,8 +368,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               callback: _isClick,
               isWidget: true,
               length: 35,
-              isRegEXp: true,
-              regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
+              // isRegEXp: true,
+              // regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
             ),
             TextFieldContainer(
               title: S.current.receipt_side_account,
@@ -668,13 +669,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _transferCcy = _transferCcyList[result];
       });
     }
-    if (_payCcy == _transferCcy) {
-      setState(() {
-        _amount = _transferMoneyController.text;
-      });
-    } else {
-      _rateCalculate();
-    }
+    // if (_payCcy == _transferCcy) {
+    //   setState(() {
+    //     _amount = _transferMoneyController.text;
+    //   });
+    // } else {
+    //   _rateCalculate();
+    // }
+    _rateCalculate();
   }
 
   //账号弹窗
@@ -701,7 +703,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   Widget _submitButton() {
     return SliverToBoxAdapter(
       child: Container(
-        margin: EdgeInsets.only(top: 100, bottom: 50),
+        margin: EdgeInsets.only(top: 50, bottom: 50),
         child: HsgButton.button(
             title: S.current.next_step,
             click: _isClick() ? _judgeDialog : null,
@@ -758,6 +760,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           payerBankCode,
           payerName,
           _countryCode,
+          _rate,
         ),
       );
     }
@@ -791,15 +794,17 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       value.forEach((element) {
         //通过绑定手机号查询卡列表接口POST
         if (element is GetCardListResp) {
-          setState(() {
-            //付款方卡号
-            _account = element.cardList[0].cardNo;
-            element.cardList.forEach((e) {
-              _accountList.add(e.cardNo);
+          if (this.mounted) {
+            setState(() {
+              //付款方卡号
+              _account = element.cardList[0].cardNo;
+              element.cardList.forEach((e) {
+                _accountList.add(e.cardNo);
+              });
+              //付款方姓名
+              // payerName = element.cardList[0].ciName;
             });
-            //付款方姓名
-            // payerName = element.cardList[0].ciName;
-          });
+          }
           _getCcyList();
           _getCardTotal(_account);
         }
@@ -818,63 +823,68 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       value.forEach((element) {
         // 通过卡号查询余额
         if (element is GetSingleCardBalResp) {
-          setState(() {
-            //初始币种和余额
-            if (_payCcy == '' || _balance == '') {
-              _payCcy = element.cardListBal[0].ccy;
-              _balance = element.cardListBal[0].currBal;
-              element.cardListBal.forEach((element) {
-                if (element.ccy == _localeCcy) {
-                  _payCcy = element.ccy;
-                  _balance = element.currBal;
-                }
-              });
-            }
-            _payCcyList.clear();
-            _balanceList.clear();
-            _payIndex = 0;
-            element.cardListBal.forEach((element) {
-              _payCcyList.add(element.ccy);
-              _balanceList.add(element.currBal);
-            });
-            if (_payCcyList.length == 0) {
-              _payCcyList.add(_localeCcy);
-              _balanceList.add('0.0');
-            }
-            if (_payCcyList.length > 1) {
-              for (int i = 0; i < _payCcyList.length; i++) {
-                if (_payCcy == _payCcyList[i]) {
-                  _balance = _balanceList[i];
-                  break;
-                } else {
-                  _payIndex++;
-                }
+          if (this.mounted) {
+            setState(() {
+              //初始币种和余额
+              if (_payCcy == '' || _balance == '') {
+                _payCcy = element.cardListBal[0].ccy;
+                _balance = element.cardListBal[0].currBal;
+                element.cardListBal.forEach((element) {
+                  if (element.ccy == _localeCcy) {
+                    _payCcy = element.ccy;
+                    _balance = element.currBal;
+                  }
+                });
               }
-            } else {
-              _payCcy = _payCcyList[0];
-              _balance = _balanceList[0];
-            }
-            if (!_payCcyList.contains(_payCcy)) {
-              _payCcy = _payCcyList[0];
-              _balance = _balanceList[0];
+              _payCcyList.clear();
+              _balanceList.clear();
               _payIndex = 0;
-            }
-            _getTransferCcySamePayCcy();
-            if (_payCcy == _transferCcy) {
-              setState(() {
-                _amount = _transferMoneyController.text;
+              element.cardListBal.forEach((element) {
+                _payCcyList.add(element.ccy);
+                _balanceList.add(element.currBal);
               });
-            } else {
+              if (_payCcyList.length == 0) {
+                _payCcyList.add(_localeCcy);
+                _balanceList.add('0.0');
+              }
+              if (_payCcyList.length > 1) {
+                for (int i = 0; i < _payCcyList.length; i++) {
+                  if (_payCcy == _payCcyList[i]) {
+                    _balance = _balanceList[i];
+                    break;
+                  } else {
+                    _payIndex++;
+                  }
+                }
+              } else {
+                _payCcy = _payCcyList[0];
+                _balance = _balanceList[0];
+              }
+              if (!_payCcyList.contains(_payCcy)) {
+                _payCcy = _payCcyList[0];
+                _balance = _balanceList[0];
+                _payIndex = 0;
+              }
+              _getTransferCcySamePayCcy();
+              // if (_payCcy == _transferCcy) {
+              //   setState(() {
+              //     _amount = _transferMoneyController.text;
+              //   });
+              // } else {
+              //   _rateCalculate();
+              // }
               _rateCalculate();
-            }
-          });
+            });
+          }
         }
         //查询额度
         else if (element is GetCardLimitByCardNoResp) {
-          setState(() {
-            //单次限额
-            _limit = element.singleLimit;
-          });
+          if (this.mounted) {
+            setState(() {
+              //单次限额
+              _limit = element.singleLimit;
+            });
+          }
         }
       });
     }).catchError((e) {});
@@ -888,11 +898,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         print(_transferCcyList.length);
         if (_transferCcyList[i] == _payCcy) {
           _transferCcy = _payCcy;
-          print(_transferCcy);
+          // print(_transferCcy);
           break;
         } else {
           _transferIndex++;
-          print(_transferIndex);
+          // print(_transferIndex);
         }
       }
     });
@@ -958,9 +968,12 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   Future _rateCalculate() async {
     double _payerAmount = 0;
     if (_transferMoneyController.text == '') {
-      setState(() {
-        _amount = '0';
-      });
+      if (this.mounted) {
+        setState(() {
+          _amount = '0';
+          _rate = '-';
+        });
+      }
     } else {
       _payerAmount =
           AiDecimalAccuracy.parse(_transferMoneyController.text).toDouble();
@@ -972,9 +985,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   defaultCcy: _payCcy),
               'TransferTrialReq')
           .then((data) {
-        setState(() {
-          _amount = data.optExAmt;
-        });
+        if (this.mounted) {
+          setState(() {
+            _amount = data.optExAmt;
+            _rate = data.optExRate;
+          });
+        }
+      }).catchError((e) {
+        print(e.toString());
       });
     }
   }
