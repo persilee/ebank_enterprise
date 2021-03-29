@@ -37,7 +37,7 @@
   "repayment_ways4": "Equivalent principal",
   "deduct_money_date": "Repayment Date",
   "deduct_money_account": "Repayment Account",
-  "loan_limit_detail": "Amount of details",
+  "loan_limit_detail": "Loan Record",
   "contract_account": "Contract Account",
   "loan_principal": "Loan Principal",
   "begin_time": "Value Date",
@@ -577,6 +577,12 @@
   "openAccount_notOpen_content": "You have not opened an account yet, to perform this operation, please complete the remote account opening process first!",
   "not_set_tranPassword_content": "You have not set a transaction password, please go to set a transaction password.",
   "face_sign_NotBusiness_content":"The interview code is not consistent with the use of cell phone number, please confirm whether your information is filled in correctly, and contact the data entry party",
+  "loan_New_product_column":"Loan Products",
+  "loan_Disbursement_Account_column":"Disbursement Account Number",
+  "loan_Repayment_account_column":"Repayment Account Number",
+  "loan_Repayment_method_column":"Repayment Method",
+  "loan_Interest_Rate_column":"Loan Interest Rate",
+  "loan_NewTop_infomation":"Application Information",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }

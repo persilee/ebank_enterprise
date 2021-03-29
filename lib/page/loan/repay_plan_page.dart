@@ -94,20 +94,20 @@ class _RepayPlanState extends State<RepayPlanPage> {
   }
 
   Future<void> _loadData() async {
-    // var req =
-    //     new GetScheduleDetailListReq(acNo, page, pageSize, repaymentStatus);
-    // LoanDataRepository()
-    //     .getScheduleDetailList(req, 'getScheduleDetailList')
-    //     .then((data) {
-    //   if (data.getLnAcScheduleRspDetlsDTOList != null) {
-    //     setState(() {
-    //       lnScheduleList.clear();
-    //       lnScheduleList.addAll(data.getLnAcScheduleRspDetlsDTOList);
-    //     });
-    //   }
-    // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString());
-    // });
+    var req =
+        new GetScheduleDetailListReq(acNo, page, pageSize, repaymentStatus);
+    LoanDataRepository()
+        .getScheduleDetailList(req, 'getScheduleDetailList')
+        .then((data) {
+      if (data.getLnAcScheduleRspDetlsDTOList != null) {
+        setState(() {
+          lnScheduleList.clear();
+          lnScheduleList.addAll(data.getLnAcScheduleRspDetlsDTOList);
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
     lnScheduleList.clear();
     lnScheduleList.add(_list1);
     lnScheduleList.add(_list2);

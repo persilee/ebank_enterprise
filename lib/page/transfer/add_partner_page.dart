@@ -253,14 +253,6 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           ),
         ),
         //户名
-        // Container(
-        //   padding: EdgeInsets.only(top: 10, bottom: 16),
-        //   child: _inputFrame(
-        //     S.current.receipt_side_name,
-        //     _inputField(_nameController, S.current.please_input,
-        //         TextInputType.text, 35),
-        //   ),
-        // ),
         TextFieldContainer(
           title: S.current.receipt_side_name,
           hintText: S.current.please_input,
@@ -268,8 +260,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           controller: _nameController,
           callback: _check,
           length: 35,
-          isRegEXp: true,
-          regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
+          // isRegEXp: true,
+          // regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
         ),
         Divider(height: 0.5, color: HsgColors.divider),
         //账号
@@ -300,7 +292,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           },
           child: Container(
             color: Colors.white,
-            padding: EdgeInsets.only(top: 16, bottom: 16),
+            padding: EdgeInsets.only(top: 15, bottom: 15),
             child: _inputFrame(
               S.current.transfer_type,
               _inputSelector(_transferType, S.of(context).please_select),
@@ -365,13 +357,16 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         // ),
         // Divider(height: 0.5, color: HsgColors.divider),
         //别名 (备注)
-        Container(
-          padding: EdgeInsets.only(top: 16, bottom: 16),
-          child: _inputFrame(
-            S.current.transfer_postscript,
-            _inputField(_aliasController, S.current.word_limit_5,
-                TextInputType.text, 140),
-          ),
+        // Container(
+        //   padding: EdgeInsets.only(top: 16, bottom: 16),
+        // ),
+        TextFieldContainer(
+          title: S.current.transfer_postscript,
+          hintText: S.current.please_input,
+          keyboardType: TextInputType.text,
+          controller: _aliasController,
+          callback: _check,
+          length: 140,
         ),
       ],
     );

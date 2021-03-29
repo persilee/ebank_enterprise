@@ -11,6 +11,7 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,11 +72,12 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
 
     contactNo = "";
     productCode = "";
-
+    SVProgressHUD.show();
     LoanDataRepository()
         .getLoanList(GetLoanListReq(acNo, ciNo, contactNo, productCode),
             'getLoanMastList')
         .then((data) {
+      SVProgressHUD.dismiss();
       if (data.loanList != null) {
         setState(() {
           loanDetails.clear();
@@ -83,6 +85,7 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
         });
       }
     }).catchError((e) {
+      SVProgressHUD.dismiss();
       Fluttertoast.showToast(msg: e.toString());
     });
     loanDetails.clear();

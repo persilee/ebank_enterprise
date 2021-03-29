@@ -577,6 +577,12 @@
   "openAccount_notOpen_content": "您還未開戶，請先開戶再進行本操作！",
   "not_set_tranPassword_content": "您還未設置交易密碼，請前往設置交易密碼。",
   "face_sign_NotBusiness_content":"面簽碼與使用手機號碼不一致，請確認您的資料是否填寫正確，並聯系資料錄入方",
+  "loan_New_product_column":"貸款產品",
+  "loan_Disbursement_Account_column":"放款帳號",
+  "loan_Repayment_account_column":"還款帳號",
+  "loan_Repayment_method_column":"還款方式",
+  "loan_Interest_Rate_column":"貸款利率",
+  "loan_NewTop_infomation":"申請信息",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家偉（開戶）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }

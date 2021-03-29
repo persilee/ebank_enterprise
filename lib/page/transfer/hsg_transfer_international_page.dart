@@ -131,13 +131,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       if (_transferMoneyController.text.length == 0) {
         _amount = '0';
       }
-      if (_payCcy == _transferCcy) {
-        setState(() {
-          _amount = _transferMoneyController.text;
-        });
-      } else {
-        _rateCalculate();
-      }
+      // if (_payCcy == _transferCcy) {
+      //   setState(() {
+      //     _amount = _transferMoneyController.text;
+      //   });
+      // } else {
+      //   _rateCalculate();
+      // }
+      _rateCalculate();
     });
   }
 
@@ -367,8 +368,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               callback: _isClick,
               isWidget: true,
               length: 35,
-              isRegEXp: true,
-              regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
+              // isRegEXp: true,
+              // regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
             ),
             TextFieldContainer(
               title: S.current.receipt_side_account,
@@ -668,13 +669,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _transferCcy = _transferCcyList[result];
       });
     }
-    if (_payCcy == _transferCcy) {
-      setState(() {
-        _amount = _transferMoneyController.text;
-      });
-    } else {
-      _rateCalculate();
-    }
+    // if (_payCcy == _transferCcy) {
+    //   setState(() {
+    //     _amount = _transferMoneyController.text;
+    //   });
+    // } else {
+    //   _rateCalculate();
+    // }
+    _rateCalculate();
   }
 
   //账号弹窗
@@ -701,7 +703,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   Widget _submitButton() {
     return SliverToBoxAdapter(
       child: Container(
-        margin: EdgeInsets.only(top: 100, bottom: 50),
+        margin: EdgeInsets.only(top: 50, bottom: 50),
         child: HsgButton.button(
             title: S.current.next_step,
             click: _isClick() ? _judgeDialog : null,
@@ -758,6 +760,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           payerBankCode,
           payerName,
           _countryCode,
+          _rate,
         ),
       );
     }
@@ -863,13 +866,14 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                 _payIndex = 0;
               }
               _getTransferCcySamePayCcy();
-              if (_payCcy == _transferCcy) {
-                setState(() {
-                  _amount = _transferMoneyController.text;
-                });
-              } else {
-                _rateCalculate();
-              }
+              // if (_payCcy == _transferCcy) {
+              //   setState(() {
+              //     _amount = _transferMoneyController.text;
+              //   });
+              // } else {
+              //   _rateCalculate();
+              // }
+              _rateCalculate();
             });
           }
         }
@@ -967,6 +971,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       if (this.mounted) {
         setState(() {
           _amount = '0';
+          _rate = '-';
         });
       }
     } else {
@@ -983,8 +988,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         if (this.mounted) {
           setState(() {
             _amount = data.optExAmt;
+            _rate = data.optExRate;
           });
         }
+      }).catchError((e) {
+        print(e.toString());
       });
     }
   }
