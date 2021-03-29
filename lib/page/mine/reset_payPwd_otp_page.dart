@@ -30,7 +30,6 @@ class ResetPayPwdPage extends StatefulWidget {
 GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
-  // TextEditingController _phoneNumber = TextEditingController();
   TextEditingController _sms = TextEditingController();
   String _officeAreaCodeText = '86';
   Timer _timer;
@@ -41,9 +40,6 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   @override
   void initState() {
     super.initState();
-    // _phoneNumber.addListener(() {
-    //   setState(() {});
-    // });
     _getUser();
   }
 
@@ -57,10 +53,6 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
 
   @override
   Widget build(BuildContext context) {
-    String argument = ModalRoute.of(context).settings.arguments;
-    if (argument != null) {
-      _phone = argument;
-    }
     return new Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).resetPayPsd),
@@ -99,11 +91,6 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                         //手机号
                         _infoFrame(S.of(context).phone_num,
                             '+' + _officeAreaCodeText + ' ' + _phone),
-                        // _inputList(
-                        //   S.of(context).phone_num,
-                        //   S.of(context).phone_num,
-                        //   _phoneNumber,
-                        // ),
                         Container(
                           height: 50,
                           child: Row(
@@ -141,6 +128,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                     ),
                     isEnable: _submit(),
                     clickCallback: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
                       _submitData();
                     },
                   ),
@@ -164,16 +152,18 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       if (this.mounted) {
         setState(() {
           _belongCustStatus =
-              data.belongCustStatus != null ? data.belongCustStatus : '';
-          _phone = data.userPhone != null ? data.userPhone : '';
+              data.belongCustStatus != null ? data.belongCustStatus : ''; //用户状态
+          _phone = data.userPhone != null ? data.userPhone : ''; //手机号
           if (data.areaCode != null) {
             _officeAreaCodeText = data.areaCode; //区号
           }
         });
       }
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
-      HSProgressHUD.showError(status: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       print('${e.toString()}');
     });
   }
@@ -183,21 +173,16 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
     //请求验证手机号验证码，成功后跳转到身份验证界面
     RegExp number_6 = new RegExp(r'^\d{6}$');
     if (!number_6.hasMatch(_sms.text)) {
-      // HSProgressHUD.showInfo(status: S.of(context).set_pay_password_prompt);
-      HSProgressHUD.showInfo(status: S.current.sms_error);
+      Fluttertoast.showToast(
+        msg: S.current.sms_error,
+        gravity: ToastGravity.CENTER,
+      );
     } else {
-      //请求
+      //请求-未写
       HSProgressHUD.show();
       //请求成功后跳转
-      Map map = new Map();
-      map['certificateNo'] = '0';
-      map['certificateType'] = '0';
-      map['phoneNumber'] = _phone;
-      map['belongCustStatus'] = _belongCustStatus;
-      _belongCustStatus == '6'
-          ? Navigator.pushNamed(context, iDcardVerification, arguments: _phone)
-          : Navigator.pushNamed(context, setPayPage, arguments: map);
-      //请求结束
+      Navigator.pushNamed(context, iDcardVerification, arguments: _phone);
+      //请求结束-无论成功与否
       HSProgressHUD.dismiss();
     }
   }
@@ -254,7 +239,6 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
           ),
         ),
         Container(
-          padding: EdgeInsets.only(left: 15, right: 15),
           child: Divider(
               height: 1, color: HsgColors.divider, indent: 3, endIndent: 3),
         ),
@@ -283,9 +267,10 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   //获取验证码按钮
   FlatButton _otpButton() {
     return FlatButton(
-      onPressed: (countdownTime > 0 && _phone != '')
+      onPressed: (countdownTime > 0 || _phone == '')
           ? null
           : () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _getVerificationCode();
             },
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
@@ -311,21 +296,8 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
 
   //获取验证码接口
   _getVerificationCode() async {
-    // final prefs = await SharedPreferences.getInstance();
-    // String userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
-    // RegExp postalcode = new RegExp(r'\D');
-    // if (postalcode.hasMatch(_phoneNumber.text)) {
-    //   Fluttertoast.showToast(msg: '请输入正确的手机号!');
-    //   return;
-    // } else if (_phoneNumber.text.length <= 0) {
-    //   Fluttertoast.showToast(msg: '请输入手机号!');
-    //   return;
-    // }
     HSProgressHUD.show();
     VerificationCodeRepository()
-        // .sendSmsByAccount(
-        //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
-        // )
         .sendSmsByPhone(
             SendSmsByPhoneNumberReq(_phone, 'transactionPwd'), 'sendSms')
         .then((data) {
@@ -337,8 +309,8 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.dismiss();
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
     });
   }
 

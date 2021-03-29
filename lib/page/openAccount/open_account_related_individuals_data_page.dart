@@ -446,10 +446,10 @@ class _RelatedIndividualsDataPageState
   /// 称谓输入值
   void _selectAppellation(BuildContext context) async {
     List<String> appellationList = [
-      'Mr', // 先生
-      'Mrs', // 太太
-      'Miss', // 小姐
-      'Ms', // 女士
+      // 'Mr', // 先生
+      // 'Mrs', // 太太
+      // 'Miss', // 小姐
+      // 'Ms', // 女士
     ];
     if (_appellationTypes.length > 0) {
       appellationList = [];
@@ -468,7 +468,7 @@ class _RelatedIndividualsDataPageState
 
     if (result != null && result != false) {
       IdType data = _documentTypes[result];
-      _partner.appellation = data.code;
+      _partner.appellation = 'A'; //data.code;
       setState(() {
         _appellationText = appellationList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
@@ -481,16 +481,16 @@ class _RelatedIndividualsDataPageState
   /// 类别输入值
   void _selectCategory(BuildContext context) async {
     List<String> categoryList = [
-      'Sole Proprietor', // 獨資經營者
-      'Partner', // 合夥人
-      'Director', // 董事
-      'Legal Representative', //企業法人
-      'Authorised Signatory', //授權簽署人
-      'Ultimate Beneficial Owner', //最終實益擁有人
-      'Key Controller', //主要管理人
-      'Direct Appointee', //受任人
-      'Contact Person', //聯絡人
-      'Primary Users of Ebank', //網上理財主要使用者
+      // 'Sole Proprietor', // 獨資經營者
+      // 'Partner', // 合夥人
+      // 'Director', // 董事
+      // 'Legal Representative', //企業法人
+      // 'Authorised Signatory', //授權簽署人
+      // 'Ultimate Beneficial Owner', //最終實益擁有人
+      // 'Key Controller', //主要管理人
+      // 'Direct Appointee', //受任人
+      // 'Contact Person', //聯絡人
+      // 'Primary Users of Ebank', //網上理財主要使用者
     ];
     if (_categoryTypes.length > 0) {
       categoryList = [];
@@ -522,9 +522,9 @@ class _RelatedIndividualsDataPageState
   /// 证件类型输入值
   void _selectDocumentType(BuildContext context) async {
     List<String> documentList = [
-      'Identity Card', //身分證
-      'Passport', //護照
-      'Other', //其他:
+      // 'Identity Card', //身分證
+      // 'Passport', //護照
+      // 'Other', //其他:
     ];
     if (_documentTypes.length > 0) {
       documentList = [];
