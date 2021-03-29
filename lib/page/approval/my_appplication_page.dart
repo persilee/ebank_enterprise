@@ -6,9 +6,12 @@
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
 
+import 'dart:convert';
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
 import 'package:ebank_mobile/data/source/model/get_my_application.dart';
+import 'package:ebank_mobile/data/source/model/my_approval_data.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
@@ -16,6 +19,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MyApplicationPage extends StatefulWidget {
@@ -39,10 +43,17 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
       "transfer", "3", "776106645288648704", "2020-11-11 14:16:24");
   FinishTaskDetail dataB = FinishTaskDetail("60002", "0", "定期开立", "6002",
       "transfer", "3", "776106645288648704", "2020-11-11 15:46:56");
+  FinishTaskDetail dataC = FinishTaskDetail("60003", "0", "一对一转账审批", "6003",
+      "transfer", "3", "776106645288648704", "2020-11-11 15:51:18");
+  FinishTaskDetail dataD = FinishTaskDetail("60003", "0", "定期开立", "6003",
+      "transfer", "3", "776106645288648704", "2020-11-11 16:02:33");
   var _future;
 
   bool _isLoading = false;
   RefreshController _refreshController;
+
+  ////////////
+  List<Data> _testListData = [];
 
   @override
   void initState() {
@@ -66,16 +77,20 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
   void _testLoadData() async {
     _isLoading = true;
     await Future.delayed(Duration(seconds: 2));
-    list.add(dataA);
-    list.add(dataB);
-    if(this.mounted) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    rootBundle.loadString('assets/json/my_history_approval.json').then((value) {
+      Map map = json.decode(value);
+      MyApprovalData data = MyApprovalData.fromJson(map);
+      print(data.toJson());
+      if (this.mounted) {
+        setState(() {
+          _testListData.addAll(data.data.sublist(0, 2));
+          _isLoading = false;
+        });
+      }
+    });
   }
 
-  void go2Detail(FinishTaskDetail history) {
+  void go2Detail(Data history) {
     Navigator.pushNamed(context, pageAuthorizationTaskApproval,
         arguments: {"data": history, "title": widget.title});
   }
@@ -84,7 +99,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
   Widget build(BuildContext context) {
     return _isLoading
         ? HsgLoading()
-        : list.length > 0
+        : _testListData.length > 0
         ? CustomRefresh(
       controller: _refreshController,
       onRefresh: () async {
@@ -99,48 +114,42 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
       },
       content: ListView.builder(
         padding: EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
-        itemCount: list.length + 1,
-        // itemCount: list.length,
+        itemCount: _testListData.length,
         itemBuilder: (context, index) {
-          if (index == list.length) {
-            return Container();
-            // return _loadingView();
-          } else {
-            return Container(
-              height: 156.0,
-              padding: EdgeInsets.only(top: 16),
-              child: GestureDetector(
-                onTap: () {
-                  go2Detail(list[index]);
-                },
-                child: Stack(
-                  overflow: Overflow.visible,
-                  children: [
-                    Row(
+          return Container(
+            height: 156.0,
+            padding: EdgeInsets.only(top: 16),
+            child: GestureDetector(
+              onTap: () {
+                go2Detail(_testListData[index]);
+              },
+              child: Stack(
+                overflow: Overflow.visible,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 20.0,
+                      ),
+                      Expanded(
+                        child: _getColumn(index),
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    child: Column(
                       children: [
-                        Container(
-                          width: 20.0,
-                        ),
-                        Expanded(
-                          child: _getColumn(index),
-                        ),
+                        _icon(),
+                        _line(),
                       ],
                     ),
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      child: Column(
-                        children: [
-                          _icon(),
-                          _line(),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            );
-          }
+            ),
+          );
         },
         controller: _scrollController,
       ),
@@ -217,11 +226,11 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             //待办任务名称
-            _taskName(list[index].processTitle),
+            _taskName(_testListData[index].taskName),
             //发起人
-            _getRow(S.current.sponsor, list[index].startUser),
+            _getRow(S.current.sponsor, _testListData[index].startUser),
             //创建时间
-            _getRow(S.current.creation_time, list[index].createTime),
+            _getRow(S.current.creation_time, _testListData[index].createTime),
             //创建时间
             _getRow('处理状态', '成功'),
           ],

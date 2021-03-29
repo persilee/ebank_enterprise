@@ -2,9 +2,9 @@
   "data": [
     {
       "index": 1,
-      "taskName": "预约转账",
-      "type": "transferPlanApproval",
-      "startUser": "0703658789",
+      "taskName": "行内转账",
+      "type": "oneToOneTransferApproval",
+      "startUser": "989185387615485957",
       "createTime": "2021-03-26 11:12:30",
       "status": "完成"
     },
@@ -50,8 +50,8 @@
     },
     {
       "index": 7,
-      "taskName": "预约转账",
-      "type": "transferPlanApproval",
+      "taskName": "国际汇款",
+      "type": "internationalTransferApproval",
       "startUser": "0703658789",
       "createTime": "2021-03-23 18:06:18",
       "status": "完成"
@@ -90,16 +90,16 @@
     },
     {
       "index": 12,
-      "taskName": "预约转账",
-      "type": "transferPlanApproval",
+      "taskName": "国际汇款",
+      "type": "internationalTransferApproval",
       "startUser": "0703658789",
       "createTime": "2021-03-19 16:26:18",
       "status": "完成"
     },
     {
       "index": 13,
-      "taskName": "预约转账",
-      "type": "transferPlanApproval",
+      "taskName": "行内转账",
+      "type": "oneToOneTransferApproval",
       "startUser": "0703658789",
       "createTime": "2021-03-19 11:36:42",
       "status": "完成"

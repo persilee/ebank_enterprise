@@ -325,7 +325,7 @@ onGenerateRoute(RouteSettings settings) {
     return MaterialPageRoute(builder: (context) {
       Map<String, dynamic> arguments = settings.arguments;
       return AuthorizationTaskApprovalPage(
-        history: arguments['data'],
+        data: arguments['data'],
         title: arguments['title'],
       );
     });
