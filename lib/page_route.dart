@@ -93,6 +93,7 @@ import 'package:ebank_mobile/page/mine/change_logPswd_page.dart';
 import 'package:ebank_mobile/page/mine/change_pay_page.dart';
 import 'package:ebank_mobile/page/mine/set_pay_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_account_get_face_sign.dart';
+import 'package:ebank_mobile/page/loan/loan_new_application_page.dart';
 
 var pageHome = '/';
 var pageLogin = pageHome;
@@ -192,6 +193,7 @@ var pageOpenAccountIdentifyResultsFailure =
 var pageOpenAccountIdentifySuccessfulFailure =
     '/open_account_identify_results_successful_page.dart';
 var pageOpenAccountGetFaceSign = '/open_account_get_face_sign.dart';
+var pageLoanNewApplictionNav = '/loan_new_application_page.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -287,6 +289,7 @@ var appRoutes = {
   pageOpenAccountIdentifySuccessfulFailure: (context) =>
       OpenAccountIdentifyResultsSuccessfulPage(),
   pageOpenAccountGetFaceSign: (context) => OpenAccountGetFaceSignPage(),
+  pageLoanNewApplictionNav: (context) => LoanNewApplicationPage(), //贷款申请
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {

@@ -56,22 +56,13 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
 
   List<String> _passwordList = []; //密码列表
   List<String> _ccyList = []; //币种列表'HKD', 'USD', 'CND'
-  List<String> _deadLineLists = [
-    // S.current.three_month,
-    // S.current.six_month,
-    // S.current.nine_month,
-    // S.current.twelemonth
-  ]; //贷款期限列表
-  List<String> _goalLists = [
-    // S.current.project_loan,
-    // S.current.business_loan,
-    // S.current.purpose
-  ]; //贷款目的列表
+  List<String> _deadLineLists = []; //贷款期限列表
+  List<String> _goalLists = []; //贷款目的列表
 
   @override
   void initState() {
     super.initState();
-    _custIdReqData();
+    _custIdReqData(); //获取客户号
     _getCcyList(); //获取币种
     _getLoanPurposeList(); //贷款目的
     _getLoanTimeList(); //获取贷款期限

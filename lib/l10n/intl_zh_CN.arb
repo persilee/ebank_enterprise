@@ -571,6 +571,12 @@
   "openAccount_notOpen_content": "您还未开户，请先开户再进行本操作！",
   "not_set_tranPassword_content": "您还未设置交易密码，请前往设置交易密码。",
   "face_sign_NotBusiness_content":"面签码与使用手机号码不一致，请确认您的资料是否填写正确，并联系资料录入方",
+  "loan_New_product_column":"贷款产品",
+  "loan_Disbursement_Account_column":"放款帐号",
+  "loan_Repayment_account_column":"还款帐号",
+  "loan_Repayment_method_column":"还款方式",
+  "loan_Interest_Rate_column":"贷款利率",
+  "loan_NewTop_infomation":"申请信息",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }
