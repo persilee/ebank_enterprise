@@ -486,6 +486,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
         map['certificateNo'] = _certNo.text;
         map['certificateType'] = _certTypeKey;
         map['phoneNumber'] = _userPhone;
+        map['belongCustStatus'] = '6';
         Navigator.pushNamed(context, setPayPage, arguments: map);
       }
       HSProgressHUD.dismiss();

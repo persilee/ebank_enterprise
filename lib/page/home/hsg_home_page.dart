@@ -310,20 +310,17 @@ class _HomePageState extends State<HomePage> {
     Widget headerShowWidget = Container();
     switch (_belongCustStatus) {
       case '0': //未开户
-      case '3': //开立客户号失败
-      case '4': //开立账户失败
+      case '1': //未开户
         headerShowWidget = _headerInfoWidget();
         break;
-      case '1': //审核中
-      case '8': //待审核
+      case '2': //审核中
         headerShowWidget = _openAccInReview();
         break;
-      case '2': //已驳回
+      case '3': //已驳回
         headerShowWidget = _openAccRejected();
         break;
-      case '5': //未激活
-      case '6': //已激活
-      case '7': //锁定
+      case '4': //受限已开户
+      case '5': //正常已开户
         headerShowWidget = _headerInfoWidget();
         break;
       default:
@@ -491,14 +488,12 @@ class _HomePageState extends State<HomePage> {
   Widget _headerInfoWidget() {
     Widget infoWidget = Container();
     switch (_belongCustStatus) {
-      case '0': //未开户
-      case '3': //开立客户号失败
-      case '4': //开立账户失败
+      case '0': //受邀客户未开户
+      case '1': //非受邀客户未开户
         infoWidget = _userOffInfo();
         break;
-      case '5': //未激活
-      case '6': //已激活
-      case '7': //锁定
+      case '4': //正常受限客户
+      case '5': //正常正式客户
         infoWidget = _userInfo();
         break;
       default:
@@ -570,7 +565,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 10, bottom: 15),
+            margin: EdgeInsets.only(top: 10, bottom: 12),
             height: 35,
             child: RaisedButton(
               onPressed: () {
@@ -589,7 +584,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 7),
+            margin: EdgeInsets.only(top: 5),
             child: _timeInfo(),
           ),
         ],
@@ -721,7 +716,7 @@ class _HomePageState extends State<HomePage> {
   //功能点击事件
   VoidCallback _featureClickFunction(BuildContext context, String title) {
     return () {
-      // if (['0', '1', '2', '3', '4'].contains(_belongCustStatus)) {
+      // if (['0', '1', '2', '3'].contains(_belongCustStatus)) {
       //   HsgShowTip.notOpenAccountTip(
       //     context: context,
       //     click: (value) {
@@ -783,9 +778,7 @@ class _HomePageState extends State<HomePage> {
   void _openAccountClickFunction(BuildContext context) {
     if (_inviteeStatus == '0') {
       //前往填写面签码
-      // Navigator.pushNamed(context, pageOpenAccountBasicData);
-      Fluttertoast.showToast(msg: '前往填写面签码，开发中', gravity: ToastGravity.CENTER);
-      print('前往填写面签码');
+      Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
     } else {
       //前往快速开户
       Navigator.pushNamed(context, pageOpenAccountBasicData);
@@ -795,7 +788,7 @@ class _HomePageState extends State<HomePage> {
   //校验是否提示设置交易密码
   void _verifyGotoTranPassword(BuildContext context, bool passwordEnabled) {
     if (passwordEnabled == true ||
-        (['0', '1', '2', '3', '4'].contains(_belongCustStatus))) {
+        (['0', '1', '2', '3'].contains(_belongCustStatus))) {
       //已经设置交易密码，或者用户未开户，不做操作
       return;
     }
@@ -925,7 +918,7 @@ class _HomePageState extends State<HomePage> {
     )
         .then((data) {
       print('$data');
-      if (['0', '2'].contains(data.belongCustStatus)) {
+      if (['0', '1', '3'].contains(data.belongCustStatus)) {
         _getInviteeStatusByPhoneNetwork();
       }
 

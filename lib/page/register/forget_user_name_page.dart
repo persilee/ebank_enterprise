@@ -191,6 +191,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
           ? null
           : () {
               _checkRegister();
+              FocusScope.of(context).requestFocus(FocusNode());
             },
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
       padding: EdgeInsets.only(left: 35),
@@ -224,7 +225,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
     //   );
     // } else {
     VersionDataRepository()
-        .checkPhone(CheckPhoneReq(_phoneNum.text, '1'), 'checkPhoneReq')
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
         .then((data) {
       HSProgressHUD.dismiss();
       setState(() {

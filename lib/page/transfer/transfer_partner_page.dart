@@ -48,19 +48,19 @@ class _TransferPartnerState extends State<TransferPartner> {
     super.initState();
     _refreshController = RefreshController();
     //滚动监听
-    _scrollController.addListener(() {
-      setState(() {
-        if (_scrollController.position.pixels ==
-            _scrollController.position.maxScrollExtent) {
-          if (_page < _totalPage) {
-            _showmore = true;
-            _load = true;
-          }
-          _page++;
-          _loadData();
-        }
-      });
-    });
+    // _scrollController.addListener(() {
+    //   setState(() {
+    //     if (_scrollController.position.pixels ==
+    //         _scrollController.position.maxScrollExtent) {
+    //       if (_page < _totalPage) {
+    //         _showmore = true;
+    //         _load = true;
+    //       }
+    //       _page++;
+    //       _loadData();
+    //     }
+    //   });
+    // });
     _loadData();
   }
 
@@ -79,39 +79,46 @@ class _TransferPartnerState extends State<TransferPartner> {
       'getTransferPartnerList',
     )
         .then((data) {
-      setState(() {
-        if (data.rows != null) {
-          _isData = true;
-          _totalPage = data.totalPage;
-          _partnerListData.addAll(data.rows);
-          _tempList.clear();
-          if (_transferType != '') {
-            for (int i = 0; i < _partnerListData.length; i++) {
-              //如果是国际转账或者行内转账跳过来的，只显示对应类型的的伙伴，否则显示全部
-              if (_partnerListData[i].transferType == _transferType) {
-                _tempList.add(_partnerListData[i]);
+      if (this.mounted) {
+        setState(() {
+          if (data.rows != null) {
+            _isData = true;
+            _totalPage = data.totalPage;
+            _partnerListData.clear();
+            _partnerListData.addAll(data.rows);
+            _tempList.clear();
+            if (_transferType != '') {
+              for (int i = 0; i < _partnerListData.length; i++) {
+                //如果是国际转账或者行内转账跳过来的，只显示对应类型的的伙伴，否则显示全部
+                if (_partnerListData[i].transferType == _transferType) {
+                  _tempList.add(_partnerListData[i]);
+                }
               }
+              // //要显示的条数不足10条，继续加载下一页，直到达到最大页数
+              // if (_tempList.length < 10 && _page < _totalPage) {
+              //   _page += 1;
+              //   _loadData();
+              // }
+            } else {
+              _tempList.addAll(_partnerListData);
             }
-            //要显示的条数不足10条，继续加载下一页，直到达到最大页数
-            if (_tempList.length < 10 && _page < _totalPage) {
-              _page += 1;
-              _loadData();
-            }
-          } else {
-            _tempList.addAll(_partnerListData);
           }
-        }
-        _partnerListData.clear();
-        _partnerListData.addAll(_tempList);
-        _showmore = false;
-        _isLoading = false;
-      });
+          _partnerListData.clear();
+          _partnerListData.addAll(_tempList);
+          _showmore = false;
+          _isLoading = false;
+          _load = false;
+          _refreshController.loadComplete();
+        });
+      }
     }).catchError((e) {
       // HSProgressHUD.showError(status: e.toString());
 
-      setState(() {
-        _isLoading = false;
-      });
+      if (this.mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     });
   }
 
@@ -165,11 +172,22 @@ class _TransferPartnerState extends State<TransferPartner> {
               ? CustomRefresh(
                   controller: _refreshController,
                   onLoading: () {
+                    if (_page < _totalPage) {
+                      _load = true;
+                      _page++;
+                    }
                     //加载更多完成
-                    _refreshController.loadComplete();
+                    if (_load) {
+                      _loadData();
+                    } else {
+                      //显示没有更多数据
+                      _refreshController.loadNoData();
+                    }
                   },
                   onRefresh: () {
                     //刷新完成
+                    _page = 1;
+                    _loadData();
                     _refreshController.refreshCompleted();
                     _refreshController.footerMode.value = LoadStatus.canLoading;
                   },

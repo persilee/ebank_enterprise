@@ -75,10 +75,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     _getCardList();
 
     //滚动监听
-    // _controller.addListener(() {
+    // _scrollController.addListener(() {
     //   setState(() {
-    //     if (_controller.position.pixels ==
-    //         _controller.position.maxScrollExtent) {
+    //     if (_scrollController.position.pixels ==
+    //         _scrollController.position.maxScrollExtent) {
     //       if (_page < _totalPage) {
     //         _loadMore = true;
     //       }
@@ -118,18 +118,21 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                           ? CustomRefresh(
                               controller: _refreshController,
                               onLoading: () {
-                                //加载更多完成
                                 if (_page < _totalPage) {
                                   _loadMore = true;
+                                  _page++;
                                 }
-                                _page++;
-                                _loadData();
-                                !_loadMore ?? _refreshController.loadComplete();
-                                //显示没有更多数据
-                                _refreshController.loadNoData();
+                                //加载更多完成
+                                if (_loadMore) {
+                                  _loadData();
+                                } else {
+                                  //显示没有更多数据
+                                  _refreshController.loadNoData();
+                                }
                               },
                               onRefresh: () {
                                 //刷新完成
+                                _page = 1;
                                 _loadData();
                                 _refreshController.refreshCompleted();
                                 _refreshController.footerMode.value =
@@ -209,7 +212,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     //       ? ListView(controller: _controller, children: _list)
     //       : _noDataContainer(context),
     // );
-    return ListView(controller: _scrollController, children: _list);
+    return _isData ? ListView(children: _list) : _noDataContainer(context);
   }
 
   //加载完毕
@@ -818,8 +821,6 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         paymentCardNos = [];
         // paymentCardNos.add(_card);
       });
-      print(paymentCardNos.toString());
-      print("=====================");
       _loadData();
     }
   }
@@ -936,11 +937,13 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     UserDataRepository()
         .getUserInfo(GetUserInfoReq(userID), "getUserInfo")
         .then((data) {
-      setState(() {
-        _actualName = data.actualName;
-      });
+      if (this.mounted) {
+        setState(() {
+          _actualName = data.actualName;
+        });
+      }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      // Fluttertoast.showToast(msg: e.toString());
     });
   }
 
@@ -948,19 +951,21 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   _getCardList() {
     CardDataRepository().getCardList('getCardList').then((data) {
       if (data.cardList != null) {
-        setState(() {
-          _cradLists.clear();
-          _imageUrl.clear();
-          _cradLists.add(intl.S.current.all_account);
-          // _imageUrl.add("images/transferIcon/transfer_wallet.png");
-          data.cardList.forEach((e) {
-            _cradLists.add(e.cardNo);
-            _imageUrl.add(e.imageUrl);
+        if (this.mounted) {
+          setState(() {
+            _cradLists.clear();
+            _imageUrl.clear();
+            _cradLists.add(intl.S.current.all_account);
+            // _imageUrl.add("images/transferIcon/transfer_wallet.png");
+            data.cardList.forEach((e) {
+              _cradLists.add(e.cardNo);
+              _imageUrl.add(e.imageUrl);
+            });
           });
-        });
+        }
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      // Fluttertoast.showToast(msg: e.toString());
     });
   }
 
@@ -983,21 +988,27 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                 sort, _startDate, userAccount, userID),
             'getTransferRecord')
         .then((data) {
-      setState(() {
-        if (data.transferRecord != null) {
-          _totalPage = data.totalPage;
-          _transferHistoryList.addAll(data.transferRecord);
-        }
-        _loadMore = false;
-        _isLoading = false;
-      });
+      if (this.mounted) {
+        setState(() {
+          if (data.transferRecord != null) {
+            _totalPage = data.totalPage;
+            _transferHistoryList.addAll(data.transferRecord);
+          }
+          _loadMore = false;
+          _isLoading = false;
+          _refreshController.loadComplete();
+        });
+      }
+
       // HSProgressHUD.dismiss();
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString());
       // HSProgressHUD.dismiss();
-      setState(() {
-        _isLoading = false;
-      });
+      if (this.mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     });
   }
 }
