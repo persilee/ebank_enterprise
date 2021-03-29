@@ -155,23 +155,24 @@ class _HomePageState extends State<HomePage> {
           // },
         ]
       },
-//      {
-//        'title': S.current.other_service,
-//        'btnList': [
-//          {
-//            'btnIcon': 'images/home/listIcon/home_list_FOREX.png',
-//            'btnTitle': S.current.foreign_exchange
-//          },
-//          {
-//            'btnIcon': 'images/home/listIcon/home_list_exchange.png',
-//            'btnTitle': S.current.exchange_rate
-//          },
-//          {
-//            'btnIcon': 'images/home/listIcon/home_list_statement.png',
-//            'btnTitle': S.current.electronic_statement
-//          },
-//        ]
-//      }
+      {
+        'title': S.current.other_service,
+        'bgColor': Color(0xFFF2F0F7),
+        'btnList': [
+          {
+            'btnIcon': 'images/home/listIcon/home_list_FOREX.png',
+            'btnTitle': S.current.foreign_exchange
+          },
+          {
+            'btnIcon': 'images/home/listIcon/home_list_exchange.png',
+            'btnTitle': S.current.exchange_rate
+          },
+          {
+            'btnIcon': 'images/home/listIcon/home_list_statement.png',
+            'btnTitle': S.current.electronic_statement
+          },
+        ]
+      }
     ];
     List<Widget> slivers = [
       SliverToBoxAdapter(
