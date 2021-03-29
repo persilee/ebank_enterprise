@@ -182,8 +182,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   Widget _leftText(String leftText) {
     return Container(
       width: leftText == S.current.tdContract_estimated_payment_amount
-          ? ((MediaQuery.of(context).size.width - 12) / 2) - 10
-          : ((MediaQuery.of(context).size.width - 32) / 2) - 10,
+          ? ((MediaQuery.of(context).size.width - 12) / 2) - 15
+          : ((MediaQuery.of(context).size.width - 32) / 2) - 15,
       child: Text(
         leftText,
         style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 14.0),
@@ -194,6 +194,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   //显示选择的值
   Widget _display(String display, String leftText) {
     return Container(
+      margin: EdgeInsets.only(left: 5),
       width: leftText == S.current.tdContract_estimated_payment_amount
           ? ((MediaQuery.of(context).size.width - 12) / 2) - 10
           : ((MediaQuery.of(context).size.width - 32) / 2) - 10,

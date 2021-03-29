@@ -59,12 +59,20 @@ class DepositRecordResp extends Object {
   @JsonKey(name: 'rows')
   List<DepositRecord> rows;
 
+  @JsonKey(name: 'totalAmt')
+  String totalAmt;
+
+  @JsonKey(name: 'defaultCcy')
+  String defaultCcy;
+
   DepositRecordResp(
     this.page,
     this.pageSize,
     this.count,
     this.totalPage,
     this.rows,
+    this.totalAmt,
+    this.defaultCcy,
   );
 
   factory DepositRecordResp.fromJson(Map<String, dynamic> srcJson) =>
