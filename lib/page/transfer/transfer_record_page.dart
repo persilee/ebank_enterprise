@@ -374,6 +374,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           Animation<double> secondaryAnimation) {
         return FadeTransition(
           opacity: animation, //animation
+          // alwaysIncludeSemantics: true,
           child: SizeTransition(
             sizeFactor: animation,
             child: _popDialogContent(popcontext),
