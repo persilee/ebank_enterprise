@@ -268,7 +268,7 @@ class _CardListPageState extends State<CardListPage> {
       }
     }).catchError((e) {
       _isLoading = false;
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
     });
   }
 
@@ -370,7 +370,8 @@ class _CardListPageState extends State<CardListPage> {
           HSProgressHUD.dismiss();
         }).catchError((e) {
           HSProgressHUD.dismiss();
-          HSProgressHUD.showError(status: e.toString());
+          Fluttertoast.showToast(
+              msg: e.toString(), gravity: ToastGravity.CENTER);
         });
       }
     }
