@@ -16,8 +16,10 @@ import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart
 import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../page_route.dart';
 
@@ -38,7 +40,6 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   List<TotalAssetsCardListBal> cardList;
   List<DepositRecord> rowList = [];
   List<DepositRecord> list = []; //页面显示的记录列表
-  var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   double conRate;
   bool _isDate = false; //false
@@ -46,14 +47,17 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   int page = 1;
   int count = 0;
   ScrollController _sctrollController = ScrollController();
+  RefreshController _refreshController;
+  bool _isLoading = false; //加载状态
 
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      refrestIndicatorKey.currentState.show();
-    });
+    _refreshController = RefreshController();
+    _loadDeopstData();
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   refrestIndicatorKey.currentState.show();
+    // });
 
     //网络请求
     // _loadCardListBal();
@@ -83,11 +87,8 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RefreshIndicator(
-          key: refrestIndicatorKey,
-          child: _getContent(rowList),
-          // 下拉刷新时调用_loadDeopstData
-          onRefresh: _loadDeopstData),
+      body: _getContent(rowList),
+      // 下拉刷新时调用_loadDeopstData
     );
   }
 
@@ -159,7 +160,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         centerTitle: true,
         backgroundColor: Colors.yellowAccent[300],
         floating: true,
-        expandedHeight: 202.0,
+        expandedHeight: 210.0,
         iconTheme: IconThemeData(color: Color(0xffFEFEFE)),
         textTheme: TextTheme(
           headline6: TextStyle(
@@ -191,139 +192,148 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         ),
       ),
       //整存整取
-      _isDate
-          ? SliverList(
-              delegate:
-                  SliverChildBuilderDelegate((BuildContext context, int index) {
-                String bal =
-                    FormatUtil.formatSringToMoney('${rows[index].bal}');
+      _isLoading
+          ? SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(
+                    top: (MediaQuery.of(context).size.height - 180) / 4),
+                child: HsgLoading(),
+              ),
+            )
+          : _isDate
+              ? SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                    String bal =
+                        FormatUtil.formatSringToMoney('${rows[index].bal}');
 
-                double conRate = double.parse(rows[index].conRate);
-                conRate = double.parse(FormatUtil.formatNum(conRate, 2));
-                var endTime = Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      S.current.due_date,
-                      style: TextStyle(
-                          fontSize: 15, color: HsgColors.toDoDetailText),
-                    ),
-                    Text(
-                      //到期时间
-                      rows[index].mtDate,
-                      style: TextStyle(
-                          fontSize: 15, color: HsgColors.aboutusTextCon),
-                    ),
-                  ],
-                );
-                //存入金额
-                var rate = [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        S.current.deposit_amount,
-                        style: TextStyle(
-                            fontSize: 15, color: HsgColors.toDoDetailText),
-                      ),
-                      Text(
-                        '$bal  ${rows[index].ccy}',
-                        style: TextStyle(
-                            fontSize: 15, color: HsgColors.aboutusTextCon),
-                      )
-                    ],
-                  ),
-                  //利率
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        S.current.interest_rate,
-                        style: TextStyle(
-                            fontSize: 15, color: HsgColors.toDoDetailText),
-                      ),
-                      Text(
-                        //利率
-                        '$conRate%',
-                        style: TextStyle(fontSize: 15, color: Colors.red),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        S.current.effective_date,
-                        style: TextStyle(
-                            fontSize: 15, color: HsgColors.toDoDetailText),
-                      ),
-                      Text(
-                        //生效时间
-                        rows[index].valDate,
-                        style: TextStyle(
-                            fontSize: 15, color: HsgColors.aboutusTextCon),
-                      ),
-                    ],
-                  ),
-                  endTime
-                ];
-                var startTime = rate;
-                //整存整取
-                var taking = [
-                  SizedBox(
-                    height: 37,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    double conRate = double.parse(rows[index].conRate);
+                    conRate = double.parse(FormatUtil.formatNum(conRate, 2));
+                    var endTime = Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: Text(
-                            rows[index].engName,
-                            style: TextStyle(fontSize: 15, color: Colors.black),
-                          ),
+                        Text(
+                          S.current.due_date,
+                          style: TextStyle(
+                              fontSize: 15, color: HsgColors.toDoDetailText),
+                        ),
+                        Text(
+                          //到期时间
+                          rows[index].mtDate,
+                          style: TextStyle(
+                              fontSize: 15, color: HsgColors.aboutusTextCon),
                         ),
                       ],
-                    ),
-                  ),
-                  Divider(height: 0, color: HsgColors.textHintColor),
-                  SizedBox(
-                    height: 125,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: startTime,
+                    );
+                    //存入金额
+                    var rate = [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            S.current.deposit_amount,
+                            style: TextStyle(
+                                fontSize: 15, color: HsgColors.toDoDetailText),
+                          ),
+                          Text(
+                            '$bal  ${rows[index].ccy}',
+                            style: TextStyle(
+                                fontSize: 15, color: HsgColors.aboutusTextCon),
+                          )
+                        ],
                       ),
-                    ),
-                  )
-                ];
-                var raisedButton = RaisedButton(
-                    onPressed: () {
-                      go2Detail(rowList[index], cardList);
-                    },
-                    padding: EdgeInsets.only(bottom: 12),
-                    color: Colors.white,
-                    elevation: 0,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: taking,
-                    ));
-                if (index == list.length) {
-                  return _loadingView();
-                  // return Container();
-                } else {
-                  return raisedButton;
-                  // Container(
-                  //     margin: EdgeInsets.only(bottom: 12), child: raisedButton);
-                }
-              }, childCount: list.length),
-            )
-          : SliverToBoxAdapter(
-              child: Container(
-                margin: EdgeInsets.only(top: 100),
-                child: notDataContainer(context, S.current.no_data_now),
-              ),
-            ),
+                      //利率
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            S.current.interest_rate,
+                            style: TextStyle(
+                                fontSize: 15, color: HsgColors.toDoDetailText),
+                          ),
+                          Text(
+                            //利率
+                            '$conRate%',
+                            style: TextStyle(fontSize: 15, color: Colors.red),
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            S.current.effective_date,
+                            style: TextStyle(
+                                fontSize: 15, color: HsgColors.toDoDetailText),
+                          ),
+                          Text(
+                            //生效时间
+                            rows[index].valDate,
+                            style: TextStyle(
+                                fontSize: 15, color: HsgColors.aboutusTextCon),
+                          ),
+                        ],
+                      ),
+                      endTime
+                    ];
+                    var startTime = rate;
+                    //整存整取
+                    var taking = [
+                      SizedBox(
+                        height: 37,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                              child: Text(
+                                rows[index].engName,
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(height: 0, color: HsgColors.textHintColor),
+                      SizedBox(
+                        height: 125,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: startTime,
+                          ),
+                        ),
+                      )
+                    ];
+                    var raisedButton = RaisedButton(
+                        onPressed: () {
+                          go2Detail(rowList[index], cardList);
+                        },
+                        padding: EdgeInsets.only(bottom: 12),
+                        color: Colors.white,
+                        elevation: 0,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: taking,
+                        ));
+                    if (index == list.length) {
+                      return _loadingView();
+                      // return Container();
+                    } else {
+                      return raisedButton;
+                      // Container(
+                      //     margin: EdgeInsets.only(bottom: 12), child: raisedButton);
+                    }
+                  }, childCount: list.length),
+                )
+              : SliverToBoxAdapter(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 100),
+                    child: notDataContainer(context, S.current.no_data_now),
+                  ),
+                ),
     ];
     return CustomScrollView(slivers: SliverToBoxAdapters);
   }
@@ -334,6 +344,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   }
 
   Future<void> _loadDeopstData() async {
+    _isLoading = true;
     final prefs = await SharedPreferences.getInstance();
     bool excludeClosed = true;
     String ciNo = prefs.getString(ConfigKey.CUST_ID);
@@ -342,21 +353,24 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           DepositRecordReq(ciNo, '', excludeClosed, page, 10, ''),
           'getDepositRecord')
     }).then((value) {
-      setState(() {
-        value.forEach((element) {
-          if (element.rows.length != 0) {
-            count = element.count;
-            _isDate = true;
+      if (mounted) {
+        setState(() {
+          value.forEach((element) {
+            if (element.rows.length != 0) {
+              count = element.count;
+              _isDate = true;
 
-            rowList.clear();
-            rowList.addAll(element.rows);
-            list.clear();
-            list.addAll(rowList);
-          } else {
-            _isDate = false;
-          }
+              rowList.clear();
+              rowList.addAll(element.rows);
+              list.clear();
+              list.addAll(rowList);
+            } else {
+              _isDate = false;
+            }
+          });
+          _isLoading = false;
         });
-      });
+      }
     });
   }
 
@@ -386,11 +400,13 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           .getTotalAssets(GetTotalAssetsReq(userId, ciNo, ''), 'getTotalAssets')
     }).then((value) {
       value.forEach((element) {
-        setState(() {
-          totalAmt = element.tdTotal;
-          _defaultCcy = element.ccy;
-          cardList = element.cardListBal;
-        });
+        if (mounted) {
+          setState(() {
+            totalAmt = element.tdTotal;
+            _defaultCcy = element.ccy;
+            cardList = element.cardListBal;
+          });
+        }
       });
     });
   }
@@ -411,5 +427,11 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         loadStatus = LoadingStatus.STATUS_LOADING;
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
   }
 }
