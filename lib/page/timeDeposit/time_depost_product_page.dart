@@ -229,7 +229,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     return Container(
       color: Colors.white,
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.fromLTRB(18, 0, 18, 11),
+      padding: EdgeInsets.fromLTRB(18, 0, 18, 27),
       height: 300.0,
       child: Material(
         child: Column(
@@ -781,6 +781,14 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   //根据存期判断计提周期和档期
   _judge(String code) {
     switch (code) {
+      case 'D001':
+        _accuPeriod = '1';
+        _auctCale = '1';
+        break;
+      case 'D007':
+        _accuPeriod = '1';
+        _auctCale = '7';
+        break;
       case 'M001':
         _accuPeriod = '2';
         _auctCale = '1';
@@ -824,6 +832,10 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       case 'M011':
         _accuPeriod = '2';
         _auctCale = '11';
+        break;
+      case 'M015':
+        _accuPeriod = '2';
+        _auctCale = '15';
         break;
       case 'Y001':
         _accuPeriod = '5';

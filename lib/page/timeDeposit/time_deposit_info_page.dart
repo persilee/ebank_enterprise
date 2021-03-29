@@ -27,11 +27,11 @@ import 'package:intl/intl.dart';
 
 class PageDepositInfo extends StatefulWidget {
   final DepositRecord deposit;
-  final List<TotalAssetsCardListBal> cardList;
-  PageDepositInfo({Key key, this.deposit, this.cardList}) : super(key: key);
+  // final List<TotalAssetsCardListBal> cardList;
+  PageDepositInfo({Key key, this.deposit}) : super(key: key);
 
   @override
-  _PageDepositInfo createState() => _PageDepositInfo(deposit, cardList);
+  _PageDepositInfo createState() => _PageDepositInfo(deposit);
 }
 
 class _PageDepositInfo extends State<PageDepositInfo> {
@@ -79,7 +79,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   var transferAc = '';
 
-  _PageDepositInfo(this.deposit, this.cardList);
+  _PageDepositInfo(this.deposit);
 
   List<RemoteBankCard> cards = [];
 
