@@ -309,11 +309,7 @@ onGenerateRoute(RouteSettings settings) {
   }
   if (settings.name == pageDepositInfo) {
     return MaterialPageRoute(builder: (context) {
-      Map<String, dynamic> arguments = settings.arguments;
-      return PageDepositInfo(
-        deposit: arguments['deposit'],
-        cardList: arguments['cardList'],
-      );
+      return PageDepositInfo(deposit: settings.arguments);
     });
   }
   if (settings.name == pageUserAgreement) {
