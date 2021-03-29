@@ -35,9 +35,9 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = '';
 
   TextEditingController _accountTC =
-      TextEditingController(text: 'blk703'); //fangluyao
+      TextEditingController(text: 'ljw131'); //fangluyao
   TextEditingController _passwordTC =
-      TextEditingController(text: '4N0021S8'); //b0S25X5Y
+      TextEditingController(text: 'Aa123456@'); //b0S25X5Y
   var _account = ''; //'blk101';HSG20
   var _password = ''; //'4N0021S8';Qwe123456~
 
@@ -59,6 +59,8 @@ class _LoginPageState extends State<LoginPage> {
     _passwordTC.addListener(() {
       _password = _passwordTC.text;
     });
+
+    _getUserConfig();
   }
 
   @override
@@ -288,6 +290,8 @@ class _LoginPageState extends State<LoginPage> {
     prefs.setString(ConfigKey.USER_ID, resp.userId);
     prefs.setString(ConfigKey.USER_PHONE, resp.userPhone);
     prefs.setString(ConfigKey.USER_AREACODE, resp.areaCode);
+
+    prefs.setString(ConfigKey.USER_PASSWORD, _password);
     if (resp.custId == null || resp.custId == '') {
       prefs.setString(ConfigKey.CUST_ID, '');
     } else {
@@ -295,6 +299,18 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     _showMainPage(context);
+  }
+
+  ///获取保存的数据
+  void _getUserConfig() async {
+    final prefs = await SharedPreferences.getInstance();
+    String accountStr = prefs.getString(ConfigKey.USER_ACCOUNT);
+    String passwordStr = prefs.getString(ConfigKey.USER_PASSWORD);
+
+    setState(() {
+      _accountTC.text = accountStr == null ? '' : accountStr;
+      _passwordTC.text = passwordStr == null ? '' : passwordStr;
+    });
   }
 
   ///判断是否能点击登录按钮
