@@ -12,7 +12,9 @@ import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart
 import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
+import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -20,6 +22,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../page_route.dart';
 
 class TimeDepostProduct extends StatefulWidget {
@@ -32,7 +35,7 @@ class TimeDepostProduct extends StatefulWidget {
 class _TimeDepostProductState extends State<TimeDepostProduct> {
   List<TdepProducHeadDTO> productList = [];
   List<List<TdepProductDTOList>> producDTOList = [];
-  var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  // var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
   String language = Intl.getCurrentLocale();
   String _changedCcy = S.current.hint_please_select;
   String _changedTerm = S.current.hint_please_select;
@@ -45,14 +48,18 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   String _accuPeriod = ''; //计提周期
   String _auctCale = ''; //档期
   List<String> ccyList = []; //币种列表
+  bool _isLoading = false; //加载状态
+  RefreshController _refreshController;
 
   void initState() {
     super.initState();
     _getTerm();
+    _refreshController = RefreshController();
+    _loadData();
     //下拉刷新
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      refrestIndicatorKey.currentState.show();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   refrestIndicatorKey.currentState.show();
+    // });
 
     NotificationCenter.instance.addObserver('timeDepositProduct', (object) {
       setState(() {
@@ -568,63 +575,74 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         child: _screen(),
       ),
     );
-    _isDate
+    _isLoading
         ? section.add(
-            SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                //最小年利率
-                double minRate = double.parse(FormatUtil.formatNum(
-                    double.parse(tdepProductList[index].minRate), 2));
-                //最大年利率
-                double maxRate = double.parse(FormatUtil.formatNum(
-                    double.parse(tdepProductList[index].maxRate), 2));
-                //判断选择的语言并根据语言选择产品名称
-                String name;
-                if (language == 'zh_CN') {
-                  name = tdepProductList[index].lclName;
-                } else {
-                  name = tdepProductList[index].engName;
-                }
-                //定期产品信息
-                return FlatButton(
-                  padding: EdgeInsets.all(0),
-                  onPressed: () {
-                    go2Detail(tdepProductList[index], tdepProducDTOList[index]);
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _background(),
-                      Container(
-                        padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border(
-                            top: _lineBorderSide(),
-                            bottom: _lineBorderSide(),
-                          ),
-                        ),
-                        child: _productInfo(
-                            name,
-                            minRate,
-                            maxRate,
-                            tdepProductList[index].remark,
-                            tdepProductList[index].minAmt),
-                      ),
-                    ],
-                  ),
-                );
-              }, childCount: tdepProductList.length),
-            ),
-          )
-        : section.add(
             SliverToBoxAdapter(
-              child: Container(
-                margin: EdgeInsets.only(top: 100),
-                child: notDataContainer(context, S.current.no_data_now),
+              child: Padding(
+                padding: EdgeInsets.only(
+                    top: (MediaQuery.of(context).size.height - 180) / 4),
+                child: HsgLoading(),
               ),
             ),
-          );
+          )
+        : _isDate
+            ? section.add(
+                SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    //最小年利率
+                    double minRate = double.parse(FormatUtil.formatNum(
+                        double.parse(tdepProductList[index].minRate), 2));
+                    //最大年利率
+                    double maxRate = double.parse(FormatUtil.formatNum(
+                        double.parse(tdepProductList[index].maxRate), 2));
+                    //判断选择的语言并根据语言选择产品名称
+                    String name;
+                    if (language == 'zh_CN') {
+                      name = tdepProductList[index].lclName;
+                    } else {
+                      name = tdepProductList[index].engName;
+                    }
+                    //定期产品信息
+                    return FlatButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                        go2Detail(
+                            tdepProductList[index], tdepProducDTOList[index]);
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _background(),
+                          Container(
+                            padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border(
+                                top: _lineBorderSide(),
+                                bottom: _lineBorderSide(),
+                              ),
+                            ),
+                            child: _productInfo(
+                                name,
+                                minRate,
+                                maxRate,
+                                tdepProductList[index].remark,
+                                tdepProductList[index].minAmt),
+                          ),
+                        ],
+                      ),
+                    );
+                  }, childCount: tdepProductList.length),
+                ),
+              )
+            : section.add(
+                SliverToBoxAdapter(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 100),
+                    child: notDataContainer(context, S.current.no_data_now),
+                  ),
+                ),
+              );
     return section;
   }
 
@@ -658,21 +676,17 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           )
         ],
       ),
-      body: RefreshIndicator(
-        key: refrestIndicatorKey,
-        child: Container(
-          color: HsgColors.commonBackground,
-          child: CustomScrollView(
-            slivers: _titleSection(productList, producDTOList),
-          ),
+      body: Container(
+        color: HsgColors.commonBackground,
+        child: CustomScrollView(
+          slivers: _titleSection(productList, producDTOList),
         ),
-        //下拉刷新时调用_loadData
-        onRefresh: _loadData,
       ),
     );
   }
 
   Future<void> _loadData() async {
+    _isLoading = true;
     TimeDepositDataRepository()
         .getGetTimeDepositProduct(
             'getGetTimeDepositProduct',
@@ -693,21 +707,24 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       if (data.length != 0) {
         List ccys = [];
         _isDate = true;
-        setState(() {
-          productList.clear();
-          producDTOList.clear();
-          data.forEach((element) {
-            productList.add(element.tdepProducHeadDTO);
-            producDTOList.add(element.tdepProductDTOList);
-            element.tdepProductDTOList.forEach((data) {
-              ccys.add(data.ccy);
-              bool isContainer = ccyList.contains(data.ccy);
-              if (!isContainer) {
-                ccyList.add(data.ccy);
-              }
+        if (this.mounted) {
+          setState(() {
+            productList.clear();
+            producDTOList.clear();
+            data.forEach((element) {
+              productList.add(element.tdepProducHeadDTO);
+              producDTOList.add(element.tdepProductDTOList);
+              element.tdepProductDTOList.forEach((data) {
+                ccys.add(data.ccy);
+                bool isContainer = ccyList.contains(data.ccy);
+                if (!isContainer) {
+                  ccyList.add(data.ccy);
+                }
+              });
             });
+            _isLoading = false;
           });
-        });
+        }
       } else {
         _isDate = false;
       }
@@ -731,14 +748,16 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         data.publicCodeGetRedisRspDtoList.forEach((element) {
-          setState(() {
-            if (language == 'zh_CN') {
-              terms.add(element.cname);
-            } else {
-              terms.add(element.name);
-            }
-            termCodes.add(element.code);
-          });
+          if (this.mounted) {
+            setState(() {
+              if (language == 'zh_CN') {
+                terms.add(element.cname);
+              } else {
+                terms.add(element.name);
+              }
+              termCodes.add(element.code);
+            });
+          }
         });
       }
     });
@@ -829,5 +848,11 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         'tdepProducDTOList': tdepProducDTOList
       },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
   }
 }
