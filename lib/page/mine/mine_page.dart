@@ -32,6 +32,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/main.dart';
 
@@ -65,6 +66,7 @@ class _MinePageState extends State<MinePage> {
   var _characterName = ''; // 角色名称
   var _belongCustStatus = '0'; //用户状态
   UserInfoResp _userInfoResp;
+  var _inviteeStatus = '0'; //用户受邀状态，是否是走快速开户，默认为0，不走
 
   @override
   // ignore: must_call_super
@@ -238,6 +240,9 @@ class _MinePageState extends State<MinePage> {
                 _flatBtnNuitWidget(S.of(context).visa_interview, true, () {
                   //面签
                   Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+                  // _inviteeStatus == '0'
+                  //     ? Navigator.pushNamed(context, pageOpenAccountGetFaceSign)
+                  //     : Navigator.pushNamed(context, pageOpenAccountBasicData);
                 }),
               ],
             ),
@@ -472,7 +477,7 @@ class _MinePageState extends State<MinePage> {
     );
   }
 
-//用户信息-未开户成功
+//用户信息-未开户
   Widget _userOffInfo() {
     return Container(
         child: Row(
@@ -490,11 +495,46 @@ class _MinePageState extends State<MinePage> {
           ),
           clickCallback: () {
             print('开户申请');
+            //判断受邀状态进入不同页面
+            // _openAccountClickFunction(context);
             Navigator.pushNamed(context, pageOpenAccountBasicData);
           },
         ),
       ],
     ));
+  }
+
+  //开户点击事件
+  void _openAccountClickFunction(BuildContext context) {
+    if (_inviteeStatus == '0') {
+      //前往填写面签码
+      Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+    } else {
+      //前往快速开户
+      Navigator.pushNamed(context, pageOpenAccountBasicData);
+    }
+  }
+
+  Future<void> _getInviteeStatusByPhoneNetwork() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userAreaCode = prefs.getString(ConfigKey.USER_AREACODE);
+    String userPhone = prefs.getString(ConfigKey.USER_PHONE);
+
+    UserDataRepository()
+        .getInviteeStatusByPhone(
+      GetInviteeStatusByPhoneReq(userAreaCode, userPhone),
+      'getInviteeStatusByPhone',
+    )
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          _inviteeStatus = data.inviteeStatus;
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      print('${e.toString()}');
+    });
   }
 
 //用户信息-已开户
@@ -723,6 +763,9 @@ class _MinePageState extends State<MinePage> {
         });
       }
       _changeUserInfoShow(_userInfoResp);
+      if (['0', '1', '3'].contains(data.belongCustStatus)) {
+        _getInviteeStatusByPhoneNetwork();
+      }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
       print('${e.toString()}');
