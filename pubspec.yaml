@@ -191,6 +191,10 @@ flutter:
     - images/openAccount/open_account_document_type_other.png
     - images/openAccount/open_account_identify_results_failure.png
     - images/openAccount/open_account_identify_results_successful.png
+    #贷款产品
+    - images/loanProduct/loan_product_borrow.png 
+    - images/loanProduct/loan_product_flower.png
+    - images/loanProduct/loan_product_have.png 
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

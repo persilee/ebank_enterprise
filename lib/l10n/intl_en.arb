@@ -201,7 +201,7 @@
   "repayment_type2": "Early Redemption",
   "due_date": "Due Date",
   "deposit_rate": "View Interest Rate",
-  "loan_apply": "Loan",
+  "loan_apply": "Loan apply",
   "loan_record": "Loan Record",
   "loan_rate": "Loan Interest Rate",
   "foreign_exchange": "Foreign Exchange",
@@ -582,6 +582,17 @@
   "loan_Repayment_method_column":"Repayment Method",
   "loan_Interest_Rate_column":"Loan Interest Rate",
   "loan_NewTop_infomation":"Application Information",
+  "loan_Product_NavTitle":"Loan product",
+  "loan_Product_Characteristics":"Loan product",
+
+  "loan_Product_Per_regular":"Term Loan",
+  "loan_Product_Per_detail":"Fast approval, fast disbursement",
+  "loan_Product_Business":"Revolving Loan",
+  "loan_Product_Business_Deatil":"Unrestricted products, secured and assured loans",
+  "loan_Product_Foreign":"Foreign Exchange Loans",
+  "loan_Product_Foreign_detail":"Corporate entities, controlling shareholders can apply",
+  "loan_Product_PlaceholdMore":"Maximum application",
+
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }
