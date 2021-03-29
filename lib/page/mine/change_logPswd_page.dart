@@ -50,13 +50,19 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   void initState() {
     super.initState();
     _oldPwd.addListener(() {
-      setState(() {});
+      if (this.mounted) {
+        setState(() {});
+      }
     });
     _newPwd.addListener(() {
-      setState(() {});
+      if (this.mounted) {
+        setState(() {});
+      }
     });
     _confimPwd.addListener(() {
-      setState(() {});
+      if (this.mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -173,7 +179,9 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       keyboardType: TextInputType.number,
       controller: _sms,
       onChanged: (text) {
-        setState(() {});
+        if (this.mounted) {
+          setState(() {});
+        }
       },
       decoration: InputDecoration.collapsed(
         hintText: S.current.please_enter,

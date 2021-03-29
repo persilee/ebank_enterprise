@@ -7,6 +7,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 
 class PasswordManagementPage extends StatefulWidget {
   @override
@@ -14,8 +15,12 @@ class PasswordManagementPage extends StatefulWidget {
 }
 
 class _PasswordManagementPageState extends State<PasswordManagementPage> {
+  var _belongCustStatus = ''; //用户状态 -拦截交易密码操作
+
   @override
   Widget build(BuildContext context) {
+    String argument = ModalRoute.of(context).settings.arguments;
+    _belongCustStatus = argument != null ? argument : '';
     ScrollController _sctrollController = ScrollController();
 
     return Scaffold(
@@ -72,10 +77,14 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
             child: Column(
               children: [
                 _flatBtnNuitWidget(S.of(context).changPayPws, true, () {
-                  Navigator.pushNamed(context, changePayPS);
+                  _belongCustStatus == '6'
+                      ? Navigator.pushNamed(context, changePayPS)
+                      : _notOpenAccountTip();
                 }),
                 _flatBtnNuitWidget(S.of(context).resetPayPwd, true, () {
-                  Navigator.pushNamed(context, pageResetPayPwdOtp);
+                  _belongCustStatus == '6'
+                      ? Navigator.pushNamed(context, pageResetPayPwdOtp)
+                      : _notOpenAccountTip();
                 }),
               ],
             ),
@@ -86,6 +95,19 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
         ],
       ),
     );
+  }
+
+  _notOpenAccountTip() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertDialog(
+            title: S.current.prompt,
+            message: S.current.openAccount_notOpen_content,
+            positiveButton: S.current.confirm,
+            negativeButton: S.current.cancel,
+          );
+        });
   }
 
   ///按钮单元格，左文字，有箭头图标

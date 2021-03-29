@@ -33,7 +33,6 @@ class _SetPayPageState extends State<SetPayPage> {
   var _phoneNumber = '';
   var _userId = '';
   var _userAccount = '';
-  var _belongCustStatus = '0'; //用户状态
 
   @override
   void initState() {
@@ -54,7 +53,6 @@ class _SetPayPageState extends State<SetPayPage> {
         _certificateNo = map['certificateNo'];
         _certificateType = map['certificateType'];
         _phoneNumber = map['phoneNumber'];
-        _belongCustStatus = map['belongCustStatus'];
       }
     });
     return new Scaffold(
@@ -164,11 +162,7 @@ class _SetPayPageState extends State<SetPayPage> {
               'setTransactionPassword')
           .then((data) {
         HSProgressHUD.dismiss();
-        if (_belongCustStatus == '6') {
-          Navigator.of(context)..pop()..pop()..pop();
-        } else {
-          Navigator.of(context)..pop()..pop();
-        }
+        Navigator.of(context)..pop()..pop()..pop();
         Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
       }).catchError((e) {
         Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);

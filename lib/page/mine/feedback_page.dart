@@ -126,7 +126,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
       'GetFeedBackReq',
     )
         .then((data) {
-      Fluttertoast.showToast(msg: '意见反馈成功', gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+          msg: S.current.feedbackSuccess, gravity: ToastGravity.CENTER);
       Navigator.pop(context);
       HSProgressHUD.dismiss();
     }).catchError((e) {

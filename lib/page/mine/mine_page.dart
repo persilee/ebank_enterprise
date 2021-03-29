@@ -232,7 +232,8 @@ class _MinePageState extends State<MinePage> {
                   Navigator.pushNamed(context, pageCardList);
                 }),
                 _flatBtnNuitWidget(S.current.password_management, true, () {
-                  Navigator.pushNamed(context, pagePasswordManagement);
+                  Navigator.pushNamed(context, pagePasswordManagement,
+                      arguments: _belongCustStatus);
                 }),
                 _flatBtnNuitWidget(S.of(context).visa_interview, true, () {
                   //面签
