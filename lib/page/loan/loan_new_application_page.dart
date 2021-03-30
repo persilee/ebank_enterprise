@@ -310,7 +310,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
             //申请金额
             title: S.current.apply_amount,
             hintText: _inputs,
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
             controller: _moneyController,
             callback: _checkloanIsClick,
           ),

@@ -274,15 +274,16 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
         .then((data) {
       HSProgressHUD.dismiss();
+      if (mounted) {
+        setState(() {
+          _isRegister = data.register;
+          _userAccount = data.userAccount;
+          HSProgressHUD.dismiss();
 
-      setState(() {
-        _isRegister = data.register;
-        _userAccount = data.userAccount;
-        HSProgressHUD.dismiss();
-
-        //发送短信
-        _getVerificationCode();
-      });
+          //发送短信
+          _getVerificationCode();
+        });
+      }
     }).catchError((e) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
@@ -334,7 +335,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
           .then((data) {
         HSProgressHUD.dismiss();
         _startCountdown();
-        setState(() {});
+
         HSProgressHUD.dismiss();
       }).catchError((e) {
         HSProgressHUD.dismiss();

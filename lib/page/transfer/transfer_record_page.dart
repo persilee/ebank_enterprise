@@ -576,7 +576,11 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       width: (MediaQuery.of(context).size.width - 50) / 3,
       height: 30,
       decoration: BoxDecoration(
-        color: HsgColors.blueTextColor,
+        // color: HsgColors.blueTextColor,
+        gradient: LinearGradient(colors: [
+          Color(0xFF1775BA),
+          Color(0xFF3A9ED1),
+        ], begin: Alignment.centerLeft, end: Alignment.centerRight),
         borderRadius: BorderRadius.circular(5),
       ),
       child: OutlineButton(

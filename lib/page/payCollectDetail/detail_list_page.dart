@@ -13,7 +13,9 @@ import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
+import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,6 +25,7 @@ import 'package:flutter_tableview/flutter_tableview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:date_format/date_format.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -48,6 +51,8 @@ class _DetailListPageState extends State<DetailListPage> {
   bool _isButton4 = false; //交易时间第四个按钮
   String _time = intl.S.current.the_same_month; //时间
   int _page = 1; //几页数据
+  //int _totalPage = 1; //数据总页数
+  bool _loadMore = false; //是否加载更多
   String _endDate = DateFormat('yyyy-MM-dd').format(DateTime.now()); //结束时间
 
   String _end = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示结束时间
@@ -57,21 +62,25 @@ class _DetailListPageState extends State<DetailListPage> {
   List<TransferRecord> _transferHistoryList = []; //转账记录列表
   GlobalKey _textKey = GlobalKey();
   TextEditingController _moneyController = TextEditingController();
-  var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>(); //下拉刷新
+  // var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>(); //下拉刷新
   TextEditingController _startAmountController = TextEditingController();
   TextEditingController _endAmountController = TextEditingController();
   String selectAccNo;
+  bool _isLoading = false; //加载状态
+  RefreshController _refreshController;
+  ScrollController _scrollController = ScrollController(); //滚动监听
 
   @override
   // ignore: must_call_super
   void initState() {
     // 网络请求
+    _getRevenueByCards(_startDate, _allAccNoList);
     _getCardList();
-
-    //下拉刷新
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      refrestIndicatorKey.currentState.show();
-    });
+    _refreshController = RefreshController();
+    // //下拉刷新
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   refrestIndicatorKey.currentState.show();
+    // });
   }
 
   @override
@@ -92,13 +101,37 @@ class _DetailListPageState extends State<DetailListPage> {
             child: _getSelectButRow(_date),
           ),
           Expanded(
-            child: RefreshIndicator(
-              onRefresh: () => _getCardList(),
-              child: ddFinHisDTOList.length > 0
-                  ? _buildFlutterTableView()
-                  : _noDataContainer(context),
-            ),
+            child: _isLoading
+                ? HsgLoading()
+                : ddFinHisDTOList.length > 0
+                    ? CustomRefresh(
+                        controller: _refreshController,
+                        //上拉加载
+                        onLoading: () {
+                          // _refreshController.loadComplete();
+                          _refreshController.loadNoData();
+                          //加载更多完成
+                          // if (_loadMore) {
+                          //   _getRevenueByCards(_startDate, _allAccNoList);
+                          // } else {
+                          //   //显示没有更多数据
+                          //   _refreshController.loadNoData();
+                          // }
+                        },
+                        //下拉刷新
+                        onRefresh: () {
+                          //刷新完成
+                          _getRevenueByCards(_startDate, _allAccNoList);
+                        },
+                        content: _buildFlutterTableView(),
+                      )
+                    : _noDataContainer(context),
+            //  RefreshIndicator(
+            // onRefresh: () => _getCardList(),
+            // child: ddFinHisDTOList.length > 0
+            //     ? _buildFlutterTableView()
           ),
+          //  ),
         ],
       ),
       //   onRefresh: _getListNetworkData(),
@@ -116,6 +149,7 @@ class _DetailListPageState extends State<DetailListPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
+        //顶部选择时间
         _popDialog(),
         GestureDetector(
           onTap: _accountList,
@@ -123,11 +157,20 @@ class _DetailListPageState extends State<DetailListPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               _cardList.length > 0
-                  ? Text(_cardList[_position] == ''
-                      ? intl.S.current.all_account
-                      : _cardList[_position])
-                  : Text(intl.S.current.all_account),
-              Icon(Icons.arrow_drop_down)
+                  ? Text(
+                      _cardList[_position] == ''
+                          ? intl.S.current.all_account
+                          : _cardList[_position],
+                      overflow: TextOverflow.clip,
+                    )
+                  : Text(
+                      intl.S.current.all_account,
+                      overflow: TextOverflow.clip,
+                    ),
+              Icon(
+                Icons.arrow_drop_down,
+                size: 22,
+              )
             ],
           ),
         ),
@@ -135,14 +178,15 @@ class _DetailListPageState extends State<DetailListPage> {
     );
   }
 
-  //顶部弹窗
+  //顶部弹窗--选择时间
   Widget _popDialog() {
     return CustomPopupWindowButton(
       offset: Offset(0, 200),
       isRelative: true,
       buttonBuilder: (BuildContext context) {
         return GestureDetector(
-          child: _headerText(intl.S.of(context).custom_autofilter),
+          child: _headerText(_time),
+          // intl.S.of(context).custom_autofilter   自定义选择
         );
       },
       windowBuilder: (BuildContext popcontext, Animation<double> animation,
@@ -174,11 +218,11 @@ class _DetailListPageState extends State<DetailListPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text(
-          text,
-          key: _textKey,
+        Text(text, key: _textKey, overflow: TextOverflow.clip),
+        Icon(
+          Icons.arrow_drop_down,
+          size: 22,
         ),
-        Icon(Icons.arrow_drop_down),
       ],
     );
   }
@@ -190,36 +234,40 @@ class _DetailListPageState extends State<DetailListPage> {
       height: 230,
       padding: EdgeInsets.all(10),
       child: Material(
-        child: Container(
-          color: Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Container(
-              //   height: 20,
-              //   color: Color(0xFFF7F7F7),
-              // ),
-              //交易时间
-              _timeText(intl.S.of(context).transaction_time),
-              _tradingHour(popcontext),
-              //自定义时间
-              _timeText(intl.S.of(context).user_defined),
-              _userDefind(popcontext),
-              //金额
-              // _timeText(intl.S.of(context).amount),
-              // _amountDuration(),
-              //按钮
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  _resetButton(popcontext),
-                  _confimrButton(context),
-                ],
-              ),
-            ],
+          child: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          Container(
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Container(
+                //   height: 20,
+                //   color: Color(0xFFF7F7F7),
+                // ),
+                //交易时间
+                _timeText(intl.S.of(context).transaction_time),
+                _tradingHour(popcontext),
+                //自定义时间
+                _timeText(intl.S.of(context).user_defined),
+                _userDefind(popcontext),
+                //金额
+                // _timeText(intl.S.of(context).amount),
+                // _amountDuration(),
+                //按钮
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    _resetButton(popcontext),
+                    _confimrButton(context),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        ],
+      )),
     );
   }
 
@@ -239,6 +287,7 @@ class _DetailListPageState extends State<DetailListPage> {
     return Container(
         margin: EdgeInsets.only(left: 10, right: 10),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _trandingHourButton(
                 1, _isButton1, intl.S.current.the_same_day, popcontext),
@@ -246,8 +295,8 @@ class _DetailListPageState extends State<DetailListPage> {
                 2, _isButton2, intl.S.current.the_same_month, popcontext),
             _trandingHourButton(
                 3, _isButton3, intl.S.current.last_three_month, popcontext),
-            _trandingHourButton(
-                4, _isButton4, intl.S.current.last_half_year, popcontext),
+            // _trandingHourButton(
+            //     4, _isButton4, intl.S.current.last_half_year, popcontext),
           ],
         ));
   }
@@ -256,7 +305,8 @@ class _DetailListPageState extends State<DetailListPage> {
   Widget _trandingHourButton(int i, bool isButton, String time, popcontext) {
     return Container(
       margin: EdgeInsets.all(3),
-      width: 73,
+      width: MediaQuery.of(popcontext).size.width / 3.6,
+      //width: 73,
       height: 30,
       child: OutlineButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -346,6 +396,7 @@ class _DetailListPageState extends State<DetailListPage> {
           });
           //Navigator.of(context).pushNamed(pageAccountOverview);
           // Navigator.of(context).pop();
+          //选择之后不立马放下弹窗
           (popcontext as Element).markNeedsBuild();
         },
       ),
@@ -378,7 +429,7 @@ class _DetailListPageState extends State<DetailListPage> {
   Widget _confimrButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(5, 5, 10, 5),
-      width: 70,
+      width: MediaQuery.of(context).size.width / 3.6,
       height: 30,
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -466,7 +517,7 @@ class _DetailListPageState extends State<DetailListPage> {
   //重置按钮
   Widget _resetButton(BuildContext popcontext) {
     return Container(
-      width: 70,
+      width: MediaQuery.of(popcontext).size.width / 3.6,
       height: 30,
       margin: EdgeInsets.all(5),
       decoration: BoxDecoration(
@@ -486,6 +537,7 @@ class _DetailListPageState extends State<DetailListPage> {
         ),
         onPressed: () {
           setState(() {
+            _time = intl.S.current.the_same_month;
             _isButton2 = true;
             _isButton1 = false;
             _isButton3 = false;
@@ -557,7 +609,7 @@ class _DetailListPageState extends State<DetailListPage> {
 //自定义时间按钮
   Widget _timeButton(String name, int i, BuildContext popcontext) {
     return Container(
-      margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+      margin: EdgeInsets.fromLTRB(10, 5, 5, 5),
       width: MediaQuery.of(context).size.width / 2.7,
       height: 30,
       decoration: BoxDecoration(
@@ -622,7 +674,6 @@ class _DetailListPageState extends State<DetailListPage> {
     );
   }
 
-  // cell item widget builder.
   Widget _cellBuilder(BuildContext context, int section, int row) {
     return Container(
       color: Colors.white,
@@ -729,12 +780,15 @@ class _DetailListPageState extends State<DetailListPage> {
 
   FlutterTableView _buildFlutterTableView() {
     return FlutterTableView(
+      controller: _scrollController,
       sectionCount: ddFinHisDTOList.length,
       rowCountAtSection: _rowCountAtSection,
       sectionHeaderBuilder: _sectionHeaderBuilder,
       cellBuilder: _cellBuilder,
       sectionHeaderHeight: _sectionHeaderHeight,
       cellHeight: _cellHeight,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       // listViewFatherWidgetBuilder :_noDataContainer(context),//( ddFinHisDTOList.length > 0) ? Container()
       // : _noDataContainer(context),
     );
@@ -861,10 +915,13 @@ class _DetailListPageState extends State<DetailListPage> {
           );
         });
     if (result != null && result != false) {
-      setState(() {
-        _position = result;
-        selectAccNo = _cardList[result];
-      });
+      if (mounted) {
+        setState(() {
+          _position = result;
+          selectAccNo = _cardList[result];
+        });
+      }
+
       if (_position != 0) {
         _accNoList.clear();
         _accNoList.add(_cardList[result]);
@@ -879,12 +936,14 @@ class _DetailListPageState extends State<DetailListPage> {
     Navigator.pushNamed(context, pageDetailInfo, arguments: ddFinHist);
   }
 
+  //获取所有历史记录
   _getRevenueByCards(String localDateStart, List<String> cards) async {
+    _isLoading = true;
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
     String accNo = _accNoList.toString();
     selectAccNo = selectAccNo == _cardList[0] ? '' : selectAccNo;
-
+    int pageSize = 10;
     print(">>>>>>>>$_cardList");
     print(">>>>>>one>$selectAccNo");
 
@@ -892,52 +951,71 @@ class _DetailListPageState extends State<DetailListPage> {
     print(">>>>>>>>$_endDate");
     print(">>>>>>>$_startDate");
 
-    HSProgressHUD.show();
+    // HSProgressHUD.show();
     PayCollectDetailRepository()
         .getRevenueByCards(
             GetRevenueByCardsReq(
                 'CNY',
                 '$_endDate', //结束时间     '$_endDate'
                 '$_startDate', //开始时间   '$_startDate'
-                0, //分页
-                0, //分页
+                0, //分页 page
+                0, //分页pageSize
                 acNo: '$selectAccNo', //''
                 ciNo: '$custID'), //'818000000113'
             'GetRevenueByCardsReq')
         .then((data) {
       HSProgressHUD.dismiss();
       if (data.ddFinHisDTOList != null) {
-        setState(() {
-          ddFinHisDTOList = data.ddFinHisDTOList;
-        });
+        if (mounted) {
+          setState(() {
+            ddFinHisDTOList = data.ddFinHisDTOList;
+            // _loadMore = false;
+            _isLoading = false;
+            _refreshController.refreshCompleted();
+            _refreshController.footerMode.value = LoadStatus.canLoading;
+            // _refreshController.loadComplete();
+          });
+        }
       }
     }).catchError((e) {
+      _isLoading = false;
       Fluttertoast.showToast(
         msg: e.toString(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
       );
-      HSProgressHUD.dismiss();
+      // HSProgressHUD.dismiss();
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
+    // _scrollController.dispose();
+  }
+
+  //获取账号
   Future<void> _getCardList() async {
     CardDataRepository().getCardList('getCardList').then((data) {
       if (data.cardList != null) {
-        setState(() {
-          _cardList.clear();
-          _cardIcon.clear();
-          _allAccNoList.clear();
-          _cardList.add(intl.S.current.all_account);
-          // _cardIcon.add("images/transferIcon/transfer_wallet.png");
-          data.cardList.forEach((item) {
-            _allAccNoList.add(item.cardNo);
-            _cardList.add(item.cardNo);
+        if (mounted) {
+          setState(() {
+            _cardList.clear();
+            _cardIcon.clear();
+            _allAccNoList.clear();
+            _cardList.add(intl.S.current.all_account);
+            // _cardIcon.add("images/transferIcon/transfer_wallet.png");
+            data.cardList.forEach((item) {
+              _allAccNoList.add(item.cardNo);
+              _cardList.add(item.cardNo);
 
-            _cardIcon.add(item.imageUrl);
+              _cardIcon.add(item.imageUrl);
+            });
           });
-        });
+        }
+
         _getRevenueByCards(_startDate, _allAccNoList);
       }
     }).catchError((e) {

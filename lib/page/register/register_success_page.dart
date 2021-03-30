@@ -11,6 +11,7 @@ import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -74,35 +75,19 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
               ),
             ),
             //完成按钮
-            Container(
-                margin: EdgeInsets.only(left: 37.5, right: 37.5, top: 125),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xFF1775BA),
-                      Color(0xFF3A9ED1),
-                    ],
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(),
-                      child: FlatButton(
-                        child: Text(
-                          S.current.complete,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {
-                          _login();
-                        },
-                      ),
-                    )
-                  ],
-                ))
+            CustomButton(
+              margin: EdgeInsets.only(left: 37.5, right: 37.5, top: 125),
+              height: 50,
+              // borderRadius: BorderRadius.circular(50.0),
+              text: Text(
+                S.current.complete,
+                style: TextStyle(fontSize: 14, color: Colors.white),
+              ),
+              clickCallback: () {
+                print('开户申请');
+                _login();
+              },
+            ),
           ],
         ),
       ),
@@ -156,11 +141,13 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
     UserDataRepository()
         .login(LoginReq(username: _account, password: password), 'login')
         .then((value) {
-      setState(() {
-        HSProgressHUD.dismiss();
-        _saveUserConfig(context, value);
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          HSProgressHUD.dismiss();
+          _saveUserConfig(context, value);
+          _isLoading = false;
+        });
+      }
     }).catchError((e) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(

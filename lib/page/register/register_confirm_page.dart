@@ -185,19 +185,22 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
             'registerByAccount')
         .then((value) {
       HSProgressHUD.dismiss();
-      setState(() {
-        Map listDataLogin = new Map();
-        //传用户名和密码到成功页面已用于调用登录接口跳转至首页
-        listDataLogin = {
-          'accountName': _registerAccount,
-          'password': password,
-        };
 
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            pageRegisterSuccess, ModalRoute.withName("/"), //清除旧栈需要保留的栈 不清除就不写这句
-            arguments: listDataLogin //传值
-            );
-      });
+      if (mounted) {
+        setState(() {
+          Map listDataLogin = new Map();
+          //传用户名和密码到成功页面已用于调用登录接口跳转至首页
+          listDataLogin = {
+            'accountName': _registerAccount,
+            'password': password,
+          };
+          //传值跳转到指定页面
+          Navigator.of(context).pushNamedAndRemoveUntil(pageRegisterSuccess,
+              ModalRoute.withName("/"), //清除旧栈需要保留的栈 不清除就不写这句
+              arguments: listDataLogin //传值
+              );
+        });
+      }
     }).catchError((e) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
