@@ -47,3 +47,7 @@ app.*.symbols
 app.*.map.json
 debug
 lib/node_modules
+
+# 安装包
+*.apk
+*.ipa
