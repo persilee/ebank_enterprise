@@ -573,13 +573,14 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _confimrButton() {
     return Container(
       margin: EdgeInsets.all(5),
-      width: 75,
+      width: (MediaQuery.of(context).size.width - 50) / 3,
       height: 30,
       decoration: BoxDecoration(
         color: HsgColors.blueTextColor,
         borderRadius: BorderRadius.circular(5),
       ),
       child: OutlineButton(
+        padding: EdgeInsets.all(0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         borderSide: BorderSide(color: Colors.white),
         child: Text(
@@ -605,7 +606,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   //重置按钮
   Widget _resetButton(BuildContext popcontext) {
     return Container(
-      width: 75,
+      width: (MediaQuery.of(context).size.width - 50) / 3,
       height: 30,
       margin: EdgeInsets.all(5),
       decoration: BoxDecoration(
@@ -645,6 +646,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   //交易时间
   Widget _tradingHour(popcontext) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         _trandingHourButton(
             1, _isButton1, intl.S.current.the_same_day, popcontext),
@@ -652,8 +654,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             2, _isButton2, intl.S.current.the_same_month, popcontext),
         _trandingHourButton(
             3, _isButton3, intl.S.current.last_three_month, popcontext),
-        _trandingHourButton(
-            4, _isButton4, intl.S.current.last_half_year, popcontext),
+        // _trandingHourButton(
+        //     4, _isButton4, intl.S.current.last_half_year, popcontext),
       ],
     );
   }
@@ -661,10 +663,12 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 //交易时间按钮
   Widget _trandingHourButton(int i, bool isButton, String time, popcontext) {
     return Container(
-      margin: EdgeInsets.all(3),
-      width: 78,
+      // margin: EdgeInsets.all(3),
+      margin: EdgeInsets.only(top: 3, left: 3),
+      width: (MediaQuery.of(context).size.width - 50) / 3,
       height: 30,
       child: OutlineButton(
+        padding: EdgeInsets.all(0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         borderSide: BorderSide(
           color: isButton ? HsgColors.blueTextColor : Color(0xffD1D1D1),

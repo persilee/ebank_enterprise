@@ -49,6 +49,9 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   // ignore: must_call_super
   void initState() {
     // 网络请求
+    _payAmtController.addListener(() {
+      _transferTrial();
+    });
     _getCardList();
   }
 
@@ -125,6 +128,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           title: S.current.debit_accno,
           item: _paymentAcc,
           onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
             _accountBottomSheet(true, _paymentAccId);
           },
         ),
@@ -132,6 +136,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           title: S.current.debit_currency,
           item: _paymentCcy,
           onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
             _currencyShowDialog(true, _paymentCcyId, _paymentCcyList);
           },
         ),
@@ -147,6 +152,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           title: S.current.debit_accno,
           item: _incomeAcc,
           onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
             _accountBottomSheet(false, _incomeAccId);
           },
         ),
@@ -154,6 +160,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           title: S.current.debit_currency,
           item: _incomeCcy,
           onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
             _currencyShowDialog(false, _incomeCcyId, _incomeCcyList);
           },
         ),
@@ -211,7 +218,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           return HsgBottomSingleChoice(
             title: S.of(context).account_lsit,
             items: _accList,
-            icons: _accIcon,
+            // icons: _accIcon,
             lastSelectedPosition: index,
           );
         });
@@ -286,16 +293,18 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   _getCardList() {
     CardDataRepository().getCardList('getCardList').then((data) {
       if (data.cardList != null) {
-        setState(() {
-          cards.clear();
-          _accIcon.clear();
-          cards = data.cardList;
-          _accList.clear();
-          data.cardList.forEach((item) {
-            _accList.add(item.cardNo);
-            _accIcon.add(item.imageUrl);
+        if (this.mounted) {
+          setState(() {
+            cards.clear();
+            _accIcon.clear();
+            cards = data.cardList;
+            _accList.clear();
+            data.cardList.forEach((item) {
+              _accList.add(item.cardNo);
+              _accIcon.add(item.imageUrl);
+            });
           });
-        });
+        }
       }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
@@ -308,14 +317,16 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         .getCardBalByCardNo(GetCardBalReq(cardNo: cardNo), 'GetCardBalReq')
         .then((data) {
       if (data.cardListBal != null && _paymentCcy != S.current.please_select) {
-        setState(() {
-          _balance = '0.00';
-          data.cardListBal.forEach((item) {
-            if (_paymentCcy == item.ccy) {
-              _balance = item.avaBal;
-            }
+        if (this.mounted) {
+          setState(() {
+            _balance = '0.00';
+            data.cardListBal.forEach((item) {
+              if (_paymentCcy == item.ccy) {
+                _balance = item.avaBal;
+              }
+            });
           });
-        });
+        }
       }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
@@ -324,6 +335,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
 
   //计算汇率
   _transferTrial() {
+    print("汇率换算");
     if (_paymentAcc != '' &&
         _paymentCcy != '' &&
         _incomeAcc != '' &&
@@ -339,10 +351,12 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
                   defaultCcy: _paymentCcy),
               'TransferTrialReq')
           .then((data) {
-        setState(() {
-          // _rate = data.rate;
-          // _incomeAmt = data.resultAmount;
-        });
+        if (this.mounted) {
+          setState(() {
+            _rate = data.optExRate;
+            _incomeAmt = data.optExAmt;
+          });
+        }
       }).catchError((e) {
         Fluttertoast.showToast(msg: e.toString());
       });

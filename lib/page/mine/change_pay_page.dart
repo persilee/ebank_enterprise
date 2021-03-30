@@ -297,9 +297,11 @@ class _ChangePayPageState extends State<ChangePayPage> {
       'getUserInfo',
     )
         .then((data) {
-      setState(() {
-        _phoneNo = data.userPhone;
-      });
+      if (this.mounted) {
+        setState(() {
+          _phoneNo = data.userPhone;
+        });
+      }
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
       print('${e.toString()}');

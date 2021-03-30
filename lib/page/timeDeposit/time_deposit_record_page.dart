@@ -61,7 +61,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
 
     //网络请求
     // _loadCardListBal();
-    _loadTotalAssets();
+    // _loadTotalAssets();
 
     NotificationCenter.instance.addObserver('load', (object) {
       if (this.mounted) {
@@ -69,7 +69,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           if (object) {
             _loadDeopstData();
             // _loadCardListBal();
-            _loadTotalAssets();
+            // _loadTotalAssets();
           }
         });
       }
@@ -309,7 +309,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
                     ];
                     var raisedButton = RaisedButton(
                         onPressed: () {
-                          go2Detail(rowList[index], cardList);
+                          go2Detail(rowList[index]);
                         },
                         padding: EdgeInsets.only(bottom: 12),
                         color: Colors.white,
@@ -338,9 +338,8 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     return CustomScrollView(slivers: SliverToBoxAdapters);
   }
 
-  void go2Detail(DepositRecord deposit, List<TotalAssetsCardListBal> cardList) {
-    Navigator.pushNamed(context, pageDepositInfo,
-        arguments: {'deposit': deposit, 'cardList': cardList});
+  void go2Detail(DepositRecord deposit) {
+    Navigator.pushNamed(context, pageDepositInfo, arguments: deposit);
   }
 
   Future<void> _loadDeopstData() async {
@@ -359,7 +358,8 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
             if (element.rows.length != 0) {
               count = element.count;
               _isDate = true;
-
+              totalAmt = element.totalAmt;
+              _defaultCcy = element.defaultCcy;
               rowList.clear();
               rowList.addAll(element.rows);
               list.clear();
@@ -371,43 +371,6 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           _isLoading = false;
         });
       }
-    });
-  }
-
-  // Future<void> _loadCardListBal() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   String ciNo = prefs.getString(ConfigKey.CUST_ID);
-  //   Future.wait({
-  //     DepositDataRepository().getCardListBalByUser(
-  //         GetCardListBalByUserReq('', [], '', ciNo), 'getCardListBalByUser')
-  //   }).then((value) {
-  //     value.forEach((element) {
-  //       setState(() {
-  //         totalAmt = element.tdTotalAmt;
-  //         _defaultCcy = element.defaultCcy;
-  //         cardList = element.cardListBal;
-  //       });
-  //     });
-  //   });
-  // }
-
-  Future<void> _loadTotalAssets() async {
-    final prefs = await SharedPreferences.getInstance();
-    String ciNo = prefs.getString(ConfigKey.CUST_ID);
-    String userId = prefs.getString(ConfigKey.USER_ID);
-    Future.wait({
-      AccountOverviewRepository()
-          .getTotalAssets(GetTotalAssetsReq(userId, ciNo, ''), 'getTotalAssets')
-    }).then((value) {
-      value.forEach((element) {
-        if (this.mounted) {
-          setState(() {
-            totalAmt = element.tdTotal;
-            _defaultCcy = element.ccy;
-            cardList = element.cardListBal;
-          });
-        }
-      });
     });
   }
 
