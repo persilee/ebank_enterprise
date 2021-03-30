@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
       },
       {
         'title': S.current.other_service,
-        'bgColor': Color(0xFFF2F0F7),
+        'bgColor': Color(0xFFF4F7F0),
         'btnList': [
           {
             'btnIcon': 'images/home/listIcon/home_list_FOREX.png',
