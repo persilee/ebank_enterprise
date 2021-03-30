@@ -46,14 +46,16 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   LoadingStatus loadStatus; //加载状态
   int page = 1;
   int count = 0;
-  ScrollController _sctrollController = ScrollController();
+  ScrollController _scrollController;
   RefreshController _refreshController;
   bool _isLoading = false; //加载状态
+  bool _headColor = true;
 
   @override
   void initState() {
     super.initState();
     _refreshController = RefreshController();
+    _scrollController = ScrollController();
     _loadDeopstData();
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     //   refrestIndicatorKey.currentState.show();
@@ -75,13 +77,24 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
       }
     });
 
-    _sctrollController.addListener(() {
-      if (_sctrollController.position.pixels ==
-          _sctrollController.position.maxScrollExtent) {
-        //加载更多
-        _getMore();
-      }
+    _scrollController.addListener(() {
+      setState(() {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          _headColor = false;
+        } else {
+          _headColor = true;
+        }
+      });
     });
+
+    // _sctrollController.addListener(() {
+    //   if (_sctrollController.position.pixels ==
+    //       _sctrollController.position.maxScrollExtent) {
+    //     //加载更多
+    //     _getMore();
+    //   }
+    // });
   }
 
   @override
@@ -161,10 +174,11 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         backgroundColor: Colors.yellowAccent[300],
         floating: true,
         expandedHeight: 210.0,
-        iconTheme: IconThemeData(color: Color(0xffFEFEFE)),
+        iconTheme: IconThemeData(
+            color: _headColor ? Color(0xffFEFEFE) : Color(0xff262626)),
         textTheme: TextTheme(
           headline6: TextStyle(
-            color: Color(0xffFEFEFE),
+            color: _headColor ? Color(0xffFEFEFE) : Color(0xff262626),
             fontSize: 18,
             fontStyle: FontStyle.normal,
           ),
@@ -335,7 +349,10 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
                   ),
                 ),
     ];
-    return CustomScrollView(slivers: SliverToBoxAdapters);
+    return CustomScrollView(
+      slivers: SliverToBoxAdapters,
+      controller: _scrollController,
+    );
   }
 
   void go2Detail(DepositRecord deposit) {
