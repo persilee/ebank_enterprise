@@ -260,7 +260,10 @@ class _TransferPageState extends State<TransferPage> {
     section.add(
       _isLoading
           ? SliverToBoxAdapter(
-              child: HsgLoading(),
+              child: Container(
+                margin: EdgeInsets.only(top: 20),
+                child: HsgLoading(),
+              ),
             )
           : SliverList(
               delegate: SliverChildBuilderDelegate(

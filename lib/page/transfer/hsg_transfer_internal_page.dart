@@ -328,7 +328,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         _payIndex = result;
         _payCcy = _payCcyList[result];
       });
-      _getCardTotal(_account);
+      // _getCardTotal(_account);
+      _loadData(_account);
     }
   }
 
@@ -437,7 +438,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         _accountIndex = result;
         _account = _accountList[result];
       });
-      _getCardTotal(_account);
+      // _getCardTotal(_account);
+      _loadData(_account);
     }
   }
 
@@ -506,7 +508,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               });
             });
           }
-          _getCardTotal(_account);
+          // _getCardTotal(_account);
+          _loadData(_account);
           _loadLocalCcy();
           // _payCcyList.clear();
           // _payCcy = _localeCcy;
@@ -516,6 +519,59 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         }
       });
     });
+  }
+
+  _loadData(String cardNo) async {
+    CardDataRepository()
+        .getCardBalByCardNo(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq')
+        .then((element) {
+      if (this.mounted) {
+        setState(() {
+          //初始币种和余额
+          if (_payCcy == '' || _balance == '') {
+            _payCcy = element.cardListBal[0].ccy;
+            _balance = element.cardListBal[0].currBal;
+            element.cardListBal.forEach((element) {
+              if (element.ccy == _localeCcy) {
+                _payCcy = element.ccy;
+                _balance = element.currBal;
+              }
+            });
+          }
+          _payCcyList.clear();
+          _balanceList.clear();
+          _payIndex = 0;
+          element.cardListBal.forEach((element) {
+            _payCcyList.add(element.ccy);
+            _balanceList.add(element.currBal);
+          });
+          if (_payCcyList.length == 0) {
+            _payCcyList.add(_localeCcy);
+            _balanceList.add('0.0');
+          }
+          if (_payCcyList.length > 1) {
+            for (int i = 0; i < _payCcyList.length; i++) {
+              if (_payCcy == _payCcyList[i]) {
+                _balance = _balanceList[i];
+                break;
+              } else {
+                _payIndex++;
+              }
+            }
+          } else {
+            _payCcy = _payCcyList[0];
+            _balance = _balanceList[0];
+          }
+          if (!_payCcyList.contains(_payCcy)) {
+            _payCcy = _payCcyList[0];
+            _balance = _balanceList[0];
+            _payIndex = 0;
+          }
+          _getTransferCcySamePayCcy();
+          _rateCalculate();
+        });
+      }
+    }).catchError((e) {});
   }
 
   //默认初始货币和余额
