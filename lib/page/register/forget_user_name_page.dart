@@ -228,11 +228,13 @@ class _ForgetUserNameState extends State<ForgetUserName> {
         .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
         .then((data) {
       HSProgressHUD.dismiss();
-      setState(() {
-        _accountName = data.userAccount;
-        _isRegister = data.register;
-        _getVerificationCode();
-      });
+      if (mounted) {
+        setState(() {
+          _accountName = data.userAccount;
+          _isRegister = data.register;
+          _getVerificationCode();
+        });
+      }
     }).catchError((e) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
@@ -267,9 +269,6 @@ class _ForgetUserNameState extends State<ForgetUserName> {
           .then((data) {
         HSProgressHUD.dismiss();
         _startCountdown();
-        setState(() {
-          // _sms.text = '123456';
-        });
       }).catchError((e) {
         HSProgressHUD.dismiss();
         Fluttertoast.showToast(

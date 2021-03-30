@@ -168,7 +168,6 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
     PublicParametersRepository()
         .getIdType(GetIdTypeReq('CICID'), 'GetIdTypeReq')
         .then((data) {
-    
       if (data.publicCodeGetRedisRspDtoList != null) {
         print('data.publicCodeGetRedisRspDtoList222222');
         print(data);
@@ -206,11 +205,13 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
         });
     print('result$indList');
     if (result != null && result != false) {
-      setState(() {
-        _certType = obj[result];
-        _certTypeKey = indList[result];
-        print('$_certType>>>>>>>>>>>>>>>>>>');
-      });
+      if (mounted) {
+        setState(() {
+          _certType = obj[result];
+          _certTypeKey = indList[result];
+          print('$_certType>>>>>>>>>>>>>>>>>>');
+        });
+      }
     }
   }
 

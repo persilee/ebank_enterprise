@@ -42,7 +42,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
                       child: Text(
-                        S.current.reset_password_success,
+                        S.current.changPwsSuccess,
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
@@ -73,6 +73,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
+                            //  Navigator.of(context)..pop()..pop();
+                            // Navigator.pop(context,page)
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                     builder: (BuildContext context) {
@@ -80,10 +82,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             }), (Route route) {
                               //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
                               print(route.settings?.name);
-                              if (route.settings?.name == "/") {
-                                return true; //停止关闭
-                              }
-                              return false; //继续关闭
+                              // if (route.settings?.name == "/") {
+                              //   return true; //停止关闭
+                              // }
+                              return false; //关闭所有页面
                             });
                           },
                         ),
