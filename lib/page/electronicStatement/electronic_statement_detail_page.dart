@@ -49,7 +49,7 @@ class _ElectronicStatementDetailPageState
         ],
       ),
       body: WebView(
-        initialUrl: "http://www.baidu.com/",
+        initialUrl: data['filePath'],
         javascriptMode: JavascriptMode.unrestricted,
       ),
     );
