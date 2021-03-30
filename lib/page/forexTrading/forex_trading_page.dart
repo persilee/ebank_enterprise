@@ -150,7 +150,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           child: _payAmtTextField(),
         ),
         SelectInkWell(
-          title: S.current.debit_accno,
+          title: S.current.credit_account,
           item: _incomeAcc,
           onTap: () {
             FocusScope.of(context).requestFocus(FocusNode());
@@ -158,7 +158,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           },
         ),
         SelectInkWell(
-          title: S.current.debit_currency,
+          title: S.current.credit_currency,
           item: _incomeCcy,
           onTap: () {
             FocusScope.of(context).requestFocus(FocusNode());
