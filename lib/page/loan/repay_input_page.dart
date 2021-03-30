@@ -83,7 +83,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
     currency = 'HKD';
     max = 0;
     loanInterest = '0.00%';
-    debitAccount = '';
+    // debitAccount = '0101238000001758';
     repayPrincipal = '0.00';
     _repayInterest = '0.00';
     _fine = '0.00';
@@ -136,8 +136,9 @@ class _RepayInputPageState extends State<RepayInputPage> {
       acNo = loanDetail.acNo;
       instalNo = loanDetail.restPeriods.toString();
       max = double.parse(loanDetail.loanAmt);
-      debitAccount =
-          FormatUtil.formatSpace4(loanDetail.repaymentAcNo.toString()); //扣款帐号
+      debitAccount = '0101238000001758';
+
+      // FormatUtil.formatSpace4(loanDetail.repaymentAcNo.toString()); //扣款帐号
       loanInterest =
           (double.parse(loanDetail.intRate) * 100).toStringAsFixed(2) + "%";
     });

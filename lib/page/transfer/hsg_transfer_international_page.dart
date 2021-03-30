@@ -491,7 +491,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       child: Container(
         margin: EdgeInsets.only(left: 5),
         child: Image(
-          image: AssetImage('images/login/login_input_account.png'),
+          image: AssetImage('images/login/login_input_account1.png'),
           width: 20,
           height: 20,
         ),

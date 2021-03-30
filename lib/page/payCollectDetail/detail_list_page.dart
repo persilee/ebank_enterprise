@@ -932,6 +932,7 @@ class _DetailListPageState extends State<DetailListPage> {
     String localCcy;
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
+    String accNo = _accNoList.toString();
     if (_cardList.length < 1) {
       selectAccNo = '';
     } else {
@@ -940,6 +941,7 @@ class _DetailListPageState extends State<DetailListPage> {
 
     localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
 
+    int pageSize = 10;
     print(">>>>>>>>$_cardList");
     print(">>>>>>one>$selectAccNo");
 

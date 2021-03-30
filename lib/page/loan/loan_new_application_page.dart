@@ -310,7 +310,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
             //申请金额
             title: S.current.apply_amount,
             hintText: _inputs,
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
             controller: _moneyController,
             callback: _checkloanIsClick,
           ),
@@ -369,24 +369,24 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
                   _reimburseTypeLists, 2);
             },
           ),
-          Container(
-            height: 45,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  S.current.loan_Interest_Rate_column,
-                  style: TextStyle(),
-                  textAlign: TextAlign.start,
-                ),
-                Text(
-                  '1%',
-                  style: TextStyle(),
-                  textAlign: TextAlign.end,
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   height: 45,
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Text(
+          //         S.current.loan_Interest_Rate_column,
+          //         style: TextStyle(),
+          //         textAlign: TextAlign.start,
+          //       ),
+          //       Text(
+          //         '1%',
+          //         style: TextStyle(),
+          //         textAlign: TextAlign.end,
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
