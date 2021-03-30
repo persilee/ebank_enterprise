@@ -229,7 +229,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     return Container(
       color: Colors.white,
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.fromLTRB(18, 0, 18, 27),
+      padding: EdgeInsets.fromLTRB(18, 0, 18, 0),
       height: 300.0,
       child: Material(
         child: Column(
