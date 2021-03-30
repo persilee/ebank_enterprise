@@ -11,13 +11,13 @@ typedef AnimatedWidgetBuilder = Widget Function(BuildContext context,
 class CustomPopupWindowButton<T> extends StatefulWidget {
   const CustomPopupWindowButton(
       {Key key,
-        @required this.buttonBuilder,
-        @required this.windowBuilder,
-        this.offset = Offset.zero,
-        this.duration = 300,
-        this.onWindowShow,
-        this.isRelative = false,
-        this.onWindowDismiss})
+      @required this.buttonBuilder,
+      @required this.windowBuilder,
+      this.offset = Offset.zero,
+      this.duration = 300,
+      this.onWindowShow,
+      this.isRelative = false,
+      this.onWindowDismiss})
       : assert(buttonBuilder != null && windowBuilder != null),
         super(key: key);
 
@@ -51,19 +51,19 @@ class CustomPopupWindowButton<T> extends StatefulWidget {
 
   static _CustomPopupWindowButtonState of(BuildContext context) {
     final _PopupWindowScope scope =
-    context.dependOnInheritedWidgetOfExactType<_PopupWindowScope>();
+        context.dependOnInheritedWidgetOfExactType<_PopupWindowScope>();
     return scope?.state;
   }
 }
 
 void showWindow<T>(
     {@required BuildContext context,
-      RelativeRect position,
-      int duration = _windowPopupDuration,
-      String semanticLabel,
-      @required AnimatedWidgetBuilder windowBuilder,
-      VoidCallback onWindowShow,
-      VoidCallback onWindowDismiss}) {
+    RelativeRect position,
+    int duration = _windowPopupDuration,
+    String semanticLabel,
+    @required AnimatedWidgetBuilder windowBuilder,
+    VoidCallback onWindowShow,
+    VoidCallback onWindowDismiss}) {
   Navigator.push(
     context,
     _PopupWindowRoute<T>(
@@ -71,7 +71,7 @@ void showWindow<T>(
         duration: duration,
         semanticLabel: semanticLabel,
         barrierLabel:
-        MaterialLocalizations.of(context).modalBarrierDismissLabel,
+            MaterialLocalizations.of(context).modalBarrierDismissLabel,
         windowBuilder: windowBuilder,
         onWindowShow: onWindowShow,
         onWindowDismiss: onWindowDismiss),
@@ -82,24 +82,25 @@ class _CustomPopupWindowButtonState<T> extends State<CustomPopupWindowButton> {
   void showPopupWindow() {
     final RenderBox button = context.findRenderObject();
     final RenderBox overlay = Overlay.of(context).context.findRenderObject();
-    final Offset leftZero = Offset(0,button.localToGlobal(widget.offset, ancestor: overlay).dy);
-    final RelativeRect position = widget.isRelative ?
-    RelativeRect.fromRect(
-      Rect.fromPoints(
-        leftZero,
-        button.localToGlobal(button.size.bottomRight(Offset.zero),
-            ancestor: overlay),
-      ),
-      Offset.zero & overlay.size,
-    ):
-    RelativeRect.fromRect(
-      Rect.fromPoints(
-        button.localToGlobal(widget.offset, ancestor: overlay),
-        button.localToGlobal(button.size.bottomRight(Offset.zero),
-            ancestor: overlay),
-      ),
-      Offset.zero & overlay.size,
-    );
+    final Offset leftZero =
+        Offset(0, button.localToGlobal(widget.offset, ancestor: overlay).dy);
+    final RelativeRect position = widget.isRelative
+        ? RelativeRect.fromRect(
+            Rect.fromPoints(
+              leftZero,
+              button.localToGlobal(button.size.bottomRight(Offset.zero),
+                  ancestor: overlay),
+            ),
+            Offset.zero & overlay.size,
+          )
+        : RelativeRect.fromRect(
+            Rect.fromPoints(
+              button.localToGlobal(widget.offset, ancestor: overlay),
+              button.localToGlobal(button.size.bottomRight(Offset.zero),
+                  ancestor: overlay),
+            ),
+            Offset.zero & overlay.size,
+          );
     print(position);
 
     showWindow<T>(
@@ -125,12 +126,12 @@ class _CustomPopupWindowButtonState<T> extends State<CustomPopupWindowButton> {
 class _PopupWindowRoute<T> extends PopupRoute<T> {
   _PopupWindowRoute(
       {this.position,
-        this.barrierLabel,
-        this.semanticLabel,
-        this.duration,
-        this.windowBuilder,
-        this.onWindowShow,
-        this.onWindowDismiss});
+      this.barrierLabel,
+      this.semanticLabel,
+      this.duration,
+      this.windowBuilder,
+      this.onWindowShow,
+      this.onWindowDismiss});
 
   @override
   Animation<double> createAnimation() {
@@ -174,13 +175,23 @@ class _PopupWindowRoute<T> extends PopupRoute<T> {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    return CustomSingleChildLayout(
-      delegate: _PopupWindowLayout(position),
-      child: AnimatedBuilder(
-          animation: animation,
-          builder: (BuildContext context, Widget child) {
-            return windowBuilder(context, animation, secondaryAnimation);
-          }),
+    print(position);
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(context);
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: position.top),
+        color: Colors.black.withOpacity(0.3),
+        child: CustomSingleChildLayout(
+          delegate: _PopupWindowLayout(position),
+          child: AnimatedBuilder(
+              animation: animation,
+              builder: (BuildContext context, Widget child) {
+                return windowBuilder(context, animation, secondaryAnimation);
+              }),
+        ),
+      ),
     );
   }
 }
@@ -220,7 +231,7 @@ class _PopupWindowLayout extends SingleChildLayoutDelegate {
       // Menu button is closer to the left edge, so grow to the right, aligned to the left edge.
       x = position.left;
     }
-    return Offset(x, y);
+    return Offset(x, 0);
   }
 
   @override
