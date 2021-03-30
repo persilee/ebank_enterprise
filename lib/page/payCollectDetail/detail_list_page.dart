@@ -66,7 +66,7 @@ class _DetailListPageState extends State<DetailListPage> {
   TextEditingController _startAmountController = TextEditingController();
   TextEditingController _endAmountController = TextEditingController();
   String selectAccNo;
-  bool _isLoading = false; //加载状态
+  bool _isLoading = true; //加载状态
   RefreshController _refreshController;
   ScrollController _scrollController = ScrollController(); //滚动监听
 
@@ -74,8 +74,9 @@ class _DetailListPageState extends State<DetailListPage> {
   // ignore: must_call_super
   void initState() {
     // 网络请求
-    _getRevenueByCards(_startDate, _allAccNoList);
+    //
     _getCardList();
+    //_getRevenueByCards(_startDate, _allAccNoList);
     _refreshController = RefreshController();
     // //下拉刷新
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -108,20 +109,17 @@ class _DetailListPageState extends State<DetailListPage> {
                         controller: _refreshController,
                         //上拉加载
                         onLoading: () {
-                          // _refreshController.loadComplete();
                           _refreshController.loadNoData();
-                          //加载更多完成
-                          // if (_loadMore) {
-                          //   _getRevenueByCards(_startDate, _allAccNoList);
-                          // } else {
-                          //   //显示没有更多数据
-                          //   _refreshController.loadNoData();
-                          // }
                         },
                         //下拉刷新
                         onRefresh: () {
                           //刷新完成
-                          _getRevenueByCards(_startDate, _allAccNoList);
+                          if (_position != 0) {
+                            _getRevenueByCards(_startDate, _accNoList);
+                          } else {
+                            _getRevenueByCards(_startDate, _allAccNoList);
+                          }
+                          //_getCardList();
                         },
                         content: _buildFlutterTableView(),
                       )
@@ -134,13 +132,6 @@ class _DetailListPageState extends State<DetailListPage> {
           //  ),
         ],
       ),
-      //   onRefresh: _getListNetworkData(),
-      // )
-      // // ignore: missing_return
-      // onRefresh: () {
-      //   _page = 1;
-      //   _getRevenueByCards(_startDate, _allAccNoList);
-      // }),
     );
   }
 
@@ -394,8 +385,7 @@ class _DetailListPageState extends State<DetailListPage> {
                 break;
             }
           });
-          //Navigator.of(context).pushNamed(pageAccountOverview);
-          // Navigator.of(context).pop();
+
           //选择之后不立马放下弹窗
           (popcontext as Element).markNeedsBuild();
         },
@@ -939,6 +929,7 @@ class _DetailListPageState extends State<DetailListPage> {
   //获取所有历史记录
   _getRevenueByCards(String localDateStart, List<String> cards) async {
     _isLoading = true;
+    String localCcy;
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
     String accNo = _accNoList.toString();
@@ -948,11 +939,13 @@ class _DetailListPageState extends State<DetailListPage> {
       selectAccNo = selectAccNo == _cardList[0] ? '' : selectAccNo;
     }
 
+    localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
+
     int pageSize = 10;
     print(">>>>>>>>$_cardList");
     print(">>>>>>one>$selectAccNo");
 
-    print(">>>>>>>$custID");
+    print(">>>>>>>$localCcy");
     print(">>>>>>>>$_endDate");
     print(">>>>>>>$_startDate");
 
@@ -960,12 +953,12 @@ class _DetailListPageState extends State<DetailListPage> {
     PayCollectDetailRepository()
         .getRevenueByCards(
             GetRevenueByCardsReq(
-                'CNY',
+                localCcy,
                 '$_endDate', //结束时间     '$_endDate'
                 '$_startDate', //开始时间   '$_startDate'
-                0, //分页 page
+                0, //分页page
                 0, //分页pageSize
-                acNo: '$selectAccNo', //''
+                acNo: '$selectAccNo',
                 ciNo: '$custID'), //'818000000113'
             'GetRevenueByCardsReq')
         .then((data) {
@@ -1015,8 +1008,10 @@ class _DetailListPageState extends State<DetailListPage> {
             data.cardList.forEach((item) {
               _allAccNoList.add(item.cardNo);
               _cardList.add(item.cardNo);
-
               _cardIcon.add(item.imageUrl);
+              _isLoading = false;
+              _refreshController.refreshCompleted();
+              _refreshController.footerMode.value = LoadStatus.canLoading;
             });
           });
         }
