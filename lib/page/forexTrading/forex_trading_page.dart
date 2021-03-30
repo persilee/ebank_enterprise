@@ -94,6 +94,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
                   title: S.current.confirm,
                   click: _boolBut()
                       ? () {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _openBottomSheet();
                         }
                       : null,
@@ -372,7 +373,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
             'DoTransferAccoutReq')
         .then((data) {
       HSProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: S.current.operate_success);
+      Fluttertoast.showToast(
+          msg: S.current.operate_success, gravity: ToastGravity.CENTER);
       Navigator.pop(context, pageIndex);
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
