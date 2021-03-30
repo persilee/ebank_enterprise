@@ -13,11 +13,14 @@ class HsgLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return child ?? Center(
-      child: Lottie.asset(
-        'assets/json/loading2.json',
-        width: 126,
-        fit: BoxFit.cover,
-        alignment: Alignment.center,
+      child: SizedBox(
+        width: 40.0,
+        height: 40.0,
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Color(0xff3394D4)),
+          backgroundColor: Color(0xff3394D4).withOpacity(0.6),
+          strokeWidth: 3.0,
+        ),
       ),
     );
   }

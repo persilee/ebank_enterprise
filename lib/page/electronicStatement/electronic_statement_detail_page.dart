@@ -34,11 +34,12 @@ class _ElectronicStatementDetailPageState
       appBar: AppBar(
         title: Text(data['date']),
         centerTitle: true,
+        elevation: 1,
         actions: <Widget>[
           IconButton(
             icon: Icon(
               Icons.more_horiz,
-              color: Colors.white,
+              color: Color(0xff000000),
             ),
             onPressed: () {
               _moreSction();

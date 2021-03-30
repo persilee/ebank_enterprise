@@ -23,6 +23,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
+import 'package:ebank_mobile/util/status_bar_util.dart';
 
 import '../../page_route.dart';
 
@@ -89,6 +90,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    StatusBarUtil.setStatusBar(Brightness.light, color: Colors.transparent);
     String _language = Intl.getCurrentLocale();
     if (_language == 'zh_CN') {
       _changeLangBtnTltle = '中文（简体）';
@@ -155,7 +157,7 @@ class _HomePageState extends State<HomePage> {
       },
       {
         'title': S.current.other_service,
-        'bgColor': Color(0xFFF2F0F7),
+        'bgColor': Color(0xFFF4F7F0),
         'btnList': [
           {
             'btnIcon': 'images/home/listIcon/home_list_FOREX.png',

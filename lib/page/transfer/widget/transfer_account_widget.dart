@@ -81,12 +81,12 @@ class TransferAccount extends StatelessWidget {
             S.current.transfer_amount,
             style: TextStyle(color: Color(0xff7A7A7A), fontSize: 13),
           ),
-          Text(
-            S.current.tran_limit_amt_with_value +
-                '：' +
-                FormatUtil.formatSringToMoney(limit),
-            style: TextStyle(color: Color(0xff7A7A7A), fontSize: 13),
-          ),
+          // Text(
+          //   S.current.tran_limit_amt_with_value +
+          //       '：' +
+          //       FormatUtil.formatSringToMoney(limit),
+          //   style: TextStyle(color: Color(0xff7A7A7A), fontSize: 13),
+          // ),
         ],
       ),
     );
@@ -168,15 +168,17 @@ class TransferAccount extends StatelessWidget {
             payCcy,
             style: TextStyle(
               color: HsgColors.firstDegreeText,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              fontWeight: FontWeight.normal,
             ),
             textAlign: TextAlign.end,
           ),
         ),
         Icon(
-          Icons.arrow_drop_down_outlined,
-          color: HsgColors.firstDegreeText,
+          // Icons.arrow_drop_down,
+          Icons.keyboard_arrow_down,
+          color: Color(0xff282828),
+          // color: HsgColors.firstDegreeText,
         ),
       ],
     );

@@ -46,7 +46,7 @@ class SelectInkWell extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: MediaQuery.of(context).size.width / 3,
+                width: MediaQuery.of(context).size.width / 2,
                 padding: EdgeInsets.only(right: 12),
                 child: item == ''
                     ? Text(

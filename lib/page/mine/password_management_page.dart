@@ -15,12 +15,12 @@ class PasswordManagementPage extends StatefulWidget {
 }
 
 class _PasswordManagementPageState extends State<PasswordManagementPage> {
-  var _belongCustStatus = ''; //用户状态 -拦截交易密码操作
+  var _belongCustStatus = '6'; //用户状态 -拦截交易密码操作
 
   @override
   Widget build(BuildContext context) {
-    String argument = ModalRoute.of(context).settings.arguments;
-    _belongCustStatus = argument != null ? argument : '';
+    // String argument = ModalRoute.of(context).settings.arguments;
+    // _belongCustStatus = argument != null ? argument : '';
     ScrollController _sctrollController = ScrollController();
 
     return Scaffold(
