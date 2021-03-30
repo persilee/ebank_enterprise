@@ -588,13 +588,13 @@
   "loan_Product_Characteristics":"特色贷款",
   "loan_Product_Popular":"热门贷款",
 
-  "loan_Product_Per_regular":"個人定期貸",
-  "loan_Product_Per_detail":"快速審批，快速放款",
-  "loan_Product_Business":"商業循環貸",
-  "loan_Product_Business_Deatil":"不限制產品，有擔保，放心貸",
-  "loan_Product_Foreign":"外匯貸",
-  "loan_Product_Foreign_detail":"企業法人，控股股東即可申請",
-  "loan_Product_PlaceholdMore":"最高可申請",
+  "loan_Product_Per_regular":"个人定期贷",
+  "loan_Product_Per_detail":"快速审批，快速放款",
+  "loan_Product_Business":"商业循环贷",
+  "loan_Product_Business_Deatil":"不限制产品，有担保，放心贷",
+  "loan_Product_Foreign":"外汇贷",
+  "loan_Product_Foreign_detail":"企业法人，控股股权即可申请",
+  "loan_Product_PlaceholdMore":"最高可申请",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }

@@ -261,7 +261,7 @@ class _TransferPageState extends State<TransferPage> {
       _isLoading
           ? SliverToBoxAdapter(
               child: Container(
-                margin: EdgeInsets.only(top: 20),
+                height: MediaQuery.of(context).size.height / 4,
                 child: HsgLoading(),
               ),
             )
