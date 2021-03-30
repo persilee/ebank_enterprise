@@ -11,6 +11,7 @@ import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
+import 'package:ebank_mobile/data/source/model/get_td_product_term_rate.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_contract.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_contract_trial.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
@@ -50,7 +51,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String _changedRateTitle = '';
   String accuPeriod = '0';
   String auctCale = '0';
-  String depositType = '0';
+  String depositType = 'A';
   String ccy = '';
   String rate = '0';
   String matAmt = '0.00';
@@ -78,13 +79,21 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   List<String> instructions = [];
   String _checkAmount = '0.00';
   List<String> instructionDatas = [];
+  List<String> _termCodes = [];
+  List<String> _rates = [];
+  List<String> _terms = [];
+  List<String> _accuPeriods = [];
+  List<String> _auctCales = [];
+  String _minAmt = '';
+  String _maxAmt = '';
 
   void initState() {
     super.initState();
+    _getTdProdTermRate();
 
     //网络请求
     _loadData();
-    _first();
+    // _first();
     _getInsCode();
   }
 
@@ -173,8 +182,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   Widget _leftText(String leftText) {
     return Container(
       width: leftText == S.current.tdContract_estimated_payment_amount
-          ? ((MediaQuery.of(context).size.width - 12) / 2) - 10
-          : ((MediaQuery.of(context).size.width - 32) / 2) - 10,
+          ? ((MediaQuery.of(context).size.width - 12) / 2) - 15
+          : ((MediaQuery.of(context).size.width - 32) / 2) - 15,
       child: Text(
         leftText,
         style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 14.0),
@@ -185,6 +194,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   //显示选择的值
   Widget _display(String display, String leftText) {
     return Container(
+      margin: EdgeInsets.only(left: 5),
       width: leftText == S.current.tdContract_estimated_payment_amount
           ? ((MediaQuery.of(context).size.width - 12) / 2) - 10
           : ((MediaQuery.of(context).size.width - 32) / 2) - 10,
@@ -308,8 +318,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           onChanged: (value) {
             double.parse(value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
             //输入金额大于起存金额时进行网络请求,计算到期金额
-            if (double.parse(inputValue.text) >=
-                double.parse(productList.minAmt)) {
+            if (double.parse(inputValue.text) >= double.parse(_minAmt) &&
+                double.parse(inputValue.text) <= double.parse(_maxAmt)) {
               _loadDepositData(
                 accuPeriod,
                 auctCale,
@@ -337,7 +347,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           decoration: InputDecoration(
             contentPadding: EdgeInsets.all(0),
             border: InputBorder.none,
-            hintText: S.current.deposit_min_with_value + productList.minAmt,
+            hintText: S.current.deposit_min_with_value + _minAmt,
             hintStyle: TextStyle(
               color: HsgColors.hintText,
               fontSize: 18.0,
@@ -499,60 +509,20 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 //存款期限弹窗
   _selectTerm(
       BuildContext context, List<TdepProductDTOList> producDTOList) async {
-    List<String> depositTerms = [];
-    List<String> terms = [];
-    List<String> rates = [];
-    List<String> accuPeriods = [];
-    List<String> auctCales = [];
-
-    for (var i = 0; i < producDTOList.length; i++) {
-      switch (producDTOList[i].minAccuPeriod) {
-        case '2':
-          terms.add(producDTOList[i].minAuctCale + S.current.months);
-          depositTerms.add(producDTOList[i].minAuctCale);
-          break;
-        case '3':
-          terms.add((int.parse(producDTOList[i].minAuctCale) * 3).toString() +
-              S.current.months);
-          depositTerms
-              .add((int.parse(producDTOList[i].minAuctCale) * 3).toString());
-          break;
-        case '4':
-          terms.add((int.parse(producDTOList[i].minAuctCale) * 6).toString() +
-              S.current.months);
-          depositTerms
-              .add((int.parse(producDTOList[i].minAuctCale) * 6).toString());
-          break;
-        default:
-          {
-            terms.add(
-                (int.parse(producDTOList[i].minAuctCale) * 12).toString() +
-                    S.current.months);
-            depositTerms
-                .add((int.parse(producDTOList[i].minAuctCale) * 12).toString());
-          }
-      }
-      rates.add(producDTOList[i].minRate);
-      accuPeriods.add(producDTOList[i].minAccuPeriod);
-      auctCales.add(producDTOList[i].minAuctCale);
-    }
-
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
         title: S.current.deposit_time_limit,
-        items: terms,
+        items: _terms,
       ),
     );
     if (this.mounted) {
       setState(() {
         if (result != null && result != false) {
-          _changedTermBtnTiTle = terms[result];
-          _changedRateTitle = rates[result];
-          accuPeriod = accuPeriods[result];
-          auctCale = auctCales[result];
-          depositType = producDTOList[result].depositType;
-          ccy = producDTOList[result].ccy;
+          _changedTermBtnTiTle = _terms[result];
+          _changedRateTitle = _rates[result];
+          accuPeriod = _accuPeriods[result];
+          auctCale = _auctCales[result];
           rate = FormatUtil.formatNum(double.parse(_changedRateTitle), 2);
         } else {
           return;
@@ -650,7 +620,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     if (result != null && result != false) {
       _cardCcy = _cardCcyList[result];
       _cardBal = _cardBalList[result];
-      // _rateCalculate();
     } else {
       return;
     }
@@ -856,7 +825,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   Future _rateCalculate() async {
     double _payerAmount = 0;
     if ((inputValue.text).length == 0 ||
-        double.parse(inputValue.text) < double.parse(productList.minAmt)) {
+        double.parse(inputValue.text) < double.parse(_minAmt) ||
+        double.parse(inputValue.text) > double.parse(_maxAmt)) {
       if (this.mounted) {
         setState(() {
           _amount = '0.00';
@@ -884,36 +854,116 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
   //数据初值
   void _first() {
-    //按计提周期计算存款期限
-    switch (producDTOList[0].minAccuPeriod) {
-      case '2':
-        _changedTermBtnTiTle =
-            (producDTOList[0].minAuctCale + S.current.months);
+    _changedTermBtnTiTle = _terms[0];
+    accuPeriod = _accuPeriods[0];
+    auctCale = _auctCales[0];
+    rate = FormatUtil.formatNum(double.parse(_rates[0]), 2);
+  }
+
+  //判断存期
+  _term(int i) {
+    switch (_termCodes[i]) {
+      case 'D001':
+        _changedTermBtnTiTle = ('1' + S.current.tdContract_day);
+        accuPeriod = '1';
+        auctCale = '1';
         break;
-      case '3':
-        _changedTermBtnTiTle =
-            ((int.parse(producDTOList[0].minAuctCale) * 3).toString() +
-                S.current.months);
+      case 'D007':
+        _changedTermBtnTiTle = ('7' + S.current.tdContract_day);
+        accuPeriod = '1';
+        auctCale = '7';
         break;
-      case '4':
-        _changedTermBtnTiTle =
-            ((int.parse(producDTOList[0].minAuctCale) * 6).toString() +
-                S.current.months);
+      case 'M001':
+        _changedTermBtnTiTle = ('1' + S.current.months);
+        accuPeriod = '2';
+        auctCale = '1';
         break;
-      default:
-        {
-          _changedTermBtnTiTle =
-              ((int.parse(producDTOList[0].minAuctCale) * 12).toString() +
-                  S.current.months);
-        }
+      case 'M002':
+        _changedTermBtnTiTle = ('2' + S.current.months);
+        accuPeriod = '2';
+        auctCale = '2';
+        break;
+      case 'M003':
+        _changedTermBtnTiTle = ('3' + S.current.months);
+        accuPeriod = '2';
+        auctCale = '3';
+        break;
+      case 'M004':
+        _changedTermBtnTiTle = ('4' + S.current.months);
+        accuPeriod = '2';
+        auctCale = '4';
+        break;
+      case 'M005':
+        _changedTermBtnTiTle = ('5' + S.current.months);
+        accuPeriod = '2';
+        auctCale = '5';
+        break;
+      case 'M006':
+        _changedTermBtnTiTle = ('6' + S.current.months);
+        accuPeriod = '2';
+        auctCale = '6';
+        break;
+      case 'M007':
+        _changedTermBtnTiTle = ('7' + S.current.months);
+        accuPeriod = '2';
+        auctCale = '7';
+        break;
+      case 'M008':
+        _changedTermBtnTiTle = ('8' + S.current.months);
+        accuPeriod = '2';
+        auctCale = '8';
+        break;
+      case 'M009':
+        _changedTermBtnTiTle = ('9' + S.current.months);
+        accuPeriod = '2';
+        auctCale = '9';
+        break;
+      case 'M010':
+        _changedTermBtnTiTle = ('10' + S.current.months);
+        accuPeriod = '2';
+        auctCale = '10';
+        break;
+      case 'M011':
+        _changedTermBtnTiTle = ('11' + S.current.months);
+        accuPeriod = '2';
+        auctCale = '11';
+        break;
+      case 'M015':
+        _changedTermBtnTiTle = ('15' + S.current.months);
+        accuPeriod = '2';
+        auctCale = '15';
+        break;
+      case 'Y001':
+        _changedTermBtnTiTle = ('1' + S.current.year);
+        accuPeriod = '5';
+        auctCale = '1';
+        break;
+      case 'Y002':
+        _changedTermBtnTiTle = ('2' + S.current.year);
+        accuPeriod = '5';
+        auctCale = '2';
+        break;
+      case 'Y003':
+        _changedTermBtnTiTle = ('3' + S.current.year);
+        accuPeriod = '5';
+        auctCale = '3';
+        break;
+      case 'Y004':
+        _changedTermBtnTiTle = ('4' + S.current.year);
+        accuPeriod = '5';
+        auctCale = '4';
+        break;
+      case 'Y005':
+        _changedTermBtnTiTle = ('5' + S.current.year);
+        accuPeriod = '5';
+        auctCale = '5';
+        break;
+      case 'Y006':
+        _changedTermBtnTiTle = ('6' + S.current.year);
+        accuPeriod = '5';
+        auctCale = '6';
+        break;
     }
-    accuPeriod = producDTOList[0].minAccuPeriod;
-    auctCale = producDTOList[0].minAuctCale;
-    depositType = producDTOList[0].depositType;
-    ccy = producDTOList[0].ccy;
-    rate = FormatUtil.formatNum(double.parse(producDTOList[0].minRate), 2);
-    // _cardCcy = _cardCcyList[0];
-    // _cardBal = _cardBalList[0];
   }
 
   Future<void> _loadDepositData(
@@ -964,7 +1014,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           });
         }
       });
-    }).catchError((e) {});
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
+    });
   }
 
   //获取到期指示列表
@@ -986,6 +1038,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           }
         });
       }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString());
     });
   }
 
@@ -1041,6 +1095,46 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       if (this.mounted) {
         setState(() {});
       }
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(msg: e.toString());
+    });
+  }
+
+  //获取定期产品利率和存期
+  Future _getTdProdTermRate() async {
+    if (this.mounted) {
+      setState(() {});
+    }
+    HSProgressHUD.show();
+    TimeDepositDataRepository()
+        .getTdProductTermRate(
+            GetTdProductTermRateReq(productList.ccy, productList.bppdCode),
+            'getTdProdTermRate')
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          if (data != null) {
+            ccy = data.ccy;
+            _minAmt = data.minAmt;
+            _maxAmt = data.maxAmt;
+            if (data.recordLists != null) {
+              data.recordLists.forEach((value) {
+                _termCodes.add(value.term);
+                _rates.add(value.intRat);
+              });
+              for (int i = 0; i < _termCodes.length; i++) {
+                _term(i);
+                _terms.add(_changedTermBtnTiTle);
+                _accuPeriods.add(accuPeriod);
+                _auctCales.add(auctCale);
+              }
+            }
+            _first();
+          }
+        });
+        HSProgressHUD.dismiss();
+      }
+    }).catchError((e) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(msg: e.toString());
     });

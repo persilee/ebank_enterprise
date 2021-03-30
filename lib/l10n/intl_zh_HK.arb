@@ -498,6 +498,7 @@
   "tdEarlyRed_modify_expiration_instruction":"是否修改到期指示",
   "tdEarlyRed_modify_expiration_instruction_determine":"請確認是否修改到期指示為：",
   "tdContract_balance_insufficient":"您的餘額不足",
+  "tdContract_day":"天",
   "wangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<王璐瑤國際化代碼寫在這裏<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "zhangqirong_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>張其榮際化代碼寫在這裏>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "in_all": "共",
@@ -583,6 +584,16 @@
   "loan_Repayment_method_column":"還款方式",
   "loan_Interest_Rate_column":"貸款利率",
   "loan_NewTop_infomation":"申請信息",
+  "loan_Product_NavTitle":"貸款產品",
+  "loan_Product_Characteristics":"特色貸款",
+  "loan_Product_Popular":"熱門貸款",
+  "loan_Product_Per_regular":"个人定期贷",
+  "loan_Product_Per_detail":"快速审批，",
+  "loan_Product_Business":"Revolving Loan",
+  "loan_Product_Business_Deatil":"Unrestricted products, secured and assured loans",
+  "loan_Product_Foreign":"Foreign Exchange Loans",
+  "loan_Product_Foreign_detail":"Corporate entities, controlling shareholders can apply",
+  "loan_Product_PlaceholdMore":"Maximum application",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家偉（開戶）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }

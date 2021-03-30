@@ -508,7 +508,7 @@ class _RelatedIndividualsDataPageState
     );
 
     if (result != null && result != false) {
-      IdType data = _documentTypes[result];
+      IdType data = _categoryTypes[result];
       _partner.partnerType = '001'; //data.code;
       setState(() {
         _categoryText = categoryList[result];

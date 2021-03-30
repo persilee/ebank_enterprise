@@ -498,6 +498,7 @@
   "tdEarlyRed_modify_expiration_instruction":"是否修改到期指示",
   "tdEarlyRed_modify_expiration_instruction_determine":"请确认是否修改到期指示为：",
   "tdContract_balance_insufficient":"您的余额不足",
+  "tdContract_day":"天",
   "wangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<王璐瑶国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "zhangqirong_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>张其荣际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "in_all": "共",
@@ -583,6 +584,17 @@
   "loan_Repayment_method_column":"还款方式",
   "loan_Interest_Rate_column":"贷款利率",
   "loan_NewTop_infomation":"申请信息",
+  "loan_Product_NavTitle":"贷款产品",
+  "loan_Product_Characteristics":"特色贷款",
+  "loan_Product_Popular":"热门贷款",
+
+  "loan_Product_Per_regular":"個人定期貸",
+  "loan_Product_Per_detail":"快速審批，快速放款",
+  "loan_Product_Business":"商業循環貸",
+  "loan_Product_Business_Deatil":"不限制產品，有擔保，放心貸",
+  "loan_Product_Foreign":"外匯貸",
+  "loan_Product_Foreign_detail":"企業法人，控股股東即可申請",
+  "loan_Product_PlaceholdMore":"最高可申請",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }
