@@ -69,30 +69,140 @@ class _TransferPageState extends State<TransferPage> {
     _scrollController = ScrollController();
     _loadData();
     //滚动监听
-    _scrollController.addListener(() {
-      setState(() {
-        if (_scrollController.position.pixels ==
-            _scrollController.position.maxScrollExtent) {
-          _headColor = false;
-        } else {
-          _headColor = true;
-        }
-      });
-    });
+    // _scrollController.addListener(() {
+    //   setState(() {
+    //     if (_scrollController.position.pixels ==
+    //         _scrollController.position.maxScrollExtent) {
+    //       _headColor = false;
+    //     } else {
+    //       _headColor = true;
+    //     }
+    //   });
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      appBar: _appBar(),
+      body: Column(
         children: [
-          Container(
-            child: CustomScrollView(
-              slivers: _sliversSection(_gridFeatures, _listFeatures),
-              controller: _scrollController,
-            ),
-          ),
+          _recently(),
+          _isLoading
+              ? Container(
+                  margin: EdgeInsets.only(top: 50),
+                  child: HsgLoading(),
+                )
+              : Expanded(
+                  child: CustomRefresh(
+                    controller: _refreshController,
+                    onLoading: () {
+                      //加载更多完成
+                      _refreshController.loadComplete();
+                      //显示没有更多数据
+                      _refreshController.loadNoData();
+                    },
+                    onRefresh: () {
+                      //刷新完成
+                      _refreshController.refreshCompleted();
+                      _refreshController.footerMode.value =
+                          LoadStatus.canLoading;
+                    },
+                    content: ListView.builder(
+                      // padding: EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
+                      itemCount: _partnerListData.length,
+                      // controller: _scrollController,
+                      itemBuilder: (context, index) {
+                        return _partnerListItemWidget(_partnerListData[index]);
+                      },
+                    ),
+                  ),
+                ),
         ],
+      ),
+    );
+    // Stack(
+    // children: [
+    //   Container(
+    //     child:
+    //     CustomScrollView(
+    //       slivers: _sliversSection(_gridFeatures, _listFeatures),
+    //       controller: _scrollController,
+    //     ),
+    //   ),
+    // ],
+    // ),
+  }
+
+  _appBar() {
+    return AppBar(
+      title: Text(S.of(context).transfer),
+      centerTitle: true,
+      iconTheme: IconThemeData(
+        color: Color(0xffFEFEFE),
+      ),
+      textTheme: TextTheme(
+        headline6: TextStyle(
+          color: Color(0xffFEFEFE),
+          fontSize: 18,
+          fontStyle: FontStyle.normal,
+        ),
+      ),
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [
+            Color(0xFF1775BA),
+            Color(0xFF3A9ED1),
+          ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+        ),
+        // height: 110,
+      ),
+      bottom: PreferredSize(
+        child: Container(
+          padding: EdgeInsets.only(bottom: 30),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              Color(0xFF1775BA),
+              Color(0xFF3A9ED1),
+            ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+          ),
+          // height: 50,
+          width: double.infinity,
+          // color: Colors.grey,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _graphicButton(
+                _gridFeatures[0]['btnTitle'],
+                _gridFeatures[0]['btnIcon'],
+                35,
+                () {
+                  //行内转账
+                  Navigator.pushNamed(context, pageTransferInternal);
+                },
+              ),
+              _graphicButton(
+                _gridFeatures[1]['btnTitle'],
+                _gridFeatures[1]['btnIcon'],
+                35,
+                () {
+                  //'跨行转账'
+                  Navigator.pushNamed(context, pageTrasferInternational);
+                },
+              ),
+              _graphicButton(
+                _gridFeatures[2]['btnTitle'],
+                _gridFeatures[2]['btnIcon'],
+                35,
+                () {
+                  //转账记录
+                  Navigator.pushNamed(context, pageTransferRecord);
+                },
+              ),
+            ],
+          ),
+        ),
+        preferredSize: Size(30, 110),
       ),
     );
   }
@@ -562,6 +672,38 @@ class _TransferPageState extends State<TransferPage> {
   // void go2Detail(RemoteBankCard card) {
   //   Navigator.pushNamed(context, pageTransferInternal, arguments: card);
   // }
+
+//最近转出横条
+  _recently() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            color: HsgColors.commonBackground,
+            height: 10,
+          ),
+          Container(
+            color: Colors.white,
+            height: 40,
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.only(left: 15, right: 15),
+            child: Text(
+              S.of(context).recent_transfer_account,
+              style: TextStyle(
+                  color: HsgColors.firstDegreeText,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Divider(
+            color: HsgColors.divider,
+            height: 0.5,
+          ),
+        ],
+      ),
+    );
+  }
 
   Future<void> _loadData() async {
     _isLoading = true;

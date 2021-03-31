@@ -215,8 +215,11 @@ class _HomePageState extends State<HomePage> {
               ),
               onPressed: () {
                 print('联系客服');
-                Navigator.pushNamed(context,
-                    pageOpenAccountSelectDocumentType); //pageContactCustomer
+                Navigator.pushNamed(
+                  context,
+                  pageOpenAccountSelectDocumentType,
+                  arguments: '123456987465312456',
+                ); //pageContactCustomer
               },
             ),
             _languageChangeBtn(),
