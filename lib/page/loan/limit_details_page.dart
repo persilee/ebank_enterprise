@@ -225,6 +225,7 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
               items: pages,
             ));
     if (result != null && result != false) {
+      // loanDetails.debitAccount => '0101238000001758';;
       print('详情数据----$loanDetail.');
       switch (result) {
         case 0:
