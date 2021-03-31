@@ -123,8 +123,11 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                               ? () async {
                                   final prefs =
                                       await SharedPreferences.getInstance();
-                                  String userName =
-                                      prefs.getString(ConfigKey.USER_ACCOUNT);
+
+                                  // String userName =
+                                  //     prefs.getString(ConfigKey.USER_ID);
+
+                                  // print(userName + "userName");
                                   //特殊字符
                                   RegExp characters = new RegExp(
                                       "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
@@ -144,7 +147,8 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                                           false ||
                                       number.hasMatch(_newPassword.text) ==
                                           false ||
-                                      ((_newPassword.text).contains(userName) ==
+                                      ((_newPassword.text)
+                                              .contains(_registerAccount) ==
                                           true) ||
                                       (_newPassword.text.length < 8 ||
                                           _newPassword.text.length > 16)) {
