@@ -598,6 +598,7 @@
   "loan_application_confirm_NavTitle": "貸款確認",
   "loan_application_submit_success": "申請已提交，待審批",
 
+  "open_account_goto_ebank_tip": "尊敬的用戶，您好。由於您不是受邀客戶，請前往網銀進行開戶申請。",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家偉（開戶）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }

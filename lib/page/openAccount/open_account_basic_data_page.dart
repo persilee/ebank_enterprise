@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
 /// 快速开户-基本信息录入
 /// Author: 李家伟
@@ -6,12 +8,16 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/open_account_get_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
+import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
+import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -113,6 +119,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     });
 
     _getPublicParameters();
+    _getPreCustByStep();
     super.initState();
   }
 
@@ -150,6 +157,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                   title: S.of(context).next_step,
                   click: _nextBtnEnabled
                       ? () {
+                          _savePreCust();
                           Navigator.pushNamed(
                             context,
                             pageOpenAccountContactInformation,
@@ -328,6 +336,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                   }
 
                   _dataReq.idIssuePlace = data.countryCode;
+                  _dataReq.idIssuePlaceCountryRegionModel = data;
                   setState(() {
                     _countryOrRegionText = showText;
                     _nextBtnEnabled = _judgeButtonIsEnabled();
@@ -619,6 +628,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     if (result != null && result != false) {
       IdType data = _documentTypes[result];
       _dataReq.idType = data.code;
+      _dataReq.idTypeIdType = data;
       setState(() {
         _documentTypeText = documentList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
@@ -654,6 +664,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     if (result != null && result != false) {
       IdType data = _companyTypes[result];
       _dataReq.custCategory = data.code;
+      _dataReq.custCategoryIdType = data;
       setState(() {
         _companyTypeText = companyList[result];
         _isShowCompanyTypeOther =
@@ -711,6 +722,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     if (result != null && result != false) {
       IdType data = _industrialNatures[result];
       _dataReq.corporatinAttributes = data.code;
+      _dataReq.corporatinAttributesIdType = data;
       setState(() {
         _industrialNatureText = industrialList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
@@ -757,5 +769,67 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
     });
+  }
+
+  ///上传本页数据后台保存
+  void _savePreCust() async {
+    Map<String, dynamic> josnMap = _dataReq.toJson();
+    String josnString = jsonEncode(josnMap);
+    josnString.replaceAll('\\n', '');
+    //获取登记注册文件类型
+    OpenAccountRepository()
+        .savePreCust(OpenAccountSaveDataReq(josnString), 'savePreCust')
+        .then((data) {})
+        .catchError((e) {});
+  }
+
+  ///获取后台保存的数据
+  void _getPreCustByStep() async {
+    HSProgressHUD.show();
+    //获取登记注册文件类型
+    OpenAccountRepository()
+        .getPreCustByStep(OpenAccountGetDataReq(), 'getPreCustByStep')
+        .then((data) {
+      HSProgressHUD.dismiss();
+      var content = jsonDecode(data.content);
+      _dataReq = OpenAccountQuickSubmitDataReq.fromJson(content);
+      _changeShowData();
+    }).catchError((e) {
+      HSProgressHUD.dismiss();
+      print('getdata = ${e.toString()}');
+    });
+  }
+
+  void _changeShowData() {
+    if (this.mounted) {
+      setState(() {
+        String _language = Intl.getCurrentLocale();
+        _companyNameEngTEC.text = _companyNameEngText = _dataReq.custNameEng;
+        _companyNameCNTEC.text = _companyNameCNText = _dataReq.custNameLoc;
+        _documentNumberTEC.text = _documentNumberText = _dataReq.idNo;
+        _companyTypeOtherTEC.text =
+            _companyTypeOtherText = _dataReq.otherCategory;
+        if (_language == 'en') {
+          _documentTypeText = _dataReq.idTypeIdType.name;
+          _companyTypeText = _dataReq.custCategoryIdType.name;
+          _countryOrRegionText = _dataReq.idIssuePlaceCountryRegionModel.nameEN;
+          _industrialNatureText = _dataReq.corporatinAttributesIdType.name;
+        } else if (_language == 'zh_CN') {
+          _documentTypeText = _dataReq.idTypeIdType.cname;
+          _companyTypeText = _dataReq.custCategoryIdType.cname;
+          _countryOrRegionText =
+              _dataReq.idIssuePlaceCountryRegionModel.nameZhCN;
+          _industrialNatureText = _dataReq.corporatinAttributesIdType.cname;
+        } else {
+          _documentTypeText = _dataReq.idTypeIdType.cname;
+          _companyTypeText = _dataReq.custCategoryIdType.cname;
+          _countryOrRegionText =
+              _dataReq.idIssuePlaceCountryRegionModel.nameZhHK;
+          _industrialNatureText = _dataReq.corporatinAttributesIdType.cname;
+        }
+
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
+    }
   }
 }

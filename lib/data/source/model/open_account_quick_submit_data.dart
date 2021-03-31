@@ -1,3 +1,6 @@
+import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
 /// 快速开户上传公司信息模型（第一次数据提交）
 /// Author: 李家伟
@@ -57,6 +60,23 @@ class OpenAccountQuickSubmitDataReq {
   @JsonKey(name: 'partnerList')
   List<Partner> partnerList;
 
+  ///自定义字段，用来上传保存数据下载显示用
+  ///商业/行业性质辅助字段
+  @JsonKey(name: 'corporatinAttributesIdType')
+  IdType corporatinAttributesIdType;
+
+  ///公司类别辅助字段
+  @JsonKey(name: 'custCategoryIdType')
+  IdType custCategoryIdType;
+
+  ///证件签发国家辅助字段
+  @JsonKey(name: 'idIssuePlaceCountryRegionModel')
+  CountryRegionModel idIssuePlaceCountryRegionModel;
+
+  ///证件类型辅助字段
+  @JsonKey(name: 'idTypeIdType')
+  IdType idTypeIdType;
+
   OpenAccountQuickSubmitDataReq({
     this.corporatinAttributes,
     this.custCategory,
@@ -70,6 +90,10 @@ class OpenAccountQuickSubmitDataReq {
     this.telCountryCode,
     this.telNumber,
     this.partnerList,
+    this.corporatinAttributesIdType,
+    this.custCategoryIdType,
+    this.idIssuePlaceCountryRegionModel,
+    this.idTypeIdType,
   });
 
   @override
@@ -114,6 +138,15 @@ class Address {
   @JsonKey(name: 'postCode')
   String postCode;
 
+  ///自定义字段，用来上传保存数据下载显示用
+  ///国家省市显示的字段
+  @JsonKey(name: 'addressCityShowString')
+  String addressCityShowString;
+
+  ///国家省市选择
+  @JsonKey(name: 'addressCitySelectList')
+  List<int> addressCitySelectList;
+
   Address({
     this.addressType,
     this.country,
@@ -121,6 +154,8 @@ class Address {
     this.city,
     this.detail,
     this.postCode,
+    this.addressCityShowString,
+    this.addressCitySelectList,
   });
 
   @override
@@ -169,6 +204,23 @@ class Partner {
   @JsonKey(name: 'idNo')
   String idNo;
 
+  ///自定义字段，用来上传保存数据下载显示用
+  ///证件类型
+  @JsonKey(name: 'idTypeIdType')
+  IdType idTypeIdType;
+
+  ///国籍辅助字段
+  @JsonKey(name: 'nationalityCountryRegionModel')
+  CountryRegionModel nationalityCountryRegionModel;
+
+  ///类别
+  @JsonKey(name: 'partnerTypeIdType')
+  IdType partnerTypeIdType;
+
+  ///称呼
+  @JsonKey(name: 'appellationIdType')
+  IdType appellationIdType;
+
   Partner({
     this.appellation,
     this.idType,
@@ -178,6 +230,10 @@ class Partner {
     // this.fullNameLoc,
     // this.fullNameEng,
     // this.idNo,
+    this.idTypeIdType,
+    this.nationalityCountryRegionModel,
+    this.partnerTypeIdType,
+    this.appellationIdType,
   });
 
   @override

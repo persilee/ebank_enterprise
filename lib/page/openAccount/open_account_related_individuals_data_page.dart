@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
+import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
 import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -85,6 +88,8 @@ class _RelatedIndividualsDataPageState
   @override
   Widget build(BuildContext context) {
     _dataReq = ModalRoute.of(context).settings.arguments;
+    _changeShowData();
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -104,29 +109,33 @@ class _RelatedIndividualsDataPageState
           child: ListView(
             children: [
               _inputViewWidget(context),
-              Container(
-                margin: EdgeInsets.only(top: 40, bottom: 20),
-                child: HsgButton.button(
-                  title: S.of(context).next_step,
-                  click: _nextBtnEnabled
-                      ? () async {
-                          final prefs = await SharedPreferences.getInstance();
-                          String phoneStr =
-                              prefs.getString(ConfigKey.USER_PHONE);
-                          _partner.phone = phoneStr == null ? '' : phoneStr;
-                          List<Partner> partnerList = [_partner];
-                          _dataReq.partnerList = partnerList;
-                          print('>>>>${_dataReq.toString()}');
-
-                          _openAccountQuickSubmitData();
-                        }
-                      : null,
-                  isColor: _nextBtnEnabled,
-                ),
-              )
+              _nextBtnWidget(context),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  ///下一步按钮
+  Widget _nextBtnWidget(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 40, bottom: 20),
+      child: HsgButton.button(
+        title: S.of(context).next_step,
+        click: _nextBtnEnabled
+            ? () async {
+                final prefs = await SharedPreferences.getInstance();
+                String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
+                _partner.phone = phoneStr == null ? '' : phoneStr;
+                List<Partner> partnerList = [_partner];
+                _dataReq.partnerList = partnerList;
+                _savePreCust();
+
+                _openAccountQuickSubmitData();
+              }
+            : null,
+        isColor: _nextBtnEnabled,
       ),
     );
   }
@@ -211,7 +220,7 @@ class _RelatedIndividualsDataPageState
       Container(
         child: _oneLayerSelectWidget(
           context,
-          S.of(context).identificationNumber,
+          S.of(context).openAccout_documentType,
           _documentTypeText,
           S.of(context).please_select,
           false,
@@ -255,6 +264,7 @@ class _RelatedIndividualsDataPageState
                 showText = data.nameEN;
               }
 
+              _partner.nationalityCountryRegionModel = data;
               _partner.nationality = data.countryCode;
               setState(() {
                 _nationalityText = showText;
@@ -461,13 +471,14 @@ class _RelatedIndividualsDataPageState
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
-        title: S.of(context).openAccount_documentType_select,
+        title: S.of(context).openAccout_appellation,
         items: appellationList,
       ),
     );
 
     if (result != null && result != false) {
       IdType data = _documentTypes[result];
+      _partner.appellationIdType = data;
       _partner.appellation = 'A'; //data.code;
       setState(() {
         _appellationText = appellationList[result];
@@ -502,13 +513,14 @@ class _RelatedIndividualsDataPageState
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
-        title: S.of(context).openAccount_documentType_select,
+        title: S.of(context).openAccout_capacity,
         items: categoryList,
       ),
     );
 
     if (result != null && result != false) {
       IdType data = _categoryTypes[result];
+      _partner.partnerTypeIdType = data;
       _partner.partnerType = '001'; //data.code;
       setState(() {
         _categoryText = categoryList[result];
@@ -536,13 +548,14 @@ class _RelatedIndividualsDataPageState
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
-        title: S.of(context).openAccount_documentType_select,
+        title: S.of(context).openAccout_documentType,
         items: documentList,
       ),
     );
 
     if (result != null && result != false) {
       IdType data = _documentTypes[result];
+      _partner.idTypeIdType = data;
       _partner.idType = data.code;
       setState(() {
         _documentTypeText = documentList[result];
@@ -619,5 +632,48 @@ class _RelatedIndividualsDataPageState
         );
       },
     );
+  }
+
+  ///上传本页数据后台保存
+  void _savePreCust() async {
+    Map<String, dynamic> josnMap = _dataReq.toJson();
+    String josnString = jsonEncode(josnMap);
+    josnString.replaceAll('\\n', '');
+    print('josnString>>>>>>>>>>>>>>>>>>>>> == $josnString');
+    //获取登记注册文件类型
+    OpenAccountRepository()
+        .savePreCust(OpenAccountSaveDataReq(josnString), 'savePreCust')
+        .then((data) {})
+        .catchError((e) {});
+  }
+
+  void _changeShowData() {
+    if (this.mounted) {
+      setState(() {
+        if (_dataReq.partnerList != null && _dataReq.partnerList.length > 0) {
+          Partner partner = _dataReq.partnerList[0];
+
+          String _language = Intl.getCurrentLocale();
+          if (_language == 'en') {
+            _appellationText = partner.appellationIdType.name;
+            _categoryText = partner.partnerTypeIdType.name;
+            _documentTypeText = partner.idTypeIdType.name;
+            _nationalityText = partner.nationalityCountryRegionModel.nameEN;
+          } else if (_language == 'zh_CN') {
+            _appellationText = partner.appellationIdType.cname;
+            _categoryText = partner.partnerTypeIdType.cname;
+            _documentTypeText = partner.idTypeIdType.cname;
+            _nationalityText = partner.nationalityCountryRegionModel.nameZhCN;
+          } else {
+            _appellationText = partner.appellationIdType.cname;
+            _categoryText = partner.partnerTypeIdType.cname;
+            _documentTypeText = partner.idTypeIdType.cname;
+            _nationalityText = partner.nationalityCountryRegionModel.nameZhHK;
+          }
+
+          _nextBtnEnabled = _judgeButtonIsEnabled();
+        }
+      });
+    }
   }
 }

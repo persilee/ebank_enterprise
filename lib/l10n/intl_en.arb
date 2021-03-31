@@ -597,6 +597,7 @@
   "loan_application_confirm_NavTitle": "Loans to confirm",
   "loan_application_submit_success": "The application has been submitted for approval",
 
+  "open_account_goto_ebank_tip": "Dear user. Since you are not an invited customer, please go to online banking to apply for an account.",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-
+  
 }
