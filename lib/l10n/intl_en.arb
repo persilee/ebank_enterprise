@@ -594,6 +594,9 @@
   "loan_Product_Foreign_detail": "Corporate entities, controlling shareholders can apply",
   "loan_Product_PlaceholdMore": "Maximum application",
   "home_header_welcome_title": "Welcome to Brillink Mobile Banking",
+  "loan_application_confirm_NavTitle": "Loans to confirm",
+  "loan_application_submit_success": "The application has been submitted for approval",
+
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
 
 }

@@ -595,6 +595,9 @@
   "loan_Product_Foreign_detail": "企業法人，控股股東即可申請",
   "loan_Product_PlaceholdMore": "最高可申請",
   "home_header_welcome_title": "歡迎使用朗華手機銀行",
+  "loan_application_confirm_NavTitle": "貸款確認",
+  "loan_application_submit_success": "申請已提交，待審批",
+
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家偉（開戶）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }
