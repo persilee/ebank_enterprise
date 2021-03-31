@@ -141,6 +141,7 @@ class _LoanProductState extends State<LoanProductListPage> {
 //创建单个的cell
   Widget _getProductCellWidget(Map indexMap) {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent, //设置点击的范围属性
       onTap: () {
         //点击某一行，在进行反向传值
         Navigator.pop(context, indexMap);

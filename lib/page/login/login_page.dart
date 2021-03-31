@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
     // 释放
     _accountTC.dispose();
     _passwordTC.dispose();
-    super.dispose();
+    // super.dispose();
   }
 
   @override
