@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   var _userName = ''; // 姓名
   var _characterName = ''; // 角色名称
   var _belongCustStatus = ''; //用户状态
-  var _inviteeStatus = '0'; //用户受邀状态，是否是走快速开户，默认为0，不走
+  // var _inviteeStatus = '0'; //用户受邀状态，是否是走快速开户，默认为0，不走
   var _lastLoginTime = ''; // 上次登录时间
   String _language = Intl.getCurrentLocale();
   var _features = [];
@@ -643,10 +643,8 @@ class _HomePageState extends State<HomePage> {
 //默认欢迎页
   Widget _welcomeWidget() {
     return Container(
-      margin: EdgeInsets.only(top: 30),
-      constraints: BoxConstraints(
-        maxWidth: (MediaQuery.of(context).size.width - 50),
-      ),
+      margin: EdgeInsets.only(top: 35),
+      width: (MediaQuery.of(context).size.width - 50),
       child: Text(
         S.of(context).home_header_welcome_title,
         overflow: TextOverflow.ellipsis,
@@ -805,9 +803,13 @@ class _HomePageState extends State<HomePage> {
 
   //开户点击事件
   void _openAccountClickFunction(BuildContext context) {
-    if (_inviteeStatus == '0') {
-      //前往填写面签码
-      Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+    if (_belongCustStatus == '1') {
+      // //前往填写面签码
+      // Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+      HsgShowTip.notOpenAccountGotoEbankTip(
+        context: context,
+        click: (value) {},
+      );
     } else {
       //前往快速开户
       Navigator.pushNamed(context, pageOpenAccountBasicData);
@@ -950,9 +952,9 @@ class _HomePageState extends State<HomePage> {
     )
         .then((data) {
       print('$data');
-      if (['0', '1', '3'].contains(data.belongCustStatus)) {
-        _getInviteeStatusByPhoneNetwork();
-      }
+      // if (['0', '1', '3'].contains(data.belongCustStatus)) {
+      //   _getInviteeStatusByPhoneNetwork();
+      // }
 
       _verifyGotoTranPassword(context, data.passwordEnabled);
 
@@ -969,28 +971,28 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<void> _getInviteeStatusByPhoneNetwork() async {
-    final prefs = await SharedPreferences.getInstance();
-    String userAreaCode = prefs.getString(ConfigKey.USER_AREACODE);
-    String userPhone = prefs.getString(ConfigKey.USER_PHONE);
+  // Future<void> _getInviteeStatusByPhoneNetwork() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   String userAreaCode = prefs.getString(ConfigKey.USER_AREACODE);
+  //   String userPhone = prefs.getString(ConfigKey.USER_PHONE);
 
-    UserDataRepository()
-        .getInviteeStatusByPhone(
-      GetInviteeStatusByPhoneReq(userAreaCode, userPhone),
-      'getInviteeStatusByPhone',
-    )
-        .then((data) {
-      if (this.mounted) {
-        setState(() {
-          _inviteeStatus = data.inviteeStatus;
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
-      // HSProgressHUD.showError(status: e.toString());
-      print('${e.toString()}');
-    });
-  }
+  //   UserDataRepository()
+  //       .getInviteeStatusByPhone(
+  //     GetInviteeStatusByPhoneReq(userAreaCode, userPhone),
+  //     'getInviteeStatusByPhone',
+  //   )
+  //       .then((data) {
+  //     if (this.mounted) {
+  //       setState(() {
+  //         _inviteeStatus = data.inviteeStatus;
+  //       });
+  //     }
+  //   }).catchError((e) {
+  //     Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+  //     // HSProgressHUD.showError(status: e.toString());
+  //     print('${e.toString()}');
+  //   });
+  // }
 }
 
 /// 这是一个可以指定SafeArea区域背景色的AppBar

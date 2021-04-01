@@ -40,6 +40,7 @@ class LoginResp {
   String actualName;
   String userPhone;
   String areaCode;
+  String userType;
 
   LoginResp(
     this.userId,
@@ -49,6 +50,7 @@ class LoginResp {
     this.actualName,
     this.userPhone,
     this.areaCode,
+    this.userType,
   );
 
   factory LoginResp.fromJson(Map<String, dynamic> srcJson) =>

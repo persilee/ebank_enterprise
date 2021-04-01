@@ -169,8 +169,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   //快速开户
   void _quickAccountOpening() async {
     String businessId = _valueData.businessId;
-    if (businessId.contains('&')) {
-      List dataList = businessId.split('&');
+    if (businessId.contains('-')) {
+      List dataList = businessId.split('-');
       if (dataList.length > 0) {
         businessId = dataList[0];
       }
@@ -201,8 +201,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     // Map valueMap = _valueData.toJson();
 
     String businessId = _valueData.businessId;
-    if (businessId.contains('&')) {
-      List dataList = businessId.split('&');
+    if (businessId.contains('-')) {
+      List dataList = businessId.split('-');
       if (dataList.length > 0) {
         businessId = dataList[0];
       }

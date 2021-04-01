@@ -25,6 +25,7 @@ import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -528,8 +529,7 @@ class _MinePageState extends State<MinePage> {
           clickCallback: () {
             print('开户申请');
             //判断受邀状态进入不同页面
-            // _openAccountClickFunction(context);
-            Navigator.pushNamed(context, pageOpenAccountBasicData);
+            _openAccountClickFunction(context);
           },
         ),
       ],
@@ -648,8 +648,12 @@ class _MinePageState extends State<MinePage> {
   //开户点击事件
   void _openAccountClickFunction(BuildContext context) {
     if (_inviteeStatus == '0') {
-      //前往填写面签码
-      Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+      // //前往填写面签码
+      // Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+      HsgShowTip.notOpenAccountGotoEbankTip(
+        context: context,
+        click: (value) {},
+      );
     } else {
       //前往快速开户
       Navigator.pushNamed(context, pageOpenAccountBasicData);
@@ -859,21 +863,9 @@ class _MinePageState extends State<MinePage> {
     if (_imgPath == null || _imgPath == '') {
       Fluttertoast.showToast(msg: '图片异常，请重新选择', gravity: ToastGravity.CENTER);
     } else {
-      // HSProgressHUD.show();
-      // UploadAvatarRepository()
-      //     .uploadAvatar(UploadAvatarReq(), _imgPath, 'uploadAvatar')
-      //     .then((data) {
-      //   setState(() {});
-      //   HSProgressHUD.dismiss();
-      // }).catchError((e) {
-      //   Fluttertoast.showToast(msg: e.toString());
-      //   HSProgressHUD.dismiss();
-      // });
-
       File file = File(_imgPath);
-      // var resultData = await ApiClient().uploadAvatar(file);
-      // print(resultData);
-      ApiClient().uploadAvatar(file, BaseBody(body: {})).then((value) {
+      ApiClient().uploadAvatar(file).then((value) {
+        //, BaseBody(body: {})
         print(value);
       }).catchError((e) {
         Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);

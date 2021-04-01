@@ -10,6 +10,7 @@ import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/language.dart';
+import 'package:ebank_mobile/util/login_save_user_data.dart';
 import 'package:ebank_mobile/util/screen_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -35,11 +36,11 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = '';
 
   TextEditingController _accountTC =
-      TextEditingController(text: ''); //fangluyao
+      TextEditingController(text: 'blk603'); //fangluyao
   TextEditingController _passwordTC =
-      TextEditingController(text: 'Aa123456@'); //b0S25X5Y
-  var _account = ''; //'blk101';HSG20
-  var _password = ''; //'4N0021S8';Qwe123456~
+      TextEditingController(text: '4N0021S8'); //b0S25X5Y
+  var _account = 'blk603'; //'blk101';HSG20
+  var _password = '4N0021S8'; //'4N0021S8';Qwe123456~
 
   // TextEditingController _accountTC =
   //     TextEditingController(text: 'blk302'); //HSG20
@@ -68,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
     // 释放
     _accountTC.dispose();
     _passwordTC.dispose();
-    super.dispose();
+    // super.dispose();
   }
 
   @override
@@ -281,22 +282,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   ///保存数据
-  _saveUserConfig(BuildContext context, LoginResp resp) async {
-    ///登录页面清空数据
-    HsgHttp().clearUserCache();
-
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
-    prefs.setString(ConfigKey.USER_ID, resp.userId);
-    prefs.setString(ConfigKey.USER_PHONE, resp.userPhone);
-    prefs.setString(ConfigKey.USER_AREACODE, resp.areaCode);
-
-    prefs.setString(ConfigKey.USER_PASSWORD, _password);
-    if (resp.custId == null || resp.custId == '') {
-      prefs.setString(ConfigKey.CUST_ID, '');
-    } else {
-      prefs.setString(ConfigKey.CUST_ID, resp.custId);
-    }
+  _saveUserConfig(BuildContext context, LoginResp resp) {
+    SaveUserData(resp, password: _password);
 
     _showMainPage(context);
   }
