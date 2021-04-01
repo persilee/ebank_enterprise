@@ -760,6 +760,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       _accuPeriod = '';
       _auctCale = '';
       (context as Element).markNeedsBuild();
+      _isLoading = false;
       // _loadData();
     });
   }
