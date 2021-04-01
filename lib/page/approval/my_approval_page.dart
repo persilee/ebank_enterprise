@@ -1,31 +1,25 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///我的待办页面
 /// Author: wangluyao
 /// Date: 2020-12-21
-
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/config/hsg_styles.dart';
 import 'package:ebank_mobile/data/source/model/find_user_to_do_task.dart';
 import 'package:ebank_mobile/data/source/model/find_user_todo_task_body.dart';
 import 'package:ebank_mobile/data/source/model/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/my_approval_data.dart';
-import 'package:ebank_mobile/data/source/process_task_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
-import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:lottie/lottie.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 import '../../page_route.dart';
 
 class MyApprovalPage extends StatefulWidget {
@@ -39,7 +33,7 @@ class MyApprovalPage extends StatefulWidget {
 
 class _MyApprovalPageState extends State<MyApprovalPage> {
   List<FindUserTaskDetail> toDoTask = [];
-  List<Rows> _listData = []; //页面显示的待办列表
+  List<ApprovalTask> _listData = []; //页面显示的待办列表
   ScrollController _scrollController;
   int count = 0;
   int page = 1;
@@ -60,7 +54,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     _refreshController = RefreshController();
     _scrollController = ScrollController();
     _loadData();
-    _testLoadData(false);
+    // _testLoadData(false);
   }
 
   void _testLoadData(bool isLoadMore) async {
@@ -153,7 +147,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   }
 
   //待办列表右侧信息
-  Widget _rightInfo(Data rows) {
+  Widget _rightInfo(ApprovalTask approvalTask) {
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -173,11 +167,13 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             //待办任务名称
-            _taskName(rows.taskName),
+            _taskName(approvalTask?.taskName ?? ''),
+            //待办任务id
+            _rowInformation(intl.S.current.sponsor, approvalTask?.taskId ?? ''),
             //发起人
-            _rowInformation(intl.S.current.sponsor, rows.startUser),
+            _rowInformation(intl.S.current.sponsor, approvalTask?.applicantName ?? ''),
             //创建时间
-            _rowInformation(intl.S.current.creation_time, rows.createTime),
+            _rowInformation(intl.S.current.creation_time, approvalTask?.createTime ?? ''),
           ],
         ),
       ),
@@ -185,13 +181,13 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   }
 
 //待办列表
-  Widget _todoInformation(Data rows) {
+  Widget _todoInformation(ApprovalTask approvalTask) {
     return Container(
       height: 136.0,
       padding: EdgeInsets.only(top: 16),
       child: GestureDetector(
         onTap: () {
-          go2Detail(rows);
+          go2Detail(approvalTask);
         },
         child: Stack(
           overflow: Overflow.visible,
@@ -201,7 +197,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                 Container(
                   width: 20.0,
                 ),
-                Expanded(child: _rightInfo(rows)),
+                Expanded(child: _rightInfo(approvalTask)),
               ],
             ),
             Positioned(
@@ -224,7 +220,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   Widget build(BuildContext context) {
     return _isLoading
         ? HsgLoading()
-        : _testListData.length > 0
+        : _listData.length > 0
             ? CustomRefresh(
                 controller: _refreshController,
                 onLoading: () async {
@@ -243,13 +239,12 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                   _refreshController.footerMode.value = LoadStatus.canLoading;
                 },
                 content: ListView.builder(
-                  // itemCount: list.length,
                   padding:
                       EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
-                  itemCount: _testListData.length,
+                  itemCount: _listData.length,
                   controller: _scrollController,
                   itemBuilder: (context, index) {
-                    return _todoInformation(_testListData[index]);
+                    return _todoInformation(_listData[index]);
                   },
                 ),
               )
@@ -257,15 +252,15 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   }
 
 //跳转并传值
-  void go2Detail(Data rows) {
+  void go2Detail(ApprovalTask approvalTask) {
     Navigator.pushNamed(context, pageTaskApproval,
-        arguments: {"data": rows, "title": widget.title});
+        arguments: {"data": approvalTask, "title": widget.title});
   }
 
   Future<void> _loadData() async {
     _isLoading = true;
     try {
-      FindUserTodoTaskModel findUserTodoTaskModel = await ApiClient()
+      FindUserTodoTaskModel response = await ApiClient()
           .findUserTodoTask(BaseBody(
               body: FindUserTodoTaskBody(
                       page: 1,
@@ -274,13 +269,13 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                       custId: '818000000113')
                   .toJson()));
       if (this.mounted) {
-        // setState(() {
-        //   _listData.addAll(findUserTodoTaskModel.body.rows);
-        //   _isLoading = false;
-        // });
+        setState(() {
+          _listData.addAll(response.rows);
+          _isLoading = false;
+        });
       }
 
-      print('findUserTodoTaskResponse: ${findUserTodoTaskModel.toJson()}');
+      print('findUserTodoTaskResponse: ${response.toJson()}');
     } catch (e) {
       print(e);
     }

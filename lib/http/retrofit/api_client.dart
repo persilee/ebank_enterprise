@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart' hide Headers;
+import 'package:ebank_mobile/http/retrofit/base_response.dart';
 import 'package:http_parser/http_parser.dart' show MediaType;
 import 'package:ebank_mobile/data/source/model/find_to_do_task_detail_contract_model.dart';
 import 'package:ebank_mobile/data/source/model/find_user_todo_task_model.dart';
