@@ -94,6 +94,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
                   title: S.current.confirm,
                   click: _boolBut()
                       ? () {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           _openBottomSheet();
                         }
                       : null,
@@ -149,7 +150,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           child: _payAmtTextField(),
         ),
         SelectInkWell(
-          title: S.current.debit_accno,
+          title: S.current.credit_account,
           item: _incomeAcc,
           onTap: () {
             FocusScope.of(context).requestFocus(FocusNode());
@@ -157,7 +158,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           },
         ),
         SelectInkWell(
-          title: S.current.debit_currency,
+          title: S.current.credit_currency,
           item: _incomeCcy,
           onTap: () {
             FocusScope.of(context).requestFocus(FocusNode());
@@ -372,7 +373,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
             'DoTransferAccoutReq')
         .then((data) {
       HSProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: S.current.operate_success);
+      Fluttertoast.showToast(
+          msg: S.current.operate_success, gravity: ToastGravity.CENTER);
       Navigator.pop(context, pageIndex);
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());

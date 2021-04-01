@@ -117,7 +117,11 @@ class TextFieldContainer extends StatelessWidget {
         children: [
           Container(
             width: 150,
-            child: Text(title),
+            child: Text(
+              title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
           Expanded(
             child: TextField(

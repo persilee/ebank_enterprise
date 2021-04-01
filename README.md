@@ -146,8 +146,12 @@ Future<LoginResp> login(LoginReq loginReq, String tag) {
 
 输入以下命令：
 
-```bash
+<!-- ```bash
 flutter build apk
 ```
 
-打包完成后的输出文件(apk)目录： `<app dir>/build/app/outputs/apk/app-release.apk`
+打包完成后的输出文件(apk)目录： `<app dir>/build/app/outputs/apk/app-release.apk` -->
+
+使用Android Studio 打开Android目录，点击Build，选择Generate Signed Bundle / APK 
+在弹窗中选择“APK”->“NEXT”->CHOOSE EXISTING->选择签名文件hisun.jks->找到key.properties->复制密码分别填入store password、alias和password->“NEXT”
+运行完，点击右下角Event Log，找到输出日志中的locate or analyze the APK，点击locate，在文件夹下能看到.apk

@@ -89,147 +89,146 @@ class _RegisterPageState extends State<RegisterPage> {
         elevation: 0,
       ),
       body: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            // 触摸收起键盘
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          child: Container(
-            color: Colors.white,
-            child: Form(
-                //绑定状态属性
-                key: _formKey,
-                child: ListView(
-                  children: <Widget>[
-                    //注册标题
-                    getRegisterTitle(S.current.welcome_to_register),
-                    //注册手机号
-                    getRegisterRegion(context, _phoneNum, _officeAreaCodeText,
-                        _selectRegionCode),
-                    //输入用户名
-                    getRegisterRow(
-                        S.current.please_input_username, _userName, false),
-                    //获取验证码
-                    Container(
-                      height: MediaQuery.of(context).size.height / 15,
-                      margin: EdgeInsets.fromLTRB(30, 0, 30, 10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: Color(0xFFF5F7F9)),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 20),
-                            width: MediaQuery.of(context).size.width / 2,
-                            child: TextField(
-                              //是否自动更正
-                              controller: _sms,
-                              autocorrect: true,
-                              //是否自动获得焦点
-                              autofocus: true,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: S.current.please_input_sms,
-                                hintStyle: TextStyle(
-                                  fontSize: 15,
-                                  color: HsgColors.textHintColor,
-                                ),
-                              ),
-                              inputFormatters: <TextInputFormatter>[
-                                WhitelistingTextInputFormatter
-                                    .digitsOnly, //只输入数字
-                                LengthLimitingTextInputFormatter(6) //限制长度
-                              ],
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
+          color: Colors.white,
+          child: Form(
+            //绑定状态属性
+            key: _formKey,
+            child: ListView(
+              children: <Widget>[
+                //注册标题
+                getRegisterTitle(S.current.welcome_to_register),
+                //注册手机号
+                getRegisterRegion(
+                    context, _phoneNum, _officeAreaCodeText, _selectRegionCode),
+                //输入用户名
+                getRegisterRow(
+                    S.current.please_input_username, _userName, false),
+                //获取验证码
+                Container(
+                  height: MediaQuery.of(context).size.height / 15,
+                  margin: EdgeInsets.fromLTRB(30, 0, 30, 10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      color: Color(0xFFF5F7F9)),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left: 20),
+                        width: MediaQuery.of(context).size.width / 2,
+                        child: TextField(
+                          //是否自动更正
+                          controller: _sms,
+                          autocorrect: true,
+                          //是否自动获得焦点
+                          autofocus: true,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: S.current.please_input_sms,
+                            hintStyle: TextStyle(
+                              fontSize: 15,
+                              color: HsgColors.textHintColor,
                             ),
                           ),
-                          Container(
-                            alignment: Alignment.center,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: _otpButton(),
-                          )
-                        ],
+                          inputFormatters: <TextInputFormatter>[
+                            WhitelistingTextInputFormatter.digitsOnly, //只输入数字
+                            LengthLimitingTextInputFormatter(6) //限制长度
+                          ],
+                        ),
                       ),
-                    ),
-                    //下一步按钮
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.only(bottom: 16),
-                      color: Colors.white,
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      child: Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Color(0xFF1775BA),
-                                  Color(0xFF3A9ED1),
-                                ],
-                              ),
-                            ),
-                            margin: EdgeInsets.only(top: 75),
-                            width: MediaQuery.of(context).size.width / 1.2,
-                            height: MediaQuery.of(context).size.height / 15,
-                            child: FlatButton(
-                              disabledColor: HsgColors.btnDisabled,
-                              //color: Colors.blue,
-                              child: Text(
-                                S.current.next_step,
-                                style: (TextStyle(color: Colors.white)),
-                              ),
-                              onPressed: _submit()
-                                  ? () {
-                                      RegExp userName =
-                                          new RegExp("[a-zA-Z0-9]{4,16}");
-                                      //特殊字符
-                                      RegExp characters = new RegExp(
-                                          "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
-                                      if (userName.hasMatch(_userName.text) ==
-                                              false ||
-                                          characters.hasMatch(_userName.text) ==
-                                              true) {
-                                        //校验用户名
-                                        Fluttertoast.showToast(
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.CENTER,
-                                            timeInSecForIosWeb: 1,
-                                            msg: S.current
-                                                .register_check_username);
-                                      } else {
-                                        Map listData = new Map();
-                                        listData = {
-                                          'accountName': _userNameListen,
-                                          'sms': _smsListen,
-                                          'phone': _phoneNumListen,
-                                          'areaCode': _officeAreaCodeText
-                                        };
+                      Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width / 3,
+                        child: _otpButton(),
+                      )
+                    ],
+                  ),
+                ),
+                //下一步按钮
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.only(bottom: 16),
+                  color: Colors.white,
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color(0xFF1775BA),
+                              Color(0xFF3A9ED1),
+                            ],
+                          ),
+                        ),
+                        margin: EdgeInsets.only(top: 75),
+                        width: MediaQuery.of(context).size.width / 1.2,
+                        height: MediaQuery.of(context).size.height / 15,
+                        child: FlatButton(
+                          disabledColor: HsgColors.btnDisabled,
+                          //color: Colors.blue,
+                          child: Text(
+                            S.current.next_step,
+                            style: (TextStyle(color: Colors.white)),
+                          ),
+                          onPressed: _submit()
+                              ? () {
+                                  RegExp userName =
+                                      new RegExp("[a-zA-Z0-9]{4,16}");
+                                  //特殊字符
+                                  RegExp characters = new RegExp(
+                                      "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
+                                  if (userName.hasMatch(_userName.text) ==
+                                          false ||
+                                      characters.hasMatch(_userName.text) ==
+                                          true) {
+                                    //校验用户名
+                                    Fluttertoast.showToast(
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        msg: S.current.register_check_username);
+                                  } else {
+                                    Map listData = new Map();
+                                    listData = {
+                                      'accountName': _userNameListen,
+                                      'sms': _smsListen,
+                                      'phone': _phoneNumListen,
+                                      'areaCode': _officeAreaCodeText
+                                    };
 
-                                        Navigator.pushNamed(
-                                            context, pageRegisterConfirm,
-                                            arguments: listData);
-                                      }
-                                    }
-                                  : null,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    //复选框及协议文本内容
-                    Container(
-                      margin: EdgeInsets.only(top: 10),
-                      padding: CONTENT_PADDING,
-                      child: Row(
-                        children: [_roundCheckBox(), _textContent()],
-                      ),
-                    ),
-                  ],
-                )),
-          )),
+                                    Navigator.pushNamed(
+                                        context, pageRegisterConfirm,
+                                        arguments: listData);
+                                  }
+                                }
+                              : null,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                //复选框及协议文本内容
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  padding: CONTENT_PADDING,
+                  child: Row(
+                    children: [_roundCheckBox(), _textContent()],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -343,7 +342,7 @@ class _RegisterPageState extends State<RegisterPage> {
     // } else {
     HSProgressHUD.show();
     VersionDataRepository()
-        .checkPhone(CheckPhoneReq(_phoneNum.text, '1'), 'checkPhoneReq')
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
         .then((data) {
       if (mounted) {
         setState(() {

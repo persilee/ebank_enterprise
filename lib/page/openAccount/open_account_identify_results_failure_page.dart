@@ -129,7 +129,7 @@ class _OpenAccountIdentifyResultsFailurePageState
     }
     final prefs = await SharedPreferences.getInstance();
     String userPhone = prefs.getString(ConfigKey.USER_PHONE);
-    String businessId = _businessId + '&' + userPhone;
+    String businessId = _businessId + '-' + userPhone;
 
     HSProgressHUD.show();
 

@@ -25,6 +25,7 @@ import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,7 @@ class _MinePageState extends State<MinePage> {
   String _registerAccount = "wly3"; //手机号注册（用户账号）
   var _enterpriseName = ''; // 企业名称
   var _characterName = ''; // 角色名称
-  var _belongCustStatus = '0'; //用户状态
+  var _belongCustStatus = ''; //用户状态
   UserInfoResp _userInfoResp;
   var _inviteeStatus = '0'; //用户受邀状态，是否是走快速开户，默认为0，不走
 
@@ -151,6 +152,25 @@ class _MinePageState extends State<MinePage> {
 
   ///scrollview的顶部view，包含背景图、登录信息
   Widget _mineHeaderView() {
+    Widget headerShowWidget = Container();
+    switch (_belongCustStatus) {
+      case '0': //未开户
+      case '1': //未开户
+        headerShowWidget = _headerInfoWidget();
+        break;
+      case '2': //审核中
+        headerShowWidget = _openAccInReview();
+        break;
+      case '3': //已驳回
+        headerShowWidget = _openAccRejected();
+        break;
+      case '4': //受限已开户
+      case '5': //正常已开户
+        headerShowWidget = _headerInfoWidget();
+        break;
+      default:
+        headerShowWidget = _welcomeWidget();
+    }
     return Container(
       child: Stack(
         children: [
@@ -181,7 +201,7 @@ class _MinePageState extends State<MinePage> {
           Container(
             width: MediaQuery.of(context).size.width,
             height: 200,
-            child: _headerInfoWidget(),
+            child: headerShowWidget,
           ),
           //   ),
           // ),
@@ -412,6 +432,19 @@ class _MinePageState extends State<MinePage> {
 
 //头部信息展示
   Widget _headerInfoWidget() {
+    Widget infoWidget = Container();
+    switch (_belongCustStatus) {
+      case '0': //受邀客户未开户
+      case '1': //非受邀客户未开户
+        infoWidget = _userOffInfo();
+        break;
+      case '4': //正常受限客户
+      case '5': //正常正式客户
+        infoWidget = _userInfo();
+        break;
+      default:
+    }
+
     return Container(
       height: 200,
       alignment: Alignment.center,
@@ -432,7 +465,7 @@ class _MinePageState extends State<MinePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _belongCustStatus == '6' ? _userInfo() : _userOffInfo(),
+                infoWidget,
                 // Text(
                 //   _userName,
                 //   textAlign: TextAlign.start,
@@ -496,19 +529,131 @@ class _MinePageState extends State<MinePage> {
           clickCallback: () {
             print('开户申请');
             //判断受邀状态进入不同页面
-            // _openAccountClickFunction(context);
-            Navigator.pushNamed(context, pageOpenAccountBasicData);
+            _openAccountClickFunction(context);
           },
         ),
       ],
     ));
   }
 
+  //审核驳回
+  Widget _openAccRejected() {
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      height: 110,
+      width: MediaQuery.of(context).size.width - 40,
+      child: Column(
+        children: [
+          Container(
+            child: Text(
+              S.of(context).open_account_rejected_tip,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 10, bottom: 12),
+            height: 35,
+            child: RaisedButton(
+              onPressed: () {
+                _openAccountClickFunction(context);
+              },
+              child: Text(
+                S.of(context).open_account_reapply,
+                style: TextStyle(fontSize: 14, color: Colors.white),
+              ),
+              shape: RoundedRectangleBorder(
+                side: BorderSide.none,
+                borderRadius: BorderRadius.all(Radius.circular(50)),
+              ),
+              color: Color(0xFF4871FF),
+              disabledColor: HsgColors.btnDisabled,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 5),
+            child: _timeInfo(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //审核中
+  Widget _openAccInReview() {
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      height: 110,
+      width: MediaQuery.of(context).size.width - 40,
+      child: Column(
+        children: [
+          Container(
+            child: Text(
+              S.of(context).open_account_inReview_tip,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Text(
+              S.of(context).open_account_inReview_content,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          Expanded(child: Container()),
+          Container(
+            margin: EdgeInsets.only(top: 7),
+            child: _timeInfo(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //默认欢迎页
+  Widget _welcomeWidget() {
+    return Container(
+      margin: EdgeInsets.only(top: 100),
+      constraints: BoxConstraints(
+        maxWidth: (MediaQuery.of(context).size.width - 50),
+      ),
+      child: Text(
+        S.of(context).home_header_welcome_title,
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
+        maxLines: 3,
+        style: TextStyle(
+          color: HsgColors.firstDegreeText,
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
   //开户点击事件
   void _openAccountClickFunction(BuildContext context) {
     if (_inviteeStatus == '0') {
-      //前往填写面签码
-      Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+      // //前往填写面签码
+      // Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+      HsgShowTip.notOpenAccountGotoEbankTip(
+        context: context,
+        click: (value) {},
+      );
     } else {
       //前往快速开户
       Navigator.pushNamed(context, pageOpenAccountBasicData);
@@ -670,16 +815,20 @@ class _MinePageState extends State<MinePage> {
   void _changeUserInfoShow(UserInfoResp model) {
     if (this.mounted) {
       setState(() {
-        // _headPortraitUrl = model.headPortrait; //头像地址
-        _enterpriseName = _language == 'zh_CN'
-            ? model.custLocalName
-            : model.custEngName; // 企业名称
-        _userName = _language == 'zh_CN'
-            ? model.localUserName
-            : model.englishUserName; // 姓名
-        _characterName = _language == 'zh_CN'
-            ? model.roleLocalName
-            : model.roleEngName; //用户角色名称
+        _headPortraitUrl = model.headPortrait; //头像地址
+        _enterpriseName =
+            _language == 'en' ? model.custEngName : model.custLocalName; // 企业名称
+        _userName = model.userAccount;
+        // _language == 'en'
+        //     ? model.englishUserName
+        //     : model.localUserName; // 姓名
+        // _userName = _userName == null ? model.userAccount : _userName;
+        _characterName = _language == 'en'
+            ? model.roleEngName
+            : model.roleLocalName; //用户角色名称
+        _belongCustStatus = model.userId == '989185387615485977'
+            ? '5'
+            : model.belongCustStatus; //用户状态(先临时数据判断是blk703显示为已开户)
         _lastLoginTime = model.lastLoginTime; // 上次登录时间
       });
     }
@@ -714,21 +863,9 @@ class _MinePageState extends State<MinePage> {
     if (_imgPath == null || _imgPath == '') {
       Fluttertoast.showToast(msg: '图片异常，请重新选择', gravity: ToastGravity.CENTER);
     } else {
-      // HSProgressHUD.show();
-      // UploadAvatarRepository()
-      //     .uploadAvatar(UploadAvatarReq(), _imgPath, 'uploadAvatar')
-      //     .then((data) {
-      //   setState(() {});
-      //   HSProgressHUD.dismiss();
-      // }).catchError((e) {
-      //   Fluttertoast.showToast(msg: e.toString());
-      //   HSProgressHUD.dismiss();
-      // });
-
       File file = File(_imgPath);
-      // var resultData = await ApiClient().uploadAvatar(file);
-      // print(resultData);
-      ApiClient().uploadAvatar(file, BaseBody(body: {})).then((value) {
+      ApiClient().uploadAvatar(file).then((value) {
+        //, BaseBody(body: {})
         print(value);
       }).catchError((e) {
         Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
@@ -748,21 +885,10 @@ class _MinePageState extends State<MinePage> {
     )
         .then((data) {
       if (this.mounted) {
-        setState(() {
-          _userInfoResp = data;
-          _userName = data.actualName; // 姓名
-          _headPortraitUrl = data.headPortrait; //头像
-          _characterName = data.roleLocalName; //角色
-          _enterpriseName = data.custLocalName; //公司名
-          _belongCustStatus = data.belongCustStatus; //用户状态
-          _lastLoginTime = data.lastLoginTime; // 上次登录时间
-          print(_userName);
-          // _userType = data.userType; //用户类型
-          // _userPhone = data.userPhone; //用户手机号
-          // _areaCode = data.areaCode; //区号
-        });
+        _userInfoResp = data;
+        _changeUserInfoShow(_userInfoResp);
       }
-      _changeUserInfoShow(_userInfoResp);
+
       if (['0', '1', '3'].contains(data.belongCustStatus)) {
         _getInviteeStatusByPhoneNetwork();
       }

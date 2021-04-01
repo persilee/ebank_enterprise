@@ -39,8 +39,8 @@ class _HomePageState extends State<HomePage> {
   var _enterpriseName = ''; // 企业名称
   var _userName = ''; // 姓名
   var _characterName = ''; // 角色名称
-  var _belongCustStatus = '0'; //用户状态
-  var _inviteeStatus = '0'; //用户受邀状态，是否是走快速开户，默认为0，不走
+  var _belongCustStatus = ''; //用户状态
+  // var _inviteeStatus = '0'; //用户受邀状态，是否是走快速开户，默认为0，不走
   var _lastLoginTime = ''; // 上次登录时间
   String _language = Intl.getCurrentLocale();
   var _features = [];
@@ -215,8 +215,11 @@ class _HomePageState extends State<HomePage> {
               ),
               onPressed: () {
                 print('联系客服');
-                Navigator.pushNamed(context,
-                    pageOpenAccountSelectDocumentType); //pageContactCustomer
+                Navigator.pushNamed(
+                  context,
+                  pageOpenAccountSelectDocumentType,
+                  arguments: '123456987465312456',
+                ); //pageContactCustomer
               },
             ),
             _languageChangeBtn(),
@@ -327,6 +330,7 @@ class _HomePageState extends State<HomePage> {
         headerShowWidget = _headerInfoWidget();
         break;
       default:
+        headerShowWidget = _welcomeWidget();
     }
 
     return Container(
@@ -636,7 +640,26 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-//用户信息-已开户
+//默认欢迎页
+  Widget _welcomeWidget() {
+    return Container(
+      margin: EdgeInsets.only(top: 35),
+      width: (MediaQuery.of(context).size.width - 50),
+      child: Text(
+        S.of(context).home_header_welcome_title,
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
+        maxLines: 3,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  //用户信息-已开户
   Widget _userInfo() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -780,9 +803,13 @@ class _HomePageState extends State<HomePage> {
 
   //开户点击事件
   void _openAccountClickFunction(BuildContext context) {
-    if (_inviteeStatus == '0') {
-      //前往填写面签码
-      Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+    if (_belongCustStatus == '1') {
+      // //前往填写面签码
+      // Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+      HsgShowTip.notOpenAccountGotoEbankTip(
+        context: context,
+        click: (value) {},
+      );
     } else {
       //前往快速开户
       Navigator.pushNamed(context, pageOpenAccountBasicData);
@@ -792,7 +819,7 @@ class _HomePageState extends State<HomePage> {
   //校验是否提示设置交易密码
   void _verifyGotoTranPassword(BuildContext context, bool passwordEnabled) {
     if (passwordEnabled == true ||
-        (['0', '1', '2', '3'].contains(_belongCustStatus))) {
+        (['0', '1', '2', '3', ''].contains(_belongCustStatus))) {
       //已经设置交易密码，或者用户未开户，不做操作
       return;
     }
@@ -896,16 +923,19 @@ class _HomePageState extends State<HomePage> {
     if (this.mounted) {
       setState(() {
         _headPortraitUrl = model.headPortrait; //头像地址
-        _enterpriseName = _language == 'zh_CN'
-            ? model.custLocalName
-            : model.custEngName; // 企业名称
-        _userName = _language == 'zh_CN'
-            ? model.localUserName
-            : model.englishUserName; // 姓名
-        _userName = _userName == null ? model.userAccount : _userName;
-        _characterName = _language == 'zh_CN'
-            ? model.roleLocalName
-            : model.roleEngName; //用户角色名称
+        _enterpriseName =
+            _language == 'en' ? model.custEngName : model.custLocalName; // 企业名称
+        _userName = model.userAccount;
+        // _language == 'en'
+        //     ? model.englishUserName
+        //     : model.localUserName; // 姓名
+        // _userName = _userName == null ? model.userAccount : _userName;
+        _characterName = _language == 'en'
+            ? model.roleEngName
+            : model.roleLocalName; //用户角色名称
+        _belongCustStatus = model.userId == '989185387615485977'
+            ? '5'
+            : model.belongCustStatus; //用户状态(先临时数据判断是blk703显示为已开户)
         _lastLoginTime = model.lastLoginTime; // 上次登录时间
       });
     }
@@ -922,27 +952,16 @@ class _HomePageState extends State<HomePage> {
     )
         .then((data) {
       print('$data');
-      if (['0', '1', '3'].contains(data.belongCustStatus)) {
-        _getInviteeStatusByPhoneNetwork();
-      }
+      // if (['0', '1', '3'].contains(data.belongCustStatus)) {
+      //   _getInviteeStatusByPhoneNetwork();
+      // }
 
       _verifyGotoTranPassword(context, data.passwordEnabled);
 
       if (this.mounted) {
         setState(() {
-          _headPortraitUrl = data.headPortrait; //头像地址
-          _enterpriseName = _language == 'zh_CN'
-              ? data.custLocalName
-              : data.custEngName; // 企业名称
-          _userName = _language == 'zh_CN'
-              ? data.localUserName
-              : data.englishUserName; // 姓名
-          _characterName = _language == 'zh_CN'
-              ? data.roleLocalName
-              : data.roleEngName; //用户角色名称
-          _belongCustStatus = data.belongCustStatus; //用户状态
-          _lastLoginTime = data.lastLoginTime; // 上次登录时间
           _data = data;
+          _changeUserInfoShow(_data);
         });
       }
     }).catchError((e) {
@@ -952,28 +971,28 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<void> _getInviteeStatusByPhoneNetwork() async {
-    final prefs = await SharedPreferences.getInstance();
-    String userAreaCode = prefs.getString(ConfigKey.USER_AREACODE);
-    String userPhone = prefs.getString(ConfigKey.USER_PHONE);
+  // Future<void> _getInviteeStatusByPhoneNetwork() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   String userAreaCode = prefs.getString(ConfigKey.USER_AREACODE);
+  //   String userPhone = prefs.getString(ConfigKey.USER_PHONE);
 
-    UserDataRepository()
-        .getInviteeStatusByPhone(
-      GetInviteeStatusByPhoneReq(userAreaCode, userPhone),
-      'getInviteeStatusByPhone',
-    )
-        .then((data) {
-      if (this.mounted) {
-        setState(() {
-          _inviteeStatus = data.inviteeStatus;
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
-      // HSProgressHUD.showError(status: e.toString());
-      print('${e.toString()}');
-    });
-  }
+  //   UserDataRepository()
+  //       .getInviteeStatusByPhone(
+  //     GetInviteeStatusByPhoneReq(userAreaCode, userPhone),
+  //     'getInviteeStatusByPhone',
+  //   )
+  //       .then((data) {
+  //     if (this.mounted) {
+  //       setState(() {
+  //         _inviteeStatus = data.inviteeStatus;
+  //       });
+  //     }
+  //   }).catchError((e) {
+  //     Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+  //     // HSProgressHUD.showError(status: e.toString());
+  //     print('${e.toString()}');
+  //   });
+  // }
 }
 
 /// 这是一个可以指定SafeArea区域背景色的AppBar

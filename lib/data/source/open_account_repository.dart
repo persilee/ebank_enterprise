@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/data/source/model/open_account_get_data.dart';
+
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
 /// 开户面签相关接口
 /// Author: 李家伟
@@ -6,6 +8,7 @@
 import 'package:ebank_mobile/data/source/model/open_account_information_supplement_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
+import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 
 import 'model/face_sign_businessid.dart';
@@ -36,6 +39,20 @@ class OpenAccountRepository {
   Future<FaceSignIDRespons> getFaceSignBusiness(FaceSignIDReq req, String tag) {
     return request('/cust/corporationCust/getBusinessByPhone', req, tag,
         (data) => FaceSignIDRespons.fromJson(data));
+  }
+
+  //上传开户数据保存
+  Future<OpenAccountSaveDataResp> savePreCust(
+      OpenAccountSaveDataReq req, String tag) {
+    return request('/cust/preCust/savePreCust', req, tag,
+        (data) => OpenAccountSaveDataResp.fromJson(data));
+  }
+
+  //获取开户保存的数据
+  Future<OpenAccountGetDataResp> getPreCustByStep(
+      OpenAccountGetDataReq req, String tag) {
+    return request('/cust/preCust/getPreCustByStep', req, tag,
+        (data) => OpenAccountGetDataResp.fromJson(data));
   }
 
   static final _instance = OpenAccountRepository._internal();

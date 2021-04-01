@@ -121,14 +121,14 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
             Text(
               S.current.total_periods,
             ),
-            Text(loanDetail.termValue.toString()),
+            Text('12'), //loanDetail.termValue.toString()
           ),
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(
             Text(
               S.current.remaining_periods,
             ),
-            Text(loanDetail.restPeriods.toString()),
+            Text('10'), //loanDetail.restPeriods.toString()
           ),
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(
@@ -162,14 +162,16 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(
             Text(S.current.deduct_money_date),
-            Text(loanDetail.repaymentDay.toString() + S.current.day),
+            Text('2021-05-01' +
+                S.current.day), //loanDetail.repaymentDay.toString()
           ),
           Divider(height: 0, color: HsgColors.textHintColor),
           _getSingleBox(
               Text(
                 S.current.deduct_money_account,
               ),
-              Text(loanDetail.repaymentAcNo.toString())),
+              Text(
+                  '0101238000001758')), //0101238000001758  loanDetail.repaymentAcNo.toString()
         ],
       ),
     );

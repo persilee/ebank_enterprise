@@ -59,7 +59,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     super.initState();
     _refreshController = RefreshController();
     _scrollController = ScrollController();
-    // _loadData();
+    _loadData();
     _testLoadData(false);
   }
 
@@ -244,7 +244,8 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
                 },
                 content: ListView.builder(
                   // itemCount: list.length,
-                  padding: EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
+                  padding:
+                      EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
                   itemCount: _testListData.length,
                   controller: _scrollController,
                   itemBuilder: (context, index) {
@@ -263,23 +264,26 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
 
   Future<void> _loadData() async {
     _isLoading = true;
-    FindUserTodoTaskModel findUserTodoTaskModel = await ApiClient()
-        .findUserTodoTask(BaseBody(
-            body: FindUserTodoTaskBody(
-                    page: 1,
-                    pageSize: 20,
-                    tenantId: 'EB',
-                    custId: '818000000113')
-                .toJson()));
+    try {
+      FindUserTodoTaskModel findUserTodoTaskModel = await ApiClient()
+          .findUserTodoTask(BaseBody(
+              body: FindUserTodoTaskBody(
+                      page: 1,
+                      pageSize: 20,
+                      tenantId: 'EB',
+                      custId: '818000000113')
+                  .toJson()));
+      if (this.mounted) {
+        // setState(() {
+        //   _listData.addAll(findUserTodoTaskModel.body.rows);
+        //   _isLoading = false;
+        // });
+      }
 
-    if (this.mounted) {
-      setState(() {
-        _listData.addAll(findUserTodoTaskModel.body.rows);
-        _isLoading = false;
-      });
+      print('findUserTodoTaskResponse: ${findUserTodoTaskModel.toJson()}');
+    } catch (e) {
+      print(e);
     }
-
-    print('findUserTodoTaskResponse: ${findUserTodoTaskModel.toJson()}');
   }
 
 //加载更多

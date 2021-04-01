@@ -1,0 +1,23 @@
+import 'package:ebank_mobile/data/source/model/login.dart';
+import 'package:ebank_mobile/http/hsg_http.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+void SaveUserData(LoginResp resp, {String password}) async {
+  ///登录页面清空数据
+  HsgHttp().clearUserCache();
+
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
+  prefs.setString(ConfigKey.USER_ID, resp.userId);
+  prefs.setString(ConfigKey.USER_PHONE, resp.userPhone);
+  prefs.setString(ConfigKey.USER_AREACODE, resp.areaCode);
+  prefs.setString(ConfigKey.USER_TYPE, resp.userType);
+
+  prefs.setString(ConfigKey.USER_PASSWORD, password);
+  if (resp.custId == null || resp.custId == '') {
+    prefs.setString(ConfigKey.CUST_ID, '');
+  } else {
+    prefs.setString(ConfigKey.CUST_ID, resp.custId);
+  }
+}

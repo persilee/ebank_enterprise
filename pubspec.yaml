@@ -101,6 +101,7 @@ flutter:
     - images/login/login_bg_password.png
     - images/login/login_header_logo.png
     - images/login/login_input_account.png
+    - images/login/login_input_account1.png
     - images/login/login_input_password.png
 
     #tabbar
