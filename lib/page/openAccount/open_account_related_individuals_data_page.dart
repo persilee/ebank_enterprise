@@ -619,7 +619,10 @@ class _RelatedIndividualsDataPageState
           Navigator.pushNamed(
             context,
             pageOpenAccountSelectDocumentType,
-            arguments: value.businessId,
+            arguments: {
+              'businessId': value.businessId,
+              'isQuick': true,
+            },
           );
         } else {}
       },

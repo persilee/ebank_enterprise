@@ -192,7 +192,7 @@ var pageOpenAccountRelatedIndividualsData =
     '/open_account_related_individuals_data_page.dart';
 var pageOpenAccountIdentifyResultsFailure =
     '/open_account_identify_results_failure_page.dart';
-var pageOpenAccountIdentifySuccessfulFailure =
+var pageOpenAccountIdentifySuccessful =
     '/open_account_identify_results_successful_page.dart';
 var pageOpenAccountGetFaceSign = '/open_account_get_face_sign.dart';
 var pageLoanNewApplictionNav = '/loan_new_application_page.dart';
@@ -290,7 +290,7 @@ var appRoutes = {
       RelatedIndividualsDataPage(),
   pageOpenAccountIdentifyResultsFailure: (context) =>
       OpenAccountIdentifyResultsFailurePage(),
-  pageOpenAccountIdentifySuccessfulFailure: (context) =>
+  pageOpenAccountIdentifySuccessful: (context) =>
       OpenAccountIdentifyResultsSuccessfulPage(),
   pageOpenAccountGetFaceSign: (context) => OpenAccountGetFaceSignPage(),
   pageLoanNewApplictionNav: (context) => LoanNewApplicationPage(), //
