@@ -119,6 +119,10 @@ class _HSGBankAppState extends State<HSGBankApp> {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate
         ],
+        // ignore: missing_return
+        localeResolutionCallback: (locale, supportedLocales) {
+          print('deviceLocale: $locale');
+        },
         supportedLocales: S.delegate.supportedLocales,
         builder: (context, child) => Scaffold(
           resizeToAvoidBottomInset: false,

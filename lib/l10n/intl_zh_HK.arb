@@ -37,7 +37,6 @@
   "deduct_money_account": "扣款卡號",
   "instruction_at_maturity_0": "等待客戶指示",
   "loan_limit_detail": "額度詳情",
-  "contract_account": "合約賬號",
   "loan_principal": "貸款本金",
   "begin_time": "開始時間",
   "end_time": "結束時間",
@@ -598,6 +597,8 @@
   "home_header_welcome_title": "歡迎使用朗華手機銀行",
   "loan_application_confirm_NavTitle": "貸款確認",
   "loan_application_submit_success": "申請已提交，待審批",
+  "loan_mineLoan_record_navTitle": "我的貸款",
+
   "open_account_goto_ebank_tip": "尊敬的用戶，您好。由於您不是受邀客戶，請前往網銀進行開戶申請。",
   "openAccount_faceSign_results_content": "面簽數據提交成功",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家偉（開戶）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"

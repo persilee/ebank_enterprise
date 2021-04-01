@@ -50,7 +50,7 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).loan_limit_detail),
+        title: Text(S.of(context).loan_mineLoan_record_navTitle),
         centerTitle: true,
         elevation: 0,
       ),
@@ -122,7 +122,7 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
       children: [
         Text(
           //合约账号
-          S.of(context).contract_account + " " + loanDetail.contactNo,
+          S.of(context).loan_account + " " + loanDetail.acNo,
           style: TextStyle(fontSize: 15, color: Color(0xFF242424)),
         ),
         Icon(
@@ -213,36 +213,36 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
 
   //跳转
   _selectPage(BuildContext context, Loan loanDetail) async {
-    List<String> pages = [
-      S.of(context).view_details,
-      S.of(context).view_repayment_plan,
-      S.of(context).prepayment,
-    ];
-    final result = await showHsgBottomSheet(
-        context: context,
-        builder: (context) => BottomMenu(
-              title: S.of(context).loan_account + ' ' + loanDetail.contactNo,
-              items: pages,
-            ));
-    if (result != null && result != false) {
-      // loanDetails.debitAccount => '0101238000001758';;
-      print('详情数据----$loanDetail.');
-      switch (result) {
-        case 0:
-          //查看详情
-          Navigator.pushNamed(context, pageloanDetails, arguments: loanDetail);
-          break;
-        case 1:
-          //查看还款计划
-          Navigator.pushNamed(context, pageRepayPlan, arguments: loanDetail);
-          break;
-        case 2:
-          //提前还款
-          Navigator.pushNamed(context, pageRepayInput, arguments: loanDetail);
-          break;
-      }
-    } else {
-      return;
-    }
+    // List<String> pages = [
+    //   S.of(context).view_details,
+    //   S.of(context).view_repayment_plan,
+    //   S.of(context).prepayment,
+    // ];
+    // final result = await showHsgBottomSheet(
+    //     context: context,
+    //     builder: (context) => BottomMenu(
+    //           title: S.of(context).loan_account + ' ' + loanDetail.contactNo,
+    //           items: pages,
+    //         ));
+    // if (result != null && result != false) {
+    //   // loanDetails.debitAccount => '0101238000001758';;
+    //   print('详情数据----$loanDetail.');
+    //   switch (result) {
+    //     case 0:
+    //直接跳到查看详情
+    Navigator.pushNamed(context, pageloanDetails, arguments: loanDetail);
+    //       break;
+    //     case 1:
+    //       //查看还款计划
+    //       Navigator.pushNamed(context, pageRepayPlan, arguments: loanDetail);
+    //       break;
+    //     case 2:
+    //       //提前还款
+    //       Navigator.pushNamed(context, pageRepayInput, arguments: loanDetail);
+    //       break;
+    //   }
+    // } else {
+    //   return;
+    // }
   }
 }

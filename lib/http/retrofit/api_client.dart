@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/dio.dart' hide Headers;
-import 'package:http_parser/http_parser.dart' show MediaType;
+import 'package:dio/dio.dart';
 import 'package:ebank_mobile/data/source/model/find_to_do_task_detail_contract_model.dart';
 import 'package:ebank_mobile/data/source/model/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
@@ -15,7 +13,7 @@ import 'base_dio.dart';
 part 'api_client.g.dart';
 
 @RestApi(baseUrl: 'http://161.189.48.75:5040') //dev
-// @RestApi(baseUrl: 'http://47.57.236.20:5040')//sit
+// @RestApi(baseUrl: 'http://47.57.236.20:5040') //sit
 abstract class ApiClient {
   factory ApiClient({Dio dio, String baseUrl}) {
     dio ??= BaseDio.getInstance().getDio();
