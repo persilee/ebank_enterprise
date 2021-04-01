@@ -154,10 +154,10 @@ class _CardListPageState extends State<CardListPage> {
   Widget _cardContent(RemoteBankCard card, int position) {
     String ccy = '';
     String totalAmt = '';
-    if (_totalbalMap[position].ccy != null) {
+    if (_totalbalMap.length > 0 && _totalbalMap[position].ccy != null) {
       ccy = _totalbalMap[position].ccy;
     }
-    if (_totalbalMap[position].currBal != null) {
+    if (_totalbalMap.length > 0 && _totalbalMap[position].currBal != null) {
       totalAmt = _totalbalMap[position].currBal;
     }
     return Container(
@@ -356,7 +356,10 @@ class _CardListPageState extends State<CardListPage> {
               if (this.mounted) {
                 setState(() {
                   //余额+币种
-                  _totalbalMap[position] = element.cardListBal[0];
+                  if (element.cardListBal.length > 0) {
+                    _totalbalMap[position] = element.cardListBal[0];
+                  }
+
                   // _totalbalMap[position].currBal;
                   // Map map = <String, String>{};
                   // map["currBal"] = element.cardListBal[0].currBal;
@@ -371,7 +374,9 @@ class _CardListPageState extends State<CardListPage> {
         }).catchError((e) {
           HSProgressHUD.dismiss();
           Fluttertoast.showToast(
-              msg: e.toString(), gravity: ToastGravity.CENTER);
+            msg: e.toString(),
+            gravity: ToastGravity.CENTER,
+          );
         });
       }
     }

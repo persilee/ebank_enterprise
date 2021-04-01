@@ -743,7 +743,7 @@ class _HomePageState extends State<HomePage> {
   //功能点击事件
   VoidCallback _featureClickFunction(BuildContext context, String title) {
     return () {
-      // if (['0', '1', '2', '3'].contains(_belongCustStatus)) {
+      // if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
       //   HsgShowTip.notOpenAccountTip(
       //     context: context,
       //     click: (value) {
