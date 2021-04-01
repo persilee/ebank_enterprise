@@ -1,5 +1,6 @@
 import 'package:ebank_mobile/data/source/model/get_loan_money_caculate.dart';
 import 'package:ebank_mobile/data/source/model/post_repayment.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///贷款相关接口
 /// Author: fanfluyao
@@ -26,6 +27,14 @@ class LoanDataRepository {
         (data) => LoanApplicationResp.fromJson(data));
   }
 
+  //贷款申请提交接口
+  Future<LoanApplicationResp> submitLoanApplication(
+      LoanApplicationReq loanApplicationReq, String tag) {
+    print('==========$loanApplicationReq');
+    return request('/loan/contracts/applyForLoan', loanApplicationReq, tag,
+        (data) => LoanApplicationResp.fromJson(data));
+  }
+
   //贷款目录接口
   Future<GetLoanListResp> getLoanList(GetLoanListReq req, String tag) {
     return request('/loan/masters/getLoanMastList', req, tag,
@@ -45,10 +54,9 @@ class LoanDataRepository {
     return request('loan/repayments/postAdvanceRepayment', req, tag,
         (data) => GetLoanCaculateResp.fromJson(data));
   }
-  
+
   //提交还款接口
-  Future<PostRepaymentResp> postRepayment(
-      PostRepaymentReq req, String tag) {
+  Future<PostRepaymentResp> postRepayment(PostRepaymentReq req, String tag) {
     return request('loan/repayments/postRepayment', req, tag,
         (data) => PostRepaymentResp.fromJson(data));
   }
