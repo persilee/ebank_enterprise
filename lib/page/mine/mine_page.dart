@@ -864,7 +864,7 @@ class _MinePageState extends State<MinePage> {
       Fluttertoast.showToast(msg: '图片异常，请重新选择', gravity: ToastGravity.CENTER);
     } else {
       File file = File(_imgPath);
-      ApiClient().uploadAvatar(file).then((value) {
+      ApiClient().uploadAvatar(BaseBody(body: {}), file).then((value) {
         //, BaseBody(body: {})
         print(value);
       }).catchError((e) {
