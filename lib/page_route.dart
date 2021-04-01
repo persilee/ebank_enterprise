@@ -69,6 +69,7 @@ import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_rate_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_open_transfer_page.dart';
+import 'package:ebank_mobile/page/transfer/hsg_open_transfer_preview_page.dart';
 
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_preview_page.dart';
@@ -145,6 +146,7 @@ var pageFeatureList = '/hsg_feature_list_page';
 var pageTransfer = '/hsg_transfer_page';
 var pageAuthorizationHistory = '/authorization_history_page';
 var pageTransferInternal = '/hsg_transfer_internal_page';
+var pageTransferOrderPreview = 'hsg_open_transfer_preview_page.dart';
 var pageTransferInternalPreview = '/hsg_transfer_internal_preview_page';
 var pageTransferInternationalPreview =
     '/hsg_transfer_international_preview_page';
@@ -245,6 +247,7 @@ var appRoutes = {
   pageTransfer: (context) => TransferPage(),
   pageAuthorizationHistory: (context) => AuthorizationHistoryPage(),
   pageTransferInternal: (context) => TransferInternalPage(),
+  pageTransferOrderPreview: (context) => TransferOrderPreviewPage(),
   pageTransferInternalPreview: (context) => TransferInternalPreviewPage(),
   pageTransferInternationalPreview: (context) =>
       TransferinternationalPreviewPage(),

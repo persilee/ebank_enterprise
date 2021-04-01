@@ -1,21 +1,29 @@
+import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///预约转账页面
 /// Author: wangluyao
 /// Date: 2020-12-28
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/add_transfer_plan.dart';
-import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
+import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
+import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
+import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
+import 'package:ebank_mobile/page/transfer/data/transfer_order_data.dart';
+import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -55,7 +63,6 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   var bals = [];
   var ccyList = ['CNY'];
   var tranferType;
-  int _accountIndex = 0;
   var accountSelect = '';
   List<String> ccyLists = [];
   List<CardBalBean> cardBal = [];
@@ -79,8 +86,43 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   var _payeeNameController = TextEditingController();
   var _payeeAccountController = TextEditingController();
   var _payeeBankCodeController = TextEditingController();
+  var _planNameController = TextEditingController();
   String _payPassword = '';
   String _smsCode = '';
+  //转入币种
+  String _payCcy = '';
+  List<String> _payCcyList = [];
+  int _payIndex = 0;
+
+  //支付币种
+  String _transferCcy = '';
+  int _transferIndex = 0;
+  List<String> _transferCcyList = [];
+
+  //本地币种
+  String _localeCcy = '';
+
+  //账户选择
+  String _account = '';
+  List<String> _accountList = [];
+  int _accountIndex = 0;
+
+  //余额
+  String _balance = '';
+  List<String> _balanceList = [];
+
+  //预计收款金额
+  String _amount = '0';
+
+  //限额
+  String _limit = '';
+
+  //汇率
+  String _xRate = '';
+
+  var _transferMoneyController = new TextEditingController();
+
+  var _remarkController = new TextEditingController();
 
   //预约频率集合
   List frequency = [
@@ -102,57 +144,116 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     }
   ];
 
-  _transferInputChange(String transfer) {
-    remark = transfer;
-  }
-
-  _amountInputChange(String title) {
-    money = double.parse(title);
-  }
-
-  //选择货币方法
-  _getCcy() async {
-    final result = await showDialog(
-        context: context,
-        builder: (context) {
-          return HsgSingleChoiceDialog(
-            title: S.current.currency_choice,
-            items: ccyList,
-            positiveButton: S.current.confirm,
-            negativeButton: S.current.cancel,
-            lastSelectedPosition: _position,
-          );
-        });
-
-    if (result != null && result != false) {
-      //货币种类
-      setState(() {
-        _position = result;
-        _changedCcyTitle = ccyList[_position];
-      });
-      //余额
-      _getCardTotals(_changedAccountTitle);
-    }
-  }
-
-  _nameInputChange(String name) {
-    payeeName = name;
-  }
-
-  _accountInputChange(String account) {
-    payeeCardNo = account;
-  }
-
   @override
   void initState() {
     super.initState();
-    _payeeNameController.addListener(() {
-      _nameInputChange(_payeeNameController.text); //输入框内容改变时调用
-    });
-    _payeeAccountController.addListener(() {
-      _accountInputChange(_payeeAccountController.text); //输入框内容改变时调用
-    });
     _loadTransferData();
+    _transferMoneyController.addListener(() {
+      if (_transferMoneyController.text.length == 0) {
+        _amount = '0';
+        _xRate = '-';
+      }
+      _rateCalculate();
+    });
+  }
+
+  @override
+  void dispose() {
+    _payeeNameController.dispose();
+    _planNameController.dispose();
+    _remarkController.dispose();
+    _transferMoneyController.dispose();
+    _payeeAccountController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(intl.S.current.open_transfer),
+        actions: <Widget>[
+          Container(
+            margin: EdgeInsets.only(right: 15),
+            child: InkWell(
+              child: Text(
+                intl.S.current.transfer_plan,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  height: 3.0,
+                ),
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, pageTransferPlan);
+              },
+            ),
+          ),
+        ],
+      ),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverToBoxAdapter(
+            child: _transferInfo(), // 计划信息
+          ),
+          _frequencyBtn(), //选择频率按钮
+          SliverToBoxAdapter(
+            //选择转账时间和截止日期
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: groupValue == '0'
+                  ? _once(_start, 0)
+                  : _manyTimes(_start, _end, 0, 1),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 20,
+            ),
+          ),
+          //转账方法
+          //转账金额和币种
+          TransferAccount(
+            payCcy: _payCcy,
+            transferCcy: _transferCcy,
+            limit: _limit,
+            account: _account,
+            balance: _balance,
+            amount: _amount,
+            rate: _xRate,
+            transferMoneyController: _transferMoneyController,
+            callback: _boolBut,
+            payCcyDialog: payCcyDialog,
+            transferCcyDialog: transferCcyDialog,
+            accountDialog: _accountDialog,
+          ),
+          //获取用户姓名及账号方法
+          _payeeWidget(),
+          //备注
+          _remarkWidget(),
+          //按钮
+          _submitButton(),
+        ],
+      ),
+    );
+  }
+
+  //附言
+  Widget _remarkWidget() {
+    return SliverToBoxAdapter(
+      child: Container(
+        color: Colors.white,
+        margin: EdgeInsets.only(top: 20),
+        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+        child: TextFieldContainer(
+          title: S.current.transfer_postscript,
+          hintText: S.current.transfer,
+          keyboardType: TextInputType.text,
+          controller: _remarkController,
+          callback: _boolBut,
+        ),
+      ),
+    );
   }
 
   //改变groupValue为选中预约频率的type值
@@ -423,7 +524,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               '-28')
           : DateTime.parse('2100-12-31'),
       initialDateTime: _startValue,
-      //选择每月转账时间只显示日，选择每年转账时间只显示月和日
+      //选择每月转账时间只显示日,选择每年转账时间只显示月和日
       dateFormat: double.parse(groupValue) > 1
           ? (groupValue == '2' ? 'dd日' : 'MM月-dd日')
           : 'yyyy年-MM月-dd日',
@@ -435,17 +536,17 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             _startValue = DateFormat('yyyy-MM-dd').format(startDate) == ''
                 ? _startValue
                 : startDate;
-            //当选择每月转账时间的日期在当前日期前，截止日期加一月
+            //当选择每月转账时间的日期在当前日期前,截止日期加一月
             DateTime nextMonth = DateTime.now();
             nextMonth = startDate.isAfter(DateTime.now())
                 ? DateTime.now()
                 : DateTime(nextMonth.year, nextMonth.month + 1, nextMonth.day);
-            //当选择每年转账时间的日期在当前日期前，截止日期加一年
+            //当选择每年转账时间的日期在当前日期前,截止日期加一年
             DateTime nextYear = DateTime.now();
             nextYear = startDate.isAfter(DateTime.now())
                 ? DateTime.now()
                 : DateTime(nextYear.year + 1, nextYear.month, nextYear.day);
-            //每月开始时间只显示日，每年开始时间只显示月和日
+            //每月开始时间只显示日,每年开始时间只显示月和日
             if (double.parse(groupValue) > 1) {
               if (groupValue == '2') {
                 _start = DateFormat('dd').format(startDate);
@@ -455,7 +556,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             } else {
               _start = DateFormat('yyyy-MM-dd').format(startDate);
             }
-            //每月结束时间只显示月和日，每年结束时间只显年
+            //每月结束时间只显示月和日,每年结束时间只显年
             if (double.parse(groupValue) > 1) {
               if (groupValue == '2') {
                 _end = startDate.isAfter(DateTime.now())
@@ -474,11 +575,11 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
               _endValue = _startValue; //仅1次转账时间等于截止日期
             } else if (groupValue == '2') {
               _endValue = (startDate.isAfter(DateTime.now()))
-                  ? DateTime.now() //当选择每月转账时间的日期在当前日期前，
+                  ? DateTime.now() //当选择每月转账时间的日期在当前日期前,
                   : nextMonth; //截止日期加一月
             } else if (groupValue == '3') {
               _endValue = (startDate.isAfter(DateTime.now()))
-                  ? DateTime.now() //当选择每年转账时间的日期在当前日期前，
+                  ? DateTime.now() //当选择每年转账时间的日期在当前日期前,
                   : nextYear; //截止日期加一年
             }
           },
@@ -490,12 +591,12 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
 
 //选择结束时间弹窗
   _endCupertinoPicker(int i, BuildContext context) {
-    //当选择每月转账时间的日期在当前日期前，截止日期加一月
+    //当选择每月转账时间的日期在当前日期前,截止日期加一月
     DateTime nextMonth = DateTime.now();
     nextMonth = _startValue.isAfter(DateTime.now())
         ? DateTime.now()
         : DateTime(nextMonth.year, nextMonth.month + 1, nextMonth.day);
-//当选择每年转账时间的日期在当前日期前，截止日期加一年
+//当选择每年转账时间的日期在当前日期前,截止日期加一年
     DateTime nextYear = DateTime.now();
     nextYear = _startValue.isAfter(DateTime.now())
         ? DateTime.now()
@@ -671,14 +772,15 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       child: Column(
         children: [
           Container(
-            child: Row(
-              children: [
-                //计划名称
-                _leftText(intl.S.current.plan_name),
-                _inputPlanName(),
-              ],
-            ),
-          ),
+              margin: EdgeInsets.only(left: 15, right: 15),
+              child: TextFieldContainer(
+                title: intl.S.current.plan_name,
+                hintText: intl.S.current.hint_input_plan_name,
+                controller: _planNameController,
+                keyboardType: TextInputType.text,
+                length: 30,
+                callback: _boolBut,
+              )),
           _line(),
           //预约频率
           Container(
@@ -696,24 +798,33 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     );
   }
 
+  //增加转账伙伴图标
   Widget _getImage() {
     return InkWell(
       onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
         Navigator.pushNamed(context, pageTranferPartner, arguments: '0').then(
           (value) {
-            if (value != null) {
-              Rows rowListPartner = value;
-              _payeeNameController.text = rowListPartner.payeeName;
-              _payeeAccountController.text = rowListPartner.payeeCardNo;
-              _payeeBankCodeController.text = rowListPartner.bankCode;
-            } else {}
+            setState(() {
+              if (value != null) {
+                Rows rowListPartner = value;
+                _payeeNameController.text = rowListPartner.payeeName;
+                _payeeAccountController.text = rowListPartner.payeeCardNo;
+                _remarkController.text = rowListPartner.remark;
+                payerBankCode = rowListPartner.bankCode;
+              }
+              _boolBut();
+            });
           },
         );
       },
-      child: Image(
-        image: AssetImage('images/login/login_input_account.png'),
-        width: 20,
-        height: 20,
+      child: Container(
+        margin: EdgeInsets.only(left: 5),
+        child: Image(
+          image: AssetImage('images/login/login_input_account1.png'),
+          width: 20,
+          height: 20,
+        ),
       ),
     );
   }
@@ -731,116 +842,217 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           );
         });
     if (isPassword != null && isPassword == true) {
-      _addTransferPlan();
+      // _addTransferPlan();
       Navigator.pushNamed(context, pageDepositRecordSucceed,
           arguments: "advanceTransfer");
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(intl.S.current.open_transfer),
-        actions: <Widget>[
-          Container(
-            child: Text.rich(
-              TextSpan(
-                  text: intl.S.current.transfer_plan,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    height: 3.0,
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigator.pushNamed(context, pageTransferPlan);
-                    }),
+  //收款方
+  Widget _payeeWidget() {
+    return SliverToBoxAdapter(
+      child: Container(
+        color: Colors.white,
+        margin: EdgeInsets.only(top: 20),
+        padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+        child: Column(
+          children: [
+            _payeeName(),
+            TextFieldContainer(
+              title: S.of(context).receipt_side_name,
+              hintText: S.of(context).hint_input_receipt_name,
+              widget: _getImage(),
+              keyboardType: TextInputType.text,
+              controller: _payeeNameController,
+              callback: _boolBut,
+              isWidget: true,
+              length: 35,
+              // isRegEXp: true,
+              // regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
             ),
-          )
-        ],
-      ),
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverToBoxAdapter(
-            child: _transferInfo(), // 计划信息
-          ),
-          _frequencyBtn(), //选择频率按钮
-          SliverToBoxAdapter(
-            //选择转账时间和截止日期
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: groupValue == '0'
-                  ? _once(_start, 0)
-                  : _manyTimes(_start, _end, 0, 1),
+            TextFieldContainer(
+              title: S.of(context).receipt_side_account,
+              hintText: S.of(context).hint_input_receipt_account,
+              keyboardType: TextInputType.number,
+              controller: _payeeAccountController,
+              callback: _boolBut,
+              length: 20,
+              isRegEXp: true,
+              regExp: '[0-9]',
             ),
-          ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 20,
-            ),
-          ),
-          //转账方法
-          transferPayerWidget(
-              context,
-              _limitMoney,
-              _changedCcyTitle,
-              _currBal,
-              _changedAccountTitle,
-              ccy,
-              singleLimit,
-              totalBalance,
-              cardNo,
-              payerBankCode,
-              money,
-              _amountInputChange,
-              _selectAccount,
-              _getCcy,
-              _getCardTotals),
-          //获取用户姓名及账号方法
-          transferPayeeWidget(
-              payeeCardNo,
-              payeeName,
-              accountSelect,
-              payeeNameForSelects,
-              _getImage,
-              context,
-              intl.S.current.receipt_side,
-              intl.S.current.company_name,
-              intl.S.current.account_num,
-              intl.S.current.please_input,
-              intl.S.current.please_input,
-              _nameInputChange,
-              _accountInputChange,
-              _payeeNameController,
-              _payeeAccountController),
-          //备注
-          transferOtherWidget(context, '', _transferInputChange),
-          SliverToBoxAdapter(
-            child: _transferBtn(),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-//选择账号方法
-  _selectAccount() async {
+  Widget _payeeName() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          child: Text(
+            S.of(context).receipt_side,
+            style: TextStyle(color: HsgColors.describeText, fontSize: 13),
+            textAlign: TextAlign.right,
+          ),
+        ),
+      ],
+    );
+  }
+
+  //按钮是否能点击
+  _boolBut() {
+    if (_transferMoneyController.text != '' &&
+        _payeeNameController.text != '' &&
+        _payeeAccountController.text != '' &&
+        _transferCcy != '' &&
+        _planNameController.text != '') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  //币种弹窗
+  Future payCcyDialog() async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) {
+        return HsgSingleChoiceDialog(
+          title: S.of(context).currency_choice,
+          items: _payCcyList,
+          positiveButton: S.of(context).confirm,
+          negativeButton: S.of(context).cancel,
+          lastSelectedPosition: _payIndex,
+        );
+      },
+    );
+    if (result != null && result != false) {
+      setState(() {
+        _payIndex = result;
+        _payCcy = _payCcyList[result];
+      });
+      _loadData(_account);
+    }
+  }
+
+  //提交按钮
+  Widget _submitButton() {
+    return SliverToBoxAdapter(
+      child: Container(
+        margin: EdgeInsets.only(top: 50, bottom: 50),
+        child: HsgButton.button(
+          title: S.current.next_step,
+          click: _boolBut() ? _judgeDialog : null,
+          isColor: _boolBut(),
+        ),
+      ),
+    );
+  }
+
+  _judgeDialog() {
+    // if (double.parse(_transferMoneyController.text) > double.parse(_limit) ||
+    if (double.parse(_transferMoneyController.text) > double.parse(_balance)) {
+      // if (double.parse(_limit) > double.parse(_balance)) {
+      Fluttertoast.showToast(
+        msg: "余额不足",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Color(0x57272727),
+        textColor: Color(0xffffffff),
+      );
+      // }
+      // else {
+      //   Fluttertoast.showToast(
+      //     msg: "超过限额",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.CENTER,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Color(0x57272727),
+      //     textColor: Color(0xffffffff),
+      //   );
+      // }
+    } else {
+      Navigator.pushNamed(
+        context,
+        pageTransferOrderPreview,
+        arguments: TransferOrderData(
+          _transferMoneyController.text, //amount
+          _balance, //availableBalance
+          "", //bankSwift
+          "", //city
+          "", //costOptions
+          _payCcy, //creditCurrency
+          "", //day
+          _transferCcy, //debitCurrency
+          "", //district
+          false, //enabled
+          _endTime, //endDate
+          0, //feeAmount
+          groupValue, //frequency
+          "", //midBankSwift
+          "", //month
+          "", //payPassword
+          "", //payeeAddress
+          _payeeBankCodeController.text, //payeeBankCode
+          _payeeAccountController.text, //payeeCardNo
+          _payeeNameController.text, //payeeName
+          payerBankCode, //payerBankCode
+          "", //payerCardNo
+          "", //payerName
+          _planNameController.text, //planName
+          _remarkController.text, //remark
+          "", //remittancePurposes
+          "", //remitterAddress
+          "", //smsCode
+          _startTime, //startDate
+          "0", //transferType
+        ),
+      );
+    }
+  }
+
+  Future transferCcyDialog() async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) {
+        return HsgSingleChoiceDialog(
+          title: S.of(context).currency_choice,
+          items: _transferCcyList,
+          positiveButton: S.of(context).confirm,
+          negativeButton: S.of(context).cancel,
+          lastSelectedPosition: _transferIndex,
+        );
+      },
+    );
+    if (result != null && result != false) {
+      setState(() {
+        _transferIndex = result;
+        _transferCcy = _transferCcyList[result];
+      });
+    }
+    _rateCalculate();
+  }
+
+  //账号弹窗
+  _accountDialog() async {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
           return HsgBottomSingleChoice(
             title: S.current.account_lsit,
-            items: cardNoList,
+            items: _accountList,
             lastSelectedPosition: _accountIndex,
           );
         });
     if (result != null && result != false) {
       setState(() {
         _accountIndex = result;
-        _changedAccountTitle = cardNoList[_accountIndex];
+        _account = _accountList[result];
       });
-      _getCardTotals(_changedAccountTitle);
+      _loadData(_account);
     }
   }
 
@@ -853,160 +1065,130 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
         if (element is GetCardListResp) {
           setState(() {
             //付款方卡号
-            cardNo = element.cardList[0].cardNo;
+            _account = element.cardList[0].cardNo;
             element.cardList.forEach((e) {
-              cardNoList.add(e.cardNo);
+              _accountList.add(e.cardNo);
             });
-            //付款方银行名字
-            payerBankCode = element.cardList[0].ciName;
-            //付款方姓名
-            //  payerName = element.cardList[0].ciName;
-            //付款方卡号
-            payerCardNo = element.cardList[0].ciName;
           });
-          _getCardTotal(cardNo);
+          _loadData(_account);
+          _loadLocalCcy();
         }
       });
     });
   }
 
-  _getCardTotal(String cardNo) {
-    Future.wait({
-      CardDataRepository().getCardBalByCardNo(
-          GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
-      CardDataRepository().getCardLimitByCardNo(
-          GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
-    }).then((value) {
-      value.forEach((element) {
-        // 通过卡号查询余额
-        if (element is GetSingleCardBalResp) {
-          setState(() {
-            //余额
+  _loadData(String cardNo) async {
+    CardDataRepository()
+        .getCardBalByCardNo(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq')
+        .then((element) {
+      if (this.mounted) {
+        setState(() {
+          //初始币种和余额
+          if (_payCcy == '' || _balance == '') {
+            _payCcy = element.cardListBal[0].ccy;
+            _balance = element.cardListBal[0].currBal;
             element.cardListBal.forEach((element) {
-              ccyListOne.clear();
-              ccyListOne.add(element.ccy);
-              // if (element.ccy == 'USD') {
-              //   _currBal = element.currBal;
-              //   _changedCcyTitle = 'USD';
-              //   _loacalCurrBal = _currBal;
-              // }
-              if (element.ccy == 'CNY') {
-                _currBal = element.currBal;
-                _changedCcyTitle = 'CNY';
-                _loacalCurrBal = _currBal;
+              if (element.ccy == _localeCcy) {
+                _payCcy = element.ccy;
+                _balance = element.currBal;
               }
             });
+          }
+          _payCcyList.clear();
+          _balanceList.clear();
+          _payIndex = 0;
+          element.cardListBal.forEach((element) {
+            _payCcyList.add(element.ccy);
+            _balanceList.add(element.currBal);
           });
+          if (_payCcyList.length == 0) {
+            _payCcyList.add(_localeCcy);
+            _balanceList.add('0.0');
+          }
+          if (_payCcyList.length > 1) {
+            for (int i = 0; i < _payCcyList.length; i++) {
+              if (_payCcy == _payCcyList[i]) {
+                _balance = _balanceList[i];
+                break;
+              } else {
+                _payIndex++;
+              }
+            }
+          } else {
+            _payCcy = _payCcyList[0];
+            _balance = _balanceList[0];
+          }
+          if (!_payCcyList.contains(_payCcy)) {
+            _payCcy = _payCcyList[0];
+            _balance = _balanceList[0];
+            _payIndex = 0;
+          }
+          _getTransferCcySamePayCcy();
+          _rateCalculate();
+        });
+      }
+    }).catchError((e) {});
+  }
+
+  //收款方币种与转账币种相同
+  _getTransferCcySamePayCcy() {
+    setState(() {
+      _transferIndex = 0;
+      for (int i = 0; i < _transferCcyList.length; i++) {
+        if (_transferCcyList[i] == _payCcy) {
+          _transferCcy = _payCcy;
+          break;
+        } else {
+          _transferIndex++;
         }
-        //查询额度
-        else if (element is GetCardLimitByCardNoResp) {
-          setState(() {
-            //单次限额
-            singleLimit = element.singleLimit;
-          });
-        }
-      });
+      }
     });
   }
 
-  _addTransferPlan() {
-    Future.wait({
-      TransferDataRepository().addTransferPlan(
-          AddTransferPlanReq(
-            money,
-            '',
-            '',
-            '',
-            'HKD', // _changedCcyTitle,
-            'HKD',
-            '',
-            false,
-            _endTime,
-            0,
-            groupValue,
-            '',
-            '',
-            _payeeBankCodeController.text,
-            _payeeAccountController.text,
-            _payeeNameController.text,
-            payerBankCode,
-            _changedAccountTitle,
-            payerName,
-            '',
-            planName,
-            remark,
-            '',
-            '',
-            _startTime,
-            '0',
-            _payPassword,
-            _smsCode,
-          ),
-          'AddTransferPlanReq')
-    }).then((value) {
-      setState(() {});
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+  // 获取币种列表
+  Future _loadLocalCcy() async {
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _transferCcyList.clear();
+        data.publicCodeGetRedisRspDtoList.forEach((e) {
+          _transferCcyList.add(e.code);
+        });
+      }
     });
   }
 
-  //选择货币和余额
-  _getCardTotals(String _changedAccountTitle) {
-    Future.wait({
-      CardDataRepository().getCardBalByCardNo(
-          GetSingleCardBalReq(_changedAccountTitle), 'GetSingleCardBalReq'),
-      CardDataRepository().getCardLimitByCardNo(
-          GetCardLimitByCardNoReq(_changedAccountTitle),
-          'GetCardLimitByCardNoReq'),
-    }).then((value) {
-      value.forEach((element) {
-        // 通过卡号查询余额
-        if (element is GetSingleCardBalResp) {
-          ccyLists.clear();
-          ccyList.clear();
-          _currBal = '';
-          _position = 0;
-          element.cardListBal.forEach((bals) {
-            totalBalances.add(bals.avaBal);
-          });
-          // var cardListB = new List();
-          element.cardListBal.forEach((cardBalBean) {
-            if (cardBalBean.ccy != '') {
-              ccyList.add(cardBalBean.ccy);
-            }
-            if (_changedCcyTitle == cardBalBean.ccy) {
-              _currBal = cardBalBean.currBal.toString();
-            }
-          });
-          //   if (ccyList.length > 1) {
-          //     if (_changedCcyTitle == 'USD') {
-          //       _position = 2;
-          //     } else if (_changedCcyTitle == 'CNY') {
-          //       _position = 0;
-          //     }
-          //   } else {
-          //     _position = 0;
-          //   }
-          //   if (_changedCcyTitle != 'USD' &&
-          //       ccyList.length < 3 &&
-          //       ccyList.length > 0) {
-          //     _changedCcyTitle = 'USD';
-          //     _currBal = _loacalCurrBal;
-          //   }
-          //   if (element.cardListBal.length == 0) {
-          //     _currBal = '';
-          //     _changedCcyTitle = 'CNY';
-          //     ccyList.add('CNY');
-          //     _position = 0;
-          //   }
-        }
-        //查询额度
-        else if (element is GetCardLimitByCardNoResp) {
+  //汇率换算
+  Future _rateCalculate() async {
+    double _payerAmount = 0;
+    if (_transferMoneyController.text == '') {
+      if (this.mounted) {
+        setState(() {
+          _amount = '0';
+          _xRate = '-';
+        });
+      }
+    } else {
+      _payerAmount =
+          AiDecimalAccuracy.parse(_transferMoneyController.text).toDouble();
+      ForexTradingRepository()
+          .transferTrial(
+              TransferTrialReq(
+                  amount: _payerAmount,
+                  corrCcy: _transferCcy,
+                  defaultCcy: _payCcy),
+              'TransferTrialReq')
+          .then((data) {
+        if (this.mounted) {
           setState(() {
-            _limitMoney = element.singleLimit;
+            _amount = data.optExAmt;
+            _xRate = data.optExRate;
           });
         }
+      }).catchError((e) {
+        print(e.toString());
       });
-    });
+    }
   }
 }
