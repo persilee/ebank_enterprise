@@ -28,11 +28,15 @@ class _OpenAccountIdentifyResultsFailurePageState
   ///证件类型
   String _documentType = '';
 
+  ///是否是快速开户
+  bool _isQuick;
+
   @override
   Widget build(BuildContext context) {
     Map data = ModalRoute.of(context).settings.arguments;
     _businessId = data['businessId'];
     _documentType = data['documentType'];
+    _isQuick = data['isQuick'];
 
     final size = MediaQuery.of(context).size;
 
@@ -129,7 +133,7 @@ class _OpenAccountIdentifyResultsFailurePageState
     }
     final prefs = await SharedPreferences.getInstance();
     String userPhone = prefs.getString(ConfigKey.USER_PHONE);
-    String businessId = _businessId + '&' + userPhone;
+    String businessId = _businessId + '-' + userPhone;
 
     HSProgressHUD.show();
 
@@ -148,8 +152,11 @@ class _OpenAccountIdentifyResultsFailurePageState
           value.infoStr['IdNum'] != '') {
         Navigator.pushNamed(
           context,
-          pageOpenAccountIdentifySuccessfulFailure,
-          arguments: {'valueData': value},
+          pageOpenAccountIdentifySuccessful,
+          arguments: {
+            'valueData': value,
+            'isQuick': _isQuick,
+          },
         );
       } else {
         Fluttertoast.showToast(

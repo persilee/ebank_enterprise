@@ -390,27 +390,27 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
 
   //贷款申请请求
   _reqData() {
-    String _prdtCode = "LN000008";
-    String _repaymentMethod = "EPI";
-    String _termUnit = "MONTH";
-    LoanDataRepository()
-        .getLoanApplication(
-            LoanApplicationReq(
-                _currency,
-                _custId,
-                _contactsController.text,
-                int.parse(_moneyController.text),
-                _goal,
-                _phoneController.text,
-                _prdtCode,
-                _remarkController.text,
-                _repaymentMethod,
-                _termUnit,
-                _index),
-            "getLoanApplication")
-        .then((data) {})
-        .catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
+    //   String _prdtCode = "LN000008";
+    //   String _repaymentMethod = "EPI";
+    //   String _termUnit = "MONTH";
+    //   LoanDataRepository()
+    //       .getLoanApplication(
+    //           LoanApplicationReq(
+    //               _currency,
+    //               _custId,
+    //               _contactsController.text,
+    //               int.parse(_moneyController.text),
+    //               _goal,
+    //               _phoneController.text,
+    //               _prdtCode,
+    //               _remarkController.text,
+    //               _repaymentMethod,
+    //               _termUnit,
+    //               _index),
+    //           "getLoanApplication")
+    //       .then((data) {})
+    //       .catchError((e) {
+    //     Fluttertoast.showToast(msg: e.toString());
+    //   });
   }
 }

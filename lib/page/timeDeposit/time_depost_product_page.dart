@@ -33,18 +33,18 @@ class TimeDepostProduct extends StatefulWidget {
 }
 
 class _TimeDepostProductState extends State<TimeDepostProduct> {
-  List<TdepProducHeadDTO> productList = [];
-  List<List<TdepProductDTOList>> producDTOList = [];
+  List<TdepProducHeadDTO> productList = []; //产品（大类）
+  List<List<TdepProductDTOList>> producDTOList = []; //子产品
   // var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
   String language = Intl.getCurrentLocale();
-  String _changedCcy = S.current.hint_please_select;
-  String _changedTerm = S.current.hint_please_select;
-  double _bal = 0.0;
+  String _changedCcy = S.current.hint_please_select; //筛选币种
+  String _changedTerm = S.current.hint_please_select; //筛选存期
+  double _bal = 0.0; //筛选金额
   TextEditingController inputValue = TextEditingController();
   int page = 1;
-  bool _isDate = false;
+  bool _isDate = false; //判断是否有数据
   List<String> terms = []; //存款期限
-  List<String> termCodes = [];
+  List<String> termCodes = []; //存款期限代码
   String _accuPeriod = ''; //计提周期
   String _auctCale = ''; //档期
   List<String> ccyList = []; //币种列表
@@ -53,9 +53,9 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
 
   void initState() {
     super.initState();
-    _getTerm();
+    _getTerm(); //获取存款期限列表
     _refreshController = RefreshController();
-    _loadData();
+    _loadData(); //获取定期产品列表
     //下拉刷新
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     //   refrestIndicatorKey.currentState.show();
@@ -65,7 +65,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       if (this.mounted) {
         setState(() {
           if (object) {
-            _loadData();
+            _loadData(); //获取定期产品列表
           }
         });
       }
@@ -390,8 +390,12 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           style: TextStyle(fontSize: 11, color: Colors.white),
         ),
         onPressed: () {
-          _loadData();
-          Navigator.of(context).pop();
+          if (this.mounted) {
+            setState(() {
+              _loadData();
+            });
+            Navigator.of(context).pop();
+          }
         },
       ),
     );
@@ -422,6 +426,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
               inputValue.text = '';
               _changedCcy = S.current.hint_please_select;
               _changedTerm = S.current.hint_please_select;
+              _accuPeriod = '';
+              _auctCale = '';
               (popcontext as Element).markNeedsBuild();
               _loadData();
             });
@@ -431,6 +437,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     );
   }
 
+//筛选框按钮行
   Widget _screenBtnRow(BuildContext popcontext) {
     return Container(
       color: Colors.white,
@@ -612,11 +619,11 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                     ),
                   ),
                   child: _productInfo(
-                      name,
-                      minRate,
-                      maxRate,
-                      tdepProductList[index].remark,
-                      tdepProductList[index].minAmt),
+                      name, //产品名称
+                      minRate, //最小利率
+                      maxRate, //最大利率
+                      tdepProductList[index].remark, //产品描述
+                      tdepProductList[index].minAmt), //起存金额
                 ),
               ],
             ),
@@ -689,8 +696,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                             },
                             content: Container(
                               child: CustomScrollView(
-                                slivers:
-                                    _titleSection(productList, producDTOList),
+                                slivers: _titleSection(
+                                    productList, producDTOList), //产品列表
                               ),
                             ),
                           )
@@ -703,6 +710,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     );
   }
 
+//获取定期产品列表
   Future<void> _loadData() async {
     _isLoading = true;
     TimeDepositDataRepository()
@@ -720,7 +728,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                 ''))
         .then((data) {
       if (data.length != 0) {
-        List ccys = [];
+        // List ccys = [];
         _isDate = true;
         if (this.mounted) {
           setState(() {
@@ -730,7 +738,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
               productList.add(element.tdepProducHeadDTO);
               producDTOList.add(element.tdepProductDTOList);
               element.tdepProductDTOList.forEach((data) {
-                ccys.add(data.ccy);
+                // ccys.add(data.ccy);
                 bool isContainer = ccyList.contains(data.ccy);
                 if (!isContainer) {
                   ccyList.add(data.ccy);
@@ -752,7 +760,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       _accuPeriod = '';
       _auctCale = '';
       (context as Element).markNeedsBuild();
-      _loadData();
+      // _loadData();
     });
   }
 

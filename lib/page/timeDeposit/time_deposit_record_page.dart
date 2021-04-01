@@ -5,12 +5,8 @@
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
 
-import 'dart:math';
-
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/account_overview_repository.dart';
 import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
@@ -34,14 +30,14 @@ class TimeDepositRecordPage extends StatefulWidget {
 enum LoadingStatus { STATUS_LOADING, STATUS_COMPLETED, STATUS_IDEL }
 
 class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
-  var ccy = '';
-  var totalAmt = '';
-  var _defaultCcy = '';
-  List<TotalAssetsCardListBal> cardList;
-  List<DepositRecord> rowList = [];
+  var ccy = ''; //币种
+  var totalAmt = ''; //定期存单总额
+  var _defaultCcy = ''; //默认币种
+  // List<TotalAssetsCardListBal> cardList;
+  List<DepositRecord> rowList = []; //定期存单列表
   List<DepositRecord> list = []; //页面显示的记录列表
 
-  double conRate;
+  double conRate; //利率
   bool _isDate = false; //false
   LoadingStatus loadStatus; //加载状态
   int page = 1;
@@ -56,6 +52,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     super.initState();
     _refreshController = RefreshController();
     _scrollController = ScrollController();
+    //获取定期存单列表
     _loadDeopstData();
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     //   refrestIndicatorKey.currentState.show();
@@ -100,6 +97,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: _appBar(),
       body: _getContent(rowList),
       // 下拉刷新时调用_loadDeopstData
     );
@@ -164,47 +162,103 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     );
   }
 
+  _appBar() {
+    return AppBar(
+      title: Text(S.current.deposit_record),
+      centerTitle: true,
+      iconTheme: IconThemeData(
+        color: Color(0xffFEFEFE),
+      ),
+      textTheme: TextTheme(
+        headline6: TextStyle(
+          color: Color(0xffFEFEFE),
+          fontSize: 18,
+          fontStyle: FontStyle.normal,
+        ),
+      ),
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [
+            Color(0xFF1775BA),
+            Color(0xFF3A9ED1),
+          ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+        ),
+      ),
+      bottom: PreferredSize(
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              Color(0xFF1775BA),
+              Color(0xFF3A9ED1),
+            ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+          ),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: [
+                _totalAmt(),
+                _totalCcy(),
+              ],
+            ),
+          ),
+        ),
+        preferredSize: Size(30, 150),
+      ),
+    );
+  }
+
   Widget _getContent(List<DepositRecord> rows) {
     // ignore: non_constant_identifier_names
     var SliverToBoxAdapters = <Widget>[
-      SliverAppBar(
-        pinned: true,
-        title: Text(S.current.deposit_record),
-        centerTitle: true,
-        backgroundColor: Colors.yellowAccent[300],
-        floating: true,
-        expandedHeight: 210.0,
-        iconTheme: IconThemeData(
-            color: _headColor ? Color(0xffFEFEFE) : Color(0xff262626)),
-        textTheme: TextTheme(
-          headline6: TextStyle(
-            color: _headColor ? Color(0xffFEFEFE) : Color(0xff262626),
-            fontSize: 18,
-            fontStyle: FontStyle.normal,
-          ),
-        ),
-        flexibleSpace: FlexibleSpaceBar(
-          background: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-                Color(0xFF1775BA),
-                Color(0xFF3A9ED1),
-              ], begin: Alignment.centerLeft, end: Alignment.centerRight),
-            ),
-            // height: 110,
-            child: Container(
-              margin: EdgeInsets.only(top: 80),
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                children: [
-                  _totalAmt(),
-                  _totalCcy(),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+      // SliverAppBar(
+      //   // pinned: true,
+      //   title: Text(S.current.deposit_record),
+      //   centerTitle: true,
+      //   // backgroundColor: Colors.yellowAccent[300],
+      //   // floating: true,
+      //   // expandedHeight: 210.0,
+      //   iconTheme: IconThemeData(
+      //     color: Color(0xffFEFEFE),
+      //   ),
+      //   textTheme: TextTheme(
+      //     headline6: TextStyle(
+      //       color: Color(0xffFEFEFE),
+      //       fontSize: 18,
+      //       fontStyle: FontStyle.normal,
+      //     ),
+      //   ),
+      //   flexibleSpace: Container(
+      //     decoration: BoxDecoration(
+      //       gradient: LinearGradient(colors: [
+      //         Color(0xFF1775BA),
+      //         Color(0xFF3A9ED1),
+      //       ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+      //     ),
+      //     // height: 110,
+      //   ),
+      //   bottom: PreferredSize(
+      //     child: Container(
+      //       decoration: BoxDecoration(
+      //         gradient: LinearGradient(colors: [
+      //           Color(0xFF1775BA),
+      //           Color(0xFF3A9ED1),
+      //         ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+      //       ),
+      //       // height: 110,
+      //       child: Container(
+      //         // margin: EdgeInsets.only(top: 80),
+      //         width: MediaQuery.of(context).size.width,
+      //         child: Column(
+      //           children: [
+      //             _totalAmt(),
+      //             _totalCcy(),
+      //           ],
+      //         ),
+      //       ),
+      //     ),
+      //     preferredSize: Size(30, 150),
+      //   ),
+      // ),
       //整存整取
       _isLoading
           ? SliverToBoxAdapter(
@@ -359,6 +413,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     Navigator.pushNamed(context, pageDepositInfo, arguments: deposit);
   }
 
+//获取定期存单列表
   Future<void> _loadDeopstData() async {
     _isLoading = true;
     final prefs = await SharedPreferences.getInstance();

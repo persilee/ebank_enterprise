@@ -19,5 +19,6 @@ class ConfigKey {
 
   static const LOCAL_CCY = "local_ccy";
 
+  static const USER_TYPE = "user_type";
   static const USER_PASSWORD = "user_password"; //临时使用，方便开发，后面需要去除保存
 }

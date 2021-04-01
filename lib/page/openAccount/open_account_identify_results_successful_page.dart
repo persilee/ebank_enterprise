@@ -1,7 +1,11 @@
-import 'dart:convert';
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+/// 开户-面签结果成功页面
+/// Author: 李家伟
+/// Date: 2021-03-22
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
+import 'package:ebank_mobile/data/source/model/face_sign_upload_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_information_supplement_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_data.dart';
 import 'package:ebank_mobile/data/source/open_account_repository.dart';
@@ -11,8 +15,6 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
-import 'package:ebank_mobile/widget/hsg_dialog.dart';
-import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
@@ -30,12 +32,18 @@ class OpenAccountIdentifyResultsSuccessfulPage extends StatefulWidget {
 class _OpenAccountIdentifyResultsSuccessfulPageState
     extends State<OpenAccountIdentifyResultsSuccessfulPage> {
   AuthIdentityResp _valueData;
+
+  ///快速开户信息补录转态，如果成功则不再调用快速开户信息补录接口
   int _state;
+
+  ///是否是快速
+  bool _isQuick;
 
   @override
   Widget build(BuildContext context) {
     Map data = ModalRoute.of(context).settings.arguments;
     _valueData = data['valueData'];
+    _isQuick = data['isQuick'];
     print('${_valueData.toJson()}');
 
     final size = MediaQuery.of(context).size;
@@ -90,11 +98,16 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
               child: HsgButton.defaultButton(
                 title: S.of(context).complete,
                 click: () {
-                  // _showTypeTips(context);
-                  if (_state == 1) {
-                    _quickAccountOpening();
+                  if (_isQuick) {
+                    ///快速开户
+                    if (_state == 1) {
+                      _quickAccountOpening();
+                    } else {
+                      _openAccountQuickSubmitData();
+                    }
                   } else {
-                    _openAccountQuickSubmitData();
+                    ///完整开户面签
+                    _saveSignVideoNetwork();
                   }
                 },
               ),
@@ -105,6 +118,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     );
   }
 
+  ///快速开户成功提示
   void _showTypeTips(BuildContext context) {
     EventBusUtils.getInstance()
         .fire(GetUserEvent(msg: "通知重新获取用户信息getUser", state: 200));
@@ -125,12 +139,29 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
             return false; //继续关闭
           },
         );
-        // print(value);
-        // Navigator.of(context).pushNamedAndRemoveUntil(
-        //   pageResetPayPwdOtp,
-        //   ModalRoute.withName('/'), //清除旧栈需要保留的栈 不清除就不写这句
-        //   arguments: {"data": '11'}, //传值
-        // );
+      },
+    );
+  }
+
+  ///完整开户面签成功弹窗提示
+  void _showTypeTipsForFaceSign(BuildContext context) {
+    HsgShowTip.openAccountSuccessfulTip(
+      context,
+      (value) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) {
+            return IndexPage();
+          }),
+          (Route route) {
+            //一直关闭，直到我的时停止，停止时，整个应用只有我的和当前页面
+            print(route.settings?.name);
+            if (route.settings?.name == minePage) {
+              //'/'
+              return true; //停止关闭
+            }
+            return false; //继续关闭
+          },
+        );
       },
     );
   }
@@ -141,7 +172,6 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
 
     HSProgressHUD.show();
-    //称谓
     OpenAccountInformationSupplementDataReq dataReq = _getDataReq(phoneStr);
     OpenAccountRepository()
         .supplementQuickPartnerInfo(dataReq, 'supplementQuickPartnerInfo')
@@ -169,8 +199,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   //快速开户
   void _quickAccountOpening() async {
     String businessId = _valueData.businessId;
-    if (businessId.contains('&')) {
-      List dataList = businessId.split('&');
+    if (businessId.contains('-')) {
+      List dataList = businessId.split('-');
       if (dataList.length > 0) {
         businessId = dataList[0];
       }
@@ -197,12 +227,43 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     );
   }
 
+  //保存面签视频名称（完整开户面签数据）
+  void _saveSignVideoNetwork() async {
+    final prefs = await SharedPreferences.getInstance();
+    String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
+
+    HSProgressHUD.show();
+    String businessId = _valueData.businessId;
+    String fileName = _valueData.fileName;
+    List speechFlowData = _valueData.speechFlowData;
+    FaceSignUploadDataReq dataReq =
+        FaceSignUploadDataReq(businessId, fileName, phoneStr, speechFlowData);
+    OpenAccountRepository().saveSignVideo(dataReq, 'saveSignVideo').then(
+      (value) {
+        print(value);
+        HSProgressHUD.dismiss();
+        if (value.state == '1') {
+          _showTypeTipsForFaceSign(context);
+        }
+      },
+    ).catchError(
+      (e) {
+        HSProgressHUD.dismiss();
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+      },
+    );
+  }
+
+  ///面签数据转换（面签返回的时间格式不正确，不能直接使用）
   OpenAccountInformationSupplementDataReq _getDataReq(String phoneStr) {
     // Map valueMap = _valueData.toJson();
 
     String businessId = _valueData.businessId;
-    if (businessId.contains('&')) {
-      List dataList = businessId.split('&');
+    if (businessId.contains('-')) {
+      List dataList = businessId.split('-');
       if (dataList.length > 0) {
         businessId = dataList[0];
       }

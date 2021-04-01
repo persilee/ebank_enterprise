@@ -25,7 +25,9 @@ class HsgHttp {
   static const int _RECEIVE_TIMTOUT = 30000;
 
   Dio _dio;
-  var _baseUrl = 'http://161.189.48.75:5040/'; //'http://52.82.42.59:5040/';
+  var _baseUrl = 'http://161.189.48.75:5040/'; //dev
+  // var _baseUrl = 'http://47.57.236.20:5040/';//sit
+  //'http://52.82.42.59:5040/'; http://161.189.48.75:5040/ http://192.168.201.65:5041/
 
   static final _instance = HsgHttp._internal();
 

@@ -3,7 +3,7 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
 
 class HsgShowTip {
-  ///没有开户提示
+  ///没有开户提示(快速)
   static void notOpenAccountTip({
     BuildContext context,
     Function(dynamic value) click,
@@ -16,6 +16,24 @@ class HsgShowTip {
             message: S.of(context).openAccount_notOpen_content,
             positiveButton: S.current.confirm,
             negativeButton: S.current.cancel,
+          );
+        }).then((value) {
+      click(value);
+    });
+  }
+
+  ///没有开户提示（非快速）
+  static void notOpenAccountGotoEbankTip({
+    BuildContext context,
+    Function(dynamic value) click,
+  }) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertDialog(
+            title: S.of(context).warm_prompt,
+            message: S.of(context).open_account_goto_ebank_tip,
+            positiveButton: S.current.confirm,
           );
         }).then((value) {
       click(value);
@@ -52,6 +70,24 @@ class HsgShowTip {
           return HsgAlertDialog(
             title: S.of(context).openAccout_application_results_title,
             message: S.of(context).openAccout_application_results_content,
+            positiveButton: S.current.confirm,
+          );
+        }).then((value) {
+      click(value);
+    });
+  }
+
+  ///完整开户面签成功提示
+  static void faceSignSuccessfulTip(
+    BuildContext context,
+    Function(dynamic value) click,
+  ) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertDialog(
+            title: S.of(context).warm_prompt,
+            message: S.of(context).openAccount_faceSign_results_content,
             positiveButton: S.current.confirm,
           );
         }).then((value) {

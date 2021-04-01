@@ -30,6 +30,11 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
   @override
   Widget build(BuildContext context) {
     TransferOrderData transferData = ModalRoute.of(context).settings.arguments;
+    print(transferData.startDate +
+        "==========" +
+        transferData.payeeBankCode +
+        "----" +
+        transferData.payerBankCode);
     return Scaffold(
         appBar: AppBar(
           title: Text(S.current.transfer_the_preview),
@@ -38,14 +43,14 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
         ),
         body: ListView(
           children: [
-            // _content(transferData),
+            _content(transferData),
             _explain(),
             Container(
               margin: EdgeInsets.only(top: 50, bottom: 50),
               child: HsgButton.button(
                 title: S.current.confirm,
                 click: () {
-                  // _loadData(transferData);
+                  _loadData(transferData);
                 },
                 isColor: true,
               ),
@@ -54,7 +59,7 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
         ));
   }
 
-  Widget _content(TransferInternalData transferData) {
+  Widget _content(TransferOrderData transferData) {
     return Container(
       padding: EdgeInsets.only(left: 15, right: 15),
       child: Column(
@@ -68,10 +73,9 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
                 Container(
                   width: (MediaQuery.of(context).size.width - 40) / 2,
                   child: Text(
-                    transferData.transferIntoCcy +
+                    transferData.creditCurrency +
                         ' ' +
-                        FormatUtil.formatSringToMoney(
-                            transferData.transferIntoAmount),
+                        FormatUtil.formatSringToMoney(transferData.amount),
                     style: TextStyle(color: Color(0xff232323), fontSize: 20),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -85,22 +89,21 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
             color: Color(0xffE1E1E1),
           ),
           _getRowContent(S.current.transfer_from,
-              FormatUtil.formatSpace4(transferData.transferOutAccount)),
+              FormatUtil.formatSpace4(transferData.payerCardNo)),
           _getRowContent(S.current.to_amount,
-              FormatUtil.formatSringToMoney(transferData.transferOutAmount)),
+              FormatUtil.formatSringToMoney(transferData.amount)),
           _getRowContent(
-              S.current.payment_currency, transferData.transferOutCcy),
-          _getRowContent(
-              S.current.receipt_side_name, transferData.transferIntoName),
+              S.current.payment_currency, transferData.debitCurrency),
+          _getRowContent(S.current.receipt_side_name, transferData.payeeName),
           _getRowContent(S.current.into_account,
-              FormatUtil.formatSpace4(transferData.transferIntoAccount)),
+              FormatUtil.formatSpace4(transferData.payeeCardNo)),
           _getRowContent(
-              S.current.transfer_into_currency, transferData.transferIntoCcy),
+              S.current.transfer_into_currency, transferData.debitCurrency),
           _getRowContent(
               S.current.transfer_postscript,
-              transferData.transferRemark == ''
+              transferData.remark == ''
                   ? S.current.transfer
-                  : transferData.transferRemark),
+                  : transferData.remark),
         ],
       ),
     );
@@ -162,51 +165,56 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
   }
 
   Future _loadData(TransferOrderData transferData) async {
-    // String amount = transferData.transferIntoAccount;
-    // String transferOutCcy = transferData.transferOutCcy;
-    // String transferIntoCcy = transferData.transferIntoCcy;
-    // String payeeBankCode = transferData.payeeBankCode;
-    // String payeeCardNo = transferData.transferOutAccount;
-    // String payeeName = transferData.payeeName;
-    // String payerBankCode = transferData.payerBankCode;
-    // String cardNo = transferData.transferIntoAccount;
-    // String payerName = transferData.payerName;
-    // String remark = transferData.transferRemark;
-    // String smsCode = '';
-    // String xRate = transferData.xRate;
+    String amount = transferData.amount;
+    String availableBalance = transferData.availableBalance;
+    String creditCurrency = transferData.creditCurrency;
+    String day = transferData.day;
+    String debitCurrency = transferData.debitCurrency;
+    String endDate = transferData.endDate;
+    String frequency = transferData.frequency;
+    String payeeBankCode = transferData.payeeBankCode;
+    String payeeCardNo = transferData.payeeCardNo;
+    String payeeName = transferData.payeeName;
+    String payerBankCode = transferData.payerBankCode;
+    String payerCardNo = transferData.payerCardNo;
+    String payerName = transferData.payerName;
+    String planName = transferData.planName;
+    String remark = transferData.remark;
+    String startDate = transferData.startDate;
+
     HSProgressHUD.show();
     Future.wait({
       TransferDataRepository().addTransferPlan(
           AddTransferPlanReq(
-            "122.00", //amount
-            "9,668,000.00", //availableBalance
+            amount, //amount
+            availableBalance, //availableBalance
             "", //bankSwift
             "", //city
             "", //costOptions
-            "HKD", //creditCurrency
-            "01", //day
-            "HKD", //debitCurrency
+            creditCurrency, //creditCurrency
+            day, //day
+            debitCurrency, //debitCurrency
             "", //district
             false, //enabled
-            "2025-01-01", //endDate
+            endDate, //endDate
             0, //feeAmount
-            "2", //frequency
+            frequency, //frequency
             "", //midBankSwift
             "", //month
             "L5o+WYWLFVSCqHbd0Szu4Q==", //payPassword
             "", //payeeAddress
-            "AAAMFRP1XXX", //payeeBankCode
-            "0101238000001538", //payeeCardNo
-            "朗华银行", //payeeName
-            "AAAMFRP1XXX", //payerBankCode
-            "0101268000001878", //payerCardNo
-            "朗华银行", //payerName
-            "CESI", //planName
-            "XXXXXX", //remark
+            payeeBankCode, //payeeBankCode
+            payeeCardNo, //payeeCardNo
+            payeeName, //payeeName
+            payerBankCode, //payerBankCode  AAAMFRP1XXX
+            payerCardNo, //payerCardNo
+            payerName, //payerName
+            planName, //planName
+            remark, //remark
             "", //remittancePurposes
             "", //remitterAddress
             "123456", //smsCode
-            "2021-05-01", //startDate
+            startDate, //startDate
             "0", //transferType
           ),
           'AddTransferPlanReq')

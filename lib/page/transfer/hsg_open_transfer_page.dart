@@ -85,10 +85,12 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   String _end = DateFormat('yyyy-MM-dd').format(DateTime.now()); //显示结束时间
   var _payeeNameController = TextEditingController();
   var _payeeAccountController = TextEditingController();
-  var _payeeBankCodeController = TextEditingController();
+  // var _payeeBankCodeController = TextEditingController();
   var _planNameController = TextEditingController();
   String _payPassword = '';
   String _smsCode = '';
+
+  String _payeeBankCode = '';
   //转入币种
   String _payCcy = '';
   List<String> _payCcyList = [];
@@ -811,7 +813,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                 _payeeNameController.text = rowListPartner.payeeName;
                 _payeeAccountController.text = rowListPartner.payeeCardNo;
                 _remarkController.text = rowListPartner.remark;
-                payerBankCode = rowListPartner.bankCode;
+                // _payeeBankCode = rowListPartner.bankCode;
               }
               _boolBut();
             });
@@ -996,11 +998,11 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           "", //month
           "", //payPassword
           "", //payeeAddress
-          _payeeBankCodeController.text, //payeeBankCode
+          _payeeBankCode, //payeeBankCode
           _payeeAccountController.text, //payeeCardNo
           _payeeNameController.text, //payeeName
           payerBankCode, //payerBankCode
-          "", //payerCardNo
+          _account, //payerCardNo
           "", //payerName
           _planNameController.text, //planName
           _remarkController.text, //remark
@@ -1069,6 +1071,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             element.cardList.forEach((e) {
               _accountList.add(e.cardNo);
             });
+            _payeeBankCode = element.cardList[0].bankCode;
+            payerBankCode = element.cardList[0].bankCode;
           });
           _loadData(_account);
           _loadLocalCcy();
