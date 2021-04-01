@@ -143,7 +143,10 @@ class _OpenAccountGetFaceSignPageState
             Navigator.pushNamed(
               context,
               pageOpenAccountSelectDocumentType,
-              arguments: value.businessId,
+              arguments: {
+                'businessId': value.businessId,
+                'isQuick': false,
+              },
             );
           } else {
             HsgShowTip.notFaceSignBusinessTip(

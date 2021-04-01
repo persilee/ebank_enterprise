@@ -110,8 +110,9 @@ class _HomePageState extends State<HomePage> {
             'btnTitle': S.current.transfer
           },
           {
-            'btnIcon': 'images/home/listIcon/home_list_transfer_record.png',
-            'btnTitle': S.current.transfer_record
+            'btnIcon':
+                'images/home/listIcon/home_list_transfer_appointment.png',
+            'btnTitle': S.current.open_transfer
           },
           {
             'btnIcon': 'images/home/listIcon/home_list_partner.png',
@@ -742,7 +743,7 @@ class _HomePageState extends State<HomePage> {
   //功能点击事件
   VoidCallback _featureClickFunction(BuildContext context, String title) {
     return () {
-      // if (['0', '1', '2', '3'].contains(_belongCustStatus)) {
+      // if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
       //   HsgShowTip.notOpenAccountTip(
       //     context: context,
       //     click: (value) {
@@ -762,8 +763,8 @@ class _HomePageState extends State<HomePage> {
       } else if (S.current.transfer == title) {
         //转账
         Navigator.pushNamed(context, pageTransfer);
-      } else if (S.current.transfer_record == title) {
-        //转账记录
+      } else if (S.current.open_transfer == title) {
+        //转账记录-》预约转账
         Navigator.pushNamed(context, pageTransferRecord);
       } else if (S.current.transfer_model == title) {
         //收款范本

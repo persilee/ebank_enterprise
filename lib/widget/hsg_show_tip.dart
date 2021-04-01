@@ -77,6 +77,24 @@ class HsgShowTip {
     });
   }
 
+  ///完整开户面签成功提示
+  static void faceSignSuccessfulTip(
+    BuildContext context,
+    Function(dynamic value) click,
+  ) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertDialog(
+            title: S.of(context).warm_prompt,
+            message: S.of(context).openAccount_faceSign_results_content,
+            positiveButton: S.current.confirm,
+          );
+        }).then((value) {
+      click(value);
+    });
+  }
+
   ///面签码返回错误的提示
   static void notFaceSignBusinessTip({
     BuildContext context,

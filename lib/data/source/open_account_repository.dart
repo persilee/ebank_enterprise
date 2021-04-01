@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/data/source/model/face_sign_upload_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_get_data.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
@@ -53,6 +54,13 @@ class OpenAccountRepository {
       OpenAccountGetDataReq req, String tag) {
     return request('/cust/preCust/getPreCustByStep', req, tag,
         (data) => OpenAccountGetDataResp.fromJson(data));
+  }
+
+  //保存面签视频名称（完整开户面签数据）
+  Future<FaceSignUploadDataResp> saveSignVideo(
+      FaceSignUploadDataReq req, String tag) {
+    return request('/cust/corporationCust/saveSignVideo', req, tag,
+        (data) => FaceSignUploadDataResp.fromJson(data));
   }
 
   static final _instance = OpenAccountRepository._internal();

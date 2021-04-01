@@ -504,6 +504,7 @@
   "in_all": "共",
   "accounts": "个账户",
   "feedbackSuccess": "意见反馈成功",
+  "select_image_error": "图片异常，请重新选择",
   "zhangqirong_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<张其荣国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "pengyikang_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>彭逸康国际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "register_check_username": "用户名只能为4-16位字符、数字或者字母，不能包含特殊字符，不能重复",
@@ -597,8 +598,8 @@
   "home_header_welcome_title": "欢迎使用朗华手机银行",
   "loan_application_confirm_NavTitle": "贷款确认",
   "loan_application_submit_success": "申请已提交，待审批",
-
   "open_account_goto_ebank_tip": "尊敬的用户，您好。由于您不是受邀客户，请前往网银进行开户申请。",
+  "openAccount_faceSign_results_content": "面签数据提交成功",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }
