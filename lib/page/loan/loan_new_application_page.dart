@@ -72,8 +72,6 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   int _repayAccountIndex = 0; //还款索引
   List<RemoteBankCard> _totalAccoutList = []; //总帐号
 
-  String _custID; //用户ID
-
   String _reimburseStr = ''; //还款方式
   List<IdType> _reimburseTypeLists = []; //还款方式
 
@@ -99,10 +97,6 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _ccyList.clear();
         _ccyList.addAll(data.publicCodeGetRedisRspDtoList);
-
-        // data.publicCodeGetRedisRspDtoList.forEach((e) {
-        //   _ccyList.add(e.code);
-        // });
       }
     });
   }
@@ -115,14 +109,6 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _deadLineLists.clear();
         _deadLineLists.addAll(data.publicCodeGetRedisRspDtoList);
-        // data.publicCodeGetRedisRspDtoList.forEach((e) {
-        //   _deadLineLists.addAll(data.publicCodeGetRedisRspDtoList);
-        //   // if (_language == 'zh_CN') {
-        //   //   _deadLineLists.add(e.cname);
-        //   // } else {
-        //   //   _deadLineLists.add(e.name);
-        //   // }
-        // });
       }
     });
   }
@@ -135,13 +121,6 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _goalLists.clear();
         _goalLists.addAll(data.publicCodeGetRedisRspDtoList);
-        // data.publicCodeGetRedisRspDtoList.forEach((e) {
-        //   if (_language == 'zh_CN') {
-        //     _goalLists.add(e.cname);
-        //   } else {
-        //     _goalLists.add(e.name);
-        //   }
-        // });
       }
     });
   }
@@ -154,13 +133,6 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _reimburseTypeLists.clear();
         _reimburseTypeLists.addAll(data.publicCodeGetRedisRspDtoList);
-        // data.publicCodeGetRedisRspDtoList.forEach((e) {
-        //   if (_language == 'zh_CN') {
-        //     _reimburseTypeLists.add(e.cname);
-        //   } else {
-        //     _reimburseTypeLists.add(e.name);
-        //   }
-        // });
       }
     });
   }
@@ -183,8 +155,6 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   //获取放款以及还款帐号列表
   Future<void> _loadTotalAccountData() async {
     SVProgressHUD.show();
-    final prefs = await SharedPreferences.getInstance();
-    _custID = prefs.getString(ConfigKey.CUST_ID);
     CardDataRepository().getCardList('getCardList').then(
       (data) {
         SVProgressHUD.dismiss();
@@ -209,6 +179,27 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         title: Text(S.of(context).loan_apply),
         centerTitle: true,
         elevation: 1,
+        actions: <Widget>[
+          Container(
+            padding: EdgeInsets.only(top: _language == 'zh_CN' ? 17.5 : 12),
+            width: (MediaQuery.of(context).size.width - 36) / 4,
+            margin: EdgeInsets.only(right: 18),
+            child: Text.rich(
+              TextSpan(
+                  text: S.current.my_application,
+                  style: TextStyle(
+                    fontSize: 14.0,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.pushNamed(context, pageLoanMyApplicationList);
+                    }),
+              textAlign: TextAlign.right,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        ],
       ),
       body: Container(
         color: HsgColors.commonBackground,
@@ -527,9 +518,10 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     );
     if (result != null && result != false) {
       setState(() {
+        IdType type = list[result];
         _ccyId = result;
         _listDataMap['ccy'] = tempList[index];
-        _requestDataMap['ccy'] = result;
+        _requestDataMap['ccy'] = type.code;
         _currency = tempList[result];
         _checkloanIsClick();
       });

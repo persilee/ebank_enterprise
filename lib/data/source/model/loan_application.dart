@@ -51,6 +51,15 @@ class LoanApplicationReq extends Object {
   //用户类型
   @JsonKey(name: 'userType')
   String userType;
+  //还款帐号
+  @JsonKey(name: 'repaymentAcNo')
+  String repaymentAcNo;
+  //收款帐号
+  @JsonKey(name: 'payAcNo')
+  String payAcNo;
+  //利率
+  @JsonKey(name: 'loanRate')
+  String loanRate;
 
   LoanApplicationReq(
     this.ccy,
@@ -67,6 +76,9 @@ class LoanApplicationReq extends Object {
     this.userAccount,
     this.userId,
     this.userType,
+    this.repaymentAcNo,
+    this.payAcNo,
+    this.loanRate,
   );
 
   factory LoanApplicationReq.fromJson(Map<String, dynamic> srcJson) =>

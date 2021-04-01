@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/loan_application.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
@@ -177,16 +180,18 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
     String custID = prefs.getString(ConfigKey.CUST_ID);
     String userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
     String userID = prefs.getString(ConfigKey.USER_ID);
+    String userType = prefs.getString(ConfigKey.USER_TYPE);
+
     print(userPhone);
     print(custID);
     print(userAccount);
     print(userID);
 
-    // SVProgressHUD.show();
+    SVProgressHUD.show();
     LoanDataRepository()
         .submitLoanApplication(
             LoanApplicationReq(
-              _requstMap['ccy'], //币种
+              _requstMap['ccy'].toString(), //币种
               custID, //用户custID
               _requstMap['contact'], //联系人
               double.parse(_requstMap['intentAmt']), //金额
@@ -195,19 +200,35 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
               'TDCBCBNF', //贷款产品码 TDCBCBNF _requstMap['prdtCode']
               _requstMap['remark'], //备注
               _requstMap['repaymentMethod'], //还款方式
-              'MONTH', //单位
+              '2', //单位 月份MONTH
               int.parse(_requstMap['termValue']), //日期code
               userAccount, //用户帐号
               userID, //用户ID
-              '2', //用户类型 prefs.getString(ConfigKey.)
+              userType, //用户类型
+              _requstMap['repaymentAcNo'], //还款帐号
+              _requstMap['payAcNo'], //收款账号
+              _requstMap['loanRate'], //利率
             ),
             "getLoanApplication")
         .then((data) {
       SVProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: S.current.loan_application_submit_success);
+      SVProgressHUD.showSuccess(
+          status: S.current.loan_application_submit_success);
+      sleep(Duration(seconds: 1));
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) {
+        return IndexPage();
+      }), (Route route) {
+        //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
+        print(route.settings?.name);
+        if (route.settings?.name == "/") {
+          return true; //停止
+        }
+        return false; //继续关闭
+      });
     }).catchError((e) {
       SVProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: e.toString());
+      SVProgressHUD.showError(status: e.toString());
     });
   }
 }
