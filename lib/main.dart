@@ -150,7 +150,10 @@ class _HSGBankAppState extends State<HSGBankApp> {
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {}
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
 
     //获取本币
@@ -166,7 +169,10 @@ class _HSGBankAppState extends State<HSGBankApp> {
         prefs.setString(ConfigKey.LOCAL_CCY, '');
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 }

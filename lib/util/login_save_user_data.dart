@@ -3,6 +3,7 @@ import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: non_constant_identifier_names
 void SaveUserData(LoginResp resp, {String password}) async {
   ///登录页面清空数据
   HsgHttp().clearUserCache();
