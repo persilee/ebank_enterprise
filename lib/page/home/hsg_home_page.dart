@@ -1,5 +1,3 @@
-import 'dart:math';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 首页
 /// Author: lijiawei
@@ -763,9 +761,12 @@ class _HomePageState extends State<HomePage> {
       } else if (S.current.transfer == title) {
         //转账
         Navigator.pushNamed(context, pageTransfer);
-      } else if (S.current.open_transfer == title) {
-        //转账记录-》预约转账
+      } else if (S.current.transfer_record == title) {
+        //转账记录
         Navigator.pushNamed(context, pageTransferRecord);
+      } else if (S.current.open_transfer == title) {
+        //预约转账
+        Navigator.pushNamed(context, pageOpenTransfer);
       } else if (S.current.transfer_model == title) {
         //收款范本
         Navigator.pushNamed(context, pageTranferPartner);
