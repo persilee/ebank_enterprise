@@ -142,16 +142,18 @@ class _LoanReferenceState extends State<LoanReference> {
               children: [
                 //借款期限
                 Container(
-                  padding: EdgeInsets.only(left: 20),
+                  // padding: EdgeInsets.only(left: 20),
                   color: Colors.white,
-                  child: SelectInkWell(
-                    title: '收款账户',
-                    item: _deadLine,
-                    onTap: () {
-                      // FocusScope.of(context).requestFocus(FocusNode());
-                      // _select(S.current.loan_duration, _deadLineLists, 0);
-                    },
-                  ),
+                  child:
+                      // SelectInkWell(
+                      //   title: '收款账户',
+                      //   item: _deadLine,
+                      //   onTap: () {
+                      //     // FocusScope.of(context).requestFocus(FocusNode());
+                      //     // _select(S.current.loan_duration, _deadLineLists, 0);
+                      //   },
+                      // ),
+                      selectInkWellToBlackTitle('收款账户', _deadLine, onClink()),
                 ),
                 Divider(
                   height: 0,
@@ -202,15 +204,34 @@ class _LoanReferenceState extends State<LoanReference> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: 50,
+        // height: 50,
+        padding: EdgeInsets.fromLTRB(0, 15, 0, title == '收款账户' ? 5 : 15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
               padding: EdgeInsets.only(left: 20),
-              child: Text(
-                title,
-                style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.bold),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Text(
+                      title,
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  Container(
+                    child: title == '收款账户'
+                        ? Text(
+                            '预计两小时内到账',
+                            style: TextStyle(
+                                fontSize: 13, color: HsgColors.describeText),
+                          )
+                        : Container(),
+                  ),
+                ],
               ),
             ),
             Row(
