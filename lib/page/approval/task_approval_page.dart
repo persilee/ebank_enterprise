@@ -6,10 +6,11 @@ import 'dart:async';
 /// Date: 2020-12-29
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/do_claim_task.dart';
+import 'package:ebank_mobile/data/source/model/early_red_td_contract_detail_model.dart' as EarlyRedModel;
 import 'package:ebank_mobile/data/source/model/find_todo_task_detail_body.dart';
 import 'package:ebank_mobile/data/source/model/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/get_process_task.dart';
-import 'package:ebank_mobile/data/source/model/open_td_contract_detail_model.dart';
+import 'package:ebank_mobile/data/source/model/open_td_contract_detail_model.dart' as OpenTDModel;
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/data/source/process_task_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -69,21 +70,23 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
     var _contractModel = await ApiClient().findToDoTaskDetail(FindTodoTaskDetailBody(
       processId: widget.data.processId
     ));
-    // openTdContractApproval - 开立定期存单
-    if(_processKey == 'openTdContractApproval') {
-      OpenTdContractDetailModel openTdContractDetailModel = OpenTdContractDetailModel.fromJson(_contractModel);
-      // _doTaskDetailContractModel = await ApiClient().findToDoTaskDetail(
-      //     BaseBody(body: FindTodoTaskDetailBody(processId: _processId)));
-      // _contractList.add(_buildTitle('基本信息'));
-      // _contractList.add(_buildContentItem('产品', item.name));
-      // _contractList.add(_buildContentItem('存款期限', item.tenor));
-      // _contractList.add(_buildContentItem('金额', item.bal));
-      // _contractList.add(_buildContentItem('年利率', item.rate));
-      // _contractList.add(_buildContentItem('存单货币', item.ccy));
-      // _contractList.add(_buildContentItem('到期指示', item.inst));
-      // _contractList.add(_buildContentItem('结算账户', item.dAc));
-      // _contractList.add(_buildContentItem('扣款账户', item.oppAc));
-    } else {
+    if(_processKey == 'openTdContractApproval') { // openTdContractApproval - 开立定期存单
+      OpenTDModel.OpenTdContractDetailModel openTdContractDetailModel = OpenTDModel.OpenTdContractDetailModel.fromJson(_contractModel);
+      OpenTDModel.OperateEndValue data = openTdContractDetailModel?.operateEndValue;
+      setState(() {
+        _contractList.add(_buildTitle('基本信息'));
+        _contractList.add(_buildContentItem('产品', data?.prodName ?? ''));
+        _contractList.add(_buildContentItem('存款期限', data?.tenor ?? ''));
+        _contractList.add(_buildContentItem('金额', data?.bal ?? ''));
+        _contractList.add(_buildContentItem('年利率', ''));
+        _contractList.add(_buildContentItem('存单货币', data?.ccy ?? ''));
+        _contractList.add(_buildContentItem('到期指示', data?.instCode ?? ''));
+        _contractList.add(_buildContentItem('结算账户', data?.settDdAc ?? ''));
+        _contractList.add(_buildContentItem('扣款账户', data?.oppAc ?? ''));
+      });
+    } else if(_processKey == 'earlyRedTdContractApproval') {  //earlyRedTdContractApproval - 定期提前结清
+      EarlyRedModel.EarlyRedTdContractDetailModel earlyRedTdContractDetailModel = EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
+
       // _transferList.add(_buildTitle('付款方信息'));
       // _transferList.add(_buildContentItem('付款账号', item.oppAc));
       // _transferList.add(_buildContentItem('账户名称', item.oppAcName));
