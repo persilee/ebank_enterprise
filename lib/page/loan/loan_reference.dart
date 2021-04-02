@@ -6,6 +6,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 贷款引用页面
@@ -33,23 +34,71 @@ class _LoanReferenceState extends State<LoanReference> {
         // child: Column(
         children: [
           Container(
+            padding: EdgeInsets.fromLTRB(23, 16, 23, 0),
+            // width: MediaQuery.of(context).size.width,
             color: Colors.white,
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.fromLTRB(23, 16, 0, 0),
                   width: MediaQuery.of(context).size.width,
                   child: Text(
                     '可借款额度 CNY800.00',
                     textAlign: TextAlign.left,
+                    style: TextStyle(color: Color(0xFF262626), fontSize: 15),
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(23, 16, 23, 21),
-                  width: MediaQuery.of(context).size.width,
-                  child: TextField(
-                    decoration: InputDecoration(hintText: '0.00'),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(right: 5, top: 10),
+                        child: Text(
+                          'CNY',
+                          style: TextStyle(
+                              color: Color(0xFF3394D4),
+                              fontSize: 21,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(top: 20),
+                        width: MediaQuery.of(context).size.width / 1.5,
+                        height: 60,
+                        child: TextField(
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: HsgColors.firstDegreeText,
+                          ),
+                          decoration: InputDecoration(
+                              // isCollapsed: true,
+                              // contentPadding: EdgeInsets.symmetric(
+                              //     vertical: 10, horizontal: 10),
+                              // filled: true,
+                              //  fillColor: Colors.green,
+                              border: InputBorder.none,
+                              hintText: '0.00',
+                              hintStyle: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 24,
+                                  color: Color(0xFFCCCCCC))),
+                          keyboardType:
+                              TextInputType.numberWithOptions(decimal: true),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+                            LengthLimitingTextInputFormatter(12),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
+                ),
+                Divider(
+                  height: 0,
+                  color: Colors.blue,
+                ),
+                Container(
+                  padding: EdgeInsets.only(bottom: 21),
                 )
               ],
             ),
