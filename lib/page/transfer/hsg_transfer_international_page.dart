@@ -715,27 +715,27 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   _judgeDialog() {
-    if (double.parse(_transferMoneyController.text) > double.parse(_limit) ||
-        double.parse(_transferMoneyController.text) > double.parse(_balance)) {
-      if (double.parse(_limit) > double.parse(_balance)) {
-        Fluttertoast.showToast(
-          msg: "余额不足",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Color(0xffe74c3c),
-          textColor: Color(0xffffffff),
-        );
-      } else {
-        Fluttertoast.showToast(
-          msg: "超过限额",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Color(0xffe74c3c),
-          textColor: Color(0xffffffff),
-        );
-      }
+    // if (double.parse(_transferMoneyController.text) > double.parse(_limit) ||
+    if (double.parse(_transferMoneyController.text) > double.parse(_balance)) {
+      // if (double.parse(_limit) > double.parse(_balance)) {
+      Fluttertoast.showToast(
+        msg: "余额不足",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Color(0xffe74c3c),
+        textColor: Color(0xffffffff),
+      );
+      // } else {
+      //   Fluttertoast.showToast(
+      //     msg: "超过限额",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.CENTER,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Color(0xffe74c3c),
+      //     textColor: Color(0xffffffff),
+      //   );
+      // }
     } else {
       Navigator.pushNamed(
         context,

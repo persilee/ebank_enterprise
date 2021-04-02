@@ -9,6 +9,7 @@ import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
+import 'package:ebank_mobile/page/loan/loan_reference.dart';
 
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
 import 'package:ebank_mobile/page/openAccount/country_region_select_page.dart';
@@ -69,6 +70,7 @@ import 'package:ebank_mobile/page/payCollectDetail/detail_info_page.dart';
 import 'package:ebank_mobile/page/payCollectDetail/detail_list_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_rate_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_open_transfer_page.dart';
+import 'package:ebank_mobile/page/transfer/hsg_open_transfer_preview_page.dart';
 
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_preview_page.dart';
@@ -147,6 +149,7 @@ var pageFeatureList = '/hsg_feature_list_page';
 var pageTransfer = '/hsg_transfer_page';
 var pageAuthorizationHistory = '/authorization_history_page';
 var pageTransferInternal = '/hsg_transfer_internal_page';
+var pageTransferOrderPreview = 'hsg_open_transfer_preview_page.dart';
 var pageTransferInternalPreview = '/hsg_transfer_internal_preview_page';
 var pageTransferInternationalPreview =
     '/hsg_transfer_international_preview_page';
@@ -200,6 +203,7 @@ var pageLoanNewApplictionNav = '/loan_new_application_page.dart';
 var pageLoanProductlistNav = '/loan_product_list_page.dart';
 var pageLoanConfirmNav = '/loan_application_confirm_page.dart';
 var pageLoanMyApplicationList = '/loan_myApplication_list_page.dart';
+var pageLoanReference = 'loan_reference.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -249,6 +253,7 @@ var appRoutes = {
   pageTransfer: (context) => TransferPage(),
   pageAuthorizationHistory: (context) => AuthorizationHistoryPage(),
   pageTransferInternal: (context) => TransferInternalPage(),
+  pageTransferOrderPreview: (context) => TransferOrderPreviewPage(),
   pageTransferInternalPreview: (context) => TransferInternalPreviewPage(),
   pageTransferInternationalPreview: (context) =>
       TransferinternationalPreviewPage(),
@@ -299,6 +304,7 @@ var appRoutes = {
   pageLoanProductlistNav: (context) => LoanProductListPage(),
   pageLoanConfirmNav: (context) => LoanConfirmApplicationList(),
   pageLoanMyApplicationList: (context) => LoanMyApplicationListPage(), //贷款 我的申请
+  pageLoanReference: (context) => LoanReference()
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {

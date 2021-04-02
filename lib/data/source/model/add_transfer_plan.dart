@@ -10,7 +10,10 @@ part 'add_transfer_plan.g.dart';
 @JsonSerializable()
 class AddTransferPlanReq extends Object {
   @JsonKey(name: 'amount')
-  double amount;
+  String amount;
+
+  @JsonKey(name: 'availableBalance')
+  String availableBalance;
 
   @JsonKey(name: 'bankSwift')
   String bankSwift;
@@ -23,6 +26,9 @@ class AddTransferPlanReq extends Object {
 
   @JsonKey(name: 'creditCurrency')
   String creditCurrency;
+
+  @JsonKey(name: 'day')
+  String day;
 
   @JsonKey(name: 'debitCurrency')
   String debitCurrency;
@@ -37,13 +43,19 @@ class AddTransferPlanReq extends Object {
   String endDate;
 
   @JsonKey(name: 'feeAmount')
-  double feeAmount;
+  int feeAmount;
 
   @JsonKey(name: 'frequency')
   String frequency;
 
   @JsonKey(name: 'midBankSwift')
   String midBankSwift;
+
+  @JsonKey(name: 'month')
+  String month;
+
+  @JsonKey(name: 'payPassword')
+  String payPassword;
 
   @JsonKey(name: 'payeeAddress')
   String payeeAddress;
@@ -66,9 +78,6 @@ class AddTransferPlanReq extends Object {
   @JsonKey(name: 'payerName')
   String payerName;
 
-  @JsonKey(name: 'planId')
-  String planId;
-
   @JsonKey(name: 'planName')
   String planName;
 
@@ -81,24 +90,23 @@ class AddTransferPlanReq extends Object {
   @JsonKey(name: 'remitterAddress')
   String remitterAddress;
 
+  @JsonKey(name: 'smsCode')
+  String smsCode;
+
   @JsonKey(name: 'startDate')
   String startDate;
 
   @JsonKey(name: 'transferType')
   String transferType;
 
-  @JsonKey(name: 'payPassword')
-  String payPassword;
-
-  @JsonKey(name: 'smsCode')
-  String smsCode;
-
   AddTransferPlanReq(
     this.amount,
+    this.availableBalance,
     this.bankSwift,
     this.city,
     this.costOptions,
     this.creditCurrency,
+    this.day,
     this.debitCurrency,
     this.district,
     this.enabled,
@@ -106,6 +114,8 @@ class AddTransferPlanReq extends Object {
     this.feeAmount,
     this.frequency,
     this.midBankSwift,
+    this.month,
+    this.payPassword,
     this.payeeAddress,
     this.payeeBankCode,
     this.payeeCardNo,
@@ -113,15 +123,13 @@ class AddTransferPlanReq extends Object {
     this.payerBankCode,
     this.payerCardNo,
     this.payerName,
-    this.planId,
     this.planName,
     this.remark,
     this.remittancePurposes,
     this.remitterAddress,
+    this.smsCode,
     this.startDate,
     this.transferType,
-    this.payPassword,
-    this.smsCode,
   );
 
   factory AddTransferPlanReq.fromJson(Map<String, dynamic> srcJson) =>
