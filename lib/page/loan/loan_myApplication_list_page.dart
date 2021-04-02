@@ -35,9 +35,8 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
         height: double.infinity,
         child: ListView(
           children: [
-            _creatListCell(),
-            _creatListCell(),
-            _creatListCell(),
+            ExpandBox(),
+            ExpandBox(),
           ],
           // child: ListView.builder(
           //   itemCount: _productApplyList.length, //数量
@@ -49,9 +48,19 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
       ),
     );
   }
+}
 
-  Widget _creatListCell() {
-    //每一行
+class ExpandBox extends StatefulWidget {
+  @override
+  _ExpandBoxState createState() => _ExpandBoxState();
+}
+
+class _ExpandBoxState extends State<ExpandBox> {
+
+  bool _isShow = false;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       child: Column(
         children: [
@@ -62,7 +71,6 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
     );
   }
 
-//创建头部展示
   Widget _creatListHeader() {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -148,7 +156,6 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
     );
   }
 
-//添加线
   Widget _addLinne() {
     return Divider(
       color: Color(0xFFD8D8D8),
@@ -159,7 +166,6 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
     );
   }
 
-//抽出的数据详情组件
   Widget _textFieldCommonFunc(
       String columnName, String detailStr, bool hiddenLine) {
     return Padding(
@@ -190,3 +196,4 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
     );
   }
 }
+
