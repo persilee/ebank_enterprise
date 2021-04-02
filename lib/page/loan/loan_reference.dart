@@ -185,6 +185,7 @@ class _LoanReferenceState extends State<LoanReference> {
             ),
             clickCallback: () {
               //  _login();
+              Navigator.pushNamed(context, pageLoanCollectionPreview);
             },
           ),
         ],
