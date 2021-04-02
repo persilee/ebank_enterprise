@@ -33,7 +33,7 @@ class _TransferInternalPreviewPageState
         ModalRoute.of(context).settings.arguments;
     return Scaffold(
         appBar: AppBar(
-          title: Text('行内转账预览'),
+          title: Text(S.current.transfer_the_preview1),
           centerTitle: true,
           elevation: 1,
         ),
@@ -87,16 +87,17 @@ class _TransferInternalPreviewPageState
           ),
           _getRowContent(S.current.transfer_from,
               FormatUtil.formatSpace4(transferData.transferOutAccount)),
-          _getRowContent('预计收款金额',
+          _getRowContent(S.current.estimated_collection_amount,
               FormatUtil.formatSringToMoney(transferData.transferOutAmount)),
-          _getRowContent('汇率', transferData.xRate),
+          _getRowContent(S.current.rate_of_exchange, transferData.xRate),
           _getRowContent(
               S.current.payment_currency, transferData.transferOutCcy),
           _getRowContent(
               S.current.receipt_side_name, transferData.transferIntoName),
-          _getRowContent('收款人账号',
+          _getRowContent(S.current.receipt_side_account,
               FormatUtil.formatSpace4(transferData.transferIntoAccount)),
-          _getRowContent('收款方币种', transferData.transferIntoCcy),
+          _getRowContent(
+              S.current.transfer_from_ccy, transferData.transferIntoCcy),
           _getRowContent(
               S.current.transfer_postscript,
               transferData.transferRemark == ''

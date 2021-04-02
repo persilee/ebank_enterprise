@@ -31,7 +31,7 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
     TransferOrderData transferData = ModalRoute.of(context).settings.arguments;
     return Scaffold(
         appBar: AppBar(
-          title: Text('预约转账预览'),
+          title: Text(S.current.transfer_the_preview3),
           centerTitle: true,
           elevation: 1,
         ),
@@ -88,15 +88,16 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
           _getRowContent('截至日期', transferData.endDate),
           _getRowContent(S.current.transfer_from,
               FormatUtil.formatSpace4(transferData.payerCardNo)),
-          _getRowContent(
-              '预计收款金额', FormatUtil.formatSringToMoney(transferData.amount)),
-          _getRowContent('汇率', '1'),
+          _getRowContent(S.current.estimated_collection_amount,
+              FormatUtil.formatSringToMoney(transferData.amount)),
+          _getRowContent(S.current.rate_of_exchange, '1'),
           _getRowContent(
               S.current.payment_currency, transferData.debitCurrency),
           _getRowContent(S.current.receipt_side_name, transferData.payeeName),
+          _getRowContent(S.current.receipt_side_account,
+              FormatUtil.formatSpace4(transferData.payeeCardNo)),
           _getRowContent(
-              '收款人账号', FormatUtil.formatSpace4(transferData.payeeCardNo)),
-          _getRowContent('收款方币种', transferData.debitCurrency),
+              S.current.transfer_from_ccy, transferData.debitCurrency),
           _getRowContent(
               S.current.transfer_postscript,
               transferData.remark == ''
