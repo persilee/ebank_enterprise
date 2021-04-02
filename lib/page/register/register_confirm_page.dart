@@ -2,13 +2,10 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/register_by_account.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
-import 'package:ebank_mobile/page/register/register_success_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
-import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 
 import 'package:flutter/material.dart';

@@ -18,9 +18,17 @@ class GetSms extends StatefulWidget {
   final TextEditingController sms;
   final String smsType;
   final String officeAreaCodeText;
-  const GetSms(
-      {Key key, this.sms, this.smsType, this.phone, this.officeAreaCodeText})
-      : super(key: key);
+  final bool isRegister;
+  final bool isForget;
+  const GetSms({
+    Key key,
+    this.sms,
+    this.smsType,
+    this.phone,
+    this.officeAreaCodeText,
+    this.isRegister,
+    this.isForget,
+  }) : super(key: key);
   @override
   _GetSmsState createState() => _GetSmsState();
 }
@@ -57,6 +65,7 @@ class _GetSmsState extends State<GetSms> {
                     color: HsgColors.textHintColor,
                   ),
                 ),
+                keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
                   WhitelistingTextInputFormatter.digitsOnly, //只输入数字
                   LengthLimitingTextInputFormatter(6) //限制长度
@@ -102,37 +111,72 @@ class _GetSmsState extends State<GetSms> {
   //获取注册发送短信验证码接口
   _sendSmsRegister(bool _isRegister) async {
     print('$_isRegister>>>>>>>>');
-
-    if (_isRegister) {
-      Fluttertoast.showToast(
-        msg: S.current.num_is_register,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-      );
-    } else {
-      VersionDataRepository()
-          .sendSmsRegister(
-              SendSmsRegisterReq(
-                  widget.officeAreaCodeText, widget.phone.text, widget.smsType),
-              'sendSmsRegister')
-          .then((value) {
-        if (mounted) {
-          setState(() {
-            HSProgressHUD.dismiss();
-            _startCountdown();
-            //  _sms.text = "123456";
-          });
-        }
-      }).catchError((e) {
-        HSProgressHUD.dismiss();
+    // _isRegister ?
+    if (widget.isRegister) {
+      if (_isRegister) {
         Fluttertoast.showToast(
-          msg: e.toString(),
+          msg: S.current.num_is_register,
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
         );
-      });
+      } else {
+        VersionDataRepository()
+            .sendSmsRegister(
+                SendSmsRegisterReq(widget.officeAreaCodeText, widget.phone.text,
+                    widget.smsType),
+                'sendSmsRegister')
+            .then((value) {
+          if (mounted) {
+            setState(() {
+              HSProgressHUD.dismiss();
+              _startCountdown();
+              //  _sms.text = "123456";
+            });
+          }
+        }).catchError((e) {
+          HSProgressHUD.dismiss();
+          Fluttertoast.showToast(
+            msg: e.toString(),
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+          );
+        });
+      }
+    }
+    if (widget.isForget) {
+      if (!_isRegister) {
+        Fluttertoast.showToast(
+          msg: S.current.num_not_is_register,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+        );
+      } else {
+        VersionDataRepository()
+            .sendSmsRegister(
+                SendSmsRegisterReq(widget.officeAreaCodeText, widget.phone.text,
+                    widget.smsType),
+                'sendSmsRegister')
+            .then((value) {
+          if (mounted) {
+            setState(() {
+              HSProgressHUD.dismiss();
+              _startCountdown();
+              //  _sms.text = "123456";
+            });
+          }
+        }).catchError((e) {
+          HSProgressHUD.dismiss();
+          Fluttertoast.showToast(
+            msg: e.toString(),
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+          );
+        });
+      }
     }
   }
 
