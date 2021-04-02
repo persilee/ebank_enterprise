@@ -1001,8 +1001,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         if (this.mounted) {
           setState(() {
             // if (_cardBal == '' || _cardCcy == S.current.hint_please_select) {
-            _cardBal = element.cardListBal[0].currBal;
-            _cardCcy = element.cardListBal[0].ccy;
+            if (element.cardListBal.length > 0) {
+              _cardBal = element.cardListBal[0].currBal;
+              _cardCcy = element.cardListBal[0].ccy;
+            }
             // }
             _cardBalList.clear();
             _cardCcyList.clear();

@@ -33,10 +33,17 @@ abstract class ApiClient {
   Future<FindToDoTaskDetailContractModel> findToDoTaskDetail(
       @Body() BaseBody baseBody);
 
-  /// 上传头像（开户图片上传暂时共用）
+  /// 上传头像
   @POST('/cust/user/uploadAvatar')
   Future<dynamic> uploadAvatar(
     @Queries() BaseBody baseBody,
     @Part(fileName: 'avatar.jpg') File file,
+  );
+
+  /// 银行信息管理-上传银行图标（开户图片上传暂时共用）
+  @POST('/platform/bankInfo/uploadBankIcon')
+  Future<dynamic> uploadBankIcon(
+    @Queries() BaseBody baseBody,
+    @Part(fileName: 'certificate.jpg') File file,
   );
 }
