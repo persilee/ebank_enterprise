@@ -512,6 +512,9 @@
   "num_not_is_register": "The mobile phone number has not been registered, please register the account first",
   "pengyikang_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<彭逸康（登录注册收支明细账户总览）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "lishaoying_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李少颖（待办）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+
+  "approval_task_id": "Task ID",
+
   "lishaoying_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李少颖（待办）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "lijiawei_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李家伟（开户）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "openAccout_basicInformation": "General Information",

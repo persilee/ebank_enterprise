@@ -1,39 +1,29 @@
 import 'dart:async';
-import 'dart:convert';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///任务审批页面
 /// Author: wangluyao
 /// Date: 2020-12-29
-
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/contract_detail_data.dart';
 import 'package:ebank_mobile/data/source/model/do_claim_task.dart';
-import 'package:ebank_mobile/data/source/model/find_to_do_task_detail_contract_model.dart';
 import 'package:ebank_mobile/data/source/model/find_todo_task_detail_body.dart';
-import 'package:ebank_mobile/data/source/model/find_user_to_do_task.dart';
-import 'package:ebank_mobile/data/source/model/find_user_todo_task_body.dart';
 import 'package:ebank_mobile/data/source/model/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/get_process_task.dart';
-import 'package:ebank_mobile/data/source/model/my_approval_data.dart';
-import 'package:ebank_mobile/data/source/model/transfer_detail_data.dart';
+import 'package:ebank_mobile/data/source/model/open_td_contract_detail_model.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/data/source/process_task_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
-import 'package:ebank_mobile/http/retrofit/base_body.dart';
-import 'package:ebank_mobile/page/approval/widget/information_display_list_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class TaskApprovalPage extends StatefulWidget {
 
-  final Data data;
+  final ApprovalTask data;
   final String title;
 
   TaskApprovalPage({Key key, this.data, this.title}) : super(key: key);
@@ -52,7 +42,6 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   ScrollController _controller;
   List<Widget> _contractList = [];
   List<Widget> _transferList = [];
-  FindToDoTaskDetailContractModel _doTaskDetailContractModel;
 
   @override
   void initState() {
@@ -76,56 +65,35 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   }
 
   void _loadData() async {
-    // String _processId = widget.data.processId;
-    // String _processKey = widget.data.processKey;
-    String _processKey = widget.data.type;
-    int _index = widget.data.index;
-    // print('_processId: $_processId');
-    if(_processKey == 'openTdContractApproval' || _processKey == 'earlyRedTdContractApproval') {
+    String _processKey = widget.data.processKey;
+    var _contractModel = await ApiClient().findToDoTaskDetail(FindTodoTaskDetailBody(
+      processId: widget.data.processId
+    ));
+    // openTdContractApproval - 开立定期存单
+    if(_processKey == 'openTdContractApproval') {
+      OpenTdContractDetailModel openTdContractDetailModel = OpenTdContractDetailModel.fromJson(_contractModel);
       // _doTaskDetailContractModel = await ApiClient().findToDoTaskDetail(
       //     BaseBody(body: FindTodoTaskDetailBody(processId: _processId)));
-      rootBundle.loadString('assets/json/contract_detail.json').then((value) {
-        Map map = json.decode(value);
-        ContractDetailData data = ContractDetailData.fromJson(map);
-        ContractList item;
-        data.contractList.forEach((element) {
-          if(_index == element.index) {
-            item = element;
-          }
-        });
-        _contractList.add(_buildTitle('基本信息'));
-        _contractList.add(_buildContentItem('产品', item.name));
-        _contractList.add(_buildContentItem('存款期限', item.tenor));
-        _contractList.add(_buildContentItem('金额', item.bal));
-        _contractList.add(_buildContentItem('年利率', item.rate));
-        _contractList.add(_buildContentItem('存单货币', item.ccy));
-        _contractList.add(_buildContentItem('到期指示', item.inst));
-        _contractList.add(_buildContentItem('结算账户', item.dAc));
-        _contractList.add(_buildContentItem('扣款账户', item.oppAc));
-        setState(() {});
-      });
+      // _contractList.add(_buildTitle('基本信息'));
+      // _contractList.add(_buildContentItem('产品', item.name));
+      // _contractList.add(_buildContentItem('存款期限', item.tenor));
+      // _contractList.add(_buildContentItem('金额', item.bal));
+      // _contractList.add(_buildContentItem('年利率', item.rate));
+      // _contractList.add(_buildContentItem('存单货币', item.ccy));
+      // _contractList.add(_buildContentItem('到期指示', item.inst));
+      // _contractList.add(_buildContentItem('结算账户', item.dAc));
+      // _contractList.add(_buildContentItem('扣款账户', item.oppAc));
     } else {
-      rootBundle.loadString('assets/json/transfer_detail.json').then((value) {
-        Map map = json.decode(value);
-        TransferDetailData data = TransferDetailData.fromJson(map);
-        TransferList item;
-        data.transferList.forEach((element) {
-          if(_index == element.index) {
-            item = element;
-          }
-        });
-        _transferList.add(_buildTitle('付款方信息'));
-        _transferList.add(_buildContentItem('付款账号', item.oppAc));
-        _transferList.add(_buildContentItem('账户名称', item.oppAcName));
-        _transferList.add(Padding(padding: EdgeInsets.only(top: 15)),);
-        _transferList.add(_buildTitle('收款方信息'));
-        _transferList.add(_buildContentItem('付款账号', item.dAc));
-        _transferList.add(_buildContentItem('账户名称', item.dAcName));
-        _transferList.add(_buildContentItem('货币', item.ccy));
-        _transferList.add(_buildContentItem('金额', item.bal));
-        _transferList.add(_buildContentItem('附言', item.postscript));
-        setState(() {});
-      });
+      // _transferList.add(_buildTitle('付款方信息'));
+      // _transferList.add(_buildContentItem('付款账号', item.oppAc));
+      // _transferList.add(_buildContentItem('账户名称', item.oppAcName));
+      // _transferList.add(Padding(padding: EdgeInsets.only(top: 15)),);
+      // _transferList.add(_buildTitle('收款方信息'));
+      // _transferList.add(_buildContentItem('付款账号', item.dAc));
+      // _transferList.add(_buildContentItem('账户名称', item.dAcName));
+      // _transferList.add(_buildContentItem('货币', item.ccy));
+      // _transferList.add(_buildContentItem('金额', item.bal));
+      // _transferList.add(_buildContentItem('附言', item.postscript));
     }
   }
 
@@ -355,8 +323,6 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    print(_doTaskDetailContractModel?.body?.operateEndValue?.matAmt);
 
     return Scaffold(
       appBar: AppBar(
