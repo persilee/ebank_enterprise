@@ -928,7 +928,6 @@ class _DetailListPageState extends State<DetailListPage> {
 
   //获取所有历史记录
   _getRevenueByCards(String localDateStart, List<String> cards) async {
-    _isLoading = true;
     String localCcy;
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
@@ -948,7 +947,7 @@ class _DetailListPageState extends State<DetailListPage> {
     print(">>>>>>>$localCcy");
     print(">>>>>>>>$_endDate");
     print(">>>>>>>$_startDate");
-
+    // _isLoading = true;
     // HSProgressHUD.show();
     PayCollectDetailRepository()
         .getRevenueByCards(
@@ -957,7 +956,7 @@ class _DetailListPageState extends State<DetailListPage> {
                 '$_endDate', //结束时间     '$_endDate'
                 '$_startDate', //开始时间   '$_startDate'
                 0, //分页page
-                0, //分页pageSize
+                20, //分页pageSize
                 acNo: '$selectAccNo',
                 ciNo: '$custID'), //'818000000113'
             'GetRevenueByCardsReq')
@@ -996,6 +995,7 @@ class _DetailListPageState extends State<DetailListPage> {
 
   //获取账号
   Future<void> _getCardList() async {
+    _isLoading = true;
     CardDataRepository().getCardList('getCardList').then((data) {
       if (data.cardList != null) {
         if (mounted) {
@@ -1009,9 +1009,9 @@ class _DetailListPageState extends State<DetailListPage> {
               _allAccNoList.add(item.cardNo);
               _cardList.add(item.cardNo);
               _cardIcon.add(item.imageUrl);
-              _isLoading = false;
-              _refreshController.refreshCompleted();
-              _refreshController.footerMode.value = LoadStatus.canLoading;
+              //  _isLoading = false;
+              // _refreshController.refreshCompleted();
+              //_refreshController.footerMode.value = LoadStatus.canLoading;
             });
           });
         }
@@ -1019,7 +1019,13 @@ class _DetailListPageState extends State<DetailListPage> {
         _getRevenueByCards(_startDate, _allAccNoList);
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      //  _isLoading = false;
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
     });
   }
 }
