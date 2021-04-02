@@ -24,226 +24,262 @@ class _LoanReferenceState extends State<LoanReference> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //防止挤压溢出
-      //resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: Text('领用'),
-        centerTitle: true,
-        elevation: 1,
-      ),
-      body: Container(
-        //height: MediaQuery.of(context).size.height / 0.33,
-        //color: Colors.white,
-        child: ListView(
-          children: [
-            Container(
-              padding: EdgeInsets.fromLTRB(23, 16, 23, 0),
-              // width: MediaQuery.of(context).size.width,
-              color: Colors.white,
-              child: Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Text(
-                      '可借款额度 CNY800.00',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(color: Color(0xFF262626), fontSize: 15),
-                    ),
-                  ),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(right: 5, top: 10),
-                          child: Text(
-                            'CNY',
-                            style: TextStyle(
-                                color: Color(0xFF3394D4),
-                                fontSize: 21,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(top: 20),
-                          width: MediaQuery.of(context).size.width / 1.5,
-                          height: 60,
-                          child: TextField(
-                            style: TextStyle(
-                              fontSize: 24,
-                              color: HsgColors.firstDegreeText,
-                            ),
-                            decoration: InputDecoration(
-                                // isCollapsed: true,
-                                // contentPadding: EdgeInsets.symmetric(
-                                //     vertical: 10, horizontal: 10),
-                                // filled: true,
-                                //  fillColor: Colors.green,
-                                border: InputBorder.none,
-                                hintText: '0.00',
-                                hintStyle: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 24,
-                                    color: Color(0xFFCCCCCC))),
-                            keyboardType:
-                                TextInputType.numberWithOptions(decimal: true),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp('[0-9.]')),
-                              LengthLimitingTextInputFormatter(12),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    height: 0,
-                    color: Colors.blue,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(bottom: 21),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
+        //防止挤压溢出
+        //resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          title: Text('领用'),
+          centerTitle: true,
+          elevation: 1,
+        ),
+        body: Container(
+          //height: MediaQuery.of(context).size.height / 0.33,
+          //color: Colors.white,
+          child: ListView(
+            children: [
+              Container(
+                padding: EdgeInsets.fromLTRB(23, 16, 23, 0),
+                // width: MediaQuery.of(context).size.width,
                 color: Colors.white,
-              ),
-              margin: EdgeInsets.fromLTRB(15, 16, 15, 13),
-              child: Column(
-                children: [
-                  //借款期限
-                  Container(
-                      child: selectInkWellToBlackTitle(
-                          '借款期限', _deadLine, onClink())),
-                  Divider(
-                    height: 0,
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(20, 5, 0, 11),
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.white,
-                    child: Text(
-                      '可提前还款，利息按天计算，免手续费',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(color: Color(0xFF9C9C9C), fontSize: 13),
+                child: Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Text(
+                        '可借款额度 CNY800.00',
+                        textAlign: TextAlign.left,
+                        style:
+                            TextStyle(color: Color(0xFF262626), fontSize: 15),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(15, 0, 15, 13),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Colors.white,
-              ),
-              child: Column(
-                children: [
-                  //借款期限
-                  Container(
-                      //  color: Colors.white,
-                      child: selectInkWellToBlackTitle(
-                    '还款方式',
-                    _deadLine,
-                    onClink,
-                  )),
-                  Divider(
-                    height: 0,
-                  ),
-                  Container(
-                      color: Colors.white,
-                      child: selectInkWellToBlackTitle(
-                        '还款计划',
-                        _deadLine,
-                        onClink(),
-                      )),
-                  Divider(
-                    height: 0,
-                  ),
-
-                  Container(
-                    padding: EdgeInsets.fromLTRB(19, 20, 11, 20),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Text('总利息',
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(right: 5, top: 10),
+                            child: Text(
+                              'CNY',
                               style: TextStyle(
-                                  fontSize: 14.5, fontWeight: FontWeight.bold)),
-                        ),
-                        Container(
-                          child: Text(
-                            '261.88',
-                            style: TextStyle(color: Color(0xFF9C9C9C)),
+                                  color: Color(0xFF3394D4),
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        )
-                      ],
+                          Container(
+                            padding: EdgeInsets.only(top: 20),
+                            width: MediaQuery.of(context).size.width / 1.5,
+                            height: 60,
+                            child: TextField(
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: HsgColors.firstDegreeText,
+                              ),
+                              decoration: InputDecoration(
+                                  // isCollapsed: true,
+                                  // contentPadding: EdgeInsets.symmetric(
+                                  //     vertical: 10, horizontal: 10),
+                                  // filled: true,
+                                  //  fillColor: Colors.green,
+                                  border: InputBorder.none,
+                                  hintText: '0.00',
+                                  hintStyle: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 24,
+                                      color: Color(0xFFCCCCCC))),
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp('[0-9.]')),
+                                LengthLimitingTextInputFormatter(12),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    Divider(
+                      height: 0,
+                      color: Colors.blue,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(bottom: 21),
+                    )
+                  ],
+                ),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(15, 16, 15, 13),
-              child: Column(
-                children: [
-                  //借款期限
-                  Container(
-                    padding: EdgeInsets.only(left: 20),
-                    color: Colors.white,
-                    child: SelectInkWell(
-                      title: '收款账户',
-                      item: _deadLine,
-                      onTap: () {
-                        // FocusScope.of(context).requestFocus(FocusNode());
-                        // _select(S.current.loan_duration, _deadLineLists, 0);
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.white,
+                ),
+                margin: EdgeInsets.fromLTRB(15, 16, 15, 13),
+                child: Column(
+                  children: [
+                    //借款期限
+                    Container(
+                        child: selectInkWellToBlackTitle(
+                            '借款期限', _deadLine, onClink())),
+                    Divider(
+                      height: 0,
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(20, 5, 0, 11),
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.white,
+                      child: Text(
+                        '可提前还款，利息按天计算，免手续费',
+                        textAlign: TextAlign.left,
+                        style:
+                            TextStyle(color: Color(0xFF9C9C9C), fontSize: 13),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(15, 0, 15, 13),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  children: [
+                    //借款期限
+                    Container(
+                        //  color: Colors.white,
+                        child: selectInkWellToBlackTitle(
+                      '还款方式',
+                      _deadLine,
+                      onClink,
+                    )),
+                    Divider(
+                      height: 0,
+                    ),
+                    Container(
+                        color: Colors.white,
+                        child: selectInkWellToBlackTitle(
+                          '还款计划',
+                          _deadLine,
+                          onClink(),
+                        )),
+                    Divider(
+                      height: 0,
+                    ),
+
+                    Container(
+                      padding: EdgeInsets.fromLTRB(19, 20, 11, 20),
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Text('总利息',
+                                style: TextStyle(
+                                    fontSize: 14.5,
+                                    fontWeight: FontWeight.bold)),
+                          ),
+                          Container(
+                            child: Text(
+                              '261.88',
+                              style: TextStyle(color: Color(0xFF9C9C9C)),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(15, 16, 15, 13),
+                child: Column(
+                  children: [
+                    //借款期限
+                    Container(
+                      padding: EdgeInsets.only(left: 20),
+                    ),
+                    Container(
+                      child: Column(
+                        children: [
+                          //借款期限
+                          Container(
+                            // padding: EdgeInsets.only(left: 20),
+                            color: Colors.white,
+                            child:
+                                // SelectInkWell(
+                                //   title: '收款账户',
+                                //   item: _deadLine,
+                                //   onTap: () {
+                                //     // FocusScope.of(context).requestFocus(FocusNode());
+                                //     // _select(S.current.loan_duration, _deadLineLists, 0);
+                                //   },
+                                // ),
+                                selectInkWellToBlackTitle(
+                                    '收款账户', _deadLine, onClink()),
+                          ),
+                          Divider(
+                            height: 0,
+                          ),
+                          // Container(
+                          //   color: Colors.white,
+                          //   child: SelectInkWell(
+                          //     title: '收款账户',
+                          //     item: _deadLine,
+                          //     onTap: () {
+                          //       // FocusScope.of(context).requestFocus(FocusNode());
+                          //       // _select(S.current.loan_duration, _deadLineLists, 0);
+                          //     },
+                          //   ),
+                          // ),
+                          Divider(
+                            height: 0,
+                          ),
+                          Container(
+                              color: Colors.white,
+                              child: selectInkWellToBlackTitle(
+                                '借款用途',
+                                _deadLine,
+                                onClink(),
+                              )),
+                        ],
+                      ),
+                    ),
+                    //文本协议内容
+                    Container(
+                      margin: EdgeInsets.only(top: 10, bottom: 20),
+                      //padding: CONTENT_PADDING,
+                      child: Row(
+                        children: [_roundCheckBox(), _textContent()],
+                      ),
+                    ),
+                    //完成按钮
+
+                    CustomButton(
+                      margin: EdgeInsets.only(
+                          left: 37.5, right: 37.5, bottom: 50, top: 10),
+                      height: 50,
+                      text: Text(
+                        S.current.complete,
+                        style: TextStyle(fontSize: 14, color: Colors.white),
+                      ),
+                      // clickCallback: () {
+                      //   //  _login();
+                      // },
+                      //
+                      //
+                      clickCallback: () {
+                        //  _login();
+                        Navigator.pushNamed(context, pageLoanCollectionPreview);
                       },
                     ),
-                  ),
-                  Divider(
-                    height: 0,
-                  ),
-                  Container(
-                      color: Colors.white,
-                      child: selectInkWellToBlackTitle(
-                        '借款用途',
-                        _deadLine,
-                        onClink(),
-                      )),
-                ],
+                  ],
+                ),
               ),
-            ),
-            //文本协议内容
-            Container(
-              margin: EdgeInsets.only(top: 10, bottom: 20),
-              //padding: CONTENT_PADDING,
-              child: Row(
-                children: [_roundCheckBox(), _textContent()],
-              ),
-            ),
-            //完成按钮
-
-            CustomButton(
-              margin:
-                  EdgeInsets.only(left: 37.5, right: 37.5, bottom: 50, top: 10),
-              height: 50,
-              text: Text(
-                S.current.complete,
-                style: TextStyle(fontSize: 14, color: Colors.white),
-              ),
-              clickCallback: () {
-                //  _login();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+            ],
+            //  ),
+          ),
+        ));
   }
 
   Widget selectInkWellToBlackTitle(
@@ -254,15 +290,34 @@ class _LoanReferenceState extends State<LoanReference> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: 50,
+        // height: 50,
+        padding: EdgeInsets.fromLTRB(0, 15, 0, title == '收款账户' ? 5 : 15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
               padding: EdgeInsets.only(left: 20),
-              child: Text(
-                title,
-                style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.bold),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Text(
+                      title,
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  Container(
+                    child: title == '收款账户'
+                        ? Text(
+                            '预计两小时内到账',
+                            style: TextStyle(
+                                fontSize: 13, color: HsgColors.describeText),
+                          )
+                        : Container(),
+                  ),
+                ],
               ),
             ),
             Row(
