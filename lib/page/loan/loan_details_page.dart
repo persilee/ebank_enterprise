@@ -323,7 +323,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           ),
         ),
         onPressed: () {
-          print("领用");
+          Navigator.pushNamed(context, pageLoanReference);
         },
       ),
     );

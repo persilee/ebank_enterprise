@@ -12,6 +12,7 @@ import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/register/component/register_86.dart';
+import 'package:ebank_mobile/page/register/component/register_getSms.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -77,10 +78,26 @@ class _ForgetUserNameState extends State<ForgetUserName> {
               color: Colors.white,
               child: ListView(
                 children: [
+                  //忘记用户名标题
                   getRegisterTitle(S.current.forget_username),
+                  //忘记用户名区号
                   getRegisterRegion(context, _phoneNum, _officeAreaCodeText,
                       _selectRegionCode),
+
                   //获取验证码
+                  //    SizedBox(
+                  //   height: 20,
+                  // ),
+                  // GetSms(
+                  //   phone: _phoneNum,
+                  //   officeAreaCodeText: _officeAreaCodeText,
+                  //   smsType: 'findAccount',
+                  //   sms: _sms,
+                  //   isRegister: false,
+                  //   isForget: true,
+                  // ),
+
+                  // //获取验证码
                   Container(
                     height: MediaQuery.of(context).size.height / 15,
                     margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
@@ -215,15 +232,6 @@ class _ForgetUserNameState extends State<ForgetUserName> {
 
   //检验用户是否注册
   _checkRegister() {
-    // RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
-    // if (characters.hasMatch(_phoneNum.text) == false) {
-    //   Fluttertoast.showToast(
-    //     msg: S.current.format_mobile_error,
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     gravity: ToastGravity.CENTER,
-    //     timeInSecForIosWeb: 1,
-    //   );
-    // } else {
     VersionDataRepository()
         .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
         .then((data) {
@@ -250,10 +258,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
   //获取验证码接口
   _getVerificationCode() async {
     print(">>>>>>>>>>>>>>>$_accountName");
-    // RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
-    // if (characters.hasMatch(_phoneNum.text) == false) {
-    //   HSProgressHUD.showInfo(status: S.current.format_mobile_error);
-    // } else
+
     if (!_isRegister) {
       Fluttertoast.showToast(
         msg: S.current.num_not_is_register,
