@@ -790,6 +790,7 @@ class _HomePageState extends State<HomePage> {
         //'贷款申请'
         // Navigator.pushNamed(context, pageLoanApplication);
         Navigator.pushNamed(context, pageLoanNewApplictionNav);
+        //Navigator.pushNamed(context, pageLoanReference);
       } else if (S.current.loan_record == title) {
         //'贷款记录'
         Navigator.pushNamed(context, pageLimitDetails);

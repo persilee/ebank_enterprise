@@ -9,6 +9,8 @@ import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/approval/task_approval_page.dart';
 
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
+import 'package:ebank_mobile/page/loan/loan_collection_preview.dart';
+import 'package:ebank_mobile/page/loan/loan_reference.dart';
 
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
 import 'package:ebank_mobile/page/openAccount/country_region_select_page.dart';
@@ -202,6 +204,8 @@ var pageLoanNewApplictionNav = '/loan_new_application_page.dart';
 var pageLoanProductlistNav = '/loan_product_list_page.dart';
 var pageLoanConfirmNav = '/loan_application_confirm_page.dart';
 var pageLoanMyApplicationList = '/loan_myApplication_list_page.dart';
+var pageLoanReference = 'loan_reference.dart';
+var pageLoanCollectionPreview = '/loan_collection_preview.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -302,6 +306,8 @@ var appRoutes = {
   pageLoanProductlistNav: (context) => LoanProductListPage(),
   pageLoanConfirmNav: (context) => LoanConfirmApplicationList(),
   pageLoanMyApplicationList: (context) => LoanMyApplicationListPage(), //贷款 我的申请
+  pageLoanReference: (context) => LoanReference(),
+  pageLoanCollectionPreview: (context) => PageLoanCollectionPreview(), //贷款领用预览
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {

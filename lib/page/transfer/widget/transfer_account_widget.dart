@@ -175,8 +175,8 @@ class TransferAccount extends StatelessWidget {
           ),
         ),
         Icon(
-          // Icons.arrow_drop_down,
-          Icons.keyboard_arrow_down,
+          Icons.arrow_drop_down,
+          // Icons.keyboard_arrow_down,
           color: Color(0xff282828),
           // color: HsgColors.firstDegreeText,
         ),

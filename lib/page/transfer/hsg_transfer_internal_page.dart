@@ -149,6 +149,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   @override
   void initState() {
     super.initState();
+    _loadLocalCcy();
     _loadTransferData();
 
     _transferMoneyController.addListener(() {
@@ -510,7 +511,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           }
           // _getCardTotal(_account);
           _loadData(_account);
-          _loadLocalCcy();
+          // _loadLocalCcy();
           // _payCcyList.clear();
           // _payCcy = _localeCcy;
           // _payCcyList.add(_localeCcy);

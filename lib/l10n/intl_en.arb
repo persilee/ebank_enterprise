@@ -44,7 +44,7 @@
   "loan_interest_rate": "Loan Interest Rate",
   "loan_account": "Loan Account",
   "view_details": "View Details",
-  "view_repayment_plan": "View Repayment Plan",
+  "view_repayment_plan": "Repayment Plan",
   "prepayment": "Prepayment",
   "remaining_principal": "Remaining Principal",
   "remain_loan_amount": "Rest Loan",
@@ -446,6 +446,9 @@
   "add_payee": "Add Payee",
   "bank_name": "Bank Name",
   "transfer_the_preview": "Transfer The Preview",
+  "transfer_the_preview1": "Internal Transfer The Preview",
+  "transfer_the_preview2": "International Transfer The Preview",
+  "transfer_the_preview3": "Reservation Transfer The Preview",
   "payment_currency": "Payment Currency",
   "into_account": "Into Account",
   "transfer_into_currency": "Transfer Into Currency",
@@ -512,6 +515,9 @@
   "num_not_is_register": "The mobile phone number has not been registered, please register the account first",
   "pengyikang_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<彭逸康（登录注册收支明细账户总览）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "lishaoying_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李少颖（待办）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+
+  "approval_task_id": "Task ID",
+
   "lishaoying_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李少颖（待办）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "lijiawei_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李家伟（开户）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "openAccout_basicInformation": "General Information",
