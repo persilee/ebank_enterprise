@@ -199,6 +199,7 @@ class _FeatureListPageState extends State<FeatureListPage> {
                 Navigator.pushNamed(context, pageMyDepositRate);
               } else if (S.current.loan_apply == title) {
                 //'贷款申请'
+                // Navigator.pushNamed(context, pageLoanReference);
                 Navigator.pushNamed(context, pageLoanApplication);
               } else if (S.current.loan_record == title) {
                 //'贷款记录'
