@@ -96,6 +96,7 @@ import 'package:ebank_mobile/page/openAccount/open_account_get_face_sign.dart';
 import 'package:ebank_mobile/page/loan/loan_new_application_page.dart';
 import 'package:ebank_mobile/page/loan/loan_product_list_page.dart';
 import 'package:ebank_mobile/page/loan/loan_application_confirm_page.dart';
+import 'package:ebank_mobile/page/loan/loan_myApplication_list_page.dart';
 
 var pageHome = '/';
 var pageLogin = pageHome;
@@ -192,12 +193,13 @@ var pageOpenAccountRelatedIndividualsData =
     '/open_account_related_individuals_data_page.dart';
 var pageOpenAccountIdentifyResultsFailure =
     '/open_account_identify_results_failure_page.dart';
-var pageOpenAccountIdentifySuccessfulFailure =
+var pageOpenAccountIdentifySuccessful =
     '/open_account_identify_results_successful_page.dart';
 var pageOpenAccountGetFaceSign = '/open_account_get_face_sign.dart';
 var pageLoanNewApplictionNav = '/loan_new_application_page.dart';
 var pageLoanProductlistNav = '/loan_product_list_page.dart';
 var pageLoanConfirmNav = '/loan_application_confirm_page.dart';
+var pageLoanMyApplicationList = '/loan_myApplication_list_page.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -290,12 +292,13 @@ var appRoutes = {
       RelatedIndividualsDataPage(),
   pageOpenAccountIdentifyResultsFailure: (context) =>
       OpenAccountIdentifyResultsFailurePage(),
-  pageOpenAccountIdentifySuccessfulFailure: (context) =>
+  pageOpenAccountIdentifySuccessful: (context) =>
       OpenAccountIdentifyResultsSuccessfulPage(),
   pageOpenAccountGetFaceSign: (context) => OpenAccountGetFaceSignPage(),
   pageLoanNewApplictionNav: (context) => LoanNewApplicationPage(), //
   pageLoanProductlistNav: (context) => LoanProductListPage(),
   pageLoanConfirmNav: (context) => LoanConfirmApplicationList(),
+  pageLoanMyApplicationList: (context) => LoanMyApplicationListPage(), //贷款 我的申请
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {

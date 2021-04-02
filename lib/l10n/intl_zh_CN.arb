@@ -37,7 +37,6 @@
   "deduct_money_account": "扣款卡号",
   "instruction_at_maturity_0": "等待客户指示",
   "loan_limit_detail": "贷款记录",
-  "contract_account": "合约账号",
   "loan_principal": "贷款本金",
   "begin_time": "开始时间",
   "end_time": "结束时间",
@@ -504,6 +503,7 @@
   "in_all": "共",
   "accounts": "个账户",
   "feedbackSuccess": "意见反馈成功",
+  "select_image_error": "图片异常，请重新选择",
   "zhangqirong_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<张其荣国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "pengyikang_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>彭逸康国际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "register_check_username": "用户名只能为4-16位字符、数字或者字母，不能包含特殊字符，不能重复",
@@ -511,6 +511,10 @@
   "num_not_is_register": "该手机号还未注册，请先注册账号",
   "pengyikang_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<彭逸康国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "lishaoying_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李少颖际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+
+  "approval_task_id": "任务ID",
+
+
   "lishaoying_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李少颖国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "lijiawei_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李家伟际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "openAccout_basicInformation": "基本信息",
@@ -597,8 +601,10 @@
   "home_header_welcome_title": "欢迎使用朗华手机银行",
   "loan_application_confirm_NavTitle": "贷款确认",
   "loan_application_submit_success": "申请已提交，待审批",
+  "loan_mineLoan_record_navTitle": "我的贷款",
 
   "open_account_goto_ebank_tip": "尊敬的用户，您好。由于您不是受邀客户，请前往网银进行开户申请。",
+  "openAccount_faceSign_results_content": "面签数据提交成功",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }

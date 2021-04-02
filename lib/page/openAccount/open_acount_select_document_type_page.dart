@@ -30,10 +30,15 @@ class _OpenAccountSelectDocumentTypePageState
   ///业务编号
   String _businessId = '';
 
+  ///是否是快速开户
+  bool _isQuick;
+
   @override
   Widget build(BuildContext context) {
-    ///业务编号
-    _businessId = ModalRoute.of(context).settings.arguments;
+    Map argumentsMap = ModalRoute.of(context).settings.arguments;
+
+    _businessId = argumentsMap['businessId'];
+    _isQuick = argumentsMap['isQuick'];
 
     final size = MediaQuery.of(context).size;
 
@@ -242,14 +247,21 @@ class _OpenAccountSelectDocumentTypePageState
           value.infoStr['IdNum'] != '') {
         Navigator.pushNamed(
           context,
-          pageOpenAccountIdentifySuccessfulFailure,
-          arguments: {'valueData': value},
+          pageOpenAccountIdentifySuccessful,
+          arguments: {
+            'valueData': value,
+            'isQuick': _isQuick,
+          },
         );
       } else {
         Navigator.pushNamed(
           context,
           pageOpenAccountIdentifyResultsFailure,
-          arguments: {'businessId': _businessId, 'documentType': documentType},
+          arguments: {
+            'businessId': _businessId,
+            'isQuick': _isQuick,
+            'documentType': documentType,
+          },
         );
       }
     }).catchError((e) {
@@ -261,7 +273,11 @@ class _OpenAccountSelectDocumentTypePageState
       Navigator.pushNamed(
         context,
         pageOpenAccountIdentifyResultsFailure,
-        arguments: {'businessId': _businessId, 'documentType': documentType},
+        arguments: {
+          'businessId': _businessId,
+          'isQuick': _isQuick,
+          'documentType': documentType,
+        },
       );
     });
   }

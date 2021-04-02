@@ -38,7 +38,6 @@
   "deduct_money_date": "Repayment Date",
   "deduct_money_account": "Repayment Account",
   "loan_limit_detail": "Loan Record",
-  "contract_account": "Contract Account",
   "loan_principal": "Loan Principal",
   "begin_time": "Value Date",
   "end_time": "Maturity Date",
@@ -505,6 +504,7 @@
   "in_all": "There are",
   "accounts": "amounts",
   "feedbackSuccess": "Feedback successful",
+  "select_image_error": "The picture is abnormal, please select again.",
   "zhangqirong_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<张其荣（我的）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "pengyikang_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>彭逸康（登录注册收支明细账户总览）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "register_check_username": "The user name can only be 4-16 characters, numbers or letters, can't contain special characters and can't be repeated",
@@ -512,6 +512,9 @@
   "num_not_is_register": "The mobile phone number has not been registered, please register the account first",
   "pengyikang_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<彭逸康（登录注册收支明细账户总览）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "lishaoying_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李少颖（待办）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+
+  "approval_task_id": "Task ID",
+
   "lishaoying_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李少颖（待办）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "lijiawei_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李家伟（开户）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "openAccout_basicInformation": "General Information",
@@ -596,8 +599,10 @@
   "home_header_welcome_title": "Welcome to Brillink Mobile Banking",
   "loan_application_confirm_NavTitle": "Loans to confirm",
   "loan_application_submit_success": "The application has been submitted for approval",
+  "loan_mineLoan_record_navTitle": "My loan",
 
   "open_account_goto_ebank_tip": "Dear user. Since you are not an invited customer, please go to online banking to apply for an account.",
+  "openAccount_faceSign_results_content": "FaceSign data submitted successfully.",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   
 }

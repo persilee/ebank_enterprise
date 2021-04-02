@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/http/retrofit/error_interceptor.dart';
 import 'package:ebank_mobile/http/retrofit/queryParameters_interceptor.dart';
+import 'package:ebank_mobile/http/retrofit/request_interceptor.dart';
 import 'package:ebank_mobile/http/retrofit/response_interceptor.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'header_interceptor.dart';
@@ -22,6 +23,7 @@ class BaseDio {
     dio.interceptors.add(HeaderInterceptor()); // 添加拦截器，如 token之类，需要全局使用的参数
     dio.interceptors.add(ErrorInterceptor()); // 添加error拦截器
     dio.interceptors.add(ResponseInterceptor());
+    dio.interceptors.add(RequestInterceptor());
     // dio.interceptors
     //     .add(ExtraInterceptor()); // 添加拦截器，如 userId 和 loginName这两个额外参数
     // dio.interceptors.add(

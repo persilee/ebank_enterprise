@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///我的待办页面
 /// Author: wangluyao
@@ -36,17 +37,10 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   List<ApprovalTask> _listData = []; //页面显示的待办列表
   ScrollController _scrollController;
   int count = 0;
-  int page = 1;
+  int _page = 1;
   bool _isLoading = false; //加载状态
-  bool _isDate = false;
-  RefreshController _refreshController;
-
-  ///////////////
-  List<Data> _testListData = [];
-  int _testPageIndex = 1;
   bool _isMoreData = false;
-
-  // bool refresh;
+  RefreshController _refreshController;
 
   @override
   void initState() {
@@ -55,33 +49,6 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     _scrollController = ScrollController();
     _loadData();
     // _testLoadData(false);
-  }
-
-  void _testLoadData(bool isLoadMore) async {
-    if (isLoadMore) {
-      _testPageIndex++;
-    } else {
-      _testPageIndex = 1;
-    }
-    _isLoading = true;
-    if (!isLoadMore) await Future.delayed(Duration(seconds: 2));
-    rootBundle.loadString('assets/json/my_approval.json').then((value) {
-      Map map = json.decode(value);
-      MyApprovalData data = MyApprovalData.fromJson(map);
-      print(data.toJson());
-      _isLoading = true;
-      if (this.mounted) {
-        setState(() {
-          if (_testPageIndex == 1) {
-            _testListData.addAll(data.data.sublist(0, 9));
-          } else if (_testPageIndex == 2) {
-            _testListData.addAll(data.data.sublist(9, data.data.length));
-            _isMoreData = true;
-          }
-          _isLoading = false;
-        });
-      }
-    });
   }
 
 //蓝色圆点
@@ -102,7 +69,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
       padding: EdgeInsets.only(right: 10.0, top: 6.0),
       child: SizedBox(
         width: 1.0,
-        height: 116.0,
+        height: 126.0,
         child: DecoratedBox(
           decoration: BoxDecoration(color: HsgColors.divider),
         ),
@@ -169,11 +136,13 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
             //待办任务名称
             _taskName(approvalTask?.taskName ?? ''),
             //待办任务id
-            _rowInformation(intl.S.current.sponsor, approvalTask?.taskId ?? ''),
+            _rowInformation(intl.S.current.approval_task_id, approvalTask?.taskId ?? ''),
             //发起人
-            _rowInformation(intl.S.current.sponsor, approvalTask?.applicantName ?? ''),
+            _rowInformation(
+                intl.S.current.sponsor, approvalTask?.applicantName ?? ''),
             //创建时间
-            _rowInformation(intl.S.current.creation_time, approvalTask?.createTime ?? ''),
+            _rowInformation(
+                intl.S.current.creation_time, approvalTask?.createTime ?? ''),
           ],
         ),
       ),
@@ -183,7 +152,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
 //待办列表
   Widget _todoInformation(ApprovalTask approvalTask) {
     return Container(
-      height: 136.0,
+      height: 146.0,
       padding: EdgeInsets.only(top: 16),
       child: GestureDetector(
         onTap: () {
@@ -224,16 +193,15 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
             ? CustomRefresh(
                 controller: _refreshController,
                 onLoading: () async {
-                  await Future.delayed(Duration(seconds: 1));
-                  _testLoadData(true);
+                  await _loadData(isLoadMore: true);
                   //加载更多完成
                   _refreshController.loadComplete();
                   //显示没有更多数据
                   if (_isMoreData) _refreshController.loadNoData();
                   // _refreshController.loadNoData();
                 },
-                onRefresh: () {
-                  _testLoadData(false);
+                onRefresh: () async {
+                  await _loadData();
                   //刷新完成
                   _refreshController.refreshCompleted();
                   _refreshController.footerMode.value = LoadStatus.canLoading;
@@ -257,32 +225,33 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
         arguments: {"data": approvalTask, "title": widget.title});
   }
 
-  Future<void> _loadData() async {
+  Future<void> _loadData({bool isLoadMore = false}) async {
+    isLoadMore ? _page ++ : _page = 1;
     _isLoading = true;
     try {
-      FindUserTodoTaskModel response = await ApiClient()
-          .findUserTodoTask(BaseBody(
-              body: FindUserTodoTaskBody(
-                      page: 1,
-                      pageSize: 20,
-                      tenantId: 'EB',
-                      custId: '818000000113')
-                  .toJson()));
+      FindUserTodoTaskModel response = await ApiClient().findUserTodoTask(
+        FindUserTodoTaskBody(
+            page: _page, pageSize: 10, tenantId: 'EB', custId: '818000000113'),
+      );
       if (this.mounted) {
         setState(() {
+          if(isLoadMore == false && _page == 1) _listData.clear();
           _listData.addAll(response.rows);
+          _isLoading = false;
+          if(response.rows.length < 10 && response.totalPage >= _page) {
+            _isMoreData = true;
+          }
+        });
+      }
+    } catch (e) {
+      if(this.mounted) {
+        setState(() {
           _isLoading = false;
         });
       }
-
-      print('findUserTodoTaskResponse: ${response.toJson()}');
-    } catch (e) {
-      print(e);
+      print(e.runtimeType);
     }
   }
-
-//加载更多
-  _getMore() {}
 
   @override
   void dispose() {
