@@ -149,6 +149,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   @override
   void initState() {
     super.initState();
+    _loadLocalCcy();
     _loadTransferData();
     _transferMoneyController.addListener(() {
       if (_transferMoneyController.text.length == 0) {
@@ -1075,7 +1076,6 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             payerBankCode = element.cardList[0].bankCode;
           });
           _loadData(_account);
-          _loadLocalCcy();
         }
       });
     });
