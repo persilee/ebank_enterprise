@@ -232,10 +232,10 @@ class _ForgetUserNameState extends State<ForgetUserName> {
 
   //检验用户是否注册
   _checkRegister() {
+    HSProgressHUD.show();
     VersionDataRepository()
         .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
         .then((data) {
-      HSProgressHUD.dismiss();
       if (mounted) {
         setState(() {
           _accountName = data.userAccount;
@@ -267,13 +267,14 @@ class _ForgetUserNameState extends State<ForgetUserName> {
         timeInSecForIosWeb: 1,
       );
     } else {
-      HSProgressHUD.show();
       VerificationCodeRepository()
           .sendSmsByPhone(
               SendSmsByPhoneNumberReq(_phoneNum.text, 'findAccount'), 'sendSms')
           .then((data) {
+        setState(() {
+          _startCountdown();
+        });
         HSProgressHUD.dismiss();
-        _startCountdown();
       }).catchError((e) {
         HSProgressHUD.dismiss();
         Fluttertoast.showToast(

@@ -273,12 +273,10 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     VersionDataRepository()
         .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
         .then((data) {
-      HSProgressHUD.dismiss();
       if (mounted) {
         setState(() {
           _isRegister = data.register;
           _userAccount = data.userAccount;
-          HSProgressHUD.dismiss();
 
           //发送短信
           _getVerificationCode();
@@ -308,6 +306,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         }
       });
     };
+    HSProgressHUD.dismiss();
+
     _timer = Timer.periodic(Duration(seconds: 1), call);
   }
 
@@ -322,6 +322,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         timeInSecForIosWeb: 1,
       );
     } else if (!_isRegister) {
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: S.current.num_not_is_register,
         toastLength: Toast.LENGTH_SHORT,
@@ -333,8 +334,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
           .sendSmsByPhone(
               SendSmsByPhoneNumberReq(_phoneNum.text, 'findPwd'), 'sendSms')
           .then((data) {
-        HSProgressHUD.dismiss();
-        _startCountdown();
+        setState(() {
+          _startCountdown();
+        });
 
         HSProgressHUD.dismiss();
       }).catchError((e) {

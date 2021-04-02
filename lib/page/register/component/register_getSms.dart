@@ -93,17 +93,16 @@ class _GetSmsState extends State<GetSms> {
         setState(() {
           _isRegister = data.register;
           _sendSmsRegister(_isRegister);
-          HSProgressHUD.dismiss();
         });
       }
     }).catchError((e) {
-      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
       );
+      HSProgressHUD.dismiss();
     });
     // }
   }
@@ -114,6 +113,7 @@ class _GetSmsState extends State<GetSms> {
     // _isRegister ?
     if (widget.isRegister) {
       if (_isRegister) {
+        HSProgressHUD.dismiss();
         Fluttertoast.showToast(
           msg: S.current.num_is_register,
           toastLength: Toast.LENGTH_SHORT,
@@ -129,8 +129,8 @@ class _GetSmsState extends State<GetSms> {
             .then((value) {
           if (mounted) {
             setState(() {
-              HSProgressHUD.dismiss();
               _startCountdown();
+
               //  _sms.text = "123456";
             });
           }
@@ -162,7 +162,6 @@ class _GetSmsState extends State<GetSms> {
             .then((value) {
           if (mounted) {
             setState(() {
-              HSProgressHUD.dismiss();
               _startCountdown();
               //  _sms.text = "123456";
             });
@@ -194,6 +193,7 @@ class _GetSmsState extends State<GetSms> {
         });
       }
     };
+    HSProgressHUD.dismiss();
     _timer = Timer.periodic(Duration(seconds: 1), call);
   }
 
