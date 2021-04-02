@@ -5,6 +5,7 @@
 
 class ConfigKey {
   static const LANGUAGE = "language";
+  static const DEVICELANGUAGE = "device_language";
 
   static const CUST_ID = "cust_id";
   static const USER_ID = "user_id";
