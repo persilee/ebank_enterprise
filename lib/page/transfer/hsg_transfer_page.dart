@@ -32,8 +32,11 @@ class _TransferPageState extends State<TransferPage> {
   bool _isShowNoDataWidget = false;
   bool _isLoading = false;
   bool _headColor = true;
+  bool _loadMore = false; //是否加载更多
   RefreshController _refreshController;
   ScrollController _scrollController;
+  int _page = 1; //第几页数据
+  int _totalPage = 1; //数据总页数
 
   //顶部网格数据
   List<Map<String, Object>> _gridFeatures = [
@@ -93,31 +96,47 @@ class _TransferPageState extends State<TransferPage> {
                   margin: EdgeInsets.only(top: 50),
                   child: HsgLoading(),
                 )
-              : Expanded(
-                  child: CustomRefresh(
-                    controller: _refreshController,
-                    onLoading: () {
-                      //加载更多完成
-                      _refreshController.loadComplete();
-                      //显示没有更多数据
-                      _refreshController.loadNoData();
-                    },
-                    onRefresh: () {
-                      //刷新完成
-                      _refreshController.refreshCompleted();
-                      _refreshController.footerMode.value =
-                          LoadStatus.canLoading;
-                    },
-                    content: ListView.builder(
-                      // padding: EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
-                      itemCount: _partnerListData.length,
-                      // controller: _scrollController,
-                      itemBuilder: (context, index) {
-                        return _partnerListItemWidget(_partnerListData[index]);
-                      },
-                    ),
-                  ),
-                ),
+              : _partnerListData.length > 0
+                  ? Expanded(
+                      child: CustomRefresh(
+                        controller: _refreshController,
+                        onLoading: () {
+                          // //加载更多完成
+                          // _refreshController.loadComplete();
+                          // //显示没有更多数据
+                          // _refreshController.loadNoData();
+                          if (_page < _totalPage) {
+                            _loadMore = true;
+                            _page++;
+                          }
+                          //加载更多完成
+                          if (_loadMore) {
+                            _loadData();
+                          } else {
+                            //显示没有更多数据
+                            _refreshController.loadNoData();
+                          }
+                        },
+                        onRefresh: () {
+                          _page = 1;
+                          _loadData();
+                          //刷新完成
+                          _refreshController.refreshCompleted();
+                          _refreshController.footerMode.value =
+                              LoadStatus.canLoading;
+                        },
+                        content: ListView.builder(
+                          // padding: EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
+                          itemCount: _partnerListData.length,
+                          // controller: _scrollController,
+                          itemBuilder: (context, index) {
+                            return _partnerListItemWidget(
+                                _partnerListData[index]);
+                          },
+                        ),
+                      ),
+                    )
+                  : _noDataContainer(),
         ],
       ),
     );
@@ -517,6 +536,34 @@ class _TransferPageState extends State<TransferPage> {
     );
   }
 
+  //没数据显示页面
+  Widget _noDataContainer() {
+    return Container(
+      width: (MediaQuery.of(context).size.width),
+      height: 270,
+      color: Colors.white,
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 45),
+            child: Image(
+              image: AssetImage('images/noDataIcon/no_data_person.png'),
+              width: 159,
+              height: 128,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            child: Text(
+              S.of(context).no_recent_transfer_account,
+              style: TextStyle(color: HsgColors.describeText, fontSize: 15.0),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   ///最近转账账号列表单元widget
   Widget _partnerListItemWidget(Rows data) {
     //银行图标
@@ -710,20 +757,23 @@ class _TransferPageState extends State<TransferPage> {
     // HSProgressHUD.show();
     TransferDataRepository()
         .getTransferPartnerList(
-      GetTransferPartnerListReq(1, 10),
+      GetTransferPartnerListReq(_page, 10),
       'getTransferPartnerList',
     )
         .then((data) {
       print('$data');
       // setState(() {
-      if (data.rows != null) {
-        if (this.mounted) {
+      if (this.mounted) {
+        if (data.rows != null) {
           setState(() {
+            _totalPage = data.totalPage;
             _partnerListData.clear();
             _partnerListData.addAll(data.rows);
             _isShowNoDataWidget = _partnerListData.length > 0 ? false : true;
-            _isLoading = false;
           });
+          _isLoading = false;
+          _loadMore = false;
+          _refreshController.loadComplete();
         }
         // HSProgressHUD.dismiss();
       }

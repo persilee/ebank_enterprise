@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
+import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
@@ -8,6 +12,7 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -26,7 +31,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
   String _headPortraitUrl = ""; //头像地址
   var _imgPath;
   var _enterpriseName = ''; // 企业名称
-  var _userName = '高阳银行企业用户'; // 姓名
+  var _userName = ''; // 姓名
   var _characterName = ''; // 角色名称
   var _belongCustStatus = ''; //用户状态
   String _userPhone = "";
@@ -77,10 +82,10 @@ class _UserInformationPageState extends State<UserInformationPage> {
             }, 70),
             _infoFrame(S.current.user_name, _userName),
             _infoFrame(S.current.phone_num, _userPhone),
-            _belongCustStatus == '6'
+            (_belongCustStatus == '5' || _belongCustStatus == '6')
                 ? _infoFrame(S.current.character, _characterName)
                 : Container(),
-            _belongCustStatus == '6'
+            (_belongCustStatus == '5' || _belongCustStatus == '6')
                 ? _infoFrame(S.current.company_name, _enterpriseName)
                 : Container(),
             selectFrame(
@@ -335,38 +340,38 @@ class _UserInformationPageState extends State<UserInformationPage> {
   //上传头像
   _uploadAvatar() async {
     if (_imgPath == null || _imgPath == '') {
-      HSProgressHUD.showInfo(status: '图片异常，请重新选择');
+      HSProgressHUD.showInfo(status: S.of(context).select_image_error);
     } else {
-      // HSProgressHUD.show();
-      // UploadAvatarRepository()
-      //     .uploadAvatar(UploadAvatarReq(), _imgPath, 'uploadAvatar')
-      //     .then((data) {
-      //   setState(() {});
-      //   HSProgressHUD.dismiss();
-      // }).catchError((e) {
-      //   Fluttertoast.showToast(msg: e.toString());
-      //   HSProgressHUD.dismiss();
-      // });
+      File file = File(_imgPath);
+      ApiClient().uploadAvatar(BaseBody(body: {}), file).then((value) {
+        //, BaseBody(body: {})
+        print(value);
+      }).catchError((e) {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+      });
     }
   }
 
   void _changeUserInfoShow(UserInfoResp model) {
     setState(() {
-      _enterpriseName = _language == 'zh_CN'
+      _enterpriseName = _language != 'en'
           ? model.custLocalName != null
               ? model.custLocalName
               : ''
           : model.custEngName != null
               ? model.custEngName
               : ''; // 企业名称
-      _userName = _language == 'zh_CN'
+      _userName = _language != 'en'
           ? model.localUserName != null
               ? model.localUserName
               : ''
           : model.englishUserName != null
               ? model.englishUserName
               : ''; // 姓名
-      _characterName = _language == 'zh_CN'
+      _characterName = _language != 'en'
           ? model.roleLocalName != null
               ? model.roleLocalName
               : ''

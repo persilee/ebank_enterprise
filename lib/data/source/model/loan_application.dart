@@ -20,7 +20,7 @@ class LoanApplicationReq extends Object {
   String contact;
   //申请金额
   @JsonKey(name: 'intentAmt')
-  int intentAmt;
+  double intentAmt;
   //贷款目的
   @JsonKey(name: 'loanPurpose')
   String loanPurpose;
@@ -42,6 +42,24 @@ class LoanApplicationReq extends Object {
   //贷款期限
   @JsonKey(name: 'termValue')
   int termValue;
+  //帐号名称
+  @JsonKey(name: 'userAccount')
+  String userAccount;
+  //用户id
+  @JsonKey(name: 'userId')
+  String userId;
+  //用户类型
+  @JsonKey(name: 'userType')
+  String userType;
+  //还款帐号
+  @JsonKey(name: 'repaymentAcNo')
+  String repaymentAcNo;
+  //收款帐号
+  @JsonKey(name: 'payAcNo')
+  String payAcNo;
+  //利率
+  @JsonKey(name: 'loanRate')
+  String loanRate;
 
   LoanApplicationReq(
     this.ccy,
@@ -55,6 +73,12 @@ class LoanApplicationReq extends Object {
     this.repaymentMethod,
     this.termUnit,
     this.termValue,
+    this.userAccount,
+    this.userId,
+    this.userType,
+    this.repaymentAcNo,
+    this.payAcNo,
+    this.loanRate,
   );
 
   factory LoanApplicationReq.fromJson(Map<String, dynamic> srcJson) =>

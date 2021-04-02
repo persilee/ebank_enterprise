@@ -58,10 +58,12 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   var _moneyController = new TextEditingController(); //申请金额文本监听器
   var _remarkController = new TextEditingController(); //备注文本监听器
 
-  List<String> _passwordList = []; //密码列表
-  List<String> _ccyList = []; //币种列表、
-  List<String> _deadLineLists = []; //贷款期限列表
-  List<String> _goalLists = []; //贷款目的列表
+  Map _listDataMap = {}; //确认页展示列表数据的map
+  Map _requestDataMap = {}; //确认页上传数据的map
+
+  List<IdType> _ccyList = []; //币种列表、
+  List<IdType> _deadLineLists = []; //贷款期限列表
+  List<IdType> _goalLists = []; //贷款目的列表
 
   String _loanAccount = ''; //放款帐号
   int _loanAccountIndex = 0; //放款款索引
@@ -70,10 +72,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   int _repayAccountIndex = 0; //还款索引
   List<RemoteBankCard> _totalAccoutList = []; //总帐号
 
-  String _custID; //用户ID
-
   String _reimburseStr = ''; //还款方式
-  List<String> _reimburseTypeLists = []; //还款方式
+  List<IdType> _reimburseTypeLists = []; //还款方式
 
   get w500 => null; //还款方式
 
@@ -96,9 +96,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _ccyList.clear();
-        data.publicCodeGetRedisRspDtoList.forEach((e) {
-          _ccyList.add(e.code);
-        });
+        _ccyList.addAll(data.publicCodeGetRedisRspDtoList);
       }
     });
   }
@@ -110,13 +108,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _deadLineLists.clear();
-        data.publicCodeGetRedisRspDtoList.forEach((e) {
-          if (_language == 'zh_CN') {
-            _deadLineLists.add(e.cname);
-          } else {
-            _deadLineLists.add(e.name);
-          }
-        });
+        _deadLineLists.addAll(data.publicCodeGetRedisRspDtoList);
       }
     });
   }
@@ -128,13 +120,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _goalLists.clear();
-        data.publicCodeGetRedisRspDtoList.forEach((e) {
-          if (_language == 'zh_CN') {
-            _goalLists.add(e.cname);
-          } else {
-            _goalLists.add(e.name);
-          }
-        });
+        _goalLists.addAll(data.publicCodeGetRedisRspDtoList);
       }
     });
   }
@@ -146,13 +132,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _reimburseTypeLists.clear();
-        data.publicCodeGetRedisRspDtoList.forEach((e) {
-          if (_language == 'zh_CN') {
-            _reimburseTypeLists.add(e.cname);
-          } else {
-            _reimburseTypeLists.add(e.name);
-          }
-        });
+        _reimburseTypeLists.addAll(data.publicCodeGetRedisRspDtoList);
       }
     });
   }
@@ -175,8 +155,6 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   //获取放款以及还款帐号列表
   Future<void> _loadTotalAccountData() async {
     SVProgressHUD.show();
-    final prefs = await SharedPreferences.getInstance();
-    _custID = prefs.getString(ConfigKey.CUST_ID);
     CardDataRepository().getCardList('getCardList').then(
       (data) {
         SVProgressHUD.dismiss();
@@ -201,6 +179,27 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         title: Text(S.of(context).loan_apply),
         centerTitle: true,
         elevation: 1,
+        actions: <Widget>[
+          Container(
+            padding: EdgeInsets.only(top: _language == 'zh_CN' ? 17.5 : 12),
+            width: (MediaQuery.of(context).size.width - 36) / 4,
+            margin: EdgeInsets.only(right: 18),
+            child: Text.rich(
+              TextSpan(
+                  text: S.current.my_application,
+                  style: TextStyle(
+                    fontSize: 14.0,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.pushNamed(context, pageLoanMyApplicationList);
+                    }),
+              textAlign: TextAlign.right,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        ],
       ),
       body: Container(
         color: HsgColors.commonBackground,
@@ -302,6 +301,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
                 setState(() {
                   Map map = value;
                   _loanProductName = map['pro_name'];
+                  _listDataMap['prdtCode'] = map['pro_name']; //名称
+                  _requestDataMap['prdtCode'] = map['pro_ID']; //ID
                 });
               });
             },
@@ -399,36 +400,54 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
       color: Colors.white,
       child: Column(
         children: [
-          TextFieldContainer(
-            //联系人
-            title: S.current.contact,
-            hintText: _inputs,
-            keyboardType: TextInputType.text,
-            controller: _contactsController,
-            callback: _checkloanIsClick,
-          ),
-          TextFieldContainer(
-            //联系人手机号码
-            title: S.current.contact_phone_num,
-            hintText: _inputs,
-            keyboardType: TextInputType.number,
-            controller: _phoneController,
-            callback: _checkloanIsClick,
-          ),
-          TextFieldContainer(
-            //备注
-            title: S.current.remark,
-            hintText: this._notRequired,
-            keyboardType: TextInputType.text,
-            controller: _remarkController,
-          ),
+          //联系人
+          _textFieldCommonFunc(S.current.contact, _inputs, TextInputType.text,
+              _contactsController, _checkloanIsClick),
+          //联系人手机号码
+          _textFieldCommonFunc(S.current.contact_phone_num, _inputs,
+              TextInputType.number, _phoneController, _checkloanIsClick),
+          //联系人手机号码
+          _textFieldCommonFunc(S.current.remark, _notRequired,
+              TextInputType.text, _remarkController, () {}),
         ],
       ),
     );
   }
 
-//交易密码窗口
+  Widget _textFieldCommonFunc(
+      String title,
+      String hintText,
+      TextInputType keyboard,
+      TextEditingController controller,
+      VoidCallback callback) {
+    return TextFieldContainer(
+      //备注
+      title: title,
+      hintText: hintText,
+      keyboardType: keyboard,
+      controller: controller,
+      callback: _checkloanIsClick,
+    );
+  }
+
+//交易密码窗口  点击确认页面
   void _openBottomSheet() async {
+    //需要将数据绑定并传值，添加新的值进去
+    _listDataMap["loanRate"] = '0.1'; //利率
+    _listDataMap["remark"] = _remarkController.text; //备注
+    _listDataMap["contact"] = _contactsController.text; //联系人
+    _listDataMap["phone"] = _phoneController.text; //联系方式
+    _listDataMap["intentAmt"] = _moneyController.text; //金额
+
+    _requestDataMap["loanRate"] = '0.1'; //利率
+    _requestDataMap["remark"] = _remarkController.text; //备注
+    _requestDataMap["contact"] = _contactsController.text; //联系人
+    _requestDataMap["phone"] = _phoneController.text; //联系方式
+    _requestDataMap["intentAmt"] = _moneyController.text; //金额
+
+    Map dataList = {'reviewList': _listDataMap, 'requestList': _requestDataMap};
+
+    Navigator.pushNamed(context, pageLoanConfirmNav, arguments: dataList);
     // _passwordList = await showHsgBottomSheet(
     //   context: context,
     //   builder: (context) {
@@ -475,13 +494,22 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   }
 
   //币种弹窗内容
-  _showDialog(int index, List<String> list) async {
+  _showDialog(int index, List<IdType> list) async {
+    List<String> tempList = [];
+    list.forEach((e) {
+      if (_language == 'zh_CN') {
+        tempList.add(e.cname);
+      } else {
+        tempList.add(e.name);
+      }
+    });
+
     final result = await showDialog(
       context: context,
       builder: (context) {
         return HsgSingleChoiceDialog(
           title: S.of(context).currency_choice,
-          items: list,
+          items: tempList,
           positiveButton: S.of(context).confirm,
           negativeButton: S.of(context).cancel,
           lastSelectedPosition: index,
@@ -490,8 +518,11 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     );
     if (result != null && result != false) {
       setState(() {
+        IdType type = list[result];
         _ccyId = result;
-        _currency = list[result];
+        _listDataMap['ccy'] = tempList[index];
+        _requestDataMap['ccy'] = type.code;
+        _currency = tempList[result];
         _checkloanIsClick();
       });
     }
@@ -525,20 +556,36 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   }
 
   //期限，目的底部弹窗内容选择
-  _select(String title, List list, int i) {
+  _select(String title, List<IdType> list, int i) {
+    List<String> tempList = [];
+    list.forEach((e) {
+      if (_language == 'zh_CN') {
+        tempList.add(e.cname);
+      } else {
+        tempList.add(e.name);
+      }
+    });
     SinglePicker.showStringPicker(
       context,
-      data: list,
+      data: tempList,
       title: title,
       clickCallBack: (int index, var str) {
         setState(() {
           //贷款期限，贷款目的, 还款方式
+          IdType type = list[index];
           if (i == 0) {
             _deadLine = str;
+            _listDataMap['timeLimit'] = str; //名称
+            _requestDataMap['termUnit'] = str; //月份中文
+            _requestDataMap['termValue'] = type.code; //月份编码
           } else if (i == 1) {
             _goal = str;
+            _listDataMap['loanPurpose'] = str; //名称
+            _requestDataMap['loanPurpose'] = type.code; //ID
           } else {
             _reimburseStr = str;
+            _listDataMap['repaymentMethod'] = str; //名称
+            _requestDataMap['repaymentMethod'] = type.code; //ID
           }
           _index = _index * (index + 1);
           _checkloanIsClick();
@@ -571,12 +618,18 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     if (result != null && result != false) {
       setState(() {
         if (index == 0) {
+          //放款
           //返回拿到的索引值
           _loanAccount = accounts[result];
           _loanAccountIndex = result;
+          _listDataMap['payAcNo'] = _loanAccount;
+          _requestDataMap['payAcNo'] = _loanAccount;
         } else {
+          //还款
           _repayAccount = accounts[result];
           _repayAccountIndex = result;
+          _listDataMap['repaymentAcNo'] = _repayAccount;
+          _requestDataMap['repaymentAcNo'] = _repayAccount;
         }
       });
     } else {

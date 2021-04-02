@@ -10,6 +10,7 @@ import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/login_save_user_data.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -96,19 +97,7 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
 
   ///保存数据
   _saveUserConfig(BuildContext context, LoginResp resp) async {
-    ///登录页面清空数据
-    HsgHttp().clearUserCache();
-
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
-    prefs.setString(ConfigKey.USER_ID, resp.userId);
-    prefs.setString(ConfigKey.USER_PHONE, resp.userPhone);
-    prefs.setString(ConfigKey.USER_AREACODE, resp.areaCode);
-    if (resp.custId == null || resp.custId == '') {
-      prefs.setString(ConfigKey.CUST_ID, '');
-    } else {
-      prefs.setString(ConfigKey.CUST_ID, resp.custId);
-    }
+    SaveUserData(resp);
 
     _showMainPage(context);
   }

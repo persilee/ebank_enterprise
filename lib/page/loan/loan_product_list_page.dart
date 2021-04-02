@@ -1,5 +1,6 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
@@ -16,6 +17,8 @@ class LoanProductListPage extends StatefulWidget {
 }
 
 class _LoanProductState extends State<LoanProductListPage> {
+  // List<TdepProducHeadDTO> _productList = [];//产品列表
+
   var _productList = [
     {
       'sectionTitle': S.current.loan_Product_Characteristics,
@@ -48,10 +51,54 @@ class _LoanProductState extends State<LoanProductListPage> {
     },
   ];
 
+//目前是根据定期开立的接口去获取产品的ID 以及名称和汇率等信息
+  // Future<void> _loadData() async {
+  //   _isLoading = true;
+  //   TimeDepositDataRepository()
+  //       .getGetTimeDepositProduct(
+  //           'getGetTimeDepositProduct',
+  //           TimeDepositProductReq(
+  //               _accuPeriod == '' ? null : _accuPeriod,
+  //               _auctCale == '' ? null : _auctCale,
+  //               _changedCcy == S.current.hint_please_select
+  //                   ? null
+  //                   : _changedCcy,
+  //               _bal == 0.0 ? null : _bal,
+  //               page,
+  //               10,
+  //               ''))
+  //       .then((data) {
+  //     if (data.length != 0) {
+  //       List ccys = [];
+  //       _isDate = true;
+  //       if (this.mounted) {
+  //         setState(() {
+  //           productList.clear();
+  //           producDTOList.clear();
+  //           data.forEach((element) {
+  //             productList.add(element.tdepProducHeadDTO);
+  //             producDTOList.add(element.tdepProductDTOList);
+  //             element.tdepProductDTOList.forEach((data) {
+  //               ccys.add(data.ccy);
+  //               bool isContainer = ccyList.contains(data.ccy);
+  //               if (!isContainer) {
+  //                 ccyList.add(data.ccy);
+  //               }
+  //             });
+  //           });
+  //           _isLoading = false;
+  //         });
+  //       }
+  //     } else {
+  //       _isDate = false;
+  //     }
+  //   }).catchError((e) {
+  //     Fluttertoast.showToast(msg: "${e.toString()}");
+  //   });
+  // }
+
   //在此进行数据设置
   ScrollController _sctrollController;
-
-  get image => null;
 
   @override
   void initState() {

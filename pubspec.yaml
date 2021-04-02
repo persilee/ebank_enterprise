@@ -202,6 +202,8 @@ flutter:
     - images/loanProduct/loan_product_borrow.png 
     - images/loanProduct/loan_product_flower.png
     - images/loanProduct/loan_product_have.png 
+    - images/loanProduct/loan_apply_down.png
+    - images/loanProduct/loan_apply_up.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

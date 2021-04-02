@@ -8,6 +8,8 @@ import 'dart:convert';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
+import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
+import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -15,6 +17,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:intl/intl.dart';
 
 class OpenAccountContactInformationPage extends StatefulWidget {
   @override
@@ -225,6 +228,7 @@ class _OpenAccountContactInformationPageState
   @override
   Widget build(BuildContext context) {
     _dataReq = ModalRoute.of(context).settings.arguments;
+    _changeShowData();
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -244,32 +248,38 @@ class _OpenAccountContactInformationPageState
           child: ListView(
             children: [
               _inputViewWidget(context),
-              Container(
-                margin: EdgeInsets.only(top: 40, bottom: 20),
-                child: HsgButton.button(
-                  title: S.of(context).next_step,
-                  click: _nextBtnEnabled
-                      ? () {
-                          List<Address> addressList = [
-                            _registrationAddress,
-                            _businessAddress,
-                            _communicationAddress,
-                          ];
-                          _dataReq.addressList = addressList;
-
-                          Navigator.pushNamed(
-                            context,
-                            pageOpenAccountRelatedIndividualsData,
-                            arguments: _dataReq,
-                          );
-                        }
-                      : null,
-                  isColor: _nextBtnEnabled,
-                ),
-              )
+              _nextBtnWidget(context),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  ///下一步按钮
+  Widget _nextBtnWidget(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 40, bottom: 20),
+      child: HsgButton.button(
+        title: S.of(context).next_step,
+        click: _nextBtnEnabled
+            ? () {
+                List<Address> addressList = [
+                  _registrationAddress,
+                  _businessAddress,
+                  _communicationAddress,
+                ];
+                _dataReq.addressList = addressList;
+                _savePreCust();
+
+                Navigator.pushNamed(
+                  context,
+                  pageOpenAccountRelatedIndividualsData,
+                  arguments: _dataReq,
+                );
+              }
+            : null,
+        isColor: _nextBtnEnabled,
       ),
     );
   }
@@ -380,32 +390,40 @@ class _OpenAccountContactInformationPageState
               String oneLevelStr = _cityDataList[value[0]]['name'];
               String twoLevelStr =
                   _cityDataList[value[0]]['children'][value[1]]['name'];
-              // String threeLevelStr = _cityDataList[value[0]]['children'][value[1]]['children'][value[2]]['name'];
+              String threeLevelStr = _cityDataList[value[0]]['children']
+                  [value[1]]['children'][value[2]]['name'];
+
+              String dataStr = picker.adapter.text;
+              dataStr = dataStr.replaceAll('[', '');
+              dataStr = dataStr.replaceAll(']', '');
+              dataStr = dataStr.replaceAll(',', '/');
 
               _registrationAreaIndex = value;
-              _registrationAreaOneText = 'CN';
-              _registrationAreaTwoText = oneLevelStr;
-              _registrationAreaThreeText = twoLevelStr;
+              _registrationAreaOneText = oneLevelStr;
+              _registrationAreaTwoText = twoLevelStr;
+              _registrationAreaThreeText = threeLevelStr;
 
               _registrationAddress.country = _registrationAreaOneText;
               _registrationAddress.province = _registrationAreaTwoText;
               _registrationAddress.city = _registrationAreaThreeText;
+              _registrationAddress.addressCitySelectList = value;
+              _registrationAddress.addressCityShowString = dataStr;
               if (_theSameForRegisterAndBusiness == true) {
                 _businessAddress.country = _registrationAreaOneText;
                 _businessAddress.province = _registrationAreaTwoText;
                 _businessAddress.city = _registrationAreaThreeText;
+                _businessAddress.addressCitySelectList = value;
+                _businessAddress.addressCityShowString = dataStr;
               }
               if (_theSameForRegisterAndCommunication == true) {
                 _communicationAddress.country = _registrationAreaOneText;
                 _communicationAddress.province = _registrationAreaTwoText;
                 _communicationAddress.city = _registrationAreaThreeText;
+                _communicationAddress.addressCitySelectList = value;
+                _communicationAddress.addressCityShowString = dataStr;
               }
 
               setState(() {
-                String dataStr = picker.adapter.text;
-                dataStr = dataStr.replaceAll('[', '');
-                dataStr = dataStr.replaceAll(']', '');
-                dataStr = dataStr.replaceAll(',', '/');
                 _registrationAreaText = dataStr;
                 _nextBtnEnabled = _judgeButtonIsEnabled();
               });
@@ -473,6 +491,10 @@ class _OpenAccountContactInformationPageState
           false,
           (value) {
             FocusScope.of(context).requestFocus(FocusNode());
+            setState(() {
+              _theSameForRegisterAndBusiness = value;
+              _nextBtnEnabled = _judgeButtonIsEnabled();
+            });
             if (_theSameForRegisterAndBusiness == true) {
               _businessAddress.detail = _registeredAddressText;
               _businessAddress.postCode = _registrationZipCodeText;
@@ -480,6 +502,8 @@ class _OpenAccountContactInformationPageState
               _businessAddress.country = _registrationAreaOneText;
               _businessAddress.province = _registrationAreaTwoText;
               _businessAddress.city = _registrationAreaThreeText;
+              _businessAddress.addressCitySelectList = _registrationAreaIndex;
+              _businessAddress.addressCityShowString = _registrationAreaText;
             } else {
               _businessAddress.detail = _businessAddressText;
               _businessAddress.postCode = _businessZipCodeText;
@@ -487,11 +511,9 @@ class _OpenAccountContactInformationPageState
               _businessAddress.country = _businessAreaOneText;
               _businessAddress.province = _businessAreaTwoText;
               _businessAddress.city = _businessAreaThreeText;
+              _businessAddress.addressCitySelectList = _businessAreaIndex;
+              _businessAddress.addressCityShowString = _businessAreaText;
             }
-            setState(() {
-              _theSameForRegisterAndBusiness = value;
-              _nextBtnEnabled = _judgeButtonIsEnabled();
-            });
           },
         ),
       ),
@@ -508,22 +530,26 @@ class _OpenAccountContactInformationPageState
               String oneLevelStr = _cityDataList[value[0]]['name'];
               String twoLevelStr =
                   _cityDataList[value[0]]['children'][value[1]]['name'];
-              // String threeLevelStr = _cityDataList[value[0]]['children'][value[1]]['children'][value[2]]['name'];
+              String threeLevelStr = _cityDataList[value[0]]['children']
+                  [value[1]]['children'][value[2]]['name'];
+
+              String dataStr = picker.adapter.text;
+              dataStr = dataStr.replaceAll('[', '');
+              dataStr = dataStr.replaceAll(']', '');
+              dataStr = dataStr.replaceAll(',', '/');
 
               _businessAreaIndex = value;
-              _businessAreaOneText = 'CN';
-              _businessAreaTwoText = oneLevelStr;
-              _businessAreaThreeText = twoLevelStr;
+              _businessAreaOneText = oneLevelStr;
+              _businessAreaTwoText = twoLevelStr;
+              _businessAreaThreeText = threeLevelStr;
 
               _businessAddress.country = _businessAreaOneText;
               _businessAddress.province = _businessAreaTwoText;
               _businessAddress.city = _businessAreaThreeText;
+              _businessAddress.addressCitySelectList = value;
+              _businessAddress.addressCityShowString = dataStr;
 
               setState(() {
-                String dataStr = picker.adapter.text;
-                dataStr = dataStr.replaceAll('[', '');
-                dataStr = dataStr.replaceAll(']', '');
-                dataStr = dataStr.replaceAll(',', '/');
                 _businessAreaText = dataStr;
                 _nextBtnEnabled = _judgeButtonIsEnabled();
               });
@@ -595,6 +621,10 @@ class _OpenAccountContactInformationPageState
           false,
           (value) {
             FocusScope.of(context).requestFocus(FocusNode());
+            setState(() {
+              _theSameForRegisterAndCommunication = value;
+              _nextBtnEnabled = _judgeButtonIsEnabled();
+            });
             if (_theSameForRegisterAndCommunication == true) {
               _communicationAddress.detail = _registeredAddressText;
               _communicationAddress.postCode = _registrationZipCodeText;
@@ -602,6 +632,10 @@ class _OpenAccountContactInformationPageState
               _communicationAddress.country = _registrationAreaOneText;
               _communicationAddress.province = _registrationAreaTwoText;
               _communicationAddress.city = _registrationAreaThreeText;
+              _communicationAddress.addressCitySelectList =
+                  _registrationAreaIndex;
+              _communicationAddress.addressCityShowString =
+                  _registrationAreaText;
             } else {
               _communicationAddress.detail = _correspondenceAddressText;
               _communicationAddress.postCode = _communicationsZipCodeText;
@@ -609,11 +643,11 @@ class _OpenAccountContactInformationPageState
               _communicationAddress.country = _communicationAreaOneText;
               _communicationAddress.province = _communicationAreaTwoText;
               _communicationAddress.city = _communicationAreaThreeText;
+              _communicationAddress.addressCitySelectList =
+                  _communicationAreaIndex;
+              _communicationAddress.addressCityShowString =
+                  _communicationAreaText;
             }
-            setState(() {
-              _theSameForRegisterAndCommunication = value;
-              _nextBtnEnabled = _judgeButtonIsEnabled();
-            });
           },
         ),
       ),
@@ -630,22 +664,26 @@ class _OpenAccountContactInformationPageState
               String oneLevelStr = _cityDataList[value[0]]['name'];
               String twoLevelStr =
                   _cityDataList[value[0]]['children'][value[1]]['name'];
-              // String threeLevelStr = _cityDataList[value[0]]['children'][value[1]]['children'][value[2]]['name'];
+              String threeLevelStr = _cityDataList[value[0]]['children']
+                  [value[1]]['children'][value[2]]['name'];
+
+              String dataStr = picker.adapter.text;
+              dataStr = dataStr.replaceAll('[', '');
+              dataStr = dataStr.replaceAll(']', '');
+              dataStr = dataStr.replaceAll(',', '/');
 
               _communicationAreaIndex = value;
-              _communicationAreaOneText = 'CN';
-              _communicationAreaTwoText = oneLevelStr;
-              _communicationAreaThreeText = twoLevelStr;
+              _communicationAreaOneText = oneLevelStr;
+              _communicationAreaTwoText = twoLevelStr;
+              _communicationAreaThreeText = threeLevelStr;
 
               _communicationAddress.country = _communicationAreaOneText;
               _communicationAddress.province = _communicationAreaTwoText;
               _communicationAddress.city = _communicationAreaThreeText;
+              _communicationAddress.addressCitySelectList = value;
+              _communicationAddress.addressCityShowString = dataStr;
 
               setState(() {
-                String dataStr = picker.adapter.text;
-                dataStr = dataStr.replaceAll('[', '');
-                dataStr = dataStr.replaceAll(']', '');
-                dataStr = dataStr.replaceAll(',', '/');
                 _communicationAreaText = dataStr;
                 _nextBtnEnabled = _judgeButtonIsEnabled();
               });
@@ -1086,5 +1124,89 @@ class _OpenAccountContactInformationPageState
       ),
       onConfirm: onConfirm,
     ).showModal(this.context);
+  }
+
+  ///上传本页数据后台保存
+  void _savePreCust() async {
+    Map<String, dynamic> josnMap = _dataReq.toJson();
+    String josnString = jsonEncode(josnMap);
+    josnString.replaceAll('\\n', '');
+    //获取登记注册文件类型
+    OpenAccountRepository()
+        .savePreCust(OpenAccountSaveDataReq(josnString), 'savePreCust')
+        .then((data) {})
+        .catchError((e) {});
+  }
+
+  void _changeShowData() {
+    if (this.mounted) {
+      setState(() {
+        // String _language = Intl.getCurrentLocale();
+        _officeAreaCodeText = _dataReq.telCountryCode;
+        _officePhoneTEC.text = _officePhoneText = _dataReq.telNumber;
+
+        if (_dataReq.addressList != null && _dataReq.addressList.length > 0) {
+          _dataReq.addressList.forEach((element) {
+            switch (element.addressType) {
+
+              ///注册公司地址
+              case 'R':
+                _registrationAddress = element;
+                _registrationAreaText =
+                    _registrationAddress.addressCityShowString;
+                // _registrationAreaText = _registrationAddress.country +
+                //     '/' +
+                //     _registrationAddress.province +
+                //     '/' +
+                //     _registrationAddress.city;
+                _registrationAreaIndex =
+                    _registrationAddress.addressCitySelectList;
+                _registeredAddressTEC.text =
+                    _registeredAddressText = _registrationAddress.detail;
+                _registrationZipCodeTEC.text =
+                    _registrationZipCodeText = _registrationAddress.postCode;
+                break;
+
+              ///营业地址
+              case 'P':
+                _businessAddress = element;
+                _businessAreaText = _businessAddress.addressCityShowString;
+                // _businessAreaText = _businessAddress.country +
+                //     '/' +
+                //     _businessAddress.province +
+                //     '/' +
+                //     _businessAddress.city;
+                _businessAreaIndex = _businessAddress.addressCitySelectList;
+                _businessAddressTEC.text =
+                    _businessAddressText = _businessAddress.detail;
+                _businessZipCodeTEC.text =
+                    _businessZipCodeText = _businessAddress.postCode;
+                break;
+
+              ///通讯地址
+              case 'C':
+                _communicationAddress = element;
+                _communicationAreaText =
+                    _communicationAddress.addressCityShowString;
+                // _communicationAreaText = _communicationAddress.country +
+                //     '/' +
+                //     _communicationAddress.province +
+                //     '/' +
+                //     _communicationAddress.city;
+                _communicationAreaIndex =
+                    _communicationAddress.addressCitySelectList;
+                _correspondenceAddressTEC.text =
+                    _correspondenceAddressText = _communicationAddress.detail;
+                _communicationsZipCodeTEC.text =
+                    _communicationsZipCodeText = _communicationAddress.postCode;
+                break;
+              default:
+            }
+          });
+        }
+
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
+    }
   }
 }

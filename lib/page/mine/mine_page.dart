@@ -25,6 +25,7 @@ import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -54,14 +55,6 @@ class _MinePageState extends State<MinePage> {
   // bool _switchZhiWen = true; //指纹登录
   // bool _switchFaceId = false; //faceID登录
   String lastVersionName = ""; //版本号
-  String _userPhone = "";
-  String _userType = "";
-  String _register = ""; //用户是否注册
-  String _areaCode = ""; //区号
-  String _smsType = "register"; //短信类型(注册)
-  String _sms = ""; //验证码
-  String _password = "123456qwe~"; //密码
-  String _registerAccount = "wly3"; //手机号注册（用户账号）
   var _enterpriseName = ''; // 企业名称
   var _characterName = ''; // 角色名称
   var _belongCustStatus = ''; //用户状态
@@ -250,6 +243,17 @@ class _MinePageState extends State<MinePage> {
             child: Column(
               children: [
                 _flatBtnNuitWidget(S.of(context).my_account, true, () {
+                  // if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
+                  //   HsgShowTip.notOpenAccountTip(
+                  //     context: context,
+                  //     click: (value) {
+                  //       if (value == true) {
+                  //         _openAccountClickFunction(context);
+                  //       }
+                  //     },
+                  //   );
+                  //   return;
+                  // }
                   Navigator.pushNamed(context, pageCardList);
                 }),
                 _flatBtnNuitWidget(S.current.password_management, true, () {
@@ -528,8 +532,7 @@ class _MinePageState extends State<MinePage> {
           clickCallback: () {
             print('开户申请');
             //判断受邀状态进入不同页面
-            // _openAccountClickFunction(context);
-            Navigator.pushNamed(context, pageOpenAccountBasicData);
+            _openAccountClickFunction(context);
           },
         ),
       ],
@@ -648,8 +651,12 @@ class _MinePageState extends State<MinePage> {
   //开户点击事件
   void _openAccountClickFunction(BuildContext context) {
     if (_inviteeStatus == '0') {
-      //前往填写面签码
-      Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+      // //前往填写面签码
+      // Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+      HsgShowTip.notOpenAccountGotoEbankTip(
+        context: context,
+        click: (value) {},
+      );
     } else {
       //前往快速开户
       Navigator.pushNamed(context, pageOpenAccountBasicData);
@@ -857,23 +864,14 @@ class _MinePageState extends State<MinePage> {
   //上传头像
   _uploadAvatar() async {
     if (_imgPath == null || _imgPath == '') {
-      Fluttertoast.showToast(msg: '图片异常，请重新选择', gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: S.of(context).select_image_error,
+        gravity: ToastGravity.CENTER,
+      );
     } else {
-      // HSProgressHUD.show();
-      // UploadAvatarRepository()
-      //     .uploadAvatar(UploadAvatarReq(), _imgPath, 'uploadAvatar')
-      //     .then((data) {
-      //   setState(() {});
-      //   HSProgressHUD.dismiss();
-      // }).catchError((e) {
-      //   Fluttertoast.showToast(msg: e.toString());
-      //   HSProgressHUD.dismiss();
-      // });
-
       File file = File(_imgPath);
-      // var resultData = await ApiClient().uploadAvatar(file);
-      // print(resultData);
-      ApiClient().uploadAvatar(file, BaseBody(body: {})).then((value) {
+      ApiClient().uploadAvatar(BaseBody(body: {}), file).then((value) {
+        //, BaseBody(body: {})
         print(value);
       }).catchError((e) {
         Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
@@ -1038,119 +1036,6 @@ class _MinePageState extends State<MinePage> {
       setState(() {
         lastVersionName = value.versionName;
       });
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
-    });
-  }
-
-//校验用户是否注册按钮
-  Widget _checkUserPhone() {
-    return Container(
-      height: 50,
-      color: Colors.blue[200],
-      child: FlatButton(
-        height: 50.0,
-        onPressed: () {
-          _checkPhone();
-        },
-        child: Container(
-          width: 90,
-          child: Center(
-            child: Text(
-              '校验用户是否注册 ' + _register,
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  //校验用户是否注册接口
-  _checkPhone() async {
-    VersionDataRepository()
-        .checkPhone(CheckPhoneReq(_userPhone, _userType), 'checkPhone')
-        .then((value) {
-      setState(() {
-        _register = (value.register).toString();
-      });
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
-    });
-  }
-
-  //注册发送短信验证码按钮
-  Widget _smsRegister() {
-    return Container(
-      margin: EdgeInsets.only(right: 16),
-      height: 50,
-      color: Colors.blue[200],
-      child: FlatButton(
-        height: 50.0,
-        onPressed: () {
-          _sendSmsRegister();
-        },
-        child: Container(
-          width: 90,
-          child: Center(
-            child: Text(
-              '获取验证码',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  //注册发送短信验证码接口
-  _sendSmsRegister() async {
-    VersionDataRepository()
-        .sendSmsRegister(SendSmsRegisterReq(_areaCode, _userPhone, _smsType),
-            'sendSmsRegister')
-        .then((value) {
-      setState(() {
-        _sms = "123456";
-      });
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
-    });
-  }
-
-  //手机号注册按钮
-  Widget _registerByAccountBtn() {
-    return Container(
-      margin: EdgeInsets.only(right: 16),
-      height: 50,
-      color: Colors.blue[200],
-      child: FlatButton(
-        height: 50.0,
-        onPressed: () {
-          _registerByAccount();
-        },
-        child: Container(
-          width: 90,
-          child: Center(
-            child: Text(
-              '手机号注册',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  //手机号注册接口
-  _registerByAccount() async {
-    String password = EncryptUtil.aesEncode(_password);
-    VersionDataRepository()
-        .registerByAccount(
-            RegisterByAccountReq(_areaCode, password, _registerAccount,
-                _userPhone, _userType, _sms),
-            'registerByAccount')
-        .then((value) {
-      setState(() {});
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
     });
