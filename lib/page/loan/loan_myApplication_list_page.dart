@@ -38,8 +38,6 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
             _creatListCell(),
             _creatListCell(),
             _creatListCell(),
-            _creatListCell(),
-            _creatListCell()
           ],
           // child: ListView.builder(
           //   itemCount: _productApplyList.length, //数量
@@ -84,6 +82,7 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
           children: [
             Container(
               margin: EdgeInsets.only(right: 30, left: 15),
+              width: MediaQuery.of(context).size.width - 108,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start, //纵轴的间距
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly, //横轴的间距
@@ -110,9 +109,11 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
               child: Row(
                 children: [
                   Image(
-                    width: 35,
-                    height: 35,
-                    image: AssetImage('images/loanProduct/loan_apply_down.png'),
+                    width: 13,
+                    height: 7.5,
+                    image: _isShow
+                        ? AssetImage('images/loanProduct/loan_apply_up.png')
+                        : AssetImage('images/loanProduct/loan_apply_down.png'),
                   )
                 ],
               ),
