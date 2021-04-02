@@ -7,10 +7,12 @@ import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
+import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -47,6 +49,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   var _accountController = TextEditingController(); //账号
 
   var _bankSwiftController = TextEditingController(); //银行swift
+
+  var _bankNameController = TextEditingController(); //银行名称
 
   var _middleBankSwiftController = TextEditingController(); //中间行swift
 
@@ -120,9 +124,12 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   var check = false;
 
+  bool isSwift = true;
+
   @override
   void initState() {
     super.initState();
+    _getCcyList();
     _loadTransferData();
     _getTransferFeeList();
     _getFeeUseList();
@@ -203,6 +210,9 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         onTap: () {
           // 触摸收起键盘
           FocusScope.of(context).requestFocus(FocusNode());
+          if (_bankSwiftController.text.length == 11) {
+            _getBankNameBySwift(_bankSwiftController.text);
+          }
         },
         child: Container(
           child: CustomScrollView(
@@ -278,16 +288,16 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               callback: _isClick,
               length: 11,
               isRegEXp: true,
-              regExp: "[a-zA-Z]",
+              regExp: "[a-zA-Z0-9]",
               isUpperCase: true,
             ),
             _getLine(),
-            //银行
+            //银行名称
             TextFieldContainer(
               title: S.current.receipt_bank,
               hintText: S.current.please_input,
               keyboardType: TextInputType.text,
-              // controller: _bankSwiftController,
+              controller: _bankNameController,
               callback: _isClick,
               length: 30,
             ),
@@ -303,7 +313,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             //   regExp: "[a-zA-Z]",
             //   isUpperCase: true,
             // ),
-            // _getLine(),
+            _getLine(),
             //收款地址
             _getAddress(S.current.collection_address, S.current.please_input,
                 _payeeAddressController),
@@ -816,7 +826,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               // payerName = element.cardList[0].ciName;
             });
           }
-          _getCcyList();
           // _getCardTotal(_account);
           _loadData(_account);
         }
@@ -1060,5 +1069,21 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         print(e.toString());
       });
     }
+  }
+
+  //根据银行Swift查询银行名称
+  Future _getBankNameBySwift(String swift) async {
+    TransferDataRepository()
+        .getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift), 'getInfoBySwiftCode')
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          _bankNameController.text =
+              data.swiftName1 + data.swiftName2 + data.swiftName3;
+        });
+      }
+    }).catchError((e) {
+      print(e.toString());
+    });
   }
 }

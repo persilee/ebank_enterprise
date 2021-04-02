@@ -6,6 +6,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/add_partner.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
@@ -43,6 +44,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   var _centerSwiftController = TextEditingController();
   var _payeeAdressController = TextEditingController();
   var _bankSwiftController = TextEditingController();
+  var _bankNameController = TextEditingController();
   // var _bankSwiftController = TextEditingController();
   bool _showInternational = false; //国际转账
   var _alias = '';
@@ -209,6 +211,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         onTap: () {
           // 触摸收起键盘
           FocusScope.of(context).requestFocus(FocusNode());
+          if (_bankSwiftController.text.length == 11) {
+            _getBankNameBySwift(_bankSwiftController.text);
+          }
         },
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -503,16 +508,25 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             isUpperCase: true,
           ),
           Divider(height: 0.5, color: HsgColors.divider),
-          //中间行SWFIT
+          //银行名称
           TextFieldContainer(
-            title: S.current.middle_bank_swift,
-            hintText: S.current.not_required,
+            title: S.current.receipt_bank,
+            hintText: S.current.please_input,
             keyboardType: TextInputType.text,
-            controller: _centerSwiftController,
+            controller: _bankNameController,
             callback: _check,
-            length: 11,
-            isUpperCase: true,
+            length: 30,
           ),
+          // //中间行SWFIT
+          // TextFieldContainer(
+          //   title: S.current.middle_bank_swift,
+          //   hintText: S.current.not_required,
+          //   keyboardType: TextInputType.text,
+          //   controller: _centerSwiftController,
+          //   callback: _check,
+          //   length: 11,
+          //   isUpperCase: true,
+          // ),
           Divider(height: 0.5, color: HsgColors.divider),
           _payeeAdress(_payeeAdressController),
           Divider(height: 0.5, color: HsgColors.divider),
@@ -855,5 +869,21 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     } else {
       return null;
     }
+  }
+
+  //根据银行Swift查询银行名称
+  Future _getBankNameBySwift(String swift) async {
+    TransferDataRepository()
+        .getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift), 'getInfoBySwiftCode')
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          _bankNameController.text =
+              data.swiftName1 + data.swiftName2 + data.swiftName3;
+        });
+      }
+    }).catchError((e) {
+      print(e.toString());
+    });
   }
 }

@@ -540,9 +540,10 @@ class _TransferPageState extends State<TransferPage> {
   Widget _noDataContainer() {
     return Container(
       width: (MediaQuery.of(context).size.width),
-      height: 270,
+      height: (MediaQuery.of(context).size.width),
       color: Colors.white,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             margin: EdgeInsets.only(top: 45),
