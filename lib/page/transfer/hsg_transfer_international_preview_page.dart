@@ -36,7 +36,7 @@ class _TransferInternalPreviewPageState
         ModalRoute.of(context).settings.arguments;
     return Scaffold(
         appBar: AppBar(
-          title: Text(S.current.transfer_the_preview),
+          title: Text('跨行转账预览'),
           centerTitle: true,
           elevation: 1,
         ),
@@ -73,7 +73,7 @@ class _TransferInternalPreviewPageState
                   transferData.transferIntoCcy +
                       FormatUtil.formatSringToMoney(
                           transferData.transferIntoAmount),
-                  style: TextStyle(color: Color(0xff232323), fontSize: 30),
+                  style: TextStyle(color: Color(0xff232323), fontSize: 20),
                 ),
               ],
             ),
@@ -83,17 +83,17 @@ class _TransferInternalPreviewPageState
           ),
           _getRowContent(S.current.transfer_from,
               FormatUtil.formatSpace4(transferData.transferOutAccount)),
-          _getRowContent(S.current.to_amount, transferData.transferOutAmount),
+          _getRowContent('预计收款金额', transferData.transferOutAmount),
+          _getRowContent('汇率', transferData.rate),
           _getRowContent(
-              S.current.payment_currency, transferData.transferOutCcy),
+              S.current.payment_currency, transferData.transferIntoCcy),
           _getRowContent(
               S.current.remitter_address1, transferData.transferOutAdress),
           _getRowContent(
               S.current.receipt_side_name, transferData.transferIntoName),
-          _getRowContent(S.current.into_account,
+          _getRowContent('收款人账号',
               FormatUtil.formatSpace4(transferData.transferIntoAccount)),
-          _getRowContent(
-              S.current.transfer_into_currency, transferData.transferIntoCcy),
+          _getRowContent('收款方币种', transferData.transferOutCcy),
           _getRowContent(
               S.current.receiver_address, transferData.transferIntoAdress),
           _getRowContent(S.current.state_area, transferData.nation),

@@ -782,7 +782,11 @@ class _TransferPageState extends State<TransferPage> {
       // HSProgressHUD.showError(status: e.toString());
       print('${e.toString()}');
       // HSProgressHUD.dismiss();
-      _isLoading = false;
+      if (this.mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     });
   }
 }

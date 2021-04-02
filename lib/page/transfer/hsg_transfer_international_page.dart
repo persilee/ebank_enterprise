@@ -260,15 +260,15 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             ),
             _getLine(),
             //收款银行
-            SelectInkWell(
-              title: S.current.receipt_bank,
-              item: _getPayeeBank,
-              onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
-                _selectBank();
-              },
-            ),
-            _getLine(),
+            // SelectInkWell(
+            //   title: S.current.receipt_bank,
+            //   item: _getPayeeBank,
+            //   onTap: () {
+            //     FocusScope.of(context).requestFocus(FocusNode());
+            //     _selectBank();
+            //   },
+            // ),
+            // _getLine(),
             //银行SWIFT
             TextFieldContainer(
               title: S.current.bank_swift,
@@ -282,19 +282,28 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               isUpperCase: true,
             ),
             _getLine(),
-            //中间行
+            //银行
             TextFieldContainer(
-              title: S.current.middle_bank_swift,
+              title: S.current.receipt_bank,
               hintText: S.current.please_input,
               keyboardType: TextInputType.text,
-              controller: _middleBankSwiftController,
+              // controller: _bankSwiftController,
               callback: _isClick,
-              length: 11,
-              isRegEXp: true,
-              regExp: "[a-zA-Z]",
-              isUpperCase: true,
+              length: 30,
             ),
-            _getLine(),
+            //中间行
+            // TextFieldContainer(
+            //   title: S.current.middle_bank_swift,
+            //   hintText: S.current.please_input,
+            //   keyboardType: TextInputType.text,
+            //   controller: _middleBankSwiftController,
+            //   callback: _isClick,
+            //   length: 11,
+            //   isRegEXp: true,
+            //   regExp: "[a-zA-Z]",
+            //   isUpperCase: true,
+            // ),
+            // _getLine(),
             //收款地址
             _getAddress(S.current.collection_address, S.current.please_input,
                 _payeeAddressController),

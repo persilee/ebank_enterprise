@@ -15,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../page_route.dart';
-import 'data/transfer_internal_data.dart';
 import 'data/transfer_order_data.dart';
 
 class TransferOrderPreviewPage extends StatefulWidget {
@@ -30,14 +29,9 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
   @override
   Widget build(BuildContext context) {
     TransferOrderData transferData = ModalRoute.of(context).settings.arguments;
-    print(transferData.startDate +
-        "==========" +
-        transferData.payeeBankCode +
-        "----" +
-        transferData.payerBankCode);
     return Scaffold(
         appBar: AppBar(
-          title: Text(S.current.transfer_the_preview),
+          title: Text('预约转账预览'),
           centerTitle: true,
           elevation: 1,
         ),
@@ -88,17 +82,21 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
           Divider(
             color: Color(0xffE1E1E1),
           ),
+          _getRowContent('计划名称', transferData.planName),
+          _getRowContent('预约频率', transferData.frequency),
+          _getRowContent('首次转账时间', transferData.startDate),
+          _getRowContent('截至日期', transferData.endDate),
           _getRowContent(S.current.transfer_from,
               FormatUtil.formatSpace4(transferData.payerCardNo)),
-          _getRowContent(S.current.to_amount,
-              FormatUtil.formatSringToMoney(transferData.amount)),
+          _getRowContent(
+              '预计收款金额', FormatUtil.formatSringToMoney(transferData.amount)),
+          _getRowContent('汇率', '1'),
           _getRowContent(
               S.current.payment_currency, transferData.debitCurrency),
           _getRowContent(S.current.receipt_side_name, transferData.payeeName),
-          _getRowContent(S.current.into_account,
-              FormatUtil.formatSpace4(transferData.payeeCardNo)),
           _getRowContent(
-              S.current.transfer_into_currency, transferData.debitCurrency),
+              '收款人账号', FormatUtil.formatSpace4(transferData.payeeCardNo)),
+          _getRowContent('收款方币种', transferData.debitCurrency),
           _getRowContent(
               S.current.transfer_postscript,
               transferData.remark == ''

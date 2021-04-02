@@ -59,7 +59,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   bool _isButton3 = false; //交易时间第三个按钮
   bool _isButton4 = false; //交易时间第四个按钮
   ScrollController _scrollController = ScrollController(); //滚动监听
-  int _page = 1; //几页数据
+  int _page = 1; //第几页数据
   int _totalPage = 1; //数据总页数
   bool _loadMore = false; //是否加载更多
   bool _isLoading = false; //加载状态
