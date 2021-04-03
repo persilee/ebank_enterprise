@@ -2,16 +2,16 @@ import 'package:dio/dio.dart';
 
 /// 自定义异常
 class AppException implements Exception {
-  final String _message;
-  final String _code;
+  final String message;
+  final String code;
 
   AppException([
-    this._code,
-    this._message,
+    this.code,
+    this.message,
   ]);
 
   String toString() {
-    return "_code:$_code message:$_message";
+    return message;
   }
 
   factory AppException.create(DioError error) {
@@ -90,7 +90,8 @@ class AppException implements Exception {
                 break;
               default:
                 {
-                  return AppException(errCode.toString(), error.response.statusMessage);
+                  return AppException(
+                      errCode.toString(), error.response.statusMessage);
                 }
             }
           } on Exception catch (_) {
@@ -111,12 +112,22 @@ class BadRequestException extends AppException {
   BadRequestException([String code, String message]) : super(code, message);
 }
 
-/// 响应错误
-class BadResponseException extends AppException {
-  BadResponseException([String code, String message]) : super(code, message);
-}
-
 /// 未认证异常
 class UnauthorisedException extends AppException {
   UnauthorisedException([String code, String message]) : super(code, message);
+}
+
+abstract class BaseError {
+  final int code;
+  final String message;
+
+  BaseError({this.code, this.message});
+}
+
+class NeedLogin implements BaseError {
+  @override
+  int get code => 401;
+
+  @override
+  String get message => "请先登录";
 }

@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/http/retrofit/error_interceptor.dart';
-import 'package:ebank_mobile/http/retrofit/queryParameters_interceptor.dart';
 import 'package:ebank_mobile/http/retrofit/request_interceptor.dart';
 import 'package:ebank_mobile/http/retrofit/response_interceptor.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -21,7 +20,7 @@ class BaseDio {
     final Dio dio = Dio();
     dio.options = BaseOptions(receiveTimeout: 30000, connectTimeout: 30000); // 设置超时时间等 ...
     dio.interceptors.add(HeaderInterceptor()); // 添加拦截器，如 token之类，需要全局使用的参数
-    dio.interceptors.add(ErrorInterceptor()); // 添加error拦截器
+    // dio.interceptors.add(ErrorInterceptor()); // 添加error拦截器
     dio.interceptors.add(ResponseInterceptor());
     dio.interceptors.add(RequestInterceptor());
     // dio.interceptors

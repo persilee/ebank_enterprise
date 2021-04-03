@@ -1,29 +1,37 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///任务审批页面
 /// Author: wangluyao
 /// Date: 2020-12-29
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/do_claim_task.dart';
-import 'package:ebank_mobile/data/source/model/early_red_td_contract_detail_model.dart' as EarlyRedModel;
+import 'package:ebank_mobile/data/source/model/early_red_td_contract_detail_model.dart'
+    as EarlyRedModel;
 import 'package:ebank_mobile/data/source/model/find_todo_task_detail_body.dart';
 import 'package:ebank_mobile/data/source/model/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/get_process_task.dart';
-import 'package:ebank_mobile/data/source/model/open_td_contract_detail_model.dart' as OpenTDModel;
+import 'package:ebank_mobile/data/source/model/one_to_one_transfer_detail_model.dart'
+    as OneToOneModel;
+import 'package:ebank_mobile/data/source/model/open_td_contract_detail_model.dart'
+    as OpenTDModel;
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/data/source/process_task_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
+import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class TaskApprovalPage extends StatefulWidget {
-
   final ApprovalTask data;
   final String title;
 
@@ -41,8 +49,10 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
   String comment = ''; //审批意见
   String taskId = '';
   ScrollController _controller;
-  List<Widget> _contractList = [];
-  List<Widget> _transferList = [];
+  List<Widget> _openTdList = [];
+  List<Widget> _earlyRedTdList = [];
+  List<Widget> _oneToOneList = [];
+  final f = NumberFormat("#,##0.00", "en_US");
 
   @override
   void initState() {
@@ -56,7 +66,6 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
       print("focusNode 兼听 hasFocus:$hasFocus  hasListeners:$hasListeners");
     });
     _loadData();
-    print('aaaa');
   }
 
   @override
@@ -67,37 +76,148 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
 
   void _loadData() async {
     String _processKey = widget.data.processKey;
-    var _contractModel = await ApiClient().findToDoTaskDetail(FindTodoTaskDetailBody(
-      processId: widget.data.processId
-    ));
-    if(_processKey == 'openTdContractApproval') { // openTdContractApproval - 开立定期存单
-      OpenTDModel.OpenTdContractDetailModel openTdContractDetailModel = OpenTDModel.OpenTdContractDetailModel.fromJson(_contractModel);
-      OpenTDModel.OperateEndValue data = openTdContractDetailModel?.operateEndValue;
-      setState(() {
-        _contractList.add(_buildTitle('基本信息'));
-        _contractList.add(_buildContentItem('产品', data?.prodName ?? ''));
-        _contractList.add(_buildContentItem('存款期限', data?.tenor ?? ''));
-        _contractList.add(_buildContentItem('金额', data?.bal ?? ''));
-        _contractList.add(_buildContentItem('年利率', ''));
-        _contractList.add(_buildContentItem('存单货币', data?.ccy ?? ''));
-        _contractList.add(_buildContentItem('到期指示', data?.instCode ?? ''));
-        _contractList.add(_buildContentItem('结算账户', data?.settDdAc ?? ''));
-        _contractList.add(_buildContentItem('扣款账户', data?.oppAc ?? ''));
-      });
-    } else if(_processKey == 'earlyRedTdContractApproval') {  //earlyRedTdContractApproval - 定期提前结清
-      EarlyRedModel.EarlyRedTdContractDetailModel earlyRedTdContractDetailModel = EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
-
-      // _transferList.add(_buildTitle('付款方信息'));
-      // _transferList.add(_buildContentItem('付款账号', item.oppAc));
-      // _transferList.add(_buildContentItem('账户名称', item.oppAcName));
-      // _transferList.add(Padding(padding: EdgeInsets.only(top: 15)),);
-      // _transferList.add(_buildTitle('收款方信息'));
-      // _transferList.add(_buildContentItem('付款账号', item.dAc));
-      // _transferList.add(_buildContentItem('账户名称', item.dAcName));
-      // _transferList.add(_buildContentItem('货币', item.ccy));
-      // _transferList.add(_buildContentItem('金额', item.bal));
-      // _transferList.add(_buildContentItem('附言', item.postscript));
+    var _contractModel;
+    try {
+      _contractModel = await ApiClient().findToDoTaskDetail(
+          FindTodoTaskDetailBody(processId: widget.data.processId));
+    } catch (e) {
+      if (e is NeedLogin) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(builder: (context) => LoginPage()),
+            (route) => false);
+      } else {
+        print('error: ${e.toString()}');
+      }
     }
+    // openTdContractApproval - 开立定期存单
+    if (_processKey == 'openTdContractApproval') {
+      OpenTDModel.OpenTdContractDetailModel openTdContractDetailModel =
+          OpenTDModel.OpenTdContractDetailModel.fromJson(_contractModel);
+      OpenTDModel.OperateEndValue data =
+          openTdContractDetailModel?.operateEndValue;
+      if (this.mounted) {
+        setState(() {
+          _openTdList.add(_buildTitle('基本信息'));
+          _openTdList.add(_buildContentItem('产品', data?.prodName ?? ''));
+          _openTdList.add(_buildContentItem('存款期限', data?.tenor ?? ''));
+          _openTdList.add(_buildContentItem('金额', f.format(data?.bal) ?? ''));
+          _openTdList.add(_buildContentItem('年利率', ''));
+          _openTdList.add(_buildContentItem('存单货币', data?.ccy ?? ''));
+          _openTdList.add(_buildContentItem('到期指示', data?.instCode ?? ''));
+          _openTdList.add(_buildContentItem('结算账户', data?.settDdAc ?? ''));
+          _openTdList.add(_buildContentItem('扣款账户', data?.oppAc ?? ''));
+        });
+      }
+    }
+    //earlyRedTdContractApproval - 定期提前结清
+    else if (_processKey == 'earlyRedTdContractApproval') {
+      EarlyRedModel.EarlyRedTdContractDetailModel
+          earlyRedTdContractDetailModel =
+          EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
+      EarlyRedModel.OperateEndValue data =
+          earlyRedTdContractDetailModel.operateEndValue;
+      if (this.mounted) {
+        setState(() {
+          _earlyRedTdList.add(_buildTitle('基本信息'));
+          _earlyRedTdList.add(_buildContentItem('合约号', data?.conNo ?? ''));
+          _earlyRedTdList
+              .add(_buildContentItem('存单金额', f.format(data?.bal) ?? ''));
+          _earlyRedTdList.add(_buildContentItem('货币', data?.ccy ?? ''));
+          _earlyRedTdList.add(_buildContentItem('存期', data?.tenor ?? ''));
+          _earlyRedTdList.add(_buildContentItem('状态', data?.status ?? ''));
+          _earlyRedTdList.add(_buildContentItem('生效日', data?.valueDate ?? ''));
+          _earlyRedTdList.add(_buildContentItem('到期日', data?.dueDate ?? ''));
+          _earlyRedTdList.add(_buildContentItem('结清本金金额', data?.matAmt ?? ''));
+          _earlyRedTdList.add(
+            Padding(padding: EdgeInsets.only(top: 15)),
+          );
+          _earlyRedTdList.add(_buildTitle('试算信息'));
+          _earlyRedTdList
+              .add(_buildContentItem('提前结清利率', '${data?.eryRate}%' ?? ''));
+          _earlyRedTdList.add(_buildContentItem('提前结清利息', data?.eryInt ?? ''));
+          _earlyRedTdList
+              .add(_buildContentItem('手续费', f.format(data?.hdlFee) ?? ''));
+          _earlyRedTdList
+              .add(_buildContentItem('罚金', f.format(data?.pnltFee) ?? ''));
+          _earlyRedTdList.add(
+            Padding(padding: EdgeInsets.only(top: 15)),
+          );
+          _earlyRedTdList.add(_buildTitle('结算信息'));
+          _earlyRedTdList.add(_buildContentItem('结算账号', data?.settDdAc ?? ''));
+          _earlyRedTdList.add(_buildContentItem('结算金额', data?.settBal ?? ''));
+        });
+      }
+    }
+    // oneToOneTransferApproval - 行内转账
+    else if (_processKey == 'oneToOneTransferApproval') {
+      OneToOneModel.OneToOneTransferDetailModel oneToOneTransferDetailModel =
+          OneToOneModel.OneToOneTransferDetailModel.fromJson(_contractModel);
+      OneToOneModel.OperateEndValue data =
+          oneToOneTransferDetailModel.operateEndValue;
+      if (this.mounted) {
+        setState(() {
+          _oneToOneList.add(_buildTitle('收款信息'));
+          _oneToOneList.add(_buildContentItem('账号', data?.payeeCardNo ?? ''));
+          _oneToOneList.add(_buildContentItem('账户名称', data?.payeeName ?? ''));
+          _oneToOneList
+              .add(_buildContentItem('货币', data?.creditCurrency ?? ''));
+          _oneToOneList
+              .add(_buildContentItem('金额', f.format(data?.amount) ?? ''));
+          _oneToOneList
+              .add(_buildContentItem('参考汇率', data?.exchangeRate ?? ''));
+          _oneToOneList.add(
+            Padding(padding: EdgeInsets.only(top: 15)),
+          );
+          _oneToOneList.add(_buildTitle('付款信息'));
+          _oneToOneList.add(_buildContentItem('账号', data?.payerCardNo ?? ''));
+          _oneToOneList.add(_buildContentItem('账户名称', data?.payerName ?? ''));
+          _oneToOneList.add(_buildContentItem('货币', data?.debitCurrency ?? ''));
+          _oneToOneList
+              .add(_buildContentItem('金额', f.format(data?.amount) ?? ''));
+          _oneToOneList.add(_buildContentItem('附言', data?.remark ?? ''));
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String _processKey = widget.data.processKey;
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(widget.title),
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        controller: _controller,
+        child: Column(
+          children: [
+            _tips(), //提示
+            Column(
+              children: [
+                Padding(padding: EdgeInsets.only(top: 15)),
+                if (_processKey == 'openTdContractApproval') ..._openTdList,
+                if (_processKey == 'earlyRedTdContractApproval')
+                  ..._earlyRedTdList,
+                if (_processKey == 'oneToOneTransferApproval') ..._oneToOneList,
+              ],
+            ),
+            Padding(padding: EdgeInsets.only(top: 15)),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(
+                    context, pageAuthorizationTaskApprovalHistoryDetail);
+              },
+              child: _buildHistoryItem('审批历史', true),
+            ),
+
+            _myApproval(context), //我的审批
+          ],
+        ),
+      ),
+    );
   }
 
 //签收按钮被点击时改变offstage
@@ -204,10 +324,12 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
               child: CustomButton(
                 isOutline: true,
                 margin: EdgeInsets.all(0),
-                text: Text(S.current.reject_to_sponsor, style: TextStyle(color: Color(0xff3394D4), fontSize: 14.0),),
-                clickCallback: (){
+                text: Text(
+                  S.current.reject_to_sponsor,
+                  style: TextStyle(color: Color(0xff3394D4), fontSize: 14.0),
+                ),
+                clickCallback: () {
                   if (comment.length != 0) {
-
                   } else {
                     _alertDialog();
                   }
@@ -220,8 +342,11 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
               child: CustomButton(
                 isOutline: true,
                 margin: EdgeInsets.all(0),
-                text: Text(S.current.reject, style: TextStyle(color: Color(0xff3394D4), fontSize: 14.0),),
-                clickCallback: (){
+                text: Text(
+                  S.current.reject,
+                  style: TextStyle(color: Color(0xff3394D4), fontSize: 14.0),
+                ),
+                clickCallback: () {
                   if (comment.length != 0) {
                     Navigator.pop(context);
                   } else {
@@ -238,10 +363,12 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
               flex: 1,
               child: CustomButton(
                 margin: EdgeInsets.all(0),
-                text: Text(S.current.approval_unlock, style: TextStyle(color: Colors.white, fontSize: 14.0),),
-                clickCallback: (){
+                text: Text(
+                  S.current.approval_unlock,
+                  style: TextStyle(color: Colors.white, fontSize: 14.0),
+                ),
+                clickCallback: () {
                   if (comment.length != 0) {
-
                   } else {
                     _alertDialog();
                   }
@@ -259,8 +386,11 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
           children: [
             CustomButton(
               margin: EdgeInsets.all(0),
-              text: Text(S.current.approval_lock, style: TextStyle(color: Colors.white, fontSize: 14.0),),
-              clickCallback: (){
+              text: Text(
+                S.current.approval_lock,
+                style: TextStyle(color: Colors.white, fontSize: 14.0),
+              ),
+              clickCallback: () {
                 _toggle();
                 // _doClaimTask();
                 WidgetsBinding.instance.addPostFrameCallback((callback) {
@@ -320,45 +450,6 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
                 )
               : Container(),
         ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(widget.title),
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        controller: _controller,
-        child: Column(
-          children: [
-            _tips(), //提示
-            Column(
-              //审批信息列表
-              // children: informationDisplayList(context, approvalInfo),
-              children: [
-                Padding(padding: EdgeInsets.only(top: 15)),
-                ..._contractList,
-                ..._transferList,
-              ],
-            ),
-            Padding(padding: EdgeInsets.only(top: 15)),
-            GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(
-                    context, pageAuthorizationTaskApprovalHistoryDetail);
-              },
-              child: _buildHistoryItem('审批历史', true),
-            ),
-
-            _myApproval(context), //我的审批
-          ],
-        ),
       ),
     );
   }

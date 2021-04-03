@@ -238,7 +238,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
           if(isLoadMore == false && _page == 1) _listData.clear();
           _listData.addAll(response.rows);
           _isLoading = false;
-          if(response.rows.length < 10 && response.totalPage >= _page) {
+          if(response.rows.length <= 10 && response.totalPage <= _page) {
             _isMoreData = true;
           }
         });

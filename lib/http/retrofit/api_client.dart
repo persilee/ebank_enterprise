@@ -25,10 +25,6 @@ abstract class ApiClient {
     return _ApiClient(dio, baseUrl: baseUrl);
   }
 
-  /// 登录
-  @POST('/security/cutlogin')
-  Future<LoginResp> login(@Body() BaseBody baseBody);
-
   /// 查询属于我的待办任务
   @POST('/wkfl/processTask/findUserTodoTask')
   Future<FindUserTodoTaskModel> findUserTodoTask(@Body() FindUserTodoTaskBody findUserTodoTaskBody);
