@@ -20,7 +20,7 @@ class BaseDio {
     final Dio dio = Dio();
     dio.options = BaseOptions(receiveTimeout: 30000, connectTimeout: 30000); // 设置超时时间等 ...
     dio.interceptors.add(HeaderInterceptor()); // 添加拦截器，如 token之类，需要全局使用的参数
-    // dio.interceptors.add(ErrorInterceptor()); // 添加error拦截器
+    dio.interceptors.add(ErrorInterceptor()); // 添加error拦截器
     dio.interceptors.add(ResponseInterceptor());
     dio.interceptors.add(RequestInterceptor());
     // dio.interceptors

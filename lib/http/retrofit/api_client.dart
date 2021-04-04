@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart' hide Headers;
-import 'package:ebank_mobile/data/source/model/find_todo_task_detail_body.dart';
-import 'package:ebank_mobile/data/source/model/find_user_todo_task_body.dart';
-import 'package:ebank_mobile/http/retrofit/base_response.dart';
-import 'package:http_parser/http_parser.dart' show MediaType;
 import 'package:dio/dio.dart';
-import 'package:ebank_mobile/data/source/model/open_td_contract_detail_model.dart';
-import 'package:ebank_mobile/data/source/model/find_user_todo_task_model.dart';
+import 'package:ebank_mobile/data/source/model/approval/complete_task_body.dart';
+import 'package:ebank_mobile/data/source/model/approval/complete_task_model.dart';
+import 'package:ebank_mobile/data/source/model/approval/find_all_finished_task_model.dart';
+import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
+import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_body.dart';
+import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:retrofit/http.dart';
@@ -27,12 +27,32 @@ abstract class ApiClient {
 
   /// 查询属于我的待办任务
   @POST('/wkfl/processTask/findUserTodoTask')
-  Future<FindUserTodoTaskModel> findUserTodoTask(@Body() FindUserTodoTaskBody findUserTodoTaskBody);
+  Future<FindUserTodoTaskModel> findUserTodoTask(@Body() FindTaskBody findTaskBody);
+
+  /// 查询所有历史任务列表
+  @POST('/wkfl/processTask/findAllFinishedTask')
+  Future<FindAllFinishedTaskModel> findAllFinishedTask(@Body() FindTaskBody findTaskBody);
 
   /// 根据流程id查询待办任务详细信息
   @POST('/wkfl/processTask/findToDoTaskDetail')
   Future<dynamic> findToDoTaskDetail(
       @Body() FindTodoTaskDetailBody findTodoTaskDetailBody);
+
+  /// 认领任务
+  @POST('/wkfl/processTask/doClaimTask')
+  Future<void> doClaimTask(@Body() FindTaskBody findTaskBody);
+
+  /// 取消认领任务
+  @POST('/wkfl/processTask/doUnclaimTask')
+  Future<void> doUnclaimTask(@Body() FindTaskBody findTaskBody);
+
+  /// 回退到发起人
+  @POST('/wkfl/processTask/withdrawToStartTask')
+  Future<void> withdrawToStartTask(@Body() FindTaskBody findTaskBody);
+
+  /// 完成任务
+  @POST('/wkfl/processTask/completeTask')
+  Future<CompleteTaskModel> completeTask(@Body() CompleteTaskBody completeTaskBody);
 
   /// 上传头像（开户图片上传暂时共用）
   @POST('/cust/user/uploadAvatar')

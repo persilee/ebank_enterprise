@@ -11,7 +11,7 @@ class ResponseInterceptor extends Interceptor {
       response.data = baseResponse.body;
     } else {
       if(baseResponse?.msgCd == 'SYS90018') {
-        return Future.error(NeedLogin);
+        return Future.error(NeedLogin());
       }
       return Future.error(
           AppException(baseResponse?.msgCd, baseResponse?.msgInfo));

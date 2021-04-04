@@ -1,24 +1,20 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///我的待办页面
+/// 我的待办页面
 /// Author: wangluyao
 /// Date: 2020-12-21
+import 'package:dio/dio.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/find_user_to_do_task.dart';
-import 'package:ebank_mobile/data/source/model/find_user_todo_task_body.dart';
-import 'package:ebank_mobile/data/source/model/find_user_todo_task_model.dart';
-import 'package:ebank_mobile/data/source/model/my_approval_data.dart';
+import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
+import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
-import 'package:ebank_mobile/http/retrofit/base_body.dart';
+import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
+import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../page_route.dart';
@@ -33,14 +29,13 @@ class MyApprovalPage extends StatefulWidget {
 }
 
 class _MyApprovalPageState extends State<MyApprovalPage> {
-  List<FindUserTaskDetail> toDoTask = [];
-  List<ApprovalTask> _listData = []; //页面显示的待办列表
   ScrollController _scrollController;
-  int count = 0;
-  int _page = 1;
-  bool _isLoading = false; //加载状态
-  bool _isMoreData = false;
   RefreshController _refreshController;
+  List<ApprovalTask> _listData = [];
+  int _page = 1;
+  bool _isLoading = false;
+  bool _isMoreData = false;
+
 
   @override
   void initState() {
@@ -48,36 +43,89 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     _refreshController = RefreshController();
     _scrollController = ScrollController();
     _loadData();
-    // _testLoadData(false);
   }
 
-//蓝色圆点
-  Widget _icon() {
-    return Container(
-      padding: EdgeInsets.only(right: 10.0),
-      child: Icon(
-        Icons.fiber_manual_record,
-        color: Color(0xff3394D4),
-        size: 10.0,
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+    _refreshController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _isLoading
+        ? HsgLoading()
+        : _listData.length > 0
+        ? CustomRefresh(
+      controller: _refreshController,
+      onLoading: () async {
+        await _loadData(isLoadMore: true);
+        //加载更多完成
+        _refreshController.loadComplete();
+        //显示没有更多数据
+        if (_isMoreData) _refreshController.loadNoData();
+      },
+      onRefresh: () async {
+        await _loadData();
+        //刷新完成
+        _refreshController.refreshCompleted();
+        _refreshController.footerMode.value = LoadStatus.canLoading;
+      },
+      content: ListView.builder(
+        padding:
+        EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
+        itemCount: _listData.length,
+        controller: _scrollController,
+        itemBuilder: (context, index) {
+          return _todoInformation(_listData[index]);
+        },
       ),
-    );
+    )
+        : notDataContainer(context, S.current.no_data_now);
   }
 
-//竖直线
-  Widget _line() {
-    return Container(
-      padding: EdgeInsets.only(right: 10.0, top: 6.0),
-      child: SizedBox(
-        width: 1.0,
-        height: 126.0,
-        child: DecoratedBox(
-          decoration: BoxDecoration(color: HsgColors.divider),
-        ),
-      ),
-    );
+  //加载数据
+  Future<void> _loadData({bool isLoadMore = false}) async {
+    isLoadMore ? _page ++ : _page = 1;
+    _isLoading = true;
+    try {
+      FindUserTodoTaskModel response = await ApiClient().findUserTodoTask(
+        FindTaskBody(
+            page: _page, pageSize: 10, tenantId: 'EB', custId: '818000000113'),
+      );
+      if (this.mounted) {
+        setState(() {
+          if(isLoadMore == false && _page == 1) {
+            _listData.clear();
+          }
+          _listData.addAll(response.rows);
+          _isLoading = false;
+          if(response.rows.length <= 10 && response.totalPage <= _page) {
+            _isMoreData = true;
+          }
+        });
+      }
+    } catch (e) {
+      print((e as DioError).error is NeedLogin);
+      if ((e as DioError).error is NeedLogin) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) {
+              return LoginPage();
+            }), (Route route) {
+          print(route.settings?.name);
+          if (route.settings?.name == "/") {
+            return true;
+          }
+          return false;
+        });
+      } else {
+        print('error: ${e.toString()}');
+      }
+    }
   }
 
-//待办任务名称
+  //待办任务名称
   Widget _taskName(String taskName) {
     return Text(
       taskName,
@@ -89,7 +137,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     );
   }
 
-//发起人、创建时间
+  //发起人、创建时间
   Widget _rowInformation(String leftText, String rightText) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -149,7 +197,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     );
   }
 
-//待办列表
+  //待办列表
   Widget _todoInformation(ApprovalTask approvalTask) {
     return Container(
       height: 146.0,
@@ -185,78 +233,35 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return _isLoading
-        ? HsgLoading()
-        : _listData.length > 0
-            ? CustomRefresh(
-                controller: _refreshController,
-                onLoading: () async {
-                  await _loadData(isLoadMore: true);
-                  //加载更多完成
-                  _refreshController.loadComplete();
-                  //显示没有更多数据
-                  if (_isMoreData) _refreshController.loadNoData();
-                  // _refreshController.loadNoData();
-                },
-                onRefresh: () async {
-                  await _loadData();
-                  //刷新完成
-                  _refreshController.refreshCompleted();
-                  _refreshController.footerMode.value = LoadStatus.canLoading;
-                },
-                content: ListView.builder(
-                  padding:
-                      EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
-                  itemCount: _listData.length,
-                  controller: _scrollController,
-                  itemBuilder: (context, index) {
-                    return _todoInformation(_listData[index]);
-                  },
-                ),
-              )
-            : notDataContainer(context, S.current.no_data_now);
-  }
-
-//跳转并传值
+  //跳转并传值
   void go2Detail(ApprovalTask approvalTask) {
     Navigator.pushNamed(context, pageTaskApproval,
         arguments: {"data": approvalTask, "title": widget.title});
   }
 
-  Future<void> _loadData({bool isLoadMore = false}) async {
-    isLoadMore ? _page ++ : _page = 1;
-    _isLoading = true;
-    try {
-      FindUserTodoTaskModel response = await ApiClient().findUserTodoTask(
-        FindUserTodoTaskBody(
-            page: _page, pageSize: 10, tenantId: 'EB', custId: '818000000113'),
-      );
-      if (this.mounted) {
-        setState(() {
-          if(isLoadMore == false && _page == 1) _listData.clear();
-          _listData.addAll(response.rows);
-          _isLoading = false;
-          if(response.rows.length <= 10 && response.totalPage <= _page) {
-            _isMoreData = true;
-          }
-        });
-      }
-    } catch (e) {
-      if(this.mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-      print(e.runtimeType);
-    }
+  //蓝色圆点
+  Widget _icon() {
+    return Container(
+      padding: EdgeInsets.only(right: 10.0),
+      child: Icon(
+        Icons.fiber_manual_record,
+        color: Color(0xff3394D4),
+        size: 10.0,
+      ),
+    );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _scrollController.dispose();
-    _refreshController.dispose();
+  //竖直线
+  Widget _line() {
+    return Container(
+      padding: EdgeInsets.only(right: 10.0, top: 6.0),
+      child: SizedBox(
+        width: 1.0,
+        height: 126.0,
+        child: DecoratedBox(
+          decoration: BoxDecoration(color: HsgColors.divider),
+        ),
+      ),
+    );
   }
 }
