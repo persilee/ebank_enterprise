@@ -6,14 +6,14 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/feature_demo/my_tab_indicator.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/page/approval/authorization_history_page.dart';
+import 'package:ebank_mobile/page/approval/my_approved_history_page.dart';
 import 'package:ebank_mobile/util/screen_util.dart';
 import 'package:ebank_mobile/util/status_bar_util.dart';
 import 'package:ebank_mobile/util/widget_util.dart';
 import 'package:ebank_mobile/widget/custom_tabs.dart' as CustomTabBar;
 import 'package:flutter/material.dart';
 import 'my_appplication_page.dart';
-import 'my_approval_page.dart';
+import 'my_to_do_task_page.dart';
 
 class ApprovalPage extends StatefulWidget {
   ApprovalPage();
@@ -101,8 +101,8 @@ class _ApprovalPageState extends State<ApprovalPage>
                     child: CustomTabBar.TabBarView(
                       controller: tabController,
                       children: [
-                        MyApprovalPage(title: S.current.my_to_do_list),
-                        AuthorizationHistoryPage(
+                        MyToDoTaskPage(title: S.current.my_to_do_list),
+                        MyApprovedHistoryPage(
                             title: S.current.authorization_history),
                         MyApplicationPage(title: S.current.my_application)
                       ],

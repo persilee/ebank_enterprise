@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart' hide Headers;
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/data/source/model/approval/complete_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/complete_task_model.dart';
@@ -8,7 +7,6 @@ import 'package:ebank_mobile/data/source/model/approval/find_all_finished_task_m
 import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
-import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
@@ -53,6 +51,14 @@ abstract class ApiClient {
   /// 完成任务
   @POST('/wkfl/processTask/completeTask')
   Future<CompleteTaskModel> completeTask(@Body() CompleteTaskBody completeTaskBody);
+
+  /// 查询我的处理记录待办任务
+  @POST('/wkfl/processTask/findUserFinishedTask')
+  Future<FindUserTodoTaskModel> findUserFinishedTask(@Body() FindTaskBody findTaskBody);
+
+  /// 查询我的申请的流程列表
+  @POST('/wkfl/processTask/findUserStartTask')
+  Future<FindUserTodoTaskModel> findUserStartTask(@Body() FindTaskBody findTaskBody);
 
   /// 上传头像（开户图片上传暂时共用）
   @POST('/cust/user/uploadAvatar')

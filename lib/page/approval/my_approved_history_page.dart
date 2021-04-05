@@ -2,37 +2,43 @@
  * 
  * Created Date: Thursday, December 10th 2020, 5:34:04 pm
  * Author: pengyikang
- * 我的申请页面
+ * 授权历史记录页面
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
 
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
+import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
+import 'package:ebank_mobile/data/source/model/my_approval_data.dart';
+import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
-import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class MyApplicationPage extends StatefulWidget {
+import '../../page_route.dart';
+
+class MyApprovedHistoryPage extends StatefulWidget {
   final title;
-  MyApplicationPage({Key key, this.title}) : super(key: key);
+
+  MyApprovedHistoryPage({Key key, this.title}) : super(key: key);
 
   @override
-  _MyApplicationPageState createState() => _MyApplicationPageState();
+  _MyApprovedHistoryPageState createState() =>
+      _MyApprovedHistoryPageState();
 }
 
-enum LoadingStatus { STATUS_LOADING, STATUS_COMPLETED, STATUS_IDEL }
-
-class _MyApplicationPageState extends State<MyApplicationPage> {
+class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage> {
   ScrollController _scrollController;
   RefreshController _refreshController;
   List<ApprovalTask> _listData = [];
@@ -94,7 +100,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
     isLoadMore ? _page ++ : _page = 1;
     _isLoading = true;
     try {
-      FindUserTodoTaskModel response = await ApiClient().findUserStartTask(
+      FindUserTodoTaskModel response = await ApiClient().findUserFinishedTask(
         FindTaskBody(
             page: _page, pageSize: 10, tenantId: 'EB', custId: '818000000113'),
       );
@@ -124,11 +130,6 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
           return false;
         });
       } else {
-        if(this.mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
         print('error: ${e.toString()}');
       }
     }

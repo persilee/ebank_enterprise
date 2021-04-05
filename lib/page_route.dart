@@ -4,9 +4,9 @@
 /// Date: 2020-12-07
 
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
-import 'package:ebank_mobile/page/approval/authorization_task_approval_history_detail.dart';
+import 'package:ebank_mobile/page/approval/approval_history_detail_page.dart';
 import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
-import 'package:ebank_mobile/page/approval/task_approval_page.dart';
+import 'package:ebank_mobile/page/approval/my_to_do_task_detail_page.dart';
 
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/loan/loan_reference.dart';
@@ -37,9 +37,9 @@ import 'package:ebank_mobile/page/register/reset_password_success.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
 import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
-import 'package:ebank_mobile/page/approval/application_task_approval_page.dart';
-import 'package:ebank_mobile/page/approval/authorization_history_page.dart';
-import 'package:ebank_mobile/page/approval/authorization_task_approval_page.dart';
+import 'package:ebank_mobile/page/approval/my_application_detail_page.dart';
+import 'package:ebank_mobile/page/approval/my_approved_history_page.dart';
+import 'package:ebank_mobile/page/approval/my_approved_history_detail_page.dart';
 import 'package:ebank_mobile/page/approval/my_appplication_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_detail_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
@@ -251,7 +251,7 @@ var appRoutes = {
   pageTrasferInternational: (context) => TransferInternationalPage(),
   pageFeatureList: (context) => FeatureListPage(),
   pageTransfer: (context) => TransferPage(),
-  pageAuthorizationHistory: (context) => AuthorizationHistoryPage(),
+  pageAuthorizationHistory: (context) => MyApprovedHistoryPage(),
   pageTransferInternal: (context) => TransferInternalPage(),
   pageTransferOrderPreview: (context) => TransferOrderPreviewPage(),
   pageTransferInternalPreview: (context) => TransferInternalPreviewPage(),
@@ -335,7 +335,7 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageAuthorizationTaskApproval) {
     return MaterialPageRoute(builder: (context) {
       Map<String, dynamic> arguments = settings.arguments;
-      return AuthorizationTaskApprovalPage(
+      return MyApprovedHistoryDetailPage(
         data: arguments['data'],
         title: arguments['title'],
       );
@@ -344,7 +344,7 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageAuthorizationTaskApprovalHistoryDetail) {
     return MaterialPageRoute(builder: (context) {
       Map<String, dynamic> arguments = settings.arguments;
-      return AuthorizationTaskApprovalHistoryDetail();
+      return ApprovalHistoryDetailPage();
     });
   }
   if (settings.name == pageTransferPlanDetails) {
@@ -355,7 +355,7 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageApplicationTaskApproval) {
     return MaterialPageRoute(builder: (context) {
       Map<String, dynamic> arguments = settings.arguments;
-      return ApplicationTaskApprovalPage(
+      return MyApplicationDetailPage(
         history: arguments['data'],
         title: arguments['title'],
       );
@@ -364,7 +364,7 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageTaskApproval) {
     return MaterialPageRoute(builder: (context) {
       Map<String, dynamic> arguments = settings.arguments;
-      return TaskApprovalPage(
+      return MyToDoTaskDetailPage(
         data: arguments['data'],
         title: arguments['title'],
       );

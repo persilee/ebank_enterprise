@@ -34,17 +34,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class TaskApprovalPage extends StatefulWidget {
+class MyToDoTaskDetailPage extends StatefulWidget {
   final ApprovalTask data;
   final String title;
 
-  TaskApprovalPage({Key key, this.data, this.title}) : super(key: key);
+  MyToDoTaskDetailPage({Key key, this.data, this.title}) : super(key: key);
 
   @override
-  _TaskApprovalPageState createState() => _TaskApprovalPageState();
+  _MyToDoTaskDetailPageState createState() => _MyToDoTaskDetailPageState();
 }
 
-class _TaskApprovalPageState extends State<TaskApprovalPage> {
+class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   ScrollController _controller;
   String _comment = '';
   bool _offstage = true;
@@ -487,6 +487,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
                 ),
                 clickCallback: () {
                   if (_comment.length != 0) {
+                    _rejectToStartTask();
                   } else {
                     _alertDialog();
                   }
@@ -506,7 +507,7 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
                 ),
                 clickCallback: () {
                   if (_comment.length != 0) {
-                    Navigator.pop(context);
+                    _rejectTask();
                   } else {
                     _alertDialog();
                   }
@@ -763,6 +764,44 @@ class _TaskApprovalPageState extends State<TaskApprovalPage> {
     try {
       await ApiClient().doUnclaimTask(FindTaskBody(taskId: widget.data.taskId));
       Navigator.pop(context);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // 驳回
+  void _rejectTask() async {
+    try {
+      CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
+        CompleteTaskBody(
+          approveResult: false,
+          comment: _comment,
+          rejectToStart: false,
+          taskId: widget.data.taskId,
+        ),
+      );
+      if(completeTaskModel.msgCd == '0000') {
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // 驳回至发起人
+  void _rejectToStartTask() async {
+    try {
+      CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
+        CompleteTaskBody(
+          approveResult: false,
+          comment: _comment,
+          rejectToStart: true,
+          taskId: widget.data.taskId,
+        ),
+      );
+      if(completeTaskModel.msgCd == '0000') {
+        Navigator.pop(context);
+      }
     } catch (e) {
       print(e);
     }

@@ -19,16 +19,16 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../page_route.dart';
 
-class MyApprovalPage extends StatefulWidget {
+class MyToDoTaskPage extends StatefulWidget {
   final title;
 
-  MyApprovalPage({Key key, this.title}) : super(key: key);
+  MyToDoTaskPage({Key key, this.title}) : super(key: key);
 
   @override
-  _MyApprovalPageState createState() => _MyApprovalPageState();
+  _MyToDoTaskPageState createState() => _MyToDoTaskPageState();
 }
 
-class _MyApprovalPageState extends State<MyApprovalPage> {
+class _MyToDoTaskPageState extends State<MyToDoTaskPage> {
   ScrollController _scrollController;
   RefreshController _refreshController;
   List<ApprovalTask> _listData = [];
@@ -183,6 +183,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
           children: [
             //待办任务名称
             _taskName(approvalTask?.taskName ?? ''),
+            Padding(padding: EdgeInsets.only(top: 1.0)),
             //待办任务id
             _rowInformation(intl.S.current.approval_task_id, approvalTask?.taskId ?? ''),
             //发起人
@@ -200,7 +201,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
   //待办列表
   Widget _todoInformation(ApprovalTask approvalTask) {
     return Container(
-      height: 146.0,
+      height: 156.0,
       padding: EdgeInsets.only(top: 16),
       child: GestureDetector(
         onTap: () {
@@ -257,7 +258,7 @@ class _MyApprovalPageState extends State<MyApprovalPage> {
       padding: EdgeInsets.only(right: 10.0, top: 6.0),
       child: SizedBox(
         width: 1.0,
-        height: 126.0,
+        height: 136.0,
         child: DecoratedBox(
           decoration: BoxDecoration(color: HsgColors.divider),
         ),
