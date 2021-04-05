@@ -26,12 +26,14 @@ import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sp_util/sp_util.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class MyToDoTaskDetailPage extends StatefulWidget {
@@ -49,6 +51,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   String _comment = '';
   bool _offstage = true;
   bool _isLoading = false;
+  bool _btnIsLoadingRTS = false; // 驳回至发起人按钮
+  bool _btnIsLoadingR = false; // 驳回按钮
+  bool _btnIsLoadingUN = false; // 解锁按钮
+  bool _btnIsLoadingL = false; // 锁定按钮
+  bool _btnIsLoadingEAA = false; // 审批按钮
+  bool _btnIsEnable = true;
   List<Widget> _openTdList = [];
   List<Widget> _earlyRedTdList = [];
   List<Widget> _oneToOneList = [];
@@ -87,7 +95,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           page: 1,
           pageSize: 6,
           tenantId: 'EB',
-          custId: '818000000113',
+          custId: SpUtil.getString(ConfigKey.CUST_ID),
           taskId: _taskId,
         ),
       );
@@ -479,11 +487,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             Expanded(
               flex: 2,
               child: CustomButton(
+                isLoading: _btnIsLoadingRTS,
+                isEnable: _btnIsEnable,
                 isOutline: true,
                 margin: EdgeInsets.all(0),
                 text: Text(
                   S.current.reject_to_sponsor,
-                  style: TextStyle(color: Color(0xff3394D4), fontSize: 14.0),
+                  style: TextStyle(color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey, fontSize: 14.0),
                 ),
                 clickCallback: () {
                   if (_comment.length != 0) {
@@ -499,11 +509,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             Expanded(
               flex: 1,
               child: CustomButton(
+                isLoading: _btnIsLoadingR,
+                isEnable: _btnIsEnable,
                 isOutline: true,
                 margin: EdgeInsets.all(0),
                 text: Text(
                   S.current.reject,
-                  style: TextStyle(color: Color(0xff3394D4), fontSize: 14.0),
+                  style: TextStyle(color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey, fontSize: 14.0),
                 ),
                 clickCallback: () {
                   if (_comment.length != 0) {
@@ -519,10 +531,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             Expanded(
               flex: 1,
               child: CustomButton(
+                isLoading: _btnIsLoadingUN,
+                isEnable: _btnIsEnable,
                 margin: EdgeInsets.all(0),
                 text: Text(
                   S.current.approval_unlock,
-                  style: TextStyle(color: Colors.white, fontSize: 14.0),
+                  style: TextStyle(color: _btnIsEnable ? Colors.white : Colors.grey, fontSize: 14.0),
                 ),
                 clickCallback: () {
                   if (_comment.length != 0) {
@@ -544,10 +558,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             CustomButton(
+              isLoading: _btnIsLoadingL,
+              isEnable: _btnIsEnable,
               margin: EdgeInsets.all(0),
               text: Text(
                 S.current.approval_lock,
-                style: TextStyle(color: Colors.white, fontSize: 14.0),
+                style: TextStyle(color: _btnIsEnable ? Colors.white : Colors.grey, fontSize: 14.0),
               ),
               clickCallback: () {
                 // 认领任务
@@ -576,20 +592,27 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           _inputApprovalComments(),
           //底部按钮
           _button(),
-          !_offstage
-              ? CustomButton(
-                  clickCallback: () {
-                    if (_comment.length != 0) {
-                      _completeTask();
-                    } else {
-                      _alertDialog();
-                    }
-                  },
-                  text: Text(
-                    S.current.examine_and_approve,
-                    style: TextStyle(fontSize: 13.0, color: Colors.white),
-                  ),
-                )
+          !_offstage ? Row(
+              children: [
+                Expanded(
+                  child: CustomButton(
+                  isLoading: _btnIsLoadingEAA,
+                  isEnable: _btnIsEnable,
+                        clickCallback: () {
+                          if (_comment.length != 0) {
+                            _completeTask();
+                          } else {
+                            _alertDialog();
+                          }
+                        },
+                        text: Text(
+                          S.current.examine_and_approve,
+                          style: TextStyle(fontSize: 13.0, color: Colors.white),
+                        ),
+                      ),
+                ),
+              ],
+            )
               : Container(),
           !_offstage
               ? SizedBox(
@@ -744,8 +767,20 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
   // 认领任务
   void _doClaimTask() async {
+    if(this.mounted) {
+      setState(() {
+        _btnIsLoadingL = true;
+        _btnIsEnable = false;
+      });
+    }
     try {
       await ApiClient().doClaimTask(FindTaskBody(taskId: widget.data.taskId));
+      if(this.mounted) {
+        setState(() {
+          _btnIsLoadingL = false;
+          _btnIsEnable = true;
+        });
+      }
       _toggle();
       WidgetsBinding.instance.addPostFrameCallback((callback) {
         _controller.animateTo(
@@ -761,8 +796,20 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
   // 取消认领任务
   void _doUnclaimTask() async {
+    if(this.mounted) {
+      setState(() {
+        _btnIsLoadingUN = true;
+        _btnIsEnable = false;
+      });
+    }
     try {
       await ApiClient().doUnclaimTask(FindTaskBody(taskId: widget.data.taskId));
+      if(this.mounted) {
+        setState(() {
+          _btnIsLoadingUN = false;
+          _btnIsEnable = true;
+        });
+      }
       Navigator.pop(context);
     } catch (e) {
       print(e);
@@ -771,6 +818,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
   // 驳回
   void _rejectTask() async {
+    if(this.mounted) {
+      setState(() {
+        _btnIsLoadingR = true;
+        _btnIsEnable = false;
+      });
+    }
     try {
       CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
         CompleteTaskBody(
@@ -781,6 +834,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         ),
       );
       if(completeTaskModel.msgCd == '0000') {
+        if(this.mounted) {
+          setState(() {
+            _btnIsLoadingR = false;
+            _btnIsEnable = true;
+          });
+        }
         Navigator.pop(context);
       }
     } catch (e) {
@@ -790,6 +849,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
   // 驳回至发起人
   void _rejectToStartTask() async {
+    if(this.mounted) {
+      setState(() {
+        _btnIsLoadingRTS = true;
+        _btnIsEnable = false;
+      });
+    }
     try {
       CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
         CompleteTaskBody(
@@ -800,6 +865,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         ),
       );
       if(completeTaskModel.msgCd == '0000') {
+        if(this.mounted) {
+          setState(() {
+            _btnIsLoadingRTS = false;
+            _btnIsEnable = true;
+          });
+        }
         Navigator.pop(context);
       }
     } catch (e) {
@@ -809,6 +880,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
   // 完成任务
   void _completeTask() async {
+    if(this.mounted) {
+      setState(() {
+        _btnIsLoadingEAA = true;
+        _btnIsEnable = false;
+      });
+    }
     try {
       CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
         CompleteTaskBody(
@@ -819,6 +896,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         ),
       );
       if(completeTaskModel.msgCd == '0000') {
+        if(this.mounted) {
+          setState(() {
+            _btnIsLoadingEAA = false;
+            _btnIsEnable = true;
+          });
+        }
         Navigator.pushReplacementNamed(
             context, pageDepositRecordSucceed,
             arguments: 'taskApproval');

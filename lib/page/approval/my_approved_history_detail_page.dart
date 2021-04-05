@@ -19,9 +19,11 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sp_util/sp_util.dart';
 
 import '../../page_route.dart';
 
@@ -79,7 +81,7 @@ class _MyApprovedHistoryDetailPageState
           page: 1,
           pageSize: 6,
           tenantId: 'EB',
-          custId: '818000000113',
+          custId: SpUtil.getString(ConfigKey.CUST_ID),
           taskId: _taskId,
         ),
       );

@@ -11,6 +11,7 @@ class CustomButton extends StatelessWidget {
   final bool isOutline;
   final VoidCallback clickCallback;
   final bool isEnable;
+  final bool isLoading;
 
   const CustomButton({
     Key key,
@@ -22,6 +23,7 @@ class CustomButton extends StatelessWidget {
     this.isOutline = false,
     this.clickCallback,
     this.isEnable = true,
+    this.isLoading = false,
   }) : super(key: key);
 
   @override
@@ -59,13 +61,26 @@ class CustomButton extends StatelessWidget {
               : BorderSide(color: Colors.transparent, width: 0),
         ),
         onPressed: isEnable ? clickCallback ?? () {} : null,
-        child: Container(
+        child: isLoading ? LayoutBuilder(
+          builder: (context, constraints) {
+            print(constraints.maxHeight);
+            return SizedBox(
+              width: constraints.maxHeight / 2,
+              height: constraints.maxHeight / 2,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xff3394D4)),
+                backgroundColor: Color(0xff3394D4).withOpacity(0.6),
+                strokeWidth: 1.0,
+              ),
+            );
+          }
+        ) : Container(
           alignment: Alignment.center,
           child: text ??
               Text(
                 'button',
                 style: TextStyle(
-                    color: isOutline ? Color(0xff3394D4) : Colors.white,
+                    color: isOutline ? (isEnable ? Color(0xff3394D4) : Colors.grey) : Colors.white,
                     fontSize: 14.0),
               ),
         ),

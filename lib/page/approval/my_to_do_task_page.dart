@@ -12,10 +12,12 @@ import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sp_util/sp_util.dart';
 
 import '../../page_route.dart';
 
@@ -92,7 +94,7 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage> {
     try {
       FindUserTodoTaskModel response = await ApiClient().findUserTodoTask(
         FindTaskBody(
-            page: _page, pageSize: 10, tenantId: 'EB', custId: '818000000113'),
+            page: _page, pageSize: 10, tenantId: 'EB', custId: SpUtil.getString(ConfigKey.CUST_ID)),
       );
       if (this.mounted) {
         setState(() {
