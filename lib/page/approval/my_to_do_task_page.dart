@@ -38,7 +38,6 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage> {
   bool _isLoading = false;
   bool _isMoreData = false;
 
-
   @override
   void initState() {
     super.initState();
@@ -56,54 +55,57 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading
-        ? HsgLoading()
-        : _listData.length > 0
-        ? CustomRefresh(
-      controller: _refreshController,
-      onLoading: () async {
-        await _loadData(isLoadMore: true);
-        //加载更多完成
-        _refreshController.loadComplete();
-        //显示没有更多数据
-        if (_isMoreData) _refreshController.loadNoData();
-      },
-      onRefresh: () async {
-        await _loadData();
-        //刷新完成
-        _refreshController.refreshCompleted();
-        _refreshController.footerMode.value = LoadStatus.canLoading;
-      },
-      content: ListView.builder(
-        padding:
-        EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
-        itemCount: _listData.length,
-        controller: _scrollController,
-        itemBuilder: (context, index) {
-          return _todoInformation(_listData[index]);
+      return _isLoading
+          ? HsgLoading()
+          : _listData.length > 0
+          ? CustomRefresh(
+        controller: _refreshController,
+        onLoading: () async {
+          await _loadData(isLoadMore: true);
+          //加载更多完成
+          _refreshController.loadComplete();
+          //显示没有更多数据
+          if (_isMoreData) _refreshController.loadNoData();
         },
-      ),
-    )
-        : notDataContainer(context, S.current.no_data_now);
+        onRefresh: () async {
+          await _loadData();
+          //刷新完成
+          _refreshController.refreshCompleted();
+          _refreshController.footerMode.value = LoadStatus.canLoading;
+        },
+        content: ListView.builder(
+          padding:
+          EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
+          itemCount: _listData.length,
+          controller: _scrollController,
+          itemBuilder: (context, index) {
+            return _todoInformation(_listData[index]);
+          },
+        ),
+      )
+          : notDataContainer(context, S.current.no_data_now);
   }
 
   //加载数据
   Future<void> _loadData({bool isLoadMore = false}) async {
-    isLoadMore ? _page ++ : _page = 1;
+    isLoadMore ? _page++ : _page = 1;
     _isLoading = true;
     try {
       FindUserTodoTaskModel response = await ApiClient().findUserTodoTask(
         FindTaskBody(
-            page: _page, pageSize: 10, tenantId: 'EB', custId: SpUtil.getString(ConfigKey.CUST_ID)),
+            page: _page,
+            pageSize: 10,
+            tenantId: 'EB',
+            custId: SpUtil.getString(ConfigKey.CUST_ID)),
       );
       if (this.mounted) {
         setState(() {
-          if(isLoadMore == false && _page == 1) {
+          if (isLoadMore == false && _page == 1) {
             _listData.clear();
           }
           _listData.addAll(response.rows);
           _isLoading = false;
-          if(response.rows.length <= 10 && response.totalPage <= _page) {
+          if (response.rows.length <= 10 && response.totalPage <= _page) {
             _isMoreData = true;
           }
         });
@@ -113,8 +115,8 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage> {
       if ((e as DioError).error is NeedLogin) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) {
-              return LoginPage();
-            }), (Route route) {
+          return LoginPage();
+        }), (Route route) {
           print(route.settings?.name);
           if (route.settings?.name == "/") {
             return true;
@@ -187,7 +189,8 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage> {
             _taskName(approvalTask?.taskName ?? ''),
             Padding(padding: EdgeInsets.only(top: 1.0)),
             //待办任务id
-            _rowInformation(intl.S.current.approval_task_id, approvalTask?.taskId ?? ''),
+            _rowInformation(
+                intl.S.current.approval_task_id, approvalTask?.taskId ?? ''),
             //发起人
             _rowInformation(
                 intl.S.current.sponsor, approvalTask?.applicantName ?? ''),

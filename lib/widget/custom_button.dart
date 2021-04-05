@@ -1,4 +1,3 @@
-import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

@@ -2,25 +2,24 @@
 /// 任务审批页面
 /// Author: wangluyao
 /// Date: 2020-12-29
-
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/approval/complete_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/complete_task_model.dart';
-import 'package:ebank_mobile/data/source/model/early_red_td_contract_detail_model.dart'
-    as EarlyRedModel;
 import 'package:ebank_mobile/data/source/model/approval/find_all_finished_task_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/international_transfer_detail_model.dart'
     as InternationalModel;
+import 'package:ebank_mobile/data/source/model/approval/transfer_plan_detail_model.dart'
+    as TransferPlanModel;
+import 'package:ebank_mobile/data/source/model/early_red_td_contract_detail_model.dart'
+    as EarlyRedModel;
 import 'package:ebank_mobile/data/source/model/one_to_one_transfer_detail_model.dart'
     as OneToOneModel;
 import 'package:ebank_mobile/data/source/model/open_td_contract_detail_model.dart'
     as OpenTDModel;
-import 'package:ebank_mobile/data/source/model/approval/transfer_plan_detail_model.dart'
-    as TransferPlanModel;
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
@@ -34,7 +33,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sp_util/sp_util.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class MyToDoTaskDetailPage extends StatefulWidget {
   final ApprovalTask data;
