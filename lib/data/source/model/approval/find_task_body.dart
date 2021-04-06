@@ -10,7 +10,7 @@
 /// tenantId : "EB"
 /// custId : "818000000113"
 
-class FindUserTodoTaskBody {
+class FindTaskBody {
   int _page;
   int _pageSize;
   String _processId;
@@ -35,7 +35,7 @@ class FindUserTodoTaskBody {
   String get tenantId => _tenantId;
   String get custId => _custId;
 
-  FindUserTodoTaskBody({
+  FindTaskBody({
       int page, 
       int pageSize, 
       String processId, 
@@ -60,7 +60,7 @@ class FindUserTodoTaskBody {
     _custId = custId;
 }
 
-  FindUserTodoTaskBody.fromJson(dynamic json) {
+  FindTaskBody.fromJson(dynamic json) {
     _page = json["page"];
     _pageSize = json["pageSize"];
     _processId = json["processId"];

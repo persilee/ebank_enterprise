@@ -39,7 +39,7 @@ class CustomRefresh extends StatelessWidget {
                   body = textIndicator("加载成功");
                 }
                 return Container(
-                  padding: EdgeInsets.only(top: 6),
+                  padding: EdgeInsets.only(top: 6, bottom: 12),
                   height: 76,
                   child: Center(
                     child: body,

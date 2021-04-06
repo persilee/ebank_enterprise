@@ -2,20 +2,20 @@ import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class AuthorizationTaskApprovalHistoryDetail extends StatefulWidget {
+class ApprovalHistoryDetailPage extends StatefulWidget {
   final FinishTaskDetail history;
   final title;
 
-  AuthorizationTaskApprovalHistoryDetail({Key key, this.history, this.title})
+  ApprovalHistoryDetailPage({Key key, this.history, this.title})
       : super(key: key);
 
   @override
-  _AuthorizationTaskApprovalHistoryDetailState createState() =>
-      _AuthorizationTaskApprovalHistoryDetailState();
+  _ApprovalHistoryDetailPageState createState() =>
+      _ApprovalHistoryDetailPageState();
 }
 
-class _AuthorizationTaskApprovalHistoryDetailState
-    extends State<AuthorizationTaskApprovalHistoryDetail> {
+class _ApprovalHistoryDetailPageState
+    extends State<ApprovalHistoryDetailPage> {
   ScrollController _scrollController;
 
   @override
