@@ -20,6 +20,7 @@ class GetSms extends StatefulWidget {
   final String officeAreaCodeText;
   final bool isRegister;
   final bool isForget;
+  final bool isInput;
   const GetSms({
     Key key,
     this.sms,
@@ -28,6 +29,7 @@ class GetSms extends StatefulWidget {
     this.officeAreaCodeText,
     this.isRegister,
     this.isForget,
+    this.isInput,
   }) : super(key: key);
   @override
   _GetSmsState createState() => _GetSmsState();
@@ -37,6 +39,7 @@ class _GetSmsState extends State<GetSms> {
   int countdownTime = 0;
   Timer _timer;
   bool _isRegister = false;
+  bool _isInput = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -57,6 +60,8 @@ class _GetSmsState extends State<GetSms> {
                 autocorrect: true,
                 //是否自动获得焦点
                 autofocus: true,
+                //输入框是否可用
+                enabled: true,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: S.current.please_input_sms,
@@ -66,9 +71,9 @@ class _GetSmsState extends State<GetSms> {
                   ),
                 ),
                 keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  WhitelistingTextInputFormatter.digitsOnly, //只输入数字
-                  LengthLimitingTextInputFormatter(6) //限制长度
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                  LengthLimitingTextInputFormatter(6),
                 ],
               ),
             ),
@@ -130,7 +135,7 @@ class _GetSmsState extends State<GetSms> {
           if (mounted) {
             setState(() {
               _startCountdown();
-
+              _isInput = true;
               //  _sms.text = "123456";
             });
           }
