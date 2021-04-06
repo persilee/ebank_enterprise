@@ -23,3 +23,9 @@ class ConfigKey {
   static const USER_TYPE = "user_type";
   static const USER_PASSWORD = "user_password"; //临时使用，方便开发，后面需要去除保存
 }
+
+class InputFormartterRegExp {
+  /// emjio
+  static const String REGEX_EMOJI =
+      '[^\\u0020-\\u007E\\u00A0-\\u00BE\\u2E80-\\uA4CF\\uF900-\\uFAFF\\uFE30-\\uFE4F\\uFF00-\\uFFEF\\u0080-\\u009F\\u2000-\\u201f\r\n]';
+}

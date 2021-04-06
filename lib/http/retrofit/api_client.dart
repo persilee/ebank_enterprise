@@ -25,11 +25,13 @@ abstract class ApiClient {
 
   /// 查询属于我的待办任务
   @POST('/wkfl/processTask/findUserTodoTask')
-  Future<FindUserTodoTaskModel> findUserTodoTask(@Body() FindTaskBody findTaskBody);
+  Future<FindUserTodoTaskModel> findUserTodoTask(
+      @Body() FindTaskBody findTaskBody);
 
   /// 查询所有历史任务列表
   @POST('/wkfl/processTask/findAllFinishedTask')
-  Future<FindAllFinishedTaskModel> findAllFinishedTask(@Body() FindTaskBody findTaskBody);
+  Future<FindAllFinishedTaskModel> findAllFinishedTask(
+      @Body() FindTaskBody findTaskBody);
 
   /// 根据流程id查询待办任务详细信息
   @POST('/wkfl/processTask/findToDoTaskDetail')
@@ -50,15 +52,18 @@ abstract class ApiClient {
 
   /// 完成任务
   @POST('/wkfl/processTask/completeTask')
-  Future<CompleteTaskModel> completeTask(@Body() CompleteTaskBody completeTaskBody);
+  Future<CompleteTaskModel> completeTask(
+      @Body() CompleteTaskBody completeTaskBody);
 
   /// 查询我的处理记录待办任务
   @POST('/wkfl/processTask/findUserFinishedTask')
-  Future<FindUserTodoTaskModel> findUserFinishedTask(@Body() FindTaskBody findTaskBody);
+  Future<FindUserTodoTaskModel> findUserFinishedTask(
+      @Body() FindTaskBody findTaskBody);
 
   /// 查询我的申请的流程列表
   @POST('/wkfl/processTask/findUserStartTask')
-  Future<FindUserTodoTaskModel> findUserStartTask(@Body() FindTaskBody findTaskBody);
+  Future<FindUserTodoTaskModel> findUserStartTask(
+      @Body() FindTaskBody findTaskBody);
 
   /// 上传头像（开户图片上传暂时共用）
   @POST('/cust/user/uploadAvatar')
@@ -71,6 +76,6 @@ abstract class ApiClient {
   @POST('/platform/bankInfo/uploadBankIcon')
   Future<dynamic> uploadBankIcon(
     @Queries() BaseBody baseBody,
-    @Part(fileName: 'certificate.jpg') File file,
+    @Part(fileName: "certificate.jpg") List<int> file,
   );
 }

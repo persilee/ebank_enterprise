@@ -1,6 +1,7 @@
 import 'package:ebank_mobile/data/source/mine_feedbackApi.dart';
 import 'package:ebank_mobile/data/source/model/getFeedback.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 
@@ -64,10 +65,11 @@ class _FeedbackPageState extends State<FeedbackPage> {
                       controller: _feedbackController,
                       textAlign: TextAlign.start,
                       maxLines: 10,
-                      maxLength: 300, //允许输入的字符长度/
+                      maxLength: 200, //允许输入的字符长度/
                       inputFormatters: <TextInputFormatter>[
-                        // FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
-                        LengthLimitingTextInputFormatter(300), //限制长度
+                        FilteringTextInputFormatter.deny(RegExp(
+                            InputFormartterRegExp.REGEX_EMOJI)), //禁止输入emoji
+                        LengthLimitingTextInputFormatter(200), //限制长度
                       ],
                       maxLengthEnforced: false, //是否允许输入的字符长度超过限定的字符长度
                       style: TextStyle(
@@ -115,7 +117,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
   }
 
   _submitFeedBack() async {
-    String feedbackProblem = _feedbackController.text;
+    String feedbackProblem = _feedbackController.text ?? '';
     String opinionPhone = '';
     String opinionTheme = '反馈';
     String problemType = '4';
