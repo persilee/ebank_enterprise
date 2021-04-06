@@ -265,8 +265,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           controller: _nameController,
           callback: _check,
           length: 35,
-          // isRegEXp: true,
+          isRegEXp: true,
           // regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
+          regExp: '[\u4e00-\u9fa5a-zA-Z0-9 ]',
         ),
         Divider(height: 0.5, color: HsgColors.divider),
         //账号
