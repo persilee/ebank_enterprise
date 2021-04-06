@@ -117,18 +117,15 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                             //textDirection: Colors.white,
                           ),
                           onPressed: _submit()
-                              ? () async {
-                                  final prefs =
-                                      await SharedPreferences.getInstance();
+                              ? () {
+                                  // final prefs =
+                                  //     await SharedPreferences.getInstance();
 
-                                  // String userName =
-                                  //     prefs.getString(ConfigKey.USER_ID);
-
-                                  // print(userName + "userName");
                                   //特殊字符
                                   RegExp characters = new RegExp(
                                       "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
-                                  RegExp letter = new RegExp("[a-zA-Z]");
+                                  RegExp letter = new RegExp("[A-Z]");
+                                  RegExp minAZ = new RegExp("[a-z]");
                                   RegExp number = new RegExp("[0-9]");
                                   if ((_newPassword.text !=
                                       _confirmPassword.text)) {
@@ -137,23 +134,20 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                                         gravity: ToastGravity.CENTER,
                                         timeInSecForIosWeb: 1,
                                         msg: S.of(context).differentPwd);
-                                  } else if (characters
-                                              .hasMatch(_newPassword.text) ==
+                                  } else if (number.hasMatch(
+                                              _newPassword.text) ==
                                           false ||
                                       letter.hasMatch(_newPassword.text) ==
                                           false ||
-                                      number.hasMatch(_newPassword.text) ==
+                                      characters.hasMatch(_newPassword.text) ==
                                           false ||
-                                      ((_newPassword.text)
-                                              .contains(_registerAccount) ==
-                                          true) ||
-                                      (_newPassword.text.length < 8 ||
-                                          _newPassword.text.length > 16)) {
+                                      minAZ.hasMatch(_newPassword.text) ==
+                                          false ||
+                                      ((_newPassword.text).length < 8 ||
+                                          (_newPassword.text).length > 16)) {
                                     Fluttertoast.showToast(
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.CENTER,
-                                        timeInSecForIosWeb: 1,
-                                        msg: S.current.password_need_num);
+                                        msg: S.current.password_need_num,
+                                        gravity: ToastGravity.CENTER);
                                   } else {
                                     _registerByAccount();
                                   }

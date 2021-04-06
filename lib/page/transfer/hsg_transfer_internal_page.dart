@@ -752,7 +752,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     HSProgressHUD.show();
     VerificationCodeRepository()
         .sendSmsByPhone(
-            SendSmsByPhoneNumberReq('13411111111', 'transactionPwd'), 'sendSms')
+            SendSmsByPhoneNumberReq('', '13411111111', 'transactionPwd', ''),
+            'sendSms')
         .then((data) {
       // _startCountdown();
       setState(() {

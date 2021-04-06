@@ -56,7 +56,10 @@ Widget getRegisterRegion(
               autocorrect: false,
               //是否自动获得焦点
               autofocus: true,
-
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                LengthLimitingTextInputFormatter(11),
+              ], //限制长度
               controller: _phoneNum,
               decoration: InputDecoration(
                 border: InputBorder.none,
