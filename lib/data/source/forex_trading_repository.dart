@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
+import 'package:ebank_mobile/data/source/model/get_ex_rate.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 
 class ForexTradingRepository {
@@ -19,6 +20,12 @@ class ForexTradingRepository {
       DoTransferAccoutReq req, String tag) {
     return request('/ddep/transfer/doTransferAccout', req, tag,
         (data) => DoTransferAccoutResp.fromJson(data));
+  }
+
+  //汇率查询
+  Future<GetExRateResp> getExRate(GetExRateReq req,String tag) {
+    return request('/ddep/transfer/getExRate', req, tag,
+        (data) => GetExRateResp.fromJson(data));
   }
 
   static final _instance = ForexTradingRepository._internal();

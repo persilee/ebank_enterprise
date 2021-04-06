@@ -258,8 +258,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               callback: _boolBut,
               isWidget: true,
               length: 35,
-              // isRegEXp: true,
+              isRegEXp: true,
               // regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
+              regExp: '[\u4e00-\u9fa5a-zA-Z0-9 ]',
             ),
             TextFieldContainer(
               title: S.of(context).receipt_side_account,
