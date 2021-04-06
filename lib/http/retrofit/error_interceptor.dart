@@ -5,8 +5,9 @@ import 'package:flutter/foundation.dart';
 class ErrorInterceptor extends Interceptor {
   @override
   Future onError(DioError err) {
+    var e = err.error;
     AppException appException = AppException.create(err);
-    err.error = appException;
+    e = appException;
     return super.onError(err);
   }
 }

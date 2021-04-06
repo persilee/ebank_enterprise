@@ -1,47 +1,44 @@
-/*
- * 
- * Created Date: Thursday, December 10th 2020, 5:34:04 pm
- * Author: pengyikang
- * 我的申请页面
- * Copyright (c) 2020 深圳高阳寰球科技有限公司
- */
-
-
+/// Copyright (c) 2020 深圳高阳寰球科技有限公司
+/// 我的待办页面
+/// Author: wangluyao
+/// Date: 2020-12-21
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
+import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
-import 'package:ebank_mobile/page/login/login_page.dart';
-import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
+import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sp_util/sp_util.dart';
 
-class MyApplicationPage extends StatefulWidget {
+import '../../page_route.dart';
+
+class MyToDoTaskPage extends StatefulWidget {
   final title;
-  MyApplicationPage({Key key, this.title}) : super(key: key);
+
+  MyToDoTaskPage({Key key, this.title}) : super(key: key);
 
   @override
-  _MyApplicationPageState createState() => _MyApplicationPageState();
+  _MyToDoTaskPageState createState() => _MyToDoTaskPageState();
 }
 
-enum LoadingStatus { STATUS_LOADING, STATUS_COMPLETED, STATUS_IDEL }
-
-class _MyApplicationPageState extends State<MyApplicationPage> with AutomaticKeepAliveClientMixin {
+class _MyToDoTaskPageState extends State<MyToDoTaskPage>
+    with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController;
   RefreshController _refreshController;
   List<ApprovalTask> _listData = [];
   int _page = 1;
   bool _isLoading = false;
   bool _isMoreData = false;
-
 
   @override
   void initState() {
@@ -60,54 +57,58 @@ class _MyApplicationPageState extends State<MyApplicationPage> with AutomaticKee
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return _isLoading
         ? HsgLoading()
         : _listData.length > 0
-        ? CustomRefresh(
-      controller: _refreshController,
-      onLoading: () async {
-        await _loadData(isLoadMore: true);
-        //加载更多完成
-        _refreshController.loadComplete();
-        //显示没有更多数据
-        if (_isMoreData) _refreshController.loadNoData();
-      },
-      onRefresh: () async {
-        await _loadData();
-        //刷新完成
-        _refreshController.refreshCompleted();
-        _refreshController.footerMode.value = LoadStatus.canLoading;
-      },
-      content: ListView.builder(
-        padding:
-        EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
-        itemCount: _listData.length,
-        controller: _scrollController,
-        itemBuilder: (context, index) {
-          return _todoInformation(_listData[index]);
-        },
-      ),
-    )
-        : notDataContainer(context, S.current.no_data_now);
+            ? CustomRefresh(
+                controller: _refreshController,
+                onLoading: () async {
+                  await _loadData(isLoadMore: true);
+                  //加载更多完成
+                  _refreshController.loadComplete();
+                  //显示没有更多数据
+                  if (_isMoreData) _refreshController.loadNoData();
+                },
+                onRefresh: () async {
+                  await _loadData();
+                  //刷新完成
+                  _refreshController.refreshCompleted();
+                  _refreshController.footerMode.value = LoadStatus.canLoading;
+                },
+                content: ListView.builder(
+                  padding:
+                      EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
+                  itemCount: _listData.length,
+                  controller: _scrollController,
+                  itemBuilder: (context, index) {
+                    return _todoInformation(_listData[index]);
+                  },
+                ),
+              )
+            : notDataContainer(context, S.current.no_data_now);
   }
 
   //加载数据
   Future<void> _loadData({bool isLoadMore = false}) async {
-    isLoadMore ? _page ++ : _page = 1;
+    isLoadMore ? _page++ : _page = 1;
     _isLoading = true;
     try {
-      FindUserTodoTaskModel response = await ApiClient().findUserStartTask(
+      FindUserTodoTaskModel response = await ApiClient().findUserTodoTask(
         FindTaskBody(
-            page: _page, pageSize: 10, tenantId: 'EB', custId: SpUtil.getString(ConfigKey.CUST_ID)),
+            page: _page,
+            pageSize: 10,
+            tenantId: 'EB',
+            custId: SpUtil.getString(ConfigKey.CUST_ID)),
       );
       if (this.mounted) {
         setState(() {
-          if(isLoadMore == false && _page == 1) {
+          if (isLoadMore == false && _page == 1) {
             _listData.clear();
           }
           _listData.addAll(response.rows);
           _isLoading = false;
-          if(response.rows.length <= 10 && response.totalPage <= _page) {
+          if (response.rows.length <= 10 && response.totalPage <= _page) {
             _isMoreData = true;
           }
         });
@@ -121,8 +122,8 @@ class _MyApplicationPageState extends State<MyApplicationPage> with AutomaticKee
       // if ((e as DioError).error is NeedLogin) {
       //   Navigator.of(context).pushAndRemoveUntil(
       //       MaterialPageRoute(builder: (BuildContext context) {
-      //         return LoginPage();
-      //       }), (Route route) {
+      //     return LoginPage();
+      //   }), (Route route) {
       //     print(route.settings?.name);
       //     if (route.settings?.name == "/") {
       //       return true;
@@ -130,11 +131,6 @@ class _MyApplicationPageState extends State<MyApplicationPage> with AutomaticKee
       //     return false;
       //   });
       // } else {
-      //   if(this.mounted) {
-      //     setState(() {
-      //       _isLoading = false;
-      //     });
-      //   }
       //   print('error: ${e.toString()}');
       // }
     }
@@ -198,15 +194,16 @@ class _MyApplicationPageState extends State<MyApplicationPage> with AutomaticKee
           children: [
             //待办任务名称
             _taskName(approvalTask?.taskName ?? ''),
-            Padding(padding: EdgeInsets.only(top: 2.0)),
+            Padding(padding: EdgeInsets.only(top: 1.0)),
             //待办任务id
-            _rowInformation(S.current.approval_task_id, approvalTask?.taskId ?? ''),
+            _rowInformation(
+                intl.S.current.approval_task_id, approvalTask?.taskId ?? ''),
             //发起人
-            _rowInformation(S.current.sponsor, approvalTask?.applicantName ?? ''),
-            //审批结果
-            _rowInformation(S.current.approve_result, approvalTask?.result ?? ''),
-            //审批时间
-            _rowInformation(S.current.approve_create_time, approvalTask?.createTime ?? ''),
+            _rowInformation(
+                intl.S.current.sponsor, approvalTask?.applicantName ?? ''),
+            //创建时间
+            _rowInformation(
+                intl.S.current.creation_time, approvalTask?.createTime ?? ''),
           ],
         ),
       ),
@@ -216,7 +213,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> with AutomaticKee
   //待办列表
   Widget _todoInformation(ApprovalTask approvalTask) {
     return Container(
-      height: 166.0,
+      height: 156.0,
       padding: EdgeInsets.only(top: 16),
       child: GestureDetector(
         onTap: () {
@@ -251,7 +248,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> with AutomaticKee
 
   //跳转并传值
   void go2Detail(ApprovalTask approvalTask) {
-    Navigator.pushNamed(context, pageAuthorizationTaskApproval,
+    Navigator.pushNamed(context, pageTaskApproval,
         arguments: {"data": approvalTask, "title": widget.title});
   }
 
@@ -273,7 +270,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> with AutomaticKee
       padding: EdgeInsets.only(right: 10.0, top: 6.0),
       child: SizedBox(
         width: 1.0,
-        height: 146.0,
+        height: 136.0,
         child: DecoratedBox(
           decoration: BoxDecoration(color: HsgColors.divider),
         ),

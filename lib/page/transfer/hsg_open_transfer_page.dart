@@ -11,22 +11,20 @@ import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
+import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
-import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
+import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/page/transfer/data/transfer_order_data.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -34,6 +32,7 @@ import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
 
@@ -160,6 +159,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       }
       _rateCalculate();
     });
+    _actualNameReqData();
   }
 
   @override
@@ -1006,7 +1006,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           _payeeNameController.text, //payeeName
           payerBankCode, //payerBankCode
           _account, //payerCardNo
-          "", //payerName
+          payerName, //payerName
           _planNameController.text, //planName
           _remarkController.text, //remark
           "", //remittancePurposes
@@ -1196,5 +1196,22 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
         print(e.toString());
       });
     }
+  }
+
+  //获取用户真实姓名
+  Future<void> _actualNameReqData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+    UserDataRepository()
+        .getUserInfo(GetUserInfoReq(userID), "getUserInfo")
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          payerName = data.actualName;
+        });
+      }
+    }).catchError((e) {
+      // Fluttertoast.showToast(msg: e.toString());
+    });
   }
 }
