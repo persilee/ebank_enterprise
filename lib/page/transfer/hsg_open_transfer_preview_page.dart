@@ -180,7 +180,6 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
     String planName = transferData.planName;
     String remark = transferData.remark;
     String startDate = transferData.startDate;
-
     HSProgressHUD.show();
     Future.wait({
       TransferDataRepository().addTransferPlan(

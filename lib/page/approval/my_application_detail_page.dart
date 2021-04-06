@@ -10,21 +10,21 @@ import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-class ApplicationTaskApprovalPage extends StatefulWidget {
+class MyApplicationDetailPage extends StatefulWidget {
   final MyApplicationDetail history;
   final title;
-  ApplicationTaskApprovalPage({Key key, this.history, this.title})
+  MyApplicationDetailPage({Key key, this.history, this.title})
       : super(key: key);
 
   @override
-  _ApplicationTaskApprovalPageState createState() =>
-      _ApplicationTaskApprovalPageState(history);
+  _MyApplicationDetailPageState createState() =>
+      _MyApplicationDetailPageState(history);
 }
 
-class _ApplicationTaskApprovalPageState
-    extends State<ApplicationTaskApprovalPage> {
+class _MyApplicationDetailPageState
+    extends State<MyApplicationDetailPage> {
   MyApplicationDetail history;
-  _ApplicationTaskApprovalPageState(this.history);
+  _MyApplicationDetailPageState(this.history);
   var commentList = [];
   // var processId = "";
 

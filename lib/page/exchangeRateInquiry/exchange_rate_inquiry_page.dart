@@ -7,14 +7,21 @@ import 'dart:ui';
 import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
+import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_ex_rate.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
+import 'package:ebank_mobile/widget/money_text_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ExchangeRateInquiryPage extends StatefulWidget {
@@ -44,6 +51,8 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   String _objectiveCcy = '--';
   String _primitiveCcyAmt = '0.00';
   bool _isSwap = true;
+  bool _isLoading = false; //加载状态
+  RefreshController _refreshController = new RefreshController();
 
   @override
   // ignore: must_call_super
@@ -56,10 +65,14 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   @override
   Widget build(BuildContext context) {
     if (_primitiveCcyList.length > 0) {
-      _primitiveCcy = _primitiveCcyList[_primitiveCcyId];
+      setState(() {
+        _primitiveCcy = _primitiveCcyList[_primitiveCcyId];
+      });
     }
     if (_objectiveCcyList.length > 0) {
-      _objectiveCcy = _objectiveCcyList[_objectiveCcyId];
+      setState(() {
+        _objectiveCcy = _objectiveCcyList[_objectiveCcyId];
+      });
     }
     return Scaffold(
       appBar: AppBar(
@@ -101,25 +114,38 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
                 style: TextStyle(color: HsgColors.describeText),
               ),
             ),
+            Container(
+              color: Color(0xFFEEF0EF),
+              height: 40,
+              child: _listTitle(),
+            ),
+            // Expanded(
+            //   child: RefreshIndicator(
+            //     child: _listContent(),
+            //     onRefresh: _getExchangeRateList,
+            //   ),
+            // ),
             Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Column(
-                  children: [
-                    Container(
-                      color: Color(0xFFEEF0EF),
-                      height: 40,
-                      child: _listTitle(),
-                    ),
-                    Expanded(
-                      child: RefreshIndicator(
-                        child: _listContent(),
-                        onRefresh: _getExchangeRateList,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              child: _isLoading
+                  ? HsgLoading()
+                  : rateList.length > 0
+                      ? CustomRefresh(
+                          controller: _refreshController,
+                          onLoading: () {
+                            //加载更多完成
+                            _refreshController.loadComplete();
+                            //显示没有更多数据
+                            _refreshController.loadNoData();
+                          },
+                          onRefresh: () {
+                            _getExchangeRateList();
+                            _refreshController.refreshCompleted();
+                            _refreshController.footerMode.value =
+                                LoadStatus.canLoading;
+                          },
+                          content: _listContent(),
+                        )
+                      : notDataContainer(context, S.current.no_data_now),
             ),
           ],
         ),
@@ -129,7 +155,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
 
   Row _listTitle() {
     TextStyle style =
-        TextStyle(fontSize: 16, color: HsgColors.secondDegreeText);
+        TextStyle(fontSize: 15, color: HsgColors.secondDegreeText);
     return Row(
       children: [
         Expanded(
@@ -189,7 +215,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
                 child: Center(
                   child: Text(
                     rateList[index].ccy,
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 15),
                   ),
                 ),
               ),
@@ -197,7 +223,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
                 child: Center(
                   child: Text(
                     rateList[index].ccy2,
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 15),
                   ),
                 ),
               ),
@@ -205,7 +231,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
                 child: Center(
                   child: Text(
                     rateList[index].fxSell,
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 15),
                   ),
                 ),
               ),
@@ -213,7 +239,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
                 child: Center(
                   child: Text(
                     rateList[index].fxBuy,
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 15),
                   ),
                 ),
               ),
@@ -221,7 +247,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
                 child: Center(
                   child: Text(
                     rateList[index].mid,
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 15),
                   ),
                 ),
               ),
@@ -263,6 +289,13 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
           color: HsgColors.textHintColor,
         ),
       ),
+      inputFormatters: <TextInputFormatter>[
+        LengthLimitingTextInputFormatter(11),
+        FilteringTextInputFormatter.allow(
+          RegExp("[0-9.]"),
+        ),
+        MoneyTextInputFormatter(),
+      ],
       onChanged: (text) {
         _amountConversion();
       },
@@ -373,31 +406,62 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     _amountConversion();
   }
 
-  //计算兑换金额
-  _amountConversion() {
-    for (var i = 0; i < rateList.length; i++) {
-      setState(() {
-        if (_amtController.text != '') {
-          AiDecimalAccuracy _amount =
-              AiDecimalAccuracy.parse(_amtController.text);
-          AiDecimalAccuracy _rate = AiDecimalAccuracy.parse(rateList[i].fxBuy);
+  // //计算兑换金额
+  // _amountConversion() {
+  //   for (var i = 0; i < rateList.length; i++) {
+  //     setState(() {
+  //       if (_amtController.text != '') {
+  //         AiDecimalAccuracy _amount =
+  //             AiDecimalAccuracy.parse(_amtController.text);
+  //         AiDecimalAccuracy _rate = AiDecimalAccuracy.parse(rateList[i].fxBuy);
 
-          if (rateList[i].ccy == _objectiveCcy) {
-            double newAmt = _isSwap
-                ? (_amount / _rate).toDouble()
-                : (_amount * _rate).toDouble();
-            _primitiveCcyAmt = newAmt.toStringAsFixed(4);
-          }
+  //         if (rateList[i].ccy == _objectiveCcy) {
+  //           double newAmt = _isSwap
+  //               ? (_amount / _rate).toDouble()
+  //               : (_amount * _rate).toDouble();
+  //           _primitiveCcyAmt = newAmt.toStringAsFixed(4);
+  //         }
 
-          if (rateList[i].ccy == _primitiveCcy) {
-            double newAmt = _isSwap
-                ? (_amount * _rate).toDouble()
-                : (_amount / _rate).toDouble();
-            _primitiveCcyAmt = newAmt.toStringAsFixed(4);
-          }
-        } else {
+  //         if (rateList[i].ccy == _primitiveCcy) {
+  //           double newAmt = _isSwap
+  //               ? (_amount * _rate).toDouble()
+  //               : (_amount / _rate).toDouble();
+  //           _primitiveCcyAmt = newAmt.toStringAsFixed(4);
+  //         }
+  //       } else {
+  //         _primitiveCcyAmt = '0.00';
+  //       }
+  //     });
+  //   }
+  // }
+
+//汇率换算
+  Future _amountConversion() async {
+    double _payerAmount = 0;
+    if (_amtController.text == '') {
+      if (this.mounted) {
+        setState(() {
           _primitiveCcyAmt = '0.00';
+        });
+      }
+    } else {
+      _payerAmount = AiDecimalAccuracy.parse(_amtController.text).toDouble();
+      ForexTradingRepository()
+          .transferTrial(
+              TransferTrialReq(
+                amount: _payerAmount,
+                corrCcy: _objectiveCcy,
+                defaultCcy: _primitiveCcy,
+              ),
+              'TransferTrialReq')
+          .then((data) {
+        if (this.mounted) {
+          setState(() {
+            _primitiveCcyAmt = data.optExAmt;
+          });
         }
+      }).catchError((e) {
+        print(e.toString());
       });
     }
   }
