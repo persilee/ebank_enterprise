@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
+import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/login_save_user_data.dart';
@@ -277,6 +278,18 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录成功-跳转操作
   _showMainPage(BuildContext context) async {
+    // Navigator.of(context).pushAndRemoveUntil(
+    //     MaterialPageRoute(builder: (BuildContext context) {
+    //   return IndexPage();
+    // }), (Route route) {
+    //   //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
+    //   print(route.settings?.name);
+    //   //跳转至首页
+    //   // if (route.settings?.name == "/") {
+    //   //   return true; //停止关闭
+    //   // }
+    //   return false; //继续关闭
+    // });
     setState(() {
       _isLoading = false;
     });
@@ -490,7 +503,7 @@ class ForgetButton extends StatelessWidget {
         TextSpan(
           text: title,
           style: TextStyle(
-            decoration: TextDecoration.underline,
+            //  decoration: TextDecoration.underline,
             color: Colors.white,
             fontSize: 12,
           ),

@@ -36,6 +36,8 @@ class _ForgetUserNameState extends State<ForgetUserName> {
   int countdownTime = 0;
   String _accountName;
   bool _isRegister;
+  bool _isInput = false; //判断是否点击获取验证码
+  bool _isCommit = false; //点击下一步进行二次校验
 
   /// 区号
   String _officeAreaCodeText = '';
@@ -113,6 +115,8 @@ class _ForgetUserNameState extends State<ForgetUserName> {
                             //是否自动更正
                             controller: _sms,
                             autocorrect: true,
+                            enabled: true,
+                            //_isInput,
                             //是否自动获得焦点
                             autofocus: true,
                             decoration: InputDecoration(
@@ -123,10 +127,12 @@ class _ForgetUserNameState extends State<ForgetUserName> {
                                 color: HsgColors.textHintColor,
                               ),
                             ),
-                            inputFormatters: <TextInputFormatter>[
-                              WhitelistingTextInputFormatter.digitsOnly, //只输入数字
-                              LengthLimitingTextInputFormatter(6) //限制长度
-                            ],
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp("[0-9]")), //纯数字
+                              LengthLimitingTextInputFormatter(6),
+                            ], //限制长度
+                            keyboardType: TextInputType.number,
                           ),
                         ),
                         Container(
@@ -168,9 +174,25 @@ class _ForgetUserNameState extends State<ForgetUserName> {
                             ),
                             onPressed: _submit()
                                 ? () {
-                                    Navigator.popAndPushNamed(
-                                        context, pageFindUserNameSuccess,
-                                        arguments: _accountName);
+                                    //  setState(() {
+
+                                    _checkRegister();
+                                    _isCommit = true;
+                                    //  });
+                                    // if (!_isRegister) {
+                                    //   Fluttertoast.showToast(
+                                    //     msg: S.current.num_not_is_register,
+                                    //     toastLength: Toast.LENGTH_SHORT,
+                                    //     gravity: ToastGravity.CENTER,
+                                    //     timeInSecForIosWeb: 1,
+                                    //   );
+                                    //   HSProgressHUD.dismiss();
+                                    // } else {
+                                    //   HSProgressHUD.dismiss();
+                                    //   Navigator.popAndPushNamed(
+                                    //       context, pageFindUserNameSuccess,
+                                    //       arguments: _accountName);
+                                    // }
                                   }
                                 : null,
                           ),
@@ -184,7 +206,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
   }
 
   bool _submit() {
-    if (_phoneNum.text != '' && _sms.text != '') {
+    if (_phoneNum.text != '' && _sms.text.length > 5 && _isInput) {
       return true;
     } else {
       return false;
@@ -232,10 +254,10 @@ class _ForgetUserNameState extends State<ForgetUserName> {
 
   //检验用户是否注册
   _checkRegister() {
+    HSProgressHUD.show();
     VersionDataRepository()
         .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
         .then((data) {
-      HSProgressHUD.dismiss();
       if (mounted) {
         setState(() {
           _accountName = data.userAccount;
@@ -252,13 +274,11 @@ class _ForgetUserNameState extends State<ForgetUserName> {
         timeInSecForIosWeb: 1,
       );
     });
-    // }
   }
 
   //获取验证码接口
   _getVerificationCode() async {
     print(">>>>>>>>>>>>>>>$_accountName");
-
     if (!_isRegister) {
       Fluttertoast.showToast(
         msg: S.current.num_not_is_register,
@@ -266,14 +286,29 @@ class _ForgetUserNameState extends State<ForgetUserName> {
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
       );
+      HSProgressHUD.dismiss();
     } else {
-      HSProgressHUD.show();
       VerificationCodeRepository()
           .sendSmsByPhone(
-              SendSmsByPhoneNumberReq(_phoneNum.text, 'findAccount'), 'sendSms')
+              SendSmsByPhoneNumberReq(
+                  '', //地区号
+                  _phoneNum.text, //电话号
+                  'findAccount', //短信类型
+                  '' //smsTemplateId
+                  ),
+              'sendSms')
           .then((data) {
-        HSProgressHUD.dismiss();
-        _startCountdown();
+        if (mounted) {
+          setState(() {
+            _startCountdown();
+            _isInput = true;
+            HSProgressHUD.dismiss();
+            if (_isCommit) {
+              Navigator.popAndPushNamed(context, pageFindUserNameSuccess,
+                  arguments: _accountName);
+            }
+          });
+        }
       }).catchError((e) {
         HSProgressHUD.dismiss();
         Fluttertoast.showToast(

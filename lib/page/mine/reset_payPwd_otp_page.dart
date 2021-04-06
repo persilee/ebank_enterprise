@@ -299,7 +299,8 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
     HSProgressHUD.show();
     VerificationCodeRepository()
         .sendSmsByPhone(
-            SendSmsByPhoneNumberReq(_phone, 'transactionPwd'), 'sendSms')
+            SendSmsByPhoneNumberReq('', _phone, 'transactionPwd', ''),
+            'sendSms')
         .then((data) {
       _startCountdown();
       if (this.mounted) {

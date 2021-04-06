@@ -4,8 +4,6 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
-import 'package:ebank_mobile/data/source/model/modify_pwd_by_sms.dart';
-import 'package:ebank_mobile/data/source/update_login_paw_repository.dart';
 
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
@@ -46,6 +44,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   int countdownTime = 0;
   bool _isRegister;
   String _userAccount;
+  bool _isInput = false; //判断是否点击获取验证码
+  bool _isCommit = false; //进行二次校验
 
   /// 区号
   String _officeAreaCodeText = '';
@@ -124,6 +124,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                           autocorrect: true,
                           //是否自动获得焦点
                           autofocus: true,
+                          enabled: _isInput,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: S.current.please_input_sms,
@@ -132,10 +133,12 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                               color: HsgColors.textHintColor,
                             ),
                           ),
-                          inputFormatters: <TextInputFormatter>[
-                            WhitelistingTextInputFormatter.digitsOnly, //只输入数字
-                            LengthLimitingTextInputFormatter(6) //限制长度
-                          ],
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[0-9]")), //纯数字
+                            LengthLimitingTextInputFormatter(6),
+                          ], //限制长度
+                          keyboardType: TextInputType.number,
                         ),
                       ),
                       Container(
@@ -258,27 +261,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   //检验用户是否注册
   _checkRegister() {
-    RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
-    // if (characters.hasMatch(_phoneNum.text) == false) {
-    //   Fluttertoast.showToast(
-    //     msg: S.current.format_mobile_error,
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     gravity: ToastGravity.CENTER,
-    //     timeInSecForIosWeb: 1,
-    //   );
-    // }
-    // if {
     HSProgressHUD.show();
 
     VersionDataRepository()
         .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
         .then((data) {
-      HSProgressHUD.dismiss();
       if (mounted) {
         setState(() {
           _isRegister = data.register;
           _userAccount = data.userAccount;
-          HSProgressHUD.dismiss();
 
           //发送短信
           _getVerificationCode();
@@ -308,20 +299,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         }
       });
     };
+    HSProgressHUD.dismiss();
+
     _timer = Timer.periodic(Duration(seconds: 1), call);
   }
 
   //获取验证码接口
   _getVerificationCode() async {
-    RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
-    if (characters.hasMatch(_phoneNum.text) == false) {
-      Fluttertoast.showToast(
-        msg: S.current.format_mobile_error,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-      );
-    } else if (!_isRegister) {
+    if (!_isRegister) {
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: S.current.num_not_is_register,
         toastLength: Toast.LENGTH_SHORT,
@@ -331,10 +317,13 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     } else {
       VerificationCodeRepository()
           .sendSmsByPhone(
-              SendSmsByPhoneNumberReq(_phoneNum.text, 'findPwd'), 'sendSms')
+              SendSmsByPhoneNumberReq('', _phoneNum.text, 'findPwd', ''),
+              'sendSms')
           .then((data) {
-        HSProgressHUD.dismiss();
-        _startCountdown();
+        setState(() {
+          _isInput = true;
+          _startCountdown();
+        });
 
         HSProgressHUD.dismiss();
       }).catchError((e) {
