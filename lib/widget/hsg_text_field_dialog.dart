@@ -2,6 +2,67 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/widget/hsg_otp_button.dart';
 import 'package:flutter/material.dart';
 
+class HsgTipsDialog extends StatelessWidget {
+  final Widget title;
+  final Widget child;
+  final VoidCallback confirmCallback;
+
+  HsgTipsDialog({this.title,this.child, this.confirmCallback});
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      contentPadding: EdgeInsets.only(bottom: 0),
+      title: Center(
+        child: this.title ?? Text(
+          S.current.prompt,
+          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
+        ),
+      ),
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 6.0),
+          child: Center(
+            child: this.child ?? Text('this is content'),
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            border: Border(
+                top: BorderSide(
+                    color: Colors.grey.withOpacity(0.3), width: 1.0)),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                  child: TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  S.current.field_dialog_cancel,
+                  style: TextStyle(fontSize: 14.0, color: Colors.black38),
+                ),
+              )),
+              Expanded(
+                  child: TextButton(
+                onPressed: this.confirmCallback,
+                child: Text(
+                  S.current.field_dialog_confirm,
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.blueAccent,
+                  ),
+                ),
+              )),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class HsgTextFieldDialog extends StatelessWidget {
   final String areaCode;
   final String phoneNum;

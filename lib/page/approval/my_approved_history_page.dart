@@ -40,7 +40,7 @@ class MyApprovedHistoryPage extends StatefulWidget {
       _MyApprovedHistoryPageState();
 }
 
-class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage> {
+class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage> with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController;
   RefreshController _refreshController;
   List<ApprovalTask> _listData = [];
@@ -120,20 +120,24 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage> {
       }
     } catch (e) {
       print((e as DioError).error is NeedLogin);
-      if ((e as DioError).error is NeedLogin) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) {
-              return LoginPage();
-            }), (Route route) {
-          print(route.settings?.name);
-          if (route.settings?.name == "/") {
-            return true;
-          }
-          return false;
-        });
-      } else {
-        print('error: ${e.toString()}');
-      }
+      print('error: ${e.toString()}');
+      setState(() {
+        _isLoading = false;
+      });
+      // if ((e as DioError).error is NeedLogin) {
+      //   Navigator.of(context).pushAndRemoveUntil(
+      //       MaterialPageRoute(builder: (BuildContext context) {
+      //         return LoginPage();
+      //       }), (Route route) {
+      //     print(route.settings?.name);
+      //     if (route.settings?.name == "/") {
+      //       return true;
+      //     }
+      //     return false;
+      //   });
+      // } else {
+      //   print('error: ${e.toString()}');
+      // }
     }
   }
 
@@ -277,4 +281,7 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

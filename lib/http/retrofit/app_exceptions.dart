@@ -40,8 +40,6 @@ class AppException implements Exception {
         {
           try {
             int errCode = error.response.statusCode;
-            // String errMsg = error.response.statusMessage;
-            // return ErrorEntity(code: errCode, message: errMsg);
             switch (errCode) {
               case 400:
                 {
@@ -97,6 +95,11 @@ class AppException implements Exception {
           } on Exception catch (_) {
             return AppException("-1", "未知错误");
           }
+        }
+        break;
+      case DioErrorType.DEFAULT:
+        {
+          return AppException("-1", "网络异常，请稍后重试！");
         }
         break;
       default:

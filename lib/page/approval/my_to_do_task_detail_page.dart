@@ -29,6 +29,8 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
+import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_text_field_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -364,7 +366,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         if (_processKey == 'openTdContractApproval') ..._openTdList,
         if (_processKey == 'earlyRedTdContractApproval') ..._earlyRedTdList,
         if (_processKey == 'oneToOneTransferApproval') ..._oneToOneList,
-        if (_processKey == 'internationalTransferApproval') ..._internationalList,
+        if (_processKey == 'internationalTransferApproval')
+          ..._internationalList,
         if (_processKey == 'transferPlanApproval') ..._transferPlanList,
       ],
     );
@@ -491,7 +494,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 margin: EdgeInsets.all(0),
                 text: Text(
                   S.current.reject_to_sponsor,
-                  style: TextStyle(color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey, fontSize: 14.0),
+                  style: TextStyle(
+                      color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
+                      fontSize: 14.0),
                 ),
                 clickCallback: () {
                   if (_comment.length != 0) {
@@ -513,7 +518,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 margin: EdgeInsets.all(0),
                 text: Text(
                   S.current.reject,
-                  style: TextStyle(color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey, fontSize: 14.0),
+                  style: TextStyle(
+                      color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
+                      fontSize: 14.0),
                 ),
                 clickCallback: () {
                   if (_comment.length != 0) {
@@ -534,7 +541,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 margin: EdgeInsets.all(0),
                 text: Text(
                   S.current.approval_unlock,
-                  style: TextStyle(color: _btnIsEnable ? Colors.white : Colors.grey, fontSize: 14.0),
+                  style: TextStyle(
+                      color: _btnIsEnable ? Colors.white : Colors.grey,
+                      fontSize: 14.0),
                 ),
                 clickCallback: () {
                   if (_comment.length != 0) {
@@ -561,7 +570,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
               margin: EdgeInsets.all(0),
               text: Text(
                 S.current.approval_lock,
-                style: TextStyle(color: _btnIsEnable ? Colors.white : Colors.grey, fontSize: 14.0),
+                style: TextStyle(
+                    color: _btnIsEnable ? Colors.white : Colors.grey,
+                    fontSize: 14.0),
               ),
               clickCallback: () {
                 // 认领任务
@@ -590,12 +601,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           _inputApprovalComments(),
           //底部按钮
           _button(),
-          !_offstage ? Row(
-              children: [
-                Expanded(
-                  child: CustomButton(
-                  isLoading: _btnIsLoadingEAA,
-                  isEnable: _btnIsEnable,
+          !_offstage
+              ? Row(
+                  children: [
+                    Expanded(
+                      child: CustomButton(
+                        isLoading: _btnIsLoadingEAA,
+                        isEnable: _btnIsEnable,
                         clickCallback: () {
                           if (_comment.length != 0) {
                             _completeTask();
@@ -608,9 +620,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                           style: TextStyle(fontSize: 13.0, color: Colors.white),
                         ),
                       ),
-                ),
-              ],
-            )
+                    ),
+                  ],
+                )
               : Container(),
           !_offstage
               ? SizedBox(
@@ -765,7 +777,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
   // 认领任务
   void _doClaimTask() async {
-    if(this.mounted) {
+    if (this.mounted) {
       setState(() {
         _btnIsLoadingL = true;
         _btnIsEnable = false;
@@ -773,7 +785,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     }
     try {
       await ApiClient().doClaimTask(FindTaskBody(taskId: widget.data.taskId));
-      if(this.mounted) {
+      if (this.mounted) {
         setState(() {
           _btnIsLoadingL = false;
           _btnIsEnable = true;
@@ -794,7 +806,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
   // 取消认领任务
   void _doUnclaimTask() async {
-    if(this.mounted) {
+    if (this.mounted) {
       setState(() {
         _btnIsLoadingUN = true;
         _btnIsEnable = false;
@@ -802,7 +814,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     }
     try {
       await ApiClient().doUnclaimTask(FindTaskBody(taskId: widget.data.taskId));
-      if(this.mounted) {
+      if (this.mounted) {
         setState(() {
           _btnIsLoadingUN = false;
           _btnIsEnable = true;
@@ -815,8 +827,23 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   }
 
   // 驳回
-  void _rejectTask() async {
-    if(this.mounted) {
+  void _rejectTask() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgTipsDialog(
+            child: Text(S.current.approve_reject_tip),
+            confirmCallback: () {
+              Navigator.pop(context);
+              _rejectTaskConfirm(context);
+            },
+          );
+        });
+  }
+
+  // 驳回逻辑
+  void _rejectTaskConfirm(BuildContext context) async {
+    if (this.mounted) {
       setState(() {
         _btnIsLoadingR = true;
         _btnIsEnable = false;
@@ -831,8 +858,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           taskId: widget.data.taskId,
         ),
       );
-      if(completeTaskModel.msgCd == '0000') {
-        if(this.mounted) {
+      if (completeTaskModel.msgCd == '0000') {
+        if (this.mounted) {
           setState(() {
             _btnIsLoadingR = false;
             _btnIsEnable = true;
@@ -847,7 +874,22 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
   // 驳回至发起人
   void _rejectToStartTask() async {
-    if(this.mounted) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgTipsDialog(
+            child: Text(S.current.approve_reject_to_start_tip),
+            confirmCallback: () {
+              Navigator.pop(context);
+              _rejectToStartTaskConfirm();
+            },
+          );
+        });
+  }
+
+  // 驳回至发起人逻辑
+  void _rejectToStartTaskConfirm() async {
+    if (this.mounted) {
       setState(() {
         _btnIsLoadingRTS = true;
         _btnIsEnable = false;
@@ -862,8 +904,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           taskId: widget.data.taskId,
         ),
       );
-      if(completeTaskModel.msgCd == '0000') {
-        if(this.mounted) {
+      if (completeTaskModel.msgCd == '0000') {
+        if (this.mounted) {
           setState(() {
             _btnIsLoadingRTS = false;
             _btnIsEnable = true;
@@ -876,36 +918,59 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     }
   }
 
+  //交易密码窗口
+  Future<bool> _openBottomSheet() async {
+    final isPassword = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return HsgPasswordDialog(
+            title: S.current.input_password,
+            resultPage: pageDepositRecordSucceed,
+            arguments: '',
+            isDialog: true,
+          );
+        });
+    if (isPassword != null && isPassword == true) {
+      return true;
+    }
+    return false;
+  }
+
   // 完成任务
   void _completeTask() async {
-    if(this.mounted) {
-      setState(() {
-        _btnIsLoadingEAA = true;
-        _btnIsEnable = false;
-      });
-    }
-    try {
-      CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
-        CompleteTaskBody(
-          approveResult: true,
-          comment: _comment,
-          rejectToStart: false,
-          taskId: widget.data.taskId,
-        ),
-      );
-      if(completeTaskModel.msgCd == '0000') {
-        if(this.mounted) {
-          setState(() {
-            _btnIsLoadingEAA = false;
-            _btnIsEnable = true;
-          });
-        }
-        Navigator.pushReplacementNamed(
-            context, pageDepositRecordSucceed,
-            arguments: 'taskApproval');
+    // 输入交易密码
+    bool isPassword =  await _openBottomSheet();
+    // 如果交易密码正确，处理审批逻辑
+    if(isPassword) {
+      if (this.mounted) {
+        setState(() {
+          _btnIsLoadingEAA = true;
+          _btnIsEnable = false;
+        });
       }
-    } catch (e) {
-      print(e);
+      try {
+        // 请求审批接口
+        CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
+          CompleteTaskBody(
+            approveResult: true,
+            comment: _comment,
+            rejectToStart: false,
+            taskId: widget.data.taskId,
+          ),
+        );
+        if (completeTaskModel.msgCd == '0000') {
+          if (this.mounted) {
+            setState(() {
+              _btnIsLoadingEAA = false;
+              _btnIsEnable = true;
+            });
+          }
+          Navigator.pushReplacementNamed(context, pageDepositRecordSucceed,
+              arguments: 'taskApproval');
+        }
+      } catch (e) {
+        print(e);
+      }
     }
   }
 }

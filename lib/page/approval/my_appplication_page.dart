@@ -34,7 +34,7 @@ class MyApplicationPage extends StatefulWidget {
 
 enum LoadingStatus { STATUS_LOADING, STATUS_COMPLETED, STATUS_IDEL }
 
-class _MyApplicationPageState extends State<MyApplicationPage> {
+class _MyApplicationPageState extends State<MyApplicationPage> with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController;
   RefreshController _refreshController;
   List<ApprovalTask> _listData = [];
@@ -114,25 +114,29 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
       }
     } catch (e) {
       print((e as DioError).error is NeedLogin);
-      if ((e as DioError).error is NeedLogin) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) {
-              return LoginPage();
-            }), (Route route) {
-          print(route.settings?.name);
-          if (route.settings?.name == "/") {
-            return true;
-          }
-          return false;
-        });
-      } else {
-        if(this.mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
-        print('error: ${e.toString()}');
-      }
+      print('error: ${e.toString()}');
+      setState(() {
+        _isLoading = false;
+      });
+      // if ((e as DioError).error is NeedLogin) {
+      //   Navigator.of(context).pushAndRemoveUntil(
+      //       MaterialPageRoute(builder: (BuildContext context) {
+      //         return LoginPage();
+      //       }), (Route route) {
+      //     print(route.settings?.name);
+      //     if (route.settings?.name == "/") {
+      //       return true;
+      //     }
+      //     return false;
+      //   });
+      // } else {
+      //   if(this.mounted) {
+      //     setState(() {
+      //       _isLoading = false;
+      //     });
+      //   }
+      //   print('error: ${e.toString()}');
+      // }
     }
   }
 
@@ -276,4 +280,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

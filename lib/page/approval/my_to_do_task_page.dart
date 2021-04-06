@@ -11,10 +11,11 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
-import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
+import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sp_util/sp_util.dart';
@@ -30,7 +31,8 @@ class MyToDoTaskPage extends StatefulWidget {
   _MyToDoTaskPageState createState() => _MyToDoTaskPageState();
 }
 
-class _MyToDoTaskPageState extends State<MyToDoTaskPage> {
+class _MyToDoTaskPageState extends State<MyToDoTaskPage>
+    with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController;
   RefreshController _refreshController;
   List<ApprovalTask> _listData = [];
@@ -55,35 +57,36 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage> {
 
   @override
   Widget build(BuildContext context) {
-      return _isLoading
-          ? HsgLoading()
-          : _listData.length > 0
-          ? CustomRefresh(
-        controller: _refreshController,
-        onLoading: () async {
-          await _loadData(isLoadMore: true);
-          //加载更多完成
-          _refreshController.loadComplete();
-          //显示没有更多数据
-          if (_isMoreData) _refreshController.loadNoData();
-        },
-        onRefresh: () async {
-          await _loadData();
-          //刷新完成
-          _refreshController.refreshCompleted();
-          _refreshController.footerMode.value = LoadStatus.canLoading;
-        },
-        content: ListView.builder(
-          padding:
-          EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
-          itemCount: _listData.length,
-          controller: _scrollController,
-          itemBuilder: (context, index) {
-            return _todoInformation(_listData[index]);
-          },
-        ),
-      )
-          : notDataContainer(context, S.current.no_data_now);
+    super.build(context);
+    return _isLoading
+        ? HsgLoading()
+        : _listData.length > 0
+            ? CustomRefresh(
+                controller: _refreshController,
+                onLoading: () async {
+                  await _loadData(isLoadMore: true);
+                  //加载更多完成
+                  _refreshController.loadComplete();
+                  //显示没有更多数据
+                  if (_isMoreData) _refreshController.loadNoData();
+                },
+                onRefresh: () async {
+                  await _loadData();
+                  //刷新完成
+                  _refreshController.refreshCompleted();
+                  _refreshController.footerMode.value = LoadStatus.canLoading;
+                },
+                content: ListView.builder(
+                  padding:
+                      EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
+                  itemCount: _listData.length,
+                  controller: _scrollController,
+                  itemBuilder: (context, index) {
+                    return _todoInformation(_listData[index]);
+                  },
+                ),
+              )
+            : notDataContainer(context, S.current.no_data_now);
   }
 
   //加载数据
@@ -112,20 +115,24 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage> {
       }
     } catch (e) {
       print((e as DioError).error is NeedLogin);
-      if ((e as DioError).error is NeedLogin) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) {
-          return LoginPage();
-        }), (Route route) {
-          print(route.settings?.name);
-          if (route.settings?.name == "/") {
-            return true;
-          }
-          return false;
-        });
-      } else {
-        print('error: ${e.toString()}');
-      }
+      print('error: ${e.toString()}');
+      setState(() {
+        _isLoading = false;
+      });
+      // if ((e as DioError).error is NeedLogin) {
+      //   Navigator.of(context).pushAndRemoveUntil(
+      //       MaterialPageRoute(builder: (BuildContext context) {
+      //     return LoginPage();
+      //   }), (Route route) {
+      //     print(route.settings?.name);
+      //     if (route.settings?.name == "/") {
+      //       return true;
+      //     }
+      //     return false;
+      //   });
+      // } else {
+      //   print('error: ${e.toString()}');
+      // }
     }
   }
 
@@ -270,4 +277,7 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

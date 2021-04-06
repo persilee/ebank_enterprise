@@ -13,6 +13,7 @@ import 'package:ebank_mobile/util/widget_util.dart';
 import 'package:ebank_mobile/widget/custom_tabs.dart' as CustomTabBar;
 import 'package:flutter/material.dart';
 import 'my_appplication_page.dart';
+import 'my_to_do_task_detail_page.dart';
 import 'my_to_do_task_page.dart';
 
 class ApprovalPage extends StatefulWidget {

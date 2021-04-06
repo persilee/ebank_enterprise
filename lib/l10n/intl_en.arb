@@ -516,6 +516,8 @@
   "approval_task_id": "Task ID",
   "approve_result": "Approval Result",
   "approve_create_time": "Approval Time",
+  "approve_reject_tip": "Whether or not to reject",
+  "approve_reject_to_start_tip": "Whether to dismiss to the originator",
 
   "lishaoying_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李少颖（待办）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "lijiawei_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李家伟（开户）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
