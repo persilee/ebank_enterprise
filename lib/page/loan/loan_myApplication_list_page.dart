@@ -20,10 +20,10 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
 
   @override
   Widget build(BuildContext context) {
-    // for (int i = 0; i < 5; i++) {
-    //   _productApplyList.add(_creatListCell());
-    //   _isShowList.add(false);
-    // }
+    for (int i = 0; i < 5; i++) {
+      _productApplyList.add(ExpandBox());
+      _isShowList.add(false);
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).loan_apply),
@@ -33,19 +33,19 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
       body: Container(
         color: HsgColors.commonBackground,
         height: double.infinity,
-        child: ListView(
-          children: [
-            ExpandBox(),
-            ExpandBox(),
-          ],
-          // child: ListView.builder(
-          //   itemCount: _productApplyList.length, //数量
-          //   itemBuilder: (BuildContext context, int index) {
-          //     return _productApplyList[index];
-          //   },
-          // ),
+        // child: ListView(
+        //   children: [
+        //     // ExpandBox(),
+        //     // ExpandBox(),
+        //   ],
+        child: ListView.builder(
+          itemCount: _productApplyList.length, //数量
+          itemBuilder: (BuildContext context, int index) {
+            return _productApplyList[index];
+          },
         ),
       ),
+      // ),
     );
   }
 }
@@ -56,7 +56,6 @@ class ExpandBox extends StatefulWidget {
 }
 
 class _ExpandBoxState extends State<ExpandBox> {
-
   bool _isShow = false;
 
   @override
@@ -196,4 +195,3 @@ class _ExpandBoxState extends State<ExpandBox> {
     );
   }
 }
-

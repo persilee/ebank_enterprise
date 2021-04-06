@@ -94,6 +94,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
         title: 'HSGBank',
         theme: ThemeData(
           appBarTheme: AppBarTheme(
+            centerTitle: true,
             elevation: 1,
             textTheme: TextTheme(
               headline6: TextStyle(

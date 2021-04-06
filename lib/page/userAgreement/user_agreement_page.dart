@@ -34,16 +34,11 @@ class _UserAgreementPageState extends State<UserAgreementPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          alignment: Alignment.center,
-          width: 290,
-          child: Text(
-            pactTitle,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+        title: Text(
+          pactTitle,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
-        centerTitle: true,
       ),
       body: pactUrl != ''
           ? WebView(

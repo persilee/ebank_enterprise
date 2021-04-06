@@ -10,7 +10,9 @@ import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'model/get_loan_rate.dart';
 import 'model/get_schedule_detail_list.dart';
+import 'model/loan_account_model.dart';
 import 'model/loan_application.dart';
+import 'model/loan_detail_modelList.dart';
 
 class LoanDataRepository {
   //贷款利率接口
@@ -35,10 +37,18 @@ class LoanDataRepository {
         (data) => LoanApplicationResp.fromJson(data));
   }
 
-  //贷款目录接口
-  Future<GetLoanListResp> getLoanList(GetLoanListReq req, String tag) {
+  //我的贷款列表接口
+  Future<LoanAccountMastModelResp> getLoanAccountList(
+      LoanAccountMastModelReq req, String tag) {
+    return request('/loan/masters/getLoanAccountList', req, tag,
+        (data) => LoanAccountMastModelResp.fromJson(data));
+  }
+
+  //贷款合约列表接口
+  Future<LoanDetailMastModelResp> getLoanList(
+      LoanDetailMastModelReq req, String tag) {
     return request('/loan/masters/getLoanMastList', req, tag,
-        (data) => GetLoanListResp.fromJson(data));
+        (data) => LoanDetailMastModelResp.fromJson(data));
   }
 
   //查询计划详情列表接口

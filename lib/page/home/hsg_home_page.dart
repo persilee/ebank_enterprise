@@ -848,7 +848,8 @@ class _HomePageState extends State<HomePage> {
         //Navigator.pushNamed(context, pageLoanReference);
       } else if (S.current.loan_record == title) {
         //'贷款记录'
-        Navigator.pushNamed(context, pageLimitDetails);
+        Navigator.pushNamed(
+            context, pageLimitDetails); //   pageLimitDetails  pageLoanReference
       } else if (S.current.loan_rate == title) {
         //'贷款利率'
         //Navigator.pushNamed(context, pageloanDemo);

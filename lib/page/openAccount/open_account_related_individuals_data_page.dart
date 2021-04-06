@@ -20,7 +20,9 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RelatedIndividualsDataPage extends StatefulWidget {
-  RelatedIndividualsDataPage({Key key}) : super(key: key);
+  final OpenAccountQuickSubmitDataReq dataReq;
+
+  RelatedIndividualsDataPage({Key key, this.dataReq}) : super(key: key);
 
   @override
   _RelatedIndividualsDataPageState createState() =>
@@ -29,9 +31,6 @@ class RelatedIndividualsDataPage extends StatefulWidget {
 
 class _RelatedIndividualsDataPageState
     extends State<RelatedIndividualsDataPage> {
-  ///数据上传请求体
-  OpenAccountQuickSubmitDataReq _dataReq = new OpenAccountQuickSubmitDataReq();
-
   ///有关人士请求体
   Partner _partner = new Partner();
 
@@ -76,6 +75,8 @@ class _RelatedIndividualsDataPageState
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     });
+    _changeShowData();
+
     super.initState();
   }
 
@@ -87,9 +88,6 @@ class _RelatedIndividualsDataPageState
 
   @override
   Widget build(BuildContext context) {
-    _dataReq = ModalRoute.of(context).settings.arguments;
-    _changeShowData();
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -129,7 +127,7 @@ class _RelatedIndividualsDataPageState
                 String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
                 _partner.phone = phoneStr == null ? '' : phoneStr;
                 List<Partner> partnerList = [_partner];
-                _dataReq.partnerList = partnerList;
+                widget.dataReq.partnerList = partnerList;
                 _savePreCust();
 
                 _openAccountQuickSubmitData();
@@ -477,7 +475,7 @@ class _RelatedIndividualsDataPageState
     );
 
     if (result != null && result != false) {
-      IdType data = _documentTypes[result];
+      IdType data = _appellationTypes[result];
       _partner.appellationIdType = data;
       _partner.appellation = 'A'; //data.code;
       setState(() {
@@ -610,7 +608,7 @@ class _RelatedIndividualsDataPageState
     HSProgressHUD.show();
 
     OpenAccountRepository()
-        .submitQuickCustTempInfo(_dataReq, 'GetIdTypeReq')
+        .submitQuickCustTempInfo(widget.dataReq, 'GetIdTypeReq')
         .then(
       (value) {
         print(value);
@@ -639,7 +637,7 @@ class _RelatedIndividualsDataPageState
 
   ///上传本页数据后台保存
   void _savePreCust() async {
-    Map<String, dynamic> josnMap = _dataReq.toJson();
+    Map<String, dynamic> josnMap = widget.dataReq.toJson();
     String josnString = jsonEncode(josnMap);
     josnString.replaceAll('\\n', '');
     print('josnString>>>>>>>>>>>>>>>>>>>>> == $josnString');
@@ -653,25 +651,29 @@ class _RelatedIndividualsDataPageState
   void _changeShowData() {
     if (this.mounted) {
       setState(() {
-        if (_dataReq.partnerList != null && _dataReq.partnerList.length > 0) {
-          Partner partner = _dataReq.partnerList[0];
+        if (widget.dataReq.partnerList != null &&
+            widget.dataReq.partnerList.length > 0) {
+          _partner = widget.dataReq.partnerList[0];
 
           String _language = Intl.getCurrentLocale();
           if (_language == 'en') {
-            _appellationText = partner.appellationIdType.name;
-            _categoryText = partner.partnerTypeIdType.name;
-            _documentTypeText = partner.idTypeIdType.name;
-            _nationalityText = partner.nationalityCountryRegionModel.nameEN;
+            _appellationText = _partner.appellationIdType.name ?? '';
+            _categoryText = _partner.partnerTypeIdType.name ?? '';
+            _documentTypeText = _partner.idTypeIdType.name ?? '';
+            _nationalityText =
+                _partner.nationalityCountryRegionModel.nameEN ?? '';
           } else if (_language == 'zh_CN') {
-            _appellationText = partner.appellationIdType.cname;
-            _categoryText = partner.partnerTypeIdType.cname;
-            _documentTypeText = partner.idTypeIdType.cname;
-            _nationalityText = partner.nationalityCountryRegionModel.nameZhCN;
+            _appellationText = _partner.appellationIdType.cname ?? '';
+            _categoryText = _partner.partnerTypeIdType.cname ?? '';
+            _documentTypeText = _partner.idTypeIdType.cname ?? '';
+            _nationalityText =
+                _partner.nationalityCountryRegionModel.nameZhCN ?? '';
           } else {
-            _appellationText = partner.appellationIdType.cname;
-            _categoryText = partner.partnerTypeIdType.cname;
-            _documentTypeText = partner.idTypeIdType.cname;
-            _nationalityText = partner.nationalityCountryRegionModel.nameZhHK;
+            _appellationText = _partner.appellationIdType.cname ?? '';
+            _categoryText = _partner.partnerTypeIdType.cname ?? '';
+            _documentTypeText = _partner.idTypeIdType.cname ?? '';
+            _nationalityText =
+                _partner.nationalityCountryRegionModel.nameZhHK ?? '';
           }
 
           _nextBtnEnabled = _judgeButtonIsEnabled();
