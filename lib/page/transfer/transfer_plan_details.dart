@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/get_transfer_plan_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -38,6 +39,7 @@ class _TransferPlanDetailsPageState extends State<TransferPlanDetailsPage> {
   String debitCurrency = '';
   String amount = '';
   String remark = '';
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -159,23 +161,26 @@ class _TransferPlanDetailsPageState extends State<TransferPlanDetailsPage> {
         centerTitle: true,
         title: Text(S.current.transfer_plan_detail),
       ),
-      body: _transferPlanDetails(
-          planName,
-          transferType,
-          payeeName,
-          FormatUtil.formatSpace4(payeeCardNo),
-          FormatUtil.formatSpace4(payerCardNo),
-          frequency,
-          startDate,
-          endDate,
-          nextDate,
-          debitCurrency,
-          amount,
-          remark),
+      body: isLoading
+          ? HsgLoading()
+          : _transferPlanDetails(
+              planName,
+              transferType,
+              payeeName,
+              FormatUtil.formatSpace4(payeeCardNo),
+              FormatUtil.formatSpace4(payerCardNo),
+              frequency,
+              startDate,
+              endDate,
+              nextDate,
+              debitCurrency,
+              amount,
+              remark),
     );
   }
 
   void _getTransferPlan() {
+    isLoading = true;
     Future.wait({
       TransferDataRepository().getTransferPlanDetails(
           GetTransferPlanDetailsReq(transferPlan.planId),
@@ -184,23 +189,32 @@ class _TransferPlanDetailsPageState extends State<TransferPlanDetailsPage> {
       (data) {
         data.forEach((value) {
           if (value is GetTransferPlanDetailsResp) {
-            setState(() {
-              planName = value.planName;
-              transferTypeCode = value.transferType;
-              payeeName = value.payeeName;
-              payeeCardNo = value.payeeCardNo;
-              payerCardNo = value.payerCardNo;
-              frequencyCode = value.frequency;
-              startDate = value.startDate;
-              endDate = value.endDate;
-              nextDate = value.nextDate;
-              debitCurrency = value.debitCurrency;
-              amount = value.amount;
-              remark = value.remark;
-            });
+            if (this.mounted) {
+              setState(() {
+                planName = value.planName;
+                transferTypeCode = value.transferType;
+                payeeName = value.payeeName;
+                payeeCardNo = value.payeeCardNo;
+                payerCardNo = value.payerCardNo;
+                frequencyCode = value.frequency;
+                startDate = value.startDate;
+                endDate = value.endDate;
+                nextDate = value.nextDate;
+                debitCurrency = value.debitCurrency;
+                amount = value.amount;
+                remark = value.remark;
+                isLoading = false;
+              });
+            }
           }
         });
       },
-    );
+    ).catchError((e) {
+      if (this.mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    });
   }
 }

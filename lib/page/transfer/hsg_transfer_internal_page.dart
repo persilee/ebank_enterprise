@@ -149,6 +149,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   @override
   void initState() {
     super.initState();
+    _loadLocalCcy();
     _loadTransferData();
 
     _transferMoneyController.addListener(() {
@@ -257,8 +258,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               callback: _boolBut,
               isWidget: true,
               length: 35,
-              // isRegEXp: true,
+              isRegEXp: true,
               // regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
+              regExp: '[\u4e00-\u9fa5a-zA-Z0-9 ]',
             ),
             TextFieldContainer(
               title: S.of(context).receipt_side_account,
@@ -510,7 +512,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           }
           // _getCardTotal(_account);
           _loadData(_account);
-          _loadLocalCcy();
+          // _loadLocalCcy();
           // _payCcyList.clear();
           // _payCcy = _localeCcy;
           // _payCcyList.add(_localeCcy);

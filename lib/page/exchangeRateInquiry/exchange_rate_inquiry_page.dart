@@ -6,10 +6,22 @@
 import 'dart:ui';
 import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_ex_rate.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
+import 'package:ebank_mobile/widget/money_text_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ExchangeRateInquiryPage extends StatefulWidget {
   @override
@@ -18,15 +30,18 @@ class ExchangeRateInquiryPage extends StatefulWidget {
 }
 
 class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
-  List<String> _primitiveCcyList = ['HKD'];
-  List<String> _objectiveCcyList = ['USD', 'EUR', 'GBP', 'CAD', 'AUD'];
-  List<Map<String, Object>> rateList = [
-    {'ccy': 'USD', 'selling': '7.8820', 'buying': '7.7524'},
-    {'ccy': 'EUR', 'selling': '9.6058', 'buying': '9.5005'},
-    {'ccy': 'GBP', 'selling': '10.6166', 'buying': '10.5376'},
-    {'ccy': 'CAD', 'selling': '6.2332', 'buying': '6.0684'},
-    {'ccy': 'AUD', 'selling': '6.1162', 'buying': '5.9481'}
-  ];
+  // List<String> _primitiveCcyList = ['HKD'];
+  List<String> _primitiveCcyList = [];
+  // List<String> _objectiveCcyList = ['USD', 'EUR', 'GBP', 'CAD', 'AUD'];
+  List<String> _objectiveCcyList = [];
+  List<RecordLists> rateList = [];
+  // List<Map<String, Object>> rateList = [
+  //   {'ccy': 'USD', 'selling': '7.8820', 'buying': '7.7524'},
+  //   {'ccy': 'EUR', 'selling': '9.6058', 'buying': '9.5005'},
+  //   {'ccy': 'GBP', 'selling': '10.6166', 'buying': '10.5376'},
+  //   {'ccy': 'CAD', 'selling': '6.2332', 'buying': '6.0684'},
+  //   {'ccy': 'AUD', 'selling': '6.1162', 'buying': '5.9481'}
+  // ];
   TextEditingController _amtController = TextEditingController();
   String updateDate = DateFormat('yyyy/MM/dd HH:mm:ss').format(DateTime.now());
   int _primitiveCcyId = 0;
@@ -35,11 +50,15 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   String _objectiveCcy = '--';
   String _primitiveCcyAmt = '0.00';
   bool _isSwap = true;
+  bool _isLoading = false; //加载状态
+  RefreshController _refreshController = new RefreshController();
 
   @override
   // ignore: must_call_super
   void initState() {
     // 网络请求
+    _getExchangeRateList();
+    _getCcyList();
   }
 
   @override
@@ -95,11 +114,33 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
               height: 40,
               child: _listTitle(),
             ),
+            // Expanded(
+            //   child: RefreshIndicator(
+            //     child: _listContent(),
+            //     onRefresh: _getExchangeRateList,
+            //   ),
+            // ),
             Expanded(
-              child: RefreshIndicator(
-                child: _listContent(),
-                onRefresh: _getExchangeRateList,
-              ),
+              child: _isLoading
+                  ? HsgLoading()
+                  : rateList.length > 0
+                      ? CustomRefresh(
+                          controller: _refreshController,
+                          onLoading: () {
+                            //加载更多完成
+                            _refreshController.loadComplete();
+                            //显示没有更多数据
+                            _refreshController.loadNoData();
+                          },
+                          onRefresh: () {
+                            _getExchangeRateList();
+                            _refreshController.refreshCompleted();
+                            _refreshController.footerMode.value =
+                                LoadStatus.canLoading;
+                          },
+                          content: _listContent(),
+                        )
+                      : notDataContainer(context, S.current.no_data_now),
             ),
           ],
         ),
@@ -109,9 +150,17 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
 
   Row _listTitle() {
     TextStyle style =
-        TextStyle(fontSize: 16, color: HsgColors.secondDegreeText);
+        TextStyle(fontSize: 15, color: HsgColors.secondDegreeText);
     return Row(
       children: [
+        Expanded(
+          child: Center(
+            child: Text(
+              S.current.currency,
+              style: style,
+            ),
+          ),
+        ),
         Expanded(
           child: Center(
             child: Text(
@@ -136,6 +185,14 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
             ),
           ),
         ),
+        Expanded(
+          child: Center(
+            child: Text(
+              '中间价',
+              style: style,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -152,24 +209,40 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
               Expanded(
                 child: Center(
                   child: Text(
-                    rateList[index]['ccy'],
-                    style: TextStyle(fontSize: 16),
+                    rateList[index].ccy,
+                    style: TextStyle(fontSize: 15),
                   ),
                 ),
               ),
               Expanded(
                 child: Center(
                   child: Text(
-                    rateList[index]['selling'],
-                    style: TextStyle(fontSize: 16),
+                    rateList[index].ccy2,
+                    style: TextStyle(fontSize: 15),
                   ),
                 ),
               ),
               Expanded(
                 child: Center(
                   child: Text(
-                    rateList[index]['buying'],
-                    style: TextStyle(fontSize: 16),
+                    rateList[index].fxSell,
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Center(
+                  child: Text(
+                    rateList[index].fxBuy,
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Center(
+                  child: Text(
+                    rateList[index].mid,
+                    style: TextStyle(fontSize: 15),
                   ),
                 ),
               ),
@@ -211,6 +284,13 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
           color: HsgColors.textHintColor,
         ),
       ),
+      inputFormatters: <TextInputFormatter>[
+        LengthLimitingTextInputFormatter(11),
+        FilteringTextInputFormatter.allow(
+          RegExp("[0-9.]"),
+        ),
+        MoneyTextInputFormatter(),
+      ],
       onChanged: (text) {
         _amountConversion();
       },
@@ -328,17 +408,16 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
         if (_amtController.text != '') {
           AiDecimalAccuracy _amount =
               AiDecimalAccuracy.parse(_amtController.text);
-          AiDecimalAccuracy _rate =
-              AiDecimalAccuracy.parse(rateList[i]['buying']);
+          AiDecimalAccuracy _rate = AiDecimalAccuracy.parse(rateList[i].fxBuy);
 
-          if (rateList[i]['ccy'] == _objectiveCcy) {
+          if (rateList[i].ccy == _objectiveCcy) {
             double newAmt = _isSwap
                 ? (_amount / _rate).toDouble()
                 : (_amount * _rate).toDouble();
             _primitiveCcyAmt = newAmt.toStringAsFixed(4);
           }
 
-          if (rateList[i]['ccy'] == _primitiveCcy) {
+          if (rateList[i].ccy == _primitiveCcy) {
             double newAmt = _isSwap
                 ? (_amount * _rate).toDouble()
                 : (_amount / _rate).toDouble();
@@ -351,7 +430,33 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     }
   }
 
-  Future _getExchangeRateList() async {}
+  Future _getExchangeRateList() async {
+    ForexTradingRepository()
+        .getExRate(GetExRateReq(), 'getExRateReq')
+        .then((data) {
+      if (data != null) {
+        rateList.clear();
+        rateList.addAll(data.recordLists);
+      }
+    });
+  }
+
+  // 获取币种列表
+  Future _getCcyList() async {
+    final prefs = await SharedPreferences.getInstance();
+    _primitiveCcyList.clear();
+    _primitiveCcyList.add(prefs.getString(ConfigKey.LOCAL_CCY));
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _objectiveCcyList.clear();
+        data.publicCodeGetRedisRspDtoList.forEach((e) {
+          _objectiveCcyList.add(e.code);
+        });
+      }
+    });
+  }
 }
 
 class CurrencyInkWell extends StatelessWidget {

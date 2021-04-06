@@ -18,15 +18,12 @@ class BaseDio {
 
   Dio getDio() {
     final Dio dio = Dio();
-    dio.options = BaseOptions(receiveTimeout: 30000, connectTimeout: 30000); // 设置超时时间等 ...
+    dio.options = BaseOptions(
+        receiveTimeout: 30000, connectTimeout: 30000); // 设置超时时间等 ...
     dio.interceptors.add(HeaderInterceptor()); // 添加拦截器，如 token之类，需要全局使用的参数
     dio.interceptors.add(ErrorInterceptor()); // 添加error拦截器
     dio.interceptors.add(ResponseInterceptor());
     dio.interceptors.add(RequestInterceptor());
-    // dio.interceptors
-    //     .add(ExtraInterceptor()); // 添加拦截器，如 userId 和 loginName这两个额外参数
-    // dio.interceptors.add(
-    //     QueryParametersInterceptor()); // 添加拦截器 在queryParametersInterceptor中添加，如 userId 和 loginName这两个额外参数
     dio.interceptors.add(PrettyDioLogger(
       // 添加日志格式化工具类
       requestHeader: true,

@@ -11,6 +11,7 @@ import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 
+import 'model/get_info_by_swift_code.dart';
 import 'model/get_international_transfer.dart';
 import 'model/get_international_transfer_new.dart';
 import 'model/get_transfer_plan_details.dart';
@@ -62,6 +63,13 @@ class TransferDataRepository {
       GetInternationalTransferNewReq req, String tag) {
     return request('/ddep/transfer/doInternationalTransfer', req, tag,
         (data) => GetInternationalTransferNewResp.fromJson(data));
+  }
+
+  //根据银行SWIFT获取银行名称
+  Future<GetInfoBySwiftCodeResp> getInfoBySwiftCode(
+      GetInfoBySwiftCodeReq req, String tag) {
+    return request('/ddep/transfer/getInfoBySwiftCode', req, tag,
+        (data) => GetInfoBySwiftCodeResp.fromJson(data));
   }
 
   //预约转账

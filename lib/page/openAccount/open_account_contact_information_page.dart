@@ -292,9 +292,9 @@ class _OpenAccountContactInformationPageState
     if (_registeredAddressText == null || _registeredAddressText == '') {
       return false;
     }
-    if (_registrationZipCodeText == null || _registrationZipCodeText == '') {
-      return false;
-    }
+    // if (_registrationZipCodeText == null || _registrationZipCodeText == '') {
+    //   return false;
+    // }
     if (_theSameForRegisterAndBusiness == false) {
       if (_businessAreaText == null || _businessAreaText == '') {
         return false;
@@ -302,9 +302,9 @@ class _OpenAccountContactInformationPageState
       if (_businessAddressText == null || _businessAddressText == '') {
         return false;
       }
-      if (_businessZipCodeText == null || _businessZipCodeText == '') {
-        return false;
-      }
+      // if (_businessZipCodeText == null || _businessZipCodeText == '') {
+      //   return false;
+      // }
     }
     if (_theSameForRegisterAndCommunication == false) {
       if (_communicationAreaText == null || _communicationAreaText == '') {
@@ -314,10 +314,10 @@ class _OpenAccountContactInformationPageState
           _correspondenceAddressText == '') {
         return false;
       }
-      if (_communicationsZipCodeText == null ||
-          _communicationsZipCodeText == '') {
-        return false;
-      }
+      // if (_communicationsZipCodeText == null ||
+      //     _communicationsZipCodeText == '') {
+      //   return false;
+      // }
     }
     if (_officeAreaCodeText == null || _officeAreaCodeText == '') {
       return false;

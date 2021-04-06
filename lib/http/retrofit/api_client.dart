@@ -66,4 +66,11 @@ abstract class ApiClient {
     @Queries() BaseBody baseBody,
     @Part(fileName: 'avatar.jpg') File file,
   );
+
+  /// 银行信息管理-上传银行图标（开户图片上传暂时共用）
+  @POST('/platform/bankInfo/uploadBankIcon')
+  Future<dynamic> uploadBankIcon(
+    @Queries() BaseBody baseBody,
+    @Part(fileName: 'certificate.jpg') File file,
+  );
 }
