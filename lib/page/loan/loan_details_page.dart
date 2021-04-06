@@ -452,9 +452,11 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
     section.add(
       loanDetailsArr.length <= 0
           ? SliverToBoxAdapter(
-              child: Expanded(
-              child: notDataContainer(context, S.current.no_data_now),
-            ))
+              child: 
+              Contain(
+               margin: EdgeInsets.only(top: 100),
+              child:  notDataContainer(context, S.current.no_data_now),)
+            ),)
           : SliverList(
               delegate:
                   SliverChildBuilderDelegate((BuildContext context, int index) {
