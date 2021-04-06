@@ -44,7 +44,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   int countdownTime = 0;
   bool _isRegister;
   String _userAccount;
-  bool _isInput = false;
+  bool _isInput = false; //判断是否点击获取验证码
+  bool _isCommit = false; //进行二次校验
 
   /// 区号
   String _officeAreaCodeText = '';
@@ -316,7 +317,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     } else {
       VerificationCodeRepository()
           .sendSmsByPhone(
-              SendSmsByPhoneNumberReq(_phoneNum.text, 'findPwd'), 'sendSms')
+              SendSmsByPhoneNumberReq('', _phoneNum.text, 'findPwd', ''),
+              'sendSms')
           .then((data) {
         setState(() {
           _isInput = true;

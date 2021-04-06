@@ -1,3 +1,5 @@
+import 'dart:io';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 首页
 /// Author: lijiawei
@@ -237,7 +239,8 @@ class _HomePageState extends State<HomePage> {
       if (this.mounted) {
         setState(() {
           Future.delayed(Duration.zero, () {
-            SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+            exit(0);
+            // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
           });
           Fluttertoast.showToast(
               msg: S.of(context).logoutSuccess, gravity: ToastGravity.CENTER);

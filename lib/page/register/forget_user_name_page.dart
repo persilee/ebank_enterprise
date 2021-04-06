@@ -36,8 +36,8 @@ class _ForgetUserNameState extends State<ForgetUserName> {
   int countdownTime = 0;
   String _accountName;
   bool _isRegister;
-  bool _isInput = false;
-  bool _isCommit = false;
+  bool _isInput = false; //判断是否点击获取验证码
+  bool _isCommit = false; //点击下一步进行二次校验
 
   /// 区号
   String _officeAreaCodeText = '';
@@ -206,7 +206,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
   }
 
   bool _submit() {
-    if (_phoneNum.text != '' && _sms.text.length > 5) {
+    if (_phoneNum.text != '' && _sms.text.length > 5 && _isInput) {
       return true;
     } else {
       return false;
@@ -290,7 +290,13 @@ class _ForgetUserNameState extends State<ForgetUserName> {
     } else {
       VerificationCodeRepository()
           .sendSmsByPhone(
-              SendSmsByPhoneNumberReq(_phoneNum.text, 'findAccount'), 'sendSms')
+              SendSmsByPhoneNumberReq(
+                  '', //地区号
+                  _phoneNum.text, //电话号
+                  'findAccount', //短信类型
+                  '' //smsTemplateId
+                  ),
+              'sendSms')
           .then((data) {
         if (mounted) {
           setState(() {

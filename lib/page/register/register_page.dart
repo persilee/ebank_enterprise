@@ -4,7 +4,9 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/send_sms_register.dart';
+import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -48,6 +50,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _checkBoxValue = false; //复选框默认值
   bool _isGetSms = false;
   bool _isRegister = false;
+  bool _isCommit = false;
 
   /// 区号
   String _officeAreaCodeText = '86';
@@ -108,7 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   false,
                   <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(
-                        RegExp("[a-zA-Z0-9]")), //纯数字
+                        RegExp("[a-zA-Z0-9]")), //只可输入大小写字母及数字
                     //  LengthLimitingTextInputFormatter(6),
                   ],
                 ),
@@ -211,17 +214,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                         timeInSecForIosWeb: 1,
                                         msg: S.current.register_check_username);
                                   } else {
-                                    Map listData = new Map();
-                                    listData = {
-                                      'accountName': _userNameListen,
-                                      'sms': _smsListen,
-                                      'phone': _phoneNumListen,
-                                      'areaCode': _officeAreaCodeText
-                                    };
-
-                                    Navigator.pushNamed(
-                                        context, pageRegisterConfirm,
-                                        arguments: listData);
+                                    _checkRegister();
+                                    _isCommit = true;
                                   }
                                 }
                               : null,
@@ -284,16 +278,29 @@ class _RegisterPageState extends State<RegisterPage> {
         timeInSecForIosWeb: 1,
       );
     } else {
-      VersionDataRepository()
-          .sendSmsRegister(
-              SendSmsRegisterReq(
-                  _officeAreaCodeText, _phoneNum.text, 'register'),
+      VerificationCodeRepository()
+          .sendSmsByPhone(
+              SendSmsByPhoneNumberReq(
+                  _officeAreaCodeText, _phoneNum.text, 'register', '123123'),
               'sendSmsRegister')
           .then((value) {
         if (mounted) {
           setState(() {
             _isGetSms = true;
             _startCountdown();
+
+            if (_isCommit) {
+              Map listData = new Map();
+              listData = {
+                'accountName': _userNameListen,
+                'sms': _smsListen,
+                'phone': _phoneNumListen,
+                'areaCode': _officeAreaCodeText
+              };
+
+              Navigator.pushNamed(context, pageRegisterConfirm,
+                  arguments: listData);
+            }
           });
         }
       }).catchError((e) {
