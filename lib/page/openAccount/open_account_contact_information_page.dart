@@ -20,6 +20,9 @@ import 'package:flutter_picker/flutter_picker.dart';
 import 'package:intl/intl.dart';
 
 class OpenAccountContactInformationPage extends StatefulWidget {
+  final OpenAccountQuickSubmitDataReq dataReq;
+  OpenAccountContactInformationPage({Key key, this.dataReq}) : super(key: key);
+
   @override
   _OpenAccountContactInformationPageState createState() =>
       _OpenAccountContactInformationPageState();
@@ -27,9 +30,6 @@ class OpenAccountContactInformationPage extends StatefulWidget {
 
 class _OpenAccountContactInformationPageState
     extends State<OpenAccountContactInformationPage> {
-  ///数据上传请求体
-  OpenAccountQuickSubmitDataReq _dataReq = new OpenAccountQuickSubmitDataReq();
-
   /// 注册公司地址请求体
   Address _registrationAddress = new Address(addressType: 'R');
 
@@ -202,13 +202,15 @@ class _OpenAccountContactInformationPageState
     });
     _officePhoneTEC.addListener(() {
       _officePhoneText = _officePhoneTEC.text;
-      _dataReq.telNumber = _officePhoneText;
+      widget.dataReq.telNumber = _officePhoneText;
       setState(() {
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     });
 
     _getCityData();
+
+    _changeShowData();
 
     super.initState();
   }
@@ -227,9 +229,6 @@ class _OpenAccountContactInformationPageState
 
   @override
   Widget build(BuildContext context) {
-    _dataReq = ModalRoute.of(context).settings.arguments;
-    _changeShowData();
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -269,13 +268,13 @@ class _OpenAccountContactInformationPageState
                   _businessAddress,
                   _communicationAddress,
                 ];
-                _dataReq.addressList = addressList;
+                widget.dataReq.addressList = addressList;
                 _savePreCust();
 
                 Navigator.pushNamed(
                   context,
                   pageOpenAccountRelatedIndividualsData,
-                  arguments: _dataReq,
+                  arguments: {'data': widget.dataReq},
                 );
               }
             : null,
@@ -747,7 +746,7 @@ class _OpenAccountContactInformationPageState
               CountryRegionModel data = value;
               setState(() {
                 _officeAreaCodeText = '+ ${data.code}';
-                _dataReq.telCountryCode = data.code;
+                widget.dataReq.telCountryCode = data.code;
                 _nextBtnEnabled = _judgeButtonIsEnabled();
               });
             });
@@ -1128,7 +1127,7 @@ class _OpenAccountContactInformationPageState
 
   ///上传本页数据后台保存
   void _savePreCust() async {
-    Map<String, dynamic> josnMap = _dataReq.toJson();
+    Map<String, dynamic> josnMap = widget.dataReq.toJson();
     String josnString = jsonEncode(josnMap);
     josnString.replaceAll('\\n', '');
     //获取登记注册文件类型
@@ -1142,11 +1141,12 @@ class _OpenAccountContactInformationPageState
     if (this.mounted) {
       setState(() {
         // String _language = Intl.getCurrentLocale();
-        _officeAreaCodeText = _dataReq.telCountryCode;
-        _officePhoneTEC.text = _officePhoneText = _dataReq.telNumber;
+        _officeAreaCodeText = widget.dataReq.telCountryCode;
+        _officePhoneTEC.text = _officePhoneText = widget.dataReq.telNumber;
 
-        if (_dataReq.addressList != null && _dataReq.addressList.length > 0) {
-          _dataReq.addressList.forEach((element) {
+        if (widget.dataReq.addressList != null &&
+            widget.dataReq.addressList.length > 0) {
+          widget.dataReq.addressList.forEach((element) {
             switch (element.addressType) {
 
               ///注册公司地址

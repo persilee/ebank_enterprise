@@ -290,13 +290,13 @@ var appRoutes = {
   pageResetPasswordSuccess: (context) => ResetPasswordPage(),
   pageResetPasswordOpenAccount: (context) => ResetPasswordAccountOpen(),
   pageCountryRegionSelect: (context) => CountryOrRegionSelectPage(),
-  pageOpenAccountContactInformation: (context) =>
-      OpenAccountContactInformationPage(),
+  // pageOpenAccountContactInformation: (context) =>
+  //     OpenAccountContactInformationPage(),
   pageOpenAccountSelectDocumentType: (context) =>
       OpenAccountSelectDocumentTypePage(),
   pageOpenAccountResults: (context) => OpenAccountResultsPage(),
-  pageOpenAccountRelatedIndividualsData: (context) =>
-      RelatedIndividualsDataPage(),
+  // pageOpenAccountRelatedIndividualsData: (context) =>
+  //     RelatedIndividualsDataPage(),
   pageOpenAccountIdentifyResultsFailure: (context) =>
       OpenAccountIdentifyResultsFailurePage(),
   pageOpenAccountIdentifySuccessful: (context) =>
@@ -370,6 +370,23 @@ onGenerateRoute(RouteSettings settings) {
       return TaskApprovalPage(
         data: arguments['data'],
         title: arguments['title'],
+      );
+    });
+  }
+  if (settings.name == pageOpenAccountRelatedIndividualsData) {
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return RelatedIndividualsDataPage(
+        dataReq: arguments['data'],
+      );
+    });
+  }
+
+  if (settings.name == pageOpenAccountContactInformation) {
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return OpenAccountContactInformationPage(
+        dataReq: arguments['data'],
       );
     });
   }
