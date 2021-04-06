@@ -1,5 +1,6 @@
 import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
@@ -11,8 +12,10 @@ import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
+import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
+import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -133,6 +136,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     _loadTransferData();
     _getTransferFeeList();
     _getFeeUseList();
+    _actualNameReqData();
 
     _transferMoneyController.addListener(() {
       if (_transferMoneyController.text.length == 0) {
@@ -387,8 +391,9 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               callback: _isClick,
               isWidget: true,
               length: 35,
-              // isRegEXp: true,
+              isRegEXp: true,
               // regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
+              regExp: '[\u4e00-\u9fa5a-zA-Z0-9 ]',
             ),
             TextFieldContainer(
               title: S.current.receipt_side_account,
@@ -430,32 +435,28 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             ),
           ),
           Expanded(
-            child: Container(
-              // padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-              // width: MediaQuery.of(context).size.width - 30,
-              child: TextField(
-                // minLines: 1,
-                // maxLines: 3,
-                //是否自动更正
-                autocorrect: false,
-                //是否自动获得焦点
-                autofocus: false,
-                controller: _payerAddressController,
-                textAlign: TextAlign.end,
-                inputFormatters: <TextInputFormatter>[
-                  LengthLimitingTextInputFormatter(105) //限制长度
-                ],
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: inputText,
-                  hintStyle: TextStyle(
-                    fontSize: 15,
-                    color: HsgColors.textHintColor,
-                  ),
-                ),
+            // child: Container(
+            // padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+            // width: MediaQuery.of(context).size.width - 30,
+            child: TextField(
+              // minLines: 1,
+              //是否自动更正
+              autocorrect: false,
+              //是否自动获得焦点
+              autofocus: false,
+              controller: _payerAddressController,
+              textAlign: TextAlign.end,
+              inputFormatters: <TextInputFormatter>[
+                LengthLimitingTextInputFormatter(105) //限制长度
+              ],
+              decoration: InputDecoration.collapsed(
+                // border: InputBorder.none,
+                hintText: inputText,
+                hintStyle: HINET_TEXT_STYLE,
               ),
             ),
           ),
+          // ),
         ],
       ),
     );
@@ -884,6 +885,23 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         });
       }
     }).catchError((e) {});
+  }
+
+  //获取用户真实姓名
+  Future<void> _actualNameReqData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+    UserDataRepository()
+        .getUserInfo(GetUserInfoReq(userID), "getUserInfo")
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          payerName = data.actualName;
+        });
+      }
+    }).catchError((e) {
+      // Fluttertoast.showToast(msg: e.toString());
+    });
   }
 
   //获取货币和余额
