@@ -233,11 +233,36 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
 
     HSProgressHUD.show();
-    String businessId = _valueData.businessId;
-    String fileName = _valueData.fileName;
-    List speechFlowData = _valueData.speechFlowData;
-    FaceSignUploadDataReq dataReq =
-        FaceSignUploadDataReq(businessId, fileName, phoneStr, speechFlowData);
+    String businessId = _valueData.businessId ?? '';
+    String fileName = _valueData.fileName ?? '';
+    String idNo = '';
+    if (_valueData.certificateType == '1') {
+      InfoStrForCN infoStr = _valueData.infoStr;
+      idNo = infoStr.idNum ?? '';
+    } else if (_valueData.certificateType == '2') {
+      InfoStrForHK infoStr = _valueData.infoStr;
+      idNo = infoStr.idNum ?? '';
+    } else {
+      InfoStrForPassport infoStr = _valueData.infoStr;
+      idNo = infoStr.idNum ?? '';
+    }
+    String certificateType = _valueData.certificateType ?? '';
+    List<SpeechFlowData> speechFlowData = _valueData.speechFlowData;
+
+    List<SpeechFlowDataHS> speechFlowDataHSList = [];
+    speechFlowData.forEach((element) {
+      SpeechFlowDataHS speechFlowDataHS = SpeechFlowDataHS(
+        element.problem,
+        element.timer,
+        element.answerArr.length > 0
+            ? element.answerArr[element.answerArr.length - 1]
+            : '',
+      );
+      speechFlowDataHSList.add(speechFlowDataHS);
+    });
+
+    FaceSignUploadDataReq dataReq = FaceSignUploadDataReq(businessId, fileName,
+        phoneStr, certificateType, idNo, speechFlowDataHSList);
     OpenAccountRepository().saveSignVideo(dataReq, 'saveSignVideo').then(
       (value) {
         print(value);

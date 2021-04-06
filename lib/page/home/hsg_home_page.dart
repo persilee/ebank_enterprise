@@ -266,11 +266,18 @@ class _HomePageState extends State<HomePage> {
               ),
               onPressed: () {
                 print('联系客服');
+                // Navigator.pushNamed(
+                //   context,
+                //   pageOpenAccountSelectDocumentType,
+                //   arguments: {
+                //     'businessId': '123456987465312456',
+                //     'isQuick': true,
+                //   },
+                // );
                 Navigator.pushNamed(
                   context,
-                  pageOpenAccountSelectDocumentType,
-                  arguments: '123456987465312456',
-                ); //pageContactCustomer
+                  pageContactCustomer,
+                );
               },
             ),
             _languageChangeBtn(),

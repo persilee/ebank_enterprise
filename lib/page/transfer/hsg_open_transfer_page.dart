@@ -78,8 +78,10 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   String cardTotals = '';
   DateTime _endValue = DateTime.now().add(Duration(days: 1)); //转账时间
   DateTime _startValue = DateTime.now().add(Duration(days: 1)); //截止日期
-  String _startTime = '';
-  String _endTime = '';
+  String _startTime =
+      DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1)));
+  String _endTime =
+      DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1)));
   String _start = DateFormat('yyyy-MM-dd')
       .format(DateTime.now().add(Duration(days: 1))); //显示开始时间
   String _end = DateFormat('yyyy-MM-dd').format(DateTime.now()); //显示结束时间

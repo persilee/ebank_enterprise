@@ -12,19 +12,29 @@ class FaceSignUploadDataReq {
   @JsonKey(name: 'fileName')
   String fileName;
 
+  /// 证件号
+  @JsonKey(name: 'idNo')
+  String idNo;
+
+  /// 证件类型
+  @JsonKey(name: 'idType')
+  String idType;
+
   /// 手机号
   @JsonKey(name: 'phone')
   String phone;
 
   ///ai会话中对话数据
-  @JsonKey(name: 'speechFlowData')
-  List<SpeechFlowData> speechFlowData;
+  @JsonKey(name: 'SpeechFlowDataHS')
+  List<SpeechFlowDataHS> speechFlowDataHS;
 
   FaceSignUploadDataReq(
     this.businessId,
     this.fileName,
+    this.idNo,
+    this.idType,
     this.phone,
-    this.speechFlowData,
+    this.speechFlowDataHS,
   );
 
   factory FaceSignUploadDataReq.fromJson(Map<String, dynamic> srcJson) =>
@@ -35,26 +45,26 @@ class FaceSignUploadDataReq {
 
 ///话术数据
 @JsonSerializable()
-class SpeechFlowData {
+class SpeechFlowDataHS {
   @JsonKey(name: 'problem')
   String problem;
 
   @JsonKey(name: 'timer')
   String timer;
 
-  @JsonKey(name: 'answerArr')
-  List<String> answerArr;
+  @JsonKey(name: 'answer')
+  String answer;
 
-  SpeechFlowData(
+  SpeechFlowDataHS(
     this.problem,
     this.timer,
-    this.answerArr,
+    this.answer,
   );
 
-  factory SpeechFlowData.fromJson(Map<String, dynamic> srcJson) =>
-      _$SpeechFlowDataFromJson(srcJson);
+  factory SpeechFlowDataHS.fromJson(Map<String, dynamic> srcJson) =>
+      _$SpeechFlowDataHSFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$SpeechFlowDataToJson(this);
+  Map<String, dynamic> toJson() => _$SpeechFlowDataHSToJson(this);
 }
 
 @JsonSerializable()
