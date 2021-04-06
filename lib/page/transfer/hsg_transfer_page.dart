@@ -92,8 +92,8 @@ class _TransferPageState extends State<TransferPage> {
         children: [
           _recently(),
           _isLoading
-              ? Container(
-                  margin: EdgeInsets.only(top: 50),
+              ? Expanded(
+                  // margin: EdgeInsets.only(top: 50),
                   child: HsgLoading(),
                 )
               : _partnerListData.length > 0
@@ -538,29 +538,31 @@ class _TransferPageState extends State<TransferPage> {
 
   //没数据显示页面
   Widget _noDataContainer() {
-    return Container(
-      width: (MediaQuery.of(context).size.width),
-      height: (MediaQuery.of(context).size.width),
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            margin: EdgeInsets.only(top: 45),
-            child: Image(
-              image: AssetImage('images/noDataIcon/no_data_person.png'),
-              width: 159,
-              height: 128,
+    return Expanded(
+      child: Container(
+        width: (MediaQuery.of(context).size.width),
+        // height: (MediaQuery.of(context).size.height) / 2,
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              // margin: EdgeInsets.only(top: 45),
+              child: Image(
+                image: AssetImage('images/noDataIcon/no_data_person.png'),
+                width: 159,
+                height: 128,
+              ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 20),
-            child: Text(
-              S.of(context).no_recent_transfer_account,
-              style: TextStyle(color: HsgColors.describeText, fontSize: 15.0),
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: Text(
+                S.of(context).no_recent_transfer_account,
+                style: TextStyle(color: HsgColors.describeText, fontSize: 15.0),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
