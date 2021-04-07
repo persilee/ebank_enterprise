@@ -434,11 +434,15 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
                 child: Row(
                   children: [
                     //贷款金额
-                    _loanMoney(S.current.loan_amount, loanDetail.amt),
+                    _loanMoney(
+                        S.current.loan_amount + '(' + loanDetail.ccy + ')',
+                        loanDetail.amt),
                     // _loanMoney("额度(USD)", "10000"),
                     _verticalMoulding(),
                     //贷款余额
-                    _loanMoney(S.current.loan_balance2, loanDetail.bal),
+                    _loanMoney(
+                        S.current.loan_balance2 + '(' + loanDetail.ccy + ')',
+                        loanDetail.bal),
                     // _loanMoney("可用额度(USD)", "8000"),
                   ],
                 ),
@@ -452,9 +456,11 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
     section.add(
       loanDetailsArr.length <= 0
           ? SliverToBoxAdapter(
-              child: Expanded(
-              child: notDataContainer(context, S.current.no_data_now),
-            ))
+              child: Container(
+                margin: EdgeInsets.only(top: 100),
+                child: notDataContainer(context, S.current.no_data_now),
+              ),
+            )
           : SliverList(
               delegate:
                   SliverChildBuilderDelegate((BuildContext context, int index) {
