@@ -10,13 +10,20 @@ import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
+import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
+import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
+import 'package:ebank_mobile/widget/money_text_input_formatter.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ForexTradingPage extends StatefulWidget {
@@ -27,8 +34,8 @@ class ForexTradingPage extends StatefulWidget {
 class _ForexTradingPageState extends State<ForexTradingPage> {
   List<String> _accList = [];
   List<String> _accIcon = [];
-  List<String> _paymentCcyList = ['CNY', 'EUR', 'HKD'];
-  List<String> _incomeCcyList = ['CNY', 'EUR', 'HKD', 'USD'];
+  List<String> _paymentCcyList = [];
+  List<String> _incomeCcyList = [];
   List<RemoteBankCard> cards = [];
   int _paymentAccId = -1;
   int _incomeAccId = -1;
@@ -53,6 +60,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
       _transferTrial();
     });
     _getCardList();
+    _loadLocalCcy();
   }
 
   @override
@@ -95,7 +103,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
                   click: _boolBut()
                       ? () {
                           FocusScope.of(context).requestFocus(FocusNode());
-                          _openBottomSheet();
+                          // _openBottomSheet();
+                          _submitFormData();
                         }
                       : null,
                   isColor: _boolBut(),
@@ -143,7 +152,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         ),
         ItemContainer(
           title: S.current.available_balance,
-          item: _balance,
+          item: FormatUtil.formatSringToMoney(_balance),
         ),
         Container(
           height: 50,
@@ -201,6 +210,13 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
                   color: HsgColors.textHintColor,
                 ),
               ),
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(12),
+                FilteringTextInputFormatter.allow(
+                  RegExp("[0-9.]"),
+                ),
+                MoneyTextInputFormatter(),
+              ],
               onChanged: (text) {
                 _transferTrial();
               },
@@ -228,7 +244,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         if (isAcc) {
           _paymentAccId = result;
           _paymentAcc = _accList[_paymentAccId];
-          if (_paymentAcc != '' && _paymentCcy != '') {
+          if (_paymentAcc != '') {
             _getCardBal(_paymentAcc);
           }
         } else {
@@ -325,6 +341,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
               if (_paymentCcy == item.ccy) {
                 _balance = item.avaBal;
               }
+              _paymentCcyList.clear();
+              _paymentCcyList.add(item.ccy);
             });
           });
         }
@@ -364,13 +382,44 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     }
   }
 
-  _submitFormData() {
+  _submitFormData() async {
     HSProgressHUD.show();
-    ForexTradingRepository()
-        .doTransferAccout(
-            DoTransferAccoutReq(_incomeAmt, _incomeCcy, _paymentCcy, _incomeAcc,
-                _paymentAcc, _incomeName, _incomeBackCode),
-            'DoTransferAccoutReq')
+    // ForexTradingRepository()
+    //     .doTransferAccout(
+    //         DoTransferAccoutReq(_incomeAmt, _incomeCcy, _paymentCcy, _incomeAcc,
+    //             _paymentAcc, _incomeName, _incomeBackCode),
+    //         'DoTransferAccoutReq')
+    TransferDataRepository()
+        .getTransferByAccount(
+            GetTransferByAccount(
+              //转账金额
+              double.parse(_payAmtController.text),
+              //贷方货币
+              _incomeCcy,
+              //借方货币
+              _paymentCcy,
+              //输入密码
+              // 'L5o+WYWLFVSCqHbd0Szu4Q==',
+              '',
+              //收款方银行
+              _incomeBackCode,
+              //收款方卡号
+              _incomeAcc,
+              //收款方姓名
+              _incomeName,
+              //付款方银行
+              _incomeBackCode,
+              //付款方卡号
+              _paymentAcc,
+              //付款方姓名
+              _incomeName,
+              //附言
+              "",
+              //验证码
+              "",
+              _rate,
+            ),
+            'getTransferByAccount')
         .then((data) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
@@ -379,6 +428,20 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     }).catchError((e) {
       Fluttertoast.showToast(msg: e.toString());
       HSProgressHUD.dismiss();
+    });
+  }
+
+  // 获取币种列表
+  Future _loadLocalCcy() async {
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _incomeCcyList.clear();
+        data.publicCodeGetRedisRspDtoList.forEach((e) {
+          _incomeCcyList.add(e.code);
+        });
+      }
     });
   }
 }

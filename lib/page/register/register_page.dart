@@ -5,14 +5,12 @@ import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
-import 'package:ebank_mobile/data/source/model/send_sms_register.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 
 import 'package:ebank_mobile/generated/l10n.dart';
 
 import 'package:ebank_mobile/page/register/component/register_86.dart';
-import 'package:ebank_mobile/page/register/component/register_getSms.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -48,9 +46,9 @@ class _RegisterPageState extends State<RegisterPage> {
   Timer _timer;
   int countdownTime = 0;
   bool _checkBoxValue = false; //复选框默认值
-  bool _isGetSms = false;
+  bool _isGetSms = false; //是否点击获取验证码
   bool _isRegister = false;
-  bool _isCommit = false;
+  String _smsCode = ''; //后台获取短信
 
   /// 区号
   String _officeAreaCodeText = '86';
@@ -112,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(
                         RegExp("[a-zA-Z0-9]")), //只可输入大小写字母及数字
-                    //  LengthLimitingTextInputFormatter(6),
+                    LengthLimitingTextInputFormatter(16),
                   ],
                 ),
                 // GetSms(
@@ -214,8 +212,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         timeInSecForIosWeb: 1,
                                         msg: S.current.register_check_username);
                                   } else {
-                                    _checkRegister();
-                                    _isCommit = true;
+                                    _checkRegisterBysencond();
                                   }
                                 }
                               : null,
@@ -240,7 +237,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  //检验用户是否注册
+  //检验用户是否注册及发短信
   _checkRegister() {
     HSProgressHUD.show();
     VersionDataRepository()
@@ -249,7 +246,17 @@ class _RegisterPageState extends State<RegisterPage> {
       if (mounted) {
         setState(() {
           _isRegister = data.register;
-          _sendSmsRegister(_isRegister);
+          if (_isRegister) {
+            HSProgressHUD.dismiss();
+            Fluttertoast.showToast(
+              msg: S.current.num_is_register,
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+            );
+          } else {
+            _sendSmsRegister(_isRegister);
+          }
         });
       }
     }).catchError((e) {
@@ -261,58 +268,90 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       HSProgressHUD.dismiss();
     });
-    // }
   }
 
   //获取注册发送短信验证码接口
   _sendSmsRegister(bool _isRegister) async {
     print('$_isRegister>>>>>>>>');
-    // _isRegister ?
-
-    if (_isRegister) {
+    VerificationCodeRepository()
+        .sendSmsByPhone(
+            SendSmsByPhoneNumberReq(
+                _officeAreaCodeText, _phoneNum.text, 'register', '123123'),
+            'sendSmsRegister')
+        .then((value) {
+      if (mounted) {
+        setState(() {
+          _smsCode = value.smsCode;
+          HSProgressHUD.dismiss();
+          _isGetSms = true;
+          _startCountdown();
+        });
+      }
+    }).catchError((e) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
-        msg: S.current.num_is_register,
+        msg: e.toString(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
       );
-    } else {
-      VerificationCodeRepository()
-          .sendSmsByPhone(
-              SendSmsByPhoneNumberReq(
-                  _officeAreaCodeText, _phoneNum.text, 'register', '123123'),
-              'sendSmsRegister')
-          .then((value) {
-        if (mounted) {
-          setState(() {
-            _isGetSms = true;
-            _startCountdown();
+    });
+    // }
+  }
 
-            if (_isCommit) {
-              Map listData = new Map();
-              listData = {
-                'accountName': _userNameListen,
-                'sms': _smsListen,
-                'phone': _phoneNumListen,
-                'areaCode': _officeAreaCodeText
-              };
-
-              Navigator.pushNamed(context, pageRegisterConfirm,
-                  arguments: listData);
-            }
-          });
-        }
-      }).catchError((e) {
-        HSProgressHUD.dismiss();
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-        );
-      });
-    }
+  //二次校验
+  _checkRegisterBysencond() {
+    print('$_smsCode+_smsCode');
+    HSProgressHUD.show();
+    VersionDataRepository()
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
+        .then((data) {
+      if (mounted) {
+        setState(() {
+          HSProgressHUD.dismiss();
+          _isRegister = data.register;
+          //校验是否注册
+          if (_isRegister) {
+            HSProgressHUD.dismiss();
+            Fluttertoast.showToast(
+              msg: S.current.num_is_register,
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+            );
+          }
+          //校验短信
+          else if (_sms.text != _smsCode) {
+            HSProgressHUD.dismiss();
+            Fluttertoast.showToast(
+              msg: '您输入的验证码错误',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+            );
+          } else {
+            Map listData = new Map();
+            listData = {
+              'accountName': _userNameListen,
+              'sms': _smsListen,
+              'phone': _phoneNumListen,
+              'areaCode': _officeAreaCodeText
+            };
+            Navigator.pushNamed(context, pageRegisterConfirm,
+                arguments: listData);
+            HSProgressHUD.dismiss();
+          }
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
+      HSProgressHUD.dismiss();
+    });
   }
 
   //倒计时方法

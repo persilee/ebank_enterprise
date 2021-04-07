@@ -51,10 +51,10 @@ class LnAcMastAppDOList extends Object {
   String acType;
 
   @JsonKey(name: 'availableCredit')
-  int availableCredit;
+  String availableCredit;
 
   @JsonKey(name: 'br')
-  int br;
+  String br;
 
   @JsonKey(name: 'ccy')
   String ccy;
@@ -81,7 +81,7 @@ class LnAcMastAppDOList extends Object {
   String insTyp;
 
   @JsonKey(name: 'intRate')
-  int intRate;
+  String intRate;
 
   @JsonKey(name: 'isMaturity')
   String isMaturity;
@@ -90,7 +90,7 @@ class LnAcMastAppDOList extends Object {
   String lmtNo;
 
   @JsonKey(name: 'loanAmt')
-  int loanAmt;
+  String loanAmt;
 
   @JsonKey(name: 'loanTyp')
   String loanTyp;
@@ -99,16 +99,16 @@ class LnAcMastAppDOList extends Object {
   String maturityDate;
 
   @JsonKey(name: 'month')
-  int month;
+  String month;
 
   @JsonKey(name: 'osAmt')
-  int osAmt;
+  String osAmt;
 
   @JsonKey(name: 'payAcNo')
   String payAcNo;
 
   @JsonKey(name: 'penInt')
-  int penInt;
+  String penInt;
 
   @JsonKey(name: 'prodTyp')
   String prodTyp;

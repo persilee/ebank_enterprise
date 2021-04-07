@@ -46,6 +46,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   String _userAccount;
   bool _isInput = false; //判断是否点击获取验证码
   bool _isCommit = false; //进行二次校验
+  String _smsCode = '';
 
   /// 区号
   String _officeAreaCodeText = '';
@@ -124,7 +125,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                           autocorrect: true,
                           //是否自动获得焦点
                           autofocus: true,
-                          enabled: _isInput,
+                          enabled: true,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: S.current.please_input_sms,
@@ -170,15 +171,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     child: Text(S.of(context).next_step),
                     onPressed: _submit()
                         ? () {
-                            Map listData = new Map();
-                            listData = {
-                              'userAccount': _userAccount,
-                              'userPhone': _phoneNumListen,
-                              'sms': _smsListen
-                            };
-                            Navigator.pushNamed(
-                                context, pageResetPasswordOpenAccount,
-                                arguments: listData);
+                            _checkRegisterBysencond();
                           }
                         : null,
                     // color: HsgColors.accent,
@@ -231,14 +224,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               _checkRegister();
               FocusScope.of(context).requestFocus(FocusNode());
             },
-      //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
       padding: EdgeInsets.only(left: 35),
-      //文字颜色
       textColor: HsgColors.blueTextColor,
-      //画圆角
-      // shape: RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.circular(50),
-      // ),
       disabledTextColor: HsgColors.blueTextColor,
       child: Text(
         countdownTime > 0
@@ -252,7 +239,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   }
 
   bool _submit() {
-    if (_sms.text != '' && _phoneNum.text != '') {
+    if (_phoneNum.text != '' && _sms.text.length > 5 && _isInput) {
       return true;
     } else {
       return false;
@@ -262,7 +249,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   //检验用户是否注册
   _checkRegister() {
     HSProgressHUD.show();
-
     VersionDataRepository()
         .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
         .then((data) {
@@ -270,9 +256,17 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         setState(() {
           _isRegister = data.register;
           _userAccount = data.userAccount;
-
-          //发送短信
-          _getVerificationCode();
+          if (!_isRegister) {
+            Fluttertoast.showToast(
+              msg: S.current.num_not_is_register,
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+            );
+            HSProgressHUD.dismiss();
+          } else {
+            _getVerificationCode();
+          }
         });
       }
     }).catchError((e) {
@@ -285,6 +279,60 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       );
     });
     // }
+  }
+
+  //二次校验
+  _checkRegisterBysencond() {
+    print('$_smsCode+_smsCode');
+    HSProgressHUD.show();
+    VersionDataRepository()
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
+        .then((data) {
+      if (mounted) {
+        setState(() {
+          HSProgressHUD.dismiss();
+          _isRegister = data.register;
+          //校验是否注册
+          if (!_isRegister) {
+            HSProgressHUD.dismiss();
+            Fluttertoast.showToast(
+              msg: S.current.num_not_is_register,
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+            );
+          }
+          //校验短信
+          else if (_sms.text != _smsCode) {
+            HSProgressHUD.dismiss();
+            Fluttertoast.showToast(
+              msg: '您输入的验证码错误',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+            );
+          } else {
+            Map listData = new Map();
+            listData = {
+              'userAccount': _userAccount,
+              'userPhone': _phoneNumListen,
+              'sms': _smsListen
+            };
+            Navigator.pushNamed(context, pageResetPasswordOpenAccount,
+                arguments: listData);
+            HSProgressHUD.dismiss();
+          }
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
+      HSProgressHUD.dismiss();
+    });
   }
 
   //倒计时方法
@@ -306,35 +354,29 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   //获取验证码接口
   _getVerificationCode() async {
-    if (!_isRegister) {
+    VerificationCodeRepository()
+        .sendSmsByPhone(
+            SendSmsByPhoneNumberReq(
+                _officeAreaCodeText, _phoneNum.text, 'findPwd', ''),
+            'sendSms')
+        .then((data) {
+      if (mounted) {
+        setState(() {
+          _isInput = true;
+          _smsCode = data.smsCode;
+          _startCountdown();
+        });
+      }
+      HSProgressHUD.dismiss();
+    }).catchError((e) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
-        msg: S.current.num_not_is_register,
+        msg: e.toString(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
       );
-    } else {
-      VerificationCodeRepository()
-          .sendSmsByPhone(
-              SendSmsByPhoneNumberReq('', _phoneNum.text, 'findPwd', ''),
-              'sendSms')
-          .then((data) {
-        setState(() {
-          _isInput = true;
-          _startCountdown();
-        });
-
-        HSProgressHUD.dismiss();
-      }).catchError((e) {
-        HSProgressHUD.dismiss();
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-        );
-      });
-    }
+    });
+    // }
   }
 }

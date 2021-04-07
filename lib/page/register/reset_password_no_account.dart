@@ -9,6 +9,7 @@ import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -82,10 +83,26 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                       '${S.current.reset_password}-${S.current.please_input_password}'),
                   //输入新密码
                   getRegisterRow(
-                      S.current.password_need_num, _newPassword, true),
+                    S.current.password_need_num,
+                    _newPassword,
+                    true,
+                    <TextInputFormatter>[
+                      LengthLimitingTextInputFormatter(16),
+                      FilteringTextInputFormatter.allow(RegExp(
+                          "[a-zA-Z0-9,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
+                    ],
+                  ),
                   //再次输入密码
                   getRegisterRow(
-                      S.current.placeConfimPwd, _confirmPassword, true),
+                    S.current.placeConfimPwd,
+                    _confirmPassword,
+                    true,
+                    <TextInputFormatter>[
+                      LengthLimitingTextInputFormatter(16),
+                      FilteringTextInputFormatter.allow(RegExp(
+                          "[a-zA-Z0-9,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
+                    ],
+                  ),
                   //下一步
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -125,8 +142,9 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                                     //特殊字符
                                     RegExp characters = new RegExp(
                                         "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
-                                    RegExp letter = new RegExp("[a-zA-Z]");
+                                    RegExp letter = new RegExp("[A-Z]");
                                     RegExp number = new RegExp("[0-9]");
+                                    RegExp minWord = new RegExp("[a-z]");
                                     if ((_newPassword.text !=
                                         _confirmPassword.text)) {
                                       Fluttertoast.showToast(
@@ -141,6 +159,8 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                                         letter.hasMatch(_newPassword.text) ==
                                             false ||
                                         number.hasMatch(_newPassword.text) ==
+                                            false ||
+                                        minWord.hasMatch(_newPassword.text) ==
                                             false ||
                                         ((_newPassword.text)
                                                 .contains(userName) ==

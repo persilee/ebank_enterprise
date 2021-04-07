@@ -89,20 +89,22 @@ class TextFieldContainer extends StatelessWidget {
   final bool isRegEXp;
   final String regExp;
   final bool isUpperCase;
-  TextFieldContainer({
-    Key key,
-    @required this.title,
-    this.hintText,
-    this.widget,
-    this.keyboardType,
-    this.controller,
-    this.callback,
-    this.isWidget = false,
-    this.length = 140,
-    this.isRegEXp = false,
-    this.regExp,
-    this.isUpperCase = false,
-  }) : super(key: key);
+  final FocusNode focusNode;
+  TextFieldContainer(
+      {Key key,
+      @required this.title,
+      this.hintText,
+      this.widget,
+      this.keyboardType,
+      this.controller,
+      this.callback,
+      this.isWidget = false,
+      this.length = 140,
+      this.isRegEXp = false,
+      this.regExp,
+      this.isUpperCase = false,
+      this.focusNode})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +128,7 @@ class TextFieldContainer extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: controller,
+              focusNode: focusNode,
               autocorrect: false,
               autofocus: false,
               textAlign: TextAlign.end,

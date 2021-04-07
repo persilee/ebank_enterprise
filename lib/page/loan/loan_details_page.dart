@@ -32,13 +32,18 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
   @override
   void initState() {
     super.initState();
-    _loadData(); //获取列表数据
+    // _loadData(); //获取列表数据
+    _getData();
+  }
+
+  void _getData() {
+    print('hhhhh');
   }
 
   //获取底部详情数据
   Future<void> _loadData() async {
     //请求的参数
-    String acNo = loanAccountDetail.ciNo; //贷款帐号
+    String acNo = loanAccountDetail.lnac; //贷款帐号
     String ciNo = "";
     String contactNo = "";
     String productCode = "";
@@ -65,159 +70,6 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
   Widget build(BuildContext context) {
     LoanAccountDOList loanDetail = ModalRoute.of(context).settings.arguments;
     this.loanAccountDetail = loanDetail;
-    _loadData();
-
-    //判断业务状态
-    var isMaturity = '';
-    // switch (loanDetail.isMaturity) {
-    //   case '0':
-    //     isMaturity = S.current.installment_status1;
-    //     break;
-    //   case '1':
-    //     isMaturity = S.current.installment_status2;
-    //     break;
-    //   case '2':
-    //     isMaturity = S.current.installment_status3;
-    //     break;
-    //   case '3':
-    //     isMaturity = S.current.installment_status4;
-    //     break;
-    //   case '4':
-    //     isMaturity = S.current.unknown;
-    //     break;
-    // }
-    //判断还款方式
-    var repaymentMethod = '';
-    // switch (loanDetail.repaymentMethod) {
-    //   case 'EPI':
-    //     repaymentMethod = S.current.repayment_ways1;
-    //     break;
-    //   case 'FPI':
-    //     repaymentMethod = S.current.repayment_ways2;
-    //     break;
-    //   case 'IOI':
-    //     repaymentMethod = S.current.repayment_ways3;
-    //     break;
-    //   case 'IPI':
-    //     repaymentMethod = S.current.repayment_ways4;
-    //     break;
-    // }
-
-    //业务品种、贷款金额、余额
-    var container1 = Container(
-      margin: EdgeInsets.only(bottom: 12),
-      color: Colors.white,
-      child: Column(
-        children: [
-          //业务品种
-          _business(loanDetail.lnac),
-          Divider(height: 0, color: HsgColors.textHintColor),
-          Padding(
-            padding: EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
-            child: Row(
-              children: [
-                //贷款金额
-                _loanMoney(S.current.loan_amount, loanDetail.amt),
-                _verticalMoulding(),
-                //贷款余额
-                _loanMoney(S.current.loan_balance2, loanDetail.bal),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-    //还款记录、待还计划
-    var container2 = Container(
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //跳转到还款记录
-          _jumpPage(
-            pageRepayRecords,
-            loanDetail,
-          ),
-          Divider(height: 0, color: HsgColors.textHintColor),
-          //跳转到待还计划
-          _jumpPage(
-            pageWaitRepayPlan,
-            loanDetail,
-          ),
-        ],
-      ),
-    );
-    //贷款利率、期数、起始到期日
-    // var container3 = Container(
-    //   margin: EdgeInsets.only(bottom: 10),
-    //   color: Colors.white,
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       _getSingleBox(
-    //         Text(S.current.loan_interest_rate_with_symbol),
-    //         Text((double.parse(loanDetail.intRate) * 100).toStringAsFixed(2) +
-    //             '%'),
-    //       ),
-    //       Divider(height: 0, color: HsgColors.textHintColor),
-    //       _getSingleBox(
-    //         Text(
-    //           S.current.total_periods,
-    //         ),
-    //         Text('12'), //loanDetail.termValue.toString()
-    //       ),
-    //       Divider(height: 0, color: HsgColors.textHintColor),
-    //       _getSingleBox(
-    //         Text(
-    //           S.current.remaining_periods,
-    //         ),
-    //         Text('10'), //loanDetail.restPeriods.toString()
-    //       ),
-    //       Divider(height: 0, color: HsgColors.textHintColor),
-    //       _getSingleBox(
-    //         Text(
-    //           S.current.begin_date,
-    //         ),
-    //         Text(loanDetail.disbDate),
-    //       ),
-    //       Divider(height: 0, color: HsgColors.textHintColor),
-    //       _getSingleBox(
-    //         Text(
-    //           S.current.end_date,
-    //         ),
-    //         Text(loanDetail.maturityDate),
-    //       ),
-    //     ],
-    //   ),
-    // );
-    //还款方式、扣款日、扣款卡号
-    var container4 = Container(
-      margin: EdgeInsets.only(bottom: 10),
-      color: Colors.white,
-      child: Column(
-        children: [
-          _getSingleBox(
-            Text(
-              S.current.repayment_ways,
-            ),
-            Text(repaymentMethod),
-          ),
-          Divider(height: 0, color: HsgColors.textHintColor),
-          _getSingleBox(
-            Text(S.current.deduct_money_date),
-            Text('2021-05-01' +
-                S.current.day), //loanDetail.repaymentDay.toString()
-          ),
-          Divider(height: 0, color: HsgColors.textHintColor),
-          _getSingleBox(
-              Text(
-                S.current.deduct_money_account,
-              ),
-              Text(
-                  '0101238000001758')), //0101238000001758  loanDetail.repaymentAcNo.toString()
-        ],
-      ),
-    );
 
     return Scaffold(
       appBar: AppBar(
@@ -228,24 +80,6 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
       body: CustomScrollView(
         slivers: _getContent(),
       ),
-
-      // body: Container(
-      //   color: HsgColors.backgroundColor,
-      //   child: Row(
-      //     children: [
-      //       //业务品种、贷款金额、余额
-      //       container1,
-
-      //       // // 贷款利率、期数、起始到期日
-      //       // container3,
-      //       // //还款方式、扣款日、扣款卡号
-      //       // container4,
-      //       // //还款记录、待还计划
-      //       // container2,
-      //       _getContent(),
-      //     ],
-      //   ),
-      // ),
     );
   }
 
@@ -258,7 +92,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           children: [
             // 业务品种
             Text(
-              S.current.loan_product_name_with_value + '：' + acNo,
+              S.current.loan_account + '：' + acNo,
               // "贷款账号",
               style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
             ),
@@ -266,7 +100,6 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
             Container(
               margin: EdgeInsets.only(top: 13.5),
               child: Text(
-                // S.current.loanId + '：' + br,
                 acNo,
                 style: TextStyle(fontSize: 16, color: HsgColors.aboutusTextCon),
               ),
@@ -394,28 +227,6 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
 
 //合约列表
   List<Widget> _getContent() {
-    // ignore: non_constant_identifier_names
-    LoanAccountDOList loanDetail = ModalRoute.of(context).settings.arguments;
-    this.loanAccountDetail = loanDetail;
-    //判断业务状态
-    // var isMaturity = '';
-    // switch (loanDetail.isMaturity) {
-    //   case '0':
-    //     isMaturity = S.current.installment_status1;
-    //     break;
-    //   case '1':
-    //     isMaturity = S.current.installment_status2;
-    //     break;
-    //   case '2':
-    //     isMaturity = S.current.installment_status3;
-    //     break;
-    //   case '3':
-    //     isMaturity = S.current.installment_status4;
-    //     break;
-    //   case '4':
-    //     isMaturity = S.current.unknown;
-    //     break;
-    // }
     List<Widget> section = [];
 
     section.add(
@@ -426,24 +237,25 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           child: Column(
             children: [
               //业务品种
-              _business(loanDetail.ciNo),
+              _business(loanAccountDetail.lnac),
               Divider(height: 0, color: HsgColors.textHintColor),
               Padding(
                 padding:
                     EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
                 child: Row(
                   children: [
-                    //贷款金额
+                    //总额度
                     _loanMoney(
-                        S.current.loan_amount + '(' + loanDetail.ccy + ')',
-                        loanDetail.amt),
-                    // _loanMoney("额度(USD)", "10000"),
+                        S.current.amount + ' (' + loanAccountDetail.ccy + ')',
+                        loanAccountDetail.amt),
                     _verticalMoulding(),
-                    //贷款余额
+                    //余额额度
                     _loanMoney(
-                        S.current.loan_balance2 + '(' + loanDetail.ccy + ')',
-                        loanDetail.bal),
-                    // _loanMoney("可用额度(USD)", "8000"),
+                        S.current.loan_detail_available_amount +
+                            ' (' +
+                            loanAccountDetail.ccy +
+                            ')',
+                        loanAccountDetail.bal),
                   ],
                 ),
               ),
@@ -457,47 +269,45 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
       loanDetailsArr.length <= 0
           ? SliverToBoxAdapter(
               child: Container(
-                margin: EdgeInsets.only(top: 100),
-                child: notDataContainer(context, S.current.no_data_now),
-              ),
+                  // margin: EdgeInsets.only(top: 100),
+                  // child: notDataContainer(context, S.current.no_data_now),
+                  ),
             )
           : SliverList(
               delegate:
                   SliverChildBuilderDelegate((BuildContext context, int index) {
                 LnAcMastAppDOList detailModel = loanDetailsArr[index];
                 //存入金额
-                var rate = loanDetailsArr.length <= 0
-                    ? Container()
-                    : [
-                        _rowText(
-                            S.current.loan_principal,
-                            detailModel.loanAmt.toString() +
-                                '' +
-                                detailModel.ccy,
-                            HsgColors.secondDegreeText), //金额
-                        _rowText(
-                            S.current.loan_balance2,
-                            detailModel.br.toString() + detailModel.ccy,
-                            HsgColors.secondDegreeText), //余额
-                        _rowText(S.current.begin_time, detailModel.disbDate,
-                            HsgColors.secondDegreeText), //开始时间
-                        _rowText(S.current.end_time, detailModel.maturityDate,
-                            HsgColors.secondDegreeText), //结束时间
-                        _rowText(
-                            S.of(context).loan_interest_rate,
-                            (double.parse(detailModel.intRate.toString()) * 100)
-                                    .toStringAsFixed(2) +
-                                "%",
-                            Color(0xFFF8514D)),
-                      ];
+                var rate = [
+                  _rowText(
+                      S.current.loan_principal,
+                      detailModel.loanAmt.toString() + ' ' + detailModel.ccy,
+                      HsgColors.secondDegreeText), //金额
+                  _rowText(
+                      S.current.loan_balance2,
+                      detailModel.br.toString() + " " + detailModel.ccy,
+                      HsgColors.secondDegreeText), //余额
+                  _rowText(S.current.begin_time, detailModel.disbDate,
+                      HsgColors.secondDegreeText), //开始时间
+                  _rowText(S.current.end_time, detailModel.maturityDate,
+                      HsgColors.secondDegreeText), //结束时间
+                  _rowText(
+                      S.of(context).loan_interest_rate,
+                      (double.parse(detailModel.intRate) * 100)
+                              .toStringAsFixed(2) +
+                          "%",
+                      Color(0xFFF8514D)),
+                ];
                 //整存整取
                 var taking = Column(
                   children: [
                     Container(
+                      //顶部线条
                       height: 13,
                       color: Color(0xFFF7F7F7),
                     ),
                     Container(
+                      //合约号
                       color: Colors.white,
                       child: Row(
                         children: [
@@ -507,9 +317,9 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
                             margin: EdgeInsets.only(right: 10),
                             child: Text(
                               //合约账号
-                              detailModel.contactNo +
+                              S.current.contract_number +
                                   '' +
-                                  S.current.contract_number,
+                                  detailModel.contactNo,
                               style: TextStyle(
                                   fontSize: 15,
                                   color: HsgColors.aboutusTextCon),
@@ -521,8 +331,8 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
                             child: FlatButton(
                               padding: EdgeInsets.all(0),
                               onPressed: () {
-                                print("点击");
-                                _selectPage(context);
+                                //点击弹窗
+                                _selectPage(context, detailModel);
                               },
                               child: Image(
                                 width: 15,
@@ -549,18 +359,15 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
                   ],
                 );
                 return taking;
-              }, childCount: 3),
+              }, childCount: loanDetailsArr.length //需要标注子类的个数
+                      ),
             ),
     );
     return section;
   }
 
   //弹窗跳转
-  _selectPage(BuildContext context
-      // ,
-      // Loan loanDetail
-      ) async {
-    Loan loanDetail = ModalRoute.of(context).settings.arguments;
+  _selectPage(BuildContext context, LnAcMastAppDOList loanDetail) async {
     List<String> pages = [
       S.current.repayment_record,
       S.of(context).view_repayment_plan,
