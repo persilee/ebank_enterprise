@@ -9,6 +9,7 @@ import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -81,10 +82,26 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                     '${S.current.welcome_to_register}-${S.current.please_input_password}'),
                 //输入新密码
                 getRegisterRow(
-                    S.of(context).password_need_num, _newPassword, true),
+                  S.of(context).password_need_num,
+                  _newPassword,
+                  true,
+                  <TextInputFormatter>[
+                    LengthLimitingTextInputFormatter(16),
+                    FilteringTextInputFormatter.allow(RegExp(
+                        "[a-zA-Z0-9,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
+                  ],
+                ),
                 //再次输入密码
                 getRegisterRow(
-                    S.current.placeConfimPwd, _confirmPassword, true),
+                  S.current.placeConfimPwd,
+                  _confirmPassword,
+                  true,
+                  <TextInputFormatter>[
+                    LengthLimitingTextInputFormatter(16),
+                    FilteringTextInputFormatter.allow(RegExp(
+                        "[a-zA-Z0-9,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
+                  ],
+                ),
                 //下一步
                 Container(
                   width: MediaQuery.of(context).size.width,
