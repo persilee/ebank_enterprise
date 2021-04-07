@@ -781,7 +781,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           _payCcy,
           _payeeAddressController.text,
           _countryText,
-          _getPayeeBank,
+          _bankNameController.text,
           _bankSwiftController.text,
           _middleBankSwiftController.text,
           _transferFee,
