@@ -150,18 +150,24 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         contentRow(
+            //贷款金额
             S.of(context).loan_principal,
             FormatUtil.formatSringToMoney(loanDetail.amt.toString()) +
                 loanDetail.ccy,
             Color(0xFF1E1E1E)),
         contentRow(
+            //贷款余额
             S.of(context).loan_balance2,
             FormatUtil.formatSringToMoney(loanDetail.bal.toString()) +
                 loanDetail.ccy,
             Color(0xFF1E1E1E)),
         contentRow(
-            S.of(context).begin_time, loanDetail.valDt, Color(0xFF1E1E1E)),
-        contentRow(S.of(context).end_time, loanDetail.endDt, Color(0xFF1E1E1E)),
+            //开始日期
+            S.of(context).begin_time,
+            loanDetail.valDt,
+            Color(0xFF1E1E1E)),
+        contentRow(
+            S.of(context).end_time, loanDetail.endDt, Color(0xFF1E1E1E)), //结束日期
         // contentRow(
         //     S.of(context).loan_interest_rate,
         //     (double.parse(loanDetail.intRate) * 100).toStringAsFixed(2) + "%",
@@ -229,7 +235,8 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
     //   switch (result) {
     //     case 0:
     //直接跳到查看详情
-    Navigator.pushNamed(context, pageloanDetails, arguments: loanDetail);
+    Navigator.pushNamed(context, pageloanDetails,
+        arguments: {'data': loanDetail});
     //       break;
     //     case 1:
     //       //查看还款计划

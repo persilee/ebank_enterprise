@@ -623,6 +623,7 @@
   "loan_recipients_agreement3": "\"同意报送贷款相关信息至金融信用信息基础数据库（人行征信系统）\"",
   "loan_lines_get":"领取",
   "loan_opration_alert":"操作",
+  "loan_detail_available_amount":"可用额度",
 
   "open_account_goto_ebank_tip": "尊敬的用户，您好。由于您不是受邀客户，请前往网银进行开户申请。",
   "openAccount_faceSign_results_content": "面签数据提交成功",

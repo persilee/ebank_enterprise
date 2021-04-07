@@ -75,7 +75,6 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
             CustomButton(
               margin: EdgeInsets.only(left: 37.5, right: 37.5, top: 125),
               height: 50,
-              // borderRadius: BorderRadius.circular(50.0),
               text: Text(
                 S.current.complete,
                 style: TextStyle(fontSize: 14, color: Colors.white),

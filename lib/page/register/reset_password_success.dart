@@ -1,5 +1,6 @@
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
+import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -51,47 +52,70 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 ),
               ),
               //完成按钮
-              Container(
-                  margin: EdgeInsets.only(left: 37.5, right: 37.5, top: 125),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color(0xFF1775BA),
-                        Color(0xFF3A9ED1),
-                      ],
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        child: FlatButton(
-                          child: Text(
-                            S.current.complete,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                            //  Navigator.of(context)..pop()..pop();
-                            // Navigator.pop(context,page)
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) {
-                              return LoginPage();
-                            }), (Route route) {
-                              //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
-                              print(route.settings?.name);
-                              // if (route.settings?.name == "/") {
-                              //   return true; //停止关闭
-                              // }
-                              return false; //关闭所有页面
-                            });
-                          },
-                        ),
-                      )
-                    ],
-                  ))
+              //完成按钮
+              CustomButton(
+                margin: EdgeInsets.only(left: 37.5, right: 37.5, top: 150),
+                height: 50,
+                text: Text(
+                  S.current.go_to_login,
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
+                clickCallback: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (BuildContext context) {
+                    return LoginPage();
+                  }), (Route route) {
+                    //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
+                    print(route.settings?.name);
+                    // if (route.settings?.name == "/") {
+                    //   return true; //停止关闭
+                    // }
+                    return false; //关闭所有页面
+                  });
+                },
+              ),
+              //
+              // Container(
+              //     margin: EdgeInsets.only(left: 37.5, right: 37.5, top: 125),
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.all(Radius.circular(5)),
+              //       gradient: LinearGradient(
+              //         begin: Alignment.topLeft,
+              //         end: Alignment.bottomRight,
+              //         colors: [
+              //           Color(0xFF1775BA),
+              //           Color(0xFF3A9ED1),
+              //         ],
+              //       ),
+              //     ),
+              //     child: Column(
+              //       children: [
+              //         Container(
+              //           child: FlatButton(
+              //             child: Text(
+              //               S.current.complete,
+              //               style: TextStyle(color: Colors.white),
+              //             ),
+              //             onPressed: () {
+              //               //  Navigator.of(context)..pop()..pop();
+              //               // Navigator.pop(context,page)
+              //               Navigator.of(context).pushAndRemoveUntil(
+              //                   MaterialPageRoute(
+              //                       builder: (BuildContext context) {
+              //                 return LoginPage();
+              //               }), (Route route) {
+              //                 //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
+              //                 print(route.settings?.name);
+              //                 // if (route.settings?.name == "/") {
+              //                 //   return true; //停止关闭
+              //                 // }
+              //                 return false; //关闭所有页面
+              //               });
+              //             },
+              //           ),
+              //         )
+              //       ],
+              //     ))
             ],
           ),
         ));

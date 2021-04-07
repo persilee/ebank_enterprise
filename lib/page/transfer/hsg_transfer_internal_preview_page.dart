@@ -164,7 +164,7 @@ class _TransferInternalPreviewPageState
   }
 
   Future _loadData(TransferInternalData transferData) async {
-    double money = double.parse(transferData.transferIntoAccount);
+    double money = double.parse(transferData.transferIntoAmount);
     String transferOutCcy = transferData.transferOutCcy;
     String transferIntoCcy = transferData.transferIntoCcy;
     String payeeBankCode = transferData.payeeBankCode;
@@ -212,7 +212,6 @@ class _TransferInternalPreviewPageState
       HSProgressHUD.dismiss();
       Navigator.pushReplacementNamed(context, pageOperationResult);
     }).catchError((e) {
-      print(e.toString());
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),

@@ -101,7 +101,7 @@ class _TransferInternalPreviewPageState
           _getRowContent(S.current.state_area, transferData.nation),
           _getRowContent(S.current.receipt_bank, transferData.bank),
           _getRowContent(S.current.bank_swift, transferData.bankSWIFT),
-          _getRowContent(S.current.middle_bank_swift, transferData.centerSWIFI),
+          // _getRowContent(S.current.middle_bank_swift, transferData.centerSWIFI),
           _getRowContent(S.current.Transfer_fee, transferData.transferFee),
           _getRowContent(S.current.remittance_usage, transferData.purpose),
           _getRowContent(
@@ -192,52 +192,6 @@ class _TransferInternalPreviewPageState
     String intermediateBankSwift = transferData.centerSWIFI;
     String countryCode = transferData.countryCode;
     String rate = transferData.rate;
-    // TransferDataRepository()
-    //     .getInternationalTransferNew(
-    //         GetInternationalTransferNewReq(
-    //           amount,
-    //           "",
-    //           "1,997,923.00",
-    //           bankSwift,
-    //           "1",
-    //           costOptions,
-    //           transferOutCcy,
-    //           custId,
-    //           transferIntoCcy,
-    //           countryCode,
-    //           "100",
-    //           "0",
-    //           "",
-    //           intermediateBankSwift,
-    //           "0.00",
-    //           "L5o+WYWLFVSCqHbd0Szu4Q==",
-    //           payeeAddress,
-    //           payeeBankCode,
-    //           "朗华银行",
-    //           "朗华银行",
-    //           payeeCardNo,
-    //           payeeName,
-    //           "",
-    //           "",
-    //           "",
-    //           payerAddress,
-    //           payerBankCode,
-    //           payerCardNo,
-    //           payerName,
-    //           "3",
-    //           "",
-    //           remark,
-    //           "",
-    //           "123456",
-    //           "123.00",
-    //           "0",
-    //         ),
-    //         'getInternationalTransferNew')
-    //     .then((data) {
-    //   Navigator.pushReplacementNamed(context, pageOperationResult);
-    // }).catchError((e) {
-    //   print(e.toString());
-    // });
     HSProgressHUD.show();
     TransferDataRepository()
         .getInterNationalTransfer(

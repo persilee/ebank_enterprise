@@ -11,6 +11,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -83,7 +84,16 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                   getRegisterTitle(
                       '${S.current.fotget_password}-${S.current.placeIdNumber}'),
                   //姓名
-                  getRegisterRow(S.current.please_input_name, _userName, false),
+                  getRegisterRow(
+                    S.current.please_input_name,
+                    _userName,
+                    false,
+                    <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(
+                          "[a-zA-Z0-9,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]")),
+                      LengthLimitingTextInputFormatter(16),
+                    ],
+                  ),
                   //  证件类型
                   Container(
                     margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
@@ -129,7 +139,14 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                   ),
                   //证件号码
                   getRegisterRow(
-                      S.current.placeIdNumber, _cardNumber, false), //确定按钮
+                    S.current.placeIdNumber,
+                    _cardNumber,
+                    false,
+                    <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                      LengthLimitingTextInputFormatter(16),
+                    ],
+                  ), //确定按钮
                   //按钮
                   Container(
                     decoration: BoxDecoration(

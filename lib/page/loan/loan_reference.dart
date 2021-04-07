@@ -3,6 +3,7 @@ import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/mine/id_cardVerification_page.dart';
@@ -45,12 +46,15 @@ class _LoanReferenceState extends State<LoanReference> {
   String _reimburseStr = ''; //还款方式
   List<IdType> _reimburseTypeLists = []; //还款方式
 
-  String _loanAccount = '81003891929'; //收款帐号
+  String _loanAccount = ''; //收款帐号
   int _loanAccountIndex = 0; //收款索引
   List<RemoteBankCard> _totalAccoutList = []; //总帐号
 
   Map _listDataMap = {}; //确认页展示列表数据的map
   Map _requestDataMap = {}; //确认页上传数据的map
+
+  LoanAccountDOList accountInfo; //上个界面传过来的值
+  FocusNode focusnode = FocusNode(); //监听编辑的输入
 
   //获取借款期限
   Future _getLoanTimeList() async {
@@ -99,6 +103,8 @@ class _LoanReferenceState extends State<LoanReference> {
           setState(() {
             _totalAccoutList.clear();
             _totalAccoutList.addAll(data.cardList);
+            RemoteBankCard card = _totalAccoutList[0];
+            _loanAccount = card.cardNo;
           });
         }
       },
@@ -108,6 +114,8 @@ class _LoanReferenceState extends State<LoanReference> {
     });
   }
 
+// loan/interestRate/queryInterestRate
+
   @override
   void initState() {
     //网络请求，数据等都在这里进行创建
@@ -116,10 +124,33 @@ class _LoanReferenceState extends State<LoanReference> {
     _getLoanTimeList(); //获取贷款期限
     _loadTotalAccountData(); //获取贷款账户列表
     _getLoanRepayTypeList(); //获取还款方式
+
+    focusnode.addListener(() {
+      if (focusnode.hasFocus) {
+        //得到焦点
+
+      } else {
+        //失去焦点
+
+      }
+    });
+  }
+
+//计算领用的总利息
+  Future _loadGrossCalculationData() async {}
+
+  @override
+  void dispose() {
+    super.dispose();
+    //释放
+    focusnode.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    LoanAccountDOList accountInfo = ModalRoute.of(context).settings.arguments;
+    this.accountInfo = accountInfo;
+
     return Scaffold(
         //防止挤压溢出
         //resizeToAvoidBottomPadding: false,
@@ -142,7 +173,10 @@ class _LoanReferenceState extends State<LoanReference> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       child: Text(
-                        '可借款额度 CNY800.00',
+                        S.current.loan_detail_available_amount +
+                            ' ' +
+                            accountInfo.ccy +
+                            accountInfo.bal,
                         textAlign: TextAlign.left,
                         style:
                             TextStyle(color: Color(0xFF262626), fontSize: 15),
@@ -167,6 +201,7 @@ class _LoanReferenceState extends State<LoanReference> {
                             width: MediaQuery.of(context).size.width / 1.5,
                             height: 60,
                             child: TextField(
+                              focusNode: focusnode,
                               controller: _recipientsController, //绑定属性关系
                               style: TextStyle(
                                 fontSize: 24,
