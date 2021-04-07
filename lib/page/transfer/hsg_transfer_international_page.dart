@@ -129,6 +129,10 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   bool isSwift = true;
 
+  var _focusNode = new FocusNode();
+
+  var _swiftFocusNode = new FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -140,16 +144,18 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
     _transferMoneyController.addListener(() {
       if (_transferMoneyController.text.length == 0) {
-        _amount = '0';
+        setState(() {
+          _amount = '0';
+          _rate = '-';
+        });
+      } else {
+        _focusNode.addListener(() {
+          _rateCalculate();
+        });
       }
-      // if (_payCcy == _transferCcy) {
-      //   setState(() {
-      //     _amount = _transferMoneyController.text;
-      //   });
-      // } else {
-      //   _rateCalculate();
-      // }
-      _rateCalculate();
+    });
+    _swiftFocusNode.addListener(() {
+      _getBankNameBySwift(_bankSwiftController.text);
     });
   }
 
@@ -163,6 +169,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     _bankSwiftController.dispose();
     _middleBankSwiftController.dispose();
     _remarkController.dispose();
+    _focusNode.dispose();
+    _swiftFocusNode.dispose();
     super.dispose();
   }
 
@@ -240,6 +248,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                 payCcyDialog: payCcyDialog,
                 transferCcyDialog: transferCcyDialog,
                 accountDialog: _accountDialog,
+                focusNode: _focusNode,
               ),
               _payerAddress(),
               _payeeWidget(),
@@ -289,6 +298,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               hintText: S.current.please_input,
               keyboardType: TextInputType.text,
               controller: _bankSwiftController,
+              focusNode: _swiftFocusNode,
               callback: _isClick,
               length: 11,
               isRegEXp: true,
@@ -794,7 +804,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _companyController.text.length > 0 &&
         _accountController.text.length > 0 &&
         _countryText != '' &&
-        _getPayeeBank != '' &&
+        _bankNameController.text != '' &&
         _bankSwiftController.text.length > 0 &&
         _payerAddressController.text.length > 0 &&
         _transferFee != '' &&

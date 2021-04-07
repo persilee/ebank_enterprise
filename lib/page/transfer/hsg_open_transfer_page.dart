@@ -123,6 +123,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   //汇率
   String _xRate = '';
 
+  var _focusNode = new FocusNode();
+
   var _transferMoneyController = new TextEditingController();
 
   var _remarkController = new TextEditingController();
@@ -154,10 +156,15 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     _loadTransferData();
     _transferMoneyController.addListener(() {
       if (_transferMoneyController.text.length == 0) {
-        _amount = '0';
-        _xRate = '-';
+        setState(() {
+          _amount = '0';
+          _xRate = '-';
+        });
+      } else {
+        _focusNode.addListener(() {
+          _rateCalculate();
+        });
       }
-      _rateCalculate();
     });
     _actualNameReqData();
   }
@@ -231,6 +238,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             payCcyDialog: payCcyDialog,
             transferCcyDialog: transferCcyDialog,
             accountDialog: _accountDialog,
+            focusNode: _focusNode,
           ),
           //获取用户姓名及账号方法
           _payeeWidget(),

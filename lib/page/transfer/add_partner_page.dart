@@ -5,6 +5,7 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/add_partner.dart';
+import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
@@ -62,6 +63,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   List<String> feeUse = [];
   int _feeUseIndex = 0;
 
+  var _swiftFocusNode = FocusNode();
+  var _accountFocusNode = FocusNode();
+
   bool _isSelect = true;
   @override
   void initState() {
@@ -69,32 +73,40 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     _getTransferFeeList();
     _getFeeUseList();
     //备注最多输入words个文字
-    _aliasController.addListener(() {
-      String text = _aliasController.text;
-      int length = text.length;
+    // _aliasController.addListener(() {
+    //   String text = _aliasController.text;
+    //   int length = text.length;
 
-      if (length > words) {
-        _alias += text.substring(0, (length ~/ words) * words);
+    //   if (length > words) {
+    //     _alias += text.substring(0, (length ~/ words) * words);
 
-        _aliasController.text = text.substring(words);
-        _aliasController.selection =
-            TextSelection.collapsed(offset: _aliasController.text.length);
-      } else if (length == 0) {
-        if (_alias != '') {
-          _aliasController.text =
-              _alias.substring(_alias.length - words, _alias.length);
+    //     _aliasController.text = text.substring(words);
+    //     _aliasController.selection =
+    //         TextSelection.collapsed(offset: _aliasController.text.length);
+    //   } else if (length == 0) {
+    //     if (_alias != '') {
+    //       _aliasController.text =
+    //           _alias.substring(_alias.length - words, _alias.length);
 
-          _aliasController.selection =
-              TextSelection.collapsed(offset: _aliasController.text.length);
-          _alias = _alias.substring(0, _alias.length - words);
-        }
-      }
-    });
+    //       _aliasController.selection =
+    //           TextSelection.collapsed(offset: _aliasController.text.length);
+    //       _alias = _alias.substring(0, _alias.length - words);
+    //     }
+    //   }
+    // });
     //初始化
     _bankName = S.current.please_select;
     _branch = S.current.optional;
     _transferType = S.current.please_select;
     _swiftAdress = S.current.bank_swift;
+    _swiftFocusNode.addListener(() {
+      _getBankNameBySwift(_bankSwiftController.text);
+    });
+    _accountFocusNode.addListener(() {
+      if (!_accountFocusNode.hasFocus) {
+        _getCardByCardNo(_acountController.text);
+      }
+    });
   }
 
   @override
@@ -106,6 +118,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     _aliasController.dispose();
     _centerSwiftController.dispose();
     _payeeAdressController.dispose();
+    _swiftFocusNode.dispose();
+    _accountFocusNode.dispose();
   }
 
 //获取转账费用列表
@@ -211,9 +225,6 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         onTap: () {
           // 触摸收起键盘
           FocusScope.of(context).requestFocus(FocusNode());
-          if (_bankSwiftController.text.length == 11) {
-            _getBankNameBySwift(_bankSwiftController.text);
-          }
         },
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -257,19 +268,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             style: TextStyle(color: HsgColors.secondDegreeText, fontSize: 13),
           ),
         ),
-        //户名
-        TextFieldContainer(
-          title: S.current.receipt_side_name,
-          hintText: S.current.please_input,
-          keyboardType: TextInputType.text,
-          controller: _nameController,
-          callback: _check,
-          length: 35,
-          isRegEXp: true,
-          // regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
-          regExp: '[\u4e00-\u9fa5a-zA-Z0-9 ]',
-        ),
-        Divider(height: 0.5, color: HsgColors.divider),
+
         //账号
         // Container(
         //   padding: EdgeInsets.only(top: 16, bottom: 16),
@@ -284,10 +283,24 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           hintText: S.current.please_input,
           keyboardType: TextInputType.number,
           controller: _acountController,
+          focusNode: _accountFocusNode,
           callback: _check,
           length: 20,
           isRegEXp: true,
           regExp: '[0-9]',
+        ),
+        Divider(height: 0.5, color: HsgColors.divider),
+        //户名
+        TextFieldContainer(
+          title: S.current.receipt_side_name,
+          hintText: S.current.please_input,
+          keyboardType: TextInputType.text,
+          controller: _nameController,
+          callback: _check,
+          length: 35,
+          isRegEXp: true,
+          // regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
+          regExp: '[\u4e00-\u9fa5a-zA-Z0-9 ]',
         ),
         Divider(height: 0.5, color: HsgColors.divider),
         //转账类型
@@ -504,6 +517,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             hintText: S.current.please_input,
             keyboardType: TextInputType.text,
             controller: _bankSwiftController,
+            focusNode: _swiftFocusNode,
             callback: _check,
             length: 11,
             isUpperCase: true,
@@ -884,7 +898,36 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         });
       }
     }).catchError((e) {
-      print(e.toString());
+      Fluttertoast.showToast(
+        msg: "银行SWIFT不存在",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Color(0x57272727),
+        textColor: Color(0xffffffff),
+      );
+    });
+  }
+
+  //根据账号查询名称
+  Future _getCardByCardNo(String cardNo) async {
+    TransferDataRepository()
+        .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          _nameController.text = data.ciName;
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(
+        msg: "账号不存在",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Color(0x57272727),
+        textColor: Color(0xffffffff),
+      );
     });
   }
 }

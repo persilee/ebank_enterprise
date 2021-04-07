@@ -192,52 +192,6 @@ class _TransferInternalPreviewPageState
     String intermediateBankSwift = transferData.centerSWIFI;
     String countryCode = transferData.countryCode;
     String rate = transferData.rate;
-    // TransferDataRepository()
-    //     .getInternationalTransferNew(
-    //         GetInternationalTransferNewReq(
-    //           amount,
-    //           "",
-    //           "1,997,923.00",
-    //           bankSwift,
-    //           "1",
-    //           costOptions,
-    //           transferOutCcy,
-    //           custId,
-    //           transferIntoCcy,
-    //           countryCode,
-    //           "100",
-    //           "0",
-    //           "",
-    //           intermediateBankSwift,
-    //           "0.00",
-    //           "L5o+WYWLFVSCqHbd0Szu4Q==",
-    //           payeeAddress,
-    //           payeeBankCode,
-    //           "朗华银行",
-    //           "朗华银行",
-    //           payeeCardNo,
-    //           payeeName,
-    //           "",
-    //           "",
-    //           "",
-    //           payerAddress,
-    //           payerBankCode,
-    //           payerCardNo,
-    //           payerName,
-    //           "3",
-    //           "",
-    //           remark,
-    //           "",
-    //           "123456",
-    //           "123.00",
-    //           "0",
-    //         ),
-    //         'getInternationalTransferNew')
-    //     .then((data) {
-    //   Navigator.pushReplacementNamed(context, pageOperationResult);
-    // }).catchError((e) {
-    //   print(e.toString());
-    // });
     HSProgressHUD.show();
     TransferDataRepository()
         .getInterNationalTransfer(

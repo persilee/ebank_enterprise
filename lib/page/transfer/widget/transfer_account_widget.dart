@@ -35,6 +35,8 @@ class TransferAccount extends StatelessWidget {
   final Function transferCcyDialog;
   //账户弹窗
   final Function accountDialog;
+  //焦点
+  final FocusNode focusNode;
   TransferAccount({
     Key key,
     this.payCcy,
@@ -49,6 +51,7 @@ class TransferAccount extends StatelessWidget {
     this.payCcyDialog,
     this.transferCcyDialog,
     this.accountDialog,
+    this.focusNode,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -132,6 +135,7 @@ class TransferAccount extends StatelessWidget {
         autocorrect: false,
         //是否自动获得焦点
         autofocus: false,
+        focusNode: focusNode,
         textAlign: TextAlign.right,
         style: TextStyle(
           fontSize: 18,
