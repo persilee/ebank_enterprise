@@ -53,6 +53,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   bool _isSwap = true;
   bool _isLoading = false; //加载状态
   RefreshController _refreshController = new RefreshController();
+  FocusNode _focusNode = new FocusNode();
 
   @override
   // ignore: must_call_super
@@ -60,6 +61,9 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     // 网络请求
     _getExchangeRateList();
     _getCcyList();
+    _focusNode.addListener(() {
+      _amountConversion();
+    });
   }
 
   @override
@@ -272,6 +276,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     return TextField(
       keyboardType: TextInputType.number,
       controller: _amtController,
+      focusNode: _focusNode,
       style: TextStyle(
         fontSize: 20,
       ),
@@ -296,9 +301,9 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
         ),
         MoneyTextInputFormatter(),
       ],
-      onChanged: (text) {
-        _amountConversion();
-      },
+      // onChanged: (text) {
+      //   _amountConversion();
+      // },
     );
   }
 
@@ -466,6 +471,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     }
   }
 
+  //获取币种买入卖出列表
   Future _getExchangeRateList() async {
     ForexTradingRepository()
         .getExRate(GetExRateReq(), 'getExRateReq')

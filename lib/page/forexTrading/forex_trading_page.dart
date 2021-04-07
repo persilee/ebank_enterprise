@@ -16,6 +16,7 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
@@ -151,7 +152,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         ),
         ItemContainer(
           title: S.current.available_balance,
-          item: _balance,
+          item: FormatUtil.formatSringToMoney(_balance),
         ),
         Container(
           height: 50,
@@ -211,10 +212,10 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
               ),
               inputFormatters: [
                 LengthLimitingTextInputFormatter(12),
-                 FilteringTextInputFormatter.allow(
-          RegExp("[0-9.]"),
-        ),
-                 MoneyTextInputFormatter(),
+                FilteringTextInputFormatter.allow(
+                  RegExp("[0-9.]"),
+                ),
+                MoneyTextInputFormatter(),
               ],
               onChanged: (text) {
                 _transferTrial();
@@ -341,7 +342,6 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
                 _balance = item.avaBal;
               }
               _paymentCcyList.clear();
-              print("=============" + item.ccy);
               _paymentCcyList.add(item.ccy);
             });
           });

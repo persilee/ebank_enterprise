@@ -101,7 +101,7 @@ class _TransferInternalPreviewPageState
           _getRowContent(S.current.state_area, transferData.nation),
           _getRowContent(S.current.receipt_bank, transferData.bank),
           _getRowContent(S.current.bank_swift, transferData.bankSWIFT),
-          _getRowContent(S.current.middle_bank_swift, transferData.centerSWIFI),
+          // _getRowContent(S.current.middle_bank_swift, transferData.centerSWIFI),
           _getRowContent(S.current.Transfer_fee, transferData.transferFee),
           _getRowContent(S.current.remittance_usage, transferData.purpose),
           _getRowContent(
