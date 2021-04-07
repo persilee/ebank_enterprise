@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
 /// 开户-面签结果成功页面
 /// Author: 李家伟
@@ -10,6 +13,8 @@ import 'package:ebank_mobile/data/source/model/open_account_information_suppleme
 import 'package:ebank_mobile/data/source/model/open_account_quick_data.dart';
 import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/event_bus_utils.dart';
@@ -38,6 +43,15 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
 
   ///是否是快速
   bool _isQuick;
+
+  ///大头照
+  String _headerImgUrl = '';
+
+  ///正面照
+  String _positiveImageUrl = '';
+
+  ///反面照
+  String _backImageUrl = '';
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +117,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
                     if (_state == 1) {
                       _quickAccountOpening();
                     } else {
-                      _openAccountQuickSubmitData();
+                      // _openAccountQuickSubmitData();
+                      _uploadImage();
                     }
                   } else {
                     ///完整开户面签
@@ -164,6 +179,43 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         );
       },
     );
+  }
+
+  void _uploadImage() async {
+    HSProgressHUD.show();
+    try {
+      if (_valueData.headerImg != null && _valueData.headerImg != '') {
+        Uint8List _bytes = base64Decode(
+          _valueData.headerImg,
+        );
+        Map response =
+            await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
+        _headerImgUrl = response['incompleteUrl'] ?? '';
+      }
+      if (_valueData.positiveImage != null && _valueData.positiveImage != '') {
+        Uint8List _bytes = base64Decode(
+          _valueData.positiveImage,
+        );
+        Map response =
+            await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
+        _positiveImageUrl = response['incompleteUrl'] ?? '';
+      }
+      if (_valueData.backImage != null && _valueData.backImage != '') {
+        Uint8List _bytes = base64Decode(
+          _valueData.backImage,
+        );
+        Map response =
+            await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
+        _backImageUrl = response['incompleteUrl'] ?? '';
+      }
+      _openAccountQuickSubmitData();
+    } catch (e) {
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
+    }
   }
 
   //面签数据补录
@@ -296,9 +348,9 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     OpenAccountInformationSupplementDataReq dataReq =
         OpenAccountInformationSupplementDataReq();
     // dataReq = OpenAccountInformationSupplementDataReq.fromJson(valueMap);
-    dataReq.headerPic = 'headerPic'; //_valueData.headerImg;
-    dataReq.idPic = 'idPic'; //_valueData.positiveImage;
-    dataReq.idPicBack = 'idPicBack'; //_valueData.backImage;
+    dataReq.headerPic = _headerImgUrl; //_valueData.headerImg;
+    dataReq.idPic = _positiveImageUrl; //_valueData.positiveImage;
+    dataReq.idPicBack = _backImageUrl; //_valueData.backImage;
     dataReq.phone = phoneStr;
     dataReq.businessId = businessId;
     dataReq.certificateType = _valueData.certificateType;

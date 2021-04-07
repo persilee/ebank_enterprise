@@ -15,6 +15,7 @@ import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -240,6 +241,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                 // FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')), //只允许输入字母
                 FilteringTextInputFormatter.deny(
                     RegExp("[\u4e00-\u9fa5]")), //不允许输入汉字
+                FilteringTextInputFormatter.deny(
+                    RegExp(InputFormartterRegExp.REGEX_EMOJI)), //不允许表情
               ],
               TextInputType.text,
             ),
@@ -253,7 +256,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               false,
               <TextInputFormatter>[
                 LengthLimitingTextInputFormatter(35),
-                // FilteringTextInputFormatter.allow(RegExp("[\u4e00-\u9fa5]")),
+                FilteringTextInputFormatter.deny(
+                    RegExp(InputFormartterRegExp.REGEX_EMOJI)), //不允许表情
               ],
               TextInputType.text,
             ),
@@ -279,7 +283,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               _documentNumberTEC,
               false,
               <TextInputFormatter>[
-                LengthLimitingTextInputFormatter(140),
+                LengthLimitingTextInputFormatter(30),
                 FilteringTextInputFormatter.allow(
                     RegExp('[a-zA-Z0-9]')), //只允许输入字母
               ],
@@ -308,6 +312,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                     false,
                     <TextInputFormatter>[
                       LengthLimitingTextInputFormatter(35),
+                      FilteringTextInputFormatter.deny(
+                          RegExp(InputFormartterRegExp.REGEX_EMOJI)), //不允许表情
                     ],
                     TextInputType.text,
                   ),

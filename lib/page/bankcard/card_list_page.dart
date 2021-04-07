@@ -239,7 +239,11 @@ class _CardListPageState extends State<CardListPage> {
 
   _loadData() {
     if (_cardsLength == 0) {
-      _isLoading = true;
+      if (this.mounted) {
+        setState(() {
+          _isLoading = true;
+        });
+      }
     }
     CardDataRepository().getCardList('getCardList').then((data) {
       if (data.cardList != null) {
@@ -267,7 +271,11 @@ class _CardListPageState extends State<CardListPage> {
         }
       }
     }).catchError((e) {
-      _isLoading = false;
+      if (this.mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
       Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
     });
   }
