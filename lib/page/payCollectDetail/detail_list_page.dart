@@ -926,12 +926,52 @@ class _DetailListPageState extends State<DetailListPage> {
     Navigator.pushNamed(context, pageDetailInfo, arguments: ddFinHist);
   }
 
+  //获取账号
+  Future<void> _getCardList() async {
+    //_isLoading = false;
+    CardDataRepository().getCardList('getCardList').then((data) {
+      if (data.cardList != null) {
+        if (mounted) {
+          setState(() {
+            _cardList.clear();
+            _cardIcon.clear();
+            _allAccNoList.clear();
+            _cardList.add(intl.S.current.all_account);
+            // _cardIcon.add("images/transferIcon/transfer_wallet.png");
+
+            data.cardList.forEach((item) {
+              _allAccNoList.add(item.cardNo);
+              _cardList.add(item.cardNo);
+              _cardIcon.add(item.imageUrl);
+            });
+          });
+        }
+        _getRevenueByCards(_startDate, _allAccNoList);
+      }
+      if (data.cardList == null) {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    }).catchError((e) {
+      _isLoading = false;
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
+    });
+  }
+
   //获取所有历史记录
   _getRevenueByCards(String localDateStart, List<String> cards) async {
     String localCcy;
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
-    String accNo = _accNoList.toString();
+    // String accNo = _accNoList.toString();
     if (_cardList.length < 1) {
       selectAccNo = '';
     } else {
@@ -966,11 +1006,9 @@ class _DetailListPageState extends State<DetailListPage> {
         if (mounted) {
           setState(() {
             ddFinHisDTOList = data.ddFinHisDTOList;
-            // _loadMore = false;
             _isLoading = false;
             _refreshController.refreshCompleted();
             _refreshController.footerMode.value = LoadStatus.canLoading;
-            // _refreshController.loadComplete();
           });
         }
       }
@@ -991,41 +1029,5 @@ class _DetailListPageState extends State<DetailListPage> {
     super.dispose();
     _refreshController.dispose();
     // _scrollController.dispose();
-  }
-
-  //获取账号
-  Future<void> _getCardList() async {
-    _isLoading = true;
-    CardDataRepository().getCardList('getCardList').then((data) {
-      if (data.cardList != null) {
-        if (mounted) {
-          setState(() {
-            _cardList.clear();
-            _cardIcon.clear();
-            _allAccNoList.clear();
-            _cardList.add(intl.S.current.all_account);
-            // _cardIcon.add("images/transferIcon/transfer_wallet.png");
-            data.cardList.forEach((item) {
-              _allAccNoList.add(item.cardNo);
-              _cardList.add(item.cardNo);
-              _cardIcon.add(item.imageUrl);
-              //  _isLoading = false;
-              // _refreshController.refreshCompleted();
-              //_refreshController.footerMode.value = LoadStatus.canLoading;
-            });
-          });
-        }
-
-        _getRevenueByCards(_startDate, _allAccNoList);
-      }
-    }).catchError((e) {
-      //  _isLoading = false;
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-      );
-    });
   }
 }

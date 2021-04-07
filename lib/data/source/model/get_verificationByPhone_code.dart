@@ -6,27 +6,32 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'get_verificationByPhone_code.g.dart';
 
-
 //根据账户获取验证码
 @JsonSerializable()
 class SendSmsByPhoneNumberReq {
+  @JsonKey(name: 'areaCode')
+  String areaCode;
+
   @JsonKey(name: 'phoneNumber')
   String phoneNumber;
 
   @JsonKey(name: 'smsType')
   String smsType;
 
-  
+  @JsonKey(name: 'smsTemplateId')
+  String smsTemplateId;
 
   SendSmsByPhoneNumberReq(
+    this.areaCode,
     this.phoneNumber,
-    this.smsType
+    this.smsType,
+    this.smsTemplateId,
   );
 
-  @override
-  String toString() {
-    return toJson().toString();
-  }
+  // @override
+  // String toString() {
+  //   return toJson().toString();
+  // }
 
   factory SendSmsByPhoneNumberReq.fromJson(Map<String, dynamic> srcJson) =>
       _$SendSmsByPhoneNumberReqFromJson(srcJson);
@@ -36,12 +41,12 @@ class SendSmsByPhoneNumberReq {
 
 @JsonSerializable()
 class SendSmsByPhoneNumberResp {
-  @JsonKey(name: 'phoneNo')
-  @JsonKey(name: 'smsType')
-  String phoneNo;
-  String smsType;
+  @JsonKey(name: 'smsCode')
+  String smsCode;
 
-  SendSmsByPhoneNumberResp(this.phoneNo);
+  SendSmsByPhoneNumberResp(
+    this.smsCode,
+  );
 
   factory SendSmsByPhoneNumberResp.fromJson(Map<String, dynamic> srcJson) =>
       _$SendSmsByPhoneNumberRespFromJson(srcJson);

@@ -2,7 +2,12 @@ import 'dart:async';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/model/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
+import 'package:ebank_mobile/data/source/model/send_sms_register.dart';
+import 'package:ebank_mobile/data/source/verification_code_repository.dart';
+import 'package:ebank_mobile/data/source/version_data_repository.dart';
 
 import 'package:ebank_mobile/generated/l10n.dart';
 
@@ -11,6 +16,7 @@ import 'package:ebank_mobile/page/register/component/register_getSms.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 
 import 'package:flutter/gestures.dart';
 
@@ -19,6 +25,7 @@ import 'package:flutter/gestures.dart';
 /// Author: pengyikang
 /// Date: 2020-03-15
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -41,7 +48,9 @@ class _RegisterPageState extends State<RegisterPage> {
   Timer _timer;
   int countdownTime = 0;
   bool _checkBoxValue = false; //复选框默认值
+  bool _isGetSms = false;
   bool _isRegister = false;
+  bool _isCommit = false;
 
   /// 区号
   String _officeAreaCodeText = '86';
@@ -49,28 +58,22 @@ class _RegisterPageState extends State<RegisterPage> {
   // ignore: must_call_super
   void initState() {
     super.initState();
-    setState(() {
-      _phoneNum.addListener(() {
-        setState(() {
-          _phoneNumListen = _phoneNum.text;
-        });
-      });
-      _sms.addListener(() {
-        setState(() {
-          _smsListen = _sms.text;
-        });
-      });
-      _userName.addListener(() {
-        setState(() {
-          _userNameListen = _userName.text;
-        });
-        print("$_userNameListen>>>>>>>>>");
+    _phoneNum.addListener(() {
+      setState(() {
+        _phoneNumListen = _phoneNum.text;
       });
     });
-  }
-
-  _phoneNumberChange(String phoneNumber) {
-    _phoneNumListen = phoneNumber;
+    _sms.addListener(() {
+      setState(() {
+        _smsListen = _sms.text;
+      });
+    });
+    _userName.addListener(() {
+      setState(() {
+        _userNameListen = _userName.text;
+      });
+      print("$_userNameListen>>>>>>>>>");
+    });
   }
 
   @override
@@ -103,56 +106,66 @@ class _RegisterPageState extends State<RegisterPage> {
                     context, _phoneNum, _officeAreaCodeText, _selectRegionCode),
                 //输入用户名
                 getRegisterRow(
-                    S.current.please_input_username, _userName, false),
-                GetSms(
-                  phone: _phoneNum,
-                  sms: _sms,
-                  smsType: 'register',
-                  officeAreaCodeText: _officeAreaCodeText,
-                  isRegister: true,
-                  isForget: false,
+                  S.current.please_input_username,
+                  _userName,
+                  false,
+                  <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                        RegExp("[a-zA-Z0-9]")), //只可输入大小写字母及数字
+                    //  LengthLimitingTextInputFormatter(6),
+                  ],
                 ),
-
-                // //获取验证码
-                // Container(
-                //   height: MediaQuery.of(context).size.height / 15,
-                //   margin: EdgeInsets.fromLTRB(30, 0, 30, 10),
-                //   decoration: BoxDecoration(
-                //       borderRadius: BorderRadius.all(Radius.circular(5)),
-                //       color: Color(0xFFF5F7F9)),
-                //   child: Row(
-                //     children: [
-                //       Container(
-                //         padding: EdgeInsets.only(left: 20),
-                //         width: MediaQuery.of(context).size.width / 2,
-                //         child: TextField(
-                //           //是否自动更正
-                //           controller: _sms,
-                //           autocorrect: true,
-                //           //是否自动获得焦点
-                //           autofocus: true,
-                //           decoration: InputDecoration(
-                //             border: InputBorder.none,
-                //             hintText: S.current.please_input_sms,
-                //             hintStyle: TextStyle(
-                //               fontSize: 15,
-                //               color: HsgColors.textHintColor,
-                //             ),
-                //           ),
-                //           inputFormatters: <TextInputFormatter>[
-                //             WhitelistingTextInputFormatter.digitsOnly, //只输入数字
-                //             LengthLimitingTextInputFormatter(6) //限制长度
-                //           ],
-                //         ),
-                //       ),
-                //       Container(
-                //         alignment: Alignment.center,
-                //         width: MediaQuery.of(context).size.width / 3,
-                //         child: _otpButton(),
-                //       )
-                //     ],
-                //   ),
+                // GetSms(
+                //   phone: _phoneNum,
+                //   sms: _sms,
+                //   smsType: 'register',
+                //   officeAreaCodeText: _officeAreaCodeText,
+                //   isRegister: true,
+                //   isForget: false,
+                //   isInput: _isGetSms,
                 // ),
+                // //获取验证码
+                Container(
+                  height: MediaQuery.of(context).size.height / 15,
+                  margin: EdgeInsets.fromLTRB(30, 0, 30, 10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      color: Color(0xFFF5F7F9)),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left: 20),
+                        width: MediaQuery.of(context).size.width / 2,
+                        child: TextField(
+                          //是否自动更正
+                          controller: _sms,
+                          autocorrect: true,
+                          //是否自动获得焦点
+                          autofocus: true,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: S.current.please_input_sms,
+                            hintStyle: TextStyle(
+                              fontSize: 15,
+                              color: HsgColors.textHintColor,
+                            ),
+                          ),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[0-9]")), //纯数字
+                            LengthLimitingTextInputFormatter(6),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width / 3,
+                        child: _otpButton(),
+                      )
+                    ],
+                  ),
+                ),
                 //下一步按钮
                 Container(
                   width: MediaQuery.of(context).size.width,
@@ -201,17 +214,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                         timeInSecForIosWeb: 1,
                                         msg: S.current.register_check_username);
                                   } else {
-                                    Map listData = new Map();
-                                    listData = {
-                                      'accountName': _userNameListen,
-                                      'sms': _smsListen,
-                                      'phone': _phoneNumListen,
-                                      'areaCode': _officeAreaCodeText
-                                    };
-
-                                    Navigator.pushNamed(
-                                        context, pageRegisterConfirm,
-                                        arguments: listData);
+                                    _checkRegister();
+                                    _isCommit = true;
                                   }
                                 }
                               : null,
@@ -236,10 +240,132 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  //检验用户是否注册
+  _checkRegister() {
+    HSProgressHUD.show();
+    VersionDataRepository()
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
+        .then((data) {
+      if (mounted) {
+        setState(() {
+          _isRegister = data.register;
+          _sendSmsRegister(_isRegister);
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
+      HSProgressHUD.dismiss();
+    });
+    // }
+  }
+
+  //获取注册发送短信验证码接口
+  _sendSmsRegister(bool _isRegister) async {
+    print('$_isRegister>>>>>>>>');
+    // _isRegister ?
+
+    if (_isRegister) {
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: S.current.num_is_register,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
+    } else {
+      VerificationCodeRepository()
+          .sendSmsByPhone(
+              SendSmsByPhoneNumberReq(
+                  _officeAreaCodeText, _phoneNum.text, 'register', '123123'),
+              'sendSmsRegister')
+          .then((value) {
+        if (mounted) {
+          setState(() {
+            _isGetSms = true;
+            _startCountdown();
+
+            if (_isCommit) {
+              Map listData = new Map();
+              listData = {
+                'accountName': _userNameListen,
+                'sms': _smsListen,
+                'phone': _phoneNumListen,
+                'areaCode': _officeAreaCodeText
+              };
+
+              Navigator.pushNamed(context, pageRegisterConfirm,
+                  arguments: listData);
+            }
+          });
+        }
+      }).catchError((e) {
+        HSProgressHUD.dismiss();
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+        );
+      });
+    }
+  }
+
+  //倒计时方法
+  _startCountdown() {
+    countdownTime = 120;
+    final call = (timer) {
+      if (mounted) {
+        setState(() {
+          if (countdownTime < 1) {
+            _timer.cancel();
+          } else {
+            countdownTime -= 1;
+          }
+        });
+      }
+    };
+    HSProgressHUD.dismiss();
+    _timer = Timer.periodic(Duration(seconds: 1), call);
+  }
+
+//发送短信
+  FlatButton _otpButton() {
+    return FlatButton(
+      onPressed: countdownTime > 0
+          ? null
+          : () {
+              _checkRegister();
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+      //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
+      padding: EdgeInsets.only(left: 35),
+      //文字颜色
+      textColor: HsgColors.blueTextColor,
+
+      disabledTextColor: HsgColors.blueTextColor,
+
+      child: Text(
+        countdownTime > 0
+            ? '${countdownTime}s'
+            : S.of(context).getVerificationCode,
+        style: TextStyle(fontSize: 14),
+        textAlign: TextAlign.right,
+      ),
+
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    );
+  }
+
   bool _submit() {
     if (_phoneNum.text != '' &&
         _userName.text != '' &&
-        _sms.text != '' &&
+        _sms.text.length > 5 &&
+        _isGetSms &&
         _checkBoxValue) {
       return true;
     } else {

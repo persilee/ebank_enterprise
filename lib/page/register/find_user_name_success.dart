@@ -84,7 +84,7 @@ class _FindUserNameSuccessState extends State<FindUserNameSuccess> {
                         decoration: BoxDecoration(),
                         child: FlatButton(
                           child: Text(
-                            S.current.complete,
+                            S.current.go_to_login,
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {

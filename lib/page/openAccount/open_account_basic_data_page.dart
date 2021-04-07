@@ -161,7 +161,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                           Navigator.pushNamed(
                             context,
                             pageOpenAccountContactInformation,
-                            arguments: _dataReq,
+                            arguments: {'data': _dataReq},
                           );
                         }
                       : null,

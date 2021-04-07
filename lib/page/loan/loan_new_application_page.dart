@@ -148,7 +148,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         _custId = data.custId;
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      SVProgressHUD.showInfo(status: e.toString());
     });
   }
 
@@ -168,7 +168,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
       },
     ).catchError((e) {
       SVProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: e.toString());
+      SVProgressHUD.showInfo(status: e.toString());
     });
   }
 

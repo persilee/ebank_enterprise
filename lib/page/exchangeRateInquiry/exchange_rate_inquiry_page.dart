@@ -7,6 +7,7 @@ import 'dart:ui';
 import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
+import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_ex_rate.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
@@ -64,10 +65,14 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   @override
   Widget build(BuildContext context) {
     if (_primitiveCcyList.length > 0) {
-      _primitiveCcy = _primitiveCcyList[_primitiveCcyId];
+      setState(() {
+        _primitiveCcy = _primitiveCcyList[_primitiveCcyId];
+      });
     }
     if (_objectiveCcyList.length > 0) {
-      _objectiveCcy = _objectiveCcyList[_objectiveCcyId];
+      setState(() {
+        _objectiveCcy = _objectiveCcyList[_objectiveCcyId];
+      });
     }
     return Scaffold(
       appBar: AppBar(
@@ -401,31 +406,62 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     _amountConversion();
   }
 
-  //计算兑换金额
-  _amountConversion() {
-    for (var i = 0; i < rateList.length; i++) {
-      setState(() {
-        if (_amtController.text != '') {
-          AiDecimalAccuracy _amount =
-              AiDecimalAccuracy.parse(_amtController.text);
-          AiDecimalAccuracy _rate = AiDecimalAccuracy.parse(rateList[i].fxBuy);
+  // //计算兑换金额
+  // _amountConversion() {
+  //   for (var i = 0; i < rateList.length; i++) {
+  //     setState(() {
+  //       if (_amtController.text != '') {
+  //         AiDecimalAccuracy _amount =
+  //             AiDecimalAccuracy.parse(_amtController.text);
+  //         AiDecimalAccuracy _rate = AiDecimalAccuracy.parse(rateList[i].fxBuy);
 
-          if (rateList[i].ccy == _objectiveCcy) {
-            double newAmt = _isSwap
-                ? (_amount / _rate).toDouble()
-                : (_amount * _rate).toDouble();
-            _primitiveCcyAmt = newAmt.toStringAsFixed(4);
-          }
+  //         if (rateList[i].ccy == _objectiveCcy) {
+  //           double newAmt = _isSwap
+  //               ? (_amount / _rate).toDouble()
+  //               : (_amount * _rate).toDouble();
+  //           _primitiveCcyAmt = newAmt.toStringAsFixed(4);
+  //         }
 
-          if (rateList[i].ccy == _primitiveCcy) {
-            double newAmt = _isSwap
-                ? (_amount * _rate).toDouble()
-                : (_amount / _rate).toDouble();
-            _primitiveCcyAmt = newAmt.toStringAsFixed(4);
-          }
-        } else {
+  //         if (rateList[i].ccy == _primitiveCcy) {
+  //           double newAmt = _isSwap
+  //               ? (_amount * _rate).toDouble()
+  //               : (_amount / _rate).toDouble();
+  //           _primitiveCcyAmt = newAmt.toStringAsFixed(4);
+  //         }
+  //       } else {
+  //         _primitiveCcyAmt = '0.00';
+  //       }
+  //     });
+  //   }
+  // }
+
+//汇率换算
+  Future _amountConversion() async {
+    double _payerAmount = 0;
+    if (_amtController.text == '') {
+      if (this.mounted) {
+        setState(() {
           _primitiveCcyAmt = '0.00';
+        });
+      }
+    } else {
+      _payerAmount = AiDecimalAccuracy.parse(_amtController.text).toDouble();
+      ForexTradingRepository()
+          .transferTrial(
+              TransferTrialReq(
+                amount: _payerAmount,
+                corrCcy: _objectiveCcy,
+                defaultCcy: _primitiveCcy,
+              ),
+              'TransferTrialReq')
+          .then((data) {
+        if (this.mounted) {
+          setState(() {
+            _primitiveCcyAmt = data.optExAmt;
+          });
         }
+      }).catchError((e) {
+        print(e.toString());
       });
     }
   }

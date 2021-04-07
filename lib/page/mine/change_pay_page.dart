@@ -318,7 +318,8 @@ class _ChangePayPageState extends State<ChangePayPage> {
         //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
         // )
         .sendSmsByPhone(
-            SendSmsByPhoneNumberReq(_phoneNo, 'transactionPwd'), 'sendSms')
+            SendSmsByPhoneNumberReq('', _phoneNo, 'transactionPwd', ''),
+            'sendSms')
         .then((data) {
       _startCountdown();
       if (this.mounted) {

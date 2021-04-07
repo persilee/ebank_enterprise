@@ -12,11 +12,18 @@ class PageLoanCollectionPreview extends StatefulWidget {
 }
 
 class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
+  Map _reviewMap = {};
+  Map _requstMap = {};
+
   @override
   Widget build(BuildContext context) {
+    Map listData = ModalRoute.of(context).settings.arguments;
+    _reviewMap = listData['reviewList'];
+    _requstMap = listData['requestList'];
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("转账预览"),
+        title: Text(S.current.transfer_the_preview),
         centerTitle: true,
         elevation: 1,
       ),
@@ -30,7 +37,7 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
   Widget _textStyle(
       String text, Color color, double fontSize, TextAlign textAlign) {
     return Text(
-      text,
+      text == null ? '' : text,
       style: TextStyle(
           color: color,
           fontSize: fontSize,
@@ -43,16 +50,16 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
   Widget _rowText(String leftText, String rightText, Color leftColor,
       Color rightColor, double leftSize, double rightSize) {
     return Container(
-      padding: EdgeInsets.fromLTRB(16, 30, 16, 0),
+      padding: EdgeInsets.fromLTRB(15, 20, 16, 0),
       child: Row(
         children: [
           Container(
-            width: (MediaQuery.of(context).size.width - 37) / 5 * 3,
+            width: (MediaQuery.of(context).size.width - 37) / 5 * 2,
             margin: EdgeInsets.only(right: 5),
             child: _textStyle(leftText, leftColor, leftSize, TextAlign.left),
           ),
           Container(
-            width: (MediaQuery.of(context).size.width - 37) / 5 * 2,
+            width: (MediaQuery.of(context).size.width - 37) / 5 * 3,
             child:
                 _textStyle(rightText, rightColor, rightSize, TextAlign.right),
           ),
@@ -65,8 +72,8 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
   Widget _previewHeader() {
     return Container(
       padding: EdgeInsets.fromLTRB(0, 12.5, 0, 42.5),
-      child: _rowText("可借款额度", "USD148.95", HsgColors.aboutusTextCon,
-          Color(0xFF232323), 14, 24),
+      child: _rowText(S.current.loan_Recipients_Amount, _reviewMap['price'],
+          HsgColors.aboutusTextCon, Color(0xFF232323), 14, 24),
     );
   }
 
@@ -80,20 +87,25 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
           Divider(
             height: 1,
           ),
-          _rowText("可借款额度", "USD 800", HsgColors.aboutusTextCon,
-              HsgColors.secondDegreeText, 14, 14),
-          _rowText("借款期限", "12个月", HsgColors.aboutusTextCon,
-              HsgColors.secondDegreeText, 14, 14),
-          _rowText("还款方式", "按月付息", HsgColors.aboutusTextCon,
-              HsgColors.secondDegreeText, 14, 14),
-          _rowText("还款计划", "首期4月28", HsgColors.aboutusTextCon,
-              HsgColors.secondDegreeText, 14, 14),
-          _rowText("总利息", "51.4", HsgColors.aboutusTextCon,
-              HsgColors.secondDegreeText, 14, 14),
-          _rowText("收款账户", "2444 4547 4545", HsgColors.aboutusTextCon,
-              HsgColors.secondDegreeText, 14, 14),
-          _rowText("借款用途", "无", HsgColors.aboutusTextCon,
-              HsgColors.secondDegreeText, 14, 14),
+          _rowText(
+              S.current.loan_Borrowing_limit,
+              _reviewMap['availableCredit'],
+              HsgColors.aboutusTextCon,
+              HsgColors.secondDegreeText,
+              14,
+              14),
+          _rowText(S.current.loan_Borrowing_Period, _reviewMap['timeLimit'],
+              HsgColors.aboutusTextCon, HsgColors.secondDegreeText, 14, 14),
+          _rowText(S.current.repayment_ways, _reviewMap['repaymentMethod'],
+              HsgColors.aboutusTextCon, HsgColors.secondDegreeText, 14, 14),
+          _rowText(S.current.view_repayment_plan, _reviewMap['repayPlan'],
+              HsgColors.aboutusTextCon, HsgColors.secondDegreeText, 14, 14),
+          _rowText(S.current.loan_Total_Interest, _reviewMap['totalInterst'],
+              HsgColors.aboutusTextCon, HsgColors.secondDegreeText, 14, 14),
+          _rowText(S.current.transfer_to_account, _reviewMap['payAcNo'],
+              HsgColors.aboutusTextCon, HsgColors.secondDegreeText, 14, 14),
+          _rowText(S.current.loan_Borrowing_Purposes, _reviewMap['loanPurpose'],
+              HsgColors.aboutusTextCon, HsgColors.secondDegreeText, 14, 14),
           _finishBtn(),
         ],
       ),

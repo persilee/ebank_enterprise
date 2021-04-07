@@ -1,3 +1,5 @@
+import 'dart:io';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 首页
 /// Author: lijiawei
@@ -6,9 +8,12 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_styles.dart';
 import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart';
+import 'package:ebank_mobile/data/source/model/logout.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
+import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
+import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -17,6 +22,7 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -186,16 +192,65 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: _homeAppbar(_opacity, _changeLangBtnTltle),
-      body: Container(
-        child: CustomScrollView(
-          controller: _sctrollController,
-          slivers: slivers,
+    return WillPopScope(
+      onWillPop: () => _showTypeTips(),
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: _homeAppbar(_opacity, _changeLangBtnTltle),
+        body: Container(
+          child: CustomScrollView(
+            controller: _sctrollController,
+            slivers: slivers,
+          ),
         ),
       ),
     );
+  }
+
+  //提示弹窗(提示语句，确认事件)
+  _showTypeTips() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertDialog(
+            title: S.current.exit,
+            message: S.current.loginOut_tips,
+            positiveButton: S.current.confirm,
+            negativeButton: S.current.cancel,
+          );
+        }).then((value) {
+      if (value == true) {
+        setState(() {
+          _loginOut();
+        });
+      }
+    });
+  }
+
+  _loginOut() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+
+    HSProgressHUD.show();
+    UserDataRepository()
+        .logout(LogoutReq(userID, _userName), 'logout')
+        .then((data) {
+      HSProgressHUD.dismiss();
+      if (this.mounted) {
+        setState(() {
+          Future.delayed(Duration.zero, () {
+            exit(0);
+            // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+          });
+          Fluttertoast.showToast(
+              msg: S.of(context).logoutSuccess, gravity: ToastGravity.CENTER);
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      HSProgressHUD.dismiss();
+      // print(e.toString());
+    });
   }
 
   ///自定义导航条（包含联系客服、消息、标题、切换语言按钮）
@@ -793,7 +848,8 @@ class _HomePageState extends State<HomePage> {
         //Navigator.pushNamed(context, pageLoanReference);
       } else if (S.current.loan_record == title) {
         //'贷款记录'
-        Navigator.pushNamed(context, pageLimitDetails);
+        Navigator.pushNamed(
+            context, pageLimitDetails); //   pageLimitDetails  pageLoanReference
       } else if (S.current.loan_rate == title) {
         //'贷款利率'
         //Navigator.pushNamed(context, pageloanDemo);
