@@ -166,14 +166,14 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
             ),
           ),
         ),
-        Expanded(
-          child: Center(
-            child: Text(
-              S.current.currency,
-              style: style,
-            ),
-          ),
-        ),
+        // Expanded(
+        //   child: Center(
+        //     child: Text(
+        //       S.current.currency,
+        //       style: style,
+        //     ),
+        //   ),
+        // ),
         Expanded(
           child: Center(
             child: Text(
@@ -190,14 +190,14 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
             ),
           ),
         ),
-        Expanded(
-          child: Center(
-            child: Text(
-              '中间价',
-              style: style,
-            ),
-          ),
-        ),
+        // Expanded(
+        //   child: Center(
+        //     child: Text(
+        //       '中间价',
+        //       style: style,
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
@@ -219,14 +219,14 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
                   ),
                 ),
               ),
-              Expanded(
-                child: Center(
-                  child: Text(
-                    rateList[index].ccy2,
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
-              ),
+              // Expanded(
+              //   child: Center(
+              //     child: Text(
+              //       rateList[index].ccy2,
+              //       style: TextStyle(fontSize: 15),
+              //     ),
+              //   ),
+              // ),
               Expanded(
                 child: Center(
                   child: Text(
@@ -243,14 +243,14 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
                   ),
                 ),
               ),
-              Expanded(
-                child: Center(
-                  child: Text(
-                    rateList[index].mid,
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
-              ),
+              // Expanded(
+              //   child: Center(
+              //     child: Text(
+              //       rateList[index].mid,
+              //       style: TextStyle(fontSize: 15),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         );

@@ -2,6 +2,8 @@ import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_ex_rate.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 
+import 'model/foreign_ccy.dart';
+
 class ForexTradingRepository {
   //账户可用余额查询
   Future<GetCardBalResp> getCardBalByCardNo(GetCardBalReq req, String tag) {
@@ -22,8 +24,13 @@ class ForexTradingRepository {
         (data) => DoTransferAccoutResp.fromJson(data));
   }
 
+  Future<ForeignCcyResp> foreignCcy(ForeignCcyReq req, String tag) {
+    return request('/ddep/transfer/foreignCcy', req, tag,
+        (data) => ForeignCcyResp.fromJson(data));
+  }
+
   //汇率查询
-  Future<GetExRateResp> getExRate(GetExRateReq req,String tag) {
+  Future<GetExRateResp> getExRate(GetExRateReq req, String tag) {
     return request('/ddep/transfer/getExRate', req, tag,
         (data) => GetExRateResp.fromJson(data));
   }

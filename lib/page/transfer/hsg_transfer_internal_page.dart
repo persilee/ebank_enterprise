@@ -96,6 +96,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   var payeeNameForSelects = '';
 
   var _transferMoneyController = new TextEditingController();
+  var _focusNode = new FocusNode();
 
   var _remarkController = new TextEditingController();
 
@@ -157,18 +158,15 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
     _transferMoneyController.addListener(() {
       if (_transferMoneyController.text.length == 0) {
-        _amount = '0';
-        _xRate = '-';
+        setState(() {
+          _amount = '0';
+          _xRate = '-';
+        });
+      } else {
+        _focusNode.addListener(() {
+          _rateCalculate();
+        });
       }
-      // if (_payCcy == _transferCcy) {
-      //   setState(() {
-      //     _amount = _transferMoneyController.text;
-      //     _xRate = '1';
-      //   });
-      // } else {
-      //   _rateCalculate();
-      // }
-      _rateCalculate();
     });
   }
 
@@ -178,6 +176,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     _accountController.dispose();
     _remarkController.dispose();
     _transferMoneyController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -228,6 +227,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 payCcyDialog: payCcyDialog,
                 transferCcyDialog: transferCcyDialog,
                 accountDialog: _accountDialog,
+                focusNode: _focusNode,
               ),
               //收款方
               _payeeWidget(),
