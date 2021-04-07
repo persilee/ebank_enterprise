@@ -6,6 +6,8 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
+import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
+import 'package:ebank_mobile/data/source/model/loan_prepayment_model.dart';
 import 'package:ebank_mobile/data/source/model/post_repayment.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
@@ -17,6 +19,7 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ebank_mobile/data/source/model/get_loan_money_caculate.dart';
 
 class RepayConfirmPage extends StatefulWidget {
   @override
@@ -24,6 +27,9 @@ class RepayConfirmPage extends StatefulWidget {
 }
 
 class _RepayConfirmPageState extends State<RepayConfirmPage> {
+  LnAcMastAppDOList loanDetail; //合约帐号信息
+  PostAdvanceRepaymentDTOList list; //利息计算信息
+
   List<String> passwordList = [];
   var _payPassword = '';
   var currency = ''; //币种
@@ -81,49 +87,77 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
     totalAmount = '';
   }
 
+// acNo (string, optional): 贷款合约 ,
+// ccy (string, optional): 贷款货币 ,
+// compoundAmount (number, optional): 还复利金额 ,
+// ddAc (string, optional): 结算活期账户 ,
+// dueAmount (number, optional): 逾期金额 ,
+// eqAmt (number, optional): 折算后的金额 ,
+// exRate (number, optional): 结算汇率 ,
+// instalNo (integer, optional): 期数 ,
+// interestAmount (number, optional): 还利息金额 ,
+// nostrac (string, optional): 结算同业账户 ,
+// outBal (number, optional): 贷款余额 ,
+// payPassword (string, optional): 交易密码 ,
+// penaltyAmount (number, optional): 还罚息金额 ,
+// prin (number, optional): 贷款本金 ,
+// principalAmount (number, optional): 还本金金额 ,
+// prodCode (string, optional): 产品代码 ,
+// refNo (string, optional): 业务编号 ,
+// repaymentAcNo (string, optional): 还款账号 ,
+// repaymentAcType (string, optional): 还款账号类型 ,
+// repaymentCiName (string, optional): 还款人姓名 ,
+// repaymentMethod (string, optional): 还息方式 ,
+// rescheduleType (string, optional): 重算还款计划方式 ,
+// setMethod (string, optional): 结算方式 ,
+// setlCcy (string, optional): 结算货币 ,
+// suspeac (string, optional): 结算内部账户 ,
+// totalAmount (number, optional): 实际还款金额 ,
+// trValDate (string, optional): 交易生效日
+
   Future<void> _loadData() async {
-    var req = new PostRepaymentReq(
-        acNo,
-        dueAmount,
-        instalNo,
-        interestAmount,
-        penaltyAmount,
-        principalAmount,
-        prodCode,
-        refNo,
-        repaymentAcNo,
-        repaymentAcType,
-        repaymentCiName,
-        repaymentMethod,
-        rescheduleType,
-        totalRepay);
-    LoanDataRepository().postRepayment(req, "postRepayment").then((data) {
-      if (data != null) {
-        Navigator.of(context)..pop();
-        Navigator.pushReplacementNamed(context, pageRepaySuccess,
-            arguments: message);
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
-    });
+    // var req = LoanPrepaymentModelReq(
+    //         loanDetail.contactNo,//合约号
+    //         loanDetail.ccy,
+    //         list.rcvCom,//利息罚息
+
+    // );
+    // LoanPrepaymentModelResp()
+    //     .postRepayment(LoanPrepaymentModelReq(), "postRepayment")
+    //     .then((data) {
+    //   if (data != null) {
+    //     Navigator.of(context)..pop();
+    //     Navigator.pushReplacementNamed(context, pageRepaySuccess,
+    //         arguments: message);
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString());
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    message = ModalRoute.of(context).settings.arguments;
-    Loan loanDetail = message['LoanDetail'];
+    Map message = ModalRoute.of(context).settings.arguments;
+    LnAcMastAppDOList loanDetail = message['accountModel']; //合约帐号信息
+    this.loanDetail = loanDetail;
+    PostAdvanceRepaymentDTOList list = message['calculateModel']; //利息计算信息
+    this.list = list;
+
     setState(() {
       message = ModalRoute.of(context).settings.arguments;
-      currency = message['Currency'];
-      loanInterest = message['LoanInterest'];
-      debitAccount = message['DebitAccount'];
-      repayPrincipal = message['RepayPrincipal'];
-      repayInterest = message['RepayInterest'];
-      fine = message['Fine'];
-      totalRepay = message['TotalRepay'];
-      restLoan =
-          (message['LoanBalance'] - double.parse(message['RepayPrincipal']))
-              .toString();
+      currency = list.ccy; //币种
+      int totalRcv = int.parse(list.rcvPen) + int.parse(list.rcvCom);
+      fine = totalRcv.toString(); //罚息总额
+      totalRepay = message['totalRepay']; //还款总额
+      loanInterest = loanDetail.intRate + "%"; //当前利率
+      debitAccount = loanDetail.repaymentAcNo != null
+          ? loanDetail.repaymentAcNo
+          : '8011208000001258'; //扣款帐号
+      repayPrincipal = list.payPrin; //还款本金
+      repayInterest = list.rcvInt; //还款利息
+      restLoan = (double.parse(loanDetail.osAmt) - double.parse(list.payPrin))
+          .toString(); //用贷款余额减去还款本金
+
       //请求数据
       acNo = loanDetail.acNo;
       dueAmount = '';
@@ -240,6 +274,7 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
     }
   }
 
+//提交还款
   void _submitRepayment() async {
     VerifyTradePawRepository()
         .verifyTransPwdNoSms(

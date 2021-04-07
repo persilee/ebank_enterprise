@@ -6,13 +6,18 @@
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_money_caculate.dart';
+import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
+import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RepayInputPage extends StatefulWidget {
   @override
@@ -20,6 +25,9 @@ class RepayInputPage extends StatefulWidget {
 }
 
 class _RepayInputPageState extends State<RepayInputPage> {
+  LnAcMastAppDOList loanDetail; //合约帐号信息
+  PostAdvanceRepaymentDTOList list; //利息计算信息
+
   Map message = new Map();
   var currency = ''; //币种
   double max = 0; //还款最大值(贷款余额)
@@ -40,108 +48,113 @@ class _RepayInputPageState extends State<RepayInputPage> {
 
   //创建文本控制器实例
   TextEditingController _inputController = new TextEditingController();
+  FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    _inputController.addListener(() {
-      String text = _inputController.text;
 
-      int length = text.length;
-      if (length <= 0) {
-        setState(() {
-          _isBtnDisabled = false;
-          _repayInterest = '0.00';
-          _fine = '0.00';
-          _totalRepay = '0.00';
-        });
-      } else {
-        RegExp postalcode = new RegExp(r'^(0\d)');
-        if (postalcode.hasMatch(text)) {
-          _inputController.text = text.substring(1);
-          _inputController.selection =
-              TextSelection.collapsed(offset: _inputController.text.length);
-        }
-        if (double.parse(_inputController.text) > max) {
-          _inputController.text = formatDouble(max, 2);
-          _inputController.selection =
-              TextSelection.collapsed(offset: _inputController.text.length);
-        }
-        repayPrincipal = _inputController.text;
-        if (double.parse(repayPrincipal) == max) {
-          repaymentMethod = "SETTLEMENT";
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        //得到焦点
+        String text = _inputController.text;
+        int length = text.length;
+        if (length <= 0) {
+          setState(() {
+            _isBtnDisabled = false;
+            _repayInterest = '0.00';
+            _fine = '0.00';
+            _totalRepay = '0.00';
+          });
         } else {
-          repaymentMethod = "PART_PREPAYMENT";
+          RegExp postalcode = new RegExp(r'^(0\d)');
+          if (postalcode.hasMatch(text)) {
+            _inputController.text = text.substring(1);
+            _inputController.selection =
+                TextSelection.collapsed(offset: _inputController.text.length);
+          }
+          if (double.parse(_inputController.text) > max) {
+            _inputController.text = formatDouble(max, 2);
+            _inputController.selection =
+                TextSelection.collapsed(offset: _inputController.text.length);
+          }
+          repayPrincipal = _inputController.text;
+          if (double.parse(repayPrincipal) == max) {
+            repaymentMethod = "SETTLEMENT";
+          } else {
+            repaymentMethod = "PART_PREPAYMENT";
+          }
         }
-        _loadData();
-        if (double.parse(text) != 0) {
-          _isBtnDisabled = true;
+      } else {
+        //失去焦点
+        String text = _inputController.text;
+        int length = text.length;
+        if (length > 0) {
+          _loadData();
         }
       }
     });
-    //初始化
-    currency = 'HKD';
-    max = 0;
-    loanInterest = '0.00%';
-    // debitAccount = '0101238000001758';
-    repayPrincipal = '0.00';
-    _repayInterest = '0.00';
-    _fine = '0.00';
-    _totalRepay = '0.00';
-    repaymentMethod = "PART_PREPAYMENT";
-
-    message.putIfAbsent('RepaymentMethod', () => repaymentMethod);
-    message.putIfAbsent('LoanBalance', () => max);
-    message.putIfAbsent('Currency', () => currency);
-    message.putIfAbsent('TotalRepay', () => _totalRepay);
-    message.putIfAbsent('RepayPrincipal', () => repayPrincipal);
-    message.putIfAbsent('RepayInterest', () => _repayInterest);
-    message.putIfAbsent('Fine', () => _fine);
-    message.putIfAbsent('LoanInterest', () => loanInterest);
-    message.putIfAbsent('DebitAccount', () => debitAccount);
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    //释放
+    focusNode.dispose();
+  }
+
+  //进行贷款试算
   Future<void> _loadData() async {
-    // LoanDataRepository()
-    //     .getLoanCaculate(
-    //         GetLoanCaculateReq(acNo, instalNo, isInterestCharge, repayPrincipal,
-    //             repaymentMethod, rescheduleType),
-    //         "getLoanMoneyCaculate")
-    //     .then((data) {
-    //   if (data != null) {
-    //     setState(() {
-    //       if (data.feeAmount != null) {
-    //         _fine = data.feeAmount;
-    //       }
-    //       _repayInterest = data.interestAmount;
-    //       _totalRepay = data.repaymentAmount;
-    //     });
-    //   }
-    // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString());
-    // });
-    _fine = '0';
-    _repayInterest =
-        (double.parse(repayPrincipal) * 8.8 / 100 / 360 * 30).toString();
-    _totalRepay = (double.parse(repayPrincipal) +
-            double.parse(repayPrincipal) * 8.8 / 100 / 360 * 30)
-        .toString();
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID);
+    SVProgressHUD.show();
+    LoanDataRepository()
+        .getLoanCaculate(
+            GetLoanCaculateReq(
+                loanDetail.contactNo, //贷款放款编号
+                loanDetail.br, //机构号
+                loanDetail.ccy, //币种
+                custID, //客户号
+                loanDetail.osAmt, //贷款余额
+                loanDetail.loanAmt, //贷款本金
+                _inputController.text, //还本金额
+                loanDetail.prodTyp, //产品类型
+                loanDetail.repaymentMethod, //还息方式
+                loanDetail.disbDate //生效日期
+                ),
+            "getLoanMoneyCaculate")
+        .then((data) {
+      SVProgressHUD.dismiss();
+      if (data.postAdvanceRepaymentDTOList != null) {
+        setState(() {
+          //请求回来进行变更
+          PostAdvanceRepaymentDTOList list =
+              data.postAdvanceRepaymentDTOList[0];
+          this.list = list; //保存传回去
+          _repayInterest = list.rcvInt; //还款利息
+          //  rcvPen 本金罚息 + rcvCom 利息罚息
+          double totalRcv =
+              double.parse(list.rcvPen) + double.parse(list.rcvCom);
+          _fine = totalRcv.toString();
+
+          double totalAmt =
+              double.parse(list.payPrin) + double.parse(list.rcvInt) + totalRcv;
+          _totalRepay = totalAmt.toString(); //还款总额 = 还款本金 + 利息 + 罚金
+
+          _isBtnDisabled = true;
+        });
+      }
+    }).catchError((e) {
+      SVProgressHUD.dismiss();
+      SVProgressHUD.showInfo(status: e.toString());
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    Loan loanDetail = ModalRoute.of(context).settings.arguments;
-    setState(() {
-      message.putIfAbsent('LoanDetail', () => loanDetail);
-      acNo = loanDetail.acNo;
-      instalNo = loanDetail.restPeriods.toString();
-      max = double.parse(loanDetail.loanAmt);
-      debitAccount = '0101238000001758';
+    LnAcMastAppDOList loanDetail = ModalRoute.of(context).settings.arguments;
+    this.loanDetail = loanDetail;
 
-      // FormatUtil.formatSpace4(loanDetail.repaymentAcNo.toString()); //扣款帐号
-      loanInterest =
-          (double.parse(loanDetail.intRate) * 100).toStringAsFixed(2) + "%";
-    });
     var container1 = Container(
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -149,17 +162,18 @@ class _RepayInputPageState extends State<RepayInputPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           //贷款账号
-          _contentColumn(S.of(context).loan_account, loanDetail.contactNo),
+          _contentColumn(S.of(context).loan_account, loanDetail.acNo),
           //币种
-          _contentColumn(S.of(context).currency, currency),
+          _contentColumn(S.of(context).currency, loanDetail.ccy), //ccy
           //贷款本金
           _contentColumn(S.of(context).loan_principal,
-              FormatUtil.formatSringToMoney(loanDetail.loanAmt)),
+              FormatUtil.formatSringToMoney(loanDetail.loanAmt)), //loanAmt
           //贷款余额
           _contentColumn(S.of(context).loan_balance2,
-              FormatUtil.formatSringToMoney(loanDetail.unpaidPrincipal)),
+              FormatUtil.formatSringToMoney(loanDetail.osAmt)), //osAmt
           //贷款利率
-          _contentColumn(S.of(context).loan_interest_rate, loanInterest),
+          _contentColumn(
+              S.of(context).loan_interest_rate, loanDetail.intRate + "%"),
         ],
       ),
     );
@@ -171,12 +185,16 @@ class _RepayInputPageState extends State<RepayInputPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           //扣款账号
-          _contentColumn(S.of(context).debit_account, debitAccount),
+          _contentColumn(
+              S.of(context).debit_account,
+              loanDetail.repaymentAcNo != null
+                  ? loanDetail.repaymentAcNo
+                  : '8011208000001258'), //repaymentAcNo  8011208000001258 测试的
           //还款本金
           _repayPrincipal(loanDetail),
           //还款利息
           _contentColumn(S.of(context).repayment_interest,
-              FormatUtil.formatSringToMoney(_repayInterest)),
+              FormatUtil.formatSringToMoney(_repayInterest)), //需要计算
           //罚金
           _contentColumn(
               S.of(context).fine, FormatUtil.formatSringToMoney(_fine)),
@@ -187,6 +205,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
       ),
     );
     var btnNext = Padding(
+      // 点击进入下一步
       padding: EdgeInsets.fromLTRB(30, 50, 30, 50),
       child: RaisedButton(
         child: Text(
@@ -218,26 +237,21 @@ class _RepayInputPageState extends State<RepayInputPage> {
             _getPadding(0, 13, 0, 0),
             //扣款账号，还款本金，还款利息，罚金，还款总额
             container2,
-            btnNext,
+            btnNext, //点击下一步按钮
           ],
         ),
       ),
     );
   }
 
+  //点击进入下一步
   _getBtnClickListener(BuildContext context) {
     if (_isBtnDisabled) {
       return () {
         //修改信息map里的信息
-        message['LoanBalance'] = max;
-        message['Currency'] = currency;
-        message['TotalRepay'] = _totalRepay;
-        message['RepayPrincipal'] = repayPrincipal;
-        message['RepayInterest'] = _repayInterest;
-        message['Fine'] = _fine;
-        message['LoanInterest'] = loanInterest;
-        message['DebitAccount'] = debitAccount;
-        message['RepaymentMethod'] = repaymentMethod;
+        message['accountModel'] = loanDetail;
+        message['calculateModel'] = list;
+        message['totalRepay'] = _totalRepay; //还款总额
         Navigator.pushNamed(context, pageRepayConfirm, arguments: message);
       };
     } else {
@@ -261,7 +275,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
   }
 
   //还款金额输入
-  Widget _repayPrincipal(Loan loanDetail) {
+  Widget _repayPrincipal(LnAcMastAppDOList loanDetail) {
     var inputRow = Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -271,6 +285,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
             width: 170,
             height: 21,
             child: TextField(
+              focusNode: focusNode,
               controller: _inputController,
               textAlign: TextAlign.end,
               inputFormatters: <TextInputFormatter>[
@@ -279,7 +294,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
                     RegExp("^[0-9]+[.]?[0-9]{0,2}"))
               ],
               style: TextStyle(fontSize: 14, color: Colors.black87),
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
                 isCollapsed: true,
                 hintText: S.of(context).hint_repayment_principal,
@@ -288,7 +303,6 @@ class _RepayInputPageState extends State<RepayInputPage> {
               ),
               onChanged: (text) {
                 //输入框数据修改后
-
                 setState(() {
                   repayPrincipal = _inputController.text;
                 });
@@ -298,6 +312,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
           ),
         ),
         Container(
+          //提前还清
           width: 84,
           height: 21,
           child: OutlineButton(
@@ -311,13 +326,14 @@ class _RepayInputPageState extends State<RepayInputPage> {
               style: TextStyle(fontSize: 13, color: HsgColors.btnPrimary),
             ),
             onPressed: () {
-              _inputController.text = formatDouble(max, 2);
+              _inputController.text = loanDetail.osAmt;
               _inputController.selection =
                   TextSelection.collapsed(offset: _inputController.text.length);
               setState(() {
+                // _inputController.text = loanDetail.osAmt;
                 repayPrincipal = _inputController.text;
+                _loadData(); //达到最大值后不修改了
               });
-              // _loadData();//达到最大值后不修改了
             },
           ),
         ),
