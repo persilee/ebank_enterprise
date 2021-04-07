@@ -21,29 +21,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../page_route.dart';
 
 class LoanDetailsPage extends StatefulWidget {
+//如果需要在initState里面拿到传过来的值。必须在一开始就需要去实例化它
+  final LoanAccountDOList loanAccountDetail;
+  LoanDetailsPage({Key key, this.loanAccountDetail}) : super(key: key);
+
   @override
   _LoanDetailsPageState createState() => _LoanDetailsPageState();
 }
 
 class _LoanDetailsPageState extends State<LoanDetailsPage> {
-  LoanAccountDOList loanAccountDetail;
+  // LoanAccountDOList loanAccountDetail;
   var loanDetailsArr = []; //币种列表、
 
-  @override
+  // @override
   void initState() {
     super.initState();
-    // _loadData(); //获取列表数据
-    _getData();
-  }
-
-  void _getData() {
-    print('hhhhh');
+    _loadDetailData(); //获取列表数据
   }
 
   //获取底部详情数据
-  Future<void> _loadData() async {
+  Future<void> _loadDetailData() async {
     //请求的参数
-    String acNo = loanAccountDetail.lnac; //贷款帐号
+    String acNo = widget.loanAccountDetail.lnac; //贷款帐号
     String ciNo = "";
     String contactNo = "";
     String productCode = "";
@@ -68,8 +67,8 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    LoanAccountDOList loanDetail = ModalRoute.of(context).settings.arguments;
-    this.loanAccountDetail = loanDetail;
+    // LoanAccountDOList loanDetail = ModalRoute.of(context).settings.arguments;
+    // this.loanAccountDetail = loanDetail;
 
     return Scaffold(
       appBar: AppBar(
@@ -92,7 +91,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           children: [
             // 业务品种
             Text(
-              S.current.loan_account + '：' + acNo,
+              S.current.loan_account + ': ' + acNo,
               // "贷款账号",
               style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
             ),
@@ -107,7 +106,6 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           ],
         ),
       ),
-
       _collectButton(), //领用按钮
     );
   }
@@ -198,7 +196,9 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           ),
         ),
         onPressed: () {
-          Navigator.pushNamed(context, pageLoanReference);
+          //传值过去
+          Navigator.pushNamed(context, pageLoanReference,
+              arguments: widget.loanAccountDetail);
         },
       ),
     );
@@ -237,7 +237,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           child: Column(
             children: [
               //业务品种
-              _business(loanAccountDetail.lnac),
+              _business(widget.loanAccountDetail.lnac),
               Divider(height: 0, color: HsgColors.textHintColor),
               Padding(
                 padding:
@@ -246,16 +246,19 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
                   children: [
                     //总额度
                     _loanMoney(
-                        S.current.amount + ' (' + loanAccountDetail.ccy + ')',
-                        loanAccountDetail.amt),
+                        S.current.amount +
+                            ' (' +
+                            widget.loanAccountDetail.ccy +
+                            ')',
+                        widget.loanAccountDetail.amt),
                     _verticalMoulding(),
                     //余额额度
                     _loanMoney(
                         S.current.loan_detail_available_amount +
                             ' (' +
-                            loanAccountDetail.ccy +
+                            widget.loanAccountDetail.ccy +
                             ')',
-                        loanAccountDetail.bal),
+                        widget.loanAccountDetail.bal),
                   ],
                 ),
               ),
@@ -285,18 +288,14 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
                       HsgColors.secondDegreeText), //金额
                   _rowText(
                       S.current.loan_balance2,
-                      detailModel.br.toString() + " " + detailModel.ccy,
+                      detailModel.osAmt + " " + detailModel.ccy,
                       HsgColors.secondDegreeText), //余额
                   _rowText(S.current.begin_time, detailModel.disbDate,
                       HsgColors.secondDegreeText), //开始时间
                   _rowText(S.current.end_time, detailModel.maturityDate,
                       HsgColors.secondDegreeText), //结束时间
-                  _rowText(
-                      S.of(context).loan_interest_rate,
-                      (double.parse(detailModel.intRate) * 100)
-                              .toStringAsFixed(2) +
-                          "%",
-                      Color(0xFFF8514D)),
+                  _rowText(S.of(context).loan_interest_rate,
+                      detailModel.intRate + "%", Color(0xFFF8514D)),
                 ];
                 //整存整取
                 var taking = Column(
@@ -318,7 +317,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
                             child: Text(
                               //合约账号
                               S.current.contract_number +
-                                  '' +
+                                  ' ' +
                                   detailModel.contactNo,
                               style: TextStyle(
                                   fontSize: 15,

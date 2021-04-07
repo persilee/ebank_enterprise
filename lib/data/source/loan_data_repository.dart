@@ -13,6 +13,7 @@ import 'model/get_schedule_detail_list.dart';
 import 'model/loan_account_model.dart';
 import 'model/loan_application.dart';
 import 'model/loan_detail_modelList.dart';
+import 'model/loan_prepayment_model.dart';
 
 class LoanDataRepository {
   //贷款利率接口
@@ -66,9 +67,17 @@ class LoanDataRepository {
   }
 
   //提交还款接口
-  Future<PostRepaymentResp> postRepayment(PostRepaymentReq req, String tag) {
+  Future<LoanPrepaymentModelResp> postRepayment(
+      LoanPrepaymentModelReq req, String tag) {
     return request('loan/repayments/postRepayment', req, tag,
-        (data) => PostRepaymentResp.fromJson(data));
+        (data) => LoanPrepaymentModelResp.fromJson(data));
+  }
+
+  //贷款领用界面试算的接口
+  Future<LoanPrepaymentModelResp> loanPilotComputingInterface(
+      LoanPrepaymentModelReq req, String tag) {
+    return request('loan/contracts/loanTrial', req, tag,
+        (data) => LoanPrepaymentModelResp.fromJson(data));
   }
 
   static final _instance = LoanDataRepository._internal();
