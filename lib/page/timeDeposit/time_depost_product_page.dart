@@ -668,6 +668,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         behavior: HitTestBehavior.translucent,
         onTap: () {
           // 触摸收起键盘
+          // FocusManager.instance.primaryFocus?.unfocus();
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Container(
@@ -752,7 +753,10 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         _isDate = false;
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: "${e.toString()}");
+      Fluttertoast.showToast(
+        msg: "${e.toString()}",
+        gravity: ToastGravity.CENTER,
+      );
       inputValue.text = '';
       _changedCcy = S.current.hint_please_select;
       _changedTerm = S.current.hint_please_select;

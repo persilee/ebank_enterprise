@@ -241,10 +241,14 @@ class _OpenAccountSelectDocumentTypePageState
       print(value.toJson());
       HSProgressHUD.dismiss();
 
-      ///通过判断证件号码不为空来判断是否识别正确
+      ///通过判断证件号码不为空以及视频地址不为空来判断是否识别正确
       if (value.infoStr != null &&
           value.infoStr['IdNum'] != null &&
-          value.infoStr['IdNum'] != '') {
+          value.infoStr['IdNum'] != '' &&
+          (value.isSuccess == true ||
+              (value.isSuccess == false &&
+                  value.fileName != null &&
+                  value.fileName != ''))) {
         Navigator.pushNamed(
           context,
           pageOpenAccountIdentifySuccessful,

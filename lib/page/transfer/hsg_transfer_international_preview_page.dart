@@ -172,15 +172,15 @@ class _TransferInternalPreviewPageState
   Future _loadData(TransferInternationalData transferData) async {
     final prefs = await SharedPreferences.getInstance();
     String custId = prefs.getString(ConfigKey.CUST_ID);
-    // String amount = transferData.transferIntoAmount;
-    double amount = double.parse(transferData.transferIntoAmount);
+    String amount = transferData.transferIntoAmount;
+    // double amount = double.parse(transferData.transferIntoAmount);
     String transferOutCcy = transferData.transferOutCcy;
     String transferIntoCcy = transferData.transferIntoCcy;
     String payeeBankCode = transferData.payeeBankCode;
-    String payeeCardNo = transferData.transferOutAccount;
+    String payeeCardNo = transferData.transferIntoAccount;
     String payeeName = transferData.payeeName;
     String payerBankCode = transferData.payerBankCode;
-    String payerCardNo = transferData.transferIntoAccount;
+    String payerCardNo = transferData.transferOutAccount;
     String payerName = transferData.payerName;
     String remark = transferData.transferRemark;
     String costOptions = transferData.transferFee;
@@ -224,11 +224,7 @@ class _TransferInternalPreviewPageState
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Color(0x57272727),
-        textColor: Color(0xffffffff),
       );
     });
   }

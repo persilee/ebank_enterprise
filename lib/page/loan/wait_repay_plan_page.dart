@@ -74,7 +74,7 @@ class _WaitRepayPlanState extends State<WaitRepayPlanPage> {
     //     });
     //   }
     // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString());
+    //   Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     // });
     lnScheduleList.clear();
     lnScheduleList.add(_list1);
@@ -308,7 +308,7 @@ class _WaitRepayPlanState extends State<WaitRepayPlanPage> {
               // InkWell(
               //   onTap: () {
               //     //跳转
-              //     Fluttertoast.showToast(msg: '还款中...');
+              //     Fluttertoast.showToast(msg: '还款中...',gravity: ToastGravity.CENTER,);
               //   },
               //   child: Text(
               //     repay,

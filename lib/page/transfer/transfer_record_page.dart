@@ -133,6 +133,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                               onRefresh: () {
                                 //刷新完成
                                 _page = 1;
+                                _transferHistoryList.clear();
                                 _loadData();
                                 _refreshController.refreshCompleted();
                                 _refreshController.footerMode.value =
@@ -215,29 +216,6 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     return _isData ? ListView(children: _list) : _noDataContainer(context);
   }
 
-  //加载完毕
-  Widget _toLoad(String loadStatus) {
-    return Container(
-      padding: EdgeInsets.all(20),
-      child: Text(
-        loadStatus,
-        style: FIRST_DESCRIBE_TEXT_STYLE,
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
-
-  //加载更多
-  _loadMoreData() {
-    return Center(
-      child: Container(
-        width: 15,
-        height: 15,
-        child: CircularProgressIndicator(),
-      ),
-    );
-  }
-
   //转账记录内容
   Widget _contentWidget(TransferRecord _transferHistory) {
     return InkWell(
@@ -273,7 +251,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                 FormatUtil.formatSringToMoney(_transferHistory.amount),
                 _transferHistory.status),
             _rowContent(intl.S.of(context).transfer_time,
-                _transferHistory.transactionHour),
+                _transferHistory.transactionTime),
             _rowContent(
                 intl.S.current.transfer_type_with_value,
                 _transferHistory.transferType == '0'
@@ -897,7 +875,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         children: [
           Text(left, style: FIRST_DEGREE_TEXT_STYLE),
           Text(
-            right,
+            right == null ? '' : right,
             style: TextStyle(fontSize: 12, color: statusColor),
           ),
         ],
@@ -952,7 +930,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         });
       }
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
+      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     });
   }
 
@@ -974,7 +952,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         }
       }
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
+      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     });
   }
 
@@ -1011,7 +989,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
       // HSProgressHUD.dismiss();
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
+      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
       // HSProgressHUD.dismiss();
       if (this.mounted) {
         setState(() {

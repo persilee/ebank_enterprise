@@ -129,12 +129,17 @@ class _FeedbackPageState extends State<FeedbackPage> {
     )
         .then((data) {
       Fluttertoast.showToast(
-          msg: S.current.feedbackSuccess, gravity: ToastGravity.CENTER);
+        msg: S.current.feedbackSuccess,
+        gravity: ToastGravity.CENTER,
+      );
       Navigator.pop(context);
       HSProgressHUD.dismiss();
     }).catchError((e) {
       HSProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       print('${e.toString()}');
     });
   }

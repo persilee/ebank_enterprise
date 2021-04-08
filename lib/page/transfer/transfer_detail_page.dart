@@ -48,19 +48,22 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
         children: [
           _transferAccount(_transferHistory),
           _rowWidget(S.of(context).payee_name, _transferHistory.receiveName),
-          _rowWidget(S.of(context).transfer_from_account,
+          _rowWidget(S.of(context).receipt_side_account,
               FormatUtil.formatSpace4(_transferHistory.receiveCardNo)),
-          _rowWidget(S.of(context).transfer_to_account,
+          _rowWidget(
+              S.of(context).debit_currency, _transferHistory.debitCurrency),
+          _rowWidget(S.of(context).transfer_from,
               FormatUtil.formatSpace4(_transferHistory.paymentCardNo)),
           _rowWidget(
-              S.of(context).transaction_time, _transferHistory.transactionHour),
+              S.of(context).transaction_time, _transferHistory.transactionTime),
           _differentContent(_transferHistory),
           _rowWidget(
               S.current.transfer_type_with_value,
               _transferHistory.transferType == '0'
                   ? S.current.transfer_type_0_short
                   : S.current.transfer_type_1_short),
-          _rowWidget(S.of(context).remark, _transferHistory.remark),
+          _rowWidget(
+              S.of(context).transfer_postscript, _transferHistory.remark),
         ],
       ),
     );
@@ -74,12 +77,12 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
             children: [
               _rowWidget(
                   S.of(context).state_area, _transferHistory.countryOrRegion),
-              _rowWidget(S.of(context).remitter_address,
-                  _transferHistory.remitterAddress),
+              // _rowWidget(S.of(context).remitter_address,
+              //     _transferHistory.remitterAddress),
               _rowWidget(
                   S.of(context).payee_address, _transferHistory.payeeAddress),
               _rowWidget(S.of(context).bank_swift, _transferHistory.bankSwift),
-              _rowWidget(S.of(context).middle_bank_swift, ""),
+              // _rowWidget(S.of(context).middle_bank_swift, ""),
               _rowWidget(S.of(context).other_fee, _transferHistory.costOptions),
               _rowWidget(S.of(context).remittance_usage,
                   _transferHistory.remittancePurposes),

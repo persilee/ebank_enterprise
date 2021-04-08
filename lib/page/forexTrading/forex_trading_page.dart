@@ -51,16 +51,26 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   TextEditingController _payAmtController = TextEditingController();
   String _rate = '';
   String _incomeAmt = '';
+  FocusNode _focusNode = new FocusNode();
 
   @override
   // ignore: must_call_super
   void initState() {
     // 网络请求
-    _payAmtController.addListener(() {
-      _transferTrial();
-    });
     _getCardList();
     _loadLocalCcy();
+    _payAmtController.addListener(() {
+      if (_payAmtController.text.length == 0) {
+        setState(() {
+          _rate = '';
+          _incomeAmt = '';
+        });
+      } else {
+        _focusNode.addListener(() {
+          _transferTrial();
+        });
+      }
+    });
   }
 
   @override
@@ -203,6 +213,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
               textAlign: TextAlign.end,
               keyboardType: TextInputType.number,
               controller: _payAmtController,
+              focusNode: _focusNode,
               decoration: InputDecoration.collapsed(
                 hintText: S.current.please_input,
                 hintStyle: TextStyle(
@@ -324,7 +335,10 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         }
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -348,7 +362,10 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         }
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -377,7 +394,10 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           });
         }
       }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
       });
     }
   }
@@ -423,10 +443,15 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         .then((data) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
-          msg: S.current.operate_success, gravity: ToastGravity.CENTER);
+        msg: S.current.operate_success,
+        gravity: ToastGravity.CENTER,
+      );
       Navigator.pop(context, pageIndex);
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       HSProgressHUD.dismiss();
     });
   }

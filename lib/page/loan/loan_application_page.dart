@@ -129,7 +129,10 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         _custId = data.custId;
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -384,7 +387,10 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
       _reqData();
       Navigator.pushNamed(context, pageOperationResult);
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -410,7 +416,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
     //           "getLoanApplication")
     //       .then((data) {})
     //       .catchError((e) {
-    //     Fluttertoast.showToast(msg: e.toString());
+    //     Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     //   });
   }
 }

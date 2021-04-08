@@ -57,10 +57,10 @@ class OpenAccountRepository {
   }
 
   //保存面签视频名称（完整开户面签数据）
-  Future<FaceSignUploadDataResp> saveSignVideo(
-      FaceSignUploadDataReq req, String tag) {
+  Future<OpenAccountInformationSupplementDataResp> saveSignVideo(
+      OpenAccountInformationSupplementDataReq req, String tag) {
     return request('/cust/corporationCust/saveSignVideo', req, tag,
-        (data) => FaceSignUploadDataResp.fromJson(data));
+        (data) => OpenAccountInformationSupplementDataResp.fromJson(data));
   }
 
   static final _instance = OpenAccountRepository._internal();

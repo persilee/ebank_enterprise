@@ -5,7 +5,7 @@ part 'get_international_transfer.g.dart';
 @JsonSerializable()
 class GetInternationalTransferReq extends Object {
   @JsonKey(name: 'amount')
-  double amount;
+  String amount;
 
   @JsonKey(name: 'creditCurrency')
   String creditCurrency;
@@ -87,11 +87,17 @@ class GetInternationalTransferReq extends Object {
 
 @JsonSerializable()
 class InternationalTransferResp extends Object {
-  @JsonKey(name: 'payerBankCode')
-  String payerBankCode;
+  @JsonKey(name: 'amount')
+  String amount;
 
-  @JsonKey(name: 'payerCardNo')
-  String payerCardNo;
+  @JsonKey(name: 'creditCurrency')
+  String creditCurrency;
+
+  @JsonKey(name: 'debitCurrency')
+  String debitCurrency;
+
+  @JsonKey(name: 'payPassword')
+  String payPassword;
 
   @JsonKey(name: 'payeeBankCode')
   String payeeBankCode;
@@ -102,20 +108,23 @@ class InternationalTransferResp extends Object {
   @JsonKey(name: 'payeeName')
   String payeeName;
 
-  @JsonKey(name: 'amount')
-  String amount;
+  @JsonKey(name: 'payerBankCode')
+  String payerBankCode;
+
+  @JsonKey(name: 'payerCardNo')
+  String payerCardNo;
+
+  @JsonKey(name: 'payerName')
+  String payerName;
 
   @JsonKey(name: 'remark')
   String remark;
 
-  @JsonKey(name: 'debitCurrency')
-  String debitCurrency;
+  @JsonKey(name: 'smsCode')
+  String smsCode;
 
-  @JsonKey(name: 'creditCurrency')
-  String creditCurrency;
-
-  @JsonKey(name: 'payerAddress')
-  String payerAddress;
+  @JsonKey(name: 'exchangeRate')
+  String exchangeRate;
 
   @JsonKey(name: 'payeeAddress')
   String payeeAddress;
@@ -123,35 +132,34 @@ class InternationalTransferResp extends Object {
   @JsonKey(name: 'bankSwift')
   String bankSwift;
 
-  @JsonKey(name: 'intermediateBankSwift')
-  String intermediateBankSwift;
+  @JsonKey(name: 'district')
+  String district;
 
-  @JsonKey(name: 'remittancePurposes')
-  String remittancePurposes;
+  @JsonKey(name: 'custId')
+  String custId;
 
   @JsonKey(name: 'costOptions')
   String costOptions;
 
-  @JsonKey(name: 'district')
-  String district;
-
   InternationalTransferResp(
-    this.payerBankCode,
-    this.payerCardNo,
+    this.amount,
+    this.creditCurrency,
+    this.debitCurrency,
+    this.payPassword,
     this.payeeBankCode,
     this.payeeCardNo,
     this.payeeName,
-    this.amount,
+    this.payerBankCode,
+    this.payerCardNo,
+    this.payerName,
     this.remark,
-    this.debitCurrency,
-    this.creditCurrency,
-    this.payerAddress,
+    this.smsCode,
+    this.exchangeRate,
     this.payeeAddress,
     this.bankSwift,
-    this.intermediateBankSwift,
-    this.remittancePurposes,
-    this.costOptions,
     this.district,
+    this.custId,
+    this.costOptions,
   );
 
   factory InternationalTransferResp.fromJson(Map<String, dynamic> srcJson) =>

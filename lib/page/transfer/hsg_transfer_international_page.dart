@@ -183,7 +183,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _companyController.text = listPartner.payeeName;
         _accountController.text = listPartner.payeeCardNo;
         _countryText = listPartner.district;
-        _getPayeeBank = _language == 'zh_CN'
+        _bankNameController.text = _language == 'zh_CN'
             ? listPartner.payeeBankLocalName
             : listPartner.payeeBankEngName;
         _bankSwiftController.text = listPartner.bankSwift;
@@ -486,7 +486,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   _companyController.text = rowListPartner.payeeName;
                   _accountController.text = rowListPartner.payeeCardNo;
                   _countryText = rowListPartner.district;
-                  _getPayeeBank = _language == 'zh_CN'
+                  _bankNameController.text = _language == 'zh_CN'
                       ? rowListPartner.payeeBankLocalName
                       : rowListPartner.payeeBankEngName;
                   _bankSwiftController.text = rowListPartner.bankSwift;
@@ -750,20 +750,12 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
       // if (double.parse(_limit) > double.parse(_balance)) {
       Fluttertoast.showToast(
         msg: "余额不足",
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Color(0xffe74c3c),
-        textColor: Color(0xffffffff),
       );
       // } else {
       //   Fluttertoast.showToast(
       //     msg: "超过限额",
-      //     toastLength: Toast.LENGTH_SHORT,
       //     gravity: ToastGravity.CENTER,
-      //     timeInSecForIosWeb: 1,
-      //     backgroundColor: Color(0xffe74c3c),
-      //     textColor: Color(0xffffffff),
       //   );
       // }
     } else {
@@ -910,7 +902,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         });
       }
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
+      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     });
   }
 
