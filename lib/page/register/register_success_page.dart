@@ -135,9 +135,7 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
     });
   }

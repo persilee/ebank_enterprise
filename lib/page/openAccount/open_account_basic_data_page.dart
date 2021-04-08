@@ -749,7 +749,10 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         print('FIRM_CERT-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
 
     //获取公司类别类型
@@ -761,7 +764,10 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         print('ET-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
 
     //获取商业行业性质类型
@@ -773,7 +779,10 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         print('BIZ_IDU-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 

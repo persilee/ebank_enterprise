@@ -32,7 +32,9 @@ class _SetPayPageState extends State<SetPayPage> {
   var _certificateType = '';
   var _phoneNumber = '';
   var _userId = '';
+  var _areaCode = '';
   var _userAccount = '';
+  var _smsCode = '';
 
   @override
   void initState() {
@@ -52,7 +54,9 @@ class _SetPayPageState extends State<SetPayPage> {
       if (map != null) {
         _certificateNo = map['certificateNo'];
         _certificateType = map['certificateType'];
+        _areaCode = map['areaCode'];
         _phoneNumber = map['phoneNumber'];
+        _smsCode = map['smsCode'] ?? '';
       }
     });
     return new Scaffold(
@@ -137,7 +141,9 @@ class _SetPayPageState extends State<SetPayPage> {
   _submitData() async {
     if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(
-          msg: S.of(context).differentPwd, gravity: ToastGravity.CENTER);
+        msg: S.of(context).differentPwd,
+        gravity: ToastGravity.CENTER,
+      );
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
@@ -156,7 +162,7 @@ class _SetPayPageState extends State<SetPayPage> {
                   _userId,
                   _userAccount,
                   false,
-                  '123456',
+                  _smsCode,
                   '',
                   ''),
               'setTransactionPassword')
@@ -165,7 +171,10 @@ class _SetPayPageState extends State<SetPayPage> {
         Navigator.of(context)..pop()..pop()..pop();
         Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
       }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
         HSProgressHUD.dismiss();
       });
     }

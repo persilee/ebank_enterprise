@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/update_login_password.dart';
 import 'package:ebank_mobile/data/source/update_login_paw_repository.dart';
 
@@ -34,7 +35,8 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   TextEditingController _newPwd = TextEditingController();
   TextEditingController _confimPwd = TextEditingController();
   TextEditingController _sms = TextEditingController();
-  String userAcc;
+  String _phoneStr;
+  String _areaCodeStr;
   Timer _timer;
   int countdownTime = 0;
 
@@ -263,22 +265,38 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
   _getVerificationCode() async {
     HSProgressHUD.show();
     final prefs = await SharedPreferences.getInstance();
-    userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
+    _phoneStr = prefs.getString(ConfigKey.USER_PHONE) ?? '';
+    _areaCodeStr = prefs.getString(ConfigKey.USER_AREACODE) ?? '86';
+    // VerificationCodeRepository()
+    //     .sendSmsByAccount(
+    //         SendSmsByAccountReq('modifyPwd', _phoneStr), 'SendSmsByAccountReq')
+    //     .then((data) {
+    //   _startCountdown();
+    //   if (this.mounted) {
+    //     setState(() {
+    //       //保留setState是为了快一点刷新验证码按钮
+    //       // _sms.text = '123456';
+    //     });
+    //   }
+    //   HSProgressHUD.dismiss();
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER,);
+    //   HSProgressHUD.dismiss();
+    // });
+
     VerificationCodeRepository()
-        .sendSmsByAccount(
-            SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
+        .sendSmsByPhone(
+            SendSmsByPhoneNumberReq(_areaCodeStr, _phoneStr, 'modifyPwd', ''),
+            'sendSms')
         .then((data) {
       _startCountdown();
-      if (this.mounted) {
-        setState(() {
-          //保留setState是为了快一点刷新验证码按钮
-          // _sms.text = '123456';
-        });
-      }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
       HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -293,19 +311,27 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     RegExp number_6 = new RegExp(r'^\d{6}$');
     if (!number_6.hasMatch(_sms.text)) {
       Fluttertoast.showToast(
-          msg: S.current.sms_error, gravity: ToastGravity.CENTER);
+        msg: S.current.sms_error,
+        gravity: ToastGravity.CENTER,
+      );
     } else if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(
-          msg: S.current.differentPwd, gravity: ToastGravity.CENTER);
+        msg: S.current.differentPwd,
+        gravity: ToastGravity.CENTER,
+      );
     } else if (_oldPwd.text == _newPwd.text) {
       Fluttertoast.showToast(
-          msg: S.current.differnet_old_new_pwd, gravity: ToastGravity.CENTER);
+        msg: S.current.differnet_old_new_pwd,
+        gravity: ToastGravity.CENTER,
+      );
     } else if (number.hasMatch(_newPwd.text) == false ||
         letter.hasMatch(_newPwd.text) == false ||
         characters.hasMatch(_newPwd.text) == false ||
         ((_newPwd.text).length < 8 || (_newPwd.text).length > 16)) {
       Fluttertoast.showToast(
-          msg: S.current.password_need_num, gravity: ToastGravity.CENTER);
+        msg: S.current.password_need_num,
+        gravity: ToastGravity.CENTER,
+      );
     } else {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
@@ -316,12 +342,17 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
               'ModifyPasswordReq')
           .then((data) {
         Fluttertoast.showToast(
-            msg: S.current.operate_success, gravity: ToastGravity.CENTER);
+          msg: S.current.operate_success,
+          gravity: ToastGravity.CENTER,
+        );
         Navigator.of(context)..pop();
         Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
         HSProgressHUD.dismiss();
       }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
         HSProgressHUD.dismiss();
       });
     }

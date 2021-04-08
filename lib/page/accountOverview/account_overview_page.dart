@@ -675,11 +675,8 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     }).catchError((e) {
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
-      // Fluttertoast.showToast(msg: e.toString());
     });
   }
 
@@ -748,9 +745,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
     });
   }

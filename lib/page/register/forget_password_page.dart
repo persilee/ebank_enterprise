@@ -259,9 +259,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
           if (!_isRegister) {
             Fluttertoast.showToast(
               msg: S.current.num_not_is_register,
-              toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
             );
             HSProgressHUD.dismiss();
           } else {
@@ -273,9 +271,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
     });
     // }
@@ -297,9 +293,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
             HSProgressHUD.dismiss();
             Fluttertoast.showToast(
               msg: S.current.num_not_is_register,
-              toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
             );
           }
           //校验短信
@@ -307,9 +301,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
             HSProgressHUD.dismiss();
             Fluttertoast.showToast(
               msg: '您输入的验证码错误',
-              toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
             );
           } else {
             Map listData = new Map();
@@ -327,9 +319,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     }).catchError((e) {
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
       HSProgressHUD.dismiss();
     });
@@ -372,9 +362,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
     });
     // }

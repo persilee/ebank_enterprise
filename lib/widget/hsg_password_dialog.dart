@@ -291,11 +291,14 @@ class HsgPasswordDialog extends StatelessWidget {
       }
     }).catchError((e) {
       // if (e.toString() == 'ECUST031') {
-      //   Fluttertoast.showToast(msg: '交易密码错误！请重试');
+      //   Fluttertoast.showToast(msg: '交易密码错误！请重试',gravity: ToastGravity.CENTER,);
       // } else {
-      //   Fluttertoast.showToast(msg: '未设置交易密码！');
+      //   Fluttertoast.showToast(msg: '未设置交易密码！',gravity: ToastGravity.CENTER,);
       // }
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       passwordList.clear();
       (context as Element).markNeedsBuild();
     });

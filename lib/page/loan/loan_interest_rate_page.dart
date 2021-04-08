@@ -83,7 +83,10 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
         });
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 

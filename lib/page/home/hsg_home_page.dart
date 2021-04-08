@@ -242,11 +242,16 @@ class _HomePageState extends State<HomePage> {
             // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
           });
           Fluttertoast.showToast(
-              msg: S.of(context).logoutSuccess, gravity: ToastGravity.CENTER);
+            msg: S.of(context).logoutSuccess,
+            gravity: ToastGravity.CENTER,
+          );
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       HSProgressHUD.dismiss();
       // print(e.toString());
     });
@@ -1028,7 +1033,10 @@ class _HomePageState extends State<HomePage> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       // HSProgressHUD.showError(status: e.toString());
       print('${e.toString()}');
     });
@@ -1051,7 +1059,7 @@ class _HomePageState extends State<HomePage> {
   //       });
   //     }
   //   }).catchError((e) {
-  //     Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+  //     Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER,);
   //     // HSProgressHUD.showError(status: e.toString());
   //     print('${e.toString()}');
   //   });

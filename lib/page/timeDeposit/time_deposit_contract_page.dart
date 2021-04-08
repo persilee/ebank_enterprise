@@ -718,9 +718,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                   if (double.parse(_cardBal) < double.parse(_checkAmount)) {
                     Fluttertoast.showToast(
                       msg: S.current.tdContract_balance_insufficient,
-                      toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.CENTER,
-                      timeInSecForIosWeb: 1,
                     );
                   } else {
                     _loadContractData(
@@ -817,7 +815,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         }
       },
     ).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -987,7 +988,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -1017,7 +1021,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         }
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -1041,7 +1048,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -1098,7 +1108,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         setState(() {});
       }
       HSProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -1138,7 +1151,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       }
     }).catchError((e) {
       HSProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 }

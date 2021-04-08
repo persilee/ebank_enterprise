@@ -103,9 +103,7 @@
 //     }).catchError((e) {
 //       Fluttertoast.showToast(
 //         msg: e.toString(),
-//         toastLength: Toast.LENGTH_SHORT,
 //         gravity: ToastGravity.CENTER,
-//         timeInSecForIosWeb: 1,
 //       );
 //       HSProgressHUD.dismiss();
 //     });
@@ -121,9 +119,7 @@
 //         HSProgressHUD.dismiss();
 //         Fluttertoast.showToast(
 //           msg: S.current.num_is_register,
-//           toastLength: Toast.LENGTH_SHORT,
 //           gravity: ToastGravity.CENTER,
-//           timeInSecForIosWeb: 1,
 //         );
 //       } else {
 //         VersionDataRepository()
@@ -143,9 +139,7 @@
 //           HSProgressHUD.dismiss();
 //           Fluttertoast.showToast(
 //             msg: e.toString(),
-//             toastLength: Toast.LENGTH_SHORT,
 //             gravity: ToastGravity.CENTER,
-//             timeInSecForIosWeb: 1,
 //           );
 //         });
 //       }
@@ -154,9 +148,7 @@
 //       if (!_isRegister) {
 //         Fluttertoast.showToast(
 //           msg: S.current.num_not_is_register,
-//           toastLength: Toast.LENGTH_SHORT,
 //           gravity: ToastGravity.CENTER,
-//           timeInSecForIosWeb: 1,
 //         );
 //       } else {
 //         VersionDataRepository()
@@ -175,9 +167,7 @@
 //           HSProgressHUD.dismiss();
 //           Fluttertoast.showToast(
 //             msg: e.toString(),
-//             toastLength: Toast.LENGTH_SHORT,
 //             gravity: ToastGravity.CENTER,
-//             timeInSecForIosWeb: 1,
 //           );
 //         });
 //       }

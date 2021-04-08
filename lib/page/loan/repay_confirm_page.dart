@@ -131,7 +131,7 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
     //         arguments: message);
     //   }
     // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString());
+    //   Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     // });
   }
 
@@ -282,7 +282,10 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
         .then((data) {
       // _loadData();
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 

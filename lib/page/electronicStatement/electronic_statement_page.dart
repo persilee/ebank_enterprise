@@ -95,7 +95,10 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
           arguments: {'filePath': data.filePath, 'date': date});
     }).catchError((e) {
       HSProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 }

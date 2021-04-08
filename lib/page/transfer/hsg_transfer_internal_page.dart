@@ -358,20 +358,12 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       // if (double.parse(_limit) > double.parse(_balance)) {
       Fluttertoast.showToast(
         msg: "余额不足",
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Color(0x57272727),
-        textColor: Color(0xffffffff),
       );
       // } else {
       //   Fluttertoast.showToast(
       //     msg: "超过限额",
-      //     toastLength: Toast.LENGTH_SHORT,
       //     gravity: ToastGravity.CENTER,
-      //     timeInSecForIosWeb: 1,
-      //     backgroundColor: Color(0x57272727),
-      //     textColor: Color(0xffffffff),
       //   );
       // }
     } else {
@@ -739,7 +731,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         });
       }
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
+      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     });
   }
 
@@ -761,7 +753,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       });
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      ///  Fluttertoast.showToast(msg: e.toString());
+      ///  Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
       HSProgressHUD.dismiss();
     });
     // }

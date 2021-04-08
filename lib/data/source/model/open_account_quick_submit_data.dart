@@ -188,6 +188,10 @@ class Partner {
   @JsonKey(name: 'partnerType')
   String partnerType;
 
+  ///区号
+  @JsonKey(name: 'areaCode')
+  String areaCode;
+
   ///手机号
   @JsonKey(name: 'phone')
   String phone;
@@ -226,6 +230,7 @@ class Partner {
     this.idType,
     this.nationality,
     this.partnerType,
+    this.areaCode,
     this.phone,
     // this.fullNameLoc,
     // this.fullNameEng,

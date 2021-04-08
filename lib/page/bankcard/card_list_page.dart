@@ -276,7 +276,10 @@ class _CardListPageState extends State<CardListPage> {
           _isLoading = false;
         });
       }
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 

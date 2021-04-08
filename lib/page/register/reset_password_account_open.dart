@@ -194,9 +194,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
     });
   }
@@ -237,7 +235,10 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
     print('$_cardNumberListen>>>>>>>>>>>>>>>>>');
     //调用三要素验证，成功后进入人脸识别，识别成功后进入设置密码阶段
     if (_cardNumber.text.length <= 0) {
-      Fluttertoast.showToast(msg: '请输入证件号!');
+      Fluttertoast.showToast(
+        msg: '请输入证件号!',
+        gravity: ToastGravity.CENTER,
+      );
       return;
     }
     print(_cardNumber.text +
@@ -272,9 +273,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
       print(e.toString());
     });

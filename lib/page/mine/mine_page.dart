@@ -805,7 +805,10 @@ class _MinePageState extends State<MinePage> {
         //, BaseBody(body: {})
         print(value);
       }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
       });
     }
   }
@@ -826,7 +829,10 @@ class _MinePageState extends State<MinePage> {
         _changeUserInfoShow(_userInfoResp);
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       print('${e.toString()}');
     });
   }
@@ -867,11 +873,16 @@ class _MinePageState extends State<MinePage> {
                 (route) => false);
           });
           Fluttertoast.showToast(
-              msg: S.of(context).logoutSuccess, gravity: ToastGravity.CENTER);
+            msg: S.of(context).logoutSuccess,
+            gravity: ToastGravity.CENTER,
+          );
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       HSProgressHUD.dismiss();
     });
   }
@@ -956,7 +967,10 @@ class _MinePageState extends State<MinePage> {
         lastVersionName = value.versionName;
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 }
