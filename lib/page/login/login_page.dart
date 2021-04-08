@@ -318,12 +318,17 @@ class _LoginPageState extends State<LoginPage> {
   ///判断是否能点击登录按钮
   bool _judgeCanLogin() {
     if (_account.toString().length == 0 || _account == null) {
-      Fluttertoast.showToast(msg: S.of(context).please_input_account);
+      Fluttertoast.showToast(
+          gravity: ToastGravity.CENTER,
+          msg: S.of(context).please_input_username);
+
       return false;
     }
 
     if (_password.toString().length == 0 || _password == null) {
-      Fluttertoast.showToast(msg: S.of(context).please_input_password);
+      Fluttertoast.showToast(
+          gravity: ToastGravity.CENTER,
+          msg: S.of(context).please_input_password);
       return false;
     }
 
@@ -354,6 +359,7 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
       child: FlatButton(
         onPressed: () {
           _selectLanguage(context);
+          FocusManager.instance.primaryFocus?.unfocus();
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
