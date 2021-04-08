@@ -753,7 +753,10 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         _isDate = false;
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: "${e.toString()}");
+      Fluttertoast.showToast(
+        msg: "${e.toString()}",
+        gravity: ToastGravity.CENTER,
+      );
       inputValue.text = '';
       _changedCcy = S.current.hint_please_select;
       _changedTerm = S.current.hint_please_select;

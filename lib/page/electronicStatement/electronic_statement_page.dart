@@ -41,11 +41,13 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
       ),
       body: Container(
         color: HsgColors.commonBackground,
-        child: _isLoading ? HsgLoading() : ListView.builder(
-            itemCount: dataList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return _getList(context, index);
-            }),
+        child: _isLoading
+            ? HsgLoading()
+            : ListView.builder(
+                itemCount: dataList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return _getList(context, index);
+                }),
       ),
     );
   }
@@ -102,12 +104,15 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
       });
       _isLoading = false;
     } catch (e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     }
   }
 
   void openPDF(BuildContext context, String title) {
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => HsgPdfViewer(title: title,data: _fileData)));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => HsgPdfViewer(title: title, data: _fileData)));
   }
 }

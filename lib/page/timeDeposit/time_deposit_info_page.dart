@@ -598,7 +598,10 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         }
       },
     ).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 

@@ -204,11 +204,17 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             'addPartner')
         .then((data) {
       if (data != null) {
-        Fluttertoast.showToast(msg: '添加成功');
+        Fluttertoast.showToast(
+          msg: '添加成功',
+          gravity: ToastGravity.CENTER,
+        );
         Navigator.of(context).pop();
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -900,11 +906,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     }).catchError((e) {
       Fluttertoast.showToast(
         msg: "银行SWIFT不存在",
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Color(0x57272727),
-        textColor: Color(0xffffffff),
       );
     });
   }
@@ -922,11 +924,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     }).catchError((e) {
       Fluttertoast.showToast(
         msg: "账号不存在",
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Color(0x57272727),
-        textColor: Color(0xffffffff),
       );
     });
   }

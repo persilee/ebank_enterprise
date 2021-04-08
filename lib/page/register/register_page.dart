@@ -207,10 +207,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                           true) {
                                     //校验用户名
                                     Fluttertoast.showToast(
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.CENTER,
-                                        timeInSecForIosWeb: 1,
-                                        msg: S.current.register_check_username);
+                                      gravity: ToastGravity.CENTER,
+                                      msg: S.current.register_check_username,
+                                    );
                                   } else {
                                     _checkRegisterBysencond();
                                   }
@@ -250,9 +249,7 @@ class _RegisterPageState extends State<RegisterPage> {
             HSProgressHUD.dismiss();
             Fluttertoast.showToast(
               msg: S.current.num_is_register,
-              toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
             );
           } else {
             _sendSmsRegister(_isRegister);
@@ -262,9 +259,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }).catchError((e) {
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
       HSProgressHUD.dismiss();
     });
@@ -291,9 +286,7 @@ class _RegisterPageState extends State<RegisterPage> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
     });
     // }
@@ -315,9 +308,7 @@ class _RegisterPageState extends State<RegisterPage> {
             HSProgressHUD.dismiss();
             Fluttertoast.showToast(
               msg: S.current.num_is_register,
-              toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
             );
           }
           //校验短信
@@ -325,9 +316,7 @@ class _RegisterPageState extends State<RegisterPage> {
             HSProgressHUD.dismiss();
             Fluttertoast.showToast(
               msg: '您输入的验证码错误',
-              toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
             );
           } else {
             Map listData = new Map();
@@ -346,9 +335,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }).catchError((e) {
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
       HSProgressHUD.dismiss();
     });

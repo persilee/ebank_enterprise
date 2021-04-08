@@ -956,9 +956,7 @@ class _DetailListPageState extends State<DetailListPage> {
       }
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
     });
   }
@@ -1006,9 +1004,7 @@ class _DetailListPageState extends State<DetailListPage> {
       _isLoading = false;
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
       // HSProgressHUD.dismiss();
     });

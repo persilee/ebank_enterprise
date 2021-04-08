@@ -335,7 +335,10 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         }
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -359,7 +362,10 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         }
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -388,7 +394,10 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           });
         }
       }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
       });
     }
   }
@@ -434,10 +443,15 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         .then((data) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
-          msg: S.current.operate_success, gravity: ToastGravity.CENTER);
+        msg: S.current.operate_success,
+        gravity: ToastGravity.CENTER,
+      );
       Navigator.pop(context, pageIndex);
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       HSProgressHUD.dismiss();
     });
   }

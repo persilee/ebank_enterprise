@@ -125,7 +125,9 @@ class _RelatedIndividualsDataPageState
             ? () async {
                 final prefs = await SharedPreferences.getInstance();
                 String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
+                String areaCodeStr = prefs.getString(ConfigKey.USER_AREACODE);
                 _partner.phone = phoneStr == null ? '' : phoneStr;
+                _partner.areaCode = areaCodeStr == null ? '' : areaCodeStr;
                 List<Partner> partnerList = [_partner];
                 widget.dataReq.partnerList = partnerList;
                 _savePreCust();
@@ -575,7 +577,10 @@ class _RelatedIndividualsDataPageState
         print('SALUTATION-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
 
     //个人职位类别
@@ -587,7 +592,10 @@ class _RelatedIndividualsDataPageState
         print('POSIT-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
 
     //个人证件类型
@@ -599,7 +607,10 @@ class _RelatedIndividualsDataPageState
         print('CERT_TYPE-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 

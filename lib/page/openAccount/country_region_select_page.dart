@@ -84,7 +84,7 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
     //     print('COUNTRY-  ${data.publicCodeGetRedisRspDtoList}');
     //   }
     // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString());
+    //   Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     // });
 
     //加载城市列表

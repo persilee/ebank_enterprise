@@ -75,6 +75,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    HSProgressHUD.dismiss();
+
     String _language = Intl.getCurrentLocale();
     if (_language == 'zh_CN') {
       _changeLangBtnTltle = '中文（简体）';
@@ -319,16 +321,17 @@ class _LoginPageState extends State<LoginPage> {
   bool _judgeCanLogin() {
     if (_account.toString().length == 0 || _account == null) {
       Fluttertoast.showToast(
-          gravity: ToastGravity.CENTER,
-          msg: S.of(context).please_input_username);
-
+        msg: S.of(context).please_input_account,
+        gravity: ToastGravity.CENTER,
+      );
       return false;
     }
 
     if (_password.toString().length == 0 || _password == null) {
       Fluttertoast.showToast(
-          gravity: ToastGravity.CENTER,
-          msg: S.of(context).please_input_password);
+        msg: S.of(context).please_input_password,
+        gravity: ToastGravity.CENTER,
+      );
       return false;
     }
 
