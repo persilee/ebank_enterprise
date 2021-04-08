@@ -172,8 +172,8 @@ class _TransferInternalPreviewPageState
   Future _loadData(TransferInternationalData transferData) async {
     final prefs = await SharedPreferences.getInstance();
     String custId = prefs.getString(ConfigKey.CUST_ID);
-    // String amount = transferData.transferIntoAmount;
-    double amount = double.parse(transferData.transferIntoAmount);
+    String amount = transferData.transferIntoAmount;
+    // double amount = double.parse(transferData.transferIntoAmount);
     String transferOutCcy = transferData.transferOutCcy;
     String transferIntoCcy = transferData.transferIntoCcy;
     String payeeBankCode = transferData.payeeBankCode;

@@ -133,6 +133,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                               onRefresh: () {
                                 //刷新完成
                                 _page = 1;
+                                _transferHistoryList.clear();
                                 _loadData();
                                 _refreshController.refreshCompleted();
                                 _refreshController.footerMode.value =

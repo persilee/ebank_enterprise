@@ -183,7 +183,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _companyController.text = listPartner.payeeName;
         _accountController.text = listPartner.payeeCardNo;
         _countryText = listPartner.district;
-        _getPayeeBank = _language == 'zh_CN'
+        _bankNameController.text = _language == 'zh_CN'
             ? listPartner.payeeBankLocalName
             : listPartner.payeeBankEngName;
         _bankSwiftController.text = listPartner.bankSwift;
@@ -486,7 +486,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   _companyController.text = rowListPartner.payeeName;
                   _accountController.text = rowListPartner.payeeCardNo;
                   _countryText = rowListPartner.district;
-                  _getPayeeBank = _language == 'zh_CN'
+                  _bankNameController.text = _language == 'zh_CN'
                       ? rowListPartner.payeeBankLocalName
                       : rowListPartner.payeeBankEngName;
                   _bankSwiftController.text = rowListPartner.bankSwift;

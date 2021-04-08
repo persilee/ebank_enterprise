@@ -1,5 +1,5 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-/// 外汇买卖
+/// 汇率查询
 /// Author: CaiTM
 /// Date: 2020-12-28
 
@@ -59,8 +59,8 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   // ignore: must_call_super
   void initState() {
     // 网络请求
-    _getExchangeRateList();
     _getCcyList();
+    _getExchangeRateList();
     _focusNode.addListener(() {
       _amountConversion();
     });
@@ -486,6 +486,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   // 获取币种列表
   Future _getCcyList() async {
     final prefs = await SharedPreferences.getInstance();
+    //获取本地币种
     _primitiveCcyList.clear();
     _primitiveCcyList.add(prefs.getString(ConfigKey.LOCAL_CCY));
     PublicParametersRepository()
