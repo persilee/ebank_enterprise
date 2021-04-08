@@ -160,7 +160,7 @@
   "transfer_in": "转入",
   "company_name": "公司名",
   "international_transfer_account_prompt": "*若汇往欧洲地区，收款人账号必须为IBAN（International Bank Account Number)组合。",
-  "state_area": "国家地区",
+  "state_area": "国家/地区",
   "receipt_bank": "收款银行",
   "bank_swift": "银行SWIFT",
   "middle_bank_swift": "中间行SWIFT",

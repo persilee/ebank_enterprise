@@ -5,7 +5,7 @@ part 'get_international_transfer.g.dart';
 @JsonSerializable()
 class GetInternationalTransferReq extends Object {
   @JsonKey(name: 'amount')
-  double amount;
+  String amount;
 
   @JsonKey(name: 'creditCurrency')
   String creditCurrency;
