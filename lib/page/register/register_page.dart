@@ -372,6 +372,15 @@ class _RegisterPageState extends State<RegisterPage> {
     _timer = Timer.periodic(Duration(seconds: 1), call);
   }
 
+  //释放_timer
+  @override
+  void dispose() {
+    super.dispose();
+    if (_timer != null) {
+      _timer.cancel();
+    }
+  }
+
 //发送短信
   FlatButton _otpButton() {
     return FlatButton(

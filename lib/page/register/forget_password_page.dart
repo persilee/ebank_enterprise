@@ -50,13 +50,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   /// 区号
   String _officeAreaCodeText = '';
-  @override
-  void dispose() {
-    super.dispose();
-    if (_timer != null) {
-      _timer.cancel();
-    }
-  }
 
   @override
   // ignore: must_call_super
@@ -214,6 +207,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         _officeAreaCodeText = (value as CountryRegionModel).code;
       });
     });
+  }
+
+  //释放_timer
+  @override
+  void dispose() {
+    super.dispose();
+    if (_timer != null) {
+      _timer.cancel();
+    }
   }
 
   FlatButton _otpButton() {
