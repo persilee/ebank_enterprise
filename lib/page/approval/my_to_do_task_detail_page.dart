@@ -834,6 +834,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           return HsgTipsDialog(
             child: Text(S.current.approve_reject_tip),
             confirmCallback: () {
+              FocusManager.instance.primaryFocus?.unfocus();
               Navigator.pop(context);
               _rejectTaskConfirm(context);
             },
@@ -880,6 +881,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           return HsgTipsDialog(
             child: Text(S.current.approve_reject_to_start_tip),
             confirmCallback: () {
+              FocusManager.instance.primaryFocus?.unfocus();
               Navigator.pop(context);
               _rejectToStartTaskConfirm();
             },
@@ -933,6 +935,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     if (isPassword != null && isPassword == true) {
       return true;
     }
+    FocusManager.instance.primaryFocus?.unfocus();
     return false;
   }
 
@@ -942,6 +945,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     bool isPassword =  await _openBottomSheet();
     // 如果交易密码正确，处理审批逻辑
     if(isPassword) {
+      FocusManager.instance.primaryFocus?.unfocus();
       if (this.mounted) {
         setState(() {
           _btnIsLoadingEAA = true;

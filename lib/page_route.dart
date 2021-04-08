@@ -88,6 +88,7 @@ import 'package:ebank_mobile/page/transfer/select_bank_page.dart';
 import 'package:ebank_mobile/page/transfer/select_city_page.dart';
 import 'package:ebank_mobile/page/transfer/select_branch_bank_page.dart';
 import 'package:ebank_mobile/page/userAgreement/user_agreement_page.dart';
+import 'package:ebank_mobile/widget/hsg_pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page/mine/mine_page.dart';
 import 'package:ebank_mobile/page/mine/about_us_page.dart';
@@ -157,6 +158,7 @@ var pageTransferInternationalPreview =
 var pageTrasferInternational = '/hsg_transfer_international_page';
 var pageElectronicStatement = '/electronic_statement_page';
 var pageElectronicStatementDetail = '/electronic_statement_detail_page';
+var hsgPdfViewer = '/hsg_pdf_viewer';
 var pageTimeDepostProduct = '/time_depost_product_page';
 var pageForexTrading = '/forex_trading_page';
 var pageExchangeRateInquiry = '/exchange_rate_inquiry_page';
@@ -260,6 +262,7 @@ var appRoutes = {
       TransferinternationalPreviewPage(),
   pageElectronicStatement: (context) => ElectronicStatementPage(),
   pageElectronicStatementDetail: (context) => ElectronicStatementDetailPage(),
+  hsgPdfViewer: (context) => HsgPdfViewer(),
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
   // pageTimeDepositContract: (context) => TimeDepositContract(),
   pageForexTrading: (context) => ForexTradingPage(),

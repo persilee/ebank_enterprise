@@ -2,11 +2,10 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/electronic_statement_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_electronic_statement.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/widget/progressHUD.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
+import 'package:ebank_mobile/widget/hsg_pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import '../../page_route.dart';
 
 class ElectronicStatementPage extends StatefulWidget {
   @override
@@ -23,6 +22,14 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
     {'date': '2020-08'},
     {'date': '2020-07'},
   ];
+  GetFilePathResp _fileData;
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +41,13 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
       ),
       body: Container(
         color: HsgColors.commonBackground,
-        child: ListView.builder(
-            itemCount: dataList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return _getList(context, index);
-            }),
+        child: _isLoading
+            ? HsgLoading()
+            : ListView.builder(
+                itemCount: dataList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return _getList(context, index);
+                }),
       ),
     );
   }
@@ -79,26 +88,31 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
         ),
       ),
       onTap: () {
-        _getFilePath(dataList[index]['date']);
+        print('aaa');
+        openPDF(context, dataList[index]['date']);
       },
     );
   }
 
-  _getFilePath(String date) {
-    HSProgressHUD.show();
-    RlectronicStatementRepository()
-        .getFilePath(GetFilePathReq(), 'GetFilePathReq')
-        .then((data) {
-      HSProgressHUD.dismiss();
-
-      Navigator.pushNamed(context, pageElectronicStatementDetail,
-          arguments: {'filePath': data.filePath, 'date': date});
-    }).catchError((e) {
-      HSProgressHUD.dismiss();
+  void _loadData() async {
+    _isLoading = true;
+    try {
+      GetFilePathResp filePathResp = await RlectronicStatementRepository()
+          .getFilePath(GetFilePathReq(), 'GetFilePathReq');
+      setState(() {
+        _fileData = filePathResp;
+      });
+      _isLoading = false;
+    } catch (e) {
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
       );
-    });
+    }
+  }
+
+  void openPDF(BuildContext context, String title) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => HsgPdfViewer(title: title, data: _fileData)));
   }
 }

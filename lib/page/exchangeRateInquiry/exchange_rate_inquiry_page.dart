@@ -1,5 +1,5 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-/// 外汇买卖
+/// 汇率查询
 /// Author: CaiTM
 /// Date: 2020-12-28
 
@@ -59,8 +59,8 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   // ignore: must_call_super
   void initState() {
     // 网络请求
-    _getExchangeRateList();
     _getCcyList();
+    _getExchangeRateList();
     _focusNode.addListener(() {
       _amountConversion();
     });
@@ -79,6 +79,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
       });
     }
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(S.current.exchange_rate),
         centerTitle: true,
@@ -473,12 +474,24 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
 
   //获取币种买入卖出列表
   Future _getExchangeRateList() async {
+    _isLoading = true;
     ForexTradingRepository()
         .getExRate(GetExRateReq(), 'getExRateReq')
         .then((data) {
       if (data != null) {
         rateList.clear();
         rateList.addAll(data.recordLists);
+        if (this.mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    }).catchError(() {
+      if (this.mounted) {
+        setState(() {
+          _isLoading = false;
+        });
       }
     });
   }
@@ -486,8 +499,12 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   // 获取币种列表
   Future _getCcyList() async {
     final prefs = await SharedPreferences.getInstance();
+    //获取本地币种
     _primitiveCcyList.clear();
     _primitiveCcyList.add(prefs.getString(ConfigKey.LOCAL_CCY));
+    setState(() {
+      _primitiveCcy = _primitiveCcyList[0];
+    });
     PublicParametersRepository()
         .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
         .then((data) {
@@ -496,6 +513,11 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
         data.publicCodeGetRedisRspDtoList.forEach((e) {
           _objectiveCcyList.add(e.code);
         });
+        if (this.mounted) {
+          setState(() {
+            _objectiveCcy = _objectiveCcyList[0];
+          });
+        }
       }
     });
   }
