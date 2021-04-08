@@ -930,7 +930,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         });
       }
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
+      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     });
   }
 
@@ -952,7 +952,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         }
       }
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
+      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     });
   }
 
@@ -989,7 +989,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
       // HSProgressHUD.dismiss();
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
+      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
       // HSProgressHUD.dismiss();
       if (this.mounted) {
         setState(() {

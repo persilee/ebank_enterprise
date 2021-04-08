@@ -149,9 +149,7 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                                         _confirmPassword.text)) {
                                       Fluttertoast.showToast(
                                         msg: S.of(context).differentPwd,
-                                        toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.CENTER,
-                                        timeInSecForIosWeb: 1,
                                       );
                                     } else if (characters
                                                 .hasMatch(_newPassword.text) ==
@@ -169,9 +167,7 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                                             _newPassword.text.length > 16)) {
                                       Fluttertoast.showToast(
                                         msg: S.current.password_need_num,
-                                        toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.CENTER,
-                                        timeInSecForIosWeb: 1,
                                       );
                                     } else {
                                       _updateLoginPassword();
@@ -208,46 +204,34 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
     // if (_newPassword.text != _confirmPassword.text) {
     //   Fluttertoast.showToast(
     //     msg: S.of(context).differentPwd,
-    //     toastLength: Toast.LENGTH_SHORT,
     //     gravity: ToastGravity.CENTER,
-    //     timeInSecForIosWeb: 1,
     //   );
     // }
     // if ((_newPassword.text).contains(userAccount) == true) {
     //   Fluttertoast.showToast(
     //     msg: S.current.not_contain_password,
-    //     toastLength: Toast.LENGTH_SHORT,
     //     gravity: ToastGravity.CENTER,
-    //     timeInSecForIosWeb: 1,
     //   );
     // } else if ((_newPassword.text).length < 8 ||
     //     (_newPassword.text).length > 16) {
     //   Fluttertoast.showToast(
     //     msg: S.current.password_8_16,
-    //     toastLength: Toast.LENGTH_SHORT,
     //     gravity: ToastGravity.CENTER,
-    //     timeInSecForIosWeb: 1,
     //   );
     // } else if (number.hasMatch(_newPassword.text) == false) {
     //   Fluttertoast.showToast(
     //     msg: S.current.password_need_num,
-    //     toastLength: Toast.LENGTH_SHORT,
     //     gravity: ToastGravity.CENTER,
-    //     timeInSecForIosWeb: 1,
     //   );
     // } else if (letter.hasMatch(_newPassword.text) == false) {
     //   Fluttertoast.showToast(
     //     msg: S.current.password_need_num,
-    //     toastLength: Toast.LENGTH_SHORT,
     //     gravity: ToastGravity.CENTER,
-    //     timeInSecForIosWeb: 1,
     //   );
     // } else if (characters.hasMatch(_newPassword.text) == false) {
     //   Fluttertoast.showToast(
     //     msg: S.current.password_need_num,
-    //     toastLength: Toast.LENGTH_SHORT,
     //     gravity: ToastGravity.CENTER,
-    //     timeInSecForIosWeb: 1,
     //   );
     // } else {
     String confirmPassword = EncryptUtil.aesEncode(_confirmPasswordListen);
@@ -266,9 +250,7 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: S.current.operate_success,
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
       Navigator.of(context).pushNamedAndRemoveUntil(
         pageResetPasswordSuccess,
@@ -280,9 +262,7 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
     }).catchError((e) {
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
       HSProgressHUD.dismiss();
     });

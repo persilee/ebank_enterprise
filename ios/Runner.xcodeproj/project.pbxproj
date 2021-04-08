@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
-		47E5ABB8260DA1B0000E0FB1 /* SigningEyeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47E5ABB7260DA1B0000E0FB1 /* SigningEyeSDK.framework */; };
+		47791B9D261F020400954035 /* SigningResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 47791B9B261F020200954035 /* SigningResources.bundle */; };
+		47791B9E261F020400954035 /* SigningEyeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47791B9C261F020400954035 /* SigningEyeSDK.framework */; };
 		6815D74826047BED007BFC9D /* .ruby-gemset in Resources */ = {isa = PBXBuildFile; fileRef = 6815D71A26047BED007BFC9D /* .ruby-gemset */; };
 		6815D74926047BED007BFC9D /* .cocoadocs.yml in Resources */ = {isa = PBXBuildFile; fileRef = 6815D71B26047BED007BFC9D /* .cocoadocs.yml */; };
 		6815D74A26047BED007BFC9D /* .codecov.yml in Resources */ = {isa = PBXBuildFile; fileRef = 6815D71C26047BED007BFC9D /* .codecov.yml */; };
@@ -94,7 +95,6 @@
 		68B783FA26019851001F2648 /* YTCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B783EA26019851001F2648 /* YTCommon.framework */; };
 		68B783FB26019851001F2648 /* YTIllumination.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B783EB26019851001F2648 /* YTIllumination.framework */; };
 		68B783FC26019851001F2648 /* WBCloudReflectionFaceVerify_framework.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 68B783EC26019851001F2648 /* WBCloudReflectionFaceVerify_framework.podspec */; };
-		68B783FE26019851001F2648 /* SigningResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 68B783EE26019851001F2648 /* SigningResources.bundle */; };
 		68B78400260198CB001F2648 /* CloudroomVideoSDK_IOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B783EF26019851001F2648 /* CloudroomVideoSDK_IOS.framework */; };
 		68B78401260198CB001F2648 /* CloudroomVideoSDK_IOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 68B783EF26019851001F2648 /* CloudroomVideoSDK_IOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
@@ -122,7 +122,8 @@
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		47319BD32574C88E002F4BF2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		47E5ABB7260DA1B0000E0FB1 /* SigningEyeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SigningEyeSDK.framework; sourceTree = "<group>"; };
+		47791B9B261F020200954035 /* SigningResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SigningResources.bundle; sourceTree = "<group>"; };
+		47791B9C261F020400954035 /* SigningEyeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SigningEyeSDK.framework; sourceTree = "<group>"; };
 		6805F576739CE86F7DAD4B3A /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		6815D71A26047BED007BFC9D /* .ruby-gemset */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ".ruby-gemset"; sourceTree = "<group>"; };
 		6815D71B26047BED007BFC9D /* .cocoadocs.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .cocoadocs.yml; sourceTree = "<group>"; };
@@ -254,7 +255,6 @@
 		68B783EA26019851001F2648 /* YTCommon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YTCommon.framework; sourceTree = "<group>"; };
 		68B783EB26019851001F2648 /* YTIllumination.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YTIllumination.framework; sourceTree = "<group>"; };
 		68B783EC26019851001F2648 /* WBCloudReflectionFaceVerify_framework.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WBCloudReflectionFaceVerify_framework.podspec; sourceTree = "<group>"; };
-		68B783EE26019851001F2648 /* SigningResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SigningResources.bundle; sourceTree = "<group>"; };
 		68B783EF26019851001F2648 /* CloudroomVideoSDK_IOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CloudroomVideoSDK_IOS.framework; sourceTree = "<group>"; };
 		68B784502601F7F3001F2648 /* UtilsMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilsMacros.h; sourceTree = "<group>"; };
 		716F3B214F9BF043DCDD56FF /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -289,7 +289,7 @@
 				68B783F726019851001F2648 /* YTPoseDetector.framework in Frameworks */,
 				686D0B2B2600B4C600781075 /* SystemConfiguration.framework in Frameworks */,
 				686D0B292600B4BF00781075 /* Security.framework in Frameworks */,
-				47E5ABB8260DA1B0000E0FB1 /* SigningEyeSDK.framework in Frameworks */,
+				47791B9E261F020400954035 /* SigningEyeSDK.framework in Frameworks */,
 				686D0B272600B4B300781075 /* Accelerate.framework in Frameworks */,
 				686D0B252600B4A800781075 /* CoreVideo.framework in Frameworks */,
 				686D0B232600B49A00781075 /* ExternalAccessory.framework in Frameworks */,
@@ -539,9 +539,9 @@
 		686D0AD82600B3D400781075 /* QianliyanSDK */ = {
 			isa = PBXGroup;
 			children = (
+				47791B9C261F020400954035 /* SigningEyeSDK.framework */,
+				47791B9B261F020200954035 /* SigningResources.bundle */,
 				68B783EF26019851001F2648 /* CloudroomVideoSDK_IOS.framework */,
-				47E5ABB7260DA1B0000E0FB1 /* SigningEyeSDK.framework */,
-				68B783EE26019851001F2648 /* SigningResources.bundle */,
 				68B783DD26019850001F2648 /* WBCloudReflectionFaceVerify_framework */,
 			);
 			path = QianliyanSDK;
@@ -733,8 +733,8 @@
 			files = (
 				6815D78F26048767007BFC9D /* LICENSE.md in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
-				68B783FE26019851001F2648 /* SigningResources.bundle in Resources */,
 				6815D79D26048767007BFC9D /* README.md in Resources */,
+				47791B9D261F020400954035 /* SigningResources.bundle in Resources */,
 				6815D75326047BED007BFC9D /* ci.yml in Resources */,
 				6815D74B26047BED007BFC9D /* .ruby-version in Resources */,
 				68B783F226019851001F2648 /* PEDat_wb.bundle in Resources */,

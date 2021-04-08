@@ -44,7 +44,6 @@ class _HomePageState extends State<HomePage> {
   var _userName = ''; // 姓名
   var _characterName = ''; // 角色名称
   var _belongCustStatus = ''; //用户状态
-  // var _inviteeStatus = '0'; //用户受邀状态，是否是走快速开户，默认为0，不走
   var _lastLoginTime = ''; // 上次登录时间
   String _language = Intl.getCurrentLocale();
   var _features = [];
@@ -243,11 +242,16 @@ class _HomePageState extends State<HomePage> {
             // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
           });
           Fluttertoast.showToast(
-              msg: S.of(context).logoutSuccess, gravity: ToastGravity.CENTER);
+            msg: S.of(context).logoutSuccess,
+            gravity: ToastGravity.CENTER,
+          );
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       HSProgressHUD.dismiss();
       // print(e.toString());
     });
@@ -467,11 +471,12 @@ class _HomePageState extends State<HomePage> {
         child: ClipOval(
           child: (_headPortraitUrl == null || _headPortraitUrl == '')
               ? Image(
+                  fit: BoxFit.cover,
                   image: AssetImage(
                       'images/home/heaerIcon/home_header_person.png'),
                 )
               : FadeInImage.assetNetwork(
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.cover,
                   image: _headPortraitUrl == null ? '' : _headPortraitUrl,
                   placeholder: 'images/home/heaerIcon/home_header_person.png',
                 ),
@@ -870,8 +875,7 @@ class _HomePageState extends State<HomePage> {
   //开户点击事件
   void _openAccountClickFunction(BuildContext context) {
     if (_belongCustStatus == '1') {
-      // //前往填写面签码
-      // Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+      ///提示，前往网银开户
       HsgShowTip.notOpenAccountGotoEbankTip(
         context: context,
         click: (value) {},
@@ -999,9 +1003,7 @@ class _HomePageState extends State<HomePage> {
         _characterName = _language == 'en'
             ? model.roleEngName
             : model.roleLocalName; //用户角色名称
-        _belongCustStatus = model.userId == '989185387615485977'
-            ? '5'
-            : model.belongCustStatus; //用户状态(先临时数据判断是blk703显示为已开户)
+        _belongCustStatus = model.belongCustStatus; //用户状态
         _lastLoginTime = model.lastLoginTime; // 上次登录时间
       });
     }
@@ -1031,7 +1033,10 @@ class _HomePageState extends State<HomePage> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       // HSProgressHUD.showError(status: e.toString());
       print('${e.toString()}');
     });
@@ -1054,7 +1059,7 @@ class _HomePageState extends State<HomePage> {
   //       });
   //     }
   //   }).catchError((e) {
-  //     Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+  //     Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER,);
   //     // HSProgressHUD.showError(status: e.toString());
   //     print('${e.toString()}');
   //   });
