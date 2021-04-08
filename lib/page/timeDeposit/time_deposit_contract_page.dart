@@ -432,6 +432,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       color: Colors.white,
       child: FlatButton(
         onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
           _selectAccount(context);
         },
         child: Row(
@@ -452,6 +453,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       color: Colors.white,
       child: FlatButton(
         onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
           _selectCcy(context);
         },
         child: Row(
@@ -472,6 +474,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       color: Colors.white,
       child: FlatButton(
         onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
           _selectSettAc(context);
         },
         child: Row(
@@ -492,6 +495,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       color: Colors.white,
       child: FlatButton(
         onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
           _selectInstruction(context);
         },
         child: Row(
