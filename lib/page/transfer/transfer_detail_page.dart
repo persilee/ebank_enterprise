@@ -55,7 +55,7 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
           _rowWidget(S.of(context).transfer_from,
               FormatUtil.formatSpace4(_transferHistory.paymentCardNo)),
           _rowWidget(
-              S.of(context).transaction_time, _transferHistory.transactionHour),
+              S.of(context).transaction_time, _transferHistory.transactionTime),
           _differentContent(_transferHistory),
           _rowWidget(
               S.current.transfer_type_with_value,
