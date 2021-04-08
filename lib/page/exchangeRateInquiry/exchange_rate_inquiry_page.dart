@@ -79,6 +79,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
       });
     }
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(S.current.exchange_rate),
         centerTitle: true,
@@ -473,12 +474,24 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
 
   //获取币种买入卖出列表
   Future _getExchangeRateList() async {
+    _isLoading = true;
     ForexTradingRepository()
         .getExRate(GetExRateReq(), 'getExRateReq')
         .then((data) {
       if (data != null) {
         rateList.clear();
         rateList.addAll(data.recordLists);
+        if (this.mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    }).catchError(() {
+      if (this.mounted) {
+        setState(() {
+          _isLoading = false;
+        });
       }
     });
   }
@@ -489,6 +502,9 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     //获取本地币种
     _primitiveCcyList.clear();
     _primitiveCcyList.add(prefs.getString(ConfigKey.LOCAL_CCY));
+    setState(() {
+      _primitiveCcy = _primitiveCcyList[0];
+    });
     PublicParametersRepository()
         .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
         .then((data) {
@@ -497,6 +513,11 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
         data.publicCodeGetRedisRspDtoList.forEach((e) {
           _objectiveCcyList.add(e.code);
         });
+        if (this.mounted) {
+          setState(() {
+            _objectiveCcy = _objectiveCcyList[0];
+          });
+        }
       }
     });
   }
