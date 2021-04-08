@@ -213,7 +213,6 @@ var appRoutes = {
   pageResetPayPwdOtp: (context) => ResetPayPwdPage(),
   pagePwdOperationSuccess: (context) => PwdOperationSuccessPage(),
   pageIndexName: (context) => IndexPage(),
-  pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
   pageLoanApplication: (context) => LoanApplicationPage(),
   pageOperationResult: (context) => OperationResultPage(),
@@ -387,6 +386,16 @@ onGenerateRoute(RouteSettings settings) {
       Map<String, dynamic> arguments = settings.arguments;
       return OpenAccountContactInformationPage(
         dataReq: arguments['data'],
+      );
+    });
+  }
+
+  if (settings.name == pageloanDetails) {
+    //跳转贷款详情
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return LoanDetailsPage(
+        loanAccountDetail: arguments['data'],
       );
     });
   }

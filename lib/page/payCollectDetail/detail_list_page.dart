@@ -75,7 +75,9 @@ class _DetailListPageState extends State<DetailListPage> {
   void initState() {
     // 网络请求
     //
-    _getCardList();
+    setState(() {
+      _getCardList();
+    });
     //_getRevenueByCards(_startDate, _allAccNoList);
     _refreshController = RefreshController();
     // //下拉刷新
@@ -119,7 +121,6 @@ class _DetailListPageState extends State<DetailListPage> {
                           } else {
                             _getRevenueByCards(_startDate, _allAccNoList);
                           }
-                          //_getCardList();
                         },
                         content: _buildFlutterTableView(),
                       )
@@ -639,7 +640,6 @@ class _DetailListPageState extends State<DetailListPage> {
     return ddFinHisDTOList.length;
   }
 
-  // Section header widget builder.
   //交易时间 --头标题
   Widget _sectionHeaderBuilder(BuildContext context, int section) {
     //String _titileTime =  DateFormat('yyyy-MM-dd').format(dateTime);
@@ -927,36 +927,33 @@ class _DetailListPageState extends State<DetailListPage> {
   }
 
   //获取账号
-  Future<void> _getCardList() async {
-    //_isLoading = false;
+  _getCardList() {
     CardDataRepository().getCardList('getCardList').then((data) {
-      if (data.cardList != null) {
-        if (mounted) {
-          setState(() {
+      if (mounted) {
+        setState(() {
+          if (data.cardList != null) {
             _cardList.clear();
             _cardIcon.clear();
             _allAccNoList.clear();
             _cardList.add(intl.S.current.all_account);
-            // _cardIcon.add("images/transferIcon/transfer_wallet.png");
-
             data.cardList.forEach((item) {
               _allAccNoList.add(item.cardNo);
               _cardList.add(item.cardNo);
               _cardIcon.add(item.imageUrl);
             });
-          });
-        }
-        _getRevenueByCards(_startDate, _allAccNoList);
-      }
-      if (data.cardList == null) {
-        if (mounted) {
-          setState(() {
+
+            _getRevenueByCards(_startDate, _allAccNoList);
+          } else if (data.cardList == null) {
             _isLoading = false;
-          });
-        }
+          }
+        });
       }
     }).catchError((e) {
-      _isLoading = false;
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
       Fluttertoast.showToast(
         msg: e.toString(),
         toastLength: Toast.LENGTH_SHORT,
@@ -981,14 +978,7 @@ class _DetailListPageState extends State<DetailListPage> {
     localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
 
     int pageSize = 10;
-    print(">>>>>>>>$_cardList");
-    print(">>>>>>one>$selectAccNo");
 
-    print(">>>>>>>$localCcy");
-    print(">>>>>>>>$_endDate");
-    print(">>>>>>>$_startDate");
-    // _isLoading = true;
-    // HSProgressHUD.show();
     PayCollectDetailRepository()
         .getRevenueByCards(
             GetRevenueByCardsReq(

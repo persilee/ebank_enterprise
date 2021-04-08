@@ -15,6 +15,7 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../page_route.dart';
@@ -443,6 +444,20 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           _isLoading = false;
         });
       }
+    }).catchError((e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
+      // HSProgressHUD.dismiss();
     });
   }
 
