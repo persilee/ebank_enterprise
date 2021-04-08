@@ -177,10 +177,10 @@ class _TransferInternalPreviewPageState
     String transferOutCcy = transferData.transferOutCcy;
     String transferIntoCcy = transferData.transferIntoCcy;
     String payeeBankCode = transferData.payeeBankCode;
-    String payeeCardNo = transferData.transferOutAccount;
+    String payeeCardNo = transferData.transferIntoAccount;
     String payeeName = transferData.payeeName;
     String payerBankCode = transferData.payerBankCode;
-    String payerCardNo = transferData.transferIntoAccount;
+    String payerCardNo = transferData.transferOutAccount;
     String payerName = transferData.payerName;
     String remark = transferData.transferRemark;
     String costOptions = transferData.transferFee;
