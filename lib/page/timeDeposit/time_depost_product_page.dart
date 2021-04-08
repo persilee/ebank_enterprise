@@ -668,6 +668,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         behavior: HitTestBehavior.translucent,
         onTap: () {
           // 触摸收起键盘
+          // FocusManager.instance.primaryFocus?.unfocus();
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Container(

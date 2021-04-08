@@ -935,6 +935,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     if (isPassword != null && isPassword == true) {
       return true;
     }
+    FocusManager.instance.primaryFocus?.unfocus();
     return false;
   }
 
