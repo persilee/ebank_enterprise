@@ -362,6 +362,7 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
       child: FlatButton(
         onPressed: () {
           _selectLanguage(context);
+          FocusManager.instance.primaryFocus?.unfocus();
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,

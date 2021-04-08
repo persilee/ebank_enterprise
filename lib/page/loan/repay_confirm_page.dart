@@ -18,8 +18,12 @@ import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_money_caculate.dart';
+
+import 'limit_details_page.dart';
+import 'loan_details_page.dart';
 
 class RepayConfirmPage extends StatefulWidget {
   @override
@@ -41,21 +45,6 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
   var fine = ''; //罚金
   var totalRepay = ''; //还款总额
   Map message = new Map();
-  //请求数据
-  var acNo = '';
-  var dueAmount = '';
-  var instalNo = '';
-  var interestAmount = '';
-  var penaltyAmount = '';
-  var principalAmount = '';
-  var prodCode = '';
-  var refNo = '';
-  var repaymentAcNo = '';
-  var repaymentAcType = '';
-  var repaymentCiName = '';
-  var repaymentMethod = '';
-  var rescheduleType = '';
-  var totalAmount = '';
 
   @override
   void initState() {
@@ -69,70 +58,44 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
     repayInterest = '0.00';
     fine = '0.00';
     totalRepay = '0.00';
-
-    //请求数据
-    acNo = '';
-    dueAmount = '';
-    instalNo = '';
-    interestAmount = '';
-    penaltyAmount = '';
-    principalAmount = '';
-    prodCode = '';
-    refNo = '';
-    repaymentAcNo = '';
-    repaymentAcType = '';
-    repaymentCiName = '';
-    repaymentMethod = '';
-    rescheduleType = '';
-    totalAmount = '';
   }
 
-// acNo (string, optional): 贷款合约 ,
-// ccy (string, optional): 贷款货币 ,
-// compoundAmount (number, optional): 还复利金额 ,
-// ddAc (string, optional): 结算活期账户 ,
-// dueAmount (number, optional): 逾期金额 ,
-// eqAmt (number, optional): 折算后的金额 ,
-// exRate (number, optional): 结算汇率 ,
-// instalNo (integer, optional): 期数 ,
-// interestAmount (number, optional): 还利息金额 ,
-// nostrac (string, optional): 结算同业账户 ,
-// outBal (number, optional): 贷款余额 ,
-// payPassword (string, optional): 交易密码 ,
-// penaltyAmount (number, optional): 还罚息金额 ,
-// prin (number, optional): 贷款本金 ,
-// principalAmount (number, optional): 还本金金额 ,
-// prodCode (string, optional): 产品代码 ,
-// refNo (string, optional): 业务编号 ,
-// repaymentAcNo (string, optional): 还款账号 ,
-// repaymentAcType (string, optional): 还款账号类型 ,
-// repaymentCiName (string, optional): 还款人姓名 ,
-// repaymentMethod (string, optional): 还息方式 ,
-// rescheduleType (string, optional): 重算还款计划方式 ,
-// setMethod (string, optional): 结算方式 ,
-// setlCcy (string, optional): 结算货币 ,
-// suspeac (string, optional): 结算内部账户 ,
-// totalAmount (number, optional): 实际还款金额 ,
-// trValDate (string, optional): 交易生效日
-
   Future<void> _loadData() async {
-    // var req = LoanPrepaymentModelReq(
-    //         loanDetail.contactNo,//合约号
-    //         loanDetail.ccy,
-    //         list.rcvCom,//利息罚息
+    var req = LoanPrepaymentModelReq(
+      loanDetail.contactNo, //合约号
+      loanDetail.ccy,
+      double.parse(list.payPrin), //折算后的金额就是实际还款的金额
+      double.parse(list.rcvInt), //还利息金额
+      double.parse(loanDetail.osAmt), //贷款的余额
+      double.parse(loanDetail.loanAmt), //贷款本金
+      double.parse(list.payPrin), //还本金金额
+      loanDetail.repaymentMethod, //还息方式
+      // '1', //结算方式
+      loanDetail.ccy, //结算货币
+      double.parse(list.payPrin), //实际还款金额
+      debitAccount,
+    );
+    SVProgressHUD.show();
+    LoanDataRepository().postRepayment(req, "postRepayment").then((data) {
+      SVProgressHUD.dismiss();
+      if (data != null) {
+        SVProgressHUD.showSuccess(status: S.current.repayment_succeed);
 
-    // );
-    // LoanPrepaymentModelResp()
-    //     .postRepayment(LoanPrepaymentModelReq(), "postRepayment")
-    //     .then((data) {
-    //   if (data != null) {
-    //     Navigator.of(context)..pop();
-    //     Navigator.pushReplacementNamed(context, pageRepaySuccess,
-    //         arguments: message);
-    //   }
-    // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
-    // });
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) {
+          return LimitDetailsPage();
+        }), (Route route) {
+          //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
+          if (route.settings?.name == "/limit_details_page") {
+            return true; //停止关闭
+          }
+          return false; //继续关闭
+        });
+      }
+    }).catchError((e) {
+      SVProgressHUD.dismiss();
+      SVProgressHUD.showInfo(status: e.toString());
+    });
   }
 
   @override
@@ -157,22 +120,6 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
       repayInterest = list.rcvInt; //还款利息
       restLoan = (double.parse(loanDetail.osAmt) - double.parse(list.payPrin))
           .toString(); //用贷款余额减去还款本金
-
-      //请求数据
-      acNo = loanDetail.acNo;
-      dueAmount = '';
-      instalNo = '';
-      interestAmount = repayInterest;
-      penaltyAmount = fine;
-      principalAmount = repayPrincipal;
-      prodCode = 'LN000008';
-      refNo = '';
-      repaymentAcNo = loanDetail.repaymentAcNo;
-      repaymentAcType = '';
-      repaymentCiName = '';
-      repaymentMethod = message['RepaymentMethod'];
-      rescheduleType = 'I';
-      totalAmount = totalRepay;
     });
     var container1 = Container(
       color: Colors.white,
@@ -256,37 +203,39 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
 
   //交易密码窗口
   void _openBottomSheet() async {
-    passwordList = await showHsgBottomSheet(
-      context: context,
-      builder: (context) {
-        return HsgPasswordDialog(
-          title: S.current.input_password,
-          resultPage: pageRepaySuccess,
-          arguments: message,
-        );
-      },
-    );
-    if (passwordList != null) {
-      if (passwordList.length == 6) {
-        _payPassword = EncryptUtil.aesEncode(passwordList.join());
-        _submitRepayment();
-      }
-    }
+    _loadData(); //还款
+
+    // passwordList = await showHsgBottomSheet(
+    //   context: context,
+    //   builder: (context) {
+    //     return HsgPasswordDialog(
+    //       title: S.current.input_password,
+    //       resultPage: pageRepaySuccess,
+    //       arguments: message,
+    //     );
+    //   },
+    // );
+    // if (passwordList != null) {
+    //   if (passwordList.length == 6) {
+    //     _payPassword = EncryptUtil.aesEncode(passwordList.join());
+    //     _submitRepayment();
+    //   }
+    // }
   }
 
 //提交还款
   void _submitRepayment() async {
-    VerifyTradePawRepository()
-        .verifyTransPwdNoSms(
-            VerifyTransPwdNoSmsReq(_payPassword), 'VerifyTransPwdNoSmsReq')
-        .then((data) {
-      // _loadData();
-    }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-    });
+    // SVProgressHUD.show();
+    // VerifyTradePawRepository()
+    //     .verifyTransPwdNoSms(
+    //         VerifyTransPwdNoSmsReq(_payPassword), 'VerifyTransPwdNoSmsReq')
+    //     .then((data) {
+    //   SVProgressHUD.dismiss();
+    _loadData(); //还款
+    // }).catchError((e) {
+    //   SVProgressHUD.dismiss();
+    //   SVProgressHUD.showInfo(status: e.toString());
+    // });
   }
 
   Widget _getPadding(double l, double t, double r, double b) {

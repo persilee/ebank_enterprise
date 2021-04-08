@@ -2,6 +2,7 @@ import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_ex_rate.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 
+import 'model/application_loan.dart';
 import 'model/foreign_ccy.dart';
 
 class ForexTradingRepository {
@@ -33,6 +34,13 @@ class ForexTradingRepository {
   Future<GetExRateResp> getExRate(GetExRateReq req, String tag) {
     return request('/ddep/transfer/getExRate', req, tag,
         (data) => GetExRateResp.fromJson(data));
+  }
+
+  //贷款领用界面获取当前贷款利率的接口
+  Future<LoantIntereRateResp> loanGetRateInterface(
+      LoanIntereRateReq req, String tag) {
+    return request('loan/interestRate/queryInterestRate', req, tag,
+        (data) => LoantIntereRateResp.fromJson(data));
   }
 
   static final _instance = ForexTradingRepository._internal();
