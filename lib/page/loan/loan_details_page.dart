@@ -196,9 +196,15 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           ),
         ),
         onPressed: () {
-          //传值过去
-          Navigator.pushNamed(context, pageLoanReference,
-              arguments: widget.loanAccountDetail);
+          //需要先判断当前额度是否大于0
+          if (double.parse(widget.loanAccountDetail.bal) <= 0) {
+            SVProgressHUD.showInfo(
+                status: S.current.loan_detail_available_insufficient);
+          } else {
+            //传值过去
+            Navigator.pushNamed(context, pageLoanReference,
+                arguments: widget.loanAccountDetail);
+          }
         },
       ),
     );

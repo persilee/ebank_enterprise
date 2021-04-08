@@ -624,6 +624,7 @@
   "loan_lines_get":"Get",
   "loan_opration_alert":"Operation",
   "loan_detail_available_amount":"Available Amount",
+  "loan_detail_available_insufficient":"Insufficient available amount",
 
 
   "open_account_goto_ebank_tip": "Dear user. Since you are not an invited customer, please go to online banking to apply for an account.",

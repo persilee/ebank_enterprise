@@ -1,9 +1,16 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
+import 'package:ebank_mobile/data/source/loan_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/application_loan.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
+import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
+import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
+import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
+import 'package:ebank_mobile/data/source/model/loan_trial_rate.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/mine/id_cardVerification_page.dart';
@@ -34,6 +41,11 @@ class _LoanReferenceState extends State<LoanReference> {
   bool _isButton = false; //按钮是否能点击
   String _language = Intl.getCurrentLocale(); //版本语言
   String _totalInterest = ''; //总利息
+  String _mothCode = ''; //月份编码
+  double max = 0; //贷款最大限额
+  String iratCd1 = ''; //用户额度保存
+  String interestRate = ''; //贷款利率
+
   var _recipientsController = new TextEditingController(); //领用金额输入框
 
 //获取各个公共参数的接口
@@ -41,6 +53,8 @@ class _LoanReferenceState extends State<LoanReference> {
   List<IdType> _goalLists = []; //贷款目的列表
 
   String _deadLine = ''; //贷款期限
+  String _dateCode = ''; //贷款期限编码
+
   List<IdType> _deadLineLists = []; //贷款期限列表
 
   String _reimburseStr = ''; //还款方式
@@ -128,16 +142,105 @@ class _LoanReferenceState extends State<LoanReference> {
     focusnode.addListener(() {
       if (focusnode.hasFocus) {
         //得到焦点
+        String text = _recipientsController.text;
+        int length = text.length;
 
+        RegExp postalcode = new RegExp(r'^(0\d)');
+        if (postalcode.hasMatch(text)) {
+          _recipientsController.text = text.substring(1);
+          _recipientsController.selection = TextSelection.collapsed(
+              offset: _recipientsController.text.length);
+        }
+        if (double.parse(_recipientsController.text) > max) {
+          _recipientsController.text = formatDouble(max, 2);
+          _recipientsController.selection = TextSelection.collapsed(
+              offset: _recipientsController.text.length);
+        }
       } else {
-        //失去焦点
-
+        //失去焦点 去请求接口并计算
+        checkInputValueAndRate();
+        _loadQueryIntereRateData();
       }
     });
   }
 
-//计算领用的总利息
-  Future _loadGrossCalculationData() async {}
+  //贷款领用界面查询客户授信额度信息的接口
+
+//先去请求/loan/contracts/getCreditlimitByCust  拿到iratCd1 参数，再去请求利率接口拿到利率和还款计划
+  Future _loadQueryIntereRateData() async {
+    var req = LoanGetCreditlimitReq(
+      '',
+      '',
+      accountInfo.lmtNo,
+      'L',
+    );
+    LoanDataRepository()
+        .loanCreditlimitInterface(req, 'getCreditlimitByCust')
+        .then((data) {
+      if (data.getCreditlimitByCusteDTOList != null) {
+        //判断数据不为空
+        if (mounted) {
+          setState(() {
+            GetCreditlimitByCusteDTOList custcd =
+                data.getCreditlimitByCusteDTOList[0];
+            print('========custcd.iratCd1');
+            iratCd1 = custcd.iratCd1 != '' ? custcd.iratCd1 : 'E11';
+            checkInputValueAndRate(); //利率判断
+          });
+        }
+      }
+    }).catchError((e) {
+      SVProgressHUD.dismiss();
+      SVProgressHUD.showInfo(status: e.toString());
+    });
+  }
+
+//获取当前的利率
+  Future<void> _loadGrossCalculationData() async {
+    var req = LoanIntereRateReq(
+        accountInfo.bookBr, accountInfo.ccy, iratCd1, _mothCode);
+    SVProgressHUD.show();
+    ForexTradingRepository()
+        .loanGetRateInterface(req, 'getInterstRate')
+        .then((data) {
+      SVProgressHUD.dismiss();
+      //获取利率在去进行试算
+      // if (mounted) {
+      //   setState(() {
+      //     // interestRate = data.interestRate.toString();
+      //     // _loadTrialDate(); //拿到利率进行失算
+      //   });
+      //   print('============data.interestRate');
+      // }
+    }).catchError((e) {
+      print(e.toString());
+      SVProgressHUD.dismiss();
+      SVProgressHUD.showInfo(status: e.toString());
+    });
+  }
+
+//领用试算的接口
+  Future _loadTrialDate() async {
+    var req = LoanTrailReq(
+      accountInfo.ccy, //货币
+      '1', //频率 还款周期
+      'M', //频率单位
+      _reimburseStr, //还款方式
+      double.parse(_recipientsController.text), //贷款本金
+      double.parse(interestRate), //贷款利率
+      // '',//指定还款日
+      _dateCode, //总期数
+      // '',//起息日
+    );
+    LoanDataRepository()
+        .loanPilotComputingInterface(req, 'loanTrial')
+        .then((data) {
+      if (data.loanTrialDTOList != null) {}
+    }).catchError((e) {
+      SVProgressHUD.dismiss();
+      SVProgressHUD.showInfo(status: e.toString());
+    });
+  }
 
   @override
   void dispose() {
@@ -150,6 +253,7 @@ class _LoanReferenceState extends State<LoanReference> {
   Widget build(BuildContext context) {
     LoanAccountDOList accountInfo = ModalRoute.of(context).settings.arguments;
     this.accountInfo = accountInfo;
+    max = double.parse(accountInfo.bal); //保存可使用的额度
 
     return Scaffold(
         //防止挤压溢出
@@ -171,6 +275,7 @@ class _LoanReferenceState extends State<LoanReference> {
                 child: Column(
                   children: [
                     Container(
+                      //可用额度
                       width: MediaQuery.of(context).size.width,
                       child: Text(
                         S.current.loan_detail_available_amount +
@@ -416,6 +521,13 @@ class _LoanReferenceState extends State<LoanReference> {
               _listDataMap['timeLimit'] = str; //名称
               _requestDataMap['termUnit'] = str; //月份中文
               _requestDataMap['termValue'] = type.code; //月份编码
+              _dateCode = type.code;
+              if (int.parse(type.code) < 10) {
+                _mothCode = 'M00' + type.code;
+              } else {
+                _mothCode = 'M0' + type.code;
+              }
+              checkInputValueAndRate(); //利率判断
             } else if (i == 1) {
               _goal = str;
               _listDataMap['loanPurpose'] = str; //名称
@@ -660,17 +772,25 @@ class _LoanReferenceState extends State<LoanReference> {
         arguments: dataList);
   }
 
-// 先去拿到利率
-  //利率接口
-  // "ccy": 上个界面拿过来的,
-  // "payFre": 1, OK
-  // "payUnit": "M",OK
-  // "paytyp": "1", OK
-  // "prin": 输入的金额，需要拿到, OK
-  // "rate": 0, no
-  // "totTerm": 0, no
-  // "repDay": 3, OK
-  // "valDt": "2021-02-03" OK
-  //
+//直接删除多余的小数(不四舍五入、向上或向下)
+  static formatDouble(double num, int postion) {
+    if ((num.toString().length - num.toString().lastIndexOf(".") - 1) <
+        postion) {
+      //小数点后有几位小数
+      return num.toStringAsFixed(postion)
+          .substring(0, num.toString().lastIndexOf(".") + postion + 1)
+          .toString();
+    } else {
+      return num.toString()
+          .substring(0, num.toString().lastIndexOf(".") + postion + 1)
+          .toString();
+    }
+  }
 
+  void checkInputValueAndRate() {
+    if (iratCd1 != '' && _mothCode != '' && _recipientsController.text != '') {
+      //调用试算的接口
+      _loadGrossCalculationData();
+    }
+  }
 }
