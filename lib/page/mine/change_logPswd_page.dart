@@ -310,7 +310,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     RegExp number = new RegExp("[0-9]");
     RegExp number_6 = new RegExp(r'^\d{6}$');
     RegExp pwdRegExp = new RegExp(
-        r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]).{8,16}$");
+        r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\[\]\{\}\#\%\^\*\+\=\_\\\|\~\<\>€£¥•\.\,\?\!‘\-\/\:\;\(\)\$\&\@“]).{8,16}$");
     if (!number_6.hasMatch(_sms.text)) {
       Fluttertoast.showToast(
         msg: S.current.sms_error,
@@ -326,11 +326,11 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
         msg: S.current.differnet_old_new_pwd,
         gravity: ToastGravity.CENTER,
       );
-    } else if (number.hasMatch(_newPwd.text) == false ||
-        letter.hasMatch(_newPwd.text) == false ||
-        characters.hasMatch(_newPwd.text) == false ||
-        ((_newPwd.text).length < 8 || (_newPwd.text).length > 16)) {
-      // } else if (!pwdRegExp.hasMatch(_sms.text)) {
+      // } else if (number.hasMatch(_newPwd.text) == false ||
+      //     letter.hasMatch(_newPwd.text) == false ||
+      //     characters.hasMatch(_newPwd.text) == false ||
+      //     ((_newPwd.text).length < 8 || (_newPwd.text).length > 16)) {
+    } else if (!pwdRegExp.hasMatch(_newPwd.text)) {
       Fluttertoast.showToast(
         msg: S.current.password_need_num,
         gravity: ToastGravity.CENTER,
