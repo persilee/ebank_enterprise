@@ -91,13 +91,13 @@ class _TransferInternalPreviewPageState
               FormatUtil.formatSringToMoney(transferData.transferOutAmount)),
           _getRowContent(S.current.rate_of_exchange, transferData.xRate),
           _getRowContent(
-              S.current.payment_currency, transferData.transferOutCcy),
+              S.current.payment_currency, transferData.transferIntoCcy),
           _getRowContent(
               S.current.receipt_side_name, transferData.transferIntoName),
           _getRowContent(S.current.receipt_side_account,
               FormatUtil.formatSpace4(transferData.transferIntoAccount)),
           _getRowContent(
-              S.current.transfer_from_ccy, transferData.transferIntoCcy),
+              S.current.transfer_from_ccy, transferData.transferOutCcy),
           _getRowContent(
               S.current.transfer_postscript,
               transferData.transferRemark == ''

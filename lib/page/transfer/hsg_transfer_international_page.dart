@@ -148,10 +148,11 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           _amount = '0';
           _rate = '-';
         });
-      } else {
-        _focusNode.addListener(() {
-          _rateCalculate();
-        });
+      } else if (_transferCcy != '') {
+        _rateCalculate();
+        // _focusNode.addListener(() {
+        //   _rateCalculate();
+        // });
       }
     });
     _swiftFocusNode.addListener(() {
@@ -882,7 +883,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             _balance = _balanceList[0];
             _payIndex = 0;
           }
-          _getTransferCcySamePayCcy();
+          // _getTransferCcySamePayCcy();
           _rateCalculate();
         });
       }
