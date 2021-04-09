@@ -321,7 +321,9 @@ class _UserInformationPageState extends State<UserInformationPage> {
   /*拍照*/
   _takePhoto() async {
     var image = await ImagePicker().getImage(source: ImageSource.camera);
-
+    if (image == null) {
+      return;
+    }
     setState(() {
       _imgPath = image.path;
       _uploadAvatar();
@@ -331,6 +333,9 @@ class _UserInformationPageState extends State<UserInformationPage> {
   /*相册*/
   _openGallery() async {
     var image = await ImagePicker().getImage(source: ImageSource.gallery);
+    if (image == null) {
+      return;
+    }
     setState(() {
       _imgPath = image.path;
       _uploadAvatar();
@@ -342,16 +347,16 @@ class _UserInformationPageState extends State<UserInformationPage> {
     if (_imgPath == null || _imgPath == '') {
       HSProgressHUD.showInfo(status: S.of(context).select_image_error);
     } else {
-      // File file = File(_imgPath);
-      // ApiClient().uploadAvatar(BaseBody(body: {}), file).then((value) {
-      //   //, BaseBody(body: {})
-      //   print(value);
-      // }).catchError((e) {
-      //   Fluttertoast.showToast(
-      //     msg: e.toString(),
-      //     gravity: ToastGravity.CENTER,
-      //   );
-      // });
+      File file = File(_imgPath);
+      ApiClient().uploadAvatar(BaseBody(body: {}), file).then((value) {
+        //, BaseBody(body: {})
+        print(value);
+      }).catchError((e) {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+      });
     }
   }
 

@@ -94,8 +94,8 @@ class TransferRecord extends Object {
   @JsonKey(name: 'msgId')
   String msgId;
 //交易时间
-  @JsonKey(name: 'transactionHour')
-  String transactionHour;
+  @JsonKey(name: 'transactionTime')
+  String transactionTime;
 //收款卡号
   @JsonKey(name: 'receiveCardNo')
   String receiveCardNo;
@@ -166,7 +166,7 @@ class TransferRecord extends Object {
   TransferRecord(
     this.id,
     this.msgId,
-    this.transactionHour,
+    this.transactionTime,
     this.receiveCardNo,
     this.receiveName,
     this.receiveBankCode,

@@ -36,6 +36,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
   TextEditingController _confimPwd = TextEditingController();
   TextEditingController _sms = TextEditingController();
   String _phoneNo = '';
+  String _areaCodeStr = '';
   Timer _timer;
   int countdownTime = 0;
 
@@ -187,16 +188,24 @@ class _ChangePayPageState extends State<ChangePayPage> {
     RegExp number_6 = new RegExp(r'^\d{6}$');
     if (!number_6.hasMatch(_sms.text)) {
       Fluttertoast.showToast(
-          msg: S.current.sms_error, gravity: ToastGravity.CENTER);
+        msg: S.current.sms_error,
+        gravity: ToastGravity.CENTER,
+      );
     } else if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(
-          msg: S.current.differentPwd, gravity: ToastGravity.CENTER);
+        msg: S.current.differentPwd,
+        gravity: ToastGravity.CENTER,
+      );
     } else if (_newPwd.text == _oldPwd.text) {
       Fluttertoast.showToast(
-          msg: S.current.differnet_old_new_pwd, gravity: ToastGravity.CENTER);
+        msg: S.current.differnet_old_new_pwd,
+        gravity: ToastGravity.CENTER,
+      );
     } else if (!number_6.hasMatch(_newPwd.text)) {
       Fluttertoast.showToast(
-          msg: S.current.set_pay_password_prompt, gravity: ToastGravity.CENTER);
+        msg: S.current.set_pay_password_prompt,
+        gravity: ToastGravity.CENTER,
+      );
     } else {
       HSProgressHUD.show();
       PaymentPwdRepository()
@@ -206,13 +215,18 @@ class _ChangePayPageState extends State<ChangePayPage> {
       )
           .then((data) {
         Fluttertoast.showToast(
-            msg: S.current.changPwsSuccess, gravity: ToastGravity.CENTER);
+          msg: S.current.changPwsSuccess,
+          gravity: ToastGravity.CENTER,
+        );
         Navigator.of(context)..pop();
         Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
         HSProgressHUD.dismiss();
       }).catchError((e) {
         HSProgressHUD.dismiss();
-        Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
         print('${e.toString()}');
       });
     }
@@ -290,22 +304,32 @@ class _ChangePayPageState extends State<ChangePayPage> {
   //获取用户信息
   _getUser() async {
     final prefs = await SharedPreferences.getInstance();
-    String userID = prefs.getString(ConfigKey.USER_ID);
-    UserDataRepository()
-        .getUserInfo(
-      GetUserInfoReq(userID),
-      'getUserInfo',
-    )
-        .then((data) {
-      if (this.mounted) {
-        setState(() {
-          _phoneNo = data.userPhone;
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
-      print('${e.toString()}');
-    });
+    // String userID = prefs.getString(ConfigKey.USER_ID);
+    String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
+    String areacodeStr = prefs.getString(ConfigKey.USER_AREACODE);
+
+    if (mounted) {
+      setState(() {
+        _phoneNo = phoneStr ?? '';
+        _areaCodeStr = areacodeStr ?? '86';
+      });
+    }
+
+    // UserDataRepository()
+    //     .getUserInfo(
+    //   GetUserInfoReq(userID),
+    //   'getUserInfo',
+    // )
+    //     .then((data) {
+    //   if (this.mounted) {
+    //     setState(() {
+    //       _phoneNo = data.userPhone;
+    //     });
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER,);
+    //   print('${e.toString()}');
+    // });
   }
 
   //获取验证码接口
@@ -318,7 +342,8 @@ class _ChangePayPageState extends State<ChangePayPage> {
         //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
         // )
         .sendSmsByPhone(
-            SendSmsByPhoneNumberReq('', _phoneNo, 'transactionPwd', ''),
+            SendSmsByPhoneNumberReq(
+                _areaCodeStr, _phoneNo, 'transactionPwd', ''),
             'sendSms')
         .then((data) {
       _startCountdown();
@@ -329,7 +354,10 @@ class _ChangePayPageState extends State<ChangePayPage> {
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       HSProgressHUD.dismiss();
     });
   }

@@ -147,10 +147,9 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                                   if ((_newPassword.text !=
                                       _confirmPassword.text)) {
                                     Fluttertoast.showToast(
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.CENTER,
-                                        timeInSecForIosWeb: 1,
-                                        msg: S.of(context).differentPwd);
+                                      gravity: ToastGravity.CENTER,
+                                      msg: S.of(context).differentPwd,
+                                    );
                                   } else if (number.hasMatch(
                                               _newPassword.text) ==
                                           false ||
@@ -163,8 +162,9 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                                       ((_newPassword.text).length < 8 ||
                                           (_newPassword.text).length > 16)) {
                                     Fluttertoast.showToast(
-                                        msg: S.current.password_need_num,
-                                        gravity: ToastGravity.CENTER);
+                                      msg: S.current.password_need_num,
+                                      gravity: ToastGravity.CENTER,
+                                    );
                                   } else {
                                     _registerByAccount();
                                   }
@@ -217,9 +217,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
     });
   }

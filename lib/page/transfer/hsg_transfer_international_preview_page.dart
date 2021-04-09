@@ -224,11 +224,7 @@ class _TransferInternalPreviewPageState
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Color(0x57272727),
-        textColor: Color(0xffffffff),
       );
     });
   }

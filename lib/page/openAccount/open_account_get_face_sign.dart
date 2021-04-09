@@ -98,6 +98,8 @@ class _OpenAccountGetFaceSignPageState
               child: HsgButton.defaultButton(
                 title: S.of(context).field_dialog_confirm,
                 click: () {
+                  // 触摸收起键盘
+                  FocusScope.of(context).requestFocus(FocusNode());
                   _didFaceSignCommit();
                 },
               ),

@@ -93,7 +93,7 @@ class _LoanProductState extends State<LoanProductListPage> {
   //       _isDate = false;
   //     }
   //   }).catchError((e) {
-  //     Fluttertoast.showToast(msg: "${e.toString()}");
+  //     Fluttertoast.showToast(msg: "${e.toString()}",gravity: ToastGravity.CENTER,);
   //   });
   // }
 

@@ -162,7 +162,10 @@ class _SelectBankPageState extends State<SelectBankPage> {
                   });
                   if (_tempList.isEmpty) {
                     _searchController.text = '';
-                    Fluttertoast.showToast(msg: '没有找到相关银行!');
+                    Fluttertoast.showToast(
+                      msg: '没有找到相关银行!',
+                      gravity: ToastGravity.CENTER,
+                    );
                   }
                 }
               });

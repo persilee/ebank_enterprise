@@ -453,9 +453,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
 
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
       // HSProgressHUD.dismiss();
     });

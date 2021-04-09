@@ -247,9 +247,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
           if (!_isRegister) {
             Fluttertoast.showToast(
               msg: S.current.num_not_is_register,
-              toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
             );
             HSProgressHUD.dismiss();
           } else {
@@ -261,9 +259,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
     });
   }
@@ -274,9 +270,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
     // if (!_isRegister) {
     //   Fluttertoast.showToast(
     //     msg: S.current.num_not_is_register,
-    //     toastLength: Toast.LENGTH_SHORT,
     //     gravity: ToastGravity.CENTER,
-    //     timeInSecForIosWeb: 1,
     //   );
     //   HSProgressHUD.dismiss();
     // } else {
@@ -302,9 +296,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
     });
     // }
@@ -325,9 +317,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
           if (!_isRegister) {
             Fluttertoast.showToast(
               msg: S.current.num_not_is_register,
-              toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
             );
             HSProgressHUD.dismiss();
           }
@@ -336,9 +326,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
             HSProgressHUD.dismiss();
             Fluttertoast.showToast(
               msg: '您输入的验证码错误',
-              toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
             );
           }
           //跳转至下一页面
@@ -352,9 +340,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
     }).catchError((e) {
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
       HSProgressHUD.dismiss();
     });
@@ -373,5 +359,14 @@ class _ForgetUserNameState extends State<ForgetUserName> {
       });
     };
     _timer = Timer.periodic(Duration(seconds: 1), call);
+  }
+
+  //释放_timer
+  @override
+  void dispose() {
+    super.dispose();
+    if (_timer != null) {
+      _timer.cancel();
+    }
   }
 }

@@ -161,7 +161,10 @@ class _SelectBranchBankPageState extends State<SelectBranchBankPage> {
                   });
                   if (_tempList.isEmpty) {
                     _searchController.text = '';
-                    Fluttertoast.showToast(msg: '没有找到相关分支行!');
+                    Fluttertoast.showToast(
+                      msg: '没有找到相关分支行!',
+                      gravity: ToastGravity.CENTER,
+                    );
                   }
                 }
               });

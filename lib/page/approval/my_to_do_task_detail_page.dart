@@ -989,7 +989,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           _btnIsLoadingEAA = false;
           _btnIsEnable = true;
         });
-        Fluttertoast.showToast(msg: e.toString());
+        Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
       }
     }
   }

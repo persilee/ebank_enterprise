@@ -12,6 +12,7 @@ import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
 import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -438,7 +439,9 @@ class _OpenAccountContactInformationPageState
           _registeredAddressTEC,
           false,
           <TextInputFormatter>[
-            LengthLimitingTextInputFormatter(120),
+            LengthLimitingTextInputFormatter(30),
+            FilteringTextInputFormatter.deny(
+                RegExp(InputFormartterRegExp.REGEX_EMOJI)), //不允许表情
           ],
           TextInputType.text,
         ),
@@ -564,7 +567,9 @@ class _OpenAccountContactInformationPageState
           _businessAddressTEC,
           false,
           <TextInputFormatter>[
-            LengthLimitingTextInputFormatter(120),
+            LengthLimitingTextInputFormatter(30),
+            FilteringTextInputFormatter.deny(
+                RegExp(InputFormartterRegExp.REGEX_EMOJI)), //不允许表情
           ],
           TextInputType.text,
         ),
@@ -698,7 +703,9 @@ class _OpenAccountContactInformationPageState
           _correspondenceAddressTEC,
           false,
           <TextInputFormatter>[
-            LengthLimitingTextInputFormatter(120),
+            LengthLimitingTextInputFormatter(30),
+            FilteringTextInputFormatter.deny(
+                RegExp(InputFormartterRegExp.REGEX_EMOJI)), //不允许表情
           ],
           TextInputType.text,
         ),

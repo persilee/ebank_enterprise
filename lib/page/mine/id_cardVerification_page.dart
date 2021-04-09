@@ -50,7 +50,9 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   // TextEditingController _confimPwd = TextEditingController(); //确认新密码
 
   String _certType = ''; //证件类型
+  String _areaCode = '';
   String _userPhone = '';
+  String _smsCode = '';
   bool isShowIdCheckout = true; //显示第一步身份证验证信息
   String _certTypeKey; //身份校验的key
   // Timer _timer;
@@ -121,7 +123,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   //       });
   //     }
   //   }).catchError((e) {
-  //     Fluttertoast.showToast(msg: e.toString());
+  //     Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
   //   });
   // }
 
@@ -136,7 +138,10 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
         idInformationList = data.publicCodeGetRedisRspDtoList;
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -199,9 +204,11 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    String argument = ModalRoute.of(context).settings.arguments;
+    Map argument = ModalRoute.of(context).settings.arguments;
     if (argument != null) {
-      _userPhone = argument;
+      _areaCode = argument['areaCode'];
+      _userPhone = argument['phone'];
+      _smsCode = argument['smsCode'];
     }
     return new Scaffold(
       appBar: AppBar(
@@ -448,7 +455,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   //     });
   //     HSProgressHUD.dismiss();
   //   }).catchError((e) {
-  //     Fluttertoast.showToast(msg: e.toString());
+  //     Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
   //     HSProgressHUD.dismiss();
   //   });
   // }
@@ -482,6 +489,8 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
         map['certificateType'] = _certTypeKey;
         map['phoneNumber'] = _userPhone;
         map['belongCustStatus'] = '6';
+        map['areaCode'] = _areaCode;
+        map['smsCode'] = _smsCode;
         //调用三要素验证，成功后进入"人脸识别"，识别成功后进入设置密码阶段
         //人臉識別還未添加
         Navigator.pushNamed(context, setPayPage, arguments: map);
@@ -489,19 +498,22 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       HSProgressHUD.dismiss();
     }).catchError((e) {
       HSProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       print(e.toString());
     });
 
     // RegExp postalcode1 =
     //     new RegExp(r'(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x))$');
     // if (!postalcode1.hasMatch(_certNo.text)) {
-    //   Fluttertoast.showToast(msg: '请输入正确的身份证!');
+    //   Fluttertoast.showToast(msg: '请输入正确的身份证!',gravity: ToastGravity.CENTER,);
     //   return;
     // }
     // RegExp postalcode2 = new RegExp(r'^\d{11}$');
     // if (!postalcode2.hasMatch(_phoneNo.text)) {
-    //   Fluttertoast.showToast(msg: '请输入正确的手机号!');
+    //   Fluttertoast.showToast(msg: '请输入正确的手机号!',gravity: ToastGravity.CENTER,);
     //   return;
     // }
 
@@ -521,9 +533,9 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
     //     isShowIdCheckout = false;
     //   }
     //   HSProgressHUD.dismiss();
-    //   Fluttertoast.showToast(msg: S.current.operate_success);
+    //   Fluttertoast.showToast(msg: S.current.operate_success,gravity: ToastGravity.CENTER,);
     // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString());
+    //   Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     //   HSProgressHUD.dismiss();
     // });
   }
@@ -542,12 +554,12 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   //   final prefs = await SharedPreferences.getInstance();
   //   String userID = prefs.getString(ConfigKey.USER_ID);
   //   if (_newPwd.text != _confimPwd.text) {
-  //     Fluttertoast.showToast(msg: S.of(context).differentPwd);
+  //     Fluttertoast.showToast(msg: S.of(context).differentPwd,gravity: ToastGravity.CENTER,);
   //     return;
   //   }
   //   RegExp postalcode1 = new RegExp(r'^\d{6}$');
   //   if (!postalcode1.hasMatch(_newPwd.text)) {
-  //     Fluttertoast.showToast(msg: S.of(context).set_pay_password_prompt);
+  //     Fluttertoast.showToast(msg: S.of(context).set_pay_password_prompt,gravity: ToastGravity.CENTER,);
   //     return;
   //   }
   //   String password = EncryptUtil.aesEncode(_confimPwd.text);
@@ -568,11 +580,11 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   //           'setTransactionPassword')
   //       .then((data) {
   //     HSProgressHUD.dismiss();
-  //     Fluttertoast.showToast(msg: S.current.operate_success);
+  //     Fluttertoast.showToast(msg: S.current.operate_success,gravity: ToastGravity.CENTER,);
   //     // Navigator.pushNamed(context, minePage);
   //     Navigator.pop(context);
   //   }).catchError((e) {
-  //     Fluttertoast.showToast(msg: e.toString());
+  //     Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
   //     HSProgressHUD.dismiss();
   //   });
   // }

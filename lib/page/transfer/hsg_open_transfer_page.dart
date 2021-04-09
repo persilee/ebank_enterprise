@@ -160,10 +160,11 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           _amount = '0';
           _xRate = '-';
         });
-      } else {
-        _focusNode.addListener(() {
-          _rateCalculate();
-        });
+      } else if (_transferCcy != '') {
+        _rateCalculate();
+        // _focusNode.addListener(() {
+        //   _rateCalculate();
+        // });
       }
     });
     _actualNameReqData();
@@ -970,21 +971,13 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       // if (double.parse(_limit) > double.parse(_balance)) {
       Fluttertoast.showToast(
         msg: "余额不足",
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Color(0x57272727),
-        textColor: Color(0xffffffff),
       );
       // }
       // else {
       //   Fluttertoast.showToast(
       //     msg: "超过限额",
-      //     toastLength: Toast.LENGTH_SHORT,
       //     gravity: ToastGravity.CENTER,
-      //     timeInSecForIosWeb: 1,
-      //     backgroundColor: Color(0x57272727),
-      //     textColor: Color(0xffffffff),
       //   );
       // }
     } else {
@@ -1137,7 +1130,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             _balance = _balanceList[0];
             _payIndex = 0;
           }
-          _getTransferCcySamePayCcy();
+          // _getTransferCcySamePayCcy();
           _rateCalculate();
         });
       }
@@ -1219,7 +1212,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
         });
       }
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString());
+      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     });
   }
 }

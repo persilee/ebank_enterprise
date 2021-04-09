@@ -71,7 +71,7 @@ class _MyApprovedHistoryDetailPageState
     var _contractModel;
     try {
       // 请求任务详情接口
-      _contractModel = await ApiClient().findToDoTaskDetail(
+      _contractModel = await ApiClient().findHistoryTaskDetail(
           FindTodoTaskDetailBody(processId: widget.data.processId));
 
       // 根据任务id请求该任务的审批历史

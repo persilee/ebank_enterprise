@@ -35,7 +35,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   Timer _timer;
   int countdownTime = 0;
   String _phone = '';
-  var _belongCustStatus = '0'; //用户状态
+  // var _belongCustStatus = '0'; //用户状态
 
   @override
   void initState() {
@@ -142,30 +142,39 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   //获取用户信息
   _getUser() async {
     final prefs = await SharedPreferences.getInstance();
-    String userID = prefs.getString(ConfigKey.USER_ID);
-    UserDataRepository()
-        .getUserInfo(
-      GetUserInfoReq(userID),
-      'getUserInfo',
-    )
-        .then((data) {
-      if (this.mounted) {
-        setState(() {
-          _belongCustStatus =
-              data.belongCustStatus != null ? data.belongCustStatus : ''; //用户状态
-          _phone = data.userPhone != null ? data.userPhone : ''; //手机号
-          if (data.areaCode != null) {
-            _officeAreaCodeText = data.areaCode; //区号
-          }
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      print('${e.toString()}');
-    });
+    // String userID = prefs.getString(ConfigKey.USER_ID);
+    String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
+    String areacodeStr = prefs.getString(ConfigKey.USER_AREACODE);
+
+    if (mounted) {
+      setState(() {
+        _phone = phoneStr ?? '';
+        _officeAreaCodeText = areacodeStr ?? '86';
+      });
+    }
+    // UserDataRepository()
+    //     .getUserInfo(
+    //   GetUserInfoReq(userID),
+    //   'getUserInfo',
+    // )
+    //     .then((data) {
+    //   if (this.mounted) {
+    //     setState(() {
+    //       _belongCustStatus =
+    //           data.belongCustStatus != null ? data.belongCustStatus : ''; //用户状态
+    //       _phone = data.userPhone != null ? data.userPhone : ''; //手机号
+    //       if (data.areaCode != null) {
+    //         _officeAreaCodeText = data.areaCode; //区号
+    //       }
+    //     });
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(
+    //     msg: e.toString(),
+    //     gravity: ToastGravity.CENTER,
+    //   );
+    //   print('${e.toString()}');
+    // });
   }
 
   //提交按钮
@@ -181,7 +190,11 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       //请求-未写
       HSProgressHUD.show();
       //请求成功后跳转
-      Navigator.pushNamed(context, iDcardVerification, arguments: _phone);
+      Navigator.pushNamed(context, iDcardVerification, arguments: {
+        'areaCode': _officeAreaCodeText,
+        'phone': _phone,
+        'smsCode': _sms.text,
+      });
       //请求结束-无论成功与否
       HSProgressHUD.dismiss();
     }
@@ -299,7 +312,8 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
     HSProgressHUD.show();
     VerificationCodeRepository()
         .sendSmsByPhone(
-            SendSmsByPhoneNumberReq('', _phone, 'transactionPwd', ''),
+            SendSmsByPhoneNumberReq(
+                _officeAreaCodeText, _phone, 'transactionPwd', ''),
             'sendSms')
         .then((data) {
       _startCountdown();
@@ -311,7 +325,10 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       HSProgressHUD.dismiss();
     }).catchError((e) {
       HSProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
