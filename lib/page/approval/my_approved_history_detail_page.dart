@@ -138,31 +138,31 @@ class _MyApprovedHistoryDetailPageState
         transferPlanDetailModel.operateEndValue;
     if (this.mounted) {
       setState(() {
-        _transferPlanList.add(_buildTitle('计划信息'));
-        _transferPlanList.add(_buildContentItem('计划名称', data?.planName ?? ''));
-        _transferPlanList.add(_buildContentItem('预约频率', data?.frequency ?? ''));
+        _transferPlanList.add(_buildTitle(S.current.approve_project_information));
+        _transferPlanList.add(_buildContentItem(S.current.approve_project_name, data?.planName ?? ''));
+        _transferPlanList.add(_buildContentItem(S.current.approve_appointment_frequency, data?.frequency ?? ''));
         _transferPlanList
-            .add(_buildContentItem('首次转账时间', data?.startDate ?? ''));
-        _transferPlanList.add(_buildContentItem('截止日期', data?.endDate ?? ''));
+            .add(_buildContentItem(S.current.approve_first_transfer_time, data?.startDate ?? ''));
+        _transferPlanList.add(_buildContentItem(S.current.approve_as_of_date, data?.endDate ?? ''));
         _transferPlanList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
-        _transferPlanList.add(_buildTitle('收款信息'));
-        _transferPlanList.add(_buildContentItem('账号', data?.payeeCardNo ?? ''));
-        _transferPlanList.add(_buildContentItem('账户名称', data?.payeeName ?? ''));
+        _transferPlanList.add(_buildTitle(S.current.approve_gathering_information));
+        _transferPlanList.add(_buildContentItem(S.current.approve_account, data?.payeeCardNo ?? ''));
+        _transferPlanList.add(_buildContentItem(S.current.approve_name_account, data?.payeeName ?? ''));
         _transferPlanList
-            .add(_buildContentItem('货币', data?.creditCurrency ?? ''));
+            .add(_buildContentItem(S.current.approve_currency, data?.creditCurrency ?? ''));
         _transferPlanList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
-        _transferPlanList.add(_buildTitle('付款信息'));
-        _transferPlanList.add(_buildContentItem('账号', data?.payerCardNo ?? ''));
-        _transferPlanList.add(_buildContentItem('账户名称', data?.payerName ?? ''));
+        _transferPlanList.add(_buildTitle(S.current.approve_payment_information));
+        _transferPlanList.add(_buildContentItem(S.current.approve_account, data?.payerCardNo ?? ''));
+        _transferPlanList.add(_buildContentItem(S.current.approve_name_account, data?.payerName ?? ''));
         _transferPlanList
-            .add(_buildContentItem('货币', data?.debitCurrency ?? ''));
+            .add(_buildContentItem(S.current.approve_currency, data?.debitCurrency ?? ''));
         _transferPlanList.add(_buildContentItem(
-            '金额', f.format(double.parse(data?.amount)) ?? ''));
-        _transferPlanList.add(_buildContentItem('附言', data?.remark ?? ''));
+            S.current.approve_amount, f.format(double.parse(data?.amount)) ?? ''));
+        _transferPlanList.add(_buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
       });
     }
@@ -178,43 +178,43 @@ class _MyApprovedHistoryDetailPageState
         internationalTransferDetailModel.operateEndValue;
     if (this.mounted) {
       setState(() {
-        _internationalList.add(_buildTitle('收款信息'));
+        _internationalList.add(_buildTitle(S.current.approve_gathering_information));
         _internationalList
-            .add(_buildContentItem('账号', data?.payeeCardNo ?? ''));
+            .add(_buildContentItem(S.current.approve_account, data?.payeeCardNo ?? ''));
         _internationalList
-            .add(_buildContentItem('账户名称', data?.payeeName ?? ''));
+            .add(_buildContentItem(S.current.approve_name_account, data?.payeeName ?? ''));
         _internationalList
-            .add(_buildContentItem('货币', data?.creditCurrency ?? ''));
+            .add(_buildContentItem(S.current.approve_currency, data?.creditCurrency ?? ''));
         _internationalList.add(_buildContentItem(
-            '金额',
+            S.current.approve_amount,
             f.format(double.parse(data?.amount) *
                 double.parse(data?.exchangeRate)) ??
                 ''));
         _internationalList
-            .add(_buildContentItem('参考汇率', data?.exchangeRate ?? ''));
+            .add(_buildContentItem(S.current.approve_reference_rate, data?.exchangeRate ?? ''));
         _internationalList
-            .add(_buildContentItem('国家/地区', data?.district ?? ''));
+            .add(_buildContentItem(S.current.approve_country_region, data?.district ?? ''));
         _internationalList
-            .add(_buildContentItem('SWIFT Code', data?.bankSwift ?? ''));
+            .add(_buildContentItem(S.current.approve_swift_code, data?.bankSwift ?? ''));
         _internationalList
-            .add(_buildContentItem('收款银行', data?.payeeBankCode ?? ''));
+            .add(_buildContentItem(S.current.approve_collecting_bank, data?.payeeBankCode ?? ''));
         _internationalList
-            .add(_buildContentItem('收款地址', data?.payeeAddress ?? ''));
+            .add(_buildContentItem(S.current.approve_collection_address, data?.payeeAddress ?? ''));
         _internationalList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
-        _internationalList.add(_buildTitle('付款信息'));
+        _internationalList.add(_buildTitle(S.current.approve_payment_information));
         _internationalList
-            .add(_buildContentItem('账号', data?.payerCardNo ?? ''));
+            .add(_buildContentItem(S.current.approve_account, data?.payerCardNo ?? ''));
         _internationalList
-            .add(_buildContentItem('账户名称', data?.payerName ?? ''));
+            .add(_buildContentItem(S.current.approve_name_account, data?.payerName ?? ''));
         _internationalList
-            .add(_buildContentItem('货币', data?.debitCurrency ?? ''));
+            .add(_buildContentItem(S.current.approve_currency, data?.debitCurrency ?? ''));
         _internationalList.add(_buildContentItem(
-            '金额', f.format(double.parse(data?.amount)) ?? ''));
+            S.current.approve_amount, f.format(double.parse(data?.amount)) ?? ''));
         _internationalList
-            .add(_buildContentItem('手续费支付方式', data?.costOptions ?? ''));
-        _internationalList.add(_buildContentItem('附言', data?.remark ?? ''));
+            .add(_buildContentItem(S.current.approve_payment_method, data?.costOptions ?? ''));
+        _internationalList.add(_buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
       });
     }
@@ -228,26 +228,26 @@ class _MyApprovedHistoryDetailPageState
         oneToOneTransferDetailModel.operateEndValue;
     if (this.mounted) {
       setState(() {
-        _oneToOneList.add(_buildTitle('收款信息'));
-        _oneToOneList.add(_buildContentItem('账号', data?.payeeCardNo ?? ''));
-        _oneToOneList.add(_buildContentItem('账户名称', data?.payeeName ?? ''));
-        _oneToOneList.add(_buildContentItem('货币', data?.creditCurrency ?? ''));
+        _oneToOneList.add(_buildTitle(S.current.approve_gathering_information));
+        _oneToOneList.add(_buildContentItem(S.current.approve_account, data?.payeeCardNo ?? ''));
+        _oneToOneList.add(_buildContentItem(S.current.approve_name_account, data?.payeeName ?? ''));
+        _oneToOneList.add(_buildContentItem(S.current.approve_currency, data?.creditCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(
-            '金额',
+            S.current.approve_amount,
             f.format(double.parse(data?.amount) *
                 double.parse(data?.exchangeRate)) ??
                 ''));
-        _oneToOneList.add(_buildContentItem('参考汇率', data?.exchangeRate ?? ''));
+        _oneToOneList.add(_buildContentItem(S.current.approve_reference_rate, data?.exchangeRate ?? ''));
         _oneToOneList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
-        _oneToOneList.add(_buildTitle('付款信息'));
-        _oneToOneList.add(_buildContentItem('账号', data?.payerCardNo ?? ''));
-        _oneToOneList.add(_buildContentItem('账户名称', data?.payerName ?? ''));
-        _oneToOneList.add(_buildContentItem('货币', data?.debitCurrency ?? ''));
+        _oneToOneList.add(_buildTitle(S.current.approve_payment_information));
+        _oneToOneList.add(_buildContentItem(S.current.approve_account, data?.payerCardNo ?? ''));
+        _oneToOneList.add(_buildContentItem(S.current.approve_name_account, data?.payerName ?? ''));
+        _oneToOneList.add(_buildContentItem(S.current.approve_currency, data?.debitCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(
-            '金额', f.format(double.parse(data?.amount)) ?? ''));
-        _oneToOneList.add(_buildContentItem('附言', data?.remark ?? ''));
+            S.current.approve_amount, f.format(double.parse(data?.amount)) ?? ''));
+        _oneToOneList.add(_buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
       });
     }
@@ -261,33 +261,33 @@ class _MyApprovedHistoryDetailPageState
         earlyRedTdContractDetailModel.operateEndValue;
     if (this.mounted) {
       setState(() {
-        _earlyRedTdList.add(_buildTitle('基本信息'));
-        _earlyRedTdList.add(_buildContentItem('合约号', data?.conNo ?? ''));
+        _earlyRedTdList.add(_buildTitle(S.current.approve_basic_information));
+        _earlyRedTdList.add(_buildContentItem(S.current.approve_contract_no, data?.conNo ?? ''));
         _earlyRedTdList.add(
-            _buildContentItem('存单金额', f.format(double.parse(data?.bal)) ?? ''));
-        _earlyRedTdList.add(_buildContentItem('货币', data?.ccy ?? ''));
-        _earlyRedTdList.add(_buildContentItem('存期', data?.tenor ?? ''));
-        _earlyRedTdList.add(_buildContentItem('状态', data?.status ?? ''));
-        _earlyRedTdList.add(_buildContentItem('生效日', data?.valueDate ?? ''));
-        _earlyRedTdList.add(_buildContentItem('到期日', data?.dueDate ?? ''));
-        _earlyRedTdList.add(_buildContentItem('结清本金金额', data?.matAmt ?? ''));
+            _buildContentItem(S.current.approve_certificates_deposit_amount, f.format(double.parse(data?.bal)) ?? ''));
+        _earlyRedTdList.add(_buildContentItem(S.current.approve_currency, data?.ccy ?? ''));
+        _earlyRedTdList.add(_buildContentItem(S.current.approve_deposit_term, data?.tenor ?? ''));
+        _earlyRedTdList.add(_buildContentItem(S.current.approve_state, data?.status ?? ''));
+        _earlyRedTdList.add(_buildContentItem(S.current.approve_effective_date, data?.valueDate ?? ''));
+        _earlyRedTdList.add(_buildContentItem(S.current.approve_maturity_date, data?.dueDate ?? ''));
+        _earlyRedTdList.add(_buildContentItem(S.current.approve_settle_the_principal_amount, data?.matAmt ?? ''));
         _earlyRedTdList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
-        _earlyRedTdList.add(_buildTitle('试算信息'));
+        _earlyRedTdList.add(_buildTitle(S.current.approve_trial_information));
         _earlyRedTdList
-            .add(_buildContentItem('提前结清利率', '${data?.eryRate}%' ?? ''));
-        _earlyRedTdList.add(_buildContentItem('提前结清利息', data?.eryInt ?? ''));
+            .add(_buildContentItem(S.current.approve_prepay_interest_rate, '${data?.eryRate}%' ?? ''));
+        _earlyRedTdList.add(_buildContentItem(S.current.approve_prepay_interest, data?.eryInt ?? ''));
         _earlyRedTdList.add(_buildContentItem(
-            '手续费', f.format(double.parse(data?.hdlFee)) ?? ''));
+            S.current.approve_poundage, f.format(double.parse(data?.hdlFee)) ?? ''));
         _earlyRedTdList.add(_buildContentItem(
-            '罚金', f.format(double.parse(data?.pnltFee)) ?? ''));
+            S.current.approve_penalty, f.format(double.parse(data?.pnltFee)) ?? ''));
         _earlyRedTdList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
-        _earlyRedTdList.add(_buildTitle('结算信息'));
-        _earlyRedTdList.add(_buildContentItem('结算账号', data?.settDdAc ?? ''));
-        _earlyRedTdList.add(_buildContentItem('结算金额', data?.settBal ?? ''));
+        _earlyRedTdList.add(_buildTitle(S.current.approve_billing_info));
+        _earlyRedTdList.add(_buildContentItem(S.current.approve_settlement_account, data?.settDdAc ?? ''));
+        _earlyRedTdList.add(_buildContentItem(S.current.approve_settlement_amount, data?.settBal ?? ''));
         _isLoading = false;
       });
     }
@@ -301,16 +301,16 @@ class _MyApprovedHistoryDetailPageState
         openTdContractDetailModel?.operateEndValue;
     if (this.mounted) {
       setState(() {
-        _openTdList.add(_buildTitle('基本信息'));
-        _openTdList.add(_buildContentItem('产品', data?.prodName ?? ''));
-        _openTdList.add(_buildContentItem('存款期限', data?.tenor ?? ''));
+        _openTdList.add(_buildTitle(S.current.approve_basic_information));
+        _openTdList.add(_buildContentItem(S.current.approve_product, data?.prodName ?? ''));
+        _openTdList.add(_buildContentItem(S.current.approve_terms_of_deposit, data?.tenor ?? ''));
         _openTdList.add(
-            _buildContentItem('金额', f.format(double.parse(data?.bal)) ?? ''));
-        _openTdList.add(_buildContentItem('年利率', ''));
-        _openTdList.add(_buildContentItem('存单货币', data?.ccy ?? ''));
-        _openTdList.add(_buildContentItem('到期指示', data?.instCode ?? ''));
-        _openTdList.add(_buildContentItem('结算账户', data?.settDdAc ?? ''));
-        _openTdList.add(_buildContentItem('扣款账户', data?.oppAc ?? ''));
+            _buildContentItem(S.current.approve_amount, f.format(double.parse(data?.bal)) ?? ''));
+        _openTdList.add(_buildContentItem(S.current.approve_interest_rate, ''));
+        _openTdList.add(_buildContentItem(S.current.approve_certificates_deposit_money, data?.ccy ?? ''));
+        _openTdList.add(_buildContentItem(S.current.approve_maturity_instructions, data?.instCode ?? ''));
+        _openTdList.add(_buildContentItem(S.current.approve_settlement_account, data?.settDdAc ?? ''));
+        _openTdList.add(_buildContentItem(S.current.approve_debit_account, data?.oppAc ?? ''));
         _isLoading = false;
       });
     }
@@ -330,6 +330,7 @@ class _MyApprovedHistoryDetailPageState
           : SingleChildScrollView(
         controller: _controller,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             //提示
             _tips(),
@@ -364,7 +365,7 @@ class _MyApprovedHistoryDetailPageState
           Navigator.pushNamed(
               context, pageAuthorizationTaskApprovalHistoryDetail);
         },
-        child: _buildHistoryItem('审批历史', true),
+        child: _buildHistoryItem(S.current.approve_approval_history, true),
       ),
     );
   }
@@ -418,28 +419,37 @@ class _MyApprovedHistoryDetailPageState
 
   Widget _buildContentItem(String name, String value) {
     return Container(
-      height: 46,
+      padding: EdgeInsets.symmetric(horizontal: 14.0),
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 12.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Text(
                     name,
                     style: TextStyle(fontSize: 13.0),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  Text(
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(
                     value,
                     style: TextStyle(
                         fontSize: 13.0, color: Color(int.parse('0xff7A7A7A'))),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           Container(
