@@ -386,9 +386,17 @@ class _TransferPartnerState extends State<TransferPartner> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          partner.payeeName == null ? '无名' : partner.payeeName,
-          style: TextStyle(fontSize: 14, color: Color(0xFF232323)),
+        Container(
+          width: MediaQuery.of(context).size.width / 1.5,
+          child: Text(
+            partner.payeeName == null ? '无名' : partner.payeeName,
+            style: TextStyle(
+              fontSize: 14,
+              color: Color(0xFF232323),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
         Container(
           width: MediaQuery.of(context).size.width / 1.5,

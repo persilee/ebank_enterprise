@@ -162,10 +162,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           _amount = '0';
           _xRate = '-';
         });
-      } else {
-        _focusNode.addListener(() {
-          _rateCalculate();
-        });
+      } else if (_transferCcy != '') {
+        _rateCalculate();
+        // _focusNode.addListener(() {
+        //   _rateCalculate();
+        // });
       }
     });
   }
@@ -564,7 +565,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             _balance = _balanceList[0];
             _payIndex = 0;
           }
-          _getTransferCcySamePayCcy();
+          // _getTransferCcySamePayCcy();
           _rateCalculate();
         });
       }
