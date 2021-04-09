@@ -200,7 +200,7 @@ class _MyApplicationPageState extends State<MyApplicationPage> with AutomaticKee
             _taskName(approvalTask?.taskName ?? ''),
             Padding(padding: EdgeInsets.only(top: 2.0)),
             //待办任务id
-            _rowInformation(S.current.approval_task_id, approvalTask?.taskId ?? ''),
+            _rowInformation(S.current.approve_task_id, approvalTask?.taskId ?? ''),
             //发起人
             _rowInformation(S.current.sponsor, approvalTask?.applicantName ?? ''),
             //审批结果

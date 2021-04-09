@@ -39,6 +39,10 @@ abstract class ApiClient {
   Future<dynamic> findToDoTaskDetail(
       @Body() FindTodoTaskDetailBody findTodoTaskDetailBody);
 
+  @POST('/wkfl/processTask/findHistoryTaskDetail')
+  Future<dynamic> findHistoryTaskDetail(
+      @Body() FindTodoTaskDetailBody findTodoTaskDetailBody);
+
   /// 认领任务
   @POST('/wkfl/processTask/doClaimTask')
   Future<void> doClaimTask(@Body() FindTaskBody findTaskBody);
