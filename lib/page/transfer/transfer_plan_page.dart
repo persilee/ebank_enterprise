@@ -565,6 +565,7 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
                           },
                           onRefresh: () {
                             _page = 1;
+                            transferPlanList.clear();
                             _getTransferPlanList();
                             //刷新完成
                             _refreshController.refreshCompleted();

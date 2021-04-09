@@ -188,7 +188,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         .then((data) {
       if (data != null) {
         Fluttertoast.showToast(
-          msg: '添加成功',
+          msg: S.current.add_successful,
           gravity: ToastGravity.CENTER,
         );
         Navigator.of(context).pop();
@@ -877,7 +877,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           _loadData();
         } else {
           Fluttertoast.showToast(
-            msg: "账号不存在，请重新输入",
+            msg: S.current.account_no_exist,
             gravity: ToastGravity.CENTER,
           );
         }
@@ -919,7 +919,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       }
     }).catchError((e) {
       Fluttertoast.showToast(
-        msg: "账号不存在",
+        msg: S.current.no_account,
         gravity: ToastGravity.CENTER,
       );
     });

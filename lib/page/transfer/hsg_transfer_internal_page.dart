@@ -360,7 +360,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     if (double.parse(_transferMoneyController.text) > double.parse(_balance)) {
       // if (double.parse(_limit) > double.parse(_balance)) {
       Fluttertoast.showToast(
-        msg: "余额不足",
+        msg:  S.current.tdContract_balance_insufficient,
         gravity: ToastGravity.CENTER,
       );
       // } else {

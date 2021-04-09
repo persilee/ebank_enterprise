@@ -6,7 +6,6 @@
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
 
-
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
@@ -34,14 +33,14 @@ class MyApplicationPage extends StatefulWidget {
 
 enum LoadingStatus { STATUS_LOADING, STATUS_COMPLETED, STATUS_IDEL }
 
-class _MyApplicationPageState extends State<MyApplicationPage> with AutomaticKeepAliveClientMixin {
+class _MyApplicationPageState extends State<MyApplicationPage>
+    with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController;
   RefreshController _refreshController;
   List<ApprovalTask> _listData = [];
   int _page = 1;
   bool _isLoading = false;
   bool _isMoreData = false;
-
 
   @override
   void initState() {
@@ -63,51 +62,54 @@ class _MyApplicationPageState extends State<MyApplicationPage> with AutomaticKee
     return _isLoading
         ? HsgLoading()
         : _listData.length > 0
-        ? CustomRefresh(
-      controller: _refreshController,
-      onLoading: () async {
-        await _loadData(isLoadMore: true);
-        //加载更多完成
-        _refreshController.loadComplete();
-        //显示没有更多数据
-        if (_isMoreData) _refreshController.loadNoData();
-      },
-      onRefresh: () async {
-        await _loadData();
-        //刷新完成
-        _refreshController.refreshCompleted();
-        _refreshController.footerMode.value = LoadStatus.canLoading;
-      },
-      content: ListView.builder(
-        padding:
-        EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
-        itemCount: _listData.length,
-        controller: _scrollController,
-        itemBuilder: (context, index) {
-          return _todoInformation(_listData[index]);
-        },
-      ),
-    )
-        : notDataContainer(context, S.current.no_data_now);
+            ? CustomRefresh(
+                controller: _refreshController,
+                onLoading: () async {
+                  await _loadData(isLoadMore: true);
+                  //加载更多完成
+                  _refreshController.loadComplete();
+                  //显示没有更多数据
+                  if (_isMoreData) _refreshController.loadNoData();
+                },
+                onRefresh: () async {
+                  await _loadData();
+                  //刷新完成
+                  _refreshController.refreshCompleted();
+                  _refreshController.footerMode.value = LoadStatus.canLoading;
+                },
+                content: ListView.builder(
+                  padding:
+                      EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
+                  itemCount: _listData.length,
+                  controller: _scrollController,
+                  itemBuilder: (context, index) {
+                    return _todoInformation(_listData[index]);
+                  },
+                ),
+              )
+            : notDataContainer(context, S.current.no_data_now);
   }
 
   //加载数据
   Future<void> _loadData({bool isLoadMore = false}) async {
-    isLoadMore ? _page ++ : _page = 1;
+    isLoadMore ? _page++ : _page = 1;
     _isLoading = true;
     try {
       FindUserTodoTaskModel response = await ApiClient().findUserStartTask(
         FindTaskBody(
-            page: _page, pageSize: 10, tenantId: 'EB', custId: SpUtil.getString(ConfigKey.CUST_ID)),
+            page: _page,
+            pageSize: 10,
+            tenantId: 'EB',
+            custId: SpUtil.getString(ConfigKey.CUST_ID)),
       );
       if (this.mounted) {
         setState(() {
-          if(isLoadMore == false && _page == 1) {
+          if (isLoadMore == false && _page == 1) {
             _listData.clear();
           }
           _listData.addAll(response.rows);
           _isLoading = false;
-          if(response.rows.length <= 10 && response.totalPage <= _page) {
+          if (response.rows.length <= 10 && response.totalPage <= _page) {
             _isMoreData = true;
           }
         });
@@ -200,13 +202,17 @@ class _MyApplicationPageState extends State<MyApplicationPage> with AutomaticKee
             _taskName(approvalTask?.taskName ?? ''),
             Padding(padding: EdgeInsets.only(top: 2.0)),
             //待办任务id
-            _rowInformation(S.current.approve_task_id, approvalTask?.taskId ?? ''),
+            _rowInformation(
+                S.current.approve_task_id, approvalTask?.taskId ?? ''),
             //发起人
-            _rowInformation(S.current.sponsor, approvalTask?.applicantName ?? ''),
+            _rowInformation(
+                S.current.sponsor, approvalTask?.applicantName ?? ''),
             //审批结果
-            _rowInformation(S.current.approve_result, approvalTask?.result ?? ''),
+            _rowInformation(
+                S.current.approve_result, approvalTask?.result ?? ''),
             //审批时间
-            _rowInformation(S.current.approve_create_time, approvalTask?.createTime ?? ''),
+            _rowInformation(
+                S.current.approve_create_time, approvalTask?.createTime ?? ''),
           ],
         ),
       ),
