@@ -153,19 +153,29 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          leftText,
-          style: TextStyle(
-            fontSize: 14.0,
-            color: HsgColors.toDoDetailText,
+        Expanded(
+          flex: 1,
+          child: Text(
+            leftText,
+            style: TextStyle(
+              fontSize: 14.0,
+              color: HsgColors.toDoDetailText,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
-        Text(
-          rightText,
-          textAlign: TextAlign.right,
-          style: TextStyle(
-            fontSize: 14.0,
-            color: HsgColors.aboutusTextCon,
+        Expanded(
+          flex: 1,
+          child: Text(
+            rightText,
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              fontSize: 14.0,
+              color: HsgColors.aboutusTextCon,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
@@ -197,7 +207,7 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
             Padding(padding: EdgeInsets.only(top: 1.0)),
             //待办任务id
             _rowInformation(
-                intl.S.current.approval_task_id, approvalTask?.taskId ?? ''),
+                intl.S.current.approve_task_id, approvalTask?.taskId ?? ''),
             //发起人
             _rowInformation(
                 intl.S.current.sponsor, approvalTask?.applicantName ?? ''),
@@ -249,7 +259,9 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
   //跳转并传值
   void go2Detail(ApprovalTask approvalTask) {
     Navigator.pushNamed(context, pageTaskApproval,
-        arguments: {"data": approvalTask, "title": widget.title});
+        arguments: {"data": approvalTask, "title": widget.title}).then((value) {
+      setState(() {});
+    });
   }
 
   //蓝色圆点

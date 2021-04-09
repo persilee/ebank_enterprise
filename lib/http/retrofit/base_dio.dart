@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:ebank_mobile/http/retrofit/error_interceptor.dart';
 import 'package:ebank_mobile/http/retrofit/request_interceptor.dart';
 import 'package:ebank_mobile/http/retrofit/response_interceptor.dart';
+import 'package:ebank_mobile/util/log_util.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'header_interceptor.dart';
 

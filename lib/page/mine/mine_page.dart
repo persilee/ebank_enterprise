@@ -915,6 +915,9 @@ class _MinePageState extends State<MinePage> {
   /*拍照*/
   _takePhoto() async {
     var image = await ImagePicker().getImage(source: ImageSource.camera);
+    if (image == null) {
+      return;
+    }
 
     setState(() {
       _imgPath = image.path;
