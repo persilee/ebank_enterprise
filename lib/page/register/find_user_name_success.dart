@@ -75,7 +75,12 @@ class _FindUserNameSuccessState extends State<FindUserNameSuccess> {
                   style: TextStyle(fontSize: 14, color: Colors.white),
                 ),
                 clickCallback: () {
-                  Navigator.pop(context, _userName);
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      pageHome, ModalRoute.withName(""), //清除旧栈需要保留的栈 不清除就不写这句
+                      arguments: _userName //传值
+                      );
+                  // Navigator.popAndPushNamed(context, pageHome,
+                  //     arguments: _userName);
                 },
               ),
               // //完成按钮

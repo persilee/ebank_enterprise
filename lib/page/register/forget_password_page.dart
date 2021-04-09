@@ -137,6 +137,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       ),
                       Container(
                         //获取验证码按钮
+                        alignment: Alignment.centerRight,
                         width: MediaQuery.of(context).size.width / 3,
                         child: _otpButton(),
                       )
@@ -226,7 +227,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               _checkRegister();
               FocusScope.of(context).requestFocus(FocusNode());
             },
-      padding: EdgeInsets.only(left: 35),
+      //  padding: EdgeInsets.only(left: 35),
       textColor: HsgColors.blueTextColor,
       disabledTextColor: HsgColors.blueTextColor,
       child: Text(
