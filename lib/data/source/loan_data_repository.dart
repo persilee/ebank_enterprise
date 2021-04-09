@@ -15,7 +15,6 @@ import 'model/loan_account_model.dart';
 import 'model/loan_application.dart';
 import 'model/loan_creditlimit_cust.dart';
 import 'model/loan_detail_modelList.dart';
-import 'model/loan_interest_rate.dart';
 import 'model/loan_prepayment_model.dart';
 import 'model/loan_product_list.dart';
 import 'model/loan_record_list_model.dart';

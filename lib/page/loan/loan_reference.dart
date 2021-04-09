@@ -500,6 +500,7 @@ class _LoanReferenceState extends State<LoanReference> {
 //期限，用途 ，还款方式底部弹窗内容选择
   _select(String title, List<IdType> list, int i) {
     return () {
+      FocusScope.of(context).requestFocus(FocusNode());
       List<String> tempList = [];
       list.forEach((e) {
         if (_language == 'zh_CN') {
