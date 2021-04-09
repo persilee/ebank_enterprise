@@ -256,10 +256,8 @@ class HsgPasswordDialog extends StatelessWidget {
         .verifyTransPwdNoSms(
             VerifyTransPwdNoSmsReq(payPassword), 'VerifyTransPwdNoSmsReq')
         .then((data) {
-      returnPasswordFunc(password);
       Navigator.pop(context, true);
-      //Navigator.of(context)..pop()..pop();
-      //Navigator.pushNamed(context, resultPage);
+      returnPasswordFunc(password);
       if (resultPage == '') {
         Navigator.of(context)..pop()..pop();
       } else {
@@ -290,17 +288,19 @@ class HsgPasswordDialog extends StatelessWidget {
         }
       }
     }).catchError((e) {
+      print(e.toString());
       // if (e.toString() == 'ECUST031') {
       //   Fluttertoast.showToast(msg: '交易密码错误！请重试',gravity: ToastGravity.CENTER,);
       // } else {
       //   Fluttertoast.showToast(msg: '未设置交易密码！',gravity: ToastGravity.CENTER,);
       // }
+
+      passwordList.clear();
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
       );
-      passwordList.clear();
-      (context as Element).markNeedsBuild();
+      // (context as Element).markNeedsBuild();
     });
   }
 }

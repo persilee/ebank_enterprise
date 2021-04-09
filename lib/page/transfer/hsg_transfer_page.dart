@@ -609,6 +609,7 @@ class _TransferPageState extends State<TransferPage> {
                 color: HsgColors.secondDegreeText,
                 fontSize: 14,
               ),
+              maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -622,10 +623,12 @@ class _TransferPageState extends State<TransferPage> {
                     : data.payeeBankEngName,
             // data.payeeBankLocalName == null ? '朗华银行' : data.payeeBankLocalName,
             style: TextStyle(fontSize: 13, color: HsgColors.describeText),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
           Row(
             children: [
-              data.payeeCardNo.length > 12
+              data.payeeCardNo.length > 14
                   ? Container(
                       width: 100,
                       child: Text(

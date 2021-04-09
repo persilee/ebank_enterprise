@@ -160,10 +160,11 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           _amount = '0';
           _xRate = '-';
         });
-      } else {
-        _focusNode.addListener(() {
-          _rateCalculate();
-        });
+      } else if (_transferCcy != '') {
+        _rateCalculate();
+        // _focusNode.addListener(() {
+        //   _rateCalculate();
+        // });
       }
     });
     _actualNameReqData();
@@ -1129,7 +1130,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             _balance = _balanceList[0];
             _payIndex = 0;
           }
-          _getTransferCcySamePayCcy();
+          // _getTransferCcySamePayCcy();
           _rateCalculate();
         });
       }
