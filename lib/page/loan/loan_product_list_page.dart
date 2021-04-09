@@ -189,10 +189,7 @@ class _LoanProductState extends State<LoanProductListPage> {
   Widget _getProductCellWidget(Map indexMap) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent, //设置点击的范围属性
-      onTap: () {
-        //点击某一行，在进行反向传值
-        Navigator.pop(context, indexMap);
-      },
+
       child: Container(
         width: MediaQuery.of(context).size.width,
         child: Column(

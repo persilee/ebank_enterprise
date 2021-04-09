@@ -85,8 +85,8 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
     }).catchError((e) {
       SVProgressHUD.dismiss();
       SVProgressHUD.showInfo(status: e.toString());
+      loanDetails.clear();
     });
-    loanDetails.clear();
   }
 
   //封装ListView.Builder
