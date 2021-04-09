@@ -938,9 +938,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         builder: (context) {
           return HsgPasswordDialog(
             title: S.current.input_password,
-            resultPage: pageDepositRecordSucceed,
-            arguments: '',
-            isDialog: true,
+            isDialog: false,
           );
         });
     if (isPassword != null && isPassword == true) {
