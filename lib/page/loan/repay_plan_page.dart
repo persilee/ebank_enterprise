@@ -5,9 +5,11 @@
 
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_schedule_detail_list.dart';
+import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 
@@ -28,60 +30,60 @@ class _RepayPlanState extends State<RepayPlanPage> {
   String pageSize;
   //还款状态
   String repaymentStatus;
-  GetLnAcScheduleRspDetlsDTOList _list1 = new GetLnAcScheduleRspDetlsDTOList(
-    "50000085",
-    "0",
-    "30",
-    0,
-    0,
-    "2020-02-01",
-    "2014.67",
-    "NORMAL",
-    "ALL",
-    "14.67",
-    "2020-03-20",
-    "200",
-    "2000",
-    "2020-03-20",
-    "2020-03-20",
-    "0",
-  );
-  GetLnAcScheduleRspDetlsDTOList _list2 = new GetLnAcScheduleRspDetlsDTOList(
-    "50000085",
-    "0",
-    "30",
-    0,
-    0,
-    "2020-03-01",
-    "2014.67",
-    "NORMAL",
-    "ALL",
-    "14.67",
-    "2020-03-20",
-    "200",
-    "2000",
-    "2020-03-20",
-    "2020-03-20",
-    "0",
-  );
-  GetLnAcScheduleRspDetlsDTOList _list3 = new GetLnAcScheduleRspDetlsDTOList(
-    "50000085",
-    "0",
-    "30",
-    0,
-    0,
-    "2020-04-01",
-    "2014.67",
-    "NORMAL",
-    "NONE",
-    "14.67",
-    "2020-03-20",
-    "200",
-    "2000",
-    "2020-03-20",
-    "2020-03-20",
-    "0",
-  );
+  // GetLnAcScheduleRspDetlsDTOList _list1 = new GetLnAcScheduleRspDetlsDTOList(
+  //   "50000085",
+  //   "0",
+  //   "30",
+  //   0,
+  //   0,
+  //   "2020-02-01",
+  //   "2014.67",
+  //   "NORMAL",
+  //   "ALL",
+  //   "14.67",
+  //   "2020-03-20",
+  //   "200",
+  //   "2000",
+  //   "2020-03-20",
+  //   "2020-03-20",
+  //   "0",
+  // );
+  // GetLnAcScheduleRspDetlsDTOList _list2 = new GetLnAcScheduleRspDetlsDTOList(
+  //   "50000085",
+  //   "0",
+  //   "30",
+  //   0,
+  //   0,
+  //   "2020-03-01",
+  //   "2014.67",
+  //   "NORMAL",
+  //   "ALL",
+  //   "14.67",
+  //   "2020-03-20",
+  //   "200",
+  //   "2000",
+  //   "2020-03-20",
+  //   "2020-03-20",
+  //   "0",
+  // );
+  // GetLnAcScheduleRspDetlsDTOList _list3 = new GetLnAcScheduleRspDetlsDTOList(
+  //   "50000085",
+  //   "0",
+  //   "30",
+  //   0,
+  //   0,
+  //   "2020-04-01",
+  //   "2014.67",
+  //   "NORMAL",
+  //   "NONE",
+  //   "14.67",
+  //   "2020-03-20",
+  //   "200",
+  //   "2000",
+  //   "2020-03-20",
+  //   "2020-03-20",
+  //   "0",
+  // );
 
   @override
   void initState() {
@@ -97,7 +99,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
     var req =
         new GetScheduleDetailListReq(acNo, page, pageSize, repaymentStatus);
     LoanDataRepository()
-        .getScheduleDetailList(req, 'getScheduleDetailList')
+        .getSchedulePlanDetailList(req, 'getScheduleDetailList')
         .then((data) {
       if (data.getLnAcScheduleRspDetlsDTOList != null) {
         setState(() {
@@ -112,14 +114,14 @@ class _RepayPlanState extends State<RepayPlanPage> {
       );
     });
     lnScheduleList.clear();
-    lnScheduleList.add(_list1);
-    lnScheduleList.add(_list2);
-    lnScheduleList.add(_list3);
+    // lnScheduleList.add(_list1);
+    // lnScheduleList.add(_list2);
+    // lnScheduleList.add(_list3);
   }
 
   @override
   Widget build(BuildContext context) {
-    Loan loanDetail = ModalRoute.of(context).settings.arguments;
+    LnAcMastAppDOList loanDetail = ModalRoute.of(context).settings.arguments;
     setState(() {
       acNo = loanDetail.acNo;
       page = "1";
@@ -205,7 +207,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
   }
 
   //获取头部(贷款本金，贷款余额)
-  Widget _getHeader(Loan loanDetail) {
+  Widget _getHeader(LnAcMastAppDOList loanDetail) {
     return Padding(
       padding: EdgeInsets.fromLTRB(15, 21, 20, 15),
       child: Column(
@@ -214,10 +216,8 @@ class _RepayPlanState extends State<RepayPlanPage> {
           _getHeadBox(S.of(context).loan_principal + ":",
               " HKD " + FormatUtil.formatSringToMoney(loanDetail.loanAmt)),
           Padding(padding: EdgeInsets.only(top: 9)),
-          _getHeadBox(
-              S.of(context).loan_balance2 + ":",
-              " HKD " +
-                  FormatUtil.formatSringToMoney(loanDetail.unpaidPrincipal)),
+          _getHeadBox(S.of(context).loan_balance2 + ":",
+              " HKD " + FormatUtil.formatSringToMoney(loanDetail.osAmt)),
           Padding(padding: EdgeInsets.only(top: 10)),
           Container(
             height: 20,

@@ -4,115 +4,57 @@ part 'loan_prepayment_model.g.dart';
 
 @JsonSerializable()
 class LoanPrepaymentModelReq extends Object {
+  //贷款合约
   @JsonKey(name: 'acNo')
   String acNo;
-
+//贷款货币
   @JsonKey(name: 'ccy')
   String ccy;
-
-  @JsonKey(name: 'compoundAmount')
-  int compoundAmount;
-
-  @JsonKey(name: 'ddAc')
-  String ddAc;
-
-  @JsonKey(name: 'dueAmount')
-  int dueAmount;
-
+//折算后的金额
   @JsonKey(name: 'eqAmt')
-  int eqAmt;
+  double eqAmt;
 
-  @JsonKey(name: 'exRate')
-  int exRate;
-
-  @JsonKey(name: 'instalNo')
-  int instalNo;
-
+//还利息金额
   @JsonKey(name: 'interestAmount')
-  int interestAmount;
-
-  @JsonKey(name: 'nostrac')
-  String nostrac;
-
+  double interestAmount;
+//贷款余额
   @JsonKey(name: 'outBal')
-  int outBal;
-
-  @JsonKey(name: 'payPassword')
-  String payPassword;
-
-  @JsonKey(name: 'penaltyAmount')
-  int penaltyAmount;
-
+  double outBal;
+//贷款本金
   @JsonKey(name: 'prin')
-  int prin;
-
+  double prin;
+//还本金金额
   @JsonKey(name: 'principalAmount')
-  int principalAmount;
-
-  @JsonKey(name: 'prodCode')
-  String prodCode;
-
-  @JsonKey(name: 'refNo')
-  String refNo;
-
-  @JsonKey(name: 'repaymentAcNo')
-  String repaymentAcNo;
-
-  @JsonKey(name: 'repaymentAcType')
-  String repaymentAcType;
-
-  @JsonKey(name: 'repaymentCiName')
-  String repaymentCiName;
-
+  double principalAmount;
+// //还息方式
   @JsonKey(name: 'repaymentMethod')
   String repaymentMethod;
-
-  @JsonKey(name: 'rescheduleType')
-  String rescheduleType;
-
-  @JsonKey(name: 'setMethod')
-  String setMethod;
-
+//结算方式
+  // @JsonKey(name: 'setMethod')
+  // String setMethod;
+//结算货币
   @JsonKey(name: 'setlCcy')
   String setlCcy;
-
-  @JsonKey(name: 'suspeac')
-  String suspeac;
-
+//实际还款金额
   @JsonKey(name: 'totalAmount')
-  int totalAmount;
-
-  @JsonKey(name: 'trValDate')
-  String trValDate;
+  double totalAmount;
+//还款帐号
+  @JsonKey(name: 'ddAc')
+  String ddAc;
 
   LoanPrepaymentModelReq(
     this.acNo,
     this.ccy,
-    this.compoundAmount,
-    this.ddAc,
-    this.dueAmount,
     this.eqAmt,
-    this.exRate,
-    this.instalNo,
     this.interestAmount,
-    this.nostrac,
     this.outBal,
-    this.payPassword,
-    this.penaltyAmount,
     this.prin,
     this.principalAmount,
-    this.prodCode,
-    this.refNo,
-    this.repaymentAcNo,
-    this.repaymentAcType,
-    this.repaymentCiName,
     this.repaymentMethod,
-    this.rescheduleType,
-    this.setMethod,
+    // this.setMethod,
     this.setlCcy,
-    this.suspeac,
     this.totalAmount,
-    this.trValDate,
+    this.ddAc,
   );
 
   factory LoanPrepaymentModelReq.fromJson(Map<String, dynamic> srcJson) =>
@@ -138,22 +80,22 @@ class LoanPrepaymentModelResp extends Object {
   String ddAc;
 
   @JsonKey(name: 'eqAmt')
-  int eqAmt;
+  String eqAmt;
 
   @JsonKey(name: 'exRate')
-  int exRate;
+  String exRate;
 
-  @JsonKey(name: 'feeAmount')
-  int feeAmount;
+  // @JsonKey(name: 'feeAmount')
+  // int feeAmount;
 
   @JsonKey(name: 'intMode')
   String intMode;
 
   @JsonKey(name: 'interestAmount')
-  int interestAmount;
+  String interestAmount;
 
-  @JsonKey(name: 'jrnNo')
-  int jrnNo;
+  // @JsonKey(name: 'jrnNo')
+  // int jrnNo;
 
   @JsonKey(name: 'msgType')
   String msgType;
@@ -162,19 +104,19 @@ class LoanPrepaymentModelResp extends Object {
   String nostrac;
 
   @JsonKey(name: 'outBal')
-  int outBal;
+  String outBal;
 
-  @JsonKey(name: 'penaltyInterestAmount')
-  int penaltyInterestAmount;
+  // @JsonKey(name: 'penaltyInterestAmount')
+  // int penaltyInterestAmount;
 
   @JsonKey(name: 'prin')
-  int prin;
+  String prin;
 
   @JsonKey(name: 'principalAmount')
-  int principalAmount;
+  String principalAmount;
 
   @JsonKey(name: 'repaymentAmount')
-  int repaymentAmount;
+  String repaymentAmount;
 
   @JsonKey(name: 'setMethod')
   String setMethod;
@@ -199,14 +141,14 @@ class LoanPrepaymentModelResp extends Object {
     this.ddAc,
     this.eqAmt,
     this.exRate,
-    this.feeAmount,
+    // this.feeAmount,
     this.intMode,
     this.interestAmount,
-    this.jrnNo,
+    // this.jrnNo,
     this.msgType,
     this.nostrac,
     this.outBal,
-    this.penaltyInterestAmount,
+    // this.penaltyInterestAmount,
     this.prin,
     this.principalAmount,
     this.repaymentAmount,

@@ -1,9 +1,13 @@
+import 'package:ebank_mobile/data/source/loan_data_repository.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 还款记录页面
 /// Author: zhangqirong
 /// Date: 2020-12-15
 
 import 'package:ebank_mobile/data/source/model/get_schedule_detail_list.dart';
+import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
+import 'package:ebank_mobile/data/source/model/loan_record_list_model.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -29,24 +33,9 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
   String repaymentStatus;
   //已还本金
   var paidPrincipal = '4000';
-  GetLnAcScheduleRspDetlsDTOList _list1 = new GetLnAcScheduleRspDetlsDTOList(
-    "50000085",
-    "4000",
-    "30",
-    0,
-    0,
-    "2020-02-01",
-    "2014.67",
-    "NORMAL",
-    "ALL",
-    "14.67",
-    "2020-03-20",
-    "200",
-    "2000",
-    "2020-03-20",
-    "2020-03-20",
-    "4000",
-  );
+
+  LnAcMastAppDOList loanDetail; //上界面传回来的模型
+
   GetLnAcScheduleRspDetlsDTOList _list2 = new GetLnAcScheduleRspDetlsDTOList(
     "50000085",
     "0",
@@ -77,15 +66,14 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
   }
 
   Future<void> _loadData() async {
-    // var req =
-    //     new GetScheduleDetailListReq(acNo, page, pageSize, repaymentStatus);
+    // var req = new LoanRecordListResp(acNo, page, pageSize, repaymentStatus);
     // LoanDataRepository()
-    //     .getScheduleDetailList(req, 'getScheduleDetailList')
+    //     .getScheduleRecordDetailList(req, 'getScheduleDetailList')
     //     .then((data) {
-    //   if (data.getLnAcScheduleRspDetlsDTOList != null) {
+    //   if (data.loanPrepaymentHistoryDTOList != null) {
     //     setState(() {
     //       lnScheduleList.clear();
-    //       lnScheduleList.addAll(data.getLnAcScheduleRspDetlsDTOList);
+    //       lnScheduleList.addAll(data.loanPrepaymentHistoryDTOList);
     //     });
     //     double tempMoney = 0;
     //     for (int i = 0; i < lnScheduleList.length; i++) {
@@ -100,13 +88,13 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
     //   Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     // });
     lnScheduleList.clear();
-    lnScheduleList.add(_list1);
-    lnScheduleList.add(_list2);
+    // lnScheduleList.add(_list1);
+    // lnScheduleList.add(_list2);
   }
 
   @override
   Widget build(BuildContext context) {
-    Loan loanDetail = ModalRoute.of(context).settings.arguments;
+    LnAcMastAppDOList loanDetail = ModalRoute.of(context).settings.arguments;
     setState(() {
       acNo = loanDetail.acNo;
       page = "1";

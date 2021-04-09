@@ -995,9 +995,6 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         setState(() {
           _isLoading = false;
         });
-        print(e.toString() +
-            "00000000000000000" +
-            _transferHistoryList[0].amount);
       }
     });
   }
