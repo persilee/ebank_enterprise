@@ -11,7 +11,12 @@ class CustomRefresh extends StatelessWidget {
   final Widget content;
 
   const CustomRefresh(
-      {Key key, this.controller, this.onRefresh, this.onLoading, this.content})
+      {Key key,
+      this.controller,
+      this.onRefresh,
+      this.onLoading,
+      this.content,
+      Column child})
       : super(key: key);
 
   @override

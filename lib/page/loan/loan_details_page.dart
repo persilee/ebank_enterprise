@@ -393,11 +393,13 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
       switch (result) {
         case 0:
           //直接还款记录
-          Navigator.pushNamed(context, pageRepayRecords, arguments: loanDetail);
+          Navigator.pushNamed(context, pageRepayRecords,
+              arguments: {'data': loanDetail});
           break;
         case 1:
           //查看还款计划
-          Navigator.pushNamed(context, pageRepayPlan, arguments: loanDetail);
+          Navigator.pushNamed(context, pageRepayPlan,
+              arguments: {'data': loanDetail});
           break;
         case 2:
           //提前还款

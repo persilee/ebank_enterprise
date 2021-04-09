@@ -623,7 +623,7 @@ class _TransferPageState extends State<TransferPage> {
                     : data.payeeBankEngName,
             // data.payeeBankLocalName == null ? '朗华银行' : data.payeeBankLocalName,
             style: TextStyle(fontSize: 13, color: HsgColors.describeText),
-            maxLines: 2,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           Row(

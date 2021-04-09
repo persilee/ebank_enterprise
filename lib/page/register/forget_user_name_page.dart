@@ -137,6 +137,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
                       ),
                     ),
                     Container(
+                      alignment: Alignment.centerRight,
                       width: MediaQuery.of(context).size.width / 3,
                       child: _otpButton(),
                     )
@@ -218,7 +219,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
               FocusScope.of(context).requestFocus(FocusNode());
             },
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
-      padding: EdgeInsets.only(left: 35),
+      // padding: EdgeInsets.only(left: 35),
       //文字颜色
       textColor: HsgColors.blueTextColor,
 
@@ -325,7 +326,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
           else if (_sms.text != _smsCode) {
             HSProgressHUD.dismiss();
             Fluttertoast.showToast(
-              msg: '您输入的验证码错误',
+              msg: S.current.verification_code_wrong,
               gravity: ToastGravity.CENTER,
             );
           }

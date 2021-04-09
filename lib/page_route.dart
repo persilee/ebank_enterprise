@@ -232,9 +232,9 @@ var appRoutes = {
   pageRepayConfirm: (context) => RepayConfirmPage(),
   pageRepayInput: (context) => RepayInputPage(),
   pageWaitRepayPlan: (context) => WaitRepayPlanPage(),
-  pageRepayPlan: (context) => RepayPlanPage(),
+  // pageRepayPlan: (context) => RepayPlanPage(),
   pageLimitDetails: (context) => LimitDetailsPage(),
-  pageRepayRecords: (context) => RepayRecordsPage(),
+  // pageRepayRecords: (context) => RepayRecordsPage(),
   // pageCardDetail: (context) => CardDetailPage(),
   pageCardLimit: (context) => CardLimitManagerPage(),
   minePage: (context) => MinePage(),
@@ -399,6 +399,25 @@ onGenerateRoute(RouteSettings settings) {
       Map<String, dynamic> arguments = settings.arguments;
       return LoanDetailsPage(
         loanAccountDetail: arguments['data'],
+      );
+    });
+  }
+
+  if (settings.name == pageRepayRecords) {
+    //跳转贷款还款记录
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return RepayRecordsPage(
+        loanDetail: arguments['data'],
+      );
+    });
+  }
+  if (settings.name == pageRepayPlan) {
+    //跳转贷款还款计划
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return RepayPlanPage(
+        loanDetail: arguments['data'],
       );
     });
   }

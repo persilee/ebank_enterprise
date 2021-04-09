@@ -13,11 +13,12 @@ import 'model/get_loan_rate.dart';
 import 'model/get_schedule_detail_list.dart';
 import 'model/loan_account_model.dart';
 import 'model/loan_application.dart';
+import 'model/loan_applyfor_list.dart';
 import 'model/loan_creditlimit_cust.dart';
 import 'model/loan_detail_modelList.dart';
 import 'model/loan_prepayment_model.dart';
 import 'model/loan_product_list.dart';
-import 'model/loan_record_list_model.dart';
+import 'model/loan_repayment_record.dart';
 
 class LoanDataRepository {
   //贷款利率接口
@@ -49,6 +50,14 @@ class LoanDataRepository {
         (data) => LoanApplicationResp.fromJson(data));
   }
 
+  //贷款申请里面--》我的申请记录接口
+  Future<LoanApplyFoyListResp> loanApplyforListData(
+      LoanApplyFoyListReq loanApplicationReq, String tag) {
+    print('==========$loanApplicationReq');
+    return request('loan/contracts/myLoanApplys', loanApplicationReq, tag,
+        (data) => LoanApplyFoyListResp.fromJson(data));
+  }
+
   //我的贷款列表接口
   Future<LoanAccountMastModelResp> getLoanAccountList(
       LoanAccountMastModelReq req, String tag) {
@@ -64,10 +73,10 @@ class LoanDataRepository {
   }
 
   //查询还款记录详情列表接口
-  Future<LoanRecordListResp> getScheduleRecordDetailList(
-      LoanRecordListReq req, String tag) {
+  Future<LoanRepaymentRecordResp> getScheduleRecordDetailList(
+      LoanRepaymentRecordReq req, String tag) {
     return request('loan/repayments/getLoanRepaymentHistory', req, tag,
-        (data) => LoanRecordListResp.fromJson(data));
+        (data) => LoanRepaymentRecordResp.fromJson(data));
   }
 
   //查询还款计划详情列表接口
