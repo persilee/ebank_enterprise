@@ -143,7 +143,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     _actualNameReqData();
 
     _transferMoneyController.addListener(() {
-      if (_transferMoneyController.text.length == 0) {
+      if (_transferMoneyController.text.length == 0 ||
+          _transferMoneyController.text == '0') {
         setState(() {
           _amount = '0';
           _rate = '-';
@@ -194,7 +195,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         //付款方银行
         payeeBankCode = listPartner.bankCode;
         //收款方银行
-        payerBankCode = listPartner.payerBankCode;
+        _bankNameController.text = listPartner.payerBankCode;
         payeeName = listPartner.payeeName;
         payerName = listPartner.payerName;
         if (listPartner.paysMethod != null) {
@@ -495,7 +496,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   _payeeAddressController.text = rowListPartner.payeeAddress;
                   _remarkController.text = rowListPartner.remark;
                   //付款方银行
-                  payeeBankCode = rowListPartner.bankCode;
+                  _bankNameController.text = rowListPartner.bankCode;
                   //收款方银行
                   payerBankCode = rowListPartner.payerBankCode;
                   payeeName = rowListPartner.payeeName;
@@ -802,7 +803,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _payerAddressController.text.length > 0 &&
         _transferFee != '' &&
         _transferMoneyController.text != '' &&
-        _feeUse != '') {
+        _feeUse != '' &&
+        _transferCcy != '') {
       return true;
     } else {
       return false;

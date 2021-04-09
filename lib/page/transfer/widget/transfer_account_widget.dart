@@ -112,6 +112,7 @@ class TransferAccount extends StatelessWidget {
               onPressed: () {
                 FocusScope.of(context).requestFocus(FocusNode());
                 payCcyDialog();
+                callback();
               },
               child: Row(
                 children: [

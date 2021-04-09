@@ -37,6 +37,7 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
   String nextDate = '--';
   String btnTitle = S.current.cancel_plan;
   Color btnColor = HsgColors.accent;
+  Color textColor = Colors.white;
   bool _isDate = false;
   bool _isColor = false;
   BorderRadius borderRadius;
@@ -268,7 +269,8 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
               btnTitle,
               null,
               btnColor,
-              Colors.white,
+              // Colors.white,
+              textColor,
               BorderSide.none,
               13.0,
               BorderRadius.all(Radius.circular(13)),
@@ -351,14 +353,18 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
       btnTitle = S.current.cancel_plan;
       // btnColor = HsgColors.accent;
       _isColor = true;
+      textColor = Colors.white;
     } else if (transferPlanList[index].status == 'C') {
       btnTitle = S.current.canceled;
       _isColor = false;
       btnColor = HsgColors.canceledBtn;
+      textColor = Colors.white;
     } else if (transferPlanList[index].status == 'A') {
       btnTitle = S.current.under_review;
       _isColor = false;
-      btnColor = Color(0xFF48b4ff);
+      // btnColor = Color(0xFF48b4ff);
+      btnColor = Colors.white;
+      textColor = Color(0xFF48b4ff);
     } else {
       btnTitle = S.current.finished;
       _isColor = false;
@@ -411,119 +417,121 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
     );
   }
 
-  //转账计划列表
-  List<Widget> _transferPlanList() {
-    List<Widget> section = [];
-    section.add(
-      SliverToBoxAdapter(
-        child: _toggleButton(),
-      ),
-    );
-    section.add(
-      _isDate
-          ? SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                planId = transferPlanList[index].planId;
-                //判断转账频率
-                switch (transferPlanList[index].frequency) {
-                  case '0':
-                    frequency = S.current.only_once;
-                    break;
-                  case '1':
-                    frequency = S.current.daily;
-                    break;
-                  case '2':
-                    frequency = S.current.monthly;
-                    break;
-                  default:
-                    frequency = S.current.yearly;
-                }
-                //判断转账类型
-                switch (transferPlanList[index].transferType) {
-                  case '0':
-                    transferType = S.current.transfer_type_0;
-                    break;
-                  default:
-                    frequency = S.current.transfer_type_2;
-                }
-                //根据转账计划的状态改变按钮颜色
-                if (transferPlanList[index].status == 'P') {
-                  btnTitle = S.current.cancel_plan;
-                  // btnColor = HsgColors.accent;
-                  _isColor = true;
-                } else if (transferPlanList[index].status == 'C') {
-                  btnTitle = S.current.canceled;
-                  _isColor = false;
-                  btnColor = HsgColors.canceledBtn;
-                } else if (transferPlanList[index].status == 'A') {
-                  btnTitle = S.current.under_review;
-                  _isColor = false;
-                  btnColor = Color(0xFF48b4ff);
-                } else {
-                  btnTitle = S.current.finished;
-                  _isColor = false;
-                  btnColor = HsgColors.finishedBtn;
-                }
-                nextDate = transferPlanList[index].nextDate == null
-                    ? '--'
-                    : transferPlanList[index].nextDate;
-                return FlatButton(
-                  padding: EdgeInsets.all(0),
-                  onPressed: () {
-                    go2Detail(transferPlanList[index]);
-                  },
-                  child: Column(
-                    children: [
-                      //计划名称
-                      _planName(transferPlanList[index].planName),
-                      //付款账户和收款账户
-                      Container(
-                        color: Colors.white,
-                        padding: EdgeInsets.only(left: 15, right: 15, top: 15),
-                        child: Row(
-                          children: [
-                            _bank(
-                                transferPlanList[index].payerName,
-                                FormatUtil.formatSpace4(
-                                    transferPlanList[index].payerCardNo)),
-                            _transferRecordImage(
-                                'images/transferIcon/transfert_to.png',
-                                MediaQuery.of(context).size.width / 7,
-                                25,
-                                25),
-                            _bank(
-                                transferPlanList[index].payeeName,
-                                FormatUtil.formatSpace4(
-                                    transferPlanList[index].payeeCardNo)),
-                          ],
-                        ),
-                      ),
-                      _dottedLine(),
-                      //转账计划信息
-                      _planInfo(
-                          transferPlanList[index].debitCurrency +
-                              ' ' +
-                              transferPlanList[index].amount,
-                          frequency,
-                          transferPlanList[index].startDate,
-                          transferPlanList[index].endDate,
-                          nextDate,
-                          transferType),
-                    ],
-                  ),
-                );
-              }, childCount: transferPlanList.length),
-            )
-          : SliverToBoxAdapter(
-              //暂无数据页面
-              child: Container(
-                height: MediaQuery.of(context).size.height * 3.5 / 5,
-                child: notDataContainer(context, S.current.no_data_now),
-              ),
-            ),
-    );
-    return section;
-  }
+  // //转账计划列表
+  // List<Widget> _transferPlanList() {
+  //   List<Widget> section = [];
+  //   section.add(
+  //     SliverToBoxAdapter(
+  //       child: _toggleButton(),
+  //     ),
+  //   );
+  //   section.add(
+  //     _isDate
+  //         ? SliverList(
+  //             delegate: SliverChildBuilderDelegate((context, index) {
+  //               planId = transferPlanList[index].planId;
+  //               //判断转账频率
+  //               switch (transferPlanList[index].frequency) {
+  //                 case '0':
+  //                   frequency = S.current.only_once;
+  //                   break;
+  //                 case '1':
+  //                   frequency = S.current.daily;
+  //                   break;
+  //                 case '2':
+  //                   frequency = S.current.monthly;
+  //                   break;
+  //                 default:
+  //                   frequency = S.current.yearly;
+  //               }
+  //               //判断转账类型
+  //               switch (transferPlanList[index].transferType) {
+  //                 case '0':
+  //                   transferType = S.current.transfer_type_0;
+  //                   break;
+  //                 default:
+  //                   frequency = S.current.transfer_type_2;
+  //               }
+  //               //根据转账计划的状态改变按钮颜色
+  //               if (transferPlanList[index].status == 'P') {
+  //                 btnTitle = S.current.cancel_plan;
+  //                 // btnColor = HsgColors.accent;
+  //                 _isColor = true;
+  //               } else if (transferPlanList[index].status == 'C') {
+  //                 btnTitle = S.current.canceled;
+  //                 _isColor = false;
+  //                 btnColor = HsgColors.canceledBtn;
+  //               } else if (transferPlanList[index].status == 'A') {
+  //                 btnTitle = S.current.under_review;
+  //                 _isColor = false;
+  //                 // btnColor = Color(0xFF48b4ff);
+  //                 btnColor = Colors.white;
+  //                 textColor = Color(0xFF48b4ff);
+  //               } else {
+  //                 btnTitle = S.current.finished;
+  //                 _isColor = false;
+  //                 btnColor = HsgColors.finishedBtn;
+  //               }
+  //               nextDate = transferPlanList[index].nextDate == null
+  //                   ? '--'
+  //                   : transferPlanList[index].nextDate;
+  //               return FlatButton(
+  //                 padding: EdgeInsets.all(0),
+  //                 onPressed: () {
+  //                   go2Detail(transferPlanList[index]);
+  //                 },
+  //                 child: Column(
+  //                   children: [
+  //                     //计划名称
+  //                     _planName(transferPlanList[index].planName),
+  //                     //付款账户和收款账户
+  //                     Container(
+  //                       color: Colors.white,
+  //                       padding: EdgeInsets.only(left: 15, right: 15, top: 15),
+  //                       child: Row(
+  //                         children: [
+  //                           _bank(
+  //                               transferPlanList[index].payerName,
+  //                               FormatUtil.formatSpace4(
+  //                                   transferPlanList[index].payerCardNo)),
+  //                           _transferRecordImage(
+  //                               'images/transferIcon/transfert_to.png',
+  //                               MediaQuery.of(context).size.width / 7,
+  //                               25,
+  //                               25),
+  //                           _bank(
+  //                               transferPlanList[index].payeeName,
+  //                               FormatUtil.formatSpace4(
+  //                                   transferPlanList[index].payeeCardNo)),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                     _dottedLine(),
+  //                     //转账计划信息
+  //                     _planInfo(
+  //                         transferPlanList[index].debitCurrency +
+  //                             ' ' +
+  //                             transferPlanList[index].amount,
+  //                         frequency,
+  //                         transferPlanList[index].startDate,
+  //                         transferPlanList[index].endDate,
+  //                         nextDate,
+  //                         transferType),
+  //                   ],
+  //                 ),
+  //               );
+  //             }, childCount: transferPlanList.length),
+  //           )
+  //         : SliverToBoxAdapter(
+  //             //暂无数据页面
+  //             child: Container(
+  //               height: MediaQuery.of(context).size.height * 3.5 / 5,
+  //               child: notDataContainer(context, S.current.no_data_now),
+  //             ),
+  //           ),
+  //   );
+  //   return section;
+  // }
 
   @override
   Widget build(BuildContext context) {

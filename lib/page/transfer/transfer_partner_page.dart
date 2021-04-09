@@ -412,7 +412,7 @@ class _TransferPartnerState extends State<TransferPartner> {
             //     ? partner.payeeBankLocalName
             //     : partner.payeeBankEngName,
             style: TextStyle(fontSize: 13, color: HsgColors.hintText),
-            maxLines: 2,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
         ),
