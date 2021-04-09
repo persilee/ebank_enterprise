@@ -326,7 +326,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
           else if (_sms.text != _smsCode) {
             HSProgressHUD.dismiss();
             Fluttertoast.showToast(
-              msg: '您输入的验证码错误',
+              msg: S.current.verification_code_wrong,
               gravity: ToastGravity.CENTER,
             );
           }
