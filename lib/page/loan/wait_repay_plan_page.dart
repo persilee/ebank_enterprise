@@ -32,24 +32,24 @@ class _WaitRepayPlanState extends State<WaitRepayPlanPage> {
   var paidPrincipal = '';
   //待还本金
   var notPaidPrincipal = '2000';
-  GetLnAcScheduleRspDetlsDTOList _list1 = new GetLnAcScheduleRspDetlsDTOList(
-    "50000085",
-    "0",
-    "30",
-    0,
-    0,
-    "2020-04-01",
-    "2000",
-    "NORMAL",
-    "NONE",
-    "14.67",
-    "2020-03-20",
-    "200",
-    "2000",
-    "2020-03-20",
-    "2020-03-20",
-    "0",
-  );
+  // GetLnAcScheduleRspDetlsDTOList _list1 = new GetLnAcScheduleRspDetlsDTOList(
+  //   "50000085",
+  //   "0",
+  //   "30",
+  //   0,
+  //   0,
+  //   "2020-04-01",
+  //   "2000",
+  //   "NORMAL",
+  //   "NONE",
+  //   "14.67",
+  //   "2020-03-20",
+  //   "200",
+  //   "2000",
+  //   "2020-03-20",
+  //   "2020-03-20",
+  //   "0",
+  // );
 
   @override
   void initState() {
@@ -77,7 +77,7 @@ class _WaitRepayPlanState extends State<WaitRepayPlanPage> {
     //   Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     // });
     lnScheduleList.clear();
-    lnScheduleList.add(_list1);
+    // lnScheduleList.add(_list1);
   }
 
   @override
@@ -129,10 +129,10 @@ class _WaitRepayPlanState extends State<WaitRepayPlanPage> {
   Widget listViewList(BuildContext context) {
     List<Widget> _list = new List();
     for (int i = 0; i < lnScheduleList.length; i++) {
-      if (lnScheduleList[i].instalType == 'PART' ||
-          lnScheduleList[i].instalType == 'NONE') {
-        _list.add(getListViewBuilder(_getContent(lnScheduleList[i])));
-      }
+      // if (lnScheduleList[i].instalType == 'PART' ||
+      //     lnScheduleList[i].instalType == 'NONE') {
+      //   _list.add(getListViewBuilder(_getContent(lnScheduleList[i])));
+      // }
     }
     return new ListView(
       children: _list,
@@ -207,10 +207,10 @@ class _WaitRepayPlanState extends State<WaitRepayPlanPage> {
 
   //获取内容(左[日期] 中[时间轴] 右[还款详情])
   Widget _getContent(GetLnAcScheduleRspDetlsDTOList lnSchedule) {
-    var instalDate = lnSchedule.instalDate;
+    var instalDate = ''; //lnSchedule.instalDate;
     var year = instalDate.substring(0, 4);
     var day = instalDate.substring(5);
-    var instalType = lnSchedule.instalType; //还款状态 未还NONE、部分还款PART、全额还款ALL
+    var instalType = ''; //lnSchedule.instalType; //还款状态 未还NONE、部分还款PART、全额还款ALL
     var repay = '还款'; //还款
     switch (instalType) {
       case 'NONE':
@@ -226,11 +226,11 @@ class _WaitRepayPlanState extends State<WaitRepayPlanPage> {
       default:
     }
     var instalOutstAmt =
-        FormatUtil.formatSringToMoney(lnSchedule.instalOutstAmt); //归还金额合计
-    var principalAmt =
-        FormatUtil.formatSringToMoney(lnSchedule.principalAmt); //本金金额
-    var interestAmt =
-        FormatUtil.formatSringToMoney(lnSchedule.interestAmt); //利息
+        ''; //FormatUtil.formatSringToMoney(lnSchedule.instalOutstAmt); //归还金额合计
+    var principalAmt = '';
+    // FormatUtil.formatSringToMoney(lnSchedule.principalAmt); //本金金额
+    var interestAmt = '';
+    // FormatUtil.formatSringToMoney(lnSchedule.interestAmt); //利息
 
     var leftCont = Container(
       width: 66,

@@ -21,6 +21,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/money_text_input_formatter.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -313,7 +314,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           autofocus: true,
           style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 18.0),
           inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+            LengthLimitingTextInputFormatter(12),
+            FilteringTextInputFormatter.allow(
+              RegExp("[0-9.]"),
+            ),
+            MoneyTextInputFormatter(),
           ],
           onChanged: (value) {
             double.parse(value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));

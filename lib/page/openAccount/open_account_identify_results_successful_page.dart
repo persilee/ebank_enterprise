@@ -163,7 +163,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
 
   ///完整开户面签成功弹窗提示
   void _showTypeTipsForFaceSign(BuildContext context) {
-    HsgShowTip.openAccountSuccessfulTip(
+    HsgShowTip.faceSignSuccessfulTip(
       context,
       (value) {
         Navigator.of(context).pushAndRemoveUntil(
@@ -249,7 +249,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         print(value);
         HSProgressHUD.dismiss();
         _state = value.state;
-        if (value.state == 1) {
+        if (value.state > 0) {
           ///成功，前往调用通知开户接口
           _quickAccountOpening();
         } else {}
@@ -338,7 +338,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
       (value) {
         print(value);
         HSProgressHUD.dismiss();
-        if (value.state == 1) {
+        if (value.state > 0) {
           _showTypeTipsForFaceSign(context);
         }
       },

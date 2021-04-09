@@ -122,7 +122,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 //   isForget: false,
                 //   isInput: _isGetSms,
                 // ),
-                // //获取验证码
+                //获取验证码
                 Container(
                   height: MediaQuery.of(context).size.height / 15,
                   margin: EdgeInsets.fromLTRB(30, 0, 30, 10),
@@ -157,7 +157,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       Container(
-                        alignment: Alignment.center,
+                        alignment: Alignment.centerRight,
                         width: MediaQuery.of(context).size.width / 3,
                         child: _otpButton(),
                       )
@@ -315,7 +315,7 @@ class _RegisterPageState extends State<RegisterPage> {
           else if (_sms.text != _smsCode) {
             HSProgressHUD.dismiss();
             Fluttertoast.showToast(
-              msg: '您输入的验证码错误',
+              msg: S.current.verification_code_wrong,
               gravity: ToastGravity.CENTER,
             );
           } else {
@@ -378,12 +378,13 @@ class _RegisterPageState extends State<RegisterPage> {
               FocusScope.of(context).requestFocus(FocusNode());
             },
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
-      padding: EdgeInsets.only(left: 35),
+      // padding: EdgeInsets.only(left: 35),
       //文字颜色
       textColor: HsgColors.blueTextColor,
-
       disabledTextColor: HsgColors.blueTextColor,
-
+      // splashColor: Colors.transparent,
+      // highlightColor: Colors.transparent,
+      //textTheme: ,
       child: Text(
         countdownTime > 0
             ? '${countdownTime}s'
@@ -391,7 +392,6 @@ class _RegisterPageState extends State<RegisterPage> {
         style: TextStyle(fontSize: 14),
         textAlign: TextAlign.right,
       ),
-
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }
