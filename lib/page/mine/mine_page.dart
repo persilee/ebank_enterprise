@@ -141,25 +141,25 @@ class _MinePageState extends State<MinePage> {
 
   ///scrollview的顶部view，包含背景图、登录信息
   Widget _mineHeaderView() {
-    Widget headerShowWidget = Container();
-    switch (_belongCustStatus) {
-      case '0': //未开户
-      case '1': //未开户
-        headerShowWidget = _headerInfoWidget();
-        break;
-      case '2': //审核中
-        headerShowWidget = _openAccInReview();
-        break;
-      case '3': //已驳回
-        headerShowWidget = _openAccRejected();
-        break;
-      case '4': //受限已开户
-      case '5': //正常已开户
-        headerShowWidget = _headerInfoWidget();
-        break;
-      default:
-        headerShowWidget = _welcomeWidget();
-    }
+    Widget headerShowWidget = _headerInfoWidget();
+    // switch (_belongCustStatus) {
+    //   case '0': //未开户
+    //   case '1': //未开户
+    //     headerShowWidget = _headerInfoWidget();
+    //     break;
+    //   case '2': //审核中
+    //     headerShowWidget = _openAccInReview();
+    //     break;
+    //   case '3': //已驳回
+    //     headerShowWidget = _openAccRejected();
+    //     break;
+    //   case '4': //受限已开户
+    //   case '5': //正常已开户
+    //     headerShowWidget = _headerInfoWidget();
+    //     break;
+    //   default:
+    //     headerShowWidget = _welcomeWidget();
+    // }
     return Container(
       child: Stack(
         children: [
@@ -471,25 +471,17 @@ class _MinePageState extends State<MinePage> {
   Widget _userOffInfo() {
     return Container(
       margin: EdgeInsets.only(top: 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _nameInfo((MediaQuery.of(context).size.width / 3 * 2 - 160)),
-          CustomButton(
-            margin: EdgeInsets.all(0),
-            height: 35,
-            borderRadius: BorderRadius.circular(50.0),
-            text: Text(
-              S.current.open_account_apply,
-              style: TextStyle(fontSize: 14, color: Colors.white),
-            ),
-            clickCallback: () {
-              print('开户申请');
-              //判断受邀状态进入不同页面
-              _openAccountClickFunction(context);
-            },
+          Container(
+            margin: EdgeInsets.only(top: 7),
+            child: _nameInfo((MediaQuery.of(context).size.width / 3 * 2 - 20)),
           ),
+          Container(
+            margin: EdgeInsets.only(top: 7),
+            child: _timeInfo(),
+          )
         ],
       ),
     );

@@ -309,6 +309,8 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     RegExp letter = new RegExp("[a-zA-Z]");
     RegExp number = new RegExp("[0-9]");
     RegExp number_6 = new RegExp(r'^\d{6}$');
+    RegExp pwdRegExp = new RegExp(
+        r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]).{8,16}$");
     if (!number_6.hasMatch(_sms.text)) {
       Fluttertoast.showToast(
         msg: S.current.sms_error,
@@ -328,6 +330,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
         letter.hasMatch(_newPwd.text) == false ||
         characters.hasMatch(_newPwd.text) == false ||
         ((_newPwd.text).length < 8 || (_newPwd.text).length > 16)) {
+      // } else if (!pwdRegExp.hasMatch(_sms.text)) {
       Fluttertoast.showToast(
         msg: S.current.password_need_num,
         gravity: ToastGravity.CENTER,
