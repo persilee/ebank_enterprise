@@ -386,22 +386,35 @@ class _TransferPartnerState extends State<TransferPartner> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          partner.payeeName == null ? '无名' : partner.payeeName,
-          style: TextStyle(fontSize: 14, color: Color(0xFF232323)),
+        Container(
+          width: MediaQuery.of(context).size.width / 1.5,
+          child: Text(
+            partner.payeeName == null ? '无名' : partner.payeeName,
+            style: TextStyle(
+              fontSize: 14,
+              color: Color(0xFF232323),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-        Text(
-          _language == 'zh_CN'
-              ? partner.payeeBankLocalName == null
-                  ? '朗华银行'
-                  : partner.payeeBankLocalName
-              : partner.payeeBankEngName == null
-                  ? 'Brillink bank'
-                  : partner.payeeBankEngName,
-          // _bankName = _language == 'zh_CN'
-          //     ? partner.payeeBankLocalName
-          //     : partner.payeeBankEngName,
-          style: TextStyle(fontSize: 13, color: HsgColors.hintText),
+        Container(
+          width: MediaQuery.of(context).size.width / 1.5,
+          child: Text(
+            _language == 'zh_CN'
+                ? partner.payeeBankLocalName == null
+                    ? '朗华银行'
+                    : partner.payeeBankLocalName
+                : partner.payeeBankEngName == null
+                    ? 'Brillink bank'
+                    : partner.payeeBankEngName,
+            // _bankName = _language == 'zh_CN'
+            //     ? partner.payeeBankLocalName
+            //     : partner.payeeBankEngName,
+            style: TextStyle(fontSize: 13, color: HsgColors.hintText),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
         Row(
           children: [
@@ -431,17 +444,40 @@ class _TransferPartnerState extends State<TransferPartner> {
     );
 
     //银行图标
-    var _bankImage = partner.payeeBankImageUrl != null
-        ? Image.network(
-            partner.payeeBankImageUrl,
-            width: 30,
-            height: 30,
-          )
-        : Image(
-            image: AssetImage('images/transferIcon/transfer_head.png'),
-            width: 30,
-            height: 30,
-          );
+    Widget _bankImage = Container(
+      width: 46,
+      height: 46,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(46.0 / 2),
+      ),
+      child: ClipOval(
+        child: (partner.payeeBankImageUrl == null ||
+                partner.payeeBankImageUrl == '')
+            ? Image(
+                image: AssetImage(
+                  'images/transferIcon/transfer_head.png',
+                ),
+              )
+            : FadeInImage.assetNetwork(
+                fit: BoxFit.fitWidth,
+                image: partner.payeeBankImageUrl,
+                placeholder:
+                    'images/transferIcon/transfer_sample_placeholder.png',
+              ),
+      ),
+    );
+    // partner.payeeBankImageUrl != null
+    //     ? Image.network(
+    //         partner.payeeBankImageUrl,
+    //         width: 30,
+    //         height: 30,
+    //       )
+    //     : Image(
+    //         image: AssetImage('images/transferIcon/transfer_head.png'),
+    //         width: 30,
+    //         height: 30,
+    //       );
     return FlatButton(
       onPressed: () {
         if (_transferType != '') {

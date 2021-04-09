@@ -157,15 +157,17 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     _actualNameReqData();
 
     _transferMoneyController.addListener(() {
-      if (_transferMoneyController.text.length == 0) {
+      if (_transferMoneyController.text.length == 0 ||
+          _transferMoneyController.text == '0') {
         setState(() {
           _amount = '0';
           _xRate = '-';
         });
-      } else {
-        _focusNode.addListener(() {
-          _rateCalculate();
-        });
+      } else if (_transferCcy != '') {
+        _rateCalculate();
+        // _focusNode.addListener(() {
+        //   _rateCalculate();
+        // });
       }
     });
   }
@@ -194,6 +196,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         payeeName = rowPartner.payeeName;
         payerName = rowPartner.payerName;
         check = true;
+        _boolBut();
       }
     });
     return Scaffold(
@@ -357,7 +360,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     if (double.parse(_transferMoneyController.text) > double.parse(_balance)) {
       // if (double.parse(_limit) > double.parse(_balance)) {
       Fluttertoast.showToast(
-        msg: "余额不足",
+        msg:  S.current.tdContract_balance_insufficient,
         gravity: ToastGravity.CENTER,
       );
       // } else {
@@ -406,6 +409,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       setState(() {
         _transferIndex = result;
         _transferCcy = _transferCcyList[result];
+        _boolBut();
       });
       // if (_payCcy == _transferCcy) {
       //   setState(() {
@@ -564,7 +568,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             _balance = _balanceList[0];
             _payIndex = 0;
           }
-          _getTransferCcySamePayCcy();
+          // _getTransferCcySamePayCcy();
           _rateCalculate();
         });
       }

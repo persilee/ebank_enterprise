@@ -15,8 +15,9 @@ import 'base_dio.dart';
 
 part 'api_client.g.dart';
 
-@RestApi(baseUrl: 'http://161.189.48.75:5040') //dev
-// @RestApi(baseUrl: 'http://47.57.236.20:5040') //sit
+// @RestApi(baseUrl: 'http://161.189.48.75:5040') //dev
+@RestApi(baseUrl: 'http://47.57.236.20:5040') //sit
+// @RestApi(baseUrl: 'http://47.242.2.219:5040') //UAT
 abstract class ApiClient {
   factory ApiClient({Dio dio, String baseUrl}) {
     dio ??= BaseDio.getInstance().getDio();
@@ -36,6 +37,10 @@ abstract class ApiClient {
   /// 根据流程id查询待办任务详细信息
   @POST('/wkfl/processTask/findToDoTaskDetail')
   Future<dynamic> findToDoTaskDetail(
+      @Body() FindTodoTaskDetailBody findTodoTaskDetailBody);
+
+  @POST('/wkfl/processTask/findHistoryTaskDetail')
+  Future<dynamic> findHistoryTaskDetail(
       @Body() FindTodoTaskDetailBody findTodoTaskDetailBody);
 
   /// 认领任务

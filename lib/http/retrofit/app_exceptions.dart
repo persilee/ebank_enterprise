@@ -10,8 +10,10 @@ class AppException implements Exception {
     this.message,
   ]);
 
+
+  @override
   String toString() {
-    return message;
+    return 'AppException{message: $message, code: $code}';
   }
 
   factory AppException.create(DioError error) {

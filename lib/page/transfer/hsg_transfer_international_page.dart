@@ -143,15 +143,17 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     _actualNameReqData();
 
     _transferMoneyController.addListener(() {
-      if (_transferMoneyController.text.length == 0) {
+      if (_transferMoneyController.text.length == 0 ||
+          _transferMoneyController.text == '0') {
         setState(() {
           _amount = '0';
           _rate = '-';
         });
-      } else {
-        _focusNode.addListener(() {
-          _rateCalculate();
-        });
+      } else if (_transferCcy != '') {
+        _rateCalculate();
+        // _focusNode.addListener(() {
+        //   _rateCalculate();
+        // });
       }
     });
     _swiftFocusNode.addListener(() {
@@ -193,7 +195,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         //付款方银行
         payeeBankCode = listPartner.bankCode;
         //收款方银行
-        payerBankCode = listPartner.payerBankCode;
+        _bankNameController.text = listPartner.payerBankCode;
         payeeName = listPartner.payeeName;
         payerName = listPartner.payerName;
         if (listPartner.paysMethod != null) {
@@ -494,7 +496,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   _payeeAddressController.text = rowListPartner.payeeAddress;
                   _remarkController.text = rowListPartner.remark;
                   //付款方银行
-                  payeeBankCode = rowListPartner.bankCode;
+                  _bankNameController.text = rowListPartner.bankCode;
                   //收款方银行
                   payerBankCode = rowListPartner.payerBankCode;
                   payeeName = rowListPartner.payeeName;
@@ -749,7 +751,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     if (double.parse(_transferMoneyController.text) > double.parse(_balance)) {
       // if (double.parse(_limit) > double.parse(_balance)) {
       Fluttertoast.showToast(
-        msg: "余额不足",
+        msg: S.current.tdContract_balance_insufficient,
         gravity: ToastGravity.CENTER,
       );
       // } else {
@@ -801,7 +803,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _payerAddressController.text.length > 0 &&
         _transferFee != '' &&
         _transferMoneyController.text != '' &&
-        _feeUse != '') {
+        _feeUse != '' &&
+        _transferCcy != '') {
       return true;
     } else {
       return false;
@@ -882,7 +885,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             _balance = _balanceList[0];
             _payIndex = 0;
           }
-          _getTransferCcySamePayCcy();
+          // _getTransferCcySamePayCcy();
           _rateCalculate();
         });
       }

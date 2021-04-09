@@ -154,10 +154,12 @@ class _DetailListPageState extends State<DetailListPage> {
                           ? intl.S.current.all_account
                           : _cardList[_position],
                       overflow: TextOverflow.clip,
+                      style: SECOND_DEGREE_TEXT_STYLE,
                     )
                   : Text(
                       intl.S.current.all_account,
                       overflow: TextOverflow.clip,
+                      style: SECOND_DEGREE_TEXT_STYLE,
                     ),
               Icon(
                 Icons.arrow_drop_down,
@@ -210,7 +212,10 @@ class _DetailListPageState extends State<DetailListPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text(text, key: _textKey, overflow: TextOverflow.clip),
+        Text(text,
+            style: SECOND_DEGREE_TEXT_STYLE,
+            key: _textKey,
+            overflow: TextOverflow.clip),
         Icon(
           Icons.arrow_drop_down,
           size: 22,
@@ -643,7 +648,7 @@ class _DetailListPageState extends State<DetailListPage> {
   //交易时间 --头标题
   Widget _sectionHeaderBuilder(BuildContext context, int section) {
     //String _titileTime =  DateFormat('yyyy-MM-dd').format(dateTime);
-    RegExp characters = new RegExp("/\d{4}-\d{1,2}-\d{1,2}/g");
+    //  RegExp characters = new RegExp("/\d{4}-\d{1,2}-\d{1,2}/g");
     //var newDate=/\d{4}-\d{1,2}-\d{1,2}/g.exec(date)
     return Column(
       children: [
@@ -944,7 +949,9 @@ class _DetailListPageState extends State<DetailListPage> {
 
             _getRevenueByCards(_startDate, _allAccNoList);
           } else if (data.cardList == null) {
-            _isLoading = false;
+            setState(() {
+              _isLoading = false;
+            });
           }
         });
       }
@@ -974,8 +981,6 @@ class _DetailListPageState extends State<DetailListPage> {
     }
 
     localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
-
-    int pageSize = 10;
 
     PayCollectDetailRepository()
         .getRevenueByCards(

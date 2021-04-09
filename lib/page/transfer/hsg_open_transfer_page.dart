@@ -155,15 +155,17 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     _loadLocalCcy();
     _loadTransferData();
     _transferMoneyController.addListener(() {
-      if (_transferMoneyController.text.length == 0) {
+      if (_transferMoneyController.text.length == 0 ||
+          _transferMoneyController.text == '0') {
         setState(() {
           _amount = '0';
           _xRate = '-';
         });
-      } else {
-        _focusNode.addListener(() {
-          _rateCalculate();
-        });
+      } else if (_transferCcy != '') {
+        _rateCalculate();
+        // _focusNode.addListener(() {
+        //   _rateCalculate();
+        // });
       }
     });
     _actualNameReqData();
@@ -969,7 +971,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     if (double.parse(_transferMoneyController.text) > double.parse(_balance)) {
       // if (double.parse(_limit) > double.parse(_balance)) {
       Fluttertoast.showToast(
-        msg: "余额不足",
+        msg: S.current.tdContract_balance_insufficient,
         gravity: ToastGravity.CENTER,
       );
       // }
@@ -989,9 +991,9 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           "", //bankSwift
           "", //city
           "", //costOptions
-          _payCcy, //creditCurrency
+          _transferCcy, //creditCurrency
           "", //day
-          _transferCcy, //debitCurrency
+          _payCcy, //debitCurrency
           "", //district
           false, //enabled
           _endTime, //endDate
@@ -1129,7 +1131,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             _balance = _balanceList[0];
             _payIndex = 0;
           }
-          _getTransferCcySamePayCcy();
+          // _getTransferCcySamePayCcy();
           _rateCalculate();
         });
       }
