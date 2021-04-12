@@ -84,8 +84,8 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
               _rowWidget(S.of(context).bank_swift, _transferHistory.bankSwift),
               // _rowWidget(S.of(context).middle_bank_swift, ""),
               _rowWidget(S.of(context).other_fee, _transferHistory.costOptions),
-              _rowWidget(S.of(context).remittance_usage,
-                  _transferHistory.remittancePurposes),
+              // _rowWidget(S.of(context).remittance_usage,
+              //     _transferHistory.remittancePurposes),
             ],
           );
   }

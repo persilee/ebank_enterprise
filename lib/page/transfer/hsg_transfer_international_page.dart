@@ -199,11 +199,13 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _bankNameController.text = listPartner.payerBankCode;
         payeeName = listPartner.payeeName;
         payerName = listPartner.payerName;
-        if (listPartner.paysMethod != null) {
-          // _transferFeeIndex = int.parse(listPartner.paysMethod);
-          _transferFee =
-              listPartner.paysMethod == '' ? '' : listPartner.paysMethod;
-        }
+        // if (listPartner.paysMethod != null) {
+        //   // _transferFeeIndex = int.parse(listPartner.paysMethod);
+        //   _transferFee =
+        //       listPartner.paysMethod == '' ? '' : listPartner.paysMethod;
+        // }
+        _transferFee =
+            listPartner.paysMethod == null ? '' : listPartner.paysMethod;
         // if (listPartner.rollInPurpose != null) {
         //   // _feeUseIndex = int.parse(listPartner.rollInPurpose);
         //   _feeUse =
