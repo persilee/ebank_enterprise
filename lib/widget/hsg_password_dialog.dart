@@ -256,37 +256,36 @@ class HsgPasswordDialog extends StatelessWidget {
         .verifyTransPwdNoSms(
             VerifyTransPwdNoSmsReq(payPassword), 'VerifyTransPwdNoSmsReq')
         .then((data) {
-      Navigator.pop(context, true);
-      returnPasswordFunc(password);
-      if (resultPage == '') {
-        Navigator.of(context)..pop()..pop();
-      } else {
-        if (this.isDialog) {
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return HsgTextFieldDialog(
-                  areaCode: areaCodeNum != null ? areaCodeNum : '',
-                  phoneNum: phoneNum != null ? phoneNum : '',
-                  editingController: _editingController,
-                  onChanged: (value) {
-                    inputText = value;
-                    print(inputText);
-                  },
-                  confirmCallback: () {
-                    Navigator.pushNamed(context, resultPage,
-                        arguments: arguments);
-                  },
-                  sendCallback: () {
-                    print('发送验证码');
-                  },
-                );
-              });
-        } else {
-          Navigator.pushNamed(context, resultPage, arguments: arguments);
-        }
+      if (returnPasswordFunc != null) {
+        returnPasswordFunc(password);
       }
+      if (this.isDialog) {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return HsgTextFieldDialog(
+                areaCode: areaCodeNum != null ? areaCodeNum : '',
+                phoneNum: phoneNum != null ? phoneNum : '',
+                editingController: _editingController,
+                onChanged: (value) {
+                  inputText = value;
+                  print(inputText);
+                },
+                confirmCallback: () {
+                  Navigator.pushNamed(context, resultPage,
+                      arguments: arguments);
+                },
+                sendCallback: () {
+                  print('发送验证码');
+                },
+              );
+            });
+      }
+      if (resultPage == '') {
+        Navigator.pushNamed(context, resultPage, arguments: arguments);
+      }
+      Navigator.pop(context, true);
     }).catchError((e) {
       print(e.toString());
       // if (e.toString() == 'ECUST031') {
