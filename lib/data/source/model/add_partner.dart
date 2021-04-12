@@ -45,8 +45,13 @@ class AddPartnerReq extends Object {
   @JsonKey(name: 'phoneNo')
   String phoneNo;
 
-  @JsonKey(name: 'payeeBankName')
-  String payeeBankName;
+  // @JsonKey(name: 'payeeBankName')
+  // String payeeBankName;
+  @JsonKey(name: 'payeeBankEngName')
+  String payeeBankEngName;
+
+  @JsonKey(name: 'payeeBankLocalName')
+  String payeeBankLocalName;
 
   @JsonKey(name: 'remark')
   String remark;
@@ -73,7 +78,8 @@ class AddPartnerReq extends Object {
     this.payerCardNo,
     this.payerName,
     this.phoneNo,
-    this.payeeBankName,
+    this.payeeBankEngName,
+    this.payeeBankLocalName,
     this.remark,
     this.transferType,
     this.paysMethod,

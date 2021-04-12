@@ -164,7 +164,7 @@ class _TransferInternalPreviewPageState
   }
 
   Future _loadData(TransferInternalData transferData) async {
-    double money = double.parse(transferData.transferIntoAmount);
+    double money = double.parse(transferData.transferOutAmount);
     // String transferOutCcy = transferData.transferOutCcy;
     // String transferIntoCcy = transferData.transferIntoCcy;
     // String payeeBankCode = transferData.payeeBankCode;

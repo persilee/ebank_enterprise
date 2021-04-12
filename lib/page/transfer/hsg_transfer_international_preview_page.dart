@@ -88,8 +88,8 @@ class _TransferInternalPreviewPageState
           _getRowContent(S.current.rate_of_exchange, transferData.rate),
           _getRowContent(
               S.current.payment_currency, transferData.transferIntoCcy),
-          _getRowContent(
-              S.current.remitter_address1, transferData.transferOutAdress),
+          // _getRowContent(
+          //     S.current.remitter_address1, transferData.transferOutAdress),
           _getRowContent(
               S.current.receipt_side_name, transferData.transferIntoName),
           _getRowContent(S.current.receipt_side_account,
@@ -103,7 +103,7 @@ class _TransferInternalPreviewPageState
           _getRowContent(S.current.bank_swift, transferData.bankSWIFT),
           // _getRowContent(S.current.middle_bank_swift, transferData.centerSWIFI),
           _getRowContent(S.current.Transfer_fee, transferData.transferFee),
-          _getRowContent(S.current.remittance_usage, transferData.purpose),
+          // _getRowContent(S.current.remittance_usage, transferData.purpose),
           _getRowContent(
               S.current.transfer_postscript,
               transferData.transferRemark == ''
