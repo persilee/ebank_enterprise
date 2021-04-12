@@ -62,6 +62,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   String _feeUse = '';
   List<String> feeUse = [];
   int _feeUseIndex = 0;
+  //币种
+  String _ccy = '';
+  List<String> _ccyList = [];
+  int _ccyIndex = 0;
 
   var _swiftFocusNode = FocusNode();
   var _accountFocusNode = FocusNode();
@@ -73,6 +77,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     super.initState();
     _getTransferFeeList();
     _getFeeUseList();
+    _loadLocalCcy();
     //初始化
     _bankName = S.current.please_select;
     _branch = S.current.optional;
@@ -167,9 +172,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         .addPartner(
             AddPartnerReq(
               _bankCode,
-              _swiftAdressReq,
+              _bankSwiftController.text, //_swiftAdressReq,
+              _ccy,
               "",
-              _countryText,
+              _countryCode, //_countryText,
               _centerSwiftReq,
               _payeeAdressReq,
               _acountController.text,
@@ -178,7 +184,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               "",
               "",
               _smsController.text,
-              _bankName,
+              "",
+              _bankNameController.text,
               _aliasController.text,
               myTransferType,
               _transferFeeIndex.toString(),
@@ -308,7 +315,16 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           regExp: '[\u4e00-\u9fa5a-zA-Z0-9 ]',
         ),
         Divider(height: 0.5, color: HsgColors.divider),
-
+        //收款方币种
+        SelectInkWell(
+          title: S.current.transfer_from_ccy,
+          item: _ccy,
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+            _payCcyDialog();
+          },
+        ),
+        Divider(height: 0.5, color: HsgColors.divider),
         //分支行
         // GestureDetector(
         //   onTap: () {
@@ -511,7 +527,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
             length: 11,
             isUpperCase: true,
             isRegEXp: true,
-            regExp: '[a-zA-Z]',
+            regExp: '[a-zA-Z0-9]',
           ),
           Divider(height: 0.5, color: HsgColors.divider),
           //银行名称
@@ -547,15 +563,15 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           ),
           Divider(height: 0.5, color: HsgColors.divider),
           //汇款用途
-          SelectInkWell(
-            title: S.current.remittance_usage,
-            item: _feeUse,
-            onTap: () {
-              FocusScope.of(context).requestFocus(FocusNode());
-              _selectFeeUse();
-            },
-          ),
-          Divider(height: 0.5, color: HsgColors.divider),
+          // SelectInkWell(
+          //   title: S.current.remittance_usage,
+          //   item: _feeUse,
+          //   onTap: () {
+          //     FocusScope.of(context).requestFocus(FocusNode());
+          //     _selectFeeUse();
+          //   },
+          // ),
+          // Divider(height: 0.5, color: HsgColors.divider),
         ],
       ),
     );
@@ -854,7 +870,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               _payeeAdressController.text.length > 0 &&
               _countryText != '' &&
               _transferFee != '' &&
-              _feeUse != '' &&
+              // _feeUse != '' &&
               _bankSwiftController.text != '') {
             _isInputed = true;
           } else {
@@ -885,6 +901,42 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     } else {
       return null;
     }
+  }
+
+  //币种弹窗
+  Future _payCcyDialog() async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) {
+        return HsgSingleChoiceDialog(
+          title: S.of(context).currency_choice,
+          items: _ccyList,
+          positiveButton: S.of(context).confirm,
+          negativeButton: S.of(context).cancel,
+          lastSelectedPosition: _ccyIndex,
+        );
+      },
+    );
+    if (result != null && result != false) {
+      setState(() {
+        _ccyIndex = result;
+        _ccy = _ccyList[result];
+      });
+    }
+  }
+
+  // 获取币种列表
+  Future _loadLocalCcy() async {
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _ccyList.clear();
+        data.publicCodeGetRedisRspDtoList.forEach((e) {
+          _ccyList.add(e.code);
+        });
+      }
+    });
   }
 
   //根据银行Swift查询银行名称

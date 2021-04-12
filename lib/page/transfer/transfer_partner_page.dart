@@ -84,7 +84,7 @@ class _TransferPartnerState extends State<TransferPartner> {
           if (data.rows != null) {
             _isData = true;
             _totalPage = data.totalPage;
-            _partnerListData.clear();
+            // _partnerListData.clear();
             _partnerListData.addAll(data.rows);
             _tempList.clear();
             if (_transferType != '') {
@@ -187,6 +187,7 @@ class _TransferPartnerState extends State<TransferPartner> {
                   onRefresh: () {
                     //刷新完成
                     _page = 1;
+                    _partnerListData.clear();
                     _loadData();
                     _refreshController.refreshCompleted();
                     _refreshController.footerMode.value = LoadStatus.canLoading;
