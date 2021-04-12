@@ -215,12 +215,12 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
           Container(
             padding: EdgeInsets.only(top: _language == 'zh_CN' ? 17.5 : 12),
             width: (MediaQuery.of(context).size.width - 36) / 4,
-            margin: EdgeInsets.only(right: 18),
+            margin: EdgeInsets.only(right: 18, top: 5),
             child: Text.rich(
               TextSpan(
                   text: S.current.my_application,
                   style: TextStyle(
-                    fontSize: 14.0,
+                    fontSize: 15.0,
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
@@ -665,6 +665,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
       bankCards.add(cards.cardNo);
       ciNames.add((cards.ciName));
     }
+    bankCards = bankCards.toSet().toList(); //去重复的数据
     for (var i = 0; i < bankCards.length; i++) {
       accounts.add(FormatUtil.formatSpace4(bankCards[i]));
     }
