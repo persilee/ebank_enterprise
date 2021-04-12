@@ -35,11 +35,6 @@ class HomePage extends StatefulWidget {
 
   HomePage({Key key}): super(key: key);
 
-  static void setLocale(BuildContext context, Locale newLocale) async {
-    _HomePageState state = context.findAncestorStateOfType<_HomePageState>();
-    await state.changeLanguage(newLocale);
-  }
-
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -107,6 +102,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     StatusBarUtil.setStatusBar(Brightness.light, color: Colors.transparent);
     String _language = Intl.getCurrentLocale();
     if (_language == 'zh_CN') {

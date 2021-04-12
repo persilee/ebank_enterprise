@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:io' as Io;
-import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:dio/dio.dart';
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// desc: 个人中心
 /// Author: hlx
@@ -20,20 +18,15 @@ import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
-import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart';
-
-import 'package:http_parser/http_parser.dart' show MediaType;
-import 'package:dio/dio.dart';
 
 class MinePage extends StatefulWidget {
   @override
@@ -67,6 +60,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin 
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: _mineAppbar(_opacity),
