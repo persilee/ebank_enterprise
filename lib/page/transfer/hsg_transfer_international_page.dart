@@ -192,17 +192,20 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _middleBankSwiftController.text = listPartner.midBankSwift;
         _payeeAddressController.text = listPartner.payeeAddress;
         _remarkController.text = listPartner.remark;
+        _transferCcy = listPartner.ccy;
         //付款方银行
         payeeBankCode = listPartner.bankCode;
         //收款方银行
         _bankNameController.text = listPartner.payerBankCode;
         payeeName = listPartner.payeeName;
         payerName = listPartner.payerName;
-        if (listPartner.paysMethod != null) {
-          // _transferFeeIndex = int.parse(listPartner.paysMethod);
-          _transferFee =
-              listPartner.paysMethod == '' ? '' : listPartner.paysMethod;
-        }
+        // if (listPartner.paysMethod != null) {
+        //   // _transferFeeIndex = int.parse(listPartner.paysMethod);
+        //   _transferFee =
+        //       listPartner.paysMethod == '' ? '' : listPartner.paysMethod;
+        // }
+        _transferFee =
+            listPartner.paysMethod == null ? '' : listPartner.paysMethod;
         // if (listPartner.rollInPurpose != null) {
         //   // _feeUseIndex = int.parse(listPartner.rollInPurpose);
         //   _feeUse =
@@ -501,6 +504,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   payerBankCode = rowListPartner.payerBankCode;
                   payeeName = rowListPartner.payeeName;
                   payerName = rowListPartner.payerName;
+                  _transferCcy =
+                      _transferCcy == '' ? rowListPartner.ccy : _transferCcy;
                   if (rowListPartner.paysMethod != null) {
                     // _transferFeeIndex = int.parse(rowListPartner.paysMethod);
                     _transferFee = rowListPartner.paysMethod == ''
