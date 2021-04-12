@@ -6,8 +6,8 @@ import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 
 class UserDataRepository {
   Future<LoginResp> login(LoginReq loginReq, String tag) {
-    return request(
-        'security/cutlogin', loginReq, tag, (data) => LoginResp.fromJson(data));
+    return request('/security/cutlogin', loginReq, tag,
+        (data) => LoginResp.fromJson(data));
   }
 
   Future<UserInfoResp> getUserInfo(GetUserInfoReq req, String tag) {

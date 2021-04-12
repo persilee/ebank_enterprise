@@ -360,7 +360,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     if (double.parse(_transferMoneyController.text) > double.parse(_balance)) {
       // if (double.parse(_limit) > double.parse(_balance)) {
       Fluttertoast.showToast(
-        msg:  S.current.tdContract_balance_insufficient,
+        msg: S.current.tdContract_balance_insufficient,
         gravity: ToastGravity.CENTER,
       );
       // } else {
@@ -375,12 +375,12 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         pageTransferInternalPreview,
         arguments: TransferInternalData(
           _account,
-          _amount,
-          _transferCcy,
-          _nameController.text,
-          _accountController.text,
           _transferMoneyController.text,
           _payCcy,
+          _nameController.text,
+          _accountController.text,
+          _amount,
+          _transferCcy,
           _remarkController.text,
           payeeBankCode,
           payeeName,
@@ -388,6 +388,21 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           payerName,
           _xRate,
         ),
+        // TransferInternalData(
+        //   _account,
+        //   _amount,
+        //   _transferCcy,
+        //   _nameController.text,
+        //   _accountController.text,
+        //   _transferMoneyController.text,
+        //   _payCcy,
+        //   _remarkController.text,
+        //   payeeBankCode,
+        //   payeeName,
+        //   payerBankCode,
+        //   _nameController.text ?? '',
+        //   _xRate,
+        // ),
       );
     }
   }
@@ -501,13 +516,18 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         //通过绑定手机号查询卡列表接口POST
         if (element is GetCardListResp) {
           if (this.mounted) {
-            setState(() {
-              //付款方卡号
-              _account = element.cardList[0].cardNo;
-              element.cardList.forEach((e) {
-                _accountList.add(e.cardNo);
+            if (element != null &&
+                element.cardList != null &&
+                element.cardList.length > 0) {
+              setState(() {
+                //付款方卡号
+                _account = element.cardList[0].cardNo;
+                payerBankCode = payeeBankCode = element.cardList[0].bankCode;
+                element.cardList.forEach((e) {
+                  _accountList.add(e.cardNo);
+                });
               });
-            });
+            }
           }
           // _getCardTotal(_account);
           _loadData(_account);
@@ -789,7 +809,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 //付款方卡号
                 cardNo,
                 //付款方姓名
-                payerName,
+                _nameController.text ?? '',
                 //附言
                 remark,
                 //验证码

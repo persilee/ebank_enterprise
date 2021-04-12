@@ -67,7 +67,7 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
                 Container(
                   width: (MediaQuery.of(context).size.width - 40) / 2,
                   child: Text(
-                    transferData.creditCurrency +
+                    transferData.debitCurrency +
                         ' ' +
                         FormatUtil.formatSringToMoney(transferData.amount),
                     style: TextStyle(color: Color(0xff232323), fontSize: 20),
@@ -83,21 +83,25 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
             color: Color(0xffE1E1E1),
           ),
           _getRowContent('计划名称', transferData.planName),
-          _getRowContent('预约频率', transferData.frequency),
+          _getRowContent(
+              '预约频率',
+              transferData.frequency != null
+                  ? transferData.frequency['title'] ?? ''
+                  : ''),
           _getRowContent('首次转账时间', transferData.startDate),
           _getRowContent('截至日期', transferData.endDate),
           _getRowContent(S.current.transfer_from,
               FormatUtil.formatSpace4(transferData.payerCardNo)),
           _getRowContent(S.current.estimated_collection_amount,
-              FormatUtil.formatSringToMoney(transferData.amount)),
-          _getRowContent(S.current.rate_of_exchange, '1'),
+              FormatUtil.formatSringToMoney(transferData.transferIntoAmount)),
+          _getRowContent(S.current.rate_of_exchange, transferData.xRate),
           _getRowContent(
               S.current.payment_currency, transferData.debitCurrency),
           _getRowContent(S.current.receipt_side_name, transferData.payeeName),
           _getRowContent(S.current.receipt_side_account,
               FormatUtil.formatSpace4(transferData.payeeCardNo)),
           _getRowContent(
-              S.current.transfer_from_ccy, transferData.debitCurrency),
+              S.current.transfer_from_ccy, transferData.creditCurrency),
           _getRowContent(
               S.current.transfer_postscript,
               transferData.remark == ''
@@ -170,7 +174,7 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
     String day = transferData.day;
     String debitCurrency = transferData.debitCurrency;
     String endDate = transferData.endDate;
-    String frequency = transferData.frequency;
+    Map frequency = transferData.frequency;
     String payeeBankCode = transferData.payeeBankCode;
     String payeeCardNo = transferData.payeeCardNo;
     String payeeName = transferData.payeeName;
@@ -196,7 +200,7 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
             false, //enabled
             endDate, //endDate
             0, //feeAmount
-            frequency, //frequency
+            frequency != null ? frequency['type'] ?? '' : '', //frequency
             "", //midBankSwift
             "", //month
             "L5o+WYWLFVSCqHbd0Szu4Q==", //payPassword
