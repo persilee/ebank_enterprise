@@ -1088,6 +1088,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             element.cardList.forEach((e) {
               _accountList.add(e.cardNo);
             });
+            _accountList = _accountList.toSet().toList();
             _payeeBankCode = element.cardList[0].bankCode;
             payerBankCode = element.cardList[0].bankCode;
           });

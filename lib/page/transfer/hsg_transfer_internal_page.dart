@@ -7,6 +7,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 /// Date: 2020-12-09
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
+import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
@@ -149,6 +150,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   String _language = Intl.getCurrentLocale();
 
+  var _accountFocusNode = FocusNode();
+  bool _isAccount = true;
+
   @override
   void initState() {
     super.initState();
@@ -168,6 +172,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         // _focusNode.addListener(() {
         //   _rateCalculate();
         // });
+      }
+    });
+    _accountFocusNode.addListener(() {
+      if (_accountController.text.length > 0) {
+        _getCardByCardNo(_accountController.text);
       }
     });
   }
@@ -273,6 +282,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               hintText: S.of(context).hint_input_receipt_account,
               keyboardType: TextInputType.number,
               controller: _accountController,
+              focusNode: _accountFocusNode,
               callback: _boolBut,
               length: 20,
               isRegEXp: true,
@@ -369,6 +379,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       //     gravity: ToastGravity.CENTER,
       //   );
       // }
+    } else if (_isAccount) {
+      Fluttertoast.showToast(
+        msg: S.current.account_no_exist,
+        gravity: ToastGravity.CENTER,
+      );
     } else {
       Navigator.pushNamed(
         context,
@@ -526,6 +541,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 element.cardList.forEach((e) {
                   _accountList.add(e.cardNo);
                 });
+                _accountList = _accountList.toSet().toList();
               });
             }
           }
@@ -756,6 +772,30 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       }
     }).catchError((e) {
       // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+    });
+  }
+
+  //根据账号查询名称
+  Future _getCardByCardNo(String cardNo) async {
+    TransferDataRepository()
+        .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          _nameController.text = data.ciName;
+          _isAccount = false;
+        });
+      }
+    }).catchError((e) {
+      if (this.mounted) {
+        setState(() {
+          _isAccount = true;
+        });
+      }
+      Fluttertoast.showToast(
+        msg: S.current.no_account,
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
