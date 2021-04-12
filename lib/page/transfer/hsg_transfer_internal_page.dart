@@ -7,6 +7,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 /// Date: 2020-12-09
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
+import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
@@ -149,6 +150,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   String _language = Intl.getCurrentLocale();
 
+  var _accountFocusNode = FocusNode();
+  bool _isAccount = true;
+
   @override
   void initState() {
     super.initState();
@@ -168,6 +172,11 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         // _focusNode.addListener(() {
         //   _rateCalculate();
         // });
+      }
+    });
+    _accountFocusNode.addListener(() {
+      if (_accountController.text.length > 0) {
+        _getCardByCardNo(_accountController.text);
       }
     });
   }
@@ -273,6 +282,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               hintText: S.of(context).hint_input_receipt_account,
               keyboardType: TextInputType.number,
               controller: _accountController,
+              focusNode: _accountFocusNode,
               callback: _boolBut,
               length: 20,
               isRegEXp: true,
@@ -360,7 +370,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     if (double.parse(_transferMoneyController.text) > double.parse(_balance)) {
       // if (double.parse(_limit) > double.parse(_balance)) {
       Fluttertoast.showToast(
-        msg:  S.current.tdContract_balance_insufficient,
+        msg: S.current.tdContract_balance_insufficient,
         gravity: ToastGravity.CENTER,
       );
       // } else {
@@ -369,18 +379,23 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       //     gravity: ToastGravity.CENTER,
       //   );
       // }
+    } else if (_isAccount) {
+      Fluttertoast.showToast(
+        msg: S.current.account_no_exist,
+        gravity: ToastGravity.CENTER,
+      );
     } else {
       Navigator.pushNamed(
         context,
         pageTransferInternalPreview,
         arguments: TransferInternalData(
           _account,
-          _amount,
-          _transferCcy,
-          _nameController.text,
-          _accountController.text,
           _transferMoneyController.text,
           _payCcy,
+          _nameController.text,
+          _accountController.text,
+          _amount,
+          _transferCcy,
           _remarkController.text,
           payeeBankCode,
           payeeName,
@@ -388,6 +403,21 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           payerName,
           _xRate,
         ),
+        // TransferInternalData(
+        //   _account,
+        //   _amount,
+        //   _transferCcy,
+        //   _nameController.text,
+        //   _accountController.text,
+        //   _transferMoneyController.text,
+        //   _payCcy,
+        //   _remarkController.text,
+        //   payeeBankCode,
+        //   payeeName,
+        //   payerBankCode,
+        //   _nameController.text ?? '',
+        //   _xRate,
+        // ),
       );
     }
   }
@@ -501,13 +531,19 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         //通过绑定手机号查询卡列表接口POST
         if (element is GetCardListResp) {
           if (this.mounted) {
-            setState(() {
-              //付款方卡号
-              _account = element.cardList[0].cardNo;
-              element.cardList.forEach((e) {
-                _accountList.add(e.cardNo);
+            if (element != null &&
+                element.cardList != null &&
+                element.cardList.length > 0) {
+              setState(() {
+                //付款方卡号
+                _account = element.cardList[0].cardNo;
+                payerBankCode = payeeBankCode = element.cardList[0].bankCode;
+                element.cardList.forEach((e) {
+                  _accountList.add(e.cardNo);
+                });
+                _accountList = _accountList.toSet().toList();
               });
-            });
+            }
           }
           // _getCardTotal(_account);
           _loadData(_account);
@@ -739,6 +775,30 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     });
   }
 
+  //根据账号查询名称
+  Future _getCardByCardNo(String cardNo) async {
+    TransferDataRepository()
+        .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          _nameController.text = data.ciName;
+          _isAccount = false;
+        });
+      }
+    }).catchError((e) {
+      if (this.mounted) {
+        setState(() {
+          _isAccount = true;
+        });
+      }
+      Fluttertoast.showToast(
+        msg: S.current.no_account,
+        gravity: ToastGravity.CENTER,
+      );
+    });
+  }
+
   //获取验证码接口
   _getVerificationCode() async {
     // RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
@@ -789,7 +849,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 //付款方卡号
                 cardNo,
                 //付款方姓名
-                payerName,
+                _nameController.text ?? '',
                 //附言
                 remark,
                 //验证码

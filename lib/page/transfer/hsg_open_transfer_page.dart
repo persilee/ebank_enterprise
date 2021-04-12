@@ -130,7 +130,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   var _remarkController = new TextEditingController();
 
   //预约频率集合
-  List frequency = [
+  List _frequency = [
     {
       "title": intl.S.current.only_once,
       "type": "0",
@@ -736,7 +736,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           crossAxisSpacing: 5.0,
           mainAxisSpacing: 10.0,
           childAspectRatio: 1 / 0.35,
-          children: frequency.map((value) {
+          children: _frequency.map((value) {
             return groupValue == value['type']
                 ? _chooseBtn(value['title'], value['type'],
                     HsgColors.frequencyBtn, HsgColors.accent)
@@ -982,6 +982,16 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       //   );
       // }
     } else {
+      Map frequency;
+      _frequency.forEach((element) {
+        Map data = element;
+        if (data != null && data['type'] == groupValue) {
+          frequency = data;
+          return;
+        }
+      });
+      _startTime = DateFormat('yyyy-MM-dd').format(_startValue);
+      _endTime = DateFormat('yyyy-MM-dd').format(_endValue);
       Navigator.pushNamed(
         context,
         pageTransferOrderPreview,
@@ -998,7 +1008,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           false, //enabled
           _endTime, //endDate
           0, //feeAmount
-          groupValue, //frequency
+          frequency, //frequency
           "", //midBankSwift
           "", //month
           "", //payPassword
@@ -1016,6 +1026,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           "", //smsCode
           _startTime, //startDate
           "0", //transferType
+          _amount, //transferIntoAmount
+          _xRate, //xRate
         ),
       );
     }
@@ -1076,6 +1088,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             element.cardList.forEach((e) {
               _accountList.add(e.cardNo);
             });
+            _accountList = _accountList.toSet().toList();
             _payeeBankCode = element.cardList[0].bankCode;
             payerBankCode = element.cardList[0].bankCode;
           });
