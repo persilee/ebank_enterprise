@@ -1,3 +1,5 @@
+import 'dart:io';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 首页
 /// Author: lijiawei
@@ -6,9 +8,12 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_styles.dart';
 import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart';
+import 'package:ebank_mobile/data/source/model/logout.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
+import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
+import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -17,6 +22,7 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,7 +44,6 @@ class _HomePageState extends State<HomePage> {
   var _userName = ''; // 姓名
   var _characterName = ''; // 角色名称
   var _belongCustStatus = ''; //用户状态
-  // var _inviteeStatus = '0'; //用户受邀状态，是否是走快速开户，默认为0，不走
   var _lastLoginTime = ''; // 上次登录时间
   String _language = Intl.getCurrentLocale();
   var _features = [];
@@ -186,16 +191,70 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: _homeAppbar(_opacity, _changeLangBtnTltle),
-      body: Container(
-        child: CustomScrollView(
-          controller: _sctrollController,
-          slivers: slivers,
+    return WillPopScope(
+      onWillPop: () => _showTypeTips(),
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: _homeAppbar(_opacity, _changeLangBtnTltle),
+        body: Container(
+          child: CustomScrollView(
+            controller: _sctrollController,
+            slivers: slivers,
+          ),
         ),
       ),
     );
+  }
+
+  //提示弹窗(提示语句，确认事件)
+  _showTypeTips() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertDialog(
+            title: S.current.exit,
+            message: S.current.loginOut_tips,
+            positiveButton: S.current.confirm,
+            negativeButton: S.current.cancel,
+          );
+        }).then((value) {
+      if (value == true) {
+        setState(() {
+          _loginOut();
+        });
+      }
+    });
+  }
+
+  _loginOut() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+
+    HSProgressHUD.show();
+    UserDataRepository()
+        .logout(LogoutReq(userID, _userName), 'logout')
+        .then((data) {
+      HSProgressHUD.dismiss();
+      if (this.mounted) {
+        setState(() {
+          Future.delayed(Duration.zero, () {
+            exit(0);
+            // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+          });
+          Fluttertoast.showToast(
+            msg: S.of(context).logoutSuccess,
+            gravity: ToastGravity.CENTER,
+          );
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
+      HSProgressHUD.dismiss();
+      // print(e.toString());
+    });
   }
 
   ///自定义导航条（包含联系客服、消息、标题、切换语言按钮）
@@ -214,11 +273,18 @@ class _HomePageState extends State<HomePage> {
               ),
               onPressed: () {
                 print('联系客服');
+                // Navigator.pushNamed(
+                //   context,
+                //   pageOpenAccountSelectDocumentType,
+                //   arguments: {
+                //     'businessId': '123456987465312456',
+                //     'isQuick': true,
+                //   },
+                // );
                 Navigator.pushNamed(
                   context,
-                  pageOpenAccountSelectDocumentType,
-                  arguments: '123456987465312456',
-                ); //pageContactCustomer
+                  pageContactCustomer,
+                );
               },
             ),
             _languageChangeBtn(),
@@ -405,11 +471,12 @@ class _HomePageState extends State<HomePage> {
         child: ClipOval(
           child: (_headPortraitUrl == null || _headPortraitUrl == '')
               ? Image(
+                  fit: BoxFit.cover,
                   image: AssetImage(
                       'images/home/heaerIcon/home_header_person.png'),
                 )
               : FadeInImage.assetNetwork(
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.cover,
                   image: _headPortraitUrl == null ? '' : _headPortraitUrl,
                   placeholder: 'images/home/heaerIcon/home_header_person.png',
                 ),
@@ -786,7 +853,8 @@ class _HomePageState extends State<HomePage> {
         //Navigator.pushNamed(context, pageLoanReference);
       } else if (S.current.loan_record == title) {
         //'贷款记录'
-        Navigator.pushNamed(context, pageLimitDetails);
+        Navigator.pushNamed(
+            context, pageLimitDetails); //   pageLimitDetails  pageLoanReference
       } else if (S.current.loan_rate == title) {
         //'贷款利率'
         //Navigator.pushNamed(context, pageloanDemo);
@@ -807,8 +875,7 @@ class _HomePageState extends State<HomePage> {
   //开户点击事件
   void _openAccountClickFunction(BuildContext context) {
     if (_belongCustStatus == '1') {
-      // //前往填写面签码
-      // Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+      ///提示，前往网银开户
       HsgShowTip.notOpenAccountGotoEbankTip(
         context: context,
         click: (value) {},
@@ -936,9 +1003,7 @@ class _HomePageState extends State<HomePage> {
         _characterName = _language == 'en'
             ? model.roleEngName
             : model.roleLocalName; //用户角色名称
-        _belongCustStatus = model.userId == '989185387615485977'
-            ? '5'
-            : model.belongCustStatus; //用户状态(先临时数据判断是blk703显示为已开户)
+        _belongCustStatus = model.belongCustStatus; //用户状态
         _lastLoginTime = model.lastLoginTime; // 上次登录时间
       });
     }
@@ -968,7 +1033,10 @@ class _HomePageState extends State<HomePage> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       // HSProgressHUD.showError(status: e.toString());
       print('${e.toString()}');
     });
@@ -991,7 +1059,7 @@ class _HomePageState extends State<HomePage> {
   //       });
   //     }
   //   }).catchError((e) {
-  //     Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+  //     Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER,);
   //     // HSProgressHUD.showError(status: e.toString());
   //     print('${e.toString()}');
   //   });

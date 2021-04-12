@@ -53,6 +53,9 @@ dependencies:
   pretty_dio_logger: ^1.1.1
   pull_to_refresh: 1.6.3
   lottie: ^0.7.0+1
+  flutter_pdfview: ^1.0.4
+  path: ^1.7.0
+  path_provider: ^1.6.24
   sp_util:
   flutter_cupertino_date_picker:
     git:

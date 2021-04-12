@@ -2,16 +2,18 @@ import 'package:dio/dio.dart';
 
 /// 自定义异常
 class AppException implements Exception {
-  final String _message;
-  final String _code;
+  final String message;
+  final String code;
 
   AppException([
-    this._code,
-    this._message,
+    this.code,
+    this.message,
   ]);
 
+
+  @override
   String toString() {
-    return "_code:$_code message:$_message";
+    return 'AppException{message: $message, code: $code}';
   }
 
   factory AppException.create(DioError error) {
@@ -40,8 +42,6 @@ class AppException implements Exception {
         {
           try {
             int errCode = error.response.statusCode;
-            // String errMsg = error.response.statusMessage;
-            // return ErrorEntity(code: errCode, message: errMsg);
             switch (errCode) {
               case 400:
                 {
@@ -90,12 +90,18 @@ class AppException implements Exception {
                 break;
               default:
                 {
-                  return AppException(errCode.toString(), error.response.statusMessage);
+                  return AppException(
+                      errCode.toString(), error.response.statusMessage);
                 }
             }
           } on Exception catch (_) {
             return AppException("-1", "未知错误");
           }
+        }
+        break;
+      case DioErrorType.DEFAULT:
+        {
+          return AppException("-1", "网络异常，请稍后重试！");
         }
         break;
       default:
@@ -111,12 +117,22 @@ class BadRequestException extends AppException {
   BadRequestException([String code, String message]) : super(code, message);
 }
 
-/// 响应错误
-class BadResponseException extends AppException {
-  BadResponseException([String code, String message]) : super(code, message);
-}
-
 /// 未认证异常
 class UnauthorisedException extends AppException {
   UnauthorisedException([String code, String message]) : super(code, message);
+}
+
+abstract class BaseError {
+  final int code;
+  final String message;
+
+  BaseError({this.code, this.message});
+}
+
+class NeedLogin implements BaseError {
+  @override
+  int get code => 401;
+
+  @override
+  String get message => "请先登录";
 }

@@ -7,7 +7,6 @@ import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
-import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/login_save_user_data.dart';
@@ -36,11 +35,11 @@ class _LoginPageState extends State<LoginPage> {
   var _changeLangBtnTltle = '';
 
   TextEditingController _accountTC =
-      TextEditingController(text: 'blk603'); //fangluyao
+      TextEditingController(text: 'HSG16'); //fangluyao
   TextEditingController _passwordTC =
-      TextEditingController(text: '4N0021S8'); //b0S25X5Y
-  var _account = 'blk603'; //'blk101';HSG20
-  var _password = '4N0021S8'; //'4N0021S8';Qwe123456~
+      TextEditingController(text: 'Qwe123456~'); //b0S25X5Y
+  var _account = 'HSG16'; //'blk101';HSG20
+  var _password = 'Qwe123456~'; //'4N0021S8';Qwe123456~
 
   // TextEditingController _accountTC =
   //     TextEditingController(text: 'blk302'); //HSG20
@@ -74,6 +73,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    HSProgressHUD.dismiss();
+
     String _language = Intl.getCurrentLocale();
     if (_language == 'zh_CN') {
       _changeLangBtnTltle = '中文（简体）';
@@ -85,7 +86,10 @@ class _LoginPageState extends State<LoginPage> {
 
     //从忘记用户名界面拿到名字
     var _userName = ModalRoute.of(context).settings.arguments;
-    _accountTC.text = _userName;
+
+    setState(() {
+      _accountTC.text = _userName;
+    });
     Widget backgroundImgWidget = Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -218,19 +222,19 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           backgroundImgWidget,
           contentDetailWidget,
-          Positioned(
-            bottom: 26,
-            right: 0,
-            left: 0,
-            child: Text(
-              '@2020-2025 HSBC.com.cn.All Rights Reserved.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 11.0,
-                  color: Colors.white, //HsgColors.aboutusTextCon,
-                  fontWeight: FontWeight.normal),
-            ),
-          ),
+          // Positioned(
+          //   bottom: 26,
+          //   right: 0,
+          //   left: 0,
+          //   child: Text(
+          //     '@2020-2025 HSBC.com.cn.All Rights Reserved.',
+          //     textAlign: TextAlign.center,
+          //     style: TextStyle(
+          //         fontSize: 11.0,
+          //         color: Colors.white, //HsgColors.aboutusTextCon,
+          //         fontWeight: FontWeight.normal),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -238,6 +242,8 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录操作
   _login(BuildContext context) async {
+    // Navigator.pushNamed(context, pageIndexName);
+    // return;
     //登录以输入框的值为准
     _account = _accountTC.text;
     _password = _passwordTC.text;
@@ -290,6 +296,8 @@ class _LoginPageState extends State<LoginPage> {
 
   ///获取保存的数据
   void _getUserConfig() async {
+    print('_accountTC.text+${_accountTC.text}');
+
     final prefs = await SharedPreferences.getInstance();
     String accountStr = prefs.getString(ConfigKey.USER_ACCOUNT);
     String passwordStr = prefs.getString(ConfigKey.USER_PASSWORD);
@@ -303,12 +311,18 @@ class _LoginPageState extends State<LoginPage> {
   ///判断是否能点击登录按钮
   bool _judgeCanLogin() {
     if (_account.toString().length == 0 || _account == null) {
-      Fluttertoast.showToast(msg: S.of(context).please_input_account);
+      Fluttertoast.showToast(
+        msg: S.of(context).please_input_account,
+        gravity: ToastGravity.CENTER,
+      );
       return false;
     }
 
     if (_password.toString().length == 0 || _password == null) {
-      Fluttertoast.showToast(msg: S.of(context).please_input_password);
+      Fluttertoast.showToast(
+        msg: S.of(context).please_input_password,
+        gravity: ToastGravity.CENTER,
+      );
       return false;
     }
 
@@ -339,6 +353,7 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
       child: FlatButton(
         onPressed: () {
           _selectLanguage(context);
+          FocusManager.instance.primaryFocus?.unfocus();
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -488,7 +503,7 @@ class ForgetButton extends StatelessWidget {
         TextSpan(
           text: title,
           style: TextStyle(
-            decoration: TextDecoration.underline,
+            //  decoration: TextDecoration.underline,
             color: Colors.white,
             fontSize: 12,
           ),

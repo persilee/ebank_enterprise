@@ -14,7 +14,9 @@ import 'package:ebank_mobile/data/source/model/get_deposit_early_contract.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_trial.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/update_time_deposit_con_info.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
+import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -73,7 +75,13 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   var settBals = '';
 
-  var instCode = '';
+  var _instCode = ''; //到期指示代码
+
+  var instruction = ''; //到期指示
+
+  var _changedInstruction = '';
+
+  var _changedInstCode = '';
 
   var mainAc = '';
 
@@ -81,11 +89,13 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   _PageDepositInfo(this.deposit);
 
-  List<RemoteBankCard> cards = [];
+  List<String> cards = [];
 
   int _settAcPosition = 0;
 
   String _changedSettAcTitle = '';
+
+  String _changedSettAc = '';
 
   String _paymentAc = '';
 
@@ -93,9 +103,15 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   List<String> instructions = [];
 
+  List<String> instCodes = [];
+
   String language = Intl.getCurrentLocale();
 
   String productName;
+
+  String _termUnit = '';
+
+  String _modify;
 
   //获取网络请求
   @override
@@ -137,7 +153,10 @@ class _PageDepositInfo extends State<PageDepositInfo> {
       String leftText, String rightText, bool isShowLine, bool isOptional) {
     return Container(
       padding: EdgeInsets.zero,
-      height: 45,
+      height: language == "en" &&
+              leftText == S.current.tdInfo_interest_settlement_account
+          ? 57
+          : 45,
       child: FlatButton(
         padding: EdgeInsets.zero,
         child: _unit(leftText, rightText, isShowLine, isOptional),
@@ -150,16 +169,12 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   //结算账户弹窗
   _selectSettAc(BuildContext context) async {
-    List<String> bankCards = [];
     List<String> accounts = [];
     List<String> cardNo = [];
-    for (RemoteBankCard card in cards) {
-      bankCards.add(card.cardNo);
-    }
-    for (var i = 0; i < bankCards.length; i++) {
-      accounts.add(FormatUtil.formatSpace4(bankCards[i]));
-      cardNo.add(bankCards[i]);
-      if (_changedSettAcTitle == bankCards[i]) {
+    for (var i = 0; i < cards.length; i++) {
+      accounts.add(FormatUtil.formatSpace4(cards[i]));
+      cardNo.add(cards[i]);
+      if (_changedSettAcTitle == cards[i]) {
         _settAcPosition = i;
       }
     }
@@ -171,12 +186,12 @@ class _PageDepositInfo extends State<PageDepositInfo> {
             lastSelectedPosition: _settAcPosition));
     if (result != null && result != false) {
       _settAcPosition = result;
-      _changedSettAcTitle = cardNo[result];
+      _changedSettAc = cardNo[result];
       _verificationDialog(
           S.current.tdEarlyRed_modify_settlement_account,
           S.current.tdEarlyRed_modify_settlement_account_determine +
               '\n' +
-              FormatUtil.formatSpace4(_changedSettAcTitle),
+              FormatUtil.formatSpace4(_changedSettAc),
           _select);
     } else {
       return;
@@ -217,7 +232,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
             children: [
               Expanded(
                 child: Container(
-                  width: (MediaQuery.of(context).size.width - 42) / 7 * 2,
+                  width: (MediaQuery.of(context).size.width - 42) / 7 * 3,
                   child: Text(
                     leftText,
                     style: TextStyle(fontWeight: FontWeight.normal),
@@ -316,13 +331,13 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     if (this.mounted) {
       setState(() {
         if (result != null && result != false) {
-          instCode = instructions[result];
-          // instCode = instructionDatas[result];
+          _changedInstruction = instructions[result];
+          _changedInstCode = instCodes[result];
           _verificationDialog(
               S.current.tdEarlyRed_modify_expiration_instruction,
               S.current.tdEarlyRed_modify_expiration_instruction_determine +
                   '\n' +
-                  instCode,
+                  _changedInstruction,
               _select);
         } else {
           // return {instCode, instCode};
@@ -403,18 +418,23 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                   _unit(S.current.deposit_amount,
                       FormatUtil.formatSringToMoney(bal), true, false),
                   //存期
-                  _unit(S.current.deposit_term, auctCale + S.current.month,
-                      true, false),
+                  _unit(S.current.deposit_term, auctCale + _termUnit, true,
+                      false),
                   //生效日期
                   _unit(S.current.effective_date, valDate, true, false),
                   //到期日期
                   _unit(S.current.due_date, mtDate, true, false),
-                  //结算账户
-                  _selectSettACBtn(S.current.settlement_account,
-                      FormatUtil.formatSpace4(_changedSettAcTitle), true, true),
                   //到期指示
                   _selectInstCodeBtn(
-                      S.current.due_date_indicate, instCode, false, true),
+                      S.current.due_date_indicate, instruction, true, true),
+                  //结算账户
+                  _selectSettACBtn(
+                      _instCode == "3"
+                          ? S.current.tdInfo_interest_settlement_account
+                          : S.current.settlement_account,
+                      FormatUtil.formatSpace4(_changedSettAcTitle),
+                      false,
+                      true),
                 ],
               ),
             ),
@@ -487,6 +507,11 @@ class _PageDepositInfo extends State<PageDepositInfo> {
           });
         }
       });
+    }).catchError((e) {
+      Fluttertoast.showToast(
+        msg: "${e.toString()}",
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -521,7 +546,10 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         setState(() {});
       }
       HSProgressHUD.dismiss();
-      HSProgressHUD.showError(status: '${e.toString()}');
+      Fluttertoast.showToast(
+        msg: "${e.toString()}",
+        gravity: ToastGravity.CENTER,
+      );
     });
     // HSProgressHUD.dismiss();
     // _showContractSucceedPage(context);
@@ -537,54 +565,58 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     valDate = deposit.valDate;
     mtDate = deposit.mtDate;
     productName = deposit.engName;
+    auctCale = deposit.auctCale;
+    _changedInstCode = deposit.instCode;
+    _changedSettAc = deposit.settDdAc;
 
     switch (deposit.accuPeriod) {
+      case '1':
+        _termUnit = S.current.tdContract_day;
+        break;
       case '2':
-        auctCale = deposit.auctCale;
+        _termUnit = S.current.months;
         break;
-      case '3':
-        auctCale = (int.parse(deposit.auctCale) * 3).toString();
+      case '5':
+        _termUnit = S.current.year;
         break;
-      case '4':
-        auctCale = (int.parse(deposit.auctCale) * 6).toString();
-        break;
-      default:
-        {
-          auctCale = (int.parse(deposit.auctCale) * 12).toString();
-        }
     }
     switch (deposit.instCode) {
-      case '0':
-        instCode = S.current.instruction_at_maturity_0;
-        break;
       case '1':
-        instCode = S.current.instruction_at_maturity_1;
+        instruction = S.current.tdInfo_transfer_to_current_account;
         break;
-      case '2':
-        instCode = S.current.instruction_at_maturity_2;
+      case '3':
+        instruction = S.current.tdInfo_continuation_of_principal_and_interest;
         break;
-      default:
-        {
-          instCode = S.current.instruction_at_maturity_5;
-        }
+      case '6':
+        instruction = S.current.tdInfo_principal_renewal;
     }
-    // for (int i = 0; i < cardList.length; i++) {
-    //   if (cardList[i].ccy == ccy) {
-    //     transferAc = cardList[i].cardNo;
-    //   }
-    // }
   }
 
   void _select(String leftText) {
+    _modify = '';
     if (leftText == S.current.tdEarlyRed_modify_settlement_account) {
-      _loadData();
+      //修改结算账户
+      _updateTimeDepositConInfo(ccy, conNos, _changedInstCode, '',
+          _changedSettAc.replaceAll(new RegExp(r"\s+\b|\b\s"), ""), '');
+    } else if (leftText == S.current.tdInfo_interest_settlement_account) {
+      //修改结息账户
+      _updateTimeDepositConInfo(ccy, conNos, _changedInstCode, '', '',
+          _changedSettAc.replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
     } else if (leftText == S.current.tdEarlyRed_modify_expiration_instruction) {
-      _getInsCode();
+      //修改到期指示
+      _changedInstCode == '3'
+          ? _updateTimeDepositConInfo(ccy, conNos, _changedInstCode, ccy, '',
+              _changedSettAc.replaceAll(new RegExp(r"\s+\b|\b\s"), ""))
+          : _updateTimeDepositConInfo(ccy, conNos, _changedInstCode, '',
+              _changedSettAc.replaceAll(new RegExp(r"\s+\b|\b\s"), ""), '');
+      _modify = S.current.tdEarlyRed_modify_expiration_instruction;
     } else {
+      //提前结清
       _contractEarly(context);
     }
   }
 
+//获取卡列表
   Future<void> _loadData() async {
     CardDataRepository().getCardList('getCardList').then(
       (data) {
@@ -592,13 +624,21 @@ class _PageDepositInfo extends State<PageDepositInfo> {
           if (this.mounted) {
             setState(() {
               cards.clear();
-              cards.addAll(data.cardList);
+              data.cardList.forEach((element) {
+                bool isContainer = cards.contains(element.cardNo);
+                if (!isContainer) {
+                  cards.add(element.cardNo);
+                }
+              });
             });
           }
         }
       },
     ).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -608,9 +648,12 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         .getIdType(GetIdTypeReq("EXP_IN"), 'GetIdTypeReq')
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
+        instructions.clear();
+        instCodes.clear();
         data.publicCodeGetRedisRspDtoList.forEach((element) {
           if (this.mounted) {
             setState(() {
+              instCodes.add(element.code);
               if (language == 'zh_CN') {
                 instructions.add(element.cname);
               } else {
@@ -620,6 +663,42 @@ class _PageDepositInfo extends State<PageDepositInfo> {
           }
         });
       }
+    }).catchError((e) {
+      Fluttertoast.showToast(
+        msg: "${e.toString()}",
+        gravity: ToastGravity.CENTER,
+      );
+    });
+  }
+
+//修改到期指示和结算账户
+  Future _updateTimeDepositConInfo(
+    String ccy,
+    String conNo,
+    String instCode,
+    String intAcCcy,
+    String settDdAc,
+    String settIntAc,
+  ) async {
+    TimeDepositDataRepository()
+        .updateTimeDepositConInfo(
+            UpdateTdConInfoReq(
+                ccy, conNo, instCode, intAcCcy, settDdAc, settIntAc),
+            'updateTimeDepositConInfo')
+        .then((data) {
+      setState(() {
+        if (_modify == S.current.tdEarlyRed_modify_expiration_instruction) {
+          instruction = _changedInstruction;
+          _instCode = _changedInstCode;
+        } else {
+          _changedSettAcTitle = _changedSettAc;
+        }
+      });
+    }).catchError((e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 

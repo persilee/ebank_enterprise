@@ -7,6 +7,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
+import 'package:ebank_mobile/widget/money_text_input_formatter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,6 +35,8 @@ class TransferAccount extends StatelessWidget {
   final Function transferCcyDialog;
   //账户弹窗
   final Function accountDialog;
+  //焦点
+  final FocusNode focusNode;
   TransferAccount({
     Key key,
     this.payCcy,
@@ -48,6 +51,7 @@ class TransferAccount extends StatelessWidget {
     this.payCcyDialog,
     this.transferCcyDialog,
     this.accountDialog,
+    this.focusNode,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -108,6 +112,7 @@ class TransferAccount extends StatelessWidget {
               onPressed: () {
                 FocusScope.of(context).requestFocus(FocusNode());
                 payCcyDialog();
+                callback();
               },
               child: Row(
                 children: [
@@ -131,6 +136,7 @@ class TransferAccount extends StatelessWidget {
         autocorrect: false,
         //是否自动获得焦点
         autofocus: false,
+        focusNode: focusNode,
         textAlign: TextAlign.right,
         style: TextStyle(
           fontSize: 18,
@@ -139,6 +145,7 @@ class TransferAccount extends StatelessWidget {
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
           LengthLimitingTextInputFormatter(12),
+          MoneyTextInputFormatter(),
         ],
         controller: transferMoneyController,
         keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -175,8 +182,8 @@ class TransferAccount extends StatelessWidget {
           ),
         ),
         Icon(
-          // Icons.arrow_drop_down,
-          Icons.keyboard_arrow_down,
+          Icons.arrow_drop_down,
+          // Icons.keyboard_arrow_down,
           color: Color(0xff282828),
           // color: HsgColors.firstDegreeText,
         ),

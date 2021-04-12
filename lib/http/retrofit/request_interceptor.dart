@@ -7,7 +7,8 @@ class RequestInterceptor extends Interceptor {
 
   @override
   Future onRequest(RequestOptions options) {
-    if(options.data != null) {
+    print('options: ${options.data is FormData}');
+    if(options.data != null && !(options.data is FormData)) {
       BaseBody baseBody = BaseBody(body: options.data);
       options.data = baseBody.toJson();
     }

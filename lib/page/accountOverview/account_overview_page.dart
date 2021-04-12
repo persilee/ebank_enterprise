@@ -10,7 +10,6 @@ import 'package:ebank_mobile/config/hsg_text_style.dart';
 //import 'package:ebank_mobile/data/source/account_overview_repository.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
 //import 'package:ebank_mobile/data/source/model/account_overview_all_data.dart';
 //import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
@@ -43,6 +42,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   List<LnListBal> lnList = [];
   List<String> cardNoList = [];
   bool _isLoading = false;
+  bool _isNegative = false;
 
   //判断是否是总资产
   bool isTotalAsset = true;
@@ -59,7 +59,9 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     });
     _getAccountOverviewInfo();
     // 网络请求
-    _getCardList();
+    setState(() {
+      _getCardList();
+    });
     // _getAccountOverviewInfo();
   }
 
@@ -79,7 +81,6 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
       //     ),
       //   ),
       // ),
-
       body:
           // _isLoading
           //  ? HsgLoading()
@@ -631,7 +632,9 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
         Container(
           padding: EdgeInsets.only(left: 18),
           child: Text(
-            localCcy + ' ' + FormatUtil.formatSringToMoney(totalAssets),
+            _isNegative
+                ? localCcy + ' -' + FormatUtil.formatSringToMoney(totalAssets)
+                : localCcy + ' ' + FormatUtil.formatSringToMoney(totalAssets),
             style: TextStyle(
                 fontSize: 22.5,
                 color: Colors.white,
@@ -667,11 +670,13 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
             });
           });
         }
-
         _getAccountOverviewInfo();
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -722,7 +727,12 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
             //净资产
             var netAssetCompute = double.parse(netAssets);
             var lnTotalCompute = double.parse(lnTotal);
+            //判断是否为负数
+            if (lnTotalCompute > netAssetCompute) {
+              _isNegative = true;
+            }
             double totalAssetsCompute = netAssetCompute - lnTotalCompute;
+            print('totalAssetsCompute=$totalAssetsCompute');
             totalAssets = totalAssetsCompute.toStringAsFixed(2);
             _isLoading = false;
           });
@@ -731,13 +741,11 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
         HSProgressHUD.dismiss();
       }
     }).catchError((e) {
-      _isLoading = false;
+      //_isLoading = false;
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
     });
   }

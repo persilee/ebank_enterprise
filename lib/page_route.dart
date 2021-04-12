@@ -4,9 +4,9 @@
 /// Date: 2020-12-07
 
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
-import 'package:ebank_mobile/page/approval/authorization_task_approval_history_detail.dart';
+import 'package:ebank_mobile/page/approval/approval_history_detail_page.dart';
 import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
-import 'package:ebank_mobile/page/approval/task_approval_page.dart';
+import 'package:ebank_mobile/page/approval/my_to_do_task_detail_page.dart';
 
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/loan/loan_collection_preview.dart';
@@ -38,9 +38,9 @@ import 'package:ebank_mobile/page/register/reset_password_success.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
 import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
-import 'package:ebank_mobile/page/approval/application_task_approval_page.dart';
-import 'package:ebank_mobile/page/approval/authorization_history_page.dart';
-import 'package:ebank_mobile/page/approval/authorization_task_approval_page.dart';
+import 'package:ebank_mobile/page/approval/my_application_detail_page.dart';
+import 'package:ebank_mobile/page/approval/my_approved_history_page.dart';
+import 'package:ebank_mobile/page/approval/my_approved_history_detail_page.dart';
 import 'package:ebank_mobile/page/approval/my_appplication_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_detail_page.dart';
 import 'package:ebank_mobile/page/bankcard/card_limit_manager_page.dart';
@@ -88,6 +88,7 @@ import 'package:ebank_mobile/page/transfer/select_bank_page.dart';
 import 'package:ebank_mobile/page/transfer/select_city_page.dart';
 import 'package:ebank_mobile/page/transfer/select_branch_bank_page.dart';
 import 'package:ebank_mobile/page/userAgreement/user_agreement_page.dart';
+import 'package:ebank_mobile/widget/hsg_pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page/mine/mine_page.dart';
 import 'package:ebank_mobile/page/mine/about_us_page.dart';
@@ -157,6 +158,7 @@ var pageTransferInternationalPreview =
 var pageTrasferInternational = '/hsg_transfer_international_page';
 var pageElectronicStatement = '/electronic_statement_page';
 var pageElectronicStatementDetail = '/electronic_statement_detail_page';
+var hsgPdfViewer = '/hsg_pdf_viewer';
 var pageTimeDepostProduct = '/time_depost_product_page';
 var pageForexTrading = '/forex_trading_page';
 var pageExchangeRateInquiry = '/exchange_rate_inquiry_page';
@@ -213,7 +215,6 @@ var appRoutes = {
   pageResetPayPwdOtp: (context) => ResetPayPwdPage(),
   pagePwdOperationSuccess: (context) => PwdOperationSuccessPage(),
   pageIndexName: (context) => IndexPage(),
-  pageloanDetails: (context) => LoanDetailsPage(),
   pageLogin: (context) => LoginPage(),
   pageLoanApplication: (context) => LoanApplicationPage(),
   pageOperationResult: (context) => OperationResultPage(),
@@ -231,9 +232,9 @@ var appRoutes = {
   pageRepayConfirm: (context) => RepayConfirmPage(),
   pageRepayInput: (context) => RepayInputPage(),
   pageWaitRepayPlan: (context) => WaitRepayPlanPage(),
-  pageRepayPlan: (context) => RepayPlanPage(),
+  // pageRepayPlan: (context) => RepayPlanPage(),
   pageLimitDetails: (context) => LimitDetailsPage(),
-  pageRepayRecords: (context) => RepayRecordsPage(),
+  // pageRepayRecords: (context) => RepayRecordsPage(),
   // pageCardDetail: (context) => CardDetailPage(),
   pageCardLimit: (context) => CardLimitManagerPage(),
   minePage: (context) => MinePage(),
@@ -253,7 +254,7 @@ var appRoutes = {
   pageTrasferInternational: (context) => TransferInternationalPage(),
   pageFeatureList: (context) => FeatureListPage(),
   pageTransfer: (context) => TransferPage(),
-  pageAuthorizationHistory: (context) => AuthorizationHistoryPage(),
+  pageAuthorizationHistory: (context) => MyApprovedHistoryPage(),
   pageTransferInternal: (context) => TransferInternalPage(),
   pageTransferOrderPreview: (context) => TransferOrderPreviewPage(),
   pageTransferInternalPreview: (context) => TransferInternalPreviewPage(),
@@ -261,6 +262,7 @@ var appRoutes = {
       TransferinternationalPreviewPage(),
   pageElectronicStatement: (context) => ElectronicStatementPage(),
   pageElectronicStatementDetail: (context) => ElectronicStatementDetailPage(),
+  hsgPdfViewer: (context) => HsgPdfViewer(),
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
   // pageTimeDepositContract: (context) => TimeDepositContract(),
   pageForexTrading: (context) => ForexTradingPage(),
@@ -290,13 +292,13 @@ var appRoutes = {
   pageResetPasswordSuccess: (context) => ResetPasswordPage(),
   pageResetPasswordOpenAccount: (context) => ResetPasswordAccountOpen(),
   pageCountryRegionSelect: (context) => CountryOrRegionSelectPage(),
-  pageOpenAccountContactInformation: (context) =>
-      OpenAccountContactInformationPage(),
+  // pageOpenAccountContactInformation: (context) =>
+  //     OpenAccountContactInformationPage(),
   pageOpenAccountSelectDocumentType: (context) =>
       OpenAccountSelectDocumentTypePage(),
   pageOpenAccountResults: (context) => OpenAccountResultsPage(),
-  pageOpenAccountRelatedIndividualsData: (context) =>
-      RelatedIndividualsDataPage(),
+  // pageOpenAccountRelatedIndividualsData: (context) =>
+  //     RelatedIndividualsDataPage(),
   pageOpenAccountIdentifyResultsFailure: (context) =>
       OpenAccountIdentifyResultsFailurePage(),
   pageOpenAccountIdentifySuccessful: (context) =>
@@ -338,7 +340,7 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageAuthorizationTaskApproval) {
     return MaterialPageRoute(builder: (context) {
       Map<String, dynamic> arguments = settings.arguments;
-      return AuthorizationTaskApprovalPage(
+      return MyApprovedHistoryDetailPage(
         data: arguments['data'],
         title: arguments['title'],
       );
@@ -347,7 +349,7 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageAuthorizationTaskApprovalHistoryDetail) {
     return MaterialPageRoute(builder: (context) {
       Map<String, dynamic> arguments = settings.arguments;
-      return AuthorizationTaskApprovalHistoryDetail();
+      return ApprovalHistoryDetailPage();
     });
   }
   if (settings.name == pageTransferPlanDetails) {
@@ -358,7 +360,7 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageApplicationTaskApproval) {
     return MaterialPageRoute(builder: (context) {
       Map<String, dynamic> arguments = settings.arguments;
-      return ApplicationTaskApprovalPage(
+      return MyApplicationDetailPage(
         history: arguments['data'],
         title: arguments['title'],
       );
@@ -367,9 +369,55 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageTaskApproval) {
     return MaterialPageRoute(builder: (context) {
       Map<String, dynamic> arguments = settings.arguments;
-      return TaskApprovalPage(
+      return MyToDoTaskDetailPage(
         data: arguments['data'],
         title: arguments['title'],
+      );
+    });
+  }
+  if (settings.name == pageOpenAccountRelatedIndividualsData) {
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return RelatedIndividualsDataPage(
+        dataReq: arguments['data'],
+      );
+    });
+  }
+
+  if (settings.name == pageOpenAccountContactInformation) {
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return OpenAccountContactInformationPage(
+        dataReq: arguments['data'],
+      );
+    });
+  }
+
+  if (settings.name == pageloanDetails) {
+    //跳转贷款详情
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return LoanDetailsPage(
+        loanAccountDetail: arguments['data'],
+      );
+    });
+  }
+
+  if (settings.name == pageRepayRecords) {
+    //跳转贷款还款记录
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return RepayRecordsPage(
+        loanDetail: arguments['data'],
+      );
+    });
+  }
+  if (settings.name == pageRepayPlan) {
+    //跳转贷款还款计划
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return RepayPlanPage(
+        loanDetail: arguments['data'],
       );
     });
   }

@@ -36,7 +36,7 @@ class _TransferInternalPreviewPageState
         ModalRoute.of(context).settings.arguments;
     return Scaffold(
         appBar: AppBar(
-          title: Text(S.current.transfer_the_preview),
+          title: Text(S.current.transfer_the_preview2),
           centerTitle: true,
           elevation: 1,
         ),
@@ -73,7 +73,7 @@ class _TransferInternalPreviewPageState
                   transferData.transferIntoCcy +
                       FormatUtil.formatSringToMoney(
                           transferData.transferIntoAmount),
-                  style: TextStyle(color: Color(0xff232323), fontSize: 30),
+                  style: TextStyle(color: Color(0xff232323), fontSize: 20),
                 ),
               ],
             ),
@@ -83,23 +83,25 @@ class _TransferInternalPreviewPageState
           ),
           _getRowContent(S.current.transfer_from,
               FormatUtil.formatSpace4(transferData.transferOutAccount)),
-          _getRowContent(S.current.to_amount, transferData.transferOutAmount),
+          _getRowContent(S.current.estimated_collection_amount,
+              transferData.transferOutAmount),
+          _getRowContent(S.current.rate_of_exchange, transferData.rate),
           _getRowContent(
-              S.current.payment_currency, transferData.transferOutCcy),
+              S.current.payment_currency, transferData.transferIntoCcy),
           _getRowContent(
               S.current.remitter_address1, transferData.transferOutAdress),
           _getRowContent(
               S.current.receipt_side_name, transferData.transferIntoName),
-          _getRowContent(S.current.into_account,
+          _getRowContent(S.current.receipt_side_account,
               FormatUtil.formatSpace4(transferData.transferIntoAccount)),
           _getRowContent(
-              S.current.transfer_into_currency, transferData.transferIntoCcy),
+              S.current.transfer_from_ccy, transferData.transferOutCcy),
           _getRowContent(
               S.current.receiver_address, transferData.transferIntoAdress),
           _getRowContent(S.current.state_area, transferData.nation),
           _getRowContent(S.current.receipt_bank, transferData.bank),
           _getRowContent(S.current.bank_swift, transferData.bankSWIFT),
-          _getRowContent(S.current.middle_bank_swift, transferData.centerSWIFI),
+          // _getRowContent(S.current.middle_bank_swift, transferData.centerSWIFI),
           _getRowContent(S.current.Transfer_fee, transferData.transferFee),
           _getRowContent(S.current.remittance_usage, transferData.purpose),
           _getRowContent(
@@ -170,15 +172,15 @@ class _TransferInternalPreviewPageState
   Future _loadData(TransferInternationalData transferData) async {
     final prefs = await SharedPreferences.getInstance();
     String custId = prefs.getString(ConfigKey.CUST_ID);
-    // String amount = transferData.transferIntoAmount;
-    double amount = double.parse(transferData.transferIntoAmount);
+    String amount = transferData.transferIntoAmount;
+    // double amount = double.parse(transferData.transferIntoAmount);
     String transferOutCcy = transferData.transferOutCcy;
     String transferIntoCcy = transferData.transferIntoCcy;
     String payeeBankCode = transferData.payeeBankCode;
-    String payeeCardNo = transferData.transferOutAccount;
+    String payeeCardNo = transferData.transferIntoAccount;
     String payeeName = transferData.payeeName;
     String payerBankCode = transferData.payerBankCode;
-    String payerCardNo = transferData.transferIntoAccount;
+    String payerCardNo = transferData.transferOutAccount;
     String payerName = transferData.payerName;
     String remark = transferData.transferRemark;
     String costOptions = transferData.transferFee;
@@ -190,52 +192,6 @@ class _TransferInternalPreviewPageState
     String intermediateBankSwift = transferData.centerSWIFI;
     String countryCode = transferData.countryCode;
     String rate = transferData.rate;
-    // TransferDataRepository()
-    //     .getInternationalTransferNew(
-    //         GetInternationalTransferNewReq(
-    //           amount,
-    //           "",
-    //           "1,997,923.00",
-    //           bankSwift,
-    //           "1",
-    //           costOptions,
-    //           transferOutCcy,
-    //           custId,
-    //           transferIntoCcy,
-    //           countryCode,
-    //           "100",
-    //           "0",
-    //           "",
-    //           intermediateBankSwift,
-    //           "0.00",
-    //           "L5o+WYWLFVSCqHbd0Szu4Q==",
-    //           payeeAddress,
-    //           payeeBankCode,
-    //           "朗华银行",
-    //           "朗华银行",
-    //           payeeCardNo,
-    //           payeeName,
-    //           "",
-    //           "",
-    //           "",
-    //           payerAddress,
-    //           payerBankCode,
-    //           payerCardNo,
-    //           payerName,
-    //           "3",
-    //           "",
-    //           remark,
-    //           "",
-    //           "123456",
-    //           "123.00",
-    //           "0",
-    //         ),
-    //         'getInternationalTransferNew')
-    //     .then((data) {
-    //   Navigator.pushReplacementNamed(context, pageOperationResult);
-    // }).catchError((e) {
-    //   print(e.toString());
-    // });
     HSProgressHUD.show();
     TransferDataRepository()
         .getInterNationalTransfer(
@@ -268,11 +224,7 @@ class _TransferInternalPreviewPageState
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Color(0x57272727),
-        textColor: Color(0xffffffff),
       );
     });
   }

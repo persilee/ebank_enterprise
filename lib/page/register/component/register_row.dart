@@ -1,12 +1,14 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 注册账号普通行
 /// Author: pengyikang
 Widget getRegisterRow(
-    String hintText, TextEditingController controlText, bool password) {
+    String hintText, TextEditingController controlText, bool password,
+    [List<TextInputFormatter> inputFormatters]) {
   return Container(
     margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
     padding: EdgeInsets.only(left: 20),
@@ -21,6 +23,7 @@ Widget getRegisterRow(
       // onChanged: (value) {
       //   value = controlText.text;
       // },
+      inputFormatters: inputFormatters,
       controller: controlText,
       obscureText: password,
       // textAlign: TextAlign.right,

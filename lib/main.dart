@@ -50,7 +50,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
   @override
   void initState() {
     super.initState();
-    _initLanguage();
+    // _initLanguage();
     _getPublicParameters();
   }
 
@@ -94,6 +94,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
         title: 'HSGBank',
         theme: ThemeData(
           appBarTheme: AppBarTheme(
+            centerTitle: true,
             elevation: 1,
             textTheme: TextTheme(
               headline6: TextStyle(
@@ -121,7 +122,7 @@ class _HSGBankAppState extends State<HSGBankApp> {
         ],
         // ignore: missing_return
         localeResolutionCallback: (locale, supportedLocales) {
-          print('deviceLocale: $locale');
+          _initLang(locale);
         },
         supportedLocales: S.delegate.supportedLocales,
         builder: (context, child) => Scaffold(
@@ -137,10 +138,27 @@ class _HSGBankAppState extends State<HSGBankApp> {
     );
   }
 
-  _initLanguage() async {
-    String language = await Language.getSaveLangage();
+  // _initLanguage() async {
+  //   String language = await Language.getSaveLangage();
 
-    print('language $language');
+  //   print('language $language');
+  //   changeLanguage(Language().getLocaleByLanguage(language));
+  // }
+
+  _initLang(Locale deviceLocale) async {
+    String lang = 'en';
+    if (deviceLocale.languageCode == 'zh') {
+      if (deviceLocale.scriptCode == 'Hans') {
+        lang = 'zh_cn';
+      } else {
+        lang = 'zh_hk';
+      }
+    } else {
+      lang = 'en';
+    }
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(ConfigKey.DEVICELANGUAGE, lang);
+    String language = await Language.getSaveLangage();
     changeLanguage(Language().getLocaleByLanguage(language));
   }
 

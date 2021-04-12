@@ -4,8 +4,6 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
-import 'package:ebank_mobile/data/source/model/modify_pwd_by_sms.dart';
-import 'package:ebank_mobile/data/source/update_login_paw_repository.dart';
 
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
@@ -46,16 +44,12 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   int countdownTime = 0;
   bool _isRegister;
   String _userAccount;
+  bool _isInput = false; //判断是否点击获取验证码
+  bool _isCommit = false; //进行二次校验
+  String _smsCode = '';
 
   /// 区号
   String _officeAreaCodeText = '';
-  @override
-  void dispose() {
-    super.dispose();
-    if (_timer != null) {
-      _timer.cancel();
-    }
-  }
 
   @override
   // ignore: must_call_super
@@ -124,6 +118,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                           autocorrect: true,
                           //是否自动获得焦点
                           autofocus: true,
+                          enabled: true,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: S.current.please_input_sms,
@@ -132,14 +127,17 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                               color: HsgColors.textHintColor,
                             ),
                           ),
-                          inputFormatters: <TextInputFormatter>[
-                            WhitelistingTextInputFormatter.digitsOnly, //只输入数字
-                            LengthLimitingTextInputFormatter(6) //限制长度
-                          ],
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp("[0-9]")), //纯数字
+                            LengthLimitingTextInputFormatter(6),
+                          ], //限制长度
+                          keyboardType: TextInputType.number,
                         ),
                       ),
                       Container(
                         //获取验证码按钮
+                        alignment: Alignment.centerRight,
                         width: MediaQuery.of(context).size.width / 3,
                         child: _otpButton(),
                       )
@@ -167,15 +165,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     child: Text(S.of(context).next_step),
                     onPressed: _submit()
                         ? () {
-                            Map listData = new Map();
-                            listData = {
-                              'userAccount': _userAccount,
-                              'userPhone': _phoneNumListen,
-                              'sms': _smsListen
-                            };
-                            Navigator.pushNamed(
-                                context, pageResetPasswordOpenAccount,
-                                arguments: listData);
+                            _checkRegisterBysencond();
                           }
                         : null,
                     // color: HsgColors.accent,
@@ -220,6 +210,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     });
   }
 
+  //释放_timer
+  @override
+  void dispose() {
+    super.dispose();
+    if (_timer != null) {
+      _timer.cancel();
+    }
+  }
+
   FlatButton _otpButton() {
     return FlatButton(
       onPressed: countdownTime > 0
@@ -228,14 +227,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               _checkRegister();
               FocusScope.of(context).requestFocus(FocusNode());
             },
-      //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
-      padding: EdgeInsets.only(left: 35),
-      //文字颜色
+      //  padding: EdgeInsets.only(left: 35),
       textColor: HsgColors.blueTextColor,
-      //画圆角
-      // shape: RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.circular(50),
-      // ),
       disabledTextColor: HsgColors.blueTextColor,
       child: Text(
         countdownTime > 0
@@ -249,7 +242,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   }
 
   bool _submit() {
-    if (_sms.text != '' && _phoneNum.text != '') {
+    if (_phoneNum.text != '' && _sms.text.length > 5 && _isInput) {
       return true;
     } else {
       return false;
@@ -258,42 +251,81 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   //检验用户是否注册
   _checkRegister() {
-    RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
-    // if (characters.hasMatch(_phoneNum.text) == false) {
-    //   Fluttertoast.showToast(
-    //     msg: S.current.format_mobile_error,
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     gravity: ToastGravity.CENTER,
-    //     timeInSecForIosWeb: 1,
-    //   );
-    // }
-    // if {
     HSProgressHUD.show();
-
     VersionDataRepository()
         .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
         .then((data) {
-      HSProgressHUD.dismiss();
       if (mounted) {
         setState(() {
           _isRegister = data.register;
           _userAccount = data.userAccount;
-          HSProgressHUD.dismiss();
-
-          //发送短信
-          _getVerificationCode();
+          if (!_isRegister) {
+            Fluttertoast.showToast(
+              msg: S.current.num_not_is_register,
+              gravity: ToastGravity.CENTER,
+            );
+            HSProgressHUD.dismiss();
+          } else {
+            _getVerificationCode();
+          }
         });
       }
     }).catchError((e) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
     });
     // }
+  }
+
+  //二次校验
+  _checkRegisterBysencond() {
+    print('$_smsCode+_smsCode');
+    HSProgressHUD.show();
+    VersionDataRepository()
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
+        .then((data) {
+      if (mounted) {
+        setState(() {
+          HSProgressHUD.dismiss();
+          _isRegister = data.register;
+          //校验是否注册
+          if (!_isRegister) {
+            HSProgressHUD.dismiss();
+            Fluttertoast.showToast(
+              msg: S.current.num_not_is_register,
+              gravity: ToastGravity.CENTER,
+            );
+          }
+          //校验短信
+          else if (_sms.text != _smsCode) {
+            HSProgressHUD.dismiss();
+            Fluttertoast.showToast(
+              msg: S.current.verification_code_wrong,
+              gravity: ToastGravity.CENTER,
+            );
+          } else {
+            Map listData = new Map();
+            listData = {
+              'userAccount': _userAccount,
+              'userPhone': _phoneNumListen,
+              'sms': _smsListen
+            };
+            Navigator.pushNamed(context, pageResetPasswordOpenAccount,
+                arguments: listData);
+            HSProgressHUD.dismiss();
+          }
+        });
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
+      HSProgressHUD.dismiss();
+    });
   }
 
   //倒计时方法
@@ -308,44 +340,34 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         }
       });
     };
+    HSProgressHUD.dismiss();
+
     _timer = Timer.periodic(Duration(seconds: 1), call);
   }
 
   //获取验证码接口
   _getVerificationCode() async {
-    RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
-    if (characters.hasMatch(_phoneNum.text) == false) {
+    VerificationCodeRepository()
+        .sendSmsByPhone(
+            SendSmsByPhoneNumberReq(
+                _officeAreaCodeText, _phoneNum.text, 'findPwd', ''),
+            'sendSms')
+        .then((data) {
+      if (mounted) {
+        setState(() {
+          _isInput = true;
+          _smsCode = data.smsCode;
+          _startCountdown();
+        });
+      }
+      HSProgressHUD.dismiss();
+    }).catchError((e) {
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
-        msg: S.current.format_mobile_error,
-        toastLength: Toast.LENGTH_SHORT,
+        msg: e.toString(),
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
-    } else if (!_isRegister) {
-      Fluttertoast.showToast(
-        msg: S.current.num_not_is_register,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-      );
-    } else {
-      VerificationCodeRepository()
-          .sendSmsByPhone(
-              SendSmsByPhoneNumberReq(_phoneNum.text, 'findPwd'), 'sendSms')
-          .then((data) {
-        HSProgressHUD.dismiss();
-        _startCountdown();
-
-        HSProgressHUD.dismiss();
-      }).catchError((e) {
-        HSProgressHUD.dismiss();
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-        );
-      });
-    }
+    });
+    // }
   }
 }

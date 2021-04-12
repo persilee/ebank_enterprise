@@ -43,6 +43,8 @@ class Language {
 
   static Future<String> getSaveLangage() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(ConfigKey.LANGUAGE) ?? EN;
+    return prefs.getString(ConfigKey.LANGUAGE) ??
+        prefs.getString(ConfigKey.DEVICELANGUAGE) ??
+        EN;
   }
 }

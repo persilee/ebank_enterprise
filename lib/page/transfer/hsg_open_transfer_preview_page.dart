@@ -15,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../page_route.dart';
-import 'data/transfer_internal_data.dart';
 import 'data/transfer_order_data.dart';
 
 class TransferOrderPreviewPage extends StatefulWidget {
@@ -30,14 +29,9 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
   @override
   Widget build(BuildContext context) {
     TransferOrderData transferData = ModalRoute.of(context).settings.arguments;
-    print(transferData.startDate +
-        "==========" +
-        transferData.payeeBankCode +
-        "----" +
-        transferData.payerBankCode);
     return Scaffold(
         appBar: AppBar(
-          title: Text(S.current.transfer_the_preview),
+          title: Text(S.current.transfer_the_preview3),
           centerTitle: true,
           elevation: 1,
         ),
@@ -73,7 +67,7 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
                 Container(
                   width: (MediaQuery.of(context).size.width - 40) / 2,
                   child: Text(
-                    transferData.creditCurrency +
+                    transferData.debitCurrency +
                         ' ' +
                         FormatUtil.formatSringToMoney(transferData.amount),
                     style: TextStyle(color: Color(0xff232323), fontSize: 20),
@@ -88,17 +82,26 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
           Divider(
             color: Color(0xffE1E1E1),
           ),
+          _getRowContent('计划名称', transferData.planName),
+          _getRowContent(
+              '预约频率',
+              transferData.frequency != null
+                  ? transferData.frequency['title'] ?? ''
+                  : ''),
+          _getRowContent('首次转账时间', transferData.startDate),
+          _getRowContent('截至日期', transferData.endDate),
           _getRowContent(S.current.transfer_from,
               FormatUtil.formatSpace4(transferData.payerCardNo)),
-          _getRowContent(S.current.to_amount,
-              FormatUtil.formatSringToMoney(transferData.amount)),
+          _getRowContent(S.current.estimated_collection_amount,
+              FormatUtil.formatSringToMoney(transferData.transferIntoAmount)),
+          _getRowContent(S.current.rate_of_exchange, transferData.xRate),
           _getRowContent(
               S.current.payment_currency, transferData.debitCurrency),
           _getRowContent(S.current.receipt_side_name, transferData.payeeName),
-          _getRowContent(S.current.into_account,
+          _getRowContent(S.current.receipt_side_account,
               FormatUtil.formatSpace4(transferData.payeeCardNo)),
           _getRowContent(
-              S.current.transfer_into_currency, transferData.debitCurrency),
+              S.current.transfer_from_ccy, transferData.creditCurrency),
           _getRowContent(
               S.current.transfer_postscript,
               transferData.remark == ''
@@ -171,7 +174,7 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
     String day = transferData.day;
     String debitCurrency = transferData.debitCurrency;
     String endDate = transferData.endDate;
-    String frequency = transferData.frequency;
+    Map frequency = transferData.frequency;
     String payeeBankCode = transferData.payeeBankCode;
     String payeeCardNo = transferData.payeeCardNo;
     String payeeName = transferData.payeeName;
@@ -181,7 +184,6 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
     String planName = transferData.planName;
     String remark = transferData.remark;
     String startDate = transferData.startDate;
-
     HSProgressHUD.show();
     Future.wait({
       TransferDataRepository().addTransferPlan(
@@ -198,7 +200,7 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
             false, //enabled
             endDate, //endDate
             0, //feeAmount
-            frequency, //frequency
+            frequency != null ? frequency['type'] ?? '' : '', //frequency
             "", //midBankSwift
             "", //month
             "L5o+WYWLFVSCqHbd0Szu4Q==", //payPassword
@@ -228,11 +230,7 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Color(0x57272727),
-        textColor: Color(0xffffffff),
       );
     });
   }

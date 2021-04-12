@@ -6,6 +6,7 @@ import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/loan_application.dart';
+import 'package:ebank_mobile/data/source/model/loan_product_list.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
@@ -41,7 +42,6 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   String _deadLine = ''; //贷款期限
   String _goal = ""; //贷款目的
   String _currency = ""; //币种
-  String _loanProductName = ""; //贷款产品名称
   String _rateValue = ""; //利率
 
   String _inputs = S.current.please_input; //请输入提示
@@ -75,6 +75,11 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   String _reimburseStr = ''; //还款方式
   List<IdType> _reimburseTypeLists = []; //还款方式
 
+  List<LoanProductList> _loanProduct = []; //贷款产品列表
+  String _loanProductName = ""; //贷款产品名称
+  String _loanProductID = ""; //贷款产品ID
+  int _indexPro = 0; //贷款产品对应的几个月
+
   get w500 => null; //还款方式
 
   @override
@@ -87,6 +92,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     _getLoanTimeList(); //获取贷款期限
     _loadTotalAccountData(); //获取贷款账户列表
     _getLoanRepayTypeList();
+    _loadLoanProductData(); //获取贷款产品列表
   }
 
 // 获取币种列表
@@ -148,7 +154,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         _custId = data.custId;
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      SVProgressHUD.showInfo(status: e.toString());
     });
   }
 
@@ -168,7 +174,33 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
       },
     ).catchError((e) {
       SVProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: e.toString());
+      SVProgressHUD.showInfo(status: e.toString());
+    });
+  }
+
+//获取贷款产品
+  Future<void> _loadLoanProductData() async {
+    LoanDataRepository()
+        .loanGetProductListRequest(LoanProductListReq('0'), 'loanProductData')
+        .then((data) {
+      if (data.loanProductList != null) {
+        setState(() {
+          _loanProduct = data.loanProductList;
+          LoanProductList names = _loanProduct[0];
+          _loanProductID = names.bppdCode;
+          _requestDataMap['prdtCode'] = names.bppdCode; //ID
+          if (_language == 'zh_CN') {
+            _loanProductName = names.lclName;
+            _listDataMap['prdtCode'] = names.lclName;
+          } else {
+            _loanProductName = names.engName;
+            _listDataMap['prdtCode'] = names.engName; //名称
+          }
+        });
+      }
+    }).catchError((e) {
+      SVProgressHUD.dismiss();
+      SVProgressHUD.showInfo(status: e.toString());
     });
   }
 
@@ -295,16 +327,17 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
             item: _loanProductName,
             onTap: () {
               FocusScope.of(context).requestFocus(FocusNode());
+              _selectProductList(_indexPro);
               //点击跳转回调的方法
-              Navigator.pushNamed(context, pageLoanProductlistNav)
-                  .then((value) {
-                setState(() {
-                  Map map = value;
-                  _loanProductName = map['pro_name'];
-                  _listDataMap['prdtCode'] = map['pro_name']; //名称
-                  _requestDataMap['prdtCode'] = map['pro_ID']; //ID
-                });
-              });
+              // Navigator.pushNamed(context, pageLoanProductlistNav)
+              //     .then((value) {
+              //   setState(() {
+              //     Map map = value;
+              //     _loanProductName = map['pro_name'];
+              //     _listDataMap['prdtCode'] = map['pro_name']; //名称
+              //     _requestDataMap['prdtCode'] = map['pro_ID']; //ID
+              //   });
+              // });
             },
           ),
           TextFieldContainer(
@@ -433,7 +466,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
 //交易密码窗口  点击确认页面
   void _openBottomSheet() async {
     //需要将数据绑定并传值，添加新的值进去
-    _listDataMap["loanRate"] = '0.1'; //利率
+    // _listDataMap["loanRate"] = '0.1'; //利率
     _listDataMap["remark"] = _remarkController.text; //备注
     _listDataMap["contact"] = _contactsController.text; //联系人
     _listDataMap["phone"] = _phoneController.text; //联系方式
@@ -497,11 +530,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   _showDialog(int index, List<IdType> list) async {
     List<String> tempList = [];
     list.forEach((e) {
-      if (_language == 'zh_CN') {
-        tempList.add(e.cname);
-      } else {
-        tempList.add(e.name);
-      }
+      tempList.add(e.code);
     });
 
     final result = await showDialog(
@@ -594,7 +623,38 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     );
   }
 
-  //账号弹窗
+//获取贷款产品列表的数据
+  _selectProductList(int index) async {
+    List<String> _productName = [];
+    List<String> _productID = [];
+    for (LoanProductList names in _loanProduct) {
+      if (_language == 'zh_CN') {
+        _productName.add(names.lclName);
+      } else {
+        _productName.add(names.engName);
+      }
+      _productID.add(names.bppdCode);
+    }
+    //弹窗
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) => HsgBottomSingleChoice(
+            title: S.current.loan_New_product_column,
+            items: _productName,
+            lastSelectedPosition: index));
+    //拿值
+    if (result != null && result != false) {
+      setState(() {
+        _loanProductName = _productName[result]; //产品名称
+        _loanProductID = _productID[result]; //产品ID
+        _indexPro = result;
+
+        _listDataMap['prdtCode'] = _productName[result]; //名称
+        _requestDataMap['prdtCode'] = _productID[result]; //ID
+      });
+    }
+  }
+
 //付款账户弹窗
   _selectAccount(int index) async {
     List<String> bankCards = [];

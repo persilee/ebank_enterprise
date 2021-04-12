@@ -4,6 +4,7 @@ part 'get_card_list_bal_by_user.g.dart';
 
 @JsonSerializable()
 class GetCardListBalByUserReq extends Object {
+  /// SA：储蓄账户，CA往来账户，TD定期账户，LN贷款账户，不传查所有
   @JsonKey(name: 'accountType')
   String accountType;
 

@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:io' as Io;
+import 'dart:typed_data';
 import 'dart:ui';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -6,14 +9,9 @@ import 'dart:ui';
 /// Author: hlx
 /// Date: 2020-12-11
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/get_last_version.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
-import 'package:ebank_mobile/data/source/model/register_by_account.dart';
-import 'package:ebank_mobile/data/source/model/send_sms_register.dart';
 import 'package:ebank_mobile/data/source/model/logout.dart';
-// import 'package:ebank_mobile/data/source/model/upload_avatar.dart';
-// import 'package:ebank_mobile/data/source/upload_avatar_network.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -21,7 +19,6 @@ import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
-import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -34,8 +31,9 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart';
-import 'package:ebank_mobile/util/language.dart';
-import 'package:ebank_mobile/main.dart';
+
+import 'package:http_parser/http_parser.dart' show MediaType;
+import 'package:dio/dio.dart';
 
 class MinePage extends StatefulWidget {
   @override
@@ -59,7 +57,6 @@ class _MinePageState extends State<MinePage> {
   var _characterName = ''; // 角色名称
   var _belongCustStatus = ''; //用户状态
   UserInfoResp _userInfoResp;
-  var _inviteeStatus = '0'; //用户受邀状态，是否是走快速开户，默认为0，不走
 
   @override
   // ignore: must_call_super
@@ -99,18 +96,18 @@ class _MinePageState extends State<MinePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
-              icon: Image(
-                image: AssetImage('images/home/navIcon/home_nav_service.png'),
-                width: 18.5,
-                height: 18.5,
-                color: HsgColors.mineInfoIcon,
-              ),
-              onPressed: () {
-                print('联系客服');
-                Navigator.pushNamed(context, pageContactCustomer);
-              },
-            ),
+            // IconButton(
+            //   icon: Image(
+            //     image: AssetImage('images/home/navIcon/home_nav_service.png'),
+            //     width: 18.5,
+            //     height: 18.5,
+            //     color: HsgColors.mineInfoIcon,
+            //   ),
+            //   onPressed: () {
+            //     print('联系客服');
+            //     Navigator.pushNamed(context, pageContactCustomer);
+            //   },
+            // ),
             // IconButton(
             //   icon: Image(
             //     image:
@@ -144,25 +141,25 @@ class _MinePageState extends State<MinePage> {
 
   ///scrollview的顶部view，包含背景图、登录信息
   Widget _mineHeaderView() {
-    Widget headerShowWidget = Container();
-    switch (_belongCustStatus) {
-      case '0': //未开户
-      case '1': //未开户
-        headerShowWidget = _headerInfoWidget();
-        break;
-      case '2': //审核中
-        headerShowWidget = _openAccInReview();
-        break;
-      case '3': //已驳回
-        headerShowWidget = _openAccRejected();
-        break;
-      case '4': //受限已开户
-      case '5': //正常已开户
-        headerShowWidget = _headerInfoWidget();
-        break;
-      default:
-        headerShowWidget = _welcomeWidget();
-    }
+    Widget headerShowWidget = _headerInfoWidget();
+    // switch (_belongCustStatus) {
+    //   case '0': //未开户
+    //   case '1': //未开户
+    //     headerShowWidget = _headerInfoWidget();
+    //     break;
+    //   case '2': //审核中
+    //     headerShowWidget = _openAccInReview();
+    //     break;
+    //   case '3': //已驳回
+    //     headerShowWidget = _openAccRejected();
+    //     break;
+    //   case '4': //受限已开户
+    //   case '5': //正常已开户
+    //     headerShowWidget = _headerInfoWidget();
+    //     break;
+    //   default:
+    //     headerShowWidget = _welcomeWidget();
+    // }
     return Container(
       child: Stack(
         children: [
@@ -191,8 +188,8 @@ class _MinePageState extends State<MinePage> {
           //     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0), //设置图片模糊度
           //     child:
           Container(
+            margin: EdgeInsets.only(top: 50),
             width: MediaQuery.of(context).size.width,
-            height: 200,
             child: headerShowWidget,
           ),
           //   ),
@@ -263,9 +260,6 @@ class _MinePageState extends State<MinePage> {
                 _flatBtnNuitWidget(S.of(context).visa_interview, true, () {
                   //面签
                   Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
-                  // _inviteeStatus == '0'
-                  //     ? Navigator.pushNamed(context, pageOpenAccountGetFaceSign)
-                  //     : Navigator.pushNamed(context, pageOpenAccountBasicData);
                 }),
               ],
             ),
@@ -275,7 +269,6 @@ class _MinePageState extends State<MinePage> {
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.only(bottom: 16),
             color: Colors.white,
-            // padding: EdgeInsets.only(left: 20, right: 20),
             child: Column(
               children: [
                 _flatBtnNuitWidget(S.of(context).aboutUs, true, () {
@@ -290,19 +283,6 @@ class _MinePageState extends State<MinePage> {
               ],
             ),
           ),
-          // Container(
-          //   width: MediaQuery.of(context).size.width,
-          //   margin: EdgeInsets.only(bottom: 16),
-          //   color: Colors.white,
-          //   // padding: EdgeInsets.only(left: 20, right: 20),
-          //   child: Column(
-          //     children: [
-          //       _flatBtnNuitWidget('签里眼面签相关', true, () {
-          //         Navigator.pushNamed(context, pageQianliyanDemo);
-          //       }),
-          //     ],
-          //   ),
-          // ),
           //退出按钮
           Container(
             height: 50,
@@ -324,17 +304,6 @@ class _MinePageState extends State<MinePage> {
               ),
             ),
           ),
-          // Container(
-          //   margin: EdgeInsets.only(bottom: 10),
-          //   child: Row(
-          //     children: [_version(), _checkUserPhone()],
-          //   ),
-          // ),
-          // Container(
-          //   child: Row(
-          //     children: [_smsRegister(), _registerByAccountBtn()],
-          //   ),
-          // ),
           Container(
             height: 15,
           ),
@@ -449,9 +418,9 @@ class _MinePageState extends State<MinePage> {
     }
 
     return Container(
-      height: 200,
+      // height: 200,
       alignment: Alignment.center,
-      margin: EdgeInsets.only(top: 50),
+      margin: EdgeInsets.only(top: 30),
       child: Row(
         children: [
           GestureDetector(
@@ -469,21 +438,6 @@ class _MinePageState extends State<MinePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 infoWidget,
-                // Text(
-                //   _userName,
-                //   textAlign: TextAlign.start,
-                //   style: TextStyle(
-                //       color: HsgColors.aboutusText,
-                //       fontSize: 20.0,
-                //       height: 1.5),
-                // ),
-                // Text(
-                //   S.of(context).lastLoginTime + _lastLoginTime,
-                //   style: TextStyle(
-                //     color: HsgColors.aboutusText,
-                //     fontSize: 12.0,
-                //   ),
-                // ),
               ],
             ),
           ),
@@ -516,27 +470,21 @@ class _MinePageState extends State<MinePage> {
 //用户信息-未开户
   Widget _userOffInfo() {
     return Container(
-        child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        _nameInfo((MediaQuery.of(context).size.width / 3 * 2 - 160)),
-        CustomButton(
-          margin: EdgeInsets.all(0),
-          height: 35,
-          borderRadius: BorderRadius.circular(50.0),
-          text: Text(
-            S.current.open_account_apply,
-            style: TextStyle(fontSize: 14, color: Colors.white),
+      margin: EdgeInsets.only(top: 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 7),
+            child: _nameInfo((MediaQuery.of(context).size.width / 3 * 2 - 20)),
           ),
-          clickCallback: () {
-            print('开户申请');
-            //判断受邀状态进入不同页面
-            _openAccountClickFunction(context);
-          },
-        ),
-      ],
-    ));
+          Container(
+            margin: EdgeInsets.only(top: 7),
+            child: _timeInfo(),
+          )
+        ],
+      ),
+    );
   }
 
   //审核驳回
@@ -630,7 +578,7 @@ class _MinePageState extends State<MinePage> {
   //默认欢迎页
   Widget _welcomeWidget() {
     return Container(
-      margin: EdgeInsets.only(top: 100),
+      margin: EdgeInsets.only(top: 50),
       constraints: BoxConstraints(
         maxWidth: (MediaQuery.of(context).size.width - 50),
       ),
@@ -650,9 +598,8 @@ class _MinePageState extends State<MinePage> {
 
   //开户点击事件
   void _openAccountClickFunction(BuildContext context) {
-    if (_inviteeStatus == '0') {
-      // //前往填写面签码
-      // Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+    if (_belongCustStatus == '1') {
+      ///提示，前往网银开户
       HsgShowTip.notOpenAccountGotoEbankTip(
         context: context,
         click: (value) {},
@@ -661,28 +608,6 @@ class _MinePageState extends State<MinePage> {
       //前往快速开户
       Navigator.pushNamed(context, pageOpenAccountBasicData);
     }
-  }
-
-  Future<void> _getInviteeStatusByPhoneNetwork() async {
-    final prefs = await SharedPreferences.getInstance();
-    String userAreaCode = prefs.getString(ConfigKey.USER_AREACODE);
-    String userPhone = prefs.getString(ConfigKey.USER_PHONE);
-
-    UserDataRepository()
-        .getInviteeStatusByPhone(
-      GetInviteeStatusByPhoneReq(userAreaCode, userPhone),
-      'getInviteeStatusByPhone',
-    )
-        .then((data) {
-      if (this.mounted) {
-        setState(() {
-          _inviteeStatus = data.inviteeStatus;
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
-      print('${e.toString()}');
-    });
   }
 
 //用户信息-已开户
@@ -829,9 +754,7 @@ class _MinePageState extends State<MinePage> {
         _characterName = _language == 'en'
             ? model.roleEngName
             : model.roleLocalName; //用户角色名称
-        _belongCustStatus = model.userId == '989185387615485977'
-            ? '5'
-            : model.belongCustStatus; //用户状态(先临时数据判断是blk703显示为已开户)
+        _belongCustStatus = model.belongCustStatus; //用户状态
         _lastLoginTime = model.lastLoginTime; // 上次登录时间
       });
     }
@@ -874,7 +797,10 @@ class _MinePageState extends State<MinePage> {
         //, BaseBody(body: {})
         print(value);
       }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
       });
     }
   }
@@ -894,12 +820,11 @@ class _MinePageState extends State<MinePage> {
         _userInfoResp = data;
         _changeUserInfoShow(_userInfoResp);
       }
-
-      if (['0', '1', '3'].contains(data.belongCustStatus)) {
-        _getInviteeStatusByPhoneNetwork();
-      }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       print('${e.toString()}');
     });
   }
@@ -926,11 +851,6 @@ class _MinePageState extends State<MinePage> {
   _loginOut() async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
-    // UserDataRepository()
-    //     .getUserInfo(
-    //   GetUserInfoReq(userID),
-    //   'logout',
-    // )
     HSProgressHUD.show();
     UserDataRepository()
         .logout(LogoutReq(userID, _userName), 'logout')
@@ -938,11 +858,6 @@ class _MinePageState extends State<MinePage> {
       HSProgressHUD.dismiss();
       if (this.mounted) {
         setState(() {
-          // prefs.setString(ConfigKey.USER_ACCOUNT, '');
-          // prefs.setString(ConfigKey.USER_ID, '');
-          // prefs.setString(ConfigKey.NET_TOKEN, '');
-          // Navigator.pushNamed(context, pageLogin);
-          // Navigator.pushNamed(context, pageLogin);
           Future.delayed(Duration.zero, () {
             Navigator.pushAndRemoveUntil(
                 context,
@@ -950,13 +865,17 @@ class _MinePageState extends State<MinePage> {
                 (route) => false);
           });
           Fluttertoast.showToast(
-              msg: S.of(context).logoutSuccess, gravity: ToastGravity.CENTER);
+            msg: S.of(context).logoutSuccess,
+            gravity: ToastGravity.CENTER,
+          );
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
       HSProgressHUD.dismiss();
-      // print(e.toString());
     });
   }
 
@@ -988,6 +907,9 @@ class _MinePageState extends State<MinePage> {
   /*拍照*/
   _takePhoto() async {
     var image = await ImagePicker().getImage(source: ImageSource.camera);
+    if (image == null) {
+      return;
+    }
 
     setState(() {
       _imgPath = image.path;
@@ -998,6 +920,9 @@ class _MinePageState extends State<MinePage> {
   /*相册*/
   _openGallery() async {
     var image = await ImagePicker().getImage(source: ImageSource.gallery);
+    if (image == null) {
+      return;
+    }
     setState(() {
       _imgPath = image.path;
       _uploadAvatar();
@@ -1037,7 +962,10 @@ class _MinePageState extends State<MinePage> {
         lastVersionName = value.versionName;
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 }

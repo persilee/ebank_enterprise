@@ -44,6 +44,10 @@ class OpenAccountInformationSupplementDataReq {
   @JsonKey(name: 'videoUrl')
   String videoUrl;
 
+  ///文件名称
+  @JsonKey(name: 'fileName')
+  String fileName;
+
   ///大陆证件信息
   @JsonKey(name: 'mainlandCertificateInfo')
   ChinaMainlandCertificateInfoDTO mainlandCertificateInfo;
@@ -56,6 +60,10 @@ class OpenAccountInformationSupplementDataReq {
   @JsonKey(name: 'passportInfo')
   PassportInfoDTO passportInfo;
 
+  ///话术内容
+  @JsonKey(name: 'speakings')
+  List<SignSpeakDTO> speakings;
+
   OpenAccountInformationSupplementDataReq({
     this.businessId,
     this.certificateType,
@@ -67,9 +75,11 @@ class OpenAccountInformationSupplementDataReq {
     this.phone,
     this.tenantId,
     this.videoUrl,
+    this.fileName,
     this.mainlandCertificateInfo,
     this.hkCertificateInfo,
     this.passportInfo,
+    this.speakings,
   });
 
   @override
@@ -245,6 +255,30 @@ class PassportInfoDTO {
   factory PassportInfoDTO.fromJson(Map<String, dynamic> srcJson) =>
       _$PassportInfoDTOFromJson(srcJson);
   Map<String, dynamic> toJson() => _$PassportInfoDTOToJson(this);
+}
+
+///话术数据
+@JsonSerializable()
+class SignSpeakDTO {
+  @JsonKey(name: 'problem')
+  String problem;
+
+  @JsonKey(name: 'timer')
+  String timer;
+
+  @JsonKey(name: 'answer')
+  String answer;
+
+  SignSpeakDTO(
+    this.problem,
+    this.timer,
+    this.answer,
+  );
+
+  factory SignSpeakDTO.fromJson(Map<String, dynamic> srcJson) =>
+      _$SignSpeakDTOFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$SignSpeakDTOToJson(this);
 }
 
 @JsonSerializable()

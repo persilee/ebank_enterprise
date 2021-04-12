@@ -1,12 +1,30 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
+import 'package:ebank_mobile/data/source/loan_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/application_loan.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
+import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
+import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
+import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
+import 'package:ebank_mobile/data/source/model/loan_trial_rate.dart';
+import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/mine/id_cardVerification_page.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
+import 'package:ebank_mobile/widget/hsg_button.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_single_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
+import 'package:intl/intl.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 贷款引用页面
@@ -19,12 +37,224 @@ class LoanReference extends StatefulWidget {
 }
 
 class _LoanReferenceState extends State<LoanReference> {
-  String _deadLine = ''; //贷款期限
   bool _checkBoxValue = false; //复选框默认值
+  bool _isButton = false; //按钮是否能点击
+  String _language = Intl.getCurrentLocale(); //版本语言
+  String _totalInterest = ''; //总利息
+  String _mothCode = ''; //月份编码
+  double max = 0; //贷款最大限额
+  String iratCd1 = ''; //用户额度保存
+  String interestRate = ''; //贷款利率
 
-  String custID;
+  var _recipientsController = new TextEditingController(); //领用金额输入框
+
+//获取各个公共参数的接口
+  String _goal = ""; //贷款目的
+  List<IdType> _goalLists = []; //贷款目的列表
+
+  String _deadLine = ''; //贷款期限
+  String _dateCode = ''; //贷款期限编码
+
+  List<IdType> _deadLineLists = []; //贷款期限列表
+
+  String _reimburseStr = ''; //还款方式
+  List<IdType> _reimburseTypeLists = []; //还款方式
+
+  String _loanAccount = ''; //收款帐号
+  int _loanAccountIndex = 0; //收款索引
+  List<RemoteBankCard> _totalAccoutList = []; //总帐号
+
+  Map _listDataMap = {}; //确认页展示列表数据的map
+  Map _requestDataMap = {}; //确认页上传数据的map
+
+  LoanAccountDOList accountInfo; //上个界面传过来的值
+  FocusNode focusnode = FocusNode(); //监听编辑的输入
+
+  //获取借款期限
+  Future _getLoanTimeList() async {
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq("LOAN_TERM"), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _deadLineLists.clear();
+        _deadLineLists.addAll(data.publicCodeGetRedisRspDtoList);
+      }
+    });
+  }
+
+  //获取借款用途
+  Future _getLoanPurposeList() async {
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq("LOAN_PUR"), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _goalLists.clear();
+        _goalLists.addAll(data.publicCodeGetRedisRspDtoList);
+      }
+    });
+  }
+
+//还款方式
+  Future _getLoanRepayTypeList() async {
+    PublicParametersRepository()
+        .getIdType(GetIdTypeReq("REPAY_TYPE"), 'GetIdTypeReq')
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _reimburseTypeLists.clear();
+        _reimburseTypeLists.addAll(data.publicCodeGetRedisRspDtoList);
+      }
+    });
+  }
+
+  //获取收款账户列表
+  Future _loadTotalAccountData() async {
+    SVProgressHUD.show();
+    CardDataRepository().getCardList('getCardList').then(
+      (data) {
+        SVProgressHUD.dismiss();
+        if (data.cardList != null) {
+          // if (mounted) {
+          setState(() {
+            _totalAccoutList.clear();
+            _totalAccoutList.addAll(data.cardList);
+            RemoteBankCard card = _totalAccoutList[0];
+            _loanAccount = card.cardNo;
+          });
+        }
+      },
+    ).catchError((e) {
+      SVProgressHUD.dismiss();
+      SVProgressHUD.showInfo(status: e.toString());
+    });
+  }
+
+// loan/interestRate/queryInterestRate
+
+  @override
+  void initState() {
+    //网络请求，数据等都在这里进行创建
+    super.initState();
+    _getLoanPurposeList(); //贷款目的
+    _getLoanTimeList(); //获取贷款期限
+    _loadTotalAccountData(); //获取贷款账户列表
+    _getLoanRepayTypeList(); //获取还款方式
+
+    focusnode.addListener(() {
+      if (focusnode.hasFocus) {
+        //得到焦点
+        String text = _recipientsController.text;
+        int length = text.length;
+
+        RegExp postalcode = new RegExp(r'^(0\d)');
+        if (postalcode.hasMatch(text)) {
+          _recipientsController.text = text.substring(1);
+          _recipientsController.selection = TextSelection.collapsed(
+              offset: _recipientsController.text.length);
+        }
+        if (double.parse(_recipientsController.text) > max) {
+          _recipientsController.text = formatDouble(max, 2);
+          _recipientsController.selection = TextSelection.collapsed(
+              offset: _recipientsController.text.length);
+        }
+      } else {
+        //失去焦点 去请求接口并计算
+        checkInputValueAndRate();
+        _loadQueryIntereRateData();
+      }
+    });
+  }
+
+  //贷款领用界面查询客户授信额度信息的接口
+
+//先去请求/loan/contracts/getCreditlimitByCust  拿到iratCd1 参数，再去请求利率接口拿到利率和还款计划
+  Future _loadQueryIntereRateData() async {
+    var req = LoanGetCreditlimitReq(
+      '',
+      '',
+      accountInfo.lmtNo,
+      'L',
+    );
+    LoanDataRepository()
+        .loanCreditlimitInterface(req, 'getCreditlimitByCust')
+        .then((data) {
+      if (data.getCreditlimitByCusteDTOList != null) {
+        //判断数据不为空
+        if (mounted) {
+          setState(() {
+            GetCreditlimitByCusteDTOList custcd =
+                data.getCreditlimitByCusteDTOList[0];
+            print('========custcd.iratCd1');
+            iratCd1 = custcd.iratCd1 != '' ? custcd.iratCd1 : 'E11';
+            checkInputValueAndRate(); //利率判断
+          });
+        }
+      }
+    }).catchError((e) {
+      SVProgressHUD.dismiss();
+      SVProgressHUD.showInfo(status: e.toString());
+    });
+  }
+
+//获取当前的利率
+  Future<void> _loadGrossCalculationData() async {
+    var req = LoanIntereRateReq(
+        accountInfo.bookBr, accountInfo.ccy, iratCd1, _mothCode);
+    SVProgressHUD.show();
+    ForexTradingRepository()
+        .loanGetRateInterface(req, 'getInterstRate')
+        .then((data) {
+      SVProgressHUD.dismiss();
+      //获取利率在去进行试算
+      // if (mounted) {
+      //   setState(() {
+      //     // interestRate = data.interestRate.toString();
+      //     // _loadTrialDate(); //拿到利率进行失算
+      //   });
+      //   print('============data.interestRate');
+      // }
+    }).catchError((e) {
+      print(e.toString());
+      SVProgressHUD.dismiss();
+      SVProgressHUD.showInfo(status: e.toString());
+    });
+  }
+
+//领用试算的接口
+  Future _loadTrialDate() async {
+    var req = LoanTrailReq(
+      accountInfo.ccy, //货币
+      '1', //频率 还款周期
+      'M', //频率单位
+      _reimburseStr, //还款方式
+      double.parse(_recipientsController.text), //贷款本金
+      double.parse(interestRate), //贷款利率
+      // '',//指定还款日
+      _dateCode, //总期数
+      // '',//起息日
+    );
+    LoanDataRepository()
+        .loanPilotComputingInterface(req, 'loanTrial')
+        .then((data) {
+      if (data.loanTrialDTOList != null) {}
+    }).catchError((e) {
+      SVProgressHUD.dismiss();
+      SVProgressHUD.showInfo(status: e.toString());
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    //释放
+    focusnode.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    LoanAccountDOList accountInfo = ModalRoute.of(context).settings.arguments;
+    this.accountInfo = accountInfo;
+    max = double.parse(accountInfo.bal); //保存可使用的额度
+
     return Scaffold(
         //防止挤压溢出
         //resizeToAvoidBottomPadding: false,
@@ -46,9 +276,13 @@ class _LoanReferenceState extends State<LoanReference> {
                 child: Column(
                   children: [
                     Container(
+                      //可用额度
                       width: MediaQuery.of(context).size.width,
                       child: Text(
-                        '可借款额度 CNY800.00',
+                        S.current.loan_detail_available_amount +
+                            ' ' +
+                            accountInfo.ccy +
+                            accountInfo.bal,
                         textAlign: TextAlign.left,
                         style:
                             TextStyle(color: Color(0xFF262626), fontSize: 15),
@@ -73,6 +307,8 @@ class _LoanReferenceState extends State<LoanReference> {
                             width: MediaQuery.of(context).size.width / 1.5,
                             height: 60,
                             child: TextField(
+                              focusNode: focusnode,
+                              controller: _recipientsController, //绑定属性关系
                               style: TextStyle(
                                 fontSize: 24,
                                 color: HsgColors.firstDegreeText,
@@ -122,7 +358,10 @@ class _LoanReferenceState extends State<LoanReference> {
                     //借款期限
                     Container(
                         child: selectInkWellToBlackTitle(
-                            '借款期限', _deadLine, onClink())),
+                            S.current.loan_Borrowing_Period,
+                            _deadLine,
+                            _select(S.current.loan_Borrowing_Period,
+                                _deadLineLists, 0))),
                     Divider(
                       height: 0,
                     ),
@@ -131,7 +370,7 @@ class _LoanReferenceState extends State<LoanReference> {
                       width: MediaQuery.of(context).size.width,
                       color: Colors.white,
                       child: Text(
-                        '可提前还款，利息按天计算，免手续费',
+                        S.current.loan_Borrowing_description,
                         textAlign: TextAlign.left,
                         style:
                             TextStyle(color: Color(0xFF9C9C9C), fontSize: 13),
@@ -148,21 +387,22 @@ class _LoanReferenceState extends State<LoanReference> {
                 ),
                 child: Column(
                   children: [
-                    //借款期限
+                    //还款方式
                     Container(
                         //  color: Colors.white,
                         child: selectInkWellToBlackTitle(
-                      '还款方式',
-                      _deadLine,
-                      onClink,
+                      S.current.repayment_ways,
+                      _reimburseStr,
+                      _select(S.current.repayment_ways, _reimburseTypeLists, 2),
                     )),
                     Divider(
                       height: 0,
                     ),
                     Container(
+                        //还款计划
                         color: Colors.white,
                         child: selectInkWellToBlackTitle(
-                          '还款计划',
+                          S.current.repayment_plan,
                           _deadLine,
                           onClink(),
                         )),
@@ -177,14 +417,15 @@ class _LoanReferenceState extends State<LoanReference> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            child: Text('总利息',
+                            //总利息
+                            child: Text(S.current.loan_Total_Interest,
                                 style: TextStyle(
                                     fontSize: 14.5,
                                     fontWeight: FontWeight.bold)),
                           ),
                           Container(
                             child: Text(
-                              '261.88',
+                              _totalInterest,
                               style: TextStyle(color: Color(0xFF9C9C9C)),
                             ),
                           )
@@ -198,53 +439,34 @@ class _LoanReferenceState extends State<LoanReference> {
                 margin: EdgeInsets.fromLTRB(15, 16, 15, 13),
                 child: Column(
                   children: [
-                    //借款期限
+                    //收款账户
                     Container(
                       padding: EdgeInsets.only(left: 20),
                     ),
                     Container(
                       child: Column(
                         children: [
-                          //借款期限
+                          //收款账户
                           Container(
                             // padding: EdgeInsets.only(left: 20),
                             color: Colors.white,
-                            child:
-                                // SelectInkWell(
-                                //   title: '收款账户',
-                                //   item: _deadLine,
-                                //   onTap: () {
-                                //     // FocusScope.of(context).requestFocus(FocusNode());
-                                //     // _select(S.current.loan_duration, _deadLineLists, 0);
-                                //   },
-                                // ),
-                                selectInkWellToBlackTitle(
-                                    '收款账户', _deadLine, onClink()),
+                            child: selectInkWellToBlackTitle(
+                                S.current.transfer_to_account,
+                                _loanAccount,
+                                _selectAccount()),
                           ),
-                          Divider(
-                            height: 0,
-                          ),
-                          // Container(
-                          //   color: Colors.white,
-                          //   child: SelectInkWell(
-                          //     title: '收款账户',
-                          //     item: _deadLine,
-                          //     onTap: () {
-                          //       // FocusScope.of(context).requestFocus(FocusNode());
-                          //       // _select(S.current.loan_duration, _deadLineLists, 0);
-                          //     },
-                          //   ),
-                          // ),
+
                           Divider(
                             height: 0,
                           ),
                           Container(
+                              //借款用途
                               color: Colors.white,
                               child: selectInkWellToBlackTitle(
-                                '借款用途',
-                                _deadLine,
-                                onClink(),
-                              )),
+                                  S.current.loan_Borrowing_Purposes,
+                                  _goal,
+                                  _select(S.current.loan_Borrowing_Purposes,
+                                      _goalLists, 1))),
                         ],
                       ),
                     ),
@@ -257,24 +479,15 @@ class _LoanReferenceState extends State<LoanReference> {
                       ),
                     ),
                     //完成按钮
-
-                    CustomButton(
+                    Container(
+                      //申请按钮
                       margin: EdgeInsets.only(
                           left: 37.5, right: 37.5, bottom: 50, top: 10),
-                      height: 50,
-                      text: Text(
-                        S.current.complete,
-                        style: TextStyle(fontSize: 14, color: Colors.white),
+                      child: HsgButton.button(
+                        title: S.current.apply,
+                        click: _isButton ? _openBottomSheet : null,
+                        isColor: _isButton,
                       ),
-                      // clickCallback: () {
-                      //   //  _login();
-                      // },
-                      //
-                      //
-                      clickCallback: () {
-                        //  _login();
-                        Navigator.pushNamed(context, pageLoanCollectionPreview);
-                      },
                     ),
                   ],
                 ),
@@ -285,6 +498,92 @@ class _LoanReferenceState extends State<LoanReference> {
         ));
   }
 
+//期限，用途 ，还款方式底部弹窗内容选择
+  _select(String title, List<IdType> list, int i) {
+    return () {
+      FocusScope.of(context).requestFocus(FocusNode());
+      List<String> tempList = [];
+      list.forEach((e) {
+        if (_language == 'zh_CN') {
+          tempList.add(e.cname);
+        } else {
+          tempList.add(e.name);
+        }
+      });
+      SinglePicker.showStringPicker(
+        context,
+        data: tempList,
+        title: title,
+        clickCallBack: (int index, var str) {
+          setState(() {
+            //贷款期限，贷款用途, 还款方式
+            IdType type = list[index];
+            if (i == 0) {
+              _deadLine = str;
+              _listDataMap['timeLimit'] = str; //名称
+              _requestDataMap['termUnit'] = str; //月份中文
+              _requestDataMap['termValue'] = type.code; //月份编码
+              _dateCode = type.code;
+              if (int.parse(type.code) < 10) {
+                _mothCode = 'M00' + type.code;
+              } else {
+                _mothCode = 'M0' + type.code;
+              }
+              checkInputValueAndRate(); //利率判断
+            } else if (i == 1) {
+              _goal = str;
+              _listDataMap['loanPurpose'] = str; //名称
+              _requestDataMap['loanPurpose'] = type.code; //ID
+            } else {
+              _reimburseStr = str;
+              _listDataMap['repaymentMethod'] = str; //名称
+              _requestDataMap['repaymentMethod'] = type.code; //ID
+            }
+            // _index = _index * (index + 1);
+            _checkloanIsClick();
+          });
+        },
+      );
+    };
+  }
+
+//账号弹窗
+  _selectAccount() {
+    return () async {
+      List<String> bankCards = [];
+      List<String> accounts = [];
+      List<String> ciNames = [];
+      for (RemoteBankCard cards in _totalAccoutList) {
+        //便利拿出帐号
+        bankCards.add(cards.cardNo);
+        ciNames.add((cards.ciName));
+      }
+      for (var i = 0; i < bankCards.length; i++) {
+        accounts.add(FormatUtil.formatSpace4(bankCards[i]));
+      }
+      final result = await showHsgBottomSheet(
+          context: context,
+          builder: (context) => HsgBottomSingleChoice(
+              title: S.current.transfer_to_account,
+              items: accounts,
+              lastSelectedPosition: _loanAccountIndex));
+      if (result != null && result != false) {
+        setState(() {
+          //放款
+          //返回拿到的索引值
+          _loanAccount = accounts[result];
+          _loanAccountIndex = result;
+          _listDataMap['payAcNo'] = _loanAccount;
+          _requestDataMap['payAcNo'] = _loanAccount;
+          _checkloanIsClick(); //校验按钮
+        });
+      } else {
+        return;
+      }
+    };
+  }
+
+//选项弹窗
   Widget selectInkWellToBlackTitle(
     String title,
     String item,
@@ -293,12 +592,13 @@ class _LoanReferenceState extends State<LoanReference> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        // height: 50,
-        padding: EdgeInsets.fromLTRB(0, 15, 0, title == '收款账户' ? 5 : 15),
+        padding: EdgeInsets.fromLTRB(
+            0, 15, 0, title == S.current.transfer_to_account ? 5 : 15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
+              //左侧文本
               padding: EdgeInsets.only(left: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -312,11 +612,14 @@ class _LoanReferenceState extends State<LoanReference> {
                     ),
                   ),
                   Container(
-                    child: title == '收款账户'
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: title == S.current.transfer_to_account
                         ? Text(
-                            '预计两小时内到账',
+                            S.current.loan_Estimated_time_account,
                             style: TextStyle(
                                 fontSize: 13, color: HsgColors.describeText),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
                           )
                         : Container(),
                   ),
@@ -324,16 +627,29 @@ class _LoanReferenceState extends State<LoanReference> {
               ),
             ),
             Row(
+              // mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Padding(
+                Container(
+                  //右侧文本
+                  // Padding(
+                  width: MediaQuery.of(context).size.width / 3,
                   padding: EdgeInsets.only(right: 12),
                   child: item == ''
                       ? Text(S.current.please_select,
                           style: TextStyle(color: HsgColors.textHintColor))
-                      : Text(item),
+                      : Text(
+                          item,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          textAlign: TextAlign.end,
+                        ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(right: 11),
+                  //右侧箭头
+                  padding: EdgeInsets.only(
+                    right: 5,
+                  ),
+                  // width: 20,
                   child: Image(
                     color: HsgColors.firstDegreeText,
                     image: AssetImage(
@@ -356,6 +672,7 @@ class _LoanReferenceState extends State<LoanReference> {
       onTap: () {
         setState(() {
           _checkBoxValue = !_checkBoxValue;
+          _checkloanIsClick();
         });
         //_submit();
       },
@@ -384,17 +701,17 @@ class _LoanReferenceState extends State<LoanReference> {
         text: TextSpan(
           children: <TextSpan>[
             TextSpan(
-              text: '本人已阅读并同意签署',
+              text: S.current.loan_application_agreement1,
               style: AGREEMENT_TEXT_STYLE,
             ),
-            _conetentJump('《个人消费贷款合同》', '98822'),
+            _conetentJump(S.current.loan_recipients_agreement1, '98822'),
             TextSpan(
               text: S.current.loan_application_agreement3,
               style: AGREEMENT_TEXT_STYLE,
             ),
-            _conetentJump('《个人信用报告查询授权书》', '99868'),
+            _conetentJump(S.current.loan_recipients_agreement2, '99868'),
             TextSpan(
-              text: '同意报送贷款相关信息至金融信用信息基础数据库（人行征信系统）',
+              text: S.current.loan_recipients_agreement3,
               style: AGREEMENT_TEXT_STYLE,
             ),
           ],
@@ -415,5 +732,67 @@ class _LoanReferenceState extends State<LoanReference> {
     );
   }
 
-  onClink() {}
+//判断按钮能否使用
+  _checkloanIsClick() {
+    if (_checkBoxValue &&
+        _recipientsController.text != '' &&
+        _deadLine != '' &&
+        _goal != '' &&
+        _loanAccount != '' &&
+        _reimburseStr != '') {
+      return setState(() {
+        _isButton = true;
+      });
+    } else {
+      setState(() {
+        _isButton = false;
+      });
+    }
+  }
+
+  onClink() {
+    return () {
+      print('来到了这里');
+    };
+  }
+
+  _openBottomSheet() {
+    //需要传值
+    _listDataMap["totalInterst"] = '100'; //总利息
+    _listDataMap["price"] = _recipientsController.text; //金额
+    _listDataMap["repayPlan"] = '首期24，还款1000元'; //计划
+    _listDataMap["availableCredit"] = '首期24，还款1000元'; //可借款额度
+
+    _requestDataMap["totalInterst"] = '100'; //总利息
+    _requestDataMap["price"] = _recipientsController.text; //金额
+    _listDataMap["repayPlan"] = '12'; //计划
+    _listDataMap["availableCredit"] = 'USD 10000'; //可用额度
+
+    Map dataList = {'reviewList': _listDataMap, 'requestList': _requestDataMap};
+
+    Navigator.pushNamed(context, pageLoanCollectionPreview,
+        arguments: dataList);
+  }
+
+//直接删除多余的小数(不四舍五入、向上或向下)
+  static formatDouble(double num, int postion) {
+    if ((num.toString().length - num.toString().lastIndexOf(".") - 1) <
+        postion) {
+      //小数点后有几位小数
+      return num.toStringAsFixed(postion)
+          .substring(0, num.toString().lastIndexOf(".") + postion + 1)
+          .toString();
+    } else {
+      return num.toString()
+          .substring(0, num.toString().lastIndexOf(".") + postion + 1)
+          .toString();
+    }
+  }
+
+  void checkInputValueAndRate() {
+    if (iratCd1 != '' && _mothCode != '' && _recipientsController.text != '') {
+      //调用试算的接口
+      _loadGrossCalculationData();
+    }
+  }
 }

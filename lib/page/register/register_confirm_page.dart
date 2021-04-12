@@ -9,6 +9,7 @@ import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -81,10 +82,26 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                     '${S.current.welcome_to_register}-${S.current.please_input_password}'),
                 //输入新密码
                 getRegisterRow(
-                    S.of(context).password_need_num, _newPassword, true),
+                  S.of(context).password_need_num,
+                  _newPassword,
+                  true,
+                  <TextInputFormatter>[
+                    LengthLimitingTextInputFormatter(16),
+                    FilteringTextInputFormatter.allow(RegExp(
+                        "[a-zA-Z0-9,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
+                  ],
+                ),
                 //再次输入密码
                 getRegisterRow(
-                    S.current.placeConfimPwd, _confirmPassword, true),
+                  S.current.placeConfimPwd,
+                  _confirmPassword,
+                  true,
+                  <TextInputFormatter>[
+                    LengthLimitingTextInputFormatter(16),
+                    FilteringTextInputFormatter.allow(RegExp(
+                        "[a-zA-Z0-9,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
+                  ],
+                ),
                 //下一步
                 Container(
                   width: MediaQuery.of(context).size.width,
@@ -117,43 +134,37 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                             //textDirection: Colors.white,
                           ),
                           onPressed: _submit()
-                              ? () async {
-                                  final prefs =
-                                      await SharedPreferences.getInstance();
+                              ? () {
+                                  // final prefs =
+                                  //     await SharedPreferences.getInstance();
 
-                                  // String userName =
-                                  //     prefs.getString(ConfigKey.USER_ID);
-
-                                  // print(userName + "userName");
                                   //特殊字符
                                   RegExp characters = new RegExp(
                                       "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
-                                  RegExp letter = new RegExp("[a-zA-Z]");
+                                  RegExp letter = new RegExp("[A-Z]");
+                                  RegExp minAZ = new RegExp("[a-z]");
                                   RegExp number = new RegExp("[0-9]");
                                   if ((_newPassword.text !=
                                       _confirmPassword.text)) {
                                     Fluttertoast.showToast(
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.CENTER,
-                                        timeInSecForIosWeb: 1,
-                                        msg: S.of(context).differentPwd);
-                                  } else if (characters
-                                              .hasMatch(_newPassword.text) ==
+                                      gravity: ToastGravity.CENTER,
+                                      msg: S.of(context).differentPwd,
+                                    );
+                                  } else if (number.hasMatch(
+                                              _newPassword.text) ==
                                           false ||
                                       letter.hasMatch(_newPassword.text) ==
                                           false ||
-                                      number.hasMatch(_newPassword.text) ==
+                                      characters.hasMatch(_newPassword.text) ==
                                           false ||
-                                      ((_newPassword.text)
-                                              .contains(_registerAccount) ==
-                                          true) ||
-                                      (_newPassword.text.length < 8 ||
-                                          _newPassword.text.length > 16)) {
+                                      minAZ.hasMatch(_newPassword.text) ==
+                                          false ||
+                                      ((_newPassword.text).length < 8 ||
+                                          (_newPassword.text).length > 16)) {
                                     Fluttertoast.showToast(
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.CENTER,
-                                        timeInSecForIosWeb: 1,
-                                        msg: S.current.password_need_num);
+                                      msg: S.current.password_need_num,
+                                      gravity: ToastGravity.CENTER,
+                                    );
                                   } else {
                                     _registerByAccount();
                                   }
@@ -206,9 +217,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
     });
   }

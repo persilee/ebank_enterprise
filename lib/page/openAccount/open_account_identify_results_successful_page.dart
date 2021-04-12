@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
 /// 开户-面签结果成功页面
 /// Author: 李家伟
@@ -10,15 +13,19 @@ import 'package:ebank_mobile/data/source/model/open_account_information_suppleme
 import 'package:ebank_mobile/data/source/model/open_account_quick_data.dart';
 import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/event_bus_utils.dart';
+import 'package:ebank_mobile/util/log_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OpenAccountIdentifyResultsSuccessfulPage extends StatefulWidget {
@@ -38,6 +45,15 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
 
   ///是否是快速
   bool _isQuick;
+
+  ///大头照
+  String _headerImgUrl = '';
+
+  ///正面照
+  String _positiveImageUrl = '';
+
+  ///反面照
+  String _backImageUrl = '';
 
   @override
   Widget build(BuildContext context) {
@@ -103,11 +119,13 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
                     if (_state == 1) {
                       _quickAccountOpening();
                     } else {
-                      _openAccountQuickSubmitData();
+                      // _openAccountQuickSubmitData();
+                      _uploadImage();
                     }
                   } else {
-                    ///完整开户面签
-                    _saveSignVideoNetwork();
+                    _uploadImage();
+                    // ///完整开户面签
+                    // _saveSignVideoNetwork();
                   }
                 },
               ),
@@ -145,7 +163,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
 
   ///完整开户面签成功弹窗提示
   void _showTypeTipsForFaceSign(BuildContext context) {
-    HsgShowTip.openAccountSuccessfulTip(
+    HsgShowTip.faceSignSuccessfulTip(
       context,
       (value) {
         Navigator.of(context).pushAndRemoveUntil(
@@ -166,6 +184,57 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     );
   }
 
+  void _uploadImage() async {
+    HSProgressHUD.show();
+    try {
+      if (_valueData.headerImg != null && _valueData.headerImg != '') {
+        Uint8List _bytes = base64Decode(
+          _valueData.headerImg,
+        );
+        Map response =
+            await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
+        _headerImgUrl = response['incompleteUrl'] ?? '';
+      }
+      // print('<><><> ${_valueData.positiveImage}');
+      // debugPrint('<><><>1 ${_valueData.positiveImage}',
+      //     wrapWidth: _valueData.positiveImage.length);
+      // LogUtil.v('<><><> ${_valueData.positiveImage}');
+      if (_valueData.positiveImage != null && _valueData.positiveImage != '') {
+        String positiveImageBase64 =
+            _valueData.positiveImage.replaceAll('\n', '');
+        positiveImageBase64 = positiveImageBase64.replaceAll('\\n', '');
+        Uint8List _bytes = base64Decode(
+          positiveImageBase64,
+        );
+        Map response =
+            await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
+        _positiveImageUrl = response['incompleteUrl'] ?? '';
+      }
+      if (_valueData.backImage != null && _valueData.backImage != '') {
+        String backImageBase64 = _valueData.backImage.replaceAll('\n', '');
+        backImageBase64 = backImageBase64.replaceAll('\\n', '');
+        Uint8List _bytes = base64Decode(
+          backImageBase64,
+        );
+        Map response =
+            await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
+        _backImageUrl = response['incompleteUrl'] ?? '';
+      }
+      HSProgressHUD.dismiss();
+      if (_isQuick) {
+        _openAccountQuickSubmitData();
+      } else {
+        _saveSignVideoNetwork();
+      }
+    } catch (e) {
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
+    }
+  }
+
   //面签数据补录
   void _openAccountQuickSubmitData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -180,7 +249,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         print(value);
         HSProgressHUD.dismiss();
         _state = value.state;
-        if (value.state == 1) {
+        if (value.state > 0) {
           ///成功，前往调用通知开户接口
           _quickAccountOpening();
         } else {}
@@ -232,17 +301,44 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     final prefs = await SharedPreferences.getInstance();
     String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
 
+    // String businessId = _valueData.businessId ?? '';
+    // String fileName = _valueData.fileName ?? '';
+    // String idNo = '';
+    // if (_valueData.certificateType == '1') {
+    //   InfoStrForCN infoStr = _valueData.infoStr;
+    //   idNo = infoStr.idNum ?? '';
+    // } else if (_valueData.certificateType == '2') {
+    //   InfoStrForHK infoStr = _valueData.infoStr;
+    //   idNo = infoStr.idNum ?? '';
+    // } else {
+    //   InfoStrForPassport infoStr = _valueData.infoStr;
+    //   idNo = infoStr.idNum ?? '';
+    // }
+    // String certificateType = _valueData.certificateType ?? '';
+    // List<SpeechFlowData> speechFlowData = _valueData.speechFlowData;
+
+    // List<SpeechFlowDataHS> speechFlowDataHSList = [];
+    // speechFlowData.forEach((element) {
+    //   SpeechFlowDataHS speechFlowDataHS = SpeechFlowDataHS(
+    //     element.problem,
+    //     element.timer,
+    //     element.answerArr.length > 0
+    //         ? element.answerArr[element.answerArr.length - 1]
+    //         : '',
+    //   );
+    //   speechFlowDataHSList.add(speechFlowDataHS);
+    // });
+
+    // FaceSignUploadDataReq dataReq = FaceSignUploadDataReq(businessId, fileName,
+    //     phoneStr, certificateType, idNo, speechFlowDataHSList);
+
+    OpenAccountInformationSupplementDataReq dataReq = _getDataReq(phoneStr);
     HSProgressHUD.show();
-    String businessId = _valueData.businessId;
-    String fileName = _valueData.fileName;
-    List speechFlowData = _valueData.speechFlowData;
-    FaceSignUploadDataReq dataReq =
-        FaceSignUploadDataReq(businessId, fileName, phoneStr, speechFlowData);
     OpenAccountRepository().saveSignVideo(dataReq, 'saveSignVideo').then(
       (value) {
         print(value);
         HSProgressHUD.dismiss();
-        if (value.state == '1') {
+        if (value.state > 0) {
           _showTypeTipsForFaceSign(context);
         }
       },
@@ -271,17 +367,47 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     OpenAccountInformationSupplementDataReq dataReq =
         OpenAccountInformationSupplementDataReq();
     // dataReq = OpenAccountInformationSupplementDataReq.fromJson(valueMap);
-    dataReq.headerPic = 'headerPic'; //_valueData.headerImg;
-    dataReq.idPic = 'idPic'; //_valueData.positiveImage;
-    dataReq.idPicBack = 'idPicBack'; //_valueData.backImage;
+    dataReq.headerPic = _headerImgUrl; //_valueData.headerImg;
+    dataReq.idPic = _positiveImageUrl; //_valueData.positiveImage;
+    dataReq.idPicBack = _backImageUrl; //_valueData.backImage;
     dataReq.phone = phoneStr;
     dataReq.businessId = businessId;
     dataReq.certificateType = _valueData.certificateType;
     // dataReq.compareImageData = _valueData.compareImageData;
     dataReq.tenantId = _valueData.tenantId;
     dataReq.videoUrl = _valueData.videoUrl;
+    dataReq.fileName = _valueData.fileName;
 
     dataReq.isSuccess = _valueData.isSuccess == true ? '1' : '0';
+
+    List<SpeechFlowData> speechFlowData = _valueData.speechFlowData;
+
+    List<SignSpeakDTO> signSpeakList = [];
+    if (speechFlowData != null) {
+      speechFlowData.forEach((element) {
+        String timeStr = element.timer;
+        // var format = new DateFormat('yyyy-MM-dd');
+        // int timeInt = element.timer.length == 10
+        //     ? int.parse(element.timer) * 1000
+        //     : int.parse(element.timer);
+        // if (timeInt != 0) {
+        //   var date = new DateTime.fromMillisecondsSinceEpoch(timeInt);
+        //   timeStr = format.format(date);
+        // }
+
+        SignSpeakDTO speechFlowDataHS = SignSpeakDTO(
+          element.problem,
+          timeStr,
+          element.answerArr != null
+              ? element.answerArr.length > 0
+                  ? element.answerArr[element.answerArr.length - 1]
+                  : ''
+              : '',
+        );
+        signSpeakList.add(speechFlowDataHS);
+      });
+    }
+    dataReq.speakings = signSpeakList;
 
     // Map infoStrForMap = jsonDecode(_valueData.infoStr);
 

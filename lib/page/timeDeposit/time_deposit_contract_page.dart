@@ -21,6 +21,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/money_text_input_formatter.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -55,7 +56,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String ccy = '';
   String rate = '0';
   String matAmt = '0.00';
-  List<RemoteBankCard> cards = [];
+  List<String> cards = [];
   RemoteBankCard card;
   String custID;
   String _cardCcy = '';
@@ -309,11 +310,15 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         margin: EdgeInsets.only(left: 20),
         child: TextField(
           controller: inputValue,
-          autocorrect: false,
+          autocorrect: true,
           autofocus: false,
           style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 18.0),
           inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+            LengthLimitingTextInputFormatter(12),
+            FilteringTextInputFormatter.allow(
+              RegExp("[0-9.]"),
+            ),
+            MoneyTextInputFormatter(),
           ],
           onChanged: (value) {
             double.parse(value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
@@ -432,6 +437,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       color: Colors.white,
       child: FlatButton(
         onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
           _selectAccount(context);
         },
         child: Row(
@@ -452,6 +458,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       color: Colors.white,
       child: FlatButton(
         onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
           _selectCcy(context);
         },
         child: Row(
@@ -472,6 +479,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       color: Colors.white,
       child: FlatButton(
         onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
           _selectSettAc(context);
         },
         child: Row(
@@ -492,6 +500,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       color: Colors.white,
       child: FlatButton(
         onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
           _selectInstruction(context);
         },
         child: Row(
@@ -581,15 +590,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
 //付款账户弹窗
   _selectAccount(BuildContext context) async {
-    List<String> bankCards = [];
     List<String> accounts = [];
-    List<String> ciNames = [];
-    for (RemoteBankCard card in cards) {
-      bankCards.add(card.cardNo);
-      ciNames.add((card.ciName));
-    }
-    for (var i = 0; i < bankCards.length; i++) {
-      accounts.add(FormatUtil.formatSpace4(bankCards[i]));
+    for (var i = 0; i < cards.length; i++) {
+      accounts.add(FormatUtil.formatSpace4(cards[i]));
     }
     final result = await showHsgBottomSheet(
         context: context,
@@ -631,15 +634,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
 //结算账户弹窗
   _selectSettAc(BuildContext context) async {
-    List<String> bankCards = [];
     List<String> accounts = [];
-    List<String> ciNames = [];
-    for (RemoteBankCard card in cards) {
-      bankCards.add(card.cardNo);
-      ciNames.add((card.ciName));
-    }
-    for (var i = 0; i < bankCards.length; i++) {
-      accounts.add(FormatUtil.formatSpace4(bankCards[i]));
+    for (var i = 0; i < cards.length; i++) {
+      accounts.add(FormatUtil.formatSpace4(cards[i]));
     }
     final result = await showHsgBottomSheet(
         context: context,
@@ -679,6 +676,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     }
   }
 
+//判断是否可以点击
   _ifClick() {
     if (matAmt == '0.00' ||
         _changedTermBtnTiTle == S.current.hint_please_select ||
@@ -718,9 +716,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                   if (double.parse(_cardBal) < double.parse(_checkAmount)) {
                     Fluttertoast.showToast(
                       msg: S.current.tdContract_balance_insufficient,
-                      toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.CENTER,
-                      timeInSecForIosWeb: 1,
                     );
                   } else {
                     _loadContractData(
@@ -808,16 +804,24 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           if (this.mounted) {
             setState(() {
               cards.clear();
-              cards.addAll(data.cardList);
-              _changedAccountTitle = FormatUtil.formatSpace4(cards[0].cardNo);
-              _getCardBal(
-                  cards[0].cardNo.replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
+              // cards.addAll(data.cardList);
+              data.cardList.forEach((element) {
+                bool isContainer = cards.contains(element.cardNo);
+                if (!isContainer) {
+                  cards.add(element.cardNo);
+                }
+              });
+              _changedAccountTitle = FormatUtil.formatSpace4(cards[0]);
+              _getCardBal(cards[0].replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
             });
           }
         }
       },
     ).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -836,6 +840,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       _amount = FormatUtil.formatSringToMoney((inputValue.text).toString());
     } else {
       _payerAmount = AiDecimalAccuracy.parse(inputValue.text).toDouble();
+
       ForexTradingRepository()
           .transferTrial(
               TransferTrialReq(
@@ -848,6 +853,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             _checkAmount = data.optExAmt;
           });
         }
+      }).catchError((e) {
+        Fluttertoast.showToast(
+          msg: "${e.toString()}",
+          gravity: ToastGravity.CENTER,
+        );
       });
     }
   }
@@ -966,6 +976,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     }
   }
 
+//定期开立试算
   Future<void> _loadDepositData(
       String accuPeriod,
       String auctCale,
@@ -987,7 +998,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -1001,8 +1015,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         if (this.mounted) {
           setState(() {
             // if (_cardBal == '' || _cardCcy == S.current.hint_please_select) {
-            _cardBal = element.cardListBal[0].currBal;
-            _cardCcy = element.cardListBal[0].ccy;
+            if (element.cardListBal.length > 0) {
+              _cardBal = element.cardListBal[0].currBal;
+              _cardCcy = element.cardListBal[0].ccy;
+            }
             // }
             _cardBalList.clear();
             _cardCcyList.clear();
@@ -1015,7 +1031,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         }
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -1039,10 +1058,14 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
+  //立即存入接口
   Future<void> _loadContractData(
       String accuPeriod,
       String annualInterestRate,
@@ -1063,7 +1086,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       setState(() {});
     }
     HSProgressHUD.show();
-
+    print('accuPeriod===$accuPeriod');
     TimeDepositDataRepository()
         .getTimeDepositContract(
             TimeDepositContractReq(
@@ -1096,12 +1119,18 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         setState(() {});
       }
       HSProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
   //获取定期产品利率和存期
   Future _getTdProdTermRate() async {
+    print('productListCCy   +  ${productList.ccy}');
+    print('productList.bppdCode   +  ${productList.bppdCode}');
+
     if (this.mounted) {
       setState(() {});
     }
@@ -1136,7 +1165,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       }
     }).catchError((e) {
       HSProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 }

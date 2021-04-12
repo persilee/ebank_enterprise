@@ -11,6 +11,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -83,7 +84,16 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                   getRegisterTitle(
                       '${S.current.fotget_password}-${S.current.placeIdNumber}'),
                   //姓名
-                  getRegisterRow(S.current.please_input_name, _userName, false),
+                  getRegisterRow(
+                    S.current.please_input_name,
+                    _userName,
+                    false,
+                    <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(
+                          RegExp("[a-zA-Z0-9]|[\u4e00-\u9fa5]")),
+                      LengthLimitingTextInputFormatter(16),
+                    ],
+                  ),
                   //  证件类型
                   Container(
                     margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
@@ -129,7 +139,14 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                   ),
                   //证件号码
                   getRegisterRow(
-                      S.current.placeIdNumber, _cardNumber, false), //确定按钮
+                    S.current.placeIdNumber,
+                    _cardNumber,
+                    false,
+                    <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                      LengthLimitingTextInputFormatter(16),
+                    ],
+                  ), //确定按钮
                   //按钮
                   Container(
                     decoration: BoxDecoration(
@@ -177,9 +194,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
     });
   }
@@ -220,7 +235,10 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
     print('$_cardNumberListen>>>>>>>>>>>>>>>>>');
     //调用三要素验证，成功后进入人脸识别，识别成功后进入设置密码阶段
     if (_cardNumber.text.length <= 0) {
-      Fluttertoast.showToast(msg: '请输入证件号!');
+      Fluttertoast.showToast(
+        msg: '请输入证件号!',
+        gravity: ToastGravity.CENTER,
+      );
       return;
     }
     print(_cardNumber.text +
@@ -255,9 +273,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
       print(e.toString());
     });

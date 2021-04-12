@@ -156,14 +156,14 @@ class HsgPasswordDialog extends StatelessWidget {
       passwordbox.add(
         Container(
           alignment: Alignment.center,
-          padding: EdgeInsets.only(top: 10),
+          // padding: EdgeInsets.only(top: 10),
           decoration: BoxDecoration(
             border: Border.all(color: Color(0xFFD1D1D1), width: 0.8),
           ),
           child: Text(
-            passwordList.length > i ? '*' : '',
+            passwordList.length > i ? '●' : '',
             style: TextStyle(
-              fontSize: 30,
+              fontSize: 10,
               fontWeight: FontWeight.bold,
               color: HsgColors.firstDegreeText,
             ),
@@ -256,48 +256,50 @@ class HsgPasswordDialog extends StatelessWidget {
         .verifyTransPwdNoSms(
             VerifyTransPwdNoSmsReq(payPassword), 'VerifyTransPwdNoSmsReq')
         .then((data) {
-      returnPasswordFunc(password);
-      Navigator.pop(context, true);
-      //Navigator.of(context)..pop()..pop();
-      //Navigator.pushNamed(context, resultPage);
-      if (resultPage == '') {
-        Navigator.of(context)..pop()..pop();
-      } else {
-        if (this.isDialog) {
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return HsgTextFieldDialog(
-                  areaCode: areaCodeNum != null ? areaCodeNum : '',
-                  phoneNum: phoneNum != null ? phoneNum : '',
-                  editingController: _editingController,
-                  onChanged: (value) {
-                    inputText = value;
-                    print(inputText);
-                  },
-                  confirmCallback: () {
-                    Navigator.pushNamed(context, resultPage,
-                        arguments: arguments);
-                  },
-                  sendCallback: () {
-                    print('发送验证码');
-                  },
-                );
-              });
-        } else {
-          Navigator.pushNamed(context, resultPage, arguments: arguments);
-        }
+      if (returnPasswordFunc != null) {
+        returnPasswordFunc(password);
       }
+      if (this.isDialog) {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return HsgTextFieldDialog(
+                areaCode: areaCodeNum != null ? areaCodeNum : '',
+                phoneNum: phoneNum != null ? phoneNum : '',
+                editingController: _editingController,
+                onChanged: (value) {
+                  inputText = value;
+                  print(inputText);
+                },
+                confirmCallback: () {
+                  Navigator.pushNamed(context, resultPage,
+                      arguments: arguments);
+                },
+                sendCallback: () {
+                  print('发送验证码');
+                },
+              );
+            });
+      }
+      if (resultPage == '') {
+        Navigator.pushNamed(context, resultPage, arguments: arguments);
+      }
+      Navigator.pop(context, true);
     }).catchError((e) {
+      print(e.toString());
       // if (e.toString() == 'ECUST031') {
-      //   Fluttertoast.showToast(msg: '交易密码错误！请重试');
+      //   Fluttertoast.showToast(msg: '交易密码错误！请重试',gravity: ToastGravity.CENTER,);
       // } else {
-      //   Fluttertoast.showToast(msg: '未设置交易密码！');
+      //   Fluttertoast.showToast(msg: '未设置交易密码！',gravity: ToastGravity.CENTER,);
       // }
-      Fluttertoast.showToast(msg: e.toString());
+
       passwordList.clear();
-      (context as Element).markNeedsBuild();
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
+      // (context as Element).markNeedsBuild();
     });
   }
 }

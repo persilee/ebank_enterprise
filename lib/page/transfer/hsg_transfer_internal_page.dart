@@ -15,9 +15,11 @@ import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
+import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
+import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
@@ -94,6 +96,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   var payeeNameForSelects = '';
 
   var _transferMoneyController = new TextEditingController();
+  var _focusNode = new FocusNode();
 
   var _remarkController = new TextEditingController();
 
@@ -149,22 +152,23 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   @override
   void initState() {
     super.initState();
+    _loadLocalCcy();
     _loadTransferData();
+    _actualNameReqData();
 
     _transferMoneyController.addListener(() {
-      if (_transferMoneyController.text.length == 0) {
-        _amount = '0';
-        _xRate = '-';
+      if (_transferMoneyController.text.length == 0 ||
+          _transferMoneyController.text == '0') {
+        setState(() {
+          _amount = '0';
+          _xRate = '-';
+        });
+      } else if (_transferCcy != '') {
+        _rateCalculate();
+        // _focusNode.addListener(() {
+        //   _rateCalculate();
+        // });
       }
-      // if (_payCcy == _transferCcy) {
-      //   setState(() {
-      //     _amount = _transferMoneyController.text;
-      //     _xRate = '1';
-      //   });
-      // } else {
-      //   _rateCalculate();
-      // }
-      _rateCalculate();
     });
   }
 
@@ -174,6 +178,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     _accountController.dispose();
     _remarkController.dispose();
     _transferMoneyController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -191,6 +196,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         payeeName = rowPartner.payeeName;
         payerName = rowPartner.payerName;
         check = true;
+        _boolBut();
       }
     });
     return Scaffold(
@@ -224,6 +230,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 payCcyDialog: payCcyDialog,
                 transferCcyDialog: transferCcyDialog,
                 accountDialog: _accountDialog,
+                focusNode: _focusNode,
               ),
               //收款方
               _payeeWidget(),
@@ -257,8 +264,9 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
               callback: _boolBut,
               isWidget: true,
               length: 35,
-              // isRegEXp: true,
+              isRegEXp: true,
               // regExp: _language == 'zh_CN' ? '[\u4e00-\u9fa5]' : '[a-zA-Z]',
+              regExp: '[\u4e00-\u9fa5a-zA-Z0-9 ]',
             ),
             TextFieldContainer(
               title: S.of(context).receipt_side_account,
@@ -352,21 +360,13 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     if (double.parse(_transferMoneyController.text) > double.parse(_balance)) {
       // if (double.parse(_limit) > double.parse(_balance)) {
       Fluttertoast.showToast(
-        msg: "余额不足",
-        toastLength: Toast.LENGTH_SHORT,
+        msg: S.current.tdContract_balance_insufficient,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Color(0x57272727),
-        textColor: Color(0xffffffff),
       );
       // } else {
       //   Fluttertoast.showToast(
       //     msg: "超过限额",
-      //     toastLength: Toast.LENGTH_SHORT,
       //     gravity: ToastGravity.CENTER,
-      //     timeInSecForIosWeb: 1,
-      //     backgroundColor: Color(0x57272727),
-      //     textColor: Color(0xffffffff),
       //   );
       // }
     } else {
@@ -375,12 +375,12 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         pageTransferInternalPreview,
         arguments: TransferInternalData(
           _account,
-          _amount,
-          _transferCcy,
-          _nameController.text,
-          _accountController.text,
           _transferMoneyController.text,
           _payCcy,
+          _nameController.text,
+          _accountController.text,
+          _amount,
+          _transferCcy,
           _remarkController.text,
           payeeBankCode,
           payeeName,
@@ -388,6 +388,21 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           payerName,
           _xRate,
         ),
+        // TransferInternalData(
+        //   _account,
+        //   _amount,
+        //   _transferCcy,
+        //   _nameController.text,
+        //   _accountController.text,
+        //   _transferMoneyController.text,
+        //   _payCcy,
+        //   _remarkController.text,
+        //   payeeBankCode,
+        //   payeeName,
+        //   payerBankCode,
+        //   _nameController.text ?? '',
+        //   _xRate,
+        // ),
       );
     }
   }
@@ -409,6 +424,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       setState(() {
         _transferIndex = result;
         _transferCcy = _transferCcyList[result];
+        _boolBut();
       });
       // if (_payCcy == _transferCcy) {
       //   setState(() {
@@ -500,17 +516,22 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         //通过绑定手机号查询卡列表接口POST
         if (element is GetCardListResp) {
           if (this.mounted) {
-            setState(() {
-              //付款方卡号
-              _account = element.cardList[0].cardNo;
-              element.cardList.forEach((e) {
-                _accountList.add(e.cardNo);
+            if (element != null &&
+                element.cardList != null &&
+                element.cardList.length > 0) {
+              setState(() {
+                //付款方卡号
+                _account = element.cardList[0].cardNo;
+                payerBankCode = payeeBankCode = element.cardList[0].bankCode;
+                element.cardList.forEach((e) {
+                  _accountList.add(e.cardNo);
+                });
               });
-            });
+            }
           }
           // _getCardTotal(_account);
           _loadData(_account);
-          _loadLocalCcy();
+          // _loadLocalCcy();
           // _payCcyList.clear();
           // _payCcy = _localeCcy;
           // _payCcyList.add(_localeCcy);
@@ -567,7 +588,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
             _balance = _balanceList[0];
             _payIndex = 0;
           }
-          _getTransferCcySamePayCcy();
+          // _getTransferCcySamePayCcy();
           _rateCalculate();
         });
       }
@@ -721,6 +742,23 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     }
   }
 
+  //获取用户真实姓名
+  Future<void> _actualNameReqData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+    UserDataRepository()
+        .getUserInfo(GetUserInfoReq(userID), "getUserInfo")
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          payerName = data.actualName;
+        });
+      }
+    }).catchError((e) {
+      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+    });
+  }
+
   //获取验证码接口
   _getVerificationCode() async {
     // RegExp characters = new RegExp("^1[3|4|5|7|8][0-9]{9}");
@@ -730,7 +768,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     HSProgressHUD.show();
     VerificationCodeRepository()
         .sendSmsByPhone(
-            SendSmsByPhoneNumberReq('13411111111', 'transactionPwd'), 'sendSms')
+            SendSmsByPhoneNumberReq('', '13411111111', 'transactionPwd', ''),
+            'sendSms')
         .then((data) {
       // _startCountdown();
       setState(() {
@@ -738,7 +777,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
       });
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      ///  Fluttertoast.showToast(msg: e.toString());
+      ///  Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
       HSProgressHUD.dismiss();
     });
     // }
@@ -770,7 +809,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 //付款方卡号
                 cardNo,
                 //付款方姓名
-                payerName,
+                _nameController.text ?? '',
                 //附言
                 remark,
                 //验证码

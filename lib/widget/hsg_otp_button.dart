@@ -67,17 +67,17 @@ class _HSGOTPButtonState extends State<HSGOTPButton> {
           //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
           // )
           .sendSmsByPhone(
-              SendSmsByPhoneNumberReq(
-                userPhone,
-                widget.smsType,
-              ),
+              SendSmsByPhoneNumberReq('', userPhone, widget.smsType, ''),
               'sendSms')
           .then((data) {
         _startCountdown();
         setState(() {});
         HSProgressHUD.dismiss();
       }).catchError((e) {
-        Fluttertoast.showToast(msg: e.toString());
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
         HSProgressHUD.dismiss();
       });
     }

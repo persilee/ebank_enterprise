@@ -28,7 +28,7 @@ class TransferOrderData {
 
   int feeAmount;
 
-  String frequency;
+  Map frequency;
 
   String midBankSwift;
 
@@ -64,6 +64,10 @@ class TransferOrderData {
 
   String transferType;
 
+  String transferIntoAmount;
+
+  String xRate;
+
   TransferOrderData(
     this.amount,
     this.availableBalance,
@@ -95,5 +99,7 @@ class TransferOrderData {
     this.smsCode,
     this.startDate,
     this.transferType,
+    this.transferIntoAmount,
+    this.xRate,
   );
 }

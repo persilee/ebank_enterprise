@@ -2,7 +2,7 @@
 /// 意见反馈的对象
 /// Author: hlx
 /// Date: 2020-12-02
-/// 
+///
 import 'package:json_annotation/json_annotation.dart';
 
 part 'getFeedback.g.dart';
@@ -31,6 +31,7 @@ class GetFeedBackReq {
   String toString() {
     return toJson().toString();
   }
+
   factory GetFeedBackReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetFeedBackReqFromJson(srcJson);
 

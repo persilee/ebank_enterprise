@@ -4,10 +4,6 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>.DS_Store</key>
-		<data>
-		frrs6vtJW6hOz1tzx9RJm5T2KBg=
-		</data>
 		<key>Headers/SECertificationDataModel.h</key>
 		<data>
 		qGFJJqsGeATAXsAEMbhE0isZqVQ=
@@ -78,35 +74,35 @@
 		</data>
 		<key>More.storyboardc/PlaybackController.nib</key>
 		<data>
-		3Kr5HTtikYs7mpMU6zhYxZbhiS8=
+		SVtmr3d+kATYTOIFl/uhNHrx1Yw=
 		</data>
 		<key>More.storyboardc/RemoteController.nib</key>
 		<data>
-		RgqhDcw6RoyFw5h1yyRMhjRAB08=
+		7wtzP2VzwMuboC9TWkY/W2na5DQ=
 		</data>
 		<key>More.storyboardc/UploadController.nib</key>
 		<data>
-		F0D3mP6rUFQkPzhea6+CTkEG8Uc=
+		HPuxKfxLispHl11biynidNZogCA=
 		</data>
 		<key>More.storyboardc/YouSelfController.nib</key>
 		<data>
-		U3vc8U7JoRmpl5i3rUe18CDa3FA=
+		rAoNoTVbl8J2x9TxTZI3LXkAM4g=
 		</data>
 		<key>More.storyboardc/Zyi-Rc-fZK-view-fWT-Go-nzM.nib</key>
 		<data>
-		oiU6pcuwu76+JIgHWMPqRkKOB/w=
+		+LUNhryAG3valksStInu06UB7b8=
 		</data>
 		<key>More.storyboardc/c35-H3-39c-view-Sa6-RT-F88.nib</key>
 		<data>
-		9AqDYsQ8T33J+Fa+rON3y5ajy6Q=
+		UNjlM/jlOb7rtKfQdPupBevFlNE=
 		</data>
 		<key>More.storyboardc/eJ6-lR-MsV-view-SuG-eX-V8U.nib</key>
 		<data>
-		7pEI+VYoXb9n+ZvM5nIUvskx4Ms=
+		zAIl9sF4c+0jTGVPIUM5lg6QNjM=
 		</data>
 		<key>More.storyboardc/jqZ-wd-Nkf-view-p23-pq-XHi.nib</key>
 		<data>
-		6JOyW4EorTSHSVdGCK2cMN8+xsM=
+		VGCtEs9IOVlMBGMc6R5iYAwyWow=
 		</data>
 		<key>SigningResources.bundle/Info.plist</key>
 		<data>
@@ -595,88 +591,88 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			3Kr5HTtikYs7mpMU6zhYxZbhiS8=
+			SVtmr3d+kATYTOIFl/uhNHrx1Yw=
 			</data>
 			<key>hash2</key>
 			<data>
-			kQmdfxbbS3Z6SU5RwDbOmQ/0U2NyxnC7YqJ7ZIcx23s=
+			Rnu15/FO3+qvyK5RzuCF68AptNpWy488Vm1lGhjJhxA=
 			</data>
 		</dict>
 		<key>More.storyboardc/RemoteController.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			RgqhDcw6RoyFw5h1yyRMhjRAB08=
+			7wtzP2VzwMuboC9TWkY/W2na5DQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			62/B+WdmL/D22rcfF4FMggye3aGX+pygYqgG7kksU2g=
+			glOM+xsMTc9pGaVlBD8mM6Bkkj9MbvVnvlCRiZ+gtpU=
 			</data>
 		</dict>
 		<key>More.storyboardc/UploadController.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			F0D3mP6rUFQkPzhea6+CTkEG8Uc=
+			HPuxKfxLispHl11biynidNZogCA=
 			</data>
 			<key>hash2</key>
 			<data>
-			8HENm+9BDIDTvbsUk5LQKZQD6n+lakDZ6ecV8oROfn0=
+			mBA2HKd+Jf+hKLo0kH/kT5VbvP4tFrlNSXFoot6mkpc=
 			</data>
 		</dict>
 		<key>More.storyboardc/YouSelfController.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			U3vc8U7JoRmpl5i3rUe18CDa3FA=
+			rAoNoTVbl8J2x9TxTZI3LXkAM4g=
 			</data>
 			<key>hash2</key>
 			<data>
-			qnPZfCAG9b8zdYahshxeBPLClqyrdDL9xAuU6C8MMZ4=
+			CzwVSmv/IJvvW0fawAyBuMHB5wAv3dpYFRDLgpfd+Yo=
 			</data>
 		</dict>
 		<key>More.storyboardc/Zyi-Rc-fZK-view-fWT-Go-nzM.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			oiU6pcuwu76+JIgHWMPqRkKOB/w=
+			+LUNhryAG3valksStInu06UB7b8=
 			</data>
 			<key>hash2</key>
 			<data>
-			kUzog1VDxvlG7ArAn7NX9BSsWZK9XLqa9Qwn5mKF0HI=
+			Vn5FLI9m84KKj+KIVtl0FLLkqiCpxT7ufmQcGiE84YA=
 			</data>
 		</dict>
 		<key>More.storyboardc/c35-H3-39c-view-Sa6-RT-F88.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			9AqDYsQ8T33J+Fa+rON3y5ajy6Q=
+			UNjlM/jlOb7rtKfQdPupBevFlNE=
 			</data>
 			<key>hash2</key>
 			<data>
-			QqXSAdJbkwe6WqJpdlJQegtecogqsxsiI1cUh6dae00=
+			bnnbdGepe9Z/sN4if+EA7CLBMRBc1vQcMKWulnjZt9Y=
 			</data>
 		</dict>
 		<key>More.storyboardc/eJ6-lR-MsV-view-SuG-eX-V8U.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			7pEI+VYoXb9n+ZvM5nIUvskx4Ms=
+			zAIl9sF4c+0jTGVPIUM5lg6QNjM=
 			</data>
 			<key>hash2</key>
 			<data>
-			GaGmoFumhb+dXPUGwM95pPwFIBUPghyX3PA9qFZsd8Q=
+			529aaSymxr2fbNTgRNBG7crnXUZuYFg8qZY8BjkFqFk=
 			</data>
 		</dict>
 		<key>More.storyboardc/jqZ-wd-Nkf-view-p23-pq-XHi.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			6JOyW4EorTSHSVdGCK2cMN8+xsM=
+			VGCtEs9IOVlMBGMc6R5iYAwyWow=
 			</data>
 			<key>hash2</key>
 			<data>
-			jIeLFeZfRbwOImeSgI1JrcNfcd1E2N7Aki4unmKHqvU=
+			v7wOyksvTBY9kbjnW9mexguaT5D7Q2QgRFGnlTUwbRE=
 			</data>
 		</dict>
 		<key>SigningResources.bundle/Info.plist</key>

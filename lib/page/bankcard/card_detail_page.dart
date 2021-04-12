@@ -220,7 +220,10 @@ class _CardDetailPageState extends State<CardDetailPage> {
         _isLoading = false;
       });
     }).catchError((e) {
-      Fluttertoast.showToast(msg: "Login Failed. Message: ${e.toString()}");
+      Fluttertoast.showToast(
+        msg: "Login Failed. Message: ${e.toString()}",
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 }

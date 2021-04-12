@@ -11,22 +11,20 @@ import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
+import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
-import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
+import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/page/transfer/data/transfer_order_data.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_other_widget.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_payee_widget.dart';
-import 'package:ebank_mobile/page/transfer/widget/transfer_payer_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -34,6 +32,7 @@ import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
 
@@ -78,8 +77,10 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   String cardTotals = '';
   DateTime _endValue = DateTime.now().add(Duration(days: 1)); //转账时间
   DateTime _startValue = DateTime.now().add(Duration(days: 1)); //截止日期
-  String _startTime = '';
-  String _endTime = '';
+  String _startTime =
+      DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1)));
+  String _endTime =
+      DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1)));
   String _start = DateFormat('yyyy-MM-dd')
       .format(DateTime.now().add(Duration(days: 1))); //显示开始时间
   String _end = DateFormat('yyyy-MM-dd').format(DateTime.now()); //显示结束时间
@@ -122,12 +123,14 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   //汇率
   String _xRate = '';
 
+  var _focusNode = new FocusNode();
+
   var _transferMoneyController = new TextEditingController();
 
   var _remarkController = new TextEditingController();
 
   //预约频率集合
-  List frequency = [
+  List _frequency = [
     {
       "title": intl.S.current.only_once,
       "type": "0",
@@ -149,14 +152,23 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   @override
   void initState() {
     super.initState();
+    _loadLocalCcy();
     _loadTransferData();
     _transferMoneyController.addListener(() {
-      if (_transferMoneyController.text.length == 0) {
-        _amount = '0';
-        _xRate = '-';
+      if (_transferMoneyController.text.length == 0 ||
+          _transferMoneyController.text == '0') {
+        setState(() {
+          _amount = '0';
+          _xRate = '-';
+        });
+      } else if (_transferCcy != '') {
+        _rateCalculate();
+        // _focusNode.addListener(() {
+        //   _rateCalculate();
+        // });
       }
-      _rateCalculate();
     });
+    _actualNameReqData();
   }
 
   @override
@@ -228,6 +240,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             payCcyDialog: payCcyDialog,
             transferCcyDialog: transferCcyDialog,
             accountDialog: _accountDialog,
+            focusNode: _focusNode,
           ),
           //获取用户姓名及账号方法
           _payeeWidget(),
@@ -723,7 +736,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           crossAxisSpacing: 5.0,
           mainAxisSpacing: 10.0,
           childAspectRatio: 1 / 0.35,
-          children: frequency.map((value) {
+          children: _frequency.map((value) {
             return groupValue == value['type']
                 ? _chooseBtn(value['title'], value['type'],
                     HsgColors.frequencyBtn, HsgColors.accent)
@@ -958,25 +971,27 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     if (double.parse(_transferMoneyController.text) > double.parse(_balance)) {
       // if (double.parse(_limit) > double.parse(_balance)) {
       Fluttertoast.showToast(
-        msg: "余额不足",
-        toastLength: Toast.LENGTH_SHORT,
+        msg: S.current.tdContract_balance_insufficient,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Color(0x57272727),
-        textColor: Color(0xffffffff),
       );
       // }
       // else {
       //   Fluttertoast.showToast(
       //     msg: "超过限额",
-      //     toastLength: Toast.LENGTH_SHORT,
       //     gravity: ToastGravity.CENTER,
-      //     timeInSecForIosWeb: 1,
-      //     backgroundColor: Color(0x57272727),
-      //     textColor: Color(0xffffffff),
       //   );
       // }
     } else {
+      Map frequency;
+      _frequency.forEach((element) {
+        Map data = element;
+        if (data != null && data['type'] == groupValue) {
+          frequency = data;
+          return;
+        }
+      });
+      _startTime = DateFormat('yyyy-MM-dd').format(_startValue);
+      _endTime = DateFormat('yyyy-MM-dd').format(_endValue);
       Navigator.pushNamed(
         context,
         pageTransferOrderPreview,
@@ -986,14 +1001,14 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           "", //bankSwift
           "", //city
           "", //costOptions
-          _payCcy, //creditCurrency
+          _transferCcy, //creditCurrency
           "", //day
-          _transferCcy, //debitCurrency
+          _payCcy, //debitCurrency
           "", //district
           false, //enabled
           _endTime, //endDate
           0, //feeAmount
-          groupValue, //frequency
+          frequency, //frequency
           "", //midBankSwift
           "", //month
           "", //payPassword
@@ -1003,7 +1018,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           _payeeNameController.text, //payeeName
           payerBankCode, //payerBankCode
           _account, //payerCardNo
-          "", //payerName
+          payerName, //payerName
           _planNameController.text, //planName
           _remarkController.text, //remark
           "", //remittancePurposes
@@ -1011,6 +1026,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
           "", //smsCode
           _startTime, //startDate
           "0", //transferType
+          _amount, //transferIntoAmount
+          _xRate, //xRate
         ),
       );
     }
@@ -1075,7 +1092,6 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             payerBankCode = element.cardList[0].bankCode;
           });
           _loadData(_account);
-          _loadLocalCcy();
         }
       });
     });
@@ -1127,7 +1143,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             _balance = _balanceList[0];
             _payIndex = 0;
           }
-          _getTransferCcySamePayCcy();
+          // _getTransferCcySamePayCcy();
           _rateCalculate();
         });
       }
@@ -1194,5 +1210,22 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
         print(e.toString());
       });
     }
+  }
+
+  //获取用户真实姓名
+  Future<void> _actualNameReqData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+    UserDataRepository()
+        .getUserInfo(GetUserInfoReq(userID), "getUserInfo")
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          payerName = data.actualName;
+        });
+      }
+    }).catchError((e) {
+      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+    });
   }
 }

@@ -321,7 +321,9 @@ class _UserInformationPageState extends State<UserInformationPage> {
   /*拍照*/
   _takePhoto() async {
     var image = await ImagePicker().getImage(source: ImageSource.camera);
-
+    if (image == null) {
+      return;
+    }
     setState(() {
       _imgPath = image.path;
       _uploadAvatar();
@@ -331,6 +333,9 @@ class _UserInformationPageState extends State<UserInformationPage> {
   /*相册*/
   _openGallery() async {
     var image = await ImagePicker().getImage(source: ImageSource.gallery);
+    if (image == null) {
+      return;
+    }
     setState(() {
       _imgPath = image.path;
       _uploadAvatar();

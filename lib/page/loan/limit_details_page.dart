@@ -5,6 +5,7 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -64,31 +65,28 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
 
   Future<void> _loadData() async {
     //请求的参数
-    acNo = "";
-
     final prefs = await SharedPreferences.getInstance();
     String cino = prefs.getString(ConfigKey.CUST_ID);
     ciNo = cino;
 
     contactNo = "";
-    productCode = "";
     SVProgressHUD.show();
     LoanDataRepository()
-        .getLoanList(GetLoanListReq(acNo, ciNo, contactNo, productCode),
-            'getLoanMastList')
+        .getLoanAccountList(
+            LoanAccountMastModelReq(0, ciNo, contactNo), 'getLoanAccountList')
         .then((data) {
       SVProgressHUD.dismiss();
-      if (data.loanList != null) {
+      if (data.loanAccountDOList != null) {
         setState(() {
           loanDetails.clear();
-          loanDetails.addAll(data.loanList);
+          loanDetails.addAll(data.loanAccountDOList);
         });
       }
     }).catchError((e) {
       SVProgressHUD.dismiss();
-      Fluttertoast.showToast(msg: e.toString());
+      SVProgressHUD.showInfo(status: e.toString());
+      loanDetails.clear();
     });
-    loanDetails.clear();
   }
 
   //封装ListView.Builder
@@ -116,13 +114,13 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
   }
 
   //额度详情-封装
-  Widget _limitDetailsIcon(BuildContext context, Loan loanDetail) {
+  Widget _limitDetailsIcon(BuildContext context, LoanAccountDOList loanDetail) {
     var titleRow = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           //合约账号
-          S.of(context).loan_account + " " + loanDetail.acNo,
+          S.of(context).loan_account + " " + loanDetail.lnac,
           style: TextStyle(fontSize: 15, color: Color(0xFF242424)),
         ),
         Icon(
@@ -152,21 +150,28 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         contentRow(
+            //贷款金额
             S.of(context).loan_principal,
-            FormatUtil.formatSringToMoney(loanDetail.loanAmt) + " HKD",
+            FormatUtil.formatSringToMoney(loanDetail.amt.toString()) +
+                loanDetail.ccy,
             Color(0xFF1E1E1E)),
         contentRow(
+            //贷款余额
             S.of(context).loan_balance2,
-            FormatUtil.formatSringToMoney(loanDetail.unpaidPrincipal) + " HKD",
+            FormatUtil.formatSringToMoney(loanDetail.bal.toString()) +
+                loanDetail.ccy,
             Color(0xFF1E1E1E)),
         contentRow(
-            S.of(context).begin_time, loanDetail.disbDate, Color(0xFF1E1E1E)),
+            //开始日期
+            S.of(context).begin_time,
+            loanDetail.valDt,
+            Color(0xFF1E1E1E)),
         contentRow(
-            S.of(context).end_time, loanDetail.maturityDate, Color(0xFF1E1E1E)),
-        contentRow(
-            S.of(context).loan_interest_rate,
-            (double.parse(loanDetail.intRate) * 100).toStringAsFixed(2) + "%",
-            Color(0xFFF8514D)),
+            S.of(context).end_time, loanDetail.endDt, Color(0xFF1E1E1E)), //结束日期
+        // contentRow(
+        //     S.of(context).loan_interest_rate,
+        //     (double.parse(loanDetail.intRate) * 100).toStringAsFixed(2) + "%",
+        //     Color(0xFFF8514D)),
       ],
     );
     var contentBox = SizedBox(
@@ -212,7 +217,7 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
   }
 
   //跳转
-  _selectPage(BuildContext context, Loan loanDetail) async {
+  _selectPage(BuildContext context, LoanAccountDOList loanDetail) async {
     // List<String> pages = [
     //   S.of(context).view_details,
     //   S.of(context).view_repayment_plan,
@@ -230,7 +235,8 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
     //   switch (result) {
     //     case 0:
     //直接跳到查看详情
-    Navigator.pushNamed(context, pageloanDetails, arguments: loanDetail);
+    Navigator.pushNamed(context, pageloanDetails,
+        arguments: {'data': loanDetail});
     //       break;
     //     case 1:
     //       //查看还款计划

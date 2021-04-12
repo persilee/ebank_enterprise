@@ -75,7 +75,6 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
             CustomButton(
               margin: EdgeInsets.only(left: 37.5, right: 37.5, top: 125),
               height: 50,
-              // borderRadius: BorderRadius.circular(50.0),
               text: Text(
                 S.current.complete,
                 style: TextStyle(fontSize: 14, color: Colors.white),
@@ -136,9 +135,7 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
       );
     });
   }

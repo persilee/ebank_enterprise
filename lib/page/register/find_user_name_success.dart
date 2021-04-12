@@ -2,6 +2,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -65,42 +66,59 @@ class _FindUserNameSuccessState extends State<FindUserNameSuccess> {
                 ),
               ),
               //完成按钮
-              Container(
-                  margin: EdgeInsets.only(left: 37.5, right: 37.5, top: 125),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color(0xFF1775BA),
-                        Color(0xFF3A9ED1),
-                      ],
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(),
-                        child: FlatButton(
-                          child: Text(
-                            S.current.complete,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                            // Navigator.of(context).pushNamedAndRemoveUntil(
-                            //     pageRegisterSuccess,
-                            //     ModalRoute.withName("/"), //清除旧栈需要保留的栈 不清除就不写这句
-                            //     arguments: _userName //传值
-                            //     );
-                            // Navigator.popAndPushNamed(context, pageHome,
-                            //     arguments: _userName);
-                            Navigator.pop(context, _userName);
-                          },
-                        ),
-                      )
-                    ],
-                  ))
+              CustomButton(
+                margin: EdgeInsets.only(left: 37.5, right: 37.5, top: 125),
+                height: 50,
+                // borderRadius: BorderRadius.circular(50.0),
+                text: Text(
+                  S.current.go_to_login,
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
+                clickCallback: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      pageHome, ModalRoute.withName(""), //清除旧栈需要保留的栈 不清除就不写这句
+                      arguments: _userName //传值
+                      );
+                  // Navigator.popAndPushNamed(context, pageHome,
+                  //     arguments: _userName);
+                },
+              ),
+              // //完成按钮
+              // Container(
+              //     margin: EdgeInsets.only(left: 37.5, right: 37.5, top: 125),
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.all(Radius.circular(5)),
+              //       gradient: LinearGradient(
+              //         begin: Alignment.topLeft,
+              //         end: Alignment.bottomRight,
+              //         colors: [
+              //           Color(0xFF1775BA),
+              //           Color(0xFF3A9ED1),
+              //         ],
+              //       ),
+              //     ),
+              //     child: Column(
+              //       children: [
+              //         Container(
+              //           decoration: BoxDecoration(),
+              //           child: FlatButton(
+              //             child: Text(
+              //               S.current.go_to_login,
+              //               style: TextStyle(color: Colors.white),
+              //             ),
+              //             onPressed: () {
+              //               // Navigator.of(context).pushNamedAndRemoveUntil(
+              //               //     pageRegisterSuccess,
+              //               //     ModalRoute.withName("/"), //清除旧栈需要保留的栈 不清除就不写这句
+              //               //     arguments: _userName //传值
+              //               //     );
+              //               // Navigator.popAndPushNamed(context, pageHome,
+              //               //     arguments: _userName);
+              //             },
+              //           ),
+              //         )
+              //       ],
+              //     ))
             ],
           ),
         ));
