@@ -61,7 +61,10 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     // 网络请求
     _getCcyList();
     _getExchangeRateList();
-    _focusNode.addListener(() {
+    // _focusNode.addListener(() {
+    //   _amountConversion();
+    // });
+    _amtController.addListener(() {
       _amountConversion();
     });
   }
@@ -408,6 +411,9 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
       newCcyId = _primitiveCcyId;
       _primitiveCcyId = _objectiveCcyId;
       _objectiveCcyId = newCcyId;
+
+      _amtController.text = '';
+      _primitiveCcyAmt = '';
     });
     _amountConversion();
   }

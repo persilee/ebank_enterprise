@@ -192,22 +192,25 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _middleBankSwiftController.text = listPartner.midBankSwift;
         _payeeAddressController.text = listPartner.payeeAddress;
         _remarkController.text = listPartner.remark;
+        _transferCcy = listPartner.ccy;
         //付款方银行
         payeeBankCode = listPartner.bankCode;
         //收款方银行
         _bankNameController.text = listPartner.payerBankCode;
         payeeName = listPartner.payeeName;
         payerName = listPartner.payerName;
-        if (listPartner.paysMethod != null) {
-          // _transferFeeIndex = int.parse(listPartner.paysMethod);
-          _transferFee =
-              listPartner.paysMethod == '' ? '' : listPartner.paysMethod;
-        }
-        if (listPartner.rollInPurpose != null) {
-          // _feeUseIndex = int.parse(listPartner.rollInPurpose);
-          _feeUse =
-              listPartner.rollInPurpose == '' ? '' : listPartner.rollInPurpose;
-        }
+        // if (listPartner.paysMethod != null) {
+        //   // _transferFeeIndex = int.parse(listPartner.paysMethod);
+        //   _transferFee =
+        //       listPartner.paysMethod == '' ? '' : listPartner.paysMethod;
+        // }
+        _transferFee =
+            listPartner.paysMethod == null ? '' : listPartner.paysMethod;
+        // if (listPartner.rollInPurpose != null) {
+        //   // _feeUseIndex = int.parse(listPartner.rollInPurpose);
+        //   _feeUse =
+        //       listPartner.rollInPurpose == '' ? '' : listPartner.rollInPurpose;
+        // }
         // _transferFee = listPartner.paysMethod;
         // _feeUse = listPartner.rollInPurpose;
         check = true;
@@ -252,7 +255,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                 accountDialog: _accountDialog,
                 focusNode: _focusNode,
               ),
-              _payerAddress(),
+              // _payerAddress(),
               _payeeWidget(),
               _fourWidget(),
               _fiveWidget(),
@@ -359,15 +362,15 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
             ),
             _getLine(),
             //汇款用途
-            SelectInkWell(
-              title: S.current.remittance_usage,
-              item: _feeUse,
-              onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
-                _selectFeeUse();
-              },
-            ),
-            _getLine(),
+            // SelectInkWell(
+            //   title: S.current.remittance_usage,
+            //   item: _feeUse,
+            //   onTap: () {
+            //     FocusScope.of(context).requestFocus(FocusNode());
+            //     _selectFeeUse();
+            //   },
+            // ),
+            // _getLine(),
             //转账附言
             TextFieldContainer(
               title: S.current.transfer_postscript,
@@ -501,18 +504,20 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   payerBankCode = rowListPartner.payerBankCode;
                   payeeName = rowListPartner.payeeName;
                   payerName = rowListPartner.payerName;
+                  _transferCcy =
+                      _transferCcy == '' ? rowListPartner.ccy : _transferCcy;
                   if (rowListPartner.paysMethod != null) {
                     // _transferFeeIndex = int.parse(rowListPartner.paysMethod);
                     _transferFee = rowListPartner.paysMethod == ''
                         ? ''
                         : rowListPartner.paysMethod;
                   }
-                  if (rowListPartner.rollInPurpose != null) {
-                    // _feeUseIndex = int.parse(rowListPartner.rollInPurpose);
-                    _feeUse = rowListPartner.rollInPurpose == ''
-                        ? ''
-                        : rowListPartner.rollInPurpose;
-                  }
+                  // if (rowListPartner.rollInPurpose != null) {
+                  //   // _feeUseIndex = int.parse(rowListPartner.rollInPurpose);
+                  //   _feeUse = rowListPartner.rollInPurpose == ''
+                  //       ? ''
+                  //       : rowListPartner.rollInPurpose;
+                  // }
                 }
                 _isClick();
               },
@@ -800,10 +805,10 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _countryText != '' &&
         _bankNameController.text != '' &&
         _bankSwiftController.text.length > 0 &&
-        _payerAddressController.text.length > 0 &&
+        // _payerAddressController.text.length > 0 &&
         _transferFee != '' &&
         _transferMoneyController.text != '' &&
-        _feeUse != '' &&
+        // _feeUse != '' &&
         _transferCcy != '') {
       return true;
     } else {
@@ -828,6 +833,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
               element.cardList.forEach((e) {
                 _accountList.add(e.cardNo);
               });
+              _accountList = _accountList.toSet().toList();
               //付款方姓名
               // payerName = element.cardList[0].ciName;
             });

@@ -827,6 +827,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                 _payeeAccountController.text = rowListPartner.payeeCardNo;
                 _remarkController.text = rowListPartner.remark;
                 // _payeeBankCode = rowListPartner.bankCode;
+                _transferCcy =
+                    _transferCcy == '' ? rowListPartner.ccy : _transferCcy;
               }
               _boolBut();
             });
@@ -1088,6 +1090,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             element.cardList.forEach((e) {
               _accountList.add(e.cardNo);
             });
+            _accountList = _accountList.toSet().toList();
             _payeeBankCode = element.cardList[0].bankCode;
             payerBankCode = element.cardList[0].bankCode;
           });

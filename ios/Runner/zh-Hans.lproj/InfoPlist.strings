@@ -1,0 +1,24 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by 李家伟 on 2021/4/12.
+  
+*/
+"CFBundleName" = "智朗银行";
+
+"CFBundleDisplayName" = "智朗银行";
+
+"NSFaceIDUsageDescription" = "是否允许智朗银行访问Face ID进行人脸识别功能";
+
+"NSCameraUsageDescription" = "是否允许智朗银行访问相机进行信息采集功能";
+
+"NSPhotoLibraryUsageDescription" = "是否允许智朗银行访问相册进行图片上传功能";
+
+"NSMicrophoneUsageDescription" = "是否允许智朗银行访问麦克风进行声音采集功能";
+
+"NSPhotoLibraryAddUsageDescription" = "是否允许智朗银行访问相册进行保存图片到相册功能";
+
+"NSLocationAlwaysUsageDescription" = "是否允许智朗银行总是访问定位进行位置采集功能";
+
+"NSLocationWhenInUseUsageDescription" = "是否允许智朗银行在使用时访问定位进行位置采集功能";
