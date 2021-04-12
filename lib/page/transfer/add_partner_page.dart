@@ -864,7 +864,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     setState(() {
       if (_nameController.text.length > 0 &&
           _acountController.text.length > 0 &&
-          _transferType != S.current.please_select) {
+          _transferType != S.current.please_select &&
+          _ccy != '') {
         if (_showInternational) {
           if (_bankNameController.text != '' &&
               _payeeAdressController.text.length > 0 &&
@@ -922,6 +923,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         _ccyIndex = result;
         _ccy = _ccyList[result];
       });
+      _check();
     }
   }
 

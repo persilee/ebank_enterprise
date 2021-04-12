@@ -192,6 +192,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
         _middleBankSwiftController.text = listPartner.midBankSwift;
         _payeeAddressController.text = listPartner.payeeAddress;
         _remarkController.text = listPartner.remark;
+        _transferCcy = listPartner.ccy;
         //付款方银行
         payeeBankCode = listPartner.bankCode;
         //收款方银行
@@ -501,6 +502,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   payerBankCode = rowListPartner.payerBankCode;
                   payeeName = rowListPartner.payeeName;
                   payerName = rowListPartner.payerName;
+                  _transferCcy = rowListPartner.ccy;
                   if (rowListPartner.paysMethod != null) {
                     // _transferFeeIndex = int.parse(rowListPartner.paysMethod);
                     _transferFee = rowListPartner.paysMethod == ''
