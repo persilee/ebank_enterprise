@@ -18,8 +18,6 @@ class DepositContractSucceed extends StatefulWidget {
 class _DepositContractSucceed extends State<DepositContractSucceed> {
   @override
   Widget build(BuildContext context) {
-    var _arguments = ModalRoute.of(context).settings.arguments;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.operation_successful),

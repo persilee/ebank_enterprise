@@ -40,7 +40,7 @@ class MinePage extends StatefulWidget {
   _MinePageState createState() => _MinePageState();
 }
 
-class _MinePageState extends State<MinePage> {
+class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin {
   String _language = Intl.getCurrentLocale();
   double _opacity = 0;
   ScrollController _sctrollController = ScrollController();
@@ -968,6 +968,9 @@ class _MinePageState extends State<MinePage> {
       );
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 /// 这是一个可以指定SafeArea区域背景色的AppBar
@@ -989,7 +992,7 @@ class XAppBar extends StatefulWidget implements PreferredSizeWidget {
 /// 这里没有直接用SafeArea，而是用Container包装了一层
 /// 因为直接用SafeArea，会把顶部的statusBar区域留出空白
 /// 外层Container会填充SafeArea，指定外层Container背景色也会覆盖原来SafeArea的颜色
-class _XAppBarState extends State<XAppBar> {
+class _XAppBarState extends State<XAppBar> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -1003,4 +1006,7 @@ class _XAppBarState extends State<XAppBar> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

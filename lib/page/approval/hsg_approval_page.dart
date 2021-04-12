@@ -17,14 +17,21 @@ import 'my_to_do_task_detail_page.dart';
 import 'my_to_do_task_page.dart';
 
 class ApprovalPage extends StatefulWidget {
-  ApprovalPage();
+  ApprovalPage({Key key}): super(key: key);
+
+  static void setLocale(BuildContext context, Locale newLocale) async {
+    _ApprovalPageState state = context.findAncestorStateOfType<_ApprovalPageState>();
+    if(state.mounted) {
+      state.changeLanguage(newLocale);
+    }
+  }
 
   @override
   _ApprovalPageState createState() => _ApprovalPageState();
 }
 
 class _ApprovalPageState extends State<ApprovalPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   _ApprovalPageState();
 
   final List tabs = [
@@ -41,6 +48,12 @@ class _ApprovalPageState extends State<ApprovalPage>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+  }
+
+  changeLanguage(Locale locale) {
+    setState(() {
+      S.load(locale);
+    });
   }
 
 //顶部切换
@@ -117,4 +130,7 @@ class _ApprovalPageState extends State<ApprovalPage>
       }),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
