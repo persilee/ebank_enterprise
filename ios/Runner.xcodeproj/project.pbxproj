@@ -11,6 +11,7 @@
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		47791B9D261F020400954035 /* SigningResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 47791B9B261F020200954035 /* SigningResources.bundle */; };
 		47791B9E261F020400954035 /* SigningEyeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47791B9C261F020400954035 /* SigningEyeSDK.framework */; };
+		477981AB26241EA800ABB56A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 477981AD26241EA800ABB56A /* InfoPlist.strings */; };
 		6815D74826047BED007BFC9D /* .ruby-gemset in Resources */ = {isa = PBXBuildFile; fileRef = 6815D71A26047BED007BFC9D /* .ruby-gemset */; };
 		6815D74926047BED007BFC9D /* .cocoadocs.yml in Resources */ = {isa = PBXBuildFile; fileRef = 6815D71B26047BED007BFC9D /* .cocoadocs.yml */; };
 		6815D74A26047BED007BFC9D /* .codecov.yml in Resources */ = {isa = PBXBuildFile; fileRef = 6815D71C26047BED007BFC9D /* .codecov.yml */; };
@@ -121,9 +122,11 @@
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
-		47319BD32574C88E002F4BF2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		47791B9B261F020200954035 /* SigningResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SigningResources.bundle; sourceTree = "<group>"; };
 		47791B9C261F020400954035 /* SigningEyeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SigningEyeSDK.framework; sourceTree = "<group>"; };
+		477981AC26241EA800ABB56A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		477981AE26241EAD00ABB56A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		477981AF26241EAE00ABB56A /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		6805F576739CE86F7DAD4B3A /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		6815D71A26047BED007BFC9D /* .ruby-gemset */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ".ruby-gemset"; sourceTree = "<group>"; };
 		6815D71B26047BED007BFC9D /* .cocoadocs.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .cocoadocs.yml; sourceTree = "<group>"; };
@@ -312,6 +315,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		477981A426241D9900ABB56A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		4B1C87E5CE8229C255763912 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -624,6 +634,8 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				477981AD26241EA800ABB56A /* InfoPlist.strings */,
+				477981A426241D9900ABB56A /* Resources */,
 				68B784512601F86F001F2648 /* Define */,
 				686D0AD82600B3D400781075 /* QianliyanSDK */,
 				686D0A982600B3D400781075 /* third */,
@@ -715,6 +727,8 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
@@ -740,6 +754,7 @@
 				68B783F226019851001F2648 /* PEDat_wb.bundle in Resources */,
 				6815D74826047BED007BFC9D /* .ruby-gemset in Resources */,
 				68B783F026019851001F2648 /* ufa_wb.bundle in Resources */,
+				477981AB26241EA800ABB56A /* InfoPlist.strings in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				6815D74A26047BED007BFC9D /* .codecov.yml in Resources */,
 				68B783FC26019851001F2648 /* WBCloudReflectionFaceVerify_framework.podspec in Resources */,
@@ -880,6 +895,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		477981AD26241EA800ABB56A /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				477981AC26241EA800ABB56A /* en */,
+				477981AE26241EAD00ABB56A /* zh-Hans */,
+				477981AF26241EAE00ABB56A /* zh-Hant */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		97C146FA1CF9000F007C117D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -892,7 +917,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				97C147001CF9000F007C117D /* Base */,
-				47319BD32574C88E002F4BF2 /* en */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -904,6 +928,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -998,6 +1023,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1053,6 +1079,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
