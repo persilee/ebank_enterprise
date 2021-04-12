@@ -1014,7 +1014,11 @@ class _DetailListPageState extends State<DetailListPage> {
         }
       }
     }).catchError((e) {
-      _isLoading = false;
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
