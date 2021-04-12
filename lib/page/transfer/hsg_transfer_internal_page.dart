@@ -505,7 +505,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 _nameController.text = rowListPartner.payeeName;
                 _accountController.text = rowListPartner.payeeCardNo;
                 _remarkController.text = rowListPartner.remark;
-                _transferCcy = rowListPartner.ccy;
+                _transferCcy =
+                      _transferCcy == '' ? rowListPartner.ccy : _transferCcy;
                 _isAccount = false;
               }
               _boolBut();

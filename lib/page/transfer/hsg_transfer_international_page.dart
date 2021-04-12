@@ -504,7 +504,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
                   payerBankCode = rowListPartner.payerBankCode;
                   payeeName = rowListPartner.payeeName;
                   payerName = rowListPartner.payerName;
-                  _transferCcy = rowListPartner.ccy;
+                  _transferCcy =
+                      _transferCcy == '' ? rowListPartner.ccy : _transferCcy;
                   if (rowListPartner.paysMethod != null) {
                     // _transferFeeIndex = int.parse(rowListPartner.paysMethod);
                     _transferFee = rowListPartner.paysMethod == ''
