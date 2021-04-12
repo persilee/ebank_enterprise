@@ -411,6 +411,9 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
       newCcyId = _primitiveCcyId;
       _primitiveCcyId = _objectiveCcyId;
       _objectiveCcyId = newCcyId;
+
+      _amtController.text = '';
+      _primitiveCcyAmt = '';
     });
     _amountConversion();
   }
