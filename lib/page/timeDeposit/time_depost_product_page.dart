@@ -15,6 +15,7 @@ import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
+import 'package:ebank_mobile/widget/money_text_input_formatter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -35,13 +36,12 @@ class TimeDepostProduct extends StatefulWidget {
 class _TimeDepostProductState extends State<TimeDepostProduct> {
   List<TdepProducHeadDTO> productList = []; //产品（大类）
   List<List<TdepProductDTOList>> producDTOList = []; //子产品
-  // var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
   String language = Intl.getCurrentLocale();
   String _changedCcy = S.current.hint_please_select; //筛选币种
   String _changedTerm = S.current.hint_please_select; //筛选存期
   double _bal = 0.0; //筛选金额
   TextEditingController inputValue = TextEditingController();
-  int page = 1;
+  int _page = 1;
   bool _isDate = false; //判断是否有数据
   List<String> terms = []; //存款期限
   List<String> termCodes = []; //存款期限代码
@@ -50,17 +50,16 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   List<String> ccyList = []; //币种列表
   bool _isLoading = false; //加载状态
   RefreshController _refreshController;
+  ScrollController _scrollController;
 
   void initState() {
     super.initState();
     _getTerm(); //获取存款期限列表
     _refreshController = RefreshController();
+    _scrollController = ScrollController();
     _loadData(); //获取定期产品列表
-    //下拉刷新
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   refrestIndicatorKey.currentState.show();
-    // });
 
+//接收通知
     NotificationCenter.instance.addObserver('timeDepositProduct', (object) {
       if (this.mounted) {
         setState(() {
@@ -211,7 +210,9 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           ),
         ),
         inputFormatters: [
+          LengthLimitingTextInputFormatter(12),
           FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+          MoneyTextInputFormatter(),
           // FilteringTextInputFormatter.allow(RegExp('[0-9]|\\.|[0-9]')),
           // FilteringTextInputFormatter.allow(
           //     RegExp('([1-9]\d*\.?\d*)|(0\.?\d*[1-9])?')),
@@ -579,59 +580,51 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   }
 
   //定期产品列表
-  List<Widget> _titleSection(List<TdepProducHeadDTO> tdepProductList,
-      List<List<TdepProductDTOList>> tdepProducDTOList) {
-    List<Widget> section = [];
+  Widget _titleSection(TdepProducHeadDTO tdepProductList,
+      List<TdepProductDTOList> tdepProducDTOList) {
+    //最小年利率
+    double minRate = double.parse(
+        FormatUtil.formatNum(double.parse(tdepProductList.minRate), 2));
+    //最大年利率
+    double maxRate = double.parse(
+        FormatUtil.formatNum(double.parse(tdepProductList.maxRate), 2));
+    //判断选择的语言并根据语言选择产品名称
+    String name;
+    if (language == 'zh_CN') {
+      name = tdepProductList.lclName;
+    } else {
+      name = tdepProductList.engName;
+    }
 
-    section.add(
-      SliverList(
-        delegate: SliverChildBuilderDelegate((context, index) {
-          //最小年利率
-          double minRate = double.parse(FormatUtil.formatNum(
-              double.parse(tdepProductList[index].minRate), 2));
-          //最大年利率
-          double maxRate = double.parse(FormatUtil.formatNum(
-              double.parse(tdepProductList[index].maxRate), 2));
-          //判断选择的语言并根据语言选择产品名称
-          String name;
-          if (language == 'zh_CN') {
-            name = tdepProductList[index].lclName;
-          } else {
-            name = tdepProductList[index].engName;
-          }
-          //定期产品信息
-          return FlatButton(
-            padding: EdgeInsets.all(0),
-            onPressed: () {
-              go2Detail(tdepProductList[index], tdepProducDTOList[index]);
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _background(),
-                Container(
-                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                      top: _lineBorderSide(),
-                      bottom: _lineBorderSide(),
-                    ),
-                  ),
-                  child: _productInfo(
-                      name, //产品名称
-                      minRate, //最小利率
-                      maxRate, //最大利率
-                      tdepProductList[index].remark, //产品描述
-                      tdepProductList[index].minAmt), //起存金额
-                ),
-              ],
+    //定期产品信息
+    return FlatButton(
+      padding: EdgeInsets.all(0),
+      onPressed: () {
+        go2Detail(tdepProductList, tdepProducDTOList);
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _background(),
+          Container(
+            padding: EdgeInsets.only(left: 15.0, right: 15.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                top: _lineBorderSide(),
+                bottom: _lineBorderSide(),
+              ),
             ),
-          );
-        }, childCount: tdepProductList.length),
+            child: _productInfo(
+                name, //产品名称
+                minRate, //最小利率
+                maxRate, //最大利率
+                tdepProductList.remark, //产品描述
+                tdepProductList.minAmt), //起存金额
+          ),
+        ],
       ),
     );
-    return _isDate ? section : notDataContainer(context, S.current.no_data_now);
   }
 
   @override
@@ -680,7 +673,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
               Expanded(
                 child: _isLoading
                     ? HsgLoading()
-                    : productList.length > 0
+                    : _isDate
                         ? CustomRefresh(
                             controller: _refreshController,
                             onLoading: () {
@@ -691,16 +684,15 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                             },
                             onRefresh: () {
                               //刷新完成
-                              _refreshController.refreshCompleted();
-                              _refreshController.footerMode.value =
-                                  LoadStatus.canLoading;
+                              _loadData();
                             },
-                            content: Container(
-                              child: CustomScrollView(
-                                slivers: _titleSection(
-                                    productList, producDTOList), //产品列表
-                              ),
-                            ),
+                            content: ListView.builder(
+                                itemCount: producDTOList.length,
+                                controller: _scrollController,
+                                itemBuilder: (context, index) {
+                                  return _titleSection(
+                                      productList[index], producDTOList[index]);
+                                }),
                           )
                         : notDataContainer(context, S.current.no_data_now),
               ),
@@ -724,13 +716,15 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                     ? null
                     : _changedCcy,
                 _bal == 0.0 ? null : _bal,
-                page,
+                _page,
                 10,
                 ''))
         .then((data) {
       if (data.length != 0) {
         // List ccys = [];
         _isDate = true;
+        _refreshController.refreshCompleted();
+        _refreshController.footerMode.value = LoadStatus.canLoading;
         if (this.mounted) {
           setState(() {
             productList.clear();
@@ -788,6 +782,11 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           }
         });
       }
+    }).catchError((e) {
+      Fluttertoast.showToast(
+        msg: "${e.toString()}",
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 
@@ -894,5 +893,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   void dispose() {
     super.dispose();
     _refreshController.dispose();
+    _scrollController.dispose();
   }
 }

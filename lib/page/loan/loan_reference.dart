@@ -264,6 +264,7 @@ class _LoanReferenceState extends State<LoanReference> {
           elevation: 1,
         ),
         body: Container(
+          color: HsgColors.commonBackground,
           //height: MediaQuery.of(context).size.height / 0.33,
           //color: Colors.white,
           child: ListView(
@@ -292,7 +293,7 @@ class _LoanReferenceState extends State<LoanReference> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
-                            margin: EdgeInsets.only(right: 5, top: 10),
+                            margin: EdgeInsets.only(right: 14.5, top: 10),
                             child: Text(
                               'CNY',
                               style: TextStyle(

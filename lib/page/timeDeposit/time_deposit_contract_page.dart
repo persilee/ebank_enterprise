@@ -56,7 +56,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String ccy = '';
   String rate = '0';
   String matAmt = '0.00';
-  List<RemoteBankCard> cards = [];
+  List<String> cards = [];
   RemoteBankCard card;
   String custID;
   String _cardCcy = '';
@@ -311,7 +311,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         child: TextField(
           controller: inputValue,
           autocorrect: true,
-          autofocus: true,
+          autofocus: false,
           style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 18.0),
           inputFormatters: [
             LengthLimitingTextInputFormatter(12),
@@ -590,15 +590,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
 //付款账户弹窗
   _selectAccount(BuildContext context) async {
-    List<String> bankCards = [];
     List<String> accounts = [];
-    List<String> ciNames = [];
-    for (RemoteBankCard card in cards) {
-      bankCards.add(card.cardNo);
-      ciNames.add((card.ciName));
-    }
-    for (var i = 0; i < bankCards.length; i++) {
-      accounts.add(FormatUtil.formatSpace4(bankCards[i]));
+    for (var i = 0; i < cards.length; i++) {
+      accounts.add(FormatUtil.formatSpace4(cards[i]));
     }
     final result = await showHsgBottomSheet(
         context: context,
@@ -640,15 +634,9 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
 //结算账户弹窗
   _selectSettAc(BuildContext context) async {
-    List<String> bankCards = [];
     List<String> accounts = [];
-    List<String> ciNames = [];
-    for (RemoteBankCard card in cards) {
-      bankCards.add(card.cardNo);
-      ciNames.add((card.ciName));
-    }
-    for (var i = 0; i < bankCards.length; i++) {
-      accounts.add(FormatUtil.formatSpace4(bankCards[i]));
+    for (var i = 0; i < cards.length; i++) {
+      accounts.add(FormatUtil.formatSpace4(cards[i]));
     }
     final result = await showHsgBottomSheet(
         context: context,
@@ -688,6 +676,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     }
   }
 
+//判断是否可以点击
   _ifClick() {
     if (matAmt == '0.00' ||
         _changedTermBtnTiTle == S.current.hint_please_select ||
@@ -815,10 +804,15 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           if (this.mounted) {
             setState(() {
               cards.clear();
-              cards.addAll(data.cardList);
-              _changedAccountTitle = FormatUtil.formatSpace4(cards[0].cardNo);
-              _getCardBal(
-                  cards[0].cardNo.replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
+              // cards.addAll(data.cardList);
+              data.cardList.forEach((element) {
+                bool isContainer = cards.contains(element.cardNo);
+                if (!isContainer) {
+                  cards.add(element.cardNo);
+                }
+              });
+              _changedAccountTitle = FormatUtil.formatSpace4(cards[0]);
+              _getCardBal(cards[0].replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
             });
           }
         }
@@ -846,6 +840,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       _amount = FormatUtil.formatSringToMoney((inputValue.text).toString());
     } else {
       _payerAmount = AiDecimalAccuracy.parse(inputValue.text).toDouble();
+
       ForexTradingRepository()
           .transferTrial(
               TransferTrialReq(
@@ -858,6 +853,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             _checkAmount = data.optExAmt;
           });
         }
+      }).catchError((e) {
+        Fluttertoast.showToast(
+          msg: "${e.toString()}",
+          gravity: ToastGravity.CENTER,
+        );
       });
     }
   }
@@ -976,6 +976,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     }
   }
 
+//定期开立试算
   Future<void> _loadDepositData(
       String accuPeriod,
       String auctCale,
