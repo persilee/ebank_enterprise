@@ -151,7 +151,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   String _language = Intl.getCurrentLocale();
 
   var _accountFocusNode = FocusNode();
-  bool _isAccount = true;
+  bool _isAccount = true; //账号是否存在
 
   @override
   void initState() {
@@ -205,6 +205,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
         payeeName = rowPartner.payeeName;
         payerName = rowPartner.payerName;
         check = true;
+        _isAccount = false;
         _boolBut();
       }
     });
@@ -503,6 +504,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 _nameController.text = rowListPartner.payeeName;
                 _accountController.text = rowListPartner.payeeCardNo;
                 _remarkController.text = rowListPartner.remark;
+                _isAccount = false;
               }
               _boolBut();
             });

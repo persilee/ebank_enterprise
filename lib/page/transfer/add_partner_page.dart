@@ -167,9 +167,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         .addPartner(
             AddPartnerReq(
               _bankCode,
-              _swiftAdressReq,
+              _bankSwiftController.text, //_swiftAdressReq,
               "",
-              _countryText,
+              _countryCode, //_countryText,
               _centerSwiftReq,
               _payeeAdressReq,
               _acountController.text,
@@ -178,7 +178,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               "",
               "",
               _smsController.text,
-              _bankName,
+              "",
+              _bankNameController.text,
               _aliasController.text,
               myTransferType,
               _transferFeeIndex.toString(),
@@ -547,15 +548,15 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           ),
           Divider(height: 0.5, color: HsgColors.divider),
           //汇款用途
-          SelectInkWell(
-            title: S.current.remittance_usage,
-            item: _feeUse,
-            onTap: () {
-              FocusScope.of(context).requestFocus(FocusNode());
-              _selectFeeUse();
-            },
-          ),
-          Divider(height: 0.5, color: HsgColors.divider),
+          // SelectInkWell(
+          //   title: S.current.remittance_usage,
+          //   item: _feeUse,
+          //   onTap: () {
+          //     FocusScope.of(context).requestFocus(FocusNode());
+          //     _selectFeeUse();
+          //   },
+          // ),
+          // Divider(height: 0.5, color: HsgColors.divider),
         ],
       ),
     );
@@ -854,7 +855,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               _payeeAdressController.text.length > 0 &&
               _countryText != '' &&
               _transferFee != '' &&
-              _feeUse != '' &&
+              // _feeUse != '' &&
               _bankSwiftController.text != '') {
             _isInputed = true;
           } else {

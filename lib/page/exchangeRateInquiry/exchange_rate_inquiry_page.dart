@@ -61,7 +61,10 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     // 网络请求
     _getCcyList();
     _getExchangeRateList();
-    _focusNode.addListener(() {
+    // _focusNode.addListener(() {
+    //   _amountConversion();
+    // });
+    _amtController.addListener(() {
       _amountConversion();
     });
   }

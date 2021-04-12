@@ -331,6 +331,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
               _accList.add(item.cardNo);
               _accIcon.add(item.imageUrl);
             });
+            _accList = _accList.toSet().toList();
           });
         }
       }
@@ -351,11 +352,11 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         if (this.mounted) {
           setState(() {
             _balance = '0.00';
+            _paymentCcyList.clear();
             data.cardListBal.forEach((item) {
               if (_paymentCcy == item.ccy) {
                 _balance = item.avaBal;
               }
-              _paymentCcyList.clear();
               _paymentCcyList.add(item.ccy);
             });
           });
