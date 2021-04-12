@@ -22,9 +22,12 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   await SpUtil.getInstance();
-  runApp(
-    HSGBankApp(),
-  );
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(
+      HSGBankApp(),
+    );
+  });
 }
 
 class HSGBankApp extends StatefulWidget {
