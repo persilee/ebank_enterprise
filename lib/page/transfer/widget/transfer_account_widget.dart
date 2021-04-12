@@ -258,7 +258,7 @@ class TransferAccount extends StatelessWidget {
       color: Colors.white,
       child: SelectInkWell(
         title: S.current.transfer_from_ccy,
-        item: transferCcy,
+        item: transferCcy == null ? '' : transferCcy,
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
           transferCcyDialog();

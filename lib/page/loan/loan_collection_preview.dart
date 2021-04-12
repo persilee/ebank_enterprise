@@ -123,8 +123,10 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
         style: TextStyle(fontSize: 14, color: Colors.white),
       ),
       clickCallback: () {
-        print('确定');
+        _loanWithdrawalCommit();
       },
     );
   }
+
+  Future _loanWithdrawalCommit() async {}
 }

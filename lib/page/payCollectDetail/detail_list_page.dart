@@ -650,26 +650,29 @@ class _DetailListPageState extends State<DetailListPage> {
     //String _titileTime =  DateFormat('yyyy-MM-dd').format(dateTime);
     //  RegExp characters = new RegExp("/\d{4}-\d{1,2}-\d{1,2}/g");
     //var newDate=/\d{4}-\d{1,2}-\d{1,2}/g.exec(date)
-    return Column(
-      children: [
-        Container(
-          height: 10,
-          color: HsgColors.backgroundColor,
-        ),
-        Container(
-          height: 35,
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.only(left: 16),
-          color: Colors.white,
-          //交易时间
-          //  child: Text(ddFinHisDTOList[section].transDate),
-          child: Text(ddFinHisDTOList[section].txDateTime.substring(0, 10)),
-        ),
-      ],
-    );
+    return Container();
+    // Column(
+    //   children: [
+    //     Container(
+    //       height: 10,
+    //       color: HsgColors.backgroundColor,
+    //     ),
+    //     Container(
+    //       height: 35,
+    //       alignment: Alignment.centerLeft,
+    //       padding: EdgeInsets.only(left: 16),
+    //       color: Colors.white,
+    //       //交易时间
+    //       //  child: Text(ddFinHisDTOList[section].transDate),
+    //       child: Text(ddFinHisDTOList[section].txDateTime.substring(0, 10)),
+    //     ),
+    //   ],
+    // );
   }
 
+  ///单元格构建方法
   Widget _cellBuilder(BuildContext context, int section, int row) {
+    DdFinHisDTOList dtoData = ddFinHisDTOList[row];
     return Container(
       color: Colors.white,
       child: Column(
@@ -677,7 +680,7 @@ class _DetailListPageState extends State<DetailListPage> {
         children: [
           InkWell(
             onTap: () {
-              _goToDetail(ddFinHisDTOList[section]);
+              _goToDetail(dtoData);
             },
             child: _getContainer(section, row, context),
           ),
@@ -698,6 +701,7 @@ class _DetailListPageState extends State<DetailListPage> {
     int row,
     BuildContext context,
   ) {
+    // DdFinHisDTOList dtoData = ddFinHisDTOList[row];
     return Container(
       padding: EdgeInsets.only(left: 16, right: 16, top: 15),
       child: Row(
@@ -722,6 +726,8 @@ class _DetailListPageState extends State<DetailListPage> {
   }
 
   Column _transactionInfo(int section, int row, BuildContext context) {
+    DdFinHisDTOList dtoData = ddFinHisDTOList[row];
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -733,7 +739,7 @@ class _DetailListPageState extends State<DetailListPage> {
               padding: EdgeInsets.only(bottom: 8),
               child: Text(
                 //账号
-                ddFinHisDTOList[section].acNo,
+                dtoData.acNo,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 15, color: Color(0xFF222121)),
@@ -741,7 +747,7 @@ class _DetailListPageState extends State<DetailListPage> {
             ),
             Container(
               width: MediaQuery.of(context).size.width / 2.85,
-              child: _transactionAmount(ddFinHisDTOList, section, row, context),
+              child: _transactionAmount(dtoData, section, row, context),
             ),
           ],
         ),
@@ -751,7 +757,7 @@ class _DetailListPageState extends State<DetailListPage> {
             Container(
               width: 160,
               child: Text(
-                ddFinHisDTOList[section].txDateTime,
+                dtoData.txDateTime,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 12, color: Color(0xFFACACAC)),
@@ -765,7 +771,7 @@ class _DetailListPageState extends State<DetailListPage> {
 
   // Each section header height;
   double _sectionHeaderHeight(BuildContext context, int section) {
-    return 45;
+    return 10; //45;
   }
 
   // Each cell item widget height.
@@ -776,7 +782,8 @@ class _DetailListPageState extends State<DetailListPage> {
   FlutterTableView _buildFlutterTableView() {
     return FlutterTableView(
       controller: _scrollController,
-      sectionCount: ddFinHisDTOList.length,
+      sectionCount:
+          (ddFinHisDTOList != null && ddFinHisDTOList.length > 0) ? 1 : 0,
       rowCountAtSection: _rowCountAtSection,
       sectionHeaderBuilder: _sectionHeaderBuilder,
       cellBuilder: _cellBuilder,
@@ -812,18 +819,18 @@ class _DetailListPageState extends State<DetailListPage> {
   }
 
   //交易金额
-  Text _transactionAmount(List<DdFinHisDTOList> ddFinHisDTOList, int section,
-      int row, BuildContext context) {
+  Text _transactionAmount(
+      DdFinHisDTOList dtoData, int section, int row, BuildContext context) {
     return Text(
-      ddFinHisDTOList[section].drCrFlg == 'C'
+      dtoData.drCrFlg == 'C'
           ? '+ ' +
-              ddFinHisDTOList[section].txCcy +
+              dtoData.txCcy +
               ' ' +
-              FormatUtil.formatSringToMoney(ddFinHisDTOList[section].txAmt)
+              FormatUtil.formatSringToMoney(dtoData.txAmt)
           : '- ' +
               ddFinHisDTOList[section].txCcy +
               ' ' +
-              FormatUtil.formatSringToMoney(ddFinHisDTOList[section].txAmt),
+              FormatUtil.formatSringToMoney(dtoData.txAmt),
       style: TextStyle(fontSize: 15, color: Color(0xFF222121)),
       textAlign: TextAlign.right,
     );
@@ -985,13 +992,14 @@ class _DetailListPageState extends State<DetailListPage> {
     PayCollectDetailRepository()
         .getRevenueByCards(
             GetRevenueByCardsReq(
-                localCcy,
-                '$_endDate', //结束时间     '$_endDate'
-                '$_startDate', //开始时间   '$_startDate'
-                0, //分页page
-                20, //分页pageSize
-                acNo: '$selectAccNo',
-                ciNo: '$custID'), //'818000000113'
+              localCcy,
+              '$_endDate', //结束时间     '$_endDate'
+              '$_startDate', //开始时间   '$_startDate'
+              0, //分页page
+              20, //分页pageSize
+              acNo: '$selectAccNo',
+              ciNo: '$custID',
+            ), //'818000000113'
             'GetRevenueByCardsReq')
         .then((data) {
       HSProgressHUD.dismiss();
@@ -1006,7 +1014,11 @@ class _DetailListPageState extends State<DetailListPage> {
         }
       }
     }).catchError((e) {
-      _isLoading = false;
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,

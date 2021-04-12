@@ -69,10 +69,10 @@ class _TransferInternalPreviewPageState
                 Container(
                   width: (MediaQuery.of(context).size.width - 40) / 2,
                   child: Text(
-                    transferData.transferIntoCcy +
+                    transferData.transferOutCcy +
                         ' ' +
                         FormatUtil.formatSringToMoney(
-                            transferData.transferIntoAmount),
+                            transferData.transferOutAmount),
                     style: TextStyle(color: Color(0xff232323), fontSize: 20),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -88,16 +88,16 @@ class _TransferInternalPreviewPageState
           _getRowContent(S.current.transfer_from,
               FormatUtil.formatSpace4(transferData.transferOutAccount)),
           _getRowContent(S.current.estimated_collection_amount,
-              FormatUtil.formatSringToMoney(transferData.transferOutAmount)),
+              FormatUtil.formatSringToMoney(transferData.transferIntoAmount)),
           _getRowContent(S.current.rate_of_exchange, transferData.xRate),
           _getRowContent(
-              S.current.payment_currency, transferData.transferIntoCcy),
+              S.current.payment_currency, transferData.transferOutCcy),
           _getRowContent(
               S.current.receipt_side_name, transferData.transferIntoName),
           _getRowContent(S.current.receipt_side_account,
               FormatUtil.formatSpace4(transferData.transferIntoAccount)),
           _getRowContent(
-              S.current.transfer_from_ccy, transferData.transferOutCcy),
+              S.current.transfer_from_ccy, transferData.transferIntoCcy),
           _getRowContent(
               S.current.transfer_postscript,
               transferData.transferRemark == ''
@@ -164,14 +164,25 @@ class _TransferInternalPreviewPageState
   }
 
   Future _loadData(TransferInternalData transferData) async {
-    double money = double.parse(transferData.transferIntoAmount);
+    double money = double.parse(transferData.transferOutAmount);
+    // String transferOutCcy = transferData.transferOutCcy;
+    // String transferIntoCcy = transferData.transferIntoCcy;
+    // String payeeBankCode = transferData.payeeBankCode;
+    // String payeeCardNo = transferData.transferOutAccount;
+    // String payeeName = transferData.payeeName;
+    // String payerBankCode = transferData.payerBankCode;
+    // String cardNo = transferData.transferIntoAccount;
+    // String payerName = transferData.payerName;
+    // String remark = transferData.transferRemark;
+    // String smsCode = '';
+    // String xRate = transferData.xRate;
     String transferOutCcy = transferData.transferOutCcy;
     String transferIntoCcy = transferData.transferIntoCcy;
     String payeeBankCode = transferData.payeeBankCode;
-    String payeeCardNo = transferData.transferOutAccount;
-    String payeeName = transferData.payeeName;
+    String payeeCardNo = transferData.transferIntoAccount;
+    String payeeName = transferData.transferIntoName;
     String payerBankCode = transferData.payerBankCode;
-    String cardNo = transferData.transferIntoAccount;
+    String payerCardNo = transferData.transferOutAccount;
     String payerName = transferData.payerName;
     String remark = transferData.transferRemark;
     String smsCode = '';
@@ -198,7 +209,7 @@ class _TransferInternalPreviewPageState
               //付款方银行
               payerBankCode,
               //付款方卡号
-              cardNo,
+              payerCardNo,
               //付款方姓名
               payerName,
               //附言

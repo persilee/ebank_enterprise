@@ -11,6 +11,8 @@ class PayCollectDetailRepository {
       GetRevenueByCardsReq req, String tag) {
     return request('universal/transhis/getRevenueByCards', req, tag,
         (data) => GetRevenueByCardsResp.fromJson(data));
+    // return request('/universal/transhis/queryTransHis', req, tag,
+    //     (data) => GetRevenueByCardsResp.fromJson(data));
   }
 
   static final _instance = PayCollectDetailRepository._internal();

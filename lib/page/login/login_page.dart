@@ -222,19 +222,19 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           backgroundImgWidget,
           contentDetailWidget,
-          Positioned(
-            bottom: 26,
-            right: 0,
-            left: 0,
-            child: Text(
-              '@2020-2025 HSBC.com.cn.All Rights Reserved.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 11.0,
-                  color: Colors.white, //HsgColors.aboutusTextCon,
-                  fontWeight: FontWeight.normal),
-            ),
-          ),
+          // Positioned(
+          //   bottom: 26,
+          //   right: 0,
+          //   left: 0,
+          //   child: Text(
+          //     '@2020-2025 HSBC.com.cn.All Rights Reserved.',
+          //     textAlign: TextAlign.center,
+          //     style: TextStyle(
+          //         fontSize: 11.0,
+          //         color: Colors.white, //HsgColors.aboutusTextCon,
+          //         fontWeight: FontWeight.normal),
+          //   ),
+          // ),
         ],
       ),
     );

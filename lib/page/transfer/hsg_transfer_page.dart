@@ -12,7 +12,6 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
-import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -119,6 +118,7 @@ class _TransferPageState extends State<TransferPage> {
                         },
                         onRefresh: () {
                           _page = 1;
+                          _partnerListData.clear();
                           _loadData();
                           //刷新完成
                           _refreshController.refreshCompleted();
@@ -628,7 +628,7 @@ class _TransferPageState extends State<TransferPage> {
           ),
           Row(
             children: [
-              data.payeeCardNo.length > 14
+              data.payeeCardNo.length > 12
                   ? Container(
                       width: 100,
                       child: Text(
@@ -773,7 +773,7 @@ class _TransferPageState extends State<TransferPage> {
         if (data.rows != null) {
           setState(() {
             _totalPage = data.totalPage;
-            _partnerListData.clear();
+            // _partnerListData.clear();
             _partnerListData.addAll(data.rows);
             _isShowNoDataWidget = _partnerListData.length > 0 ? false : true;
           });

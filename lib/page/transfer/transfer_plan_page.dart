@@ -45,6 +45,7 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
   int _page = 1; //第几页数据
   int _totalPage = 1; //数据总页数
   bool _loadMore = false; //是否加载更多
+  bool _enableClick = true; //是否能点击
   RefreshController _refreshController;
   // var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
@@ -151,55 +152,59 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
 
   //按钮样式
   Widget _btnStyle(
-      String btnTitle,
-      String btnType,
-      Color btnColor,
-      Color textColor,
-      BorderSide borderSide,
-      double textSize,
-      BorderRadius borderRadius) {
+    String btnTitle,
+    String btnType,
+    Color btnColor,
+    Color textColor,
+    BorderSide borderSide,
+    double textSize,
+    BorderRadius borderRadius,
+    bool enableClick,
+  ) {
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-            colors: _isColor
-                ? [
-                    Color(0xFF1775BA),
-                    Color(0xFF3A9ED1),
-                  ]
-                : [btnColor, btnColor],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight),
-        borderRadius: BorderRadius.circular(5),
-      ),
+      // decoration: BoxDecoration(
+      //   gradient: LinearGradient(
+      //       colors: _isColor
+      //           ? [
+      //               Color(0xFF1775BA),
+      //               Color(0xFF3A9ED1),
+      //             ]
+      //           : [btnColor, btnColor],
+      //       begin: Alignment.centerLeft,
+      //       end: Alignment.centerRight),
+      //   borderRadius: BorderRadius.circular(5),
+      // ),
       child: FlatButton(
         padding: EdgeInsets.zero,
-        // color: btnColor,
+        color: btnColor,
         shape: RoundedRectangleBorder(
             side: borderSide, borderRadius: borderRadius),
-        onPressed: () {
-          setState(() {
-            if (btnTitle == S.current.in_progress) {
-              _statusList = ['P', 'A'];
-              updateGroupValue(btnType);
-              transferPlanList.clear();
-              _page = 1;
-              _getTransferPlanList();
-            } else if (btnTitle == S.current.already_finished) {
-              _statusList = ['C', 'E'];
-              updateGroupValue(btnType);
-              transferPlanList.clear();
-              _page = 1;
-              _getTransferPlanList();
-            } else if (btnTitle == S.current.cancel_plan) {
-              _alertDialog();
-            } else {
-              _statusList = ['C', 'E'];
-              transferPlanList.clear();
-              _page = 1;
-              _getTransferPlanList();
-            }
-          });
-        },
+        onPressed: !enableClick
+            ? () {}
+            : () {
+                setState(() {
+                  if (btnTitle == S.current.in_progress) {
+                    _statusList = ['P', 'A'];
+                    updateGroupValue(btnType);
+                    transferPlanList.clear();
+                    _page = 1;
+                    _getTransferPlanList();
+                  } else if (btnTitle == S.current.already_finished) {
+                    _statusList = ['C', 'E'];
+                    updateGroupValue(btnType);
+                    transferPlanList.clear();
+                    _page = 1;
+                    _getTransferPlanList();
+                  } else if (btnTitle == S.current.cancel_plan) {
+                    _alertDialog();
+                  } else {
+                    _statusList = ['C', 'E'];
+                    transferPlanList.clear();
+                    _page = 1;
+                    _getTransferPlanList();
+                  }
+                });
+              },
         child: _textStyle(
             btnTitle, textColor, textSize, FontWeight.normal, TextAlign.center),
       ),
@@ -224,8 +229,16 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
               ? BorderRadius.horizontal(left: Radius.circular(5))
               : BorderRadius.horizontal(right: Radius.circular(5));
           return groupValue == value['type']
-              ? _btnStyle(value['title'], value['type'], Color(0xff3394D4),
-                  HsgColors.aboutusText, BorderSide.none, 14.0, borderRadius)
+              ? _btnStyle(
+                  value['title'],
+                  value['type'],
+                  Color(0xff3394D4),
+                  HsgColors.aboutusText,
+                  BorderSide.none,
+                  14.0,
+                  borderRadius,
+                  true,
+                )
               : _btnStyle(
                   value['title'],
                   value['type'],
@@ -233,7 +246,9 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
                   HsgColors.notSelectedBtn,
                   BorderSide(color: HsgColors.divider),
                   14.0,
-                  borderRadius);
+                  borderRadius,
+                  true,
+                );
         }).toList(),
       ),
     );
@@ -273,7 +288,10 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
               textColor,
               BorderSide.none,
               13.0,
-              BorderRadius.all(Radius.circular(13)),
+              BorderRadius.all(
+                Radius.circular(13),
+              ),
+              _enableClick,
             ),
           ),
         ],
@@ -352,23 +370,28 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
     if (transferPlanList[index].status == 'P') {
       btnTitle = S.current.cancel_plan;
       // btnColor = HsgColors.accent;
-      _isColor = true;
+      // _isColor = true;
+      btnColor = Color(0xff1775BA);
       textColor = Colors.white;
+      _enableClick = true;
     } else if (transferPlanList[index].status == 'C') {
       btnTitle = S.current.canceled;
-      _isColor = false;
+      // _isColor = false;
       btnColor = HsgColors.canceledBtn;
       textColor = Colors.white;
+      _enableClick = false;
     } else if (transferPlanList[index].status == 'A') {
       btnTitle = S.current.under_review;
-      _isColor = false;
+      // _isColor = false;
       // btnColor = Color(0xFF48b4ff);
       btnColor = Colors.white;
       textColor = Color(0xFF48b4ff);
+      _enableClick = false;
     } else {
       btnTitle = S.current.finished;
-      _isColor = false;
+      // _isColor = false;
       btnColor = HsgColors.finishedBtn;
+      _enableClick = false;
     }
     nextDate = transferPlanList[index].nextDate == null
         ? '--'
@@ -395,23 +418,26 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
                 _transferRecordImage('images/transferIcon/transfert_to.png',
                     MediaQuery.of(context).size.width / 7, 25, 25),
                 _bank(
-                    transferPlanList[index].payeeName,
-                    FormatUtil.formatSpace4(
-                        transferPlanList[index].payeeCardNo)),
+                  transferPlanList[index].payeeName,
+                  FormatUtil.formatSpace4(
+                    transferPlanList[index].payeeCardNo,
+                  ),
+                ),
               ],
             ),
           ),
           _dottedLine(),
           //转账计划信息
           _planInfo(
-              transferPlanList[index].debitCurrency +
-                  ' ' +
-                  transferPlanList[index].amount,
-              frequency,
-              transferPlanList[index].startDate,
-              transferPlanList[index].endDate,
-              nextDate,
-              transferType),
+            transferPlanList[index].debitCurrency +
+                ' ' +
+                transferPlanList[index].amount,
+            frequency,
+            transferPlanList[index].startDate,
+            transferPlanList[index].endDate,
+            nextDate,
+            transferType,
+          ),
         ],
       ),
     );
@@ -553,7 +579,7 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
                             if (_page < _totalPage) {
                               _loadMore = true;
                               _page++;
-                              _isColor = false;
+                              // _isColor = false;
                             }
                             //加载更多完成
                             if (_loadMore) {
