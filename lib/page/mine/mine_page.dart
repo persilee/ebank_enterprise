@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:dio/dio.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// desc: 个人中心
 /// Author: hlx
@@ -33,7 +34,8 @@ class MinePage extends StatefulWidget {
   _MinePageState createState() => _MinePageState();
 }
 
-class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin {
+class _MinePageState extends State<MinePage>
+    with AutomaticKeepAliveClientMixin {
   String _language = Intl.getCurrentLocale();
   double _opacity = 0;
   ScrollController _sctrollController = ScrollController();
@@ -853,10 +855,14 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin 
       if (this.mounted) {
         setState(() {
           Future.delayed(Duration.zero, () {
-            Navigator.pushAndRemoveUntil(
-                context,
-                new MaterialPageRoute(builder: (context) => new LoginPage()),
-                (route) => false);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                pageLogin, ModalRoute.withName("/"), //清除旧栈需要保留的栈 不清除就不写这句
+                arguments: 'logout' //传值
+                );
+            // Navigator.pushAndRemoveUntil(
+            //     context,
+            //     new MaterialPageRoute(builder: (context) => new LoginPage()),
+            //     (route) => false);
           });
           Fluttertoast.showToast(
             msg: S.of(context).logoutSuccess,

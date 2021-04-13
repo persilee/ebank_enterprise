@@ -85,10 +85,15 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     //从忘记用户名界面拿到名字
+
     var _userName = ModalRoute.of(context).settings.arguments;
 
     setState(() {
-      _accountTC.text = _userName;
+      if (_userName == 'logout') {
+        _passwordTC.text = '';
+      } else {
+        _accountTC.text = _userName;
+      }
     });
     Widget backgroundImgWidget = Container(
       decoration: BoxDecoration(

@@ -393,7 +393,6 @@ class _DetailListPageState extends State<DetailListPage> {
                 break;
             }
           });
-
           //选择之后不立马放下弹窗
           (popcontext as Element).markNeedsBuild();
         },
@@ -955,7 +954,7 @@ class _DetailListPageState extends State<DetailListPage> {
               _cardList.add(item.cardNo);
               _cardIcon.add(item.imageUrl);
             });
-
+            _cardList = _cardList.toSet().toList();
             _getRevenueByCards(_startDate, _allAccNoList);
           } else if (data.cardList == null) {
             setState(() {
