@@ -572,6 +572,14 @@
   "approve_collection_address": "收款地址",
   "approve_approval_history": "审批历史",
   "approve_input_approval_comments": "请输入审批意见",
+  "refresh_loosen_refresh": "松开刷新",
+  "refresh_loading": "加载中...",
+  "refresh_drop_down_refresh": "下拉刷新",
+  "refresh_load_success": "加载成功",
+  "refresh_pull_loading": "上拉加载",
+  "refresh_failed_retry": "加载失败！点击重试!",
+  "refresh_load_more": "松手,加载更多!",
+  "refresh_no_more_data": "没有更多数据了!",
 
 
   "lishaoying_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李少颖国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
