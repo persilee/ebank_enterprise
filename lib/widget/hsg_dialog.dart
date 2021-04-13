@@ -1,10 +1,14 @@
+import 'dart:ffi';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
 /// Date: 2020-11-30
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/loan_trial_rate.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 
 const ShapeBorder _dialogShape = RoundedRectangleBorder(
@@ -553,6 +557,252 @@ class HsgBottomSingleChoice extends StatelessWidget {
         (context as Element).markNeedsBuild();
         Navigator.of(context).pop(position);
       },
+    );
+  }
+}
+
+// 贷款领用的还款计划列表
+class HsgBottomTrailPlanChiose extends StatelessWidget {
+  final String title;
+  final List<LoanTrialDTOList> listItems;
+  HsgBottomTrailPlanChiose({this.title, this.listItems});
+
+  @override
+  Widget build(BuildContext context) {
+    Widget titleWidget;
+    Widget contentWidget;
+    Widget actionsWidget;
+
+    var stackList = Stack(
+      fit: StackFit.loose,
+      children: [
+        //竖线
+        Positioned(
+          left: 88,
+          top: 10,
+          bottom: 15,
+          child: VerticalDivider(
+            width: 1,
+            color: Color(0x16000000),
+          ),
+        ),
+        _listViewList(),
+      ],
+    );
+
+    if (title != null) {
+      titleWidget = _titleWidget(
+        title,
+        titlePadding: EdgeInsets.all(15),
+        style: TextStyle(
+          fontWeight: FontWeight.normal,
+        ),
+      );
+    }
+
+    if (listItems != null && listItems.length > 0) {
+      final EdgeInsets contentPadding = EdgeInsets.fromLTRB(0, 0, 0, 20);
+      contentWidget = Padding(
+          padding: contentPadding,
+          child: Column(
+            children: [
+              Expanded(
+                child: stackList,
+              ),
+            ],
+          ));
+    }
+
+    final actionChildren = [
+      Expanded(
+        child: FlatButton(
+          height: 55,
+          onPressed: () {
+            Navigator.of(context).pop(false);
+          },
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 13, top: 10),
+            child: Text(
+              S.current.cancel,
+              style: TextStyle(
+                // fontSize: 16,
+                color: HsgColors.secondDegreeText,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ];
+
+    actionsWidget = Row(
+      children: actionChildren,
+    );
+    actionsWidget = Row(
+      children: actionChildren,
+    );
+
+    List<Widget> columnChildren = <Widget>[
+      if (title != null) titleWidget,
+      if (listItems != null && listItems.length > 0)
+        Flexible(
+          child: contentWidget,
+        ),
+      Divider(
+        color: HsgColors.commonBackground,
+        thickness: 7,
+        height: 7,
+      ),
+      actionsWidget,
+    ];
+
+    final dialogChild = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: columnChildren,
+    );
+    return dialogChild;
+  }
+
+  Widget _listViewList() {
+    List<Widget> _list = new List();
+    for (int i = 0; i < listItems.length; i++) {
+      _list.add(_creatCloumnContent(listItems[i]));
+    }
+    return new ListView(
+      children: _list,
+    );
+  }
+
+//获取内容(左[日期] 中[时间轴] 右[还款详情])
+  Widget _creatCloumnContent(LoanTrialDTOList lnSchedule) {
+    var instalDate = lnSchedule.payDt;
+    var year = instalDate.substring(0, 4);
+    var day = instalDate.substring(5);
+
+    String totalValue =
+        (double.parse(lnSchedule.payPrin) + double.parse(lnSchedule.payInt))
+            .toString();
+    var instalOutstAmt = FormatUtil.formatSringToMoney(totalValue); //归还金额合计
+    var principalAmt = FormatUtil.formatSringToMoney(lnSchedule.payPrin); //本金金额
+    var interestAmt = FormatUtil.formatSringToMoney(lnSchedule.payInt); //利息
+
+    var leftCont = Container(
+      width: 66,
+      padding: EdgeInsets.only(left: 10, right: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          SizedBox(
+            child: Text(
+              day,
+              style: TextStyle(fontSize: 14, color: Color(0xFF4D4D4D)),
+            ),
+          ),
+          SizedBox(
+            child: Text(
+              year,
+              style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
+            ),
+          ),
+        ],
+      ),
+    );
+    //创建虚圆点
+    var stackCont = Stack(
+      alignment: AlignmentDirectional.topCenter,
+      fit: StackFit.loose,
+      textDirection: TextDirection.rtl,
+      children: [
+        Align(
+          heightFactor: 2,
+          child: Opacity(
+              opacity: 0.6,
+              child: Container(
+                width: 7,
+                height: 7,
+                child: CircleAvatar(
+                  radius: 6.0,
+                ),
+              )),
+        ),
+        Opacity(
+            opacity: 0.5,
+            child: Container(
+              width: 15,
+              height: 15,
+              child: CircleAvatar(
+                radius: 6.0,
+              ),
+            )),
+      ],
+    );
+    var centerCont = Container(
+      height: 55,
+      width: 24,
+      child: Column(
+        children: [
+          stackCont,
+        ],
+      ),
+    );
+    var rightCont = Container(
+      width: 250,
+      padding: EdgeInsets.only(left: 10, right: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                instalOutstAmt,
+                style: TextStyle(fontSize: 14, color: Color(0xFF4D4D4D)),
+              ),
+            ],
+          ),
+          Padding(padding: EdgeInsets.only(top: 5)),
+          Wrap(
+            spacing: 20, //左右组件间距
+            runSpacing: 30, //上下组件间距
+            alignment: WrapAlignment.spaceEvenly, //横轴对齐方式
+            runAlignment: WrapAlignment.end,
+            children: [
+              Text(
+                S.current.with_principal +
+                    " " +
+                    principalAmt +
+                    " " +
+                    S.current.interest_amt +
+                    " " +
+                    interestAmt,
+                maxLines: 250,
+                style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
+              ),
+            ],
+          ),
+          Padding(padding: EdgeInsets.only(top: 15)),
+          SizedBox(
+            width: 250,
+            child: Divider(
+              height: 0,
+              color: Color(0xFFE4E4E4),
+            ),
+          ),
+          Padding(padding: EdgeInsets.only(top: 12)),
+        ],
+      ),
+    );
+    return Padding(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          leftCont,
+          centerCont,
+          rightCont,
+        ],
+      ),
     );
   }
 }
