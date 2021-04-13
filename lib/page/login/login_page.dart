@@ -12,6 +12,7 @@ import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/login_save_user_data.dart';
 import 'package:ebank_mobile/util/screen_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/util/status_bar_util.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -348,6 +349,7 @@ class _LanguageChangeBtnState extends State<LanguageChangeBtn> {
 
   @override
   Widget build(BuildContext context) {
+    StatusBarUtil.setStatusBar(Brightness.dark, color: Colors.transparent);
     return Container(
       // margin: EdgeInsets.only(right: 15),
       child: FlatButton(
