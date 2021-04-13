@@ -242,7 +242,7 @@ class _OpenAccountSelectDocumentTypePageState
 
     if (mounted) {
       setState(() {
-        _isCanClick = false;
+        // _isCanClick = false;
       });
     }
 

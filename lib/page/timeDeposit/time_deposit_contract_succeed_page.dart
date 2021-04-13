@@ -5,13 +5,8 @@
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
-
-// import 'package:ebank_mobile/feature_demo/time_deposit_record_page.dart';
-
-import 'package:ebank_mobile/page_route.dart';
-import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:flutter/material.dart';
 
 class DepositContractSucceed extends StatefulWidget {
   DepositContractSucceed({Key key}) : super(key: key);
@@ -23,8 +18,6 @@ class DepositContractSucceed extends StatefulWidget {
 class _DepositContractSucceed extends State<DepositContractSucceed> {
   @override
   Widget build(BuildContext context) {
-    var _arguments = ModalRoute.of(context).settings.arguments;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.operation_successful),
@@ -62,39 +55,7 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                 height: 45,
                 child: FlatButton(
                   onPressed: () {
-                    if (_arguments == '0') {
-                      Navigator.of(context)..pop()..pop()..pop();
-                    }
-                    //国际转账跳转
-                    if (_arguments == 'international') {
-                      Navigator.of(context)..pop()..pop()..pop();
-                    }
-
-                    //定期开立跳转
-                    if (_arguments == 'timeDepositProduct') {
-                      Navigator.of(context)..pop();
-                      NotificationCenter.instance
-                          .postNotification('timeDepositProduct', true);
-                      // Navigator.pushReplacementNamed(
-                      //     context, pageTimeDepostProduct);
-                    }
-                    //任务审批跳转
-                    if (_arguments == 'taskApproval') {
-                      Navigator.pop(context);
-                      NotificationCenter.instance
-                          .postNotification('refresh', true);
-                    }
-                    //预约转账
-                    if (_arguments == 'advanceTransfer') {
-                      Navigator.of(context)..pop()..pop()..pop();
-                    }
-
-                    //提前结清跳转
-                    if (_arguments == 'timeDepositRecord') {
-                      Navigator.of(context)..pop();
-                      NotificationCenter.instance
-                          .postNotification('load', true);
-                    }
+                    Navigator.pop(context);
                   },
                   color: HsgColors.accent,
                   child: (Text(S.current.complete,

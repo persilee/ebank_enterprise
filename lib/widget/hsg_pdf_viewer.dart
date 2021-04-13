@@ -105,7 +105,7 @@ class PDFApi {
 
   static Future<File> _storeFile(String url, List<int> bytes) async {
     var filename = basename(url);
-    filename = filename.substring(0,filename.indexOf('.pdf')+ 4);
+    filename = filename.substring(0,filename.indexOf('.pdf') + 4);
     final dir = await getApplicationDocumentsDirectory();
 
     final file = File('${dir.path}/$filename');

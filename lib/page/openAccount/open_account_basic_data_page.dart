@@ -255,7 +255,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               _companyNameCNTEC,
               false,
               <TextInputFormatter>[
-                LengthLimitingTextInputFormatter(35),
+                LengthLimitingTextInputFormatter(45),
                 FilteringTextInputFormatter.deny(
                     RegExp(InputFormartterRegExp.REGEX_EMOJI)), //不允许表情
               ],
@@ -311,7 +311,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                     _companyTypeOtherTEC,
                     false,
                     <TextInputFormatter>[
-                      LengthLimitingTextInputFormatter(35),
+                      LengthLimitingTextInputFormatter(45),
                       FilteringTextInputFormatter.deny(
                           RegExp(InputFormartterRegExp.REGEX_EMOJI)), //不允许表情
                     ],

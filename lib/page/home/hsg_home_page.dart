@@ -32,11 +32,14 @@ import 'package:ebank_mobile/util/status_bar_util.dart';
 import '../../page_route.dart';
 
 class HomePage extends StatefulWidget {
+  HomePage({Key key}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   double _opacity = 0;
   var _changeLangBtnTltle = '';
   var _headPortraitUrl = ''; // 头像地址
@@ -50,6 +53,12 @@ class _HomePageState extends State<HomePage> {
   UserInfoResp _data;
 
   ScrollController _sctrollController;
+
+  changeLanguage(Locale locale) {
+    setState(() {
+      S.load(locale);
+    });
+  }
 
   @override
   // ignore: must_call_super
@@ -80,6 +89,7 @@ class _HomePageState extends State<HomePage> {
           event.msg +
           "   state info is  = " +
           event.state.toString());
+      _loadData();
     });
 
     super.initState();
@@ -93,6 +103,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     StatusBarUtil.setStatusBar(Brightness.light, color: Colors.transparent);
     String _language = Intl.getCurrentLocale();
     if (_language == 'zh_CN') {
@@ -1041,6 +1052,9 @@ class _HomePageState extends State<HomePage> {
       print('${e.toString()}');
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   // Future<void> _getInviteeStatusByPhoneNetwork() async {
   //   final prefs = await SharedPreferences.getInstance();
