@@ -352,7 +352,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           decoration: InputDecoration(
             contentPadding: EdgeInsets.all(0),
             border: InputBorder.none,
-            hintText: S.current.deposit_min_with_value + _minAmt,
+            hintText: S.current.deposit_min_with_value +
+                FormatUtil.formatSringToMoney(_minAmt.toString()),
             hintStyle: TextStyle(
               color: HsgColors.hintText,
               fontSize: 18.0,
