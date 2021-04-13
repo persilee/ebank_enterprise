@@ -999,6 +999,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           _btnIsEnable = false;
         });
       }
+
       try {
         // 请求审批接口
         CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
@@ -1016,8 +1017,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
               _btnIsEnable = true;
             });
           }
-          Navigator.pushReplacementNamed(context, pageDepositRecordSucceed,
-              arguments: 'taskApproval');
+          Navigator.pushReplacementNamed(context, pageDepositRecordSucceed);
         }
       } catch (e) {
         print(e);

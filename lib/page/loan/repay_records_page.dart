@@ -12,6 +12,7 @@ import 'package:ebank_mobile/data/source/model/loan_repayment_record.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 
@@ -77,16 +78,19 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
     var req = new LoanRepaymentRecordReq(
       widget.loanDetail.contactNo, //合约号
     );
+    SVProgressHUD.show();
     LoanDataRepository()
         .getScheduleRecordDetailList(req, 'getScheduleDetailList')
         .then((data) {
       if (data.loanPrepaymentHistoryDTOList != null) {
+        SVProgressHUD.dismiss();
         setState(() {
           lnScheduleList.clear();
           lnScheduleList.addAll(data.loanPrepaymentHistoryDTOList);
         });
       }
     }).catchError((e) {
+      SVProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,

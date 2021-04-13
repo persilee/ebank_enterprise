@@ -72,9 +72,9 @@ class GetLnAcScheduleRspDetlsDTOList extends Object {
   // //正常NORMAL 到期EXPIRE 逾期OVERDUE 代偿COMPENSATE
   // @JsonKey(name: 'instalStatus')
   // String instalStatus;
-  // //还款状态 未还NONE、部分还款PART、全额还款ALL
-  // @JsonKey(name: 'instalType')
-  // String instalType;
+  //还款状态 未还NONE、部分还款PART、全额还款ALL
+  @JsonKey(name: 'instalType')
+  String instalType;
   // //分期金额
   // @JsonKey(name: 'interestAmt')
   // String interestAmt;
@@ -96,57 +96,59 @@ class GetLnAcScheduleRspDetlsDTOList extends Object {
   // //补贴金额
   // @JsonKey(name: 'subsidyAmt')
   // String subsidyAmt;
+  //
+  // 还款类型
   @JsonKey(name: 'payType')
   String payType;
-
+//还款状态
   @JsonKey(name: 'paySts')
   String paySts;
-
+//期数号
   @JsonKey(name: 'term')
   int term;
-
+//起息日
   @JsonKey(name: 'valDt')
   String valDt;
-
+//还款日期
   @JsonKey(name: 'payDt')
   String payDt;
-
+//当前期利率
   @JsonKey(name: 'curRate')
   String curRate;
-
+//币种
   @JsonKey(name: 'ccy')
   String ccy;
-
+//还款总金额
   @JsonKey(name: 'payAmt')
   String payAmt;
-
+//还款本金
   @JsonKey(name: 'payPrin')
   String payPrin;
-
+//还款利息
   @JsonKey(name: 'payInt')
   String payInt;
-
+//本金罚息
   @JsonKey(name: 'payPen')
   String payPen;
-
+//利息罚息
   @JsonKey(name: 'payCom')
   String payCom;
-
+//已还总金额
   @JsonKey(name: 'recAmt')
   String recAmt;
-
+//已还本金
   @JsonKey(name: 'recPrin')
   String recPrin;
-
+//已还利息
   @JsonKey(name: 'recInt')
   String recInt;
-
+//已还本金罚息
   @JsonKey(name: 'recPen')
   String recPen;
-
+//已还利息罚息
   @JsonKey(name: 'recCom')
   String recCom;
-
+//备注
   @JsonKey(name: 'remark')
   String remark;
 

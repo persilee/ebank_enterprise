@@ -70,9 +70,11 @@ class _RepayPlanState extends State<RepayPlanPage> {
         //  page,
         //  pageSize,
         'Q');
+    SVProgressHUD.show();
     LoanDataRepository()
         .getSchedulePlanDetailList(req, 'getScheduleDetailList')
         .then((data) {
+      SVProgressHUD.dismiss();
       if (data.getLnAcScheduleRspDetlsDTOList != null) {
         setState(() {
           lnScheduleList.clear();
@@ -80,6 +82,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
         });
       }
     }).catchError((e) {
+      SVProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
@@ -93,7 +96,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
 
   @override
   Widget build(BuildContext context) {
-    LnAcMastAppDOList loanDetail = ModalRoute.of(context).settings.arguments;
+    // LnAcMastAppDOList loanDetail = ModalRoute.of(context).settings.arguments;
     // setState(() {
     //   acNo = loanDetail.acNo;
 
@@ -125,7 +128,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
         key: refrestIndicatorKey,
         child: Column(
           children: [
-            _getHeader(loanDetail),
+            _getHeader(widget.loanDetail),
             Expanded(
               child: stackList,
             ),
@@ -184,11 +187,17 @@ class _RepayPlanState extends State<RepayPlanPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _getHeadBox(S.of(context).loan_principal + ":",
-              " HKD " + FormatUtil.formatSringToMoney(loanDetail.loanAmt)),
+          _getHeadBox(
+              S.of(context).loan_principal + ":",
+              loanDetail.ccy +
+                  ' ' +
+                  FormatUtil.formatSringToMoney(loanDetail.loanAmt)),
           Padding(padding: EdgeInsets.only(top: 9)),
-          _getHeadBox(S.of(context).loan_balance2 + ":",
-              " HKD " + FormatUtil.formatSringToMoney(loanDetail.osAmt)),
+          _getHeadBox(
+              S.of(context).loan_balance2 + ":",
+              loanDetail.ccy +
+                  ' ' +
+                  FormatUtil.formatSringToMoney(loanDetail.osAmt)),
           Padding(padding: EdgeInsets.only(top: 10)),
           Container(
             height: 20,
@@ -208,32 +217,44 @@ class _RepayPlanState extends State<RepayPlanPage> {
     instalDate = instalDate.trim();
     var year = instalDate.substring(0, 4);
     var day = instalDate.substring(5);
-    // var instalType = lnSchedule.instalType; //还款状态 未还NONE、部分还款PART、全额还款ALL
-    // var repay = '还款'; //还款
-    // switch (instalType) {
-    //   case 'NONE':
-    //     instalType = ' (未还) ';
-    //     break;
-    //   case 'PART':
-    //     instalType = ' (部分还款) ';
-    //     break;
-    //   case 'ALL':
-    //     instalType = ' (全部还款) ';
-    //     repay = '';
-    //     break;
-    //   default:
-    // }
+    var instalType = lnSchedule.instalType; //还款状态 未还NONE、部分还款PART、全额还款ALL
+    var repay = '还款'; //还款
+    switch (instalType) {
+      case 'NONE':
+        instalType = ' (未还) ';
+        break;
+      case 'PART':
+        instalType = ' (部分还款) ';
+        break;
+      case 'ALL':
+        instalType = ' (全部还款) ';
+        repay = '';
+        break;
+      default:
+    }
+
+    double currentPenAmt = double.parse(lnSchedule.payPrin) -
+        double.parse(lnSchedule.recPrin); //当前本金金额
+    double currentInterestAmt =
+        double.parse(lnSchedule.payInt) - double.parse(lnSchedule.recInt); //利息
+    double currentAmorIntAmt =
+        (double.parse(lnSchedule.payPen) + double.parse(lnSchedule.payCom)) -
+            (double.parse(lnSchedule.recPen) +
+                double.parse(lnSchedule.recCom)); //利息罚息
+
+    double currentAmt = currentPenAmt + currentInterestAmt + currentAmorIntAmt;
+
     var instalOutstAmt =
-        ''; //FormatUtil.formatSringToMoney(lnSchedule.instalOutstAmt); //归还金额合计
-    var principalAmt = '';
-    //FormatUtil.formatSringToMoney(lnSchedule.principalAmt); //本金金额
-    var interestAmt =
-        ''; //FormatUtil.formatSringToMoney(lnSchedule.interestAmt); //利息
-    var amorIntAmt = ''; //罚息
+        FormatUtil.formatSringToMoney(currentAmt.toString()); //归还金额合计
+    var principalAmt = FormatUtil.formatSringToMoney(
+        currentPenAmt.toString()); //本金金额 lnSchedule.recPrin
+    var interestAmt = FormatUtil.formatSringToMoney(
+        currentInterestAmt.toString()); //利息lnSchedule.interestAmt
+    var amorIntAmt = ''; //罚息 lnSchedule.amorIntAmt
     // if (lnSchedule.amorIntAmt == null) {
     //   amorIntAmt = '0.00';
     // } else {
-    //   amorIntAmt = lnSchedule.amorIntAmt;
+    amorIntAmt = currentAmorIntAmt.toString();
     // }
 
     var leftCont = Container(

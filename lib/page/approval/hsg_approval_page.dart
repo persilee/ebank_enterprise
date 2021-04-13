@@ -9,29 +9,21 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/approval/my_approved_history_page.dart';
 import 'package:ebank_mobile/util/screen_util.dart';
 import 'package:ebank_mobile/util/status_bar_util.dart';
-import 'package:ebank_mobile/util/widget_util.dart';
 import 'package:ebank_mobile/widget/custom_tabs.dart' as CustomTabBar;
 import 'package:flutter/material.dart';
+
 import 'my_appplication_page.dart';
-import 'my_to_do_task_detail_page.dart';
 import 'my_to_do_task_page.dart';
 
 class ApprovalPage extends StatefulWidget {
-  ApprovalPage();
 
   @override
   _ApprovalPageState createState() => _ApprovalPageState();
 }
 
 class _ApprovalPageState extends State<ApprovalPage>
-    with SingleTickerProviderStateMixin {
-  _ApprovalPageState();
-
-  final List tabs = [
-    S.current.my_to_do_list,
-    S.current.authorization_history,
-    S.current.my_application
-  ];
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  List tabs;
 
   @override
   void initState() {
@@ -71,6 +63,12 @@ class _ApprovalPageState extends State<ApprovalPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    tabs = [
+      S.current.my_to_do_list,
+      S.current.authorization_history,
+      S.current.my_application
+    ];
     StatusBarUtil.setStatusBar(Brightness.dark, color: Colors.transparent);
     return DefaultTabController(
       length: tabs.length,
@@ -117,4 +115,7 @@ class _ApprovalPageState extends State<ApprovalPage>
       }),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -19,3 +19,10 @@ class GetUserEvent {
 
   GetUserEvent({this.msg, this.state});
 }
+
+///获取用户状态刷新
+class ChangeLanguage {
+  String language;
+
+  ChangeLanguage({this.language});
+}

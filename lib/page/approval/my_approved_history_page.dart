@@ -66,6 +66,7 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage> with Auto
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return _isLoading
         ? HsgLoading()
         : _listData.length > 0

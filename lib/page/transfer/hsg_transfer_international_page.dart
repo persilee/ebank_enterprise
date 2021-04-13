@@ -817,9 +817,6 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   _loadTransferData() async {
-    final prefs = await SharedPreferences.getInstance();
-    _localeCcy = prefs.getString(ConfigKey.LOCAL_CCY);
-
     Future.wait({
       CardDataRepository().getCardList('GetCardList'),
     }).then((value) {
@@ -846,6 +843,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   }
 
   _loadData(String cardNo) async {
+    final prefs = await SharedPreferences.getInstance();
+    _localeCcy = prefs.getString(ConfigKey.LOCAL_CCY);
     CardDataRepository()
         .getCardBalByCardNo(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq')
         .then((element) {
