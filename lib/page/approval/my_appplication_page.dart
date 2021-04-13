@@ -25,6 +25,7 @@ import 'package:sp_util/sp_util.dart';
 
 class MyApplicationPage extends StatefulWidget {
   final title;
+
   MyApplicationPage({Key key, this.title}) : super(key: key);
 
   @override
@@ -98,10 +99,12 @@ class _MyApplicationPageState extends State<MyApplicationPage>
     try {
       FindUserTodoTaskModel response = await ApiClient().findUserStartTask(
         FindTaskBody(
-            page: _page,
-            pageSize: 10,
-            tenantId: 'EB',
-            custId: SpUtil.getString(ConfigKey.CUST_ID)),
+          finish: true,
+          page: _page,
+          pageSize: 10,
+          tenantId: 'EB',
+          custId: SpUtil.getString(ConfigKey.CUST_ID),
+        ),
       );
       if (this.mounted) {
         setState(() {
