@@ -226,45 +226,47 @@ class _DetailListPageState extends State<DetailListPage> {
 
   //顶部弹窗内容
   Widget _popDialogContent(BuildContext popcontext) {
-    return Container(
-      color: Colors.white,
-      height: 230,
-      padding: EdgeInsets.all(10),
-      child: Material(
-          child: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Container(
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Container(
-                //   height: 20,
-                //   color: Color(0xFFF7F7F7),
-                // ),
-                //交易时间
-                _timeText(intl.S.of(context).transaction_time),
-                _tradingHour(popcontext),
-                //自定义时间
-                _timeText(intl.S.of(context).user_defined),
-                _userDefind(popcontext),
-                //金额
-                // _timeText(intl.S.of(context).amount),
-                // _amountDuration(),
-                //按钮
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    _resetButton(popcontext),
-                    _confimrButton(context),
-                  ],
-                ),
-              ],
+    return InkWell(
+      //防止点击标题附近头部标题隐藏
+      onTap: () {
+        (popcontext as Element).markNeedsBuild();
+      },
+      child: Container(
+        color: Colors.white,
+        height: 230,
+        padding: EdgeInsets.all(10),
+        child: Material(
+            child: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            Container(
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //交易时间
+                  _timeText(intl.S.of(context).transaction_time),
+                  _tradingHour(popcontext),
+                  //自定义时间
+                  _timeText(intl.S.of(context).user_defined),
+                  _userDefind(popcontext),
+                  //金额
+                  // _timeText(intl.S.of(context).amount),
+                  // _amountDuration(),
+                  //按钮
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      _resetButton(popcontext),
+                      _confimrButton(context),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      )),
+          ],
+        )),
+      ),
     );
   }
 
@@ -391,7 +393,6 @@ class _DetailListPageState extends State<DetailListPage> {
                 break;
             }
           });
-
           //选择之后不立马放下弹窗
           (popcontext as Element).markNeedsBuild();
         },
@@ -828,7 +829,7 @@ class _DetailListPageState extends State<DetailListPage> {
               ' ' +
               FormatUtil.formatSringToMoney(dtoData.txAmt)
           : '- ' +
-              ddFinHisDTOList[section].txCcy +
+              dtoData.txCcy +
               ' ' +
               FormatUtil.formatSringToMoney(dtoData.txAmt),
       style: TextStyle(fontSize: 15, color: Color(0xFF222121)),
@@ -953,7 +954,7 @@ class _DetailListPageState extends State<DetailListPage> {
               _cardList.add(item.cardNo);
               _cardIcon.add(item.imageUrl);
             });
-
+            _cardList = _cardList.toSet().toList();
             _getRevenueByCards(_startDate, _allAccNoList);
           } else if (data.cardList == null) {
             setState(() {

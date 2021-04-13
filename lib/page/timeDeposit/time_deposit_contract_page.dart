@@ -840,6 +840,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                   cards.add(element.cardNo);
                 }
               });
+              cards = cards.toSet().toList();
               _changedAccountTitle = FormatUtil.formatSpace4(cards[0]);
               _getCardBal(cards[0].replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
             });
@@ -1051,6 +1052,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             // }
             _cardBalList.clear();
             _cardCcyList.clear();
+
             element.cardListBal.forEach((element) {
               _cardCcyList.add(element.ccy);
               _cardBalList.add(element.currBal);

@@ -11,6 +11,7 @@ import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:ebank_mobile/data/source/model/face_sign_upload_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_information_supplement_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_data.dart';
+import 'package:ebank_mobile/data/source/model/open_account_signature_result.dart';
 import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
@@ -352,6 +353,24 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
       },
     );
   }
+
+  // //手机APP提交面签结果（通知后台，让面签码失效，完整开户）
+  // void _subSignatureResult(String phoneStr) async {
+  //   OpenAccountRepository()
+  //       .subSignatureResult(
+  //           OpenAccountSignatureResultReq(
+  //             _valueData.certificateType ?? '',
+  //             phoneStr,
+  //             'sigCode',
+  //           ),
+  //           'subSignatureResult')
+  //       .then(
+  //         (value) {},
+  //       )
+  //       .catchError(
+  //         (e) {},
+  //       );
+  // }
 
   ///面签数据转换（面签返回的时间格式不正确，不能直接使用）
   OpenAccountInformationSupplementDataReq _getDataReq(String phoneStr) {
