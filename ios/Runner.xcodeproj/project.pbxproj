@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
-		47791B9D261F020400954035 /* SigningResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 47791B9B261F020200954035 /* SigningResources.bundle */; };
-		47791B9E261F020400954035 /* SigningEyeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47791B9C261F020400954035 /* SigningEyeSDK.framework */; };
 		477981AB26241EA800ABB56A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 477981AD26241EA800ABB56A /* InfoPlist.strings */; };
+		477981EA2625499300ABB56A /* SigningEyeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 477981E82625499300ABB56A /* SigningEyeSDK.framework */; };
+		477981EB2625499300ABB56A /* SigningResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 477981E92625499300ABB56A /* SigningResources.bundle */; };
 		6815D74826047BED007BFC9D /* .ruby-gemset in Resources */ = {isa = PBXBuildFile; fileRef = 6815D71A26047BED007BFC9D /* .ruby-gemset */; };
 		6815D74926047BED007BFC9D /* .cocoadocs.yml in Resources */ = {isa = PBXBuildFile; fileRef = 6815D71B26047BED007BFC9D /* .cocoadocs.yml */; };
 		6815D74A26047BED007BFC9D /* .codecov.yml in Resources */ = {isa = PBXBuildFile; fileRef = 6815D71C26047BED007BFC9D /* .codecov.yml */; };
@@ -122,11 +122,11 @@
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
-		47791B9B261F020200954035 /* SigningResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SigningResources.bundle; sourceTree = "<group>"; };
-		47791B9C261F020400954035 /* SigningEyeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SigningEyeSDK.framework; sourceTree = "<group>"; };
 		477981AC26241EA800ABB56A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		477981AE26241EAD00ABB56A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		477981AF26241EAE00ABB56A /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		477981E82625499300ABB56A /* SigningEyeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SigningEyeSDK.framework; sourceTree = "<group>"; };
+		477981E92625499300ABB56A /* SigningResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SigningResources.bundle; sourceTree = "<group>"; };
 		6805F576739CE86F7DAD4B3A /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		6815D71A26047BED007BFC9D /* .ruby-gemset */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ".ruby-gemset"; sourceTree = "<group>"; };
 		6815D71B26047BED007BFC9D /* .cocoadocs.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .cocoadocs.yml; sourceTree = "<group>"; };
@@ -292,7 +292,7 @@
 				68B783F726019851001F2648 /* YTPoseDetector.framework in Frameworks */,
 				686D0B2B2600B4C600781075 /* SystemConfiguration.framework in Frameworks */,
 				686D0B292600B4BF00781075 /* Security.framework in Frameworks */,
-				47791B9E261F020400954035 /* SigningEyeSDK.framework in Frameworks */,
+				477981EA2625499300ABB56A /* SigningEyeSDK.framework in Frameworks */,
 				686D0B272600B4B300781075 /* Accelerate.framework in Frameworks */,
 				686D0B252600B4A800781075 /* CoreVideo.framework in Frameworks */,
 				686D0B232600B49A00781075 /* ExternalAccessory.framework in Frameworks */,
@@ -315,13 +315,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		477981A426241D9900ABB56A /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		4B1C87E5CE8229C255763912 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -549,8 +542,8 @@
 		686D0AD82600B3D400781075 /* QianliyanSDK */ = {
 			isa = PBXGroup;
 			children = (
-				47791B9C261F020400954035 /* SigningEyeSDK.framework */,
-				47791B9B261F020200954035 /* SigningResources.bundle */,
+				477981E82625499300ABB56A /* SigningEyeSDK.framework */,
+				477981E92625499300ABB56A /* SigningResources.bundle */,
 				68B783EF26019851001F2648 /* CloudroomVideoSDK_IOS.framework */,
 				68B783DD26019850001F2648 /* WBCloudReflectionFaceVerify_framework */,
 			);
@@ -635,7 +628,6 @@
 			isa = PBXGroup;
 			children = (
 				477981AD26241EA800ABB56A /* InfoPlist.strings */,
-				477981A426241D9900ABB56A /* Resources */,
 				68B784512601F86F001F2648 /* Define */,
 				686D0AD82600B3D400781075 /* QianliyanSDK */,
 				686D0A982600B3D400781075 /* third */,
@@ -748,7 +740,6 @@
 				6815D78F26048767007BFC9D /* LICENSE.md in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				6815D79D26048767007BFC9D /* README.md in Resources */,
-				47791B9D261F020400954035 /* SigningResources.bundle in Resources */,
 				6815D75326047BED007BFC9D /* ci.yml in Resources */,
 				6815D74B26047BED007BFC9D /* .ruby-version in Resources */,
 				68B783F226019851001F2648 /* PEDat_wb.bundle in Resources */,
@@ -767,6 +758,7 @@
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				6815D75626047BED007BFC9D /* issue_template.md in Resources */,
 				6815D75526047BED007BFC9D /* pull_request_template.md in Resources */,
+				477981EB2625499300ABB56A /* SigningResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

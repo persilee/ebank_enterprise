@@ -3,6 +3,7 @@ import 'package:ebank_mobile/data/source/model/logout.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
+import 'package:ebank_mobile/util/login_save_user_data.dart';
 
 class UserDataRepository {
   Future<LoginResp> login(LoginReq loginReq, String tag) {
@@ -11,8 +12,14 @@ class UserDataRepository {
   }
 
   Future<UserInfoResp> getUserInfo(GetUserInfoReq req, String tag) {
-    return request(
+    Future<UserInfoResp> requestData = request(
         '/cust/user/getUser', req, tag, (data) => UserInfoResp.fromJson(data));
+    requestData.then((value) => {
+          SaveUserDataForGetUser(
+            value,
+          ),
+        });
+    return requestData;
   }
 
   Future<GetInviteeStatusByPhoneResp> getInviteeStatusByPhone(

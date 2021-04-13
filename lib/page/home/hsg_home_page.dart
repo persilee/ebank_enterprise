@@ -32,14 +32,14 @@ import 'package:ebank_mobile/util/status_bar_util.dart';
 import '../../page_route.dart';
 
 class HomePage extends StatefulWidget {
-
-  HomePage({Key key}): super(key: key);
+  HomePage({Key key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   double _opacity = 0;
   var _changeLangBtnTltle = '';
   var _headPortraitUrl = ''; // 头像地址
@@ -89,6 +89,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
           event.msg +
           "   state info is  = " +
           event.state.toString());
+      _loadData();
     });
 
     super.initState();

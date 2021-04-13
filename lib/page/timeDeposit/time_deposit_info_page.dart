@@ -630,6 +630,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                   cards.add(element.cardNo);
                 }
               });
+              cards = cards.toSet().toList();
             });
           }
         }

@@ -10,6 +10,7 @@ import 'package:ebank_mobile/data/source/model/open_account_information_suppleme
 import 'package:ebank_mobile/data/source/model/open_account_quick_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
+import 'package:ebank_mobile/data/source/model/open_account_signature_result.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 
 import 'model/face_sign_businessid.dart';
@@ -61,6 +62,13 @@ class OpenAccountRepository {
       OpenAccountInformationSupplementDataReq req, String tag) {
     return request('/cust/corporationCust/saveSignVideo', req, tag,
         (data) => OpenAccountInformationSupplementDataResp.fromJson(data));
+  }
+
+  //手机APP提交面签结果（通知后台，让面签码失效）
+  Future<OpenAccountSignatureResultResp> subSignatureResult(
+      OpenAccountSignatureResultReq req, String tag) {
+    return request('/cust/corporationCust/subSignatureResult', req, tag,
+        (data) => OpenAccountSignatureResultResp.fromJson(data));
   }
 
   static final _instance = OpenAccountRepository._internal();
