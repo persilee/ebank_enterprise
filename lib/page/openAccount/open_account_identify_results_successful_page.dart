@@ -407,6 +407,10 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         signSpeakList.add(speechFlowDataHS);
       });
     }
+    // if (signSpeakList.length == 0) {
+    //   SignSpeakDTO speechFlowDataHSNull = SignSpeakDTO('', '', '');
+    //   signSpeakList.add(speechFlowDataHSNull);
+    // }
     dataReq.speakings = signSpeakList;
 
     // Map infoStrForMap = jsonDecode(_valueData.infoStr);

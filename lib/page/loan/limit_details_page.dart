@@ -6,6 +6,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
+import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -41,7 +42,7 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
   @override
   void initState() {
     super.initState();
-    _loadData();
+    // _loadData();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       refrestIndicatorKey.currentState.show();
     });
@@ -102,15 +103,23 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
 
   //生成ListView
   Widget _getlistViewList(BuildContext context) {
-    List<Widget> _list = new List();
-
-    for (int i = 0; i < loanDetails.length; i++) {
-      _list
-          .add(_getListViewBuilder(_limitDetailsIcon(context, loanDetails[i])));
+    if (loanDetails.length <= 0) {
+      //没有数据进行占位
+      return Container(
+        child: loanDetails.length <= 0
+            ? Container()
+            : notDataContainer(context, S.current.no_data_now),
+      );
+    } else {
+      List<Widget> _list = new List();
+      for (int i = 0; i < loanDetails.length; i++) {
+        _list.add(
+            _getListViewBuilder(_limitDetailsIcon(context, loanDetails[i])));
+      }
+      return new ListView(
+        children: _list,
+      );
     }
-    return new ListView(
-      children: _list,
-    );
   }
 
   //额度详情-封装

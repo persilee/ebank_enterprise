@@ -4,6 +4,7 @@ import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/loan_applyfor_list.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -118,9 +119,16 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
         color: HsgColors.commonBackground,
         height: double.infinity,
         child: ListView.builder(
-          itemCount: _productApplyList.length, //数量
+          itemCount:
+              _productApplyList.length <= 0 ? 1 : _productApplyList.length, //数量
           itemBuilder: (BuildContext context, int index) {
-            return _productApplyList[index];
+            return _productApplyList.length <= 0
+                ? Container(
+                    margin: EdgeInsets.only(top: 200),
+                    child: _productApplyList.length <= 0
+                        ? Container()
+                        : notDataContainer(context, S.current.no_data_now))
+                : _productApplyList[index];
           },
         ),
       ),

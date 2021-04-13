@@ -8,6 +8,7 @@ import 'model/get_td_product_term_rate.dart';
 import 'model/time_deposit_contract.dart';
 import 'model/time_deposit_contract_trial.dart';
 import 'model/time_deposit_product.dart';
+import 'model/update_time_deposit_con_info.dart';
 
 class TimeDepositDataRepository {
   //获取定期产品
@@ -41,6 +42,13 @@ class TimeDepositDataRepository {
       GetTdProductTermRateReq req, String tag) {
     return request('/tdep/timeDeposit/getTdProdTermRate', req, tag,
         (data) => GetTdProductTermRateResp.fromJson(data));
+  }
+
+  //修改到期指示和结算账户
+  Future<UpdateTdConInfoResp> updateTimeDepositConInfo(
+      UpdateTdConInfoReq req, String tag) {
+    return request('/tdep/timeDeposit/updateTdConInfo', req, tag,
+        (data) => UpdateTdConInfoResp.fromJson(data));
   }
 
   static final _instance = TimeDepositDataRepository._internal();

@@ -827,6 +827,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                 _payeeAccountController.text = rowListPartner.payeeCardNo;
                 _remarkController.text = rowListPartner.remark;
                 // _payeeBankCode = rowListPartner.bankCode;
+                _transferCcy =
+                    _transferCcy == '' ? rowListPartner.ccy : _transferCcy;
               }
               _boolBut();
             });

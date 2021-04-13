@@ -196,7 +196,7 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
               _requstMap['contact'], //联系人
               double.parse(_requstMap['intentAmt']), //金额
               _requstMap['loanPurpose'], //贷款目的
-              userPhone, //手机号
+              _requstMap['phone'], //手机号
               _requstMap['prdtCode'], //贷款产品码 TDCBCBNF _requstMap['prdtCode']
               _requstMap['remark'], //备注
               _requstMap['repaymentMethod'], //还款方式

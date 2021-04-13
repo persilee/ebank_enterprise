@@ -33,6 +33,9 @@ class _OpenAccountSelectDocumentTypePageState
   ///是否是快速开户
   bool _isQuick;
 
+  ///按钮是否可以点击
+  bool _isCanClick = true;
+
   @override
   Widget build(BuildContext context) {
     Map argumentsMap = ModalRoute.of(context).settings.arguments;
@@ -89,27 +92,33 @@ class _OpenAccountSelectDocumentTypePageState
       {
         'iconName': 'images/openAccount/open_account_document_type_CN.png',
         'titleStr': S.of(context).openAccout_documentType_CN,
-        'onClickFunction': () {
-          print('中国大陆身份证识别');
-          // Navigator.pushNamed(context, pageOpenAccountResults);
-          _qianliyanSDK(context, '1');
-        },
+        'onClickFunction': _isCanClick == true
+            ? () {
+                print('中国大陆身份证识别');
+                // Navigator.pushNamed(context, pageOpenAccountResults);
+                _qianliyanSDK(context, '1');
+              }
+            : () {},
       },
       {
         'iconName': 'images/openAccount/open_account_document_type_HK.png',
         'titleStr': S.of(context).openAccout_documentType_HK,
-        'onClickFunction': () {
-          print('中国香港身份证识别');
-          _qianliyanSDK(context, '2');
-        },
+        'onClickFunction': _isCanClick == true
+            ? () {
+                print('中国香港身份证识别');
+                _qianliyanSDK(context, '2');
+              }
+            : () {},
       },
       {
         'iconName': 'images/openAccount/open_account_document_type_other.png',
         'titleStr': S.of(context).openAccout_documentType_other,
-        'onClickFunction': () {
-          print('护照识别\n (港澳台地区及境外护照)');
-          _qianliyanSDK(context, '3');
-        },
+        'onClickFunction': _isCanClick == true
+            ? () {
+                print('护照识别\n (港澳台地区及境外护照)');
+                _qianliyanSDK(context, '3');
+              }
+            : () {},
       }
     ];
 
@@ -231,6 +240,12 @@ class _OpenAccountSelectDocumentTypePageState
 
     // HSProgressHUD.show();
 
+    if (mounted) {
+      setState(() {
+        _isCanClick = false;
+      });
+    }
+
     AuthIdentity()
         .startAuth(
       new AuthIdentityReq(
@@ -249,6 +264,11 @@ class _OpenAccountSelectDocumentTypePageState
               (value.isSuccess == false &&
                   value.fileName != null &&
                   value.fileName != ''))) {
+        if (mounted) {
+          setState(() {
+            _isCanClick = true;
+          });
+        }
         Navigator.pushNamed(
           context,
           pageOpenAccountIdentifySuccessful,
@@ -274,6 +294,11 @@ class _OpenAccountSelectDocumentTypePageState
         msg: '${e.toString()}',
         gravity: ToastGravity.CENTER,
       );
+      if (mounted) {
+        setState(() {
+          _isCanClick = true;
+        });
+      }
       Navigator.pushNamed(
         context,
         pageOpenAccountIdentifyResultsFailure,

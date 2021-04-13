@@ -1,0 +1,20 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by 李家伟 on 2021/4/12.
+  
+*/
+"CFBundleName" = "Brillink Bank";
+
+"CFBundleDisplayName" = "Brillink Bank";
+
+"NSFaceIDUsageDescription" = "Whether to allow Brillink Bank to access Face ID for face recognition.";
+
+"NSCameraUsageDescription" = "Whether to allow Brillink Bank to access the camera for information collection.";
+
+"NSPhotoLibraryAddUsageDescription" = "Whether to allow Brillink Bank to access the album for the function of saving pictures to the album";
+
+"NSLocationAlwaysUsageDescription" = "Whether to allow Brillink Bank to always access the location for location collection function.";
+
+"NSLocationWhenInUseUsageDescription" = "Whether to allow Brillink Bank to access the location for location collection function when in use.";

@@ -15,6 +15,9 @@ class AddPartnerReq extends Object {
   @JsonKey(name: 'bankSwift')
   String bankSwift;
 
+  @JsonKey(name: 'ccy')
+  String ccy;
+
   @JsonKey(name: 'city')
   String city;
 
@@ -68,6 +71,7 @@ class AddPartnerReq extends Object {
   AddPartnerReq(
     this.bankCode,
     this.bankSwift,
+    this.ccy,
     this.city,
     this.district,
     this.midBankSwift,

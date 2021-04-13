@@ -71,16 +71,16 @@ class LoanTrialDTOList extends Object {
   String ccy;
 
   @JsonKey(name: 'instAmt')
-  int instAmt;
+  String instAmt;
 
   @JsonKey(name: 'nextPay')
   String nextPay;
 
   @JsonKey(name: 'outBal')
-  int outBal;
+  String outBal;
 
   @JsonKey(name: 'payAmt')
-  int payAmt;
+  String payAmt;
 
   @JsonKey(name: 'payDt')
   String payDt;
@@ -89,10 +89,10 @@ class LoanTrialDTOList extends Object {
   int payFre;
 
   @JsonKey(name: 'payInt')
-  int payInt;
+  String payInt;
 
   @JsonKey(name: 'payPrin')
-  int payPrin;
+  String payPrin;
 
   @JsonKey(name: 'payUnit')
   String payUnit;
@@ -101,10 +101,10 @@ class LoanTrialDTOList extends Object {
   String paytyp;
 
   @JsonKey(name: 'prin')
-  int prin;
+  String prin;
 
   @JsonKey(name: 'rate')
-  int rate;
+  String rate;
 
   @JsonKey(name: 'repDay')
   int repDay;
@@ -113,13 +113,13 @@ class LoanTrialDTOList extends Object {
   String term;
 
   @JsonKey(name: 'totAmt')
-  int totAmt;
+  String totAmt;
 
   @JsonKey(name: 'totInt')
-  int totInt;
+  String totInt;
 
   @JsonKey(name: 'totPri')
-  int totPri;
+  String totPri;
 
   @JsonKey(name: 'totTerm')
   int totTerm;
