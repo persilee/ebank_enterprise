@@ -27,7 +27,7 @@ import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:intl/intl.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-/// 贷款引用页面
+/// 贷款领用页面
 /// Author: pengyikang
 class LoanReference extends StatefulWidget {
   LoanReference({Key key}) : super(key: key);
@@ -58,6 +58,7 @@ class _LoanReferenceState extends State<LoanReference> {
   List<IdType> _deadLineLists = []; //贷款期限列表
 
   String _reimburseStr = ''; //还款方式
+  String _reimburseCode = ''; //还款方式编码
   List<IdType> _reimburseTypeLists = []; //还款方式
 
   String _loanAccount = ''; //收款帐号
@@ -158,13 +159,13 @@ class _LoanReferenceState extends State<LoanReference> {
         }
       } else {
         //失去焦点 去请求接口并计算
-        checkInputValueAndRate();
+        _checkInputValueAndRate();
         _loadQueryIntereRateData();
       }
     });
   }
 
-  //贷款领用界面查询客户授信额度信息的接口
+//贷款领用界面查询客户授信额度信息的接口
 
 //先去请求/loan/contracts/getCreditlimitByCust  拿到iratCd1 参数，再去请求利率接口拿到利率和还款计划
   Future _loadQueryIntereRateData() async {
@@ -185,7 +186,7 @@ class _LoanReferenceState extends State<LoanReference> {
                 data.getCreditlimitByCusteDTOList[0];
             print('========custcd.iratCd1');
             iratCd1 = custcd.iratCd1 != '' ? custcd.iratCd1 : 'E11';
-            checkInputValueAndRate(); //利率判断
+            _checkInputValueAndRate(); //利率判断
           });
         }
       }
@@ -205,13 +206,13 @@ class _LoanReferenceState extends State<LoanReference> {
         .then((data) {
       SVProgressHUD.dismiss();
       //获取利率在去进行试算
-      // if (mounted) {
-      //   setState(() {
-      //     // interestRate = data.interestRate.toString();
-      //     // _loadTrialDate(); //拿到利率进行失算
-      //   });
-      //   print('============data.interestRate');
-      // }
+      if (mounted) {
+        setState(() {
+          interestRate = data.interestRate.toString();
+          _loadTrialDate(); //拿到利率进行失算
+        });
+        print('============data.interestRate');
+      }
     }).catchError((e) {
       print(e.toString());
       SVProgressHUD.dismiss();
@@ -225,7 +226,7 @@ class _LoanReferenceState extends State<LoanReference> {
       accountInfo.ccy, //货币
       '1', //频率 还款周期
       'M', //频率单位
-      _reimburseStr, //还款方式
+      _reimburseCode, //还款方式
       double.parse(_recipientsController.text), //贷款本金
       double.parse(interestRate), //贷款利率
       // '',//指定还款日
@@ -235,7 +236,9 @@ class _LoanReferenceState extends State<LoanReference> {
     LoanDataRepository()
         .loanPilotComputingInterface(req, 'loanTrial')
         .then((data) {
-      if (data.loanTrialDTOList != null) {}
+      if (data.loanTrialDTOList != null) {
+        print(data.loanTrialDTOList);
+      }
     }).catchError((e) {
       SVProgressHUD.dismiss();
       SVProgressHUD.showInfo(status: e.toString());
@@ -264,6 +267,7 @@ class _LoanReferenceState extends State<LoanReference> {
           elevation: 1,
         ),
         body: Container(
+          color: HsgColors.commonBackground,
           //height: MediaQuery.of(context).size.height / 0.33,
           //color: Colors.white,
           child: ListView(
@@ -292,7 +296,7 @@ class _LoanReferenceState extends State<LoanReference> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
-                            margin: EdgeInsets.only(right: 5, top: 10),
+                            margin: EdgeInsets.only(right: 14.5, top: 10),
                             child: Text(
                               'CNY',
                               style: TextStyle(
@@ -528,7 +532,7 @@ class _LoanReferenceState extends State<LoanReference> {
               } else {
                 _mothCode = 'M0' + type.code;
               }
-              checkInputValueAndRate(); //利率判断
+              _checkInputValueAndRate(); //利率判断
             } else if (i == 1) {
               _goal = str;
               _listDataMap['loanPurpose'] = str; //名称
@@ -537,6 +541,8 @@ class _LoanReferenceState extends State<LoanReference> {
               _reimburseStr = str;
               _listDataMap['repaymentMethod'] = str; //名称
               _requestDataMap['repaymentMethod'] = type.code; //ID
+              _reimburseCode = type.code;
+              _checkInputValueAndRate(); //利率判断
             }
             // _index = _index * (index + 1);
             _checkloanIsClick();
@@ -557,6 +563,7 @@ class _LoanReferenceState extends State<LoanReference> {
         bankCards.add(cards.cardNo);
         ciNames.add((cards.ciName));
       }
+      bankCards = bankCards.toSet().toList(); //去重
       for (var i = 0; i < bankCards.length; i++) {
         accounts.add(FormatUtil.formatSpace4(bankCards[i]));
       }
@@ -788,8 +795,11 @@ class _LoanReferenceState extends State<LoanReference> {
     }
   }
 
-  void checkInputValueAndRate() {
-    if (iratCd1 != '' && _mothCode != '' && _recipientsController.text != '') {
+  void _checkInputValueAndRate() {
+    if (iratCd1 != '' &&
+        _mothCode != '' &&
+        _recipientsController.text != '' &&
+        _reimburseCode != '') {
       //调用试算的接口
       _loadGrossCalculationData();
     }

@@ -38,7 +38,7 @@ class LoantIntereRateResp extends Object {
   String currency;
 
   @JsonKey(name: 'interestRate')
-  int interestRate;
+  String interestRate;
 
   @JsonKey(name: 'rateType')
   String rateType;

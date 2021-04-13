@@ -107,6 +107,13 @@ class LoanDataRepository {
         (data) => LoanTrailResp.fromJson(data));
   }
 
+  //贷款领用最终确定提交接口
+  Future<LoanTrailResp> loanFinalWithdrawInterface(
+      LoanTrailReq req, String tag) {
+    return request('loan/contracts/loanWithdrawal', req, tag,
+        (data) => LoanTrailResp.fromJson(data));
+  }
+
   // //贷款领用界面获取当前贷款利率的接口
   // Future<LoantIntereRateResp> loanGetRateInterface(
   //     LoanIntereRateReq req, String tag) {
