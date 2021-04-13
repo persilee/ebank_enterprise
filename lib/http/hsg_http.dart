@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/http/hsg_http_exception.dart';
@@ -51,7 +52,16 @@ class HsgHttp {
       _dio.interceptors.add(InterceptorsWrapper(
         onRequest: (options) async {
           final prefs = await SharedPreferences.getInstance();
-          final locale = prefs.getString(ConfigKey.LANGUAGE) ?? 'en';
+
+          String localeStr = await Language.getSaveLangage();
+          if (localeStr.contains('zh_cn')) {
+            localeStr = 'zh_CN';
+          } else if (localeStr.contains('zh_hk')) {
+            localeStr = 'zh_HK';
+          } else {
+            localeStr = 'en_US';
+          }
+          final locale = localeStr;
           final token = prefs.getString(ConfigKey.NET_TOKEN) ?? '';
 
           _dio.interceptors.requestLock.lock();

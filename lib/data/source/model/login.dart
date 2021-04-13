@@ -41,6 +41,8 @@ class LoginResp {
   String userPhone;
   String areaCode;
   String userType;
+  bool passwordEnabled;
+  String belongCustStatus;
 
   LoginResp(
     this.userId,
@@ -51,6 +53,8 @@ class LoginResp {
     this.userPhone,
     this.areaCode,
     this.userType,
+    this.passwordEnabled,
+    this.belongCustStatus,
   );
 
   factory LoginResp.fromJson(Map<String, dynamic> srcJson) =>

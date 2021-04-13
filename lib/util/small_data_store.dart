@@ -20,6 +20,9 @@ class ConfigKey {
 
   static const LOCAL_CCY = "local_ccy";
 
+  static const USER_BELONGCUSTSTATUS = "user_belongCustStatus"; //用户开户状态
+  static const USER_PASSWORDENABLED = "user_show_passwordEnabled"; //用户交易密码标识
+
   static const USER_TYPE = "user_type";
   static const USER_PASSWORD = "user_password"; //临时使用，方便开发，后面需要去除保存
 }

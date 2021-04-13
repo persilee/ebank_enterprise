@@ -6,8 +6,10 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PasswordManagementPage extends StatefulWidget {
   @override
@@ -15,7 +17,29 @@ class PasswordManagementPage extends StatefulWidget {
 }
 
 class _PasswordManagementPageState extends State<PasswordManagementPage> {
-  var _belongCustStatus = '6'; //用户状态 -拦截交易密码操作
+  var _belongCustStatus = ''; //用户状态 -拦截交易密码操作
+  // bool _passwordEnabled = false; //用户状态 -拦截交易密码操作
+
+  @override
+  void initState() {
+    super.initState();
+    _getUser();
+  }
+
+  void _getUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    // String userID = prefs.getString(ConfigKey.USER_ID);
+    bool passwordEnabled = prefs.getBool(ConfigKey.USER_PASSWORDENABLED);
+    String belongCustStatusStr =
+        prefs.getString(ConfigKey.USER_BELONGCUSTSTATUS);
+
+    if (mounted) {
+      setState(() {
+        _belongCustStatus = belongCustStatusStr ?? '';
+        // _passwordEnabled = passwordEnabled ?? false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,14 +101,14 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
             child: Column(
               children: [
                 _flatBtnNuitWidget(S.of(context).changPayPws, true, () {
-                  _belongCustStatus == '6'
-                      ? Navigator.pushNamed(context, changePayPS)
-                      : _notOpenAccountTip();
+                  (['0', '1', '2', '3', ''].contains(_belongCustStatus))
+                      ? _notOpenAccountTip()
+                      : Navigator.pushNamed(context, changePayPS);
                 }),
                 _flatBtnNuitWidget(S.of(context).resetPayPwd, true, () {
-                  _belongCustStatus == '6'
-                      ? Navigator.pushNamed(context, pageResetPayPwdOtp)
-                      : _notOpenAccountTip();
+                  (['0', '1', '2', '3', ''].contains(_belongCustStatus))
+                      ? _notOpenAccountTip()
+                      : Navigator.pushNamed(context, pageResetPayPwdOtp);
                 }),
               ],
             ),

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:dio/dio.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// desc: 个人中心
 /// Author: hlx
@@ -17,6 +18,7 @@ import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
@@ -33,7 +35,8 @@ class MinePage extends StatefulWidget {
   _MinePageState createState() => _MinePageState();
 }
 
-class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin {
+class _MinePageState extends State<MinePage>
+    with AutomaticKeepAliveClientMixin {
   String _language = Intl.getCurrentLocale();
   double _opacity = 0;
   ScrollController _sctrollController = ScrollController();
@@ -56,6 +59,14 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin 
   void initState() {
     // 网络请求
     _getUser();
+
+    EventBusUtils.getInstance().on<GetUserEvent>().listen((event) {
+      print("mine  event bus msg is =" +
+          event.msg +
+          "   state info is  = " +
+          event.state.toString());
+      _getUser();
+    });
   }
 
   @override

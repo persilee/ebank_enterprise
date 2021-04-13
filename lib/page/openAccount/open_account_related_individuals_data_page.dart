@@ -521,7 +521,7 @@ class _RelatedIndividualsDataPageState
     if (result != null && result != false) {
       IdType data = _categoryTypes[result];
       _partner.partnerTypeIdType = data;
-      _partner.partnerType = '001'; //data.code;
+      _partner.partnerType = '009'; //data.code;
       setState(() {
         _categoryText = categoryList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
