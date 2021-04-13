@@ -506,7 +506,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
                 _accountController.text = rowListPartner.payeeCardNo;
                 _remarkController.text = rowListPartner.remark;
                 _transferCcy =
-                      _transferCcy == '' ? rowListPartner.ccy : _transferCcy;
+                    _transferCcy == '' ? rowListPartner.ccy : _transferCcy;
                 _isAccount = false;
               }
               _boolBut();
@@ -527,8 +527,6 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
 
   //默认初始卡号
   _loadTransferData() async {
-    final prefs = await SharedPreferences.getInstance();
-    _localeCcy = prefs.getString(ConfigKey.LOCAL_CCY);
     Future.wait({
       CardDataRepository().getCardList('GetCardList'),
     }).then((value) {
@@ -564,6 +562,8 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
   }
 
   _loadData(String cardNo) async {
+    final prefs = await SharedPreferences.getInstance();
+    _localeCcy = prefs.getString(ConfigKey.LOCAL_CCY);
     CardDataRepository()
         .getCardBalByCardNo(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq')
         .then((element) {
