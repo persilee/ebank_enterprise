@@ -1,10 +1,10 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/page/mine/mine_page.dart';
-import 'package:flutter/material.dart';
-
 import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_home_page.dart';
+import 'package:ebank_mobile/page/mine/mine_page.dart';
+import 'package:ebank_mobile/util/status_bar_util.dart';
+import 'package:flutter/material.dart';
 
 class IndexPage extends StatefulWidget {
   IndexPage({Key key}) : super(key: key);
@@ -15,6 +15,7 @@ class IndexPage extends StatefulWidget {
 
 class _IndexPageState extends State<IndexPage> {
   int currentIndex;
+  PageController _pageController;
 
   final pages = [HomePage(), ApprovalPage(), MinePage()];
 
@@ -22,6 +23,15 @@ class _IndexPageState extends State<IndexPage> {
   void initState() {
     super.initState();
     currentIndex = 0;
+    _pageController = PageController(
+      initialPage: 0,
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
   }
 
   @override
@@ -75,15 +85,33 @@ class _IndexPageState extends State<IndexPage> {
         currentIndex: currentIndex,
         type: BottomNavigationBarType.fixed,
         onTap: (index) {
-          _changePage(index);
+          // _changePage(index);
+          _toPage(index);
         },
       ),
-      body: pages[currentIndex],
+      body: PageView(
+        controller: _pageController,
+        physics: NeverScrollableScrollPhysics(),
+        children: [HomePage(), ApprovalPage(), MinePage()],
+        onPageChanged: (page) {
+          if(page == 0) StatusBarUtil.setStatusBar(Brightness.light, color: Colors.transparent);
+          else StatusBarUtil.setStatusBar(Brightness.dark, color: Colors.transparent);
+        },
+      ),
+      // body: pages[currentIndex],
       // body: IndexedStack(
       //   index: currentIndex,
       //   children: pages,
       // ),
     );
+  }
+
+  void _toPage(int index) {
+    setState(() {
+      currentIndex = index;
+      _pageController.animateToPage(currentIndex,
+          curve: Curves.easeIn, duration: Duration(milliseconds: 160));
+    });
   }
 
   /*切换页面*/

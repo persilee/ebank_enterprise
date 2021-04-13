@@ -59,6 +59,7 @@ class _MyApplicationPageState extends State<MyApplicationPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return _isLoading
         ? HsgLoading()
         : _listData.length > 0

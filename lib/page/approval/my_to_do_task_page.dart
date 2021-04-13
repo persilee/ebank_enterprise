@@ -13,9 +13,7 @@ import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
-import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
-import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sp_util/sp_util.dart';
@@ -260,7 +258,7 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
   void go2Detail(ApprovalTask approvalTask) {
     Navigator.pushNamed(context, pageTaskApproval,
         arguments: {"data": approvalTask, "title": widget.title}).then((value) {
-      setState(() {});
+          _loadData();
     });
   }
 

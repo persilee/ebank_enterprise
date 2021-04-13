@@ -88,7 +88,6 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
         ),
       ),
       onTap: () {
-        print('aaa');
         openPDF(context, dataList[index]['date']);
       },
     );
@@ -101,9 +100,12 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
           .getFilePath(GetFilePathReq(), 'GetFilePathReq');
       setState(() {
         _fileData = filePathResp;
+        _isLoading = false;
       });
-      _isLoading = false;
     } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
