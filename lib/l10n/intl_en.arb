@@ -682,6 +682,9 @@
   "loan_opration_alert":"Operation",
   "loan_detail_available_amount":"Available Amount",
   "loan_detail_available_insufficient":"Insufficient available amount",
+  "loan_trail_plan_first":"First issue",
+  "loan_trail_plan_second":"Should be repaid",
+  "loan_trail_title":"Loan claim",
 
 
   "open_account_goto_ebank_tip": "Dear user. Since you are not an invited customer, please go to online banking to apply for an account.",

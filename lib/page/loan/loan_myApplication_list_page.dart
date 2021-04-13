@@ -6,6 +6,7 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
@@ -29,12 +30,12 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
 
   List<Widget> _productDetailList = []; //底部详情的列表
 
-  bool _isShow = false;
+  bool _isShow = false; //是否展开
+  bool _isLoading = true; //显示加载中
 
   @override
   void initState() {
     super.initState();
-    SVProgressHUD.show();
     _getLoanPurposeList();
   }
 
@@ -50,7 +51,6 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
       }
       _getLoanRepayTypeList();
     }).catchError((e) {
-      SVProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
@@ -85,19 +85,18 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
     LoanDataRepository()
         .loanApplyforListData(LoanApplyFoyListReq(userID), 'applyforList')
         .then((data) {
-      print('列表数据');
-      SVProgressHUD.dismiss();
-      if (data.loanRecordDOList != null) {
-        //数组不为空
-        setState(() {
+      setState(() {
+        _isLoading = false;
+        if (data.loanRecordDOList != null) {
+          //数组不为空
           for (int i = 0; i < data.loanRecordDOList.length; i++) {
             LoanRecordDOList listData = data.loanRecordDOList[i];
             _productApplyList
                 .add(ExpandBox(i, listData, _goalLists, _reimburseTypeLists));
             _isShowList.add(false);
           }
-        });
-      }
+        }
+      });
     }).catchError((e) {
       SVProgressHUD.dismiss();
       Fluttertoast.showToast(
@@ -115,23 +114,25 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
         centerTitle: true,
         elevation: 1,
       ),
-      body: Container(
-        color: HsgColors.commonBackground,
-        height: double.infinity,
-        child: ListView.builder(
-          itemCount:
-              _productApplyList.length <= 0 ? 1 : _productApplyList.length, //数量
-          itemBuilder: (BuildContext context, int index) {
-            return _productApplyList.length <= 0
-                ? Container(
-                    margin: EdgeInsets.only(top: 200),
-                    child: _productApplyList.length <= 0
-                        ? Container()
-                        : notDataContainer(context, S.current.no_data_now))
-                : _productApplyList[index];
-          },
-        ),
-      ),
+      body: _isLoading
+          ? HsgLoading()
+          : Container(
+              color: HsgColors.commonBackground,
+              height: double.infinity,
+              child: ListView.builder(
+                itemCount: _productApplyList.length <= 0
+                    ? 1
+                    : _productApplyList.length, //数量
+                itemBuilder: (BuildContext context, int index) {
+                  return _productApplyList.length <= 0
+                      ? Container(
+                          margin: EdgeInsets.only(top: 200),
+                          child:
+                              notDataContainer(context, S.current.no_data_now))
+                      : _productApplyList[index];
+                },
+              ),
+            ),
       // ),
     );
   }
