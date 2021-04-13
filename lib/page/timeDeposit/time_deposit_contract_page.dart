@@ -87,6 +87,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   List<String> _auctCales = [];
   String _minAmt = '';
   String _maxAmt = '';
+  bool _isShow = false;
 
   void initState() {
     super.initState();
@@ -271,10 +272,34 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     );
   }
 
+  //存入金额提示
+  Widget _amountPrompt() {
+    if ((inputValue.text).length == 0) {
+      _isShow = false;
+    }
+    return !_isShow
+        ? Container()
+        : Container(
+            margin: EdgeInsets.all(0),
+            padding: EdgeInsets.only(top: 10.0, left: 15.0),
+            child: Row(
+              children: [
+                Text(
+                  '输入的金额需大于等于' +
+                      FormatUtil.formatSringToMoney(_minAmt.toString()) +
+                      '，小于等于' +
+                      FormatUtil.formatSringToMoney(_maxAmt.toString()),
+                  style: TextStyle(color: HsgColors.redText, fontSize: 13.0),
+                ),
+              ],
+            ),
+          );
+  }
+
   //到期本息
   Widget _showMatAmt() {
     return Container(
-      padding: EdgeInsets.only(top: 10.0, left: 15.0, bottom: 15.0),
+      padding: EdgeInsets.only(top: 5.0, left: 15.0, bottom: 10.0),
       child: Row(
         children: [
           Container(
@@ -314,7 +339,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           autofocus: false,
           style: TextStyle(color: HsgColors.aboutusTextCon, fontSize: 18.0),
           inputFormatters: [
-            LengthLimitingTextInputFormatter(12),
+            // LengthLimitingTextInputFormatter(12),
             FilteringTextInputFormatter.allow(
               RegExp("[0-9.]"),
             ),
@@ -325,6 +350,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             //输入金额大于起存金额时进行网络请求,计算到期金额
             if (double.parse(inputValue.text) >= double.parse(_minAmt) &&
                 double.parse(inputValue.text) <= double.parse(_maxAmt)) {
+              _isShow = false;
               _loadDepositData(
                 accuPeriod,
                 auctCale,
@@ -346,6 +372,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             } else {
               matAmt = '0.00';
               _amount = '0.00';
+              _isShow = true;
             }
           },
           keyboardType: TextInputType.number,
@@ -582,6 +609,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             ),
           ),
           _line(),
+          _amountPrompt(),
           _showMatAmt(),
           _background(),
         ],
