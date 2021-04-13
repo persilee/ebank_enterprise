@@ -352,7 +352,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           decoration: InputDecoration(
             contentPadding: EdgeInsets.all(0),
             border: InputBorder.none,
-            hintText: S.current.deposit_min_with_value + _minAmt,
+            hintText: S.current.deposit_min_with_value +
+                FormatUtil.formatSringToMoney(_minAmt.toString()),
             hintStyle: TextStyle(
               color: HsgColors.hintText,
               fontSize: 18.0,
@@ -811,6 +812,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                   cards.add(element.cardNo);
                 }
               });
+              cards = cards.toSet().toList();
               _changedAccountTitle = FormatUtil.formatSpace4(cards[0]);
               _getCardBal(cards[0].replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
             });
@@ -1022,6 +1024,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             // }
             _cardBalList.clear();
             _cardCcyList.clear();
+
             element.cardListBal.forEach((element) {
               _cardCcyList.add(element.ccy);
               _cardBalList.add(element.currBal);
