@@ -30,6 +30,7 @@ import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/hsg_text_field_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -988,49 +989,81 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     return false;
   }
 
+  //校验是否提示设置交易密码
+  void _verifyGotoTranPassword(BuildContext context, bool passwordEnabled) {
+    if (passwordEnabled == true) {
+      //已经设置交易密码，或者用户未开户，不做操作
+      return;
+    }
+    HsgShowTip.shouldSetTranPasswordTip(
+      context: context,
+      click: (value) {
+        if (value == true) {
+          //前往设置交易密码
+          Navigator.pushNamed(context, pageResetPayPwdOtp);
+        }
+      },
+    );
+  }
+
   // 完成任务
   void _completeTask() async {
-    // 输入交易密码
-    bool isPassword = await _openBottomSheet();
-    // 如果交易密码正确，处理审批逻辑
-    if (isPassword) {
-      FocusManager.instance.primaryFocus?.unfocus();
-      if (this.mounted) {
-        setState(() {
-          _btnIsLoadingEAA = true;
-          _btnIsEnable = false;
-        });
-      }
-
-      try {
-        // 请求审批接口
-        CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
-          CompleteTaskBody(
-            approveResult: true,
-            comment: _comment,
-            rejectToStart: false,
-            taskId: widget.data.taskId,
-          ),
-        );
-        if (completeTaskModel.msgCd == '0000') {
-          if (this.mounted) {
-            setState(() {
-              _btnIsLoadingEAA = false;
-              _btnIsEnable = true;
-            });
+    print('USER_PASSWORDENABLED: ${SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED)}');
+    bool passwordEnabled = SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED);
+    // 判断是否设置交易密码，如果没有设置，跳转到设置密码页面，
+    // 否则，输入交易密码
+    if (!passwordEnabled) {
+      HsgShowTip.shouldSetTranPasswordTip(
+        context: context,
+        click: (value) {
+          if (value == true) {
+            //前往设置交易密码
+            Navigator.pushNamed(context, pageResetPayPwdOtp);
           }
-          Navigator.pushReplacementNamed(context, pageDepositRecordSucceed);
+        },
+      );
+    } else {
+      // 输入交易密码
+      bool isPassword = await _openBottomSheet();
+      // 如果交易密码正确，处理审批逻辑
+      if (isPassword) {
+        FocusManager.instance.primaryFocus?.unfocus();
+        if (this.mounted) {
+          setState(() {
+            _btnIsLoadingEAA = true;
+            _btnIsEnable = false;
+          });
         }
-      } catch (e) {
-        print(e);
-        setState(() {
-          _btnIsLoadingEAA = false;
-          _btnIsEnable = true;
-        });
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
+        try {
+          // 请求审批接口
+          CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
+            CompleteTaskBody(
+              approveResult: true,
+              comment: _comment,
+              rejectToStart: false,
+              taskId: widget.data.taskId,
+            ),
+          );
+          if (completeTaskModel.msgCd == '0000') {
+            if (this.mounted) {
+              setState(() {
+                _btnIsLoadingEAA = false;
+                _btnIsEnable = true;
+              });
+            }
+            Navigator.pushReplacementNamed(context, pageDepositRecordSucceed);
+          }
+        } catch (e) {
+          print(e);
+          setState(() {
+            _btnIsLoadingEAA = false;
+            _btnIsEnable = true;
+          });
+          Fluttertoast.showToast(
+            msg: e.toString(),
+            gravity: ToastGravity.CENTER,
+          );
+        }
       }
     }
   }
