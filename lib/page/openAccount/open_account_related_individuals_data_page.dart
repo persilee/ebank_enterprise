@@ -479,7 +479,7 @@ class _RelatedIndividualsDataPageState
     if (result != null && result != false) {
       IdType data = _appellationTypes[result];
       _partner.appellationIdType = data;
-      _partner.appellation = 'A'; //data.code;
+      _partner.appellation = data.code;
       setState(() {
         _appellationText = appellationList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
@@ -521,7 +521,7 @@ class _RelatedIndividualsDataPageState
     if (result != null && result != false) {
       IdType data = _categoryTypes[result];
       _partner.partnerTypeIdType = data;
-      _partner.partnerType = '009'; //data.code;
+      _partner.partnerType = data.code;
       setState(() {
         _categoryText = categoryList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();

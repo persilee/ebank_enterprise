@@ -245,17 +245,17 @@ class _MinePageState extends State<MinePage>
             child: Column(
               children: [
                 _flatBtnNuitWidget(S.of(context).my_account, true, () {
-                  // if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
-                  //   HsgShowTip.notOpenAccountTip(
-                  //     context: context,
-                  //     click: (value) {
-                  //       if (value == true) {
-                  //         _openAccountClickFunction(context);
-                  //       }
-                  //     },
-                  //   );
-                  //   return;
-                  // }
+                  if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
+                    HsgShowTip.notOpenAccountTip(
+                      context: context,
+                      click: (value) {
+                        if (value == true) {
+                          _openAccountClickFunction(context);
+                        }
+                      },
+                    );
+                    return;
+                  }
                   Navigator.pushNamed(context, pageCardList);
                 }),
                 _flatBtnNuitWidget(S.current.password_management, true, () {
