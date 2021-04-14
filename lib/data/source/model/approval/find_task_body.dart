@@ -1,3 +1,4 @@
+/// finish : true
 /// page : 1
 /// pageSize : 10
 /// processId : ""
@@ -7,10 +8,11 @@
 /// startUser : ""
 /// taskId : ""
 /// taskName : ""
-/// tenantId : "EB"
-/// custId : "818000000113"
+/// tenantId : ""
+/// custId : ""
 
 class FindTaskBody {
+  bool _finish;
   int _page;
   int _pageSize;
   String _processId;
@@ -23,6 +25,7 @@ class FindTaskBody {
   String _tenantId;
   String _custId;
 
+  bool get finish => _finish;
   int get page => _page;
   int get pageSize => _pageSize;
   String get processId => _processId;
@@ -36,6 +39,7 @@ class FindTaskBody {
   String get custId => _custId;
 
   FindTaskBody({
+      bool finish, 
       int page, 
       int pageSize, 
       String processId, 
@@ -47,6 +51,7 @@ class FindTaskBody {
       String taskName, 
       String tenantId, 
       String custId}){
+    _finish = finish;
     _page = page;
     _pageSize = pageSize;
     _processId = processId;
@@ -61,6 +66,7 @@ class FindTaskBody {
 }
 
   FindTaskBody.fromJson(dynamic json) {
+    _finish = json["finish"];
     _page = json["page"];
     _pageSize = json["pageSize"];
     _processId = json["processId"];
@@ -76,6 +82,7 @@ class FindTaskBody {
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
+    map["finish"] = _finish;
     map["page"] = _page;
     map["pageSize"] = _pageSize;
     map["processId"] = _processId;

@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -35,19 +36,22 @@ class CustomRefresh extends StatelessWidget {
               builder: (BuildContext context, RefreshStatus mode) {
                 Widget body;
                 if (mode == RefreshStatus.canRefresh) {
-                  body = textIndicator("松开刷新");
+                  body = textIndicator(S.current.refresh_loosen_refresh);
                 } else if (mode == RefreshStatus.refreshing) {
-                  body = textIndicator("加载中...");
+                  body = textIndicator(S.current.refresh_loading);
                 } else if (mode == RefreshStatus.idle) {
-                  body = textIndicator("下拉刷新");
+                  body = textIndicator(S.current.refresh_drop_down_refresh);
                 } else if (mode == RefreshStatus.completed) {
-                  body = textIndicator("加载成功");
+                  body = textIndicator(S.current.refresh_load_success);
                 }
                 return Container(
                   padding: EdgeInsets.only(top: 6, bottom: 12),
-                  height: 76,
-                  child: Center(
-                    child: body,
+                  height: 86,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(child: body),
+                    ],
                   ),
                 );
               },
@@ -57,7 +61,12 @@ class CustomRefresh extends StatelessWidget {
               builder: (BuildContext context, LoadStatus mode) {
                 Widget body;
                 if (mode == LoadStatus.idle) {
-                  body = Text("上拉加载", style: TextStyle(fontSize: 12));
+                  body = Row(
+                    children: [
+                      Text(S.current.refresh_pull_loading,
+                          style: TextStyle(fontSize: 12)),
+                    ],
+                  );
                 } else if (mode == LoadStatus.loading) {
                   body = Container(
                     child: Row(
@@ -73,16 +82,20 @@ class CustomRefresh extends StatelessWidget {
                           height: 16,
                         ),
                         Padding(padding: EdgeInsets.only(left: 10)),
-                        Text("加载中...", style: TextStyle(fontSize: 12))
+                        Text(S.current.refresh_loading,
+                            style: TextStyle(fontSize: 12))
                       ],
                     ),
                   );
                 } else if (mode == LoadStatus.failed) {
-                  body = Text("加载失败！点击重试！", style: TextStyle(fontSize: 12));
+                  body = Text(S.current.refresh_failed_retry,
+                      style: TextStyle(fontSize: 12));
                 } else if (mode == LoadStatus.canLoading) {
-                  body = Text("松手,加载更多!", style: TextStyle(fontSize: 12));
+                  body = Text(S.current.refresh_load_more,
+                      style: TextStyle(fontSize: 12));
                 } else {
-                  body = Text("没有更多数据了!", style: TextStyle(fontSize: 12));
+                  body = Text(S.current.refresh_no_more_data,
+                      style: TextStyle(fontSize: 12));
                 }
                 return Container(
                   height: 55.0,
@@ -108,19 +121,24 @@ class CustomRefresh extends StatelessWidget {
     return Container(
       child: Stack(
         children: [
-          Lottie.asset(
-            'assets/json/loading2.json',
-            width: 96,
-            fit: BoxFit.cover,
-            alignment: Alignment.center,
+          Center(
+            child: Lottie.asset(
+              'assets/json/loading2.json',
+              width: 96,
+              fit: BoxFit.cover,
+              alignment: Alignment.center,
+            ),
           ),
           Positioned(
             bottom: -2,
-            left: 24,
+            left: 0,
             right: 0,
             child: Text(
               statusStr,
               style: TextStyle(fontSize: 12),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
             ),
           )
         ],
