@@ -16,6 +16,7 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -134,6 +135,14 @@ class _LoginPageState extends State<LoginPage> {
                 imgName: 'images/login/login_input_account.png',
                 textFieldPlaceholder: S.of(context).login_account_placeholder,
                 isCiphertext: false,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                      RegExp("[a-zA-Z0-9]")), //只可输入大小写字母及数字
+                  LengthLimitingTextInputFormatter(16),
+                  // FilteringTextInputFormatter.allow(RegExp(
+                  //     "[a-zA-Z0-9,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
+                  //r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$"))
+                ],
               ),
             ),
             //密码输入框
@@ -145,6 +154,12 @@ class _LoginPageState extends State<LoginPage> {
                 imgName: 'images/login/login_input_password.png',
                 textFieldPlaceholder: S.of(context).password_need_num,
                 isCiphertext: true,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(16),
+                  FilteringTextInputFormatter.allow(RegExp(
+                      "[a-zA-Z0-9,\\`,\\£¥•‘“,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
+                  //"[a-zA-Z0-9,\[\]\{\}\#\%\^\*\+\=\_\\\|\~\<\>€£¥•\.\,\?\!‘\-\/\:\;\(\)\$\&\@“]"))
+                ],
               ),
             ),
             Container(
@@ -436,8 +451,11 @@ class HeaderLogoView extends StatelessWidget {
 ///输入模块，带提示图标
 class InputView extends StatelessWidget {
   InputView(this.textEC,
-      {this.imgName, this.textFieldPlaceholder, this.isCiphertext});
-
+      {this.imgName,
+      this.textFieldPlaceholder,
+      this.isCiphertext,
+      this.inputFormatters});
+  final List<TextInputFormatter> inputFormatters;
   final String imgName;
   final String textFieldPlaceholder;
   final bool isCiphertext;
@@ -469,12 +487,14 @@ class InputView extends StatelessWidget {
                   autocorrect: false,
                   //是否自动获得焦点
                   autofocus: false,
+                  inputFormatters: this.inputFormatters,
                   controller: textEC,
                   obscureText: this.isCiphertext,
                   style: TextStyle(
                     fontSize: 15,
                     color: HsgColors.firstDegreeText,
                   ),
+
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: this.textFieldPlaceholder,
