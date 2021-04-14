@@ -729,8 +729,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   Widget _submitButton() {
     return Container(
       margin: EdgeInsets.fromLTRB(30, 40, 30, 30),
-
-      // flex: 2,
       child: CustomButton(
         isLoading: _isDeposit,
         isEnable: _ifClick(),
