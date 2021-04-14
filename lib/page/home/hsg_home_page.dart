@@ -7,13 +7,11 @@ import 'dart:io';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_styles.dart';
-import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart';
 import 'package:ebank_mobile/data/source/model/logout.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
-import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
-import 'package:ebank_mobile/page/login/login_page.dart';
+
 import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -51,6 +49,7 @@ class _HomePageState extends State<HomePage>
   String _language = Intl.getCurrentLocale();
   var _features = [];
   UserInfoResp _data;
+  DateTime _lastTime;
 
   ScrollController _sctrollController;
 
@@ -203,7 +202,8 @@ class _HomePageState extends State<HomePage>
       ),
     );
     return WillPopScope(
-      onWillPop: () => _showTypeTips(),
+      onWillPop: () => _isExit(),
+      // _showTypeTips(),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: _homeAppbar(_opacity, _changeLangBtnTltle),
@@ -217,56 +217,72 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  //提示弹窗(提示语句，确认事件)
-  _showTypeTips() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return HsgAlertDialog(
-            title: S.current.exit,
-            message: S.current.loginOut_tips,
-            positiveButton: S.current.confirm,
-            negativeButton: S.current.cancel,
-          );
-        }).then((value) {
-      if (value == true) {
-        setState(() {
-          _loginOut();
-        });
-      }
-    });
-  }
-
-  _loginOut() async {
-    final prefs = await SharedPreferences.getInstance();
-    String userID = prefs.getString(ConfigKey.USER_ID);
-
-    HSProgressHUD.show();
-    UserDataRepository()
-        .logout(LogoutReq(userID, _userName), 'logout')
-        .then((data) {
-      HSProgressHUD.dismiss();
-      if (this.mounted) {
-        setState(() {
-          Future.delayed(Duration.zero, () {
-            exit(0);
-            // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-          });
-          Fluttertoast.showToast(
-            msg: S.of(context).logoutSuccess,
-            gravity: ToastGravity.CENTER,
-          );
-        });
-      }
-    }).catchError((e) {
+  Future<bool> _isExit() {
+    if (_lastTime == null ||
+        DateTime.now().difference(_lastTime) > Duration(milliseconds: 2500)) {
+      _lastTime = DateTime.now();
       Fluttertoast.showToast(
-        msg: e.toString(),
+        msg: "再次点击退出应用",
         gravity: ToastGravity.CENTER,
       );
-      HSProgressHUD.dismiss();
-      // print(e.toString());
+      return Future.value(false);
+    }
+    Future.delayed(Duration.zero, () {
+      exit(0);
+      // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
     });
   }
+
+  //提示弹窗(提示语句，确认事件)
+  // _showTypeTips() {
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return HsgAlertDialog(
+  //           title: S.current.exit,
+  //           message: S.current.loginOut_tips,
+  //           positiveButton: S.current.confirm,
+  //           negativeButton: S.current.cancel,
+  //         );
+  //       }).then((value) {
+  //     if (value == true) {
+  //       setState(() {
+  //         _loginOut();
+  //       });
+  //     }
+  //   });
+  // }
+
+  // _loginOut() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   String userID = prefs.getString(ConfigKey.USER_ID);
+
+  //   HSProgressHUD.show();
+  //   UserDataRepository()
+  //       .logout(LogoutReq(userID, _userName), 'logout')
+  //       .then((data) {
+  //     HSProgressHUD.dismiss();
+  //     if (this.mounted) {
+  //       setState(() {
+  //         Future.delayed(Duration.zero, () {
+  //           exit(0);
+  //           // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+  //         });
+  //         Fluttertoast.showToast(
+  //           msg: S.of(context).logoutSuccess,
+  //           gravity: ToastGravity.CENTER,
+  //         );
+  //       });
+  //     }
+  //   }).catchError((e) {
+  //     Fluttertoast.showToast(
+  //       msg: e.toString(),
+  //       gravity: ToastGravity.CENTER,
+  //     );
+  //     HSProgressHUD.dismiss();
+  //     // print(e.toString());
+  //   });
+  // }
 
   ///自定义导航条（包含联系客服、消息、标题、切换语言按钮）
   Widget _homeAppbar(double opacity, String changeLangBtnTltle) {

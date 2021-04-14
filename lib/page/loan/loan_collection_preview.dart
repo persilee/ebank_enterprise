@@ -5,6 +5,7 @@ import 'package:ebank_mobile/data/source/model/loan_calculate_interest.dart';
 import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
 import 'package:ebank_mobile/data/source/model/loan_trail_commit.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/loan/limit_details_page.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
@@ -143,22 +144,32 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
 
   _loanWithdrawalCommit() {
     String payData = _requstMap['planPayData'];
-    String repayDat = payData.substring(8);
+    String repayDat = payData.substring(7);
     String repay = _requstMap['repaymentMethod']; //还款方式
     String insType = '';
+    String payType = ''; //还款方式
+
     if (repay == 'EPI') {
       //等额本息
       insType = '1';
+      payType = '4';
     } else if (repay == 'IPI') {
       //等额本金
       insType = '2';
-    } else {}
+      payType = '4';
+    } else if (repay == 'FPI') {
+      //到期一次性
+      payType = '1';
+    } else {
+      //按月付息
+      payType = '2';
+    }
 
     double _inRateVale = 0; //合约利率
     if (_limitCusteModel.floatNMth == '1') {
       //参考利率+点差 ：
       _inRateVale =
-          double.parse(_interestRate) + int.parse(_limitCusteModel.onRate);
+          double.parse(_interestRate) + double.parse(_limitCusteModel.onRate);
     } else if (_limitCusteModel.floatNMth == '2') {
       //参考利率+ 参考利率*百分比差/100
       _inRateVale = double.parse(_interestRate) +
@@ -166,32 +177,50 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
               int.parse(_limitCusteModel.iratNPer) /
               100;
     }
+    String mothCode = '';
+    if (int.parse(_requstMap['termValue']) < 10) {
+      mothCode = 'M00' + _requstMap['termValue'];
+    } else {
+      mothCode = 'M0' + _requstMap['termValue'];
+    }
 
     var req = LoanTrailCommitReq(
-        _requstMap['acNo'], //贷款帐号
+        _requstMap['acNo'], //贷款合约号
         _accountInfo.ccy, //货币
         int.parse(_requstMap['price']), //贷款本金
         _limitCusteModel.iratCd1, //参考利率类型
-        _requstMap['termValue'], //贷款期限
+        mothCode, //贷款期限 加上 M0
         double.parse(_interestRate), //参考利率
         _limitCusteModel.floatNMth, //浮动方式
         double.parse(_limitCusteModel.onRate), //点差
         int.parse(_limitCusteModel.iratNPer), //百分比差
         _inRateVale, //合约利率
         _requstMap['payAcNo'], //放款活期账户
-        repay, //还款方式
+        payType, //还款方式
         insType, //本利和公式
         '1', //结息周期
         'M', //结息周期单位
         _requstMap['planPayData'], //首次还息日期
         int.parse(repayDat), //还款指定日 年-月-日中的日
-        '12' //_requstMap['matuDt'], //贷款到期日
+        _accountInfo.endDt //_requstMap['matuDt'], //贷款到期日
         );
 
     SVProgressHUD.show();
     LoanDataRepository().loanFinalWithdrawInterface(req, 'getCardList').then(
       (data) {
-        if (data != null) {}
+        if (data != null) {
+          SVProgressHUD.showSuccess(status: S.current.operation_successful);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (BuildContext context) {
+            return LimitDetailsPage();
+          }), (Route route) {
+            //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
+            if (route.settings?.name == "/limit_details_page") {
+              return true; //停止关闭
+            }
+            return false; //继续关闭
+          });
+        }
         SVProgressHUD.dismiss();
       },
     ).catchError((e) {
