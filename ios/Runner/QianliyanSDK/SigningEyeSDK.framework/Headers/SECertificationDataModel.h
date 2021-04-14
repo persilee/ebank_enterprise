@@ -24,8 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString * fileName;//ai录制后视频名称
 @property (nonatomic, copy) NSString * tenant_id;//租户id
 @property (nonatomic, copy) NSString * business_id;//业务编号
-@property (nonatomic, copy) NSString * outCode;//错误编号
-@property (nonatomic, copy) NSString * errorMessage;//错误信息解释
+@property (nonatomic, copy) NSString * outCode;//返回编号
+@property (nonatomic, copy) NSString * errorMessage;//返回信息解释
 
 
 @end

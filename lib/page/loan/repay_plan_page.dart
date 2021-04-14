@@ -6,6 +6,7 @@
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_schedule_detail_list.dart';
 import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -220,13 +221,13 @@ class _RepayPlanState extends State<RepayPlanPage> {
     var instalType = lnSchedule.paySts; //还款状态 0：未还 1：逾期 2：已还
     var repay = '还款'; //还款
     switch (instalType) {
-      case 'NONE':
+      case '0':
         instalType = ' (未还) ';
         break;
-      case 'PART':
+      case '1':
         instalType = ' (部分还款) ';
         break;
-      case 'ALL':
+      case '2':
         instalType = ' (全部还款) ';
         repay = '';
         break;
@@ -327,17 +328,19 @@ class _RepayPlanState extends State<RepayPlanPage> {
                 style: TextStyle(fontSize: 14, color: Color(0xFF4D4D4D)),
               ),
               Text(
-                // instalType,
-                '',
+                instalType,
                 style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
               ),
               InkWell(
                 onTap: () {
+                  //跳转提前还款
+                  Navigator.pushNamed(context, pageRepayInput,
+                      arguments: widget.loanDetail);
                   //跳转
-                  Fluttertoast.showToast(
-                    msg: '还款中...',
-                    gravity: ToastGravity.CENTER,
-                  );
+                  // Fluttertoast.showToast(
+                  //   msg: '还款中...',
+                  //   gravity: ToastGravity.CENTER,
+                  // );
                 },
                 child: Text(
                   repay,

@@ -98,6 +98,25 @@ class AuthIdentityResp {
   @JsonKey(name: 'isSuccess')
   bool isSuccess;
 
+  /** 
+   * 1  回答错误次数 过多 
+   * 2 AI面签过程中 挂断退出    
+   * 3 AI面签过程中回答错误的弹窗退出 
+   * 4  AI面签过程中异常退出  
+   * 5 人脸识别 或 录制视频 退出 
+   * 6  返回退出
+   * 7 异常退出
+   * 8 证件不符合条件
+   * 999  ai面签过完成退出 
+  */
+  ///错误编号
+  @JsonKey(name: 'outCode')
+  String outCode;
+
+  ///反面照片
+  @JsonKey(name: 'errorMessage')
+  String errorMessage;
+
   AuthIdentityResp(
     this.tenantId,
     this.businessId,
@@ -111,6 +130,8 @@ class AuthIdentityResp {
     this.compareImageData,
     this.backImage,
     this.isSuccess,
+    this.outCode,
+    this.errorMessage,
   );
 
   factory AuthIdentityResp.fromJson(Map<String, dynamic> srcJson) =>
