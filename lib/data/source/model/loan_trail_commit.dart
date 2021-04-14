@@ -4,19 +4,19 @@ part 'loan_trail_commit.g.dart';
 
 @JsonSerializable()
 class LoanTrailCommitReq extends Object {
-  //贷款合同号
-  @JsonKey(name: 'ctaNo')
-  String ctaNo;
+  //贷款账户
+  @JsonKey(name: 'lnac')
+  String lnac;
   //贷款货币
   @JsonKey(name: 'ccy')
   String ccy;
   //贷款本金 ,
   @JsonKey(name: 'amt')
   int amt;
-  //贷款本金 ,
+  //利率代码 ,
   @JsonKey(name: 'iratCd')
   String iratCd;
-  //参考利率档期
+  //贷款期限
   @JsonKey(name: 'iratTm')
   String iratTm;
   //参考利率
@@ -60,7 +60,7 @@ class LoanTrailCommitReq extends Object {
   String matuDt;
 
   LoanTrailCommitReq(
-    this.ctaNo,
+    this.lnac,
     this.ccy,
     this.amt,
     this.iratCd,
@@ -88,10 +88,10 @@ class LoanTrailCommitReq extends Object {
 @JsonSerializable()
 class LoanTrailCommitResp extends Object {
   @JsonKey(name: 'amt')
-  int amt;
+  String amt;
 
   @JsonKey(name: 'apexRt')
-  int apexRt;
+  String apexRt;
 
   @JsonKey(name: 'ccy')
   String ccy;
@@ -106,10 +106,10 @@ class LoanTrailCommitResp extends Object {
   String ddAc2;
 
   @JsonKey(name: 'drEqAmt')
-  int drEqAmt;
+  String drEqAmt;
 
   @JsonKey(name: 'inRate')
-  int inRate;
+  String inRate;
 
   @JsonKey(name: 'jrnNo')
   int jrnNo;
@@ -127,7 +127,7 @@ class LoanTrailCommitResp extends Object {
   String payCcy;
 
   @JsonKey(name: 'penIrat')
-  int penIrat;
+  String penIrat;
 
   @JsonKey(name: 'recCcy')
   String recCcy;
