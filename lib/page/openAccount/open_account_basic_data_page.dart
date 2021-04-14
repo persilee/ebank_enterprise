@@ -742,11 +742,11 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   void _getPublicParameters() async {
     //获取登记注册文件类型
     PublicParametersRepository()
-        .getIdType(GetIdTypeReq('FIRM_CERT'), 'GetIdTypeReq')
+        .getIdType(GetIdTypeReq('CGCT'), 'GetIdTypeReq') //CGCT//FIRM_CERT
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _documentTypes = data.publicCodeGetRedisRspDtoList;
-        print('FIRM_CERT-  ${data.publicCodeGetRedisRspDtoList}');
+        print('公共参数-登记注册文件类型-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
       Fluttertoast.showToast(
@@ -757,11 +757,11 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
 
     //获取公司类别类型
     PublicParametersRepository()
-        .getIdType(GetIdTypeReq('ET'), 'GetIdTypeReq')
+        .getIdType(GetIdTypeReq('CORP_TYPE'), 'GetIdTypeReq') //CORP_TYPE//ET
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _companyTypes = data.publicCodeGetRedisRspDtoList;
-        print('ET-  ${data.publicCodeGetRedisRspDtoList}');
+        print('公共参数-公司类别类型-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
       Fluttertoast.showToast(
@@ -772,11 +772,11 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
 
     //获取商业行业性质类型
     PublicParametersRepository()
-        .getIdType(GetIdTypeReq('BIZ_IDU'), 'GetIdTypeReq')
+        .getIdType(GetIdTypeReq('NOCI'), 'GetIdTypeReq') //BIZ_IDU//NOCI
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _industrialNatures = data.publicCodeGetRedisRspDtoList;
-        print('BIZ_IDU-  ${data.publicCodeGetRedisRspDtoList}');
+        print('公共参数-商业行业性质类型-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
       Fluttertoast.showToast(

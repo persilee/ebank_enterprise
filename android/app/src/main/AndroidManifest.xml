@@ -23,7 +23,7 @@
     <application
         android:usesCleartextTraffic="true"
         android:name="com.hsg.bank.HsgApplication"
-        android:label="Brillink Bank"
+        android:label="@string/application_name"
         android:theme="@style/NormalTheme"
         android:icon="@mipmap/icon_launcher"
         android:appComponentFactory="hisun"
