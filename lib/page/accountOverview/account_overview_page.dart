@@ -304,6 +304,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     );
   }
 
+  //贷款列表
   Container _lnSliverList(int index) {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
@@ -318,9 +319,10 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
           ),
           Text(
             //unpaidPrincipal
-            FormatUtil.formatSringToMoney(lnList[index].currBal) +
+            FormatUtil.formatSringToMoney(
+                    lnList[index].currBal, lnList[index].ccy) +
                 ' ' +
-                localCcy,
+                lnList[index].ccy,
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
           )
         ],
@@ -353,6 +355,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     );
   }
 
+  //定期列表
   Container _tdSliverList(int index) {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
@@ -365,7 +368,8 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
             style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
           ),
           Text(
-            FormatUtil.formatSringToMoney(tdList[index].currBal) +
+            FormatUtil.formatSringToMoney(
+                    tdList[index].currBal, tdList[index].ccy) +
                 ' ' +
                 tdList[index].ccy, //currbal
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
@@ -400,6 +404,7 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     );
   }
 
+  //活期列表
   Container _ddSliverList(int index) {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
@@ -412,7 +417,8 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
             style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
           ),
           Text(
-            FormatUtil.formatSringToMoney(ddList[index].equAmt) +
+            FormatUtil.formatSringToMoney(
+                    ddList[index].currBal, ddList[index].ccy) +
                 ' ' +
                 ddList[index].ccy,
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),

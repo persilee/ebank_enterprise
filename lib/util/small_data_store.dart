@@ -24,7 +24,7 @@ class ConfigKey {
   static const USER_PASSWORDENABLED = "user_show_passwordEnabled"; //用户交易密码标识
 
   static const USER_TYPE = "user_type";
-  static const USER_PASSWORD = "user_password"; //临时使用，方便开发，后面需要去除保存
+  // static const USER_PASSWORD = "user_password"; //临时使用，方便开发，后面需要去除保存
 }
 
 class InputFormartterRegExp {
