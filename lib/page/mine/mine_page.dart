@@ -18,6 +18,7 @@ import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
@@ -58,6 +59,14 @@ class _MinePageState extends State<MinePage>
   void initState() {
     // 网络请求
     _getUser();
+
+    EventBusUtils.getInstance().on<GetUserEvent>().listen((event) {
+      print("mine  event bus msg is =" +
+          event.msg +
+          "   state info is  = " +
+          event.state.toString());
+      _getUser();
+    });
   }
 
   @override

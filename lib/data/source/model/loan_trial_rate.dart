@@ -64,66 +64,67 @@ class LoanTrailResp extends Object {
 
 @JsonSerializable()
 class LoanTrialDTOList extends Object {
+  //利息计算基数
   @JsonKey(name: 'calrStd')
   String calrStd;
-
+//货币
   @JsonKey(name: 'ccy')
   String ccy;
-
+//本利和金额
   @JsonKey(name: 'instAmt')
   String instAmt;
-
+//下一还款日
   @JsonKey(name: 'nextPay')
   String nextPay;
-
+//剩余本金
   @JsonKey(name: 'outBal')
   String outBal;
-
+//还款金额
   @JsonKey(name: 'payAmt')
   String payAmt;
-
+//还款日期
   @JsonKey(name: 'payDt')
   String payDt;
-
+//还款频率
   @JsonKey(name: 'payFre')
   int payFre;
-
+//利息
   @JsonKey(name: 'payInt')
   String payInt;
-
+//本金
   @JsonKey(name: 'payPrin')
   String payPrin;
-
+//还款频率单位
   @JsonKey(name: 'payUnit')
   String payUnit;
-
+//还款方式
   @JsonKey(name: 'paytyp')
   String paytyp;
-
+//贷款本金
   @JsonKey(name: 'prin')
   String prin;
-
+//贷款利率
   @JsonKey(name: 'rate')
   String rate;
-
+//指定还款日
   @JsonKey(name: 'repDay')
   int repDay;
-
+//期数号
   @JsonKey(name: 'term')
   String term;
-
+//总还款金额
   @JsonKey(name: 'totAmt')
   String totAmt;
-
+//总利息
   @JsonKey(name: 'totInt')
   String totInt;
-
+//总本金
   @JsonKey(name: 'totPri')
   String totPri;
-
+//总期数
   @JsonKey(name: 'totTerm')
   int totTerm;
-
+//起息日
   @JsonKey(name: 'valDt')
   String valDt;
 

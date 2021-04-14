@@ -439,7 +439,7 @@ class _OpenAccountContactInformationPageState
           _registeredAddressTEC,
           false,
           <TextInputFormatter>[
-            LengthLimitingTextInputFormatter(30),
+            LengthLimitingTextInputFormatter(40),
             FilteringTextInputFormatter.deny(
                 RegExp(InputFormartterRegExp.REGEX_EMOJI)), //不允许表情
           ],
@@ -567,7 +567,7 @@ class _OpenAccountContactInformationPageState
           _businessAddressTEC,
           false,
           <TextInputFormatter>[
-            LengthLimitingTextInputFormatter(30),
+            LengthLimitingTextInputFormatter(40),
             FilteringTextInputFormatter.deny(
                 RegExp(InputFormartterRegExp.REGEX_EMOJI)), //不允许表情
           ],
@@ -703,7 +703,7 @@ class _OpenAccountContactInformationPageState
           _correspondenceAddressTEC,
           false,
           <TextInputFormatter>[
-            LengthLimitingTextInputFormatter(30),
+            LengthLimitingTextInputFormatter(40),
             FilteringTextInputFormatter.deny(
                 RegExp(InputFormartterRegExp.REGEX_EMOJI)), //不允许表情
           ],

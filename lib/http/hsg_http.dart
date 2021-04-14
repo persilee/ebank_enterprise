@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/http/hsg_http_exception.dart';
@@ -27,7 +28,7 @@ class HsgHttp {
   Dio _dio;
   // var _baseUrl = 'http://161.189.48.75:5040/'; //dev
   var _baseUrl = 'http://47.57.236.20:5040/'; //sit
-  //var _baseUrl = 'http://47.242.2.219:5040/'; //UAT
+  // var _baseUrl = 'http://47.242.2.219:5040/'; //UAT
   //'http://52.82.42.59:5040/'; http://161.189.48.75:5040/ http://192.168.201.65:5041/
 
   static final _instance = HsgHttp._internal();
@@ -51,7 +52,16 @@ class HsgHttp {
       _dio.interceptors.add(InterceptorsWrapper(
         onRequest: (options) async {
           final prefs = await SharedPreferences.getInstance();
-          final locale = prefs.getString(ConfigKey.LANGUAGE) ?? 'en';
+
+          String localeStr = await Language.getSaveLangage();
+          if (localeStr.contains('zh_cn')) {
+            localeStr = 'zh_CN';
+          } else if (localeStr.contains('zh_hk')) {
+            localeStr = 'zh_HK';
+          } else {
+            localeStr = 'en_US';
+          }
+          final locale = localeStr;
           final token = prefs.getString(ConfigKey.NET_TOKEN) ?? '';
 
           _dio.interceptors.requestLock.lock();

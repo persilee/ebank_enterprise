@@ -4,9 +4,13 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>.DS_Store</key>
+		<data>
+		OFjViuYLhIm32q1pn8tqT7T7PM0=
+		</data>
 		<key>Headers/SECertificationDataModel.h</key>
 		<data>
-		qGFJJqsGeATAXsAEMbhE0isZqVQ=
+		BGyOWnv0KW8o/Xye+YfgUyxS06U=
 		</data>
 		<key>Headers/SEFaceError.h</key>
 		<data>
@@ -415,11 +419,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			qGFJJqsGeATAXsAEMbhE0isZqVQ=
+			BGyOWnv0KW8o/Xye+YfgUyxS06U=
 			</data>
 			<key>hash2</key>
 			<data>
-			o+eNqNYMop4tvRQuHZWpUXGL0hBchR+ItlB3IuBXj/A=
+			BU/A0FkL/TRVw5hTTfzYacbSAxUe+9VKxsxa6RSZsyU=
 			</data>
 		</dict>
 		<key>Headers/SEFaceError.h</key>

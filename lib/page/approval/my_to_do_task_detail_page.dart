@@ -128,6 +128,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _loadTransferPlanData(_contractModel);
       }
     } catch (e) {
+      print('eeeeeeeeee: ${(e as DioError).error}');
       if ((e as DioError).error is NeedLogin) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) {
@@ -138,10 +139,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         });
       } else {
         print('error: ${e.toString()}');
+        setState(() {
+          _isLoading = false;
+        });
       }
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
@@ -345,6 +346,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         OpenTDModel.OpenTdContractDetailModel.fromJson(_contractModel);
     OpenTDModel.OperateEndValue data =
         openTdContractDetailModel?.operateEndValue;
+
     if (this.mounted) {
       setState(() {
         _openTdList.add(_buildTitle(S.current.approve_basic_information));

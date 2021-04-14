@@ -73,8 +73,8 @@ class GetLnAcScheduleRspDetlsDTOList extends Object {
   // @JsonKey(name: 'instalStatus')
   // String instalStatus;
   //还款状态 未还NONE、部分还款PART、全额还款ALL
-  @JsonKey(name: 'instalType')
-  String instalType;
+  // @JsonKey(name: 'instalType')
+  // String instalType;
   // //分期金额
   // @JsonKey(name: 'interestAmt')
   // String interestAmt;
@@ -100,7 +100,7 @@ class GetLnAcScheduleRspDetlsDTOList extends Object {
   // 还款类型
   @JsonKey(name: 'payType')
   String payType;
-//还款状态
+//还款状态  0：未还 1：逾期 2：已还
   @JsonKey(name: 'paySts')
   String paySts;
 //期数号

@@ -19,6 +19,7 @@ import 'model/loan_detail_modelList.dart';
 import 'model/loan_prepayment_model.dart';
 import 'model/loan_product_list.dart';
 import 'model/loan_repayment_record.dart';
+import 'model/loan_trail_commit.dart';
 
 class LoanDataRepository {
   //贷款利率接口
@@ -108,10 +109,10 @@ class LoanDataRepository {
   }
 
   //贷款领用最终确定提交接口
-  Future<LoanTrailResp> loanFinalWithdrawInterface(
-      LoanTrailReq req, String tag) {
+  Future<LoanTrailCommitResp> loanFinalWithdrawInterface(
+      LoanTrailCommitReq req, String tag) {
     return request('loan/contracts/loanWithdrawal', req, tag,
-        (data) => LoanTrailResp.fromJson(data));
+        (data) => LoanTrailCommitResp.fromJson(data));
   }
 
   // //贷款领用界面获取当前贷款利率的接口

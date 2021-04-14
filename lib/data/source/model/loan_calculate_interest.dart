@@ -89,10 +89,10 @@ class LoanTrialDTOList extends Object {
   int payFre;
 
   @JsonKey(name: 'payInt')
-  int payInt;
+  String payInt;
 
   @JsonKey(name: 'payPrin')
-  int payPrin;
+  String payPrin;
 
   @JsonKey(name: 'payUnit')
   String payUnit;
