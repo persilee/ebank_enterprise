@@ -380,26 +380,26 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         _payAmtController.text != '') {
       double _amount =
           AiDecimalAccuracy.parse(_payAmtController.text).toDouble();
-      ForexTradingRepository()
-          .transferTrial(
-              TransferTrialReq(
-                  amount: _amount,
-                  corrCcy: _incomeCcy,
-                  defaultCcy: _paymentCcy),
-              'TransferTrialReq')
-          .then((data) {
-        if (this.mounted) {
-          setState(() {
-            _rate = data.optExRate;
-            _incomeAmt = data.optExAmt;
-          });
-        }
-      }).catchError((e) {
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
-      });
+      // ForexTradingRepository()
+      //     .transferTrial(
+      //         TransferTrialReq(
+      //             amount: _amount,
+      //             corrCcy: _incomeCcy,
+      //             defaultCcy: _paymentCcy),
+      //         'TransferTrialReq')
+      //     .then((data) {
+      //   if (this.mounted) {
+      //     setState(() {
+      //       _rate = data.optExRate;
+      //       _incomeAmt = data.optExAmt;
+      //     });
+      //   }
+      // }).catchError((e) {
+      //   Fluttertoast.showToast(
+      //     msg: e.toString(),
+      //     gravity: ToastGravity.CENTER,
+      //   );
+      // });
     }
   }
 

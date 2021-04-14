@@ -197,7 +197,8 @@ class _TransferPageState extends State<TransferPage> {
                 35,
                 () {
                   //行内转账
-                  Navigator.pushNamed(context, pageTransferInternal);
+                  // Navigator.pushNamed(context, pageTransferInternal);
+                  Navigator.pushNamed(context, pageTransferInline);
                 },
               ),
               _graphicButton(

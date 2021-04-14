@@ -743,23 +743,23 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     } else {
       _payerAmount =
           AiDecimalAccuracy.parse(_transferMoneyController.text).toDouble();
-      ForexTradingRepository()
-          .transferTrial(
-              TransferTrialReq(
-                  amount: _payerAmount,
-                  corrCcy: _transferCcy,
-                  defaultCcy: _payCcy),
-              'TransferTrialReq')
-          .then((data) {
-        if (this.mounted) {
-          setState(() {
-            _amount = data.optExAmt;
-            _xRate = data.optExRate;
-          });
-        }
-      }).catchError((e) {
-        print(e.toString());
-      });
+      // ForexTradingRepository()
+      //     .transferTrial(
+      //         TransferTrialReq(
+      //             amount: _payerAmount,
+      //             corrCcy: _transferCcy,
+      //             defaultCcy: _payCcy),
+      //         'TransferTrialReq')
+      //     .then((data) {
+      //   if (this.mounted) {
+      //     setState(() {
+      //       _amount = data.optExAmt;
+      //       _xRate = data.optExRate;
+      //     });
+      //   }
+      // }).catchError((e) {
+      //   print(e.toString());
+      // });
     }
   }
 
