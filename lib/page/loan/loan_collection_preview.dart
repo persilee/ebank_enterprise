@@ -184,7 +184,8 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
         '1', //结息周期
         'M', //结息周期单位
         _requstMap['planPayData'], //首次还息日期
-        int.parse(repayDat) //还款指定日 年-月-日中的日
+        int.parse(repayDat), //还款指定日 年-月-日中的日
+        '12' //_requstMap['matuDt'], //贷款到期日
         );
 
     SVProgressHUD.show();
