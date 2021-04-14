@@ -98,7 +98,9 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
         }
       });
     }).catchError((e) {
-      SVProgressHUD.dismiss();
+      setState(() {
+        _isLoading = false;
+        });
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,

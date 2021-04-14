@@ -284,12 +284,14 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             padding: EdgeInsets.only(top: 10.0, left: 15.0),
             child: Row(
               children: [
-                Text(
-                  '输入的金额需大于等于' +
-                      FormatUtil.formatSringToMoney(_minAmt.toString()) +
-                      '，小于等于' +
-                      FormatUtil.formatSringToMoney(_maxAmt.toString()),
-                  style: TextStyle(color: HsgColors.redText, fontSize: 13.0),
+                Expanded(
+                  child: Text(
+                    S.current.tdContract_min_amount +
+                        FormatUtil.formatSringToMoney(_minAmt.toString()) +
+                        S.current.tdContract_max_amount +
+                        FormatUtil.formatSringToMoney(_maxAmt.toString()),
+                    style: TextStyle(color: HsgColors.redText, fontSize: 13.0),
+                  ),
                 ),
               ],
             ),

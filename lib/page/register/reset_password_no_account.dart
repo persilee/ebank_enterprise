@@ -61,127 +61,128 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
     print('$_phone>>>>>>>>>>>>>>>');
 
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Colors.black, //修改颜色
-          ),
-          backgroundColor: Colors.white,
-          elevation: 0,
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.black, //修改颜色
         ),
-        body: GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              // 触摸收起键盘
-              FocusScope.of(context).requestFocus(FocusNode());
-            },
-            child: Container(
-              color: Colors.white,
-              child: ListView(
-                children: <Widget>[
-                  //注册标题
-                  getRegisterTitle(
-                      '${S.current.reset_password}-${S.current.please_input_password}'),
-                  //输入新密码
-                  getRegisterRow(
-                    S.current.password_need_num,
-                    _newPassword,
-                    true,
-                    <TextInputFormatter>[
-                      LengthLimitingTextInputFormatter(16),
-                      FilteringTextInputFormatter.allow(RegExp(
-                          "[a-zA-Z0-9,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
-                    ],
-                  ),
-                  //再次输入密码
-                  getRegisterRow(
-                    S.current.placeConfimPwd,
-                    _confirmPassword,
-                    true,
-                    <TextInputFormatter>[
-                      LengthLimitingTextInputFormatter(16),
-                      FilteringTextInputFormatter.allow(RegExp(
-                          "[a-zA-Z0-9,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
-                    ],
-                  ),
-                  //下一步
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(bottom: 16),
-                    color: Colors.white,
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Color(0xFF1775BA),
-                                Color(0xFF3A9ED1),
-                              ],
-                            ),
-                          ),
-                          margin: EdgeInsets.only(top: 75),
-                          width: MediaQuery.of(context).size.width / 1.2,
-                          height: MediaQuery.of(context).size.height / 15,
-                          child: FlatButton(
-                            disabledColor: HsgColors.btnDisabled,
-                            child: Text(
-                              S.current.confirm,
-                              style: (TextStyle(color: Colors.white)),
-                              //textDirection: Colors.white,
-                            ),
-                            onPressed: _submit()
-                                ? () async {
-                                    final prefs =
-                                        await SharedPreferences.getInstance();
-                                    String userName =
-                                        prefs.getString(ConfigKey.USER_ACCOUNT);
-                                    //特殊字符
-                                    RegExp characters = new RegExp(
-                                        "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
-                                    RegExp letter = new RegExp("[A-Z]");
-                                    RegExp number = new RegExp("[0-9]");
-                                    RegExp minWord = new RegExp("[a-z]");
-                                    if ((_newPassword.text !=
-                                        _confirmPassword.text)) {
-                                      Fluttertoast.showToast(
-                                        msg: S.of(context).differentPwd,
-                                        gravity: ToastGravity.CENTER,
-                                      );
-                                    } else if (characters
-                                                .hasMatch(_newPassword.text) ==
-                                            false ||
-                                        letter.hasMatch(_newPassword.text) ==
-                                            false ||
-                                        number.hasMatch(_newPassword.text) ==
-                                            false ||
-                                        minWord.hasMatch(_newPassword.text) ==
-                                            false ||
-                                        ((_newPassword.text)
-                                                .contains(userName) ==
-                                            true) ||
-                                        (_newPassword.text.length < 8 ||
-                                            _newPassword.text.length > 16)) {
-                                      Fluttertoast.showToast(
-                                        msg: S.current.password_need_num,
-                                        gravity: ToastGravity.CENTER,
-                                      );
-                                    } else {
-                                      _updateLoginPassword();
-                                    }
-                                  }
-                                : null,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 触摸收起键盘
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
+          color: Colors.white,
+          child: ListView(
+            children: <Widget>[
+              //注册标题
+              getRegisterTitle(
+                  '${S.current.reset_password}-${S.current.please_input_password}'),
+              //输入新密码
+              getRegisterRow(
+                S.current.password_need_num,
+                _newPassword,
+                true,
+                <TextInputFormatter>[
+                  LengthLimitingTextInputFormatter(16),
+                  FilteringTextInputFormatter.allow(RegExp(
+                      "[a-zA-Z0-9,\\`,\\£¥•‘“,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
                 ],
               ),
-            )));
+              //再次输入密码
+              getRegisterRow(
+                S.current.placeConfimPwd,
+                _confirmPassword,
+                true,
+                <TextInputFormatter>[
+                  LengthLimitingTextInputFormatter(16),
+                  FilteringTextInputFormatter.allow(RegExp(
+                      "[a-zA-Z0-9,\\`,\\£¥•‘“,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
+                ],
+              ),
+              //下一步
+              Container(
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.only(bottom: 16),
+                color: Colors.white,
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Color(0xFF1775BA),
+                            Color(0xFF3A9ED1),
+                          ],
+                        ),
+                      ),
+                      margin: EdgeInsets.only(top: 75),
+                      width: MediaQuery.of(context).size.width / 1.2,
+                      height: MediaQuery.of(context).size.height / 15,
+                      child: FlatButton(
+                        disabledColor: HsgColors.btnDisabled,
+                        child: Text(
+                          S.current.confirm,
+                          style: (TextStyle(color: Colors.white)),
+                          //textDirection: Colors.white,
+                        ),
+                        onPressed: _submit()
+                            ? () async {
+                                final prefs =
+                                    await SharedPreferences.getInstance();
+                                String userName =
+                                    prefs.getString(ConfigKey.USER_ACCOUNT);
+                                //特殊字符
+                                RegExp characters = new RegExp(
+                                    "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
+                                RegExp letter = new RegExp("[A-Z]");
+                                RegExp number = new RegExp("[0-9]");
+                                RegExp minWord = new RegExp("[a-z]");
+                                if ((_newPassword.text !=
+                                    _confirmPassword.text)) {
+                                  Fluttertoast.showToast(
+                                    msg: S.of(context).differentPwd,
+                                    gravity: ToastGravity.CENTER,
+                                  );
+                                } else if (characters
+                                            .hasMatch(_newPassword.text) ==
+                                        false ||
+                                    letter.hasMatch(_newPassword.text) ==
+                                        false ||
+                                    number.hasMatch(_newPassword.text) ==
+                                        false ||
+                                    minWord.hasMatch(_newPassword.text) ==
+                                        false ||
+                                    ((_newPassword.text).contains(userName) ==
+                                        true) ||
+                                    (_newPassword.text.length < 8 ||
+                                        _newPassword.text.length > 16)) {
+                                  Fluttertoast.showToast(
+                                    msg: S.current.password_need_num,
+                                    gravity: ToastGravity.CENTER,
+                                  );
+                                } else {
+                                  _updateLoginPassword();
+                                }
+                              }
+                            : null,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   bool _submit() {

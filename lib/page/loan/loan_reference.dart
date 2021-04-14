@@ -815,6 +815,9 @@ class _LoanReferenceState extends State<LoanReference> {
     _requestDataMap["interestRate"] = interestRate; //利率
     _requestDataMap["planPayData"] = _trailModel.payDt; //还款计划模型
 
+    LoanTrialDTOList _lastModel = _trailList.last;
+    _requestDataMap["matuDt"] = _lastModel.payDt;
+
     Map dataList = {
       //key的名字不能跟后面的值相同
       'reviewList': _listDataMap,

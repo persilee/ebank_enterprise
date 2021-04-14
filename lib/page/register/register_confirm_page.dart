@@ -88,7 +88,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                   <TextInputFormatter>[
                     LengthLimitingTextInputFormatter(16),
                     FilteringTextInputFormatter.allow(RegExp(
-                        "[a-zA-Z0-9,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
+                        "[a-zA-Z0-9,\\`,\\£¥•‘“,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
                   ],
                 ),
                 //再次输入密码
@@ -99,7 +99,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                   <TextInputFormatter>[
                     LengthLimitingTextInputFormatter(16),
                     FilteringTextInputFormatter.allow(RegExp(
-                        "[a-zA-Z0-9,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
+                        "[a-zA-Z0-9,\\`,\\£¥•‘“,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
                   ],
                 ),
                 //下一步
