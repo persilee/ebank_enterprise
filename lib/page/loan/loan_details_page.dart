@@ -12,6 +12,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -32,6 +33,7 @@ class LoanDetailsPage extends StatefulWidget {
 class _LoanDetailsPageState extends State<LoanDetailsPage> {
   // LoanAccountDOList loanAccountDetail;
   var loanDetailsArr = []; //币种列表、
+  bool _isLoad = true;
 
   // @override
   void initState() {
@@ -46,20 +48,21 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
     String ciNo = "";
     String contactNo = "";
     String productCode = "";
-    SVProgressHUD.show();
     LoanDataRepository()
         .getLoanList(LoanDetailMastModelReq(acNo, ciNo, contactNo, productCode),
             'getLoanList')
         .then((data) {
-      SVProgressHUD.dismiss();
-      if (data.lnAcMastAppDOList != null) {
-        setState(() {
+      setState(() {
+        _isLoad = false;
+        if (data.lnAcMastAppDOList != null) {
           loanDetailsArr.clear();
           loanDetailsArr.addAll(data.lnAcMastAppDOList);
-        });
-      }
+        }
+      });
     }).catchError((e) {
-      SVProgressHUD.dismiss();
+      setState(() {
+        _isLoad = false;
+      });
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
@@ -79,9 +82,11 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: CustomScrollView(
-        slivers: _getContent(),
-      ),
+      body: _isLoad
+          ? HsgLoading()
+          : CustomScrollView(
+              slivers: _getContent(),
+            ),
     );
   }
 
@@ -281,9 +286,9 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
       loanDetailsArr.length <= 0
           ? SliverToBoxAdapter(
               child: Container(
-                  // margin: EdgeInsets.only(top: 100),
-                  // child: notDataContainer(context, S.current.no_data_now),
-                  ),
+                margin: EdgeInsets.only(top: 100),
+                child: notDataContainer(context, S.current.no_data_now),
+              ),
             )
           : SliverList(
               delegate:
@@ -371,6 +376,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
                       ),
             ),
     );
+
     return section;
   }
 
@@ -388,8 +394,6 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
               items: pages,
             ));
     if (result != null && result != false) {
-      // loanDetails.debitAccount => '0101238000001758';;
-      // print('详情数据----$loanDetail.');
       switch (result) {
         case 0:
           //直接还款记录

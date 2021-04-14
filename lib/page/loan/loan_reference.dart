@@ -65,11 +65,19 @@ class _LoanReferenceState extends State<LoanReference> {
   int _loanAccountIndex = 0; //收款索引
   List<RemoteBankCard> _totalAccoutList = []; //总帐号
 
+  String _trailStr = ''; //领用的还款计划文本
+  int _trailIndex = 0; //计划的索引
+
+  LoanTrialDTOList _trailModel; //当前选中的模型
+  List<LoanTrialDTOList> _trailList = []; //计划的数组列表
+
   Map _listDataMap = {}; //确认页展示列表数据的map
   Map _requestDataMap = {}; //确认页上传数据的map
 
   LoanAccountDOList accountInfo; //上个界面传过来的值
   FocusNode focusnode = FocusNode(); //监听编辑的输入
+
+  GetCreditlimitByCusteDTOList _limitCusteModel; //额度接口数据
 
   //获取借款期限
   Future _getLoanTimeList() async {
@@ -120,6 +128,8 @@ class _LoanReferenceState extends State<LoanReference> {
             _totalAccoutList.addAll(data.cardList);
             RemoteBankCard card = _totalAccoutList[0];
             _loanAccount = card.cardNo;
+            _listDataMap['payAcNo'] = card.cardNo;
+            _requestDataMap['payAcNo'] = card.cardNo;
           });
         }
       },
@@ -184,8 +194,8 @@ class _LoanReferenceState extends State<LoanReference> {
           setState(() {
             GetCreditlimitByCusteDTOList custcd =
                 data.getCreditlimitByCusteDTOList[0];
-            print('========custcd.iratCd1');
-            iratCd1 = custcd.iratCd1 != '' ? custcd.iratCd1 : 'E11';
+            iratCd1 = custcd.iratCd1 != '' ? custcd.iratCd1 : 'E10';
+            _limitCusteModel = custcd;
             _checkInputValueAndRate(); //利率判断
           });
         }
@@ -211,7 +221,6 @@ class _LoanReferenceState extends State<LoanReference> {
           interestRate = data.interestRate.toString();
           _loadTrialDate(); //拿到利率进行失算
         });
-        print('============data.interestRate');
       }
     }).catchError((e) {
       print(e.toString());
@@ -222,6 +231,7 @@ class _LoanReferenceState extends State<LoanReference> {
 
 //领用试算的接口
   Future _loadTrialDate() async {
+    _trailList.clear();
     var req = LoanTrailReq(
       accountInfo.ccy, //货币
       '1', //频率 还款周期
@@ -229,15 +239,24 @@ class _LoanReferenceState extends State<LoanReference> {
       _reimburseCode, //还款方式
       double.parse(_recipientsController.text), //贷款本金
       double.parse(interestRate), //贷款利率
-      // '',//指定还款日
       _dateCode, //总期数
-      // '',//起息日
     );
     LoanDataRepository()
         .loanPilotComputingInterface(req, 'loanTrial')
         .then((data) {
       if (data.loanTrialDTOList != null) {
-        print(data.loanTrialDTOList);
+        setState(() {
+          _trailList.addAll(data.loanTrialDTOList); //添加所有的列表
+          LoanTrialDTOList modellist = _trailList[0];
+          _totalInterest = modellist.totInt; //总利息
+          var year = modellist.payDt.substring(5);
+          _trailStr = S.current.loan_trail_plan_first +
+              year +
+              ',' +
+              S.current.loan_trail_plan_second +
+              modellist.payAmt;
+          _trailModel = modellist;
+        });
       }
     }).catchError((e) {
       SVProgressHUD.dismiss();
@@ -262,7 +281,7 @@ class _LoanReferenceState extends State<LoanReference> {
         //防止挤压溢出
         //resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          title: Text('领用'),
+          title: Text(S.current.loan_trail_title),
           centerTitle: true,
           elevation: 1,
         ),
@@ -406,8 +425,8 @@ class _LoanReferenceState extends State<LoanReference> {
                         color: Colors.white,
                         child: selectInkWellToBlackTitle(
                           S.current.repayment_plan,
-                          _deadLine,
-                          onClink(),
+                          _trailStr,
+                          _repamentPlanAlert(),
                         )),
                     Divider(
                       height: 0,
@@ -589,6 +608,24 @@ class _LoanReferenceState extends State<LoanReference> {
     };
   }
 
+//还款计划弹窗
+  _repamentPlanAlert() {
+    return () async {
+      if (_trailList.length <= 0) {
+        return;
+      } else {
+        final result = await showHsgBottomSheet(
+            context: context,
+            builder: (context) => HsgBottomTrailPlanChiose(
+                  title: S.current.repayment_plan,
+                  listItems: this._trailList,
+                ));
+
+        return;
+      }
+    };
+  }
+
 //选项弹窗
   Widget selectInkWellToBlackTitle(
     String title,
@@ -605,7 +642,7 @@ class _LoanReferenceState extends State<LoanReference> {
           children: [
             Container(
               //左侧文本
-              padding: EdgeInsets.only(left: 20),
+              padding: EdgeInsets.only(left: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -618,7 +655,7 @@ class _LoanReferenceState extends State<LoanReference> {
                     ),
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width / 2,
+                    width: MediaQuery.of(context).size.width / 2 - 110,
                     child: title == S.current.transfer_to_account
                         ? Text(
                             S.current.loan_Estimated_time_account,
@@ -638,7 +675,7 @@ class _LoanReferenceState extends State<LoanReference> {
                 Container(
                   //右侧文本
                   // Padding(
-                  width: MediaQuery.of(context).size.width / 3,
+                  width: MediaQuery.of(context).size.width / 2,
                   padding: EdgeInsets.only(right: 12),
                   child: item == ''
                       ? Text(S.current.please_select,
@@ -764,17 +801,27 @@ class _LoanReferenceState extends State<LoanReference> {
 
   _openBottomSheet() {
     //需要传值
-    _listDataMap["totalInterst"] = '100'; //总利息
+    _listDataMap["totalInterst"] = _trailModel.totInt; //总利息
     _listDataMap["price"] = _recipientsController.text; //金额
-    _listDataMap["repayPlan"] = '首期24，还款1000元'; //计划
-    _listDataMap["availableCredit"] = '首期24，还款1000元'; //可借款额度
+    _listDataMap["repayPlan"] = _trailStr; //计划
+    _listDataMap["availableCredit"] = accountInfo.bal; //可借款额度
 
-    _requestDataMap["totalInterst"] = '100'; //总利息
+    _requestDataMap["totalInterst"] = _trailModel.totInt; //总利息
     _requestDataMap["price"] = _recipientsController.text; //金额
-    _listDataMap["repayPlan"] = '12'; //计划
-    _listDataMap["availableCredit"] = 'USD 10000'; //可用额度
+    _listDataMap["repayPlan"] = _trailStr; //计划
+    _listDataMap["availableCredit"] = accountInfo.bal; //可用额度
 
-    Map dataList = {'reviewList': _listDataMap, 'requestList': _requestDataMap};
+    _requestDataMap["acNo"] = accountInfo.lnac; //贷款帐号
+    _requestDataMap["interestRate"] = interestRate; //利率
+    _requestDataMap["planPayData"] = _trailModel.payDt; //还款计划模型
+
+    Map dataList = {
+      //key的名字不能跟后面的值相同
+      'reviewList': _listDataMap,
+      'requestList': _requestDataMap,
+      'loanAccountDOList': accountInfo,
+      'limitCusteModel': _limitCusteModel //额度信息数据
+    };
 
     Navigator.pushNamed(context, pageLoanCollectionPreview,
         arguments: dataList);

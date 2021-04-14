@@ -217,7 +217,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
     instalDate = instalDate.trim();
     var year = instalDate.substring(0, 4);
     var day = instalDate.substring(5);
-    var instalType = lnSchedule.instalType; //还款状态 未还NONE、部分还款PART、全额还款ALL
+    var instalType = lnSchedule.paySts; //还款状态 0：未还 1：逾期 2：已还
     var repay = '还款'; //还款
     switch (instalType) {
       case 'NONE':
@@ -286,7 +286,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
         Align(
           heightFactor: 2,
           child: Opacity(
-              opacity: 0.2,
+              opacity: 0.6,
               child: Container(
                 width: 7,
                 height: 7,
@@ -296,7 +296,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
               )),
         ),
         Opacity(
-            opacity: 0.1,
+            opacity: 0.5,
             child: Container(
               width: 15,
               height: 15,
@@ -331,19 +331,22 @@ class _RepayPlanState extends State<RepayPlanPage> {
                 '',
                 style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
               ),
-              // InkWell(
-              //   onTap: () {
-              //     //跳转
-              //     Fluttertoast.showToast(msg: '还款中...',gravity: ToastGravity.CENTER,);
-              //   },
-              //   child: Text(
-              //     repay,
-              //     style: TextStyle(
-              //         fontSize: 13,
-              //         color: Color(0xFF4871FF),
-              //         decoration: TextDecoration.underline),
-              //   ),
-              // ),
+              InkWell(
+                onTap: () {
+                  //跳转
+                  Fluttertoast.showToast(
+                    msg: '还款中...',
+                    gravity: ToastGravity.CENTER,
+                  );
+                },
+                child: Text(
+                  repay,
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF4871FF),
+                      decoration: TextDecoration.underline),
+                ),
+              ),
             ],
           ),
           Padding(padding: EdgeInsets.only(top: 5)),

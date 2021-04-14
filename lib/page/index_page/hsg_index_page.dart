@@ -94,8 +94,12 @@ class _IndexPageState extends State<IndexPage> {
         physics: NeverScrollableScrollPhysics(),
         children: [HomePage(), ApprovalPage(), MinePage()],
         onPageChanged: (page) {
-          if(page == 0) StatusBarUtil.setStatusBar(Brightness.light, color: Colors.transparent);
-          else StatusBarUtil.setStatusBar(Brightness.dark, color: Colors.transparent);
+          if (page == 0)
+            StatusBarUtil.setStatusBar(Brightness.light,
+                color: Colors.transparent);
+          else
+            StatusBarUtil.setStatusBar(Brightness.dark,
+                color: Colors.transparent);
         },
       ),
       // body: pages[currentIndex],
@@ -109,8 +113,9 @@ class _IndexPageState extends State<IndexPage> {
   void _toPage(int index) {
     setState(() {
       currentIndex = index;
-      _pageController.animateToPage(currentIndex,
-          curve: Curves.easeIn, duration: Duration(milliseconds: 160));
+      // _pageController.animateToPage(currentIndex,
+      //     curve: Curves.easeIn, duration: Duration(milliseconds: 160));
+      _pageController.jumpToPage(currentIndex);
     });
   }
 

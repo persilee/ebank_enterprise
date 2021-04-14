@@ -11,6 +11,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
@@ -36,6 +37,8 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
   //机构代码
   String br = "";
 
+  bool _isload = true;
+
   var loanDetails = [];
   var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
@@ -58,33 +61,35 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
       ),
       body: RefreshIndicator(
         key: refrestIndicatorKey,
-        child: _getlistViewList(context),
+        child: _isload ? HsgLoading() : _getlistViewList(context),
         onRefresh: _loadData,
       ),
     );
   }
 
   Future<void> _loadData() async {
+    loanDetails.clear();
     //请求的参数
     final prefs = await SharedPreferences.getInstance();
     String cino = prefs.getString(ConfigKey.CUST_ID);
     ciNo = cino;
 
     contactNo = "";
-    SVProgressHUD.show();
     LoanDataRepository()
         .getLoanAccountList(
             LoanAccountMastModelReq(0, ciNo, contactNo), 'getLoanAccountList')
         .then((data) {
-      SVProgressHUD.dismiss();
-      if (data.loanAccountDOList != null) {
-        setState(() {
+      setState(() {
+        _isload = false;
+        if (data.loanAccountDOList != null) {
           loanDetails.clear();
           loanDetails.addAll(data.loanAccountDOList);
-        });
-      }
+        }
+      });
     }).catchError((e) {
-      SVProgressHUD.dismiss();
+      setState(() {
+        _isload = false;
+      });
       SVProgressHUD.showInfo(status: e.toString());
       loanDetails.clear();
     });
@@ -103,12 +108,9 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
 
   //生成ListView
   Widget _getlistViewList(BuildContext context) {
-    if (loanDetails.length <= 0) {
-      //没有数据进行占位
+    if (_isload == false && loanDetails.length <= 0) {
       return Container(
-        child: loanDetails.length <= 0
-            ? Container()
-            : notDataContainer(context, S.current.no_data_now),
+        child: notDataContainer(context, S.current.no_data_now),
       );
     } else {
       List<Widget> _list = new List();

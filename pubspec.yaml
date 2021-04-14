@@ -56,6 +56,7 @@ dependencies:
   flutter_pdfview: ^1.0.4
   path: ^1.7.0
   path_provider: ^1.6.24
+  package_info: ^0.4.3+1
   sp_util:
   flutter_cupertino_date_picker:
     git:

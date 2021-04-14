@@ -256,7 +256,7 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
         Align(
           heightFactor: 2,
           child: Opacity(
-              opacity: 0.2,
+              opacity: 0.6,
               child: Container(
                 width: 7,
                 height: 7,
@@ -266,7 +266,7 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
               )),
         ),
         Opacity(
-            opacity: 0.1,
+            opacity: 0.5,
             child: Container(
               width: 15,
               height: 15,
