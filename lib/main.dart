@@ -10,7 +10,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-// import 'package:package_info/package_info.dart';
+import 'package:package_info/package_info.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sp_util/sp_util.dart';
 import 'widget/progressHUD.dart';
@@ -46,12 +46,12 @@ class HSGBankApp extends StatefulWidget {
 
 class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
   // 获取app名称、版本号等信息
-  // PackageInfo _packageInfo = PackageInfo(
-  //   appName: 'Unknown',
-  //   packageName: 'Unknown',
-  //   version: 'Unknown',
-  //   buildNumber: 'Unknown',
-  // );
+  PackageInfo _packageInfo = PackageInfo(
+    appName: 'Unknown',
+    packageName: 'Unknown',
+    version: 'Unknown',
+    buildNumber: 'Unknown',
+  );
 
   changeLanguage(Locale locale) {
     setState(() {
@@ -59,18 +59,18 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
     });
   }
 
-  // Future<void> _initPackageInfo() async {
-  //   final PackageInfo info = await PackageInfo.fromPlatform();
-  //   print('_initPackageInfo: $info');
-  //   setState(() {
-  //     _packageInfo = info;
-  //   });
-  // }
+  Future<void> _initPackageInfo() async {
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    print('_initPackageInfo: $info');
+    setState(() {
+      _packageInfo = info;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    // _initPackageInfo();
+    _initPackageInfo();
     // _initLanguage();
     _getPublicParameters();
     WidgetsBinding.instance.addObserver(this);
@@ -86,10 +86,10 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
       case AppLifecycleState.resumed: //从后台切换前台，界面可见
         break;
       case AppLifecycleState.paused: // 界面不可见，后台
-        // Fluttertoast.showToast(
-        //   msg: '${_packageInfo.appName}进入后台运行',
-        //   gravity: ToastGravity.CENTER,
-        // );
+        Fluttertoast.showToast(
+          msg: '${_packageInfo.appName}进入后台运行',
+          gravity: ToastGravity.CENTER,
+        );
         break;
       case AppLifecycleState.detached: // APP结束时调用
         break;
