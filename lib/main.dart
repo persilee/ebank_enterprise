@@ -45,7 +45,6 @@ class HSGBankApp extends StatefulWidget {
 }
 
 class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
-
   // 获取app名称、版本号等信息
   PackageInfo _packageInfo = PackageInfo(
     appName: 'Unknown',
@@ -75,7 +74,6 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
     // _initLanguage();
     _getPublicParameters();
     WidgetsBinding.instance.addObserver(this);
-
   }
 
   // 监听APP运行状态

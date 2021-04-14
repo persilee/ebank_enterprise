@@ -7,6 +7,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_text_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -144,6 +145,8 @@ class TextFieldContainer extends StatelessWidget {
                     ? FilteringTextInputFormatter.allow(RegExp(regExp))
                     : LengthLimitingTextInputFormatter(length),
                 if (isUpperCase) UpperCaseTextFormatter(),
+                FilteringTextInputFormatter.deny(
+                    RegExp(InputFormartterRegExp.REGEX_EMOJI)), //禁止输入emoji
               ],
               onChanged: (text) {
                 callback();
