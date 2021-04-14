@@ -126,13 +126,15 @@ static NSString *const teantID = @"DLEAED";//LFFEAE
         NSLog(@"认证结果%@",videoResult.certificationResul);
 //        NSDictionary *reultDict = @{@"result":videoResult.certificationResul};
         resultValue = [videoResult.certificationResul mj_JSONString];
-        
+
         NSLog(@"认证结果转换------------%@",resultValue);
-        
+
         self.resultBlock(resultValue);
     }else{//用户操作失败等问题统一在这里处理
-        NSLog(@"报错信息------------%@  %u",videoResult.error.desc, videoResult.error.errorType);
+        NSLog(@"报错信息------------%@ %@ %u",videoResult.error.desc, videoResult.certificationResul, videoResult.error.errorType);
     }
+//    resultValue = [videoResult.certificationResul mj_JSONString];
+//    self.resultBlock(resultValue);
 //    else{//不成功
 //        NSDictionary *reultDict = @{@"result":@"failer"};
 //        resultValue = [reultDict mj_JSONString];

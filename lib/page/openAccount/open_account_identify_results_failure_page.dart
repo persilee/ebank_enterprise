@@ -135,7 +135,7 @@ class _OpenAccountIdentifyResultsFailurePageState
     String userPhone = prefs.getString(ConfigKey.USER_PHONE);
     String businessId = _businessId + '-' + userPhone;
 
-    HSProgressHUD.show();
+    // HSProgressHUD.show();
 
     AuthIdentity()
         .startAuth(
@@ -153,7 +153,8 @@ class _OpenAccountIdentifyResultsFailurePageState
           (value.isSuccess == true ||
               (value.isSuccess == false &&
                   value.fileName != null &&
-                  value.fileName != ''))) {
+                  value.fileName != '' &&
+                  value.outCode == '999'))) {
         Navigator.pushNamed(
           context,
           pageOpenAccountIdentifySuccessful,
@@ -167,6 +168,9 @@ class _OpenAccountIdentifyResultsFailurePageState
           msg: S.of(context).openAccout_identify_results_failure,
           gravity: ToastGravity.CENTER,
         );
+        if (value.outCode == '8') {
+          Navigator.pop(context);
+        }
       }
     }).catchError((e) {
       HSProgressHUD.dismiss();

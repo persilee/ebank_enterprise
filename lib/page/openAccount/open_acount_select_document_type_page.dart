@@ -263,7 +263,8 @@ class _OpenAccountSelectDocumentTypePageState
           (value.isSuccess == true ||
               (value.isSuccess == false &&
                   value.fileName != null &&
-                  value.fileName != ''))) {
+                  value.fileName != '' &&
+                  value.outCode == '999'))) {
         if (mounted) {
           setState(() {
             _isCanClick = true;
@@ -277,6 +278,7 @@ class _OpenAccountSelectDocumentTypePageState
             'isQuick': _isQuick,
           },
         );
+      } else if (value.outCode == '8') {
       } else {
         Navigator.pushNamed(
           context,

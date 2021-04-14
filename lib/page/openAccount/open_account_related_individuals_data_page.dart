@@ -479,7 +479,7 @@ class _RelatedIndividualsDataPageState
     if (result != null && result != false) {
       IdType data = _appellationTypes[result];
       _partner.appellationIdType = data;
-      _partner.appellation = 'A'; //data.code;
+      _partner.appellation = data.code;
       setState(() {
         _appellationText = appellationList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
@@ -521,7 +521,7 @@ class _RelatedIndividualsDataPageState
     if (result != null && result != false) {
       IdType data = _categoryTypes[result];
       _partner.partnerTypeIdType = data;
-      _partner.partnerType = '009'; //data.code;
+      _partner.partnerType = data.code;
       setState(() {
         _categoryText = categoryList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
@@ -570,11 +570,11 @@ class _RelatedIndividualsDataPageState
   void _getPublicParameters() async {
     //称谓
     PublicParametersRepository()
-        .getIdType(GetIdTypeReq('SALUTATION'), 'GetIdTypeReq')
+        .getIdType(GetIdTypeReq('AOTPC'), 'GetIdTypeReq') //AOTPC//SALUTATION
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _appellationTypes = data.publicCodeGetRedisRspDtoList;
-        print('SALUTATION-  ${data.publicCodeGetRedisRspDtoList}');
+        print('公共参数-称谓-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
       Fluttertoast.showToast(
@@ -585,11 +585,11 @@ class _RelatedIndividualsDataPageState
 
     //个人职位类别
     PublicParametersRepository()
-        .getIdType(GetIdTypeReq('POSIT'), 'GetIdTypeReq')
+        .getIdType(GetIdTypeReq('COPC'), 'GetIdTypeReq') //COPC//POSIT
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _categoryTypes = data.publicCodeGetRedisRspDtoList;
-        print('POSIT-  ${data.publicCodeGetRedisRspDtoList}');
+        print('公共参数-个人职位类别-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
       Fluttertoast.showToast(
@@ -600,11 +600,11 @@ class _RelatedIndividualsDataPageState
 
     //个人证件类型
     PublicParametersRepository()
-        .getIdType(GetIdTypeReq('CERT_TYPE'), 'GetIdTypeReq')
+        .getIdType(GetIdTypeReq('TORPC'), 'GetIdTypeReq') //TORPC//CERT_TYPE
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _documentTypes = data.publicCodeGetRedisRspDtoList;
-        print('CERT_TYPE-  ${data.publicCodeGetRedisRspDtoList}');
+        print('公共参数-个人证件类型-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
       Fluttertoast.showToast(
