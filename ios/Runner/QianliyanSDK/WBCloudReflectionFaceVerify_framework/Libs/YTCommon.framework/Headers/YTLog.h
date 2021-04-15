@@ -15,14 +15,14 @@ typedef void(^YTLogCallback)(NSString *message);
 #ifdef __OPTIMIZE__
 #define YTLogD(fmt, ...)
 #else
-#define YTLogD(fmt, ...) YTLogger(nil, 0, (@"%s[Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#define YTLogD(fmt, ...) YTLogger(nil, 0, (@"[Youtu] %s[Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 #endif
 
 /**打印错误信息，Release模式下同样会显示*/
-#define YTLogE(fmt, ...) YTLogger(nil, 1, (@"%s[Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#define YTLogE(fmt, ...) YTLogger(nil, 1, (@"[Youtu] %s[Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 
 /**打印错误信息，Release模式下同样会显示，并利用callback回调给外部*/
-#define YTLogCallbackE(callback, fmt, ...) YTLogger(callback, 1, (@"%s[Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#define YTLogCallbackE(callback, fmt, ...) YTLogger(callback, 1, (@"[Youtu] %s[Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 
 
 

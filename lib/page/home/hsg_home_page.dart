@@ -69,11 +69,13 @@ class _HomePageState extends State<HomePage>
         if (this.mounted) {
           setState(() {
             num opacity = _sctrollController.offset / 120;
-            _opacity = opacity.abs();
-            if (_opacity > 1) {
+            // _opacity = opacity.abs();
+            if (opacity > 1) {
               _opacity = 1;
-            } else if (_opacity < 0) {
+            } else if (opacity < 0) {
               _opacity = 0;
+            } else {
+              _opacity = opacity;
             }
           });
         }
@@ -209,6 +211,7 @@ class _HomePageState extends State<HomePage>
         appBar: _homeAppbar(_opacity, _changeLangBtnTltle),
         body: Container(
           child: CustomScrollView(
+            shrinkWrap: true,
             controller: _sctrollController,
             slivers: slivers,
           ),

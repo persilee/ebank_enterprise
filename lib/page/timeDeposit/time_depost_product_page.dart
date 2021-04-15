@@ -210,8 +210,10 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           ),
         ),
         inputFormatters: [
-          LengthLimitingTextInputFormatter(12),
-          FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+          // LengthLimitingTextInputFormatter(12),
+          _changedCcy == 'JPY'
+              ? FilteringTextInputFormatter.allow(RegExp('[0-9]'))
+              : FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
           MoneyTextInputFormatter(),
           // FilteringTextInputFormatter.allow(RegExp('[0-9]|\\.|[0-9]')),
           // FilteringTextInputFormatter.allow(
