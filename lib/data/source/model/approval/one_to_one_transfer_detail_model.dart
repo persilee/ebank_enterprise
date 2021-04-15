@@ -1,12 +1,12 @@
-/// userId : "989185387615485977"
-/// userName : "高阳寰球"
+/// userId : "829377988633034752"
+/// userName : "HSG12 Checker"
 /// assignee : null
 /// processTitle : "oneToOneTransferApprovalTitle"
 /// processKey : "oneToOneTransferApproval"
 /// businessKey : null
 /// tenantId : null
 /// operateBeforeValue : null
-/// operateEndValue : {"payerName":"","payerBankCode":"","payerCardNo":"0101208000001528","payeeBankCode":"","payeeCardNo":"0101208000001528","payeeName":"测试银行","amount":"101208000001528","remark":"测试","debitCurrency":"CNY","creditCurrency":"HKD","payPassword":"","smsCode":"","exchangeRate":"0.8109"}
+/// operateEndValue : {"opt":"S","payerName":"玛丽","payerBankCode":"BRLPKZ20","payerCardNo":"0001208000001428","payeeBankCode":"BRLPKZ20","payeeCardNo":"0001208000001428","payeeName":"玛丽","debitAmount":"1000","creditAmount":"1000","remark":"","debitCurrency":"CNY","creditCurrency":"CNY","payPassword":"","smsCode":"","phone":null,"exchangeRate":"1"}
 /// servCtr : "hbs-ebank-general-service"
 /// custId : null
 /// commentList : []
@@ -129,108 +129,129 @@ class OneToOneTransferDetailModel {
 
 }
 
-/// payerName : ""
-/// payerBankCode : ""
-/// payerCardNo : "0101208000001528"
-/// payeeBankCode : ""
-/// payeeCardNo : "0101208000001528"
-/// payeeName : "测试银行"
-/// amount : "101208000001528"
-/// remark : "测试"
+/// opt : "S"
+/// payerName : "玛丽"
+/// payerBankCode : "BRLPKZ20"
+/// payerCardNo : "0001208000001428"
+/// payeeBankCode : "BRLPKZ20"
+/// payeeCardNo : "0001208000001428"
+/// payeeName : "玛丽"
+/// debitAmount : "1000"
+/// creditAmount : "1000"
+/// remark : ""
 /// debitCurrency : "CNY"
-/// creditCurrency : "HKD"
+/// creditCurrency : "CNY"
 /// payPassword : ""
 /// smsCode : ""
-/// exchangeRate : "0.8109"
+/// phone : null
+/// exchangeRate : "1"
 
 class OperateEndValue {
+  String _opt;
   String _payerName;
   String _payerBankCode;
   String _payerCardNo;
   String _payeeBankCode;
   String _payeeCardNo;
   String _payeeName;
-  String _amount;
+  String _debitAmount;
+  String _creditAmount;
   String _remark;
   String _debitCurrency;
   String _creditCurrency;
   String _payPassword;
   String _smsCode;
+  dynamic _phone;
   String _exchangeRate;
 
+  String get opt => _opt;
   String get payerName => _payerName;
   String get payerBankCode => _payerBankCode;
   String get payerCardNo => _payerCardNo;
   String get payeeBankCode => _payeeBankCode;
   String get payeeCardNo => _payeeCardNo;
   String get payeeName => _payeeName;
-  String get amount => _amount;
+  String get debitAmount => _debitAmount;
+  String get creditAmount => _creditAmount;
   String get remark => _remark;
   String get debitCurrency => _debitCurrency;
   String get creditCurrency => _creditCurrency;
   String get payPassword => _payPassword;
   String get smsCode => _smsCode;
+  dynamic get phone => _phone;
   String get exchangeRate => _exchangeRate;
 
   OperateEndValue({
+      String opt, 
       String payerName, 
       String payerBankCode, 
       String payerCardNo, 
       String payeeBankCode, 
       String payeeCardNo, 
       String payeeName, 
-      String amount, 
+      String debitAmount, 
+      String creditAmount, 
       String remark, 
       String debitCurrency, 
       String creditCurrency, 
       String payPassword, 
       String smsCode, 
+      dynamic phone, 
       String exchangeRate}){
+    _opt = opt;
     _payerName = payerName;
     _payerBankCode = payerBankCode;
     _payerCardNo = payerCardNo;
     _payeeBankCode = payeeBankCode;
     _payeeCardNo = payeeCardNo;
     _payeeName = payeeName;
-    _amount = amount;
+    _debitAmount = debitAmount;
+    _creditAmount = creditAmount;
     _remark = remark;
     _debitCurrency = debitCurrency;
     _creditCurrency = creditCurrency;
     _payPassword = payPassword;
     _smsCode = smsCode;
+    _phone = phone;
     _exchangeRate = exchangeRate;
 }
 
   OperateEndValue.fromJson(dynamic json) {
+    _opt = json["opt"];
     _payerName = json["payerName"];
     _payerBankCode = json["payerBankCode"];
     _payerCardNo = json["payerCardNo"];
     _payeeBankCode = json["payeeBankCode"];
     _payeeCardNo = json["payeeCardNo"];
     _payeeName = json["payeeName"];
-    _amount = json["amount"];
+    _debitAmount = json["debitAmount"];
+    _creditAmount = json["creditAmount"];
     _remark = json["remark"];
     _debitCurrency = json["debitCurrency"];
     _creditCurrency = json["creditCurrency"];
     _payPassword = json["payPassword"];
     _smsCode = json["smsCode"];
+    _phone = json["phone"];
     _exchangeRate = json["exchangeRate"];
   }
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
+    map["opt"] = _opt;
     map["payerName"] = _payerName;
     map["payerBankCode"] = _payerBankCode;
     map["payerCardNo"] = _payerCardNo;
     map["payeeBankCode"] = _payeeBankCode;
     map["payeeCardNo"] = _payeeCardNo;
     map["payeeName"] = _payeeName;
-    map["amount"] = _amount;
+    map["debitAmount"] = _debitAmount;
+    map["creditAmount"] = _creditAmount;
     map["remark"] = _remark;
     map["debitCurrency"] = _debitCurrency;
     map["creditCurrency"] = _creditCurrency;
     map["payPassword"] = _payPassword;
     map["smsCode"] = _smsCode;
+    map["phone"] = _phone;
     map["exchangeRate"] = _exchangeRate;
     return map;
   }

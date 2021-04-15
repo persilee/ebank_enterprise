@@ -499,6 +499,9 @@ class _TransferInterPageState extends State<TransferInterPage> {
                 hintText: inputText,
                 hintStyle: HINET_TEXT_STYLE,
               ),
+              onChanged: ((value) {
+                _boolBut();
+              }),
             ),
           ),
         ],
@@ -812,7 +815,8 @@ class _TransferInterPageState extends State<TransferInterPage> {
         _countryText != '' &&
         _bankNameController.text != '' &&
         _bankSwiftController.text.length > 0 &&
-        _transferFee != '') {
+        _transferFee != '' &&
+        _payeeAddressController.text != '') {
       return setState(() {
         _isClick = true;
       });

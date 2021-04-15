@@ -573,6 +573,8 @@
   "approve_collection_address": "收款地址",
   "approve_approval_history": "审批历史",
   "approve_input_approval_comments": "请输入审批意见",
+  "approve_task_approval_title": "任务审批",
+  "approve_details_title": "详情",
   "refresh_loosen_refresh": "松开刷新",
   "refresh_loading": "加载中...",
   "refresh_drop_down_refresh": "下拉刷新",

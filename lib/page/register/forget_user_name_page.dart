@@ -281,7 +281,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
                 _officeAreaCodeText, //地区号
                 _phoneNum.text, //电话号
                 'findAccount', //短信类型
-                '' //smsTemplateId
+                'SCNAOFGUN' //smsTemplateId
                 ),
             'sendSms')
         .then((data) {

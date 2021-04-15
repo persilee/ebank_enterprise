@@ -7,6 +7,7 @@ import 'package:ebank_mobile/data/source/model/approval/find_all_finished_task_m
 import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
+import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
@@ -69,6 +70,13 @@ abstract class ApiClient {
   @POST('/wkfl/processTask/findUserStartTask')
   Future<FindUserTodoTaskModel> findUserStartTask(
       @Body() FindTaskBody findTaskBody);
+
+  /// 查询我的申请的流程列表
+  @POST('/ddep/transfer/transferTrial')
+  Future<TransferTrialResp> transferTrial(
+      @Body() TransferTrialReq transferTrialReq);
+
+
 
   /// 上传头像（开户图片上传暂时共用）
   @POST('/cust/user/uploadAvatar')
