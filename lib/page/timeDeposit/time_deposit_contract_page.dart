@@ -18,6 +18,7 @@ import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -34,6 +35,7 @@ import '../../page_route.dart';
 class TimeDepositContract extends StatefulWidget {
   final TdepProducHeadDTO productList;
   final List<TdepProductDTOList> producDTOList;
+
   TimeDepositContract({Key key, this.productList, this.producDTOList})
       : super(key: key);
 
@@ -70,6 +72,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
   TdepProducHeadDTO productList;
   List<TdepProductDTOList> producDTOList;
+
   _TimeDepositContractState(this.productList, this.producDTOList);
 
   TimeDepositContractTrialReq contractTrialReq;
@@ -353,6 +356,12 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             if (double.parse(inputValue.text) >= double.parse(_minAmt) &&
                 double.parse(inputValue.text) <= double.parse(_maxAmt)) {
               _isShow = false;
+              //获取预计支付金额
+              if (_cardCcy == ccy) {
+                _amount = inputValue.text;
+              } else {
+                _rateCalculate();
+              }
               _loadDepositData(
                 accuPeriod,
                 auctCale,
@@ -364,13 +373,13 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                 '', // tenor
               );
               //获取预计支付金额
-              inputValue.addListener(() {
-                if (_cardCcy == ccy) {
-                  _amount = inputValue.text;
-                } else {
-                  _rateCalculate();
-                }
-              });
+              // inputValue.addListener(() {
+              //   if (_cardCcy == ccy) {
+              //     _amount = inputValue.text;
+              //   } else {
+              //     _rateCalculate();
+              //   }
+              // });
             } else {
               matAmt = '0.00';
               _amount = '0.00';
@@ -873,24 +882,48 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     } else {
       _payerAmount = AiDecimalAccuracy.parse(inputValue.text).toDouble();
 
-      ForexTradingRepository()
-          .transferTrial(
-              TransferTrialReq(
-                  amount: _payerAmount, corrCcy: _cardCcy, defaultCcy: ccy),
-              'TransferTrialReq')
-          .then((data) {
+      print('_payerAmount: ${inputValue.text}');
+      print('corrCcy: $_cardCcy');
+      print('defaultCcy: $ccy');
+
+      try {
+        TransferTrialResp data =
+            await ApiClient().transferTrial(TransferTrialReq(
+          amount: _payerAmount,
+          corrCcy: _cardCcy,
+          defaultCcy: ccy,
+        ));
         if (this.mounted) {
           setState(() {
             _amount = FormatUtil.formatSringToMoney((data.optExAmt).toString());
             _checkAmount = data.optExAmt;
           });
         }
-      }).catchError((e) {
+      } catch (e) {
         Fluttertoast.showToast(
           msg: "${e.toString()}",
           gravity: ToastGravity.CENTER,
         );
-      });
+      }
+
+      // ForexTradingRepository()
+      //     .transferTrial(
+      //         TransferTrialReq(
+      //             amount: _payerAmount, corrCcy: _cardCcy, defaultCcy: ccy),
+      //         'TransferTrialReq')
+      //     .then((data) {
+      //   if (this.mounted) {
+      //     setState(() {
+      //       _amount = FormatUtil.formatSringToMoney((data.optExAmt).toString());
+      //       _checkAmount = data.optExAmt;
+      //     });
+      //   }
+      // }).catchError((e) {
+      //   Fluttertoast.showToast(
+      //     msg: "${e.toString()}",
+      //     gravity: ToastGravity.CENTER,
+      //   );
+      // });
     }
   }
 
