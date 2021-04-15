@@ -86,11 +86,17 @@ class _HomePageState extends State<HomePage>
     _loadData();
 
     EventBusUtils.getInstance().on<GetUserEvent>().listen((event) {
-      print("event bus msg is =" +
-          event.msg +
-          "   state info is  = " +
-          event.state.toString());
       _loadData();
+    });
+
+    EventBusUtils.getInstance().on<ChangeHeadPortraitEvent>().listen((event) {
+      if (event.state == 100 ||
+          event.state == 300 &&
+              (event.headPortrait != null && event.headPortrait != '')) {
+        setState(() {
+          _headPortraitUrl = event.headPortrait;
+        });
+      }
     });
 
     super.initState();
@@ -838,17 +844,17 @@ class _HomePageState extends State<HomePage>
   //功能点击事件
   VoidCallback _featureClickFunction(BuildContext context, String title) {
     return () {
-      if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
-        HsgShowTip.notOpenAccountTip(
-          context: context,
-          click: (value) {
-            if (value == true) {
-              _openAccountClickFunction(context);
-            }
-          },
-        );
-        return;
-      }
+      // if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
+      //   HsgShowTip.notOpenAccountTip(
+      //     context: context,
+      //     click: (value) {
+      //       if (value == true) {
+      //         _openAccountClickFunction(context);
+      //       }
+      //     },
+      //   );
+      //   return;
+      // }
       if (S.current.transaction_details == title) {
         //收支明细
         Navigator.pushNamed(context, pageDetailList);
