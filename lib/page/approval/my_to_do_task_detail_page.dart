@@ -216,8 +216,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             S.current.approve_currency, data?.creditCurrency ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_amount,
-            f.format(double.parse(data?.amount) *
-                    double.parse(data?.exchangeRate)) ??
+            f.format(double.parse(data?.creditAmount)) ??
                 ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
@@ -241,7 +240,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _internationalList.add(_buildContentItem(
             S.current.approve_currency, data?.debitCurrency ?? ''));
         _internationalList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.amount)) ?? ''));
+            f.format(double.parse(data?.debitAmount)) ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_payment_method, data?.costOptions ?? ''));
         _internationalList.add(

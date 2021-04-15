@@ -187,7 +187,7 @@ class _MyApprovedHistoryDetailPageState
             .add(_buildContentItem(S.current.approve_currency, data?.creditCurrency ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_amount,
-            f.format(double.parse(data?.amount) *
+            f.format(double.parse(data?.creditAmount) *
                 double.parse(data?.exchangeRate)) ??
                 ''));
         _internationalList
@@ -211,7 +211,7 @@ class _MyApprovedHistoryDetailPageState
         _internationalList
             .add(_buildContentItem(S.current.approve_currency, data?.debitCurrency ?? ''));
         _internationalList.add(_buildContentItem(
-            S.current.approve_amount, f.format(double.parse(data?.amount)) ?? ''));
+            S.current.approve_amount, f.format(double.parse(data?.debitAmount)) ?? ''));
         _internationalList
             .add(_buildContentItem(S.current.approve_payment_method, data?.costOptions ?? ''));
         _internationalList.add(_buildContentItem(S.current.approve_remark, data?.remark ?? ''));
