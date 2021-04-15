@@ -271,7 +271,7 @@ class _RegisterPageState extends State<RegisterPage> {
     VerificationCodeRepository()
         .sendSmsByPhone(
             SendSmsByPhoneNumberReq(
-                _officeAreaCodeText, _phoneNum.text, 'register', '123123'),
+                _officeAreaCodeText, _phoneNum.text, 'register', 'SCNAOREGU'),
             'sendSmsRegister')
         .then((value) {
       if (mounted) {

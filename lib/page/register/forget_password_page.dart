@@ -350,7 +350,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     VerificationCodeRepository()
         .sendSmsByPhone(
             SendSmsByPhoneNumberReq(
-                _officeAreaCodeText, _phoneNum.text, 'findPwd', ''),
+                _officeAreaCodeText, _phoneNum.text, 'findPwd', 'SCNAOFTPW'),
             'sendSms')
         .then((data) {
       if (mounted) {
