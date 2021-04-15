@@ -103,7 +103,7 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
           child: Text(
             _transferHistory.debitCurrency +
                 " " +
-                FormatUtil.formatSringToMoney(_transferHistory.amount),
+                FormatUtil.formatSringToMoney(_transferHistory.debitAmount),
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.w500,

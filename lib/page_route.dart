@@ -88,6 +88,8 @@ import 'package:ebank_mobile/page/transfer/select_bank_page.dart';
 import 'package:ebank_mobile/page/transfer/select_city_page.dart';
 import 'package:ebank_mobile/page/transfer/select_branch_bank_page.dart';
 import 'package:ebank_mobile/page/transferNew/transfer_inline.dart';
+import 'package:ebank_mobile/page/transferNew/transfer_inter.dart';
+import 'package:ebank_mobile/page/transferNew/transfer_order.dart';
 import 'package:ebank_mobile/page/userAgreement/user_agreement_page.dart';
 import 'package:ebank_mobile/widget/hsg_pdf_viewer.dart';
 import 'package:flutter/material.dart';
@@ -211,6 +213,8 @@ var pageLoanMyApplicationList = '/loan_myApplication_list_page.dart';
 var pageLoanReference = 'loan_reference.dart';
 var pageLoanCollectionPreview = '/loan_collection_preview.dart';
 var pageTransferInline = '/transfer_inline.dart';
+var pageTransferInter = '/transfer_inter.dart';
+var pageTransferOrder = '/transfer_order.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -314,6 +318,8 @@ var appRoutes = {
   pageLoanReference: (context) => LoanReference(),
   pageLoanCollectionPreview: (context) => PageLoanCollectionPreview(), //贷款领用预览
   pageTransferInline: (context) => TransferInlinePage(),
+  pageTransferInter: (context) => TransferInterPage(),
+  pageTransferOrder:(context)=>TransferOrderPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {

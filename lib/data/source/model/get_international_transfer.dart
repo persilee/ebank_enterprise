@@ -4,8 +4,16 @@ part 'get_international_transfer.g.dart';
 
 @JsonSerializable()
 class GetInternationalTransferReq extends Object {
-  @JsonKey(name: 'amount')
-  String amount;
+  @JsonKey(name: 'opt')
+  String opt;
+
+  @JsonKey(name: 'debitAmount')
+  //付款金额
+  String debitAmount;
+
+  @JsonKey(name: 'creditAmount')
+  //收款金额
+  String creditAmount;
 
   @JsonKey(name: 'creditCurrency')
   String creditCurrency;
@@ -59,7 +67,9 @@ class GetInternationalTransferReq extends Object {
   String costOptions;
 
   GetInternationalTransferReq(
-    this.amount,
+    this.opt,
+    this.debitAmount,
+    this.creditAmount,
     this.creditCurrency,
     this.debitCurrency,
     this.payPassword,
