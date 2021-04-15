@@ -1,17 +1,18 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
-import 'package:ebank_mobile/data/source/model/approval/find_all_finished_task_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
+import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/transfer/data/transfer_internal_data.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -21,6 +22,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 
 import '../../page_route.dart';
 
@@ -124,19 +126,32 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     //   });
     // });
     _payerTransferFocusNode.addListener(() {
-      setState(() {
-        _opt = 'B';
-        _payeeTransferController.text = '';
-        _rateCalculate();
-      });
+      if (_payerTransferController.text.length > 0) {
+        setState(() {
+          _opt = 'S';
+          _payeeTransferController.text = '';
+          _rateCalculate();
+        });
+      }
+      _boolBut();
     });
 
-    _payeeTransferController.addListener(() {
-      setState(() {
-        _opt = 'S';
-        _payerTransferController.text = '';
-        _rateCalculate();
-      });
+    // _payeeTransferController.addListener(() {
+    //   setState(() {
+    //     _opt = 'S';
+    //     _payerTransferController.text = '';
+    //     _rateCalculate();
+    //   });
+    // });
+    _payeeTransferFocusNode.addListener(() {
+      if (_payeeTransferController.text.length > 0) {
+        setState(() {
+          _opt = 'B';
+          _payerTransferController.text = '';
+          _rateCalculate();
+        });
+      }
+      _boolBut();
     });
   }
 
@@ -158,14 +173,14 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     setState(() {
       if (_arguments != null && !check) {
         Rows rowPartner = _arguments;
-        // _payeeNameController.text = rowPartner.payeeName;
-        // _payeeAccountController.text = rowPartner.payeeCardNo;
-        // _remarkController.text = rowPartner.remark;
-        // payeeBankCode = rowPartner.bankCode;
-        // payerBankCode = rowPartner.payerBankCode;
-        // payeeName = rowPartner.payeeName;
-        // payerName = rowPartner.payerName;
-        // _payeeCcy = rowPartner.ccy;
+        _payeeNameController.text = rowPartner.payeeName;
+        _payeeAccountController.text = rowPartner.payeeCardNo;
+        _remarkController.text = rowPartner.remark;
+        payeeBankCode = rowPartner.bankCode;
+        payerBankCode = rowPartner.payerBankCode;
+        payeeName = rowPartner.payeeName;
+        payerName = rowPartner.payerName;
+        _payeeCcy = rowPartner.ccy;
         check = true;
         _isAccount = false;
         _boolBut();
@@ -410,10 +425,10 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             setState(() {
               if (value != null) {
                 Rows rowListPartner = value;
-                // _payeeNameController.text = rowListPartner.payeeName;
-                // _payeeAccountController.text = rowListPartner.payeeCardNo;
-                // _remarkController.text = rowListPartner.remark;
-                // _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
+                _payeeNameController.text = rowListPartner.payeeName;
+                _payeeAccountController.text = rowListPartner.payeeCardNo;
+                _remarkController.text = rowListPartner.remark;
+                _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
                 _isAccount = false;
               }
               _boolBut();
@@ -455,26 +470,27 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         msg: S.current.account_no_exist,
         gravity: ToastGravity.CENTER,
       );
-      // } else {
-      // Navigator.pushNamed(
-      //   context,
-      //   pageTransferInternalPreview,
-      //   arguments: TransferInternalData(
-      //     _payerAccount,
-      //     _payerTransferController.text,
-      //     _payerCcy,
-      //     _payeeNameController.text,
-      //     _payeeAccountController.text,
-      //     _amount,
-      //     _payeeCcy,
-      //     _remarkController.text,
-      //     payeeBankCode,
-      //     payeeName,
-      //     payerBankCode,
-      //     payerName,
-      //     rate,
-      //   ),
-      // );
+    } else {
+      Navigator.pushNamed(
+        context,
+        pageTransferInternalPreview,
+        arguments: TransferInternalData(
+          _payerAccount,
+          _payerTransferController.text,
+          _payerCcy,
+          _payeeNameController.text,
+          _payeeAccountController.text,
+          _payeeTransferController.text,
+          _payeeCcy,
+          _remarkController.text,
+          payeeBankCode,
+          payeeName,
+          payerBankCode,
+          payerName,
+          rate,
+          _opt,
+        ),
+      );
     }
   }
 
@@ -546,11 +562,11 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
 
   //按钮是否能点击
   _boolBut() {
-    if (_payerTransferController.text != '' &&
+    if ((_payerTransferController.text != '' ||
+            _payeeTransferController.text != '') &&
         _payeeNameController.text != '' &&
         _payeeAccountController.text != '' &&
-        _payeeCcy != '' &&
-        _payeeTransferController.text != '') {
+        _payeeCcy != '') {
       return setState(() {
         _isClick = true;
       });
@@ -671,13 +687,28 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     ForexTradingRepository()
         .transferTrial(
             TransferTrialReq(
-                opt: _opt,
-                buyCcy: _payeeCcy,
-                sellCcy: _payerCcy,
-                buyAmount: _payeeTransferController.text,
-                sellAmount: _payerTransferController.text),
+              opt: _opt,
+              buyCcy: _payerCcy,
+              sellCcy: _payeeCcy,
+              buyAmount: _payerTransferController.text == ''
+                  ? '0'
+                  : _payerTransferController.text,
+              sellAmount: _payeeTransferController.text == ''
+                  ? '0'
+                  : _payeeTransferController.text,
+            ),
             'TransferTrialReq')
         .then((data) {
+      print(" opt: " +
+          _opt +
+          " sellCcy: " +
+          _payeeCcy +
+          " buyCcy: " +
+          _payerCcy +
+          " sellAmout: " +
+          _payeeTransferController.text +
+          " buyAmount: " +
+          _payerTransferController.text);
       if (this.mounted) {
         setState(() {
           if (_opt == 'B') {
@@ -685,8 +716,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
           }
           if (_opt == 'S') {
             _payeeTransferController.text = data.optExAmt;
-            rate = data.optExRate;
           }
+          rate = data.optExRate;
         });
       }
     }).catchError((e) {

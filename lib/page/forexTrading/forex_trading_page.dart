@@ -405,16 +405,12 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
 
   _submitFormData() async {
     HSProgressHUD.show();
-    // ForexTradingRepository()
-    //     .doTransferAccout(
-    //         DoTransferAccoutReq(_incomeAmt, _incomeCcy, _paymentCcy, _incomeAcc,
-    //             _paymentAcc, _incomeName, _incomeBackCode),
-    //         'DoTransferAccoutReq')
     TransferDataRepository()
         .getTransferByAccount(
             GetTransferByAccount(
-              //转账金额
-              double.parse(_payAmtController.text),
+              "",
+              "",
+              "",
               //贷方货币
               _incomeCcy,
               //借方货币
