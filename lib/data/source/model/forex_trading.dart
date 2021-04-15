@@ -27,8 +27,8 @@ class GetCardBalReq {
 class GetCardBalResp {
   @JsonKey(name: 'cardNo')
   String cardNo;
-  @JsonKey(name: 'defaultCcy')
-  String defaultCcy;
+  @JsonKey(name: 'sellCcy')
+  String sellCcy;
   @JsonKey(name: 'totalAmt')
   String totalAmt;
   @JsonKey(name: 'cardListBal')
@@ -36,7 +36,7 @@ class GetCardBalResp {
 
   GetCardBalResp(
     this.cardNo,
-    this.defaultCcy,
+    this.sellCcy,
     this.totalAmt,
     this.cardListBal,
   );
@@ -87,17 +87,23 @@ class CardListBal {
 //汇率计算
 @JsonSerializable()
 class TransferTrialReq {
-  @JsonKey(name: 'amount')
-  double amount;
-  @JsonKey(name: 'corrCcy')
-  String corrCcy;
-  @JsonKey(name: 'defaultCcy')
-  String defaultCcy;
+  @JsonKey(name: 'opt')
+  String opt;
+  @JsonKey(name: 'buyCcy')
+  String buyCcy;
+  @JsonKey(name: 'sellCcy')
+  String sellCcy;
+  @JsonKey(name: 'buyAmount')
+  String buyAmount;
+  @JsonKey(name: 'sellAmount')
+  String sellAmount;
 
   TransferTrialReq({
-    this.amount,
-    this.corrCcy,
-    this.defaultCcy,
+    this.opt,
+    this.buyCcy,
+    this.sellCcy,
+    this.buyAmount,
+    this.sellAmount,
   });
 
   factory TransferTrialReq.fromJson(Map<String, dynamic> srcJson) =>
@@ -132,8 +138,8 @@ class TransferTrialResp {
 //外汇买卖
 @JsonSerializable()
 class DoTransferAccoutReq {
-  @JsonKey(name: 'amount')
-  String amount;
+  @JsonKey(name: 'opt')
+  String opt;
   @JsonKey(name: 'creditCurrency')
   String creditCurrency;
   @JsonKey(name: 'debitCurrency')
@@ -148,7 +154,7 @@ class DoTransferAccoutReq {
   String payeeBankCode;
 
   DoTransferAccoutReq(
-    this.amount,
+    this.opt,
     this.creditCurrency,
     this.debitCurrency,
     this.payeeCardNo,

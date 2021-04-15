@@ -461,9 +461,11 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
       ForexTradingRepository()
           .transferTrial(
               TransferTrialReq(
-                amount: _payerAmount,
-                corrCcy: _objectiveCcy,
-                defaultCcy: _primitiveCcy,
+                opt: "S",
+                buyCcy: _objectiveCcy,
+                sellCcy: _primitiveCcy,
+                buyAmount: _amtController.text,
+                sellAmount: '0',
               ),
               'TransferTrialReq')
           .then((data) {

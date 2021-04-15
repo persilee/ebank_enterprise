@@ -61,11 +61,17 @@ class _MinePageState extends State<MinePage>
     _getUser();
 
     EventBusUtils.getInstance().on<GetUserEvent>().listen((event) {
-      print("mine  event bus msg is =" +
-          event.msg +
-          "   state info is  = " +
-          event.state.toString());
       _getUser();
+    });
+
+    EventBusUtils.getInstance().on<ChangeHeadPortraitEvent>().listen((event) {
+      if (event.state == 200 ||
+          event.state == 300 &&
+              (event.headPortrait != null && event.headPortrait != '')) {
+        setState(() {
+          _headPortraitUrl = event.headPortrait;
+        });
+      }
     });
   }
 
@@ -77,6 +83,7 @@ class _MinePageState extends State<MinePage>
       appBar: _mineAppbar(_opacity),
       body: Container(
         child: CustomScrollView(
+          shrinkWrap: true,
           controller: _sctrollController,
           slivers: [
             SliverToBoxAdapter(
@@ -146,7 +153,21 @@ class _MinePageState extends State<MinePage>
 
   ///scrollview的顶部view，包含背景图、登录信息
   Widget _mineHeaderView() {
-    Widget headerShowWidget = _headerInfoWidget();
+    Widget headerShowWidget = _welcomeWidget();
+    switch (_belongCustStatus) {
+      case '0': //未开户
+      case '1': //未开户
+      case '2': //审核中
+      case '3': //已驳回
+        headerShowWidget = _headerInfoWidget();
+        break;
+      case '4': //受限已开户
+      case '5': //正常已开户
+        headerShowWidget = _headerInfoWidget();
+        break;
+      default:
+        headerShowWidget = _welcomeWidget();
+    }
     // switch (_belongCustStatus) {
     //   case '0': //未开户
     //   case '1': //未开户
@@ -492,94 +513,6 @@ class _MinePageState extends State<MinePage>
     );
   }
 
-  //审核驳回
-  Widget _openAccRejected() {
-    return Container(
-      margin: EdgeInsets.only(top: 20),
-      height: 110,
-      width: MediaQuery.of(context).size.width - 40,
-      child: Column(
-        children: [
-          Container(
-            child: Text(
-              S.of(context).open_account_rejected_tip,
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 10, bottom: 12),
-            height: 35,
-            child: RaisedButton(
-              onPressed: () {
-                _openAccountClickFunction(context);
-              },
-              child: Text(
-                S.of(context).open_account_reapply,
-                style: TextStyle(fontSize: 14, color: Colors.white),
-              ),
-              shape: RoundedRectangleBorder(
-                side: BorderSide.none,
-                borderRadius: BorderRadius.all(Radius.circular(50)),
-              ),
-              color: Color(0xFF4871FF),
-              disabledColor: HsgColors.btnDisabled,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 5),
-            child: _timeInfo(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  //审核中
-  Widget _openAccInReview() {
-    return Container(
-      margin: EdgeInsets.only(top: 20),
-      height: 110,
-      width: MediaQuery.of(context).size.width - 40,
-      child: Column(
-        children: [
-          Container(
-            child: Text(
-              S.of(context).open_account_inReview_tip,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            child: Text(
-              S.of(context).open_account_inReview_content,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 14,
-              ),
-            ),
-          ),
-          Expanded(child: Container()),
-          Container(
-            margin: EdgeInsets.only(top: 7),
-            child: _timeInfo(),
-          ),
-        ],
-      ),
-    );
-  }
-
   //默认欢迎页
   Widget _welcomeWidget() {
     return Container(
@@ -799,7 +732,8 @@ class _MinePageState extends State<MinePage>
     } else {
       File file = File(_imgPath);
       ApiClient().uploadAvatar(BaseBody(body: {}), file).then((value) {
-        //, BaseBody(body: {})
+        EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
+            headPortrait: value['headPortrait'], state: 100));
         print(value);
       }).catchError((e) {
         Fluttertoast.showToast(

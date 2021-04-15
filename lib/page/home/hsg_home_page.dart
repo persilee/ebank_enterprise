@@ -69,11 +69,13 @@ class _HomePageState extends State<HomePage>
         if (this.mounted) {
           setState(() {
             num opacity = _sctrollController.offset / 120;
-            _opacity = opacity.abs();
-            if (_opacity > 1) {
+            // _opacity = opacity.abs();
+            if (opacity > 1) {
               _opacity = 1;
-            } else if (_opacity < 0) {
+            } else if (opacity < 0) {
               _opacity = 0;
+            } else {
+              _opacity = opacity;
             }
           });
         }
@@ -84,11 +86,17 @@ class _HomePageState extends State<HomePage>
     _loadData();
 
     EventBusUtils.getInstance().on<GetUserEvent>().listen((event) {
-      print("event bus msg is =" +
-          event.msg +
-          "   state info is  = " +
-          event.state.toString());
       _loadData();
+    });
+
+    EventBusUtils.getInstance().on<ChangeHeadPortraitEvent>().listen((event) {
+      if (event.state == 100 ||
+          event.state == 300 &&
+              (event.headPortrait != null && event.headPortrait != '')) {
+        setState(() {
+          _headPortraitUrl = event.headPortrait;
+        });
+      }
     });
 
     super.initState();
@@ -209,6 +217,7 @@ class _HomePageState extends State<HomePage>
         appBar: _homeAppbar(_opacity, _changeLangBtnTltle),
         body: Container(
           child: CustomScrollView(
+            shrinkWrap: true,
             controller: _sctrollController,
             slivers: slivers,
           ),
@@ -846,7 +855,6 @@ class _HomePageState extends State<HomePage>
       //   );
       //   return;
       // }
-      //
       if (S.current.transaction_details == title) {
         //收支明细
         Navigator.pushNamed(context, pageDetailList);
@@ -861,7 +869,8 @@ class _HomePageState extends State<HomePage>
         Navigator.pushNamed(context, pageTransferRecord);
       } else if (S.current.open_transfer == title) {
         //预约转账
-        Navigator.pushNamed(context, pageOpenTransfer);
+        // Navigator.pushNamed(context, pageOpenTransfer);
+        Navigator.pushNamed(context, pageTransferOrder);
       } else if (S.current.transfer_model == title) {
         //收款范本
         Navigator.pushNamed(context, pageTranferPartner);

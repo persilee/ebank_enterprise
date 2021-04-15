@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
@@ -10,7 +12,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-//import 'package:package_info/package_info.dart';
+// import 'package:package_info/package_info.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sp_util/sp_util.dart';
 import 'widget/progressHUD.dart';
@@ -86,10 +88,12 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
       case AppLifecycleState.resumed: //从后台切换前台，界面可见
         break;
       case AppLifecycleState.paused: // 界面不可见，后台
-        // Fluttertoast.showToast(
-        //   msg: '${_packageInfo.appName}进入后台运行',
-        //   gravity: ToastGravity.CENTER,
-        // );
+        if (Platform.isAndroid) {
+          // Fluttertoast.showToast(
+          //   msg: '${_packageInfo.appName}进入后台运行',
+          //   gravity: ToastGravity.CENTER,
+          // );
+        }
         break;
       case AppLifecycleState.detached: // APP结束时调用
         break;

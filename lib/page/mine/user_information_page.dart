@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
+import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
@@ -349,7 +350,8 @@ class _UserInformationPageState extends State<UserInformationPage> {
     } else {
       File file = File(_imgPath);
       ApiClient().uploadAvatar(BaseBody(body: {}), file).then((value) {
-        //, BaseBody(body: {})
+        EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
+            headPortrait: value['headPortrait'], state: 300));
         print(value);
       }).catchError((e) {
         Fluttertoast.showToast(

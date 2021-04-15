@@ -386,7 +386,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         // ),
         TextFieldContainer(
           title: S.current.transfer_postscript,
-          hintText: S.current.please_input,
+          hintText: S.current.not_required,
           keyboardType: TextInputType.text,
           controller: _aliasController,
           callback: _check,
@@ -969,6 +969,11 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         setState(() {
           _nameController.text = data.ciName;
           _isAccount = true;
+          if (_ccy != '') {
+            _isInputed = true;
+          } else {
+            _isInputed = false;
+          }
         });
       }
     }).catchError((e) {
