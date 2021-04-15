@@ -321,11 +321,12 @@ class _LoginPageState extends State<LoginPage> {
 
     final prefs = await SharedPreferences.getInstance();
     String accountStr = prefs.getString(ConfigKey.USER_ACCOUNT);
-    String passwordStr = prefs.getString(ConfigKey.USER_PASSWORD);
+    // String passwordStr = prefs.getString(ConfigKey.USER_PASSWORD);
 
     setState(() {
       _accountTC.text = accountStr == null ? '' : accountStr;
-      _passwordTC.text = passwordStr == null ? '' : passwordStr;
+      //_passwordTC.text = passwordStr == null ? '' : passwordStr;
+      _passwordTC.text = '';
     });
   }
 

@@ -157,7 +157,7 @@ class TedpListBal extends Object {
 
   Map<String, dynamic> toJson() => _$TedpListBalToJson(this);
 }
-
+//贷款
 @JsonSerializable()
 class LnListBal extends Object {
   @JsonKey(name: 'accountType')

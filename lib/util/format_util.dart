@@ -50,18 +50,28 @@ class FormatUtil {
   }
 
   /// 每隔3三位加逗号
-  static String formatSringToMoney(String num) {
+  static String formatSringToMoney(String num, [String ccy]) {
     if (isEmpty(num)) num = '0';
+    if (ccy == "JPY") {
+      double numDouble =
+          double.parse(formatNum(double.parse(num), 0, type: 'floor'));
 
-    double numDouble =
-        double.parse(formatNum(double.parse(num), 2, type: 'floor'));
+      NumberFormat numberFormat = NumberFormat('###,##0;');
 
-    NumberFormat numberFormat = NumberFormat('###,##0.00;');
+      String string = numberFormat.format(numDouble);
+      return string;
+    } else {
+      double numDouble =
+          double.parse(formatNum(double.parse(num), 2, type: 'floor'));
 
-    String string = numberFormat.format(numDouble);
+      NumberFormat numberFormat = NumberFormat('###,##0.00;');
 
-    return string;
+      String string = numberFormat.format(numDouble);
+
+      return string;
+    }
   }
+  //
 
   ///取小数点后几位
   ///num 数据

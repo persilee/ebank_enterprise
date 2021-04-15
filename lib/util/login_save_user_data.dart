@@ -18,7 +18,7 @@ void SaveUserData(LoginResp resp, {String password}) async {
   prefs.setString(ConfigKey.USER_BELONGCUSTSTATUS, resp.belongCustStatus);
   prefs.setBool(ConfigKey.USER_PASSWORDENABLED, resp.passwordEnabled);
 
-  prefs.setString(ConfigKey.USER_PASSWORD, password);
+  // prefs.setString(ConfigKey.USER_PASSWORD, password);
   if (resp.custId == null || resp.custId == '') {
     prefs.setString(ConfigKey.CUST_ID, '');
   } else {

@@ -29,7 +29,7 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
   void _getUser() async {
     final prefs = await SharedPreferences.getInstance();
     // String userID = prefs.getString(ConfigKey.USER_ID);
-    bool passwordEnabled = prefs.getBool(ConfigKey.USER_PASSWORDENABLED);
+    //  bool passwordEnabled = prefs.getBool(ConfigKey.USER_PASSWORDENABLED);
     String belongCustStatusStr =
         prefs.getString(ConfigKey.USER_BELONGCUSTSTATUS);
 

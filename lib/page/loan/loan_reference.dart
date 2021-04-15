@@ -201,6 +201,9 @@ class _LoanReferenceState extends State<LoanReference> {
         }
       }
     }).catchError((e) {
+      setState(() {
+        _recipientsController.text = '';
+      });
       SVProgressHUD.dismiss();
       SVProgressHUD.showInfo(status: e.toString());
     });

@@ -245,17 +245,17 @@ class _MinePageState extends State<MinePage>
             child: Column(
               children: [
                 _flatBtnNuitWidget(S.of(context).my_account, true, () {
-                  // if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
-                  //   HsgShowTip.notOpenAccountTip(
-                  //     context: context,
-                  //     click: (value) {
-                  //       if (value == true) {
-                  //         _openAccountClickFunction(context);
-                  //       }
-                  //     },
-                  //   );
-                  //   return;
-                  // }
+                  if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
+                    HsgShowTip.notOpenAccountTip(
+                      context: context,
+                      click: (value) {
+                        if (value == true) {
+                          _openAccountClickFunction(context);
+                        }
+                      },
+                    );
+                    return;
+                  }
                   Navigator.pushNamed(context, pageCardList);
                 }),
                 _flatBtnNuitWidget(S.current.password_management, true, () {
@@ -865,7 +865,7 @@ class _MinePageState extends State<MinePage>
         setState(() {
           Future.delayed(Duration.zero, () {
             Navigator.of(context).pushNamedAndRemoveUntil(
-                pageLogin, ModalRoute.withName("/"), //清除旧栈需要保留的栈 不清除就不写这句
+                pageLogin, ModalRoute.withName(""), //清除旧栈需要保留的栈 不清除就不写这句
                 arguments: 'logout' //传值
                 );
             // Navigator.pushAndRemoveUntil(
