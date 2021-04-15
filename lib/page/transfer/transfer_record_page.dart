@@ -948,6 +948,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
               _cradLists.add(e.cardNo);
               _imageUrl.add(e.imageUrl);
             });
+            _cradLists = _cradLists.toSet().toList();
           });
         }
       }
