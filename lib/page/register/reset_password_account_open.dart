@@ -143,7 +143,8 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                     _cardNumber,
                     false,
                     <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                      FilteringTextInputFormatter.allow(
+                          RegExp("[a-zA-Z0-9]")), //纯数字
                       LengthLimitingTextInputFormatter(16),
                     ],
                   ), //确定按钮

@@ -36,7 +36,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
 
   double conRate; //利率
   bool _isDate = false; //判断是否有数据
-  bool _isMoreData = false; //是否加载更多
+  // bool _isMoreData = false; //是否加载更多
   int _page = 1;
   int count = 0;
   ScrollController _scrollController;
@@ -74,10 +74,10 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
                   controller: _refreshController,
                   onLoading: () {
                     _loadDeopstData(isLoadMore: true);
-                    //加载更多完成
-                    _refreshController.loadComplete();
-                    //显示没有更多数据
-                    if (_isMoreData) _refreshController.loadNoData();
+                    // //加载更多完成
+                    // _refreshController.loadComplete();
+                    // //显示没有更多数据
+                    // if (_isMoreData) _refreshController.loadNoData();
                   },
                   onRefresh: () {
                     //刷新完成
@@ -280,7 +280,59 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     Navigator.pushNamed(context, pageDepositInfo, arguments: deposit);
   }
 
-//获取定期存单列表
+// //获取定期存单列表
+//   Future<void> _loadDeopstData({bool isLoadMore = false}) async {
+//     isLoadMore ? _page++ : _page = 1;
+//     _isLoading = true;
+//     final prefs = await SharedPreferences.getInstance();
+//     bool excludeClosed = true;
+//     String ciNo = prefs.getString(ConfigKey.CUST_ID);
+//     Future.wait({
+//       DepositDataRepository().getDepositRecordRows(
+//           DepositRecordReq(ciNo, '', excludeClosed, _page, 10, ''),
+//           'getDepositRecord')
+//     }).then((value) {
+//       if (this.mounted) {
+//         setState(() {
+//           value.forEach((element) {
+//             if (element.rows.length != 0) {
+//               _refreshController.refreshCompleted();
+//               _refreshController.footerMode.value = LoadStatus.canLoading;
+//               count = element.count;
+//               _isDate = true;
+//               totalAmt = element.totalAmt;
+//               _defaultCcy = element.defaultCcy;
+//               if (isLoadMore == false && _page == 1) {
+//                 rowList.clear();
+//               }
+
+//               rowList.addAll(element.rows);
+//             } else {
+//               _isDate = false;
+//             }
+//             if (element.rows.length <= 10 && element.totalPage <= _page) {
+//               _isMoreData = true;
+//             }
+//           });
+//           _isLoading = false;
+//         });
+//       }
+//     }).catchError((e) {
+//       if (mounted) {
+//         setState(() {
+//           _isLoading = false;
+//         });
+//       }
+
+//       Fluttertoast.showToast(
+//         msg: e.toString(),
+//         gravity: ToastGravity.CENTER,
+//       );
+//       // HSProgressHUD.dismiss();
+//     });
+//   }
+
+  //获取定期存单列表
   Future<void> _loadDeopstData({bool isLoadMore = false}) async {
     isLoadMore ? _page++ : _page = 1;
     _isLoading = true;
@@ -295,23 +347,27 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
       if (this.mounted) {
         setState(() {
           value.forEach((element) {
-            if (element.rows.length != 0) {
-              _refreshController.refreshCompleted();
-              _refreshController.footerMode.value = LoadStatus.canLoading;
-              count = element.count;
-              _isDate = true;
-              totalAmt = element.totalAmt;
-              _defaultCcy = element.defaultCcy;
-              if (isLoadMore == false && _page == 1) {
-                rowList.clear();
-              }
+            _refreshController.refreshCompleted();
 
-              rowList.addAll(element.rows);
+            totalAmt = element.totalAmt;
+            _defaultCcy = element.defaultCcy;
+
+            if (element.page == 1) {
+              _refreshController.footerMode.value = LoadStatus.canLoading;
+
+              rowList = element.rows == null ? [] : element.rows;
             } else {
-              _isDate = false;
+              rowList.addAll(element.rows);
             }
-            if (element.rows.length <= 10 && element.totalPage <= _page) {
-              _isMoreData = true;
+
+            if (element.rows.length < 10 || element.totalPage <= _page) {
+              _refreshController.footerMode.value = LoadStatus.noMore;
+            }
+
+            if (rowList == null || rowList.length == 0) {
+              _isDate = false;
+            } else {
+              _isDate = true;
             }
           });
           _isLoading = false;

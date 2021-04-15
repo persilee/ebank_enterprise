@@ -86,11 +86,17 @@ class _HomePageState extends State<HomePage>
     _loadData();
 
     EventBusUtils.getInstance().on<GetUserEvent>().listen((event) {
-      print("event bus msg is =" +
-          event.msg +
-          "   state info is  = " +
-          event.state.toString());
       _loadData();
+    });
+
+    EventBusUtils.getInstance().on<ChangeHeadPortraitEvent>().listen((event) {
+      if (event.state == 100 ||
+          event.state == 300 &&
+              (event.headPortrait != null && event.headPortrait != '')) {
+        setState(() {
+          _headPortraitUrl = event.headPortrait;
+        });
+      }
     });
 
     super.initState();
@@ -863,7 +869,8 @@ class _HomePageState extends State<HomePage>
         Navigator.pushNamed(context, pageTransferRecord);
       } else if (S.current.open_transfer == title) {
         //预约转账
-        Navigator.pushNamed(context, pageOpenTransfer);
+        // Navigator.pushNamed(context, pageOpenTransfer);
+        Navigator.pushNamed(context, pageTransferOrder);
       } else if (S.current.transfer_model == title) {
         //收款范本
         Navigator.pushNamed(context, pageTranferPartner);

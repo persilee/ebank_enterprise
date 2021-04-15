@@ -458,23 +458,25 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
       }
     } else {
       _payerAmount = AiDecimalAccuracy.parse(_amtController.text).toDouble();
-      // ForexTradingRepository()
-      //     .transferTrial(
-      //         TransferTrialReq(
-      //           amount: _payerAmount,
-      //           corrCcy: _objectiveCcy,
-      //           defaultCcy: _primitiveCcy,
-      //         ),
-      //         'TransferTrialReq')
-      //     .then((data) {
-      //   if (this.mounted) {
-      //     setState(() {
-      //       _primitiveCcyAmt = data.optExAmt;
-      //     });
-      //   }
-      // }).catchError((e) {
-      //   print(e.toString());
-      // });
+      ForexTradingRepository()
+          .transferTrial(
+              TransferTrialReq(
+                opt: "S",
+                buyCcy: _objectiveCcy,
+                sellCcy: _primitiveCcy,
+                buyAmount: _amtController.text,
+                sellAmount: '0',
+              ),
+              'TransferTrialReq')
+          .then((data) {
+        if (this.mounted) {
+          setState(() {
+            _primitiveCcyAmt = data.optExAmt;
+          });
+        }
+      }).catchError((e) {
+        print(e.toString());
+      });
     }
   }
 

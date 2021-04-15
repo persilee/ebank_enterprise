@@ -622,18 +622,19 @@
   "loan_recipients_agreement1": "\"《個人消費貸合同賬》\"",
   "loan_recipients_agreement2": "\"《個人信用報告查詢授權書》\"",
   "loan_recipients_agreement3": "\"同意報送貸款相關信息至金融信用信息基礎數據庫（人行征信系統）\"",
-  "loan_lines_get":"領取",
-  "loan_opration_alert":"操作",
-  "loan_detail_available_amount":"可用額度",
-  "loan_detail_available_insufficient":"可用額度不足",
-  "loan_trail_plan_first":"首期",
-  "loan_trail_plan_second":"應還",
-  "loan_trail_title":"貸款領用",
-
+  "loan_lines_get": "領取",
+  "loan_opration_alert": "操作",
+  "loan_detail_available_amount": "可用額度",
+  "loan_detail_available_insufficient": "可用額度不足",
+  "loan_trail_plan_first": "首期",
+  "loan_trail_plan_second": "應還",
+  "loan_trail_title": "貸款領用",
   "open_account_goto_ebank_tip": "尊敬的用戶，您好。由於您不是受邀客戶，請先通過企服商進行邀請，或者前往企業網銀進行開戶申請。",
   "openAccount_faceSign_results_content": "面簽數據提交成功",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家偉（開戶）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "transfer_from1": "付款方",
   "payer_currency": "轉出方比重",
-  "transfer_to_amount": "轉入金額"
+  "transfer_to_amount": "轉入金額",
+  "transfer_from_name": "轉出方名稱",
+  "no_account_ccy_transfer": "不允許同賬號同幣種進行轉載"
 }

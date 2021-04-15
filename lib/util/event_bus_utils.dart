@@ -20,7 +20,15 @@ class GetUserEvent {
   GetUserEvent({this.msg, this.state});
 }
 
-///获取用户状态刷新
+///通知修改头像 state == 100 首页头像刷新 state == 200 我的页面头像刷新 state == 300 首页和我的头像刷新
+class ChangeHeadPortraitEvent {
+  String headPortrait;
+  int state;
+
+  ChangeHeadPortraitEvent({this.headPortrait, this.state});
+}
+
+///通知国际化刷新
 class ChangeLanguage {
   String language;
 

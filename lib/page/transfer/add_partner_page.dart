@@ -969,6 +969,11 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         setState(() {
           _nameController.text = data.ciName;
           _isAccount = true;
+          if (_ccy != '') {
+            _isInputed = true;
+          } else {
+            _isInputed = false;
+          }
         });
       }
     }).catchError((e) {
