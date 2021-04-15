@@ -45,15 +45,6 @@ class HSGBankApp extends StatefulWidget {
 }
 
 class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
-<<<<<<< HEAD
-  // 获取app名称、版本号等信息
-  PackageInfo _packageInfo = PackageInfo(
-    appName: 'Unknown',
-    packageName: 'Unknown',
-    version: 'Unknown',
-    buildNumber: 'Unknown',
-  );
-=======
   // // 获取app名称、版本号等信息
   // PackageInfo _packageInfo = PackageInfo(
   //   appName: 'Unknown',
@@ -61,7 +52,6 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
   //   version: 'Unknown',
   //   buildNumber: 'Unknown',
   // );
->>>>>>> a2124c2cd03b80327607206523e0c823c3af930e
 
   changeLanguage(Locale locale) {
     setState(() {
