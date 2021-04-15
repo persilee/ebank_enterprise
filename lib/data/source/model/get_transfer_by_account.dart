@@ -4,8 +4,16 @@ part 'get_transfer_by_account.g.dart';
 
 @JsonSerializable()
 class GetTransferByAccount extends Object {
-  @JsonKey(name: 'amount')
-  double amount;
+  @JsonKey(name: 'opt')
+  String opt;
+
+  @JsonKey(name: 'debitAmount')
+  //付款金额
+  String debitAmount;
+
+  @JsonKey(name: 'creditAmount')
+  //收款金额
+  String creditAmount;
 
   @JsonKey(name: 'creditCurrency')
   String creditCurrency;
@@ -44,7 +52,9 @@ class GetTransferByAccount extends Object {
   String exchangeRate;
 
   GetTransferByAccount(
-    this.amount,
+    this.opt,
+    this.debitAmount,
+    this.creditAmount,
     this.creditCurrency,
     this.debitCurrency,
     this.payPassword,

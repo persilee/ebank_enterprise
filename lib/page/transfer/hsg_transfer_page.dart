@@ -197,7 +197,8 @@ class _TransferPageState extends State<TransferPage> {
                 35,
                 () {
                   //行内转账
-                  Navigator.pushNamed(context, pageTransferInternal);
+                  // Navigator.pushNamed(context, pageTransferInternal);
+                  Navigator.pushNamed(context, pageTransferInline);
                 },
               ),
               _graphicButton(
@@ -269,7 +270,8 @@ class _TransferPageState extends State<TransferPage> {
                     35,
                     () {
                       //行内转账
-                      Navigator.pushNamed(context, pageTransferInternal);
+                      // Navigator.pushNamed(context, pageTransferInternal);
+                      Navigator.pushNamed(context, pageTransferInline);
                     },
                   ),
                   _graphicButton(
@@ -686,7 +688,8 @@ class _TransferPageState extends State<TransferPage> {
               arguments: data);
         } else if (data.transferType == '1') {
         } else {
-          Navigator.pushNamed(context, pageTransferInternal, arguments: data);
+          // Navigator.pushNamed(context, pageTransferInternal, arguments: data);
+          Navigator.pushNamed(context, pageTransferInline, arguments: data);
         }
       },
       shape: RoundedRectangleBorder(
