@@ -862,24 +862,24 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     } else {
       _payerAmount = AiDecimalAccuracy.parse(inputValue.text).toDouble();
 
-      ForexTradingRepository()
-          .transferTrial(
-              TransferTrialReq(
-                  amount: _payerAmount, corrCcy: _cardCcy, defaultCcy: ccy),
-              'TransferTrialReq')
-          .then((data) {
-        if (this.mounted) {
-          setState(() {
-            _amount = FormatUtil.formatSringToMoney((data.optExAmt).toString());
-            _checkAmount = data.optExAmt;
-          });
-        }
-      }).catchError((e) {
-        Fluttertoast.showToast(
-          msg: "${e.toString()}",
-          gravity: ToastGravity.CENTER,
-        );
-      });
+      // ForexTradingRepository()
+      //     .transferTrial(
+      //         TransferTrialReq(
+      //             amount: _payerAmount, corrCcy: _cardCcy, defaultCcy: ccy),
+      //         'TransferTrialReq')
+      //     .then((data) {
+      //   if (this.mounted) {
+      //     setState(() {
+      //       _amount = FormatUtil.formatSringToMoney((data.optExAmt).toString());
+      //       _checkAmount = data.optExAmt;
+      //     });
+      //   }
+      // }).catchError((e) {
+      //   Fluttertoast.showToast(
+      //     msg: "${e.toString()}",
+      //     gravity: ToastGravity.CENTER,
+      //   );
+      // });
     }
   }
 

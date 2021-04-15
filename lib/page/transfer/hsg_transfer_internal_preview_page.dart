@@ -164,18 +164,9 @@ class _TransferInternalPreviewPageState
   }
 
   Future _loadData(TransferInternalData transferData) async {
-    double money = double.parse(transferData.transferOutAmount);
-    // String transferOutCcy = transferData.transferOutCcy;
-    // String transferIntoCcy = transferData.transferIntoCcy;
-    // String payeeBankCode = transferData.payeeBankCode;
-    // String payeeCardNo = transferData.transferOutAccount;
-    // String payeeName = transferData.payeeName;
-    // String payerBankCode = transferData.payerBankCode;
-    // String cardNo = transferData.transferIntoAccount;
-    // String payerName = transferData.payerName;
-    // String remark = transferData.transferRemark;
-    // String smsCode = '';
-    // String xRate = transferData.xRate;
+    String opt = transferData.opt;
+    String debitAmount = transferData.transferOutAmount;
+    String creditAmount = transferData.transferIntoAmount;
     String transferOutCcy = transferData.transferOutCcy;
     String transferIntoCcy = transferData.transferIntoCcy;
     String payeeBankCode = transferData.payeeBankCode;
@@ -187,12 +178,16 @@ class _TransferInternalPreviewPageState
     String remark = transferData.transferRemark;
     String smsCode = '';
     String xRate = transferData.xRate;
+    print("付款：" + debitAmount + "收款：" + creditAmount);
     HSProgressHUD.show();
     TransferDataRepository()
         .getTransferByAccount(
             GetTransferByAccount(
-              //转账金额
-              money,
+              opt,
+              //付款金额
+              debitAmount,
+              //收款金额
+              creditAmount,
               //贷方货币
               transferOutCcy,
               //借方货币

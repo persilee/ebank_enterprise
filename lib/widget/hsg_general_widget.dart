@@ -7,8 +7,11 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_text_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'money_text_input_formatter.dart';
 
 //选择框
 class SelectInkWell extends StatelessWidget {
@@ -89,6 +92,7 @@ class TextFieldContainer extends StatelessWidget {
   final bool isRegEXp;
   final String regExp;
   final bool isUpperCase;
+  final bool isMoney;
   final FocusNode focusNode;
   TextFieldContainer(
       {Key key,
@@ -103,6 +107,7 @@ class TextFieldContainer extends StatelessWidget {
       this.isRegEXp = false,
       this.regExp,
       this.isUpperCase = false,
+      this.isMoney = false,
       this.focusNode})
       : super(key: key);
 
@@ -144,6 +149,9 @@ class TextFieldContainer extends StatelessWidget {
                     ? FilteringTextInputFormatter.allow(RegExp(regExp))
                     : LengthLimitingTextInputFormatter(length),
                 if (isUpperCase) UpperCaseTextFormatter(),
+                FilteringTextInputFormatter.deny(
+                    RegExp(InputFormartterRegExp.REGEX_EMOJI)), //禁止输入emoji
+                if (isMoney) MoneyTextInputFormatter(),
               ],
               onChanged: (text) {
                 callback();

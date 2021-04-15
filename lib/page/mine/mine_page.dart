@@ -865,7 +865,7 @@ class _MinePageState extends State<MinePage>
         setState(() {
           Future.delayed(Duration.zero, () {
             Navigator.of(context).pushNamedAndRemoveUntil(
-                pageLogin, ModalRoute.withName("/"), //清除旧栈需要保留的栈 不清除就不写这句
+                pageLogin, ModalRoute.withName(""), //清除旧栈需要保留的栈 不清除就不写这句
                 arguments: 'logout' //传值
                 );
             // Navigator.pushAndRemoveUntil(
