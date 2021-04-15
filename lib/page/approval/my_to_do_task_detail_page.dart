@@ -16,9 +16,9 @@ import 'package:ebank_mobile/data/source/model/approval/transfer_plan_detail_mod
     as TransferPlanModel;
 import 'package:ebank_mobile/data/source/model/early_red_td_contract_detail_model.dart'
     as EarlyRedModel;
-import 'package:ebank_mobile/data/source/model/one_to_one_transfer_detail_model.dart'
+import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_detail_model.dart'
     as OneToOneModel;
-import 'package:ebank_mobile/data/source/model/open_td_contract_detail_model.dart'
+import 'package:ebank_mobile/data/source/model/approval/open_td_contract_detail_model.dart'
     as OpenTDModel;
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
@@ -266,8 +266,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             S.current.approve_currency, data?.creditCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_amount,
-            f.format(double.parse(data?.amount) *
-                    double.parse(data?.exchangeRate)) ??
+            f.format(double.parse(data?.creditAmount)) ??
                 ''));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
@@ -282,7 +281,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _oneToOneList.add(_buildContentItem(
             S.current.approve_currency, data?.debitCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.amount)) ?? ''));
+            f.format(double.parse(data?.debitAmount)) ?? ''));
         _oneToOneList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
@@ -377,7 +376,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(widget.title),
+        title: Text(S.current.approve_task_approval_title),
         elevation: 0,
       ),
       body: _isLoading
