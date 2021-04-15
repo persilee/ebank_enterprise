@@ -218,6 +218,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
                     payerName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
                   ),
                 ),
               ],
@@ -464,6 +465,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
                 _isAccount = false;
               }
               _boolBut();
+              _rateCalculate();
             });
           },
         );
@@ -500,6 +502,13 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     } else if (_isAccount) {
       Fluttertoast.showToast(
         msg: S.current.account_no_exist,
+        gravity: ToastGravity.CENTER,
+      );
+    }
+    if (_payeeCcy == _payerCcy &&
+        _payerAccount == _payeeAccountController.text) {
+      Fluttertoast.showToast(
+        msg: S.of(context).no_account_ccy_transfer,
         gravity: ToastGravity.CENTER,
       );
     } else {
@@ -703,6 +712,17 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         data.publicCodeGetRedisRspDtoList.forEach((e) {
           _payeeCcyList.add(e.code);
         });
+        // for (int i = 0; i < _payeeCcyList.length; i++) {
+        //   if (_payeeCcy != _payeeCcyList[i]) {
+        //     if (this.mounted) {
+        //       setState(() {
+        //         _payeeIndex++;
+        //       });
+        //     } else {
+        //       break;
+        //     }
+        //   }
+        // }
       }
     });
   }

@@ -691,5 +691,6 @@
   "transfer_from1": "付款方",
   "payer_currency": "转出方币种",
   "transfer_to_amount": "转入金额",
-  "transfer_from_name": "转出方名称"
+  "transfer_from_name": "转出方名称",
+  "no_account_ccy_transfer": "不允许同账号同币种进行转账"
 }

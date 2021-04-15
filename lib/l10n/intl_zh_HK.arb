@@ -635,5 +635,6 @@
   "transfer_from1": "付款方",
   "payer_currency": "轉出方比重",
   "transfer_to_amount": "轉入金額",
-  "transfer_from_name": "轉出方名稱"
+  "transfer_from_name": "轉出方名稱",
+  "no_account_ccy_transfer": "不允許同賬號同幣種進行轉載"
 }

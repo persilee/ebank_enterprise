@@ -690,5 +690,6 @@
   "transfer_from1": "Transfer From",
   "payer_currency": "Payer Currency",
   "transfer_to_amount": "Transfer-to Amount",
-  "transfer_from_name": "Transfer From Name"
+  "transfer_from_name": "Transfer From Name",
+  "no_account_ccy_transfer": "Do not allow the same account with the same currency transfer"
 }

@@ -380,77 +380,88 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         _payAmtController.text != '') {
       double _amount =
           AiDecimalAccuracy.parse(_payAmtController.text).toDouble();
-      // ForexTradingRepository()
-      //     .transferTrial(
-      //         TransferTrialReq(
-      //             amount: _amount,
-      //             corrCcy: _incomeCcy,
-      //             defaultCcy: _paymentCcy),
-      //         'TransferTrialReq')
-      //     .then((data) {
-      //   if (this.mounted) {
-      //     setState(() {
-      //       _rate = data.optExRate;
-      //       _incomeAmt = data.optExAmt;
-      //     });
-      //   }
-      // }).catchError((e) {
-      //   Fluttertoast.showToast(
-      //     msg: e.toString(),
-      //     gravity: ToastGravity.CENTER,
-      //   );
-      // });
+
+      ForexTradingRepository()
+          .transferTrial(
+              TransferTrialReq(
+                opt: "S",
+                buyCcy: _incomeCcy,
+                sellCcy: _paymentCcy,
+                buyAmount: _payAmtController.text,
+                sellAmount: '0',
+              ),
+              'TransferTrialReq')
+          .then((data) {
+        if (this.mounted) {
+          setState(() {
+            _rate = data.optExRate;
+            _incomeAmt = data.optExAmt;
+          });
+        }
+      }).catchError((e) {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+      });
     }
   }
 
   _submitFormData() async {
-    HSProgressHUD.show();
-    TransferDataRepository()
-        .getTransferByAccount(
-            GetTransferByAccount(
-              "",
-              "",
-              "",
-              //贷方货币
-              _incomeCcy,
-              //借方货币
-              _paymentCcy,
-              //输入密码
-              // 'L5o+WYWLFVSCqHbd0Szu4Q==',
-              '',
-              //收款方银行
-              _incomeBackCode,
-              //收款方卡号
-              _incomeAcc,
-              //收款方姓名
-              _incomeName,
-              //付款方银行
-              _incomeBackCode,
-              //付款方卡号
-              _paymentAcc,
-              //付款方姓名
-              _incomeName,
-              //附言
-              "",
-              //验证码
-              "",
-              _rate,
-            ),
-            'getTransferByAccount')
-        .then((data) {
-      HSProgressHUD.dismiss();
+    if (_paymentCcy == _incomeCcy && _paymentAcc == _incomeAcc) {
       Fluttertoast.showToast(
-        msg: S.current.operate_success,
+        msg: S.of(context).no_account_ccy_transfer,
         gravity: ToastGravity.CENTER,
       );
-      Navigator.pop(context, pageIndex);
-    }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      HSProgressHUD.dismiss();
-    });
+    } else {
+      HSProgressHUD.show();
+      TransferDataRepository()
+          .getTransferByAccount(
+              GetTransferByAccount(
+                "S",
+                _payAmtController.text,
+                _incomeAmt,
+                //贷方货币
+                _incomeCcy,
+                //借方货币
+                _paymentCcy,
+                //输入密码
+                // 'L5o+WYWLFVSCqHbd0Szu4Q==',
+                '',
+                //收款方银行
+                _incomeBackCode,
+                //收款方卡号
+                _incomeAcc,
+                //收款方姓名
+                _incomeName,
+                //付款方银行
+                _incomeBackCode,
+                //付款方卡号
+                _paymentAcc,
+                //付款方姓名
+                _incomeName,
+                //附言
+                "",
+                //验证码
+                "",
+                _rate,
+              ),
+              'getTransferByAccount')
+          .then((data) {
+        HSProgressHUD.dismiss();
+        Fluttertoast.showToast(
+          msg: S.current.operate_success,
+          gravity: ToastGravity.CENTER,
+        );
+        Navigator.pop(context, pageIndex);
+      }).catchError((e) {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+        HSProgressHUD.dismiss();
+      });
+    }
   }
 
   // 获取币种列表

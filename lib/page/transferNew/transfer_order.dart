@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+///预约转账
+/// Author: fangluyao
+/// Date: 2021-04-15
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
@@ -12,7 +17,6 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
-import 'package:ebank_mobile/page/transfer/data/transfer_internal_data.dart';
 import 'package:ebank_mobile/page/transfer/data/transfer_order_data.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -741,6 +745,7 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
                     payerName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
                   ),
                 ),
               ],
@@ -987,6 +992,7 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
                 _isAccount = false;
               }
               _boolBut();
+              _rateCalculate();
             });
           },
         );
@@ -1023,6 +1029,13 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
     } else if (_isAccount) {
       Fluttertoast.showToast(
         msg: intl.S.current.account_no_exist,
+        gravity: ToastGravity.CENTER,
+      );
+    }
+    if (_payeeCcy == _payerCcy &&
+        _payerAccount == _payeeAccountController.text) {
+      Fluttertoast.showToast(
+        msg: intl.S.of(context).no_account_ccy_transfer,
         gravity: ToastGravity.CENTER,
       );
     } else {

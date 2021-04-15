@@ -251,6 +251,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
                     payerName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
                   ),
                 ),
               ],
@@ -640,6 +641,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
                 }
               }
               _boolBut();
+              _rateCalculate();
             });
           },
         );
@@ -671,6 +673,13 @@ class _TransferInterPageState extends State<TransferInterPage> {
     if (double.parse(_payerTransferController.text) > double.parse(_balance)) {
       Fluttertoast.showToast(
         msg: S.current.tdContract_balance_insufficient,
+        gravity: ToastGravity.CENTER,
+      );
+    }
+    if (_payeeCcy == _payerCcy &&
+        _payerAccount == _payeeAccountController.text) {
+      Fluttertoast.showToast(
+        msg: S.of(context).no_account_ccy_transfer,
         gravity: ToastGravity.CENTER,
       );
     } else {
