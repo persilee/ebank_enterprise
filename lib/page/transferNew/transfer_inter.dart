@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+///跨行转账
+/// Author: fangluyao
+/// Date: 2021-04-15
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
@@ -123,11 +128,11 @@ class _TransferInterPageState extends State<TransferInterPage> {
     _actualNameReqData();
     _getTransferFeeList();
 
-    _payeeAccountFocusNode.addListener(() {
-      if (_payeeAccountController.text.length > 0) {
-        _getCardByCardNo(_payeeAccountController.text);
-      }
-    });
+    // _payeeAccountFocusNode.addListener(() {
+    //   if (_payeeAccountController.text.length > 0) {
+    //     _getCardByCardNo(_payeeAccountController.text);
+    //   }
+    // });
     _payerTransferFocusNode.addListener(() {
       if (_payerTransferController.text.length > 0) {
         setState(() {
@@ -228,6 +233,31 @@ class _TransferInterPageState extends State<TransferInterPage> {
             ),
           ),
           Container(
+            padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 2.5,
+                  child: Text(
+                    S.of(context).transfer_from_name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: Text(
+                    payerName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          _getLine(),
+          Container(
             // padding: EdgeInsets.only(right: 15, left: 15),
             color: Colors.white,
             child: SelectInkWell(
@@ -266,20 +296,9 @@ class _TransferInterPageState extends State<TransferInterPage> {
         children: [
           _titleName(S.of(context).receipt_side),
           TextFieldContainer(
-            title: S.of(context).receipt_side_name,
-            hintText: S.of(context).hint_input_receipt_name,
-            widget: _getImage(),
-            keyboardType: TextInputType.text,
-            controller: _payeeNameController,
-            callback: _boolBut,
-            isWidget: true,
-            length: 35,
-            isRegEXp: true,
-            regExp: '[\u4e00-\u9fa5a-zA-Z0-9 ]',
-          ),
-          TextFieldContainer(
             title: S.of(context).receipt_side_account,
             hintText: S.of(context).hint_input_receipt_account,
+            widget: _getImage(),
             keyboardType: TextInputType.number,
             controller: _payeeAccountController,
             focusNode: _payeeAccountFocusNode,
@@ -287,6 +306,17 @@ class _TransferInterPageState extends State<TransferInterPage> {
             length: 20,
             isRegEXp: true,
             regExp: '[0-9]',
+            isWidget: true,
+          ),
+          TextFieldContainer(
+            title: S.of(context).receipt_side_name,
+            hintText: S.of(context).hint_input_receipt_name,
+            keyboardType: TextInputType.text,
+            controller: _payeeNameController,
+            callback: _boolBut,
+            length: 35,
+            isRegEXp: true,
+            regExp: '[\u4e00-\u9fa5a-zA-Z0-9 ]',
           ),
           Container(
             child: Text(
@@ -1001,6 +1031,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
         setState(() {
           _bankNameController.text =
               data.swiftName1 + data.swiftName2 + data.swiftName3;
+          _boolBut();
         });
       }
     }).catchError((e) {

@@ -677,19 +677,18 @@
   "loan_recipients_agreement1": "\"Personal Consumer Loan Contract\"",
   "loan_recipients_agreement2": "\"Personal Credit Report Inquiry Authorization Form\"",
   "loan_recipients_agreement3": "\"and agree to report loan-related information to the financial credit information base database (credit system of the People's Bank of China).\"",
-  "loan_lines_get":"Get",
-  "loan_opration_alert":"Operation",
-  "loan_detail_available_amount":"Available Amount",
-  "loan_detail_available_insufficient":"Insufficient available amount",
-  "loan_trail_plan_first":"First issue",
-  "loan_trail_plan_second":"Should be repaid",
-  "loan_trail_title":"Loan claim",
-
-
+  "loan_lines_get": "Get",
+  "loan_opration_alert": "Operation",
+  "loan_detail_available_amount": "Available Amount",
+  "loan_detail_available_insufficient": "Insufficient available amount",
+  "loan_trail_plan_first": "First issue",
+  "loan_trail_plan_second": "Should be repaid",
+  "loan_trail_title": "Loan claim",
   "open_account_goto_ebank_tip": "Dear user. Since you are not an invited customer, please first invite through an enterprise service provider, or go to corporate online banking to apply for an account.",
   "openAccount_faceSign_results_content": "FaceSign data submitted successfully.",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "transfer_from1": "Transfer From",
   "payer_currency": "Payer Currency",
-  "transfer_to_amount": "Transfer-to Amount"
+  "transfer_to_amount": "Transfer-to Amount",
+  "transfer_from_name": "Transfer From Name"
 }
