@@ -1,6 +1,6 @@
 #pragma once//;
 #include <vector>
-#include <YTTrackPro/YTTrackFaceShape.h>
+#include <YTTrackProWB/YTTrackFaceShape.h>
 #include <NextCV/Mat.h>
 #include <NextCV/NCVCommon.h>
 

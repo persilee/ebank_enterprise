@@ -207,7 +207,8 @@ class _TransferPageState extends State<TransferPage> {
                 35,
                 () {
                   //'跨行转账'
-                  Navigator.pushNamed(context, pageTrasferInternational);
+                  // Navigator.pushNamed(context, pageTrasferInternational);
+                  Navigator.pushNamed(context, pageTransferInter);
                 },
               ),
               _graphicButton(
@@ -280,7 +281,8 @@ class _TransferPageState extends State<TransferPage> {
                     35,
                     () {
                       //'跨行转账'
-                      Navigator.pushNamed(context, pageTrasferInternational);
+                      // Navigator.pushNamed(context, pageTrasferInternational);
+                      Navigator.pushNamed(context, pageTransferInter);
                     },
                   ),
                   _graphicButton(
@@ -532,7 +534,8 @@ class _TransferPageState extends State<TransferPage> {
         ),
         //国际转账
         onPressed: () {
-          Navigator.pushNamed(context, pageTrasferInternational);
+          // Navigator.pushNamed(context, pageTrasferInternational);
+          Navigator.pushNamed(context, pageTransferInter);
         },
       ),
     );
@@ -684,8 +687,9 @@ class _TransferPageState extends State<TransferPage> {
       onPressed: () {
         print('转出');
         if (data.transferType == '2') {
-          Navigator.pushNamed(context, pageTrasferInternational,
-              arguments: data);
+          // Navigator.pushNamed(context, pageTrasferInternational,
+          //     arguments: data);
+          Navigator.pushNamed(context, pageTransferInter, arguments: data);
         } else if (data.transferType == '1') {
         } else {
           // Navigator.pushNamed(context, pageTransferInternal, arguments: data);

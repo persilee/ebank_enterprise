@@ -1,3 +1,8 @@
+/// Copyright (c) 2021 深圳高阳寰球科技有限公司
+///行内转账
+/// Author: fangluyao
+/// Date: 2021-04-14
+
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
@@ -22,7 +27,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 
 import '../../page_route.dart';
 
@@ -102,29 +106,11 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     _loadTransferData();
     _actualNameReqData();
 
-    // _payerTransferController.addListener(() {
-    //   if (_payerTransferController.text.length == 0 ||
-    //       _payerTransferController.text == '0') {
-    //     setState(() {
-    //       _payeeAccountController.text = '0';
-    //       rate = '-';
-    //     });
-    //   } else if (_payeeCcy != '') {
-    //     _rateCalculate();
-    //   }
-    // });
     _payeeAccountFocusNode.addListener(() {
       if (_payeeAccountController.text.length > 0) {
         _getCardByCardNo(_payeeAccountController.text);
       }
     });
-    // _payerTransferController.addListener(() {
-    //   setState(() {
-    //     _opt = 'B';
-    //     _payeeTransferController.text = '';
-    //     _rateCalculate();
-    //   });
-    // });
     _payerTransferFocusNode.addListener(() {
       if (_payerTransferController.text.length > 0) {
         setState(() {
@@ -136,13 +122,6 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
       _boolBut();
     });
 
-    // _payeeTransferController.addListener(() {
-    //   setState(() {
-    //     _opt = 'S';
-    //     _payerTransferController.text = '';
-    //     _rateCalculate();
-    //   });
-    // });
     _payeeTransferFocusNode.addListener(() {
       if (_payeeTransferController.text.length > 0) {
         setState(() {
@@ -196,7 +175,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         children: [
           _payerWidget(),
           _payeeWidget(),
-          _transferWidget(),
+          // _transferWidget(),
           _remarkWiget(),
           _submitButton(),
         ],
@@ -212,7 +191,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
       padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
       child: Column(
         children: [
-          _titleName("付款方"),
+          _titleName(S.of(context).transfer_from1),
           _payerAccountWidget(),
           Container(
             child: Divider(
@@ -221,16 +200,27 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             ),
           ),
           Container(
-            // padding: EdgeInsets.only(right: 15, left: 15),
             color: Colors.white,
             child: SelectInkWell(
-              title: '转出方币种',
+              title: S.of(context).payer_currency,
               item: _payerCcy == null ? '' : _payerCcy,
               onTap: () {
                 FocusScope.of(context).requestFocus(FocusNode());
                 _payerCcyDialog();
               },
             ),
+          ),
+          TextFieldContainer(
+            title: S.current.to_amount,
+            hintText: S.current.please_input,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            controller: _payerTransferController,
+            focusNode: _payerTransferFocusNode,
+            callback: _boolBut,
+            isRegEXp: true,
+            regExp: '[0-9.]',
+            length: 11,
+            isMoney: true,
           ),
         ],
       ),
@@ -281,6 +271,18 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
               },
             ),
           ),
+          TextFieldContainer(
+            title: S.of(context).transfer_to_amount,
+            hintText: S.current.please_input,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            controller: _payeeTransferController,
+            focusNode: _payeeTransferFocusNode,
+            callback: _boolBut,
+            isRegEXp: true,
+            regExp: '[0-9.]',
+            length: 11,
+            isMoney: true,
+          ),
         ],
       ),
     );
@@ -294,9 +296,9 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
       padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
       child: Column(
         children: [
-          _titleName("转账金额"),
+          _titleName(S.current.transfer_amount),
           TextFieldContainer(
-            title: "预计转出金额" + "（" + _payerCcy + "）",
+            title: S.current.to_amount + "（" + _payerCcy + "）",
             hintText: S.current.please_input,
             keyboardType: TextInputType.numberWithOptions(decimal: true),
             controller: _payerTransferController,
@@ -308,7 +310,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             isMoney: true,
           ),
           TextFieldContainer(
-            title: "预计转入金额" + "（" + _payeeCcy + "）",
+            title: S.current.transfer_to_account + "（" + _payeeCcy + "）",
             hintText: S.current.please_input,
             keyboardType: TextInputType.numberWithOptions(decimal: true),
             controller: _payeeTransferController,

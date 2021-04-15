@@ -10,8 +10,21 @@
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		477981AB26241EA800ABB56A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 477981AD26241EA800ABB56A /* InfoPlist.strings */; };
-		477981FC2625D34500ABB56A /* SigningEyeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 477981FA2625D34400ABB56A /* SigningEyeSDK.framework */; };
-		477981FD2625D34500ABB56A /* SigningResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 477981FB2625D34500ABB56A /* SigningResources.bundle */; };
+		4779823D2627D9E700ABB56A /* SigningResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4779822B2627D9E500ABB56A /* SigningResources.bundle */; };
+		4779824B2627D9E700ABB56A /* SigningEyeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4779823C2627D9E700ABB56A /* SigningEyeSDK.framework */; };
+		477982972627E02300ABB56A /* ufa_wb.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 477982892627E02300ABB56A /* ufa_wb.bundle */; };
+		477982982627E02300ABB56A /* detector_wb.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4779828A2627E02300ABB56A /* detector_wb.bundle */; };
+		477982992627E02300ABB56A /* PEDat_wb.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4779828B2627E02300ABB56A /* PEDat_wb.bundle */; };
+		4779829A2627E02300ABB56A /* WBCloudReflectionFaceVerify.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4779828C2627E02300ABB56A /* WBCloudReflectionFaceVerify.bundle */; };
+		4779829B2627E02300ABB56A /* YTIllumination.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4779828E2627E02300ABB56A /* YTIllumination.framework */; };
+		4779829C2627E02300ABB56A /* WBCloudReflectionFaceVerify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4779828F2627E02300ABB56A /* WBCloudReflectionFaceVerify.framework */; };
+		4779829D2627E02300ABB56A /* rapidnet_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 477982902627E02300ABB56A /* rapidnet_ios.framework */; };
+		4779829E2627E02300ABB56A /* YTCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 477982912627E02300ABB56A /* YTCommon.framework */; };
+		4779829F2627E02300ABB56A /* YTPoseDetector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 477982922627E02300ABB56A /* YTPoseDetector.framework */; };
+		477982A02627E02300ABB56A /* faceLiveReflect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 477982932627E02300ABB56A /* faceLiveReflect.framework */; };
+		477982A12627E02300ABB56A /* YTTrackProWB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 477982942627E02300ABB56A /* YTTrackProWB.framework */; };
+		477982A22627E02300ABB56A /* NextCV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 477982952627E02300ABB56A /* NextCV.framework */; };
+		477982A32627E02300ABB56A /* WBCloudReflectionFaceVerify_framework.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 477982962627E02300ABB56A /* WBCloudReflectionFaceVerify_framework.podspec */; };
 		6815D74826047BED007BFC9D /* .ruby-gemset in Resources */ = {isa = PBXBuildFile; fileRef = 6815D71A26047BED007BFC9D /* .ruby-gemset */; };
 		6815D74926047BED007BFC9D /* .cocoadocs.yml in Resources */ = {isa = PBXBuildFile; fileRef = 6815D71B26047BED007BFC9D /* .cocoadocs.yml */; };
 		6815D74A26047BED007BFC9D /* .codecov.yml in Resources */ = {isa = PBXBuildFile; fileRef = 6815D71C26047BED007BFC9D /* .codecov.yml */; };
@@ -83,19 +96,6 @@
 		686D0B3B2600B51300781075 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 686D0B3A2600B51300781075 /* libz.tbd */; };
 		686D0B522600EB9800781075 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 686D0B502600EB9800781075 /* AppDelegate.m */; };
 		686D0B542600ED4300781075 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 686D0B532600ED4300781075 /* main.m */; };
-		68B783F026019851001F2648 /* ufa_wb.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 68B783DF26019850001F2648 /* ufa_wb.bundle */; };
-		68B783F126019851001F2648 /* WBCloudReflectionFaceVerify.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 68B783E026019850001F2648 /* WBCloudReflectionFaceVerify.bundle */; };
-		68B783F226019851001F2648 /* PEDat_wb.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 68B783E126019850001F2648 /* PEDat_wb.bundle */; };
-		68B783F326019851001F2648 /* detector_wb.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 68B783E226019850001F2648 /* detector_wb.bundle */; };
-		68B783F426019851001F2648 /* NextCV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B783E426019850001F2648 /* NextCV.framework */; };
-		68B783F526019851001F2648 /* rapidnet_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B783E526019850001F2648 /* rapidnet_ios.framework */; };
-		68B783F626019851001F2648 /* WBCloudReflectionFaceVerify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B783E626019850001F2648 /* WBCloudReflectionFaceVerify.framework */; };
-		68B783F726019851001F2648 /* YTPoseDetector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B783E726019850001F2648 /* YTPoseDetector.framework */; };
-		68B783F826019851001F2648 /* faceLiveReflect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B783E826019851001F2648 /* faceLiveReflect.framework */; };
-		68B783F926019851001F2648 /* YTTrackPro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B783E926019851001F2648 /* YTTrackPro.framework */; };
-		68B783FA26019851001F2648 /* YTCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B783EA26019851001F2648 /* YTCommon.framework */; };
-		68B783FB26019851001F2648 /* YTIllumination.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B783EB26019851001F2648 /* YTIllumination.framework */; };
-		68B783FC26019851001F2648 /* WBCloudReflectionFaceVerify_framework.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 68B783EC26019851001F2648 /* WBCloudReflectionFaceVerify_framework.podspec */; };
 		68B78400260198CB001F2648 /* CloudroomVideoSDK_IOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B783EF26019851001F2648 /* CloudroomVideoSDK_IOS.framework */; };
 		68B78401260198CB001F2648 /* CloudroomVideoSDK_IOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 68B783EF26019851001F2648 /* CloudroomVideoSDK_IOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
@@ -125,8 +125,21 @@
 		477981AC26241EA800ABB56A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		477981AE26241EAD00ABB56A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		477981AF26241EAE00ABB56A /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		477981FA2625D34400ABB56A /* SigningEyeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SigningEyeSDK.framework; sourceTree = "<group>"; };
-		477981FB2625D34500ABB56A /* SigningResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SigningResources.bundle; sourceTree = "<group>"; };
+		4779822B2627D9E500ABB56A /* SigningResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SigningResources.bundle; sourceTree = "<group>"; };
+		4779823C2627D9E700ABB56A /* SigningEyeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SigningEyeSDK.framework; sourceTree = "<group>"; };
+		477982892627E02300ABB56A /* ufa_wb.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ufa_wb.bundle; sourceTree = "<group>"; };
+		4779828A2627E02300ABB56A /* detector_wb.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = detector_wb.bundle; sourceTree = "<group>"; };
+		4779828B2627E02300ABB56A /* PEDat_wb.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PEDat_wb.bundle; sourceTree = "<group>"; };
+		4779828C2627E02300ABB56A /* WBCloudReflectionFaceVerify.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = WBCloudReflectionFaceVerify.bundle; sourceTree = "<group>"; };
+		4779828E2627E02300ABB56A /* YTIllumination.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YTIllumination.framework; sourceTree = "<group>"; };
+		4779828F2627E02300ABB56A /* WBCloudReflectionFaceVerify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WBCloudReflectionFaceVerify.framework; sourceTree = "<group>"; };
+		477982902627E02300ABB56A /* rapidnet_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = rapidnet_ios.framework; sourceTree = "<group>"; };
+		477982912627E02300ABB56A /* YTCommon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YTCommon.framework; sourceTree = "<group>"; };
+		477982922627E02300ABB56A /* YTPoseDetector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YTPoseDetector.framework; sourceTree = "<group>"; };
+		477982932627E02300ABB56A /* faceLiveReflect.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = faceLiveReflect.framework; sourceTree = "<group>"; };
+		477982942627E02300ABB56A /* YTTrackProWB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YTTrackProWB.framework; sourceTree = "<group>"; };
+		477982952627E02300ABB56A /* NextCV.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NextCV.framework; sourceTree = "<group>"; };
+		477982962627E02300ABB56A /* WBCloudReflectionFaceVerify_framework.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WBCloudReflectionFaceVerify_framework.podspec; sourceTree = "<group>"; };
 		6805F576739CE86F7DAD4B3A /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		6815D71A26047BED007BFC9D /* .ruby-gemset */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ".ruby-gemset"; sourceTree = "<group>"; };
 		6815D71B26047BED007BFC9D /* .cocoadocs.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .cocoadocs.yml; sourceTree = "<group>"; };
@@ -245,19 +258,6 @@
 		686D0B502600EB9800781075 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		686D0B512600EB9800781075 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		686D0B532600ED4300781075 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		68B783DF26019850001F2648 /* ufa_wb.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ufa_wb.bundle; sourceTree = "<group>"; };
-		68B783E026019850001F2648 /* WBCloudReflectionFaceVerify.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = WBCloudReflectionFaceVerify.bundle; sourceTree = "<group>"; };
-		68B783E126019850001F2648 /* PEDat_wb.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PEDat_wb.bundle; sourceTree = "<group>"; };
-		68B783E226019850001F2648 /* detector_wb.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = detector_wb.bundle; sourceTree = "<group>"; };
-		68B783E426019850001F2648 /* NextCV.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NextCV.framework; sourceTree = "<group>"; };
-		68B783E526019850001F2648 /* rapidnet_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = rapidnet_ios.framework; sourceTree = "<group>"; };
-		68B783E626019850001F2648 /* WBCloudReflectionFaceVerify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WBCloudReflectionFaceVerify.framework; sourceTree = "<group>"; };
-		68B783E726019850001F2648 /* YTPoseDetector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YTPoseDetector.framework; sourceTree = "<group>"; };
-		68B783E826019851001F2648 /* faceLiveReflect.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = faceLiveReflect.framework; sourceTree = "<group>"; };
-		68B783E926019851001F2648 /* YTTrackPro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YTTrackPro.framework; sourceTree = "<group>"; };
-		68B783EA26019851001F2648 /* YTCommon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YTCommon.framework; sourceTree = "<group>"; };
-		68B783EB26019851001F2648 /* YTIllumination.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YTIllumination.framework; sourceTree = "<group>"; };
-		68B783EC26019851001F2648 /* WBCloudReflectionFaceVerify_framework.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WBCloudReflectionFaceVerify_framework.podspec; sourceTree = "<group>"; };
 		68B783EF26019851001F2648 /* CloudroomVideoSDK_IOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CloudroomVideoSDK_IOS.framework; sourceTree = "<group>"; };
 		68B784502601F7F3001F2648 /* UtilsMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilsMacros.h; sourceTree = "<group>"; };
 		716F3B214F9BF043DCDD56FF /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -279,35 +279,35 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4779829C2627E02300ABB56A /* WBCloudReflectionFaceVerify.framework in Frameworks */,
 				686D0B3B2600B51300781075 /* libz.tbd in Frameworks */,
-				68B783F426019851001F2648 /* NextCV.framework in Frameworks */,
+				4779829D2627E02300ABB56A /* rapidnet_ios.framework in Frameworks */,
 				686D0B392600B50B00781075 /* libstdc++.tbd in Frameworks */,
 				686D0B372600B4FE00781075 /* libbz2.tbd in Frameworks */,
-				68B783F626019851001F2648 /* WBCloudReflectionFaceVerify.framework in Frameworks */,
 				686D0B352600B4F200781075 /* libc++.tbd in Frameworks */,
+				4779829E2627E02300ABB56A /* YTCommon.framework in Frameworks */,
 				686D0B332600B4E800781075 /* AdSupport.framework in Frameworks */,
 				686D0B312600B4E100781075 /* CoreLocation.framework in Frameworks */,
 				686D0B2F2600B4D800781075 /* ImageIO.framework in Frameworks */,
 				686D0B2D2600B4D000781075 /* CoreTelephony.framework in Frameworks */,
-				68B783F726019851001F2648 /* YTPoseDetector.framework in Frameworks */,
+				4779824B2627D9E700ABB56A /* SigningEyeSDK.framework in Frameworks */,
 				686D0B2B2600B4C600781075 /* SystemConfiguration.framework in Frameworks */,
 				686D0B292600B4BF00781075 /* Security.framework in Frameworks */,
-				477981FC2625D34500ABB56A /* SigningEyeSDK.framework in Frameworks */,
 				686D0B272600B4B300781075 /* Accelerate.framework in Frameworks */,
 				686D0B252600B4A800781075 /* CoreVideo.framework in Frameworks */,
+				4779829F2627E02300ABB56A /* YTPoseDetector.framework in Frameworks */,
+				477982A02627E02300ABB56A /* faceLiveReflect.framework in Frameworks */,
 				686D0B232600B49A00781075 /* ExternalAccessory.framework in Frameworks */,
 				68B78400260198CB001F2648 /* CloudroomVideoSDK_IOS.framework in Frameworks */,
 				686D0B212600B49200781075 /* CoreMedia.framework in Frameworks */,
-				68B783F926019851001F2648 /* YTTrackPro.framework in Frameworks */,
-				68B783FB26019851001F2648 /* YTIllumination.framework in Frameworks */,
 				686D0B1F2600B48700781075 /* AudioToolbox.framework in Frameworks */,
+				4779829B2627E02300ABB56A /* YTIllumination.framework in Frameworks */,
 				686D0B1D2600B47100781075 /* AVFoundation.framework in Frameworks */,
-				68B783F526019851001F2648 /* rapidnet_ios.framework in Frameworks */,
-				68B783F826019851001F2648 /* faceLiveReflect.framework in Frameworks */,
 				686D0B1B2600B46A00781075 /* UIKit.framework in Frameworks */,
-				68B783FA26019851001F2648 /* YTCommon.framework in Frameworks */,
 				686D0B192600B43F00781075 /* WebKit.framework in Frameworks */,
 				686D0B172600B43700781075 /* CoreServices.framework in Frameworks */,
+				477982A12627E02300ABB56A /* YTTrackProWB.framework in Frameworks */,
+				477982A22627E02300ABB56A /* NextCV.framework in Frameworks */,
 				B0E564753724D458297B7E7D /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -315,6 +315,42 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		477982872627E02300ABB56A /* WBCloudReflectionFaceVerify_framework */ = {
+			isa = PBXGroup;
+			children = (
+				477982882627E02300ABB56A /* Resources */,
+				4779828D2627E02300ABB56A /* Libs */,
+				477982962627E02300ABB56A /* WBCloudReflectionFaceVerify_framework.podspec */,
+			);
+			path = WBCloudReflectionFaceVerify_framework;
+			sourceTree = "<group>";
+		};
+		477982882627E02300ABB56A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				477982892627E02300ABB56A /* ufa_wb.bundle */,
+				4779828A2627E02300ABB56A /* detector_wb.bundle */,
+				4779828B2627E02300ABB56A /* PEDat_wb.bundle */,
+				4779828C2627E02300ABB56A /* WBCloudReflectionFaceVerify.bundle */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4779828D2627E02300ABB56A /* Libs */ = {
+			isa = PBXGroup;
+			children = (
+				4779828E2627E02300ABB56A /* YTIllumination.framework */,
+				4779828F2627E02300ABB56A /* WBCloudReflectionFaceVerify.framework */,
+				477982902627E02300ABB56A /* rapidnet_ios.framework */,
+				477982912627E02300ABB56A /* YTCommon.framework */,
+				477982922627E02300ABB56A /* YTPoseDetector.framework */,
+				477982932627E02300ABB56A /* faceLiveReflect.framework */,
+				477982942627E02300ABB56A /* YTTrackProWB.framework */,
+				477982952627E02300ABB56A /* NextCV.framework */,
+			);
+			path = Libs;
+			sourceTree = "<group>";
+		};
 		4B1C87E5CE8229C255763912 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -542,48 +578,12 @@
 		686D0AD82600B3D400781075 /* QianliyanSDK */ = {
 			isa = PBXGroup;
 			children = (
-				477981FA2625D34400ABB56A /* SigningEyeSDK.framework */,
-				477981FB2625D34500ABB56A /* SigningResources.bundle */,
+				4779823C2627D9E700ABB56A /* SigningEyeSDK.framework */,
+				4779822B2627D9E500ABB56A /* SigningResources.bundle */,
 				68B783EF26019851001F2648 /* CloudroomVideoSDK_IOS.framework */,
-				68B783DD26019850001F2648 /* WBCloudReflectionFaceVerify_framework */,
+				477982872627E02300ABB56A /* WBCloudReflectionFaceVerify_framework */,
 			);
 			path = QianliyanSDK;
-			sourceTree = "<group>";
-		};
-		68B783DD26019850001F2648 /* WBCloudReflectionFaceVerify_framework */ = {
-			isa = PBXGroup;
-			children = (
-				68B783DE26019850001F2648 /* Resources */,
-				68B783E326019850001F2648 /* Libs */,
-				68B783EC26019851001F2648 /* WBCloudReflectionFaceVerify_framework.podspec */,
-			);
-			path = WBCloudReflectionFaceVerify_framework;
-			sourceTree = "<group>";
-		};
-		68B783DE26019850001F2648 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				68B783DF26019850001F2648 /* ufa_wb.bundle */,
-				68B783E026019850001F2648 /* WBCloudReflectionFaceVerify.bundle */,
-				68B783E126019850001F2648 /* PEDat_wb.bundle */,
-				68B783E226019850001F2648 /* detector_wb.bundle */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		68B783E326019850001F2648 /* Libs */ = {
-			isa = PBXGroup;
-			children = (
-				68B783E426019850001F2648 /* NextCV.framework */,
-				68B783E526019850001F2648 /* rapidnet_ios.framework */,
-				68B783E626019850001F2648 /* WBCloudReflectionFaceVerify.framework */,
-				68B783E726019850001F2648 /* YTPoseDetector.framework */,
-				68B783E826019851001F2648 /* faceLiveReflect.framework */,
-				68B783E926019851001F2648 /* YTTrackPro.framework */,
-				68B783EA26019851001F2648 /* YTCommon.framework */,
-				68B783EB26019851001F2648 /* YTIllumination.framework */,
-			);
-			path = Libs;
 			sourceTree = "<group>";
 		};
 		68B784512601F86F001F2648 /* Define */ = {
@@ -738,27 +738,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				6815D78F26048767007BFC9D /* LICENSE.md in Resources */,
+				477982982627E02300ABB56A /* detector_wb.bundle in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
+				477982A32627E02300ABB56A /* WBCloudReflectionFaceVerify_framework.podspec in Resources */,
 				6815D79D26048767007BFC9D /* README.md in Resources */,
 				6815D75326047BED007BFC9D /* ci.yml in Resources */,
 				6815D74B26047BED007BFC9D /* .ruby-version in Resources */,
-				68B783F226019851001F2648 /* PEDat_wb.bundle in Resources */,
 				6815D74826047BED007BFC9D /* .ruby-gemset in Resources */,
-				68B783F026019851001F2648 /* ufa_wb.bundle in Resources */,
 				477981AB26241EA800ABB56A /* InfoPlist.strings in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				6815D74A26047BED007BFC9D /* .codecov.yml in Resources */,
-				68B783FC26019851001F2648 /* WBCloudReflectionFaceVerify_framework.podspec in Resources */,
-				68B783F326019851001F2648 /* detector_wb.bundle in Resources */,
 				6815D75226047BED007BFC9D /* .gitignore in Resources */,
-				68B783F126019851001F2648 /* WBCloudReflectionFaceVerify.bundle in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				6815D75426047BED007BFC9D /* stale.yml in Resources */,
+				4779823D2627D9E700ABB56A /* SigningResources.bundle in Resources */,
 				6815D74926047BED007BFC9D /* .cocoadocs.yml in Resources */,
+				4779829A2627E02300ABB56A /* WBCloudReflectionFaceVerify.bundle in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+				477982972627E02300ABB56A /* ufa_wb.bundle in Resources */,
+				477982992627E02300ABB56A /* PEDat_wb.bundle in Resources */,
 				6815D75626047BED007BFC9D /* issue_template.md in Resources */,
 				6815D75526047BED007BFC9D /* pull_request_template.md in Resources */,
-				477981FD2625D34500ABB56A /* SigningResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

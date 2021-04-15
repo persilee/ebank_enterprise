@@ -163,6 +163,7 @@ class _OpenAccountIdentifyResultsFailurePageState
             'isQuick': _isQuick,
           },
         );
+      } else if (value.outCode == '6') {
       } else {
         Fluttertoast.showToast(
           msg: S.of(context).openAccout_identify_results_failure,

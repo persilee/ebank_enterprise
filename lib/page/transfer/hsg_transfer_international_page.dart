@@ -792,6 +792,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           payerName,
           _countryCode,
           _rate,
+          "",
+          "",
         ),
       );
     }

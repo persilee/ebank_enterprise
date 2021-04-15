@@ -18,6 +18,7 @@ class TransferInternationalData {
   String bankSWIFT;
   String centerSWIFI;
   String transferFee;
+  String transferFeeIndex;
   String purpose;
   String transferRemark;
   String payeeBankCode;
@@ -26,7 +27,9 @@ class TransferInternationalData {
   String payerName;
   String countryCode;
   String rate;
+  String opt;
   TransferInternationalData(
+    this.opt,
     this.transferOutAccount,
     this.transferOutAmount,
     this.transferOutCcy,
@@ -49,5 +52,6 @@ class TransferInternationalData {
     this.payerName,
     this.countryCode,
     this.rate,
+    this.transferFeeIndex,
   );
 }

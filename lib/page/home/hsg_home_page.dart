@@ -69,11 +69,13 @@ class _HomePageState extends State<HomePage>
         if (this.mounted) {
           setState(() {
             num opacity = _sctrollController.offset / 120;
-            _opacity = opacity.abs();
-            if (_opacity > 1) {
+            // _opacity = opacity.abs();
+            if (opacity > 1) {
               _opacity = 1;
-            } else if (_opacity < 0) {
+            } else if (opacity < 0) {
               _opacity = 0;
+            } else {
+              _opacity = opacity;
             }
           });
         }
@@ -209,6 +211,7 @@ class _HomePageState extends State<HomePage>
         appBar: _homeAppbar(_opacity, _changeLangBtnTltle),
         body: Container(
           child: CustomScrollView(
+            shrinkWrap: true,
             controller: _sctrollController,
             slivers: slivers,
           ),
@@ -835,17 +838,17 @@ class _HomePageState extends State<HomePage>
   //功能点击事件
   VoidCallback _featureClickFunction(BuildContext context, String title) {
     return () {
-      if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
-        HsgShowTip.notOpenAccountTip(
-          context: context,
-          click: (value) {
-            if (value == true) {
-              _openAccountClickFunction(context);
-            }
-          },
-        );
-        return;
-      }
+      // if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
+      //   HsgShowTip.notOpenAccountTip(
+      //     context: context,
+      //     click: (value) {
+      //       if (value == true) {
+      //         _openAccountClickFunction(context);
+      //       }
+      //     },
+      //   );
+      //   return;
+      // }
       if (S.current.transaction_details == title) {
         //收支明细
         Navigator.pushNamed(context, pageDetailList);
