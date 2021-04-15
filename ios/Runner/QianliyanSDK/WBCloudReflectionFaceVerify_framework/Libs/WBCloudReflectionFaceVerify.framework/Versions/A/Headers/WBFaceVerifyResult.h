@@ -8,7 +8,35 @@
 
 #import <UIKit/UIKit.h>
 #import "WBFaceError.h"
+#import "WBFaceVerifyConst.h"
 
+@interface WBFaceSimpleModeResult : NSObject
+
+/**
+ 结果对应的订单号
+ */
+@property (nonatomic, copy, readonly) NSString *orderNo;
+
+/**
+ 接下来用于人脸对比的安全性参数
+ */
+@property (nonatomic, copy, readonly) NSString *encryptAESKey;
+
+/**
+ 视频编码
+ */
+@property (nonatomic, copy, readonly) NSString *userVideoString;
+
+/**
+ 使用传入publickey加密过的AES
+ */
+@property (nonatomic, copy, readonly) NSString *videoEncryptAESKey;
+/**
+ 用于后面进行人脸比对的数据参数
+ */
+@property (nonatomic, copy, readonly) NSString *identifyStr;
+
+@end
 /**
  人脸服务返回结果对象
  */
@@ -20,6 +48,10 @@
  NO:  表示人脸服务不通过lo
  */
 @property (nonatomic, assign, readonly) BOOL isSuccess;
+
+/**
+ 结果对应的订单号
+ */
 @property (nonatomic, copy, readonly) NSString *orderNo;
 
 /**
@@ -51,7 +83,6 @@
  人脸比对图片之一
 
  isSuccess == YES 时, 该属性是上送比对图片之一UIImage的base64编码字符串(图片格式是jpg)
- 注意: userImageString 在WBFaceVerifyLivingType_Action和WBFaceVerifyLivingType_Light模式下有值,在WBFaceVerifyLivingType_Number中无结果
 
  isSuccess == NO  时, 该属性为nil
  */
@@ -63,10 +94,11 @@
  */
 @property (nonatomic, strong, readonly) WBFaceError * error;
 
-+(instancetype)resultWith:(BOOL)isSuccess error:(WBFaceError *)error;
-+(instancetype)resultWith:(BOOL)isSuccess error:(WBFaceError *)error sign:(NSString *)sign;
-+(instancetype)resultWith:(BOOL)isSuccess error:(WBFaceError *)error sign:(NSString *)sign liveRate:(NSString *)liveRate similarity:(NSString *)similarity;
-+(instancetype)resultWith:(BOOL)isSuccess error:(WBFaceError *)error sign:(NSString *)sign liveRate:(NSString *)liveRate similarity:(NSString *)similarity userImageString:(NSString *)userImageString;
+#pragma mark - 非标专用返回参数
+
+@property (nonatomic, strong, readonly) WBFaceSimpleModeResult *simpleModeResult;
+
+#pragma mark -
 
 -(NSString *)description;
 @end

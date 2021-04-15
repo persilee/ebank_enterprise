@@ -404,6 +404,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
           payerBankCode,
           payerName,
           _xRate,
+          "",
         ),
         // TransferInternalData(
         //   _account,
@@ -743,23 +744,23 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     } else {
       _payerAmount =
           AiDecimalAccuracy.parse(_transferMoneyController.text).toDouble();
-      ForexTradingRepository()
-          .transferTrial(
-              TransferTrialReq(
-                  amount: _payerAmount,
-                  corrCcy: _transferCcy,
-                  defaultCcy: _payCcy),
-              'TransferTrialReq')
-          .then((data) {
-        if (this.mounted) {
-          setState(() {
-            _amount = data.optExAmt;
-            _xRate = data.optExRate;
-          });
-        }
-      }).catchError((e) {
-        print(e.toString());
-      });
+      // ForexTradingRepository()
+      //     .transferTrial(
+      //         TransferTrialReq(
+      //             amount: _payerAmount,
+      //             corrCcy: _transferCcy,
+      //             defaultCcy: _payCcy),
+      //         'TransferTrialReq')
+      //     .then((data) {
+      //   if (this.mounted) {
+      //     setState(() {
+      //       _amount = data.optExAmt;
+      //       _xRate = data.optExRate;
+      //     });
+      //   }
+      // }).catchError((e) {
+      //   print(e.toString());
+      // });
     }
   }
 
@@ -828,47 +829,47 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     // }
   }
 
-  _tranferAccount(BuildContext context) {
-    var smsCode = '123456';
-    setState(() {
-      HSProgressHUD.show();
-      TransferDataRepository()
-          .getTransferByAccount(
-              GetTransferByAccount(
-                //转账金额
-                money,
-                //贷方货币
-                _changedCcyTitle,
-                //借方货币
-                _changedCcyTitle,
-                //输入密码
-                'L5o+WYWLFVSCqHbd0Szu4Q==',
-                //收款方银行
-                payeeBankCode,
-                //收款方卡号
-                payeeCardNo,
-                //收款方姓名
-                payeeName,
-                //付款方银行
-                payerBankCode,
-                //付款方卡号
-                cardNo,
-                //付款方姓名
-                _nameController.text ?? '',
-                //附言
-                remark,
-                //验证码
-                smsCode,
-                _xRate,
-              ),
-              'getTransferByAccount')
-          .then((value) {
-        HSProgressHUD.dismiss();
-      }).catchError((e) {
-        HSProgressHUD.showError(status: '${e.toString()}');
-      });
-    });
-  }
+  // _tranferAccount(BuildContext context) {
+  //   var smsCode = '123456';
+  //   setState(() {
+  //     HSProgressHUD.show();
+  //     TransferDataRepository()
+  //         .getTransferByAccount(
+  //             GetTransferByAccount(
+  //               //转账金额
+  //               money,
+  //               //贷方货币
+  //               _changedCcyTitle,
+  //               //借方货币
+  //               _changedCcyTitle,
+  //               //输入密码
+  //               'L5o+WYWLFVSCqHbd0Szu4Q==',
+  //               //收款方银行
+  //               payeeBankCode,
+  //               //收款方卡号
+  //               payeeCardNo,
+  //               //收款方姓名
+  //               payeeName,
+  //               //付款方银行
+  //               payerBankCode,
+  //               //付款方卡号
+  //               cardNo,
+  //               //付款方姓名
+  //               _nameController.text ?? '',
+  //               //附言
+  //               remark,
+  //               //验证码
+  //               smsCode,
+  //               _xRate,
+  //             ),
+  //             'getTransferByAccount')
+  //         .then((value) {
+  //       HSProgressHUD.dismiss();
+  //     }).catchError((e) {
+  //       HSProgressHUD.showError(status: '${e.toString()}');
+  //     });
+  //   });
+  // }
 
   //交易密码窗口
   void _openBottomSheet() async {

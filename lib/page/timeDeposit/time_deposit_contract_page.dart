@@ -21,7 +21,9 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/money_text_input_formatter.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
@@ -91,6 +93,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String _minAmt = '';
   String _maxAmt = '';
   bool _isShow = false;
+  bool _showTermRate = false;
+  bool _isDeposit = false;
 
   void initState() {
     super.initState();
@@ -346,7 +350,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           inputFormatters: [
             // LengthLimitingTextInputFormatter(12),
             FilteringTextInputFormatter.allow(
-              RegExp("[0-9.]"),
+              ccy == 'JPY' ? RegExp("[0-9]") : RegExp("[0-9.]"),
             ),
             MoneyTextInputFormatter(),
           ],
@@ -663,6 +667,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     if (result != null && result != false) {
       _cardCcy = _cardCcyList[result];
       _cardBal = _cardBalList[result];
+      _rateCalculate();
     } else {
       return;
     }
@@ -732,63 +737,45 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   //确认按钮
   Widget _submitButton() {
     return Container(
-      height: 45,
       margin: EdgeInsets.fromLTRB(30, 40, 30, 30),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: _ifClick()
-              ? [
-                  Color(0xFF1775BA),
-                  Color(0xFF3A9ED1),
-                ]
-              : [HsgColors.btnDisabled, HsgColors.btnDisabled],
-        ),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: ButtonTheme(
-        height: 45,
-        child: FlatButton(
-          onPressed: !_ifClick()
-              ? null
-              : () {
-                  if (double.parse(_cardBal) < double.parse(_checkAmount)) {
-                    Fluttertoast.showToast(
-                      msg: S.current.tdContract_balance_insufficient,
-                      gravity: ToastGravity.CENTER,
-                    );
-                  } else {
-                    _loadContractData(
-                      accuPeriod,
-                      rate,
-                      auctCale,
-                      bal,
-                      productList.bppdCode,
-                      ccy,
-                      custID,
-                      depositType,
-                      instCode,
-                      _changedAccountTitle.replaceAll(
-                          new RegExp(r"\s+\b|\b\s"), ""),
-                      '',
-                      productList.engName,
-                      _changedSettAcTitle.replaceAll(
-                          new RegExp(r"\s+\b|\b\s"), ""),
-                      '',
-                      '',
-                    );
-                  }
-                },
-          disabledColor: HsgColors.btnDisabled,
-          child: Text(
-            S.current.deposit_now,
-            style: TextStyle(
-              fontSize: 15.0,
-              color: Colors.white,
-            ),
+      child: CustomButton(
+        isLoading: _isDeposit,
+        isEnable: _ifClick(),
+        isOutline: false,
+        margin: EdgeInsets.all(0),
+        text: Text(
+          S.current.deposit_now,
+          style: TextStyle(
+            fontSize: 15.0,
+            color: Colors.white,
           ),
         ),
+        clickCallback: () {
+          if (double.parse(_cardBal) < double.parse(_checkAmount)) {
+            Fluttertoast.showToast(
+              msg: S.current.tdContract_balance_insufficient,
+              gravity: ToastGravity.CENTER,
+            );
+          } else {
+            _loadContractData(
+              accuPeriod,
+              rate,
+              auctCale,
+              bal,
+              productList.bppdCode,
+              ccy,
+              custID,
+              depositType,
+              instCode,
+              _changedAccountTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
+              '',
+              productList.engName,
+              _changedSettAcTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
+              '',
+              '',
+            );
+          }
+        },
       ),
     );
   }
@@ -807,29 +794,31 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           // 触摸收起键盘
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: ListView(
-          children: [
-            _background(),
-            _titleSection(
-              //产品名称和年利率
-              productList,
-              producDTOList,
-            ),
-            _remark(), // 产品描述
-            _termChangeBtn(context, producDTOList), // 选择存款期限
-            _inputPrincipal(card), // 本金输入框
-            _accountChangeBtn(), //选择付款账户
-            _line(),
-            _ccyChangeBtn(), //选择支付币种
-            _line(),
-            _expectedPayment(),
-            _line(),
-            _settAcChangeBtn(), //结算账户
-            _line(),
-            _instructionChangeBtn(), //选择到期指示
-            _submitButton(),
-          ],
-        ),
+        child: _showTermRate
+            ? HsgLoading()
+            : ListView(
+                children: [
+                  _background(),
+                  _titleSection(
+                    //产品名称和年利率
+                    productList,
+                    producDTOList,
+                  ),
+                  _remark(), // 产品描述
+                  _termChangeBtn(context, producDTOList), // 选择存款期限
+                  _inputPrincipal(card), // 本金输入框
+                  _accountChangeBtn(), //选择付款账户
+                  _line(),
+                  _ccyChangeBtn(), //选择支付币种
+                  _line(),
+                  _expectedPayment(),
+                  _line(),
+                  _settAcChangeBtn(), //结算账户
+                  _line(),
+                  _instructionChangeBtn(), //选择到期指示
+                  _submitButton(),
+                ],
+              ),
       ),
     );
   }
@@ -889,9 +878,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       try {
         TransferTrialResp data =
             await ApiClient().transferTrial(TransferTrialReq(
-          amount: _payerAmount,
-          corrCcy: _cardCcy,
-          defaultCcy: ccy,
+              opt: "S",
+          buyAmount: _payerAmount.toString(),
+          buyCcy: ccy,
+          sellAmount: '0',
+          sellCcy: _cardCcy
         ));
         if (this.mounted) {
           setState(() {
@@ -905,25 +896,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           gravity: ToastGravity.CENTER,
         );
       }
-
-      // ForexTradingRepository()
-      //     .transferTrial(
-      //         TransferTrialReq(
-      //             amount: _payerAmount, corrCcy: _cardCcy, defaultCcy: ccy),
-      //         'TransferTrialReq')
-      //     .then((data) {
-      //   if (this.mounted) {
-      //     setState(() {
-      //       _amount = FormatUtil.formatSringToMoney((data.optExAmt).toString());
-      //       _checkAmount = data.optExAmt;
-      //     });
-      //   }
-      // }).catchError((e) {
-      //   Fluttertoast.showToast(
-      //     msg: "${e.toString()}",
-      //     gravity: ToastGravity.CENTER,
-      //   );
-      // });
     }
   }
 
@@ -1149,9 +1121,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       String smsCode,
       String tenor) async {
     if (this.mounted) {
-      setState(() {});
+      setState(() {
+        _isDeposit = true;
+      });
     }
-    HSProgressHUD.show();
+    // HSProgressHUD.show();
     print('accuPeriod===$accuPeriod');
     TimeDepositDataRepository()
         .getTimeDepositContract(
@@ -1175,20 +1149,23 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         .then((value) {
       if (this.mounted) {
         setState(() {
-          HSProgressHUD.dismiss();
+          // HSProgressHUD.dismiss();
+          _isDeposit = false;
           Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
               arguments: 'timeDepositProduct');
         });
       }
     }).catchError((e) {
       if (this.mounted) {
-        setState(() {});
+        setState(() {
+          _isDeposit = false;
+          // HSProgressHUD.dismiss();
+          Fluttertoast.showToast(
+            msg: e.toString(),
+            gravity: ToastGravity.CENTER,
+          );
+        });
       }
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
     });
   }
 
@@ -1198,9 +1175,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     print('productList.bppdCode   +  ${productList.bppdCode}');
 
     if (this.mounted) {
-      setState(() {});
+      setState(() {
+        _showTermRate = true;
+      });
     }
-    HSProgressHUD.show();
+    // HSProgressHUD.show();
     TimeDepositDataRepository()
         .getTdProductTermRate(
             GetTdProductTermRateReq(productList.ccy, productList.bppdCode),
@@ -1227,14 +1206,20 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             _first();
           }
         });
-        HSProgressHUD.dismiss();
+        // HSProgressHUD.dismiss();
+        _showTermRate = false;
       }
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      if (this.mounted) {
+        setState(() {
+          _showTermRate = false;
+          // HSProgressHUD.dismiss();
+          Fluttertoast.showToast(
+            msg: e.toString(),
+            gravity: ToastGravity.CENTER,
+          );
+        });
+      }
     });
   }
 }

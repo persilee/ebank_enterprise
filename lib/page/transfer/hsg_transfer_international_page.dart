@@ -792,6 +792,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
           payerName,
           _countryCode,
           _rate,
+          "",
+          "",
         ),
       );
     }
@@ -1079,23 +1081,23 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
     } else {
       _payerAmount =
           AiDecimalAccuracy.parse(_transferMoneyController.text).toDouble();
-      ForexTradingRepository()
-          .transferTrial(
-              TransferTrialReq(
-                  amount: _payerAmount,
-                  corrCcy: _transferCcy,
-                  defaultCcy: _payCcy),
-              'TransferTrialReq')
-          .then((data) {
-        if (this.mounted) {
-          setState(() {
-            _amount = data.optExAmt;
-            _rate = data.optExRate;
-          });
-        }
-      }).catchError((e) {
-        print(e.toString());
-      });
+      // ForexTradingRepository()
+      //     .transferTrial(
+      //         TransferTrialReq(
+      //             amount: _payerAmount,
+      //             corrCcy: _transferCcy,
+      //             defaultCcy: _payCcy),
+      //         'TransferTrialReq')
+      //     .then((data) {
+      //   if (this.mounted) {
+      //     setState(() {
+      //       _amount = data.optExAmt;
+      //       _rate = data.optExRate;
+      //     });
+      //   }
+      // }).catchError((e) {
+      //   print(e.toString());
+      // });
     }
   }
 

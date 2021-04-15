@@ -172,8 +172,9 @@ class _TransferInternalPreviewPageState
   Future _loadData(TransferInternationalData transferData) async {
     final prefs = await SharedPreferences.getInstance();
     String custId = prefs.getString(ConfigKey.CUST_ID);
-    String amount = transferData.transferIntoAmount;
-    // double amount = double.parse(transferData.transferIntoAmount);
+    String opt = transferData.opt;
+    String debitAmount = transferData.transferOutAmount;
+    String creditAmount = transferData.transferIntoAmount;
     String transferOutCcy = transferData.transferOutCcy;
     String transferIntoCcy = transferData.transferIntoCcy;
     String payeeBankCode = transferData.payeeBankCode;
@@ -184,20 +185,28 @@ class _TransferInternalPreviewPageState
     String payerName = transferData.payerName;
     String remark = transferData.transferRemark;
     String costOptions = transferData.transferFee;
+    String costOptionsIndex = transferData.transferFeeIndex;
     String bankSwift = transferData.bankSWIFT;
-    String remittancePurposes = transferData.purpose;
-    String district = transferData.nation;
-    String payerAddress = transferData.transferOutAdress;
     String payeeAddress = transferData.transferIntoAdress;
-    String intermediateBankSwift = transferData.centerSWIFI;
     String countryCode = transferData.countryCode;
     String rate = transferData.rate;
+    print("opt: " +
+        opt +
+        "===========================" +
+        "countryCode" +
+        countryCode);
     HSProgressHUD.show();
     TransferDataRepository()
         .getInterNationalTransfer(
             GetInternationalTransferReq(
-              amount,
+              opt,
+              //付款金额
+              debitAmount,
+              //收款金额
+              creditAmount,
+              //贷方货币
               transferOutCcy,
+              //借方货币
               transferIntoCcy,
               "",
               payeeBankCode,
@@ -211,9 +220,9 @@ class _TransferInternalPreviewPageState
               rate,
               payeeAddress,
               bankSwift,
-              "uS",
+              countryCode,
               custId,
-              "1",
+              costOptionsIndex,
             ),
             'getTransferByAccount')
         .then((value) {

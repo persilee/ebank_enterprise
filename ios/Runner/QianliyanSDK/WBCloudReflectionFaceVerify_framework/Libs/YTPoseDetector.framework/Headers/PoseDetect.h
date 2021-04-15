@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <YTTrackPro/YTTrackFaceShape.h>
+#import <YTTrackProWB/YTTrackFaceShape.h>
 
 @interface PoseDetect: NSObject
 
