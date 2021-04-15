@@ -630,7 +630,7 @@
   "loan_trail_plan_second":"應還",
   "loan_trail_title":"貸款領用",
 
-  "open_account_goto_ebank_tip": "尊敬的用戶，您好。由於您不是受邀客戶，請前往網銀進行開戶申請。",
+  "open_account_goto_ebank_tip": "尊敬的用戶，您好。由於您不是受邀客戶，請先通過企服商進行邀請，或者前往企業網銀進行開戶申請。",
   "openAccount_faceSign_results_content": "面簽數據提交成功",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家偉（開戶）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   

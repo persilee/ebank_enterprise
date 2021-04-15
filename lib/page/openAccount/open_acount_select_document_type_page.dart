@@ -278,7 +278,7 @@ class _OpenAccountSelectDocumentTypePageState
             'isQuick': _isQuick,
           },
         );
-      } else if (value.outCode == '8') {
+      } else if (value.outCode == '8' || value.outCode == '6') {
       } else {
         Navigator.pushNamed(
           context,

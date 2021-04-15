@@ -13,6 +13,10 @@
 #include <NextCV/Mat.h>
 #include <NextCV/NCVCommon.h>
 
+
+#define WBYTVERSION "20210203"
+
+
 #ifndef FaceHandle_h
 #define FaceHandle_h
 using namespace std;
@@ -23,7 +27,7 @@ typedef void (^stopDraScreen)();
 /*
  return false if you want to end the process
  */
-typedef bool (^doDetectFaceReflect)(UIImage* faceImage, std::vector<NSMutableArray*> & landmarksVec,int ind);
+typedef bool (^doDetectFaceReflect)(UIImage* faceImage, NSMutableArray* landmarksVec,int ind);
 
 
 @interface FaceHandle : NSObject

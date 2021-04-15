@@ -689,7 +689,7 @@
   "loan_trail_title":"Loan claim",
 
 
-  "open_account_goto_ebank_tip": "Dear user. Since you are not an invited customer, please go to online banking to apply for an account.",
+  "open_account_goto_ebank_tip": "Dear user. Since you are not an invited customer, please first invite through an enterprise service provider, or go to corporate online banking to apply for an account.",
   "openAccount_faceSign_results_content": "FaceSign data submitted successfully.",
 
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
