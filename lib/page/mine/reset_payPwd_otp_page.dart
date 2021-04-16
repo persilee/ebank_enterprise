@@ -313,7 +313,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
     VerificationCodeRepository()
         .sendSmsByPhone(
             SendSmsByPhoneNumberReq(
-                _officeAreaCodeText, _phone, 'transactionPwd', ''),
+                _officeAreaCodeText, _phone, 'transactionPwd', 'SCNAORESTSPW'),
             'sendSms')
         .then((data) {
       _startCountdown();

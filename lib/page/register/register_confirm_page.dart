@@ -1,5 +1,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/register_by_account.dart';
+import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
@@ -197,7 +199,6 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
             'registerByAccount')
         .then((value) {
       HSProgressHUD.dismiss();
-
       if (mounted) {
         setState(() {
           Map listDataLogin = new Map();
@@ -212,6 +213,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
               arguments: listDataLogin //传值
               );
         });
+        _sendSmsRegister();
       }
     }).catchError((e) {
       HSProgressHUD.dismiss();
@@ -220,6 +222,32 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
         gravity: ToastGravity.CENTER,
       );
     });
+  }
+
+  //注册发送短信验证码接口获取--表示注册成功
+  _sendSmsRegister() async {
+    //print('$_isRegister>>>>>>>>');
+    VerificationCodeRepository()
+        .sendSmsByPhone(
+            SendSmsByPhoneNumberReq(
+                _areaCode, _userPhone, 'register', 'SCNAOCREGU'),
+            'sendSmsRegister')
+        .then((value) {
+      if (mounted) {
+        setState(() {
+          // _smsCode = value.smsCode;
+          HSProgressHUD.dismiss();
+          // _isGetSms = true;
+        });
+      }
+    }).catchError((e) {
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
+    });
+    // }
   }
 
   bool _submit() {

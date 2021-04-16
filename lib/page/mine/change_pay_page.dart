@@ -332,7 +332,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
     // });
   }
 
-  //获取验证码接口
+  //获取验证码接口 -- 修改交易密码
   _getVerificationCode() async {
     HSProgressHUD.show();
     // final prefs = await SharedPreferences.getInstance();
@@ -343,7 +343,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
         // )
         .sendSmsByPhone(
             SendSmsByPhoneNumberReq(
-                _areaCodeStr, _phoneNo, 'transactionPwd', ''),
+                _areaCodeStr, _phoneNo, 'transactionPwd', 'SCNAOCHGTSPW'),
             'sendSms')
         .then((data) {
       _startCountdown();
