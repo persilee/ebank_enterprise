@@ -1,12 +1,12 @@
-/// userId : "989185387615485956"
-/// userName : null
+/// userId : "829378511096512512"
+/// userName : "HSG16 Checker"
 /// assignee : null
 /// processTitle : "earlyRedTdContractApprovalTitle"
 /// processKey : "earlyRedTdContractApproval"
 /// businessKey : null
 /// tenantId : null
 /// operateBeforeValue : null
-/// operateEndValue : {"conNo":"01018580000007680002","mainAc":"0101858000000768","transferAc":"0101208000001528","settBal":"0","eryRate":"0","eryInt":"0","hdlFee":"0","pnltFee":"0","settDdAc":"0101238000001758","matAmt":"0","bal":null,"ccy":null,"tenor":null,"status":null,"valueDate":null,"dueDate":null}
+/// operateEndValue : {"conNo":"80118180000009680001","mainAc":"8011818000000968","transferAc":"0101208000001528","settBal":"0","eryRate":"0","eryInt":"0","hdlFee":"0","pnltFee":"0","settDdAc":"0001291000001578","matAmt":"0","bal":null,"ccy":null,"tenor":null,"status":null,"valueDate":null,"dueDate":null}
 /// servCtr : "hbs-ebank-general-service"
 /// custId : null
 /// commentList : []
@@ -16,7 +16,7 @@
 
 class EarlyRedTdContractDetailModel {
   String _userId;
-  dynamic _userName;
+  String _userName;
   dynamic _assignee;
   String _processTitle;
   String _processKey;
@@ -32,7 +32,7 @@ class EarlyRedTdContractDetailModel {
   int _taskCount;
 
   String get userId => _userId;
-  dynamic get userName => _userName;
+  String get userName => _userName;
   dynamic get assignee => _assignee;
   String get processTitle => _processTitle;
   String get processKey => _processKey;
@@ -49,7 +49,7 @@ class EarlyRedTdContractDetailModel {
 
   EarlyRedTdContractDetailModel({
       String userId, 
-      dynamic userName, 
+      String userName, 
       dynamic assignee, 
       String processTitle, 
       String processKey, 
@@ -129,15 +129,15 @@ class EarlyRedTdContractDetailModel {
 
 }
 
-/// conNo : "01018580000007680002"
-/// mainAc : "0101858000000768"
+/// conNo : "80118180000009680001"
+/// mainAc : "8011818000000968"
 /// transferAc : "0101208000001528"
 /// settBal : "0"
 /// eryRate : "0"
 /// eryInt : "0"
 /// hdlFee : "0"
 /// pnltFee : "0"
-/// settDdAc : "0101238000001758"
+/// settDdAc : "0001291000001578"
 /// matAmt : "0"
 /// bal : null
 /// ccy : null
