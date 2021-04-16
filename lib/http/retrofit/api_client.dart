@@ -76,8 +76,6 @@ abstract class ApiClient {
   Future<TransferTrialResp> transferTrial(
       @Body() TransferTrialReq transferTrialReq);
 
-
-
   /// 上传头像（开户图片上传暂时共用）
   @POST('/cust/user/uploadAvatar')
   Future<dynamic> uploadAvatar(
