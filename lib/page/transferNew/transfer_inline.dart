@@ -99,8 +99,6 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
   var _payeeAccountFocusNode = FocusNode();
   bool _isAccount = true; //账号是否存在
   var _opt = '';
-  bool _isPayerJpy = true; //判断付款方是否为日元
-  bool _isPayeeJpy = true; //判断收款方是否为日元
 
   @override
   void initState() {
@@ -168,7 +166,6 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         _isAccount = false;
         _boolBut();
         _getCardCcyList(_payeeAccountController.text);
-        _isPayeeJpy = _payeeCcy == 'JPY' ? true : false;
       }
     });
     return Scaffold(
@@ -255,7 +252,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             focusNode: _payerTransferFocusNode,
             callback: _boolBut,
             isRegEXp: true,
-            regExp: _isPayerJpy ? '[0-9]' : '[0-9.]',
+            regExp: _payerCcy == 'JPY' ? '[0-9]' : '[0-9.]',
             length: 11,
             isMoney: true,
           ),
@@ -323,7 +320,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             focusNode: _payeeTransferFocusNode,
             callback: _boolBut,
             isRegEXp: true,
-            regExp: _isPayeeJpy ? '[0-9]' : '[0-9.]',
+            regExp: _payeeCcy == 'JPY' ? '[0-9]' : '[0-9.]',
             length: 11,
             isMoney: true,
           ),
@@ -480,7 +477,6 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
               _boolBut();
               _rateCalculate();
               _getCardCcyList(_payeeAccountController.text);
-              _isPayeeJpy = _payeeCcy == 'JPY' ? true : false;
             });
           },
         );
@@ -568,7 +564,6 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
       setState(() {
         _payerIndex = result;
         _payerCcy = _payerCcyList[result];
-        _isPayerJpy = _payerCcy == 'JPY' ? true : false;
       });
       _loadData(_payerAccount);
     }
@@ -591,7 +586,6 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
       setState(() {
         _payeeIndex = result;
         _payeeCcy = _payeeCcyList[result];
-        _isPayeeJpy = _payeeCcy == 'JPY' ? true : false;
         _boolBut();
       });
     }
@@ -713,7 +707,6 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             _balance = _balanceList[0];
             _payerIndex = 0;
           }
-          _isPayerJpy = _payerCcy == 'JPY' ? true : false;
           _rateCalculate();
         });
       }

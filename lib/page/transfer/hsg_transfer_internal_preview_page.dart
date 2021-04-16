@@ -87,17 +87,17 @@ class _TransferInternalPreviewPageState
           ),
           _getRowContent(S.current.transfer_from,
               FormatUtil.formatSpace4(transferData.transferOutAccount)),
-          _getRowContent(S.current.estimated_collection_amount,
-              FormatUtil.formatSringToMoney(transferData.transferIntoAmount)),
+          _getRowContent(S.current.transfer_from_name, transferData.payerName),
+          _getRowContent(S.current.payer_currency, transferData.transferOutCcy),
           _getRowContent(S.current.rate_of_exchange, transferData.xRate),
-          _getRowContent(
-              S.current.payment_currency, transferData.transferOutCcy),
-          _getRowContent(
-              S.current.receipt_side_name, transferData.transferIntoName),
           _getRowContent(S.current.receipt_side_account,
               FormatUtil.formatSpace4(transferData.transferIntoAccount)),
           _getRowContent(
+              S.current.receipt_side_name, transferData.transferIntoName),
+          _getRowContent(
               S.current.transfer_from_ccy, transferData.transferIntoCcy),
+          _getRowContent(S.current.transfer_to_amount,
+              FormatUtil.formatSringToMoney(transferData.transferIntoAmount)),
           _getRowContent(
               S.current.transfer_postscript,
               transferData.transferRemark == ''

@@ -11,9 +11,7 @@ import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_ccy_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
-import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -53,7 +51,6 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   String _rate = '';
   String _incomeAmt = '';
   FocusNode _focusNode = new FocusNode();
-  bool _isPaymentJpy = true; //支出币种是否为日元
 
   @override
   // ignore: must_call_super
@@ -239,7 +236,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
               inputFormatters: [
                 LengthLimitingTextInputFormatter(12),
                 FilteringTextInputFormatter.allow(
-                  RegExp("[0-9.]"),
+                  RegExp(_paymentCcy == 'JPY' ? "[0-9]" : "[0-9.]"),
                 ),
                 MoneyTextInputFormatter(),
               ],
@@ -310,7 +307,6 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           if (_paymentAcc != '' && _paymentCcy != '') {
             _getCardBal(_paymentAcc);
           }
-          _isPaymentJpy = _paymentCcy == 'JPY' ? true : false;
         } else {
           _incomeCcyId = result;
           _incomeCcy = dataList[_incomeCcyId];
