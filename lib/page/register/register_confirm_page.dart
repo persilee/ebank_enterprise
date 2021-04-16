@@ -226,7 +226,6 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
 
   //注册发送短信验证码接口获取--表示注册成功
   _sendSmsRegister() async {
-    //print('$_isRegister>>>>>>>>');
     VerificationCodeRepository()
         .sendSmsByPhone(
             SendSmsByPhoneNumberReq(
