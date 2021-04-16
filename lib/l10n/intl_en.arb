@@ -695,5 +695,10 @@
   "payer_currency": "Payer Currency",
   "transfer_to_amount": "Transfer-to Amount",
   "transfer_from_name": "Transfer From Name",
-  "no_account_ccy_transfer": "Do not allow the same account with the same currency transfer"
+  "no_account_ccy_transfer": "Do not allow the same account with the same currency transfer",
+  "please_current_payee_account": "Please input the correct payee account number first",
+  "forex_trading_msg1": "Please select a spending account first",
+  "forex_trading_msg2": "Please select an income account first",
+  "transfer_partner_msg1": "Are you sure you want to delete this partner",
+  "successfully_delete": "Successfully Delete !"
 }

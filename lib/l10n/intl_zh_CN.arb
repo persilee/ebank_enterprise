@@ -695,5 +695,11 @@
   "transfer_from1": "付款方",
   "payer_currency": "转出方币种",
   "transfer_to_amount": "转入金额",
-  "transfer_from_name": "转出方名称"
+  "transfer_from_name": "转出方名称",
+  "no_account_ccy_transfer": "不允许同账号同币种进行转账",
+  "please_current_payee_account": "请先输入正确的收款人账号",
+  "forex_trading_msg1": "请先选择支出账户",
+  "forex_trading_msg2": "请先选择收入账户",
+  "transfer_partner_msg1": "您是否确定要删除该伙伴",
+  "successfully_delete": "删除成功!"
 }

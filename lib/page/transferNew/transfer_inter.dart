@@ -278,7 +278,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
             focusNode: _payerTransferFocusNode,
             callback: _boolBut,
             isRegEXp: true,
-            regExp: '[0-9.]',
+            regExp: _payerCcy == 'JPY' ? '[0-9]' : '[0-9.]',
             length: 11,
             isMoney: true,
           ),
@@ -348,7 +348,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
             focusNode: _payeeTransferFocusNode,
             callback: _boolBut,
             isRegEXp: true,
-            regExp: '[0-9.]',
+            regExp: _payeeCcy == 'JPY' ? '[0-9]' : '[0-9.]',
             length: 11,
             isMoney: true,
           ),
@@ -618,7 +618,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
     return InkWell(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
-        Navigator.pushNamed(context, pageTranferPartner, arguments: '0').then(
+        Navigator.pushNamed(context, pageTranferPartner, arguments: '2').then(
           (value) {
             setState(() {
               if (value != null) {

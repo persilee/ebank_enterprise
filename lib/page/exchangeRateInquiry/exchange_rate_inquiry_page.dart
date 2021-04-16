@@ -301,7 +301,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
       inputFormatters: <TextInputFormatter>[
         LengthLimitingTextInputFormatter(11),
         FilteringTextInputFormatter.allow(
-          RegExp("[0-9.]"),
+          RegExp(_primitiveCcy == 'JPY' ? "[0-9]" : "[0-9.]"),
         ),
         MoneyTextInputFormatter(),
       ],
