@@ -385,8 +385,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           .transferTrial(
               TransferTrialReq(
                 opt: "S",
-                buyCcy: _incomeCcy,
-                sellCcy: _paymentCcy,
+                buyCcy: _paymentCcy,
+                sellCcy: _incomeCcy,
                 buyAmount: _payAmtController.text,
                 sellAmount: '0',
               ),

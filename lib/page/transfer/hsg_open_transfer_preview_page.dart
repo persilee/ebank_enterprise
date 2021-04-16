@@ -222,8 +222,8 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
           'AddTransferPlanReq')
     }).then((value) {
       HSProgressHUD.dismiss();
-      Navigator.pushNamed(context, pageDepositRecordSucceed,
-          arguments: "advanceTransfer");
+      Navigator.pushNamed(context, pageTransferSuccess,
+          arguments: "pageTransferSuccess");
       // setState(() {});
     }).catchError((e) {
       print(e.toString());
