@@ -689,10 +689,11 @@
   "loan_trail_title": "贷款领用",
   "open_account_goto_ebank_tip": "尊敬的用户，您好。由于您不是受邀客户，请先通过企服商进行邀请，或者前往企业网银进行开户申请。",
   "openAccount_faceSign_results_content": "面签数据提交成功",
+  "openAccount_industryNatureTwo": "商业/行业性质细分",
+  "openAccount_industryNatureTwo_select": "商业/行业性质细分选择",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "transfer_from1": "付款方",
   "payer_currency": "转出方币种",
   "transfer_to_amount": "转入金额",
-  "transfer_from_name": "转出方名称",
-  "no_account_ccy_transfer": "不允许同账号同币种进行转账"
+  "transfer_from_name": "转出方名称"
 }

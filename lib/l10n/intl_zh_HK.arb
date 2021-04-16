@@ -631,6 +631,8 @@
   "loan_trail_title": "貸款領用",
   "open_account_goto_ebank_tip": "尊敬的用戶，您好。由於您不是受邀客戶，請先通過企服商進行邀請，或者前往企業網銀進行開戶申請。",
   "openAccount_faceSign_results_content": "面簽數據提交成功",
+  "openAccount_industryNatureTwo": "商業/行業性質細分",
+  "openAccount_industryNatureTwo_select": "商業/行業性質細分選擇",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家偉（開戶）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "transfer_from1": "付款方",
   "payer_currency": "轉出方比重",

@@ -61,6 +61,9 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   /// 商业/行业性质选择值
   String _industrialNatureText = '';
 
+  /// 商业/行业性质二级选择值
+  String _industrialNatureTwoText = '';
+
   /// 是否显示公司类别（其他）输入框
   bool _isShowCompanyTypeOther = false;
 
@@ -87,6 +90,9 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
 
   ///商业行业性质请求类型
   List<IdType> _industrialNatures = [];
+
+  ///商业行业性质二级请求类型
+  List<IdType> _industrialNaturesTwo = [];
 
   @override
   void initState() {
@@ -364,6 +370,19 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               },
             ),
           ),
+          // Container(
+          //   child: _oneLayerSelectWidget(
+          //     context,
+          //     S.of(context).openAccount_industryNatureTwo,
+          //     _industrialNatureTwoText,
+          //     S.of(context).please_select,
+          //     false,
+          //     () {
+          //       print('商业/行业性质二级选择');
+          //       _selectIndustrialNatureTwo(context);
+          //     },
+          //   ),
+          // ),
         ],
       ),
     );
@@ -684,30 +703,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
 
   /// 商业/行业性质选择
   void _selectIndustrialNature(BuildContext context) async {
-    List<String> industrialList = [
-      // 'Agriculture, forestry and fishing',
-      // 'Mining and quarrying',
-      // 'Manufacturing',
-      // 'Electricity, gas, steam and air conditioning supply',
-      // 'Water supply; sewerage, waste management and remediation activities',
-      // 'Construction',
-      // 'Wholesale and retail trade; repair of motor vehicles and motorcycles',
-      // 'Transportation and storage',
-      // 'Accommodation and food service activities',
-      // 'Information and communication',
-      // 'Financial and insurance activities',
-      // 'Real estate activities',
-      // 'Professional, scientific and technical activities',
-      // 'Administrative and support service activities',
-      // 'Public administration and defence; compulsory social security',
-      // 'Education',
-      // 'Human health and social work activities',
-      // 'Arts, entertainment and recreation',
-      // 'Other service activities',
-      // 'Activities of households as employers; undifferentiated goods- and services-producing activities of households for own use',
-      // 'Activities of extraterritorial organizations and bodies',
-      // 'Sensitive business'
-    ];
+    List<String> industrialList = [];
 
     if (_industrialNatures.length > 0) {
       industrialList = [];
@@ -731,6 +727,39 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       _dataReq.corporatinAttributesIdType = data;
       setState(() {
         _industrialNatureText = industrialList[result];
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
+    } else {
+      return;
+    }
+  }
+
+  /// 商业/行业性质二级选择
+  void _selectIndustrialNatureTwo(BuildContext context) async {
+    List<String> industrialTwoList = [];
+
+    if (_industrialNatures.length > 0) {
+      industrialTwoList = [];
+      String _language = Intl.getCurrentLocale();
+      _industrialNaturesTwo.forEach((element) {
+        industrialTwoList.add(_language == 'en' ? element.name : element.cname);
+      });
+    }
+
+    final result = await showHsgBottomSheet(
+      context: context,
+      builder: (context) => BottomMenu(
+        title: S.of(context).openAccount_industryNatureTwo_select,
+        items: industrialTwoList,
+      ),
+    );
+
+    if (result != null && result != false) {
+      IdType data = _industrialNaturesTwo[result];
+      _dataReq.corporatinAttributes = data.code;
+      _dataReq.corporatinAttributesIdType = data;
+      setState(() {
+        _industrialNatureTwoText = industrialTwoList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     } else {
@@ -776,6 +805,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _industrialNatures = data.publicCodeGetRedisRspDtoList;
+        _industrialNaturesTwo = data.publicCodeGetRedisRspDtoList;
         print('公共参数-商业行业性质类型-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
