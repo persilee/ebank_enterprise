@@ -131,9 +131,8 @@ class _HomePageState extends State<HomePage>
             'btnTitle': S.current.transfer
           },
           {
-            'btnIcon':
-                'images/home/listIcon/home_list_transfer_appointment.png',
-            'btnTitle': S.current.open_transfer
+            'btnIcon': 'images/home/listIcon/home_list_transfer_record.png',
+            'btnTitle': S.current.transfer_record
           },
           {
             'btnIcon': 'images/home/listIcon/home_list_partner.png',
@@ -844,17 +843,17 @@ class _HomePageState extends State<HomePage>
   //功能点击事件
   VoidCallback _featureClickFunction(BuildContext context, String title) {
     return () {
-      // if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
-      //   HsgShowTip.notOpenAccountTip(
-      //     context: context,
-      //     click: (value) {
-      //       if (value == true) {
-      //         _openAccountClickFunction(context);
-      //       }
-      //     },
-      //   );
-      //   return;
-      // }
+      if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
+        HsgShowTip.notOpenAccountTip(
+          context: context,
+          click: (value) {
+            if (value == true) {
+              _openAccountClickFunction(context);
+            }
+          },
+        );
+        return;
+      }
       if (S.current.transaction_details == title) {
         //收支明细
         Navigator.pushNamed(context, pageDetailList);

@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
+import 'package:ebank_mobile/data/source/model/get_card_ccy_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
@@ -98,17 +99,20 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
   var _payeeAccountFocusNode = FocusNode();
   bool _isAccount = true; //账号是否存在
   var _opt = '';
+  bool _isPayerJpy = true; //判断付款方是否为日元
+  bool _isPayeeJpy = true; //判断收款方是否为日元
 
   @override
   void initState() {
     super.initState();
-    _loadLocalCcy();
+    // _loadLocalCcy();
     _loadTransferData();
     _actualNameReqData();
 
     _payeeAccountFocusNode.addListener(() {
       if (_payeeAccountController.text.length > 0) {
         _getCardByCardNo(_payeeAccountController.text);
+        _getCardCcyList(_payeeAccountController.text);
       }
     });
     _payerTransferFocusNode.addListener(() {
@@ -163,6 +167,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         check = true;
         _isAccount = false;
         _boolBut();
+        _getCardCcyList(_payeeAccountController.text);
+        _isPayeeJpy = _payeeCcy == 'JPY' ? true : false;
       }
     });
     return Scaffold(
@@ -249,7 +255,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             focusNode: _payerTransferFocusNode,
             callback: _boolBut,
             isRegEXp: true,
-            regExp: '[0-9.]',
+            regExp: _isPayerJpy ? '[0-9]' : '[0-9.]',
             length: 11,
             isMoney: true,
           ),
@@ -296,10 +302,17 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             child: SelectInkWell(
               title: S.current.transfer_from_ccy,
               item: _payeeCcy == null ? '' : _payeeCcy,
-              onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
-                _payeeCcyDialog();
-              },
+              onTap: _isAccount
+                  ? () {
+                      Fluttertoast.showToast(
+                        msg: S.of(context).please_current_payee_account,
+                        gravity: ToastGravity.CENTER,
+                      );
+                    }
+                  : () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      _payeeCcyDialog();
+                    },
             ),
           ),
           TextFieldContainer(
@@ -310,7 +323,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             focusNode: _payeeTransferFocusNode,
             callback: _boolBut,
             isRegEXp: true,
-            regExp: '[0-9.]',
+            regExp: _isPayeeJpy ? '[0-9]' : '[0-9.]',
             length: 11,
             isMoney: true,
           ),
@@ -466,6 +479,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
               }
               _boolBut();
               _rateCalculate();
+              _getCardCcyList(_payeeAccountController.text);
+              _isPayeeJpy = _payeeCcy == 'JPY' ? true : false;
             });
           },
         );
@@ -553,6 +568,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
       setState(() {
         _payerIndex = result;
         _payerCcy = _payerCcyList[result];
+        _isPayerJpy = _payerCcy == 'JPY' ? true : false;
       });
       _loadData(_payerAccount);
     }
@@ -575,6 +591,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
       setState(() {
         _payeeIndex = result;
         _payeeCcy = _payeeCcyList[result];
+        _isPayeeJpy = _payeeCcy == 'JPY' ? true : false;
         _boolBut();
       });
     }
@@ -696,6 +713,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             _balance = _balanceList[0];
             _payerIndex = 0;
           }
+          _isPayerJpy = _payerCcy == 'JPY' ? true : false;
           _rateCalculate();
         });
       }
@@ -712,17 +730,20 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         data.publicCodeGetRedisRspDtoList.forEach((e) {
           _payeeCcyList.add(e.code);
         });
-        // for (int i = 0; i < _payeeCcyList.length; i++) {
-        //   if (_payeeCcy != _payeeCcyList[i]) {
-        //     if (this.mounted) {
-        //       setState(() {
-        //         _payeeIndex++;
-        //       });
-        //     } else {
-        //       break;
-        //     }
-        //   }
-        // }
+      }
+    });
+  }
+
+  //获取账号支持币种
+  Future _getCardCcyList(String cardNo) async {
+    TransferDataRepository()
+        .getCardCcyList(GetCardCcyListReq(cardNo), 'GetCardCcyList')
+        .then((data) {
+      if (data.recordLists != null) {
+        _payeeCcyList.clear();
+        data.recordLists.forEach((e) {
+          _payeeCcyList.add(e.ccy);
+        });
       }
     });
   }

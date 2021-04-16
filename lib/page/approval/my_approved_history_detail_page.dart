@@ -8,7 +8,7 @@ import 'package:ebank_mobile/data/source/model/approval/international_transfer_d
     as InternationalModel;
 import 'package:ebank_mobile/data/source/model/approval/transfer_plan_detail_model.dart'
     as TransferPlanModel;
-import 'package:ebank_mobile/data/source/model/early_red_td_contract_detail_model.dart'
+import 'package:ebank_mobile/data/source/model/approval/early_red_td_contract_detail_model.dart'
     as EarlyRedModel;
 import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_detail_model.dart'
     as OneToOneModel;
@@ -165,12 +165,8 @@ class _MyApprovedHistoryDetailPageState
             .add(_buildTitle(S.current.approve_payment_information));
         _transferPlanList.add(_buildContentItem(
             S.current.approve_account, data?.payerCardNo ?? ''));
-        _transferPlanList.add(_buildContentItem(
-            S.current.approve_name_account, data?.payerName ?? ''));
-        _transferPlanList.add(_buildContentItem(
-            S.current.approve_currency, data?.debitCurrency ?? ''));
         _transferPlanList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.amount)) ?? ''));
+            f.format(double.parse(data?.amount ?? '0')) ?? ''));
         _transferPlanList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
@@ -196,11 +192,8 @@ class _MyApprovedHistoryDetailPageState
             S.current.approve_name_account, data?.payeeName ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_currency, data?.creditCurrency ?? ''));
-        _internationalList.add(_buildContentItem(
-            S.current.approve_amount,
-            f.format(double.parse(data?.creditAmount) *
-                    double.parse(data?.exchangeRate)) ??
-                ''));
+        _internationalList.add(_buildContentItem(S.current.approve_amount,
+            f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
         _internationalList.add(_buildContentItem(
@@ -216,14 +209,8 @@ class _MyApprovedHistoryDetailPageState
         );
         _internationalList
             .add(_buildTitle(S.current.approve_payment_information));
-        _internationalList.add(_buildContentItem(
-            S.current.approve_account, data?.payerCardNo ?? ''));
-        _internationalList.add(_buildContentItem(
-            S.current.approve_name_account, data?.payerName ?? ''));
-        _internationalList.add(_buildContentItem(
-            S.current.approve_currency, data?.debitCurrency ?? ''));
         _internationalList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.debitAmount)) ?? ''));
+            f.format(double.parse(data?.debitAmount ?? '0')) ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_payment_method, data?.costOptions ?? ''));
         _internationalList.add(
@@ -242,28 +229,16 @@ class _MyApprovedHistoryDetailPageState
     if (this.mounted) {
       setState(() {
         _oneToOneList.add(_buildTitle(S.current.approve_gathering_information));
-        _oneToOneList.add(_buildContentItem(
-            S.current.approve_account, data?.payeeCardNo ?? ''));
-        _oneToOneList.add(_buildContentItem(
-            S.current.approve_name_account, data?.payeeName ?? ''));
-        _oneToOneList.add(_buildContentItem(
-            S.current.approve_currency, data?.creditCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.debitAmount)) ?? ''));
+            f.format(double.parse(data?.debitAmount ?? '0')) ?? ''));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
         _oneToOneList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
         _oneToOneList.add(_buildTitle(S.current.approve_payment_information));
-        _oneToOneList.add(_buildContentItem(
-            S.current.approve_account, data?.payerCardNo ?? ''));
-        _oneToOneList.add(_buildContentItem(
-            S.current.approve_name_account, data?.payerName ?? ''));
-        _oneToOneList.add(_buildContentItem(
-            S.current.approve_currency, data?.debitCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.creditAmount)) ?? ''));
+            f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
         _oneToOneList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
@@ -285,6 +260,9 @@ class _MyApprovedHistoryDetailPageState
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_certificates_deposit_amount,
             f.format(double.parse(data?.bal)) ?? ''));
+        _earlyRedTdList.add(_buildContentItem(
+            S.current.approve_certificates_deposit_amount,
+            f.format(double.parse(data?.bal ?? '0')) ?? ''));
         _earlyRedTdList.add(
             _buildContentItem(S.current.approve_currency, data?.ccy ?? ''));
         _earlyRedTdList.add(_buildContentItem(
@@ -301,14 +279,10 @@ class _MyApprovedHistoryDetailPageState
           Padding(padding: EdgeInsets.only(top: 15)),
         );
         _earlyRedTdList.add(_buildTitle(S.current.approve_trial_information));
-        _earlyRedTdList.add(_buildContentItem(
-            S.current.approve_prepay_interest_rate, '${data?.eryRate}%' ?? ''));
-        _earlyRedTdList.add(_buildContentItem(
-            S.current.approve_prepay_interest, data?.eryInt ?? ''));
         _earlyRedTdList.add(_buildContentItem(S.current.approve_poundage,
-            f.format(double.parse(data?.hdlFee)) ?? ''));
+            f.format(double.parse(data?.hdlFee ?? '0')) ?? ''));
         _earlyRedTdList.add(_buildContentItem(S.current.approve_penalty,
-            f.format(double.parse(data?.pnltFee)) ?? ''));
+            f.format(double.parse(data?.pnltFee ?? '0')) ?? ''));
         _earlyRedTdList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
@@ -331,12 +305,8 @@ class _MyApprovedHistoryDetailPageState
     if (this.mounted) {
       setState(() {
         _openTdList.add(_buildTitle(S.current.approve_basic_information));
-        _openTdList.add(
-            _buildContentItem(S.current.approve_product, data?.prodName ?? ''));
-        _openTdList.add(_buildContentItem(
-            S.current.approve_terms_of_deposit, data?.tenor ?? ''));
-        _openTdList.add(_buildContentItem(
-            S.current.approve_amount, f.format(double.parse(data?.bal)) ?? ''));
+        _openTdList.add(_buildContentItem(S.current.approve_amount,
+            f.format(double.parse(data?.bal ?? '0')) ?? ''));
         _openTdList.add(_buildContentItem(S.current.approve_interest_rate, ''));
         _openTdList.add(_buildContentItem(
             S.current.approve_certificates_deposit_money, data?.ccy ?? ''));
