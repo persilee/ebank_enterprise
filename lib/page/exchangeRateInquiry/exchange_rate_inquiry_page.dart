@@ -54,7 +54,6 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   bool _isLoading = false; //加载状态
   RefreshController _refreshController = new RefreshController();
   FocusNode _focusNode = new FocusNode();
-  bool isJpy = true;
 
   @override
   // ignore: must_call_super
@@ -302,7 +301,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
       inputFormatters: <TextInputFormatter>[
         LengthLimitingTextInputFormatter(11),
         FilteringTextInputFormatter.allow(
-          RegExp("[0-9.]"),
+          RegExp(_primitiveCcy == 'JPY' ? "[0-9]" : "[0-9.]"),
         ),
         MoneyTextInputFormatter(),
       ],
