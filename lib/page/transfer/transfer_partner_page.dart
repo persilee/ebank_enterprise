@@ -351,7 +351,7 @@ class _TransferPartnerState extends State<TransferPartner> {
                   builder: (context) {
                     return HsgAlertDialog(
                       title: S.current.prompt,
-                      message: "您是否确定要删除该伙伴",
+                      message: S.of(context).transfer_partner_msg1,
                       negativeButton: S.current.cancel,
                       positiveButton: S.current.confirm,
                     );
@@ -372,7 +372,7 @@ class _TransferPartnerState extends State<TransferPartner> {
             LeftScrollCloseTag('row.payeeCardNo'), Key(partner.payeeCardNo))
         .value = false;
     _deletePartner(partner.custId, partner.payeeCardNo);
-    HSProgressHUD.showSuccess(status: '删除成功!');
+    HSProgressHUD.showSuccess(status: S.of(context).successfully_delete);
   }
 
   //单条伙伴

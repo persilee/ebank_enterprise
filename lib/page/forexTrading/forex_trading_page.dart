@@ -9,6 +9,7 @@ import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
+import 'package:ebank_mobile/data/source/model/get_card_ccy_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
@@ -52,13 +53,13 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   String _rate = '';
   String _incomeAmt = '';
   FocusNode _focusNode = new FocusNode();
+  bool _isPaymentJpy = true; //支出币种是否为日元
 
   @override
   // ignore: must_call_super
   void initState() {
     // 网络请求
     _getCardList();
-    _loadLocalCcy();
     _payAmtController.addListener(() {
       if (_payAmtController.text.length == 0) {
         setState(() {
@@ -155,10 +156,17 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         SelectInkWell(
           title: S.current.debit_currency,
           item: _paymentCcy,
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-            _currencyShowDialog(true, _paymentCcyId, _paymentCcyList);
-          },
+          onTap: _paymentAcc == ''
+              ? () {
+                  Fluttertoast.showToast(
+                    msg: S.of(context).forex_trading_msg1,
+                    gravity: ToastGravity.CENTER,
+                  );
+                }
+              : () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  _currencyShowDialog(true, _paymentCcyId, _paymentCcyList);
+                },
         ),
         ItemContainer(
           title: S.current.available_balance,
@@ -179,10 +187,17 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         SelectInkWell(
           title: S.current.credit_currency,
           item: _incomeCcy,
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-            _currencyShowDialog(false, _incomeCcyId, _incomeCcyList);
-          },
+          onTap: _incomeAcc == ''
+              ? () {
+                  Fluttertoast.showToast(
+                    msg: S.of(context).forex_trading_msg2,
+                    gravity: ToastGravity.CENTER,
+                  );
+                }
+              : () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  _currencyShowDialog(false, _incomeCcyId, _incomeCcyList);
+                },
         ),
         ItemContainer(
           title: S.current.rate_of_exchange,
@@ -267,6 +282,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
               _incomeBackCode = item.bankCode;
             }
           });
+          _getCardCcyList(_incomeAcc);
         }
         _transferTrial();
       });
@@ -294,6 +310,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           if (_paymentAcc != '' && _paymentCcy != '') {
             _getCardBal(_paymentAcc);
           }
+          _isPaymentJpy = _paymentCcy == 'JPY' ? true : false;
         } else {
           _incomeCcyId = result;
           _incomeCcy = dataList[_incomeCcyId];
@@ -465,14 +482,28 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   }
 
   // 获取币种列表
-  Future _loadLocalCcy() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
+//   Future _loadLocalCcy() async {
+//     PublicParametersRepository()
+//         .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
+//         .then((data) {
+//       if (data.publicCodeGetRedisRspDtoList != null) {
+//         _incomeCcyList.clear();
+//         data.publicCodeGetRedisRspDtoList.forEach((e) {
+//           _incomeCcyList.add(e.code);
+//         });
+//       }
+//     });
+//   }
+
+  //获取账号支持币种
+  Future _getCardCcyList(String cardNo) async {
+    TransferDataRepository()
+        .getCardCcyList(GetCardCcyListReq(cardNo), 'GetCardCcyList')
         .then((data) {
-      if (data.publicCodeGetRedisRspDtoList != null) {
+      if (data.recordLists != null) {
         _incomeCcyList.clear();
-        data.publicCodeGetRedisRspDtoList.forEach((e) {
-          _incomeCcyList.add(e.code);
+        data.recordLists.forEach((e) {
+          _incomeCcyList.add(e.ccy);
         });
       }
     });

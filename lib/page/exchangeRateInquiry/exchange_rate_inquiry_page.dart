@@ -54,6 +54,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   bool _isLoading = false; //加载状态
   RefreshController _refreshController = new RefreshController();
   FocusNode _focusNode = new FocusNode();
+  bool isJpy = true;
 
   @override
   // ignore: must_call_super
