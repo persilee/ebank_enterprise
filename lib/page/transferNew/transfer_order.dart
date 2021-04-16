@@ -1058,9 +1058,9 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
           "", //bankSwift
           "", //city
           "", //costOptions
-          _payerCcy, //creditCurrency
+          _payeeCcy, //creditCurrency
           "", //day
-          _payeeCcy, //debitCurrency
+          _payerCcy, //debitCurrency
           "", //district
           false, //enabled
           _endTime, //endDate

@@ -458,12 +458,18 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
       }
     } else {
       _payerAmount = AiDecimalAccuracy.parse(_amtController.text).toDouble();
+      print("buyCcy: " +
+          _objectiveCcy +
+          " sellCcy: " +
+          _primitiveCcy +
+          " buyAmount: " +
+          _amtController.text);
       ForexTradingRepository()
           .transferTrial(
               TransferTrialReq(
                 opt: "S",
-                buyCcy: _objectiveCcy,
-                sellCcy: _primitiveCcy,
+                buyCcy: _primitiveCcy,
+                sellCcy: _objectiveCcy,
                 buyAmount: _amtController.text,
                 sellAmount: '0',
               ),
