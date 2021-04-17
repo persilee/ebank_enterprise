@@ -108,31 +108,62 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     _actualNameReqData();
 
     _payeeAccountFocusNode.addListener(() {
-      if (_payeeAccountController.text.length > 0) {
+      if (_payeeAccountController.text.length > 0 &&
+          !_payeeAccountFocusNode.hasFocus) {
         _getCardByCardNo(_payeeAccountController.text);
         _getCardCcyList(_payeeAccountController.text);
       }
     });
     _payerTransferFocusNode.addListener(() {
-      if (_payerTransferController.text.length > 0) {
-        setState(() {
-          _opt = 'S';
-          _payeeTransferController.text = '';
-          _rateCalculate();
-        });
+      if (_payerTransferFocusNode.hasFocus) {
+        if (_payerTransferController.text.length > 0) {
+          setState(() {
+            _payeeTransferController.text = '';
+          });
+        }
+      } else {
+        if (_payerTransferController.text.length > 0) {
+          setState(() {
+            _opt = 'S';
+            _rateCalculate();
+          });
+        }
       }
       _boolBut();
+      // if (_payerTransferController.text.length > 0) {
+      //   setState(() {
+      //     _opt = 'S';
+      //     _payeeTransferController.text = '';
+      //     _rateCalculate();
+      //   });
+      // }
+      // _boolBut();
     });
 
     _payeeTransferFocusNode.addListener(() {
-      if (_payeeTransferController.text.length > 0) {
-        setState(() {
-          _opt = 'B';
-          _payerTransferController.text = '';
-          _rateCalculate();
-        });
+      if (_payeeTransferFocusNode.hasFocus) {
+        if (_payeeTransferController.text.length > 0) {
+          setState(() {
+            _payerTransferController.text = '';
+          });
+        }
+      } else {
+        if (_payeeTransferController.text.length > 0) {
+          setState(() {
+            _opt = 'B';
+            _rateCalculate();
+          });
+        }
       }
       _boolBut();
+      // if (_payeeTransferController.text.length > 0) {
+      //   setState(() {
+      //     _opt = 'B';
+      //     _payerTransferController.text = '';
+      //     _rateCalculate();
+      //   });
+      // }
+      // _boolBut();
     });
   }
 
