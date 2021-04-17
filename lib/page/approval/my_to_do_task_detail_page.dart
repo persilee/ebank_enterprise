@@ -867,7 +867,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           _btnIsEnable = true;
         });
       }
-      Navigator.pop(context, widget.data);
+      Navigator.pop(context);
     } catch (e) {
       print(e);
     }
@@ -982,23 +982,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     }
     FocusManager.instance.primaryFocus?.unfocus();
     return false;
-  }
-
-  //校验是否提示设置交易密码
-  void _verifyGotoTranPassword(BuildContext context, bool passwordEnabled) {
-    if (passwordEnabled == true) {
-      //已经设置交易密码，或者用户未开户，不做操作
-      return;
-    }
-    HsgShowTip.shouldSetTranPasswordTip(
-      context: context,
-      click: (value) {
-        if (value == true) {
-          //前往设置交易密码
-          Navigator.pushNamed(context, pageResetPayPwdOtp);
-        }
-      },
-    );
   }
 
   // 完成任务

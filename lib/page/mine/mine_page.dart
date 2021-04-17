@@ -19,6 +19,7 @@ import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/event_bus_utils.dart';
+import 'package:ebank_mobile/util/screen_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
@@ -45,6 +46,7 @@ class _MinePageState extends State<MinePage>
   String _userName = "";
   String _headPortraitUrl = "";
   var _imgPath;
+
   // var _headPortraitUrl = ''; // 头像地址
   // bool _switchZhiWen = true; //指纹登录
   // bool _switchFaceId = false; //faceID登录
@@ -96,7 +98,20 @@ class _MinePageState extends State<MinePage>
           controller: _sctrollController,
           slivers: [
             SliverToBoxAdapter(
-              child: _mineHeaderView(),
+              child: GestureDetector(
+                child: _mineHeaderView(),
+                onTap: () {
+                  //进入用户信息页面
+                  Navigator.pushNamed(context, pageUserInformation,
+                          arguments: _userInfoResp)
+                      .then((value) {
+                    setState(() {
+                      _language = Intl.getCurrentLocale();
+                    });
+                    _changeUserInfoShow(_userInfoResp);
+                  });
+                },
+              ),
             ),
             SliverToBoxAdapter(
               child: Container(
@@ -453,19 +468,14 @@ class _MinePageState extends State<MinePage>
     }
 
     return Container(
-      // height: 200,
+      width: ScreenUtil.instance.width,
       alignment: Alignment.center,
       margin: EdgeInsets.only(top: 30),
       child: Row(
         children: [
-          GestureDetector(
-            child: Container(
-              margin: EdgeInsets.only(left: 32, right: 24.0),
-              child: _headPortrait(),
-            ),
-            onTap: () {
-              _headerInfoTapClick(context);
-            },
+          Container(
+            margin: EdgeInsets.only(left: 32, right: 24.0),
+            child: _headPortrait(),
           ),
           Expanded(
             child: Column(
@@ -476,26 +486,13 @@ class _MinePageState extends State<MinePage>
               ],
             ),
           ),
-          GestureDetector(
-            child: Container(
-              padding: EdgeInsets.all(10),
-              alignment: Alignment.centerRight,
-              child: Icon(
-                Icons.navigate_next,
-                color: HsgColors.mineInfoIcon,
-              ),
+          Container(
+            padding: EdgeInsets.all(10),
+            alignment: Alignment.centerRight,
+            child: Icon(
+              Icons.navigate_next,
+              color: HsgColors.mineInfoIcon,
             ),
-            onTap: () {
-              //进入用户信息页面
-              Navigator.pushNamed(context, pageUserInformation,
-                      arguments: _userInfoResp)
-                  .then((value) {
-                setState(() {
-                  _language = Intl.getCurrentLocale();
-                });
-                _changeUserInfoShow(_userInfoResp);
-              });
-            },
           ),
         ],
       ),
@@ -932,6 +929,7 @@ class XAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Widget child; //从外部指定内容
   final Color statusBarColor; //设置statusbar的颜色
   XAppBar({this.child, this.statusBarColor}) : super();
+
   @override
   State<StatefulWidget> createState() {
     return new _XAppBarState();

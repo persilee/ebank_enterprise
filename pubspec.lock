@@ -276,6 +276,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.1"
+  extended_image:
+    dependency: "direct main"
+    description:
+      name: extended_image
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.0.0-non-null-safety"
+  extended_image_library:
+    dependency: transitive
+    description:
+      name: extended_image_library
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.1-non-null-safety"
   fake_async:
     dependency: transitive
     description:
@@ -410,6 +424,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.12.2"
+  http_client_helper:
+    dependency: transitive
+    description:
+      name: http_client_helper
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.1-non-null-safety"
   http_multi_server:
     dependency: transitive
     description:

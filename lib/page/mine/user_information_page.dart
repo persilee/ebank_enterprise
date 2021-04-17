@@ -109,9 +109,14 @@ class _UserInformationPageState extends State<UserInformationPage> {
         borderRadius: BorderRadius.circular(55.0 / 2),
       ),
       padding: EdgeInsets.all(2.0),
-      child: Container(
-        child: ClipOval(
-          child: _headPortraitImage(),
+      child: GestureDetector(
+        onTap: (){
+          print('lllll');
+        },
+        child: Container(
+          child: ClipOval(
+            child: _headPortraitImage(),
+          ),
         ),
       ),
     );
