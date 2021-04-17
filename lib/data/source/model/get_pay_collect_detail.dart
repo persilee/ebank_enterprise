@@ -23,6 +23,10 @@ class GetRevenueByCardsReq extends Object {
 
   @JsonKey(name: 'pageSize')
   int pageSize;
+
+  //turnKey
+  @JsonKey(name: 'turnKey')
+  String turnKey;
   @JsonKey(name: 'acNo')
   String acNo;
 
@@ -35,6 +39,7 @@ class GetRevenueByCardsReq extends Object {
     this.localDateStart,
     this.page,
     this.pageSize, {
+    this.turnKey,
     this.acNo,
     this.ciNo,
   });
@@ -50,9 +55,10 @@ class GetRevenueByCardsResp extends Object {
   @JsonKey(name: 'ddFinHisDTOList')
   List<DdFinHisDTOList> ddFinHisDTOList;
 
-  GetRevenueByCardsResp(
-    this.ddFinHisDTOList,
-  );
+  @JsonKey(name: 'nextKey')
+  String nextKey;
+
+  GetRevenueByCardsResp(this.ddFinHisDTOList, this.nextKey);
   Map<String, dynamic> toJson() => _$GetRevenueByCardsRespToJson(this);
 
   factory GetRevenueByCardsResp.fromJson(Map<String, dynamic> srcJson) =>
