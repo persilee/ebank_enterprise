@@ -87,17 +87,17 @@ class _TransferInternalPreviewPageState
           ),
           _getRowContent(S.current.transfer_from,
               FormatUtil.formatSpace4(transferData.transferOutAccount)),
-          _getRowContent(S.current.estimated_collection_amount,
-              FormatUtil.formatSringToMoney(transferData.transferIntoAmount)),
+          _getRowContent(S.current.transfer_from_name, transferData.payerName),
+          _getRowContent(S.current.payer_currency, transferData.transferOutCcy),
           _getRowContent(S.current.rate_of_exchange, transferData.xRate),
-          _getRowContent(
-              S.current.payment_currency, transferData.transferOutCcy),
-          _getRowContent(
-              S.current.receipt_side_name, transferData.transferIntoName),
           _getRowContent(S.current.receipt_side_account,
               FormatUtil.formatSpace4(transferData.transferIntoAccount)),
           _getRowContent(
+              S.current.receipt_side_name, transferData.transferIntoName),
+          _getRowContent(
               S.current.transfer_from_ccy, transferData.transferIntoCcy),
+          _getRowContent(S.current.transfer_to_amount,
+              FormatUtil.formatSringToMoney(transferData.transferIntoAmount)),
           _getRowContent(
               S.current.transfer_postscript,
               transferData.transferRemark == ''
@@ -178,7 +178,12 @@ class _TransferInternalPreviewPageState
     String remark = transferData.transferRemark;
     String smsCode = '';
     String xRate = transferData.xRate;
-    print("付款：" + debitAmount + "收款：" + creditAmount);
+    print("付款：" +
+        debitAmount +
+        "收款：" +
+        creditAmount +
+        "payerBankCode: " +
+        payerBankCode);
     HSProgressHUD.show();
     TransferDataRepository()
         .getTransferByAccount(
@@ -189,9 +194,9 @@ class _TransferInternalPreviewPageState
               //收款金额
               creditAmount,
               //贷方货币
-              transferOutCcy,
-              //借方货币
               transferIntoCcy,
+              //借方货币
+              transferOutCcy,
               //输入密码
               // 'L5o+WYWLFVSCqHbd0Szu4Q==',
               '',
@@ -216,6 +221,7 @@ class _TransferInternalPreviewPageState
             'getTransferByAccount')
         .then((data) {
       HSProgressHUD.dismiss();
+      print("==================跳转");
       Navigator.pushReplacementNamed(context, pageOperationResult);
     }).catchError((e) {
       HSProgressHUD.dismiss();

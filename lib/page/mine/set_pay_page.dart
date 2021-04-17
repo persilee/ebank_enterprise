@@ -139,45 +139,60 @@ class _SetPayPageState extends State<SetPayPage> {
 
   //提交按钮
   _submitData() async {
+    if (_newPwd.text == null || _newPwd.text == '') {
+      Fluttertoast.showToast(
+        msg: S.of(context).please_input_the_payment_password,
+        gravity: ToastGravity.CENTER,
+      );
+      return;
+    }
     if (_newPwd.text != _confimPwd.text) {
       Fluttertoast.showToast(
         msg: S.of(context).differentPwd,
         gravity: ToastGravity.CENTER,
       );
-    } else {
-      HSProgressHUD.show();
-      final prefs = await SharedPreferences.getInstance();
-      _userId = prefs.getString(ConfigKey.USER_ID);
-      _userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
-      String password = EncryptUtil.aesEncode(_confimPwd.text);
-      print(password);
-      HSProgressHUD.show();
-      ChecInformantApiRepository()
-          .setTransactionPassword(
-              SetTransactionPasswordReq(
-                  _certificateNo,
-                  _certificateType,
-                  password,
-                  _phoneNumber,
-                  _userId,
-                  _userAccount,
-                  false,
-                  _smsCode,
-                  '',
-                  ''),
-              'setTransactionPassword')
-          .then((data) {
-        HSProgressHUD.dismiss();
-        Navigator.of(context)..pop()..pop()..pop();
-        Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
-      }).catchError((e) {
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
-        HSProgressHUD.dismiss();
-      });
+      return;
     }
+    if (_newPwd.text.length != 6) {
+      Fluttertoast.showToast(
+        msg: S.of(context).set_pay_password_prompt,
+        gravity: ToastGravity.CENTER,
+      );
+      return;
+    }
+
+    HSProgressHUD.show();
+    final prefs = await SharedPreferences.getInstance();
+    _userId = prefs.getString(ConfigKey.USER_ID);
+    _userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
+    String password = EncryptUtil.aesEncode(_confimPwd.text);
+    print(password);
+    HSProgressHUD.show();
+    ChecInformantApiRepository()
+        .setTransactionPassword(
+            SetTransactionPasswordReq(
+                _certificateNo,
+                _certificateType,
+                password,
+                _phoneNumber,
+                _userId,
+                _userAccount,
+                false,
+                _smsCode,
+                '',
+                ''),
+            'setTransactionPassword')
+        .then((data) {
+      HSProgressHUD.dismiss();
+      Navigator.of(context)..pop()..pop()..pop();
+      Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
+    }).catchError((e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
+      HSProgressHUD.dismiss();
+    });
   }
 }
 

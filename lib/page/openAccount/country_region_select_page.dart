@@ -7,6 +7,7 @@ import 'dart:convert';
 
 import 'package:azlistview/azlistview.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -87,22 +88,40 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
     //   Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     // });
 
+    // //获取国家地区列表
+    // PublicParametersRepository()
+    //     .getCountryList(
+    //         CountryRegionNewListReq(), 'getCountryList') //CORP_TYPE//ET
+    //     .then((data) {
+    //   print('geCountryListData == $data');
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(
+    //     msg: e.toString(),
+    //     gravity: ToastGravity.CENTER,
+    //   );
+    // });
+
     //加载城市列表
     rootBundle.loadString('assets/data/country.json').then((value) {
       Map countryMap = json.decode(value);
       List list = countryMap['countryLists'];
       list.forEach((value) {
+        CountryRegionModel model = CountryRegionModel.fromJson(value);
         _cityList.add(
-          CountryRegionModel.fromJson(value),
+          model,
         );
+        if (['CN', 'HK'].contains(model.countryCode)) {
+          //需要新增一个模型，共用后会无法改变tagIndex
+          CountryRegionModel modelHot = CountryRegionModel.fromJson(value);
+          modelHot.tagIndex = '★';
+          _hotCityList.add(modelHot);
+        }
       });
-      _hotCityList.add(CountryRegionModel(
-          nameZhCN: '安哥拉', nameEN: 'Andorra', tagIndex: "★"));
-      _hotCityList.add(CountryRegionModel(
-          nameZhCN: '阿拉伯', nameEN: 'United Arab Emirates', tagIndex: "★"));
       _handleList(_cityList);
       setState(() {
+        // if (_hotCityList != null && _hotCityList.length > 0) {
         _suspensionTag = _hotCityList[0].getSuspensionTag();
+        // }
       });
     });
   }
@@ -134,7 +153,14 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
 
   Widget _buildListItem(CountryRegionModel model) {
     if (_language == null) return Container();
-    String name = _language == 'zh_cn' ? model.nameZhCN : model.nameEN;
+    String name = model.nameEN;
+    if (_language == 'zh_cn') {
+      name = model.nameZhCN;
+    } else if (_language == 'zh_hk') {
+      name = model.nameZhHK;
+    } else {
+      name = model.nameEN;
+    }
     String susTag = model.getSuspensionTag();
     susTag = (susTag == "★" ? S.of(context).hot_countries : susTag);
     return Column(

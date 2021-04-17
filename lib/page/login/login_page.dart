@@ -53,6 +53,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+
+    HSProgressHUD.dismiss();
     // 添加监听
     _accountTC.addListener(() {
       _account = _accountTC.text;
@@ -75,8 +77,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    HSProgressHUD.dismiss();
-
     String _language = Intl.getCurrentLocale();
     if (_language == 'zh_CN') {
       _changeLangBtnTltle = '中文（简体）';
@@ -275,6 +275,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _isLoading = true;
     });
+
     HSProgressHUD.show();
 
     String password = EncryptUtil.aesEncode(_password);

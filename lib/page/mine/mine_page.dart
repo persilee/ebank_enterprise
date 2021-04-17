@@ -61,11 +61,17 @@ class _MinePageState extends State<MinePage>
     _getUser();
 
     EventBusUtils.getInstance().on<GetUserEvent>().listen((event) {
-      print("mine  event bus msg is =" +
-          event.msg +
-          "   state info is  = " +
-          event.state.toString());
       _getUser();
+    });
+
+    EventBusUtils.getInstance().on<ChangeHeadPortraitEvent>().listen((event) {
+      if (event.state == 200 ||
+          event.state == 300 &&
+              (event.headPortrait != null && event.headPortrait != '')) {
+        setState(() {
+          _headPortraitUrl = event.headPortrait;
+        });
+      }
     });
   }
 
@@ -147,7 +153,21 @@ class _MinePageState extends State<MinePage>
 
   ///scrollview的顶部view，包含背景图、登录信息
   Widget _mineHeaderView() {
-    Widget headerShowWidget = _headerInfoWidget();
+    Widget headerShowWidget = _welcomeWidget();
+    switch (_belongCustStatus) {
+      case '0': //未开户
+      case '1': //未开户
+      case '2': //审核中
+      case '3': //已驳回
+        headerShowWidget = _headerInfoWidget();
+        break;
+      case '4': //受限已开户
+      case '5': //正常已开户
+        headerShowWidget = _headerInfoWidget();
+        break;
+      default:
+        headerShowWidget = _welcomeWidget();
+    }
     // switch (_belongCustStatus) {
     //   case '0': //未开户
     //   case '1': //未开户
@@ -712,6 +732,8 @@ class _MinePageState extends State<MinePage>
     } else {
       File file = File(_imgPath);
       ApiClient().uploadAvatar(BaseBody(body: {}), file).then((value) {
+        EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
+            headPortrait: value['headPortrait'], state: 100));
         print(value);
       }).catchError((e) {
         Fluttertoast.showToast(

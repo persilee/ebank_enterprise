@@ -14,11 +14,11 @@ import 'package:ebank_mobile/data/source/model/approval/international_transfer_d
     as InternationalModel;
 import 'package:ebank_mobile/data/source/model/approval/transfer_plan_detail_model.dart'
     as TransferPlanModel;
-import 'package:ebank_mobile/data/source/model/early_red_td_contract_detail_model.dart'
+import 'package:ebank_mobile/data/source/model/approval/early_red_td_contract_detail_model.dart'
     as EarlyRedModel;
-import 'package:ebank_mobile/data/source/model/one_to_one_transfer_detail_model.dart'
+import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_detail_model.dart'
     as OneToOneModel;
-import 'package:ebank_mobile/data/source/model/open_td_contract_detail_model.dart'
+import 'package:ebank_mobile/data/source/model/approval/open_td_contract_detail_model.dart'
     as OpenTDModel;
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
@@ -30,6 +30,7 @@ import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/hsg_text_field_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -187,7 +188,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _transferPlanList.add(_buildContentItem(
             S.current.approve_currency, data?.debitCurrency ?? ''));
         _transferPlanList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.amount)) ?? ''));
+            f.format(double.parse(data?.amount ?? '0')) ?? ''));
         _transferPlanList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
@@ -215,8 +216,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             S.current.approve_currency, data?.creditCurrency ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_amount,
-            f.format(double.parse(data?.amount) *
-                    double.parse(data?.exchangeRate)) ??
+            f.format(double.parse(data?.creditAmount ?? '0')) ??
                 ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
@@ -240,7 +240,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _internationalList.add(_buildContentItem(
             S.current.approve_currency, data?.debitCurrency ?? ''));
         _internationalList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.amount)) ?? ''));
+            f.format(double.parse(data?.debitAmount ?? '0')) ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_payment_method, data?.costOptions ?? ''));
         _internationalList.add(
@@ -265,8 +265,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             S.current.approve_currency, data?.creditCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_amount,
-            f.format(double.parse(data?.amount) *
-                    double.parse(data?.exchangeRate)) ??
+            f.format(double.parse(data?.creditAmount ?? '0')) ??
                 ''));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
@@ -281,7 +280,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _oneToOneList.add(_buildContentItem(
             S.current.approve_currency, data?.debitCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.amount)) ?? ''));
+            f.format(double.parse(data?.debitAmount)) ?? ''));
         _oneToOneList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
@@ -291,6 +290,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
   // earlyRedTdContractApproval - 定期提前结清
   void _loadEarlyRedData(_contractModel) {
+    print('1111111111111111');
     EarlyRedModel.EarlyRedTdContractDetailModel earlyRedTdContractDetailModel =
         EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
     EarlyRedModel.OperateEndValue data =
@@ -302,7 +302,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             S.current.approve_contract_no, data?.conNo ?? ''));
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_certificates_deposit_amount,
-            f.format(double.parse(data?.bal)) ?? ''));
+            f.format(double.parse(data?.bal ?? '0')) ?? ''));
         _earlyRedTdList.add(
             _buildContentItem(S.current.approve_currency, data?.ccy ?? ''));
         _earlyRedTdList.add(_buildContentItem(
@@ -324,9 +324,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_prepay_interest, data?.eryInt ?? ''));
         _earlyRedTdList.add(_buildContentItem(S.current.approve_poundage,
-            f.format(double.parse(data?.hdlFee)) ?? ''));
+            f.format(double.parse(data?.hdlFee ?? '0')) ?? ''));
         _earlyRedTdList.add(_buildContentItem(S.current.approve_penalty,
-            f.format(double.parse(data?.pnltFee)) ?? ''));
+            f.format(double.parse(data?.pnltFee ?? '0')) ?? ''));
         _earlyRedTdList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
@@ -355,7 +355,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _openTdList.add(_buildContentItem(
             S.current.approve_terms_of_deposit, data?.tenor ?? ''));
         _openTdList.add(_buildContentItem(
-            S.current.approve_amount, f.format(double.parse(data?.bal)) ?? ''));
+            S.current.approve_amount, f.format(double.parse(data?.bal ?? '0')) ?? ''));
         _openTdList.add(_buildContentItem(S.current.approve_interest_rate, ''));
         _openTdList.add(_buildContentItem(
             S.current.approve_certificates_deposit_money, data?.ccy ?? ''));
@@ -376,7 +376,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(widget.title),
+        title: Text(S.current.approve_task_approval_title),
         elevation: 0,
       ),
       body: _isLoading
@@ -527,29 +527,29 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         child: Row(
           children: [
             // 驳回至发起人按钮
-            Expanded(
-              flex: 2,
-              child: CustomButton(
-                isLoading: _btnIsLoadingRTS,
-                isEnable: _btnIsEnable,
-                isOutline: true,
-                margin: EdgeInsets.all(0),
-                text: Text(
-                  S.current.reject_to_sponsor,
-                  style: TextStyle(
-                      color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
-                      fontSize: 14.0),
-                ),
-                clickCallback: () {
-                  if (_comment.length != 0) {
-                    _rejectToStartTask();
-                  } else {
-                    _alertDialog();
-                  }
-                },
-              ),
-            ),
-            Padding(padding: EdgeInsets.only(left: 10)),
+            // Expanded(
+            //   flex: 2,
+            //   child: CustomButton(
+            //     isLoading: _btnIsLoadingRTS,
+            //     isEnable: _btnIsEnable,
+            //     isOutline: true,
+            //     margin: EdgeInsets.all(0),
+            //     text: Text(
+            //       S.current.reject_to_sponsor,
+            //       style: TextStyle(
+            //           color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
+            //           fontSize: 14.0),
+            //     ),
+            //     clickCallback: () {
+            //       if (_comment.length != 0) {
+            //         _rejectToStartTask();
+            //       } else {
+            //         _alertDialog();
+            //       }
+            //     },
+            //   ),
+            // ),
+            // Padding(padding: EdgeInsets.only(left: 10)),
             // 驳回按钮
             Expanded(
               flex: 1,
@@ -902,6 +902,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       });
     }
     try {
+      Navigator.pop(context);
       CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
         CompleteTaskBody(
           approveResult: false,
@@ -917,7 +918,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             _btnIsEnable = true;
           });
         }
-        Navigator.pop(context);
       }
     } catch (e) {
       print(e);
@@ -949,6 +949,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       });
     }
     try {
+      Navigator.pop(context);
       CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
         CompleteTaskBody(
           approveResult: false,
@@ -964,7 +965,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             _btnIsEnable = true;
           });
         }
-        Navigator.pop(context);
       }
     } catch (e) {
       print(e);
@@ -988,49 +988,81 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     return false;
   }
 
+  //校验是否提示设置交易密码
+  void _verifyGotoTranPassword(BuildContext context, bool passwordEnabled) {
+    if (passwordEnabled == true) {
+      //已经设置交易密码，或者用户未开户，不做操作
+      return;
+    }
+    HsgShowTip.shouldSetTranPasswordTip(
+      context: context,
+      click: (value) {
+        if (value == true) {
+          //前往设置交易密码
+          Navigator.pushNamed(context, pageResetPayPwdOtp);
+        }
+      },
+    );
+  }
+
   // 完成任务
   void _completeTask() async {
-    // 输入交易密码
-    bool isPassword = await _openBottomSheet();
-    // 如果交易密码正确，处理审批逻辑
-    if (isPassword) {
-      FocusManager.instance.primaryFocus?.unfocus();
-      if (this.mounted) {
-        setState(() {
-          _btnIsLoadingEAA = true;
-          _btnIsEnable = false;
-        });
-      }
-
-      try {
-        // 请求审批接口
-        CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
-          CompleteTaskBody(
-            approveResult: true,
-            comment: _comment,
-            rejectToStart: false,
-            taskId: widget.data.taskId,
-          ),
-        );
-        if (completeTaskModel.msgCd == '0000') {
-          if (this.mounted) {
-            setState(() {
-              _btnIsLoadingEAA = false;
-              _btnIsEnable = true;
-            });
+    print('USER_PASSWORDENABLED: ${SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED)}');
+    bool passwordEnabled = SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED);
+    // 判断是否设置交易密码，如果没有设置，跳转到设置密码页面，
+    // 否则，输入交易密码
+    if (!passwordEnabled) {
+      HsgShowTip.shouldSetTranPasswordTip(
+        context: context,
+        click: (value) {
+          if (value == true) {
+            //前往设置交易密码
+            Navigator.pushNamed(context, pageResetPayPwdOtp);
           }
-          Navigator.pushReplacementNamed(context, pageDepositRecordSucceed);
+        },
+      );
+    } else {
+      // 输入交易密码
+      bool isPassword = await _openBottomSheet();
+      // 如果交易密码正确，处理审批逻辑
+      if (isPassword) {
+        FocusManager.instance.primaryFocus?.unfocus();
+        if (this.mounted) {
+          setState(() {
+            _btnIsLoadingEAA = true;
+            _btnIsEnable = false;
+          });
         }
-      } catch (e) {
-        print(e);
-        setState(() {
-          _btnIsLoadingEAA = false;
-          _btnIsEnable = true;
-        });
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
+        try {
+          // 请求审批接口
+          CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
+            CompleteTaskBody(
+              approveResult: true,
+              comment: _comment,
+              rejectToStart: false,
+              taskId: widget.data.taskId,
+            ),
+          );
+          if (completeTaskModel.msgCd == '0000') {
+            if (this.mounted) {
+              setState(() {
+                _btnIsLoadingEAA = false;
+                _btnIsEnable = true;
+              });
+            }
+            Navigator.pushReplacementNamed(context, pageDepositRecordSucceed);
+          }
+        } catch (e) {
+          print(e);
+          setState(() {
+            _btnIsLoadingEAA = false;
+            _btnIsEnable = true;
+          });
+          Fluttertoast.showToast(
+            msg: e.toString(),
+            gravity: ToastGravity.CENTER,
+          );
+        }
       }
     }
   }

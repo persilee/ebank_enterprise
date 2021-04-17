@@ -106,8 +106,8 @@ class TransferRecord extends Object {
   @JsonKey(name: 'receiveBankCode')
   String receiveBankCode;
 //数量
-  @JsonKey(name: 'amount')
-  String amount;
+  @JsonKey(name: 'debitAmount')
+  String debitAmount;
 //付款货币
   @JsonKey(name: 'debitCurrency')
   String debitCurrency;
@@ -170,7 +170,7 @@ class TransferRecord extends Object {
     this.receiveCardNo,
     this.receiveName,
     this.receiveBankCode,
-    this.amount,
+    this.debitAmount,
     this.debitCurrency,
     this.creditCurrency,
     this.drCrFlg,

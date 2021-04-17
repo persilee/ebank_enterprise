@@ -301,7 +301,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
       inputFormatters: <TextInputFormatter>[
         LengthLimitingTextInputFormatter(11),
         FilteringTextInputFormatter.allow(
-          RegExp("[0-9.]"),
+          RegExp(_primitiveCcy == 'JPY' ? "[0-9]" : "[0-9.]"),
         ),
         MoneyTextInputFormatter(),
       ],
@@ -458,23 +458,31 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
       }
     } else {
       _payerAmount = AiDecimalAccuracy.parse(_amtController.text).toDouble();
-      // ForexTradingRepository()
-      //     .transferTrial(
-      //         TransferTrialReq(
-      //           amount: _payerAmount,
-      //           corrCcy: _objectiveCcy,
-      //           defaultCcy: _primitiveCcy,
-      //         ),
-      //         'TransferTrialReq')
-      //     .then((data) {
-      //   if (this.mounted) {
-      //     setState(() {
-      //       _primitiveCcyAmt = data.optExAmt;
-      //     });
-      //   }
-      // }).catchError((e) {
-      //   print(e.toString());
-      // });
+      print("buyCcy: " +
+          _objectiveCcy +
+          " sellCcy: " +
+          _primitiveCcy +
+          " buyAmount: " +
+          _amtController.text);
+      ForexTradingRepository()
+          .transferTrial(
+              TransferTrialReq(
+                opt: "S",
+                buyCcy: _primitiveCcy,
+                sellCcy: _objectiveCcy,
+                buyAmount: _amtController.text,
+                sellAmount: '0',
+              ),
+              'TransferTrialReq')
+          .then((data) {
+        if (this.mounted) {
+          setState(() {
+            _primitiveCcyAmt = data.optExAmt;
+          });
+        }
+      }).catchError((e) {
+        print(e.toString());
+      });
     }
   }
 

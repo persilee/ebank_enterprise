@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
+import 'package:ebank_mobile/data/source/model/get_card_ccy_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
@@ -102,13 +103,14 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
   @override
   void initState() {
     super.initState();
-    _loadLocalCcy();
+    // _loadLocalCcy();
     _loadTransferData();
     _actualNameReqData();
 
     _payeeAccountFocusNode.addListener(() {
       if (_payeeAccountController.text.length > 0) {
         _getCardByCardNo(_payeeAccountController.text);
+        _getCardCcyList(_payeeAccountController.text);
       }
     });
     _payerTransferFocusNode.addListener(() {
@@ -163,6 +165,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         check = true;
         _isAccount = false;
         _boolBut();
+        _getCardCcyList(_payeeAccountController.text);
       }
     });
     return Scaffold(
@@ -200,6 +203,37 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             ),
           ),
           Container(
+            padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 2.5,
+                  child: Text(
+                    S.of(context).transfer_from_name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: Text(
+                    payerName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            child: Divider(
+              color: HsgColors.divider,
+              height: 0.5,
+            ),
+          ),
+          Container(
             color: Colors.white,
             child: SelectInkWell(
               title: S.of(context).payer_currency,
@@ -218,7 +252,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             focusNode: _payerTransferFocusNode,
             callback: _boolBut,
             isRegEXp: true,
-            regExp: '[0-9.]',
+            regExp: _payerCcy == 'JPY' ? '[0-9]' : '[0-9.]',
             length: 11,
             isMoney: true,
           ),
@@ -237,20 +271,9 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         children: [
           _titleName(S.of(context).receipt_side),
           TextFieldContainer(
-            title: S.of(context).receipt_side_name,
-            hintText: S.of(context).hint_input_receipt_name,
-            widget: _getImage(),
-            keyboardType: TextInputType.text,
-            controller: _payeeNameController,
-            callback: _boolBut,
-            isWidget: true,
-            length: 35,
-            isRegEXp: true,
-            regExp: '[\u4e00-\u9fa5a-zA-Z0-9 ]',
-          ),
-          TextFieldContainer(
             title: S.of(context).receipt_side_account,
             hintText: S.of(context).hint_input_receipt_account,
+            widget: _getImage(),
             keyboardType: TextInputType.number,
             controller: _payeeAccountController,
             focusNode: _payeeAccountFocusNode,
@@ -258,6 +281,17 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             length: 20,
             isRegEXp: true,
             regExp: '[0-9]',
+            isWidget: true,
+          ),
+          TextFieldContainer(
+            title: S.of(context).receipt_side_name,
+            hintText: S.of(context).hint_input_receipt_name,
+            keyboardType: TextInputType.text,
+            controller: _payeeNameController,
+            callback: _boolBut,
+            length: 35,
+            isRegEXp: true,
+            regExp: '[\u4e00-\u9fa5a-zA-Z0-9 ]',
           ),
           Container(
             // padding: EdgeInsets.only(right: 15, left: 15),
@@ -265,10 +299,17 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             child: SelectInkWell(
               title: S.current.transfer_from_ccy,
               item: _payeeCcy == null ? '' : _payeeCcy,
-              onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
-                _payeeCcyDialog();
-              },
+              onTap: _isAccount
+                  ? () {
+                      Fluttertoast.showToast(
+                        msg: S.of(context).please_current_payee_account,
+                        gravity: ToastGravity.CENTER,
+                      );
+                    }
+                  : () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      _payeeCcyDialog();
+                    },
             ),
           ),
           TextFieldContainer(
@@ -279,7 +320,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             focusNode: _payeeTransferFocusNode,
             callback: _boolBut,
             isRegEXp: true,
-            regExp: '[0-9.]',
+            regExp: _payeeCcy == 'JPY' ? '[0-9]' : '[0-9.]',
             length: 11,
             isMoney: true,
           ),
@@ -434,6 +475,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
                 _isAccount = false;
               }
               _boolBut();
+              _rateCalculate();
+              _getCardCcyList(_payeeAccountController.text);
             });
           },
         );
@@ -470,6 +513,13 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     } else if (_isAccount) {
       Fluttertoast.showToast(
         msg: S.current.account_no_exist,
+        gravity: ToastGravity.CENTER,
+      );
+    }
+    if (_payeeCcy == _payerCcy &&
+        _payerAccount == _payeeAccountController.text) {
+      Fluttertoast.showToast(
+        msg: S.of(context).no_account_ccy_transfer,
         gravity: ToastGravity.CENTER,
       );
     } else {
@@ -595,6 +645,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
                 //付款方卡号
                 _payerAccount = element.cardList[0].cardNo;
                 payerBankCode = payeeBankCode = element.cardList[0].bankCode;
+                payerName = element.cardList[0].ciName;
                 element.cardList.forEach((e) {
                   _payerAccountList.add(e.cardNo);
                 });
@@ -676,57 +727,67 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     });
   }
 
-  //汇率换算
-  Future _rateCalculate() async {
-    // if (_payerTransferController.text == '') {
-    //   if (this.mounted) {
-    //     setState(() {
-    //       _payeeAccountController.text = '0';
-    //       rate = '-';
-    //     });
-    //   }
-    // } else {
-    ForexTradingRepository()
-        .transferTrial(
-            TransferTrialReq(
-              opt: _opt,
-              buyCcy: _payerCcy,
-              sellCcy: _payeeCcy,
-              buyAmount: _payerTransferController.text == ''
-                  ? '0'
-                  : _payerTransferController.text,
-              sellAmount: _payeeTransferController.text == ''
-                  ? '0'
-                  : _payeeTransferController.text,
-            ),
-            'TransferTrialReq')
+  //获取账号支持币种
+  Future _getCardCcyList(String cardNo) async {
+    TransferDataRepository()
+        .getCardCcyList(GetCardCcyListReq(cardNo), 'GetCardCcyList')
         .then((data) {
-      print(" opt: " +
-          _opt +
-          " sellCcy: " +
-          _payeeCcy +
-          " buyCcy: " +
-          _payerCcy +
-          " sellAmout: " +
-          _payeeTransferController.text +
-          " buyAmount: " +
-          _payerTransferController.text);
-      if (this.mounted) {
-        setState(() {
-          if (_opt == 'B') {
-            _payerTransferController.text = data.optExAmt;
-          }
-          if (_opt == 'S') {
-            _payeeTransferController.text = data.optExAmt;
-          }
-          rate = data.optExRate;
+      if (data.recordLists != null) {
+        _payeeCcyList.clear();
+        data.recordLists.forEach((e) {
+          _payeeCcyList.add(e.ccy);
         });
       }
-    }).catchError((e) {
-      print(e.toString());
     });
   }
-  // }
+
+  //汇率换算
+  Future _rateCalculate() async {
+    if (_payeeCcy != '' &&
+        _payerCcy != '' &&
+        (_payeeTransferController.text != '' ||
+            _payerTransferController.text != '')) {
+      ForexTradingRepository()
+          .transferTrial(
+              TransferTrialReq(
+                opt: _opt,
+                buyCcy: _payerCcy,
+                sellCcy: _payeeCcy,
+                buyAmount: _payerTransferController.text == ''
+                    ? '0'
+                    : _payerTransferController.text,
+                sellAmount: _payeeTransferController.text == ''
+                    ? '0'
+                    : _payeeTransferController.text,
+              ),
+              'TransferTrialReq')
+          .then((data) {
+        print(" opt: " +
+            _opt +
+            " sellCcy: " +
+            _payeeCcy +
+            " buyCcy: " +
+            _payerCcy +
+            " sellAmout: " +
+            _payeeTransferController.text +
+            " buyAmount: " +
+            _payerTransferController.text);
+        if (this.mounted) {
+          setState(() {
+            if (_opt == 'B') {
+              _payerTransferController.text = data.optExAmt;
+            }
+            if (_opt == 'S') {
+              _payeeTransferController.text = data.optExAmt;
+            }
+            rate = data.optExRate;
+          });
+        }
+      }).catchError((e) {
+        print(e.toString());
+      });
+    }
+  }
 
   //获取用户真实姓名
   Future<void> _actualNameReqData() async {
@@ -757,6 +818,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         setState(() {
           _payeeNameController.text = data.ciName;
           _isAccount = false;
+          _boolBut();
         });
       }
     }).catchError((e) {

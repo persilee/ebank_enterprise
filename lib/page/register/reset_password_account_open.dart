@@ -143,7 +143,8 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                     _cardNumber,
                     false,
                     <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                      FilteringTextInputFormatter.allow(
+                          RegExp("[a-zA-Z0-9]")), //纯数字
                       LengthLimitingTextInputFormatter(16),
                     ],
                   ), //确定按钮
@@ -183,7 +184,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
   //获取证件类型
   _getIdCardList() async {
     PublicParametersRepository()
-        .getIdType(GetIdTypeReq('CICID'), 'GetIdTypeReq')
+        .getIdType(GetIdTypeReq('TORPC'), 'GetIdTypeReq') //TORPC//CICID
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         print('data.publicCodeGetRedisRspDtoList222222');

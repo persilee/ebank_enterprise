@@ -248,7 +248,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             //转账记录金额、时间、状态
             _transferAmount(
                 intl.S.of(context).transfer_amount,
-                FormatUtil.formatSringToMoney(_transferHistory.amount),
+                FormatUtil.formatSringToMoney(_transferHistory.debitAmount),
                 _transferHistory.status),
             _rowContent(intl.S.of(context).transfer_time,
                 _transferHistory.transactionTime),
@@ -948,6 +948,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
               _cradLists.add(e.cardNo);
               _imageUrl.add(e.imageUrl);
             });
+            _cradLists = _cradLists.toSet().toList();
           });
         }
       }
