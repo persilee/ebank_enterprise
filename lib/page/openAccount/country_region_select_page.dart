@@ -7,10 +7,12 @@ import 'dart:convert';
 
 import 'package:azlistview/azlistview.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/language.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -26,8 +28,8 @@ class CountryOrRegionSelectPage extends StatefulWidget {
 }
 
 class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
-  List<CountryRegionModel> _cityList = List();
-  List<CountryRegionModel> _hotCityList = List();
+  List<CountryRegionNewModel> _cityList = List();
+  List<CountryRegionNewModel> _hotCityList = List();
 
   int _suspensionHeight = 40;
   int _itemHeight = 50;
@@ -87,32 +89,92 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
     //   Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     // });
 
-    //加载城市列表
-    rootBundle.loadString('assets/data/country.json').then((value) {
-      Map countryMap = json.decode(value);
-      List list = countryMap['countryLists'];
-      list.forEach((value) {
-        _cityList.add(
-          CountryRegionModel.fromJson(value),
-        );
-      });
-      _hotCityList.add(CountryRegionModel(
-          nameZhCN: '安哥拉', nameEN: 'Andorra', tagIndex: "★"));
-      _hotCityList.add(CountryRegionModel(
-          nameZhCN: '阿拉伯', nameEN: 'United Arab Emirates', tagIndex: "★"));
-      _handleList(_cityList);
-      setState(() {
-        _suspensionTag = _hotCityList[0].getSuspensionTag();
-      });
+    HSProgressHUD.show();
+    //获取国家地区列表
+    PublicParametersRepository()
+        .getCountryList(
+            CountryRegionNewListReq(), 'getCountryList') //CORP_TYPE//ET
+        .then((data) {
+      HSProgressHUD.dismiss();
+      if (data != null &&
+          data.countryCodeinfoDTOList != null &&
+          data.countryCodeinfoDTOList.length > 0) {
+        List list = data.countryCodeinfoDTOList;
+        print(list);
+        list.forEach((value) {
+          CountryRegionNewModel model = value;
+          _cityList.add(
+            model,
+          );
+          if (['CN', 'HK'].contains(model.cntyCd)) {
+            //需要新增一个模型，共用后会无法改变tagIndex
+            CountryRegionNewModel modelHot = CountryRegionNewModel(
+                value.modifyTime,
+                value.createTime,
+                value.cntyCd,
+                value.cntyNm,
+                value.cntyCnm,
+                value.cntyTcnm,
+                value.areaCode,
+                '★');
+            _hotCityList.add(modelHot);
+          }
+        });
+        _handleList(_cityList);
+        setState(() {
+          if (_hotCityList != null && _hotCityList.length > 0) {
+            _suspensionTag = _hotCityList[0].getSuspensionTag();
+          }
+        });
+      }
+    }).catchError((e) {
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
     });
+
+    // //加载城市列表
+    // rootBundle.loadString('assets/data/country.json').then((value) {
+    //   Map countryMap = json.decode(value);
+    //   List list = countryMap['countryLists'];
+    //   list.forEach((value) {
+    //     CountryRegionModel model = CountryRegionModel.fromJson(value);
+    //     _cityList.add(
+    //       model,
+    //     );
+    //     if (['CN', 'HK'].contains(model.countryCode)) {
+    //       //需要新增一个模型，共用后会无法改变tagIndex
+    //       CountryRegionModel modelHot = CountryRegionModel.fromJson(value);
+    //       modelHot.tagIndex = '★';
+    //       _hotCityList.add(modelHot);
+    //     }
+    //   });
+    //   _handleList(_cityList);
+    //   setState(() {
+    //     if (_hotCityList != null && _hotCityList.length > 0) {
+    //       _suspensionTag = _hotCityList[0].getSuspensionTag();
+    //     }
+    //   });
+    // });
   }
 
-  void _handleList(List<CountryRegionModel> list) {
+  void _handleList(List<CountryRegionNewModel> list) {
     if (list == null || list.isEmpty || _language == null) return;
     for (int i = 0, length = list.length; i < length; i++) {
-      String pinyin = _language == Language.ZH_CN
-          ? PinyinHelper.getPinyinE(list[i].nameZhCN)
-          : list[i].nameEN;
+      String pinyin;
+
+      switch (_language) {
+        case Language.ZH_CN:
+          pinyin = PinyinHelper.getPinyinE(list[i].cntyCnm);
+          break;
+        case Language.ZH_HK:
+          pinyin = PinyinHelper.getPinyinE(list[i].cntyTcnm);
+          break;
+        default:
+          pinyin = PinyinHelper.getPinyinE(list[i].cntyNm);
+      }
       String tag = pinyin.substring(0, 1).toUpperCase();
       list[i].namePinyin = pinyin;
       if (RegExp("[A-Z]").hasMatch(tag)) {
@@ -132,9 +194,16 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
     });
   }
 
-  Widget _buildListItem(CountryRegionModel model) {
+  Widget _buildListItem(CountryRegionNewModel model) {
     if (_language == null) return Container();
-    String name = _language == 'zh_cn' ? model.nameZhCN : model.nameEN;
+    String name = model.cntyNm;
+    if (_language == 'zh_cn') {
+      name = model.cntyCnm;
+    } else if (_language == 'zh_hk') {
+      name = model.cntyTcnm;
+    } else {
+      name = model.cntyNm;
+    }
     String susTag = model.getSuspensionTag();
     susTag = (susTag == "★" ? S.of(context).hot_countries : susTag);
     return Column(

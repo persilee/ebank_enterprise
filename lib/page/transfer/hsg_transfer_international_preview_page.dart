@@ -1,5 +1,4 @@
 import 'package:ebank_mobile/data/source/model/get_international_transfer.dart';
-import 'package:ebank_mobile/data/source/model/get_international_transfer_new.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -70,9 +69,9 @@ class _TransferInternalPreviewPageState
               children: [
                 Text(S.current.transfer_amount),
                 Text(
-                  transferData.transferIntoCcy +
+                  transferData.transferOutCcy +
                       FormatUtil.formatSringToMoney(
-                          transferData.transferIntoAmount),
+                          transferData.transferOutAmount),
                   style: TextStyle(color: Color(0xff232323), fontSize: 20),
                 ),
               ],
@@ -83,19 +82,21 @@ class _TransferInternalPreviewPageState
           ),
           _getRowContent(S.current.transfer_from,
               FormatUtil.formatSpace4(transferData.transferOutAccount)),
+          _getRowContent(S.current.transfer_from_name, transferData.payerName),
+          _getRowContent(S.current.payer_currency, transferData.transferOutCcy),
           _getRowContent(S.current.estimated_collection_amount,
-              transferData.transferOutAmount),
+              transferData.transferIntoAmount),
           _getRowContent(S.current.rate_of_exchange, transferData.rate),
-          _getRowContent(
-              S.current.payment_currency, transferData.transferIntoCcy),
           // _getRowContent(
           //     S.current.remitter_address1, transferData.transferOutAdress),
-          _getRowContent(
-              S.current.receipt_side_name, transferData.transferIntoName),
           _getRowContent(S.current.receipt_side_account,
               FormatUtil.formatSpace4(transferData.transferIntoAccount)),
           _getRowContent(
-              S.current.transfer_from_ccy, transferData.transferOutCcy),
+              S.current.receipt_side_name, transferData.transferIntoName),
+          _getRowContent(
+              S.current.transfer_from_ccy, transferData.transferIntoCcy),
+          _getRowContent(
+              S.current.transfer_to_amount, transferData.transferIntoAmount),
           _getRowContent(
               S.current.receiver_address, transferData.transferIntoAdress),
           _getRowContent(S.current.state_area, transferData.nation),
@@ -190,11 +191,11 @@ class _TransferInternalPreviewPageState
     String payeeAddress = transferData.transferIntoAdress;
     String countryCode = transferData.countryCode;
     String rate = transferData.rate;
-    print("opt: " +
-        opt +
-        "===========================" +
-        "countryCode" +
-        countryCode);
+    // print("opt: " +
+    //     opt +
+    //     "===========================" +
+    //     "countryCode" +
+    //     countryCode);
     HSProgressHUD.show();
     TransferDataRepository()
         .getInterNationalTransfer(
@@ -205,9 +206,9 @@ class _TransferInternalPreviewPageState
               //收款金额
               creditAmount,
               //贷方货币
-              transferOutCcy,
-              //借方货币
               transferIntoCcy,
+              //借方货币
+              transferOutCcy,
               "",
               payeeBankCode,
               payeeCardNo,
@@ -220,7 +221,7 @@ class _TransferInternalPreviewPageState
               rate,
               payeeAddress,
               bankSwift,
-              countryCode,
+              "CN", //countryCode,
               custId,
               costOptionsIndex,
             ),

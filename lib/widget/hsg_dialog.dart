@@ -285,6 +285,7 @@ class BottomMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double bottomPadding = MediaQuery.of(context).padding.bottom;
     Widget titleWidget;
     Widget contentWidget;
     Widget actionsWidget;
@@ -304,14 +305,19 @@ class BottomMenu extends StatelessWidget {
       final EdgeInsets contentPadding = EdgeInsets.zero;
       contentWidget = Padding(
         padding: contentPadding,
-        child: ListView.separated(
-          shrinkWrap: true,
-          itemCount: items.length,
-          itemBuilder: (BuildContext context, int position) {
-            return _getItemRow(position, context);
-          },
-          separatorBuilder: (context, index) => Divider(
-            height: 1,
+        child: MediaQuery.removePadding(
+          //去除底部的安全高度
+          context: context,
+          removeBottom: true,
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: items.length,
+            itemBuilder: (BuildContext context, int position) {
+              return _getItemRow(position, context);
+            },
+            separatorBuilder: (context, index) => Divider(
+              height: 1,
+            ),
           ),
         ),
       );
@@ -359,6 +365,10 @@ class BottomMenu extends StatelessWidget {
         height: 7,
       ),
       actionsWidget,
+      if (bottomPadding > 0) //判断是否是刘海屏，是底部拉起一个安全域高度
+        Container(
+          height: bottomPadding,
+        ),
     ];
 
     final menuBody = Column(

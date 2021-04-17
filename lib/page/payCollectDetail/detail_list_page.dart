@@ -981,6 +981,8 @@ class _DetailListPageState extends State<DetailListPage> {
     String localCcy;
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
+    print('custID+$custID');
+
     // String accNo = _accNoList.toString();
     if (_cardList.length < 1) {
       selectAccNo = '';
@@ -998,6 +1000,7 @@ class _DetailListPageState extends State<DetailListPage> {
               '$_startDate', //开始时间   '$_startDate'
               0, //分页page
               20, //分页pageSize
+              // turnKey: '20210401000000003088000220210414150720', //分页key
               acNo: '$selectAccNo',
               ciNo: '$custID',
             ), //'818000000113'

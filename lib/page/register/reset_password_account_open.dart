@@ -184,7 +184,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
   //获取证件类型
   _getIdCardList() async {
     PublicParametersRepository()
-        .getIdType(GetIdTypeReq('CICID'), 'GetIdTypeReq')
+        .getIdType(GetIdTypeReq('TORPC'), 'GetIdTypeReq') //TORPC//CICID
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         print('data.publicCodeGetRedisRspDtoList222222');

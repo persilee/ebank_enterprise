@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
@@ -71,7 +72,7 @@ class OpenAccountQuickSubmitDataReq {
 
   ///证件签发国家辅助字段
   @JsonKey(name: 'idIssuePlaceCountryRegionModel')
-  CountryRegionModel idIssuePlaceCountryRegionModel;
+  CountryRegionNewModel idIssuePlaceCountryRegionModel;
 
   ///证件类型辅助字段
   @JsonKey(name: 'idTypeIdType')
@@ -215,7 +216,7 @@ class Partner {
 
   ///国籍辅助字段
   @JsonKey(name: 'nationalityCountryRegionModel')
-  CountryRegionModel nationalityCountryRegionModel;
+  CountryRegionNewModel nationalityCountryRegionModel;
 
   ///类别
   @JsonKey(name: 'partnerTypeIdType')

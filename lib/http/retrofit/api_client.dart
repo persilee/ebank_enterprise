@@ -88,8 +88,6 @@ abstract class ApiClient {
   @DioResponseType(ResponseType.bytes)
   Future<List<int>> statementDownLoad(@Query('internalId') String internalId);
 
-
-
   /// 上传头像（开户图片上传暂时共用）
   @POST('/cust/user/uploadAvatar')
   Future<dynamic> uploadAvatar(

@@ -12,6 +12,7 @@ import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/http/hsg_http.dart';
 
 import 'model/approval/get_card_by_card_no.dart';
+import 'model/get_card_ccy_list.dart';
 import 'model/get_info_by_swift_code.dart';
 import 'model/get_international_transfer.dart';
 import 'model/get_international_transfer_new.dart';
@@ -78,6 +79,12 @@ class TransferDataRepository {
       GetCardByCardNoReq req, String tag) {
     return request('/cust/bankcard/getCardByCardNo', req, tag,
         (data) => GetCardByCardNoResp.fromJson(data));
+  }
+
+  //根据账号查询支持币种
+  Future<GetCardCcyListResp> getCardCcyList(GetCardCcyListReq req, String tag) {
+    return request('/cust/bankcard/getCardCcyList', req, tag,
+        (data) => GetCardCcyListResp.fromJson(data));
   }
 
   //预约转账

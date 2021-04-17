@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
@@ -254,18 +255,18 @@ class _RelatedIndividualsDataPageState
             Navigator.pushNamed(context, countryOrRegionSelectPage)
                 .then((value) {
               String _language = Intl.getCurrentLocale();
-              CountryRegionModel data = value;
+              CountryRegionNewModel data = value;
               String showText = '';
               if (_language == 'zh_CN') {
-                showText = data.nameZhCN;
+                showText = data.cntyCnm;
               } else if (_language == 'zh_HK') {
-                showText = data.nameZhHK;
+                showText = data.cntyTcnm;
               } else {
-                showText = data.nameEN;
+                showText = data.cntyNm;
               }
 
               _partner.nationalityCountryRegionModel = data;
-              _partner.nationality = data.countryCode;
+              _partner.nationality = data.cntyCd;
               setState(() {
                 _nationalityText = showText;
                 _nextBtnEnabled = _judgeButtonIsEnabled();
@@ -672,19 +673,19 @@ class _RelatedIndividualsDataPageState
             _categoryText = _partner.partnerTypeIdType.name ?? '';
             _documentTypeText = _partner.idTypeIdType.name ?? '';
             _nationalityText =
-                _partner.nationalityCountryRegionModel.nameEN ?? '';
+                _partner.nationalityCountryRegionModel.cntyNm ?? '';
           } else if (_language == 'zh_CN') {
             _appellationText = _partner.appellationIdType.cname ?? '';
             _categoryText = _partner.partnerTypeIdType.cname ?? '';
             _documentTypeText = _partner.idTypeIdType.cname ?? '';
             _nationalityText =
-                _partner.nationalityCountryRegionModel.nameZhCN ?? '';
+                _partner.nationalityCountryRegionModel.cntyCnm ?? '';
           } else {
             _appellationText = _partner.appellationIdType.cname ?? '';
             _categoryText = _partner.partnerTypeIdType.cname ?? '';
             _documentTypeText = _partner.idTypeIdType.cname ?? '';
             _nationalityText =
-                _partner.nationalityCountryRegionModel.nameZhHK ?? '';
+                _partner.nationalityCountryRegionModel.cntyTcnm ?? '';
           }
 
           _nextBtnEnabled = _judgeButtonIsEnabled();
