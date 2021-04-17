@@ -887,7 +887,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             confirmCallback: () {
               FocusManager.instance.primaryFocus?.unfocus();
               Navigator.pop(context);
-              _rejectTaskConfirm(context);
+              _rejectTaskConfirm(this.context);
             },
           );
         });
@@ -902,7 +902,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       });
     }
     try {
-      Navigator.pop(context);
       CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
         CompleteTaskBody(
           approveResult: false,
@@ -918,6 +917,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             _btnIsEnable = true;
           });
         }
+        Navigator.pop(context);
       }
     } catch (e) {
       print(e);
@@ -949,7 +949,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       });
     }
     try {
-      Navigator.pop(context);
       CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
         CompleteTaskBody(
           approveResult: false,
@@ -965,6 +964,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             _btnIsEnable = true;
           });
         }
+        Navigator.pop(context);
       }
     } catch (e) {
       print(e);
