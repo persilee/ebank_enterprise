@@ -18,6 +18,7 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page/transfer/data/transfer_internal_data.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -760,9 +761,9 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
 
   //获取账号支持币种
   Future _getCardCcyList(String cardNo) async {
-    TransferDataRepository()
-        .getCardCcyList(GetCardCcyListReq(cardNo), 'GetCardCcyList')
-        .then((data) {
+    // TransferDataRepository()
+    //     .getCardCcyList(GetCardCcyListReq(cardNo), 'GetCardCcyList')
+    Transfer().getCardCcyList(GetCardCcyListReq(cardNo)).then((data) {
       if (data.recordLists != null) {
         _payeeCcyList.clear();
         data.recordLists.forEach((e) {
@@ -778,8 +779,21 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         _payerCcy != '' &&
         (_payeeTransferController.text != '' ||
             _payerTransferController.text != '')) {
-      ForexTradingRepository()
-          .transferTrial(
+      // ForexTradingRepository()
+      //     .transferTrial(
+      //         TransferTrialReq(
+      //           opt: _opt,
+      //           buyCcy: _payerCcy,
+      //           sellCcy: _payeeCcy,
+      //           buyAmount: _payerTransferController.text == ''
+      //               ? '0'
+      //               : _payerTransferController.text,
+      //           sellAmount: _payeeTransferController.text == ''
+      //               ? '0'
+      //               : _payeeTransferController.text,
+      //         ),
+      //         'TransferTrialReq')
+              Transfer().transferTrial(
               TransferTrialReq(
                 opt: _opt,
                 buyCcy: _payerCcy,
@@ -790,8 +804,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
                 sellAmount: _payeeTransferController.text == ''
                     ? '0'
                     : _payeeTransferController.text,
-              ),
-              'TransferTrialReq')
+              ))
           .then((data) {
         print(" opt: " +
             _opt +
@@ -842,9 +855,9 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
 
   //根据账号查询名称
   Future _getCardByCardNo(String cardNo) async {
-    TransferDataRepository()
-        .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
-        .then((data) {
+    // TransferDataRepository()
+    //     .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
+    Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo)).then((data) {
       if (this.mounted) {
         setState(() {
           _payeeNameController.text = data.ciName;

@@ -13,6 +13,7 @@ import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
+import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
@@ -970,33 +971,36 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     // String loginName = '18033412021';
     // String userId = '778309634589982720';
     // HSProgressHUD.show();
-    TransferDataRepository()
-        .getTransferRecord(
-            GetTransferRecordReq(ccy, _endDate, _page, pageSize, paymentCardNos,
-                sort, _startDate, userAccount, userID),
-            'getTransferRecord')
-        .then((data) {
-      if (this.mounted) {
-        setState(() {
-          if (data.transferRecord != null) {
-            _totalPage = data.totalPage;
-            _transferHistoryList.addAll(data.transferRecord);
-          }
-          _loadMore = false;
-          _isLoading = false;
-          _refreshController.loadComplete();
-        });
-      }
+    // TransferDataRepository()
+    //     .getTransferRecord(
+    //         GetTransferRecordReq(ccy, _endDate, _page, pageSize, paymentCardNos,
+    //             sort, _startDate, userAccount, userID),
+    //         'getTransferRecord')
+    Transfer()
+      ..getTransferRecord(GetTransferRecordReq(ccy, _endDate, _page, pageSize,
+              paymentCardNos, sort, _startDate, userAccount, userID))
+          .then((data) {
+        if (this.mounted) {
+          setState(() {
+            if (data.transferRecord != null) {
+              _totalPage = data.totalPage;
+              _transferHistoryList.addAll(data.transferRecord);
+            }
+            _loadMore = false;
+            _isLoading = false;
+            _refreshController.loadComplete();
+          });
+        }
 
-      // HSProgressHUD.dismiss();
-    }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
-      // HSProgressHUD.dismiss();
-      if (this.mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    });
+        // HSProgressHUD.dismiss();
+      }).catchError((e) {
+        // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+        // HSProgressHUD.dismiss();
+        if (this.mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      });
   }
 }

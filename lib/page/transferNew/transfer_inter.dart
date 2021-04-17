@@ -21,6 +21,7 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page/transfer/data/transfer_international_data.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -973,20 +974,32 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //汇率换算
   Future _rateCalculate() async {
-    ForexTradingRepository()
-        .transferTrial(
-            TransferTrialReq(
-              opt: _opt,
-              buyCcy: _payerCcy,
-              sellCcy: _payeeCcy,
-              buyAmount: _payerTransferController.text == ''
-                  ? '0'
-                  : _payerTransferController.text,
-              sellAmount: _payeeTransferController.text == ''
-                  ? '0'
-                  : _payeeTransferController.text,
-            ),
-            'TransferTrialReq')
+    // ForexTradingRepository()
+    //     .transferTrial(
+    //         TransferTrialReq(
+    //           opt: _opt,
+    //           buyCcy: _payerCcy,
+    //           sellCcy: _payeeCcy,
+    //           buyAmount: _payerTransferController.text == ''
+    //               ? '0'
+    //               : _payerTransferController.text,
+    //           sellAmount: _payeeTransferController.text == ''
+    //               ? '0'
+    //               : _payeeTransferController.text,
+    //         ),
+    //         'TransferTrialReq')
+    Transfer()
+        .transferTrial(TransferTrialReq(
+      opt: _opt,
+      buyCcy: _payerCcy,
+      sellCcy: _payeeCcy,
+      buyAmount: _payerTransferController.text == ''
+          ? '0'
+          : _payerTransferController.text,
+      sellAmount: _payeeTransferController.text == ''
+          ? '0'
+          : _payeeTransferController.text,
+    ))
         .then((data) {
       print(" opt: " +
           _opt +
@@ -1036,9 +1049,9 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //根据账号查询名称
   Future _getCardByCardNo(String cardNo) async {
-    TransferDataRepository()
-        .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
-        .then((data) {
+    // TransferDataRepository()
+    //     .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
+    Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo)).then((data) {
       if (this.mounted) {
         setState(() {
           _payeeNameController.text = data.ciName;
@@ -1075,18 +1088,19 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //根据银行Swift查询银行名称
   Future _getBankNameBySwift(String swift) async {
-    TransferDataRepository()
-        .getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift), 'getInfoBySwiftCode')
-        .then((data) {
-      if (this.mounted) {
-        setState(() {
-          _bankNameController.text =
-              data.swiftName1 + data.swiftName2 + data.swiftName3;
-          _boolBut();
-        });
-      }
-    }).catchError((e) {
-      print(e.toString());
-    });
+    // TransferDataRepository()
+    //     .getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift), 'getInfoBySwiftCode')
+    Transfer()
+      ..getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift)).then((data) {
+        if (this.mounted) {
+          setState(() {
+            _bankNameController.text =
+                data.swiftName1 + data.swiftName2 + data.swiftName3;
+            _boolBut();
+          });
+        }
+      }).catchError((e) {
+        print(e.toString());
+      });
   }
 }

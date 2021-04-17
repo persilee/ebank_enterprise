@@ -14,6 +14,7 @@ import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -394,16 +395,24 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
       double _amount =
           AiDecimalAccuracy.parse(_payAmtController.text).toDouble();
 
-      ForexTradingRepository()
-          .transferTrial(
-              TransferTrialReq(
-                opt: "S",
-                buyCcy: _paymentCcy,
-                sellCcy: _incomeCcy,
-                buyAmount: _payAmtController.text,
-                sellAmount: '0',
-              ),
-              'TransferTrialReq')
+      // ForexTradingRepository()
+      //     .transferTrial(
+      //         TransferTrialReq(
+      //           opt: "S",
+      //           buyCcy: _paymentCcy,
+      //           sellCcy: _incomeCcy,
+      //           buyAmount: _payAmtController.text,
+      //           sellAmount: '0',
+      //         ),
+      //         'TransferTrialReq')
+      Transfer()
+          .transferTrial(TransferTrialReq(
+        opt: "S",
+        buyCcy: _paymentCcy,
+        sellCcy: _incomeCcy,
+        buyAmount: _payAmtController.text,
+        sellAmount: '0',
+      ))
           .then((data) {
         if (this.mounted) {
           setState(() {
@@ -428,38 +437,68 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
       );
     } else {
       HSProgressHUD.show();
-      TransferDataRepository()
-          .getTransferByAccount(
-              GetTransferByAccount(
-                "S",
-                _payAmtController.text,
-                _incomeAmt,
-                //贷方货币
-                _incomeCcy,
-                //借方货币
-                _paymentCcy,
-                //输入密码
-                // 'L5o+WYWLFVSCqHbd0Szu4Q==',
-                '',
-                //收款方银行
-                _incomeBackCode,
-                //收款方卡号
-                _incomeAcc,
-                //收款方姓名
-                _incomeName,
-                //付款方银行
-                _incomeBackCode,
-                //付款方卡号
-                _paymentAcc,
-                //付款方姓名
-                _incomeName,
-                //附言
-                "",
-                //验证码
-                "",
-                _rate,
-              ),
-              'getTransferByAccount')
+      // TransferDataRepository()
+      //     .getTransferByAccount(
+      //         GetTransferByAccount(
+      //           "S",
+      //           _payAmtController.text,
+      //           _incomeAmt,
+      //           //贷方货币
+      //           _incomeCcy,
+      //           //借方货币
+      //           _paymentCcy,
+      //           //输入密码
+      //           // 'L5o+WYWLFVSCqHbd0Szu4Q==',
+      //           '',
+      //           //收款方银行
+      //           _incomeBackCode,
+      //           //收款方卡号
+      //           _incomeAcc,
+      //           //收款方姓名
+      //           _incomeName,
+      //           //付款方银行
+      //           _incomeBackCode,
+      //           //付款方卡号
+      //           _paymentAcc,
+      //           //付款方姓名
+      //           _incomeName,
+      //           //附言
+      //           "",
+      //           //验证码
+      //           "",
+      //           _rate,
+      //         ),
+      //         'getTransferByAccount')
+      Transfer()
+          .getTransferByAccount(GetTransferByAccount(
+        "S",
+        _payAmtController.text,
+        _incomeAmt,
+        //贷方货币
+        _incomeCcy,
+        //借方货币
+        _paymentCcy,
+        //输入密码
+        // 'L5o+WYWLFVSCqHbd0Szu4Q==',
+        '',
+        //收款方银行
+        _incomeBackCode,
+        //收款方卡号
+        _incomeAcc,
+        //收款方姓名
+        _incomeName,
+        //付款方银行
+        _incomeBackCode,
+        //付款方卡号
+        _paymentAcc,
+        //付款方姓名
+        _incomeName,
+        //附言
+        "",
+        //验证码
+        "",
+        _rate,
+      ))
           .then((data) {
         HSProgressHUD.dismiss();
         Fluttertoast.showToast(
@@ -493,9 +532,9 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
 
   //获取账号支持币种
   Future _getCardCcyList(String cardNo) async {
-    TransferDataRepository()
-        .getCardCcyList(GetCardCcyListReq(cardNo), 'GetCardCcyList')
-        .then((data) {
+    // TransferDataRepository()
+    //     .getCardCcyList(GetCardCcyListReq(cardNo), 'GetCardCcyList')
+    Transfer().getCardCcyList(GetCardCcyListReq(cardNo)).then((data) {
       if (data.recordLists != null) {
         _incomeCcyList.clear();
         data.recordLists.forEach((e) {

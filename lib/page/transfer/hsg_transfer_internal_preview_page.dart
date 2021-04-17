@@ -1,6 +1,7 @@
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
@@ -185,40 +186,72 @@ class _TransferInternalPreviewPageState
         "payerBankCode: " +
         payerBankCode);
     HSProgressHUD.show();
-    TransferDataRepository()
-        .getTransferByAccount(
-            GetTransferByAccount(
-              opt,
-              //付款金额
-              debitAmount,
-              //收款金额
-              creditAmount,
-              //贷方货币
-              transferIntoCcy,
-              //借方货币
-              transferOutCcy,
-              //输入密码
-              // 'L5o+WYWLFVSCqHbd0Szu4Q==',
-              '',
-              //收款方银行
-              payeeBankCode,
-              //收款方卡号
-              payeeCardNo,
-              //收款方姓名
-              payeeName,
-              //付款方银行
-              payerBankCode,
-              //付款方卡号
-              payerCardNo,
-              //付款方姓名
-              payerName,
-              //附言
-              remark,
-              //验证码
-              smsCode,
-              xRate,
-            ),
-            'getTransferByAccount')
+    // TransferDataRepository()
+    //     .getTransferByAccount(
+    //         GetTransferByAccount(
+    //           opt,
+    //           //付款金额
+    //           debitAmount,
+    //           //收款金额
+    //           creditAmount,
+    //           //贷方货币
+    //           transferIntoCcy,
+    //           //借方货币
+    //           transferOutCcy,
+    //           //输入密码
+    //           // 'L5o+WYWLFVSCqHbd0Szu4Q==',
+    //           '',
+    //           //收款方银行
+    //           payeeBankCode,
+    //           //收款方卡号
+    //           payeeCardNo,
+    //           //收款方姓名
+    //           payeeName,
+    //           //付款方银行
+    //           payerBankCode,
+    //           //付款方卡号
+    //           payerCardNo,
+    //           //付款方姓名
+    //           payerName,
+    //           //附言
+    //           remark,
+    //           //验证码
+    //           smsCode,
+    //           xRate,
+    //         ),
+    //         'getTransferByAccount')
+    Transfer()
+        .getTransferByAccount(GetTransferByAccount(
+      opt,
+      //付款金额
+      debitAmount,
+      //收款金额
+      creditAmount,
+      //贷方货币
+      transferIntoCcy,
+      //借方货币
+      transferOutCcy,
+      //输入密码
+      // 'L5o+WYWLFVSCqHbd0Szu4Q==',
+      '',
+      //收款方银行
+      payeeBankCode,
+      //收款方卡号
+      payeeCardNo,
+      //收款方姓名
+      payeeName,
+      //付款方银行
+      payerBankCode,
+      //付款方卡号
+      payerCardNo,
+      //付款方姓名
+      payerName,
+      //附言
+      remark,
+      //验证码
+      smsCode,
+      xRate,
+    ))
         .then((data) {
       HSProgressHUD.dismiss();
       print("==================跳转");

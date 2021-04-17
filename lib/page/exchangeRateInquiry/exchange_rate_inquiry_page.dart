@@ -12,6 +12,7 @@ import 'package:ebank_mobile/data/source/model/get_ex_rate.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
@@ -464,16 +465,24 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
           _primitiveCcy +
           " buyAmount: " +
           _amtController.text);
-      ForexTradingRepository()
-          .transferTrial(
-              TransferTrialReq(
-                opt: "S",
-                buyCcy: _primitiveCcy,
-                sellCcy: _objectiveCcy,
-                buyAmount: _amtController.text,
-                sellAmount: '0',
-              ),
-              'TransferTrialReq')
+      // ForexTradingRepository()
+      //     .transferTrial(
+      //         TransferTrialReq(
+      //           opt: "S",
+      //           buyCcy: _primitiveCcy,
+      //           sellCcy: _objectiveCcy,
+      //           buyAmount: _amtController.text,
+      //           sellAmount: '0',
+      //         ),
+      //         'TransferTrialReq')
+      Transfer()
+          .transferTrial(TransferTrialReq(
+        opt: "S",
+        buyCcy: _primitiveCcy,
+        sellCcy: _objectiveCcy,
+        buyAmount: _amtController.text,
+        sellAmount: '0',
+      ))
           .then((data) {
         if (this.mounted) {
           setState(() {
