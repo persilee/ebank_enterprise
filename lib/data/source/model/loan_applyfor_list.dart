@@ -86,26 +86,29 @@ class LoanRecordDOList extends Object {
   @JsonKey(name: 'remark')
   String remark;
 
+  @JsonKey(name: 'lclName')
+  String lclName;
+
   LoanRecordDOList(
-    this.modifyTime,
-    this.createTime,
-    this.id,
-    this.custid,
-    this.prdtCode,
-    this.intentAmt,
-    this.termValue,
-    this.termUnit,
-    this.ccy,
-    this.loanPurpse,
-    this.payAcno,
-    this.repaymentAcno,
-    this.repaymentMethod,
-    this.loanRate,
-    this.contact,
-    this.phone,
-    this.userType,
-    this.remark,
-  );
+      this.modifyTime,
+      this.createTime,
+      this.id,
+      this.custid,
+      this.prdtCode,
+      this.intentAmt,
+      this.termValue,
+      this.termUnit,
+      this.ccy,
+      this.loanPurpse,
+      this.payAcno,
+      this.repaymentAcno,
+      this.repaymentMethod,
+      this.loanRate,
+      this.contact,
+      this.phone,
+      this.userType,
+      this.remark,
+      this.lclName);
 
   factory LoanRecordDOList.fromJson(Map<String, dynamic> srcJson) =>
       _$LoanRecordDOListFromJson(srcJson);

@@ -211,7 +211,7 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
             ),
             "getLoanApplication")
         .then((data) {
-      SVProgressHUD.dismiss();
+      // SVProgressHUD.dismiss();
       SVProgressHUD.showSuccess(
           status: S.current.loan_application_submit_success);
       sleep(Duration(seconds: 1));
