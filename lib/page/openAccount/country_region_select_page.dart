@@ -11,6 +11,7 @@ import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
@@ -90,11 +91,13 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
     // });
 
     HSProgressHUD.show();
+
+    // ApiClient().getCountryList(CountryRegionNewListReq()).then((value) => null)
     //获取国家地区列表
-    PublicParametersRepository()
-        .getCountryList(
-            CountryRegionNewListReq(), 'getCountryList') //CORP_TYPE//ET
-        .then((data) {
+    // PublicParametersRepository()
+    //     .getCountryList(
+    //         CountryRegionNewListReq(), 'getCountryList')
+    ApiClient().getCountryList(CountryRegionNewListReq()).then((data) {
       HSProgressHUD.dismiss();
       if (data != null &&
           data.countryCodeinfoDTOList != null &&
@@ -129,35 +132,48 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
       }
     }).catchError((e) {
       HSProgressHUD.dismiss();
+      // if (e.toString().length > 0) {
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
       );
+      // } else {
+      loadLocalData();
+      // }
     });
+  }
 
-    // //加载城市列表
-    // rootBundle.loadString('assets/data/country.json').then((value) {
-    //   Map countryMap = json.decode(value);
-    //   List list = countryMap['countryLists'];
-    //   list.forEach((value) {
-    //     CountryRegionModel model = CountryRegionModel.fromJson(value);
-    //     _cityList.add(
-    //       model,
-    //     );
-    //     if (['CN', 'HK'].contains(model.countryCode)) {
-    //       //需要新增一个模型，共用后会无法改变tagIndex
-    //       CountryRegionModel modelHot = CountryRegionModel.fromJson(value);
-    //       modelHot.tagIndex = '★';
-    //       _hotCityList.add(modelHot);
-    //     }
-    //   });
-    //   _handleList(_cityList);
-    //   setState(() {
-    //     if (_hotCityList != null && _hotCityList.length > 0) {
-    //       _suspensionTag = _hotCityList[0].getSuspensionTag();
-    //     }
-    //   });
-    // });
+  void loadLocalData() async {
+    //加载城市列表
+    rootBundle.loadString('assets/data/country.json').then((value) {
+      Map countryMap = json.decode(value);
+      List list = countryMap['countryCodeinfoDTOList'];
+      list.forEach((value) {
+        CountryRegionNewModel model = CountryRegionNewModel.fromJson(value);
+        _cityList.add(
+          model,
+        );
+        if (['CN', 'HK'].contains(model.cntyCd)) {
+          //需要新增一个模型，共用后会无法改变tagIndex
+          CountryRegionNewModel modelHot = CountryRegionNewModel(
+              '',
+              '',
+              model.cntyCd,
+              model.cntyNm,
+              model.cntyCnm,
+              model.cntyTcnm,
+              model.areaCode,
+              '★');
+          _hotCityList.add(modelHot);
+        }
+      });
+      _handleList(_cityList);
+      setState(() {
+        if (_hotCityList != null && _hotCityList.length > 0) {
+          _suspensionTag = _hotCityList[0].getSuspensionTag();
+        }
+      });
+    });
   }
 
   void _handleList(List<CountryRegionNewModel> list) {
