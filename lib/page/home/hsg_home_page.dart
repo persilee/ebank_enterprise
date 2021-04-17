@@ -843,17 +843,17 @@ class _HomePageState extends State<HomePage>
   //功能点击事件
   VoidCallback _featureClickFunction(BuildContext context, String title) {
     return () {
-      // if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
-      //   HsgShowTip.notOpenAccountTip(
-      //     context: context,
-      //     click: (value) {
-      //       if (value == true) {
-      //         _openAccountClickFunction(context);
-      //       }
-      //     },
-      //   );
-      //   return;
-      // }
+      if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
+        HsgShowTip.notOpenAccountTip(
+          context: context,
+          click: (value) {
+            if (value == true) {
+              _openAccountClickFunction(context);
+            }
+          },
+        );
+        return;
+      }
       if (S.current.transaction_details == title) {
         //收支明细
         Navigator.pushNamed(context, pageDetailList);
@@ -1060,12 +1060,11 @@ class _HomePageState extends State<HomePage>
       //   _getInviteeStatusByPhoneNetwork();
       // }
 
-      _verifyGotoTranPassword(context, data.passwordEnabled);
-
       if (this.mounted) {
         setState(() {
           _data = data;
           _changeUserInfoShow(_data);
+          _verifyGotoTranPassword(context, data.passwordEnabled);
         });
       }
     }).catchError((e) {

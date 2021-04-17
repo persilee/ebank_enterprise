@@ -20,11 +20,11 @@ class CityForCountryListReq extends Object {
 
 @JsonSerializable()
 class CityForCountryListResp extends Object {
-  @JsonKey(name: 'body')
-  List<CityForCountryModel> body;
+  @JsonKey(name: 'bpCtCitRspDTOS')
+  List<CityForCountryModel> bpCtCitRspDTOS;
 
   CityForCountryListResp(
-    this.body,
+    this.bpCtCitRspDTOS,
   );
 
   factory CityForCountryListResp.fromJson(Map<String, dynamic> srcJson) =>

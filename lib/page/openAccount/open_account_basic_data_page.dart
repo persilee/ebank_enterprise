@@ -7,6 +7,7 @@ import 'dart:convert';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/open_account_get_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
@@ -337,17 +338,17 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                 Navigator.pushNamed(context, countryOrRegionSelectPage)
                     .then((value) {
                   String _language = Intl.getCurrentLocale();
-                  CountryRegionModel data = value;
+                  CountryRegionNewModel data = value;
                   String showText = '';
                   if (_language == 'zh_CN') {
-                    showText = data.nameZhCN;
+                    showText = data.cntyCnm;
                   } else if (_language == 'zh_HK') {
-                    showText = data.nameZhHK;
+                    showText = data.cntyTcnm;
                   } else {
-                    showText = data.nameEN;
+                    showText = data.cntyNm;
                   }
 
-                  _dataReq.idIssuePlace = data.countryCode;
+                  _dataReq.idIssuePlace = data.cntyCd;
                   _dataReq.idIssuePlaceCountryRegionModel = data;
                   setState(() {
                     _countryOrRegionText = showText;
@@ -857,19 +858,19 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         if (_language == 'en') {
           _documentTypeText = _dataReq.idTypeIdType.name;
           _companyTypeText = _dataReq.custCategoryIdType.name;
-          _countryOrRegionText = _dataReq.idIssuePlaceCountryRegionModel.nameEN;
+          _countryOrRegionText = _dataReq.idIssuePlaceCountryRegionModel.cntyNm;
           _industrialNatureText = _dataReq.corporatinAttributesIdType.name;
         } else if (_language == 'zh_CN') {
           _documentTypeText = _dataReq.idTypeIdType.cname;
           _companyTypeText = _dataReq.custCategoryIdType.cname;
           _countryOrRegionText =
-              _dataReq.idIssuePlaceCountryRegionModel.nameZhCN;
+              _dataReq.idIssuePlaceCountryRegionModel.cntyCnm;
           _industrialNatureText = _dataReq.corporatinAttributesIdType.cname;
         } else {
           _documentTypeText = _dataReq.idTypeIdType.cname;
           _companyTypeText = _dataReq.custCategoryIdType.cname;
           _countryOrRegionText =
-              _dataReq.idIssuePlaceCountryRegionModel.nameZhHK;
+              _dataReq.idIssuePlaceCountryRegionModel.cntyTcnm;
           _industrialNatureText = _dataReq.corporatinAttributesIdType.cname;
         }
 

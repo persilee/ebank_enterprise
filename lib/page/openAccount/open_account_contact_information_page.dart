@@ -7,6 +7,7 @@ import 'dart:convert';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
 import 'package:ebank_mobile/data/source/open_account_repository.dart';
@@ -750,10 +751,10 @@ class _OpenAccountContactInformationPageState
             print('区号');
             Navigator.pushNamed(context, countryOrRegionSelectPage)
                 .then((value) {
-              CountryRegionModel data = value;
+              CountryRegionNewModel data = value;
               setState(() {
-                _officeAreaCodeText = '+ ${data.code}';
-                widget.dataReq.telCountryCode = data.code;
+                _officeAreaCodeText = '+ ${data.areaCode}';
+                widget.dataReq.telCountryCode = data.areaCode;
                 _nextBtnEnabled = _judgeButtonIsEnabled();
               });
             });

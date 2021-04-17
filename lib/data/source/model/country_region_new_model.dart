@@ -1,3 +1,4 @@
+import 'package:azlistview/azlistview.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'country_region_new_model.g.dart';
@@ -14,11 +15,11 @@ class CountryRegionNewListReq extends Object {
 
 @JsonSerializable()
 class CountryRegionNewListResp extends Object {
-  @JsonKey(name: 'body')
-  List<CountryRegionNewModel> body;
+  @JsonKey(name: 'countryCodeinfoDTOList')
+  List<CountryRegionNewModel> countryCodeinfoDTOList;
 
   CountryRegionNewListResp(
-    this.body,
+    this.countryCodeinfoDTOList,
   );
 
   factory CountryRegionNewListResp.fromJson(Map<String, dynamic> srcJson) =>
@@ -28,7 +29,7 @@ class CountryRegionNewListResp extends Object {
 }
 
 @JsonSerializable()
-class CountryRegionNewModel extends Object {
+class CountryRegionNewModel extends ISuspensionBean {
   @JsonKey(name: 'modifyTime')
   String modifyTime;
 
@@ -50,6 +51,14 @@ class CountryRegionNewModel extends Object {
   @JsonKey(name: 'areaCode')
   String areaCode;
 
+  ///辅助字段
+  @JsonKey(name: 'namePinyin')
+  String namePinyin;
+
+  ///辅助字段
+  @JsonKey(name: 'tagIndex')
+  String tagIndex;
+
   CountryRegionNewModel(
     this.modifyTime,
     this.createTime,
@@ -58,9 +67,13 @@ class CountryRegionNewModel extends Object {
     this.cntyCnm,
     this.cntyTcnm,
     this.areaCode,
+    this.tagIndex,
   );
 
   factory CountryRegionNewModel.fromJson(Map<String, dynamic> srcJson) =>
       _$CountryRegionNewModelFromJson(srcJson);
   Map<String, dynamic> toJson() => _$CountryRegionNewModelToJson(this);
+
+  @override
+  String getSuspensionTag() => tagIndex;
 }

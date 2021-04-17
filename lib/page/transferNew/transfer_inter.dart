@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
@@ -450,10 +451,20 @@ class _TransferInterPageState extends State<TransferInterPage> {
     // FocusScope.of(context).requestFocus(FocusNode());
     Navigator.pushNamed(context, countryOrRegionSelectPage).then((value) {
       setState(() {
-        _countryText = _language == 'zh_CN'
-            ? (value as CountryRegionModel).nameZhCN
-            : (value as CountryRegionModel).nameEN;
-        _countryCode = (value as CountryRegionModel).countryCode;
+        // _countryText = _language == 'zh_CN'
+        //     ? (value as CountryRegionNewModel).cntyCnm
+        //     : (value as CountryRegionNewModel).cntyNm;
+        switch (_language) {
+          case 'zh_CN':
+            _countryText = (value as CountryRegionNewModel).cntyCnm;
+            break;
+          case 'zh_HK':
+            _countryText = (value as CountryRegionNewModel).cntyTcnm;
+            break;
+          default:
+            _countryText = (value as CountryRegionNewModel).cntyNm;
+        }
+        _countryCode = (value as CountryRegionNewModel).cntyCd;
         _boolBut();
       });
     });
