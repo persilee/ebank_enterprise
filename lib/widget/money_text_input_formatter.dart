@@ -26,6 +26,7 @@ class MoneyTextInputFormatter extends TextInputFormatter {
         newValueText = newValueText.substring(0, newValueText.indexOf(".") + 3);
       }
     }
+
     return TextEditingValue(
         text: newValueText,
         selection: new TextSelection.collapsed(offset: newValueText.length));

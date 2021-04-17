@@ -15,12 +15,15 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_money_caculate.dart';
+import 'package:sp_util/sp_util.dart';
 
 import 'limit_details_page.dart';
 import 'loan_details_page.dart';
@@ -201,41 +204,45 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
     );
   }
 
-  //交易密码窗口
+  //点击确认按钮
   void _openBottomSheet() async {
-    _loadData(); //还款
-
-    // passwordList = await showHsgBottomSheet(
-    //   context: context,
-    //   builder: (context) {
-    //     return HsgPasswordDialog(
-    //       title: S.current.input_password,
-    //       resultPage: pageRepaySuccess,
-    //       arguments: message,
-    //     );
-    //   },
-    // );
-    // if (passwordList != null) {
-    //   if (passwordList.length == 6) {
-    //     _payPassword = EncryptUtil.aesEncode(passwordList.join());
-    //     _submitRepayment();
-    //   }
-    // }
+    bool passwordEnabled = SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED);
+    // 判断是否设置交易密码，如果没有设置，跳转到设置密码页面，
+    if (!passwordEnabled) {
+      HsgShowTip.shouldSetTranPasswordTip(
+        context: context,
+        click: (value) {
+          if (value == true) {
+            //前往设置交易密码
+            Navigator.pushNamed(context, pageResetPayPwdOtp);
+          }
+        },
+      );
+    } else {
+      // 输入交易密码
+      bool isPassword = await _didBottomSheet();
+      // 如果交易密码正确，处理审批逻辑
+      if (isPassword) {
+        _loadData(); //还款
+      }
+    }
   }
 
-//提交还款
-  void _submitRepayment() async {
-    // SVProgressHUD.show();
-    // VerifyTradePawRepository()
-    //     .verifyTransPwdNoSms(
-    //         VerifyTransPwdNoSmsReq(_payPassword), 'VerifyTransPwdNoSmsReq')
-    //     .then((data) {
-    //   SVProgressHUD.dismiss();
-    _loadData(); //还款
-    // }).catchError((e) {
-    //   SVProgressHUD.dismiss();
-    //   SVProgressHUD.showInfo(status: e.toString());
-    // });
+  //交易密码窗口
+  Future<bool> _didBottomSheet() async {
+    final isPassword = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return HsgPasswordDialog(
+            title: S.current.input_password,
+            isDialog: false,
+          );
+        });
+    if (isPassword != null && isPassword == true) {
+      return true;
+    }
+    FocusManager.instance.primaryFocus?.unfocus();
+    return false;
   }
 
   Widget _getPadding(double l, double t, double r, double b) {

@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/delete_partner.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -73,11 +74,13 @@ class _TransferPartnerState extends State<TransferPartner> {
 
   _loadData() {
     _isLoading = true;
-    TransferDataRepository()
-        .getTransferPartnerList(
-      GetTransferPartnerListReq(_page, 10),
-      'getTransferPartnerList',
-    )
+    // TransferDataRepository()
+    //     .getTransferPartnerList(
+    //   GetTransferPartnerListReq(_page, 10),
+    //   'getTransferPartnerList',
+    // )
+    Transfer()
+        .getTransferPartnerList(GetTransferPartnerListReq(_page, 10))
         .then((data) {
       if (this.mounted) {
         setState(() {
@@ -303,19 +306,20 @@ class _TransferPartnerState extends State<TransferPartner> {
 
   //删除请求
   _deletePartner(String custId, String payeeCardNo) {
-    TransferDataRepository()
-        .deletePartner(DeletePartnerReq(custId, payeeCardNo), 'deletePartner')
-        .then((data) {
-      setState(() {
-        if (data.count >= 1) {
-          _page = 1;
-          _partnerListData.clear();
-          _loadData();
-        }
+    // TransferDataRepository()
+    //     .deletePartner(DeletePartnerReq(custId, payeeCardNo), 'deletePartner')
+    Transfer()
+      ..deletePartner(DeletePartnerReq(custId, payeeCardNo)).then((data) {
+        setState(() {
+          if (data.count >= 1) {
+            _page = 1;
+            _partnerListData.clear();
+            _loadData();
+          }
+        });
+      }).catchError((e) {
+        HSProgressHUD.showError(status: e.toString());
       });
-    }).catchError((e) {
-      HSProgressHUD.showError(status: e.toString());
-    });
   }
 
   //伙伴列表

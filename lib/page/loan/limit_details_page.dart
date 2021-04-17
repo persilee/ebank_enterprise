@@ -10,13 +10,12 @@ import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
-import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LimitDetailsPage extends StatefulWidget {
@@ -36,35 +35,40 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
   String productCode = "";
   //机构代码
   String br = "";
-
+  //显示是否在加载中
   bool _isload = true;
+  //下拉刷新数据
+  RefreshController _refreshController;
 
   var loanDetails = [];
-  var refrestIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
-    // _loadData();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      refrestIndicatorKey.currentState.show();
-    });
+    _refreshController = RefreshController();
+    _loadData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).loan_mineLoan_record_navTitle),
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: RefreshIndicator(
-        key: refrestIndicatorKey,
-        child: _isload ? HsgLoading() : _getlistViewList(context),
-        onRefresh: _loadData,
-      ),
-    );
+        appBar: AppBar(
+          title: Text(S.of(context).loan_mineLoan_record_navTitle),
+          centerTitle: true,
+          elevation: 0,
+        ),
+        body: CustomRefresh(
+            controller: _refreshController, //绑定刷新控件
+            content: _isload ? HsgLoading() : _getlistViewList(context),
+            onRefresh: () {
+              //下拉刷新
+              _loadData();
+              _refreshController.refreshCompleted(); //刷新成功的操作
+            },
+            onLoading: () {
+              //上拉加载更多
+              _refreshController.loadNoData(); //暂无更多数据的操作
+            }));
   }
 
   Future<void> _loadData() async {
@@ -79,6 +83,7 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
         .getLoanAccountList(
             LoanAccountMastModelReq(0, ciNo, contactNo), 'getLoanAccountList')
         .then((data) {
+      _refreshController.loadComplete();
       setState(() {
         _isload = false;
         if (data.loanAccountDOList != null) {
@@ -88,9 +93,10 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
       });
     }).catchError((e) {
       setState(() {
+        SVProgressHUD.showInfo(status: e.toString());
+        _refreshController.loadComplete();
         _isload = false;
       });
-      SVProgressHUD.showInfo(status: e.toString());
       loanDetails.clear();
     });
   }

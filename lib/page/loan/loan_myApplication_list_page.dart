@@ -100,11 +100,11 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
     }).catchError((e) {
       setState(() {
         _isLoading = false;
-        });
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+      });
     });
   }
 
@@ -199,7 +199,9 @@ class _ExpandBoxState extends State<ExpandBox> {
                 crossAxisAlignment: CrossAxisAlignment.start, //纵轴的间距
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly, //横轴的间距
                 children: [
-                  Text(listData.prdtCode,
+                  Text(
+                      //产品名称
+                      listData.lclName != null ? listData.lclName : "",
                       style: TextStyle(
                           color: Color(0xFF262626),
                           fontSize: 16,
@@ -268,7 +270,7 @@ class _ExpandBoxState extends State<ExpandBox> {
       child: Column(
         children: [
           _textFieldCommonFunc(S.current.loan_New_product_column,
-              listData.prdtCode, false), //贷款产品
+              listData.lclName != null ? listData.lclName : "", false), //贷款产品
           _textFieldCommonFunc(
               S.current.apply_amount, listData.intentAmt, false), //申请金额
           _textFieldCommonFunc(S.current.loan_duration,

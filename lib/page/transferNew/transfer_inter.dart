@@ -21,6 +21,7 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page/transfer/data/transfer_international_data.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -129,6 +130,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
     _actualNameReqData();
     _getTransferFeeList();
 
+    //转出金额焦点监听
     _payerTransferFocusNode.addListener(() {
       if (_payerTransferFocusNode.hasFocus) {
         if (_payerTransferController.text.length > 0) {
@@ -138,23 +140,24 @@ class _TransferInterPageState extends State<TransferInterPage> {
         }
       } else {
         if (_payerTransferController.text.length > 0) {
-          setState(() {
-            _opt = 'S';
-            _rateCalculate();
-          });
+          if (double.parse(_payerTransferController.text) <= 0) {
+            _payerTransferController.text = '';
+            Fluttertoast.showToast(
+              msg: S.of(context).input_amount_msg1,
+              gravity: ToastGravity.CENTER,
+            );
+          } else {
+            setState(() {
+              _opt = 'S';
+              _rateCalculate();
+            });
+          }
         }
       }
       _boolBut();
-      // if (_payerTransferController.text.length > 0) {
-      //   setState(() {
-      //     _opt = 'S';
-      //     _payeeTransferController.text = '';
-      //     _rateCalculate();
-      //   });
-      // }
-      // _boolBut();
     });
 
+    //转入金额焦点监听
     _payeeTransferFocusNode.addListener(() {
       if (_payeeTransferFocusNode.hasFocus) {
         if (_payeeTransferController.text.length > 0) {
@@ -164,22 +167,23 @@ class _TransferInterPageState extends State<TransferInterPage> {
         }
       } else {
         if (_payeeTransferController.text.length > 0) {
-          setState(() {
-            _opt = 'B';
-            _rateCalculate();
-          });
+          if (double.parse(_payeeTransferController.text) <= 0) {
+            _payeeTransferController.text = '';
+            Fluttertoast.showToast(
+              msg: S.of(context).input_amount_msg1,
+              gravity: ToastGravity.CENTER,
+            );
+          } else {
+            setState(() {
+              _opt = 'B';
+              _rateCalculate();
+            });
+          }
         }
       }
       _boolBut();
-      // if (_payeeTransferController.text.length > 0) {
-      //   setState(() {
-      //     _opt = 'B';
-      //     _payerTransferController.text = '';
-      //     _rateCalculate();
-      //   });
-      // }
-      // _boolBut();
     });
+
     _swiftFocusNode.addListener(() {
       if (_bankSwiftController.text.length == 11 && !_swiftFocusNode.hasFocus) {
         _getBankNameBySwift(_bankSwiftController.text);
@@ -973,20 +977,32 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //汇率换算
   Future _rateCalculate() async {
-    ForexTradingRepository()
-        .transferTrial(
-            TransferTrialReq(
-              opt: _opt,
-              buyCcy: _payerCcy,
-              sellCcy: _payeeCcy,
-              buyAmount: _payerTransferController.text == ''
-                  ? '0'
-                  : _payerTransferController.text,
-              sellAmount: _payeeTransferController.text == ''
-                  ? '0'
-                  : _payeeTransferController.text,
-            ),
-            'TransferTrialReq')
+    // ForexTradingRepository()
+    //     .transferTrial(
+    //         TransferTrialReq(
+    //           opt: _opt,
+    //           buyCcy: _payerCcy,
+    //           sellCcy: _payeeCcy,
+    //           buyAmount: _payerTransferController.text == ''
+    //               ? '0'
+    //               : _payerTransferController.text,
+    //           sellAmount: _payeeTransferController.text == ''
+    //               ? '0'
+    //               : _payeeTransferController.text,
+    //         ),
+    //         'TransferTrialReq')
+    Transfer()
+        .transferTrial(TransferTrialReq(
+      opt: _opt,
+      buyCcy: _payerCcy,
+      sellCcy: _payeeCcy,
+      buyAmount: _payerTransferController.text == ''
+          ? '0'
+          : _payerTransferController.text,
+      sellAmount: _payeeTransferController.text == ''
+          ? '0'
+          : _payeeTransferController.text,
+    ))
         .then((data) {
       print(" opt: " +
           _opt +
@@ -1036,9 +1052,9 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //根据账号查询名称
   Future _getCardByCardNo(String cardNo) async {
-    TransferDataRepository()
-        .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
-        .then((data) {
+    // TransferDataRepository()
+    //     .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
+    Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo)).then((data) {
       if (this.mounted) {
         setState(() {
           _payeeNameController.text = data.ciName;
@@ -1075,18 +1091,19 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //根据银行Swift查询银行名称
   Future _getBankNameBySwift(String swift) async {
-    TransferDataRepository()
-        .getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift), 'getInfoBySwiftCode')
-        .then((data) {
-      if (this.mounted) {
-        setState(() {
-          _bankNameController.text =
-              data.swiftName1 + data.swiftName2 + data.swiftName3;
-          _boolBut();
-        });
-      }
-    }).catchError((e) {
-      print(e.toString());
-    });
+    // TransferDataRepository()
+    //     .getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift), 'getInfoBySwiftCode')
+    Transfer()
+      ..getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift)).then((data) {
+        if (this.mounted) {
+          setState(() {
+            _bankNameController.text =
+                data.swiftName1 + data.swiftName2 + data.swiftName3;
+            _boolBut();
+          });
+        }
+      }).catchError((e) {
+        print(e.toString());
+      });
   }
 }
