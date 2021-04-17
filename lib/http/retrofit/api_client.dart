@@ -10,6 +10,8 @@ import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_mode
 import 'package:ebank_mobile/data/source/model/city_for_country.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
+import 'package:ebank_mobile/data/source/model/statement/statement_query_list_body.dart';
+import 'package:ebank_mobile/data/source/model/statement/statement_query_list_model.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
@@ -73,10 +75,20 @@ abstract class ApiClient {
   Future<FindUserTodoTaskModel> findUserStartTask(
       @Body() FindTaskBody findTaskBody);
 
-  /// 查询我的申请的流程列表
+  /// 汇率换算
   @POST('/ddep/transfer/transferTrial')
   Future<TransferTrialResp> transferTrial(
       @Body() TransferTrialReq transferTrialReq);
+
+  /// 电子结单列表查询
+  @POST('/general/statement/queryList')
+  Future<StatementQueryListModel> statementQueryList(
+      @Body() StatementQueryListBody statementQueryListBody);
+
+  /// 电子结单下载
+  @GET('/general/statement/downLoad')
+  @DioResponseType(ResponseType.bytes)
+  Future<List<int>> statementDownLoad(@Query('internalId') String internalId);
 
   /// 上传头像（开户图片上传暂时共用）
   @POST('/cust/user/uploadAvatar')

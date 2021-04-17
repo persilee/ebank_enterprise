@@ -1,7 +1,10 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/electronic_statement_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_electronic_statement.dart';
+import 'package:ebank_mobile/data/source/model/statement/statement_query_list_body.dart';
+import 'package:ebank_mobile/data/source/model/statement/statement_query_list_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/hsg_pdf_viewer.dart';
 import 'package:flutter/material.dart';
@@ -14,15 +17,17 @@ class ElectronicStatementPage extends StatefulWidget {
 }
 
 class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
-  var dataList = [
-    {'date': '2020-12'},
-    {'date': '2020-11'},
-    {'date': '2020-10'},
-    {'date': '2020-09'},
-    {'date': '2020-08'},
-    {'date': '2020-07'},
-  ];
+  // var dataList = [
+  //   {'date': '2020-12'},
+  //   {'date': '2020-11'},
+  //   {'date': '2020-10'},
+  //   {'date': '2020-09'},
+  //   {'date': '2020-08'},
+  //   {'date': '2020-07'},
+  // ];
   GetFilePathResp _fileData;
+  StatementDTOS _statementDTOS;
+  List<StatementDTOS> dataList = [];
   bool _isLoading = false;
 
   @override
@@ -65,7 +70,7 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    dataList[index]['date'],
+                    dataList[index].reportDate,
                     style: TextStyle(
                       color: HsgColors.firstDegreeText,
                     ),
@@ -88,33 +93,26 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
         ),
       ),
       onTap: () {
-        openPDF(context, dataList[index]['date']);
+        _statementDTOS = dataList[index];
+        openPDF(context, dataList[index].reportName);
       },
     );
   }
 
   void _loadData() async {
     _isLoading = true;
-    try {
-      GetFilePathResp filePathResp = await RlectronicStatementRepository()
-          .getFilePath(GetFilePathReq(), 'GetFilePathReq');
-      setState(() {
-        _fileData = filePathResp;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-    }
+    StatementQueryListModel statementQueryListModel = await ApiClient().statementQueryList(StatementQueryListBody(
+      startDate: '2021-04-01',
+      endDate: '2021-04-16',
+    ));
+    setState(() {
+      dataList.addAll(statementQueryListModel.statementDTOS);
+      _isLoading = false;
+    });
   }
 
   void openPDF(BuildContext context, String title) {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => HsgPdfViewer(title: title, data: _fileData)));
+        builder: (context) => HsgPdfViewer(title: title, data: _statementDTOS)));
   }
 }
