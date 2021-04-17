@@ -169,6 +169,13 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
           setState(() {
             _totalAccoutList.clear();
             _totalAccoutList.addAll(data.cardList);
+            RemoteBankCard card = _totalAccoutList[0];
+            _loanAccount = card.cardNo; //放款帐号
+            _repayAccount = card.cardNo; //还款帐号
+            _listDataMap['payAcNo'] = _loanAccount;
+            _requestDataMap['payAcNo'] = _loanAccount;
+            _listDataMap['repaymentAcNo'] = _repayAccount;
+            _requestDataMap['repaymentAcNo'] = _repayAccount;
           });
         }
       },
@@ -465,6 +472,12 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
 
 //交易密码窗口  点击确认页面
   void _openBottomSheet() async {
+    //判断金额是否为0
+    if (double.parse(_moneyController.text) <= 0) {
+      SVProgressHUD.showInfo(status: S.current.loan_application_amount_check);
+      return;
+    }
+
     //需要将数据绑定并传值，添加新的值进去
     // _listDataMap["loanRate"] = '0.1'; //利率
     _listDataMap["remark"] = _remarkController.text; //备注

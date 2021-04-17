@@ -28,9 +28,11 @@ class ChangeHeadPortraitEvent {
   ChangeHeadPortraitEvent({this.headPortrait, this.state});
 }
 
-///通知国际化刷新
+///通知国际化刷新 state == 100 首页刷新 state == 200 我的页面刷新 state == 300 首页和我的刷新
+
 class ChangeLanguage {
   String language;
+  int state;
 
-  ChangeLanguage({this.language});
+  ChangeLanguage({this.language, this.state});
 }

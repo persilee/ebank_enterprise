@@ -1,2290 +1,2290 @@
 {
-    "countryLists": [
+    "countryCodeinfoDTOList": [
         {
-            "nameEN": "Andorra",
+            "cntyNm": "Andorra",
             "flZh": "A",
-            "code": "376",
-            "countryCode": "AD",
+            "areaCode": "376",
+            "cntyCd": "AD",
             "flEN": "A",
-            "nameZhCN": "安哥拉",
-            "nameZhHK": "安哥拉"
+            "cntyCnm": "安哥拉",
+            "cntyTcnm": "安哥拉"
         },
         {
-            "nameEN": "United Arab Emirates",
+            "cntyNm": "United Arab Emirates",
             "flZh": "A",
-            "code": "971",
-            "countryCode": "AE",
+            "areaCode": "971",
+            "cntyCd": "AE",
             "flEN": "U",
-            "nameZhCN": "阿拉伯",
-            "nameZhHK": "阿拉伯"
+            "cntyCnm": "阿拉伯",
+            "cntyTcnm": "阿拉伯"
         },
         {
-            "nameEN": "Afghanistan",
+            "cntyNm": "Afghanistan",
             "flZh": "A",
-            "code": "93",
-            "countryCode": "AF",
+            "areaCode": "93",
+            "cntyCd": "AF",
             "flEN": "A",
-            "nameZhCN": "阿富汗斯坦伊斯兰共和国",
-            "nameZhHK": "阿富汗斯坦伊斯蘭共和國"
+            "cntyCnm": "阿富汗斯坦伊斯兰共和国",
+            "cntyTcnm": "阿富汗斯坦伊斯蘭共和國"
         },
         {
-            "nameEN": "Antigua and Barbuda",
+            "cntyNm": "Antigua and Barbuda",
             "flZh": "A",
-            "code": "268",
-            "countryCode": "AG",
+            "areaCode": "268",
+            "cntyCd": "AG",
             "flEN": "A",
-            "nameZhCN": "安地卡和巴布达",
-            "nameZhHK": "安地卡和巴布達"
+            "cntyCnm": "安地卡和巴布达",
+            "cntyTcnm": "安地卡和巴布達"
         },
         {
-            "nameEN": "Anguilla",
+            "cntyNm": "Anguilla",
             "flZh": "A",
-            "code": "126",
-            "countryCode": "AI",
+            "areaCode": "126",
+            "cntyCd": "AI",
             "flEN": "A",
-            "nameZhCN": "安圭拉",
-            "nameZhHK": "安圭拉"
+            "cntyCnm": "安圭拉",
+            "cntyTcnm": "安圭拉"
         },
         {
-            "nameEN": "Albania",
+            "cntyNm": "Albania",
             "flZh": "A",
-            "code": "355",
-            "countryCode": "AL",
+            "areaCode": "355",
+            "cntyCd": "AL",
             "flEN": "A",
-            "nameZhCN": "阿尔巴尼亚共和国",
-            "nameZhHK": "阿爾巴尼亞共和國"
+            "cntyCnm": "阿尔巴尼亚共和国",
+            "cntyTcnm": "阿爾巴尼亞共和國"
         },
         {
-            "nameEN": "Armenia",
+            "cntyNm": "Armenia",
             "flZh": "Y",
-            "code": "374",
-            "countryCode": "AM",
+            "areaCode": "374",
+            "cntyCd": "AM",
             "flEN": "A",
-            "nameZhCN": "亚美尼亚共和国",
-            "nameZhHK": "亞美尼亞共和國"
+            "cntyCnm": "亚美尼亚共和国",
+            "cntyTcnm": "亞美尼亞共和國"
         },
         {
-            "nameEN": "Netherlands Antilles",
+            "cntyNm": "Netherlands Antilles",
             "flZh": "H",
-            "code": "599",
-            "countryCode": "AN",
+            "areaCode": "599",
+            "cntyCd": "AN",
             "flEN": "N",
-            "nameZhCN": "荷属安的列斯群岛",
-            "nameZhHK": "荷屬安的列斯群島"
+            "cntyCnm": "荷属安的列斯群岛",
+            "cntyTcnm": "荷屬安的列斯群島"
         },
         {
-            "nameEN": "Angola",
+            "cntyNm": "Angola",
             "flZh": "A",
-            "code": "244",
-            "countryCode": "AO",
+            "areaCode": "244",
+            "cntyCd": "AO",
             "flEN": "A",
-            "nameZhCN": "安哥拉共和国",
-            "nameZhHK": "安哥拉共和國"
+            "cntyCnm": "安哥拉共和国",
+            "cntyTcnm": "安哥拉共和國"
         },
         {
-            "nameEN": "Antarctica",
+            "cntyNm": "Antarctica",
             "flZh": "N",
-            "code": "998",
-            "countryCode": "AQ",
+            "areaCode": "998",
+            "cntyCd": "AQ",
             "flEN": "A",
-            "nameZhCN": "南极",
-            "nameZhHK": "南極"
+            "cntyCnm": "南极",
+            "cntyTcnm": "南極"
         },
         {
-            "nameEN": "Argentina",
+            "cntyNm": "Argentina",
             "flZh": "A",
-            "code": "54",
-            "countryCode": "AR",
+            "areaCode": "54",
+            "cntyCd": "AR",
             "flEN": "A",
-            "nameZhCN": "阿根廷共和国",
-            "nameZhHK": "阿根廷共和国"
+            "cntyCnm": "阿根廷共和国",
+            "cntyTcnm": "阿根廷共和国"
         },
         {
-            "nameEN": "American Samoa",
+            "cntyNm": "American Samoa",
             "flZh": "M",
-            "code": "001",
-            "countryCode": "AS",
+            "areaCode": "001",
+            "cntyCd": "AS",
             "flEN": "A",
-            "nameZhCN": "美洲萨摩亚群岛",
-            "nameZhHK": "美洲薩摩亞群島"
+            "cntyCnm": "美洲萨摩亚群岛",
+            "cntyTcnm": "美洲薩摩亞群島"
         },
         {
-            "nameEN": "Austria",
+            "cntyNm": "Austria",
             "flZh": "A",
-            "code": "43",
-            "countryCode": "AT",
+            "areaCode": "43",
+            "cntyCd": "AT",
             "flEN": "A",
-            "nameZhCN": "奥地利共和国",
-            "nameZhHK": "奧地利共和國"
+            "cntyCnm": "奥地利共和国",
+            "cntyTcnm": "奧地利共和國"
         },
         {
-            "nameEN": "Australia",
+            "cntyNm": "Australia",
             "flZh": "A",
-            "code": "61",
-            "countryCode": "AU",
+            "areaCode": "61",
+            "cntyCd": "AU",
             "flEN": "A",
-            "nameZhCN": "澳大利亚",
-            "nameZhHK": "澳大利亞"
+            "cntyCnm": "澳大利亚",
+            "cntyTcnm": "澳大利亞"
         },
         {
-            "nameEN": "Aruba",
+            "cntyNm": "Aruba",
             "flZh": "A",
-            "code": "297",
-            "countryCode": "AW",
+            "areaCode": "297",
+            "cntyCd": "AW",
             "flEN": "A",
-            "nameZhCN": "阿鲁巴",
-            "nameZhHK": "阿魯巴"
+            "cntyCnm": "阿鲁巴",
+            "cntyTcnm": "阿魯巴"
         },
         {
-            "nameEN": "Aland Islands",
+            "cntyNm": "Aland Islands",
             "flZh": "A",
-            "code": "358",
-            "countryCode": "AX",
+            "areaCode": "358",
+            "cntyCd": "AX",
             "flEN": "A",
-            "nameZhCN": "奥兰群岛",
-            "nameZhHK": "奧蘭群島"
+            "cntyCnm": "奥兰群岛",
+            "cntyTcnm": "奧蘭群島"
         },
         {
-            "nameEN": "Azerbaijan",
+            "cntyNm": "Azerbaijan",
             "flZh": "A",
-            "code": "994",
-            "countryCode": "AZ",
+            "areaCode": "994",
+            "cntyCd": "AZ",
             "flEN": "A",
-            "nameZhCN": "阿塞拜疆共和国",
-            "nameZhHK": "亞塞拜然共和國"
+            "cntyCnm": "阿塞拜疆共和国",
+            "cntyTcnm": "亞塞拜然共和國"
         },
         {
-            "nameEN": "Bosnia and Herzegovi",
+            "cntyNm": "Bosnia and Herzegovi",
             "flZh": "B",
-            "code": "387",
-            "countryCode": "BA",
+            "areaCode": "387",
+            "cntyCd": "BA",
             "flEN": "B",
-            "nameZhCN": "波黑",
-            "nameZhHK": "波黑"
+            "cntyCnm": "波黑",
+            "cntyTcnm": "波黑"
         },
         {
-            "nameEN": "Barbados",
+            "cntyNm": "Barbados",
             "flZh": "B",
-            "code": "124",
-            "countryCode": "BB",
+            "areaCode": "124",
+            "cntyCd": "BB",
             "flEN": "B",
-            "nameZhCN": "巴巴多斯",
-            "nameZhHK": "巴巴多斯"
+            "cntyCnm": "巴巴多斯",
+            "cntyTcnm": "巴巴多斯"
         },
         {
-            "nameEN": "Bangladesh",
+            "cntyNm": "Bangladesh",
             "flZh": "M",
-            "code": "880",
-            "countryCode": "BD",
+            "areaCode": "880",
+            "cntyCd": "BD",
             "flEN": "B",
-            "nameZhCN": "孟加拉人民共和国",
-            "nameZhHK": "孟加拉人民共和國"
+            "cntyCnm": "孟加拉人民共和国",
+            "cntyTcnm": "孟加拉人民共和國"
         },
         {
-            "nameEN": "Belgium",
+            "cntyNm": "Belgium",
             "flZh": "B",
-            "code": "32",
-            "countryCode": "BE",
+            "areaCode": "32",
+            "cntyCd": "BE",
             "flEN": "B",
-            "nameZhCN": "比利时王国",
-            "nameZhHK": "比利時王國"
+            "cntyCnm": "比利时王国",
+            "cntyTcnm": "比利時王國"
         },
         {
-            "nameEN": "Burkina Faso",
+            "cntyNm": "Burkina Faso",
             "flZh": "B",
-            "code": "226",
-            "countryCode": "BF",
+            "areaCode": "226",
+            "cntyCd": "BF",
             "flEN": "B",
-            "nameZhCN": "布基纳法索",
-            "nameZhHK": "布吉納法索"
+            "cntyCnm": "布基纳法索",
+            "cntyTcnm": "布吉納法索"
         },
         {
-            "nameEN": "Bulgaria",
+            "cntyNm": "Bulgaria",
             "flZh": "B",
-            "code": "359",
-            "countryCode": "BG",
+            "areaCode": "359",
+            "cntyCd": "BG",
             "flEN": "B",
-            "nameZhCN": "保加利亚共和国",
-            "nameZhHK": "保加利亞共和國"
+            "cntyCnm": "保加利亚共和国",
+            "cntyTcnm": "保加利亞共和國"
         },
         {
-            "nameEN": "Bahrain",
+            "cntyNm": "Bahrain",
             "flZh": "B",
-            "code": "973",
-            "countryCode": "BH",
+            "areaCode": "973",
+            "cntyCd": "BH",
             "flEN": "B",
-            "nameZhCN": "巴林王国",
-            "nameZhHK": "巴林王國"
+            "cntyCnm": "巴林王国",
+            "cntyTcnm": "巴林王國"
         },
         {
-            "nameEN": "Burundi",
+            "cntyNm": "Burundi",
             "flZh": "B",
-            "code": "257",
-            "countryCode": "BI",
+            "areaCode": "257",
+            "cntyCd": "BI",
             "flEN": "B",
-            "nameZhCN": "布隆迪共和国",
-            "nameZhHK": "布隆迪共和國"
+            "cntyCnm": "布隆迪共和国",
+            "cntyTcnm": "布隆迪共和國"
         },
         {
-            "nameEN": "Benin",
+            "cntyNm": "Benin",
             "flZh": "B",
-            "code": "229",
-            "countryCode": "BJ",
+            "areaCode": "229",
+            "cntyCd": "BJ",
             "flEN": "B",
-            "nameZhCN": "贝宁共和国",
-            "nameZhHK": "貝寧共和國"
+            "cntyCnm": "贝宁共和国",
+            "cntyTcnm": "貝寧共和國"
         },
         {
-            "nameEN": "Saint Barthelemy",
+            "cntyNm": "Saint Barthelemy",
             "flZh": "S",
-            "code": "33",
-            "countryCode": "BL",
+            "areaCode": "33",
+            "cntyCd": "BL",
             "flEN": "S",
-            "nameZhCN": "圣巴泰勒米岛",
-            "nameZhHK": "聖巴泰勒米島"
+            "cntyCnm": "圣巴泰勒米岛",
+            "cntyTcnm": "聖巴泰勒米島"
         },
         {
-            "nameEN": "Bermuda",
+            "cntyNm": "Bermuda",
             "flZh": "B",
-            "code": "144",
-            "countryCode": "BM",
+            "areaCode": "144",
+            "cntyCd": "BM",
             "flEN": "B",
-            "nameZhCN": "百慕大群岛",
-            "nameZhHK": "百慕大群島"
+            "cntyCnm": "百慕大群岛",
+            "cntyTcnm": "百慕大群島"
         },
         {
-            "nameEN": "Brunei",
+            "cntyNm": "Brunei",
             "flZh": "W",
-            "code": "673",
-            "countryCode": "BN",
+            "areaCode": "673",
+            "cntyCd": "BN",
             "flEN": "B",
-            "nameZhCN": "文莱达鲁萨兰国",
-            "nameZhHK": "汶萊達魯薩蘭國"
+            "cntyCnm": "文莱达鲁萨兰国",
+            "cntyTcnm": "汶萊達魯薩蘭國"
         },
         {
-            "nameEN": "Bolivia",
+            "cntyNm": "Bolivia",
             "flZh": "D",
-            "code": "591",
-            "countryCode": "BO",
+            "areaCode": "591",
+            "cntyCd": "BO",
             "flEN": "B",
-            "nameZhCN": "多民族玻利维亚国",
-            "nameZhHK": "多民族玻利維亞國"
+            "cntyCnm": "多民族玻利维亚国",
+            "cntyTcnm": "多民族玻利維亞國"
         },
         {
-            "nameEN": "Bonaire, Saint E.saba",
+            "cntyNm": "Bonaire, Saint E.saba",
             "flZh": "A",
-            "code": "31",
-            "countryCode": "BQ",
+            "areaCode": "31",
+            "cntyCd": "BQ",
             "flEN": "B",
-            "nameZhCN": "安的列斯群岛（荷属）",
-            "nameZhHK": "博內爾島（荷屬）"
+            "cntyCnm": "安的列斯群岛（荷属）",
+            "cntyTcnm": "博內爾島（荷屬）"
         },
         {
-            "nameEN": "Brazil",
+            "cntyNm": "Brazil",
             "flZh": "B",
-            "code": "55",
-            "countryCode": "BR",
+            "areaCode": "55",
+            "cntyCd": "BR",
             "flEN": "B",
-            "nameZhCN": "巴西联邦共和国",
-            "nameZhHK": "巴西聯邦共和國"
+            "cntyCnm": "巴西联邦共和国",
+            "cntyTcnm": "巴西聯邦共和國"
         },
         {
-            "nameEN": "Bahamas",
+            "cntyNm": "Bahamas",
             "flZh": "B",
-            "code": "242",
-            "countryCode": "BS",
+            "areaCode": "242",
+            "cntyCd": "BS",
             "flEN": "B",
-            "nameZhCN": "巴哈马国",
-            "nameZhHK": "巴哈馬國"
+            "cntyCnm": "巴哈马国",
+            "cntyTcnm": "巴哈馬國"
         },
         {
-            "nameEN": "Bhutan",
+            "cntyNm": "Bhutan",
             "flZh": "B",
-            "code": "975",
-            "countryCode": "BT",
+            "areaCode": "975",
+            "cntyCd": "BT",
             "flEN": "B",
-            "nameZhCN": "不丹王国",
-            "nameZhHK": "不丹王國"
+            "cntyCnm": "不丹王国",
+            "cntyTcnm": "不丹王國"
         },
         {
-            "nameEN": "Bouvet Island",
+            "cntyNm": "Bouvet Island",
             "flZh": "B",
-            "code": "47",
-            "countryCode": "BV",
+            "areaCode": "47",
+            "cntyCd": "BV",
             "flEN": "B",
-            "nameZhCN": "布维岛",
-            "nameZhHK": "布維島"
+            "cntyCnm": "布维岛",
+            "cntyTcnm": "布維島"
         },
         {
-            "nameEN": "Botswana",
+            "cntyNm": "Botswana",
             "flZh": "B",
-            "code": "267",
-            "countryCode": "BW",
+            "areaCode": "267",
+            "cntyCd": "BW",
             "flEN": "B",
-            "nameZhCN": "博茨瓦纳共和国",
-            "nameZhHK": "博茨瓦納共和國"
+            "cntyCnm": "博茨瓦纳共和国",
+            "cntyTcnm": "博茨瓦納共和國"
         },
         {
-            "nameEN": "Belarus",
+            "cntyNm": "Belarus",
             "flZh": "B",
-            "code": "375",
-            "countryCode": "BY",
+            "areaCode": "375",
+            "cntyCd": "BY",
             "flEN": "B",
-            "nameZhCN": "白俄罗斯共和国",
-            "nameZhHK": "白俄羅斯共和國"
+            "cntyCnm": "白俄罗斯共和国",
+            "cntyTcnm": "白俄羅斯共和國"
         },
         {
-            "nameEN": "Belize",
+            "cntyNm": "Belize",
             "flZh": "B",
-            "code": "501",
-            "countryCode": "BZ",
+            "areaCode": "501",
+            "cntyCd": "BZ",
             "flEN": "B",
-            "nameZhCN": "伯利兹",
-            "nameZhHK": "伯利茲"
+            "cntyCnm": "伯利兹",
+            "cntyTcnm": "伯利茲"
         },
         {
-            "nameEN": "Canada",
+            "cntyNm": "Canada",
             "flZh": "J",
-            "code": "001",
-            "countryCode": "CA",
+            "areaCode": "001",
+            "cntyCd": "CA",
             "flEN": "C",
-            "nameZhCN": "加拿大",
-            "nameZhHK": "加拿大"
+            "cntyCnm": "加拿大",
+            "cntyTcnm": "加拿大"
         },
         {
-            "nameEN": "Cocos (Keeling) Islands",
+            "cntyNm": "Cocos (Keeling) Islands",
             "flZh": "K",
-            "code": "61",
-            "countryCode": "CC",
+            "areaCode": "61",
+            "cntyCd": "CC",
             "flEN": "C",
-            "nameZhCN": "科科斯（基林）群岛",
-            "nameZhHK": "科科斯（基林）群島"
+            "cntyCnm": "科科斯（基林）群岛",
+            "cntyTcnm": "科科斯（基林）群島"
         },
         {
-            "nameEN": "The Republic of Congo",
+            "cntyNm": "The Republic of Congo",
             "flZh": "G",
-            "code": "242",
-            "countryCode": "CD",
+            "areaCode": "242",
+            "cntyCd": "CD",
             "flEN": "T",
-            "nameZhCN": "刚果共和国",
-            "nameZhHK": "剛果共和國"
+            "cntyCnm": "刚果共和国",
+            "cntyTcnm": "剛果共和國"
         },
         {
-            "nameEN": "Central African Republic",
+            "cntyNm": "Central African Republic",
             "flZh": "Z",
-            "code": "236",
-            "countryCode": "CF",
+            "areaCode": "236",
+            "cntyCd": "CF",
             "flEN": "C",
-            "nameZhCN": "中非共和国",
-            "nameZhHK": "中非共和國"
+            "cntyCnm": "中非共和国",
+            "cntyTcnm": "中非共和國"
         },
         {
-            "nameEN": "Congo",
+            "cntyNm": "Congo",
             "flZh": "G",
-            "code": "242",
-            "countryCode": "CG",
+            "areaCode": "242",
+            "cntyCd": "CG",
             "flEN": "C",
-            "nameZhCN": "刚果共和国",
-            "nameZhHK": "剛果共和國"
+            "cntyCnm": "刚果共和国",
+            "cntyTcnm": "剛果共和國"
         },
         {
-            "nameEN": "Switzerland",
+            "cntyNm": "Switzerland",
             "flZh": "R",
-            "code": "41",
-            "countryCode": "CH",
+            "areaCode": "41",
+            "cntyCd": "CH",
             "flEN": "S",
-            "nameZhCN": "瑞士联邦",
-            "nameZhHK": "瑞士聯邦"
+            "cntyCnm": "瑞士联邦",
+            "cntyTcnm": "瑞士聯邦"
         },
         {
-            "nameEN": "Cote D'ivoire",
+            "cntyNm": "Cote D'ivoire",
             "flZh": "K",
-            "code": "225",
-            "countryCode": "CI",
+            "areaCode": "225",
+            "cntyCd": "CI",
             "flEN": "C",
-            "nameZhCN": "科特迪瓦共和国",
-            "nameZhHK": "科特迪瓦共和國"
+            "cntyCnm": "科特迪瓦共和国",
+            "cntyTcnm": "科特迪瓦共和國"
         },
         {
-            "nameEN": "Cook Islands",
+            "cntyNm": "Cook Islands",
             "flZh": "K",
-            "code": "682",
-            "countryCode": "CK",
+            "areaCode": "682",
+            "cntyCd": "CK",
             "flEN": "C",
-            "nameZhCN": "库克群岛",
-            "nameZhHK": "庫克群島"
+            "cntyCnm": "库克群岛",
+            "cntyTcnm": "庫克群島"
         },
         {
-            "nameEN": "Chile",
+            "cntyNm": "Chile",
             "flZh": "Z",
-            "code": "56",
-            "countryCode": "CL",
+            "areaCode": "56",
+            "cntyCd": "CL",
             "flEN": "C",
-            "nameZhCN": "智利共和国",
-            "nameZhHK": "智利共和國"
+            "cntyCnm": "智利共和国",
+            "cntyTcnm": "智利共和國"
         },
         {
-            "nameEN": "Cameroon",
+            "cntyNm": "Cameroon",
             "flZh": "K",
-            "code": "237",
-            "countryCode": "CM",
+            "areaCode": "237",
+            "cntyCd": "CM",
             "flEN": "C",
-            "nameZhCN": "喀麦隆共和国",
-            "nameZhHK": "喀麥隆共和國"
+            "cntyCnm": "喀麦隆共和国",
+            "cntyTcnm": "喀麥隆共和國"
         },
         {
-            "nameEN": "China",
+            "cntyNm": "China",
             "flZh": "Z",
-            "code": "86",
-            "countryCode": "CN",
+            "areaCode": "86",
+            "cntyCd": "CN",
             "flEN": "C",
-            "nameZhCN": "中国",
-            "nameZhHK": "中國"
+            "cntyCnm": "中国",
+            "cntyTcnm": "中國"
         },
         {
-            "nameEN": "Colombia",
+            "cntyNm": "Colombia",
             "flZh": "G",
-            "code": "57",
-            "countryCode": "CO",
+            "areaCode": "57",
+            "cntyCd": "CO",
             "flEN": "C",
-            "nameZhCN": "哥伦比亚共和国",
-            "nameZhHK": "哥倫比亞共和國"
+            "cntyCnm": "哥伦比亚共和国",
+            "cntyTcnm": "哥倫比亞共和國"
         },
         {
-            "nameEN": "Costa Rica",
+            "cntyNm": "Costa Rica",
             "flZh": "G",
-            "code": "506",
-            "countryCode": "CR",
+            "areaCode": "506",
+            "cntyCd": "CR",
             "flEN": "C",
-            "nameZhCN": "哥斯达黎加共和国",
-            "nameZhHK": "哥斯大黎加共和國"
+            "cntyCnm": "哥斯达黎加共和国",
+            "cntyTcnm": "哥斯大黎加共和國"
         },
         {
-            "nameEN": "Cuba",
+            "cntyNm": "Cuba",
             "flZh": "G",
-            "code": "53",
-            "countryCode": "CU",
+            "areaCode": "53",
+            "cntyCd": "CU",
             "flEN": "C",
-            "nameZhCN": "古巴共和国",
-            "nameZhHK": "古巴共和國"
+            "cntyCnm": "古巴共和国",
+            "cntyTcnm": "古巴共和國"
         },
         {
-            "nameEN": "Cape Verde",
+            "cntyNm": "Cape Verde",
             "flZh": "F",
-            "code": "238",
-            "countryCode": "CV",
+            "areaCode": "238",
+            "cntyCd": "CV",
             "flEN": "C",
-            "nameZhCN": "佛得角共和国",
-            "nameZhHK": "佛得角共和國"
+            "cntyCnm": "佛得角共和国",
+            "cntyTcnm": "佛得角共和國"
         },
         {
-            "nameEN": "Curacao",
+            "cntyNm": "Curacao",
             "flZh": "K",
-            "code": "599",
-            "countryCode": "CW",
+            "areaCode": "599",
+            "cntyCd": "CW",
             "flEN": "C",
-            "nameZhCN": "库拉索",
-            "nameZhHK": "庫拉索"
+            "cntyCnm": "库拉索",
+            "cntyTcnm": "庫拉索"
         },
         {
-            "nameEN": "Christmas Island",
+            "cntyNm": "Christmas Island",
             "flZh": "S",
-            "code": "61",
-            "countryCode": "CX",
+            "areaCode": "61",
+            "cntyCd": "CX",
             "flEN": "C",
-            "nameZhCN": "圣诞岛",
-            "nameZhHK": "聖誕島"
+            "cntyCnm": "圣诞岛",
+            "cntyTcnm": "聖誕島"
         },
         {
-            "nameEN": "Cyprus",
+            "cntyNm": "Cyprus",
             "flZh": "S",
-            "code": "357",
-            "countryCode": "CY",
+            "areaCode": "357",
+            "cntyCd": "CY",
             "flEN": "C",
-            "nameZhCN": "塞浦路斯共和国",
-            "nameZhHK": "塞浦路斯共和國"
+            "cntyCnm": "塞浦路斯共和国",
+            "cntyTcnm": "塞浦路斯共和國"
         },
         {
-            "nameEN": "Czech Republic",
+            "cntyNm": "Czech Republic",
             "flZh": "J",
-            "code": "420",
-            "countryCode": "CZ",
+            "areaCode": "420",
+            "cntyCd": "CZ",
             "flEN": "C",
-            "nameZhCN": "捷克共和国",
-            "nameZhHK": "捷克共和國"
+            "cntyCnm": "捷克共和国",
+            "cntyTcnm": "捷克共和國"
         },
         {
-            "nameEN": "Germany",
+            "cntyNm": "Germany",
             "flZh": "D",
-            "code": "49",
-            "countryCode": "DE",
+            "areaCode": "49",
+            "cntyCd": "DE",
             "flEN": "G",
-            "nameZhCN": "德意志联邦共和国",
-            "nameZhHK": "德意志聯邦共和國"
+            "cntyCnm": "德意志联邦共和国",
+            "cntyTcnm": "德意志聯邦共和國"
         },
         {
-            "nameEN": "Djibouti",
+            "cntyNm": "Djibouti",
             "flZh": "J",
-            "code": "253",
-            "countryCode": "DJ",
+            "areaCode": "253",
+            "cntyCd": "DJ",
             "flEN": "D",
-            "nameZhCN": "吉布提共和国",
-            "nameZhHK": "吉布提共和國"
+            "cntyCnm": "吉布提共和国",
+            "cntyTcnm": "吉布提共和國"
         },
         {
-            "nameEN": "Denmark",
+            "cntyNm": "Denmark",
             "flZh": "D",
-            "code": "45",
-            "countryCode": "DK",
+            "areaCode": "45",
+            "cntyCd": "DK",
             "flEN": "D",
-            "nameZhCN": "丹麦王国",
-            "nameZhHK": "丹麥王國"
+            "cntyCnm": "丹麦王国",
+            "cntyTcnm": "丹麥王國"
         },
         {
-            "nameEN": "Dominica",
+            "cntyNm": "Dominica",
             "flZh": "D",
-            "code": "176",
-            "countryCode": "DM",
+            "areaCode": "176",
+            "cntyCd": "DM",
             "flEN": "D",
-            "nameZhCN": "多米尼克国",
-            "nameZhHK": "多米尼加國"
+            "cntyCnm": "多米尼克国",
+            "cntyTcnm": "多米尼加國"
         },
         {
-            "nameEN": "Dominican Republic",
+            "cntyNm": "Dominican Republic",
             "flZh": "D",
-            "code": "850",
-            "countryCode": "DO",
+            "areaCode": "850",
+            "cntyCd": "DO",
             "flEN": "D",
-            "nameZhCN": "多米尼加共和国",
-            "nameZhHK": "多米尼加共和國"
+            "cntyCnm": "多米尼加共和国",
+            "cntyTcnm": "多米尼加共和國"
         },
         {
-            "nameEN": "Algeria",
+            "cntyNm": "Algeria",
             "flZh": "A",
-            "code": "213",
-            "countryCode": "DZ",
+            "areaCode": "213",
+            "cntyCd": "DZ",
             "flEN": "A",
-            "nameZhCN": "阿尔及利亚民主人民共和国",
-            "nameZhHK": "阿爾及利亞民主人民共和國"
+            "cntyCnm": "阿尔及利亚民主人民共和国",
+            "cntyTcnm": "阿爾及利亞民主人民共和國"
         },
         {
-            "nameEN": "Ecuador",
+            "cntyNm": "Ecuador",
             "flZh": "E",
-            "code": "593",
-            "countryCode": "EC",
+            "areaCode": "593",
+            "cntyCd": "EC",
             "flEN": "E",
-            "nameZhCN": "厄瓜多尔共和国",
-            "nameZhHK": "厄瓜多爾共和國"
+            "cntyCnm": "厄瓜多尔共和国",
+            "cntyTcnm": "厄瓜多爾共和國"
         },
         {
-            "nameEN": "Estonia",
+            "cntyNm": "Estonia",
             "flZh": "A",
-            "code": "372",
-            "countryCode": "EE",
+            "areaCode": "372",
+            "cntyCd": "EE",
             "flEN": "E",
-            "nameZhCN": "爱沙尼亚共和国",
-            "nameZhHK": "愛沙尼亞共和國"
+            "cntyCnm": "爱沙尼亚共和国",
+            "cntyTcnm": "愛沙尼亞共和國"
         },
         {
-            "nameEN": "Egypt",
+            "cntyNm": "Egypt",
             "flZh": "A",
-            "code": "20",
-            "countryCode": "EG",
+            "areaCode": "20",
+            "cntyCd": "EG",
             "flEN": "E",
-            "nameZhCN": "阿拉伯埃及共和国",
-            "nameZhHK": "阿拉伯埃及共和國"
+            "cntyCnm": "阿拉伯埃及共和国",
+            "cntyTcnm": "阿拉伯埃及共和國"
         },
         {
-            "nameEN": "Western Sahara",
+            "cntyNm": "Western Sahara",
             "flZh": "X",
-            "code": "212",
-            "countryCode": "EH",
+            "areaCode": "212",
+            "cntyCd": "EH",
             "flEN": "W",
-            "nameZhCN": "西撒哈拉",
-            "nameZhHK": "西撒哈拉"
+            "cntyCnm": "西撒哈拉",
+            "cntyTcnm": "西撒哈拉"
         },
         {
-            "nameEN": "Eritrea",
+            "cntyNm": "Eritrea",
             "flZh": "E",
-            "code": "291",
-            "countryCode": "ER",
+            "areaCode": "291",
+            "cntyCd": "ER",
             "flEN": "E",
-            "nameZhCN": "厄立特里亚国",
-            "nameZhHK": "厄立特里亞國"
+            "cntyCnm": "厄立特里亚国",
+            "cntyTcnm": "厄立特里亞國"
         },
         {
-            "nameEN": "Spain",
+            "cntyNm": "Spain",
             "flZh": "X",
-            "code": "34",
-            "countryCode": "ES",
+            "areaCode": "34",
+            "cntyCd": "ES",
             "flEN": "S",
-            "nameZhCN": "西班牙王国",
-            "nameZhHK": "西班牙王國"
+            "cntyCnm": "西班牙王国",
+            "cntyTcnm": "西班牙王國"
         },
         {
-            "nameEN": "Ethiopia",
+            "cntyNm": "Ethiopia",
             "flZh": "A",
-            "code": "251",
-            "countryCode": "ET",
+            "areaCode": "251",
+            "cntyCd": "ET",
             "flEN": "E",
-            "nameZhCN": "埃塞俄比亚联邦民主共和国",
-            "nameZhHK": "埃塞俄比亞聯邦民主共和國"
+            "cntyCnm": "埃塞俄比亚联邦民主共和国",
+            "cntyTcnm": "埃塞俄比亞聯邦民主共和國"
         },
         {
-            "nameEN": "European Union",
+            "cntyNm": "European Union",
             "flZh": "O",
-            "code": "33",
-            "countryCode": "EU",
+            "areaCode": "33",
+            "cntyCd": "EU",
             "flEN": "E",
-            "nameZhCN": "欧盟",
-            "nameZhHK": "歐盟"
+            "cntyCnm": "欧盟",
+            "cntyTcnm": "歐盟"
         },
         {
-            "nameEN": "Finland",
+            "cntyNm": "Finland",
             "flZh": "F",
-            "code": "358",
-            "countryCode": "FI",
+            "areaCode": "358",
+            "cntyCd": "FI",
             "flEN": "F",
-            "nameZhCN": "芬兰共和国",
-            "nameZhHK": "芬蘭共和國"
+            "cntyCnm": "芬兰共和国",
+            "cntyTcnm": "芬蘭共和國"
         },
         {
-            "nameEN": "Fiji",
+            "cntyNm": "Fiji",
             "flZh": "斐",
-            "code": "679",
-            "countryCode": "FJ",
+            "areaCode": "679",
+            "cntyCd": "FJ",
             "flEN": "F",
-            "nameZhCN": "斐济共和国",
-            "nameZhHK": "斐濟共和國"
+            "cntyCnm": "斐济共和国",
+            "cntyTcnm": "斐濟共和國"
         },
         {
-            "nameEN": "Falkland Islands",
+            "cntyNm": "Falkland Islands",
             "flZh": "M",
-            "code": "500",
-            "countryCode": "FK",
+            "areaCode": "500",
+            "cntyCd": "FK",
             "flEN": "F",
-            "nameZhCN": "马尔维纳斯群岛",
-            "nameZhHK": "馬爾維納斯群島"
+            "cntyCnm": "马尔维纳斯群岛",
+            "cntyTcnm": "馬爾維納斯群島"
         },
         {
-            "nameEN": "The Federate States of Micronesia",
+            "cntyNm": "The Federate States of Micronesia",
             "flZh": "M",
-            "code": "691",
-            "countryCode": "FM",
+            "areaCode": "691",
+            "cntyCd": "FM",
             "flEN": "T",
-            "nameZhCN": "密克罗尼西亚联邦",
-            "nameZhHK": "密克羅尼西亞聯邦"
+            "cntyCnm": "密克罗尼西亚联邦",
+            "cntyTcnm": "密克羅尼西亞聯邦"
         },
         {
-            "nameEN": "Faroe Islands",
+            "cntyNm": "Faroe Islands",
             "flZh": "F",
-            "code": "298",
-            "countryCode": "FO",
+            "areaCode": "298",
+            "cntyCd": "FO",
             "flEN": "F",
-            "nameZhCN": "法罗群岛",
-            "nameZhHK": "法羅群島"
+            "cntyCnm": "法罗群岛",
+            "cntyTcnm": "法羅群島"
         },
         {
-            "nameEN": "France",
+            "cntyNm": "France",
             "flZh": "F",
-            "code": "33",
-            "countryCode": "FR",
+            "areaCode": "33",
+            "cntyCd": "FR",
             "flEN": "F",
-            "nameZhCN": "法国",
-            "nameZhHK": "法國"
+            "cntyCnm": "法国",
+            "cntyTcnm": "法國"
         },
         {
-            "nameEN": "Gabon",
+            "cntyNm": "Gabon",
             "flZh": "J",
-            "code": "241",
-            "countryCode": "GA",
+            "areaCode": "241",
+            "cntyCd": "GA",
             "flEN": "G",
-            "nameZhCN": "加蓬共和国",
-            "nameZhHK": "加蓬共和國"
+            "cntyCnm": "加蓬共和国",
+            "cntyTcnm": "加蓬共和國"
         },
         {
-            "nameEN": "United Kingdom",
+            "cntyNm": "United Kingdom",
             "flZh": "D",
-            "code": "44",
-            "countryCode": "GB",
+            "areaCode": "44",
+            "cntyCd": "GB",
             "flEN": "U",
-            "nameZhCN": "大不列颠及北爱尔兰联合王国",
-            "nameZhHK": "大不列顛及北愛爾蘭聯合王國"
+            "cntyCnm": "大不列颠及北爱尔兰联合王国",
+            "cntyTcnm": "大不列顛及北愛爾蘭聯合王國"
         },
         {
-            "nameEN": "Grenada",
+            "cntyNm": "Grenada",
             "flZh": "G",
-            "code": "147",
-            "countryCode": "GD",
+            "areaCode": "147",
+            "cntyCd": "GD",
             "flEN": "G",
-            "nameZhCN": "格林纳达",
-            "nameZhHK": "格林納達"
+            "cntyCnm": "格林纳达",
+            "cntyTcnm": "格林納達"
         },
         {
-            "nameEN": "Georgia",
+            "cntyNm": "Georgia",
             "flZh": "G",
-            "code": "995",
-            "countryCode": "GE",
+            "areaCode": "995",
+            "cntyCd": "GE",
             "flEN": "G",
-            "nameZhCN": "格鲁吉亚",
-            "nameZhHK": "格魯吉亞"
+            "cntyCnm": "格鲁吉亚",
+            "cntyTcnm": "格魯吉亞"
         },
         {
-            "nameEN": "French Guiana",
+            "cntyNm": "French Guiana",
             "flZh": "F",
-            "code": "594",
-            "countryCode": "GF",
+            "areaCode": "594",
+            "cntyCd": "GF",
             "flEN": "F",
-            "nameZhCN": "法属圭亚那",
-            "nameZhHK": "法屬圭亞那"
+            "cntyCnm": "法属圭亚那",
+            "cntyTcnm": "法屬圭亞那"
         },
         {
-            "nameEN": "Guernsey",
+            "cntyNm": "Guernsey",
             "flZh": "G",
-            "code": "44",
-            "countryCode": "GG",
+            "areaCode": "44",
+            "cntyCd": "GG",
             "flEN": "G",
-            "nameZhCN": "根西岛",
-            "nameZhHK": "根西島"
+            "cntyCnm": "根西岛",
+            "cntyTcnm": "根西島"
         },
         {
-            "nameEN": "Ghana",
+            "cntyNm": "Ghana",
             "flZh": "J",
-            "code": "233",
-            "countryCode": "GH",
+            "areaCode": "233",
+            "cntyCd": "GH",
             "flEN": "G",
-            "nameZhCN": "加纳共和国",
-            "nameZhHK": "迦納共和國"
+            "cntyCnm": "加纳共和国",
+            "cntyTcnm": "迦納共和國"
         },
         {
-            "nameEN": "Gibraltar",
+            "cntyNm": "Gibraltar",
             "flZh": "Z",
-            "code": "350",
-            "countryCode": "GI",
+            "areaCode": "350",
+            "cntyCd": "GI",
             "flEN": "G",
-            "nameZhCN": "直布罗陀",
-            "nameZhHK": "直布羅陀"
+            "cntyCnm": "直布罗陀",
+            "cntyTcnm": "直布羅陀"
         },
         {
-            "nameEN": "Greenland",
+            "cntyNm": "Greenland",
             "flZh": "G",
-            "code": "45",
-            "countryCode": "GL",
+            "areaCode": "45",
+            "cntyCd": "GL",
             "flEN": "G",
-            "nameZhCN": "格陵兰岛",
-            "nameZhHK": "格陵蘭島"
+            "cntyCnm": "格陵兰岛",
+            "cntyTcnm": "格陵蘭島"
         },
         {
-            "nameEN": "Gambia",
+            "cntyNm": "Gambia",
             "flZh": "G",
-            "code": "220",
-            "countryCode": "GM",
+            "areaCode": "220",
+            "cntyCd": "GM",
             "flEN": "G",
-            "nameZhCN": "冈比亚共和国",
-            "nameZhHK": "岡比亞共和國"
+            "cntyCnm": "冈比亚共和国",
+            "cntyTcnm": "岡比亞共和國"
         },
         {
-            "nameEN": "Guinea",
+            "cntyNm": "Guinea",
             "flZh": "J",
-            "code": "224",
-            "countryCode": "GN",
+            "areaCode": "224",
+            "cntyCd": "GN",
             "flEN": "G",
-            "nameZhCN": "几内亚共和国",
-            "nameZhHK": "幾內亞共和國"
+            "cntyCnm": "几内亚共和国",
+            "cntyTcnm": "幾內亞共和國"
         },
         {
-            "nameEN": "Guadeloupe",
+            "cntyNm": "Guadeloupe",
             "flZh": "G",
-            "code": "590",
-            "countryCode": "GP",
+            "areaCode": "590",
+            "cntyCd": "GP",
             "flEN": "G",
-            "nameZhCN": "瓜德罗普",
-            "nameZhHK": "瓜德羅普"
+            "cntyCnm": "瓜德罗普",
+            "cntyTcnm": "瓜德羅普"
         },
         {
-            "nameEN": "Equatorial Guinea",
+            "cntyNm": "Equatorial Guinea",
             "flZh": "C",
-            "code": "240",
-            "countryCode": "GQ",
+            "areaCode": "240",
+            "cntyCd": "GQ",
             "flEN": "E",
-            "nameZhCN": "赤道几内亚",
-            "nameZhHK": "赤道幾內亞"
+            "cntyCnm": "赤道几内亚",
+            "cntyTcnm": "赤道幾內亞"
         },
         {
-            "nameEN": "Greece",
+            "cntyNm": "Greece",
             "flZh": "X",
-            "code": "30",
-            "countryCode": "GR",
+            "areaCode": "30",
+            "cntyCd": "GR",
             "flEN": "G",
-            "nameZhCN": "希腊共和国",
-            "nameZhHK": "希臘共和國"
+            "cntyCnm": "希腊共和国",
+            "cntyTcnm": "希臘共和國"
         },
         {
-            "nameEN": "South Georgia and The South",
+            "cntyNm": "South Georgia and The South",
             "flZh": "N",
-            "code": "500",
-            "countryCode": "GS",
+            "areaCode": "500",
+            "cntyCd": "GS",
             "flEN": "S",
-            "nameZhCN": "南乔治亚岛和南桑威奇群岛",
-            "nameZhHK": "南喬治亞島和南桑威奇群島"
+            "cntyCnm": "南乔治亚岛和南桑威奇群岛",
+            "cntyTcnm": "南喬治亞島和南桑威奇群島"
         },
         {
-            "nameEN": "Guatemala",
+            "cntyNm": "Guatemala",
             "flZh": "W",
-            "code": "502",
-            "countryCode": "GT",
+            "areaCode": "502",
+            "cntyCd": "GT",
             "flEN": "G",
-            "nameZhCN": "危地马拉共和国",
-            "nameZhHK": "瓜地馬拉共和國"
+            "cntyCnm": "危地马拉共和国",
+            "cntyTcnm": "瓜地馬拉共和國"
         },
         {
-            "nameEN": "Guam",
+            "cntyNm": "Guam",
             "flZh": "G",
-            "code": "167",
-            "countryCode": "GU",
+            "areaCode": "167",
+            "cntyCd": "GU",
             "flEN": "G",
-            "nameZhCN": "关岛",
-            "nameZhHK": "關島"
+            "cntyCnm": "关岛",
+            "cntyTcnm": "關島"
         },
         {
-            "nameEN": "Guinea-bissau",
+            "cntyNm": "Guinea-bissau",
             "flZh": "J",
-            "code": "245",
-            "countryCode": "GW",
+            "areaCode": "245",
+            "cntyCd": "GW",
             "flEN": "G",
-            "nameZhCN": "几内亚比绍共和国",
-            "nameZhHK": "几内亚比绍共和国"
+            "cntyCnm": "几内亚比绍共和国",
+            "cntyTcnm": "几内亚比绍共和国"
         },
         {
-            "nameEN": "Guyana",
+            "cntyNm": "Guyana",
             "flZh": "G",
-            "code": "592",
-            "countryCode": "GY",
+            "areaCode": "592",
+            "cntyCd": "GY",
             "flEN": "G",
-            "nameZhCN": "圭亚那合作共和国",
-            "nameZhHK": "圭亞那合作共和國"
+            "cntyCnm": "圭亚那合作共和国",
+            "cntyTcnm": "圭亞那合作共和國"
         },
         {
-            "nameEN": "Hong Kong (China)",
+            "cntyNm": "Hong Kong (China)",
             "flZh": "Z",
-            "code": "852",
-            "countryCode": "HK",
+            "areaCode": "852",
+            "cntyCd": "HK",
             "flEN": "H",
-            "nameZhCN": "中国香港",
-            "nameZhHK": "中國香港"
+            "cntyCnm": "中国香港",
+            "cntyTcnm": "中國香港"
         },
         {
-            "nameEN": "Heard Island and McDonald",
+            "cntyNm": "Heard Island and McDonald",
             "flZh": "H",
-            "code": "61",
-            "countryCode": "HM",
+            "areaCode": "61",
+            "cntyCd": "HM",
             "flEN": "H",
-            "nameZhCN": "赫德岛和麦克唐纳岛",
-            "nameZhHK": "赫德島和麥克唐納島"
+            "cntyCnm": "赫德岛和麦克唐纳岛",
+            "cntyTcnm": "赫德島和麥克唐納島"
         },
         {
-            "nameEN": "Honduras",
+            "cntyNm": "Honduras",
             "flZh": "H",
-            "code": "504",
-            "countryCode": "HN",
+            "areaCode": "504",
+            "cntyCd": "HN",
             "flEN": "H",
-            "nameZhCN": "洪都拉斯共和国",
-            "nameZhHK": "洪都拉斯共和國"
+            "cntyCnm": "洪都拉斯共和国",
+            "cntyTcnm": "洪都拉斯共和國"
         },
         {
-            "nameEN": "Croatia",
+            "cntyNm": "Croatia",
             "flZh": "K",
-            "code": "385",
-            "countryCode": "HR",
+            "areaCode": "385",
+            "cntyCd": "HR",
             "flEN": "C",
-            "nameZhCN": "克罗地亚共和国",
-            "nameZhHK": "克羅埃西亞共和國"
+            "cntyCnm": "克罗地亚共和国",
+            "cntyTcnm": "克羅埃西亞共和國"
         },
         {
-            "nameEN": "Haiti",
+            "cntyNm": "Haiti",
             "flZh": "H",
-            "code": "509",
-            "countryCode": "HT",
+            "areaCode": "509",
+            "cntyCd": "HT",
             "flEN": "H",
-            "nameZhCN": "海地共和国",
-            "nameZhHK": "海地共和國"
+            "cntyCnm": "海地共和国",
+            "cntyTcnm": "海地共和國"
         },
         {
-            "nameEN": "Hungary",
+            "cntyNm": "Hungary",
             "flZh": "X",
-            "code": "36",
-            "countryCode": "HU",
+            "areaCode": "36",
+            "cntyCd": "HU",
             "flEN": "H",
-            "nameZhCN": "匈牙利",
-            "nameZhHK": "匈牙利"
+            "cntyCnm": "匈牙利",
+            "cntyTcnm": "匈牙利"
         },
         {
-            "nameEN": "Indonesia",
+            "cntyNm": "Indonesia",
             "flZh": "Y",
-            "code": "62",
-            "countryCode": "ID",
+            "areaCode": "62",
+            "cntyCd": "ID",
             "flEN": "I",
-            "nameZhCN": "印度尼西亚共和国",
-            "nameZhHK": "印度尼西亞共和國"
+            "cntyCnm": "印度尼西亚共和国",
+            "cntyTcnm": "印度尼西亞共和國"
         },
         {
-            "nameEN": "Ireland",
+            "cntyNm": "Ireland",
             "flZh": "A",
-            "code": "353",
-            "countryCode": "IE",
+            "areaCode": "353",
+            "cntyCd": "IE",
             "flEN": "I",
-            "nameZhCN": "爱尔兰共和国",
-            "nameZhHK": "愛爾蘭共和國"
+            "cntyCnm": "爱尔兰共和国",
+            "cntyTcnm": "愛爾蘭共和國"
         },
         {
-            "nameEN": "Israel",
+            "cntyNm": "Israel",
             "flZh": "Y",
-            "code": "972",
-            "countryCode": "IL",
+            "areaCode": "972",
+            "cntyCd": "IL",
             "flEN": "I",
-            "nameZhCN": "以色列国",
-            "nameZhHK": "以色列國"
+            "cntyCnm": "以色列国",
+            "cntyTcnm": "以色列國"
         },
         {
-            "nameEN": "Isle Of Man",
+            "cntyNm": "Isle Of Man",
             "flZh": "Y",
-            "code": "44",
-            "countryCode": "IM",
+            "areaCode": "44",
+            "cntyCd": "IM",
             "flEN": "I",
-            "nameZhCN": "英属马恩岛",
-            "nameZhHK": "英屬馬恩島"
+            "cntyCnm": "英属马恩岛",
+            "cntyTcnm": "英屬馬恩島"
         },
         {
-            "nameEN": "India",
+            "cntyNm": "India",
             "flZh": "Y",
-            "code": "91",
-            "countryCode": "IN",
+            "areaCode": "91",
+            "cntyCd": "IN",
             "flEN": "I",
-            "nameZhCN": "印度共和国",
-            "nameZhHK": "印度共和國"
+            "cntyCnm": "印度共和国",
+            "cntyTcnm": "印度共和國"
         },
         {
-            "nameEN": "British Indian Ocean",
+            "cntyNm": "British Indian Ocean",
             "flZh": "Y",
-            "code": "246",
-            "countryCode": "IO",
+            "areaCode": "246",
+            "cntyCd": "IO",
             "flEN": "B",
-            "nameZhCN": "英属印度洋领地",
-            "nameZhHK": "英屬印度洋領地"
+            "cntyCnm": "英属印度洋领地",
+            "cntyTcnm": "英屬印度洋領地"
         },
         {
-            "nameEN": "Iraq",
+            "cntyNm": "Iraq",
             "flZh": "Y",
-            "code": "964",
-            "countryCode": "IQ",
+            "areaCode": "964",
+            "cntyCd": "IQ",
             "flEN": "I",
-            "nameZhCN": "伊拉克共和国",
-            "nameZhHK": "伊拉克共和國"
+            "cntyCnm": "伊拉克共和国",
+            "cntyTcnm": "伊拉克共和國"
         },
         {
-            "nameEN": "Iran",
+            "cntyNm": "Iran",
             "flZh": "Y",
-            "code": "98",
-            "countryCode": "IR",
+            "areaCode": "98",
+            "cntyCd": "IR",
             "flEN": "I",
-            "nameZhCN": "伊朗伊斯兰共和国",
-            "nameZhHK": "伊朗伊斯蘭共和國"
+            "cntyCnm": "伊朗伊斯兰共和国",
+            "cntyTcnm": "伊朗伊斯蘭共和國"
         },
         {
-            "nameEN": "Iceland",
+            "cntyNm": "Iceland",
             "flZh": "B",
-            "code": "354",
-            "countryCode": "IS",
+            "areaCode": "354",
+            "cntyCd": "IS",
             "flEN": "I",
-            "nameZhCN": "冰岛共和国",
-            "nameZhHK": "冰島共和國"
+            "cntyCnm": "冰岛共和国",
+            "cntyTcnm": "冰島共和國"
         },
         {
-            "nameEN": "Italy",
+            "cntyNm": "Italy",
             "flZh": "Y",
-            "code": "39",
-            "countryCode": "IT",
+            "areaCode": "39",
+            "cntyCd": "IT",
             "flEN": "I",
-            "nameZhCN": "意大利共和国",
-            "nameZhHK": "意大利共和國"
+            "cntyCnm": "意大利共和国",
+            "cntyTcnm": "意大利共和國"
         },
         {
-            "nameEN": "Jersey",
+            "cntyNm": "Jersey",
             "flZh": "Z",
-            "code": "44",
-            "countryCode": "JE",
+            "areaCode": "44",
+            "cntyCd": "JE",
             "flEN": "J",
-            "nameZhCN": "泽西岛",
-            "nameZhHK": "澤西島"
+            "cntyCnm": "泽西岛",
+            "cntyTcnm": "澤西島"
         },
         {
-            "nameEN": "Jamaica",
+            "cntyNm": "Jamaica",
             "flZh": "Y",
-            "code": "876",
-            "countryCode": "JM",
+            "areaCode": "876",
+            "cntyCd": "JM",
             "flEN": "J",
-            "nameZhCN": "牙买加",
-            "nameZhHK": "牙買加"
+            "cntyCnm": "牙买加",
+            "cntyTcnm": "牙買加"
         },
         {
-            "nameEN": "Jordan",
+            "cntyNm": "Jordan",
             "flZh": "Y",
-            "code": "962",
-            "countryCode": "JO",
+            "areaCode": "962",
+            "cntyCd": "JO",
             "flEN": "J",
-            "nameZhCN": "约旦哈希姆王国",
-            "nameZhHK": "約旦哈希姆王國"
+            "cntyCnm": "约旦哈希姆王国",
+            "cntyTcnm": "約旦哈希姆王國"
         },
         {
-            "nameEN": "Japan",
+            "cntyNm": "Japan",
             "flZh": "R",
-            "code": "81",
-            "countryCode": "JP",
+            "areaCode": "81",
+            "cntyCd": "JP",
             "flEN": "J",
-            "nameZhCN": "日本国",
-            "nameZhHK": "日本國"
+            "cntyCnm": "日本国",
+            "cntyTcnm": "日本國"
         },
         {
-            "nameEN": "Kenya",
+            "cntyNm": "Kenya",
             "flZh": "K",
-            "code": "254",
-            "countryCode": "KE",
+            "areaCode": "254",
+            "cntyCd": "KE",
             "flEN": "K",
-            "nameZhCN": "肯尼亚共和国",
-            "nameZhHK": "肯尼亞共和國"
+            "cntyCnm": "肯尼亚共和国",
+            "cntyTcnm": "肯尼亞共和國"
         },
         {
-            "nameEN": "Kyrgyzstan",
+            "cntyNm": "Kyrgyzstan",
             "flZh": "J",
-            "code": "996",
-            "countryCode": "KG",
+            "areaCode": "996",
+            "cntyCd": "KG",
             "flEN": "K",
-            "nameZhCN": "吉尔吉斯共和国",
-            "nameZhHK": "吉爾吉斯共和國"
+            "cntyCnm": "吉尔吉斯共和国",
+            "cntyTcnm": "吉爾吉斯共和國"
         },
         {
-            "nameEN": "Cambodia",
+            "cntyNm": "Cambodia",
             "flZh": "J",
-            "code": "855",
-            "countryCode": "KH",
+            "areaCode": "855",
+            "cntyCd": "KH",
             "flEN": "C",
-            "nameZhCN": "柬埔寨王国",
-            "nameZhHK": "柬埔寨王國"
+            "cntyCnm": "柬埔寨王国",
+            "cntyTcnm": "柬埔寨王國"
         },
         {
-            "nameEN": "Kiribati",
+            "cntyNm": "Kiribati",
             "flZh": "J",
-            "code": "686",
-            "countryCode": "KI",
+            "areaCode": "686",
+            "cntyCd": "KI",
             "flEN": "K",
-            "nameZhCN": "基里巴斯共和国",
-            "nameZhHK": "基裡巴斯共和國"
+            "cntyCnm": "基里巴斯共和国",
+            "cntyTcnm": "基裡巴斯共和國"
         },
         {
-            "nameEN": "Comoros",
+            "cntyNm": "Comoros",
             "flZh": "K",
-            "code": "269",
-            "countryCode": "KM",
+            "areaCode": "269",
+            "cntyCd": "KM",
             "flEN": "C",
-            "nameZhCN": "科摩罗联盟",
-            "nameZhHK": "科摩羅聯盟"
+            "cntyCnm": "科摩罗联盟",
+            "cntyTcnm": "科摩羅聯盟"
         },
         {
-            "nameEN": "Saint Kitts and Nevi",
+            "cntyNm": "Saint Kitts and Nevi",
             "flZh": "S",
-            "code": "001",
-            "countryCode": "KN",
+            "areaCode": "001",
+            "cntyCd": "KN",
             "flEN": "S",
-            "nameZhCN": "圣基茨和尼维斯",
-            "nameZhHK": "聖基茨和尼維斯"
+            "cntyCnm": "圣基茨和尼维斯",
+            "cntyTcnm": "聖基茨和尼維斯"
         },
         {
-            "nameEN": "North Korea",
+            "cntyNm": "North Korea",
             "flZh": "C",
-            "code": "850",
-            "countryCode": "KP",
+            "areaCode": "850",
+            "cntyCd": "KP",
             "flEN": "N",
-            "nameZhCN": "朝鲜民主主义人民共和国",
-            "nameZhHK": "朝鮮民主主義人民共和國"
+            "cntyCnm": "朝鲜民主主义人民共和国",
+            "cntyTcnm": "朝鮮民主主義人民共和國"
         },
         {
-            "nameEN": "South Korea",
+            "cntyNm": "South Korea",
             "flZh": "D",
-            "code": "82",
-            "countryCode": "KR",
+            "areaCode": "82",
+            "cntyCd": "KR",
             "flEN": "S",
-            "nameZhCN": "大韩民国",
-            "nameZhHK": "大韓民國"
+            "cntyCnm": "大韩民国",
+            "cntyTcnm": "大韓民國"
         },
         {
-            "nameEN": "Kuwait",
+            "cntyNm": "Kuwait",
             "flZh": "K",
-            "code": "965",
-            "countryCode": "KW",
+            "areaCode": "965",
+            "cntyCd": "KW",
             "flEN": "K",
-            "nameZhCN": "科威特国",
-            "nameZhHK": "科威特國"
+            "cntyCnm": "科威特国",
+            "cntyTcnm": "科威特國"
         },
         {
-            "nameEN": "Cayman Islands",
+            "cntyNm": "Cayman Islands",
             "flZh": "K",
-            "code": "996",
-            "countryCode": "KY",
+            "areaCode": "996",
+            "cntyCd": "KY",
             "flEN": "C",
-            "nameZhCN": "开曼群岛",
-            "nameZhHK": "開曼群島"
+            "cntyCnm": "开曼群岛",
+            "cntyTcnm": "開曼群島"
         },
         {
-            "nameEN": "Kazakhstan",
+            "cntyNm": "Kazakhstan",
             "flZh": "H",
-            "code": "7",
-            "countryCode": "KZ",
+            "areaCode": "7",
+            "cntyCd": "KZ",
             "flEN": "K",
-            "nameZhCN": "哈萨克斯坦共和国",
-            "nameZhHK": "哈薩克斯坦共和國"
+            "cntyCnm": "哈萨克斯坦共和国",
+            "cntyTcnm": "哈薩克斯坦共和國"
         },
         {
-            "nameEN": "Laos",
+            "cntyNm": "Laos",
             "flZh": "L",
-            "code": "856",
-            "countryCode": "LA",
+            "areaCode": "856",
+            "cntyCd": "LA",
             "flEN": "L",
-            "nameZhCN": "老挝人民民主共和国",
-            "nameZhHK": "老撾人民民主共和國"
+            "cntyCnm": "老挝人民民主共和国",
+            "cntyTcnm": "老撾人民民主共和國"
         },
         {
-            "nameEN": "Lebanon",
+            "cntyNm": "Lebanon",
             "flZh": "L",
-            "code": "961",
-            "countryCode": "LB",
+            "areaCode": "961",
+            "cntyCd": "LB",
             "flEN": "L",
-            "nameZhCN": "黎巴嫩共和国",
-            "nameZhHK": "黎巴嫩共和國"
+            "cntyCnm": "黎巴嫩共和国",
+            "cntyTcnm": "黎巴嫩共和國"
         },
         {
-            "nameEN": "Saint Lucia",
+            "cntyNm": "Saint Lucia",
             "flZh": "S",
-            "code": "001",
-            "countryCode": "LC",
+            "areaCode": "001",
+            "cntyCd": "LC",
             "flEN": "S",
-            "nameZhCN": "圣卢西亚",
-            "nameZhHK": "聖盧西亞"
+            "cntyCnm": "圣卢西亚",
+            "cntyTcnm": "聖盧西亞"
         },
         {
-            "nameEN": "Liechtenstein",
+            "cntyNm": "Liechtenstein",
             "flZh": "L",
-            "code": "423",
-            "countryCode": "LI",
+            "areaCode": "423",
+            "cntyCd": "LI",
             "flEN": "L",
-            "nameZhCN": "列支敦士登公国",
-            "nameZhHK": "列支敦士登公國"
+            "cntyCnm": "列支敦士登公国",
+            "cntyTcnm": "列支敦士登公國"
         },
         {
-            "nameEN": "Sri Lanka",
+            "cntyNm": "Sri Lanka",
             "flZh": "S",
-            "code": "94",
-            "countryCode": "LK",
+            "areaCode": "94",
+            "cntyCd": "LK",
             "flEN": "S",
-            "nameZhCN": "斯里兰卡民主社会主义共和国",
-            "nameZhHK": "斯里兰卡民主社会主义共和国"
+            "cntyCnm": "斯里兰卡民主社会主义共和国",
+            "cntyTcnm": "斯里兰卡民主社会主义共和国"
         },
         {
-            "nameEN": "Liberia",
+            "cntyNm": "Liberia",
             "flZh": "L",
-            "code": "231",
-            "countryCode": "LR",
+            "areaCode": "231",
+            "cntyCd": "LR",
             "flEN": "L",
-            "nameZhCN": "利比里亚共和国",
-            "nameZhHK": "利比裡亞共和國"
+            "cntyCnm": "利比里亚共和国",
+            "cntyTcnm": "利比裡亞共和國"
         },
         {
-            "nameEN": "Lesotho",
+            "cntyNm": "Lesotho",
             "flZh": "L",
-            "code": "266",
-            "countryCode": "LS",
+            "areaCode": "266",
+            "cntyCd": "LS",
             "flEN": "L",
-            "nameZhCN": "莱索托王国",
-            "nameZhHK": "萊索托王國"
+            "cntyCnm": "莱索托王国",
+            "cntyTcnm": "萊索托王國"
         },
         {
-            "nameEN": "Lithuania",
+            "cntyNm": "Lithuania",
             "flZh": "L",
-            "code": "370",
-            "countryCode": "LT",
+            "areaCode": "370",
+            "cntyCd": "LT",
             "flEN": "L",
-            "nameZhCN": "立陶宛共和国",
-            "nameZhHK": "立陶宛共和國"
+            "cntyCnm": "立陶宛共和国",
+            "cntyTcnm": "立陶宛共和國"
         },
         {
-            "nameEN": "Luxembourg",
+            "cntyNm": "Luxembourg",
             "flZh": "L",
-            "code": "352",
-            "countryCode": "LU",
+            "areaCode": "352",
+            "cntyCd": "LU",
             "flEN": "L",
-            "nameZhCN": "卢森堡大公国",
-            "nameZhHK": "盧森堡大公國"
+            "cntyCnm": "卢森堡大公国",
+            "cntyTcnm": "盧森堡大公國"
         },
         {
-            "nameEN": "Latvia",
+            "cntyNm": "Latvia",
             "flZh": "L",
-            "code": "371",
-            "countryCode": "LV",
+            "areaCode": "371",
+            "cntyCd": "LV",
             "flEN": "L",
-            "nameZhCN": "拉脱维亚共和国",
-            "nameZhHK": "拉脫維亞共和國"
+            "cntyCnm": "拉脱维亚共和国",
+            "cntyTcnm": "拉脫維亞共和國"
         },
         {
-            "nameEN": "Libyan Arab Jamahiri",
+            "cntyNm": "Libyan Arab Jamahiri",
             "flZh": "L",
-            "code": "218",
-            "countryCode": "LY",
+            "areaCode": "218",
+            "cntyCd": "LY",
             "flEN": "L",
-            "nameZhCN": "利比亚国",
-            "nameZhHK": "利比亞國"
+            "cntyCnm": "利比亚国",
+            "cntyTcnm": "利比亞國"
         },
         {
-            "nameEN": "Morocco",
+            "cntyNm": "Morocco",
             "flZh": "M",
-            "code": "212",
-            "countryCode": "MA",
+            "areaCode": "212",
+            "cntyCd": "MA",
             "flEN": "M",
-            "nameZhCN": "摩洛哥王国",
-            "nameZhHK": "摩洛哥王國"
+            "cntyCnm": "摩洛哥王国",
+            "cntyTcnm": "摩洛哥王國"
         },
         {
-            "nameEN": "Monaco",
+            "cntyNm": "Monaco",
             "flZh": "M",
-            "code": "377",
-            "countryCode": "MC",
+            "areaCode": "377",
+            "cntyCd": "MC",
             "flEN": "M",
-            "nameZhCN": "摩纳哥公国",
-            "nameZhHK": "摩納哥公國"
+            "cntyCnm": "摩纳哥公国",
+            "cntyTcnm": "摩納哥公國"
         },
         {
-            "nameEN": "Republic of Moldova",
+            "cntyNm": "Republic of Moldova",
             "flZh": "M",
-            "code": "373",
-            "countryCode": "MD",
+            "areaCode": "373",
+            "cntyCd": "MD",
             "flEN": "R",
-            "nameZhCN": "摩尔多瓦共和国",
-            "nameZhHK": "摩爾多瓦共和國"
+            "cntyCnm": "摩尔多瓦共和国",
+            "cntyTcnm": "摩爾多瓦共和國"
         },
         {
-            "nameEN": "Montenegro",
+            "cntyNm": "Montenegro",
             "flZh": "H",
-            "code": "382",
-            "countryCode": "ME",
+            "areaCode": "382",
+            "cntyCd": "ME",
             "flEN": "M",
-            "nameZhCN": "黑山",
-            "nameZhHK": "黑山"
+            "cntyCnm": "黑山",
+            "cntyTcnm": "黑山"
         },
         {
-            "nameEN": "Saint Martin",
+            "cntyNm": "Saint Martin",
             "flZh": "S",
-            "code": "599",
-            "countryCode": "MF",
+            "areaCode": "599",
+            "cntyCd": "MF",
             "flEN": "S",
-            "nameZhCN": "圣马丁",
-            "nameZhHK": "聖馬丁"
+            "cntyCnm": "圣马丁",
+            "cntyTcnm": "聖馬丁"
         },
         {
-            "nameEN": "Madagascar",
+            "cntyNm": "Madagascar",
             "flZh": "M",
-            "code": "261",
-            "countryCode": "MG",
+            "areaCode": "261",
+            "cntyCd": "MG",
             "flEN": "M",
-            "nameZhCN": "马达加斯加共和国",
-            "nameZhHK": "馬達加斯加共和國"
+            "cntyCnm": "马达加斯加共和国",
+            "cntyTcnm": "馬達加斯加共和國"
         },
         {
-            "nameEN": "Marshall Islands",
+            "cntyNm": "Marshall Islands",
             "flZh": "M",
-            "code": "692",
-            "countryCode": "MH",
+            "areaCode": "692",
+            "cntyCd": "MH",
             "flEN": "M",
-            "nameZhCN": "马绍尔群岛共和国",
-            "nameZhHK": "馬紹爾群島共和國"
+            "cntyCnm": "马绍尔群岛共和国",
+            "cntyTcnm": "馬紹爾群島共和國"
         },
         {
-            "nameEN": "The Republic of Macedonia",
+            "cntyNm": "The Republic of Macedonia",
             "flZh": "B",
-            "code": "389",
-            "countryCode": "MK",
+            "areaCode": "389",
+            "cntyCd": "MK",
             "flEN": "T",
-            "nameZhCN": "北马其顿共和国",
-            "nameZhHK": "北馬其頓共和國"
+            "cntyCnm": "北马其顿共和国",
+            "cntyTcnm": "北馬其頓共和國"
         },
         {
-            "nameEN": "Mali",
+            "cntyNm": "Mali",
             "flZh": "M",
-            "code": "223",
-            "countryCode": "ML",
+            "areaCode": "223",
+            "cntyCd": "ML",
             "flEN": "M",
-            "nameZhCN": "马里共和国",
-            "nameZhHK": "馬里共和國"
+            "cntyCnm": "马里共和国",
+            "cntyTcnm": "馬里共和國"
         },
         {
-            "nameEN": "Myanmar",
+            "cntyNm": "Myanmar",
             "flZh": "M",
-            "code": "95",
-            "countryCode": "MM",
+            "areaCode": "95",
+            "cntyCd": "MM",
             "flEN": "M",
-            "nameZhCN": "缅甸联邦共和国",
-            "nameZhHK": "緬甸聯邦共和國"
+            "cntyCnm": "缅甸联邦共和国",
+            "cntyTcnm": "緬甸聯邦共和國"
         },
         {
-            "nameEN": "Mongolia",
+            "cntyNm": "Mongolia",
             "flZh": "W",
-            "code": "976",
-            "countryCode": "MN",
+            "areaCode": "976",
+            "cntyCd": "MN",
             "flEN": "M",
-            "nameZhCN": "外蒙古",
-            "nameZhHK": "外蒙古"
+            "cntyCnm": "外蒙古",
+            "cntyTcnm": "外蒙古"
         },
         {
-            "nameEN": "Macao (China)",
+            "cntyNm": "Macao (China)",
             "flZh": "Z",
-            "code": "853",
-            "countryCode": "MO",
+            "areaCode": "853",
+            "cntyCd": "MO",
             "flEN": "M",
-            "nameZhCN": "中国澳门",
-            "nameZhHK": "中國澳門"
+            "cntyCnm": "中国澳门",
+            "cntyTcnm": "中國澳門"
         },
         {
-            "nameEN": "Northern Mariana Islands",
+            "cntyNm": "Northern Mariana Islands",
             "flZh": "B",
-            "code": "001",
-            "countryCode": "MP",
+            "areaCode": "001",
+            "cntyCd": "MP",
             "flEN": "N",
-            "nameZhCN": "北马里亚纳群岛",
-            "nameZhHK": "北馬里亞納群島"
+            "cntyCnm": "北马里亚纳群岛",
+            "cntyTcnm": "北馬里亞納群島"
         },
         {
-            "nameEN": "Martinique",
+            "cntyNm": "Martinique",
             "flZh": "M",
-            "code": "596",
-            "countryCode": "MQ",
+            "areaCode": "596",
+            "cntyCd": "MQ",
             "flEN": "M",
-            "nameZhCN": "马提尼克岛",
-            "nameZhHK": "馬提尼克島"
+            "cntyCnm": "马提尼克岛",
+            "cntyTcnm": "馬提尼克島"
         },
         {
-            "nameEN": "Mauritania",
+            "cntyNm": "Mauritania",
             "flZh": "M",
-            "code": "222",
-            "countryCode": "MR",
+            "areaCode": "222",
+            "cntyCd": "MR",
             "flEN": "M",
-            "nameZhCN": "毛里塔尼亚伊斯兰共和国",
-            "nameZhHK": "毛裡塔尼亞伊斯蘭共和國"
+            "cntyCnm": "毛里塔尼亚伊斯兰共和国",
+            "cntyTcnm": "毛裡塔尼亞伊斯蘭共和國"
         },
         {
-            "nameEN": "Montserrat",
+            "cntyNm": "Montserrat",
             "flZh": "M",
-            "code": "001",
-            "countryCode": "MS",
+            "areaCode": "001",
+            "cntyCd": "MS",
             "flEN": "M",
-            "nameZhCN": "蒙特塞拉特",
-            "nameZhHK": "蒙特塞拉特"
+            "cntyCnm": "蒙特塞拉特",
+            "cntyTcnm": "蒙特塞拉特"
         },
         {
-            "nameEN": "Montserrat",
+            "cntyNm": "Montserrat",
             "flZh": "M",
-            "code": "356",
-            "countryCode": "MT",
+            "areaCode": "356",
+            "cntyCd": "MT",
             "flEN": "M",
-            "nameZhCN": "马耳他",
-            "nameZhHK": "馬爾他"
+            "cntyCnm": "马耳他",
+            "cntyTcnm": "馬爾他"
         },
         {
-            "nameEN": "Mauritius",
+            "cntyNm": "Mauritius",
             "flZh": "M",
-            "code": "230",
-            "countryCode": "MU",
+            "areaCode": "230",
+            "cntyCd": "MU",
             "flEN": "M",
-            "nameZhCN": "毛里求斯共和国",
-            "nameZhHK": "毛裡求斯共和國"
+            "cntyCnm": "毛里求斯共和国",
+            "cntyTcnm": "毛裡求斯共和國"
         },
         {
-            "nameEN": "Maldives",
+            "cntyNm": "Maldives",
             "flZh": "M",
-            "code": "960",
-            "countryCode": "MV",
+            "areaCode": "960",
+            "cntyCd": "MV",
             "flEN": "M",
-            "nameZhCN": "马尔代夫共和国",
-            "nameZhHK": "馬爾代夫共和國"
+            "cntyCnm": "马尔代夫共和国",
+            "cntyTcnm": "馬爾代夫共和國"
         },
         {
-            "nameEN": "Malawi",
+            "cntyNm": "Malawi",
             "flZh": "M",
-            "code": "265",
-            "countryCode": "MW",
+            "areaCode": "265",
+            "cntyCd": "MW",
             "flEN": "M",
-            "nameZhCN": "马拉维共和国",
-            "nameZhHK": "馬拉威共和國"
+            "cntyCnm": "马拉维共和国",
+            "cntyTcnm": "馬拉威共和國"
         },
         {
-            "nameEN": "Mexico",
+            "cntyNm": "Mexico",
             "flZh": "M",
-            "code": "52",
-            "countryCode": "MX",
+            "areaCode": "52",
+            "cntyCd": "MX",
             "flEN": "M",
-            "nameZhCN": "墨西哥合众国",
-            "nameZhHK": "墨西哥合眾國"
+            "cntyCnm": "墨西哥合众国",
+            "cntyTcnm": "墨西哥合眾國"
         },
         {
-            "nameEN": "Malaysia",
+            "cntyNm": "Malaysia",
             "flZh": "M",
-            "code": "60",
-            "countryCode": "MY",
+            "areaCode": "60",
+            "cntyCd": "MY",
             "flEN": "M",
-            "nameZhCN": "马来西亚",
-            "nameZhHK": "馬來西亞"
+            "cntyCnm": "马来西亚",
+            "cntyTcnm": "馬來西亞"
         },
         {
-            "nameEN": "Mozambique",
+            "cntyNm": "Mozambique",
             "flZh": "M",
-            "code": "258",
-            "countryCode": "MZ",
+            "areaCode": "258",
+            "cntyCd": "MZ",
             "flEN": "M",
-            "nameZhCN": "莫桑比克",
-            "nameZhHK": "莫桑比克"
+            "cntyCnm": "莫桑比克",
+            "cntyTcnm": "莫桑比克"
         },
         {
-            "nameEN": "Namibia",
+            "cntyNm": "Namibia",
             "flZh": "N",
-            "code": "264",
-            "countryCode": "NA",
+            "areaCode": "264",
+            "cntyCd": "NA",
             "flEN": "N",
-            "nameZhCN": "纳米比亚共和国",
-            "nameZhHK": "納米比亞共和國"
+            "cntyCnm": "纳米比亚共和国",
+            "cntyTcnm": "納米比亞共和國"
         },
         {
-            "nameEN": "New Caledonia",
+            "cntyNm": "New Caledonia",
             "flZh": "X",
-            "code": "687",
-            "countryCode": "NC",
+            "areaCode": "687",
+            "cntyCd": "NC",
             "flEN": "N",
-            "nameZhCN": "新喀里多尼亚",
-            "nameZhHK": "新喀裡多尼亞"
+            "cntyCnm": "新喀里多尼亚",
+            "cntyTcnm": "新喀裡多尼亞"
         },
         {
-            "nameEN": "Niger",
+            "cntyNm": "Niger",
             "flZh": "N",
-            "code": "227",
-            "countryCode": "NE",
+            "areaCode": "227",
+            "cntyCd": "NE",
             "flEN": "N",
-            "nameZhCN": "尼日尔共和国",
-            "nameZhHK": "尼日爾共和國"
+            "cntyCnm": "尼日尔共和国",
+            "cntyTcnm": "尼日爾共和國"
         },
         {
-            "nameEN": "Norfolk Island",
+            "cntyNm": "Norfolk Island",
             "flZh": "N",
-            "code": "61",
-            "countryCode": "NF",
+            "areaCode": "61",
+            "cntyCd": "NF",
             "flEN": "N",
-            "nameZhCN": "诺福克岛",
-            "nameZhHK": "諾福克島"
+            "cntyCnm": "诺福克岛",
+            "cntyTcnm": "諾福克島"
         },
         {
-            "nameEN": "Nigeria",
+            "cntyNm": "Nigeria",
             "flZh": "N",
-            "code": "234",
-            "countryCode": "NG",
+            "areaCode": "234",
+            "cntyCd": "NG",
             "flEN": "N",
-            "nameZhCN": "尼日利亚",
-            "nameZhHK": "尼日利亞"
+            "cntyCnm": "尼日利亚",
+            "cntyTcnm": "尼日利亞"
         },
         {
-            "nameEN": "Nicaragua",
+            "cntyNm": "Nicaragua",
             "flZh": "N",
-            "code": "505",
-            "countryCode": "NI",
+            "areaCode": "505",
+            "cntyCd": "NI",
             "flEN": "N",
-            "nameZhCN": "尼加拉瓜共和国",
-            "nameZhHK": "尼加拉瓜共和國"
+            "cntyCnm": "尼加拉瓜共和国",
+            "cntyTcnm": "尼加拉瓜共和國"
         },
         {
-            "nameEN": "Netherlands",
+            "cntyNm": "Netherlands",
             "flZh": "H",
-            "code": "31",
-            "countryCode": "NL",
+            "areaCode": "31",
+            "cntyCd": "NL",
             "flEN": "N",
-            "nameZhCN": "荷兰王国",
-            "nameZhHK": "荷蘭王國"
+            "cntyCnm": "荷兰王国",
+            "cntyTcnm": "荷蘭王國"
         },
         {
-            "nameEN": "Norway",
+            "cntyNm": "Norway",
             "flZh": "N",
-            "code": "47",
-            "countryCode": "NO",
+            "areaCode": "47",
+            "cntyCd": "NO",
             "flEN": "N",
-            "nameZhCN": "挪威王国",
-            "nameZhHK": "挪威王國"
+            "cntyCnm": "挪威王国",
+            "cntyTcnm": "挪威王國"
         },
         {
-            "nameEN": "Nepal",
+            "cntyNm": "Nepal",
             "flZh": "N",
-            "code": "977",
-            "countryCode": "NP",
+            "areaCode": "977",
+            "cntyCd": "NP",
             "flEN": "N",
-            "nameZhCN": "尼泊尔联邦民主共和国",
-            "nameZhHK": "尼泊爾聯邦民主共和國"
+            "cntyCnm": "尼泊尔联邦民主共和国",
+            "cntyTcnm": "尼泊爾聯邦民主共和國"
         },
         {
-            "nameEN": "Nauru",
+            "cntyNm": "Nauru",
             "flZh": "瑙",
-            "code": "674",
-            "countryCode": "NR",
+            "areaCode": "674",
+            "cntyCd": "NR",
             "flEN": "N",
-            "nameZhCN": "瑙鲁共和国",
-            "nameZhHK": "瑙魯共和國"
+            "cntyCnm": "瑙鲁共和国",
+            "cntyTcnm": "瑙魯共和國"
         },
         {
-            "nameEN": "Niue",
+            "cntyNm": "Niue",
             "flZh": "N",
-            "code": "683",
-            "countryCode": "NU",
+            "areaCode": "683",
+            "cntyCd": "NU",
             "flEN": "N",
-            "nameZhCN": "纽埃",
-            "nameZhHK": "紐埃"
+            "cntyCnm": "纽埃",
+            "cntyTcnm": "紐埃"
         },
         {
-            "nameEN": "New Zealand",
+            "cntyNm": "New Zealand",
             "flZh": "X",
-            "code": "64",
-            "countryCode": "NZ",
+            "areaCode": "64",
+            "cntyCd": "NZ",
             "flEN": "N",
-            "nameZhCN": "新西兰",
-            "nameZhHK": "新西蘭"
+            "cntyCnm": "新西兰",
+            "cntyTcnm": "新西蘭"
         },
         {
-            "nameEN": "Oman",
+            "cntyNm": "Oman",
             "flZh": "A",
-            "code": "968",
-            "countryCode": "OM",
+            "areaCode": "968",
+            "cntyCd": "OM",
             "flEN": "O",
-            "nameZhCN": "阿曼苏丹国",
-            "nameZhHK": "阿曼蘇丹國"
+            "cntyCnm": "阿曼苏丹国",
+            "cntyTcnm": "阿曼蘇丹國"
         },
         {
-            "nameEN": "Panama",
+            "cntyNm": "Panama",
             "flZh": "B",
-            "code": "507",
-            "countryCode": "PA",
+            "areaCode": "507",
+            "cntyCd": "PA",
             "flEN": "P",
-            "nameZhCN": "巴拿马共和国",
-            "nameZhHK": "巴拿馬共和國"
+            "cntyCnm": "巴拿马共和国",
+            "cntyTcnm": "巴拿馬共和國"
         },
         {
-            "nameEN": "Peru",
+            "cntyNm": "Peru",
             "flZh": "M",
-            "code": "51",
-            "countryCode": "PE",
+            "areaCode": "51",
+            "cntyCd": "PE",
             "flEN": "P",
-            "nameZhCN": "秘鲁共和国",
-            "nameZhHK": "秘魯共和國"
+            "cntyCnm": "秘鲁共和国",
+            "cntyTcnm": "秘魯共和國"
         },
         {
-            "nameEN": "French Polynesia",
+            "cntyNm": "French Polynesia",
             "flZh": "F",
-            "code": "689",
-            "countryCode": "PF",
+            "areaCode": "689",
+            "cntyCd": "PF",
             "flEN": "F",
-            "nameZhCN": "法属波利尼西亚",
-            "nameZhHK": "法屬波利尼西亞"
+            "cntyCnm": "法属波利尼西亚",
+            "cntyTcnm": "法屬波利尼西亞"
         },
         {
-            "nameEN": "Papua New Guinea",
+            "cntyNm": "Papua New Guinea",
             "flZh": "B",
-            "code": "675",
-            "countryCode": "PG",
+            "areaCode": "675",
+            "cntyCd": "PG",
             "flEN": "P",
-            "nameZhCN": "巴布亚新几内亚独立国",
-            "nameZhHK": "巴布亞新幾內亞獨立國"
+            "cntyCnm": "巴布亚新几内亚独立国",
+            "cntyTcnm": "巴布亞新幾內亞獨立國"
         },
         {
-            "nameEN": "Philippines",
+            "cntyNm": "Philippines",
             "flZh": "F",
-            "code": "63",
-            "countryCode": "PH",
+            "areaCode": "63",
+            "cntyCd": "PH",
             "flEN": "P",
-            "nameZhCN": "菲律宾共和国",
-            "nameZhHK": "菲律賓共和國"
+            "cntyCnm": "菲律宾共和国",
+            "cntyTcnm": "菲律賓共和國"
         },
         {
-            "nameEN": "Pakistan",
+            "cntyNm": "Pakistan",
             "flZh": "B",
-            "code": "92",
-            "countryCode": "PK",
+            "areaCode": "92",
+            "cntyCd": "PK",
             "flEN": "P",
-            "nameZhCN": "巴基斯坦伊斯兰共和国",
-            "nameZhHK": "巴基斯坦伊斯蘭共和國"
+            "cntyCnm": "巴基斯坦伊斯兰共和国",
+            "cntyTcnm": "巴基斯坦伊斯蘭共和國"
         },
         {
-            "nameEN": "Poland",
+            "cntyNm": "Poland",
             "flZh": "B",
-            "code": "48",
-            "countryCode": "PL",
+            "areaCode": "48",
+            "cntyCd": "PL",
             "flEN": "P",
-            "nameZhCN": "波兰共和国",
-            "nameZhHK": "波蘭共和國"
+            "cntyCnm": "波兰共和国",
+            "cntyTcnm": "波蘭共和國"
         },
         {
-            "nameEN": "Saint Pierre and Miquelon",
+            "cntyNm": "Saint Pierre and Miquelon",
             "flZh": "S",
-            "code": "508",
-            "countryCode": "PM",
+            "areaCode": "508",
+            "cntyCd": "PM",
             "flEN": "S",
-            "nameZhCN": "圣皮埃尔和密克隆群岛",
-            "nameZhHK": "聖皮埃爾和密克隆群島"
+            "cntyCnm": "圣皮埃尔和密克隆群岛",
+            "cntyTcnm": "聖皮埃爾和密克隆群島"
         },
         {
-            "nameEN": "Pitcairn",
+            "cntyNm": "Pitcairn",
             "flZh": "P",
-            "code": "64",
-            "countryCode": "PN",
+            "areaCode": "64",
+            "cntyCd": "PN",
             "flEN": "P",
-            "nameZhCN": "皮特凯恩群岛",
-            "nameZhHK": "皮特凱恩群島"
+            "cntyCnm": "皮特凯恩群岛",
+            "cntyTcnm": "皮特凱恩群島"
         },
         {
-            "nameEN": "Puerto Rico",
+            "cntyNm": "Puerto Rico",
             "flZh": "B",
-            "code": "001",
-            "countryCode": "PR",
+            "areaCode": "001",
+            "cntyCd": "PR",
             "flEN": "P",
-            "nameZhCN": "波多黎各自治邦",
-            "nameZhHK": "波多黎各自治邦"
+            "cntyCnm": "波多黎各自治邦",
+            "cntyTcnm": "波多黎各自治邦"
         },
         {
-            "nameEN": "Palestinian Territor",
+            "cntyNm": "Palestinian Territor",
             "flZh": "B",
-            "code": "970",
-            "countryCode": "PS",
+            "areaCode": "970",
+            "cntyCd": "PS",
             "flEN": "P",
-            "nameZhCN": "巴勒斯坦国",
-            "nameZhHK": "巴勒斯坦國"
+            "cntyCnm": "巴勒斯坦国",
+            "cntyTcnm": "巴勒斯坦國"
         },
         {
-            "nameEN": "Portugal",
+            "cntyNm": "Portugal",
             "flZh": "P",
-            "code": "351",
-            "countryCode": "PT",
+            "areaCode": "351",
+            "cntyCd": "PT",
             "flEN": "P",
-            "nameZhCN": "葡萄牙共和国",
-            "nameZhHK": "葡萄牙共和國"
+            "cntyCnm": "葡萄牙共和国",
+            "cntyTcnm": "葡萄牙共和國"
         },
         {
-            "nameEN": "US Pacific Islands",
+            "cntyNm": "US Pacific Islands",
             "flZh": "M",
-            "code": "001",
-            "countryCode": "PU",
+            "areaCode": "001",
+            "cntyCd": "PU",
             "flEN": "U",
-            "nameZhCN": "美国太平洋岛屿",
-            "nameZhHK": "美國太平洋島嶼"
+            "cntyCnm": "美国太平洋岛屿",
+            "cntyTcnm": "美國太平洋島嶼"
         },
         {
-            "nameEN": "Palau",
+            "cntyNm": "Palau",
             "flZh": "P",
-            "code": "680",
-            "countryCode": "PW",
+            "areaCode": "680",
+            "cntyCd": "PW",
             "flEN": "P",
-            "nameZhCN": "帕劳共和国",
-            "nameZhHK": "帕勞共和國"
+            "cntyCnm": "帕劳共和国",
+            "cntyTcnm": "帕勞共和國"
         },
         {
-            "nameEN": "Paraguay",
+            "cntyNm": "Paraguay",
             "flZh": "B",
-            "code": "595",
-            "countryCode": "PY",
+            "areaCode": "595",
+            "cntyCd": "PY",
             "flEN": "P",
-            "nameZhCN": "巴拉圭共和国",
-            "nameZhHK": "巴拉圭共和國"
+            "cntyCnm": "巴拉圭共和国",
+            "cntyTcnm": "巴拉圭共和國"
         },
         {
-            "nameEN": "Qatar",
+            "cntyNm": "Qatar",
             "flZh": "K",
-            "code": "974",
-            "countryCode": "QA",
+            "areaCode": "974",
+            "cntyCd": "QA",
             "flEN": "Q",
-            "nameZhCN": "卡塔尔国",
-            "nameZhHK": "卡塔爾國"
+            "cntyCnm": "卡塔尔国",
+            "cntyTcnm": "卡塔爾國"
         },
         {
-            "nameEN": "Reunion",
+            "cntyNm": "Reunion",
             "flZh": "L",
-            "code": "262",
-            "countryCode": "RE",
+            "areaCode": "262",
+            "cntyCd": "RE",
             "flEN": "R",
-            "nameZhCN": "留尼旺岛",
-            "nameZhHK": "留尼旺島"
+            "cntyCnm": "留尼旺岛",
+            "cntyTcnm": "留尼旺島"
         },
         {
-            "nameEN": "Romania",
+            "cntyNm": "Romania",
             "flZh": "L",
-            "code": "40",
-            "countryCode": "RO",
+            "areaCode": "40",
+            "cntyCd": "RO",
             "flEN": "R",
-            "nameZhCN": "罗马尼亚",
-            "nameZhHK": "羅馬尼亞"
+            "cntyCnm": "罗马尼亚",
+            "cntyTcnm": "羅馬尼亞"
         },
         {
-            "nameEN": "Serbia",
+            "cntyNm": "Serbia",
             "flZh": "S",
-            "code": "381",
-            "countryCode": "RS",
+            "areaCode": "381",
+            "cntyCd": "RS",
             "flEN": "S",
-            "nameZhCN": "塞尔维亚共和国",
-            "nameZhHK": "塞爾維亞共和國"
+            "cntyCnm": "塞尔维亚共和国",
+            "cntyTcnm": "塞爾維亞共和國"
         },
         {
-            "nameEN": "Russia",
+            "cntyNm": "Russia",
             "flZh": "E",
-            "code": "7",
-            "countryCode": "RU",
+            "areaCode": "7",
+            "cntyCd": "RU",
             "flEN": "R",
-            "nameZhCN": "俄罗斯联邦",
-            "nameZhHK": "俄羅斯聯邦"
+            "cntyCnm": "俄罗斯联邦",
+            "cntyTcnm": "俄羅斯聯邦"
         },
         {
-            "nameEN": "Rwanda",
+            "cntyNm": "Rwanda",
             "flZh": "L",
-            "code": "250",
-            "countryCode": "RW",
+            "areaCode": "250",
+            "cntyCd": "RW",
             "flEN": "R",
-            "nameZhCN": "卢旺达共和国",
-            "nameZhHK": "盧旺達共和國"
+            "cntyCnm": "卢旺达共和国",
+            "cntyTcnm": "盧旺達共和國"
         },
         {
-            "nameEN": "Saudi Arabia",
+            "cntyNm": "Saudi Arabia",
             "flZh": "S",
-            "code": "966",
-            "countryCode": "SA",
+            "areaCode": "966",
+            "cntyCd": "SA",
             "flEN": "S",
-            "nameZhCN": "沙特阿拉伯王国",
-            "nameZhHK": "沙特阿拉伯王國"
+            "cntyCnm": "沙特阿拉伯王国",
+            "cntyTcnm": "沙特阿拉伯王國"
         },
         {
-            "nameEN": "Solomon Islands",
+            "cntyNm": "Solomon Islands",
             "flZh": "S",
-            "code": "677",
-            "countryCode": "SB",
+            "areaCode": "677",
+            "cntyCd": "SB",
             "flEN": "S",
-            "nameZhCN": "所罗门群岛",
-            "nameZhHK": "所羅門群島"
+            "cntyCnm": "所罗门群岛",
+            "cntyTcnm": "所羅門群島"
         },
         {
-            "nameEN": "Seychelles",
+            "cntyNm": "Seychelles",
             "flZh": "S",
-            "code": "248",
-            "countryCode": "SC",
+            "areaCode": "248",
+            "cntyCd": "SC",
             "flEN": "S",
-            "nameZhCN": "塞舌尔共和国",
-            "nameZhHK": "塞舌爾共和國"
+            "cntyCnm": "塞舌尔共和国",
+            "cntyTcnm": "塞舌爾共和國"
         },
         {
-            "nameEN": "Sudan",
+            "cntyNm": "Sudan",
             "flZh": "S",
-            "code": "249",
-            "countryCode": "SD",
+            "areaCode": "249",
+            "cntyCd": "SD",
             "flEN": "S",
-            "nameZhCN": "苏丹共和国",
-            "nameZhHK": "蘇丹共和國"
+            "cntyCnm": "苏丹共和国",
+            "cntyTcnm": "蘇丹共和國"
         },
         {
-            "nameEN": "Sweden",
+            "cntyNm": "Sweden",
             "flZh": "R",
-            "code": "46",
-            "countryCode": "SE",
+            "areaCode": "46",
+            "cntyCd": "SE",
             "flEN": "S",
-            "nameZhCN": "瑞典王国",
-            "nameZhHK": "瑞典王國"
+            "cntyCnm": "瑞典王国",
+            "cntyTcnm": "瑞典王國"
         },
         {
-            "nameEN": "Singapore",
+            "cntyNm": "Singapore",
             "flZh": "X",
-            "code": "65",
-            "countryCode": "SG",
+            "areaCode": "65",
+            "cntyCd": "SG",
             "flEN": "S",
-            "nameZhCN": "新加坡共和国",
-            "nameZhHK": "新加坡共和國"
+            "cntyCnm": "新加坡共和国",
+            "cntyTcnm": "新加坡共和國"
         },
         {
-            "nameEN": "Saint Helena",
+            "cntyNm": "Saint Helena",
             "flZh": "S",
-            "code": "290",
-            "countryCode": "SH",
+            "areaCode": "290",
+            "cntyCd": "SH",
             "flEN": "S",
-            "nameZhCN": "圣赫勒拿岛",
-            "nameZhHK": "聖赫勒拿島"
+            "cntyCnm": "圣赫勒拿岛",
+            "cntyTcnm": "聖赫勒拿島"
         },
         {
-            "nameEN": "Slovenia",
+            "cntyNm": "Slovenia",
             "flZh": "S",
-            "code": "386",
-            "countryCode": "SI",
+            "areaCode": "386",
+            "cntyCd": "SI",
             "flEN": "S",
-            "nameZhCN": "斯洛文尼亚共和国",
-            "nameZhHK": "斯洛文尼亞共和國"
+            "cntyCnm": "斯洛文尼亚共和国",
+            "cntyTcnm": "斯洛文尼亞共和國"
         },
         {
-            "nameEN": "Svalbard and Jan May",
+            "cntyNm": "Svalbard and Jan May",
             "flZh": "S",
-            "code": "47",
-            "countryCode": "SJ",
+            "areaCode": "47",
+            "cntyCd": "SJ",
             "flEN": "S",
-            "nameZhCN": "斯瓦尔巴特群岛",
-            "nameZhHK": "斯瓦爾巴特群島"
+            "cntyCnm": "斯瓦尔巴特群岛",
+            "cntyTcnm": "斯瓦爾巴特群島"
         },
         {
-            "nameEN": "Slovakia",
+            "cntyNm": "Slovakia",
             "flZh": "S",
-            "code": "386",
-            "countryCode": "SK",
+            "areaCode": "386",
+            "cntyCd": "SK",
             "flEN": "S",
-            "nameZhCN": "斯洛伐克",
-            "nameZhHK": "斯洛伐克"
+            "cntyCnm": "斯洛伐克",
+            "cntyTcnm": "斯洛伐克"
         },
         {
-            "nameEN": "Sierra Leone",
+            "cntyNm": "Sierra Leone",
             "flZh": "S",
-            "code": "232",
-            "countryCode": "SL",
+            "areaCode": "232",
+            "cntyCd": "SL",
             "flEN": "S",
-            "nameZhCN": "塞拉利昂共和国",
-            "nameZhHK": "塞拉利昂共和國"
+            "cntyCnm": "塞拉利昂共和国",
+            "cntyTcnm": "塞拉利昂共和國"
         },
         {
-            "nameEN": "San Marino",
+            "cntyNm": "San Marino",
             "flZh": "S",
-            "code": "378",
-            "countryCode": "SM",
+            "areaCode": "378",
+            "cntyCd": "SM",
             "flEN": "S",
-            "nameZhCN": "圣马力诺共和国",
-            "nameZhHK": "聖馬利諾共和國"
+            "cntyCnm": "圣马力诺共和国",
+            "cntyTcnm": "聖馬利諾共和國"
         },
         {
-            "nameEN": "Senegal",
+            "cntyNm": "Senegal",
             "flZh": "S",
-            "code": "221",
-            "countryCode": "SN",
+            "areaCode": "221",
+            "cntyCd": "SN",
             "flEN": "S",
-            "nameZhCN": "塞内加尔共和国",
-            "nameZhHK": "塞內加爾共和國"
+            "cntyCnm": "塞内加尔共和国",
+            "cntyTcnm": "塞內加爾共和國"
         },
         {
-            "nameEN": "Somali",
+            "cntyNm": "Somali",
             "flZh": "S",
-            "code": "252",
-            "countryCode": "SO",
+            "areaCode": "252",
+            "cntyCd": "SO",
             "flEN": "S",
-            "nameZhCN": "索马里联邦共和国",
-            "nameZhHK": "索馬里聯邦共和國"
+            "cntyCnm": "索马里联邦共和国",
+            "cntyTcnm": "索馬里聯邦共和國"
         },
         {
-            "nameEN": "Suriname",
+            "cntyNm": "Suriname",
             "flZh": "S",
-            "code": "597",
-            "countryCode": "SR",
+            "areaCode": "597",
+            "cntyCd": "SR",
             "flEN": "S",
-            "nameZhCN": "苏里南共和国",
-            "nameZhHK": "蘇利南共和國"
+            "cntyCnm": "苏里南共和国",
+            "cntyTcnm": "蘇利南共和國"
         },
         {
-            "nameEN": "South Sudan",
+            "cntyNm": "South Sudan",
             "flZh": "N",
-            "code": "211",
-            "countryCode": "SS",
+            "areaCode": "211",
+            "cntyCd": "SS",
             "flEN": "S",
-            "nameZhCN": "南苏丹",
-            "nameZhHK": "南蘇丹"
+            "cntyCnm": "南苏丹",
+            "cntyTcnm": "南蘇丹"
         },
         {
-            "nameEN": "Sao Tome and Princip",
+            "cntyNm": "Sao Tome and Princip",
             "flZh": "S",
-            "code": "239",
-            "countryCode": "ST",
+            "areaCode": "239",
+            "cntyCd": "ST",
             "flEN": "S",
-            "nameZhCN": "圣多美和普林西比民主共和国",
-            "nameZhHK": "聖多美及普林西比島民主共和國"
+            "cntyCnm": "圣多美和普林西比民主共和国",
+            "cntyTcnm": "聖多美及普林西比島民主共和國"
         },
         {
-            "nameEN": "El Salvador",
+            "cntyNm": "El Salvador",
             "flZh": "S",
-            "code": "503",
-            "countryCode": "SV",
+            "areaCode": "503",
+            "cntyCd": "SV",
             "flEN": "E",
-            "nameZhCN": "萨尔瓦多共和国",
-            "nameZhHK": "薩爾瓦多共和國"
+            "cntyCnm": "萨尔瓦多共和国",
+            "cntyTcnm": "薩爾瓦多共和國"
         },
         {
-            "nameEN": "Sint Maarten",
+            "cntyNm": "Sint Maarten",
             "flZh": "S",
-            "code": "31",
-            "countryCode": "SX",
+            "areaCode": "31",
+            "cntyCd": "SX",
             "flEN": "S",
-            "nameZhCN": "圣马丁岛（荷属）",
-            "nameZhHK": "聖馬丁島（荷屬）"
+            "cntyCnm": "圣马丁岛（荷属）",
+            "cntyTcnm": "聖馬丁島（荷屬）"
         },
         {
-            "nameEN": "Syrian Arab Republic",
+            "cntyNm": "Syrian Arab Republic",
             "flZh": "A",
-            "code": "963",
-            "countryCode": "SY",
+            "areaCode": "963",
+            "cntyCd": "SY",
             "flEN": "S",
-            "nameZhCN": "阿拉伯叙利亚共和国",
-            "nameZhHK": "阿拉伯敘利亞共和國"
+            "cntyCnm": "阿拉伯叙利亚共和国",
+            "cntyTcnm": "阿拉伯敘利亞共和國"
         },
         {
-            "nameEN": "Swaziland",
+            "cntyNm": "Swaziland",
             "flZh": "S",
-            "code": "268",
-            "countryCode": "SZ",
+            "areaCode": "268",
+            "cntyCd": "SZ",
             "flEN": "S",
-            "nameZhCN": "斯威士兰王国",
-            "nameZhHK": "斯威士蘭王國"
+            "cntyCnm": "斯威士兰王国",
+            "cntyTcnm": "斯威士蘭王國"
         },
         {
-            "nameEN": "Turks and Caicos Islands",
+            "cntyNm": "Turks and Caicos Islands",
             "flZh": "T",
-            "code": "44",
-            "countryCode": "TC",
+            "areaCode": "44",
+            "cntyCd": "TC",
             "flEN": "T",
-            "nameZhCN": "特克斯和凯科斯群岛",
-            "nameZhHK": "特克斯和凱科斯群島"
+            "cntyCnm": "特克斯和凯科斯群岛",
+            "cntyTcnm": "特克斯和凱科斯群島"
         },
         {
-            "nameEN": "Chad",
+            "cntyNm": "Chad",
             "flZh": "Z",
-            "code": "235",
-            "countryCode": "TD",
+            "areaCode": "235",
+            "cntyCd": "TD",
             "flEN": "C",
-            "nameZhCN": "乍得共和国",
-            "nameZhHK": "乍得共和國"
+            "cntyCnm": "乍得共和国",
+            "cntyTcnm": "乍得共和國"
         },
         {
-            "nameEN": "French Southern Territories",
+            "cntyNm": "French Southern Territories",
             "flZh": "F",
-            "code": "33",
-            "countryCode": "TF",
+            "areaCode": "33",
+            "cntyCd": "TF",
             "flEN": "F",
-            "nameZhCN": "法国南部",
-            "nameZhHK": "法國南部"
+            "cntyCnm": "法国南部",
+            "cntyTcnm": "法國南部"
         },
         {
-            "nameEN": "Togo",
+            "cntyNm": "Togo",
             "flZh": "D",
-            "code": "228",
-            "countryCode": "TG",
+            "areaCode": "228",
+            "cntyCd": "TG",
             "flEN": "T",
-            "nameZhCN": "多哥共和国",
-            "nameZhHK": "多哥共和國"
+            "cntyCnm": "多哥共和国",
+            "cntyTcnm": "多哥共和國"
         },
         {
-            "nameEN": "Thailand",
+            "cntyNm": "Thailand",
             "flZh": "T",
-            "code": "66",
-            "countryCode": "TH",
+            "areaCode": "66",
+            "cntyCd": "TH",
             "flEN": "T",
-            "nameZhCN": "泰王国",
-            "nameZhHK": "泰王國"
+            "cntyCnm": "泰王国",
+            "cntyTcnm": "泰王國"
         },
         {
-            "nameEN": "Tajikistan",
+            "cntyNm": "Tajikistan",
             "flZh": "T",
-            "code": "992",
-            "countryCode": "TJ",
+            "areaCode": "992",
+            "cntyCd": "TJ",
             "flEN": "T",
-            "nameZhCN": "塔吉克斯坦共和国",
-            "nameZhHK": "塔吉克斯坦共和國"
+            "cntyCnm": "塔吉克斯坦共和国",
+            "cntyTcnm": "塔吉克斯坦共和國"
         },
         {
-            "nameEN": "Tokelau",
+            "cntyNm": "Tokelau",
             "flZh": "T",
-            "code": "690",
-            "countryCode": "TK",
+            "areaCode": "690",
+            "cntyCd": "TK",
             "flEN": "T",
-            "nameZhCN": "托克劳群岛",
-            "nameZhHK": "托克勞群島"
+            "cntyCnm": "托克劳群岛",
+            "cntyTcnm": "托克勞群島"
         },
         {
-            "nameEN": "Timor-leste",
+            "cntyNm": "Timor-leste",
             "flZh": "D",
-            "code": "670",
-            "countryCode": "TL",
+            "areaCode": "670",
+            "cntyCd": "TL",
             "flEN": "T",
-            "nameZhCN": "东帝汶民主共和国",
-            "nameZhHK": "東帝汶民主共和國"
+            "cntyCnm": "东帝汶民主共和国",
+            "cntyTcnm": "東帝汶民主共和國"
         },
         {
-            "nameEN": "Turkmenistan",
+            "cntyNm": "Turkmenistan",
             "flZh": "T",
-            "code": "993",
-            "countryCode": "TM",
+            "areaCode": "993",
+            "cntyCd": "TM",
             "flEN": "T",
-            "nameZhCN": "土库曼斯坦",
-            "nameZhHK": "土庫曼斯坦"
+            "cntyCnm": "土库曼斯坦",
+            "cntyTcnm": "土庫曼斯坦"
         },
         {
-            "nameEN": "Tunisia",
+            "cntyNm": "Tunisia",
             "flZh": "T",
-            "code": "216",
-            "countryCode": "TN",
+            "areaCode": "216",
+            "cntyCd": "TN",
             "flEN": "T",
-            "nameZhCN": "突尼斯共和国",
-            "nameZhHK": "突尼斯共和國"
+            "cntyCnm": "突尼斯共和国",
+            "cntyTcnm": "突尼斯共和國"
         },
         {
-            "nameEN": "Tonga",
+            "cntyNm": "Tonga",
             "flZh": "T",
-            "code": "676",
-            "countryCode": "TO",
+            "areaCode": "676",
+            "cntyCd": "TO",
             "flEN": "T",
-            "nameZhCN": "汤加王国",
-            "nameZhHK": "湯加王國"
+            "cntyCnm": "汤加王国",
+            "cntyTcnm": "湯加王國"
         },
         {
-            "nameEN": "Turkey",
+            "cntyNm": "Turkey",
             "flZh": "T",
-            "code": "90",
-            "countryCode": "TR",
+            "areaCode": "90",
+            "cntyCd": "TR",
             "flEN": "T",
-            "nameZhCN": "土耳其共和国",
-            "nameZhHK": "土耳其共和國"
+            "cntyCnm": "土耳其共和国",
+            "cntyTcnm": "土耳其共和國"
         },
         {
-            "nameEN": "Trinidad and Tobago",
+            "cntyNm": "Trinidad and Tobago",
             "flZh": "T",
-            "code": "686",
-            "countryCode": "TT",
+            "areaCode": "686",
+            "cntyCd": "TT",
             "flEN": "T",
-            "nameZhCN": "特立尼达和多巴哥",
-            "nameZhHK": "特立尼達和多巴哥"
+            "cntyCnm": "特立尼达和多巴哥",
+            "cntyTcnm": "特立尼達和多巴哥"
         },
         {
-            "nameEN": "Tuvalu",
+            "cntyNm": "Tuvalu",
             "flZh": "T",
-            "code": "688",
-            "countryCode": "TV",
+            "areaCode": "688",
+            "cntyCd": "TV",
             "flEN": "T",
-            "nameZhCN": "图瓦卢",
-            "nameZhHK": "圖瓦盧"
+            "cntyCnm": "图瓦卢",
+            "cntyTcnm": "圖瓦盧"
         },
         {
-            "nameEN": "Taiwan (China)",
+            "cntyNm": "Taiwan (China)",
             "flZh": "Z",
-            "code": "886",
-            "countryCode": "TW",
+            "areaCode": "886",
+            "cntyCd": "TW",
             "flEN": "T",
-            "nameZhCN": "中国台湾",
-            "nameZhHK": "中國台灣"
+            "cntyCnm": "中国台湾",
+            "cntyTcnm": "中國台灣"
         },
         {
-            "nameEN": "United Republic of Tanzania",
+            "cntyNm": "United Republic of Tanzania",
             "flZh": "T",
-            "code": "255",
-            "countryCode": "TZ",
+            "areaCode": "255",
+            "cntyCd": "TZ",
             "flEN": "U",
-            "nameZhCN": "坦桑尼亚联合共和国",
-            "nameZhHK": "坦桑尼亞聯合共和國"
+            "cntyCnm": "坦桑尼亚联合共和国",
+            "cntyTcnm": "坦桑尼亞聯合共和國"
         },
         {
-            "nameEN": "United Kingdom",
+            "cntyNm": "United Kingdom",
             "flZh": "D",
-            "code": "44",
-            "countryCode": "U1",
+            "areaCode": "44",
+            "cntyCd": "U1",
             "flEN": "U",
-            "nameZhCN": "大不列颠及北爱尔兰联合王国",
-            "nameZhHK": "大不列顛及北愛爾蘭聯合王國"
+            "cntyCnm": "大不列颠及北爱尔兰联合王国",
+            "cntyTcnm": "大不列顛及北愛爾蘭聯合王國"
         },
         {
-            "nameEN": "Ukraine",
+            "cntyNm": "Ukraine",
             "flZh": "W",
-            "code": "380",
-            "countryCode": "UA",
+            "areaCode": "380",
+            "cntyCd": "UA",
             "flEN": "U",
-            "nameZhCN": "乌克兰",
-            "nameZhHK": "烏克蘭"
+            "cntyCnm": "乌克兰",
+            "cntyTcnm": "烏克蘭"
         },
         {
-            "nameEN": "Uganda",
+            "cntyNm": "Uganda",
             "flZh": "W",
-            "code": "256",
-            "countryCode": "UG",
+            "areaCode": "256",
+            "cntyCd": "UG",
             "flEN": "U",
-            "nameZhCN": "乌干达共和国",
-            "nameZhHK": "烏干達共和國"
+            "cntyCnm": "乌干达共和国",
+            "cntyTcnm": "烏干達共和國"
         },
         {
-            "nameEN": "United States Minor",
+            "cntyNm": "United States Minor",
             "flZh": "M",
-            "code": "001",
-            "countryCode": "UM",
+            "areaCode": "001",
+            "cntyCd": "UM",
             "flEN": "U",
-            "nameZhCN": "美国本土小岛",
-            "nameZhHK": "美國本土小島"
+            "cntyCnm": "美国本土小岛",
+            "cntyTcnm": "美國本土小島"
         },
         {
-            "nameEN": "United States",
+            "cntyNm": "United States",
             "flZh": "M",
-            "code": "001",
-            "countryCode": "US",
+            "areaCode": "001",
+            "cntyCd": "US",
             "flEN": "U",
-            "nameZhCN": "美利坚合众国",
-            "nameZhHK": "美利堅合眾國"
+            "cntyCnm": "美利坚合众国",
+            "cntyTcnm": "美利堅合眾國"
         },
         {
-            "nameEN": "Uruguay",
+            "cntyNm": "Uruguay",
             "flZh": "W",
-            "code": "598",
-            "countryCode": "UY",
+            "areaCode": "598",
+            "cntyCd": "UY",
             "flEN": "U",
-            "nameZhCN": "乌拉圭共和国",
-            "nameZhHK": "烏拉圭共和國"
+            "cntyCnm": "乌拉圭共和国",
+            "cntyTcnm": "烏拉圭共和國"
         },
         {
-            "nameEN": "Uzbekistan",
+            "cntyNm": "Uzbekistan",
             "flZh": "W",
-            "code": "998",
-            "countryCode": "UZ",
+            "areaCode": "998",
+            "cntyCd": "UZ",
             "flEN": "U",
-            "nameZhCN": "乌兹别克斯坦共和国",
-            "nameZhHK": "烏茲別克斯坦共和國"
+            "cntyCnm": "乌兹别克斯坦共和国",
+            "cntyTcnm": "烏茲別克斯坦共和國"
         },
         {
-            "nameEN": "Holy See (Vatican City State)",
+            "cntyNm": "Holy See (Vatican City State)",
             "flZh": "梵",
-            "code": "379",
-            "countryCode": "VA",
+            "areaCode": "379",
+            "cntyCd": "VA",
             "flEN": "H",
-            "nameZhCN": "梵蒂冈城国",
-            "nameZhHK": "梵蒂岡城國"
+            "cntyCnm": "梵蒂冈城国",
+            "cntyTcnm": "梵蒂岡城國"
         },
         {
-            "nameEN": "Saint Vincent and The Grenadines",
+            "cntyNm": "Saint Vincent and The Grenadines",
             "flZh": "S",
-            "code": "001",
-            "countryCode": "VC",
+            "areaCode": "001",
+            "cntyCd": "VC",
             "flEN": "S",
-            "nameZhCN": "圣文森特和格林纳丁斯",
-            "nameZhHK": "聖文森特和格林納丁斯群島"
+            "cntyCnm": "圣文森特和格林纳丁斯",
+            "cntyTcnm": "聖文森特和格林納丁斯群島"
         },
         {
-            "nameEN": "Venezuela",
+            "cntyNm": "Venezuela",
             "flZh": "W",
-            "code": "58",
-            "countryCode": "VE",
+            "areaCode": "58",
+            "cntyCd": "VE",
             "flEN": "V",
-            "nameZhCN": "委内瑞拉玻利瓦尔共和国",
-            "nameZhHK": "委內瑞拉玻利瓦爾省共和國"
+            "cntyCnm": "委内瑞拉玻利瓦尔共和国",
+            "cntyTcnm": "委內瑞拉玻利瓦爾省共和國"
         },
         {
-            "nameEN": "Virgin Islands, Brit",
+            "cntyNm": "Virgin Islands, Brit",
             "flZh": "Y",
-            "code": "44",
-            "countryCode": "VG",
+            "areaCode": "44",
+            "cntyCd": "VG",
             "flEN": "V",
-            "nameZhCN": "英属维克群岛",
-            "nameZhHK": "英屬維克群島"
+            "cntyCnm": "英属维克群岛",
+            "cntyTcnm": "英屬維克群島"
         },
         {
-            "nameEN": "Virgin Islands, U.S.",
+            "cntyNm": "Virgin Islands, U.S.",
             "flZh": "M",
-            "code": "001",
-            "countryCode": "VI",
+            "areaCode": "001",
+            "cntyCd": "VI",
             "flEN": "V",
-            "nameZhCN": "美属维克群岛",
-            "nameZhHK": "美屬維克群島"
+            "cntyCnm": "美属维克群岛",
+            "cntyTcnm": "美屬維克群島"
         },
         {
-            "nameEN": "Vietnam",
+            "cntyNm": "Vietnam",
             "flZh": "Y",
-            "code": "84",
-            "countryCode": "VN",
+            "areaCode": "84",
+            "cntyCd": "VN",
             "flEN": "V",
-            "nameZhCN": "越南社会主义共和国",
-            "nameZhHK": "越南社會主義共和國"
+            "cntyCnm": "越南社会主义共和国",
+            "cntyTcnm": "越南社會主義共和國"
         },
         {
-            "nameEN": "Vanuatu",
+            "cntyNm": "Vanuatu",
             "flZh": "W",
-            "code": "678",
-            "countryCode": "VU",
+            "areaCode": "678",
+            "cntyCd": "VU",
             "flEN": "V",
-            "nameZhCN": "瓦努阿图共和国",
-            "nameZhHK": "瓦努阿圖共和國"
+            "cntyCnm": "瓦努阿图共和国",
+            "cntyTcnm": "瓦努阿圖共和國"
         },
         {
-            "nameEN": "Wallis and Futuna",
+            "cntyNm": "Wallis and Futuna",
             "flZh": "W",
-            "code": "44",
-            "countryCode": "WF",
+            "areaCode": "44",
+            "cntyCd": "WF",
             "flEN": "W",
-            "nameZhCN": "瓦利斯群岛和富图纳群岛",
-            "nameZhHK": "瓦利斯群島和富圖納群島"
+            "cntyCnm": "瓦利斯群岛和富图纳群岛",
+            "cntyTcnm": "瓦利斯群島和富圖納群島"
         },
         {
-            "nameEN": "Western Samoa",
+            "cntyNm": "Western Samoa",
             "flZh": "S",
-            "code": "685",
-            "countryCode": "WS",
+            "areaCode": "685",
+            "cntyCd": "WS",
             "flEN": "W",
-            "nameZhCN": "萨摩亚独立国",
-            "nameZhHK": "薩摩亞獨立國"
+            "cntyCnm": "萨摩亚独立国",
+            "cntyTcnm": "薩摩亞獨立國"
         },
         {
-            "nameEN": "Kosovo",
+            "cntyNm": "Kosovo",
             "flZh": "K",
-            "code": "381",
-            "countryCode": "XK",
+            "areaCode": "381",
+            "cntyCd": "XK",
             "flEN": "K",
-            "nameZhCN": "科索沃",
-            "nameZhHK": "科索沃"
+            "cntyCnm": "科索沃",
+            "cntyTcnm": "科索沃"
         },
         {
-            "nameEN": "Yemen",
+            "cntyNm": "Yemen",
             "flZh": "Y",
-            "code": "967",
-            "countryCode": "YE",
+            "areaCode": "967",
+            "cntyCd": "YE",
             "flEN": "Y",
-            "nameZhCN": "也门共和国",
-            "nameZhHK": "也門共和國"
+            "cntyCnm": "也门共和国",
+            "cntyTcnm": "也門共和國"
         },
         {
-            "nameEN": "Mayotte",
+            "cntyNm": "Mayotte",
             "flZh": "M",
-            "code": "262",
-            "countryCode": "YT",
+            "areaCode": "262",
+            "cntyCd": "YT",
             "flEN": "M",
-            "nameZhCN": "马约特岛",
-            "nameZhHK": "馬約特島"
+            "cntyCnm": "马约特岛",
+            "cntyTcnm": "馬約特島"
         },
         {
-            "nameEN": "South Africa",
+            "cntyNm": "South Africa",
             "flZh": "N",
-            "code": "27",
-            "countryCode": "ZA",
+            "areaCode": "27",
+            "cntyCd": "ZA",
             "flEN": "S",
-            "nameZhCN": "南非共和国",
-            "nameZhHK": "南非共和國"
+            "cntyCnm": "南非共和国",
+            "cntyTcnm": "南非共和國"
         },
         {
-            "nameEN": "Zambia",
+            "cntyNm": "Zambia",
             "flZh": "Z",
-            "code": "260",
-            "countryCode": "ZM",
+            "areaCode": "260",
+            "cntyCd": "ZM",
             "flEN": "Z",
-            "nameZhCN": "赞比亚共和国",
-            "nameZhHK": "贊比亞共和國"
+            "cntyCnm": "赞比亚共和国",
+            "cntyTcnm": "贊比亞共和國"
         },
         {
-            "nameEN": "Zimbabwe",
+            "cntyNm": "Zimbabwe",
             "flZh": "J",
-            "code": "263",
-            "countryCode": "ZW",
+            "areaCode": "263",
+            "cntyCd": "ZW",
             "flEN": "Z",
-            "nameZhCN": "津巴布韦共和国",
-            "nameZhHK": "津巴布韋共和國"
+            "cntyCnm": "津巴布韦共和国",
+            "cntyTcnm": "津巴布韋共和國"
         }
     ]
 }

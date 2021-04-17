@@ -7,6 +7,8 @@ import 'package:ebank_mobile/data/source/model/approval/find_all_finished_task_m
 import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
+import 'package:ebank_mobile/data/source/model/city_for_country.dart';
+import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/statement/statement_query_list_body.dart';
 import 'package:ebank_mobile/data/source/model/statement/statement_query_list_model.dart';
@@ -101,4 +103,14 @@ abstract class ApiClient {
     @Queries() BaseBody baseBody,
     @Part(fileName: "certificate.jpg") List<int> file,
   );
+
+  /// 国家信息-查询
+  @POST('/base/bpCtCnt/getCountryList')
+  Future<CountryRegionNewListResp> getCountryList(
+      @Body() CountryRegionNewListReq req);
+
+  /// 指定国家代码下所有城市代码信息-查询
+  @POST('/base/bpCtCit/getCntAllBpCtCit')
+  Future<CityForCountryListResp> getCntAllBpCtCit(
+      @Body() CityForCountryListReq req);
 }

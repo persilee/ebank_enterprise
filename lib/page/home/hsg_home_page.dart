@@ -99,6 +99,15 @@ class _HomePageState extends State<HomePage>
       }
     });
 
+    EventBusUtils.getInstance().on<ChangeLanguage>().listen((event) {
+      if ((event.state == 100 || event.state == 300) && _data != null) {
+        setState(() {
+          _language = event.language;
+          _changeUserInfoShow(_data);
+        });
+      }
+    });
+
     super.initState();
   }
 
@@ -407,6 +416,9 @@ class _HomePageState extends State<HomePage>
         _changeUserInfoShow(_data);
       });
     }
+
+    EventBusUtils.getInstance()
+        .fire(ChangeLanguage(language: _language, state: 200));
   }
 
   ///scrollview的顶部view，包含背景图、登录信息、账户总览和收支明细
