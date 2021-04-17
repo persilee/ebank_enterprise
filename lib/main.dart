@@ -218,17 +218,17 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
   _getPublicParameters() async {
     final prefs = await SharedPreferences.getInstance();
 
-    //获取证件类型
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq('CERT_TYPE'), 'GetIdTypeReq')
-        .then((data) {
-      if (data.publicCodeGetRedisRspDtoList != null) {}
-    }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-    });
+    // //获取证件类型
+    // PublicParametersRepository()
+    //     .getIdType(GetIdTypeReq('TORPC'), 'GetIdTypeReq') //TORPC//CERT_TYPE
+    //     .then((data) {
+    //   if (data.publicCodeGetRedisRspDtoList != null) {}
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(
+    //     msg: e.toString(),
+    //     gravity: ToastGravity.CENTER,
+    //   );
+    // });
 
     //获取本币
     PublicParametersRepository()

@@ -7,6 +7,7 @@ import 'dart:convert';
 
 import 'package:azlistview/azlistview.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -87,6 +88,19 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
     //   Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     // });
 
+    // //获取国家地区列表
+    // PublicParametersRepository()
+    //     .getCountryList(
+    //         CountryRegionNewListReq(), 'getCountryList') //CORP_TYPE//ET
+    //     .then((data) {
+    //   print('geCountryListData == $data');
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(
+    //     msg: e.toString(),
+    //     gravity: ToastGravity.CENTER,
+    //   );
+    // });
+
     //加载城市列表
     rootBundle.loadString('assets/data/country.json').then((value) {
       Map countryMap = json.decode(value);
@@ -105,7 +119,9 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
       });
       _handleList(_cityList);
       setState(() {
+        // if (_hotCityList != null && _hotCityList.length > 0) {
         _suspensionTag = _hotCityList[0].getSuspensionTag();
+        // }
       });
     });
   }

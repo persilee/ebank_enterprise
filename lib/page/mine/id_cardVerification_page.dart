@@ -28,6 +28,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
 // import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class IdIardVerificationPage extends StatefulWidget {
   @override
@@ -130,7 +131,8 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   //获取证件类型
   _getIdCardList() async {
     PublicParametersRepository()
-        .getIdType(GetIdTypeReq('FIRM_CERT'), 'GetIdTypeReq') //CICID
+        .getIdType(
+            GetIdTypeReq('TORPC'), 'GetIdTypeReq') //CICID//TORPC//FIRM_CERT
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         print('data.publicCodeGetRedisRspDtoList222222');
@@ -167,30 +169,33 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
 
   //证件类型选择弹窗
   void _idCardListBottomSheet() async {
-    List<String> obj = [];
-    List<String> indList = [];
+    List<String> idCardList = [];
 
-    if (idInformationList != null) {
+    if (idInformationList.length > 0) {
+      idCardList = [];
+      String _language = Intl.getCurrentLocale();
       idInformationList.forEach((element) {
-        obj.add(element.cname);
-        indList.add(element.code);
+        idCardList.add(_language == 'en' ? element.name : element.cname);
       });
     }
+
     final result = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return BottomMenu(
-            title: S.of(context).idType,
-            items: obj,
-          );
-        });
-    print('result$indList');
+      context: context,
+      builder: (context) => BottomMenu(
+        title: S.of(context).openAccount_industryNatureTwo_select,
+        items: idCardList,
+      ),
+    );
+
     if (result != null && result != false) {
+      IdType data = idInformationList[result];
+      FocusScope.of(context).requestFocus(FocusNode());
       setState(() {
-        _certType = obj[result];
-        _certTypeKey = indList[result];
-        FocusScope.of(context).requestFocus(FocusNode());
+        _certType = idCardList[result];
+        _certTypeKey = data.code;
       });
+    } else {
+      return;
     }
   }
 
