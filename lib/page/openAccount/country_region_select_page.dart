@@ -21,6 +21,9 @@ import 'package:lpinyin/lpinyin.dart';
 import 'package:flutter/material.dart';
 // import 'package:azlistview/azlistview.dart';
 import 'package:flutter/services.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import '../../page_route.dart';
 
 class CountryOrRegionSelectPage extends StatefulWidget {
   @override
@@ -31,6 +34,7 @@ class CountryOrRegionSelectPage extends StatefulWidget {
 class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
   List<CountryRegionNewModel> _cityList = List();
   List<CountryRegionNewModel> _hotCityList = List();
+  // RefreshController _refreshController;
 
   int _suspensionHeight = 40;
   int _itemHeight = 50;
@@ -112,13 +116,14 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
           if (['CN', 'HK'].contains(model.cntyCd)) {
             //需要新增一个模型，共用后会无法改变tagIndex
             CountryRegionNewModel modelHot = CountryRegionNewModel(
-                value.modifyTime,
-                value.createTime,
+                '',
+                '',
                 value.cntyCd,
                 value.cntyNm,
                 value.cntyCnm,
                 value.cntyTcnm,
                 value.areaCode,
+                '',
                 '★');
             _hotCityList.add(modelHot);
           }
@@ -163,6 +168,7 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
               model.cntyCnm,
               model.cntyTcnm,
               model.areaCode,
+              '',
               '★');
           _hotCityList.add(modelHot);
         }
@@ -235,6 +241,11 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
             onTap: () {
               print("OnItemClick: $model");
               Navigator.pop(context, model);
+              // Navigator.pushNamed(
+              //   context,
+              //   pageCityForCountrySelect,
+              //   arguments: {'data': model},
+              // );
             },
           ),
         )

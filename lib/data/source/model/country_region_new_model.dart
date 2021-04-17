@@ -67,6 +67,7 @@ class CountryRegionNewModel extends ISuspensionBean {
     this.cntyCnm,
     this.cntyTcnm,
     this.areaCode,
+    this.namePinyin,
     this.tagIndex,
   );
 
