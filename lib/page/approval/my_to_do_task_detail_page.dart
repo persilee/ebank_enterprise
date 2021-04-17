@@ -214,10 +214,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             S.current.approve_name_account, data?.payeeName ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_currency, data?.creditCurrency ?? ''));
-        _internationalList.add(_buildContentItem(
-            S.current.approve_amount,
-            f.format(double.parse(data?.creditAmount ?? '0')) ??
-                ''));
+        _internationalList.add(_buildContentItem(S.current.approve_amount,
+            f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
         _internationalList.add(_buildContentItem(
@@ -263,10 +261,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             S.current.approve_account, data?.payeeCardNo ?? ''));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_currency, data?.creditCurrency ?? ''));
-        _oneToOneList.add(_buildContentItem(
-            S.current.approve_amount,
-            f.format(double.parse(data?.creditAmount ?? '0')) ??
-                ''));
+        _oneToOneList.add(_buildContentItem(S.current.approve_amount,
+            f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
         _oneToOneList.add(
@@ -354,8 +350,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             _buildContentItem(S.current.approve_product, data?.prodName ?? ''));
         _openTdList.add(_buildContentItem(
             S.current.approve_terms_of_deposit, data?.tenor ?? ''));
-        _openTdList.add(_buildContentItem(
-            S.current.approve_amount, f.format(double.parse(data?.bal ?? '0')) ?? ''));
+        _openTdList.add(_buildContentItem(S.current.approve_amount,
+            f.format(double.parse(data?.bal ?? '0')) ?? ''));
         _openTdList.add(_buildContentItem(S.current.approve_interest_rate, ''));
         _openTdList.add(_buildContentItem(
             S.current.approve_certificates_deposit_money, data?.ccy ?? ''));
@@ -871,7 +867,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           _btnIsEnable = true;
         });
       }
-      Navigator.pop(context);
+      Navigator.pop(context, widget.data);
     } catch (e) {
       print(e);
     }
@@ -887,7 +883,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             confirmCallback: () {
               FocusManager.instance.primaryFocus?.unfocus();
               Navigator.pop(context);
-              _rejectTaskConfirm(context);
+              _rejectTaskConfirm(this.context);
             },
           );
         });
@@ -902,7 +898,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       });
     }
     try {
-      Navigator.pop(context);
       CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
         CompleteTaskBody(
           approveResult: false,
@@ -918,6 +913,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             _btnIsEnable = true;
           });
         }
+        Navigator.pop(context);
       }
     } catch (e) {
       print(e);
@@ -949,7 +945,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       });
     }
     try {
-      Navigator.pop(context);
       CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
         CompleteTaskBody(
           approveResult: false,
@@ -965,6 +960,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             _btnIsEnable = true;
           });
         }
+        Navigator.pop(context);
       }
     } catch (e) {
       print(e);
@@ -1007,7 +1003,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
   // 完成任务
   void _completeTask() async {
-    print('USER_PASSWORDENABLED: ${SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED)}');
+    print(
+        'USER_PASSWORDENABLED: ${SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED)}');
     bool passwordEnabled = SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED);
     // 判断是否设置交易密码，如果没有设置，跳转到设置密码页面，
     // 否则，输入交易密码

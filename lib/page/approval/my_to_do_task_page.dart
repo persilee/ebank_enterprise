@@ -258,6 +258,8 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
   void go2Detail(ApprovalTask approvalTask) {
     Navigator.pushNamed(context, pageTaskApproval,
         arguments: {"data": approvalTask, "title": widget.title}).then((value) {
+          ApprovalTask data = value;
+          print('approvalTask: ${data.toJson()}');
           _loadData();
     });
   }

@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_all_finished_task_model.dart';
@@ -6,15 +5,15 @@ import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/international_transfer_detail_model.dart'
-as InternationalModel;
+    as InternationalModel;
 import 'package:ebank_mobile/data/source/model/approval/transfer_plan_detail_model.dart'
-as TransferPlanModel;
+    as TransferPlanModel;
 import 'package:ebank_mobile/data/source/model/approval/early_red_td_contract_detail_model.dart'
-as EarlyRedModel;
+    as EarlyRedModel;
 import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_detail_model.dart'
-as OneToOneModel;
+    as OneToOneModel;
 import 'package:ebank_mobile/data/source/model/approval/open_td_contract_detail_model.dart'
-as OpenTDModel;
+    as OpenTDModel;
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
@@ -76,7 +75,7 @@ class _MyApprovedHistoryDetailPageState
 
       // 根据任务id请求该任务的审批历史
       FindAllFinishedTaskModel _allFinishedTaskModel =
-      await ApiClient().findAllFinishedTask(
+          await ApiClient().findAllFinishedTask(
         FindTaskBody(
           page: 1,
           pageSize: 6,
@@ -116,8 +115,8 @@ class _MyApprovedHistoryDetailPageState
       if ((e as DioError).error is NeedLogin) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) {
-              return LoginPage();
-            }), (Route route) {
+          return LoginPage();
+        }), (Route route) {
           print(route.settings?.name);
           return true;
         });
@@ -133,36 +132,43 @@ class _MyApprovedHistoryDetailPageState
   // transferPlanApproval - 预约转账
   void _loadTransferPlanData(_contractModel) {
     TransferPlanModel.TransferPlanDetailModel transferPlanDetailModel =
-    TransferPlanModel.TransferPlanDetailModel.fromJson(_contractModel);
+        TransferPlanModel.TransferPlanDetailModel.fromJson(_contractModel);
     TransferPlanModel.OperateEndValue data =
         transferPlanDetailModel.operateEndValue;
     if (this.mounted) {
       setState(() {
-        _transferPlanList.add(_buildTitle(S.current.approve_project_information));
-        _transferPlanList.add(_buildContentItem(S.current.approve_project_name, data?.planName ?? ''));
-        _transferPlanList.add(_buildContentItem(S.current.approve_appointment_frequency, data?.frequency ?? ''));
         _transferPlanList
-            .add(_buildContentItem(S.current.approve_first_transfer_time, data?.startDate ?? ''));
-        _transferPlanList.add(_buildContentItem(S.current.approve_as_of_date, data?.endDate ?? ''));
-        _transferPlanList.add(
-          Padding(padding: EdgeInsets.only(top: 15)),
-        );
-        _transferPlanList.add(_buildTitle(S.current.approve_gathering_information));
-        _transferPlanList.add(_buildContentItem(S.current.approve_account, data?.payeeCardNo ?? ''));
-        _transferPlanList.add(_buildContentItem(S.current.approve_name_account, data?.payeeName ?? ''));
-        _transferPlanList
-            .add(_buildContentItem(S.current.approve_currency, data?.creditCurrency ?? ''));
-        _transferPlanList.add(
-          Padding(padding: EdgeInsets.only(top: 15)),
-        );
-        _transferPlanList.add(_buildTitle(S.current.approve_payment_information));
-        _transferPlanList.add(_buildContentItem(S.current.approve_account, data?.payerCardNo ?? ''));
-        _transferPlanList.add(_buildContentItem(S.current.approve_name_account, data?.payerName ?? ''));
-        _transferPlanList
-            .add(_buildContentItem(S.current.approve_currency, data?.debitCurrency ?? ''));
+            .add(_buildTitle(S.current.approve_project_information));
         _transferPlanList.add(_buildContentItem(
-            S.current.approve_amount, f.format(double.parse(data?.amount ?? '0')) ?? ''));
-        _transferPlanList.add(_buildContentItem(S.current.approve_remark, data?.remark ?? ''));
+            S.current.approve_project_name, data?.planName ?? ''));
+        _transferPlanList.add(_buildContentItem(
+            S.current.approve_appointment_frequency, data?.frequency ?? ''));
+        _transferPlanList.add(_buildContentItem(
+            S.current.approve_first_transfer_time, data?.startDate ?? ''));
+        _transferPlanList.add(_buildContentItem(
+            S.current.approve_as_of_date, data?.endDate ?? ''));
+        _transferPlanList.add(
+          Padding(padding: EdgeInsets.only(top: 15)),
+        );
+        _transferPlanList
+            .add(_buildTitle(S.current.approve_gathering_information));
+        _transferPlanList.add(_buildContentItem(
+            S.current.approve_account, data?.payeeCardNo ?? ''));
+        _transferPlanList.add(_buildContentItem(
+            S.current.approve_name_account, data?.payeeName ?? ''));
+        _transferPlanList.add(_buildContentItem(
+            S.current.approve_currency, data?.creditCurrency ?? ''));
+        _transferPlanList.add(
+          Padding(padding: EdgeInsets.only(top: 15)),
+        );
+        _transferPlanList
+            .add(_buildTitle(S.current.approve_payment_information));
+        _transferPlanList.add(_buildContentItem(
+            S.current.approve_account, data?.payerCardNo ?? ''));
+        _transferPlanList.add(_buildContentItem(S.current.approve_amount,
+            f.format(double.parse(data?.amount ?? '0')) ?? ''));
+        _transferPlanList.add(
+            _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
       });
     }
@@ -171,49 +177,44 @@ class _MyApprovedHistoryDetailPageState
   // internationalTransferApproval - 国际汇款
   void _loadInternationalData(_contractModel) {
     InternationalModel.InternationalTransferDetailModel
-    internationalTransferDetailModel =
-    InternationalModel.InternationalTransferDetailModel.fromJson(
-        _contractModel);
+        internationalTransferDetailModel =
+        InternationalModel.InternationalTransferDetailModel.fromJson(
+            _contractModel);
     InternationalModel.OperateEndValue data =
         internationalTransferDetailModel.operateEndValue;
     if (this.mounted) {
       setState(() {
-        _internationalList.add(_buildTitle(S.current.approve_gathering_information));
         _internationalList
-            .add(_buildContentItem(S.current.approve_account, data?.payeeCardNo ?? ''));
-        _internationalList
-            .add(_buildContentItem(S.current.approve_name_account, data?.payeeName ?? ''));
-        _internationalList
-            .add(_buildContentItem(S.current.approve_currency, data?.creditCurrency ?? ''));
+            .add(_buildTitle(S.current.approve_gathering_information));
         _internationalList.add(_buildContentItem(
-            S.current.approve_amount,
-            f.format(double.parse(data?.creditAmount ?? '0')) ??
-                ''));
-        _internationalList
-            .add(_buildContentItem(S.current.approve_reference_rate, data?.exchangeRate ?? ''));
-        _internationalList
-            .add(_buildContentItem(S.current.approve_country_region, data?.district ?? ''));
-        _internationalList
-            .add(_buildContentItem(S.current.approve_swift_code, data?.bankSwift ?? ''));
-        _internationalList
-            .add(_buildContentItem(S.current.approve_collecting_bank, data?.payeeBankCode ?? ''));
-        _internationalList
-            .add(_buildContentItem(S.current.approve_collection_address, data?.payeeAddress ?? ''));
+            S.current.approve_account, data?.payeeCardNo ?? ''));
+        _internationalList.add(_buildContentItem(
+            S.current.approve_name_account, data?.payeeName ?? ''));
+        _internationalList.add(_buildContentItem(
+            S.current.approve_currency, data?.creditCurrency ?? ''));
+        _internationalList.add(_buildContentItem(S.current.approve_amount,
+            f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
+        _internationalList.add(_buildContentItem(
+            S.current.approve_reference_rate, data?.exchangeRate ?? ''));
+        _internationalList.add(_buildContentItem(
+            S.current.approve_country_region, data?.district ?? ''));
+        _internationalList.add(_buildContentItem(
+            S.current.approve_swift_code, data?.bankSwift ?? ''));
+        _internationalList.add(_buildContentItem(
+            S.current.approve_collecting_bank, data?.payeeBankCode ?? ''));
+        _internationalList.add(_buildContentItem(
+            S.current.approve_collection_address, data?.payeeAddress ?? ''));
         _internationalList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
-        _internationalList.add(_buildTitle(S.current.approve_payment_information));
         _internationalList
-            .add(_buildContentItem(S.current.approve_account, data?.payerCardNo ?? ''));
-        _internationalList
-            .add(_buildContentItem(S.current.approve_name_account, data?.payerName ?? ''));
-        _internationalList
-            .add(_buildContentItem(S.current.approve_currency, data?.debitCurrency ?? ''));
+            .add(_buildTitle(S.current.approve_payment_information));
+        _internationalList.add(_buildContentItem(S.current.approve_amount,
+            f.format(double.parse(data?.debitAmount ?? '0')) ?? ''));
         _internationalList.add(_buildContentItem(
-            S.current.approve_amount, f.format(double.parse(data?.debitAmount ?? '0')) ?? ''));
-        _internationalList
-            .add(_buildContentItem(S.current.approve_payment_method, data?.costOptions ?? ''));
-        _internationalList.add(_buildContentItem(S.current.approve_remark, data?.remark ?? ''));
+            S.current.approve_payment_method, data?.costOptions ?? ''));
+        _internationalList.add(
+            _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
       });
     }
@@ -222,30 +223,24 @@ class _MyApprovedHistoryDetailPageState
   // oneToOneTransferApproval - 行内转账
   void _loadOneToOneData(_contractModel) {
     OneToOneModel.OneToOneTransferDetailModel oneToOneTransferDetailModel =
-    OneToOneModel.OneToOneTransferDetailModel.fromJson(_contractModel);
+        OneToOneModel.OneToOneTransferDetailModel.fromJson(_contractModel);
     OneToOneModel.OperateEndValue data =
         oneToOneTransferDetailModel.operateEndValue;
     if (this.mounted) {
       setState(() {
         _oneToOneList.add(_buildTitle(S.current.approve_gathering_information));
-        _oneToOneList.add(_buildContentItem(S.current.approve_account, data?.payeeCardNo ?? ''));
-        _oneToOneList.add(_buildContentItem(S.current.approve_name_account, data?.payeeName ?? ''));
-        _oneToOneList.add(_buildContentItem(S.current.approve_currency, data?.creditCurrency ?? ''));
+        _oneToOneList.add(_buildContentItem(S.current.approve_amount,
+            f.format(double.parse(data?.debitAmount ?? '0')) ?? ''));
         _oneToOneList.add(_buildContentItem(
-            S.current.approve_amount,
-            f.format(double.parse(data?.debitAmount ?? '0')) ??
-                ''));
-        _oneToOneList.add(_buildContentItem(S.current.approve_reference_rate, data?.exchangeRate ?? ''));
+            S.current.approve_reference_rate, data?.exchangeRate ?? ''));
         _oneToOneList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
         _oneToOneList.add(_buildTitle(S.current.approve_payment_information));
-        _oneToOneList.add(_buildContentItem(S.current.approve_account, data?.payerCardNo ?? ''));
-        _oneToOneList.add(_buildContentItem(S.current.approve_name_account, data?.payerName ?? ''));
-        _oneToOneList.add(_buildContentItem(S.current.approve_currency, data?.debitCurrency ?? ''));
-        _oneToOneList.add(_buildContentItem(
-            S.current.approve_amount, f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
-        _oneToOneList.add(_buildContentItem(S.current.approve_remark, data?.remark ?? ''));
+        _oneToOneList.add(_buildContentItem(S.current.approve_amount,
+            f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
+        _oneToOneList.add(
+            _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
       });
     }
@@ -254,38 +249,48 @@ class _MyApprovedHistoryDetailPageState
   // earlyRedTdContractApproval - 定期提前结清
   void _loadEarlyRedData(_contractModel) {
     EarlyRedModel.EarlyRedTdContractDetailModel earlyRedTdContractDetailModel =
-    EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
+        EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
     EarlyRedModel.OperateEndValue data =
         earlyRedTdContractDetailModel.operateEndValue;
     if (this.mounted) {
       setState(() {
         _earlyRedTdList.add(_buildTitle(S.current.approve_basic_information));
-        _earlyRedTdList.add(_buildContentItem(S.current.approve_contract_no, data?.conNo ?? ''));
+        _earlyRedTdList.add(_buildContentItem(
+            S.current.approve_contract_no, data?.conNo ?? ''));
+        _earlyRedTdList.add(_buildContentItem(
+            S.current.approve_certificates_deposit_amount,
+            f.format(double.parse(data?.bal)) ?? ''));
+        _earlyRedTdList.add(_buildContentItem(
+            S.current.approve_certificates_deposit_amount,
+            f.format(double.parse(data?.bal ?? '0')) ?? ''));
         _earlyRedTdList.add(
-            _buildContentItem(S.current.approve_certificates_deposit_amount, f.format(double.parse(data?.bal ?? '0')) ?? ''));
-        _earlyRedTdList.add(_buildContentItem(S.current.approve_currency, data?.ccy ?? ''));
-        _earlyRedTdList.add(_buildContentItem(S.current.approve_deposit_term, data?.tenor ?? ''));
-        _earlyRedTdList.add(_buildContentItem(S.current.approve_state, data?.status ?? ''));
-        _earlyRedTdList.add(_buildContentItem(S.current.approve_effective_date, data?.valueDate ?? ''));
-        _earlyRedTdList.add(_buildContentItem(S.current.approve_maturity_date, data?.dueDate ?? ''));
-        _earlyRedTdList.add(_buildContentItem(S.current.approve_settle_the_principal_amount, data?.matAmt ?? ''));
+            _buildContentItem(S.current.approve_currency, data?.ccy ?? ''));
+        _earlyRedTdList.add(_buildContentItem(
+            S.current.approve_deposit_term, data?.tenor ?? ''));
+        _earlyRedTdList.add(
+            _buildContentItem(S.current.approve_state, data?.status ?? ''));
+        _earlyRedTdList.add(_buildContentItem(
+            S.current.approve_effective_date, data?.valueDate ?? ''));
+        _earlyRedTdList.add(_buildContentItem(
+            S.current.approve_maturity_date, data?.dueDate ?? ''));
+        _earlyRedTdList.add(_buildContentItem(
+            S.current.approve_settle_the_principal_amount, data?.matAmt ?? ''));
         _earlyRedTdList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
         _earlyRedTdList.add(_buildTitle(S.current.approve_trial_information));
-        _earlyRedTdList
-            .add(_buildContentItem(S.current.approve_prepay_interest_rate, '${data?.eryRate}%' ?? ''));
-        _earlyRedTdList.add(_buildContentItem(S.current.approve_prepay_interest, data?.eryInt ?? ''));
-        _earlyRedTdList.add(_buildContentItem(
-            S.current.approve_poundage, f.format(double.parse(data?.hdlFee ?? '0')) ?? ''));
-        _earlyRedTdList.add(_buildContentItem(
-            S.current.approve_penalty, f.format(double.parse(data?.pnltFee ?? '0')) ?? ''));
+        _earlyRedTdList.add(_buildContentItem(S.current.approve_poundage,
+            f.format(double.parse(data?.hdlFee ?? '0')) ?? ''));
+        _earlyRedTdList.add(_buildContentItem(S.current.approve_penalty,
+            f.format(double.parse(data?.pnltFee ?? '0')) ?? ''));
         _earlyRedTdList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
         _earlyRedTdList.add(_buildTitle(S.current.approve_billing_info));
-        _earlyRedTdList.add(_buildContentItem(S.current.approve_settlement_account, data?.settDdAc ?? ''));
-        _earlyRedTdList.add(_buildContentItem(S.current.approve_settlement_amount, data?.settBal ?? ''));
+        _earlyRedTdList.add(_buildContentItem(
+            S.current.approve_settlement_account, data?.settDdAc ?? ''));
+        _earlyRedTdList.add(_buildContentItem(
+            S.current.approve_settlement_amount, data?.settBal ?? ''));
         _isLoading = false;
       });
     }
@@ -294,21 +299,23 @@ class _MyApprovedHistoryDetailPageState
   // openTdContractApproval - 开立定期存单
   void _loadOpenTdData(_contractModel) {
     OpenTDModel.OpenTdContractDetailModel openTdContractDetailModel =
-    OpenTDModel.OpenTdContractDetailModel.fromJson(_contractModel);
+        OpenTDModel.OpenTdContractDetailModel.fromJson(_contractModel);
     OpenTDModel.OperateEndValue data =
         openTdContractDetailModel?.operateEndValue;
     if (this.mounted) {
       setState(() {
         _openTdList.add(_buildTitle(S.current.approve_basic_information));
-        _openTdList.add(_buildContentItem(S.current.approve_product, data?.prodName ?? ''));
-        _openTdList.add(_buildContentItem(S.current.approve_terms_of_deposit, data?.tenor ?? ''));
-        _openTdList.add(
-            _buildContentItem(S.current.approve_amount, f.format(double.parse(data?.bal ?? '0')) ?? ''));
+        _openTdList.add(_buildContentItem(S.current.approve_amount,
+            f.format(double.parse(data?.bal ?? '0')) ?? ''));
         _openTdList.add(_buildContentItem(S.current.approve_interest_rate, ''));
-        _openTdList.add(_buildContentItem(S.current.approve_certificates_deposit_money, data?.ccy ?? ''));
-        _openTdList.add(_buildContentItem(S.current.approve_maturity_instructions, data?.instCode ?? ''));
-        _openTdList.add(_buildContentItem(S.current.approve_settlement_account, data?.settDdAc ?? ''));
-        _openTdList.add(_buildContentItem(S.current.approve_debit_account, data?.oppAc ?? ''));
+        _openTdList.add(_buildContentItem(
+            S.current.approve_certificates_deposit_money, data?.ccy ?? ''));
+        _openTdList.add(_buildContentItem(
+            S.current.approve_maturity_instructions, data?.instCode ?? ''));
+        _openTdList.add(_buildContentItem(
+            S.current.approve_settlement_account, data?.settDdAc ?? ''));
+        _openTdList.add(_buildContentItem(
+            S.current.approve_debit_account, data?.oppAc ?? ''));
         _isLoading = false;
       });
     }
@@ -326,19 +333,19 @@ class _MyApprovedHistoryDetailPageState
       body: _isLoading
           ? HsgLoading()
           : SingleChildScrollView(
-        controller: _controller,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            //提示
-            _tips(),
-            // 审批历史
-            if (_finishedList.length > 0) _buildHistoryTask(context),
-            // 根据processKey动态显示 任务详情
-            _buildTaskDetail(_processKey),
-          ],
-        ),
-      ),
+              controller: _controller,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  //提示
+                  _tips(),
+                  // 审批历史
+                  if (_finishedList.length > 0) _buildHistoryTask(context),
+                  // 根据processKey动态显示 任务详情
+                  _buildTaskDetail(_processKey),
+                ],
+              ),
+            ),
     );
   }
 
@@ -349,7 +356,8 @@ class _MyApprovedHistoryDetailPageState
         if (_processKey == 'openTdContractApproval') ..._openTdList,
         if (_processKey == 'earlyRedTdContractApproval') ..._earlyRedTdList,
         if (_processKey == 'oneToOneTransferApproval') ..._oneToOneList,
-        if (_processKey == 'internationalTransferApproval') ..._internationalList,
+        if (_processKey == 'internationalTransferApproval')
+          ..._internationalList,
         if (_processKey == 'transferPlanApproval') ..._transferPlanList,
       ],
     );
@@ -400,7 +408,7 @@ class _MyApprovedHistoryDetailPageState
                   Text(
                     title,
                     style:
-                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -475,19 +483,19 @@ class _MyApprovedHistoryDetailPageState
                   Text(
                     title,
                     style:
-                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                   ),
                   Spacer(),
                   isShowAvatar
                       ? Row(
-                    children: [
-                      ..._finishedList,
-                      Icon(
-                        Icons.chevron_right,
-                        size: 20.0,
-                      ),
-                    ],
-                  )
+                          children: [
+                            ..._finishedList,
+                            Icon(
+                              Icons.chevron_right,
+                              size: 20.0,
+                            ),
+                          ],
+                        )
                       : Container(),
                 ],
               ),

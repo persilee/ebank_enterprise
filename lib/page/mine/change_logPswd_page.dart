@@ -286,7 +286,8 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
 
     VerificationCodeRepository()
         .sendSmsByPhone(
-            SendSmsByPhoneNumberReq(_areaCodeStr, _phoneStr, 'modifyPwd', ''),
+            SendSmsByPhoneNumberReq(
+                _areaCodeStr, _phoneStr, 'modifyPwd', 'SCNAOCHGLPW'),
             'sendSms')
         .then((data) {
       _startCountdown();

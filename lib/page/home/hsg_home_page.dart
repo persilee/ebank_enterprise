@@ -99,6 +99,15 @@ class _HomePageState extends State<HomePage>
       }
     });
 
+    EventBusUtils.getInstance().on<ChangeLanguage>().listen((event) {
+      if ((event.state == 100 || event.state == 300) && _data != null) {
+        setState(() {
+          _language = event.language;
+          _changeUserInfoShow(_data);
+        });
+      }
+    });
+
     super.initState();
   }
 
@@ -407,6 +416,9 @@ class _HomePageState extends State<HomePage>
         _changeUserInfoShow(_data);
       });
     }
+
+    EventBusUtils.getInstance()
+        .fire(ChangeLanguage(language: _language, state: 200));
   }
 
   ///scrollview的顶部view，包含背景图、登录信息、账户总览和收支明细
@@ -843,17 +855,17 @@ class _HomePageState extends State<HomePage>
   //功能点击事件
   VoidCallback _featureClickFunction(BuildContext context, String title) {
     return () {
-      // if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
-      //   HsgShowTip.notOpenAccountTip(
-      //     context: context,
-      //     click: (value) {
-      //       if (value == true) {
-      //         _openAccountClickFunction(context);
-      //       }
-      //     },
-      //   );
-      //   return;
-      // }
+      if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
+        HsgShowTip.notOpenAccountTip(
+          context: context,
+          click: (value) {
+            if (value == true) {
+              _openAccountClickFunction(context);
+            }
+          },
+        );
+        return;
+      }
       if (S.current.transaction_details == title) {
         //收支明细
         Navigator.pushNamed(context, pageDetailList);
@@ -1060,12 +1072,11 @@ class _HomePageState extends State<HomePage>
       //   _getInviteeStatusByPhoneNetwork();
       // }
 
-      _verifyGotoTranPassword(context, data.passwordEnabled);
-
       if (this.mounted) {
         setState(() {
           _data = data;
           _changeUserInfoShow(_data);
+          _verifyGotoTranPassword(context, data.passwordEnabled);
         });
       }
     }).catchError((e) {

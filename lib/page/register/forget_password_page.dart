@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
@@ -205,7 +206,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     print('区号');
     Navigator.pushNamed(context, countryOrRegionSelectPage).then((value) {
       setState(() {
-        _officeAreaCodeText = (value as CountryRegionModel).code;
+        _officeAreaCodeText = (value as CountryRegionNewModel).areaCode;
       });
     });
   }

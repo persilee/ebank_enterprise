@@ -73,6 +73,15 @@ class _MinePageState extends State<MinePage>
         });
       }
     });
+
+    EventBusUtils.getInstance().on<ChangeLanguage>().listen((event) {
+      if ((event.state == 200 || event.state == 300) && _userInfoResp != null) {
+        setState(() {
+          _language = event.language;
+          _changeUserInfoShow(_userInfoResp);
+        });
+      }
+    });
   }
 
   @override

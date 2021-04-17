@@ -292,6 +292,9 @@ class _UserInformationPageState extends State<UserInformationPage> {
       HSGBankApp.setLocale(context, Language().getLocaleByLanguage(language));
       _changeUserInfoShow(_data);
     });
+
+    EventBusUtils.getInstance()
+        .fire(ChangeLanguage(language: _language, state: 300));
   }
 
   _headerInfoTapClick(BuildContext context) async {

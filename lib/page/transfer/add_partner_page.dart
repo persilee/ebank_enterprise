@@ -7,6 +7,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/add_partner.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
@@ -475,10 +476,20 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               Navigator.pushNamed(context, countryOrRegionSelectPage)
                   .then((value) {
                 setState(() {
-                  _countryText = _language == 'zh_CN'
-                      ? (value as CountryRegionModel).nameZhCN
-                      : (value as CountryRegionModel).nameEN;
-                  _countryCode = (value as CountryRegionModel).countryCode;
+                  // _countryText = _language == 'zh_CN'
+                  //     ? (value as CountryRegionNewModel).cntyCnm
+                  //     : (value as CountryRegionNewModel).cntyNm;
+                  switch (_language) {
+                    case 'zh_CN':
+                      _countryText = (value as CountryRegionNewModel).cntyCnm;
+                      break;
+                    case 'zh_HK':
+                      _countryText = (value as CountryRegionNewModel).cntyTcnm;
+                      break;
+                    default:
+                      _countryText = (value as CountryRegionNewModel).cntyNm;
+                  }
+                  _countryCode = (value as CountryRegionNewModel).cntyCd;
                 });
               });
             },
