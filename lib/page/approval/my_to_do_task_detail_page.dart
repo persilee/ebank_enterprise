@@ -871,7 +871,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           _btnIsEnable = true;
         });
       }
-      Navigator.pop(context);
+      Navigator.pop(context, widget.data);
     } catch (e) {
       print(e);
     }
