@@ -5,7 +5,6 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
-import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_ccy_list.dart';
@@ -15,7 +14,6 @@ import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
-import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/transfer.dart';
@@ -115,6 +113,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         _getCardCcyList(_payeeAccountController.text);
       }
     });
+
+    //转出金额焦点监听
     _payerTransferFocusNode.addListener(() {
       if (_payerTransferFocusNode.hasFocus) {
         if (_payerTransferController.text.length > 0) {
@@ -124,23 +124,24 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         }
       } else {
         if (_payerTransferController.text.length > 0) {
-          setState(() {
-            _opt = 'S';
-            _rateCalculate();
-          });
+          if (double.parse(_payerTransferController.text) <= 0) {
+            _payerTransferController.text = '';
+            Fluttertoast.showToast(
+              msg: S.of(context).input_amount_msg1,
+              gravity: ToastGravity.CENTER,
+            );
+          } else {
+            setState(() {
+              _opt = 'S';
+              _rateCalculate();
+            });
+          }
         }
       }
       _boolBut();
-      // if (_payerTransferController.text.length > 0) {
-      //   setState(() {
-      //     _opt = 'S';
-      //     _payeeTransferController.text = '';
-      //     _rateCalculate();
-      //   });
-      // }
-      // _boolBut();
     });
 
+    //转入金额焦点监听
     _payeeTransferFocusNode.addListener(() {
       if (_payeeTransferFocusNode.hasFocus) {
         if (_payeeTransferController.text.length > 0) {
@@ -150,21 +151,21 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         }
       } else {
         if (_payeeTransferController.text.length > 0) {
-          setState(() {
-            _opt = 'B';
-            _rateCalculate();
-          });
+          if (double.parse(_payeeTransferController.text) <= 0) {
+            _payeeTransferController.text = '';
+            Fluttertoast.showToast(
+              msg: S.of(context).input_amount_msg1,
+              gravity: ToastGravity.CENTER,
+            );
+          } else {
+            setState(() {
+              _opt = 'B';
+              _rateCalculate();
+            });
+          }
         }
       }
       _boolBut();
-      // if (_payeeTransferController.text.length > 0) {
-      //   setState(() {
-      //     _opt = 'B';
-      //     _payerTransferController.text = '';
-      //     _rateCalculate();
-      //   });
-      // }
-      // _boolBut();
     });
   }
 
@@ -793,18 +794,18 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
       //               : _payeeTransferController.text,
       //         ),
       //         'TransferTrialReq')
-              Transfer().transferTrial(
-              TransferTrialReq(
-                opt: _opt,
-                buyCcy: _payerCcy,
-                sellCcy: _payeeCcy,
-                buyAmount: _payerTransferController.text == ''
-                    ? '0'
-                    : _payerTransferController.text,
-                sellAmount: _payeeTransferController.text == ''
-                    ? '0'
-                    : _payeeTransferController.text,
-              ))
+      Transfer()
+          .transferTrial(TransferTrialReq(
+        opt: _opt,
+        buyCcy: _payerCcy,
+        sellCcy: _payeeCcy,
+        buyAmount: _payerTransferController.text == ''
+            ? '0'
+            : _payerTransferController.text,
+        sellAmount: _payeeTransferController.text == ''
+            ? '0'
+            : _payeeTransferController.text,
+      ))
           .then((data) {
         print(" opt: " +
             _opt +

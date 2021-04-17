@@ -12,7 +12,6 @@ import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_ccy_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
-import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -51,24 +50,38 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   TextEditingController _payAmtController = TextEditingController();
   String _rate = '';
   String _incomeAmt = '';
-  FocusNode _focusNode = new FocusNode();
+  FocusNode _payAmtfocusNode = new FocusNode();
 
   @override
   // ignore: must_call_super
   void initState() {
     // 网络请求
     _getCardList();
-    _payAmtController.addListener(() {
-      if (_payAmtController.text.length == 0) {
-        setState(() {
-          _rate = '';
-          _incomeAmt = '';
-        });
-      } else {
-        _focusNode.addListener(() {
+    // _payAmtController.addListener(() {
+    //   if (_payAmtController.text.length == 0) {
+    //     setState(() {
+    //       _rate = '';
+    //       _incomeAmt = '';
+    //     });
+    //   } else {
+    //     _payAmtfocusNode.addListener(() {
+    //       _transferTrial();
+    //     });
+    //   }
+    // });
+    _payAmtfocusNode.addListener(() {
+      if (_payAmtController.text.length > 0 && !_payAmtfocusNode.hasFocus) {
+        if (double.parse(_payAmtController.text) <= 0) {
+          _payAmtController.text = '';
+          Fluttertoast.showToast(
+            msg: S.of(context).input_amount_msg1,
+            gravity: ToastGravity.CENTER,
+          );
+        } else {
           _transferTrial();
-        });
+        }
       }
+      _boolBut();
     });
   }
 
@@ -226,7 +239,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
               textAlign: TextAlign.end,
               keyboardType: TextInputType.number,
               controller: _payAmtController,
-              focusNode: _focusNode,
+              focusNode: _payAmtfocusNode,
               decoration: InputDecoration.collapsed(
                 hintText: S.current.please_input,
                 hintStyle: TextStyle(
@@ -241,9 +254,6 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
                 ),
                 MoneyTextInputFormatter(),
               ],
-              onChanged: (text) {
-                _transferTrial();
-              },
             ),
           )
         ],
@@ -392,9 +402,6 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         _incomeAcc != '' &&
         _incomeCcy != '' &&
         _payAmtController.text != '') {
-      double _amount =
-          AiDecimalAccuracy.parse(_payAmtController.text).toDouble();
-
       // ForexTradingRepository()
       //     .transferTrial(
       //         TransferTrialReq(

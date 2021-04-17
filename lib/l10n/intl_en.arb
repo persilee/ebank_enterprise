@@ -700,5 +700,6 @@
   "forex_trading_msg1": "Please select a spending account first",
   "forex_trading_msg2": "Please select an income account first",
   "transfer_partner_msg1": "Are you sure you want to delete this partner",
-  "successfully_delete": "Successfully Delete !"
+  "successfully_delete": "Successfully Delete !",
+  "input_amount_msg1": "The input amount must be greater than 0"
 }

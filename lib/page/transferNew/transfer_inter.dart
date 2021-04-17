@@ -130,6 +130,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
     _actualNameReqData();
     _getTransferFeeList();
 
+    //转出金额焦点监听
     _payerTransferFocusNode.addListener(() {
       if (_payerTransferFocusNode.hasFocus) {
         if (_payerTransferController.text.length > 0) {
@@ -139,23 +140,24 @@ class _TransferInterPageState extends State<TransferInterPage> {
         }
       } else {
         if (_payerTransferController.text.length > 0) {
-          setState(() {
-            _opt = 'S';
-            _rateCalculate();
-          });
+          if (double.parse(_payerTransferController.text) <= 0) {
+            _payerTransferController.text = '';
+            Fluttertoast.showToast(
+              msg: S.of(context).input_amount_msg1,
+              gravity: ToastGravity.CENTER,
+            );
+          } else {
+            setState(() {
+              _opt = 'S';
+              _rateCalculate();
+            });
+          }
         }
       }
       _boolBut();
-      // if (_payerTransferController.text.length > 0) {
-      //   setState(() {
-      //     _opt = 'S';
-      //     _payeeTransferController.text = '';
-      //     _rateCalculate();
-      //   });
-      // }
-      // _boolBut();
     });
 
+    //转入金额焦点监听
     _payeeTransferFocusNode.addListener(() {
       if (_payeeTransferFocusNode.hasFocus) {
         if (_payeeTransferController.text.length > 0) {
@@ -165,22 +167,23 @@ class _TransferInterPageState extends State<TransferInterPage> {
         }
       } else {
         if (_payeeTransferController.text.length > 0) {
-          setState(() {
-            _opt = 'B';
-            _rateCalculate();
-          });
+          if (double.parse(_payeeTransferController.text) <= 0) {
+            _payeeTransferController.text = '';
+            Fluttertoast.showToast(
+              msg: S.of(context).input_amount_msg1,
+              gravity: ToastGravity.CENTER,
+            );
+          } else {
+            setState(() {
+              _opt = 'B';
+              _rateCalculate();
+            });
+          }
         }
       }
       _boolBut();
-      // if (_payeeTransferController.text.length > 0) {
-      //   setState(() {
-      //     _opt = 'B';
-      //     _payerTransferController.text = '';
-      //     _rateCalculate();
-      //   });
-      // }
-      // _boolBut();
     });
+
     _swiftFocusNode.addListener(() {
       if (_bankSwiftController.text.length == 11 && !_swiftFocusNode.hasFocus) {
         _getBankNameBySwift(_bankSwiftController.text);

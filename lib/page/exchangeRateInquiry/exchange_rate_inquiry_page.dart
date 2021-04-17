@@ -66,7 +66,13 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     //   _amountConversion();
     // });
     _amtController.addListener(() {
-      _amountConversion();
+      if (_amtController.text == '') {
+        setState(() {
+          _primitiveCcyAmt = '0.00';
+        });
+      } else {
+        _amountConversion();
+      }
     });
   }
 

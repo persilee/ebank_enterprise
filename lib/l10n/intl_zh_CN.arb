@@ -701,5 +701,6 @@
   "forex_trading_msg1": "请先选择支出账户",
   "forex_trading_msg2": "请先选择收入账户",
   "transfer_partner_msg1": "您是否确定要删除该伙伴",
-  "successfully_delete": "删除成功!"
+  "successfully_delete": "删除成功!",
+  "input_amount_msg1": "输入金额必须大于0"
 }
