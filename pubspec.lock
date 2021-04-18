@@ -282,14 +282,14 @@ packages:
       name: extended_image
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.0-non-null-safety"
+    version: "1.6.0"
   extended_image_library:
     dependency: transitive
     description:
       name: extended_image_library
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.1-non-null-safety"
+    version: "0.3.1"
   fake_async:
     dependency: transitive
     description:
@@ -430,7 +430,7 @@ packages:
       name: http_client_helper
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.1-non-null-safety"
+    version: "0.2.1"
   http_multi_server:
     dependency: transitive
     description:
@@ -445,6 +445,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.1.4"
+  image:
+    dependency: "direct main"
+    description:
+      name: image
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.19"
+  image_editor:
+    dependency: "direct main"
+    description:
+      name: image_editor
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.6"
   image_picker:
     dependency: "direct main"
     description:
@@ -627,6 +641,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.9.2"
+  petitparser:
+    dependency: transitive
+    description:
+      name: petitparser
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.1.0"
+  photo_manager:
+    dependency: "direct main"
+    description:
+      name: photo_manager
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.5.8"
   platform:
     dependency: transitive
     description:
@@ -933,6 +961,27 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.0-nullsafety.3"
+  video_player:
+    dependency: transitive
+    description:
+      name: video_player
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.1"
+  video_player_platform_interface:
+    dependency: transitive
+    description:
+      name: video_player_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.2.0"
+  video_player_web:
+    dependency: transitive
+    description:
+      name: video_player_web
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.4+1"
   watcher:
     dependency: transitive
     description:
@@ -954,6 +1003,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.7"
+  wechat_assets_picker:
+    dependency: "direct main"
+    description:
+      name: wechat_assets_picker
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.2.2"
   win32:
     dependency: transitive
     description:
@@ -968,6 +1024,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.1.2"
+  xml:
+    dependency: transitive
+    description:
+      name: xml
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.5.1"
   yaml:
     dependency: transitive
     description:

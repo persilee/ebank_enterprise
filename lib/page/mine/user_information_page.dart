@@ -21,6 +21,8 @@ import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 
+import '../../page_route.dart';
+
 class UserInformationPage extends StatefulWidget {
   @override
   _UserInformationPageState createState() => _UserInformationPageState();
@@ -111,7 +113,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
       padding: EdgeInsets.all(2.0),
       child: GestureDetector(
         onTap: (){
-          print('lllll');
+          Navigator.pushNamed(context, avatarViewPage, arguments: {'imgUrl': _headPortraitUrl});
         },
         child: Container(
           child: ClipOval(
