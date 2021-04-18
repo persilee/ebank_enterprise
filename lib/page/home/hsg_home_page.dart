@@ -120,7 +120,6 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    StatusBarUtil.setStatusBar(Brightness.light, color: Colors.transparent);
     String _language = Intl.getCurrentLocale();
     if (_language == 'zh_CN') {
       _changeLangBtnTltle = '中文（简体）';
