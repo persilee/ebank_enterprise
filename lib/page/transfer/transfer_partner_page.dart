@@ -489,11 +489,14 @@ class _TransferPartnerState extends State<TransferPartner> {
           Navigator.pop(context, partner);
         } else {
           if (partner.transferType == '0') {
-            Navigator.pushNamed(context, pageTransferInternal,
+            // Navigator.pushNamed(context, pageTransferInternal,
+            // arguments: partner);
+            Navigator.pushNamed(context, pageTransferInline,
                 arguments: partner);
           } else if (partner.transferType == '2') {
-            Navigator.pushNamed(context, pageTrasferInternational,
-                arguments: partner);
+            // Navigator.pushNamed(context, pageTrasferInternational,
+            //     arguments: partner);
+            Navigator.pushNamed(context, pageTransferInter, arguments: partner);
           }
         }
       },

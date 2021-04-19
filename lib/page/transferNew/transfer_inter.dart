@@ -677,7 +677,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
                 _bankSwiftController.text = rowListPartner.bankSwift;
                 payerBankCode = rowListPartner.payerBankCode;
                 payeeName = rowListPartner.payeeName;
-                payerName = rowListPartner.payerName;
+                // payerName = rowListPartner.payerName;
                 _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
                 if (rowListPartner.paysMethod != null) {
                   _transferFee = rowListPartner.paysMethod == ''

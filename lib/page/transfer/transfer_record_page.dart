@@ -976,31 +976,31 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     //         GetTransferRecordReq(ccy, _endDate, _page, pageSize, paymentCardNos,
     //             sort, _startDate, userAccount, userID),
     //         'getTransferRecord')
-    Transfer()
-      ..getTransferRecord(GetTransferRecordReq(ccy, _endDate, _page, pageSize,
-              paymentCardNos, sort, _startDate, userAccount, userID))
-          .then((data) {
-        if (this.mounted) {
-          setState(() {
-            if (data.transferRecord != null) {
-              _totalPage = data.totalPage;
-              _transferHistoryList.addAll(data.transferRecord);
-            }
-            _loadMore = false;
-            _isLoading = false;
-            _refreshController.loadComplete();
-          });
-        }
+        Transfer()
+          ..getTransferRecord(GetTransferRecordReq(ccy, _endDate, _page, pageSize,
+                  paymentCardNos, sort, _startDate, userAccount, userID))
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          if (data.transferRecord != null) {
+            _totalPage = data.totalPage;
+            _transferHistoryList.addAll(data.transferRecord);
+          }
+          _loadMore = false;
+          _isLoading = false;
+          _refreshController.loadComplete();
+        });
+      }
 
-        // HSProgressHUD.dismiss();
-      }).catchError((e) {
-        // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
-        // HSProgressHUD.dismiss();
-        if (this.mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
-      });
+      // HSProgressHUD.dismiss();
+    }).catchError((e) {
+      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+      // HSProgressHUD.dismiss();
+      if (this.mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
   }
 }
