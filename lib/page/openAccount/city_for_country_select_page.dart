@@ -1,3 +1,8 @@
+// Copyright (c) 2021 深圳高阳寰球科技有限公司
+//
+// Author: 李家伟
+// Date: 2021-04-17
+
 import 'package:azlistview/azlistview.dart';
 import 'package:ebank_mobile/data/source/model/city_for_country.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
