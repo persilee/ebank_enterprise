@@ -30,6 +30,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sp_util/sp_util.dart';
 
 class MinePage extends StatefulWidget {
   @override
@@ -67,7 +68,7 @@ class _MinePageState extends State<MinePage>
     });
 
     EventBusUtils.getInstance().on<ChangeHeadPortraitEvent>().listen((event) {
-      if (event.state == 200 ||
+      if (event.state == 200 || event.state == 100 ||
           event.state == 300 &&
               (event.headPortrait != null && event.headPortrait != '')) {
         setState(() {
@@ -106,9 +107,10 @@ class _MinePageState extends State<MinePage>
                           arguments: _userInfoResp)
                       .then((value) {
                     setState(() {
+                      _headPortraitUrl = SpUtil.getString(ConfigKey.USER_AVATAR_URL);
                       _language = Intl.getCurrentLocale();
                     });
-                    _changeUserInfoShow(_userInfoResp);
+                    // _changeUserInfoShow(_userInfoResp);
                   });
                 },
               ),

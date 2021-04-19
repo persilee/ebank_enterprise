@@ -1,13 +1,17 @@
 import 'dart:typed_data';
 import 'dart:io';
 
+import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/image_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sp_util/sp_util.dart';
 
 class AvatarViewPage extends StatefulWidget {
   final String imgUrl;
@@ -20,6 +24,8 @@ class AvatarViewPage extends StatefulWidget {
 
 class _AvatarViewPageState extends State<AvatarViewPage> {
   Uint8List _memoryImage;
+  bool _isClipImage = false;
+  File _clipImage;
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +54,16 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
       body: Center(
         child: GestureDetector(
           onLongPress: () => _saveImgPop(context),
-          child: FadeInImage.assetNetwork(
-            fit: BoxFit.cover,
-            image: widget.imgUrl,
-            placeholder: 'images/home/heaerIcon/home_header_person.png',
-          ),
+          child: !_isClipImage
+              ? FadeInImage.assetNetwork(
+                  fit: BoxFit.cover,
+                  image: widget.imgUrl,
+                  placeholder: 'images/home/heaerIcon/home_header_person.png',
+                )
+              : Image.file(
+                  _clipImage,
+                  fit: BoxFit.cover,
+                ),
         ),
       ),
     );
@@ -114,10 +125,34 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
     if (_memoryImage.isNotEmpty) {
       Navigator.pushNamed(context, imageEditorPage,
           arguments: {'imageData': _memoryImage}).then((value) async {
-            if(value != null) {
-              var image = await ApiClient().uploadAvatar(BaseBody(body: {}), value);
-              print('image: ${image['headPortrait']}');
+        if (value != null) {
+          try {
+            var image = await ApiClient().uploadAvatar(BaseBody(body: {}), value);
+            setState(() {
+              _clipImage = value;
+              _isClipImage = true;
+            });
+            Fluttertoast.showToast(
+              msg: '头像上传成功',
+              gravity: ToastGravity.CENTER,
+            );
+            String _headPortrait = image['headPortrait'] ?? '';
+            if(_headPortrait.isEmpty) {
+              UserInfoResp data =  await ApiClient().getUserInfo(GetUserInfoReq(SpUtil.getString(ConfigKey.USER_ID)));
+              _headPortrait = data.headPortrait;
+              SpUtil.putString(ConfigKey.USER_AVATAR_URL, data.headPortrait);
+              EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
+                  headPortrait: _headPortrait, state: 100));
+            } else {
+              EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
+                  headPortrait: image['headPortrait'], state: 100));
             }
+            print('imageUrl: ${(value as File).uri}');
+            print('image: ${image['headPortrait']}');
+          } catch (e) {
+            print(e);
+          }
+        }
       });
     }
   }

@@ -10,6 +10,7 @@ import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_mode
 import 'package:ebank_mobile/data/source/model/city_for_country.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
+import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/statement/statement_query_list_body.dart';
 import 'package:ebank_mobile/data/source/model/statement/statement_query_list_model.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
@@ -89,6 +90,11 @@ abstract class ApiClient {
   @GET('/general/statement/downLoad')
   @DioResponseType(ResponseType.bytes)
   Future<List<int>> statementDownLoad(@Query('internalId') String internalId);
+
+  /// 获取用户信息
+  @POST('/cust/user/getUser')
+  Future<UserInfoResp> getUserInfo(
+      @Body() GetUserInfoReq getUserInfoReq);
 
   /// 上传头像（开户图片上传暂时共用）
   @POST('/cust/user/uploadAvatar')

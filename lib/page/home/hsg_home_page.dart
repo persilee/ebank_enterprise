@@ -62,6 +62,7 @@ class _HomePageState extends State<HomePage>
   @override
   // ignore: must_call_super
   void initState() {
+    StatusBarUtil.setStatusBar(Brightness.light, color: Colors.transparent);
     _sctrollController = ScrollController();
     // 监听滚动
     _sctrollController.addListener(
@@ -1091,28 +1092,28 @@ class _HomePageState extends State<HomePage>
   @override
   bool get wantKeepAlive => true;
 
-  // Future<void> _getInviteeStatusByPhoneNetwork() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   String userAreaCode = prefs.getString(ConfigKey.USER_AREACODE);
-  //   String userPhone = prefs.getString(ConfigKey.USER_PHONE);
+// Future<void> _getInviteeStatusByPhoneNetwork() async {
+//   final prefs = await SharedPreferences.getInstance();
+//   String userAreaCode = prefs.getString(ConfigKey.USER_AREACODE);
+//   String userPhone = prefs.getString(ConfigKey.USER_PHONE);
 
-  //   UserDataRepository()
-  //       .getInviteeStatusByPhone(
-  //     GetInviteeStatusByPhoneReq(userAreaCode, userPhone),
-  //     'getInviteeStatusByPhone',
-  //   )
-  //       .then((data) {
-  //     if (this.mounted) {
-  //       setState(() {
-  //         _inviteeStatus = data.inviteeStatus;
-  //       });
-  //     }
-  //   }).catchError((e) {
-  //     Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER,);
-  //     // HSProgressHUD.showError(status: e.toString());
-  //     print('${e.toString()}');
-  //   });
-  // }
+//   UserDataRepository()
+//       .getInviteeStatusByPhone(
+//     GetInviteeStatusByPhoneReq(userAreaCode, userPhone),
+//     'getInviteeStatusByPhone',
+//   )
+//       .then((data) {
+//     if (this.mounted) {
+//       setState(() {
+//         _inviteeStatus = data.inviteeStatus;
+//       });
+//     }
+//   }).catchError((e) {
+//     Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER,);
+//     // HSProgressHUD.showError(status: e.toString());
+//     print('${e.toString()}');
+//   });
+// }
 }
 
 /// 这是一个可以指定SafeArea区域背景色的AppBar

@@ -28,7 +28,6 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      alignment: Alignment.center,
       curve: Curves.linear,
       duration: Duration(milliseconds: 360),
       height: height,
