@@ -89,6 +89,9 @@ class LoanRecordDOList extends Object {
   @JsonKey(name: 'lclName')
   String lclName;
 
+  @JsonKey(name: 'status')
+  int status;
+
   LoanRecordDOList(
       this.modifyTime,
       this.createTime,
@@ -108,7 +111,8 @@ class LoanRecordDOList extends Object {
       this.phone,
       this.userType,
       this.remark,
-      this.lclName);
+      this.lclName,
+      this.status);
 
   factory LoanRecordDOList.fromJson(Map<String, dynamic> srcJson) =>
       _$LoanRecordDOListFromJson(srcJson);
