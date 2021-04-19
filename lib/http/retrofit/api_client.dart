@@ -105,12 +105,12 @@ abstract class ApiClient {
   );
 
   /// 国家信息-查询
-  @POST('/base/bpCtCnt/getCountryList')
+  @POST('/platform/bpCtCnt/getCountryList')
   Future<CountryRegionNewListResp> getCountryList(
       @Body() CountryRegionNewListReq req);
 
   /// 指定国家代码下所有城市代码信息-查询
-  @POST('/base/bpCtCit/getCntAllBpCtCit')
+  @POST('/platform/bpCtCit/getCntAllBpCtCit')
   Future<CityForCountryListResp> getCntAllBpCtCit(
       @Body() CityForCountryListReq req);
 }

@@ -184,14 +184,16 @@ class _SetPayPageState extends State<SetPayPage> {
             'setTransactionPassword')
         .then((data) {
       HSProgressHUD.dismiss();
-      Navigator.of(context)..pop()..pop()..pop();
+      prefs.setBool(ConfigKey.USER_PASSWORDENABLED, true);
+      Navigator.of(context)..pop()..pop();//..pop();
+      // Navigator.of(context).pop();
       Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
     }).catchError((e) {
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
       );
-      HSProgressHUD.dismiss();
     });
   }
 }
