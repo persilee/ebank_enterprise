@@ -584,11 +584,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                       fontSize: 14.0),
                 ),
                 clickCallback: () {
-                  if (_comment.length != 0) {
-                    _doUnclaimTask();
-                  } else {
-                    _alertDialog();
-                  }
+                  _doUnclaimTask();
                 },
               ),
             ),
