@@ -1,6 +1,7 @@
 import 'package:ebank_mobile/data/source/model/get_international_transfer.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 
@@ -197,35 +198,62 @@ class _TransferInternalPreviewPageState
     //     "countryCode" +
     //     countryCode);
     HSProgressHUD.show();
-    TransferDataRepository()
-        .getInterNationalTransfer(
-            GetInternationalTransferReq(
-              opt,
-              //付款金额
-              debitAmount,
-              //收款金额
-              creditAmount,
-              //贷方货币
-              transferIntoCcy,
-              //借方货币
-              transferOutCcy,
-              "",
-              payeeBankCode,
-              payeeCardNo,
-              payeeName,
-              payerBankCode,
-              payerCardNo,
-              payerName,
-              remark,
-              "",
-              rate,
-              payeeAddress,
-              bankSwift,
-              "CN", //countryCode,
-              custId,
-              costOptionsIndex,
-            ),
-            'getTransferByAccount')
+    // TransferDataRepository()
+    //     .getInterNationalTransfer(
+    //         GetInternationalTransferReq(
+    //           opt,
+    //           //付款金额
+    //           debitAmount,
+    //           //收款金额
+    //           creditAmount,
+    //           //贷方货币
+    //           transferIntoCcy,
+    //           //借方货币
+    //           transferOutCcy,
+    //           "",
+    //           payeeBankCode,
+    //           payeeCardNo,
+    //           payeeName,
+    //           payerBankCode,
+    //           payerCardNo,
+    //           payerName,
+    //           remark,
+    //           "",
+    //           rate,
+    //           payeeAddress,
+    //           bankSwift,
+    //           "CN", //countryCode,
+    //           custId,
+    //           costOptionsIndex,
+    //         ),
+    //         'getTransferByAccount')
+    Transfer()
+        .getInterNationalTransfer(GetInternationalTransferReq(
+      opt,
+      //付款金额
+      debitAmount,
+      //收款金额
+      creditAmount,
+      //贷方货币
+      transferIntoCcy,
+      //借方货币
+      transferOutCcy,
+      "",
+      payeeBankCode,
+      payeeCardNo,
+      payeeName,
+      payerBankCode,
+      payerCardNo,
+      payerName,
+      remark,
+      "",
+      rate,
+      payeeAddress,
+      bankSwift,
+      "CN", //countryCode,
+      custId,
+      costOptionsIndex,
+    ))
         .then((value) {
       HSProgressHUD.dismiss();
       Navigator.pushReplacementNamed(context, pageOperationResult);
