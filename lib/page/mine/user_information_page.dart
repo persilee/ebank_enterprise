@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/util/event_bus_utils.dart';
+import 'package:ebank_mobile/util/image_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
@@ -20,6 +23,9 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:sp_util/sp_util.dart';
+
+import '../../page_route.dart';
 
 class UserInformationPage extends StatefulWidget {
   @override
@@ -37,9 +43,19 @@ class _UserInformationPageState extends State<UserInformationPage> {
   var _belongCustStatus = ''; //用户状态
   String _userPhone = "";
   UserInfoResp _data;
+  Uint8List _memoryImage;
 
   @override
   void initState() {
+    EventBusUtils.getInstance().on<ChangeHeadPortraitEvent>().listen((event) {
+      if (event.state == 100 ||
+          event.state == 300 && event.headPortrait.isNotEmpty) {
+        setState(() {
+          _headPortraitUrl = event.headPortrait;
+        });
+      }
+    });
+
     super.initState();
   }
 
@@ -59,14 +75,16 @@ class _UserInformationPageState extends State<UserInformationPage> {
       setState(() {
         _data = arguments;
         _userPhone = arguments.userPhone != null ? arguments.userPhone : '';
-        _headPortraitUrl =
-            arguments.headPortrait != null ? arguments.headPortrait : ''; //头像地址
+        // _headPortraitUrl =
+        // arguments.headPortrait != null ? arguments.headPortrait : ''; //头像地址
+        _headPortraitUrl = SpUtil.getString(ConfigKey.USER_AVATAR_URL);//头像地址
         _belongCustStatus = arguments.belongCustStatus != null
             ? arguments.belongCustStatus
             : '';
       });
       _changeUserInfoShow(_data);
     }
+
     return new Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).user_information),
@@ -79,7 +97,8 @@ class _UserInformationPageState extends State<UserInformationPage> {
         child: Column(
           children: [
             selectFrame(S.current.head_portrait, _headPortrait(), () {
-              _headerInfoTapClick(context);
+              // _headerInfoTapClick(context);
+              _getImage();
             }, 70),
             _infoFrame(S.current.user_name, _userName),
             _infoFrame(S.current.phone_num, _userPhone),
@@ -109,9 +128,15 @@ class _UserInformationPageState extends State<UserInformationPage> {
         borderRadius: BorderRadius.circular(55.0 / 2),
       ),
       padding: EdgeInsets.all(2.0),
-      child: Container(
-        child: ClipOval(
-          child: _headPortraitImage(),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, avatarViewPage,
+              arguments: {'imgUrl': _headPortraitUrl});
+        },
+        child: Container(
+          child: ClipOval(
+            child: _headPortraitImage(),
+          ),
         ),
       ),
     );
@@ -295,6 +320,41 @@ class _UserInformationPageState extends State<UserInformationPage> {
 
     EventBusUtils.getInstance()
         .fire(ChangeLanguage(language: _language, state: 300));
+  }
+
+  Future<void> _getImage() async {
+    _memoryImage = await pickImage(context);
+    if (_memoryImage.isNotEmpty) {
+      Navigator.pushNamed(context, imageEditorPage,
+          arguments: {'imageData': _memoryImage}).then((value) async {
+        if (value != null) {
+          try {
+            var image = await ApiClient().uploadAvatar(BaseBody(body: {}), value);
+            setState(() {
+              // _clipImage = value;
+              // _isClipImage = true;
+            });
+            Fluttertoast.showToast(
+              msg: '头像上传成功',
+              gravity: ToastGravity.CENTER,
+            );
+            String _headPortrait = image['headPortrait'] ?? '';
+            if(_headPortrait.isEmpty) {
+              UserInfoResp data =  await ApiClient().getUserInfo(GetUserInfoReq(SpUtil.getString(ConfigKey.USER_ID)));
+              _headPortrait = data.headPortrait;
+              SpUtil.putString(ConfigKey.USER_AVATAR_URL, data.headPortrait);
+              EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
+                  headPortrait: _headPortrait, state: 100));
+            } else {
+              EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
+                  headPortrait: image['headPortrait'], state: 100));
+            }
+          } catch (e) {
+            print(e);
+          }
+        }
+      });
+    }
   }
 
   _headerInfoTapClick(BuildContext context) async {

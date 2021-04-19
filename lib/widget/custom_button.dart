@@ -31,7 +31,7 @@ class CustomButton extends StatelessWidget {
       curve: Curves.linear,
       duration: Duration(milliseconds: 360),
       height: height,
-      margin: margin ?? EdgeInsets.fromLTRB(16, 8, 16, 0),
+      margin: margin ?? EdgeInsets.fromLTRB(16, 8, 16, 8),
       decoration: isEnable
           ? BoxDecoration(
               gradient: isOutline

@@ -49,6 +49,6 @@ debug
 lib/node_modules
 
 # 安装包
-android/app/release/
+/android/app/release/
 *.apk
 *.ipa
