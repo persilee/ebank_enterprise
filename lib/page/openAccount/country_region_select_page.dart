@@ -12,6 +12,7 @@ import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
@@ -96,13 +97,14 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
 
     // HSProgressHUD.show();
     // //获取国家地区列表
-    // ApiClient().getCountryList(CountryRegionNewListReq()).then((data) {
+    // ApiClientOpenAccount()
+    //     .getCountryList(CountryRegionNewListReq())
+    //     .then((data) {
     //   HSProgressHUD.dismiss();
     //   if (data != null &&
     //       data.countryCodeinfoDTOList != null &&
     //       data.countryCodeinfoDTOList.length > 0) {
     //     List list = data.countryCodeinfoDTOList;
-    //     print(list);
     //     list.forEach((value) {
     //       CountryRegionNewModel model = value;
     //       _cityList.add(
@@ -132,15 +134,13 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
     //   }
     // }).catchError((e) {
     //   HSProgressHUD.dismiss();
-    //   // if (e.toString().length > 0) {
     //   Fluttertoast.showToast(
     //     msg: e.toString(),
     //     gravity: ToastGravity.CENTER,
     //   );
-    // } else {
-    loadLocalData();
-    // }
     // });
+
+    loadLocalData();
   }
 
   void loadLocalData() async {

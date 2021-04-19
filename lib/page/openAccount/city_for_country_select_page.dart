@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/model/city_for_country.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +91,7 @@ class _CityForCountrySelectPageState extends State<CityForCountrySelectPage> {
 
   void loadData() async {
     HSProgressHUD.show();
-    ApiClient()
+    ApiClientOpenAccount()
         .getCntAllBpCtCit(
             CityForCountryListReq(widget.countryData.cntyCd ?? ''))
         .then((data) {

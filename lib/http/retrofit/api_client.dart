@@ -20,9 +20,7 @@ import 'base_dio.dart';
 
 part 'api_client.g.dart';
 
-// @RestApi(baseUrl: 'http://161.189.48.75:5040') //dev
-@RestApi(baseUrl: 'http://47.57.236.20:5040') //sit
-// @RestApi(baseUrl: 'http://47.242.2.219:5040') //UAT
+@RestApi(baseUrl: BaseDio.BASEURL)
 abstract class ApiClient {
   factory ApiClient({Dio dio, String baseUrl}) {
     dio ??= BaseDio.getInstance().getDio();
@@ -103,14 +101,4 @@ abstract class ApiClient {
     @Queries() BaseBody baseBody,
     @Part(fileName: "certificate.jpg") List<int> file,
   );
-
-  /// 国家信息-查询
-  @POST('/platform/bpCtCnt/getCountryList')
-  Future<CountryRegionNewListResp> getCountryList(
-      @Body() CountryRegionNewListReq req);
-
-  /// 指定国家代码下所有城市代码信息-查询
-  @POST('/platform/bpCtCit/getCntAllBpCtCit')
-  Future<CityForCountryListResp> getCntAllBpCtCit(
-      @Body() CityForCountryListReq req);
 }
