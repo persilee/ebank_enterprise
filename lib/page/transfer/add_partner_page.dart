@@ -194,6 +194,21 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     //           _feeUseIndex.toString(),
     //         ),
     //         'addPartner')
+    print("bankSwift: " +
+        _bankSwiftController.text +
+        " payeeBankLocalName: " +
+        _bankNameController.text);
+    String payeeBankEnName = '';
+    String payeeBankLocalName = '';
+    if (_language == 'zh_CN') {
+      setState(() {
+        payeeBankLocalName = _bankNameController.text;
+      });
+    } else {
+      setState(() {
+        payeeBankEnName = _bankNameController.text;
+      });
+    }
     Transfer()
         .addPartner(AddPartnerReq(
       _bankCode,
@@ -209,8 +224,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       "",
       "",
       _smsController.text,
-      "",
-      _bankNameController.text,
+      payeeBankEnName,
+      payeeBankLocalName,
       _aliasController.text,
       myTransferType,
       _transferFeeIndex.toString(),
@@ -998,8 +1013,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   Future _getCardByCardNo(String cardNo) async {
     // TransferDataRepository()
     //     .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
-        Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo))
-        .then((data) {
+    Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo)).then((data) {
       if (this.mounted) {
         setState(() {
           _nameController.text = data.ciName;

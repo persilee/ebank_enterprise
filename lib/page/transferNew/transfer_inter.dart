@@ -223,8 +223,10 @@ class _TransferInterPageState extends State<TransferInterPage> {
             ? rowPartner.payeeBankLocalName
             : rowPartner.payeeBankEngName;
         _bankSwiftController.text = rowPartner.bankSwift;
-        // _countryText = rowPartner.district;
+        _countryText = rowPartner.district;
         _countryCode = rowPartner.district;
+        _payeeAddressController.text =
+            rowPartner == null ? '' : rowPartner.payeeAddress;
         check = true;
         _boolBut();
       }
@@ -669,7 +671,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
                 _payeeAccountController.text = rowListPartner.payeeCardNo;
                 _remarkController.text = rowListPartner.remark;
                 _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
-                // _countryText = rowListPartner.district;
+                _countryText = rowListPartner.district;
                 _countryCode = rowListPartner.district;
                 _bankNameController.text = _language == 'zh_CN'
                     ? rowListPartner.payeeBankLocalName
@@ -677,13 +679,15 @@ class _TransferInterPageState extends State<TransferInterPage> {
                 _bankSwiftController.text = rowListPartner.bankSwift;
                 payerBankCode = rowListPartner.payerBankCode;
                 payeeName = rowListPartner.payeeName;
-                payerName = rowListPartner.payerName;
+                // payerName = rowListPartner.payerName;
                 _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
                 if (rowListPartner.paysMethod != null) {
                   _transferFee = rowListPartner.paysMethod == ''
                       ? ''
                       : rowListPartner.paysMethod;
                 }
+                _payeeAddressController.text =
+                    rowListPartner == null ? '' : rowListPartner.payeeAddress;
               }
               _boolBut();
               _rateCalculate();

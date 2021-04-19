@@ -94,58 +94,53 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
     //   Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
     // });
 
-    HSProgressHUD.show();
-
-    // ApiClient().getCountryList(CountryRegionNewListReq()).then((value) => null)
-    //获取国家地区列表
-    // PublicParametersRepository()
-    //     .getCountryList(
-    //         CountryRegionNewListReq(), 'getCountryList')
-    ApiClient().getCountryList(CountryRegionNewListReq()).then((data) {
-      HSProgressHUD.dismiss();
-      if (data != null &&
-          data.countryCodeinfoDTOList != null &&
-          data.countryCodeinfoDTOList.length > 0) {
-        List list = data.countryCodeinfoDTOList;
-        print(list);
-        list.forEach((value) {
-          CountryRegionNewModel model = value;
-          _cityList.add(
-            model,
-          );
-          if (['CN', 'HK'].contains(model.cntyCd)) {
-            //需要新增一个模型，共用后会无法改变tagIndex
-            CountryRegionNewModel modelHot = CountryRegionNewModel(
-                '',
-                '',
-                value.cntyCd,
-                value.cntyNm,
-                value.cntyCnm,
-                value.cntyTcnm,
-                value.areaCode,
-                '',
-                '★');
-            _hotCityList.add(modelHot);
-          }
-        });
-        _handleList(_cityList);
-        setState(() {
-          if (_hotCityList != null && _hotCityList.length > 0) {
-            _suspensionTag = _hotCityList[0].getSuspensionTag();
-          }
-        });
-      }
-    }).catchError((e) {
-      HSProgressHUD.dismiss();
-      // if (e.toString().length > 0) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      // } else {
-      loadLocalData();
-      // }
-    });
+    // HSProgressHUD.show();
+    // //获取国家地区列表
+    // ApiClient().getCountryList(CountryRegionNewListReq()).then((data) {
+    //   HSProgressHUD.dismiss();
+    //   if (data != null &&
+    //       data.countryCodeinfoDTOList != null &&
+    //       data.countryCodeinfoDTOList.length > 0) {
+    //     List list = data.countryCodeinfoDTOList;
+    //     print(list);
+    //     list.forEach((value) {
+    //       CountryRegionNewModel model = value;
+    //       _cityList.add(
+    //         model,
+    //       );
+    //       if (['CN', 'HK'].contains(model.cntyCd)) {
+    //         //需要新增一个模型，共用后会无法改变tagIndex
+    //         CountryRegionNewModel modelHot = CountryRegionNewModel(
+    //             '',
+    //             '',
+    //             value.cntyCd,
+    //             value.cntyNm,
+    //             value.cntyCnm,
+    //             value.cntyTcnm,
+    //             value.areaCode,
+    //             '',
+    //             '★');
+    //         _hotCityList.add(modelHot);
+    //       }
+    //     });
+    //     _handleList(_cityList);
+    //     setState(() {
+    //       if (_hotCityList != null && _hotCityList.length > 0) {
+    //         _suspensionTag = _hotCityList[0].getSuspensionTag();
+    //       }
+    //     });
+    //   }
+    // }).catchError((e) {
+    //   HSProgressHUD.dismiss();
+    //   // if (e.toString().length > 0) {
+    //   Fluttertoast.showToast(
+    //     msg: e.toString(),
+    //     gravity: ToastGravity.CENTER,
+    //   );
+    // } else {
+    loadLocalData();
+    // }
+    // });
   }
 
   void loadLocalData() async {

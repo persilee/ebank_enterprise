@@ -70,6 +70,5 @@ abstract class Transfer {
 
   //计算汇率
   @POST('/ddep/transfer/transferTrial')
-  Future<TransferTrialResp> transferTrial(@Body()TransferTrialReq req);
-
+  Future<TransferTrialResp> transferTrial(@Body() TransferTrialReq req);
 }
