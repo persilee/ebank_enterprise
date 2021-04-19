@@ -687,6 +687,8 @@
   "loan_trail_plan_second": "Should be repaid",
   "loan_trail_title": "Loan claim",
   "loan_application_amount_check":"Application amount cannot be 0",
+  "loan_application_apply_pending":"Pending",
+  "loan_application_apply_processed":"Processed",
 
 
 
