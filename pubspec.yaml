@@ -57,7 +57,11 @@ dependencies:
   path: ^1.7.0
   path_provider: ^1.6.24
   package_info: ^0.4.3+1
-  extended_image: ^3.0.0-non-null-safety
+  extended_image: ^1.1.2
+  image: ^2.1.4
+  image_editor: ^0.1.2
+  photo_manager: ^0.5.8
+  wechat_assets_picker: ^4.1.0+4
   sp_util:
   flutter_cupertino_date_picker:
     git:

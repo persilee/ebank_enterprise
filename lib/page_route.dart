@@ -11,6 +11,8 @@ import 'package:ebank_mobile/page/approval/my_to_do_task_detail_page.dart';
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/loan/loan_collection_preview.dart';
 import 'package:ebank_mobile/page/loan/loan_reference.dart';
+import 'package:ebank_mobile/page/mine/avatar_view_page.dart';
+import 'package:ebank_mobile/page/mine/image_editor_page.dart';
 
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
 import 'package:ebank_mobile/page/openAccount/country_region_select_page.dart';
@@ -137,6 +139,8 @@ var pageDialogDemo = '/dialog_demo';
 var pageCardDetail = '/card_detail';
 var pageCardLimit = '/card_limit_manager';
 var minePage = '/mine_page';
+var avatarViewPage = '/avatar_view_page';
+var imageEditorPage = '/image_editor_page';
 var aboutUs = '/about_us_page';
 var feedback = '/feedback_page';
 var changeLgPs = '/change_loginpassword_page.dart';
@@ -247,6 +251,7 @@ var appRoutes = {
   // pageCardDetail: (context) => CardDetailPage(),
   pageCardLimit: (context) => CardLimitManagerPage(),
   minePage: (context) => MinePage(),
+  // avatarViewPage: (context) => AvatarViewPage(),
   aboutUs: (context) => AboutUsPage(),
   feedback: (context) => FeedbackPage(),
   changeLgPs: (context) => ChangeLoPS(),
@@ -431,6 +436,22 @@ onGenerateRoute(RouteSettings settings) {
       Map<String, dynamic> arguments = settings.arguments;
       return RepayPlanPage(
         loanDetail: arguments['data'],
+      );
+    });
+  }
+  if (settings.name == avatarViewPage) {
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return AvatarViewPage(
+        imgUrl: arguments['imgUrl'],
+      );
+    });
+  }
+  if (settings.name == imageEditorPage) {
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return ImageEditorPage(
+        imageData: arguments['imageData'],
       );
     });
   }

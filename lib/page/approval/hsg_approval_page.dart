@@ -69,7 +69,6 @@ class _ApprovalPageState extends State<ApprovalPage>
       S.current.authorization_history,
       S.current.my_application
     ];
-    StatusBarUtil.setStatusBar(Brightness.dark, color: Colors.transparent);
     return DefaultTabController(
       length: tabs.length,
       initialIndex: 0,
