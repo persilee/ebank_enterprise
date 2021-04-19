@@ -15,6 +15,7 @@ import 'package:ebank_mobile/page/mine/avatar_view_page.dart';
 import 'package:ebank_mobile/page/mine/image_editor_page.dart';
 
 import 'package:ebank_mobile/page/mine/password_management_page.dart';
+import 'package:ebank_mobile/page/openAccount/city_for_country_select_page.dart';
 import 'package:ebank_mobile/page/openAccount/country_region_select_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_account_contact_information_page.dart';
 import 'package:ebank_mobile/page/openAccount/open_account_identify_results_failure_page.dart';
@@ -221,6 +222,7 @@ var pageTransferInline = '/transfer_inline.dart';
 var pageTransferInter = '/transfer_inter.dart';
 var pageTransferOrder = '/transfer_order.dart';
 var pageTransferSuccess = '/transfer_success.dart';
+var pageCityForCountrySelect = '/city_for_country_select_page.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -328,6 +330,7 @@ var appRoutes = {
   pageTransferInter: (context) => TransferInterPage(),
   pageTransferOrder: (context) => TransferOrderPage(),
   pageTransferSuccess: (context) => TransferSuccessPage(),
+  // pageCityForCountrySelect: (context) => CityForCountrySelectPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
@@ -452,6 +455,16 @@ onGenerateRoute(RouteSettings settings) {
       Map<String, dynamic> arguments = settings.arguments;
       return ImageEditorPage(
         imageData: arguments['imageData'],
+      );
+    });
+  }
+
+  if (settings.name == pageCityForCountrySelect) {
+    //跳转选择城市
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return CityForCountrySelectPage(
+        countryData: arguments['data'],
       );
     });
   }

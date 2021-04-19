@@ -100,11 +100,11 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
     }).catchError((e) {
       setState(() {
         _isLoading = false;
-        });
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+      });
     });
   }
 
@@ -176,6 +176,18 @@ class _ExpandBoxState extends State<ExpandBox> {
   }
 
   Widget _creatListHeader() {
+    String statusStr = '';
+    if (listData.status == 0) {
+      //待处理
+      statusStr = S.current.loan_application_apply_pending;
+    } else if (listData.status == 1) {
+      //处理中
+      statusStr = S.current.on_processing;
+    } else {
+      //已处理
+      statusStr = S.current.loan_application_apply_processed;
+    }
+
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -194,12 +206,14 @@ class _ExpandBoxState extends State<ExpandBox> {
           children: [
             Container(
               margin: EdgeInsets.only(right: 30, left: 15),
-              width: MediaQuery.of(context).size.width - 108,
+              width: MediaQuery.of(context).size.width - 200,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start, //纵轴的间距
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly, //横轴的间距
                 children: [
-                  Text(listData.prdtCode,
+                  Text(
+                      //产品名称
+                      listData.lclName != null ? listData.lclName : "",
                       style: TextStyle(
                           color: Color(0xFF262626),
                           fontSize: 16,
@@ -218,7 +232,10 @@ class _ExpandBoxState extends State<ExpandBox> {
               ),
             ),
             Container(
-              child: Row(
+              width: 100,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end, //纵轴的间距
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly, //横轴的间距
                 children: [
                   Image(
                     width: 13,
@@ -226,7 +243,17 @@ class _ExpandBoxState extends State<ExpandBox> {
                     image: _isShow
                         ? AssetImage('images/loanProduct/loan_apply_up.png')
                         : AssetImage('images/loanProduct/loan_apply_down.png'),
-                  )
+                  ),
+                  Text(
+                      //审核状态
+                      statusStr,
+                      style: TextStyle(
+                        color: Color(0xFF7A7A7A),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.ellipsis),
                 ],
               ),
             )
@@ -268,7 +295,7 @@ class _ExpandBoxState extends State<ExpandBox> {
       child: Column(
         children: [
           _textFieldCommonFunc(S.current.loan_New_product_column,
-              listData.prdtCode, false), //贷款产品
+              listData.lclName != null ? listData.lclName : "", false), //贷款产品
           _textFieldCommonFunc(
               S.current.apply_amount, listData.intentAmt, false), //申请金额
           _textFieldCommonFunc(S.current.loan_duration,

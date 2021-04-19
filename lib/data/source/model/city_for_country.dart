@@ -1,3 +1,4 @@
+import 'package:azlistview/azlistview.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'city_for_country.g.dart';
@@ -34,7 +35,7 @@ class CityForCountryListResp extends Object {
 }
 
 @JsonSerializable()
-class CityForCountryModel extends Object {
+class CityForCountryModel extends ISuspensionBean {
   ///城市代码
   @JsonKey(name: 'cityCd')
   String cityCd;
@@ -59,6 +60,14 @@ class CityForCountryModel extends Object {
   @JsonKey(name: 'expDate')
   String expDate;
 
+  ///辅助字段
+  @JsonKey(name: 'namePinyin')
+  String namePinyin;
+
+  ///辅助字段
+  @JsonKey(name: 'tagIndex')
+  String tagIndex;
+
   CityForCountryModel(
     this.cityCd,
     this.cityCnm,
@@ -66,9 +75,14 @@ class CityForCountryModel extends Object {
     this.cntyCd,
     this.effDate,
     this.expDate,
+    this.namePinyin,
+    this.tagIndex,
   );
 
   factory CityForCountryModel.fromJson(Map<String, dynamic> srcJson) =>
       _$CityForCountryModelFromJson(srcJson);
   Map<String, dynamic> toJson() => _$CityForCountryModelToJson(this);
+
+  @override
+  String getSuspensionTag() => tagIndex;
 }

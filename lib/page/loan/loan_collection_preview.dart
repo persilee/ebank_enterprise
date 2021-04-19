@@ -6,9 +6,15 @@ import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
 import 'package:ebank_mobile/data/source/model/loan_trail_commit.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/loan/limit_details_page.dart';
+import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
+import 'package:sp_util/sp_util.dart';
 
 class PageLoanCollectionPreview extends StatefulWidget {
   PageLoanCollectionPreview({Key key}) : super(key: key);
@@ -137,11 +143,53 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
         style: TextStyle(fontSize: 14, color: Colors.white),
       ),
       clickCallback: () {
-        _loanWithdrawalCommit();
+        _openBottomSheet();
       },
     );
   }
 
+  //点击确认按钮
+  void _openBottomSheet() async {
+    bool passwordEnabled = SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED);
+    // 判断是否设置交易密码，如果没有设置，跳转到设置密码页面，
+    if (!passwordEnabled) {
+      HsgShowTip.shouldSetTranPasswordTip(
+        context: context,
+        click: (value) {
+          if (value == true) {
+            //前往设置交易密码
+            Navigator.pushNamed(context, pageResetPayPwdOtp);
+          }
+        },
+      );
+    } else {
+      // 输入交易密码
+      bool isPassword = await _didBottomSheet();
+      // 如果交易密码正确，处理审批逻辑
+      if (isPassword) {
+        _loanWithdrawalCommit(); //领用
+      }
+    }
+  }
+
+  //交易密码窗口
+  Future<bool> _didBottomSheet() async {
+    final isPassword = await showHsgBottomSheet(
+        context: context,
+        builder: (context) {
+          return HsgPasswordDialog(
+            title: S.current.input_password,
+            isDialog: false,
+          );
+        });
+    if (isPassword != null && isPassword == true) {
+      return true;
+    }
+    FocusManager.instance.primaryFocus?.unfocus();
+    return false;
+  }
+
+//输入交易密码最终申请
   _loanWithdrawalCommit() {
     String payData = _requstMap['planPayData'];
     String repayDat = payData.substring(7);

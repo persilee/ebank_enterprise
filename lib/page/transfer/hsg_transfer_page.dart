@@ -7,6 +7,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/transfer.dart';
 
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -768,11 +769,13 @@ class _TransferPageState extends State<TransferPage> {
   Future<void> _loadData() async {
     _isLoading = true;
     // HSProgressHUD.show();
-    TransferDataRepository()
-        .getTransferPartnerList(
-      GetTransferPartnerListReq(_page, 10),
-      'getTransferPartnerList',
-    )
+    // TransferDataRepository()
+    //     .getTransferPartnerList(
+    //   GetTransferPartnerListReq(_page, 10),
+    //   'getTransferPartnerList',
+    // )
+    Transfer()
+        .getTransferPartnerList(GetTransferPartnerListReq(_page, 10))
         .then((data) {
       print('$data');
       // setState(() {

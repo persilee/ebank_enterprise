@@ -13,6 +13,7 @@ import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -169,30 +170,67 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       _payeeAdressReq = '';
       _swiftAdressReq = '';
     }
-    TransferDataRepository()
-        .addPartner(
-            AddPartnerReq(
-              _bankCode,
-              _bankSwiftController.text, //_swiftAdressReq,
-              _ccy,
-              "",
-              _countryCode, //_countryText,
-              _centerSwiftReq,
-              _payeeAdressReq,
-              _acountController.text,
-              _nameController.text,
-              "",
-              "",
-              "",
-              _smsController.text,
-              "",
-              _bankNameController.text,
-              _aliasController.text,
-              myTransferType,
-              _transferFeeIndex.toString(),
-              _feeUseIndex.toString(),
-            ),
-            'addPartner')
+    // TransferDataRepository()
+    //     .addPartner(
+    //         AddPartnerReq(
+    //           _bankCode,
+    //           _bankSwiftController.text, //_swiftAdressReq,
+    //           _ccy,
+    //           "",
+    //           _countryCode, //_countryText,
+    //           _centerSwiftReq,
+    //           _payeeAdressReq,
+    //           _acountController.text,
+    //           _nameController.text,
+    //           "",
+    //           "",
+    //           "",
+    //           _smsController.text,
+    //           "",
+    //           _bankNameController.text,
+    //           _aliasController.text,
+    //           myTransferType,
+    //           _transferFeeIndex.toString(),
+    //           _feeUseIndex.toString(),
+    //         ),
+    //         'addPartner')
+    print("bankSwift: " +
+        _bankSwiftController.text +
+        " payeeBankLocalName: " +
+        _bankNameController.text);
+    String payeeBankEnName = '';
+    String payeeBankLocalName = '';
+    if (_language == 'zh_CN') {
+      setState(() {
+        payeeBankLocalName = _bankNameController.text;
+      });
+    } else {
+      setState(() {
+        payeeBankEnName = _bankNameController.text;
+      });
+    }
+    Transfer()
+        .addPartner(AddPartnerReq(
+      _bankCode,
+      _bankSwiftController.text, //_swiftAdressReq,
+      _ccy,
+      "",
+      _countryCode, //_countryText,
+      _centerSwiftReq,
+      _payeeAdressReq,
+      _acountController.text,
+      _nameController.text,
+      "",
+      "",
+      "",
+      _smsController.text,
+      payeeBankEnName,
+      payeeBankLocalName,
+      _aliasController.text,
+      myTransferType,
+      _transferFeeIndex.toString(),
+      _feeUseIndex.toString(),
+    ))
         .then((data) {
       if (data != null) {
         Fluttertoast.showToast(
@@ -954,9 +992,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
 
   //根据银行Swift查询银行名称
   Future _getBankNameBySwift(String swift) async {
-    TransferDataRepository()
-        .getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift), 'getInfoBySwiftCode')
-        .then((data) {
+    // TransferDataRepository()
+    //     .getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift), 'getInfoBySwiftCode')
+    Transfer().getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift)).then((data) {
       if (this.mounted) {
         setState(() {
           _bankNameController.text =
@@ -973,9 +1011,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
 
   //根据账号查询名称
   Future _getCardByCardNo(String cardNo) async {
-    TransferDataRepository()
-        .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
-        .then((data) {
+    // TransferDataRepository()
+    //     .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
+    Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo)).then((data) {
       if (this.mounted) {
         setState(() {
           _nameController.text = data.ciName;
