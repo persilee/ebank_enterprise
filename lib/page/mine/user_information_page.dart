@@ -324,18 +324,14 @@ class _UserInformationPageState extends State<UserInformationPage> {
 
   Future<void> _getImage() async {
     _memoryImage = await pickImage(context);
-    if (_memoryImage.isNotEmpty) {
+    if (_memoryImage != null) {
       Navigator.pushNamed(context, imageEditorPage,
           arguments: {'imageData': _memoryImage}).then((value) async {
         if (value != null) {
           try {
             var image = await ApiClient().uploadAvatar(BaseBody(body: {}), value);
-            setState(() {
-              // _clipImage = value;
-              // _isClipImage = true;
-            });
             Fluttertoast.showToast(
-              msg: '头像上传成功',
+              msg: S.current.avatar_uploaded_successfully,
               gravity: ToastGravity.CENTER,
             );
             String _headPortrait = image['headPortrait'] ?? '';

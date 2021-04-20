@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:io';
 
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -38,7 +39,7 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
         centerTitle: true,
         elevation: 0.0,
         title: Text(
-          '头像',
+          S.current.avatar_title,
           style: TextStyle(color: Colors.white),
         ),
         actions: [
@@ -74,7 +75,7 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) => BottomMenu(
-              items: ['保存到手机'],
+              items: [S.current.avatar_save_phone],
             ));
     if (result != null && result != false) {
       print('result: $result');
@@ -93,7 +94,7 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) => BottomMenu(
-              items: ['从手机相册选择', '保存到手机'],
+              items: [S.current.avatar_select_from_your_phone_photo, S.current.avatar_save_phone],
             ));
     if (result != null && result != false) {
       print('result: $result');
@@ -115,7 +116,7 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
     bool result = await saveNetworkImageToPhoto(imgUrl);
     print(result.toString() + imgUrl);
     Fluttertoast.showToast(
-      msg: result ? '图片保存成功' : '图标保存失败',
+      msg: result ? S.current.avatar_picture_saved_successfully : S.current.avatar_picture_saved_failed,
       gravity: ToastGravity.CENTER,
     );
   }
@@ -133,7 +134,7 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
               _isClipImage = true;
             });
             Fluttertoast.showToast(
-              msg: '头像上传成功',
+              msg: S.current.avatar_uploaded_successfully,
               gravity: ToastGravity.CENTER,
             );
             String _headPortrait = image['headPortrait'] ?? '';
@@ -147,8 +148,6 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
               EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
                   headPortrait: image['headPortrait'], state: 100));
             }
-            print('imageUrl: ${(value as File).uri}');
-            print('image: ${image['headPortrait']}');
           } catch (e) {
             print(e);
           }

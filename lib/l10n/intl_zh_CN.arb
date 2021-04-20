@@ -583,6 +583,13 @@
   "refresh_failed_retry": "加载失败！点击重试!",
   "refresh_load_more": "松手,加载更多!",
   "refresh_no_more_data": "没有更多数据了!",
+  "avatar_uploaded_successfully": "头像上传成功",
+  "avatar_save_phone": "保存到手机",
+  "avatar_select_from_your_phone_photo": "从手机相册选择",
+  "avatar_picture_saved_successfully": "图片保存成功",
+  "avatar_picture_saved_failed": "图片保存失败",
+  "avatar_title": "头像",
+
   "lishaoying_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李少颖国际化代码写在这里<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "lijiawei_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李家伟际化代码写在这里>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "openAccout_basicInformation": "基本信息",

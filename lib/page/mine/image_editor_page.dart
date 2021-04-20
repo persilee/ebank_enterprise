@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:io';
 
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/util/image_util.dart';
@@ -72,7 +73,7 @@ class _ImageEditorPageState extends State<ImageEditorPage> {
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text(
-                    '取消',
+                    S.current.cancel,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -96,7 +97,7 @@ class _ImageEditorPageState extends State<ImageEditorPage> {
                 ),
                 CustomButton(
                   height: 32.0,
-                  text: Text('确定',style: TextStyle(color: Colors.white, fontSize: 14.0),),
+                  text: Text(S.current.confirm, style: TextStyle(color: Colors.white, fontSize: 14.0),),
                   clickCallback: () => cropImage(),
                 ),
               ],
