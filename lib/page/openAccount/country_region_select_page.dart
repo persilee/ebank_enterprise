@@ -172,6 +172,8 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
       setState(() {
         if (_hotCityList != null && _hotCityList.length > 0) {
           _suspensionTag = _hotCityList[0].getSuspensionTag();
+        } else if (_cityList != null && _cityList.length > 0) {
+          _suspensionTag = _cityList[0].getSuspensionTag();
         }
       });
     });
