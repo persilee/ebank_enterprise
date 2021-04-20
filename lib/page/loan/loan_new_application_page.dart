@@ -196,7 +196,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
           LoanProductList names = _loanProduct[0];
           _loanProductID = names.bppdCode;
           _requestDataMap['prdtCode'] = names.bppdCode; //ID
-          if (_language == 'zh_CN') {
+          if (_language == 'zh_CN'|| _language == 'zh_HK') {
             _loanProductName = names.lclName;
             _listDataMap['prdtCode'] = names.lclName;
           } else {
@@ -641,7 +641,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     List<String> _productName = [];
     List<String> _productID = [];
     for (LoanProductList names in _loanProduct) {
-      if (_language == 'zh_CN') {
+      if (_language == 'zh_CN' || _language == 'zh_HK') {
         _productName.add(names.lclName);
       } else {
         _productName.add(names.engName);
