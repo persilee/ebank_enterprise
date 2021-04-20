@@ -4,6 +4,8 @@ import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/loan_applyfor_list.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_loan.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
@@ -41,9 +43,8 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
 
 //获取贷款目的
   Future _getLoanPurposeList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("LOAN_PUR"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("LOAN_PUR")).then((data) {
       print('贷款目的');
       if (data.publicCodeGetRedisRspDtoList != null) {
         _goalLists.clear();
@@ -60,9 +61,8 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
 
 //还款方式
   Future _getLoanRepayTypeList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("REPAY_TYPE"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("REPAY_TYPE")).then((data) {
       print('还款方式');
       if (data.publicCodeGetRedisRspDtoList != null) {
         _reimburseTypeLists.clear();
@@ -82,8 +82,9 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
   Future _getLoanApplyforListData() async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
-    LoanDataRepository()
-        .loanApplyforListData(LoanApplyFoyListReq(userID), 'applyforList')
+    // LoanDataRepository()
+    ApiClientLoan()
+        .loanApplyforListData(LoanApplyFoyListReq(userID))
         .then((data) {
       setState(() {
         _isLoading = false;

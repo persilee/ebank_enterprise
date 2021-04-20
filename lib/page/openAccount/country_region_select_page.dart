@@ -6,22 +6,17 @@
 import 'dart:convert';
 
 import 'package:azlistview/azlistview.dart';
-import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
-import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
+import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/language.dart';
-import 'package:ebank_mobile/widget/progressHUD.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lpinyin/lpinyin.dart';
-import 'package:flutter/material.dart';
 // import 'package:azlistview/azlistview.dart';
-import 'package:flutter/services.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../page_route.dart';
 
@@ -34,7 +29,8 @@ class CountryOrRegionSelectPage extends StatefulWidget {
 class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
   List<CountryRegionNewModel> _cityList = List();
   List<CountryRegionNewModel> _hotCityList = List();
-  // RefreshController _refreshController;
+  bool _isLoading = false;
+  bool _isSelectCity = false;
 
   int _suspensionHeight = 40;
   int _itemHeight = 50;
@@ -43,9 +39,9 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
 
   @override
   void initState() {
+    super.initState();
     _initLanguage();
     loadData();
-    super.initState();
   }
 
   _initLanguage() async {
@@ -56,53 +52,58 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool arguments = ModalRoute.of(context).settings.arguments;
+    _isSelectCity = arguments == null ? false : arguments;
+
+    Widget contentListView = Column(
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: AzListView(
+            data: _cityList,
+            topData: _hotCityList,
+            itemBuilder: (context, model) => _buildListItem(model),
+            suspensionWidget: _buildSusWidget(_suspensionTag),
+            isUseRealIndex: true,
+            itemHeight: _itemHeight,
+            suspensionHeight: _suspensionHeight,
+            onSusTagChanged: _onSusTagChanged,
+            //showCenterTip: false,
+          ),
+        ),
+      ],
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
           S.of(context).select_country,
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-              flex: 1,
-              child: AzListView(
-                data: _cityList,
-                topData: _hotCityList,
-                itemBuilder: (context, model) => _buildListItem(model),
-                suspensionWidget: _buildSusWidget(_suspensionTag),
-                isUseRealIndex: true,
-                itemHeight: _itemHeight,
-                suspensionHeight: _suspensionHeight,
-                onSusTagChanged: _onSusTagChanged,
-                //showCenterTip: false,
-              )),
-        ],
-      ),
+      body: _isLoading
+          ? HsgLoading()
+          : _cityList != null && _cityList.length > 0
+              ? contentListView
+              : notDataContainer(context, S.current.no_data_now),
     );
   }
 
   void loadData() async {
-    // //获取国家地区类型
-    // PublicParametersRepository()
-    //     .getIdType(GetIdTypeReq('COUNTRY'), 'GetIdTypeReq')
-    //     .then((data) {
-    //   if (data.publicCodeGetRedisRspDtoList != null) {
-    //     print('COUNTRY-  ${data.publicCodeGetRedisRspDtoList}');
-    //   }
-    // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
-    // });
-
     // HSProgressHUD.show();
+
+    // _isLoading = true;
     // //获取国家地区列表
-    // ApiClient().getCountryList(CountryRegionNewListReq()).then((data) {
-    //   HSProgressHUD.dismiss();
+    // ApiClientOpenAccount()
+    //     .getCountryList(CountryRegionNewListReq())
+    //     .then((data) {
+    //   // HSProgressHUD.dismiss();
+    //   setState(() {
+    //     _isLoading = false;
+    //   });
     //   if (data != null &&
     //       data.countryCodeinfoDTOList != null &&
     //       data.countryCodeinfoDTOList.length > 0) {
     //     List list = data.countryCodeinfoDTOList;
-    //     print(list);
     //     list.forEach((value) {
     //       CountryRegionNewModel model = value;
     //       _cityList.add(
@@ -131,21 +132,26 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
     //     });
     //   }
     // }).catchError((e) {
-    //   HSProgressHUD.dismiss();
-    //   // if (e.toString().length > 0) {
+    //   // HSProgressHUD.dismiss();
+    //   setState(() {
+    //     _isLoading = false;
+    //   });
     //   Fluttertoast.showToast(
     //     msg: e.toString(),
     //     gravity: ToastGravity.CENTER,
     //   );
-    // } else {
-    loadLocalData();
-    // }
     // });
+
+    loadLocalData();
   }
 
   void loadLocalData() async {
     //加载城市列表
+    _isLoading = true;
     rootBundle.loadString('assets/data/country.json').then((value) {
+      setState(() {
+        _isLoading = false;
+      });
       Map countryMap = json.decode(value);
       List list = countryMap['countryCodeinfoDTOList'];
       list.forEach((value) {
@@ -172,6 +178,8 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
       setState(() {
         if (_hotCityList != null && _hotCityList.length > 0) {
           _suspensionTag = _hotCityList[0].getSuspensionTag();
+        } else if (_cityList != null && _cityList.length > 0) {
+          _suspensionTag = _cityList[0].getSuspensionTag();
         }
       });
     });
@@ -235,12 +243,15 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
             title: Text(name),
             onTap: () {
               print("OnItemClick: $model");
-              Navigator.pop(context, model);
-              // Navigator.pushNamed(
-              //   context,
-              //   pageCityForCountrySelect,
-              //   arguments: {'data': model},
-              // );
+              if (_isSelectCity) {
+                Navigator.pushNamed(
+                  context,
+                  pageCityForCountrySelect,
+                  arguments: {'data': model},
+                );
+              } else {
+                Navigator.pop(context, model);
+              }
             },
           ),
         )
@@ -261,25 +272,6 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
         style: TextStyle(
           fontSize: 14.0,
           color: Color(0xff999999),
-        ),
-      ),
-    );
-  }
-
-  static Widget getSusItem(BuildContext context, String tag,
-      {double susHeight = 35}) {
-    return Container(
-      height: susHeight,
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.only(left: 16.0),
-      color: Color(0xFFF3F4F5),
-      alignment: Alignment.centerLeft,
-      child: Text(
-        '$tag',
-        softWrap: false,
-        style: TextStyle(
-          fontSize: 14.0,
-          color: Color(0xFF666666),
         ),
       ),
     );

@@ -12,6 +12,8 @@ import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/linear_loading.dart';
@@ -185,14 +187,15 @@ class _CardDetailPageState extends State<CardDetailPage> {
     print(ciNo);
     Future.wait({
       //根据卡号获取银行卡信息
-      BankDataRepository().getBankListByCardNo(
-          GetBankInfoByCardNo(cardNo), 'GetBankInfoByCardNo'),
+      // BankDataRepository()
+      ApiClientAccount().getBankListByCardNo(GetBankInfoByCardNo(cardNo)),
       // CardDataRepository()
       //     .getSingleCardBal(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
-      CardDataRepository().getCardLimitByCardNo(
-          GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
-      DepositDataRepository().getCardListBalByUser(
-          GetCardListBalByUserReq('', [], '', ciNo), 'getCardListBalByUser')
+      // CardDataRepository()
+      ApiClientAccount().getCardLimitByCardNo(GetCardLimitByCardNoReq(cardNo)),
+      // DepositDataRepository()
+      ApiClientTimeDeposit()
+          .getCardListBalByUser(GetCardListBalByUserReq('', [], '', ciNo))
     }).then((value) {
       value.forEach((element) {
         if (element is GetSingleCardBalResp) {

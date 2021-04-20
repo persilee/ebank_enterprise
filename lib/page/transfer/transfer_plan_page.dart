@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/model/cancel_transfer_plan.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_plan_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -620,10 +621,10 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
 
   Future<void> _getTransferPlanList() async {
     _isLoading = true;
-    TransferDataRepository()
+    // TransferDataRepository()
+    Transfer()
         .getTransferPlanList(
-            GetTransferPlanListReq(_page, 10, '', _statusList, '0'),
-            'getTransferPlanList')
+            GetTransferPlanListReq(_page, 10, '', _statusList, '0'))
         .then((value) {
       if (value is GetTransferPlanListResp) {
         if (this.mounted) {
@@ -665,8 +666,8 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
 
   void _cancleTransferPlan() {
     Future.wait({
-      TransferDataRepository().cancelTransferPlan(
-          CancelTransferPlanReq(planId), 'deleteTransferPlan')
+      // TransferDataRepository()
+      Transfer().cancelTransferPlan(CancelTransferPlanReq(planId))
     }).then((data) {
       setState(() {
         _statusList = ['P', 'A'];

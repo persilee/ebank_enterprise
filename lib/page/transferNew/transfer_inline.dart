@@ -16,6 +16,8 @@ import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page/transfer/data/transfer_internal_data.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -665,7 +667,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
   //默认初始卡号
   _loadTransferData() async {
     Future.wait({
-      CardDataRepository().getCardList('GetCardList'),
+      // CardDataRepository()
+      ApiClientAccount().getCardList(GetCardListReq()),
     }).then((value) {
       value.forEach((element) {
         //通过绑定手机号查询卡列表接口POST
@@ -695,8 +698,9 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
   _loadData(String cardNo) async {
     final prefs = await SharedPreferences.getInstance();
     _localeCcy = prefs.getString(ConfigKey.LOCAL_CCY);
-    CardDataRepository()
-        .getCardBalByCardNo(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq')
+    // CardDataRepository()
+    ApiClientAccount()
+        .getCardBalByCardNo(GetSingleCardBalReq(cardNo))
         .then((element) {
       if (this.mounted) {
         setState(() {
@@ -748,9 +752,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
 
   // 获取币种列表
   Future _loadLocalCcy() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("CCY")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _payeeCcyList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {

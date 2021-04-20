@@ -1,5 +1,6 @@
 import 'package:ebank_mobile/data/source/bank_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_branch_list.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 分支行
@@ -43,9 +44,8 @@ class _SelectBranchBankPageState extends State<SelectBranchBankPage> {
   }
 
   _loadData() {
-    BankDataRepository()
-        .getBrnachList(GetBranchListReq(_page, 10), '')
-        .then((data) {
+    // BankDataRepository()
+    ApiClientAccount().getBrnachList(GetBranchListReq(_page, 10)).then((data) {
       if (data != null) {
         setState(() {
           _totalPage = data.totalPage;

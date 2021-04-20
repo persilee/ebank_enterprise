@@ -5,6 +5,7 @@
 
 import 'package:ebank_mobile/data/source/bank_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -43,9 +44,8 @@ class _SelectBankPageState extends State<SelectBankPage> {
   }
 
   _loadData() {
-    BankDataRepository()
-        .getBankList(GetBankListReq(1, 10), 'getBankList')
-        .then((data) {
+    // BankDataRepository()
+    ApiClientAccount().getBankList(GetBankListReq(1, 10)).then((data) {
       if (data != null) {
         setState(() {
           _totalPage = data.totalPage;

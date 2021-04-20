@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
@@ -245,7 +246,8 @@ class _CardListPageState extends State<CardListPage> {
         });
       }
     }
-    CardDataRepository().getCardList('getCardList').then((data) {
+    // CardDataRepository()
+    ApiClientAccount().getCardList(GetCardListReq()).then((data) {
       if (data.cardList != null) {
         if (this.mounted) {
           setState(() {
@@ -348,10 +350,11 @@ class _CardListPageState extends State<CardListPage> {
         //没有加载过就进入这一步
         HSProgressHUD.show();
         Future.wait({
-          CardDataRepository().getCardLimitByCardNo(
-              GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
-          CardDataRepository().getCardBalByCardNo(
-              GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
+          // CardDataRepository()
+          ApiClientAccount()
+              .getCardLimitByCardNo(GetCardLimitByCardNoReq(cardNo)),
+          // CardDataRepository()
+          ApiClientAccount().getCardBalByCardNo(GetSingleCardBalReq(cardNo)),
         }).then((data) {
           print(data);
           data.forEach((element) {

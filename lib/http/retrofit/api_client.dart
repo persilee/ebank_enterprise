@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_bo
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/city_for_country.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
+import 'package:ebank_mobile/data/source/model/find_user_application_task_detail.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/statement/statement_query_list_body.dart';
@@ -21,14 +22,17 @@ import 'base_dio.dart';
 
 part 'api_client.g.dart';
 
-// @RestApi(baseUrl: 'http://161.189.48.75:5040') //dev
-@RestApi(baseUrl: 'http://47.57.236.20:5040') //sit
-// @RestApi(baseUrl: 'http://47.242.2.219:5040') //UAT
+@RestApi(baseUrl: BaseDio.BASEURL)
 abstract class ApiClient {
   factory ApiClient({Dio dio, String baseUrl}) {
     dio ??= BaseDio.getInstance().getDio();
     return _ApiClient(dio, baseUrl: baseUrl);
   }
+
+  /// 我的申请详情
+  @POST('/firmWkfl/processTask/findHistoryTaskDetail')
+  Future<FindUserApplicationDetailResp> findUserApplicationDetail(
+      @Body() FindUserApplicationDetailReq findTaskBody);
 
   /// 查询属于我的待办任务
   @POST('/wkfl/processTask/findUserTodoTask')
@@ -93,8 +97,7 @@ abstract class ApiClient {
 
   /// 获取用户信息
   @POST('/cust/user/getUser')
-  Future<UserInfoResp> getUserInfo(
-      @Body() GetUserInfoReq getUserInfoReq);
+  Future<UserInfoResp> getUserInfo(@Body() GetUserInfoReq getUserInfoReq);
 
   /// 上传头像（开户图片上传暂时共用）
   @POST('/cust/user/uploadAvatar')
@@ -109,14 +112,4 @@ abstract class ApiClient {
     @Queries() BaseBody baseBody,
     @Part(fileName: "certificate.jpg") List<int> file,
   );
-
-  /// 国家信息-查询
-  @POST('/platform/bpCtCnt/getCountryList')
-  Future<CountryRegionNewListResp> getCountryList(
-      @Body() CountryRegionNewListReq req);
-
-  /// 指定国家代码下所有城市代码信息-查询
-  @POST('/platform/bpCtCit/getCntAllBpCtCit')
-  Future<CityForCountryListResp> getCntAllBpCtCit(
-      @Body() CityForCountryListReq req);
 }

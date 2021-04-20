@@ -7,6 +7,7 @@ import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
 import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_loan.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -48,9 +49,11 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
     String ciNo = "";
     String contactNo = "";
     String productCode = "";
-    LoanDataRepository()
-        .getLoanList(LoanDetailMastModelReq(acNo, ciNo, contactNo, productCode),
-            'getLoanList')
+    // LoanDataRepository()
+    ApiClientLoan()
+        .getLoanList(
+      LoanDetailMastModelReq(acNo, ciNo, contactNo, productCode),
+    )
         .then((data) {
       setState(() {
         _isLoad = false;

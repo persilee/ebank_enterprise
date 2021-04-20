@@ -4,6 +4,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/loan_application.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_loan.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -188,28 +189,29 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
     print(userID);
 
     SVProgressHUD.show();
-    LoanDataRepository()
+    // LoanDataRepository()
+    ApiClientLoan()
         .submitLoanApplication(
-            LoanApplicationReq(
-              _requstMap['ccy'].toString(), //币种
-              custID, //用户custID
-              _requstMap['contact'], //联系人
-              double.parse(_requstMap['intentAmt']), //金额
-              _requstMap['loanPurpose'], //贷款目的
-              _requstMap['phone'], //手机号
-              _requstMap['prdtCode'], //贷款产品码 TDCBCBNF _requstMap['prdtCode']
-              _requstMap['remark'], //备注
-              _requstMap['repaymentMethod'], //还款方式
-              '2', //单位 月份MONTH
-              int.parse(_requstMap['termValue']), //日期code
-              userAccount, //用户帐号
-              userID, //用户ID
-              userType, //用户类型
-              _requstMap['repaymentAcNo'], //还款帐号
-              _requstMap['payAcNo'], //收款账号
-              _requstMap['loanRate'], //利率
-            ),
-            "getLoanApplication")
+      LoanApplicationReq(
+        _requstMap['ccy'].toString(), //币种
+        custID, //用户custID
+        _requstMap['contact'], //联系人
+        double.parse(_requstMap['intentAmt']), //金额
+        _requstMap['loanPurpose'], //贷款目的
+        _requstMap['phone'], //手机号
+        _requstMap['prdtCode'], //贷款产品码 TDCBCBNF _requstMap['prdtCode']
+        _requstMap['remark'], //备注
+        _requstMap['repaymentMethod'], //还款方式
+        '2', //单位 月份MONTH
+        int.parse(_requstMap['termValue']), //日期code
+        userAccount, //用户帐号
+        userID, //用户ID
+        userType, //用户类型
+        _requstMap['repaymentAcNo'], //还款帐号
+        _requstMap['payAcNo'], //收款账号
+        _requstMap['loanRate'], //利率
+      ),
+    )
         .then((data) {
       // SVProgressHUD.dismiss();
       SVProgressHUD.showSuccess(

@@ -7,14 +7,13 @@ import 'package:azlistview/azlistview.dart';
 import 'package:ebank_mobile/data/source/model/city_for_country.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
+import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/language.dart';
-import 'package:ebank_mobile/widget/progressHUD.dart';
+import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lpinyin/lpinyin.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-// import 'package:azlistview/azlistview.dart';
 
 class CityForCountrySelectPage extends StatefulWidget {
   final CountryRegionNewModel countryData;
@@ -28,12 +27,13 @@ class CityForCountrySelectPage extends StatefulWidget {
 class _CityForCountrySelectPageState extends State<CityForCountrySelectPage> {
   List<CityForCountryModel> _cityList = List();
   List<CityForCountryModel> _hotCityList = List();
-  // RefreshController _refreshController;
+  bool _isLoading = false;
 
   int _suspensionHeight = 40;
   int _itemHeight = 50;
   String _suspensionTag = "";
   String _language = Language.ZH_CN;
+  String _navTitleStr = '';
 
   @override
   void initState() {
@@ -44,62 +44,71 @@ class _CityForCountrySelectPageState extends State<CityForCountrySelectPage> {
 
   _initLanguage() async {
     String language = await Language.getSaveLangage();
-    print('language: $language');
     _language = language;
+
+    switch (language) {
+      case Language.ZH_CN:
+        _navTitleStr = widget.countryData.cntyCnm;
+        break;
+      case Language.ZH_HK:
+        _navTitleStr = widget.countryData.cntyTcnm;
+        break;
+      default:
+        _navTitleStr = widget.countryData.cntyNm;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget listView = AzListView(
-      data: _cityList,
-      topData: _hotCityList,
-      itemBuilder: (context, model) => _buildListItem(model),
-      suspensionWidget: _buildSusWidget(_suspensionTag),
-      isUseRealIndex: true,
-      itemHeight: _itemHeight,
-      suspensionHeight: _suspensionHeight,
-      onSusTagChanged: _onSusTagChanged,
-      //showCenterTip: false,
+    Widget contentListView = Column(
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: AzListView(
+            data: _cityList,
+            topData: _hotCityList,
+            itemBuilder: (context, model) => _buildListItem(model),
+            suspensionWidget: _buildSusWidget(_suspensionTag),
+            isUseRealIndex: true,
+            itemHeight: _itemHeight,
+            suspensionHeight: _suspensionHeight,
+            onSusTagChanged: _onSusTagChanged,
+            //showCenterTip: false,
+          ),
+        ),
+      ],
     );
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          S.of(context).select_country,
+          // S.of(context).select_country,
+          _navTitleStr,
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-              flex: 1,
-              child: AzListView(
-                data: _cityList,
-                topData: _hotCityList,
-                itemBuilder: (context, model) => _buildListItem(model),
-                suspensionWidget: _buildSusWidget(_suspensionTag),
-                isUseRealIndex: true,
-                itemHeight: _itemHeight,
-                suspensionHeight: _suspensionHeight,
-                onSusTagChanged: _onSusTagChanged,
-                //showCenterTip: false,
-              )),
-        ],
-      ),
+      body: _isLoading
+          ? HsgLoading()
+          : _cityList != null && _cityList.length > 0
+              ? contentListView
+              : notDataContainer(context, S.current.no_data_now),
     );
   }
 
   void loadData() async {
-    HSProgressHUD.show();
-    ApiClient()
+    // HSProgressHUD.show();
+    _isLoading = true;
+    ApiClientOpenAccount()
         .getCntAllBpCtCit(
             CityForCountryListReq(widget.countryData.cntyCd ?? ''))
         .then((data) {
-      HSProgressHUD.dismiss();
+      // HSProgressHUD.dismiss();
+      setState(() {
+        _isLoading = false;
+      });
       if (data != null &&
           data.bpCtCitRspDTOS != null &&
           data.bpCtCitRspDTOS.length > 0) {
         List list = data.bpCtCitRspDTOS;
-        print(list);
         list.forEach((value) {
           CityForCountryModel model = value;
           _cityList.add(
@@ -110,11 +119,16 @@ class _CityForCountrySelectPageState extends State<CityForCountrySelectPage> {
         setState(() {
           if (_hotCityList != null && _hotCityList.length > 0) {
             _suspensionTag = _hotCityList[0].getSuspensionTag();
+          } else if (_cityList != null && _cityList.length > 0) {
+            _suspensionTag = _cityList[0].getSuspensionTag();
           }
         });
       }
     }).catchError((e) {
-      HSProgressHUD.dismiss();
+      // HSProgressHUD.dismiss();
+      setState(() {
+        _isLoading = false;
+      });
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
@@ -179,8 +193,11 @@ class _CityForCountrySelectPageState extends State<CityForCountrySelectPage> {
           child: ListTile(
             title: Text(name),
             onTap: () {
-              print("OnItemClick: $model");
-              Navigator.pop(context, model);
+              Map popMap = {
+                'countryModel': widget.countryData,
+                'cityModel': model,
+              };
+              Navigator.of(context)..pop()..pop(popMap);
             },
           ),
         )
@@ -201,25 +218,6 @@ class _CityForCountrySelectPageState extends State<CityForCountrySelectPage> {
         style: TextStyle(
           fontSize: 14.0,
           color: Color(0xff999999),
-        ),
-      ),
-    );
-  }
-
-  static Widget getSusItem(BuildContext context, String tag,
-      {double susHeight = 35}) {
-    return Container(
-      height: susHeight,
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.only(left: 16.0),
-      color: Color(0xFFF3F4F5),
-      alignment: Alignment.centerLeft,
-      child: Text(
-        '$tag',
-        softWrap: false,
-        style: TextStyle(
-          fontSize: 14.0,
-          color: Color(0xFF666666),
         ),
       ),
     );

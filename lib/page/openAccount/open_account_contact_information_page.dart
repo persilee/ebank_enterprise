@@ -6,12 +6,14 @@
 import 'dart:convert';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/city_for_country.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
 import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -387,6 +389,33 @@ class _OpenAccountContactInformationPageState
           false,
           () {
             print('注册公司地址');
+
+            // Navigator.pushNamed(context, countryOrRegionSelectPage,
+            //         arguments: true)
+            //     .then(
+            //   (value) {
+            //     String _language = Intl.getCurrentLocale();
+            //     Map popData = value;
+            //     CountryRegionNewModel countryModel = popData['countryModel'];
+            //     CityForCountryModel cityModel = popData['cityModel'];
+            //     String showText = '';
+            //     if (_language == 'zh_CN') {
+            //       showText = countryModel.cntyCnm + '/' + cityModel.cityCnm;
+            //     } else if (_language == 'zh_HK') {
+            //       showText = countryModel.cntyTcnm + '/' + cityModel.cityCnm;
+            //     } else {
+            //       showText = countryModel.cntyNm + '/' + cityModel.cityNm;
+            //     }
+
+            //     // _dataReq.idIssuePlace = data.cntyCd;
+            //     // _dataReq.idIssuePlaceCountryRegionModel = data;
+            //     setState(() {
+            //       _registrationAreaText = showText;
+            //       _nextBtnEnabled = _judgeButtonIsEnabled();
+            //     });
+            //   },
+            // );
+
             _selectCity(_registrationAreaIndex, (Picker picker, List value) {
               String oneLevelStr = _cityDataList[value[0]]['name'];
               String twoLevelStr =
@@ -1138,9 +1167,9 @@ class _OpenAccountContactInformationPageState
     Map<String, dynamic> josnMap = widget.dataReq.toJson();
     String josnString = jsonEncode(josnMap);
     josnString.replaceAll('\\n', '');
-    //获取登记注册文件类型
-    OpenAccountRepository()
-        .savePreCust(OpenAccountSaveDataReq(josnString), 'savePreCust')
+    // OpenAccountRepository()
+    ApiClientOpenAccount()
+        .savePreCust(OpenAccountSaveDataReq(josnString))
         .then((data) {})
         .catchError((e) {});
   }

@@ -6,6 +6,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/language.dart';
@@ -284,7 +285,8 @@ class _LoginPageState extends State<LoginPage> {
     // print(loginResp.toJson());
 
     UserDataRepository()
-        .login(LoginReq(username: _account, password: password), 'login')
+        // ApiClientAccount()
+        .login(LoginReq(username: _account, password: password), '')
         .then((value) {
       HSProgressHUD.dismiss();
       _saveUserConfig(context, value);

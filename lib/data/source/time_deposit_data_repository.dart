@@ -23,33 +23,33 @@ class TimeDepositDataRepository {
     });
   }
 
-  //定期开立
-  Future<TimeDepositContractResp> getTimeDepositContract(
-      TimeDepositContractReq req, String tag) {
-    return request('/tdep/timeDeposit/openTdContract', req, tag,
-        (data) => TimeDepositContractResp.fromJson(data));
-  }
+  // //定期开立
+  // Future<TimeDepositContractResp> getTimeDepositContract(
+  //     TimeDepositContractReq req, String tag) {
+  //   return request('/tdep/timeDeposit/openTdContract', req, tag,
+  //       (data) => TimeDepositContractResp.fromJson(data));
+  // }
 
-  //定期开立试算
-  Future<TimeDepositContractTrialResp> getTimeDepositContractTrial(
-      TimeDepositContractTrialReq req, String tag) {
-    return request('/tdep/timeDeposit/openTdContractTrial', req, tag,
-        (data) => TimeDepositContractTrialResp.fromJson(data));
-  }
+  // //定期开立试算
+  // Future<TimeDepositContractTrialResp> getTimeDepositContractTrial(
+  //     TimeDepositContractTrialReq req, String tag) {
+  //   return request('/tdep/timeDeposit/openTdContractTrial', req, tag,
+  //       (data) => TimeDepositContractTrialResp.fromJson(data));
+  // }
 
-  //获取定期产品利率和存期
-  Future<GetTdProductTermRateResp> getTdProductTermRate(
-      GetTdProductTermRateReq req, String tag) {
-    return request('/tdep/timeDeposit/getTdProdTermRate', req, tag,
-        (data) => GetTdProductTermRateResp.fromJson(data));
-  }
+  // //获取定期产品利率和存期
+  // Future<GetTdProductTermRateResp> getTdProductTermRate(
+  //     GetTdProductTermRateReq req, String tag) {
+  //   return request('/tdep/timeDeposit/getTdProdTermRate', req, tag,
+  //       (data) => GetTdProductTermRateResp.fromJson(data));
+  // }
 
-  //修改到期指示和结算账户
-  Future<UpdateTdConInfoResp> updateTimeDepositConInfo(
-      UpdateTdConInfoReq req, String tag) {
-    return request('/tdep/timeDeposit/updateTdConInfo', req, tag,
-        (data) => UpdateTdConInfoResp.fromJson(data));
-  }
+  // //修改到期指示和结算账户
+  // Future<UpdateTdConInfoResp> updateTimeDepositConInfo(
+  //     UpdateTdConInfoReq req, String tag) {
+  //   return request('/tdep/timeDeposit/updateTdConInfo', req, tag,
+  //       (data) => UpdateTdConInfoResp.fromJson(data));
+  // }
 
   static final _instance = TimeDepositDataRepository._internal();
   factory TimeDepositDataRepository() => _instance;

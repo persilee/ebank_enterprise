@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 用户协议
 /// Author: CaiTM
@@ -50,9 +52,8 @@ class _UserAgreementPageState extends State<UserAgreementPage> {
   }
 
   _getUserAgreement(String pactId) async {
-    UserAgreementRepository()
-        .getUserPact(GetUserAgreementReq(pactId), 'GetUserAgreementReq')
-        .then((data) {
+    // UserAgreementRepository()
+    ApiClientAccount().getUserPact(GetUserAgreementReq(pactId)).then((data) {
       setState(() {
         if (Intl.getCurrentLocale() == 'zh_CN') {
           pactUrl = data.detailCnLink;

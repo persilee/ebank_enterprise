@@ -13,6 +13,10 @@ import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
 import 'package:ebank_mobile/data/source/model/loan_trial_rate.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_bill.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_loan.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/page/mine/id_cardVerification_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -81,9 +85,8 @@ class _LoanReferenceState extends State<LoanReference> {
 
   //获取借款期限
   Future _getLoanTimeList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("LOAN_TERM"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("LOAN_TERM")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _deadLineLists.clear();
         _deadLineLists.addAll(data.publicCodeGetRedisRspDtoList);
@@ -93,9 +96,8 @@ class _LoanReferenceState extends State<LoanReference> {
 
   //获取借款用途
   Future _getLoanPurposeList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("LOAN_PUR"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("LOAN_PUR")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _goalLists.clear();
         _goalLists.addAll(data.publicCodeGetRedisRspDtoList);
@@ -105,9 +107,8 @@ class _LoanReferenceState extends State<LoanReference> {
 
 //还款方式
   Future _getLoanRepayTypeList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("REPAY_TYPE"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("REPAY_TYPE")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _reimburseTypeLists.clear();
         _reimburseTypeLists.addAll(data.publicCodeGetRedisRspDtoList);
@@ -118,7 +119,8 @@ class _LoanReferenceState extends State<LoanReference> {
   //获取收款账户列表
   Future _loadTotalAccountData() async {
     SVProgressHUD.show();
-    CardDataRepository().getCardList('getCardList').then(
+    // CardDataRepository()
+    ApiClientAccount().getCardList(GetCardListReq()).then(
       (data) {
         SVProgressHUD.dismiss();
         if (data.cardList != null) {
@@ -185,9 +187,8 @@ class _LoanReferenceState extends State<LoanReference> {
       accountInfo.lmtNo,
       'L',
     );
-    LoanDataRepository()
-        .loanCreditlimitInterface(req, 'getCreditlimitByCust')
-        .then((data) {
+    // LoanDataRepository()
+    ApiClientLoan().loanCreditlimitInterface(req).then((data) {
       if (data.getCreditlimitByCusteDTOList != null) {
         //判断数据不为空
         if (mounted) {
@@ -214,9 +215,8 @@ class _LoanReferenceState extends State<LoanReference> {
     var req = LoanIntereRateReq(
         accountInfo.bookBr, accountInfo.ccy, iratCd1, _mothCode);
     SVProgressHUD.show();
-    ForexTradingRepository()
-        .loanGetRateInterface(req, 'getInterstRate')
-        .then((data) {
+    // ForexTradingRepository()
+    ApiClientBill().loanGetRateInterface(req).then((data) {
       SVProgressHUD.dismiss();
       //获取利率在去进行试算
       if (mounted) {
@@ -244,9 +244,8 @@ class _LoanReferenceState extends State<LoanReference> {
       double.parse(interestRate), //贷款利率
       _dateCode, //总期数
     );
-    LoanDataRepository()
-        .loanPilotComputingInterface(req, 'loanTrial')
-        .then((data) {
+    // LoanDataRepository()
+    ApiClientLoan().loanPilotComputingInterface(req).then((data) {
       if (data.loanTrialDTOList != null) {
         setState(() {
           _trailList.addAll(data.loanTrialDTOList); //添加所有的列表

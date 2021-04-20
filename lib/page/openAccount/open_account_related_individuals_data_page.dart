@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
 import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -569,9 +570,9 @@ class _RelatedIndividualsDataPageState
 
   //获取公共参数
   void _getPublicParameters() async {
-    //称谓
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq('AOTPC'), 'GetIdTypeReq') //AOTPC//SALUTATION
+    //称谓AOTPC
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq('AOTPC')) //AOTPC//SALUTATION
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _appellationTypes = data.publicCodeGetRedisRspDtoList;
@@ -584,9 +585,9 @@ class _RelatedIndividualsDataPageState
       );
     });
 
-    //个人职位类别
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq('COPC'), 'GetIdTypeReq') //COPC//POSIT
+    //个人职位类别COPC
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq('COPC')) //COPC//POSIT
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _categoryTypes = data.publicCodeGetRedisRspDtoList;
@@ -600,8 +601,8 @@ class _RelatedIndividualsDataPageState
     });
 
     //个人证件类型
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq('TORPC'), 'GetIdTypeReq') //TORPC//CERT_TYPE
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq('TORPC')) //TORPC//CERT_TYPE
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _documentTypes = data.publicCodeGetRedisRspDtoList;
@@ -619,9 +620,8 @@ class _RelatedIndividualsDataPageState
   void _openAccountQuickSubmitData() async {
     HSProgressHUD.show();
 
-    OpenAccountRepository()
-        .submitQuickCustTempInfo(widget.dataReq, 'GetIdTypeReq')
-        .then(
+    // OpenAccountRepository()
+    ApiClientOpenAccount().submitQuickCustTempInfo(widget.dataReq).then(
       (value) {
         print(value);
         HSProgressHUD.dismiss();
@@ -652,10 +652,9 @@ class _RelatedIndividualsDataPageState
     Map<String, dynamic> josnMap = widget.dataReq.toJson();
     String josnString = jsonEncode(josnMap);
     josnString.replaceAll('\\n', '');
-    print('josnString>>>>>>>>>>>>>>>>>>>>> == $josnString');
-    //获取登记注册文件类型
-    OpenAccountRepository()
-        .savePreCust(OpenAccountSaveDataReq(josnString), 'savePreCust')
+    // OpenAccountRepository()
+    ApiClientOpenAccount()
+        .savePreCust(OpenAccountSaveDataReq(josnString))
         .then((data) {})
         .catchError((e) {});
   }

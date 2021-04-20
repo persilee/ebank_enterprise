@@ -4,6 +4,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_password.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
@@ -62,13 +63,14 @@ class _HSGOTPButtonState extends State<HSGOTPButton> {
       final prefs = await SharedPreferences.getInstance();
       String userPhone = prefs.getString(ConfigKey.USER_PHONE);
       userPhone = userPhone != null ? userPhone : '';
-      VerificationCodeRepository()
+      // VerificationCodeRepository()
+      ApiClientPassword()
           // .sendSmsByAccount(
           //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
           // )
           .sendSmsByPhone(
-              SendSmsByPhoneNumberReq('', userPhone, widget.smsType, ''),
-              'sendSms')
+        SendSmsByPhoneNumberReq('', userPhone, widget.smsType, ''),
+      )
           .then((data) {
         _startCountdown();
         setState(() {});

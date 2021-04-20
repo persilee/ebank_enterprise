@@ -17,6 +17,9 @@ import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/update_time_deposit_con_info.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -493,8 +496,9 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 //提前结清试算
   _loadDepositData() {
     Future.wait({
-      DepositDataRepository().getDepositTrial(
-          GetDepositTrialReq(bal, conNos, bal), 'GetDepositTrialReq')
+      // DepositDataRepository()
+      ApiClientTimeDeposit()
+          .getDepositTrial(GetDepositTrialReq(bal, conNos, bal))
     }).then((value) {
       value.forEach((element) {
         if (this.mounted) {
@@ -522,22 +526,23 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     }
 
     HSProgressHUD.show();
-    DepositDataRepository()
+    // DepositDataRepository()
+    ApiClientTimeDeposit()
         .getDepositEarlyContract(
-            GetDepositEarlyContractReq(
-              conNos,
-              double.parse(eryInt),
-              double.parse(eryRate),
-              0,
-              mainAc,
-              0,
-              0,
-              0,
-              _paymentAc,
-              // _changedSettAcTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), "")
-              '0101208000001528',
-            ),
-            'getDepositEarlyContract')
+      GetDepositEarlyContractReq(
+        conNos,
+        double.parse(eryInt),
+        double.parse(eryRate),
+        0,
+        mainAc,
+        0,
+        0,
+        0,
+        _paymentAc,
+        // _changedSettAcTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), "")
+        '0101208000001528',
+      ),
+    )
         .then((value) {
       HSProgressHUD.dismiss();
       _showContractSucceedPage(context);
@@ -618,7 +623,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
 //获取卡列表
   Future<void> _loadData() async {
-    CardDataRepository().getCardList('getCardList').then(
+    // CardDataRepository()
+    ApiClientAccount().getCardList(GetCardListReq()).then(
       (data) {
         if (data.cardList != null) {
           if (this.mounted) {
@@ -645,9 +651,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
 //获取到期指示列表
   Future _getInsCode() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("EXP_IN"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("EXP_IN")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         instructions.clear();
         instCodes.clear();
@@ -681,11 +686,10 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     String settDdAc,
     String settIntAc,
   ) async {
-    TimeDepositDataRepository()
-        .updateTimeDepositConInfo(
-            UpdateTdConInfoReq(
-                ccy, conNo, instCode, intAcCcy, settDdAc, settIntAc),
-            'updateTimeDepositConInfo')
+    // TimeDepositDataRepository()
+    ApiClientTimeDeposit()
+        .updateTimeDepositConInfo(UpdateTdConInfoReq(
+            ccy, conNo, instCode, intAcCcy, settDdAc, settIntAc))
         .then((data) {
       setState(() {
         if (_modify == S.current.tdEarlyRed_modify_expiration_instruction) {

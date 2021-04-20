@@ -22,11 +22,11 @@ class UserDataRepository {
     return requestData;
   }
 
-  Future<GetInviteeStatusByPhoneResp> getInviteeStatusByPhone(
-      GetInviteeStatusByPhoneReq req, String tag) {
-    return request('/agent/inviteManage/getInviteeStatusByPhone', req, tag,
-        (data) => GetInviteeStatusByPhoneResp.fromJson(data));
-  }
+  // Future<GetInviteeStatusByPhoneResp> getInviteeStatusByPhone(
+  //     GetInviteeStatusByPhoneReq req, String tag) {
+  //   return request('/agent/inviteManage/getInviteeStatusByPhone', req, tag,
+  //       (data) => GetInviteeStatusByPhoneResp.fromJson(data));
+  // }
 
   //退出
   Future<LogoutResp> logout(LogoutReq logoutReq, String tag) {

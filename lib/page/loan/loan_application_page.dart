@@ -14,6 +14,8 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_password.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -70,9 +72,8 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
 
   // 获取币种列表
   Future _getCcyList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("CCY")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _ccyList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {
@@ -84,9 +85,8 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
 
   //获取贷款期限
   Future _getLoanTimeList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("LOAN_TERM"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("LOAN_TERM")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _deadLineLists.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {
@@ -102,9 +102,8 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
 
   //获取贷款目的
   Future _getLoanPurposeList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("LOAN_PUR"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("LOAN_PUR")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _goalLists.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {
@@ -380,9 +379,9 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
 
   //提交响应数据
   _submitFormData() {
-    VerifyTradePawRepository()
-        .verifyTransPwdNoSms(
-            VerifyTransPwdNoSmsReq(_payPassword), 'VerifyTransPwdNoSmsReq')
+    // VerifyTradePawRepository()
+    ApiClientPassword()
+        .verifyTransPwdNoSms(VerifyTransPwdNoSmsReq(_payPassword))
         .then((data) {
       _reqData();
       Navigator.pushNamed(context, pageOperationResult);

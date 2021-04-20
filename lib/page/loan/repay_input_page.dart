@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/get_loan_money_caculate.dart';
 import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
 import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_loan.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -108,21 +109,22 @@ class _RepayInputPageState extends State<RepayInputPage> {
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
     SVProgressHUD.show();
-    LoanDataRepository()
+    // LoanDataRepository()
+    ApiClientLoan()
         .getLoanCaculate(
-            GetLoanCaculateReq(
-                loanDetail.contactNo, //贷款放款编号
-                loanDetail.br, //机构号
-                loanDetail.ccy, //币种
-                custID, //客户号
-                loanDetail.osAmt, //贷款余额
-                loanDetail.loanAmt, //贷款本金
-                _inputController.text, //还本金额
-                loanDetail.prodTyp, //产品类型
-                loanDetail.repaymentMethod, //还息方式
-                loanDetail.disbDate //生效日期
-                ),
-            "getLoanMoneyCaculate")
+      GetLoanCaculateReq(
+          loanDetail.contactNo, //贷款放款编号
+          loanDetail.br, //机构号
+          loanDetail.ccy, //币种
+          custID, //客户号
+          loanDetail.osAmt, //贷款余额
+          loanDetail.loanAmt, //贷款本金
+          _inputController.text, //还本金额
+          loanDetail.prodTyp, //产品类型
+          loanDetail.repaymentMethod, //还息方式
+          loanDetail.disbDate //生效日期
+          ),
+    )
         .then((data) {
       SVProgressHUD.dismiss();
       if (data.postAdvanceRepaymentDTOList != null) {
