@@ -9,23 +9,29 @@ import 'package:ebank_mobile/data/source/mine_checInformantApi.dart';
 // import 'package:ebank_mobile/data/source/mine_checInformantApi.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/real_name_auth_by_three_factor.dart';
+
 // import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 // import 'package:ebank_mobile/data/source/model/set_transactionPassword.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
+
 // import 'package:ebank_mobile/util/encrypt_util.dart';
 // import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
+
 // import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
+
 // import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -270,8 +276,16 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                           ),
                         ),
                         //姓名
-                        InputList(S.of(context).name, S.of(context).placeName,
-                            _realName),
+                        InputList(
+                          S.of(context).name,
+                          S.of(context).placeName,
+                          _realName,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(45),
+                            FilteringTextInputFormatter.deny(
+                                RegExp(InputFormartterRegExp.REGEX_EMOJI)),
+                          ],
+                        ),
                         //证件类型
                         Container(
                           child: SelectInkWell(
@@ -285,8 +299,17 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                           color: HsgColors.divider,
                         ),
                         //证件号码
-                        InputList(S.of(context).identificationNumber,
-                            S.of(context).placeIdNumber, _certNo),
+                        InputList(
+                          S.of(context).identificationNumber,
+                          S.of(context).placeIdNumber,
+                          _certNo,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(30),
+                            FilteringTextInputFormatter.allow(
+                                RegExp('[a-zA-Z0-9]')),
+                          ],
+                        ),
+
                         //预留手机号
                         // InputList(
                         //     S.of(context).reservedMobilePhoneNumber,
@@ -545,65 +568,67 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
     // });
   }
 
-  //验证新密码非空，且一致
-  // bool _boolBut() {
-  //   if (_newPwd.text != '' && _confimPwd.text != '') {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
+//验证新密码非空，且一致
+// bool _boolBut() {
+//   if (_newPwd.text != '' && _confimPwd.text != '') {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// }
 
-  //提交修改密码表单
-  // submitChangePassword() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   String userID = prefs.getString(ConfigKey.USER_ID);
-  //   if (_newPwd.text != _confimPwd.text) {
-  //     Fluttertoast.showToast(msg: S.of(context).differentPwd,gravity: ToastGravity.CENTER,);
-  //     return;
-  //   }
-  //   RegExp postalcode1 = new RegExp(r'^\d{6}$');
-  //   if (!postalcode1.hasMatch(_newPwd.text)) {
-  //     Fluttertoast.showToast(msg: S.of(context).set_pay_password_prompt,gravity: ToastGravity.CENTER,);
-  //     return;
-  //   }
-  //   String password = EncryptUtil.aesEncode(_confimPwd.text);
-  //   print(password);
-  //   HSProgressHUD.show();
-  //   ChecInformantApiRepository()
-  //       .setTransactionPassword(
-  //           SetTransactionPasswordReq(
-  //               _realName.text,
-  //               _accNo,
-  //               _certNo.text,
-  //               _certTypeKey,
-  //               password,
-  //               _phoneNo.text,
-  //               userID,
-  //               true,
-  //               _smsCode.text),
-  //           'setTransactionPassword')
-  //       .then((data) {
-  //     HSProgressHUD.dismiss();
-  //     Fluttertoast.showToast(msg: S.current.operate_success,gravity: ToastGravity.CENTER,);
-  //     // Navigator.pushNamed(context, minePage);
-  //     Navigator.pop(context);
-  //   }).catchError((e) {
-  //     Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
-  //     HSProgressHUD.dismiss();
-  //   });
-  // }
+//提交修改密码表单
+// submitChangePassword() async {
+//   final prefs = await SharedPreferences.getInstance();
+//   String userID = prefs.getString(ConfigKey.USER_ID);
+//   if (_newPwd.text != _confimPwd.text) {
+//     Fluttertoast.showToast(msg: S.of(context).differentPwd,gravity: ToastGravity.CENTER,);
+//     return;
+//   }
+//   RegExp postalcode1 = new RegExp(r'^\d{6}$');
+//   if (!postalcode1.hasMatch(_newPwd.text)) {
+//     Fluttertoast.showToast(msg: S.of(context).set_pay_password_prompt,gravity: ToastGravity.CENTER,);
+//     return;
+//   }
+//   String password = EncryptUtil.aesEncode(_confimPwd.text);
+//   print(password);
+//   HSProgressHUD.show();
+//   ChecInformantApiRepository()
+//       .setTransactionPassword(
+//           SetTransactionPasswordReq(
+//               _realName.text,
+//               _accNo,
+//               _certNo.text,
+//               _certTypeKey,
+//               password,
+//               _phoneNo.text,
+//               userID,
+//               true,
+//               _smsCode.text),
+//           'setTransactionPassword')
+//       .then((data) {
+//     HSProgressHUD.dismiss();
+//     Fluttertoast.showToast(msg: S.current.operate_success,gravity: ToastGravity.CENTER,);
+//     // Navigator.pushNamed(context, minePage);
+//     Navigator.pop(context);
+//   }).catchError((e) {
+//     Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+//     HSProgressHUD.dismiss();
+//   });
+// }
 }
 
 // ignore: must_be_immutable
 class InputList extends StatelessWidget {
   InputList(this.labText, this.placeholderText, this.inputValue,
-      {this.isShowLine = true, this.isPwd = false});
+      {this.isShowLine = true, this.isPwd = false, this.inputFormatters});
+
   final String labText;
   final String placeholderText;
   TextEditingController inputValue = TextEditingController();
   final bool isShowLine;
   final bool isPwd;
+  final List<TextInputFormatter> inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -621,15 +646,21 @@ class InputList extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     controller: this.inputValue,
-                    maxLines: 1, //最大行数
-                    autocorrect: true, //是否自动更正
-                    autofocus: false, //是否自动对焦
-                    obscureText: this.isPwd, //是否是密码
-                    textAlign: TextAlign.right, //文本对齐方式
-                    inputFormatters: <TextInputFormatter>[
-                      // FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
-                      // LengthLimitingTextInputFormatter(11), //限制长度
-                    ],
+                    maxLines: 1,
+                    //最大行数
+                    autocorrect: true,
+                    //是否自动更正
+                    autofocus: false,
+                    //是否自动对焦
+                    obscureText: this.isPwd,
+                    //是否是密码
+                    textAlign: TextAlign.right,
+                    //文本对齐方式
+                    inputFormatters: this.inputFormatters,
+                    // <TextInputFormatter>[
+                    // FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
+                    // LengthLimitingTextInputFormatter(11), //限制长度
+                    // ],
                     onChanged: (text) {
                       //内容改变的回调
                       // print('change $text');
@@ -638,7 +669,8 @@ class InputList extends StatelessWidget {
                       //内容提交(按回车)的回调
                       // print('submit $text');
                     },
-                    enabled: true, //是否禁用
+                    enabled: true,
+                    //是否禁用
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: this.placeholderText,
@@ -663,6 +695,7 @@ class SelectInkWell extends StatelessWidget {
   final String title;
   final String item;
   final void Function() onTap;
+
   SelectInkWell({Key key, this.title, this.item, this.onTap}) : super(key: key);
 
   @override

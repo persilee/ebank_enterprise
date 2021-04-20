@@ -15,6 +15,7 @@ import 'package:ebank_mobile/data/source/model/open_account_signature_result.dar
 import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -189,8 +190,10 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     HSProgressHUD.show();
     try {
       if (_valueData.headerImg != null && _valueData.headerImg != '') {
+        String headerImgBase64 = _valueData.headerImg.replaceAll('\n', '');
+        headerImgBase64 = headerImgBase64.replaceAll('\\n', '');
         Uint8List _bytes = base64Decode(
-          _valueData.headerImg,
+          headerImgBase64,
         );
         Map response =
             await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
@@ -243,9 +246,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
 
     HSProgressHUD.show();
     OpenAccountInformationSupplementDataReq dataReq = _getDataReq(phoneStr);
-    OpenAccountRepository()
-        .supplementQuickPartnerInfo(dataReq, 'supplementQuickPartnerInfo')
-        .then(
+    // OpenAccountRepository()
+    ApiClientOpenAccount().supplementQuickPartnerInfo(dataReq).then(
       (value) {
         print(value);
         HSProgressHUD.dismiss();
@@ -279,9 +281,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     OpenAccountQuickReq quickReq = OpenAccountQuickReq(businessId: businessId);
 
     HSProgressHUD.show();
-    OpenAccountRepository()
-        .quickAccountOpening(quickReq, 'quickAccountOpening')
-        .then(
+    // OpenAccountRepository()
+    ApiClientOpenAccount().quickAccountOpening(quickReq).then(
       (value) {
         HSProgressHUD.dismiss();
         _showTypeTips(context);
@@ -335,7 +336,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
 
     OpenAccountInformationSupplementDataReq dataReq = _getDataReq(phoneStr);
     HSProgressHUD.show();
-    OpenAccountRepository().saveSignVideo(dataReq, 'saveSignVideo').then(
+    // OpenAccountRepository()
+    ApiClientOpenAccount().saveSignVideo(dataReq).then(
       (value) {
         print(value);
         HSProgressHUD.dismiss();
@@ -356,14 +358,13 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
 
   // //手机APP提交面签结果（通知后台，让面签码失效，完整开户）
   // void _subSignatureResult(String phoneStr) async {
-  //   OpenAccountRepository()
-  //       .subSignatureResult(
-  //           OpenAccountSignatureResultReq(
-  //             _valueData.certificateType ?? '',
-  //             phoneStr,
-  //             'sigCode',
-  //           ),
-  //           'subSignatureResult')
+  //   // OpenAccountRepository()
+  //   ApiClientOpenAccount()
+  //       .subSignatureResult(OpenAccountSignatureResultReq(
+  //         _valueData.certificateType ?? '',
+  //         phoneStr,
+  //         'sigCode',
+  //       ))
   //       .then(
   //         (value) {},
   //       )

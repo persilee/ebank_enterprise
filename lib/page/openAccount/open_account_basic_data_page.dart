@@ -15,6 +15,7 @@ import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
 import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -771,12 +772,10 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   //获取公共参数
   void _getPublicParameters() async {
     //获取登记注册文件类型
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq('CGCT'), 'GetIdTypeReq') //CGCT//FIRM_CERT
+    ApiClientOpenAccount().getIdType(GetIdTypeReq('CGCT')) //CGCT//FIRM_CERT
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _documentTypes = data.publicCodeGetRedisRspDtoList;
-        print('公共参数-登记注册文件类型-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
       Fluttertoast.showToast(
@@ -785,13 +784,11 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       );
     });
 
-    //获取公司类别类型
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq('CORP_TYPE'), 'GetIdTypeReq') //CORP_TYPE//ET
+    //获取公司类别类型CORP_TYPE
+    ApiClientOpenAccount().getIdType(GetIdTypeReq('CORP_TYPE')) //CORP_TYPE//ET
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _companyTypes = data.publicCodeGetRedisRspDtoList;
-        print('公共参数-公司类别类型-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
       Fluttertoast.showToast(
@@ -800,14 +797,12 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       );
     });
 
-    //获取商业行业性质类型
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq('NOCI'), 'GetIdTypeReq') //BIZ_IDU//NOCI
+    //获取商业行业性质类型NOCI
+    ApiClientOpenAccount().getIdType(GetIdTypeReq('NOCI')) //BIZ_IDU//NOCI
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _industrialNatures = data.publicCodeGetRedisRspDtoList;
         _industrialNaturesTwo = data.publicCodeGetRedisRspDtoList;
-        print('公共参数-商业行业性质类型-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
       Fluttertoast.showToast(
@@ -822,9 +817,9 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     Map<String, dynamic> josnMap = _dataReq.toJson();
     String josnString = jsonEncode(josnMap);
     josnString.replaceAll('\\n', '');
-    //获取登记注册文件类型
-    OpenAccountRepository()
-        .savePreCust(OpenAccountSaveDataReq(josnString), 'savePreCust')
+    // OpenAccountRepository()
+    ApiClientOpenAccount()
+        .savePreCust(OpenAccountSaveDataReq(josnString))
         .then((data) {})
         .catchError((e) {});
   }
@@ -832,9 +827,9 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   ///获取后台保存的数据
   void _getPreCustByStep() async {
     HSProgressHUD.show();
-    //获取登记注册文件类型
-    OpenAccountRepository()
-        .getPreCustByStep(OpenAccountGetDataReq(), 'getPreCustByStep')
+    // OpenAccountRepository()
+    ApiClientOpenAccount()
+        .getPreCustByStep(OpenAccountGetDataReq())
         .then((data) {
       HSProgressHUD.dismiss();
       var content = jsonDecode(data.content);

@@ -10,7 +10,6 @@ import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_record.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
-import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/http/retrofit/transfer.dart';
@@ -21,12 +20,10 @@ import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_dotted_line.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
-import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -807,6 +804,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         _position = result;
         _card = _cradLists[result];
         paymentCardNos = [];
+        _transferHistoryList.clear();
         // paymentCardNos.add(_card);
       });
       _loadData();
@@ -976,31 +974,31 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     //         GetTransferRecordReq(ccy, _endDate, _page, pageSize, paymentCardNos,
     //             sort, _startDate, userAccount, userID),
     //         'getTransferRecord')
-        Transfer()
-          ..getTransferRecord(GetTransferRecordReq(ccy, _endDate, _page, pageSize,
-                  paymentCardNos, sort, _startDate, userAccount, userID))
-        .then((data) {
-      if (this.mounted) {
-        setState(() {
-          if (data.transferRecord != null) {
-            _totalPage = data.totalPage;
-            _transferHistoryList.addAll(data.transferRecord);
-          }
-          _loadMore = false;
-          _isLoading = false;
-          _refreshController.loadComplete();
-        });
-      }
+    Transfer()
+      ..getTransferRecord(GetTransferRecordReq(ccy, _endDate, _page, pageSize,
+              paymentCardNos, sort, _startDate, userAccount, userID))
+          .then((data) {
+        if (this.mounted) {
+          setState(() {
+            if (data.transferRecord != null) {
+              _totalPage = data.totalPage;
+              _transferHistoryList.addAll(data.transferRecord);
+            }
+            _loadMore = false;
+            _isLoading = false;
+            _refreshController.loadComplete();
+          });
+        }
 
-      // HSProgressHUD.dismiss();
-    }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
-      // HSProgressHUD.dismiss();
-      if (this.mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    });
+        // HSProgressHUD.dismiss();
+      }).catchError((e) {
+        // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+        // HSProgressHUD.dismiss();
+        if (this.mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      });
   }
 }

@@ -18,9 +18,7 @@ import 'base_dio.dart';
 
 part 'transfer.g.dart';
 
-// @RestApi(baseUrl: 'http://161.189.48.75:5040') //dev
-@RestApi(baseUrl: 'http://47.57.236.20:5040') //sit
-// @RestApi(baseUrl: 'http://47.242.2.219:5040') //UAT
+@RestApi(baseUrl: BaseDio.BASEURL)
 abstract class Transfer {
   factory Transfer({Dio dio, String baseUrl}) {
     dio ??= BaseDio.getInstance().getDio();

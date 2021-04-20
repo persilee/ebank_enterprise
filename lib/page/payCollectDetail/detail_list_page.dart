@@ -990,15 +990,15 @@ class _DetailListPageState extends State<DetailListPage> {
       selectAccNo = selectAccNo == _cardList[0] ? '' : selectAccNo;
     }
 
-    localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
+    localCcy = '';//prefs.getString(ConfigKey.LOCAL_CCY);
 
     PayCollectDetailRepository()
         .getRevenueByCards(
             GetRevenueByCardsReq(
-              localCcy,
+              '',
               '$_endDate', //结束时间     '$_endDate'
               '$_startDate', //开始时间   '$_startDate'
-              0, //分页page
+              1, //分页page
               20, //分页pageSize
               // turnKey: '20210401000000003088000220210414150720', //分页key
               acNo: '$selectAccNo',

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:ebank_mobile/http/retrofit/base_dio.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +27,8 @@ class HsgHttp {
   static const int _RECEIVE_TIMTOUT = 30000;
 
   Dio _dio;
-  // var _baseUrl = 'http://161.189.48.75:5040/'; //dev
-  var _baseUrl = 'http://47.57.236.20:5040/'; //sit
-  // var _baseUrl = 'http://47.242.2.219:5040/'; //UAT
-  //'http://52.82.42.59:5040/'; http://161.189.48.75:5040/ http://192.168.201.65:5041/
+
+  var _baseUrl = BaseDio.BASEURL; //sit
 
   static final _instance = HsgHttp._internal();
 
