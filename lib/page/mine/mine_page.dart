@@ -16,6 +16,7 @@ import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_packaging.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -760,10 +761,10 @@ class _MinePageState extends State<MinePage>
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
 
-    UserDataRepository()
+    // UserDataRepository()
+    ApiClientPackaging()
         .getUserInfo(
       GetUserInfoReq(userID),
-      'getUserInfo',
     )
         .then((data) {
       if (this.mounted) {
@@ -802,10 +803,8 @@ class _MinePageState extends State<MinePage>
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
     HSProgressHUD.show();
-    UserDataRepository()
-        // ApiClientAccount()
-        .logout(LogoutReq(userID, _userName), '')
-        .then((data) {
+    // UserDataRepository()
+    ApiClientPackaging().logout(LogoutReq(userID, _userName)).then((data) {
       HSProgressHUD.dismiss();
       if (this.mounted) {
         setState(() {

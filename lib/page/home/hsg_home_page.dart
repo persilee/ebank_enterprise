@@ -12,6 +12,7 @@ import 'package:ebank_mobile/data/source/model/logout.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_packaging.dart';
 import 'package:ebank_mobile/main.dart';
 
 import 'package:ebank_mobile/util/event_bus_utils.dart';
@@ -1063,10 +1064,10 @@ class _HomePageState extends State<HomePage>
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
 
-    UserDataRepository()
+    // UserDataRepository()
+    ApiClientPackaging()
         .getUserInfo(
       GetUserInfoReq(userID),
-      'getUserInfo',
     )
         .then((data) {
       print('$data');

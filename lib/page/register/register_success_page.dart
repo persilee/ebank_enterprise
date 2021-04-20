@@ -7,6 +7,7 @@ import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_packaging.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/util/login_save_user_data.dart';
@@ -122,9 +123,9 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
     print('$_account >>>>>>>>>loginMethodaccount');
     print('$password >>>>>>>>>loginMethodpassword');
     HSProgressHUD.show();
-    UserDataRepository()
-        // ApiClientAccount()
-        .login(LoginReq(username: _account, password: password), '')
+    // UserDataRepository()
+    ApiClientPackaging()
+        .login(LoginReq(username: _account, password: password))
         .then((value) {
       if (mounted) {
         setState(() {

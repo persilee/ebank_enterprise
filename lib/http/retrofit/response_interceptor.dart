@@ -7,12 +7,13 @@ class ResponseInterceptor extends Interceptor {
   @override
   Future onResponse(Response response) {
     print('response: ${response.data is Map}');
-    if(response.data is Map) {
+    print('${response.request}');
+    if (response.data is Map && response.request.path != '/security/cutlogin') {
       BaseResponse baseResponse = BaseResponse.fromJson(response.data);
       if (baseResponse.msgCd == '0000') {
         response.data = baseResponse.body;
       } else {
-        if(baseResponse?.msgCd == 'SYS90018') {
+        if (baseResponse?.msgCd == 'SYS90018') {
           return Future.error(NeedLogin());
         }
         return Future.error(

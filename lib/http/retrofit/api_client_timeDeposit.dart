@@ -28,7 +28,7 @@ abstract class ApiClientTimeDeposit {
 
   /// 获取定期产品
   @POST('/tdep/timeDeposit/getTdepProducts')
-  Future<TimeDepositProductResp> getGetTimeDepositProduct(
+  Future<List<TimeDepositProductResp>> getGetTimeDepositProduct(
       @Body() TimeDepositProductReq req);
 
   //     //获取定期产品

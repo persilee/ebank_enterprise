@@ -15,6 +15,7 @@ import 'package:ebank_mobile/data/source/model/login.dart';
 import 'package:ebank_mobile/data/source/model/logout.dart';
 import 'package:ebank_mobile/data/source/model/register_by_account.dart';
 import 'package:ebank_mobile/data/source/model/send_sms_register.dart';
+import 'package:ebank_mobile/http/retrofit/base_response.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -41,9 +42,9 @@ abstract class ApiClientAccount {
   @POST('/platform/pact/getPact')
   Future<GetUserAgreementResp> getUserPact(@Body() GetUserAgreementReq req);
 
-  // /// 用户网关登录
-  // @POST('/security/cutlogin')
-  // Future<LoginResp> login(@Body() LoginReq req);
+  /// 用户网关登录
+  @POST('/security/cutlogin')
+  Future<BaseResponse> login(@Body() LoginReq req);
 
   /// 获取用户信息
   @POST('/cust/user/getUser')
@@ -60,9 +61,9 @@ abstract class ApiClientAccount {
   //   return requestData;
   // }
 
-  // /// 安全退出
-  // @POST('/security/logout')
-  // Future<LogoutResp> logout(@Body() LogoutReq req);
+  /// 安全退出
+  @POST('/security/logout')
+  Future<LogoutResp> logout(@Body() LogoutReq req);
 
   /// 获取最新版本信息
   @POST('/platform/version/getLastVersion')

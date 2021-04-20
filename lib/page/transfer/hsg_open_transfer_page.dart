@@ -18,6 +18,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_packaging.dart';
 import 'package:ebank_mobile/page/transfer/data/transfer_order_data.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -1224,9 +1225,8 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
   Future<void> _actualNameReqData() async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
-    UserDataRepository()
-        .getUserInfo(GetUserInfoReq(userID), "getUserInfo")
-        .then((data) {
+    // UserDataRepository()
+    ApiClientPackaging().getUserInfo(GetUserInfoReq(userID)).then((data) {
       if (this.mounted) {
         setState(() {
           payerName = data.actualName;
