@@ -82,4 +82,9 @@ abstract class ApiClientOpenAccount {
   @POST('/platform/bpCtCit/getCntAllBpCtCit')
   Future<CityForCountryListResp> getCntAllBpCtCit(
       @Body() CityForCountryListReq req);
+
+  /// 获取本币
+  @POST('/platform/publicCode/getPublicCodeByType')
+  Future<GetLocalCurrencyResp> getLocalCurrency(
+      @Body() GetLocalCurrencyReq req);
 }

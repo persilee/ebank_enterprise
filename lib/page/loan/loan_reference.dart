@@ -13,6 +13,7 @@ import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
 import 'package:ebank_mobile/data/source/model/loan_trial_rate.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/page/mine/id_cardVerification_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -81,9 +82,8 @@ class _LoanReferenceState extends State<LoanReference> {
 
   //获取借款期限
   Future _getLoanTimeList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("LOAN_TERM"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("LOAN_TERM")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _deadLineLists.clear();
         _deadLineLists.addAll(data.publicCodeGetRedisRspDtoList);
@@ -93,9 +93,8 @@ class _LoanReferenceState extends State<LoanReference> {
 
   //获取借款用途
   Future _getLoanPurposeList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("LOAN_PUR"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("LOAN_PUR")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _goalLists.clear();
         _goalLists.addAll(data.publicCodeGetRedisRspDtoList);
@@ -105,9 +104,8 @@ class _LoanReferenceState extends State<LoanReference> {
 
 //还款方式
   Future _getLoanRepayTypeList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("REPAY_TYPE"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("REPAY_TYPE")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _reimburseTypeLists.clear();
         _reimburseTypeLists.addAll(data.publicCodeGetRedisRspDtoList);

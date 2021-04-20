@@ -13,6 +13,7 @@ import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -114,9 +115,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
 
 //获取转账费用列表
   Future _getTransferFeeList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("PAYS_METHOD"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("PAYS_METHOD")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         transferFeeList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {
@@ -132,8 +132,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
 
   //获取汇款用途列表
   Future _getFeeUseList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("ROLL_IN_PURPOSE"), 'GetIdTypeReq')
+    // PublicParametersRepository()
+    ApiClientOpenAccount()
+        .getIdType(GetIdTypeReq("ROLL_IN_PURPOSE"))
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         feeUse.clear();
@@ -978,9 +979,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
 
   // 获取币种列表
   Future _loadLocalCcy() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("CCY")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _ccyList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {

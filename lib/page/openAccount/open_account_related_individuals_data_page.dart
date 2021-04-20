@@ -652,7 +652,6 @@ class _RelatedIndividualsDataPageState
     Map<String, dynamic> josnMap = widget.dataReq.toJson();
     String josnString = jsonEncode(josnMap);
     josnString.replaceAll('\\n', '');
-    print('josnString>>>>>>>>>>>>>>>>>>>>> == $josnString');
     // OpenAccountRepository()
     ApiClientOpenAccount()
         .savePreCust(OpenAccountSaveDataReq(josnString))

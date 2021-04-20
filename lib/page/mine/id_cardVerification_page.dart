@@ -14,6 +14,7 @@ import 'package:ebank_mobile/data/source/model/real_name_auth_by_three_factor.da
 // import 'package:ebank_mobile/data/source/model/set_transactionPassword.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
@@ -136,9 +137,9 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
 
   //获取证件类型
   _getIdCardList() async {
-    PublicParametersRepository()
-        .getIdType(
-            GetIdTypeReq('TORPC'), 'GetIdTypeReq') //CICID//TORPC//FIRM_CERT
+    // PublicParametersRepository()
+    ApiClientOpenAccount()
+        .getIdType(GetIdTypeReq('TORPC')) //CICID//TORPC//FIRM_CERT
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         print('data.publicCodeGetRedisRspDtoList222222');
