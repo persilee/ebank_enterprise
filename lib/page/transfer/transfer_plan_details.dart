@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/model/get_transfer_plan_details.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_plan_list.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/cupertino.dart';
@@ -182,9 +183,9 @@ class _TransferPlanDetailsPageState extends State<TransferPlanDetailsPage> {
   void _getTransferPlan() {
     isLoading = true;
     Future.wait({
-      TransferDataRepository().getTransferPlanDetails(
-          GetTransferPlanDetailsReq(transferPlan.planId),
-          'getTransferPlanDetails')
+      // TransferDataRepository()
+      Transfer().getTransferPlanDetails(
+          GetTransferPlanDetailsReq(transferPlan.planId))
     }).then(
       (data) {
         data.forEach((value) {

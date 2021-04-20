@@ -19,7 +19,9 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
@@ -828,7 +830,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   Future<void> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
     custID = prefs.getString(ConfigKey.CUST_ID);
-    CardDataRepository().getCardList('getCardList').then(
+    // CardDataRepository()
+    ApiClientAccount().getCardList(GetCardListReq()).then(
       (data) {
         if (data.cardList != null) {
           if (this.mounted) {
@@ -1023,11 +1026,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       String ciNo,
       String depositType,
       String tenor) async {
-    TimeDepositDataRepository()
-        .getTimeDepositContractTrial(
-            TimeDepositContractTrialReq(accuPeriod, auctCale, bal, bppdCode,
-                ccy, ciNo, depositType, tenor),
-            'getTimeDepositContractTrial')
+    // TimeDepositDataRepository()
+    ApiClientTimeDeposit()
+        .getTimeDepositContractTrial(TimeDepositContractTrialReq(
+            accuPeriod, auctCale, bal, bppdCode, ccy, ciNo, depositType, tenor))
         .then((value) {
       if (this.mounted) {
         setState(() {
@@ -1045,8 +1047,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   //获取付款账户余额
   _getCardBal(String cardNo) {
     Future.wait({
-      CardDataRepository().getCardBalByCardNo(
-          GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
+      // CardDataRepository()
+      ApiClientAccount().getCardBalByCardNo(
+        GetSingleCardBalReq(cardNo),
+      ),
     }).then((value) {
       value.forEach((element) {
         if (this.mounted) {
@@ -1126,25 +1130,26 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     }
     // HSProgressHUD.show();
     print('accuPeriod===$accuPeriod');
-    TimeDepositDataRepository()
+    // TimeDepositDataRepository()
+    ApiClientTimeDeposit()
         .getTimeDepositContract(
-            TimeDepositContractReq(
-                accuPeriod,
-                annualInterestRate,
-                auctCale,
-                bal,
-                bppdCode,
-                ccy,
-                ciNo,
-                depositType,
-                instCode,
-                oppAc,
-                payPassword,
-                prodName,
-                settDdAc,
-                smsCode,
-                tenor),
-            'getTimeDepositContract')
+      TimeDepositContractReq(
+          accuPeriod,
+          annualInterestRate,
+          auctCale,
+          bal,
+          bppdCode,
+          ccy,
+          ciNo,
+          depositType,
+          instCode,
+          oppAc,
+          payPassword,
+          prodName,
+          settDdAc,
+          smsCode,
+          tenor),
+    )
         .then((value) {
       if (this.mounted) {
         setState(() {
@@ -1179,10 +1184,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       });
     }
     // HSProgressHUD.show();
-    TimeDepositDataRepository()
+    // TimeDepositDataRepository()
+    ApiClientTimeDeposit()
         .getTdProductTermRate(
-            GetTdProductTermRateReq(productList.ccy, productList.bppdCode),
-            'getTdProdTermRate')
+            GetTdProductTermRateReq(productList.ccy, productList.bppdCode))
         .then((data) {
       if (this.mounted) {
         setState(() {

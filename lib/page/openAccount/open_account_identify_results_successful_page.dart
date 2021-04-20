@@ -202,6 +202,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
       // print('<><><> ${_valueData.positiveImage}');
       // debugPrint('<><><>1 ${_valueData.positiveImage}',
       //     wrapWidth: _valueData.positiveImage.length);
+      // debugPrint('<><><>2 ${_valueData.backImage}',
+      //     wrapWidth: _valueData.backImage.length);
       // LogUtil.v('<><><> ${_valueData.positiveImage}');
       if (_valueData.positiveImage != null && _valueData.positiveImage != '') {
         String positiveImageBase64 =
@@ -225,6 +227,10 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         _backImageUrl = response['incompleteUrl'] ?? '';
       }
       HSProgressHUD.dismiss();
+
+      // print(
+      // '是否相等 == ${_valueData.positiveImage == _valueData.backImage} 正面 = $_positiveImageUrl 反面 = $_backImageUrl');
+
       if (_isQuick) {
         _openAccountQuickSubmitData();
       } else {

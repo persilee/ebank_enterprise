@@ -15,6 +15,7 @@ import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_password.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -378,9 +379,9 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
 
   //提交响应数据
   _submitFormData() {
-    VerifyTradePawRepository()
-        .verifyTransPwdNoSms(
-            VerifyTransPwdNoSmsReq(_payPassword), 'VerifyTransPwdNoSmsReq')
+    // VerifyTradePawRepository()
+    ApiClientPassword()
+        .verifyTransPwdNoSms(VerifyTransPwdNoSmsReq(_payPassword))
         .then((data) {
       _reqData();
       Navigator.pushNamed(context, pageOperationResult);

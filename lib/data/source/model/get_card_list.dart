@@ -2,7 +2,14 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'get_card_list.g.dart';
 
-class GetCardListReq {}
+@JsonSerializable()
+class GetCardListReq extends Object {
+  GetCardListReq();
+
+  factory GetCardListReq.fromJson(Map<String, dynamic> srcJson) =>
+      _$GetCardListReqFromJson(srcJson);
+  Map<String, dynamic> toJson() => _$GetCardListReqToJson(this);
+}
 
 @JsonSerializable()
 class GetCardListResp extends Object {
@@ -16,9 +23,9 @@ class GetCardListResp extends Object {
   String toString() {
     return toJson().toString();
   }
+
   factory GetCardListResp.fromJson(Map<String, dynamic> srcJson) =>
       _$GetCardListRespFromJson(srcJson);
-  
 
   Map<String, dynamic> toJson() => _$GetCardListRespToJson(this);
 }

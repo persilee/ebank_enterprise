@@ -12,6 +12,8 @@ import 'package:ebank_mobile/data/source/model/get_card_ccy_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_bill.dart';
 import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -342,7 +344,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   }
 
   _getCardList() {
-    CardDataRepository().getCardList('getCardList').then((data) {
+    // CardDataRepository()
+    ApiClientAccount().getCardList(GetCardListReq()).then((data) {
       if (data.cardList != null) {
         if (this.mounted) {
           setState(() {
@@ -368,8 +371,9 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
 
   //获取账户可用余额
   _getCardBal(String cardNo) {
-    ForexTradingRepository()
-        .getCardBalByCardNo(GetCardBalReq(cardNo: cardNo), 'GetCardBalReq')
+    // ForexTradingRepository()
+    ApiClientBill()
+        .getCardBalByCardNo(GetCardBalReq(cardNo: cardNo))
         .then((data) {
       if (data.cardListBal != null && _paymentCcy != S.current.please_select) {
         if (this.mounted) {

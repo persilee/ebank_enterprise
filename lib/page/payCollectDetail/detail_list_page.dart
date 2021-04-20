@@ -6,10 +6,13 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_pay_collect_detail.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_record.dart';
 import 'package:ebank_mobile/data/source/pay_collect_detail_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_bill.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
@@ -941,7 +944,8 @@ class _DetailListPageState extends State<DetailListPage> {
 
   //获取账号
   _getCardList() {
-    CardDataRepository().getCardList('getCardList').then((data) {
+    // CardDataRepository()
+    ApiClientAccount().getCardList(GetCardListReq()).then((data) {
       if (mounted) {
         setState(() {
           if (data.cardList != null) {
@@ -990,21 +994,22 @@ class _DetailListPageState extends State<DetailListPage> {
       selectAccNo = selectAccNo == _cardList[0] ? '' : selectAccNo;
     }
 
-    localCcy = '';//prefs.getString(ConfigKey.LOCAL_CCY);
+    localCcy = ''; //prefs.getString(ConfigKey.LOCAL_CCY);
 
-    PayCollectDetailRepository()
+    // PayCollectDetailRepository()
+    ApiClientBill()
         .getRevenueByCards(
-            GetRevenueByCardsReq(
-              '',
-              '$_endDate', //结束时间     '$_endDate'
-              '$_startDate', //开始时间   '$_startDate'
-              1, //分页page
-              20, //分页pageSize
-              // turnKey: '20210401000000003088000220210414150720', //分页key
-              acNo: '$selectAccNo',
-              ciNo: '$custID',
-            ), //'818000000113'
-            'GetRevenueByCardsReq')
+      GetRevenueByCardsReq(
+        '',
+        '$_endDate', //结束时间     '$_endDate'
+        '$_startDate', //开始时间   '$_startDate'
+        1, //分页page
+        20, //分页pageSize
+        // turnKey: '20210401000000003088000220210414150720', //分页key
+        acNo: '$selectAccNo',
+        ciNo: '$custID',
+      ), //'818000000113'
+    )
         .then((data) {
       HSProgressHUD.dismiss();
       if (data.ddFinHisDTOList != null) {

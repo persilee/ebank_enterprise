@@ -9,6 +9,8 @@ import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_password.dart';
 import 'package:ebank_mobile/page/register/component/register_86.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -253,8 +255,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   //检验用户是否注册
   _checkRegister() {
     HSProgressHUD.show();
-    VersionDataRepository()
-        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
+    // VersionDataRepository()
+    ApiClientAccount()
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'))
         .then((data) {
       if (mounted) {
         setState(() {
@@ -285,8 +288,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   _checkRegisterBysencond() {
     print('$_smsCode+_smsCode');
     HSProgressHUD.show();
-    VersionDataRepository()
-        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
+    // VersionDataRepository()
+    ApiClientAccount()
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'))
         .then((data) {
       if (mounted) {
         setState(() {
@@ -348,11 +352,12 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   //获取验证码接口
   _getVerificationCode() async {
-    VerificationCodeRepository()
+    // VerificationCodeRepository()
+    ApiClientPassword()
         .sendSmsByPhone(
-            SendSmsByPhoneNumberReq(
-                _officeAreaCodeText, _phoneNum.text, 'findPwd', 'SCNAOFTPW'),
-            'sendSms')
+      SendSmsByPhoneNumberReq(
+          _officeAreaCodeText, _phoneNum.text, 'findPwd', 'SCNAOFTPW'),
+    )
         .then((data) {
       if (mounted) {
         setState(() {

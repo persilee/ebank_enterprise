@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/model/find_user_application_task_detail
 import 'package:ebank_mobile/data/source/model/get_my_application.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:flutter/material.dart';
 
 class MyApplicationDetailPage extends StatefulWidget {
@@ -21,8 +22,7 @@ class MyApplicationDetailPage extends StatefulWidget {
       _MyApplicationDetailPageState(history);
 }
 
-class _MyApplicationDetailPageState
-    extends State<MyApplicationDetailPage> {
+class _MyApplicationDetailPageState extends State<MyApplicationDetailPage> {
   MyApplicationDetail history;
   _MyApplicationDetailPageState(this.history);
   var commentList = [];
@@ -340,9 +340,9 @@ class _MyApplicationDetailPageState
 
   void _loadHistoryData(String processId) {
     Future.wait({
-      NeedToBeDealtWithRepository()
-          .findUserApplicationDetail(FindUserApplicationDetailReq(processId),
-              'findUserApplicationDetail')
+      // NeedToBeDealtWithRepository()
+      ApiClient()
+          .findUserApplicationDetail(FindUserApplicationDetailReq(processId))
           .then((data) {
         setState(() {
           if (data != null) {

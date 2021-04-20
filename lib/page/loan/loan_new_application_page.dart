@@ -12,6 +12,8 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_loan.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -158,7 +160,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   //获取放款以及还款帐号列表
   Future<void> _loadTotalAccountData() async {
     SVProgressHUD.show();
-    CardDataRepository().getCardList('getCardList').then(
+    // CardDataRepository()
+    ApiClientAccount().getCardList(GetCardListReq()).then(
       (data) {
         SVProgressHUD.dismiss();
         if (data.cardList != null) {
@@ -184,8 +187,9 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
 
 //获取贷款产品
   Future<void> _loadLoanProductData() async {
-    LoanDataRepository()
-        .loanGetProductListRequest(LoanProductListReq('0'), 'loanProductData')
+    // LoanDataRepository()
+    ApiClientLoan()
+        .loanGetProductListRequest(LoanProductListReq('0'))
         .then((data) {
       if (data.loanProductList != null) {
         setState(() {

@@ -8,10 +8,12 @@ import 'package:date_format/date_format.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_record.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -935,7 +937,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
   //获取银行卡
   _getCardList() {
-    CardDataRepository().getCardList('getCardList').then((data) {
+    // CardDataRepository()
+    ApiClientAccount().getCardList(GetCardListReq()).then((data) {
       if (data.cardList != null) {
         if (this.mounted) {
           setState(() {

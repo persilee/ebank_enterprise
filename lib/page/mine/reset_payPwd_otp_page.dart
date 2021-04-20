@@ -10,6 +10,7 @@ import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_password.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -311,11 +312,12 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   //获取验证码接口
   _getVerificationCode() async {
     HSProgressHUD.show();
-    VerificationCodeRepository()
+    // VerificationCodeRepository()
+    ApiClientPassword()
         .sendSmsByPhone(
-            SendSmsByPhoneNumberReq(
-                _officeAreaCodeText, _phone, 'transactionPwd', 'SCNAORESTSPW'),
-            'sendSms')
+      SendSmsByPhoneNumberReq(
+          _officeAreaCodeText, _phone, 'transactionPwd', 'SCNAORESTSPW'),
+    )
         .then((data) {
       _startCountdown();
       if (this.mounted) {

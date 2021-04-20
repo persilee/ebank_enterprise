@@ -10,10 +10,13 @@ import 'package:ebank_mobile/config/hsg_text_style.dart';
 //import 'package:ebank_mobile/data/source/account_overview_repository.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
 //import 'package:ebank_mobile/data/source/model/account_overview_all_data.dart';
 //import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
@@ -667,7 +670,8 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
   }
 
   Future<void> _getCardList() async {
-    CardDataRepository().getCardList('getCardList').then((data) {
+    // CardDataRepository()
+    ApiClientAccount().getCardList(GetCardListReq()).then((data) {
       if (data.cardList != null) {
         if (mounted) {
           setState(() {
@@ -697,15 +701,16 @@ class _AccountOverviewPageState extends State<AccountOverviewPage> {
     });
     HSProgressHUD.show();
     // 一个接口拿活期，定期总额
-    DepositDataRepository()
+    // DepositDataRepository()
+    ApiClientTimeDeposit()
         .getCardListBalByUser(
-            GetCardListBalByUserReq(
-              '',
-              cardNoList,
-              localCcy,
-              custID,
-            ),
-            'GetCardListBalByUserReq')
+      GetCardListBalByUserReq(
+        '',
+        cardNoList,
+        localCcy,
+        custID,
+      ),
+    )
         .then((data) {
       if (data.cardListBal != null) {
         if (mounted) {

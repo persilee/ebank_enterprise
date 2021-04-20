@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/data/source/model/add_partner.dart';
+import 'package:ebank_mobile/data/source/model/add_transfer_plan.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
+import 'package:ebank_mobile/data/source/model/cancel_transfer_plan.dart';
 import 'package:ebank_mobile/data/source/model/delete_partner.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_ccy_list.dart';
@@ -10,6 +12,8 @@ import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_international_transfer.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
+import 'package:ebank_mobile/data/source/model/get_transfer_plan_details.dart';
+import 'package:ebank_mobile/data/source/model/get_transfer_plan_list.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_record.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
@@ -69,4 +73,23 @@ abstract class Transfer {
   //计算汇率
   @POST('/ddep/transfer/transferTrial')
   Future<TransferTrialResp> transferTrial(@Body() TransferTrialReq req);
+
+  //预约转账
+  @POST('/ddep/transferPlan/addTransferPlan')
+  Future<AddTransferPlanResp> addTransferPlan(@Body() AddTransferPlanReq req);
+
+  //转账计划
+  @POST('/ddep/transferPlan/getTransferPlanList')
+  Future<GetTransferPlanListResp> getTransferPlanList(
+      @Body() GetTransferPlanListReq req);
+
+  //取消转账计划
+  @POST('/ddep/transferPlan/cancelTransferPlan')
+  Future<CancelTransferPlanResp> cancelTransferPlan(
+      @Body() CancelTransferPlanReq req);
+
+  //转账计划详情
+  @POST('/ddep/transferPlan/getTransferPlan')
+  Future<GetTransferPlanDetailsResp> getTransferPlanDetails(
+      @Body() GetTransferPlanDetailsReq req);
 }

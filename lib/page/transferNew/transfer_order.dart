@@ -17,7 +17,10 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_bill.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page/transfer/data/transfer_order_data.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -1185,7 +1188,8 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
   //默认初始卡号
   _loadTransferData() async {
     Future.wait({
-      CardDataRepository().getCardList('GetCardList'),
+      // CardDataRepository().getCardList('GetCardList'),
+      ApiClientAccount().getCardList(GetCardListReq()),
     }).then((value) {
       value.forEach((element) {
         //通过绑定手机号查询卡列表接口POST
@@ -1215,8 +1219,9 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
   _loadData(String cardNo) async {
     final prefs = await SharedPreferences.getInstance();
     _localeCcy = prefs.getString(ConfigKey.LOCAL_CCY);
-    CardDataRepository()
-        .getCardBalByCardNo(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq')
+    // CardDataRepository()
+    ApiClientAccount()
+        .getCardBalByCardNo(GetSingleCardBalReq(cardNo))
         .then((element) {
       if (this.mounted) {
         setState(() {
@@ -1285,20 +1290,21 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
         _payerCcy != '' &&
         (_payeeTransferController.text != '' ||
             _payerTransferController.text != '')) {
-      ForexTradingRepository()
+      // ForexTradingRepository()
+      ApiClientBill()
           .transferTrial(
-              TransferTrialReq(
-                opt: _opt,
-                buyCcy: _payerCcy,
-                sellCcy: _payeeCcy,
-                buyAmount: _payerTransferController.text == ''
-                    ? '0'
-                    : _payerTransferController.text,
-                sellAmount: _payeeTransferController.text == ''
-                    ? '0'
-                    : _payeeTransferController.text,
-              ),
-              'TransferTrialReq')
+        TransferTrialReq(
+          opt: _opt,
+          buyCcy: _payerCcy,
+          sellCcy: _payeeCcy,
+          buyAmount: _payerTransferController.text == ''
+              ? '0'
+              : _payerTransferController.text,
+          sellAmount: _payeeTransferController.text == ''
+              ? '0'
+              : _payeeTransferController.text,
+        ),
+      )
           .then((data) {
         print(" opt: " +
             _opt +
@@ -1349,9 +1355,8 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
 
   //根据账号查询名称
   Future _getCardByCardNo(String cardNo) async {
-    TransferDataRepository()
-        .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
-        .then((data) {
+    // TransferDataRepository()
+    Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo)).then((data) {
       if (this.mounted) {
         setState(() {
           _payeeNameController.text = data.ciName;

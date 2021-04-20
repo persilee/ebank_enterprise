@@ -15,6 +15,7 @@ import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -68,7 +69,8 @@ class _MinePageState extends State<MinePage>
     });
 
     EventBusUtils.getInstance().on<ChangeHeadPortraitEvent>().listen((event) {
-      if (event.state == 200 || event.state == 100 ||
+      if (event.state == 200 ||
+          event.state == 100 ||
           event.state == 300 &&
               (event.headPortrait != null && event.headPortrait != '')) {
         setState(() {
@@ -107,7 +109,8 @@ class _MinePageState extends State<MinePage>
                           arguments: _userInfoResp)
                       .then((value) {
                     setState(() {
-                      _headPortraitUrl = SpUtil.getString(ConfigKey.USER_AVATAR_URL);
+                      _headPortraitUrl =
+                          SpUtil.getString(ConfigKey.USER_AVATAR_URL);
                       _language = Intl.getCurrentLocale();
                     });
                     // _changeUserInfoShow(_userInfoResp);
@@ -800,7 +803,8 @@ class _MinePageState extends State<MinePage>
     String userID = prefs.getString(ConfigKey.USER_ID);
     HSProgressHUD.show();
     UserDataRepository()
-        .logout(LogoutReq(userID, _userName), 'logout')
+        // ApiClientAccount()
+        .logout(LogoutReq(userID, _userName), '')
         .then((data) {
       HSProgressHUD.dismiss();
       if (this.mounted) {
@@ -906,8 +910,9 @@ class _MinePageState extends State<MinePage>
 
   //版本更新接口
   _getLastVersion() async {
-    VersionDataRepository()
-        .getlastVersion(GetLastVersionReq('0', '1'), 'getLastVersion')
+    // VersionDataRepository()
+    ApiClientAccount()
+        .getlastVersion(GetLastVersionReq('0', '1'))
         .then((value) {
       setState(() {
         lastVersionName = value.versionName;
