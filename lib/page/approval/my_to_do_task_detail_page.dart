@@ -90,24 +90,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       _contractModel = await ApiClient().findToDoTaskDetail(
           FindTodoTaskDetailBody(processId: widget.data.processId));
 
-      // 根据任务id请求该任务的审批历史
-      FindAllFinishedTaskModel _allFinishedTaskModel =
-          await ApiClient().findAllFinishedTask(
-        FindTaskBody(
-          page: 1,
-          pageSize: 6,
-          tenantId: 'EB',
-          custId: SpUtil.getString(ConfigKey.CUST_ID),
-          taskId: _taskId,
-        ),
-      );
-      _allFinishedTaskModel.rows.forEach((data) {
-        _finishedList.add(_buildAvatar(
-          'https://api.lishaoy.net/files/22/serve?size=medium',
-          data.applicantName,
-        ));
-      });
-
       // openTdContractApproval - 开立定期存单
       if (_processKey == 'openTdContractApproval') {
         _loadOpenTdData(_contractModel);
@@ -151,8 +133,18 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   void _loadTransferPlanData(_contractModel) {
     TransferPlanModel.TransferPlanDetailModel transferPlanDetailModel =
         TransferPlanModel.TransferPlanDetailModel.fromJson(_contractModel);
+
     TransferPlanModel.OperateEndValue data =
         transferPlanDetailModel.operateEndValue;
+
+    // 添加历史审批记录
+    if(transferPlanDetailModel.commentList.isNotEmpty) {
+      transferPlanDetailModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
     if (this.mounted) {
       setState(() {
         _transferPlanList
@@ -202,8 +194,18 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         internationalTransferDetailModel =
         InternationalModel.InternationalTransferDetailModel.fromJson(
             _contractModel);
+
     InternationalModel.OperateEndValue data =
         internationalTransferDetailModel.operateEndValue;
+
+    // 添加历史审批记录
+    if(internationalTransferDetailModel.commentList.isNotEmpty) {
+      internationalTransferDetailModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
     if (this.mounted) {
       setState(() {
         _internationalList
@@ -252,8 +254,18 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   void _loadOneToOneData(_contractModel) {
     OneToOneModel.OneToOneTransferDetailModel oneToOneTransferDetailModel =
         OneToOneModel.OneToOneTransferDetailModel.fromJson(_contractModel);
+
     OneToOneModel.OperateEndValue data =
         oneToOneTransferDetailModel.operateEndValue;
+
+    // 添加历史审批记录
+    if(oneToOneTransferDetailModel.commentList.isNotEmpty) {
+      oneToOneTransferDetailModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
     if (this.mounted) {
       setState(() {
         _oneToOneList.add(_buildTitle(S.current.approve_gathering_information));
@@ -288,8 +300,18 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   void _loadEarlyRedData(_contractModel) {
     EarlyRedModel.EarlyRedTdContractDetailModel earlyRedTdContractDetailModel =
         EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
+
     EarlyRedModel.OperateEndValue data =
         earlyRedTdContractDetailModel.operateEndValue;
+
+    // 添加历史审批记录
+    if(earlyRedTdContractDetailModel.commentList.isNotEmpty) {
+      earlyRedTdContractDetailModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
     if (this.mounted) {
       setState(() {
         _earlyRedTdList.add(_buildTitle(S.current.approve_basic_information));
@@ -342,6 +364,14 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     OpenTDModel.OperateEndValue data =
         openTdContractDetailModel?.operateEndValue;
 
+    // 添加历史审批记录
+    if(openTdContractDetailModel.commentList.isNotEmpty) {
+      openTdContractDetailModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
     if (this.mounted) {
       setState(() {
         _openTdList.add(_buildTitle(S.current.approve_basic_information));
@@ -386,7 +416,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                   // 根据processKey动态显示 任务详情
                   _buildTaskDetail(_processKey),
                   // 审批历史
-                  // if (_finishedList.length > 0) _buildHistoryTask(context),
+                  if (_finishedList.length > 0) _buildHistoryTask(context),
                   // 我的审批
                   _myApproval(context),
                 ],
@@ -1014,7 +1044,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             CompleteTaskBody(
               approveResult: true,
               comment: _comment,
-              rejectToStart: false,
               taskId: widget.data.taskId,
             ),
           );

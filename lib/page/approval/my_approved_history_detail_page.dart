@@ -133,8 +133,18 @@ class _MyApprovedHistoryDetailPageState
   void _loadTransferPlanData(_contractModel) {
     TransferPlanModel.TransferPlanDetailModel transferPlanDetailModel =
         TransferPlanModel.TransferPlanDetailModel.fromJson(_contractModel);
+
     TransferPlanModel.OperateEndValue data =
         transferPlanDetailModel.operateEndValue;
+
+    // 添加历史审批记录
+    if(transferPlanDetailModel.commentList.isNotEmpty) {
+      transferPlanDetailModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
     if (this.mounted) {
       setState(() {
         _transferPlanList
@@ -180,8 +190,18 @@ class _MyApprovedHistoryDetailPageState
         internationalTransferDetailModel =
         InternationalModel.InternationalTransferDetailModel.fromJson(
             _contractModel);
+
     InternationalModel.OperateEndValue data =
         internationalTransferDetailModel.operateEndValue;
+
+    // 添加历史审批记录
+    if(internationalTransferDetailModel.commentList.isNotEmpty) {
+      internationalTransferDetailModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
     if (this.mounted) {
       setState(() {
         _internationalList
@@ -224,8 +244,18 @@ class _MyApprovedHistoryDetailPageState
   void _loadOneToOneData(_contractModel) {
     OneToOneModel.OneToOneTransferDetailModel oneToOneTransferDetailModel =
         OneToOneModel.OneToOneTransferDetailModel.fromJson(_contractModel);
+
     OneToOneModel.OperateEndValue data =
         oneToOneTransferDetailModel.operateEndValue;
+
+    // 添加历史审批记录
+    if(oneToOneTransferDetailModel.commentList.isNotEmpty) {
+      oneToOneTransferDetailModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
     if (this.mounted) {
       setState(() {
         _oneToOneList.add(_buildTitle(S.current.approve_gathering_information));
@@ -260,8 +290,18 @@ class _MyApprovedHistoryDetailPageState
   void _loadEarlyRedData(_contractModel) {
     EarlyRedModel.EarlyRedTdContractDetailModel earlyRedTdContractDetailModel =
         EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
+
     EarlyRedModel.OperateEndValue data =
         earlyRedTdContractDetailModel.operateEndValue;
+
+    // 添加历史审批记录
+    if(earlyRedTdContractDetailModel.commentList.isNotEmpty) {
+      earlyRedTdContractDetailModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
     if (this.mounted) {
       setState(() {
         _earlyRedTdList.add(_buildTitle(S.current.approve_basic_information));
@@ -310,8 +350,18 @@ class _MyApprovedHistoryDetailPageState
   void _loadOpenTdData(_contractModel) {
     OpenTDModel.OpenTdContractDetailModel openTdContractDetailModel =
         OpenTDModel.OpenTdContractDetailModel.fromJson(_contractModel);
+
     OpenTDModel.OperateEndValue data =
         openTdContractDetailModel?.operateEndValue;
+
+    // 添加历史审批记录
+    if(openTdContractDetailModel.commentList.isNotEmpty) {
+      openTdContractDetailModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
     if (this.mounted) {
       setState(() {
         _openTdList.add(_buildTitle(S.current.approve_basic_information));
@@ -348,7 +398,7 @@ class _MyApprovedHistoryDetailPageState
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // 审批历史
-                  // if (_finishedList.length > 0) _buildHistoryTask(context),
+                  if (_finishedList.length > 0) _buildHistoryTask(context),
                   // 根据processKey动态显示 任务详情
                   _buildTaskDetail(_processKey),
                 ],
