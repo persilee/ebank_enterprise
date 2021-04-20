@@ -286,7 +286,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
   // earlyRedTdContractApproval - 定期提前结清
   void _loadEarlyRedData(_contractModel) {
-    print('1111111111111111');
     EarlyRedModel.EarlyRedTdContractDetailModel earlyRedTdContractDetailModel =
         EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
     EarlyRedModel.OperateEndValue data =
@@ -387,7 +386,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                   // 根据processKey动态显示 任务详情
                   _buildTaskDetail(_processKey),
                   // 审批历史
-                  if (_finishedList.length > 0) _buildHistoryTask(context),
+                  // if (_finishedList.length > 0) _buildHistoryTask(context),
                   // 我的审批
                   _myApproval(context),
                 ],

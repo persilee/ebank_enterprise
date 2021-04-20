@@ -229,16 +229,26 @@ class _MyApprovedHistoryDetailPageState
     if (this.mounted) {
       setState(() {
         _oneToOneList.add(_buildTitle(S.current.approve_gathering_information));
+        _oneToOneList.add(_buildContentItem(
+            S.current.approve_account, data?.payeeCardNo ?? ''));
+        _oneToOneList.add(_buildContentItem(
+            S.current.approve_currency, data?.creditCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.debitAmount ?? '0')) ?? ''));
+            f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
         _oneToOneList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
         _oneToOneList.add(_buildTitle(S.current.approve_payment_information));
+        _oneToOneList.add(_buildContentItem(
+            S.current.approve_account, data?.payerCardNo ?? ''));
+        _oneToOneList.add(_buildContentItem(
+            S.current.approve_name_account, data?.payerName ?? ''));
+        _oneToOneList.add(_buildContentItem(
+            S.current.approve_currency, data?.debitCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
+            f.format(double.parse(data?.debitAmount)) ?? ''));
         _oneToOneList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
@@ -337,10 +347,8 @@ class _MyApprovedHistoryDetailPageState
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  //提示
-                  _tips(),
                   // 审批历史
-                  if (_finishedList.length > 0) _buildHistoryTask(context),
+                  // if (_finishedList.length > 0) _buildHistoryTask(context),
                   // 根据processKey动态显示 任务详情
                   _buildTaskDetail(_processKey),
                 ],

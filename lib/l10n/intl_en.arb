@@ -565,7 +565,7 @@
   "approve_country_region": "Country/Region",
   "approve_swift_code": "SWIFT Code",
   "approve_collecting_bank": "Collecting bank",
-  "approve_payment_method": "Payment method of commission",
+  "approve_payment_method": "Transfer fees",
   "approve_project_information": "Project information",
   "approve_project_name": "Project name",
   "approve_appointment_frequency": "Make an appointment to the frequency",
