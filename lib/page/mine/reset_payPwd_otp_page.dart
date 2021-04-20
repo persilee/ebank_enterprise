@@ -36,6 +36,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   Timer _timer;
   int countdownTime = 0;
   String _phone = '';
+  String _smsCode = '';
   // var _belongCustStatus = '0'; //用户状态
 
   @override
@@ -187,6 +188,11 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
         msg: S.current.sms_error,
         gravity: ToastGravity.CENTER,
       );
+    } else if(_smsCode != _sms.text) {
+      Fluttertoast.showToast(
+        msg: S.current.sms_verification_error,
+        gravity: ToastGravity.CENTER,
+      );
     } else {
       //请求-未写
       HSProgressHUD.show();
@@ -322,6 +328,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
         setState(() {
           // _sms.text = '123456';
         });
+        _smsCode = data.smsCode;
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {

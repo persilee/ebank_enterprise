@@ -100,16 +100,23 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
             // padding: EdgeInsets.only(left: 20, right: 20),
             child: Column(
               children: [
+                // _flatBtnNuitWidget(S.of(context).changPayPws, true, () {
+                //   (['0', '1', '2', '3', ''].contains(_belongCustStatus))
+                //       ? _notOpenAccountTip()
+                //       : Navigator.pushNamed(context, changePayPS);
+                // }),
                 _flatBtnNuitWidget(S.of(context).changPayPws, true, () {
-                  (['0', '1', '2', '3', ''].contains(_belongCustStatus))
-                      ? _notOpenAccountTip()
-                      : Navigator.pushNamed(context, changePayPS);
+                  Navigator.pushNamed(context, changePayPS);
                 }),
                 _flatBtnNuitWidget(S.of(context).resetPayPwd, true, () {
-                  (['0', '1', '2', '3', ''].contains(_belongCustStatus))
-                      ? _notOpenAccountTip()
-                      : Navigator.pushNamed(context, pageResetPayPwdOtp);
+                  Navigator.pushNamed(context, pageResetPayPwdOtp);
                 }),
+                // _flatBtnNuitWidget(S.of(context).resetPayPwd, true, () {
+                //   (['0', '1', '2', '3', ''].contains(_belongCustStatus))
+                //       ? _notOpenAccountTip()
+                //       : Navigator.pushNamed(context, pageResetPayPwdOtp);
+                // }),
+
               ],
             ),
           ),

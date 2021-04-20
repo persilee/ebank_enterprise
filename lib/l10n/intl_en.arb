@@ -590,6 +590,7 @@
   "avatar_picture_saved_successfully": "The picture was saved successfully.",
   "avatar_picture_saved_failed": "Image save failed",
   "avatar_title": "Avatar",
+  "sms_verification_error": "The SMS verification code is wrong, please enter it again",
   "lishaoying_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李少颖（待办）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "lijiawei_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李家伟（开户）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "openAccout_basicInformation": "General Information",
