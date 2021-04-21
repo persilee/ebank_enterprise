@@ -4,6 +4,7 @@ import 'package:ebank_mobile/data/source/model/logout.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_timeDeposit.dart';
+import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/http/retrofit/base_response.dart';
 import 'package:ebank_mobile/util/login_save_user_data.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -14,8 +15,13 @@ class ApiClientPackaging {
   Future<LoginResp> login(LoginReq loginReq) async {
     BaseResponse resp = await ApiClientAccount().login(loginReq);
     _saveToken(resp.token ?? '');
-    LoginResp loginResp = LoginResp.fromJson(resp.body);
-    return loginResp;
+
+    if (resp.msgCd == '0000') {
+      LoginResp loginResp = LoginResp.fromJson(resp.body);
+      return loginResp;
+    } else {
+      return Future.error(AppException(resp?.msgCd, resp?.msgInfo));
+    }
   }
 
   /// 获取用户信息

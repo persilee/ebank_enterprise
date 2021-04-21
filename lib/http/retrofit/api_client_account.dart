@@ -50,17 +50,6 @@ abstract class ApiClientAccount {
   @POST('/cust/user/getUser')
   Future<UserInfoResp> getUserInfo(@Body() GetUserInfoReq req);
 
-  // Future<UserInfoResp> getUserInfo(GetUserInfoReq req, String tag) {
-  //   Future<UserInfoResp> requestData = request(
-  //       '/cust/user/getUser', req, tag, (data) => UserInfoResp.fromJson(data));
-  //   requestData.then((value) => {
-  //         SaveUserDataForGetUser(
-  //           value,
-  //         ),
-  //       });
-  //   return requestData;
-  // }
-
   /// 安全退出
   @POST('/security/logout')
   Future<LogoutResp> logout(@Body() LogoutReq req);

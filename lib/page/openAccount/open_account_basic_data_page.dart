@@ -6,14 +6,12 @@ import 'dart:convert';
 /// Date: 2021-03-17
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/open_account_Industry_two_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_get_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
-import 'package:ebank_mobile/data/source/open_account_repository.dart';
-import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -94,7 +92,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   List<IdType> _industrialNatures = [];
 
   ///商业行业性质二级请求类型
-  List<IdType> _industrialNaturesTwo = [];
+  List<RedisRspDto> _industrialNaturesTwo = [];
 
   @override
   void initState() {
@@ -209,6 +207,9 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       return false;
     }
     if (_industrialNatureText == null || _industrialNatureText == '') {
+      return false;
+    }
+    if (_industrialNatureTwoText == null || _industrialNatureTwoText == '') {
       return false;
     }
     return true;
@@ -372,19 +373,19 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               },
             ),
           ),
-          // Container(
-          //   child: _oneLayerSelectWidget(
-          //     context,
-          //     S.of(context).openAccount_industryNatureTwo,
-          //     _industrialNatureTwoText,
-          //     S.of(context).please_select,
-          //     false,
-          //     () {
-          //       print('商业/行业性质二级选择');
-          //       _selectIndustrialNatureTwo(context);
-          //     },
-          //   ),
-          // ),
+          Container(
+            child: _oneLayerSelectWidget(
+              context,
+              S.of(context).openAccount_industryNatureTwo,
+              _industrialNatureTwoText,
+              S.of(context).please_select,
+              false,
+              () {
+                print('商业/行业性质二级选择');
+                _selectIndustrialNatureTwo(context);
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -725,7 +726,11 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
 
     if (result != null && result != false) {
       IdType data = _industrialNatures[result];
-      _dataReq.corporatinAttributes = data.code;
+      if (data != null && data != _dataReq.corporatinAttributesIdType) {
+        _industrialNatureTwoText = '';
+        _getIndustrialNaturesTwo(data);
+      }
+      // _dataReq.corporatinAttributes = data.code;
       _dataReq.corporatinAttributesIdType = data;
       setState(() {
         _industrialNatureText = industrialList[result];
@@ -740,12 +745,19 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   void _selectIndustrialNatureTwo(BuildContext context) async {
     List<String> industrialTwoList = [];
 
-    if (_industrialNatures.length > 0) {
+    if (_industrialNaturesTwo.length > 0) {
       industrialTwoList = [];
       String _language = Intl.getCurrentLocale();
       _industrialNaturesTwo.forEach((element) {
-        industrialTwoList.add(_language == 'en' ? element.name : element.cname);
+        industrialTwoList
+            .add(_language == 'en' ? element.engName : element.localName);
       });
+    } else {
+      Fluttertoast.showToast(
+        msg: S.of(context).openAccount_industryNatureNotSelect_tip,
+        gravity: ToastGravity.CENTER,
+      );
+      return;
     }
 
     final result = await showHsgBottomSheet(
@@ -757,9 +769,9 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     );
 
     if (result != null && result != false) {
-      IdType data = _industrialNaturesTwo[result];
+      RedisRspDto data = _industrialNaturesTwo[result];
       _dataReq.corporatinAttributes = data.code;
-      _dataReq.corporatinAttributesIdType = data;
+      _dataReq.corporatinAttributesIdTypeTwo = data;
       setState(() {
         _industrialNatureTwoText = industrialTwoList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();
@@ -802,9 +814,35 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _industrialNatures = data.publicCodeGetRedisRspDtoList;
+      }
+    }).catchError((e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
+    });
+  }
+
+  /// 通过商业行业性质一级Code获取二级列表接口
+  void _getIndustrialNaturesTwo(IdType data) async {
+    final prefs = await SharedPreferences.getInstance();
+    String userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
+    String userId = prefs.getString(ConfigKey.USER_ID);
+
+    HSProgressHUD.show();
+    SubPublicCodeByTypeReq req = SubPublicCodeByTypeReq(
+      'BIZ_IDU_SUB',
+      userAccount,
+      userId,
+      data.code,
+    );
+    ApiClientOpenAccount().getSubPublicCodeByType(req).then((data) {
+      HSProgressHUD.dismiss();
+      if (data.publicCodeGetRedisRspDtoList != null) {
         _industrialNaturesTwo = data.publicCodeGetRedisRspDtoList;
       }
     }).catchError((e) {
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
@@ -834,6 +872,10 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       HSProgressHUD.dismiss();
       var content = jsonDecode(data.content);
       _dataReq = OpenAccountQuickSubmitDataReq.fromJson(content);
+      if (_dataReq.corporatinAttributesIdType != null &&
+          _dataReq.corporatinAttributesIdType.code != null) {
+        _getIndustrialNaturesTwo(_dataReq.corporatinAttributesIdType);
+      }
       _changeShowData();
     }).catchError((e) {
       HSProgressHUD.dismiss();
@@ -855,18 +897,24 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
           _companyTypeText = _dataReq.custCategoryIdType.name;
           _countryOrRegionText = _dataReq.idIssuePlaceCountryRegionModel.cntyNm;
           _industrialNatureText = _dataReq.corporatinAttributesIdType.name;
+          _industrialNatureTwoText =
+              _dataReq.corporatinAttributesIdTypeTwo.engName;
         } else if (_language == 'zh_CN') {
           _documentTypeText = _dataReq.idTypeIdType.cname;
           _companyTypeText = _dataReq.custCategoryIdType.cname;
           _countryOrRegionText =
               _dataReq.idIssuePlaceCountryRegionModel.cntyCnm;
           _industrialNatureText = _dataReq.corporatinAttributesIdType.cname;
+          _industrialNatureTwoText =
+              _dataReq.corporatinAttributesIdTypeTwo.localName;
         } else {
           _documentTypeText = _dataReq.idTypeIdType.cname;
           _companyTypeText = _dataReq.custCategoryIdType.cname;
           _countryOrRegionText =
               _dataReq.idIssuePlaceCountryRegionModel.cntyTcnm;
           _industrialNatureText = _dataReq.corporatinAttributesIdType.cname;
+          _industrialNatureTwoText =
+              _dataReq.corporatinAttributesIdTypeTwo.localName;
         }
 
         _nextBtnEnabled = _judgeButtonIsEnabled();

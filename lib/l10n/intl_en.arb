@@ -692,18 +692,14 @@
   "loan_trail_plan_first": "First issue",
   "loan_trail_plan_second": "Should be repaid",
   "loan_trail_title": "Loan claim",
-  "loan_application_amount_check":"Application amount cannot be 0",
-  "loan_application_apply_pending":"Pending",
-  "loan_application_apply_processed":"Processed",
-
-
-
-
-
+  "loan_application_amount_check": "Application amount cannot be 0",
+  "loan_application_apply_pending": "Pending",
+  "loan_application_apply_processed": "Processed",
   "open_account_goto_ebank_tip": "Dear user. Since you are not an invited customer, please first invite through an enterprise service provider, or go to corporate online banking to apply for an account.",
   "openAccount_faceSign_results_content": "FaceSign data submitted successfully.",
   "openAccount_industryNatureTwo": "Business/Industry Nature Segmentation",
   "openAccount_industryNatureTwo_select": "Business/Industry Nature Segmentation Selection",
+  "openAccount_industryNatureNotSelect_tip": "Please select the business/industry nature first!",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "transfer_from1": "Transfer From",
   "payer_currency": "Payer Currency",

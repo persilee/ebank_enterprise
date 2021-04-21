@@ -7,11 +7,15 @@ class FaceSignIDReq extends Object {
   @JsonKey(name: 'phone')
   String phone;
 
+  @JsonKey(name: 'areaCode')
+  String areaCode;
+
   @JsonKey(name: 'sigCode')
   String sigCode;
 
   FaceSignIDReq(
     this.phone,
+    this.areaCode,
     this.sigCode,
   );
 
