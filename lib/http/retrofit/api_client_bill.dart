@@ -35,12 +35,12 @@ abstract class ApiClientBill {
   @POST('/ddep/transfer/transferTrial')
   Future<TransferTrialResp> transferTrial(@Body() TransferTrialReq req);
 
-  /// 外汇买卖
+  /// 一对一转账
   @POST('/ddep/transfer/doTransferAccout')
   Future<DoTransferAccoutResp> doTransferAccout(
       @Body() DoTransferAccoutReq req);
 
-  ///
+  /// 外汇买卖
   @POST('/ddep/transfer/foreignCcy')
   Future<ForeignCcyResp> foreignCcy(@Body() ForeignCcyReq req);
 
