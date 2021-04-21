@@ -5,10 +5,7 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
-import 'package:ebank_mobile/data/source/card_data_repository.dart';
-import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
-import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
@@ -17,9 +14,6 @@ import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
-import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
-import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
-import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
@@ -230,8 +224,8 @@ class _TransferInterPageState extends State<TransferInterPage> {
         _countryCode = rowPartner.district;
         _payeeAddressController.text =
             rowPartner == null ? '' : rowPartner.payeeAddress;
-        check = true;
         _boolBut();
+        check = true;
       }
     });
     return Scaffold(
@@ -662,6 +656,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //增加转账伙伴图标
   Widget _getImage() {
+    _getTransferFeeList();
     return InkWell(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -1084,12 +1079,22 @@ class _TransferInterPageState extends State<TransferInterPage> {
       if (data.publicCodeGetRedisRspDtoList != null) {
         transferFeeList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {
-          if (_language == 'zh_CN') {
+          if (_language == 'zh_CN' || _language == 'zh_HK') {
             transferFeeList.add(e.cname);
           } else {
             transferFeeList.add(e.name);
           }
         });
+        for (int i = 0; i < transferFeeList.length; i++) {
+          if (_transferFee == i.toString()) {
+            if (this.mounted) {
+              setState(() {
+                _transferFee = transferFeeList[i];
+              });
+            }
+            break;
+          }
+        }
       }
     });
   }
