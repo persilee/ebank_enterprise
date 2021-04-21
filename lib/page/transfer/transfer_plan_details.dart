@@ -6,7 +6,6 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_plan_details.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_plan_list.dart';
-import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/util/format_util.dart';
