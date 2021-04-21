@@ -14,6 +14,8 @@ import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_deta
     as OneToOneModel;
 import 'package:ebank_mobile/data/source/model/approval/open_td_contract_detail_model.dart'
     as OpenTDModel;
+import 'package:ebank_mobile/data/source/model/approval/foreign_transfer_model.dart'
+    as ForeignTransferModel;
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
@@ -21,6 +23,7 @@ import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:sp_util/sp_util.dart';
 
@@ -47,8 +50,10 @@ class _MyApprovedHistoryDetailPageState
   List<Widget> _oneToOneList = [];
   List<Widget> _internationalList = [];
   List<Widget> _transferPlanList = [];
+  List<Widget> _foreignTransferList = [];
   List<Widget> _finishedList = [];
   final f = NumberFormat("#,##0.00", "en_US");
+  final fj = NumberFormat("#,##0", "ja-JP");
 
   @override
   void initState() {
@@ -111,6 +116,10 @@ class _MyApprovedHistoryDetailPageState
       else if (_processKey == 'transferPlanApproval') {
         _loadTransferPlanData(_contractModel);
       }
+      // foreignTransferApproval - 外汇买卖
+      else if (_processKey == 'foreignTransferApproval') {
+        _loadForeignTransferData(_contractModel);
+      }
     } catch (e) {
       if ((e as DioError).error is NeedLogin) {
         Navigator.of(context).pushAndRemoveUntil(
@@ -121,9 +130,58 @@ class _MyApprovedHistoryDetailPageState
           return true;
         });
       } else {
-        print('error: ${e.toString()}');
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
       }
       setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  // foreignTransferApproval - 外汇买卖
+  void _loadForeignTransferData(_contractModel) {
+    ForeignTransferModel.ForeignTransferModel foreignTransferModel =
+        ForeignTransferModel.ForeignTransferModel.fromJson(_contractModel);
+
+    ForeignTransferModel.OperateEndValue data =
+        foreignTransferModel.operateEndValue;
+
+    // 添加历史审批记录
+    if (foreignTransferModel.commentList.isNotEmpty) {
+      foreignTransferModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
+    if (this.mounted) {
+      setState(() {
+        _foreignTransferList
+            .add(_buildTitle(S.current.approve_foreign_exchange_information));
+        _foreignTransferList.add(_buildContentItem(
+            S.current.approve_debit_account_f, data?.buyDac ?? ''));
+        _foreignTransferList.add(_buildContentItem(
+            S.current.approve_debit_currency, data?.buyCcy ?? ''));
+        _foreignTransferList.add(_buildContentItem(
+            S.current.approve_debit_amount,
+            // 处理日元没有小数
+            data?.buyCcy == 'JPY'
+                ? fj.format(double.parse(data?.buyAmt ?? '0')) ?? ''
+                : f.format(double.parse(data?.buyAmt ?? '0')) ?? ''));
+        _foreignTransferList.add(_buildContentItem(
+            S.current.approve_credit_account, data?.sellDac ?? ''));
+        _foreignTransferList.add(_buildContentItem(
+            S.current.approve_credit_currency, data?.sellCcy ?? ''));
+        _foreignTransferList.add(_buildContentItem(
+            S.current.approve_credit_amount,
+            data?.buyCcy == 'JPY'
+            ? fj.format(double.parse(data?.sellAmt ?? '0')) ?? ''
+            : f.format(double.parse(data?.sellAmt ?? '0')) ?? ''));
+        _foreignTransferList.add(
+            _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
         _isLoading = false;
       });
     }
@@ -138,7 +196,7 @@ class _MyApprovedHistoryDetailPageState
         transferPlanDetailModel.operateEndValue;
 
     // 添加历史审批记录
-    if(transferPlanDetailModel.commentList.isNotEmpty) {
+    if (transferPlanDetailModel.commentList.isNotEmpty) {
       transferPlanDetailModel.commentList.forEach((data) {
         // 暂时 commentList 都为空，里面的具体字段不明
         // _finishedList.add(_buildAvatar('',''));
@@ -195,7 +253,7 @@ class _MyApprovedHistoryDetailPageState
         internationalTransferDetailModel.operateEndValue;
 
     // 添加历史审批记录
-    if(internationalTransferDetailModel.commentList.isNotEmpty) {
+    if (internationalTransferDetailModel.commentList.isNotEmpty) {
       internationalTransferDetailModel.commentList.forEach((data) {
         // 暂时 commentList 都为空，里面的具体字段不明
         // _finishedList.add(_buildAvatar('',''));
@@ -213,7 +271,9 @@ class _MyApprovedHistoryDetailPageState
         _internationalList.add(_buildContentItem(
             S.current.approve_currency, data?.creditCurrency ?? ''));
         _internationalList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
+            data?.creditCurrency == 'JPY'
+                ? fj.format(double.parse(data?.creditAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
         _internationalList.add(_buildContentItem(
@@ -229,8 +289,16 @@ class _MyApprovedHistoryDetailPageState
         );
         _internationalList
             .add(_buildTitle(S.current.approve_payment_information));
+        _internationalList.add(_buildContentItem(
+            S.current.approve_account, data?.payerCardNo ?? ''));
+        _internationalList.add(_buildContentItem(
+            S.current.approve_name_account, data?.payerName ?? ''));
+        _internationalList.add(_buildContentItem(
+            S.current.approve_currency, data?.debitCurrency ?? ''));
         _internationalList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.debitAmount ?? '0')) ?? ''));
+            data?.debitCurrency == 'JPY'
+                ? fj.format(double.parse(data?.debitAmount ?? '0'))
+                : f.format(double.parse(data?.debitAmount ?? '0')) ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_payment_method, data?.costOptions ?? ''));
         _internationalList.add(
@@ -249,7 +317,7 @@ class _MyApprovedHistoryDetailPageState
         oneToOneTransferDetailModel.operateEndValue;
 
     // 添加历史审批记录
-    if(oneToOneTransferDetailModel.commentList.isNotEmpty) {
+    if (oneToOneTransferDetailModel.commentList.isNotEmpty) {
       oneToOneTransferDetailModel.commentList.forEach((data) {
         // 暂时 commentList 都为空，里面的具体字段不明
         // _finishedList.add(_buildAvatar('',''));
@@ -264,7 +332,9 @@ class _MyApprovedHistoryDetailPageState
         _oneToOneList.add(_buildContentItem(
             S.current.approve_currency, data?.creditCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
+            data?.creditCurrency == 'JPY'
+                ? fj.format(double.parse(data?.creditAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
         _oneToOneList.add(
@@ -278,7 +348,9 @@ class _MyApprovedHistoryDetailPageState
         _oneToOneList.add(_buildContentItem(
             S.current.approve_currency, data?.debitCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.debitAmount)) ?? ''));
+            data?.creditCurrency == 'JPY'
+                ? fj.format(double.parse(data?.debitAmount)) ?? ''
+                : f.format(double.parse(data?.debitAmount)) ?? ''));
         _oneToOneList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
@@ -295,7 +367,7 @@ class _MyApprovedHistoryDetailPageState
         earlyRedTdContractDetailModel.operateEndValue;
 
     // 添加历史审批记录
-    if(earlyRedTdContractDetailModel.commentList.isNotEmpty) {
+    if (earlyRedTdContractDetailModel.commentList.isNotEmpty) {
       earlyRedTdContractDetailModel.commentList.forEach((data) {
         // 暂时 commentList 都为空，里面的具体字段不明
         // _finishedList.add(_buildAvatar('',''));
@@ -309,10 +381,9 @@ class _MyApprovedHistoryDetailPageState
             S.current.approve_contract_no, data?.conNo ?? ''));
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_certificates_deposit_amount,
-            f.format(double.parse(data?.bal)) ?? ''));
-        _earlyRedTdList.add(_buildContentItem(
-            S.current.approve_certificates_deposit_amount,
-            f.format(double.parse(data?.bal ?? '0')) ?? ''));
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.bal ?? '0')) ?? ''
+                : f.format(double.parse(data?.bal ?? '0')) ?? ''));
         _earlyRedTdList.add(
             _buildContentItem(S.current.approve_currency, data?.ccy ?? ''));
         _earlyRedTdList.add(_buildContentItem(
@@ -355,7 +426,7 @@ class _MyApprovedHistoryDetailPageState
         openTdContractDetailModel?.operateEndValue;
 
     // 添加历史审批记录
-    if(openTdContractDetailModel.commentList.isNotEmpty) {
+    if (openTdContractDetailModel.commentList.isNotEmpty) {
       openTdContractDetailModel.commentList.forEach((data) {
         // 暂时 commentList 都为空，里面的具体字段不明
         // _finishedList.add(_buildAvatar('',''));
@@ -366,7 +437,9 @@ class _MyApprovedHistoryDetailPageState
       setState(() {
         _openTdList.add(_buildTitle(S.current.approve_basic_information));
         _openTdList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.bal ?? '0')) ?? ''));
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.bal ?? '0')) ?? ''
+                : f.format(double.parse(data?.bal ?? '0')) ?? ''));
         _openTdList.add(_buildContentItem(S.current.approve_interest_rate, ''));
         _openTdList.add(_buildContentItem(
             S.current.approve_certificates_deposit_money, data?.ccy ?? ''));
@@ -417,6 +490,7 @@ class _MyApprovedHistoryDetailPageState
         if (_processKey == 'internationalTransferApproval')
           ..._internationalList,
         if (_processKey == 'transferPlanApproval') ..._transferPlanList,
+        if (_processKey == 'foreignTransferApproval') ..._foreignTransferList,
       ],
     );
   }

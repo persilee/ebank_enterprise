@@ -21,7 +21,7 @@ import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_deta
 import 'package:ebank_mobile/data/source/model/approval/open_td_contract_detail_model.dart'
     as OpenTDModel;
 import 'package:ebank_mobile/data/source/model/approval/foreign_transfer_model.dart'
-as ForeignTransferModel;
+    as ForeignTransferModel;
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
@@ -69,6 +69,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   List<Widget> _foreignTransferList = [];
   List<Widget> _finishedList = [];
   final f = NumberFormat("#,##0.00", "en_US");
+  final fj = NumberFormat("#,##0", "ja-JP");
 
   @override
   void initState() {
@@ -118,7 +119,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _loadForeignTransferData(_contractModel);
       }
     } catch (e) {
-      print('eeeeeeeeee: ${(e as DioError).error}');
       if ((e as DioError).error is NeedLogin) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) {
@@ -129,23 +129,23 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         });
       } else {
         print('error: ${e.toString()}');
-        setState(() {
-          _isLoading = false;
-        });
       }
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
   // foreignTransferApproval - 外汇买卖
   void _loadForeignTransferData(_contractModel) {
     ForeignTransferModel.ForeignTransferModel foreignTransferModel =
-    ForeignTransferModel.ForeignTransferModel.fromJson(_contractModel);
+        ForeignTransferModel.ForeignTransferModel.fromJson(_contractModel);
 
     ForeignTransferModel.OperateEndValue data =
         foreignTransferModel.operateEndValue;
 
     // 添加历史审批记录
-    if(foreignTransferModel.commentList.isNotEmpty) {
+    if (foreignTransferModel.commentList.isNotEmpty) {
       foreignTransferModel.commentList.forEach((data) {
         // 暂时 commentList 都为空，里面的具体字段不明
         // _finishedList.add(_buildAvatar('',''));
@@ -155,21 +155,28 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     if (this.mounted) {
       setState(() {
         _foreignTransferList
-            .add(_buildTitle('外汇买卖信息'));
+            .add(_buildTitle(S.current.approve_foreign_exchange_information));
         _foreignTransferList.add(_buildContentItem(
-            '支出账户', data?.buyDac ?? ''));
+            S.current.approve_debit_account_f, data?.buyDac ?? ''));
         _foreignTransferList.add(_buildContentItem(
-            '支出币种', data?.buyCcy ?? ''));
+            S.current.approve_debit_currency, data?.buyCcy ?? ''));
         _foreignTransferList.add(_buildContentItem(
-            '支出金额', data?.buyAmt ?? ''));
+            S.current.approve_debit_amount,
+            // 处理日元没有小数
+            data?.buyCcy == 'JPY'
+                ? fj.format(double.parse(data?.buyAmt ?? '0')) ?? ''
+                : f.format(double.parse(data?.buyAmt ?? '0')) ?? ''));
         _foreignTransferList.add(_buildContentItem(
-            '收入账户', data?.sellDac ?? ''));
+            S.current.approve_credit_account, data?.sellDac ?? ''));
         _foreignTransferList.add(_buildContentItem(
-            '收入币种', data?.sellCcy ?? ''));
+            S.current.approve_credit_currency, data?.sellCcy ?? ''));
         _foreignTransferList.add(_buildContentItem(
-            '收入金额', data?.sellAmt ?? ''));
-        _foreignTransferList.add(_buildContentItem(
-            '汇率', data?.exRate ?? ''));
+            S.current.approve_credit_amount,
+            data?.buyCcy == 'JPY'
+                ? fj.format(double.parse(data?.sellAmt ?? '0')) ?? ''
+                : f.format(double.parse(data?.sellAmt ?? '0')) ?? ''));
+        _foreignTransferList.add(
+            _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
         _isLoading = false;
       });
     }
@@ -184,7 +191,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         transferPlanDetailModel.operateEndValue;
 
     // 添加历史审批记录
-    if(transferPlanDetailModel.commentList.isNotEmpty) {
+    if (transferPlanDetailModel.commentList.isNotEmpty) {
       transferPlanDetailModel.commentList.forEach((data) {
         // 暂时 commentList 都为空，里面的具体字段不明
         // _finishedList.add(_buildAvatar('',''));
@@ -245,7 +252,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         internationalTransferDetailModel.operateEndValue;
 
     // 添加历史审批记录
-    if(internationalTransferDetailModel.commentList.isNotEmpty) {
+    if (internationalTransferDetailModel.commentList.isNotEmpty) {
       internationalTransferDetailModel.commentList.forEach((data) {
         // 暂时 commentList 都为空，里面的具体字段不明
         // _finishedList.add(_buildAvatar('',''));
@@ -263,7 +270,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _internationalList.add(_buildContentItem(
             S.current.approve_currency, data?.creditCurrency ?? ''));
         _internationalList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
+            data?.creditCurrency == 'JPY'
+            ? fj.format(double.parse(data?.creditAmount ?? '0')) ?? ''
+            : f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
         _internationalList.add(_buildContentItem(
@@ -286,7 +295,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _internationalList.add(_buildContentItem(
             S.current.approve_currency, data?.debitCurrency ?? ''));
         _internationalList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.debitAmount ?? '0')) ?? ''));
+            data?.debitCurrency == 'JPY'
+            ? fj.format(double.parse(data?.debitAmount ?? '0'))
+            : f.format(double.parse(data?.debitAmount ?? '0')) ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_payment_method, data?.costOptions ?? ''));
         _internationalList.add(
@@ -305,7 +316,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         oneToOneTransferDetailModel.operateEndValue;
 
     // 添加历史审批记录
-    if(oneToOneTransferDetailModel.commentList.isNotEmpty) {
+    if (oneToOneTransferDetailModel.commentList.isNotEmpty) {
       oneToOneTransferDetailModel.commentList.forEach((data) {
         // 暂时 commentList 都为空，里面的具体字段不明
         // _finishedList.add(_buildAvatar('',''));
@@ -320,7 +331,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _oneToOneList.add(_buildContentItem(
             S.current.approve_currency, data?.creditCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
+            data?.creditCurrency == 'JPY'
+            ? fj.format(double.parse(data?.creditAmount ?? '0')) ?? ''
+            : f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
         _oneToOneList.add(
@@ -334,7 +347,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _oneToOneList.add(_buildContentItem(
             S.current.approve_currency, data?.debitCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.debitAmount)) ?? ''));
+            data?.creditCurrency == 'JPY'
+            ? fj.format(double.parse(data?.debitAmount)) ?? ''
+            : f.format(double.parse(data?.debitAmount)) ?? ''));
         _oneToOneList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
@@ -351,7 +366,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         earlyRedTdContractDetailModel.operateEndValue;
 
     // 添加历史审批记录
-    if(earlyRedTdContractDetailModel.commentList.isNotEmpty) {
+    if (earlyRedTdContractDetailModel.commentList.isNotEmpty) {
       earlyRedTdContractDetailModel.commentList.forEach((data) {
         // 暂时 commentList 都为空，里面的具体字段不明
         // _finishedList.add(_buildAvatar('',''));
@@ -365,7 +380,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             S.current.approve_contract_no, data?.conNo ?? ''));
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_certificates_deposit_amount,
-            f.format(double.parse(data?.bal ?? '0')) ?? ''));
+            data?.ccy == 'JPY'
+            ? fj.format(double.parse(data?.bal ?? '0')) ?? ''
+            : f.format(double.parse(data?.bal ?? '0')) ?? ''));
         _earlyRedTdList.add(
             _buildContentItem(S.current.approve_currency, data?.ccy ?? ''));
         _earlyRedTdList.add(_buildContentItem(
@@ -411,7 +428,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         openTdContractDetailModel?.operateEndValue;
 
     // 添加历史审批记录
-    if(openTdContractDetailModel.commentList.isNotEmpty) {
+    if (openTdContractDetailModel.commentList.isNotEmpty) {
       openTdContractDetailModel.commentList.forEach((data) {
         // 暂时 commentList 都为空，里面的具体字段不明
         // _finishedList.add(_buildAvatar('',''));
@@ -426,7 +443,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _openTdList.add(_buildContentItem(
             S.current.approve_terms_of_deposit, data?.tenor ?? ''));
         _openTdList.add(_buildContentItem(S.current.approve_amount,
-            f.format(double.parse(data?.bal ?? '0')) ?? ''));
+            data?.ccy == 'JPY'
+            ? fj.format(double.parse(data?.bal ?? '0')) ?? ''
+            : f.format(double.parse(data?.bal ?? '0')) ?? ''));
         _openTdList.add(_buildContentItem(S.current.approve_interest_rate, ''));
         _openTdList.add(_buildContentItem(
             S.current.approve_certificates_deposit_money, data?.ccy ?? ''));
@@ -1094,8 +1113,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
               taskId: widget.data.taskId,
             ),
           );
-          print(data);
-           // CompleteTaskModel completeTaskModel
           if (this.mounted) {
             setState(() {
               _btnIsLoadingEAA = false;

@@ -10,11 +10,17 @@ class ForeignCcyReq extends Object {
   @JsonKey(name: 'buyCcy')
   String buyCcy;
 
-  @JsonKey(name: 'ctaNo')
-  String ctaNo;
+  @JsonKey(name: 'buyDac')
+  String buyDac;
 
   @JsonKey(name: 'exRate')
   String exRate;
+
+  @JsonKey(name: 'exTime')
+  String exTime;
+
+  @JsonKey(name: 'payPassword')
+  String payPassword;
 
   @JsonKey(name: 'prodCd')
   String prodCd;
@@ -25,14 +31,24 @@ class ForeignCcyReq extends Object {
   @JsonKey(name: 'sellCcy')
   String sellCcy;
 
+  @JsonKey(name: 'sellDac')
+  String sellDac;
+
+  @JsonKey(name: 'smsCode')
+  String smsCode;
+
   ForeignCcyReq(
     this.buyAmt,
     this.buyCcy,
-    this.ctaNo,
+    this.buyDac,
     this.exRate,
+    this.exTime,
+    this.payPassword,
     this.prodCd,
     this.sellAmt,
     this.sellCcy,
+    this.sellDac,
+    this.smsCode,
   );
 
   factory ForeignCcyReq.fromJson(Map<String, dynamic> srcJson) =>

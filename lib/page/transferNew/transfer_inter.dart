@@ -727,8 +727,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
         msg: S.current.tdContract_balance_insufficient,
         gravity: ToastGravity.CENTER,
       );
-    }
-    if (_payeeCcy == _payerCcy &&
+    } else if (_payeeCcy == _payerCcy &&
         _payerAccount == _payeeAccountController.text) {
       Fluttertoast.showToast(
         msg: S.of(context).no_account_ccy_transfer,
