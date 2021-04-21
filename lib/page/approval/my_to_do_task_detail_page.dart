@@ -20,6 +20,8 @@ import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_deta
     as OneToOneModel;
 import 'package:ebank_mobile/data/source/model/approval/open_td_contract_detail_model.dart'
     as OpenTDModel;
+import 'package:ebank_mobile/data/source/model/approval/foreign_transfer_model.dart'
+as ForeignTransferModel;
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
@@ -64,6 +66,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   List<Widget> _oneToOneList = [];
   List<Widget> _internationalList = [];
   List<Widget> _transferPlanList = [];
+  List<Widget> _foreignTransferList = [];
   List<Widget> _finishedList = [];
   final f = NumberFormat("#,##0.00", "en_US");
 
@@ -110,6 +113,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       else if (_processKey == 'transferPlanApproval') {
         _loadTransferPlanData(_contractModel);
       }
+      // foreignTransferApproval - 外汇买卖
+      else if (_processKey == 'foreignTransferApproval') {
+        _loadForeignTransferData(_contractModel);
+      }
     } catch (e) {
       print('eeeeeeeeee: ${(e as DioError).error}');
       if ((e as DioError).error is NeedLogin) {
@@ -126,6 +133,45 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           _isLoading = false;
         });
       }
+    }
+  }
+
+  // foreignTransferApproval - 外汇买卖
+  void _loadForeignTransferData(_contractModel) {
+    ForeignTransferModel.ForeignTransferModel foreignTransferModel =
+    ForeignTransferModel.ForeignTransferModel.fromJson(_contractModel);
+
+    ForeignTransferModel.OperateEndValue data =
+        foreignTransferModel.operateEndValue;
+
+    // 添加历史审批记录
+    if(foreignTransferModel.commentList.isNotEmpty) {
+      foreignTransferModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
+    if (this.mounted) {
+      setState(() {
+        _foreignTransferList
+            .add(_buildTitle('外汇买卖信息'));
+        _foreignTransferList.add(_buildContentItem(
+            '支出账户', data?.buyDac ?? ''));
+        _foreignTransferList.add(_buildContentItem(
+            '支出币种', data?.buyCcy ?? ''));
+        _foreignTransferList.add(_buildContentItem(
+            '支出金额', data?.buyAmt ?? ''));
+        _foreignTransferList.add(_buildContentItem(
+            '收入账户', data?.sellDac ?? ''));
+        _foreignTransferList.add(_buildContentItem(
+            '收入币种', data?.sellCcy ?? ''));
+        _foreignTransferList.add(_buildContentItem(
+            '收入金额', data?.sellAmt ?? ''));
+        _foreignTransferList.add(_buildContentItem(
+            '汇率', data?.exRate ?? ''));
+        _isLoading = false;
+      });
     }
   }
 
@@ -436,6 +482,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         if (_processKey == 'internationalTransferApproval')
           ..._internationalList,
         if (_processKey == 'transferPlanApproval') ..._transferPlanList,
+        if (_processKey == 'foreignTransferApproval') ..._foreignTransferList,
       ],
     );
   }
@@ -1040,20 +1087,20 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         }
         try {
           // 请求审批接口
-          CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
+          var data = await ApiClient().completeTask(
             CompleteTaskBody(
               approveResult: true,
               comment: _comment,
               taskId: widget.data.taskId,
             ),
           );
-          if (completeTaskModel.msgCd == '0000') {
-            if (this.mounted) {
-              setState(() {
-                _btnIsLoadingEAA = false;
-                _btnIsEnable = true;
-              });
-            }
+          print(data);
+           // CompleteTaskModel completeTaskModel
+          if (this.mounted) {
+            setState(() {
+              _btnIsLoadingEAA = false;
+              _btnIsEnable = true;
+            });
             Navigator.pushReplacementNamed(context, pageDepositRecordSucceed);
           }
         } catch (e) {

@@ -67,7 +67,7 @@ abstract class ApiClient {
 
   /// 完成任务
   @POST('/wkfl/processTask/completeTask')
-  Future<CompleteTaskModel> completeTask(
+  Future<dynamic> completeTask(
       @Body() CompleteTaskBody completeTaskBody);
 
   /// 查询我的处理记录待办任务
