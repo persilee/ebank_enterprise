@@ -16,9 +16,12 @@ class ApiClientPackaging {
     BaseResponse resp = await ApiClientAccount().login(loginReq);
     _saveToken(resp.token ?? '');
 
-    if (resp.msgCd == '0000') {
+    if (resp.msgCd == '0000' || resp.msgCd == 'ECUST010') {
       LoginResp loginResp = LoginResp.fromJson(resp.body);
+      loginResp.errorCode = resp.msgCd;
       return loginResp;
+    } else if (resp.msgCd == 'ECUST009') {
+      return Future.error(AppException(resp?.msgCd, resp?.msgInfo));
     } else {
       return Future.error(AppException(resp?.msgCd, resp?.msgInfo));
     }

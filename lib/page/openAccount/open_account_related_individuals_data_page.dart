@@ -70,6 +70,9 @@ class _RelatedIndividualsDataPageState
   void initState() {
     _getPublicParameters();
 
+    _partner.partnerTypeIdType = null;
+    _partner.partnerType = '002';
+
     _documentNumberTEC.addListener(() {
       _documentNumberText = _documentNumberTEC.text;
       _partner.idNo = _documentNumberText;
@@ -147,9 +150,9 @@ class _RelatedIndividualsDataPageState
     if (_appellationText == null || _appellationText == '') {
       return false;
     }
-    if (_categoryText == null || _categoryText == '') {
-      return false;
-    }
+    // if (_categoryText == null || _categoryText == '') {
+    //   return false;
+    // }
     if (_documentTypeText == null || _documentTypeText == '') {
       return false;
     }
@@ -206,19 +209,19 @@ class _RelatedIndividualsDataPageState
           },
         ),
       ),
-      Container(
-        child: _oneLayerSelectWidget(
-          context,
-          S.of(context).openAccout_capacity,
-          _categoryText,
-          S.of(context).please_select,
-          false,
-          () {
-            print('类别');
-            _selectCategory(context);
-          },
-        ),
-      ),
+      // Container(
+      //   child: _oneLayerSelectWidget(
+      //     context,
+      //     S.of(context).openAccout_capacity,
+      //     _categoryText,
+      //     S.of(context).please_select,
+      //     false,
+      //     () {
+      //       print('类别');
+      //       _selectCategory(context);
+      //     },
+      //   ),
+      // ),
       Container(
         child: _oneLayerSelectWidget(
           context,
@@ -493,18 +496,7 @@ class _RelatedIndividualsDataPageState
 
   /// 类别输入值
   void _selectCategory(BuildContext context) async {
-    List<String> categoryList = [
-      // 'Sole Proprietor', // 獨資經營者
-      // 'Partner', // 合夥人
-      // 'Director', // 董事
-      // 'Legal Representative', //企業法人
-      // 'Authorised Signatory', //授權簽署人
-      // 'Ultimate Beneficial Owner', //最終實益擁有人
-      // 'Key Controller', //主要管理人
-      // 'Direct Appointee', //受任人
-      // 'Contact Person', //聯絡人
-      // 'Primary Users of Ebank', //網上理財主要使用者
-    ];
+    List<String> categoryList = [];
     if (_categoryTypes.length > 0) {
       categoryList = [];
       String _language = Intl.getCurrentLocale();
@@ -585,20 +577,20 @@ class _RelatedIndividualsDataPageState
       );
     });
 
-    //个人职位类别COPC
-    // PublicParametersRepository()
-    ApiClientOpenAccount().getIdType(GetIdTypeReq('COPC')) //COPC//POSIT
-        .then((data) {
-      if (data.publicCodeGetRedisRspDtoList != null) {
-        _categoryTypes = data.publicCodeGetRedisRspDtoList;
-        print('公共参数-个人职位类别-  ${data.publicCodeGetRedisRspDtoList}');
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-    });
+    // //个人职位类别COPC
+    // // PublicParametersRepository()
+    // ApiClientOpenAccount().getIdType(GetIdTypeReq('COPC')) //COPC//POSIT
+    //     .then((data) {
+    //   if (data.publicCodeGetRedisRspDtoList != null) {
+    //     _categoryTypes = data.publicCodeGetRedisRspDtoList;
+    //     print('公共参数-个人职位类别-  ${data.publicCodeGetRedisRspDtoList}');
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(
+    //     msg: e.toString(),
+    //     gravity: ToastGravity.CENTER,
+    //   );
+    // });
 
     //个人证件类型
     // PublicParametersRepository()
