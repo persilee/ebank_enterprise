@@ -23,7 +23,7 @@ import 'package:ebank_mobile/data/source/model/approval/open_td_contract_detail_
 import 'package:ebank_mobile/data/source/model/approval/foreign_transfer_model.dart'
     as ForeignTransferModel;
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';

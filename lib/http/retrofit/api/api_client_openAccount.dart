@@ -15,7 +15,7 @@ import 'package:ebank_mobile/data/source/model/open_account_signature_result.dar
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 
-import 'base_dio.dart';
+import '../base_dio.dart';
 
 part 'api_client_openAccount.g.dart';
 

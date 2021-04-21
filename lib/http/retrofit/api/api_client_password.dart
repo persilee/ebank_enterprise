@@ -13,7 +13,7 @@ import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 
-import 'base_dio.dart';
+import '../base_dio.dart';
 
 part 'api_client_password.g.dart';
 

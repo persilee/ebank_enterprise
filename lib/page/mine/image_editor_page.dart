@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'dart:io';
 
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/util/image_util.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';

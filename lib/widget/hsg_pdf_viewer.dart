@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:ebank_mobile/data/source/model/statement/statement_query_list_model.dart';
-import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
