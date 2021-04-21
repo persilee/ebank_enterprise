@@ -5,7 +5,6 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
-import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
@@ -668,7 +667,8 @@ class _TransferInterPageState extends State<TransferInterPage> {
                 _payeeNameController.text = rowListPartner.payeeName;
                 _payeeAccountController.text = rowListPartner.payeeCardNo;
                 _remarkController.text = rowListPartner.remark;
-                _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
+                // _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
+                _payeeCcy = rowListPartner.ccy;
                 _countryText = rowListPartner.district;
                 _countryCode = rowListPartner.district;
                 _bankNameController.text = _language == 'zh_CN'
@@ -689,6 +689,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
               }
               _boolBut();
               _rateCalculate();
+              _loadLocalCcy();
             });
           },
         );
@@ -974,25 +975,19 @@ class _TransferInterPageState extends State<TransferInterPage> {
           _payeeCcyList.add(e.code);
         });
       }
+      _payeeIndex = 0;
+      for (int i = 0; i < _payeeCcyList.length; i++) {
+        if (_payeeCcy == _payeeCcyList[i]) {
+          break;
+        } else {
+          _payeeIndex++;
+        }
+      }
     });
   }
 
   //汇率换算
   Future _rateCalculate() async {
-    // ForexTradingRepository()
-    //     .transferTrial(
-    //         TransferTrialReq(
-    //           opt: _opt,
-    //           buyCcy: _payerCcy,
-    //           sellCcy: _payeeCcy,
-    //           buyAmount: _payerTransferController.text == ''
-    //               ? '0'
-    //               : _payerTransferController.text,
-    //           sellAmount: _payeeTransferController.text == ''
-    //               ? '0'
-    //               : _payeeTransferController.text,
-    //         ),
-    //         'TransferTrialReq')
     Transfer()
         .transferTrial(TransferTrialReq(
       opt: _opt,
@@ -1006,16 +1001,6 @@ class _TransferInterPageState extends State<TransferInterPage> {
           : _payeeTransferController.text,
     ))
         .then((data) {
-      print(" opt: " +
-          _opt +
-          " sellCcy: " +
-          _payeeCcy +
-          " buyCcy: " +
-          _payerCcy +
-          " sellAmout: " +
-          _payeeTransferController.text +
-          " buyAmount: " +
-          _payerTransferController.text);
       if (this.mounted) {
         setState(() {
           if (_opt == 'B') {
@@ -1046,27 +1031,6 @@ class _TransferInterPageState extends State<TransferInterPage> {
     }).catchError((e) {
       Fluttertoast.showToast(
         msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-    });
-  }
-
-  //根据账号查询名称
-  Future _getCardByCardNo(String cardNo) async {
-    // TransferDataRepository()
-    //     .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
-    Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo)).then((data) {
-      if (this.mounted) {
-        setState(() {
-          _payeeNameController.text = data.ciName;
-        });
-      }
-    }).catchError((e) {
-      if (this.mounted) {
-        setState(() {});
-      }
-      Fluttertoast.showToast(
-        msg: S.current.no_account,
         gravity: ToastGravity.CENTER,
       );
     });
