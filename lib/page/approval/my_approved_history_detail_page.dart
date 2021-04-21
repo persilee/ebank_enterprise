@@ -78,24 +78,6 @@ class _MyApprovedHistoryDetailPageState
       _contractModel = await ApiClient().findHistoryTaskDetail(
           FindTodoTaskDetailBody(processId: widget.data.processId));
 
-      // 根据任务id请求该任务的审批历史
-      FindAllFinishedTaskModel _allFinishedTaskModel =
-          await ApiClient().findAllFinishedTask(
-        FindTaskBody(
-          page: 1,
-          pageSize: 6,
-          tenantId: 'EB',
-          custId: SpUtil.getString(ConfigKey.CUST_ID),
-          taskId: _taskId,
-        ),
-      );
-      _allFinishedTaskModel.rows.forEach((data) {
-        _finishedList.add(_buildAvatar(
-          'https://api.lishaoy.net/files/22/serve?size=medium',
-          data.applicantName,
-        ));
-      });
-
       // openTdContractApproval - 开立定期存单
       if (_processKey == 'openTdContractApproval') {
         _loadOpenTdData(_contractModel);
