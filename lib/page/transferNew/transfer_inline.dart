@@ -4,20 +4,15 @@
 /// Date: 2021-04-14
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_ccy_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
-import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
-import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
-import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_packaging.dart';
 import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page/transfer/data/transfer_internal_data.dart';
@@ -507,7 +502,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
                 _payeeNameController.text = rowListPartner.payeeName;
                 _payeeAccountController.text = rowListPartner.payeeCardNo;
                 _remarkController.text = rowListPartner.remark;
-                _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
+                // _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
+                _payeeCcy = rowListPartner.ccy;
                 _isAccount = false;
               }
               _boolBut();
@@ -750,29 +746,22 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     }).catchError((e) {});
   }
 
-  // 获取币种列表
-  Future _loadLocalCcy() async {
-    // PublicParametersRepository()
-    ApiClientOpenAccount().getIdType(GetIdTypeReq("CCY")).then((data) {
-      if (data.publicCodeGetRedisRspDtoList != null) {
-        _payeeCcyList.clear();
-        data.publicCodeGetRedisRspDtoList.forEach((e) {
-          _payeeCcyList.add(e.code);
-        });
-      }
-    });
-  }
-
   //获取账号支持币种
   Future _getCardCcyList(String cardNo) async {
-    // TransferDataRepository()
-    //     .getCardCcyList(GetCardCcyListReq(cardNo), 'GetCardCcyList')
     Transfer().getCardCcyList(GetCardCcyListReq(cardNo)).then((data) {
       if (data.recordLists != null) {
         _payeeCcyList.clear();
         data.recordLists.forEach((e) {
           _payeeCcyList.add(e.ccy);
         });
+      }
+      _payeeIndex = 0;
+      for (int i = 0; i < _payeeCcyList.length; i++) {
+        if (_payeeCcy == _payeeCcyList[i]) {
+          break;
+        } else {
+          _payeeIndex++;
+        }
       }
     });
   }

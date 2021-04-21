@@ -102,8 +102,8 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
   void _loadData() async {
     _isLoading = true;
     StatementQueryListModel statementQueryListModel = await ApiClient().statementQueryList(StatementQueryListBody(
-      startDate: '2021-04-01',
-      endDate: '2021-04-16',
+      startDate: '2021-03-01',
+      endDate: '2021-04-20',
     ));
     setState(() {
       dataList.addAll(statementQueryListModel.statementDTOS);

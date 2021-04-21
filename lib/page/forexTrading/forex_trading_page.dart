@@ -342,7 +342,6 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   }
 
   _getCardList() {
-    // CardDataRepository()
     ApiClientAccount().getCardList(GetCardListReq()).then((data) {
       if (data.cardList != null) {
         if (this.mounted) {
@@ -369,7 +368,6 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
 
   //获取账户可用余额
   _getCardBal(String cardNo) {
-    // ForexTradingRepository()
     ApiClientBill()
         .getCardBalByCardNo(GetCardBalReq(cardNo: cardNo))
         .then((data) {
@@ -397,22 +395,12 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
 
   //计算汇率
   _transferTrial() {
-    print("汇率换算");
+    HSProgressHUD.show();
     if (_paymentAcc != '' &&
         _paymentCcy != '' &&
         _incomeAcc != '' &&
         _incomeCcy != '' &&
         _payAmtController.text != '') {
-      // ForexTradingRepository()
-      //     .transferTrial(
-      //         TransferTrialReq(
-      //           opt: "S",
-      //           buyCcy: _paymentCcy,
-      //           sellCcy: _incomeCcy,
-      //           buyAmount: _payAmtController.text,
-      //           sellAmount: '0',
-      //         ),
-      //         'TransferTrialReq')
       Transfer()
           .transferTrial(TransferTrialReq(
         opt: "S",
@@ -428,7 +416,9 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
             _incomeAmt = data.optExAmt;
           });
         }
+        HSProgressHUD.dismiss();
       }).catchError((e) {
+        HSProgressHUD.dismiss();
         Fluttertoast.showToast(
           msg: e.toString(),
           gravity: ToastGravity.CENTER,
@@ -450,36 +440,6 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
       );
     } else {
       HSProgressHUD.show();
-      // Transfer()
-      //     .getTransferByAccount(GetTransferByAccount(
-      //   "S",
-      //   _payAmtController.text,
-      //   _incomeAmt,
-      //   //贷方货币
-      //   _incomeCcy,
-      //   //借方货币
-      //   _paymentCcy,
-      //   //输入密码
-      //   // 'L5o+WYWLFVSCqHbd0Szu4Q==',
-      //   '',
-      //   //收款方银行
-      //   _incomeBackCode,
-      //   //收款方卡号
-      //   _incomeAcc,
-      //   //收款方姓名
-      //   _incomeName,
-      //   //付款方银行
-      //   _incomeBackCode,
-      //   //付款方卡号
-      //   _paymentAcc,
-      //   //付款方姓名
-      //   _incomeName,
-      //   //附言
-      //   "",
-      //   //验证码
-      //   "",
-      //   _rate,
-      // ))
       ApiClientBill()
           .foreignCcy(ForeignCcyReq(
               _payAmtController.text,
@@ -510,24 +470,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     }
   }
 
-  // 获取币种列表
-//   Future _loadLocalCcy() async {
-//     PublicParametersRepository()
-//         .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
-//         .then((data) {
-//       if (data.publicCodeGetRedisRspDtoList != null) {
-//         _incomeCcyList.clear();
-//         data.publicCodeGetRedisRspDtoList.forEach((e) {
-//           _incomeCcyList.add(e.code);
-//         });
-//       }
-//     });
-//   }
-
   //获取账号支持币种
   Future _getCardCcyList(String cardNo) async {
-    // TransferDataRepository()
-    //     .getCardCcyList(GetCardCcyListReq(cardNo), 'GetCardCcyList')
     Transfer().getCardCcyList(GetCardCcyListReq(cardNo)).then((data) {
       if (data.recordLists != null) {
         _incomeCcyList.clear();

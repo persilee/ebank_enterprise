@@ -6,12 +6,9 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/add_partner.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
-import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
-import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
-import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/transfer.dart';
@@ -171,30 +168,6 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       _payeeAdressReq = '';
       _swiftAdressReq = '';
     }
-    // TransferDataRepository()
-    //     .addPartner(
-    //         AddPartnerReq(
-    //           _bankCode,
-    //           _bankSwiftController.text, //_swiftAdressReq,
-    //           _ccy,
-    //           "",
-    //           _countryCode, //_countryText,
-    //           _centerSwiftReq,
-    //           _payeeAdressReq,
-    //           _acountController.text,
-    //           _nameController.text,
-    //           "",
-    //           "",
-    //           "",
-    //           _smsController.text,
-    //           "",
-    //           _bankNameController.text,
-    //           _aliasController.text,
-    //           myTransferType,
-    //           _transferFeeIndex.toString(),
-    //           _feeUseIndex.toString(),
-    //         ),
-    //         'addPartner')
     print("bankSwift: " +
         _bankSwiftController.text +
         " payeeBankLocalName: " +

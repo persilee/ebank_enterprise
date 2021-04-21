@@ -175,50 +175,10 @@ class _TransferInternalPreviewPageState
     String payerBankCode = transferData.payerBankCode;
     String payerCardNo = transferData.transferOutAccount;
     String payerName = transferData.payerName;
-    String remark = transferData.transferRemark;
+    String remark = transferData.transferRemark == ''? S.current.transfer:transferData.transferRemark;
     String smsCode = '';
     String xRate = transferData.xRate;
-    print("付款：" +
-        debitAmount +
-        "收款：" +
-        creditAmount +
-        "payerBankCode: " +
-        payerBankCode);
     HSProgressHUD.show();
-    // TransferDataRepository()
-    //     .getTransferByAccount(
-    //         GetTransferByAccount(
-    //           opt,
-    //           //付款金额
-    //           debitAmount,
-    //           //收款金额
-    //           creditAmount,
-    //           //贷方货币
-    //           transferIntoCcy,
-    //           //借方货币
-    //           transferOutCcy,
-    //           //输入密码
-    //           // 'L5o+WYWLFVSCqHbd0Szu4Q==',
-    //           '',
-    //           //收款方银行
-    //           payeeBankCode,
-    //           //收款方卡号
-    //           payeeCardNo,
-    //           //收款方姓名
-    //           payeeName,
-    //           //付款方银行
-    //           payerBankCode,
-    //           //付款方卡号
-    //           payerCardNo,
-    //           //付款方姓名
-    //           payerName,
-    //           //附言
-    //           remark,
-    //           //验证码
-    //           smsCode,
-    //           xRate,
-    //         ),
-    //         'getTransferByAccount')
     Transfer()
         .getTransferByAccount(GetTransferByAccount(
       opt,
