@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_bo
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/city_for_country.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
+import 'package:ebank_mobile/data/source/model/find_user_application_task_detail.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/statement/statement_query_list_body.dart';
@@ -27,6 +28,11 @@ abstract class ApiClient {
     dio ??= BaseDio.getInstance().getDio();
     return _ApiClient(dio, baseUrl: baseUrl);
   }
+
+  /// 我的申请详情
+  @POST('/firmWkfl/processTask/findHistoryTaskDetail')
+  Future<FindUserApplicationDetailResp> findUserApplicationDetail(
+      @Body() FindUserApplicationDetailReq findTaskBody);
 
   /// 查询属于我的待办任务
   @POST('/wkfl/processTask/findUserTodoTask')
@@ -91,8 +97,7 @@ abstract class ApiClient {
 
   /// 获取用户信息
   @POST('/cust/user/getUser')
-  Future<UserInfoResp> getUserInfo(
-      @Body() GetUserInfoReq getUserInfoReq);
+  Future<UserInfoResp> getUserInfo(@Body() GetUserInfoReq getUserInfoReq);
 
   /// 上传头像（开户图片上传暂时共用）
   @POST('/cust/user/uploadAvatar')

@@ -18,6 +18,9 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_packaging.dart';
 import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page/transfer/widget/transfer_account_widget.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -832,7 +835,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   _loadTransferData() async {
     Future.wait({
-      CardDataRepository().getCardList('GetCardList'),
+      // CardDataRepository()
+      ApiClientAccount().getCardList(GetCardListReq()),
     }).then((value) {
       value.forEach((element) {
         //通过绑定手机号查询卡列表接口POST
@@ -859,8 +863,9 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   _loadData(String cardNo) async {
     final prefs = await SharedPreferences.getInstance();
     _localeCcy = prefs.getString(ConfigKey.LOCAL_CCY);
-    CardDataRepository()
-        .getCardBalByCardNo(GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq')
+    // CardDataRepository()
+    ApiClientAccount()
+        .getCardBalByCardNo(GetSingleCardBalReq(cardNo))
         .then((element) {
       if (this.mounted) {
         setState(() {
@@ -915,9 +920,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   Future<void> _actualNameReqData() async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
-    UserDataRepository()
-        .getUserInfo(GetUserInfoReq(userID), "getUserInfo")
-        .then((data) {
+    // UserDataRepository()
+    ApiClientPackaging().getUserInfo(GetUserInfoReq(userID)).then((data) {
       if (this.mounted) {
         setState(() {
           payerName = data.actualName;
@@ -931,10 +935,10 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   //获取货币和余额
   _getCardTotal(String cardNo) {
     Future.wait({
-      CardDataRepository().getCardBalByCardNo(
-          GetSingleCardBalReq(cardNo), 'GetSingleCardBalReq'),
-      CardDataRepository().getCardLimitByCardNo(
-          GetCardLimitByCardNoReq(cardNo), 'GetCardLimitByCardNoReq'),
+      // CardDataRepository()
+      ApiClientAccount().getCardBalByCardNo(GetSingleCardBalReq(cardNo)),
+      // CardDataRepository()
+      ApiClientAccount().getCardLimitByCardNo(GetCardLimitByCardNoReq(cardNo)),
     }).then((value) {
       value.forEach((element) {
         // 通过卡号查询余额
@@ -1026,9 +1030,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   // 获取币种列表
   Future _getCcyList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("CCY")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _transferCcyList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {
@@ -1040,9 +1043,8 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //获取转账费用列表
   Future _getTransferFeeList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("PAYS_METHOD"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("PAYS_METHOD")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         transferFeeList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {
@@ -1061,8 +1063,9 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
 
   //获取汇款用途列表
   Future _getFeeUseList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("ROLL_IN_PURPOSE"), 'GetIdTypeReq')
+    // PublicParametersRepository()
+    ApiClientOpenAccount()
+        .getIdType(GetIdTypeReq("ROLL_IN_PURPOSE"))
         .then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         feeUse.clear();
@@ -1117,8 +1120,7 @@ class _TransferInternationalPageState extends State<TransferInternationalPage> {
   Future _getBankNameBySwift(String swift) async {
     // TransferDataRepository()
     //     .getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift), 'getInfoBySwiftCode')
-        Transfer().getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift))
-        .then((data) {
+    Transfer().getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift)).then((data) {
       if (this.mounted) {
         setState(() {
           _bankNameController.text =

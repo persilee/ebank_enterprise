@@ -7,9 +7,12 @@ import 'dart:io';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_styles.dart';
+import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart';
 import 'package:ebank_mobile/data/source/model/logout.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_packaging.dart';
 import 'package:ebank_mobile/main.dart';
 
 import 'package:ebank_mobile/util/event_bus_utils.dart';
@@ -855,17 +858,17 @@ class _HomePageState extends State<HomePage>
   //功能点击事件
   VoidCallback _featureClickFunction(BuildContext context, String title) {
     return () {
-      // if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
-      //   HsgShowTip.notOpenAccountTip(
-      //     context: context,
-      //     click: (value) {
-      //       if (value == true) {
-      //         _openAccountClickFunction(context);
-      //       }
-      //     },
-      //   );
-      //   return;
-      // }
+      if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
+        HsgShowTip.notOpenAccountTip(
+          context: context,
+          click: (value) {
+            if (value == true) {
+              _openAccountClickFunction(context);
+            }
+          },
+        );
+        return;
+      }
       if (S.current.transaction_details == title) {
         //收支明细
         Navigator.pushNamed(context, pageDetailList);
@@ -1061,10 +1064,10 @@ class _HomePageState extends State<HomePage>
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
 
-    UserDataRepository()
+    // UserDataRepository()
+    ApiClientPackaging()
         .getUserInfo(
       GetUserInfoReq(userID),
-      'getUserInfo',
     )
         .then((data) {
       print('$data');
@@ -1097,10 +1100,9 @@ class _HomePageState extends State<HomePage>
 //   String userAreaCode = prefs.getString(ConfigKey.USER_AREACODE);
 //   String userPhone = prefs.getString(ConfigKey.USER_PHONE);
 
-//   UserDataRepository()
+//   ApiClientOpenAccount()
 //       .getInviteeStatusByPhone(
-//     GetInviteeStatusByPhoneReq(userAreaCode, userPhone),
-//     'getInviteeStatusByPhone',
+//     GetInviteeStatusByPhoneReq(userAreaCode, userPhone)
 //   )
 //       .then((data) {
 //     if (this.mounted) {

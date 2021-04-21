@@ -8,6 +8,8 @@ import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_packaging.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -708,19 +710,16 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
 //获取定期产品列表
   Future<void> _loadData() async {
     _isLoading = true;
-    TimeDepositDataRepository()
-        .getGetTimeDepositProduct(
-            'getGetTimeDepositProduct',
-            TimeDepositProductReq(
-                _accuPeriod == '' ? null : _accuPeriod,
-                _auctCale == '' ? null : _auctCale,
-                _changedCcy == S.current.hint_please_select
-                    ? null
-                    : _changedCcy,
-                _bal == 0.0 ? null : _bal,
-                _page,
-                10,
-                ''))
+    // TimeDepositDataRepository()
+    ApiClientPackaging()
+        .getGetTimeDepositProduct(TimeDepositProductReq(
+            _accuPeriod == '' ? null : _accuPeriod,
+            _auctCale == '' ? null : _auctCale,
+            _changedCcy == S.current.hint_please_select ? null : _changedCcy,
+            _bal == 0.0 ? null : _bal,
+            _page,
+            10,
+            ''))
         .then((data) {
       if (data.length != 0) {
         // List ccys = [];
@@ -767,9 +766,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
 
   //获取存款期限列表
   Future _getTerm() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("AUCT"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("AUCT")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         data.publicCodeGetRedisRspDtoList.forEach((element) {
           if (this.mounted) {

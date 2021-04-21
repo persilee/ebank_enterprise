@@ -5,6 +5,7 @@ import 'package:ebank_mobile/data/source/model/loan_calculate_interest.dart';
 import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
 import 'package:ebank_mobile/data/source/model/loan_trail_commit.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_loan.dart';
 import 'package:ebank_mobile/page/loan/limit_details_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -254,7 +255,8 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
         );
 
     SVProgressHUD.show();
-    LoanDataRepository().loanFinalWithdrawInterface(req, 'getCardList').then(
+    // LoanDataRepository()
+    ApiClientLoan().loanFinalWithdrawInterface(req).then(
       (data) {
         if (data != null) {
           SVProgressHUD.showSuccess(status: S.current.operation_successful);

@@ -12,6 +12,9 @@ import 'package:ebank_mobile/data/source/model/get_ex_rate.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_bill.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -504,9 +507,8 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   //获取币种买入卖出列表
   Future _getExchangeRateList() async {
     _isLoading = true;
-    ForexTradingRepository()
-        .getExRate(GetExRateReq(), 'getExRateReq')
-        .then((data) {
+    // ForexTradingRepository()
+    ApiClientBill().getExRate(GetExRateReq()).then((data) {
       if (data != null) {
         rateList.clear();
         rateList.addAll(data.recordLists);
@@ -534,9 +536,8 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
     setState(() {
       _primitiveCcy = _primitiveCcyList[0];
     });
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("CCY")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _objectiveCcyList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {

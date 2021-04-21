@@ -23,14 +23,14 @@ class BaseResponse {
   String get msgInfo => _msgInfo;
   String get msgType => _msgType;
 
-  BaseResponse({
-      String token,
+  BaseResponse(
+      {String token,
       String userId,
       String loginName,
       dynamic body,
       String msgCd,
       String msgInfo,
-      String msgType}){
+      String msgType}) {
     _token = token;
     _userId = userId;
     _loginName = loginName;
@@ -38,7 +38,7 @@ class BaseResponse {
     _msgCd = msgCd;
     _msgInfo = msgInfo;
     _msgType = msgType;
-}
+  }
 
   BaseResponse.fromJson(dynamic json) {
     _token = json["token"];
@@ -61,5 +61,4 @@ class BaseResponse {
     map["msgType"] = _msgType;
     return map;
   }
-
 }

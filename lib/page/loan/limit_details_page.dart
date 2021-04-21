@@ -6,6 +6,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_loan.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -79,9 +80,9 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
     ciNo = cino;
 
     contactNo = "";
-    LoanDataRepository()
-        .getLoanAccountList(
-            LoanAccountMastModelReq(0, ciNo, contactNo), 'getLoanAccountList')
+    // LoanDataRepository()
+    ApiClientLoan()
+        .getLoanAccountList(LoanAccountMastModelReq(0, ciNo, contactNo))
         .then((data) {
       _refreshController.loadComplete();
       setState(() {

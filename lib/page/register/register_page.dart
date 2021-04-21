@@ -10,6 +10,8 @@ import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_password.dart';
 
 import 'package:ebank_mobile/page/register/component/register_86.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
@@ -240,8 +242,9 @@ class _RegisterPageState extends State<RegisterPage> {
   //检验用户是否注册及发短信
   _checkRegister() {
     HSProgressHUD.show();
-    VersionDataRepository()
-        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
+    // VersionDataRepository()
+    ApiClientAccount()
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'))
         .then((data) {
       if (mounted) {
         setState(() {
@@ -269,11 +272,10 @@ class _RegisterPageState extends State<RegisterPage> {
   //获取注册发送短信验证码接口
   _sendSmsRegister(bool _isRegister) async {
     print('$_isRegister>>>>>>>>');
-    VerificationCodeRepository()
-        .sendSmsByPhone(
-            SendSmsByPhoneNumberReq(
-                _officeAreaCodeText, _phoneNum.text, 'register', 'SCNAOREGU'),
-            'sendSmsRegister')
+    // VerificationCodeRepository()
+    ApiClientPassword()
+        .sendSmsByPhone(SendSmsByPhoneNumberReq(
+            _officeAreaCodeText, _phoneNum.text, 'register', 'SCNAOREGU'))
         .then((value) {
       if (mounted) {
         setState(() {
@@ -297,8 +299,9 @@ class _RegisterPageState extends State<RegisterPage> {
   _checkRegisterBysencond() {
     print('$_smsCode+_smsCode');
     HSProgressHUD.show();
-    VersionDataRepository()
-        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'), 'checkPhoneReq')
+    // VersionDataRepository()
+    ApiClientAccount()
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'))
         .then((data) {
       if (mounted) {
         setState(() {

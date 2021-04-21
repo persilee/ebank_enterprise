@@ -1,6 +1,7 @@
 import 'package:ebank_mobile/data/source/model/add_transfer_plan.dart';
 import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/transfer.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
@@ -186,40 +187,41 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
     String startDate = transferData.startDate;
     HSProgressHUD.show();
     Future.wait({
-      TransferDataRepository().addTransferPlan(
-          AddTransferPlanReq(
-            amount, //amount
-            availableBalance, //availableBalance
-            "", //bankSwift
-            "", //city
-            "", //costOptions
-            creditCurrency, //creditCurrency
-            day, //day
-            debitCurrency, //debitCurrency
-            "", //district
-            false, //enabled
-            endDate, //endDate
-            0, //feeAmount
-            frequency != null ? frequency['type'] ?? '' : '', //frequency
-            "", //midBankSwift
-            "", //month
-            "L5o+WYWLFVSCqHbd0Szu4Q==", //payPassword
-            "", //payeeAddress
-            payeeBankCode, //payeeBankCode
-            payeeCardNo, //payeeCardNo
-            payeeName, //payeeName
-            payerBankCode, //payerBankCode  AAAMFRP1XXX
-            payerCardNo, //payerCardNo
-            payerName, //payerName
-            planName, //planName
-            remark, //remark
-            "", //remittancePurposes
-            "", //remitterAddress
-            "123456", //smsCode
-            startDate, //startDate
-            "0", //transferType
-          ),
-          'AddTransferPlanReq')
+      // TransferDataRepository()
+      Transfer().addTransferPlan(
+        AddTransferPlanReq(
+          amount, //amount
+          availableBalance, //availableBalance
+          "", //bankSwift
+          "", //city
+          "", //costOptions
+          creditCurrency, //creditCurrency
+          day, //day
+          debitCurrency, //debitCurrency
+          "", //district
+          false, //enabled
+          endDate, //endDate
+          0, //feeAmount
+          frequency != null ? frequency['type'] ?? '' : '', //frequency
+          "", //midBankSwift
+          "", //month
+          "L5o+WYWLFVSCqHbd0Szu4Q==", //payPassword
+          "", //payeeAddress
+          payeeBankCode, //payeeBankCode
+          payeeCardNo, //payeeCardNo
+          payeeName, //payeeName
+          payerBankCode, //payerBankCode  AAAMFRP1XXX
+          payerCardNo, //payerCardNo
+          payerName, //payerName
+          planName, //planName
+          remark, //remark
+          "", //remittancePurposes
+          "", //remitterAddress
+          "123456", //smsCode
+          startDate, //startDate
+          "0", //transferType
+        ),
+      )
     }).then((value) {
       HSProgressHUD.dismiss();
       Navigator.pushNamed(context, pageTransferSuccess,

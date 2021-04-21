@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/update_login_paw_repository.dart';
 /// Date: 2020-12-29
 
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_password.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -284,11 +285,10 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     //   HSProgressHUD.dismiss();
     // });
 
-    VerificationCodeRepository()
-        .sendSmsByPhone(
-            SendSmsByPhoneNumberReq(
-                _areaCodeStr, _phoneStr, 'modifyPwd', 'SCNAOCHGLPW'),
-            'sendSms')
+    // VerificationCodeRepository()
+    ApiClientPassword()
+        .sendSmsByPhone(SendSmsByPhoneNumberReq(
+            _areaCodeStr, _phoneStr, 'modifyPwd', 'SCNAOCHGLPW'))
         .then((data) {
       _startCountdown();
       HSProgressHUD.dismiss();
@@ -340,10 +340,10 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
       String userID = prefs.getString(ConfigKey.USER_ID);
-      UpdateLoginPawRepository()
+      // UpdateLoginPawRepository()
+      ApiClientPassword()
           .modifyLoginPassword(
-              ModifyPasswordReq(newPwd, oldPwd, _sms.text, userID),
-              'ModifyPasswordReq')
+              ModifyPasswordReq(newPwd, oldPwd, _sms.text, userID))
           .then((data) {
         Fluttertoast.showToast(
           msg: S.current.operate_success,

@@ -6,6 +6,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_password.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 
@@ -252,9 +253,9 @@ class HsgPasswordDialog extends StatelessWidget {
     final prefs = await SharedPreferences.getInstance();
     String phoneNum = prefs.getString(ConfigKey.USER_PHONE);
     String areaCodeNum = prefs.getString(ConfigKey.USER_AREACODE);
-    VerifyTradePawRepository()
-        .verifyTransPwdNoSms(
-            VerifyTransPwdNoSmsReq(payPassword), 'VerifyTransPwdNoSmsReq')
+    // VerifyTradePawRepository()
+    ApiClientPassword()
+        .verifyTransPwdNoSms(VerifyTransPwdNoSmsReq(payPassword))
         .then((data) {
       if (returnPasswordFunc != null) {
         returnPasswordFunc(password);

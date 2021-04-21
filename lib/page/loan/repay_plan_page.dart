@@ -6,6 +6,7 @@
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_schedule_detail_list.dart';
 import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_loan.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
@@ -72,9 +73,8 @@ class _RepayPlanState extends State<RepayPlanPage> {
         //  pageSize,
         'Q');
     SVProgressHUD.show();
-    LoanDataRepository()
-        .getSchedulePlanDetailList(req, 'getScheduleDetailList')
-        .then((data) {
+    // LoanDataRepository()
+    ApiClientLoan().getSchedulePlanDetailList(req).then((data) {
       SVProgressHUD.dismiss();
       if (data.getLnAcScheduleRspDetlsDTOList != null) {
         setState(() {

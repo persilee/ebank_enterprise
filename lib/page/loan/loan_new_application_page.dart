@@ -12,6 +12,10 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_loan.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/api_client_packaging.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -97,9 +101,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
 
 // 获取币种列表
   Future _getCcyList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("CCY")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _ccyList.clear();
         _ccyList.addAll(data.publicCodeGetRedisRspDtoList);
@@ -109,9 +112,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
 
   //获取贷款期限
   Future _getLoanTimeList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("LOAN_TERM"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("LOAN_TERM")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _deadLineLists.clear();
         _deadLineLists.addAll(data.publicCodeGetRedisRspDtoList);
@@ -121,9 +123,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
 
   //获取贷款目的
   Future _getLoanPurposeList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("LOAN_PUR"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("LOAN_PUR")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _goalLists.clear();
         _goalLists.addAll(data.publicCodeGetRedisRspDtoList);
@@ -133,9 +134,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
 
 //还款方式
   Future _getLoanRepayTypeList() async {
-    PublicParametersRepository()
-        .getIdType(GetIdTypeReq("REPAY_TYPE"), 'GetIdTypeReq')
-        .then((data) {
+    // PublicParametersRepository()
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("REPAY_TYPE")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _reimburseTypeLists.clear();
         _reimburseTypeLists.addAll(data.publicCodeGetRedisRspDtoList);
@@ -147,9 +147,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   Future<void> _custIdReqData() async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
-    UserDataRepository()
-        .getUserInfo(GetUserInfoReq(userID), "getUserInfo")
-        .then((data) {
+    // UserDataRepository()
+    ApiClientPackaging().getUserInfo(GetUserInfoReq(userID)).then((data) {
       setState(() {
         _custId = data.custId;
       });
@@ -161,7 +160,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   //获取放款以及还款帐号列表
   Future<void> _loadTotalAccountData() async {
     SVProgressHUD.show();
-    CardDataRepository().getCardList('getCardList').then(
+    // CardDataRepository()
+    ApiClientAccount().getCardList(GetCardListReq()).then(
       (data) {
         SVProgressHUD.dismiss();
         if (data.cardList != null) {
@@ -187,8 +187,9 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
 
 //获取贷款产品
   Future<void> _loadLoanProductData() async {
-    LoanDataRepository()
-        .loanGetProductListRequest(LoanProductListReq('0'), 'loanProductData')
+    // LoanDataRepository()
+    ApiClientLoan()
+        .loanGetProductListRequest(LoanProductListReq('0'))
         .then((data) {
       if (data.loanProductList != null) {
         setState(() {
@@ -196,7 +197,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
           LoanProductList names = _loanProduct[0];
           _loanProductID = names.bppdCode;
           _requestDataMap['prdtCode'] = names.bppdCode; //ID
-          if (_language == 'zh_CN') {
+          if (_language == 'zh_CN'|| _language == 'zh_HK') {
             _loanProductName = names.lclName;
             _listDataMap['prdtCode'] = names.lclName;
           } else {
@@ -641,7 +642,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     List<String> _productName = [];
     List<String> _productID = [];
     for (LoanProductList names in _loanProduct) {
-      if (_language == 'zh_CN') {
+      if (_language == 'zh_CN' || _language == 'zh_HK') {
         _productName.add(names.lclName);
       } else {
         _productName.add(names.engName);
