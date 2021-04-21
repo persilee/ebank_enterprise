@@ -224,8 +224,8 @@ class _TransferInterPageState extends State<TransferInterPage> {
         _countryCode = rowPartner.district;
         _payeeAddressController.text =
             rowPartner == null ? '' : rowPartner.payeeAddress;
-        check = true;
         _boolBut();
+        check = true;
       }
     });
     return Scaffold(
@@ -656,6 +656,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //增加转账伙伴图标
   Widget _getImage() {
+    _getTransferFeeList();
     return InkWell(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -1078,12 +1079,22 @@ class _TransferInterPageState extends State<TransferInterPage> {
       if (data.publicCodeGetRedisRspDtoList != null) {
         transferFeeList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {
-          if (_language == 'zh_CN') {
+          if (_language == 'zh_CN' || _language == 'zh_HK') {
             transferFeeList.add(e.cname);
           } else {
             transferFeeList.add(e.name);
           }
         });
+        for (int i = 0; i < transferFeeList.length; i++) {
+          if (_transferFee == i.toString()) {
+            if (this.mounted) {
+              setState(() {
+                _transferFee = transferFeeList[i];
+              });
+            }
+            break;
+          }
+        }
       }
     });
   }

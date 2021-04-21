@@ -184,48 +184,16 @@ class _TransferInternalPreviewPageState
     String payerBankCode = transferData.payerBankCode;
     String payerCardNo = transferData.transferOutAccount;
     String payerName = transferData.payerName;
-    String remark = transferData.transferRemark;
+    String remark = transferData.transferRemark == ''
+        ? S.current.transfer
+        : transferData.transferRemark;
     String costOptions = transferData.transferFee;
     String costOptionsIndex = transferData.transferFeeIndex;
     String bankSwift = transferData.bankSWIFT;
     String payeeAddress = transferData.transferIntoAdress;
     String countryCode = transferData.countryCode;
     String rate = transferData.rate;
-    // print("opt: " +
-    //     opt +
-    //     "===========================" +
-    //     "countryCode" +
-    //     countryCode);
     HSProgressHUD.show();
-    // TransferDataRepository()
-    //     .getInterNationalTransfer(
-    //         GetInternationalTransferReq(
-    //           opt,
-    //           //付款金额
-    //           debitAmount,
-    //           //收款金额
-    //           creditAmount,
-    //           //贷方货币
-    //           transferIntoCcy,
-    //           //借方货币
-    //           transferOutCcy,
-    //           "",
-    //           payeeBankCode,
-    //           payeeCardNo,
-    //           payeeName,
-    //           payerBankCode,
-    //           payerCardNo,
-    //           payerName,
-    //           remark,
-    //           "",
-    //           rate,
-    //           payeeAddress,
-    //           bankSwift,
-    //           "CN", //countryCode,
-    //           custId,
-    //           costOptionsIndex,
-    //         ),
-    //         'getTransferByAccount')
     Transfer()
         .getInterNationalTransfer(GetInternationalTransferReq(
       opt,
@@ -249,7 +217,7 @@ class _TransferInternalPreviewPageState
       rate,
       payeeAddress,
       bankSwift,
-      "CN", //countryCode,
+      countryCode, //countryCode,
       custId,
       costOptionsIndex,
     ))
