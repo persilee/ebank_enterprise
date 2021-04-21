@@ -551,8 +551,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         msg: S.current.account_no_exist,
         gravity: ToastGravity.CENTER,
       );
-    }
-    if (_payeeCcy == _payerCcy &&
+    } else if (_payeeCcy == _payerCcy &&
         _payerAccount == _payeeAccountController.text) {
       Fluttertoast.showToast(
         msg: S.of(context).no_account_ccy_transfer,
