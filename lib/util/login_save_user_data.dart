@@ -47,3 +47,17 @@ void SaveUserDataForGetUser(UserInfoResp resp) async {
     prefs.setString(ConfigKey.CUST_ID, resp.custId);
   }
 }
+
+// ignore: non_constant_identifier_names
+void RemoveUserDataNotAll() async {
+  /// 退出登录使用，去除除了登录账号以外的所有保存信息
+
+  final prefs = await SharedPreferences.getInstance();
+  prefs.remove(ConfigKey.USER_ID);
+  prefs.remove(ConfigKey.USER_PHONE);
+  prefs.remove(ConfigKey.USER_AREACODE);
+  prefs.remove(ConfigKey.USER_TYPE);
+  prefs.remove(ConfigKey.USER_BELONGCUSTSTATUS);
+  prefs.remove(ConfigKey.USER_PASSWORDENABLED);
+  prefs.remove(ConfigKey.CUST_ID);
+}

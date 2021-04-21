@@ -38,7 +38,9 @@ class ApiClientPackaging {
   /// 安全退出
   Future<LogoutResp> logout(LogoutReq req) {
     Future<LogoutResp> resp = ApiClientAccount().logout(req);
-    resp.then((value) => {});
+    resp.then((value) => {
+          RemoveUserDataNotAll(),
+        });
     return resp;
   }
 
