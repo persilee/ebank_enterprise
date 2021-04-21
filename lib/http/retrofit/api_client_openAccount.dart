@@ -5,6 +5,7 @@ import 'package:ebank_mobile/data/source/model/face_sign_businessid.dart';
 import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart';
 
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/open_account_Industry_two_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_get_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_information_supplement_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_data.dart';
@@ -93,4 +94,9 @@ abstract class ApiClientOpenAccount {
   @POST('/agent/inviteManage/getInviteeStatusByPhone')
   Future<GetInviteeStatusByPhoneResp> getInviteeStatusByPhone(
       @Body() GetInviteeStatusByPhoneReq req);
+
+  /// 通过商业行业性质一级选择的code获取商业行业性质二级选项
+  @POST('/platform/publicCode/getSubPublicCodeByType')
+  Future<SubPublicCodeByTypeResp> getSubPublicCodeByType(
+      @Body() SubPublicCodeByTypeReq req);
 }

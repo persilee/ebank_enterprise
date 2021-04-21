@@ -5,12 +5,10 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
-import 'package:ebank_mobile/data/source/card_data_repository.dart';
-import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
+import 'package:ebank_mobile/data/source/model/foreign_ccy.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_ccy_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
-import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_bill.dart';
@@ -344,7 +342,6 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   }
 
   _getCardList() {
-    // CardDataRepository()
     ApiClientAccount().getCardList(GetCardListReq()).then((data) {
       if (data.cardList != null) {
         if (this.mounted) {
@@ -371,7 +368,6 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
 
   //获取账户可用余额
   _getCardBal(String cardNo) {
-    // ForexTradingRepository()
     ApiClientBill()
         .getCardBalByCardNo(GetCardBalReq(cardNo: cardNo))
         .then((data) {
@@ -399,22 +395,12 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
 
   //计算汇率
   _transferTrial() {
-    print("汇率换算");
+    HSProgressHUD.show();
     if (_paymentAcc != '' &&
         _paymentCcy != '' &&
         _incomeAcc != '' &&
         _incomeCcy != '' &&
         _payAmtController.text != '') {
-      // ForexTradingRepository()
-      //     .transferTrial(
-      //         TransferTrialReq(
-      //           opt: "S",
-      //           buyCcy: _paymentCcy,
-      //           sellCcy: _incomeCcy,
-      //           buyAmount: _payAmtController.text,
-      //           sellAmount: '0',
-      //         ),
-      //         'TransferTrialReq')
       Transfer()
           .transferTrial(TransferTrialReq(
         opt: "S",
@@ -430,7 +416,9 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
             _incomeAmt = data.optExAmt;
           });
         }
+        HSProgressHUD.dismiss();
       }).catchError((e) {
+        HSProgressHUD.dismiss();
         Fluttertoast.showToast(
           msg: e.toString(),
           gravity: ToastGravity.CENTER,
@@ -440,75 +428,31 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   }
 
   _submitFormData() async {
-    if (_paymentCcy == _incomeCcy && _paymentAcc == _incomeAcc) {
+    if (double.parse(_payAmtController.text) > double.parse(_balance)) {
+      Fluttertoast.showToast(
+        msg: S.current.tdContract_balance_insufficient,
+        gravity: ToastGravity.CENTER,
+      );
+    } else if (_paymentCcy == _incomeCcy && _paymentAcc == _incomeAcc) {
       Fluttertoast.showToast(
         msg: S.of(context).no_account_ccy_transfer,
         gravity: ToastGravity.CENTER,
       );
     } else {
       HSProgressHUD.show();
-      // TransferDataRepository()
-      //     .getTransferByAccount(
-      //         GetTransferByAccount(
-      //           "S",
-      //           _payAmtController.text,
-      //           _incomeAmt,
-      //           //贷方货币
-      //           _incomeCcy,
-      //           //借方货币
-      //           _paymentCcy,
-      //           //输入密码
-      //           // 'L5o+WYWLFVSCqHbd0Szu4Q==',
-      //           '',
-      //           //收款方银行
-      //           _incomeBackCode,
-      //           //收款方卡号
-      //           _incomeAcc,
-      //           //收款方姓名
-      //           _incomeName,
-      //           //付款方银行
-      //           _incomeBackCode,
-      //           //付款方卡号
-      //           _paymentAcc,
-      //           //付款方姓名
-      //           _incomeName,
-      //           //附言
-      //           "",
-      //           //验证码
-      //           "",
-      //           _rate,
-      //         ),
-      //         'getTransferByAccount')
-      Transfer()
-          .getTransferByAccount(GetTransferByAccount(
-        "S",
-        _payAmtController.text,
-        _incomeAmt,
-        //贷方货币
-        _incomeCcy,
-        //借方货币
-        _paymentCcy,
-        //输入密码
-        // 'L5o+WYWLFVSCqHbd0Szu4Q==',
-        '',
-        //收款方银行
-        _incomeBackCode,
-        //收款方卡号
-        _incomeAcc,
-        //收款方姓名
-        _incomeName,
-        //付款方银行
-        _incomeBackCode,
-        //付款方卡号
-        _paymentAcc,
-        //付款方姓名
-        _incomeName,
-        //附言
-        "",
-        //验证码
-        "",
-        _rate,
-      ))
+      ApiClientBill()
+          .foreignCcy(ForeignCcyReq(
+              _payAmtController.text,
+              _paymentCcy,
+              _paymentAcc,
+              _rate,
+              DateTime.now().toString(),
+              "",
+              "FXSPTIBK",
+              _incomeAmt,
+              _incomeCcy,
+              _incomeBackCode,
+              ""))
           .then((data) {
         HSProgressHUD.dismiss();
         Fluttertoast.showToast(
@@ -526,24 +470,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     }
   }
 
-  // 获取币种列表
-//   Future _loadLocalCcy() async {
-//     PublicParametersRepository()
-//         .getIdType(GetIdTypeReq("CCY"), 'GetIdTypeReq')
-//         .then((data) {
-//       if (data.publicCodeGetRedisRspDtoList != null) {
-//         _incomeCcyList.clear();
-//         data.publicCodeGetRedisRspDtoList.forEach((e) {
-//           _incomeCcyList.add(e.code);
-//         });
-//       }
-//     });
-//   }
-
   //获取账号支持币种
   Future _getCardCcyList(String cardNo) async {
-    // TransferDataRepository()
-    //     .getCardCcyList(GetCardCcyListReq(cardNo), 'GetCardCcyList')
     Transfer().getCardCcyList(GetCardCcyListReq(cardNo)).then((data) {
       if (data.recordLists != null) {
         _incomeCcyList.clear();

@@ -105,11 +105,18 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
                       ? _notOpenAccountTip()
                       : Navigator.pushNamed(context, changePayPS);
                 }),
+                // _flatBtnNuitWidget(S.of(context).changPayPws, true, () {
+                //   Navigator.pushNamed(context, changePayPS);
+                // }),
+                // _flatBtnNuitWidget(S.of(context).resetPayPwd, true, () {
+                //   Navigator.pushNamed(context, pageResetPayPwdOtp);
+                // }),
                 _flatBtnNuitWidget(S.of(context).resetPayPwd, true, () {
                   (['0', '1', '2', '3', ''].contains(_belongCustStatus))
                       ? _notOpenAccountTip()
                       : Navigator.pushNamed(context, pageResetPayPwdOtp);
                 }),
+
               ],
             ),
           ),

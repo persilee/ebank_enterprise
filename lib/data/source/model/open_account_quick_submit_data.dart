@@ -1,6 +1,7 @@
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/open_account_Industry_two_data.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
 /// 快速开户上传公司信息模型（第一次数据提交）
@@ -62,9 +63,13 @@ class OpenAccountQuickSubmitDataReq {
   List<Partner> partnerList;
 
   ///自定义字段，用来上传保存数据下载显示用
-  ///商业/行业性质辅助字段
+  ///商业/行业性质辅助字段一级
   @JsonKey(name: 'corporatinAttributesIdType')
   IdType corporatinAttributesIdType;
+
+  ///商业/行业性质辅助字段二级
+  @JsonKey(name: 'corporatinAttributesIdTypeTwo')
+  RedisRspDto corporatinAttributesIdTypeTwo;
 
   ///公司类别辅助字段
   @JsonKey(name: 'custCategoryIdType')
@@ -92,6 +97,7 @@ class OpenAccountQuickSubmitDataReq {
     this.telNumber,
     this.partnerList,
     this.corporatinAttributesIdType,
+    this.corporatinAttributesIdTypeTwo,
     this.custCategoryIdType,
     this.idIssuePlaceCountryRegionModel,
     this.idTypeIdType,

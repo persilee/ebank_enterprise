@@ -5,10 +5,6 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
-import 'package:ebank_mobile/data/source/card_data_repository.dart';
-import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
-import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
-import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
@@ -17,9 +13,6 @@ import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
-import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
-import 'package:ebank_mobile/data/source/transfer_data_repository.dart';
-import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
@@ -230,8 +223,8 @@ class _TransferInterPageState extends State<TransferInterPage> {
         _countryCode = rowPartner.district;
         _payeeAddressController.text =
             rowPartner == null ? '' : rowPartner.payeeAddress;
-        check = true;
         _boolBut();
+        check = true;
       }
     });
     return Scaffold(
@@ -662,6 +655,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //增加转账伙伴图标
   Widget _getImage() {
+    _getTransferFeeList();
     return InkWell(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -673,7 +667,8 @@ class _TransferInterPageState extends State<TransferInterPage> {
                 _payeeNameController.text = rowListPartner.payeeName;
                 _payeeAccountController.text = rowListPartner.payeeCardNo;
                 _remarkController.text = rowListPartner.remark;
-                _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
+                // _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
+                _payeeCcy = rowListPartner.ccy;
                 _countryText = rowListPartner.district;
                 _countryCode = rowListPartner.district;
                 _bankNameController.text = _language == 'zh_CN'
@@ -694,6 +689,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
               }
               _boolBut();
               _rateCalculate();
+              _loadLocalCcy();
             });
           },
         );
@@ -727,8 +723,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
         msg: S.current.tdContract_balance_insufficient,
         gravity: ToastGravity.CENTER,
       );
-    }
-    if (_payeeCcy == _payerCcy &&
+    } else if (_payeeCcy == _payerCcy &&
         _payerAccount == _payeeAccountController.text) {
       Fluttertoast.showToast(
         msg: S.of(context).no_account_ccy_transfer,
@@ -980,25 +975,19 @@ class _TransferInterPageState extends State<TransferInterPage> {
           _payeeCcyList.add(e.code);
         });
       }
+      _payeeIndex = 0;
+      for (int i = 0; i < _payeeCcyList.length; i++) {
+        if (_payeeCcy == _payeeCcyList[i]) {
+          break;
+        } else {
+          _payeeIndex++;
+        }
+      }
     });
   }
 
   //汇率换算
   Future _rateCalculate() async {
-    // ForexTradingRepository()
-    //     .transferTrial(
-    //         TransferTrialReq(
-    //           opt: _opt,
-    //           buyCcy: _payerCcy,
-    //           sellCcy: _payeeCcy,
-    //           buyAmount: _payerTransferController.text == ''
-    //               ? '0'
-    //               : _payerTransferController.text,
-    //           sellAmount: _payeeTransferController.text == ''
-    //               ? '0'
-    //               : _payeeTransferController.text,
-    //         ),
-    //         'TransferTrialReq')
     Transfer()
         .transferTrial(TransferTrialReq(
       opt: _opt,
@@ -1012,16 +1001,6 @@ class _TransferInterPageState extends State<TransferInterPage> {
           : _payeeTransferController.text,
     ))
         .then((data) {
-      print(" opt: " +
-          _opt +
-          " sellCcy: " +
-          _payeeCcy +
-          " buyCcy: " +
-          _payerCcy +
-          " sellAmout: " +
-          _payeeTransferController.text +
-          " buyAmount: " +
-          _payerTransferController.text);
       if (this.mounted) {
         setState(() {
           if (_opt == 'B') {
@@ -1057,27 +1036,6 @@ class _TransferInterPageState extends State<TransferInterPage> {
     });
   }
 
-  //根据账号查询名称
-  Future _getCardByCardNo(String cardNo) async {
-    // TransferDataRepository()
-    //     .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
-    Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo)).then((data) {
-      if (this.mounted) {
-        setState(() {
-          _payeeNameController.text = data.ciName;
-        });
-      }
-    }).catchError((e) {
-      if (this.mounted) {
-        setState(() {});
-      }
-      Fluttertoast.showToast(
-        msg: S.current.no_account,
-        gravity: ToastGravity.CENTER,
-      );
-    });
-  }
-
   //获取转账费用列表
   Future _getTransferFeeList() async {
     // PublicParametersRepository()
@@ -1085,12 +1043,22 @@ class _TransferInterPageState extends State<TransferInterPage> {
       if (data.publicCodeGetRedisRspDtoList != null) {
         transferFeeList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {
-          if (_language == 'zh_CN') {
+          if (_language == 'zh_CN' || _language == 'zh_HK') {
             transferFeeList.add(e.cname);
           } else {
             transferFeeList.add(e.name);
           }
         });
+        for (int i = 0; i < transferFeeList.length; i++) {
+          if (_transferFee == i.toString()) {
+            if (this.mounted) {
+              setState(() {
+                _transferFee = transferFeeList[i];
+              });
+            }
+            break;
+          }
+        }
       }
     });
   }
