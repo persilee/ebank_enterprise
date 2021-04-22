@@ -114,9 +114,9 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
                 // }),
                 _flatBtnNuitWidget(S.of(context).resetPayPwd, true, () {
                   //充值交易密码
-                  //   (['0', '1', '2', '3', ''].contains(_belongCustStatus))
-                  //       ? _notOpenAccountTip()
-                  //       :
+                  // (['0', '1', '2', '3', ''].contains(_belongCustStatus))
+                  //     ? _notOpenAccountTip()
+                  //     :
                   Navigator.pushNamed(context, pageResetPayPwdOtp);
                 }),
               ],

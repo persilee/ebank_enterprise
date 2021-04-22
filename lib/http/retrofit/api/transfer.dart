@@ -18,7 +18,7 @@ import 'package:ebank_mobile/data/source/model/get_transfer_record.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 
-import 'base_dio.dart';
+import '../base_dio.dart';
 
 part 'transfer.g.dart';
 

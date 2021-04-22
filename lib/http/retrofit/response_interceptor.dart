@@ -6,8 +6,6 @@ import 'package:flutter/foundation.dart';
 class ResponseInterceptor extends Interceptor {
   @override
   Future onResponse(Response response) {
-    print('response: ${response.data is Map}');
-    print('${response.request}');
     if (response.data is Map && response.request.path != '/security/cutlogin') {
       BaseResponse baseResponse = BaseResponse.fromJson(response.data);
       if (baseResponse.msgCd == '0000') {

@@ -16,8 +16,10 @@ import 'package:ebank_mobile/data/source/model/approval/open_td_contract_detail_
     as OpenTDModel;
 import 'package:ebank_mobile/data/source/model/approval/foreign_transfer_model.dart'
     as ForeignTransferModel;
+import 'package:ebank_mobile/data/source/model/approval/post_repayment_model.dart'
+as PostRepaymentModel;
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -51,6 +53,7 @@ class _MyApprovedHistoryDetailPageState
   List<Widget> _internationalList = [];
   List<Widget> _transferPlanList = [];
   List<Widget> _foreignTransferList = [];
+  List<Widget> _postRepaymentList = [];
   List<Widget> _finishedList = [];
   final f = NumberFormat("#,##0.00", "en_US");
   final fj = NumberFormat("#,##0", "ja-JP");
@@ -102,6 +105,10 @@ class _MyApprovedHistoryDetailPageState
       else if (_processKey == 'foreignTransferApproval') {
         _loadForeignTransferData(_contractModel);
       }
+      // postRepaymentApproval - 提前还款
+      else if (_processKey == 'postRepaymentApproval') {
+        _loadPostRepaymentData(_contractModel);
+      }
     } catch (e) {
       if ((e as DioError).error is NeedLogin) {
         Navigator.of(context).pushAndRemoveUntil(
@@ -118,6 +125,70 @@ class _MyApprovedHistoryDetailPageState
         );
       }
       setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  // postRepaymentApproval  - 提前还款
+  void _loadPostRepaymentData(_contractModel) {
+    PostRepaymentModel.PostRepaymentModel postRepaymentModel =
+    PostRepaymentModel.PostRepaymentModel.fromJson(_contractModel);
+
+    PostRepaymentModel.OperateEndValue data =
+        postRepaymentModel.operateEndValue;
+
+    // 添加历史审批记录
+    if (postRepaymentModel.commentList.isNotEmpty) {
+      postRepaymentModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
+    if (this.mounted) {
+      setState(() {
+        _postRepaymentList.add(_buildTitle(S.current.approve_loan_information));
+        _postRepaymentList.add(_buildContentItem(S.current.approve_loan_account, data?.acNo ?? ''));
+        _postRepaymentList.add(_buildContentItem(S.current.approve_loan_currency, data?.ccy ?? ''));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_principal,
+            // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.prin ?? '0')) ?? ''
+                : f.format(double.parse(data?.prin ?? '0')) ?? ''));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_balance,
+            // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.outBal ?? '0')) ?? ''
+                : f.format(double.parse(data?.outBal ?? '0')) ?? ''));
+        _postRepaymentList.add(_buildContentItem(S.current.approve_loan_interest_rate, data?.exRate ?? ''));
+        _postRepaymentList.add(
+          Padding(padding: EdgeInsets.only(top: 15)),
+        );
+        _postRepaymentList.add(_buildTitle(S.current.approve_loan_payment_information));
+        _postRepaymentList.add(_buildContentItem(S.current.approve_debit_account, data?.ddAc ?? ''));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_repayment_principal,
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.principalAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.principalAmount ?? '0')) ?? ''));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_repayment_interest,
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.interestAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.interestAmount ?? '0')) ?? ''));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_fine_amount,
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_reimbursement_amount,
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.totalAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.totalAmount ?? '0')) ?? ''));
         _isLoading = false;
       });
     }
@@ -473,6 +544,7 @@ class _MyApprovedHistoryDetailPageState
           ..._internationalList,
         if (_processKey == 'transferPlanApproval') ..._transferPlanList,
         if (_processKey == 'foreignTransferApproval') ..._foreignTransferList,
+        if (_processKey == 'postRepaymentApproval') ..._postRepaymentList,
       ],
     );
   }
