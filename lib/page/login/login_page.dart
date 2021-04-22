@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_packaging.dart';
+import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/language.dart';
@@ -16,6 +17,7 @@ import 'package:ebank_mobile/util/screen_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/util/status_bar_util.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -38,19 +40,10 @@ class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
   var _changeLangBtnTltle = '';
 
-  TextEditingController _accountTC =
-      TextEditingController(text: 'HSG16'); //fangluyao
-  TextEditingController _passwordTC =
-      TextEditingController(text: 'Qwe123456~'); //b0S25X5Y
-  var _account = 'HSG16'; //'blk101';HSG20
-  var _password = 'Qwe123456~'; //'4N0021S8';Qwe123456~
-
-  // TextEditingController _accountTC =
-  //     TextEditingController(text: 'blk302'); //HSG20
-  // TextEditingController _passwordTC =
-  //     TextEditingController(text: '4N0021S8'); //Qwe123456~
-  // var _account = 'blk302'; //'blk101';
-  // var _password = '4N0021S8'; //'4N0021S8';
+  TextEditingController _accountTC = TextEditingController(); //fangluyao
+  TextEditingController _passwordTC = TextEditingController(); //b0S25X5Y
+  var _account = ''; //'blk101';HSG20
+  var _password = ''; //'4N0021S8';Qwe123456~
 
   @override
   void initState() {
@@ -71,10 +64,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
+    super.dispose();
     // 释放
     _accountTC.dispose();
     _passwordTC.dispose();
-    // super.dispose();
   }
 
   @override
@@ -142,9 +135,6 @@ class _LoginPageState extends State<LoginPage> {
                   FilteringTextInputFormatter.allow(
                       RegExp("[a-zA-Z0-9]")), //只可输入大小写字母及数字
                   LengthLimitingTextInputFormatter(16),
-                  // FilteringTextInputFormatter.allow(RegExp(
-                  //     "[a-zA-Z0-9,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]"))
-                  //r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$"))
                 ],
               ),
             ),
@@ -265,8 +255,9 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录操作
   _login(BuildContext context) async {
-    // Navigator.pushNamed(context, pageIndexName);
-    // return;
+    // 触摸收起键盘
+    FocusScope.of(context).requestFocus(FocusNode());
+
     //登录以输入框的值为准
     _account = _accountTC.text;
     _password = _passwordTC.text;
@@ -282,20 +273,46 @@ class _LoginPageState extends State<LoginPage> {
 
     String password = EncryptUtil.aesEncode(_password);
 
-    // LoginResp loginResp = await ApiClient().login(BaseBody(body: LoginReq(username: _account, password: password).toJson()));
-    // print(loginResp.toJson());
-
     // UserDataRepository()
     ApiClientPackaging()
         .login(LoginReq(username: _account, password: password))
         .then((value) {
       HSProgressHUD.dismiss();
-      _saveUserConfig(context, value);
+      if (value.errorCode == 'ECUST010') {
+        HsgShowTip.loginPasswordErrorTip(
+          context,
+          value.passwordErrors,
+          5,
+          (value) => {
+            setState(() {
+              _isLoading = false;
+            })
+          },
+        );
+      } else {
+        _saveUserConfig(context, value);
+      }
     }).catchError((e) {
       setState(() {
         _isLoading = false;
       });
-      HSProgressHUD.showError(status: '${e.toString()}');
+      HSProgressHUD.dismiss();
+
+      if (e.toString().contains('ECUST009')) {
+        HsgShowTip.loginPasswordErrorToMuchTip(
+          context,
+          (value) => {
+            setState(() {
+              _isLoading = false;
+            })
+          },
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+      }
     });
   }
 

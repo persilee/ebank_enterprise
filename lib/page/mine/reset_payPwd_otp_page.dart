@@ -189,7 +189,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
         msg: S.current.sms_error,
         gravity: ToastGravity.CENTER,
       );
-    } else if(_smsCode != _sms.text) {
+    } else if (_smsCode != _sms.text) {
       Fluttertoast.showToast(
         msg: S.current.sms_verification_error,
         gravity: ToastGravity.CENTER,

@@ -80,11 +80,11 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
       debitAccount,
     );
     SVProgressHUD.show();
-    // LoanDataRepository()
     ApiClientLoan().postRepayment(req).then((data) {
       SVProgressHUD.dismiss();
       if (data != null) {
-        SVProgressHUD.showSuccess(status: S.current.repayment_succeed);
+        SVProgressHUD.showSuccess(
+            status: S.current.loan_application_input_comfir);
 
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) {

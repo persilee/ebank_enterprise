@@ -10,6 +10,7 @@ import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
 import 'package:ebank_mobile/data/source/model/loan_prepayment_model.dart';
 import 'package:ebank_mobile/data/source/model/loan_repayment_record.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
+import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -40,26 +41,8 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
   String repaymentStatus;
   //已还本金
   var paidPrincipal = '';
-
-  // GetLnAcScheduleRspDetlsDTOList _list2 = new GetLnAcScheduleRspDetlsDTOList(
-  //   "50000085",
-  //   "0",
-  //   "30",
-  //   0,
-  //   0,
-  //   "2020-03-01",
-  //   "2014.67",
-  //   "NORMAL",
-  //   "ALL",
-  //   "14.67",
-  //   "2020-03-20",
-  //   "200",
-  //   "2000",
-  //   "2020-03-20",
-  //   "2020-03-20",
-  //   "0",
-  // );
-
+  //是否在加载中
+  bool _isLoad = true;
   @override
   void initState() {
     super.initState();
@@ -80,8 +63,8 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
       widget.loanDetail.contactNo, //合约号
     );
     SVProgressHUD.show();
-    // LoanDataRepository()
     ApiClientLoan().getScheduleRecordDetailList(req).then((data) {
+      _isLoad = false;
       if (data.loanPrepaymentHistoryDTOList != null) {
         SVProgressHUD.dismiss();
         setState(() {
@@ -90,6 +73,7 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
         });
       }
     }).catchError((e) {
+      _isLoad = false;
       SVProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: e.toString(),
@@ -126,9 +110,12 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
         key: refrestIndicatorKey,
         child: Column(
           children: [
-            _getHeader(paidPrincipal),
+            _getHeader(paidPrincipal), //头部
             Expanded(
-              child: stackList,
+              //列表体
+              child: lnScheduleList.length <= 0
+                  ? notDataContainer(context, S.current.no_data_now)
+                  : stackList,
             ),
           ],
         ),

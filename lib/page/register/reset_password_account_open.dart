@@ -10,11 +10,13 @@ import 'package:ebank_mobile/page/forexTrading/forex_trading_page.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 忘记密码--已开户页面
@@ -235,6 +237,9 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
 
   //验证身份信息 提交数据
   _realNameAuth() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
+
     print('$_cardNumberListen>>>>>>>>>>>>>>>>>');
     //调用三要素验证，成功后进入人脸识别，识别成功后进入设置密码阶段
     if (_cardNumber.text.length <= 0) {
@@ -253,11 +258,10 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
         _userName.text);
     // Navigator.pushNamed(context, setPayPage);
     HSProgressHUD.show();
-    // ChecInformantApiRepository()
     ApiClientPassword()
         .realNameAuth(
       RealNameAuthByThreeFactorReq(
-          _cardNumber.text, _certTypeKey, _userPhone, _userName.text),
+          _cardNumber.text, _certTypeKey, _userPhone, _userName.text, userID),
     )
         .then((data) {
       HSProgressHUD.dismiss();

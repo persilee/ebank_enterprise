@@ -8,24 +8,24 @@ part 'real_name_auth_by_three_factor.g.dart';
 
 @JsonSerializable()
 class RealNameAuthByThreeFactorReq extends Object {
+  //证件号
   @JsonKey(name: 'certNo')
   String certNo;
-
+//证件类型
   @JsonKey(name: 'certType')
   String certType;
-
+//用户手机号
   @JsonKey(name: 'userPhoneNo')
   String userPhoneNo;
-
+  //真实名称
   @JsonKey(name: 'realName')
   String realName;
+//用户ID
+  @JsonKey(name: "userId")
+  String userId;
 
   RealNameAuthByThreeFactorReq(
-    this.certNo,
-    this.certType,
-    this.userPhoneNo,
-    this.realName,
-  );
+      this.certNo, this.certType, this.userPhoneNo, this.realName, this.userId);
 
   factory RealNameAuthByThreeFactorReq.fromJson(Map<String, dynamic> srcJson) =>
       _$RealNameAuthByThreeFactorReqFromJson(srcJson);
