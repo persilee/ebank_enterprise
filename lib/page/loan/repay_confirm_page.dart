@@ -115,14 +115,12 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
       message = ModalRoute.of(context).settings.arguments;
       currency = list.ccy; //币种
       int totalRcv = int.parse(list.rcvPen) + int.parse(list.rcvCom);
-      fine = totalRcv.toString(); //罚息总额
-      totalRepay = message['totalRepay']; //还款总额
+      fine = list.rcvPen; //罚息总额
+      totalRepay = list.totAmt; //还款总额
       loanInterest = loanDetail.intRate + "%"; //当前利率
-      debitAccount = loanDetail.repaymentAcNo != null
-          ? loanDetail.repaymentAcNo
-          : '8011208000001258'; //扣款帐号
+      debitAccount = loanDetail.repaymentAcNo; //扣款帐号
       repayPrincipal = list.payPrin; //还款本金
-      repayInterest = list.rcvInt; //还款利息
+      repayInterest = list.payInt; //还款利息
       restLoan = (double.parse(loanDetail.osAmt) - double.parse(list.payPrin))
           .toString(); //用贷款余额减去还款本金
     });
