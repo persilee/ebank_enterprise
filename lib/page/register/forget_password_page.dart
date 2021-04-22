@@ -318,8 +318,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               'userPhone': _phoneNumListen,
               'sms': _smsListen
             };
-            Navigator.pushNamed(context, pageResetPasswordOpenAccount,
-                arguments: listData);
+            Navigator.pushNamed(context, pageResetPasswordNoAccount,
+                arguments: listData); //pageResetPasswordOpenAccount
             HSProgressHUD.dismiss();
           }
         });

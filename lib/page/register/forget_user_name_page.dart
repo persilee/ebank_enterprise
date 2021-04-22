@@ -271,7 +271,6 @@ class _ForgetUserNameState extends State<ForgetUserName> {
 
   //获取验证码接口
   _getVerificationCode() async {
-    print(">>>>>>>>>>>>>>>$_accountName");
     // if (!_isRegister) {
     //   Fluttertoast.showToast(
     //     msg: S.current.num_not_is_register,
