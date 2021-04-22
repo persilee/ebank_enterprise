@@ -672,7 +672,7 @@ class _LoanReferenceState extends State<LoanReference> {
               ),
             ),
             Row(
-              // mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
                   //右侧文本
@@ -681,8 +681,10 @@ class _LoanReferenceState extends State<LoanReference> {
                   padding: EdgeInsets.only(right: 12),
                   child: item == ''
                       ? Text(S.current.please_select,
-                          style: TextStyle(color: HsgColors.textHintColor))
+                          style: TextStyle(color: HsgColors.textHintColor),
+                          textAlign: TextAlign.end) //占位文本
                       : Text(
+                          //文本
                           item,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,

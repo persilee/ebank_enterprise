@@ -632,6 +632,8 @@
   "loan_application_amount_check": "申請金額不能為0",
   "loan_application_apply_pending": "待處理",
   "loan_application_apply_processed": "已處理",
+  "loan_application_input_comfir":"申請已提交,待審核",
+
   "open_account_goto_ebank_tip": "尊敬的用戶，您好。由於您不是受邀客戶，請先通過企服商進行邀請，或者前往企業網銀進行開戶申請。",
   "openAccount_faceSign_results_content": "面簽數據提交成功",
   "openAccount_industryNatureTwo": "商業/行業性質細分",

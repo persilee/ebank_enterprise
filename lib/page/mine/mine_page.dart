@@ -309,7 +309,7 @@ class _MinePageState extends State<MinePage>
                   }
                   Navigator.pushNamed(context, pageCardList);
                 }),
-                _flatBtnNuitWidget(S.current.password_management, true, () {
+                _flatBtnNuitWidget(S.current.password_management, true, () {//密码管理
                   Navigator.pushNamed(context, pagePasswordManagement,
                       arguments: _belongCustStatus);
                 }),
