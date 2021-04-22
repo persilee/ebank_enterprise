@@ -661,19 +661,19 @@ class _RelatedIndividualsDataPageState
           String _language = Intl.getCurrentLocale();
           if (_language == 'en') {
             _appellationText = _partner.appellationIdType.name ?? '';
-            _categoryText = _partner.partnerTypeIdType.name ?? '';
+            // _categoryText = _partner.partnerTypeIdType.name ?? '';
             _documentTypeText = _partner.idTypeIdType.name ?? '';
             _nationalityText =
                 _partner.nationalityCountryRegionModel.cntyNm ?? '';
           } else if (_language == 'zh_CN') {
             _appellationText = _partner.appellationIdType.cname ?? '';
-            _categoryText = _partner.partnerTypeIdType.cname ?? '';
+            // _categoryText = _partner.partnerTypeIdType.cname ?? '';
             _documentTypeText = _partner.idTypeIdType.cname ?? '';
             _nationalityText =
                 _partner.nationalityCountryRegionModel.cntyCnm ?? '';
           } else {
             _appellationText = _partner.appellationIdType.cname ?? '';
-            _categoryText = _partner.partnerTypeIdType.cname ?? '';
+            // _categoryText = _partner.partnerTypeIdType.cname ?? '';
             _documentTypeText = _partner.idTypeIdType.cname ?? '';
             _nationalityText =
                 _partner.nationalityCountryRegionModel.cntyTcnm ?? '';
