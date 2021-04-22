@@ -15,8 +15,8 @@ class RealNameAuthByThreeFactorReq extends Object {
   @JsonKey(name: 'certType')
   String certType;
 //用户手机号
-  @JsonKey(name: 'userPhoneNo')
-  String userPhoneNo;
+  @JsonKey(name: 'phoneNo')
+  String phoneNo;
   //真实名称
   @JsonKey(name: 'realName')
   String realName;
@@ -25,7 +25,7 @@ class RealNameAuthByThreeFactorReq extends Object {
   String userId;
 
   RealNameAuthByThreeFactorReq(
-      this.certNo, this.certType, this.userPhoneNo, this.realName, this.userId);
+      this.certNo, this.certType, this.phoneNo, this.realName, this.userId);
 
   factory RealNameAuthByThreeFactorReq.fromJson(Map<String, dynamic> srcJson) =>
       _$RealNameAuthByThreeFactorReqFromJson(srcJson);
