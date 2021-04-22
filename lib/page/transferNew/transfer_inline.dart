@@ -645,7 +645,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
 
   //按钮是否能点击
   _boolBut() {
-    if ((_payerTransferController.text != '' ||
+    if ((_payerTransferController.text != '' &&
             _payeeTransferController.text != '') &&
         _payeeNameController.text != '' &&
         _payeeAccountController.text != '' &&
@@ -772,20 +772,6 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         _payerCcy != '' &&
         (_payeeTransferController.text != '' ||
             _payerTransferController.text != '')) {
-      // ForexTradingRepository()
-      //     .transferTrial(
-      //         TransferTrialReq(
-      //           opt: _opt,
-      //           buyCcy: _payerCcy,
-      //           sellCcy: _payeeCcy,
-      //           buyAmount: _payerTransferController.text == ''
-      //               ? '0'
-      //               : _payerTransferController.text,
-      //           sellAmount: _payeeTransferController.text == ''
-      //               ? '0'
-      //               : _payeeTransferController.text,
-      //         ),
-      //         'TransferTrialReq')
       Transfer()
           .transferTrial(TransferTrialReq(
         opt: _opt,
@@ -799,16 +785,6 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             : _payeeTransferController.text,
       ))
           .then((data) {
-        print(" opt: " +
-            _opt +
-            " sellCcy: " +
-            _payeeCcy +
-            " buyCcy: " +
-            _payerCcy +
-            " sellAmout: " +
-            _payeeTransferController.text +
-            " buyAmount: " +
-            _payerTransferController.text);
         if (this.mounted) {
           setState(() {
             if (_opt == 'B') {
@@ -819,6 +795,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             }
             rate = data.optExRate;
           });
+          _boolBut();
         }
       }).catchError((e) {
         print(e.toString());

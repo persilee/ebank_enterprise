@@ -851,7 +851,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //按钮是否能点击
   _boolBut() {
-    if ((_payerTransferController.text != '' ||
+    if ((_payerTransferController.text != '' &&
             _payeeTransferController.text != '') &&
         _payeeNameController.text != '' &&
         _payeeAccountController.text != '' &&
@@ -1011,6 +1011,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
           }
           rate = data.optExRate;
         });
+        _boolBut();
       }
     }).catchError((e) {
       print(e.toString());
