@@ -113,4 +113,47 @@ class HsgShowTip {
       click(value);
     });
   }
+
+  /// 登录密码错误次数提示
+  static void loginPasswordErrorTip(
+    BuildContext context,
+    int errorNum,
+    int totalNum,
+    Function(dynamic value) click,
+  ) {
+    totalNum = totalNum == null || totalNum == 0 ? 5 : totalNum;
+    String tipTitle = S.of(context).login_password_error_tip;
+    tipTitle = tipTitle.replaceAll('errNum', errorNum.toString());
+    tipTitle =
+        tipTitle.replaceAll('remainNum', (totalNum - errorNum).toString());
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertDialog(
+            title: S.of(context).warm_prompt,
+            message: tipTitle,
+            positiveButton: S.current.confirm,
+          );
+        }).then((value) {
+      click(value);
+    });
+  }
+
+  /// 登录密码错误次数太多，被锁定提示
+  static void loginPasswordErrorToMuchTip(
+    BuildContext context,
+    Function(dynamic value) click,
+  ) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertDialog(
+            title: S.of(context).warm_prompt,
+            message: S.of(context).login_password_error_toMuch_tip,
+            positiveButton: S.current.confirm,
+          );
+        }).then((value) {
+      click(value);
+    });
+  }
 }

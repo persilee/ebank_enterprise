@@ -8,11 +8,8 @@ import 'dart:typed_data';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
-import 'package:ebank_mobile/data/source/model/face_sign_upload_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_information_supplement_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_data.dart';
-import 'package:ebank_mobile/data/source/model/open_account_signature_result.dart';
-import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
@@ -20,14 +17,12 @@ import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/event_bus_utils.dart';
-import 'package:ebank_mobile/util/log_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OpenAccountIdentifyResultsSuccessfulPage extends StatefulWidget {

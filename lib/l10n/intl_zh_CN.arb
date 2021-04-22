@@ -711,6 +711,8 @@
   "openAccount_industryNatureTwo": "商业/行业性质细分",
   "openAccount_industryNatureTwo_select": "商业/行业性质细分选择",
   "openAccount_industryNatureNotSelect_tip": "请先选择商业/行业性质",
+  "login_password_error_tip": "登录密码错误，您当日已经错误errNum次，当日还剩remainNum次机会。",
+  "login_password_error_toMuch_tip": "登录密码错误次数超限：用户被锁定。",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "transfer_from1": "付款方",
   "payer_currency": "转出方币种",
