@@ -18,6 +18,7 @@ import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../page_route.dart';
@@ -232,6 +233,16 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
       endTime
     ];
     var startTime = rate;
+    String _language = Intl.getCurrentLocale();
+    String _nameStr = '';
+    if (_language == 'zh_CN') {
+      _nameStr = rows.lclName ?? rows.engName;
+    } else if (_language == 'zh_HK') {
+      _nameStr = rows.lclName ?? rows.engName;
+    } else {
+      _nameStr = rows.engName;
+    }
+
     //整存整取
     var taking = [
       SizedBox(
@@ -242,7 +253,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
             Padding(
               padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
               child: Text(
-                rows.engName,
+                _nameStr,
                 style: TextStyle(fontSize: 15, color: Colors.black),
               ),
             ),
@@ -341,7 +352,6 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     bool excludeClosed = true;
     String ciNo = prefs.getString(ConfigKey.CUST_ID);
     Future.wait({
-      // DepositDataRepository()
       ApiClientTimeDeposit().getDepositRecordRows(
         DepositRecordReq(ciNo, '', excludeClosed, _page, 10, ''),
       )
@@ -386,7 +396,6 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
       );
-      // HSProgressHUD.dismiss();
     });
   }
 

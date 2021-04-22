@@ -85,6 +85,9 @@ class DepositRecordResp extends Object {
 class DepositRecord extends Object {
   @JsonKey(name: 'engName')
   String engName;
+  //中文名
+  @JsonKey(name: 'lclName')
+  String lclName;
 
   @JsonKey(name: 'conRate')
   String conRate;
@@ -130,6 +133,7 @@ class DepositRecord extends Object {
 
   DepositRecord(
     this.engName,
+    this.lclName,
     this.conRate,
     this.settDdAc,
     this.openDrAc,

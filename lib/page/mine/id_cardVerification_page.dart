@@ -37,6 +37,7 @@ import 'dart:async';
 // import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IdIardVerificationPage extends StatefulWidget {
   @override
@@ -492,19 +493,23 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
 
   //验证身份信息 提交数据
   _realNameAuth() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ID);
     print(_certNo.text +
         '-' +
         _certTypeKey +
         '-' +
         _userPhone +
         '-' +
-        _realName.text);
+        _realName.text +
+        '-' +
+        userID);
+
     HSProgressHUD.show();
-    // ChecInformantApiRepository()
     ApiClientPassword()
         .realNameAuth(
       RealNameAuthByThreeFactorReq(
-          _certNo.text, _certTypeKey, _userPhone, _realName.text),
+          _certNo.text, _certTypeKey, _userPhone, _realName.text, userID),
     )
         .then((data) {
       print(_certNo.text +

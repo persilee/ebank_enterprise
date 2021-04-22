@@ -703,6 +703,9 @@
   "loan_application_amount_check": "Application amount cannot be 0",
   "loan_application_apply_pending": "Pending",
   "loan_application_apply_processed": "Processed",
+  "loan_application_input_comfir":"Application has been submitted, pending review",
+
+
   "open_account_goto_ebank_tip": "Dear user. Since you are not an invited customer, please first invite through an enterprise service provider, or go to corporate online banking to apply for an account.",
   "openAccount_faceSign_results_content": "FaceSign data submitted successfully.",
   "openAccount_industryNatureTwo": "Business/Industry Nature Segmentation",

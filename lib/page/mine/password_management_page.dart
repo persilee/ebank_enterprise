@@ -101,6 +101,7 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
             child: Column(
               children: [
                 _flatBtnNuitWidget(S.of(context).changPayPws, true, () {
+                  //修改交易密码
                   (['0', '1', '2', '3', ''].contains(_belongCustStatus))
                       ? _notOpenAccountTip()
                       : Navigator.pushNamed(context, changePayPS);
@@ -112,11 +113,12 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
                 //   Navigator.pushNamed(context, pageResetPayPwdOtp);
                 // }),
                 _flatBtnNuitWidget(S.of(context).resetPayPwd, true, () {
-                  (['0', '1', '2', '3', ''].contains(_belongCustStatus))
-                      ? _notOpenAccountTip()
-                      : Navigator.pushNamed(context, pageResetPayPwdOtp);
+                  //充值交易密码
+                  //   (['0', '1', '2', '3', ''].contains(_belongCustStatus))
+                  //       ? _notOpenAccountTip()
+                  //       :
+                  Navigator.pushNamed(context, pageResetPayPwdOtp);
                 }),
-
               ],
             ),
           ),
