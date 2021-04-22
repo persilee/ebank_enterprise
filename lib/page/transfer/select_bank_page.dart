@@ -4,7 +4,7 @@
 /// Date: 2020-12-25
 
 import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
-import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:fluttertoast/fluttertoast.dart';

@@ -9,7 +9,7 @@ import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
 import 'package:ebank_mobile/data/source/open_account_repository.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -661,19 +661,19 @@ class _RelatedIndividualsDataPageState
           String _language = Intl.getCurrentLocale();
           if (_language == 'en') {
             _appellationText = _partner.appellationIdType.name ?? '';
-            _categoryText = _partner.partnerTypeIdType.name ?? '';
+            // _categoryText = _partner.partnerTypeIdType.name ?? '';
             _documentTypeText = _partner.idTypeIdType.name ?? '';
             _nationalityText =
                 _partner.nationalityCountryRegionModel.cntyNm ?? '';
           } else if (_language == 'zh_CN') {
             _appellationText = _partner.appellationIdType.cname ?? '';
-            _categoryText = _partner.partnerTypeIdType.cname ?? '';
+            // _categoryText = _partner.partnerTypeIdType.cname ?? '';
             _documentTypeText = _partner.idTypeIdType.cname ?? '';
             _nationalityText =
                 _partner.nationalityCountryRegionModel.cntyCnm ?? '';
           } else {
             _appellationText = _partner.appellationIdType.cname ?? '';
-            _categoryText = _partner.partnerTypeIdType.cname ?? '';
+            // _categoryText = _partner.partnerTypeIdType.cname ?? '';
             _documentTypeText = _partner.idTypeIdType.cname ?? '';
             _nationalityText =
                 _partner.nationalityCountryRegionModel.cntyTcnm ?? '';

@@ -1,6 +1,6 @@
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/transfer.dart';
+import 'package:ebank_mobile/http/retrofit/api/transfer.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
