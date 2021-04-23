@@ -227,10 +227,17 @@ class _TransferInternalPreviewPageState
     }).catchError((e) {
       print(e.toString());
       HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      if (e.toString().contains("EGENE218")) {
+        Fluttertoast.showToast(
+          msg: "S.of(context).transfer_msg_limit",
+          gravity: ToastGravity.CENTER,
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+      }
     });
   }
 }

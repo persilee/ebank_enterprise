@@ -999,10 +999,17 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: S.current.no_account,
-        gravity: ToastGravity.CENTER,
-      );
+      if (e.toString().contains("SC6121")) {
+        Fluttertoast.showToast(
+          msg: S.of(context).request_client_timeout,
+          gravity: ToastGravity.CENTER,
+        );
+      } else if (e.toString().contains("CI0114")) {
+        Fluttertoast.showToast(
+          msg: S.current.no_account,
+          gravity: ToastGravity.CENTER,
+        );
+      }
     });
   }
 }

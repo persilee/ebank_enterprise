@@ -175,7 +175,9 @@ class _TransferInternalPreviewPageState
     String payerBankCode = transferData.payerBankCode;
     String payerCardNo = transferData.transferOutAccount;
     String payerName = transferData.payerName;
-    String remark = transferData.transferRemark == ''? S.current.transfer:transferData.transferRemark;
+    String remark = transferData.transferRemark == ''
+        ? S.current.transfer
+        : transferData.transferRemark;
     String smsCode = '';
     String xRate = transferData.xRate;
     HSProgressHUD.show();
@@ -217,10 +219,17 @@ class _TransferInternalPreviewPageState
       Navigator.pushReplacementNamed(context, pageOperationResult);
     }).catchError((e) {
       HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      if (e.toString().contains("EGENE218")) {
+        Fluttertoast.showToast(
+          msg: "S.of(context).transfer_msg_limit",
+          gravity: ToastGravity.CENTER,
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+      }
     });
   }
 }

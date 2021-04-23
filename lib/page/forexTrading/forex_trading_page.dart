@@ -463,11 +463,18 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         );
         Navigator.pop(context, pageIndex);
       }).catchError((e) {
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
         HSProgressHUD.dismiss();
+        if (e.toString().contains("EGENE218")) {
+          Fluttertoast.showToast(
+            msg: S.of(context).transfer_msg_limit,
+            gravity: ToastGravity.CENTER,
+          );
+        } else {
+          Fluttertoast.showToast(
+            msg: e.toString(),
+            gravity: ToastGravity.CENTER,
+          );
+        }
       });
     }
   }
