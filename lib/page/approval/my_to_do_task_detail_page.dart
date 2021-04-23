@@ -126,17 +126,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _loadPostRepaymentData(_contractModel);
       }
     } catch (e) {
-      if ((e as DioError).error is NeedLogin) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) {
-          return LoginPage();
-        }), (Route route) {
-          print(route.settings?.name);
-          return true;
-        });
-      } else {
-        print('error: ${e.toString()}');
-      }
+      print('error: ${e.toString()}');
       setState(() {
         _isLoading = false;
       });
@@ -1074,15 +1064,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           taskId: widget.data.taskId,
         ),
       );
-      if (completeTaskModel.msgCd == '0000') {
-        if (this.mounted) {
-          setState(() {
-            _btnIsLoadingR = false;
-            _btnIsEnable = true;
-          });
-        }
-        Navigator.pop(context);
+      if (this.mounted) {
+        setState(() {
+          _btnIsLoadingR = false;
+          _btnIsEnable = true;
+        });
       }
+      Navigator.pop(context);
     } catch (e) {
       print(e);
     }
@@ -1121,15 +1109,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           taskId: widget.data.taskId,
         ),
       );
-      if (completeTaskModel.msgCd == '0000') {
-        if (this.mounted) {
-          setState(() {
-            _btnIsLoadingRTS = false;
-            _btnIsEnable = true;
-          });
-        }
-        Navigator.pop(context);
+      if (this.mounted) {
+        setState(() {
+          _btnIsLoadingRTS = false;
+          _btnIsEnable = true;
+        });
       }
+      Navigator.pop(context);
     } catch (e) {
       print(e);
     }
