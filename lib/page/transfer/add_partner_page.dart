@@ -11,7 +11,7 @@ import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
-import 'package:ebank_mobile/http/retrofit/api/transfer.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -888,7 +888,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       if (_nameController.text.length > 0 &&
           _acountController.text.length > 0 &&
           _transferType != S.current.please_select &&
-          _ccy != '') {
+          _ccy != '' &&
+          _isAccount) {
         if (_showInternational) {
           if (_bankNameController.text != '' &&
               _payeeAdressController.text.length > 0 &&
@@ -999,10 +1000,22 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: S.current.no_account,
-        gravity: ToastGravity.CENTER,
-      );
+      if (this.mounted) {
+        setState(() {
+          _isAccount = false;
+        });
+      }
+      if (e.toString().contains("SC6121")) {
+        Fluttertoast.showToast(
+          msg: S.of(context).request_client_timeout,
+          gravity: ToastGravity.CENTER,
+        );
+      } else if (e.toString().contains("CI0114")) {
+        Fluttertoast.showToast(
+          msg: S.current.no_account,
+          gravity: ToastGravity.CENTER,
+        );
+      }
     });
   }
 }

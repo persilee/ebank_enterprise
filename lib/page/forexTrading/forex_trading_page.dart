@@ -9,10 +9,11 @@ import 'package:ebank_mobile/data/source/model/foreign_ccy.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_ccy_list.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/get_ccy_holiday.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_bill.dart';
-import 'package:ebank_mobile/http/retrofit/api/transfer.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -23,6 +24,7 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class ForexTradingPage extends StatefulWidget {
   @override
@@ -50,6 +52,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   String _rate = '';
   String _incomeAmt = '';
   FocusNode _payAmtfocusNode = new FocusNode();
+  String _holidayFlg = '';
+  bool _isHoliday = false;
 
   @override
   // ignore: must_call_super
@@ -145,7 +149,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         _incomeCcy != '' &&
         _payAmtController.text != '' &&
         _rate != '' &&
-        _incomeAmt != '') {
+        _incomeAmt != '' &&
+        !_isHoliday) {
       return true;
     } else {
       return false;
@@ -317,9 +322,11 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           if (_paymentAcc != '' && _paymentCcy != '') {
             _getCardBal(_paymentAcc);
           }
+          _getCcyHoliday(_paymentCcy);
         } else {
           _incomeCcyId = result;
           _incomeCcy = dataList[_incomeCcyId];
+          _getCcyHoliday(_incomeCcy);
         }
         _transferTrial();
       });
@@ -424,6 +431,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           gravity: ToastGravity.CENTER,
         );
       });
+    } else {
+      HSProgressHUD.dismiss();
     }
   }
 
@@ -461,13 +470,49 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         );
         Navigator.pop(context, pageIndex);
       }).catchError((e) {
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
         HSProgressHUD.dismiss();
+        if (e.toString().contains("EGENE218")) {
+          Fluttertoast.showToast(
+            msg: S.of(context).transfer_msg_limit,
+            gravity: ToastGravity.CENTER,
+          );
+        } else {
+          Fluttertoast.showToast(
+            msg: e.toString(),
+            gravity: ToastGravity.CENTER,
+          );
+        }
       });
     }
+  }
+
+  //检查假期
+  Future _getCcyHoliday(String ccy) async {
+    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    Transfer().getCcyHoliday(GetCcyHolidayReq(ccy, date)).then((data) {
+      if (this.mounted) {
+        setState(() {
+          _holidayFlg = data.holidayFlg;
+        });
+      }
+      if (_holidayFlg == 'Y') {
+        Fluttertoast.showToast(
+          msg: S.of(context).forex_trading_msg3,
+          gravity: ToastGravity.CENTER,
+        );
+        if (this.mounted) {
+          setState(() {
+            _isHoliday = true;
+          });
+        }
+      } else {
+        if (this.mounted) {
+          setState(() {
+            _isHoliday = false;
+          });
+        }
+      }
+    });
   }
 
   //获取账号支持币种

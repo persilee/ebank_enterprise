@@ -183,6 +183,20 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   void _uploadImage() async {
     HSProgressHUD.show();
     try {
+      // if (_valueData.compareImageData != null &&
+      //     _valueData.compareImageData.length > 0 &&
+      //     _valueData.compareImageData[0].faceImgUrl != null &&
+      //     _valueData.compareImageData[0].faceImgUrl != '') {
+      //   String headerImgBase64 =
+      //       _valueData.compareImageData[0].faceImgUrl.replaceAll('\n', '');
+      //   headerImgBase64 = headerImgBase64.replaceAll('\\n', '');
+      //   Uint8List _bytes = base64Decode(
+      //     headerImgBase64,
+      //   );
+      //   Map response =
+      //       await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
+      //   _headerImgUrl = response['incompleteUrl'] ?? '';
+      // } else
       if (_valueData.headerImg != null && _valueData.headerImg != '') {
         String headerImgBase64 = _valueData.headerImg.replaceAll('\n', '');
         headerImgBase64 = headerImgBase64.replaceAll('\\n', '');
@@ -193,12 +207,6 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
             await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
         _headerImgUrl = response['incompleteUrl'] ?? '';
       }
-      // print('<><><> ${_valueData.positiveImage}');
-      // debugPrint('<><><>1 ${_valueData.positiveImage}',
-      //     wrapWidth: _valueData.positiveImage.length);
-      // debugPrint('<><><>2 ${_valueData.backImage}',
-      //     wrapWidth: _valueData.backImage.length);
-      // LogUtil.v('<><><> ${_valueData.positiveImage}');
       if (_valueData.positiveImage != null && _valueData.positiveImage != '') {
         String positiveImageBase64 =
             _valueData.positiveImage.replaceAll('\n', '');
@@ -243,9 +251,11 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   void _openAccountQuickSubmitData() async {
     final prefs = await SharedPreferences.getInstance();
     String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
+    String areaCode = prefs.getString(ConfigKey.USER_AREACODE);
 
     HSProgressHUD.show();
-    OpenAccountInformationSupplementDataReq dataReq = _getDataReq(phoneStr);
+    OpenAccountInformationSupplementDataReq dataReq =
+        _getDataReq(phoneStr, areaCode);
     // OpenAccountRepository()
     ApiClientOpenAccount().supplementQuickPartnerInfo(dataReq).then(
       (value) {
@@ -302,6 +312,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   void _saveSignVideoNetwork() async {
     final prefs = await SharedPreferences.getInstance();
     String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
+    String areaCodeStr = prefs.getString(ConfigKey.USER_AREACODE);
 
     // String businessId = _valueData.businessId ?? '';
     // String fileName = _valueData.fileName ?? '';
@@ -334,7 +345,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     // FaceSignUploadDataReq dataReq = FaceSignUploadDataReq(businessId, fileName,
     //     phoneStr, certificateType, idNo, speechFlowDataHSList);
 
-    OpenAccountInformationSupplementDataReq dataReq = _getDataReq(phoneStr);
+    OpenAccountInformationSupplementDataReq dataReq =
+        _getDataReq(phoneStr, areaCodeStr);
     HSProgressHUD.show();
     // OpenAccountRepository()
     ApiClientOpenAccount().saveSignVideo(dataReq).then(
@@ -374,7 +386,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   // }
 
   ///面签数据转换（面签返回的时间格式不正确，不能直接使用）
-  OpenAccountInformationSupplementDataReq _getDataReq(String phoneStr) {
+  OpenAccountInformationSupplementDataReq _getDataReq(
+      String phoneStr, String areaCodeStr) {
     // Map valueMap = _valueData.toJson();
 
     String businessId = _valueData.businessId;
@@ -391,6 +404,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     dataReq.idPic = _positiveImageUrl; //_valueData.positiveImage;
     dataReq.idPicBack = _backImageUrl; //_valueData.backImage;
     dataReq.phone = phoneStr;
+    dataReq.areaCode = areaCodeStr;
     dataReq.businessId = businessId;
     dataReq.certificateType = _valueData.certificateType;
     // dataReq.compareImageData = _valueData.compareImageData;
