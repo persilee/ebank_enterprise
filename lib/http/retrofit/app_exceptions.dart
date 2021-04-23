@@ -1,4 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:ebank_mobile/main.dart';
+import 'package:ebank_mobile/widget/hsg_error_page.dart';
+import 'package:flutter/material.dart';
 
 /// 自定义异常
 class AppException implements Exception {
@@ -10,32 +13,32 @@ class AppException implements Exception {
     this.message,
   ]);
 
-
   @override
   String toString() {
     return 'AppException{message: $message, code: $code}';
   }
 
   factory AppException.create(DioError error) {
+    print('error.type: ${error.type}');
     switch (error.type) {
       case DioErrorType.CANCEL:
         {
-          return BadRequestException("-1", "请求已被取消，请重新请求");
+          return error.error = AppException("-1", "请求已被取消，请重新请求");
         }
         break;
       case DioErrorType.CONNECT_TIMEOUT:
         {
-          return BadRequestException("-1", "网络连接超时，请检查网络设置");
+          return error.error = AppException("-1", "网络连接超时，请检查网络设置");
         }
         break;
       case DioErrorType.SEND_TIMEOUT:
         {
-          return BadRequestException("-1", "网络请求超时，请稍后重试！");
+          return error.error = AppException("-1", "网络请求超时，请稍后重试！");
         }
         break;
       case DioErrorType.RECEIVE_TIMEOUT:
         {
-          return BadRequestException("-1", "响应超时，请稍后重试！");
+          return error.error = AppException("-1", "响应超时，请稍后重试！");
         }
         break;
       case DioErrorType.RESPONSE:
@@ -45,68 +48,80 @@ class AppException implements Exception {
             switch (errCode) {
               case 400:
                 {
-                  return BadRequestException("400", "请求语法错误");
+                  return error.error = AppException("400", "请求语法错误");
                 }
                 break;
               case 401:
                 {
-                  return UnauthorisedException("401", "没有权限");
+                  return error.error = AppException("401", "没有权限");
                 }
                 break;
               case 403:
                 {
-                  return UnauthorisedException("403", "服务器拒绝执行");
+                  return error.error = AppException("403", "服务器拒绝执行");
                 }
                 break;
               case 404:
                 {
-                  return UnauthorisedException("404", "无法连接服务器");
+                  return error.error = AppException("404", "无法连接服务器");
                 }
                 break;
               case 405:
                 {
-                  return UnauthorisedException("405", "请求方法被禁止");
+                  return error.error = AppException("405", "请求方法被禁止");
                 }
                 break;
               case 500:
                 {
-                  return UnauthorisedException("500", "服务器内部错误");
+                  return error.error = AppException("500", "服务器内部错误");
                 }
                 break;
               case 502:
                 {
-                  return UnauthorisedException("502", "无效的请求");
+                  return error.error = AppException("502", "无效的请求");
                 }
                 break;
               case 503:
                 {
-                  return UnauthorisedException("503", "服务器挂了");
+                  return error.error = AppException("503", "服务器挂了");
                 }
                 break;
               case 505:
                 {
-                  return UnauthorisedException("505", "不支持HTTP协议请求");
+                  return error.error = AppException("505", "不支持HTTP协议请求");
                 }
                 break;
               default:
                 {
-                  return AppException(
+                  return error.error = AppException(
                       errCode.toString(), error.response.statusMessage);
                 }
             }
           } on Exception catch (_) {
-            return AppException("-1", "未知错误");
+            return error.error = AppException("-1", "未知错误");
           }
         }
         break;
       case DioErrorType.DEFAULT:
         {
-          return AppException("-1", "网络异常，请稍后重试！");
+          print('error.error.runtimeType: ${error.error.runtimeType}');
+          if(error.error is NeedLogin) {
+            // navigatorKey.currentState.push(MaterialPageRoute(
+            //     builder: (context) => HsgErrorPage(
+            //       title: error.error.code,
+            //       desc: error.error.message,
+            //     )));
+            return error.error = NeedLogin();
+            break;
+          } else {
+            return error.error;
+          }
+          return error.error = AppException("-1", "网络异常，请稍后重试！");
         }
         break;
       default:
         {
-          return AppException("-1", error.message);
+          return error.error = AppException("-1", error.message);
         }
     }
   }
@@ -123,15 +138,15 @@ class UnauthorisedException extends AppException {
 }
 
 abstract class BaseError {
-  final int code;
+  final String code;
   final String message;
 
   BaseError({this.code, this.message});
 }
 
-class NeedLogin implements BaseError {
+class NeedLogin extends AppException implements BaseError  {
   @override
-  int get code => 401;
+  String get code => '401';
 
   @override
   String get message => "请先登录";

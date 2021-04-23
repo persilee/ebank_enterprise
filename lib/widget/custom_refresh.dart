@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/util/screen_util.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -64,11 +65,12 @@ class CustomRefresh extends StatelessWidget {
                   body = Row(
                     children: [
                       Text(S.current.refresh_pull_loading,
-                          style: TextStyle(fontSize: 12)),
+                          style: TextStyle(fontSize: 12),textAlign: TextAlign.center,),
                     ],
                   );
                 } else if (mode == LoadStatus.loading) {
                   body = Container(
+                    alignment: Alignment.center,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -83,22 +85,23 @@ class CustomRefresh extends StatelessWidget {
                         ),
                         Padding(padding: EdgeInsets.only(left: 10)),
                         Text(S.current.refresh_loading,
-                            style: TextStyle(fontSize: 12))
+                            style: TextStyle(fontSize: 12), textAlign: TextAlign.center,)
                       ],
                     ),
                   );
                 } else if (mode == LoadStatus.failed) {
                   body = Text(S.current.refresh_failed_retry,
-                      style: TextStyle(fontSize: 12));
+                      style: TextStyle(fontSize: 12), textAlign: TextAlign.center,);
                 } else if (mode == LoadStatus.canLoading) {
                   body = Text(S.current.refresh_load_more,
-                      style: TextStyle(fontSize: 12));
+                      style: TextStyle(fontSize: 12), textAlign: TextAlign.center,);
                 } else {
                   body = Text(S.current.refresh_no_more_data,
-                      style: TextStyle(fontSize: 12));
+                      style: TextStyle(fontSize: 12), textAlign: TextAlign.center,);
                 }
                 return Container(
                   height: 55.0,
+                  width: ScreenUtil.instance.width,
                   child: Center(child: body),
                 );
               },

@@ -17,12 +17,13 @@ import 'package:ebank_mobile/data/source/model/approval/open_td_contract_detail_
 import 'package:ebank_mobile/data/source/model/approval/foreign_transfer_model.dart'
     as ForeignTransferModel;
 import 'package:ebank_mobile/data/source/model/approval/post_repayment_model.dart'
-as PostRepaymentModel;
+    as PostRepaymentModel;
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -57,6 +58,9 @@ class _MyApprovedHistoryDetailPageState
   List<Widget> _finishedList = [];
   final f = NumberFormat("#,##0.00", "en_US");
   final fj = NumberFormat("#,##0", "ja-JP");
+  bool _isShowErrorPage = false;
+  AppException _error;
+  Widget _hsgErrorPage;
 
   @override
   void initState() {
@@ -110,19 +114,27 @@ class _MyApprovedHistoryDetailPageState
         _loadPostRepaymentData(_contractModel);
       }
     } catch (e) {
-      if ((e as DioError).error is NeedLogin) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) {
-          return LoginPage();
-        }), (Route route) {
-          print(route.settings?.name);
-          return true;
-        });
+      bool _isNeedLogin;
+      if (e.error is NeedLogin) {
+        _isNeedLogin = true;
       } else {
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
+        _isNeedLogin = false;
+      }
+      if (this.mounted) {
+        setState(() {
+          _error = e.error;
+          _isShowErrorPage = true;
+          _hsgErrorPage = HsgErrorPage(
+            title: _error.code,
+            desc: _error.message,
+            isNeedLogin: _isNeedLogin,
+            buttonAction: _isNeedLogin
+                ? () {}
+                : () {
+                    _loadData();
+                  },
+          );
+        });
       }
       setState(() {
         _isLoading = false;
@@ -133,7 +145,7 @@ class _MyApprovedHistoryDetailPageState
   // postRepaymentApproval  - 提前还款
   void _loadPostRepaymentData(_contractModel) {
     PostRepaymentModel.PostRepaymentModel postRepaymentModel =
-    PostRepaymentModel.PostRepaymentModel.fromJson(_contractModel);
+        PostRepaymentModel.PostRepaymentModel.fromJson(_contractModel);
 
     PostRepaymentModel.OperateEndValue data =
         postRepaymentModel.operateEndValue;
@@ -149,8 +161,10 @@ class _MyApprovedHistoryDetailPageState
     if (this.mounted) {
       setState(() {
         _postRepaymentList.add(_buildTitle(S.current.approve_loan_information));
-        _postRepaymentList.add(_buildContentItem(S.current.approve_loan_account, data?.acNo ?? ''));
-        _postRepaymentList.add(_buildContentItem(S.current.approve_loan_currency, data?.ccy ?? ''));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_account, data?.acNo ?? ''));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_currency, data?.ccy ?? ''));
         _postRepaymentList.add(_buildContentItem(
             S.current.approve_loan_principal,
             // 处理日元没有小数
@@ -163,12 +177,15 @@ class _MyApprovedHistoryDetailPageState
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.outBal ?? '0')) ?? ''
                 : f.format(double.parse(data?.outBal ?? '0')) ?? ''));
-        _postRepaymentList.add(_buildContentItem(S.current.approve_loan_interest_rate, data?.exRate ?? ''));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_interest_rate, data?.exRate ?? ''));
         _postRepaymentList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
-        _postRepaymentList.add(_buildTitle(S.current.approve_loan_payment_information));
-        _postRepaymentList.add(_buildContentItem(S.current.approve_debit_account, data?.ddAc ?? ''));
+        _postRepaymentList
+            .add(_buildTitle(S.current.approve_loan_payment_information));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_debit_account, data?.ddAc ?? ''));
         _postRepaymentList.add(_buildContentItem(
             S.current.approve_repayment_principal,
             data?.ccy == 'JPY'
@@ -231,8 +248,8 @@ class _MyApprovedHistoryDetailPageState
         _foreignTransferList.add(_buildContentItem(
             S.current.approve_credit_amount,
             data?.buyCcy == 'JPY'
-            ? fj.format(double.parse(data?.sellAmt ?? '0')) ?? ''
-            : f.format(double.parse(data?.sellAmt ?? '0')) ?? ''));
+                ? fj.format(double.parse(data?.sellAmt ?? '0')) ?? ''
+                : f.format(double.parse(data?.sellAmt ?? '0')) ?? ''));
         _foreignTransferList.add(
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
         _isLoading = false;
@@ -323,7 +340,8 @@ class _MyApprovedHistoryDetailPageState
             S.current.approve_name_account, data?.payeeName ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_currency, data?.creditCurrency ?? ''));
-        _internationalList.add(_buildContentItem(S.current.approve_amount,
+        _internationalList.add(_buildContentItem(
+            S.current.approve_amount,
             data?.creditCurrency == 'JPY'
                 ? fj.format(double.parse(data?.creditAmount ?? '0')) ?? ''
                 : f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
@@ -348,7 +366,8 @@ class _MyApprovedHistoryDetailPageState
             S.current.approve_name_account, data?.payerName ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_currency, data?.debitCurrency ?? ''));
-        _internationalList.add(_buildContentItem(S.current.approve_amount,
+        _internationalList.add(_buildContentItem(
+            S.current.approve_amount,
             data?.debitCurrency == 'JPY'
                 ? fj.format(double.parse(data?.debitAmount ?? '0'))
                 : f.format(double.parse(data?.debitAmount ?? '0')) ?? ''));
@@ -384,7 +403,8 @@ class _MyApprovedHistoryDetailPageState
             S.current.approve_account, data?.payeeCardNo ?? ''));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_currency, data?.creditCurrency ?? ''));
-        _oneToOneList.add(_buildContentItem(S.current.approve_amount,
+        _oneToOneList.add(_buildContentItem(
+            S.current.approve_amount,
             data?.creditCurrency == 'JPY'
                 ? fj.format(double.parse(data?.creditAmount ?? '0')) ?? ''
                 : f.format(double.parse(data?.creditAmount ?? '0')) ?? ''));
@@ -400,7 +420,8 @@ class _MyApprovedHistoryDetailPageState
             S.current.approve_name_account, data?.payerName ?? ''));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_currency, data?.debitCurrency ?? ''));
-        _oneToOneList.add(_buildContentItem(S.current.approve_amount,
+        _oneToOneList.add(_buildContentItem(
+            S.current.approve_amount,
             data?.creditCurrency == 'JPY'
                 ? fj.format(double.parse(data?.debitAmount)) ?? ''
                 : f.format(double.parse(data?.debitAmount)) ?? ''));
@@ -489,7 +510,8 @@ class _MyApprovedHistoryDetailPageState
     if (this.mounted) {
       setState(() {
         _openTdList.add(_buildTitle(S.current.approve_basic_information));
-        _openTdList.add(_buildContentItem(S.current.approve_amount,
+        _openTdList.add(_buildContentItem(
+            S.current.approve_amount,
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.bal ?? '0')) ?? ''
                 : f.format(double.parse(data?.bal ?? '0')) ?? ''));
@@ -518,18 +540,20 @@ class _MyApprovedHistoryDetailPageState
       ),
       body: _isLoading
           ? HsgLoading()
-          : SingleChildScrollView(
-              controller: _controller,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // 审批历史
-                  if (_finishedList.length > 0) _buildHistoryTask(context),
-                  // 根据processKey动态显示 任务详情
-                  _buildTaskDetail(_processKey),
-                ],
-              ),
-            ),
+          : _isShowErrorPage
+              ? _hsgErrorPage
+              : SingleChildScrollView(
+                  controller: _controller,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // 审批历史
+                      if (_finishedList.length > 0) _buildHistoryTask(context),
+                      // 根据processKey动态显示 任务详情
+                      _buildTaskDetail(_processKey),
+                    ],
+                  ),
+                ),
     );
   }
 
