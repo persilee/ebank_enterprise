@@ -1074,15 +1074,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           taskId: widget.data.taskId,
         ),
       );
-      if (completeTaskModel.msgCd == '0000') {
-        if (this.mounted) {
-          setState(() {
-            _btnIsLoadingR = false;
-            _btnIsEnable = true;
-          });
-        }
-        Navigator.pop(context);
+      if (this.mounted) {
+        setState(() {
+          _btnIsLoadingR = false;
+          _btnIsEnable = true;
+        });
       }
+      Navigator.pop(context);
     } catch (e) {
       print(e);
     }
@@ -1121,15 +1119,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           taskId: widget.data.taskId,
         ),
       );
-      if (completeTaskModel.msgCd == '0000') {
-        if (this.mounted) {
-          setState(() {
-            _btnIsLoadingRTS = false;
-            _btnIsEnable = true;
-          });
-        }
-        Navigator.pop(context);
+      if (this.mounted) {
+        setState(() {
+          _btnIsLoadingRTS = false;
+          _btnIsEnable = true;
+        });
       }
+      Navigator.pop(context);
     } catch (e) {
       print(e);
     }

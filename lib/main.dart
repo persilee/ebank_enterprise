@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
@@ -23,6 +24,9 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 // void main() => runApp(
 //       HSGBankApp(),
 //     );
+
+final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   await SpUtil.getInstance();
@@ -143,6 +147,7 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
         return false;
       },
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         title: 'HSGBank',
         theme: ThemeData(
@@ -244,7 +249,7 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
       }
     }).catchError((e) {
       Fluttertoast.showToast(
-        msg: e.toString(),
+        msg: e.error.message,
         gravity: ToastGravity.CENTER,
       );
     });

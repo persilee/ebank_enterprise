@@ -90,18 +90,10 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/data/china.json
-    - assets/data/country.json
-    - assets/images/splash.png
-    - assets/data/city.json
+    - assets/json/
+    - assets/images/
+    - assets/data/
     - images/ic_launcher.png
-    - assets/json/loading2.json
-    - assets/json/my_approval.json
-    - assets/json/contract_detail.json
-    - assets/json/transfer_detail.json
-    - assets/json/my_history_approval.json
-    - assets/json/contract_history_detail.json
-    - assets/json/transfer_history_detail.json
     #common
     - images/common/check_btn_common_checked.png
     - images/common/check_btn_common_no_check.png
@@ -227,7 +219,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+  - family: IconFont
+    fonts:
+      - asset: assets/fonts/iconfont.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

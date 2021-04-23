@@ -8,6 +8,7 @@ class ResponseInterceptor extends Interceptor {
   Future onResponse(Response response) {
     if (response.data is Map && response.request.path != '/security/cutlogin') {
       BaseResponse baseResponse = BaseResponse.fromJson(response.data);
+      print(baseResponse.toJson());
       if (baseResponse.msgCd == '0000') {
         response.data = baseResponse.body;
       } else {
