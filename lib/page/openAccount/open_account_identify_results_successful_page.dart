@@ -183,6 +183,20 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   void _uploadImage() async {
     HSProgressHUD.show();
     try {
+      // if (_valueData.compareImageData != null &&
+      //     _valueData.compareImageData.length > 0 &&
+      //     _valueData.compareImageData[0].faceImgUrl != null &&
+      //     _valueData.compareImageData[0].faceImgUrl != '') {
+      //   String headerImgBase64 =
+      //       _valueData.compareImageData[0].faceImgUrl.replaceAll('\n', '');
+      //   headerImgBase64 = headerImgBase64.replaceAll('\\n', '');
+      //   Uint8List _bytes = base64Decode(
+      //     headerImgBase64,
+      //   );
+      //   Map response =
+      //       await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
+      //   _headerImgUrl = response['incompleteUrl'] ?? '';
+      // } else
       if (_valueData.headerImg != null && _valueData.headerImg != '') {
         String headerImgBase64 = _valueData.headerImg.replaceAll('\n', '');
         headerImgBase64 = headerImgBase64.replaceAll('\\n', '');
@@ -193,12 +207,6 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
             await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
         _headerImgUrl = response['incompleteUrl'] ?? '';
       }
-      // print('<><><> ${_valueData.positiveImage}');
-      // debugPrint('<><><>1 ${_valueData.positiveImage}',
-      //     wrapWidth: _valueData.positiveImage.length);
-      // debugPrint('<><><>2 ${_valueData.backImage}',
-      //     wrapWidth: _valueData.backImage.length);
-      // LogUtil.v('<><><> ${_valueData.positiveImage}');
       if (_valueData.positiveImage != null && _valueData.positiveImage != '') {
         String positiveImageBase64 =
             _valueData.positiveImage.replaceAll('\n', '');
