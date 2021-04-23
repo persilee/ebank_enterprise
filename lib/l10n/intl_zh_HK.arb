@@ -654,5 +654,6 @@
   "successfully_delete": "刪除成功!",
   "input_amount_msg1": "輸入金額必須大於0",
   "transfer_msg_limit": "轉賬金額超過卡單筆限額",
-  "request_client_timeout": "請求客戶端超時"
+  "request_client_timeout": "請求客戶端超時",
+  "forex_trading_msg3": "該幣種假期不允許進行外匯買賣轉載"
 }

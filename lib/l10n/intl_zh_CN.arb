@@ -737,5 +737,6 @@
   "successfully_delete": "删除成功!",
   "input_amount_msg1": "输入金额必须大于0",
   "transfer_msg_limit": "转账金额超过卡单笔限额",
-  "request_client_timeout": "请求客户端超时"
+  "request_client_timeout": "请求客户端超时",
+  "forex_trading_msg3": "该币种假期不允许进行外汇买卖转账"
 }

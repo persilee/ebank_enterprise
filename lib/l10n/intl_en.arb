@@ -736,5 +736,6 @@
   "successfully_delete": "Successfully Delete !",
   "input_amount_msg1": "The input amount must be greater than 0",
   "transfer_msg_limit": "The amount transferred exceeds the limit of a single transaction",
-  "request_client_timeout": "Request Client Timeout"
+  "request_client_timeout": "Request Client Timeout",
+  "forex_trading_msg3": "This currency does not allow foreign exchange transactions during the holidays"
 }
