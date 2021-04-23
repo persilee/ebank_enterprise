@@ -11,7 +11,7 @@ import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
-import 'package:ebank_mobile/http/retrofit/api/transfer.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
