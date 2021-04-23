@@ -222,7 +222,7 @@ class _LoanReferenceState extends State<LoanReference> {
       if (mounted) {
         setState(() {
           interestRate = data.interestRate.toString();
-          _loadTrialDate(); //拿到利率进行失算
+          _loadTrialDate(); //拿到利率进行试算
         });
       }
     }).catchError((e) {
@@ -244,7 +244,6 @@ class _LoanReferenceState extends State<LoanReference> {
       double.parse(interestRate), //贷款利率
       _dateCode, //总期数
     );
-    // LoanDataRepository()
     ApiClientLoan().loanPilotComputingInterface(req).then((data) {
       if (data.loanTrialDTOList != null) {
         setState(() {

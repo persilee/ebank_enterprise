@@ -7,6 +7,7 @@ import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
 import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
+import 'package:ebank_mobile/data/source/model/my_approval_data.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -25,6 +26,7 @@ import '../../page_route.dart';
 class LoanDetailsPage extends StatefulWidget {
 //如果需要在initState里面拿到传过来的值。必须在一开始就需要去实例化它
   final LoanAccountDOList loanAccountDetail;
+
   LoanDetailsPage({Key key, this.loanAccountDetail}) : super(key: key);
 
   @override
@@ -32,7 +34,6 @@ class LoanDetailsPage extends StatefulWidget {
 }
 
 class _LoanDetailsPageState extends State<LoanDetailsPage> {
-  // LoanAccountDOList loanAccountDetail;
   var loanDetailsArr = []; //币种列表、
   bool _isLoad = true;
 
@@ -49,7 +50,6 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
     String ciNo = "";
     String contactNo = "";
     String productCode = "";
-    // LoanDataRepository()
     ApiClientLoan()
         .getLoanList(
       LoanDetailMastModelReq(acNo, ciNo, contactNo, productCode),
@@ -76,20 +76,19 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // LoanAccountDOList loanDetail = ModalRoute.of(context).settings.arguments;
-    // this.loanAccountDetail = loanDetail;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.loan_detail),
         centerTitle: true,
         elevation: 0,
       ),
-      body: _isLoad
-          ? HsgLoading()
-          : CustomScrollView(
-              slivers: _getContent(),
-            ),
+      body:
+          // _isLoad
+          //     ? HsgLoading()
+          //     :
+          CustomScrollView(
+        slivers: _getContent(),
+      ),
     );
   }
 
@@ -410,7 +409,12 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           break;
         case 2:
           //提前还款
-          Navigator.pushNamed(context, pageRepayInput, arguments: loanDetail);
+          Navigator.pushNamed(context, pageRepayInput, arguments: loanDetail)
+              .then((data) {
+            setState(() {
+              _loadDetailData();
+            });
+          });
           break;
       }
     } else {

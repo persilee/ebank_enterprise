@@ -514,14 +514,6 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
           _certNo.text, _certTypeKey, _userPhone, _realName.text, userID),
     )
         .then((data) {
-      print(_certNo.text +
-          '-' +
-          _certTypeKey +
-          '-' +
-          _userPhone +
-          '-' +
-          _realName.text);
-      HSProgressHUD.dismiss();
       if (data.enabled) {
         Map map = new Map();
         map['certificateNo'] = _certNo.text;
