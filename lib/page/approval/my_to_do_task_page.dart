@@ -41,6 +41,7 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
   bool _isMoreData = false;
   bool _isShowErrorPage = false;
   AppException _error;
+  Widget _hsgErrorPage;
 
   @override
   void initState() {
@@ -78,23 +79,7 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
               _refreshController.footerMode.value = LoadStatus.canLoading;
             },
             content: _isShowErrorPage
-                ? HsgErrorPage(
-                    title: _error.code,
-                    desc: _error.message,
-                    buttonAction: () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return LoginPage();
-                      }), (Route route) {
-                        print(route.settings?.name);
-                        if (route.settings?.name == "/") {
-                          return true;
-                        }
-                        return false;
-                      });
-                    },
-                    buttonText: '登录',
-                  )
+                ? _hsgErrorPage
                 : _listData.length > 0
                     ? ListView.builder(
                         padding: EdgeInsets.only(
@@ -105,7 +90,9 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
                           return _todoInformation(_listData[index]);
                         },
                       )
-                    : notDataContainer(context, S.current.no_data_now),
+                    : HsgErrorPage(
+                        isEmptyPage: true,
+                      ),
           );
   }
 
@@ -137,32 +124,31 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
       print('runtimeType: ${e.error.runtimeType}');
       print(e.error is NeedLogin);
       print('error: ${e.toString()}');
-
+      bool _isNeedLogin;
       if (e.error is NeedLogin) {
-        if (this.mounted) {
-          setState(() {
-            _error = e.error;
-            // _isShowErrorPage = true;
-          });
-        }
+        _isNeedLogin = true;
+      } else {
+        _isNeedLogin = false;
+      }
+      if (this.mounted) {
+        setState(() {
+          _error = e.error;
+          _isShowErrorPage = true;
+          _hsgErrorPage = HsgErrorPage(
+            title: _error.code,
+            desc: _error.message,
+            isNeedLogin: _isNeedLogin,
+            buttonAction: _isNeedLogin
+                ? () {}
+                : () {
+                    _loadData();
+                  },
+          );
+        });
       }
       setState(() {
         _isLoading = false;
       });
-      // if ((e as DioError).error is NeedLogin) {
-      //   Navigator.of(context).pushAndRemoveUntil(
-      //       MaterialPageRoute(builder: (BuildContext context) {
-      //     return LoginPage();
-      //   }), (Route route) {
-      //     print(route.settings?.name);
-      //     if (route.settings?.name == "/") {
-      //       return true;
-      //     }
-      //     return false;
-      //   });
-      // } else {
-      //   print('error: ${e.toString()}');
-      // }
     }
   }
 

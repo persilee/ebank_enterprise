@@ -113,6 +113,8 @@ class AppException implements Exception {
             //     )));
             return error.error = NeedLogin();
             break;
+          } else {
+            return error.error;
           }
           return error.error = AppException("-1", "网络异常，请稍后重试！");
         }

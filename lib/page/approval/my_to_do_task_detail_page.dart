@@ -126,17 +126,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _loadPostRepaymentData(_contractModel);
       }
     } catch (e) {
-      if ((e as DioError).error is NeedLogin) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) {
-          return LoginPage();
-        }), (Route route) {
-          print(route.settings?.name);
-          return true;
-        });
-      } else {
-        print('error: ${e.toString()}');
-      }
+      print('error: ${e.toString()}');
       setState(() {
         _isLoading = false;
       });

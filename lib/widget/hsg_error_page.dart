@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/util/screen_util.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -13,20 +15,23 @@ class HsgErrorPage extends StatelessWidget {
   final VoidCallback buttonAction;
   final VoidCallback helpAction;
   final bool isEmptyPage;
+  final bool isNeedLogin;
 
-  HsgErrorPage(
-      {this.icon,
-      this.title,
-      this.desc,
-      this.buttonText,
-      this.buttonAction,
-      this.helpAction,
-      this.isEmptyPage = false});
+  HsgErrorPage({
+    this.icon,
+    this.title,
+    this.desc,
+    this.buttonText,
+    this.buttonAction,
+    this.helpAction,
+    this.isEmptyPage = false,
+    this.isNeedLogin = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-
+    print(this.desc);
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -38,13 +43,20 @@ class HsgErrorPage extends StatelessWidget {
               alignment: Alignment.center,
               child: this.icon != null
                   ? this.icon
-                  : Lottie.asset(
-                      'assets/json/error2.json',
-                      width: size.width / 1.3,
-                      height: 160,
-                      fit: BoxFit.fill,
-                      alignment: Alignment.center,
-                    ),
+                  : !this.isEmptyPage
+                      ? Lottie.asset(
+                          'assets/json/error2.json',
+                          width: size.width / 1.3,
+                          height: 160,
+                          fit: BoxFit.fill,
+                          alignment: Alignment.center,
+                        )
+                      : Image(
+                          image: AssetImage(
+                              'images/noDataIcon/no_data_record.png'),
+                          width: 160,
+                          fit: BoxFit.cover,
+                        ),
             ),
             !this.isEmptyPage
                 ? Padding(
@@ -62,35 +74,52 @@ class HsgErrorPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  this.desc ?? '虽然什么也没有,要不刷新看看',
+                  this.isEmptyPage
+                      ? S.current.no_data_now
+                      : this.desc ?? '虽然什么也没有,要不刷新看看',
                   style: TextStyle(fontSize: 15, color: Colors.grey.shade400),
                 ),
-                GestureDetector(
-                  onTap: () => this.helpAction(),
-                  child: Icon(
-                    IconFont.icon_info,
-                    size: 18,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-            !this.isEmptyPage
-                ? Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: SizedBox(
-                      width: 136.0,
-                      child: CustomButton(
-                        height: 36.0,
-                        clickCallback: () => this.buttonAction(),
-                        text: Text(
-                          this.buttonText ?? '刷新',
-                          style: TextStyle(fontSize: 16, color: Colors.white),
+                this.isEmptyPage
+                    ? Container()
+                    : GestureDetector(
+                        onTap: () => this.helpAction(),
+                        child: Icon(
+                          IconFont.icon_info,
+                          size: 18,
+                          color: Colors.grey,
                         ),
                       ),
-                    ),
-                  )
-                : Container(),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: SizedBox(
+                width: 126.0,
+                child: CustomButton(
+                  height: 36.0,
+                  clickCallback: () {
+                    if (this.isNeedLogin) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return LoginPage();
+                      }), (Route route) {
+                        print(route.settings?.name);
+                        if (route.settings?.name == "/") {
+                          return true;
+                        }
+                        return false;
+                      });
+                    } else {
+                      this.buttonAction();
+                    }
+                  },
+                  text: Text(
+                    this.buttonText ?? this.isNeedLogin ? '登录' : '刷新',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
