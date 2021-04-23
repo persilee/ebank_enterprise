@@ -309,7 +309,8 @@ class _MinePageState extends State<MinePage>
                   }
                   Navigator.pushNamed(context, pageCardList);
                 }),
-                _flatBtnNuitWidget(S.current.password_management, true, () {//密码管理
+                _flatBtnNuitWidget(S.current.password_management, true, () {
+                  //密码管理
                   Navigator.pushNamed(context, pagePasswordManagement,
                       arguments: _belongCustStatus);
                 }),
@@ -464,6 +465,8 @@ class _MinePageState extends State<MinePage>
     switch (_belongCustStatus) {
       case '0': //受邀客户未开户
       case '1': //非受邀客户未开户
+      case '2': //审核中
+      case '3': //已驳回
         infoWidget = _userOffInfo();
         break;
       case '4': //正常受限客户

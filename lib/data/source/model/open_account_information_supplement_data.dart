@@ -36,6 +36,10 @@ class OpenAccountInformationSupplementDataReq {
   @JsonKey(name: 'phone')
   String phone;
 
+  ///区号
+  @JsonKey(name: 'areaCode')
+  String areaCode;
+
   ///租户编号
   @JsonKey(name: 'tenantId')
   String tenantId;
@@ -73,6 +77,7 @@ class OpenAccountInformationSupplementDataReq {
     this.idPicBack,
     this.isSuccess,
     this.phone,
+    this.areaCode,
     this.tenantId,
     this.videoUrl,
     this.fileName,

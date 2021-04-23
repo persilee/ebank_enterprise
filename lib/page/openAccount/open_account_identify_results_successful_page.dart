@@ -251,9 +251,11 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   void _openAccountQuickSubmitData() async {
     final prefs = await SharedPreferences.getInstance();
     String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
+    String areaCode = prefs.getString(ConfigKey.USER_AREACODE);
 
     HSProgressHUD.show();
-    OpenAccountInformationSupplementDataReq dataReq = _getDataReq(phoneStr);
+    OpenAccountInformationSupplementDataReq dataReq =
+        _getDataReq(phoneStr, areaCode);
     // OpenAccountRepository()
     ApiClientOpenAccount().supplementQuickPartnerInfo(dataReq).then(
       (value) {
@@ -310,6 +312,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   void _saveSignVideoNetwork() async {
     final prefs = await SharedPreferences.getInstance();
     String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
+    String areaCodeStr = prefs.getString(ConfigKey.USER_AREACODE);
 
     // String businessId = _valueData.businessId ?? '';
     // String fileName = _valueData.fileName ?? '';
@@ -342,7 +345,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     // FaceSignUploadDataReq dataReq = FaceSignUploadDataReq(businessId, fileName,
     //     phoneStr, certificateType, idNo, speechFlowDataHSList);
 
-    OpenAccountInformationSupplementDataReq dataReq = _getDataReq(phoneStr);
+    OpenAccountInformationSupplementDataReq dataReq =
+        _getDataReq(phoneStr, areaCodeStr);
     HSProgressHUD.show();
     // OpenAccountRepository()
     ApiClientOpenAccount().saveSignVideo(dataReq).then(
@@ -382,7 +386,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   // }
 
   ///面签数据转换（面签返回的时间格式不正确，不能直接使用）
-  OpenAccountInformationSupplementDataReq _getDataReq(String phoneStr) {
+  OpenAccountInformationSupplementDataReq _getDataReq(
+      String phoneStr, String areaCodeStr) {
     // Map valueMap = _valueData.toJson();
 
     String businessId = _valueData.businessId;
@@ -399,6 +404,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     dataReq.idPic = _positiveImageUrl; //_valueData.positiveImage;
     dataReq.idPicBack = _backImageUrl; //_valueData.backImage;
     dataReq.phone = phoneStr;
+    dataReq.areaCode = areaCodeStr;
     dataReq.businessId = businessId;
     dataReq.certificateType = _valueData.certificateType;
     // dataReq.compareImageData = _valueData.compareImageData;

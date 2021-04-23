@@ -94,7 +94,10 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) => BottomMenu(
-              items: [S.current.avatar_select_from_your_phone_photo, S.current.avatar_save_phone],
+              items: [
+                S.current.avatar_select_from_your_phone_photo,
+                S.current.avatar_save_phone
+              ],
             ));
     if (result != null && result != false) {
       print('result: $result');
@@ -116,7 +119,9 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
     bool result = await saveNetworkImageToPhoto(imgUrl);
     print(result.toString() + imgUrl);
     Fluttertoast.showToast(
-      msg: result ? S.current.avatar_picture_saved_successfully : S.current.avatar_picture_saved_failed,
+      msg: result
+          ? S.current.avatar_picture_saved_successfully
+          : S.current.avatar_picture_saved_failed,
       gravity: ToastGravity.CENTER,
     );
   }
@@ -128,7 +133,8 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
           arguments: {'imageData': _memoryImage}).then((value) async {
         if (value != null) {
           try {
-            var image = await ApiClient().uploadAvatar(BaseBody(body: {}), value);
+            var image =
+                await ApiClient().uploadAvatar(BaseBody(body: {}), value);
             setState(() {
               _clipImage = value;
               _isClipImage = true;
@@ -138,15 +144,17 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
               gravity: ToastGravity.CENTER,
             );
             String _headPortrait = image['headPortrait'] ?? '';
-            if(_headPortrait.isEmpty) {
-              UserInfoResp data =  await ApiClient().getUserInfo(GetUserInfoReq(SpUtil.getString(ConfigKey.USER_ID)));
+            if (_headPortrait.isEmpty) {
+              UserInfoResp data = await ApiClient().getUserInfo(
+                  GetUserInfoReq(SpUtil.getString(ConfigKey.USER_ID)));
               _headPortrait = data.headPortrait;
               SpUtil.putString(ConfigKey.USER_AVATAR_URL, data.headPortrait);
               EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
-                  headPortrait: _headPortrait, state: 100));
+                  headPortrait: _headPortrait, state: 300));
             } else {
+              SpUtil.putString(ConfigKey.USER_AVATAR_URL, _headPortrait);
               EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
-                  headPortrait: image['headPortrait'], state: 100));
+                  headPortrait: image['headPortrait'], state: 300));
             }
           } catch (e) {
             print(e);
