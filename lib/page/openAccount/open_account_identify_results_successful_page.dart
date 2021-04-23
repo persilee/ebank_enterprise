@@ -135,12 +135,11 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
 
   ///快速开户成功提示
   void _showTypeTips(BuildContext context) {
-    EventBusUtils.getInstance()
-        .fire(GetUserEvent(msg: "通知重新获取用户信息getUser", state: 200));
-
     HsgShowTip.openAccountSuccessfulTip(
       context,
       (value) {
+        EventBusUtils.getInstance()
+            .fire(GetUserEvent(msg: "通知重新获取用户信息getUser", state: 200));
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) {
             return IndexPage();
@@ -184,6 +183,20 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   void _uploadImage() async {
     HSProgressHUD.show();
     try {
+      // if (_valueData.compareImageData != null &&
+      //     _valueData.compareImageData.length > 0 &&
+      //     _valueData.compareImageData[0].faceImgUrl != null &&
+      //     _valueData.compareImageData[0].faceImgUrl != '') {
+      //   String headerImgBase64 =
+      //       _valueData.compareImageData[0].faceImgUrl.replaceAll('\n', '');
+      //   headerImgBase64 = headerImgBase64.replaceAll('\\n', '');
+      //   Uint8List _bytes = base64Decode(
+      //     headerImgBase64,
+      //   );
+      //   Map response =
+      //       await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
+      //   _headerImgUrl = response['incompleteUrl'] ?? '';
+      // } else
       if (_valueData.headerImg != null && _valueData.headerImg != '') {
         String headerImgBase64 = _valueData.headerImg.replaceAll('\n', '');
         headerImgBase64 = headerImgBase64.replaceAll('\\n', '');
@@ -194,12 +207,6 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
             await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
         _headerImgUrl = response['incompleteUrl'] ?? '';
       }
-      // print('<><><> ${_valueData.positiveImage}');
-      // debugPrint('<><><>1 ${_valueData.positiveImage}',
-      //     wrapWidth: _valueData.positiveImage.length);
-      // debugPrint('<><><>2 ${_valueData.backImage}',
-      //     wrapWidth: _valueData.backImage.length);
-      // LogUtil.v('<><><> ${_valueData.positiveImage}');
       if (_valueData.positiveImage != null && _valueData.positiveImage != '') {
         String positiveImageBase64 =
             _valueData.positiveImage.replaceAll('\n', '');
@@ -244,9 +251,11 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   void _openAccountQuickSubmitData() async {
     final prefs = await SharedPreferences.getInstance();
     String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
+    String areaCode = prefs.getString(ConfigKey.USER_AREACODE);
 
     HSProgressHUD.show();
-    OpenAccountInformationSupplementDataReq dataReq = _getDataReq(phoneStr);
+    OpenAccountInformationSupplementDataReq dataReq =
+        _getDataReq(phoneStr, areaCode);
     // OpenAccountRepository()
     ApiClientOpenAccount().supplementQuickPartnerInfo(dataReq).then(
       (value) {
@@ -303,6 +312,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   void _saveSignVideoNetwork() async {
     final prefs = await SharedPreferences.getInstance();
     String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
+    String areaCodeStr = prefs.getString(ConfigKey.USER_AREACODE);
 
     // String businessId = _valueData.businessId ?? '';
     // String fileName = _valueData.fileName ?? '';
@@ -335,7 +345,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     // FaceSignUploadDataReq dataReq = FaceSignUploadDataReq(businessId, fileName,
     //     phoneStr, certificateType, idNo, speechFlowDataHSList);
 
-    OpenAccountInformationSupplementDataReq dataReq = _getDataReq(phoneStr);
+    OpenAccountInformationSupplementDataReq dataReq =
+        _getDataReq(phoneStr, areaCodeStr);
     HSProgressHUD.show();
     // OpenAccountRepository()
     ApiClientOpenAccount().saveSignVideo(dataReq).then(
@@ -375,7 +386,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   // }
 
   ///面签数据转换（面签返回的时间格式不正确，不能直接使用）
-  OpenAccountInformationSupplementDataReq _getDataReq(String phoneStr) {
+  OpenAccountInformationSupplementDataReq _getDataReq(
+      String phoneStr, String areaCodeStr) {
     // Map valueMap = _valueData.toJson();
 
     String businessId = _valueData.businessId;
@@ -392,6 +404,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     dataReq.idPic = _positiveImageUrl; //_valueData.positiveImage;
     dataReq.idPicBack = _backImageUrl; //_valueData.backImage;
     dataReq.phone = phoneStr;
+    dataReq.areaCode = areaCodeStr;
     dataReq.businessId = businessId;
     dataReq.certificateType = _valueData.certificateType;
     // dataReq.compareImageData = _valueData.compareImageData;
@@ -448,7 +461,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         dataReq.mainlandCertificateInfo.gender = infoStrForCN.sex;
         dataReq.mainlandCertificateInfo.nation = infoStrForCN.nation;
         dataReq.mainlandCertificateInfo.birthdate =
-            infoStrForCN.birth.replaceAll('/', '-');
+            _changeDate(infoStrForCN.birth);
+        // infoStrForCN.birth.replaceAll('/', '-');
         dataReq.mainlandCertificateInfo.address = infoStrForCN.address;
         dataReq.mainlandCertificateInfo.issuingAuthority =
             infoStrForCN.authority;
@@ -456,16 +470,20 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
           List dataList = infoStrForCN.validDate.split('-');
           if (dataList.length > 1) {
             dataReq.mainlandCertificateInfo.idIssueDate =
-                dataList[0].replaceAll('.', '-');
+                _changeDate(dataList[0]);
+            // dataList[0].replaceAll('.', '-');
             dataReq.mainlandCertificateInfo.idDueDate =
-                dataList[1].replaceAll('.', '-');
+                _changeDate(dataList[1]);
+            // dataList[1].replaceAll('.', '-');
           } else {
             dataReq.mainlandCertificateInfo.idIssueDate =
-                infoStrForCN.validDate.replaceAll('.', '-');
+                _changeDate(infoStrForCN.validDate);
+            // infoStrForCN.validDate.replaceAll('.', '-');
           }
         } else {
           dataReq.mainlandCertificateInfo.idIssueDate =
-              infoStrForCN.validDate.replaceAll('.', '-');
+              _changeDate(infoStrForCN.validDate);
+          // infoStrForCN.validDate.replaceAll('.', '-');
         }
 
         break;
@@ -480,10 +498,13 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         dataReq.hkCertificateInfo.gender = infoStrForHK.sex;
         dataReq.hkCertificateInfo.symbol = infoStrForHK.symbol;
         dataReq.hkCertificateInfo.birthdate =
-            infoStrForHK.birthday.replaceAll('/', '-');
-        dataReq.hkCertificateInfo.firthIssueDate = infoStrForHK.firstIssueDate;
+            _changeDate(infoStrForHK.birthday);
+        // infoStrForHK.birthday.replaceAll('/', '-');
+        dataReq.hkCertificateInfo.firthIssueDate = _changeDate(
+            infoStrForHK.firstIssueDate); // infoStrForHK.firstIssueDate;
         dataReq.hkCertificateInfo.currentIssueDate =
-            infoStrForHK.currentIssueDate;
+            _changeDate(infoStrForHK.currentIssueDate);
+        // infoStrForHK.currentIssueDate;
         break;
 
       case '3':
@@ -494,26 +515,58 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         dataReq.passportInfo.gender = infoStrForPassport.sex;
         dataReq.passportInfo.nationality = infoStrForPassport.nationality;
         dataReq.passportInfo.birthdate =
-            infoStrForPassport.dateOfBirth.replaceAll('/', '-');
+            _changeDate(infoStrForPassport.dateOfBirth);
+        // infoStrForPassport.dateOfBirth.replaceAll('/', '-');
         dataReq.passportInfo.issuingCountry = infoStrForPassport.issuingCountry;
         if (infoStrForPassport.dateOfExpiration.contains('-')) {
           List dataList = infoStrForPassport.dateOfExpiration.split('-');
           if (dataList.length > 1) {
-            dataReq.passportInfo.idIssueDate = dataList[0].replaceAll('.', '-');
-            dataReq.passportInfo.idDueDate = dataList[1].replaceAll('.', '-');
+            dataReq.passportInfo.idIssueDate =
+                _changeDate(dataList[0]); // dataList[0].replaceAll('.', '-');
+            dataReq.passportInfo.idDueDate =
+                _changeDate(dataList[1]); // dataList[1].replaceAll('.', '-');
           } else {
             dataReq.passportInfo.idIssueDate =
-                infoStrForPassport.dateOfExpiration.replaceAll('.', '-');
+                _changeDate(infoStrForPassport.dateOfExpiration);
+            // infoStrForPassport.dateOfExpiration.replaceAll('.', '-');
           }
         } else {
           dataReq.passportInfo.idIssueDate =
-              infoStrForPassport.dateOfExpiration.replaceAll('.', '-');
+              _changeDate(infoStrForPassport.dateOfExpiration);
+          // infoStrForPassport.dateOfExpiration.replaceAll('.', '-');
         }
         break;
       default:
     }
 
     return dataReq;
+  }
+
+  String _changeDate(String dateStr) {
+    if (dateStr == null || dateStr.length == 0) {
+      return '';
+    }
+    String resultsDateStr = dateStr.replaceAll('/', '-');
+    resultsDateStr = resultsDateStr.replaceAll('.', '-');
+
+    if (resultsDateStr == '长期') {
+      resultsDateStr = '9999-12-31';
+    }
+
+    // if (resultsDateStr.contains('-')) {
+    //   List<String> dataList = resultsDateStr.split('-');
+    //   if (dataList.length > 2) {
+    //     String one = dataList[0];
+    //     String two = dataList[1];
+    //     String three = dataList[2];
+    //     if (one.length == 4) {
+    //       resultsDateStr = one + '-' + two + '-' + three;
+    //     } else {
+    //       resultsDateStr = three + '-' + one + '-' + two;
+    //     }
+    //   }
+    // }
+    return resultsDateStr;
   }
 
   List<String> _changeTimeData(String dateStr, bool isSplit) {

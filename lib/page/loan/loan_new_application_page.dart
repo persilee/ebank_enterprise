@@ -160,7 +160,6 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   //获取放款以及还款帐号列表
   Future<void> _loadTotalAccountData() async {
     SVProgressHUD.show();
-    // CardDataRepository()
     ApiClientAccount().getCardList(GetCardListReq()).then(
       (data) {
         SVProgressHUD.dismiss();
@@ -197,7 +196,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
           LoanProductList names = _loanProduct[0];
           _loanProductID = names.bppdCode;
           _requestDataMap['prdtCode'] = names.bppdCode; //ID
-          if (_language == 'zh_CN'|| _language == 'zh_HK') {
+          if (_language == 'zh_CN' || _language == 'zh_HK') {
             _loanProductName = names.lclName;
             _listDataMap['prdtCode'] = names.lclName;
           } else {

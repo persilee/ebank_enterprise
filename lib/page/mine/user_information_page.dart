@@ -48,8 +48,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
   @override
   void initState() {
     EventBusUtils.getInstance().on<ChangeHeadPortraitEvent>().listen((event) {
-      if (event.state == 100 ||
-          event.state == 300 && event.headPortrait.isNotEmpty) {
+      if (event.state == 300 && event.headPortrait.isNotEmpty) {
         setState(() {
           _headPortraitUrl = event.headPortrait;
         });
@@ -77,7 +76,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
         _userPhone = arguments.userPhone != null ? arguments.userPhone : '';
         // _headPortraitUrl =
         // arguments.headPortrait != null ? arguments.headPortrait : ''; //头像地址
-        _headPortraitUrl = SpUtil.getString(ConfigKey.USER_AVATAR_URL);//头像地址
+        _headPortraitUrl = SpUtil.getString(ConfigKey.USER_AVATAR_URL); //头像地址
         _belongCustStatus = arguments.belongCustStatus != null
             ? arguments.belongCustStatus
             : '';
@@ -329,21 +328,23 @@ class _UserInformationPageState extends State<UserInformationPage> {
           arguments: {'imageData': _memoryImage}).then((value) async {
         if (value != null) {
           try {
-            var image = await ApiClient().uploadAvatar(BaseBody(body: {}), value);
+            var image =
+                await ApiClient().uploadAvatar(BaseBody(body: {}), value);
             Fluttertoast.showToast(
               msg: S.current.avatar_uploaded_successfully,
               gravity: ToastGravity.CENTER,
             );
             String _headPortrait = image['headPortrait'] ?? '';
-            if(_headPortrait.isEmpty) {
-              UserInfoResp data =  await ApiClient().getUserInfo(GetUserInfoReq(SpUtil.getString(ConfigKey.USER_ID)));
-              _headPortrait = data.headPortrait;
+            if (_headPortrait.isEmpty) {
+              UserInfoResp data = await ApiClient().getUserInfo(
+                  GetUserInfoReq(SpUtil.getString(ConfigKey.USER_ID)));
               SpUtil.putString(ConfigKey.USER_AVATAR_URL, data.headPortrait);
               EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
-                  headPortrait: _headPortrait, state: 100));
+                  headPortrait: _headPortrait, state: 300));
             } else {
+              SpUtil.putString(ConfigKey.USER_AVATAR_URL, _headPortrait);
               EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
-                  headPortrait: image['headPortrait'], state: 100));
+                  headPortrait: image['headPortrait'], state: 300));
             }
           } catch (e) {
             print(e);

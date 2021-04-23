@@ -58,8 +58,6 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
     _accountName = listData['userAccount'];
     _phone = listData['userPhone'];
     _sms = listData['sms'];
-    print('$_accountName>>>>>>>>>>>>>>>');
-    print('$_phone>>>>>>>>>>>>>>>');
 
     return Scaffold(
       appBar: AppBar(
@@ -161,8 +159,7 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                                         false ||
                                     minWord.hasMatch(_newPassword.text) ==
                                         false ||
-                                    ((_newPassword.text).contains(userName) ==
-                                        true) ||
+                                    //((_newPassword.text).contains(userName) == true) ||
                                     (_newPassword.text.length < 8 ||
                                         _newPassword.text.length > 16)) {
                                   Fluttertoast.showToast(
@@ -198,7 +195,6 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
   _updateLoginPassword() async {
     final prefs = await SharedPreferences.getInstance();
     String userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
-    print('$userAccount>>>>>>>>>>>>>>>>>>>>>>>');
     // RegExp characters = new RegExp(
     //     "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
     // RegExp letter = new RegExp("[a-zA-Z]");

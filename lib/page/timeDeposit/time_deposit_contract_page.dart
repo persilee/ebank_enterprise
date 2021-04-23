@@ -904,6 +904,12 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
   //数据初值
   void _first() {
+    if (_terms.length == 0 ||
+        _accuPeriods.length == 0 ||
+        _auctCales.length == 0 ||
+        _rates.length == 0) {
+      return;
+    }
     _changedTermBtnTiTle = _terms[0];
     accuPeriod = _accuPeriods[0];
     auctCale = _auctCales[0];

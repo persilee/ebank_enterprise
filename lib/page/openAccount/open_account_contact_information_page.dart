@@ -1286,6 +1286,10 @@ class _OpenAccountContactInformationPageState
                     _registeredAddressText = _registrationAddress.detail;
                 _registrationZipCodeTEC.text =
                     _registrationZipCodeText = _registrationAddress.postCode;
+
+                _registrationAreaOneText = _registrationAddress.country;
+                _registrationAreaTwoText = _registrationAddress.province;
+                _registrationAreaThreeText = _registrationAddress.city;
                 break;
 
               ///营业地址
@@ -1305,6 +1309,10 @@ class _OpenAccountContactInformationPageState
                     _businessAddressText = _businessAddress.detail;
                 _businessZipCodeTEC.text =
                     _businessZipCodeText = _businessAddress.postCode;
+
+                _businessAreaOneText = _businessAddress.country;
+                _businessAreaTwoText = _businessAddress.province;
+                _businessAreaThreeText = _businessAddress.city;
                 break;
 
               ///通讯地址
@@ -1326,6 +1334,10 @@ class _OpenAccountContactInformationPageState
                     _correspondenceAddressText = _communicationAddress.detail;
                 _communicationsZipCodeTEC.text =
                     _communicationsZipCodeText = _communicationAddress.postCode;
+
+                _communicationAreaOneText = _communicationAddress.country;
+                _communicationAreaTwoText = _communicationAddress.province;
+                _communicationAreaThreeText = _communicationAddress.city;
                 break;
               default:
             }
