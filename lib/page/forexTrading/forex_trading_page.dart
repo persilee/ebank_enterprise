@@ -424,6 +424,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           gravity: ToastGravity.CENTER,
         );
       });
+    } else {
+      HSProgressHUD.dismiss();
     }
   }
 
