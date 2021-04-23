@@ -632,9 +632,8 @@
   "loan_application_amount_check": "申請金額不能為0",
   "loan_application_apply_pending": "待處理",
   "loan_application_apply_processed": "已處理",
-  "loan_application_input_comfir":"申請已提交,待審核",
-  "mine_change_Trade_password":"證件信息不匹配,請重試",
-
+  "loan_application_input_comfir": "申請已提交,待審核",
+  "mine_change_Trade_password": "證件信息不匹配,請重試",
   "open_account_goto_ebank_tip": "尊敬的用戶，您好。由於您不是受邀客戶，請先通過企服商進行邀請，或者前往企業網銀進行開戶申請。",
   "openAccount_faceSign_results_content": "面簽數據提交成功",
   "openAccount_industryNatureTwo": "商業/行業性質細分",
@@ -653,5 +652,8 @@
   "forex_trading_msg2": "請先選擇收入賬戶",
   "transfer_partner_msg1": "你是否要刪除該夥伴",
   "successfully_delete": "刪除成功!",
-  "input_amount_msg1": "輸入金額必須大於0"
+  "input_amount_msg1": "輸入金額必須大於0",
+  "transfer_msg_limit": "轉賬金額超過卡單筆限額",
+  "request_client_timeout": "請求客戶端超時",
+  "forex_trading_msg3": "該幣種假期不允許進行外匯買賣轉載"
 }

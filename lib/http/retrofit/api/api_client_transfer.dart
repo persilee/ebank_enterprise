@@ -1,13 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/data/source/model/add_partner.dart';
 import 'package:ebank_mobile/data/source/model/add_transfer_plan.dart';
-import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
-import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/cancel_transfer_plan.dart';
 import 'package:ebank_mobile/data/source/model/delete_partner.dart';
 import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_ccy_list.dart';
+import 'package:ebank_mobile/data/source/model/get_ccy_holiday.dart';
 import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_international_transfer.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_by_account.dart';
@@ -20,7 +19,7 @@ import 'package:retrofit/retrofit.dart';
 
 import '../base_dio.dart';
 
-part 'transfer.g.dart';
+part 'api_client_transfer.g.dart';
 
 @RestApi(baseUrl: BaseDio.BASEURL)
 abstract class Transfer {
@@ -92,4 +91,8 @@ abstract class Transfer {
   @POST('/ddep/transferPlan/getTransferPlan')
   Future<GetTransferPlanDetailsResp> getTransferPlanDetails(
       @Body() GetTransferPlanDetailsReq req);
+
+  //检查节假日
+  @POST('/ddep/transfer/getCcyHoliday')
+  Future<GetCcyHolidayResp> getCcyHoliday(@Body() GetCcyHolidayReq req);
 }
