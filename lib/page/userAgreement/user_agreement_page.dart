@@ -1,4 +1,4 @@
-import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 用户协议

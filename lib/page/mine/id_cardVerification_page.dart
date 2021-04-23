@@ -14,8 +14,8 @@ import 'package:ebank_mobile/data/source/model/real_name_auth_by_three_factor.da
 // import 'package:ebank_mobile/data/source/model/set_transactionPassword.dart';
 import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
-import 'package:ebank_mobile/http/retrofit/api_client_password.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
@@ -29,6 +29,7 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 // import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 // import 'package:shared_preferences/shared_preferences.dart';
@@ -202,6 +203,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       setState(() {
         _certType = idCardList[result];
         _certTypeKey = data.code;
+        print(_certTypeKey);
       });
     } else {
       return;
@@ -519,6 +521,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
           _userPhone +
           '-' +
           _realName.text);
+      HSProgressHUD.dismiss();
       if (data.enabled) {
         Map map = new Map();
         map['certificateNo'] = _certNo.text;
@@ -530,8 +533,10 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
         //调用三要素验证，成功后进入"人脸识别"，识别成功后进入设置密码阶段
         //人臉識別還未添加
         Navigator.pushNamed(context, setPayPage, arguments: map);
+      } else {
+        //证件信息不匹配
+        SVProgressHUD.showInfo(status: S.current.mine_change_Trade_password);
       }
-      HSProgressHUD.dismiss();
     }).catchError((e) {
       HSProgressHUD.dismiss();
       Fluttertoast.showToast(

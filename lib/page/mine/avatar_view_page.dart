@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/event_bus_utils.dart';

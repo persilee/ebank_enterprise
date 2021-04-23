@@ -12,8 +12,8 @@ import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
-import 'package:ebank_mobile/http/retrofit/api_client_password.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/page/register/component/register_86.dart';
 import 'package:ebank_mobile/page/register/component/register_getSms.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
@@ -271,7 +271,6 @@ class _ForgetUserNameState extends State<ForgetUserName> {
 
   //获取验证码接口
   _getVerificationCode() async {
-    print(">>>>>>>>>>>>>>>$_accountName");
     // if (!_isRegister) {
     //   Fluttertoast.showToast(
     //     msg: S.current.num_not_is_register,

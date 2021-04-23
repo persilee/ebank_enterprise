@@ -11,7 +11,7 @@ import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -1286,6 +1286,10 @@ class _OpenAccountContactInformationPageState
                     _registeredAddressText = _registrationAddress.detail;
                 _registrationZipCodeTEC.text =
                     _registrationZipCodeText = _registrationAddress.postCode;
+
+                _registrationAreaOneText = _registrationAddress.country;
+                _registrationAreaTwoText = _registrationAddress.province;
+                _registrationAreaThreeText = _registrationAddress.city;
                 break;
 
               ///营业地址
@@ -1305,6 +1309,10 @@ class _OpenAccountContactInformationPageState
                     _businessAddressText = _businessAddress.detail;
                 _businessZipCodeTEC.text =
                     _businessZipCodeText = _businessAddress.postCode;
+
+                _businessAreaOneText = _businessAddress.country;
+                _businessAreaTwoText = _businessAddress.province;
+                _businessAreaThreeText = _businessAddress.city;
                 break;
 
               ///通讯地址
@@ -1326,6 +1334,10 @@ class _OpenAccountContactInformationPageState
                     _correspondenceAddressText = _communicationAddress.detail;
                 _communicationsZipCodeTEC.text =
                     _communicationsZipCodeText = _communicationAddress.postCode;
+
+                _communicationAreaOneText = _communicationAddress.country;
+                _communicationAreaTwoText = _communicationAddress.province;
+                _communicationAreaThreeText = _communicationAddress.city;
                 break;
               default:
             }

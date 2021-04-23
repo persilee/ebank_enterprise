@@ -16,7 +16,7 @@ import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
 import 'package:ebank_mobile/data/source/model/my_approval_data.dart';
 import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
@@ -36,18 +36,17 @@ class MyApprovedHistoryPage extends StatefulWidget {
   MyApprovedHistoryPage({Key key, this.title}) : super(key: key);
 
   @override
-  _MyApprovedHistoryPageState createState() =>
-      _MyApprovedHistoryPageState();
+  _MyApprovedHistoryPageState createState() => _MyApprovedHistoryPageState();
 }
 
-class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage> with AutomaticKeepAliveClientMixin {
+class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
+    with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController;
   RefreshController _refreshController;
   List<ApprovalTask> _listData = [];
   int _page = 1;
   bool _isLoading = false;
   bool _isMoreData = false;
-
 
   @override
   void initState() {
@@ -70,51 +69,54 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage> with Auto
     return _isLoading
         ? HsgLoading()
         : _listData.length > 0
-        ? CustomRefresh(
-      controller: _refreshController,
-      onLoading: () async {
-        await _loadData(isLoadMore: true);
-        //加载更多完成
-        _refreshController.loadComplete();
-        //显示没有更多数据
-        if (_isMoreData) _refreshController.loadNoData();
-      },
-      onRefresh: () async {
-        await _loadData();
-        //刷新完成
-        _refreshController.refreshCompleted();
-        _refreshController.footerMode.value = LoadStatus.canLoading;
-      },
-      content: ListView.builder(
-        padding:
-        EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
-        itemCount: _listData.length,
-        controller: _scrollController,
-        itemBuilder: (context, index) {
-          return _todoInformation(_listData[index]);
-        },
-      ),
-    )
-        : notDataContainer(context, S.current.no_data_now);
+            ? CustomRefresh(
+                controller: _refreshController,
+                onLoading: () async {
+                  await _loadData(isLoadMore: true);
+                  //加载更多完成
+                  _refreshController.loadComplete();
+                  //显示没有更多数据
+                  if (_isMoreData) _refreshController.loadNoData();
+                },
+                onRefresh: () async {
+                  await _loadData();
+                  //刷新完成
+                  _refreshController.refreshCompleted();
+                  _refreshController.footerMode.value = LoadStatus.canLoading;
+                },
+                content: ListView.builder(
+                  padding:
+                      EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
+                  itemCount: _listData.length,
+                  controller: _scrollController,
+                  itemBuilder: (context, index) {
+                    return _todoInformation(_listData[index]);
+                  },
+                ),
+              )
+            : notDataContainer(context, S.current.no_data_now);
   }
 
   //加载数据
   Future<void> _loadData({bool isLoadMore = false}) async {
-    isLoadMore ? _page ++ : _page = 1;
+    isLoadMore ? _page++ : _page = 1;
     _isLoading = true;
     try {
       FindUserTodoTaskModel response = await ApiClient().findUserFinishedTask(
         FindTaskBody(
-            page: _page, pageSize: 10, tenantId: 'EB', custId: SpUtil.getString(ConfigKey.CUST_ID)),
+            page: _page,
+            pageSize: 10,
+            tenantId: 'EB',
+            custId: SpUtil.getString(ConfigKey.CUST_ID)),
       );
       if (this.mounted) {
         setState(() {
-          if(isLoadMore == false && _page == 1) {
+          if (isLoadMore == false && _page == 1) {
             _listData.clear();
           }
           _listData.addAll(response.rows);
           _isLoading = false;
-          if(response.rows.length <= 10 && response.totalPage <= _page) {
+          if (response.rows.length <= 10 && response.totalPage <= _page) {
             _isMoreData = true;
           }
         });
@@ -202,13 +204,17 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage> with Auto
             _taskName(approvalTask?.taskName ?? ''),
             Padding(padding: EdgeInsets.only(top: 2.0)),
             //待办任务id
-            _rowInformation(S.current.approve_task_id, approvalTask?.taskId ?? ''),
+            _rowInformation(
+                S.current.approve_task_id, approvalTask?.taskId ?? ''),
             //发起人
-            _rowInformation(S.current.sponsor, approvalTask?.applicantName ?? ''),
+            _rowInformation(
+                S.current.sponsor, approvalTask?.applicantName ?? ''),
             //审批结果
-            _rowInformation(S.current.approve_result, approvalTask?.result ?? ''),
+            _rowInformation(
+                S.current.approve_result, approvalTask?.result ?? ''),
             //审批时间
-            _rowInformation(S.current.approve_create_time, approvalTask?.createTime ?? ''),
+            _rowInformation(
+                S.current.approve_create_time, approvalTask?.createTime ?? ''),
           ],
         ),
       ),

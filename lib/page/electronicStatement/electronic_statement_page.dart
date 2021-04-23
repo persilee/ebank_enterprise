@@ -4,7 +4,7 @@ import 'package:ebank_mobile/data/source/model/get_electronic_statement.dart';
 import 'package:ebank_mobile/data/source/model/statement/statement_query_list_body.dart';
 import 'package:ebank_mobile/data/source/model/statement/statement_query_list_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/hsg_pdf_viewer.dart';
 import 'package:flutter/material.dart';

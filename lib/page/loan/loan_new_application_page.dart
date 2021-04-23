@@ -12,10 +12,10 @@ import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client_account.dart';
-import 'package:ebank_mobile/http/retrofit/api_client_loan.dart';
-import 'package:ebank_mobile/http/retrofit/api_client_openAccount.dart';
-import 'package:ebank_mobile/http/retrofit/api_client_packaging.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_packaging.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -160,7 +160,6 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   //获取放款以及还款帐号列表
   Future<void> _loadTotalAccountData() async {
     SVProgressHUD.show();
-    // CardDataRepository()
     ApiClientAccount().getCardList(GetCardListReq()).then(
       (data) {
         SVProgressHUD.dismiss();
@@ -197,7 +196,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
           LoanProductList names = _loanProduct[0];
           _loanProductID = names.bppdCode;
           _requestDataMap['prdtCode'] = names.bppdCode; //ID
-          if (_language == 'zh_CN'|| _language == 'zh_HK') {
+          if (_language == 'zh_CN' || _language == 'zh_HK') {
             _loanProductName = names.lclName;
             _listDataMap['prdtCode'] = names.lclName;
           } else {

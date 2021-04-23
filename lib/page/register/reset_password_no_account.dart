@@ -2,7 +2,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/modify_pwd_by_sms.dart';
 import 'package:ebank_mobile/data/source/update_login_paw_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client_password.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -58,8 +58,6 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
     _accountName = listData['userAccount'];
     _phone = listData['userPhone'];
     _sms = listData['sms'];
-    print('$_accountName>>>>>>>>>>>>>>>');
-    print('$_phone>>>>>>>>>>>>>>>');
 
     return Scaffold(
       appBar: AppBar(
@@ -161,8 +159,7 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                                         false ||
                                     minWord.hasMatch(_newPassword.text) ==
                                         false ||
-                                    ((_newPassword.text).contains(userName) ==
-                                        true) ||
+                                    //((_newPassword.text).contains(userName) == true) ||
                                     (_newPassword.text.length < 8 ||
                                         _newPassword.text.length > 16)) {
                                   Fluttertoast.showToast(
@@ -198,7 +195,6 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
   _updateLoginPassword() async {
     final prefs = await SharedPreferences.getInstance();
     String userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
-    print('$userAccount>>>>>>>>>>>>>>>>>>>>>>>');
     // RegExp characters = new RegExp(
     //     "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
     // RegExp letter = new RegExp("[a-zA-Z]");

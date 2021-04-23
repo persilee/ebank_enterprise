@@ -4,15 +4,19 @@
 /// Date: 2020-12-16
 
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
+import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_money_caculate.dart';
 import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
 import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api_client_loan.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
+import 'package:ebank_mobile/page/forexTrading/forex_trading_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/services.dart';
@@ -33,12 +37,16 @@ class _RepayInputPageState extends State<RepayInputPage> {
   var currency = ''; //币种
   double max = 0; //还款最大值(贷款余额)
   var loanInterest = ''; //贷款利率
-  var debitAccount = ''; //扣款账号
+
+  var _debitAccount = ''; //扣款账号
+  int _debit_Index = 0; //帐号索引
+  List _totalAccoutList = []; //帐号列表
 
   var _repayInterest = ''; //还款利息
   var _fine = ''; //罚金
   var _totalRepay = ''; //还款总额
   bool _isBtnDisabled = false;
+  bool _isButton = false;
 
   var acNo = '';
   var instalNo = '';
@@ -51,9 +59,33 @@ class _RepayInputPageState extends State<RepayInputPage> {
   TextEditingController _inputController = new TextEditingController();
   FocusNode focusNode = FocusNode();
 
+  //获取放款以及还款帐号列表
+  Future<void> _loadTotalAccountData() async {
+    SVProgressHUD.show();
+    ApiClientAccount().getCardList(GetCardListReq()).then(
+      (data) {
+        SVProgressHUD.dismiss();
+        if (data.cardList != null) {
+          setState(() {
+            _totalAccoutList.clear();
+            _totalAccoutList.addAll(data.cardList);
+            RemoteBankCard card = _totalAccoutList[0];
+            _debitAccount = card.cardNo; //放款帐号
+            loanDetail.repaymentAcNo = card.cardNo;
+            _checkBtnIsClick();
+          });
+        }
+      },
+    ).catchError((e) {
+      SVProgressHUD.dismiss();
+      SVProgressHUD.showInfo(status: e.toString());
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    _loadTotalAccountData();
 
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
@@ -66,6 +98,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
             _repayInterest = '0.00';
             _fine = '0.00';
             _totalRepay = '0.00';
+            _checkBtnIsClick();
           });
         } else {
           RegExp postalcode = new RegExp(r'^(0\d)');
@@ -91,6 +124,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
         String text = _inputController.text;
         int length = text.length;
         if (length > 0) {
+          _isBtnDisabled = true;
           _loadData();
         }
       }
@@ -109,7 +143,6 @@ class _RepayInputPageState extends State<RepayInputPage> {
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
     SVProgressHUD.show();
-    // LoanDataRepository()
     ApiClientLoan()
         .getLoanCaculate(
       GetLoanCaculateReq(
@@ -133,15 +166,9 @@ class _RepayInputPageState extends State<RepayInputPage> {
           PostAdvanceRepaymentDTOList list =
               data.postAdvanceRepaymentDTOList[0];
           this.list = list; //保存传回去
-          _repayInterest = list.rcvInt; //还款利息
-          //  rcvPen 本金罚息 + rcvCom 利息罚息
-          double totalRcv =
-              double.parse(list.rcvPen) + double.parse(list.rcvCom);
-          _fine = totalRcv.toString();
-
-          double totalAmt =
-              double.parse(list.payPrin) + double.parse(list.rcvInt) + totalRcv;
-          _totalRepay = totalAmt.toString(); //还款总额 = 还款本金 + 利息 + 罚金
+          _repayInterest = list.payInt; //还款利息
+          _fine = list.rcvPen; //罚金
+          _totalRepay = list.totAmt; //还款总额
 
           _isBtnDisabled = true;
         });
@@ -187,11 +214,13 @@ class _RepayInputPageState extends State<RepayInputPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           //扣款账号
-          _contentColumn(
-              S.of(context).debit_account,
-              loanDetail.repaymentAcNo != null
-                  ? loanDetail.repaymentAcNo
-                  : '8011208000001258'), //repaymentAcNo  8011208000001258 测试的
+          SelectInkWell(
+            title: S.current.debit_account,
+            item: _debitAccount,
+            onTap: () {
+              _selectAccount();
+            },
+          ),
           //还款本金
           _repayPrincipal(loanDetail),
           //还款利息
@@ -244,6 +273,50 @@ class _RepayInputPageState extends State<RepayInputPage> {
         ),
       ),
     );
+  }
+
+//付款账户弹窗
+  _selectAccount() async {
+    List<String> bankCards = [];
+    List<String> accountNos = [];
+    for (RemoteBankCard cards in _totalAccoutList) {
+      //便利拿出帐号
+      bankCards.add(cards.cardNo);
+    }
+    bankCards = bankCards.toSet().toList(); //去重复的数据
+    for (var i = 0; i < bankCards.length; i++) {
+      accountNos.add(FormatUtil.formatSpace4(bankCards[i]));
+    }
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) => HsgBottomSingleChoice(
+            title: S.current.payment_account,
+            items: accountNos,
+            lastSelectedPosition: _debit_Index));
+    if (result != null && result != false) {
+      setState(() {
+        //帐号
+        _debitAccount = bankCards[result];
+        loanDetail.repaymentAcNo = bankCards[result]; //给模型赋值
+        _debit_Index = result;
+        _checkBtnIsClick();
+      });
+    } else {
+      return;
+    }
+  }
+
+  //校验按钮
+  _checkBtnIsClick() {
+    if (_isBtnDisabled && _debitAccount.length > 0) {
+      return setState(() {
+        _isButton = true;
+      });
+    } else {
+      return setState(() {
+        _isButton = false;
+      });
+    }
   }
 
   //点击进入下一步
@@ -307,6 +380,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
                 //输入框数据修改后
                 setState(() {
                   repayPrincipal = _inputController.text;
+                  _checkBtnIsClick();
                 });
                 // _loadData();
               },
