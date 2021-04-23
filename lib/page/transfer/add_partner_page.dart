@@ -888,7 +888,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       if (_nameController.text.length > 0 &&
           _acountController.text.length > 0 &&
           _transferType != S.current.please_select &&
-          _ccy != '') {
+          _ccy != '' &&
+          _isAccount) {
         if (_showInternational) {
           if (_bankNameController.text != '' &&
               _payeeAdressController.text.length > 0 &&
@@ -999,6 +1000,11 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         });
       }
     }).catchError((e) {
+      if (this.mounted) {
+        setState(() {
+          _isAccount = false;
+        });
+      }
       if (e.toString().contains("SC6121")) {
         Fluttertoast.showToast(
           msg: S.of(context).request_client_timeout,

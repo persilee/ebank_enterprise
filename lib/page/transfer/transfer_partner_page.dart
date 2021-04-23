@@ -407,7 +407,7 @@ class _TransferPartnerState extends State<TransferPartner> {
           child: Text(
             _language == 'zh_CN'
                 ? partner.payeeBankLocalName == null
-                    ? '朗华银行'
+                    ? '智朗银行'
                     : partner.payeeBankLocalName
                 : partner.payeeBankEngName == null
                     ? 'Brillink bank'
