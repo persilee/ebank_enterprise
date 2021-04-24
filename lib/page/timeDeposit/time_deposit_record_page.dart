@@ -181,7 +181,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         ),
         Text(
           //到期时间
-          rows.mtDate,
+          rows?.mtDate ?? '',
           style: TextStyle(fontSize: 15, color: HsgColors.aboutusTextCon),
         ),
       ],
@@ -225,7 +225,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           ),
           Text(
             //生效时间
-            rows.valDate,
+            rows?.valDate ?? '',
             style: TextStyle(fontSize: 15, color: HsgColors.aboutusTextCon),
           ),
         ],

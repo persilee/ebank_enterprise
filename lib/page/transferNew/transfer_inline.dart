@@ -663,32 +663,48 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
 
   //默认初始卡号
   _loadTransferData() async {
+    GetCardListResp _data = await ApiClientAccount().getCardList(GetCardListReq());
+
+    setState(() {
+      //付款方卡号
+      _payerAccount = _data.cardList[0].cardNo;
+      payerBankCode = payeeBankCode = _data.cardList[0].bankCode;
+      payerName = _data.cardList[0].ciName;
+      _data.cardList.forEach((e) {
+        _payerAccountList.add(e.cardNo);
+      });
+      _payerAccountList = _payerAccountList.toSet().toList();
+    });
+    _loadData(_payerAccount);
+
+        // value.forEach((element) {
+      //通过绑定手机号查询卡列表接口POST
+    //   if (element is GetCardListResp) {
+    //     if (this.mounted) {
+    //       if (element != null &&
+    //           element.cardList != null &&
+    //           element.cardList.length > 0) {
+    //         setState(() {
+    //           //付款方卡号
+    //           _payerAccount = element.cardList[0].cardNo;
+    //           payerBankCode = payeeBankCode = element.cardList[0].bankCode;
+    //           payerName = element.cardList[0].ciName;
+    //           element.cardList.forEach((e) {
+    //             _payerAccountList.add(e.cardNo);
+    //           });
+    //           _payerAccountList = _payerAccountList.toSet().toList();
+    //         });
+    //       }
+    //     }
+    //     _loadData(_payerAccount);
+    //   }
+    // });
     Future.wait({
       // CardDataRepository()
-      ApiClientAccount().getCardList(GetCardListReq()),
+
+
     }).then((value) {
-      value.forEach((element) {
-        //通过绑定手机号查询卡列表接口POST
-        if (element is GetCardListResp) {
-          if (this.mounted) {
-            if (element != null &&
-                element.cardList != null &&
-                element.cardList.length > 0) {
-              setState(() {
-                //付款方卡号
-                _payerAccount = element.cardList[0].cardNo;
-                payerBankCode = payeeBankCode = element.cardList[0].bankCode;
-                payerName = element.cardList[0].ciName;
-                element.cardList.forEach((e) {
-                  _payerAccountList.add(e.cardNo);
-                });
-                _payerAccountList = _payerAccountList.toSet().toList();
-              });
-            }
-          }
-          _loadData(_payerAccount);
-        }
-      });
+
     });
   }
 
@@ -812,7 +828,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     ApiClientPackaging().getUserInfo(GetUserInfoReq(userID)).then((data) {
       if (this.mounted) {
         setState(() {
-          payerName = data.actualName;
+          payerName = data?.actualName ?? '';
         });
       }
     }).catchError((e) {

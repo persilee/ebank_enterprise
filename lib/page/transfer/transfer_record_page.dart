@@ -233,10 +233,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _transferAccount(_actualName, _transferHistory.paymentCardNo),
+                _transferAccount(_actualName, _transferHistory?.paymentCardNo ?? ''),
                 _transferRecordImage("images/transferIcon/transfert_to.png"),
-                _transferAccount(_transferHistory.receiveName,
-                    _transferHistory.receiveCardNo),
+                _transferAccount(_transferHistory?.receiveName ?? '',
+                    _transferHistory?.receiveCardNo ?? ''),
               ],
             ),
             //虚线
@@ -925,7 +925,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     ApiClientPackaging().getUserInfo(GetUserInfoReq(userID)).then((data) {
       if (this.mounted) {
         setState(() {
-          _actualName = data.actualName;
+          _actualName = data?.actualName ?? '';
         });
       }
     }).catchError((e) {
