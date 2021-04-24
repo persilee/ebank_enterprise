@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() {
       if (_userName == 'logout') {
-        _passwordTC.text = '';
+        // _passwordTC.text = '';
       } else {
         _accountTC.text = _userName;
       }

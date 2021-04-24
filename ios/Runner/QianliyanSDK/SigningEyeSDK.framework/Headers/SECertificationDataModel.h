@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString * business_id;//业务编号
 @property (nonatomic, copy) NSString * outCode;//返回编号
 @property (nonatomic, copy) NSString * errorMessage;//返回信息解释
+@property (nonatomic, copy) NSString * idFaceComparisonImg;//返回信息解释
 
 
 @end
