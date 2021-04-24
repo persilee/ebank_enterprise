@@ -6,8 +6,10 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
+import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
 import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
 import 'package:ebank_mobile/data/source/model/loan_prepayment_model.dart';
+import 'package:ebank_mobile/data/source/model/my_approval_data.dart';
 import 'package:ebank_mobile/data/source/model/post_repayment.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
@@ -68,15 +70,15 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
     var req = LoanPrepaymentModelReq(
       loanDetail.contactNo, //合约号
       loanDetail.ccy,
-      double.parse(list.payPrin), //折算后的金额就是实际还款的金额
-      double.parse(list.rcvInt), //还利息金额
+      double.parse(list.totAmt), //折算后的金额就是实际还款的金额
+      double.parse(list.payInt), //还利息金额
       double.parse(loanDetail.osAmt), //贷款的余额
       double.parse(loanDetail.loanAmt), //贷款本金
       double.parse(list.payPrin), //还本金金额
       loanDetail.repaymentMethod, //还息方式
       // '1', //结算方式
       loanDetail.ccy, //结算货币
-      double.parse(list.payPrin), //实际还款金额
+      double.parse(list.totAmt), //实际还款金额
       debitAccount,
     );
     SVProgressHUD.show();
@@ -85,17 +87,19 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
       if (data != null) {
         SVProgressHUD.showSuccess(
             status: S.current.loan_application_input_comfir);
+        Navigator.of(context)..pop()..pop();
 
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) {
-          return LimitDetailsPage();
-        }), (Route route) {
-          //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
-          if (route.settings?.name == "/limit_details_page") {
-            return true; //停止关闭
-          }
-          return false; //继续关闭
-        });
+        // Navigator.of(context).pushAndRemoveUntil(
+        //     MaterialPageRoute(builder: (BuildContext context) {
+        //   return LoanDetailsPage();
+        // }), (Route route) {
+        //   //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
+        //   if (route.settings?.name == "/limit_details_page") {
+        //     //limit_details_page  loan_details_page
+        //     return true; //停止关闭
+        //   }
+        //   return false; //继续关闭
+        // });
       }
     }).catchError((e) {
       SVProgressHUD.dismiss();
@@ -114,7 +118,6 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
     setState(() {
       message = ModalRoute.of(context).settings.arguments;
       currency = list.ccy; //币种
-      int totalRcv = int.parse(list.rcvPen) + int.parse(list.rcvCom);
       fine = list.rcvPen; //罚息总额
       totalRepay = list.totAmt; //还款总额
       loanInterest = loanDetail.intRate + "%"; //当前利率
