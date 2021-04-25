@@ -655,5 +655,9 @@
   "input_amount_msg1": "輸入金額必須大於0",
   "transfer_msg_limit": "轉賬金額超過卡單筆限額",
   "request_client_timeout": "請求客戶端超時",
-  "forex_trading_msg3": "該幣種假期不允許進行外匯買賣轉載"
+  "forex_trading_msg3": "該幣種假期不允許進行外匯買賣轉載",
+  "time_deposit_record_Status_N":"正常",
+  "time_deposit_record_Status_C":"結清",
+  "total_opration_audit_tip":"提交成功,等待審核"
+
 }

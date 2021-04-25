@@ -63,8 +63,8 @@ abstract class ApiClientTimeDeposit {
   Future<UpdateTdConInfoResp> updateTimeDepositConInfo(
       @Body() UpdateTdConInfoReq req);
 
-  /// 获取订单详情页面GetTdConInfoListResp GetTdConInfoListReq
-  @POST('/tdep/timeDeposit/getTdConInfoList')
+  /// 获取订单详情页面GetTdConInfoListResp GetTdConInfoListReq  getTdConInfoList  网银数据getTdConInfoListByPage
+  @POST('/tdep/timeDeposit/getTdConInfoListByPage')
   Future<DepositRecordResp> getDepositRecordRows(@Body() DepositRecordReq req);
 
   /// 根据银行卡得到订单详情

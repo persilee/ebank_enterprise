@@ -365,6 +365,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
 
   //获取账户可用余额
   _getCardBal(String cardNo) {
+    HSProgressHUD.show();
     ApiClientBill()
         .getCardBalByCardNo(GetCardBalReq(cardNo: cardNo))
         .then((data) {
@@ -381,12 +382,14 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
             });
           });
         }
+        HSProgressHUD.dismiss();
       }
     }).catchError((e) {
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
       );
+      HSProgressHUD.dismiss();
     });
   }
 
@@ -486,8 +489,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
 
   //检查假期
   Future _getCcyHoliday(String ccy) async {
-    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    Transfer().getCcyHoliday(GetCcyHolidayReq(ccy, date)).then((data) {
+    // String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    Transfer().getCcyHoliday(GetCcyHolidayReq(ccy, "")).then((data) {
       if (this.mounted) {
         setState(() {
           _holidayFlg = data.holidayFlg;

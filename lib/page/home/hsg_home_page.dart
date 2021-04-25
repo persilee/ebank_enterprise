@@ -8,6 +8,7 @@ import 'dart:io';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_styles.dart';
 import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart';
+import 'package:ebank_mobile/data/source/model/login_Verfiy_phone.dart';
 import 'package:ebank_mobile/data/source/model/logout.dart';
 import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -85,7 +86,6 @@ class _HomePageState extends State<HomePage>
         }
       },
     );
-
     // 网络请求
     _loadData();
 
@@ -874,7 +874,8 @@ class _HomePageState extends State<HomePage>
         Navigator.pushNamed(context, pageDetailList);
       } else if (S.current.account_summary == title) {
         //账户总览
-        Navigator.pushNamed(context, pageAccountOverview);
+        // Navigator.pushNamed(context, pageAccountOverview);
+        Navigator.pushNamed(context, pageAccountOverviewNew);
       } else if (S.current.transfer == title) {
         //转账
         Navigator.pushNamed(context, pageTransfer);
