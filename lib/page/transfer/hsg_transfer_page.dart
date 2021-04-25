@@ -621,7 +621,7 @@ class _TransferPageState extends State<TransferPage> {
           Text(
             _language == 'zh_CN'
                 ? data.payeeBankLocalName == null
-                    ? '朗华银行'
+                    ? '智朗银行'
                     : data.payeeBankLocalName
                 : data.payeeBankEngName == null
                     ? 'Brillink bank'
