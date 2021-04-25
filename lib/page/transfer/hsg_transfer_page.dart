@@ -619,14 +619,14 @@ class _TransferPageState extends State<TransferPage> {
             ),
           ),
           Text(
-            _language == 'zh_CN'
-                ? data.payeeBankLocalName == null
-                    ? '朗华银行'
+            (_language == 'zh_CN' || _language == 'zh_HK')
+                ? (data.payeeBankLocalName == null ||
+                        data.payeeBankLocalName == '')
+                    ? '智朗银行'
                     : data.payeeBankLocalName
-                : data.payeeBankEngName == null
+                : (data.payeeBankEngName == null || data.payeeBankEngName == '')
                     ? 'Brillink bank'
                     : data.payeeBankEngName,
-            // data.payeeBankLocalName == null ? '朗华银行' : data.payeeBankLocalName,
             style: TextStyle(fontSize: 13, color: HsgColors.describeText),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

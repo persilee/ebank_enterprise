@@ -54,24 +54,13 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   FocusNode _payAmtfocusNode = new FocusNode();
   String _holidayFlg = '';
   bool _isHoliday = false;
+  String _time = '';
 
   @override
   // ignore: must_call_super
   void initState() {
     // 网络请求
     _getCardList();
-    // _payAmtController.addListener(() {
-    //   if (_payAmtController.text.length == 0) {
-    //     setState(() {
-    //       _rate = '';
-    //       _incomeAmt = '';
-    //     });
-    //   } else {
-    //     _payAmtfocusNode.addListener(() {
-    //       _transferTrial();
-    //     });
-    //   }
-    // });
     _payAmtfocusNode.addListener(() {
       if (_payAmtController.text.length > 0 && !_payAmtfocusNode.hasFocus) {
         if (double.parse(_payAmtController.text) <= 0) {
@@ -241,9 +230,10 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           Expanded(
             child: TextField(
               textAlign: TextAlign.end,
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               controller: _payAmtController,
               focusNode: _payAmtfocusNode,
+              style: FIRST_DEGREE_TEXT_STYLE,
               decoration: InputDecoration.collapsed(
                 hintText: S.current.please_input,
                 hintStyle: TextStyle(
@@ -421,13 +411,14 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           setState(() {
             _rate = data.optExRate;
             _incomeAmt = data.optExAmt;
+            _time = data.optTrTime;
           });
         }
         HSProgressHUD.dismiss();
       }).catchError((e) {
         HSProgressHUD.dismiss();
         Fluttertoast.showToast(
-          msg: e.toString(),
+          msg: e.error.message,
           gravity: ToastGravity.CENTER,
         );
       });
@@ -450,18 +441,21 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     } else {
       HSProgressHUD.show();
       ApiClientBill()
-          .foreignCcy(ForeignCcyReq(
-              _payAmtController.text,
-              _paymentCcy,
-              _paymentAcc,
-              _rate,
-              DateTime.now().toString(),
-              "",
-              "FXSPTIBK",
-              _incomeAmt,
-              _incomeCcy,
-              _incomeBackCode,
-              ""))
+          .foreignCcy(
+        ForeignCcyReq(
+          _payAmtController.text,
+          _paymentCcy,
+          _paymentAcc,
+          _rate,
+          _time,
+          "",
+          "FXSPTIBK",
+          _incomeAmt,
+          _incomeCcy,
+          _incomeAcc,
+          "",
+        ),
+      )
           .then((data) {
         HSProgressHUD.dismiss();
         Fluttertoast.showToast(
@@ -471,17 +465,21 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         Navigator.pop(context, pageIndex);
       }).catchError((e) {
         HSProgressHUD.dismiss();
-        if (e.toString().contains("EGENE218")) {
-          Fluttertoast.showToast(
-            msg: S.of(context).transfer_msg_limit,
-            gravity: ToastGravity.CENTER,
-          );
-        } else {
-          Fluttertoast.showToast(
-            msg: e.toString(),
-            gravity: ToastGravity.CENTER,
-          );
-        }
+        Fluttertoast.showToast(
+          msg: e.error.message,
+          gravity: ToastGravity.CENTER,
+        );
+        // if (e.toString().contains("EGENE218")) {
+        //   Fluttertoast.showToast(
+        //     msg: S.of(context).transfer_msg_limit,
+        //     gravity: ToastGravity.CENTER,
+        //   );
+        // } else {
+        //   Fluttertoast.showToast(
+        //     msg: e.toString(),
+        //     gravity: ToastGravity.CENTER,
+        //   );
+        // }
       });
     }
   }
