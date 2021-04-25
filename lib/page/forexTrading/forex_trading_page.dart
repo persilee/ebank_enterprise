@@ -365,6 +365,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
 
   //获取账户可用余额
   _getCardBal(String cardNo) {
+    HSProgressHUD.show();
     ApiClientBill()
         .getCardBalByCardNo(GetCardBalReq(cardNo: cardNo))
         .then((data) {
@@ -381,12 +382,14 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
             });
           });
         }
+        HSProgressHUD.dismiss();
       }
     }).catchError((e) {
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
       );
+      HSProgressHUD.dismiss();
     });
   }
 
