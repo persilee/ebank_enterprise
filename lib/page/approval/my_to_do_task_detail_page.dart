@@ -24,6 +24,8 @@ import 'package:ebank_mobile/data/source/model/approval/foreign_transfer_model.d
     as ForeignTransferModel;
 import 'package:ebank_mobile/data/source/model/approval/post_repayment_model.dart'
     as PostRepaymentModel;
+import 'package:ebank_mobile/data/source/model/approval/loan_with_drawal_model.dart'
+    as LoanWithDrawalModel;
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
@@ -71,6 +73,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   List<Widget> _transferPlanList = [];
   List<Widget> _foreignTransferList = [];
   List<Widget> _postRepaymentList = [];
+  List<Widget> _loanWithDrawalList = [];
   List<Widget> _finishedList = [];
   final f = NumberFormat("#,##0.00", "en_US");
   final fj = NumberFormat("#,##0", "ja-JP");
@@ -128,19 +131,71 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       else if (_processKey == 'postRepaymentApproval') {
         _loadPostRepaymentData(_contractModel);
       }
-    } catch (e) {
-      if (this.mounted) {
-        setState(() {
-          _isLoading = false;
-          _isShowErrorPage = true;
-          _hsgErrorPage = HsgErrorPage(
-            error: e.error,
-            buttonAction: () {
-              _loadData();
-            },
-          );
-        });
+      // loanWithDrawalApproval - 贷款领用
+      else if (_processKey == 'loanWithDrawalApproval') {
+        _loanWithDrawalData(_contractModel);
       }
+    } catch (e) {
+      // if (this.mounted) {
+      //   setState(() {
+      //     _isLoading = false;
+      //     _isShowErrorPage = true;
+      //     _hsgErrorPage = HsgErrorPage(
+      //       error: e.error,
+      //       buttonAction: () {
+      //         _loadData();
+      //       },
+      //     );
+      //   });
+      // }
+    }
+  }
+
+  // loanWithDrawalApproval - 贷款领用
+  void _loanWithDrawalData(_contractModel) {
+    LoanWithDrawalModel.LoanWithDrawalModel loanWithDrawalModel =
+    LoanWithDrawalModel.LoanWithDrawalModel.fromJson(_contractModel);
+
+    LoanWithDrawalModel.OperateEndValue data =
+        loanWithDrawalModel.operateEndValue;
+
+    // 添加历史审批记录
+    if (loanWithDrawalModel.commentList.isNotEmpty) {
+      loanWithDrawalModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
+    print('loanWithDrawalModel: ${data.toJson()}');
+
+    if (this.mounted) {
+      setState(() {
+        _loanWithDrawalList.clear();
+        _loanWithDrawalList
+            .add(_buildTitle(S.current.approve_loan_information));
+        _loanWithDrawalList.add(_buildContentItem(
+            '领用金额', // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.amt ?? '0')) ?? ''
+                : f.format(double.parse(data?.amt ?? '0')) ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            '可借款额度', ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            '借款期限', data?.iratTm ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            '还款方式', data?.repType ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            '首次还息日期', data?.fPaydt ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            '总利息', ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            '收款账户', data?.ddAc ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            '借款用途', ''));
+        _isLoading = false;
+        _isShowErrorPage = false;
+      });
     }
   }
 
@@ -601,6 +656,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         if (_processKey == 'transferPlanApproval') ..._transferPlanList,
         if (_processKey == 'foreignTransferApproval') ..._foreignTransferList,
         if (_processKey == 'postRepaymentApproval') ..._postRepaymentList,
+        if (_processKey == 'loanWithDrawalApproval') ..._loanWithDrawalList,
       ],
     );
   }
