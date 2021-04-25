@@ -114,7 +114,9 @@ class HsgErrorPage extends StatelessWidget {
                     }
                   },
                   text: Text(
-                    this.buttonText ?? this.isNeedLogin ? S.current.login : S.current.error_refresh,
+                    this.buttonText ?? this.isNeedLogin
+                        ? S.current.login
+                        : S.current.error_refresh,
                     style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),

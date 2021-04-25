@@ -244,7 +244,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                width: 150,
+                width: 155,
                 child: Text(
                   left,
                   style: TextStyle(

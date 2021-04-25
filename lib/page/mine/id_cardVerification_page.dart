@@ -514,6 +514,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
           _certNo.text, _certTypeKey, _userPhone, _realName.text, userID),
     )
         .then((data) {
+      HSProgressHUD.dismiss();
       if (data.enabled) {
         Map map = new Map();
         map['certificateNo'] = _certNo.text;
@@ -527,7 +528,10 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
         Navigator.pushNamed(context, setPayPage, arguments: map);
       } else {
         //证件信息不匹配
-        SVProgressHUD.showInfo(status: S.current.mine_change_Trade_password);
+        Fluttertoast.showToast(
+          msg: S.current.mine_change_Trade_password,
+          gravity: ToastGravity.CENTER,
+        );
       }
     }).catchError((e) {
       HSProgressHUD.dismiss();
