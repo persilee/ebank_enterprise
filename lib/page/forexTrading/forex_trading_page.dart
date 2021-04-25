@@ -489,8 +489,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
 
   //检查假期
   Future _getCcyHoliday(String ccy) async {
-    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    Transfer().getCcyHoliday(GetCcyHolidayReq(ccy, date)).then((data) {
+    // String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    Transfer().getCcyHoliday(GetCcyHolidayReq(ccy, "")).then((data) {
       if (this.mounted) {
         setState(() {
           _holidayFlg = data.holidayFlg;
