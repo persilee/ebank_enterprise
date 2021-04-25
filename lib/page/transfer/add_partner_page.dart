@@ -168,19 +168,23 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       _payeeAdressReq = '';
       _swiftAdressReq = '';
     }
-    print("bankSwift: " +
-        _bankSwiftController.text +
-        " payeeBankLocalName: " +
-        _bankNameController.text);
     String payeeBankEnName = '';
     String payeeBankLocalName = '';
-    if (_language == 'zh_CN') {
+    if (_language == 'zh_CN' || _language == 'zh_HK') {
       setState(() {
-        payeeBankLocalName = _bankNameController.text;
+        if (_transferType == _transferType_0) {
+          payeeBankLocalName = "智朗银行";
+        } else {
+          payeeBankLocalName = _bankNameController.text;
+        }
       });
     } else {
       setState(() {
-        payeeBankEnName = _bankNameController.text;
+        if (_transferType == _transferType_0) {
+          payeeBankEnName = "Brillink bank";
+        } else {
+          payeeBankEnName = _bankNameController.text;
+        }
       });
     }
     Transfer()

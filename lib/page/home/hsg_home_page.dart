@@ -874,7 +874,8 @@ class _HomePageState extends State<HomePage>
         Navigator.pushNamed(context, pageDetailList);
       } else if (S.current.account_summary == title) {
         //账户总览
-        Navigator.pushNamed(context, pageAccountOverview);
+        // Navigator.pushNamed(context, pageAccountOverview);
+        Navigator.pushNamed(context, pageAccountOverviewNew);
       } else if (S.current.transfer == title) {
         //转账
         Navigator.pushNamed(context, pageTransfer);

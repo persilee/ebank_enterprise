@@ -25,6 +25,11 @@ class ConfigKey {
 
   static const USER_TYPE = "user_type";
   // static const USER_PASSWORD = "user_password"; //临时使用，方便开发，后面需要去除保存
+
+  static const LOCAL_USER_NAME = "local_user_name";
+  static const ENGLISH_USER_NAME = "english_user_name";
+  static const CUST_LOCAL_NAME = "cust_local_name";
+  static const CUST_ENG_NAME = "cust_eng_name";
 }
 
 class InputFormartterRegExp {
