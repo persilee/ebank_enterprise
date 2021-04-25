@@ -359,6 +359,16 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     String conMatAmts = FormatUtil.formatSringToMoney('$conMatAmt');
     String matAmts = FormatUtil.formatSringToMoney('$matAmt');
 
+    String _language = Intl.getCurrentLocale();
+    String _nameStr = '';
+    if (_language == 'zh_CN') {
+      _nameStr = widget.deposit.lclName ?? widget.deposit.engName;
+    } else if (_language == 'zh_HK') {
+      _nameStr = widget.deposit.lclName ?? widget.deposit.engName;
+    } else {
+      _nameStr = widget.deposit.engName;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.receipt_detail),
@@ -400,7 +410,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                     child: Row(
                       children: [
                         Expanded(
-                            child: Text(productName,
+                            child: Text(_nameStr,
                                 style: TextStyle(fontWeight: FontWeight.bold))),
                         Container()
                       ],

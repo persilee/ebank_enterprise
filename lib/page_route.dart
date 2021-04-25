@@ -36,6 +36,7 @@ import 'package:ebank_mobile/page/register/register_success_page.dart';
 import 'package:ebank_mobile/page/register/reset_password_account_open.dart';
 import 'package:ebank_mobile/page/register/reset_password_no_account.dart';
 import 'package:ebank_mobile/page/register/reset_password_success.dart';
+import 'package:ebank_mobile/page/timeDeposit/time_deposit_close_info.dart';
 // import 'package:ebank_mobile/page/mine/qliyan_demo_page.dart';
 
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
@@ -223,6 +224,7 @@ var pageTransferInter = '/transfer_inter.dart';
 var pageTransferOrder = '/transfer_order.dart';
 var pageTransferSuccess = '/transfer_success.dart';
 var pageCityForCountrySelect = '/city_for_country_select_page.dart';
+var pageTimeDepositCloseDetail = '/time_deposit_close_info.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -331,6 +333,7 @@ var appRoutes = {
   pageTransferOrder: (context) => TransferOrderPage(),
   pageTransferSuccess: (context) => TransferSuccessPage(),
   // pageCityForCountrySelect: (context) => CityForCountrySelectPage(),
+  pageTimeDepositCloseDetail: (context) => DepositCloseInfoPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {

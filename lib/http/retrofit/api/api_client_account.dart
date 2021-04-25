@@ -12,6 +12,7 @@ import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_user_agreement.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
+import 'package:ebank_mobile/data/source/model/login_Verfiy_phone.dart';
 import 'package:ebank_mobile/data/source/model/logout.dart';
 import 'package:ebank_mobile/data/source/model/register_by_account.dart';
 import 'package:ebank_mobile/data/source/model/send_sms_register.dart';
@@ -97,4 +98,9 @@ abstract class ApiClientAccount {
   /// 获取银行列表
   @POST('/platform/branchInfo/queryBranchInfoList')
   Future<GetBranchListResp> getBrnachList(@Body() GetBranchListReq req);
+
+  /// 校验手机号是否已经开过户
+  @POST('/cust/user/getUserStatusByPhone')
+  Future<LoginVerifyPhoneResp> forgetVerifyPhoneOpenAccount(
+      @Body() LoginVerifyPhoneReq req);
 }

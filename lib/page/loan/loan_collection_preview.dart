@@ -193,7 +193,7 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
 //输入交易密码最终申请
   _loanWithdrawalCommit() {
     String payData = _requstMap['planPayData'];
-    String repayDat = payData.substring(7);
+    String repayDat = payData.substring(payData.length - 2);
     String repay = _requstMap['repaymentMethod']; //还款方式
     String insType = '';
     String payType = ''; //还款方式
@@ -259,17 +259,18 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
     ApiClientLoan().loanFinalWithdrawInterface(req).then(
       (data) {
         if (data != null) {
-          SVProgressHUD.showSuccess(status: S.current.operation_successful);
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (BuildContext context) {
-            return LimitDetailsPage();
-          }), (Route route) {
-            //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
-            if (route.settings?.name == "/limit_details_page") {
-              return true; //停止关闭
-            }
-            return false; //继续关闭
-          });
+          SVProgressHUD.showSuccess(status: S.current.total_opration_audit_tip);
+          Navigator.of(context)..pop()..pop();
+          //   Navigator.of(context).pushAndRemoveUntil(
+          //       MaterialPageRoute(builder: (BuildContext context) {
+          //     return LimitDetailsPage();
+          //   }), (Route route) {
+          //     //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
+          //     if (route.settings?.name == "/limit_details_page") {
+          //       return true; //停止关闭
+          //     }
+          //     return false; //继续关闭
+          //   });
         }
         SVProgressHUD.dismiss();
       },

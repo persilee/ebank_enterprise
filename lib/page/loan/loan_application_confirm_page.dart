@@ -214,8 +214,7 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
     )
         .then((data) {
       // SVProgressHUD.dismiss();
-      SVProgressHUD.showSuccess(
-          status: S.current.loan_application_submit_success);
+      SVProgressHUD.showSuccess(status: S.current.total_opration_audit_tip);
       sleep(Duration(seconds: 1));
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) {

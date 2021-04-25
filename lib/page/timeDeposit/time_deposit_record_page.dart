@@ -75,14 +75,13 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
               ? CustomRefresh(
                   controller: _refreshController,
                   onLoading: () {
+                    //加载更多完成
                     _loadDeopstData(isLoadMore: true);
-                    // //加载更多完成
-                    // _refreshController.loadComplete();
-                    // //显示没有更多数据
-                    // if (_isMoreData) _refreshController.loadNoData();
                   },
                   onRefresh: () {
                     //刷新完成
+                    _page = 1;
+                    rowList.clear();
                     _loadDeopstData();
                   },
                   content: ListView.builder(
@@ -173,6 +172,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     double conRate = double.parse(rows.conRate);
     conRate = double.parse(FormatUtil.formatNum(conRate, 2));
     var endTime = Row(
+      //结束时间。倒着写的
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
@@ -186,6 +186,32 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         ),
       ],
     );
+
+    String _statusText = '';
+    if (rows.conSts == 'C') {
+      //状态为关闭显示 结清
+      _statusText = S.current.time_deposit_record_Status_C;
+    } else if (rows.conSts == 'N') {
+      //显示正常
+      _statusText = S.current.time_deposit_record_Status_N;
+    }
+
+    var _orderStatus = Row(
+      //当前订单状态
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          S.current.approve_state,
+          style: TextStyle(fontSize: 15, color: HsgColors.toDoDetailText),
+        ),
+        Text(
+          //到期状态
+          _statusText,
+          style: TextStyle(fontSize: 15, color: Colors.red),
+        ),
+      ],
+    );
+
     //存入金额
     var rate = [
       Row(
@@ -230,7 +256,8 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           ),
         ],
       ),
-      endTime
+      endTime, //时间
+      _orderStatus //状态
     ];
     var startTime = rate;
     String _language = Intl.getCurrentLocale();
@@ -243,13 +270,14 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
       _nameStr = rows.engName;
     }
 
-    //整存整取
+    //整存整取 名称标题
     var taking = [
       SizedBox(
         // height: 37,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start, //设置方式
           children: [
+            //这是头部控件
             Padding(
               padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
               child: Text(
@@ -264,6 +292,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
       SizedBox(
         height: 125,
         child: Padding(
+          //底部控件
           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -274,7 +303,14 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     ];
     var raisedButton = RaisedButton(
         onPressed: () {
-          go2Detail(rows);
+          if (rows.conSts == 'C') {
+            //存单结清的详情
+            Navigator.pushNamed(context, pageTimeDepositCloseDetail,
+                arguments: rows);
+          } else if (rows.conSts == 'N') {
+            //存单正常的详情
+            Navigator.pushNamed(context, pageDepositInfo, arguments: rows);
+          }
         },
         padding: EdgeInsets.only(bottom: 12),
         color: Colors.white,
@@ -285,11 +321,6 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         ));
 
     return raisedButton;
-  }
-
-  //跳转传值
-  void go2Detail(DepositRecord deposit) {
-    Navigator.pushNamed(context, pageDepositInfo, arguments: deposit);
   }
 
 // //获取定期存单列表
@@ -356,32 +387,71 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         DepositRecordReq(ciNo, '', excludeClosed, _page, 10, ''),
       )
     }).then((value) {
+      print('当前的页数$_page');
+
       if (this.mounted) {
         setState(() {
           value.forEach((element) {
-            _refreshController.refreshCompleted();
-
-            totalAmt = element.totalAmt;
-            _defaultCcy = element.defaultCcy;
-
-            if (element.page == 1) {
-              _refreshController.footerMode.value = LoadStatus.canLoading;
-
-              rowList = element.rows == null ? [] : element.rows;
+            if (isLoadMore) {
+              //加载更多
+              if (element.rows.length < 10) {
+                //判断底部没有更多提示的
+                _refreshController.footerMode.value = LoadStatus.noMore;
+                rowList.addAll(element.rows);
+                _page = 1;
+                _isDate = false;
+              } else {
+                _isDate = true;
+                rowList.addAll(element.rows);
+              }
+              _refreshController.refreshCompleted(); //刷新完成
             } else {
-              rowList.addAll(element.rows);
-            }
-
-            if (element.rows.length < 10 || element.totalPage <= _page) {
-              _refreshController.footerMode.value = LoadStatus.noMore;
-            }
-
-            if (rowList == null || rowList.length == 0) {
-              _isDate = false;
-            } else {
-              _isDate = true;
+              //刷新
+              if (element.rows.length == 0) {
+                //没有数据
+                _isDate = false;
+              } else {
+                _isDate = true;
+              }
+              if (element.rows.length < 10) {
+                //判断底部没有更多提示的
+                _refreshController.footerMode.value = LoadStatus.noMore;
+                rowList.addAll(element.rows);
+              } else {
+                rowList.addAll(element.rows);
+              }
             }
           });
+
+          // value.forEach((element) {
+          //   //遍历数组元素
+          //   _refreshController.refreshCompleted(); //刷新完成
+
+          //   totalAmt = element.totalAmt; //总金额
+          //   _defaultCcy = element.defaultCcy; //当前币种
+
+          //   if (element.rows.length > 0) {
+          //     //当前页数为1
+          //     rowList.addAll(element.rows);
+          //     // _refreshController.footerMode.value = LoadStatus.canLoading;
+          //     // rowList = element.rows == null ? [] : element.rows;
+          //   } else {
+          //     //页数是大于1的 但是后端返回的始终为1
+          //     // rowList.addAll(element.rows);
+          //     _refreshController.footerMode.value = LoadStatus.canLoading;
+          //   }
+
+          //   if (element.rows.length < 10 || element.totalPage <= _page) {
+          //     //判断底部没有更多提示的
+          //     _refreshController.footerMode.value = LoadStatus.noMore;
+          //   }
+
+          //   if (rowList == null || rowList.length == 0) {
+          //     _isDate = false;
+          //   } else {
+          //     _isDate = true;
+          //   }
+          // });
           _isLoading = false;
         });
       }
@@ -391,11 +461,18 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           _isLoading = false;
         });
       }
-
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
       );
+    });
+  }
+
+//抽取公共代码
+  _elementDataOf(List valueData) {
+    _refreshController.refreshCompleted(); //刷新完成
+    valueData.forEach((element) {
+      rowList.addAll(element.rows);
     });
   }
 
