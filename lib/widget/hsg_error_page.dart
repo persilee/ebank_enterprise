@@ -65,7 +65,7 @@ class HsgErrorPage extends StatelessWidget {
                       bottom: 12,
                     ),
                     child: Text(
-                      this.title ?? '哦豁😯，出现了蜜汁错误！',
+                      this.title ?? S.current.error_title,
                       style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                   )
@@ -76,10 +76,10 @@ class HsgErrorPage extends StatelessWidget {
                 Text(
                   this.isEmptyPage
                       ? S.current.no_data_now
-                      : this.desc ?? '虽然什么也没有,要不刷新看看',
+                      : this.desc ?? S.current.error_desc,
                   style: TextStyle(fontSize: 15, color: Colors.grey.shade400),
                 ),
-                this.isEmptyPage
+                this.isEmptyPage || this.isNeedLogin
                     ? Container()
                     : GestureDetector(
                         onTap: () => this.helpAction(),
@@ -114,7 +114,7 @@ class HsgErrorPage extends StatelessWidget {
                     }
                   },
                   text: Text(
-                    this.buttonText ?? this.isNeedLogin ? '登录' : '刷新',
+                    this.buttonText ?? this.isNeedLogin ? S.current.login : S.current.error_refresh,
                     style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),

@@ -1041,14 +1041,14 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             confirmCallback: () {
               FocusManager.instance.primaryFocus?.unfocus();
               Navigator.pop(context);
-              _rejectTaskConfirm(this.context);
+              _rejectTaskConfirm();
             },
           );
         });
   }
 
   // 驳回逻辑
-  void _rejectTaskConfirm(BuildContext context) async {
+  void _rejectTaskConfirm() async {
     if (this.mounted) {
       setState(() {
         _btnIsLoadingR = true;
@@ -1056,7 +1056,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       });
     }
     try {
-      CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
+      await ApiClient().completeTask(
         CompleteTaskBody(
           approveResult: false,
           comment: _comment,
@@ -1101,7 +1101,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       });
     }
     try {
-      CompleteTaskModel completeTaskModel = await ApiClient().completeTask(
+      await ApiClient().completeTask(
         CompleteTaskBody(
           approveResult: false,
           comment: _comment,

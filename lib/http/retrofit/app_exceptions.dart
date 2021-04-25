@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/widget/hsg_error_page.dart';
@@ -113,6 +115,8 @@ class AppException implements Exception {
             //     )));
             return error.error = NeedLogin();
             break;
+          } if(error.error is SocketException) {
+            return error.error = AppException("-1", "请查看是否连接网络！");
           } else {
             return error.error;
           }
