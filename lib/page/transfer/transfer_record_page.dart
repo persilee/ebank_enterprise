@@ -65,6 +65,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   TextEditingController _startAmountController = TextEditingController();
   TextEditingController _endAmountController = TextEditingController();
   RefreshController _refreshController;
+  String _language = Intl.getCurrentLocale();
   @override
   void initState() {
     super.initState();
@@ -233,7 +234,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _transferAccount(_actualName, _transferHistory?.paymentCardNo ?? ''),
+                _transferAccount(
+                    _actualName, _transferHistory?.paymentCardNo ?? ''),
                 _transferRecordImage("images/transferIcon/transfert_to.png"),
                 _transferAccount(_transferHistory?.receiveName ?? '',
                     _transferHistory?.receiveCardNo ?? ''),
@@ -920,17 +922,22 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   //获取用户真实姓名
   Future<void> _actualNameReqData() async {
     final prefs = await SharedPreferences.getInstance();
-    String userID = prefs.getString(ConfigKey.USER_ID);
-    // UserDataRepository()
-    ApiClientPackaging().getUserInfo(GetUserInfoReq(userID)).then((data) {
-      if (this.mounted) {
-        setState(() {
-          _actualName = data?.actualName ?? '';
-        });
-      }
-    }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+    setState(() {
+      _actualName = (_language == 'zh_CN' || _language == 'zh_HK')
+          ? prefs.getString(ConfigKey.CUST_LOCAL_NAME)
+          : prefs.getString(ConfigKey.CUST_ENG_NAME);
     });
+    // String userID = prefs.getString(ConfigKey.USER_ID);
+    // // UserDataRepository()
+    // ApiClientPackaging().getUserInfo(GetUserInfoReq(userID)).then((data) {
+    //   if (this.mounted) {
+    //     setState(() {
+    //       _actualName = data?.actualName ?? '';
+    //     });
+    //   }
+    // }).catchError((e) {
+    //   // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+    // });
   }
 
   //获取银行卡
