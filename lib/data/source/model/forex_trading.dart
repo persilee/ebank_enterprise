@@ -118,10 +118,13 @@ class TransferTrialResp {
   String optExRate;
   @JsonKey(name: 'optExAmt')
   String optExAmt;
+  @JsonKey(name: 'optTrTime')
+  String optTrTime;
 
   TransferTrialResp(
     this.optExRate,
     this.optExAmt,
+    this.optTrTime,
   );
 
   @override

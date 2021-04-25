@@ -54,6 +54,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
   FocusNode _payAmtfocusNode = new FocusNode();
   String _holidayFlg = '';
   bool _isHoliday = false;
+  String _time = '';
 
   @override
   // ignore: must_call_super
@@ -410,13 +411,14 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           setState(() {
             _rate = data.optExRate;
             _incomeAmt = data.optExAmt;
+            _time = data.optTrTime;
           });
         }
         HSProgressHUD.dismiss();
       }).catchError((e) {
         HSProgressHUD.dismiss();
         Fluttertoast.showToast(
-          msg: e.toString(),
+          msg: e.error.message,
           gravity: ToastGravity.CENTER,
         );
       });
@@ -439,18 +441,21 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     } else {
       HSProgressHUD.show();
       ApiClientBill()
-          .foreignCcy(ForeignCcyReq(
-              _payAmtController.text,
-              _paymentCcy,
-              _paymentAcc,
-              _rate,
-              DateTime.now().toString(),
-              "",
-              "FXSPTIBK",
-              _incomeAmt,
-              _incomeCcy,
-              _incomeBackCode,
-              ""))
+          .foreignCcy(
+        ForeignCcyReq(
+          _payAmtController.text,
+          _paymentCcy,
+          _paymentAcc,
+          _rate,
+          _time,
+          "",
+          "FXSPTIBK",
+          _incomeAmt,
+          _incomeCcy,
+          _incomeAcc,
+          "",
+        ),
+      )
           .then((data) {
         HSProgressHUD.dismiss();
         Fluttertoast.showToast(

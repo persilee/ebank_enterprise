@@ -405,11 +405,13 @@ class _TransferPartnerState extends State<TransferPartner> {
         Container(
           width: MediaQuery.of(context).size.width / 1.5,
           child: Text(
-            _language == 'zh_CN'
-                ? partner.payeeBankLocalName == null
+            (_language == 'zh_CN' || _language == 'zh_HK')
+                ? (partner.payeeBankLocalName == null ||
+                        partner.payeeBankLocalName == '')
                     ? '智朗银行'
                     : partner.payeeBankLocalName
-                : partner.payeeBankEngName == null
+                : (partner.payeeBankEngName == null ||
+                        partner.payeeBankEngName == '')
                     ? 'Brillink bank'
                     : partner.payeeBankEngName,
             // _bankName = _language == 'zh_CN'

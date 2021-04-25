@@ -13,7 +13,6 @@ import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
-import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_packaging.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
 import 'package:ebank_mobile/page/transfer/data/transfer_internal_data.dart';
@@ -25,6 +24,7 @@ import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
@@ -64,6 +64,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
   var _payeeAccountController = new TextEditingController();
 
   var _payeeTransferController = new TextEditingController();
+
+  String _language = Intl.getCurrentLocale();
 
   //付款方币种
   String _payerCcy = '';
@@ -192,7 +194,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         payeeBankCode = rowPartner.bankCode;
         payerBankCode = rowPartner.payerBankCode;
         payeeName = rowPartner.payeeName;
-        payerName = rowPartner.payerName;
+        // payerName = rowPartner.payerName;
         _payeeCcy = rowPartner.ccy;
         check = true;
         _isAccount = false;
@@ -663,13 +665,14 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
 
   //默认初始卡号
   _loadTransferData() async {
-    GetCardListResp _data = await ApiClientAccount().getCardList(GetCardListReq());
+    GetCardListResp _data =
+        await ApiClientAccount().getCardList(GetCardListReq());
 
     setState(() {
       //付款方卡号
       _payerAccount = _data.cardList[0].cardNo;
       payerBankCode = payeeBankCode = _data.cardList[0].bankCode;
-      payerName = _data.cardList[0].ciName;
+      // payerName = _data.cardList[0].ciName;
       _data.cardList.forEach((e) {
         _payerAccountList.add(e.cardNo);
       });
@@ -677,8 +680,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     });
     _loadData(_payerAccount);
 
-        // value.forEach((element) {
-      //通过绑定手机号查询卡列表接口POST
+    // value.forEach((element) {
+    //通过绑定手机号查询卡列表接口POST
     //   if (element is GetCardListResp) {
     //     if (this.mounted) {
     //       if (element != null &&
@@ -701,11 +704,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     // });
     Future.wait({
       // CardDataRepository()
-
-
-    }).then((value) {
-
-    });
+    }).then((value) {});
   }
 
   _loadData(String cardNo) async {
@@ -823,20 +822,23 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
   //获取用户真实姓名
   Future<void> _actualNameReqData() async {
     final prefs = await SharedPreferences.getInstance();
-    String userID = prefs.getString(ConfigKey.USER_ID);
-    // UserDataRepository()
-    ApiClientPackaging().getUserInfo(GetUserInfoReq(userID)).then((data) {
-      if (this.mounted) {
-        setState(() {
-          payerName = data?.actualName ?? '';
-        });
-      }
-    }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+    setState(() {
+      payerName = (_language == 'zh_CN' || _language == 'zh_HK')
+          ? prefs.getString(ConfigKey.CUST_LOCAL_NAME)
+          : prefs.getString(ConfigKey.CUST_ENG_NAME);
     });
+    // ApiClientPackaging().getUserInfo(GetUserInfoReq(userID)).then((data) {
+    //   if (this.mounted) {
+    //     setState(() {
+    //       payerName = data?.actualName ?? '';
+    //     });
+    //   }
+    // }).catchError((e) {
+    //   Fluttertoast.showToast(
+    //     msg: e.toString(),
+    //     gravity: ToastGravity.CENTER,
+    //   );
+    // });
   }
 
   //根据账号查询名称
