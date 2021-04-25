@@ -122,6 +122,7 @@ class _MyApprovedHistoryDetailPageState
       }
       if (this.mounted) {
         setState(() {
+          _isLoading = false;
           _error = e.error;
           _isShowErrorPage = true;
           _hsgErrorPage = HsgErrorPage(
@@ -136,9 +137,6 @@ class _MyApprovedHistoryDetailPageState
           );
         });
       }
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 

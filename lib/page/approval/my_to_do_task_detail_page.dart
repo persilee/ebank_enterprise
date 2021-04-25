@@ -32,6 +32,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
@@ -73,6 +74,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   List<Widget> _finishedList = [];
   final f = NumberFormat("#,##0.00", "en_US");
   final fj = NumberFormat("#,##0", "ja-JP");
+  bool _isShowErrorPage = false;
+  AppException _error;
+  Widget _hsgErrorPage;
 
   @override
   void initState() {
@@ -126,9 +130,32 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _loadPostRepaymentData(_contractModel);
       }
     } catch (e) {
-      print('error: ${e.toString()}');
+      _showErrorPage(e);
+    }
+  }
+
+  void _showErrorPage(e) {
+    bool _isNeedLogin;
+    if (e.error is NeedLogin) {
+      _isNeedLogin = true;
+    } else {
+      _isNeedLogin = false;
+    }
+    if (this.mounted) {
       setState(() {
         _isLoading = false;
+        _error = e.error;
+        _isShowErrorPage = true;
+        _hsgErrorPage = HsgErrorPage(
+          title: _error.code,
+          desc: _error.message,
+          isNeedLogin: _isNeedLogin,
+          buttonAction: _isNeedLogin
+              ? () {}
+              : () {
+                  _loadData();
+                },
+        );
       });
     }
   }
@@ -152,8 +179,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     if (this.mounted) {
       setState(() {
         _postRepaymentList.add(_buildTitle(S.current.approve_loan_information));
-        _postRepaymentList.add(_buildContentItem(S.current.approve_loan_account, data?.acNo ?? ''));
-        _postRepaymentList.add(_buildContentItem(S.current.approve_loan_currency, data?.ccy ?? ''));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_account, data?.acNo ?? ''));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_currency, data?.ccy ?? ''));
         _postRepaymentList.add(_buildContentItem(
             S.current.approve_loan_principal,
             // 处理日元没有小数
@@ -166,12 +195,15 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.outBal ?? '0')) ?? ''
                 : f.format(double.parse(data?.outBal ?? '0')) ?? ''));
-        _postRepaymentList.add(_buildContentItem(S.current.approve_loan_interest_rate, data?.exRate ?? ''));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_interest_rate, data?.exRate ?? ''));
         _postRepaymentList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
-        _postRepaymentList.add(_buildTitle(S.current.approve_loan_payment_information));
-        _postRepaymentList.add(_buildContentItem(S.current.approve_debit_account, data?.ddAc ?? ''));
+        _postRepaymentList
+            .add(_buildTitle(S.current.approve_loan_payment_information));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_debit_account, data?.ddAc ?? ''));
         _postRepaymentList.add(_buildContentItem(
             S.current.approve_repayment_principal,
             data?.ccy == 'JPY'
@@ -537,22 +569,24 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       ),
       body: _isLoading
           ? HsgLoading()
-          : SingleChildScrollView(
-              controller: _controller,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // 提示
-                  _tips(),
-                  // 根据processKey动态显示 任务详情
-                  _buildTaskDetail(_processKey),
-                  // 审批历史
-                  if (_finishedList.length > 0) _buildHistoryTask(context),
-                  // 我的审批
-                  _myApproval(context),
-                ],
-              ),
-            ),
+          : _isShowErrorPage
+              ? _hsgErrorPage
+              : SingleChildScrollView(
+                  controller: _controller,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // 提示
+                      _tips(),
+                      // 根据processKey动态显示 任务详情
+                      _buildTaskDetail(_processKey),
+                      // 审批历史
+                      if (_finishedList.length > 0) _buildHistoryTask(context),
+                      // 我的审批
+                      _myApproval(context),
+                    ],
+                  ),
+                ),
     );
   }
 
@@ -684,7 +718,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       return Container(
         child: Row(
           children: [
-            // 驳回至发起人按钮
+            // 驳回至发起人按钮 （暂时去掉该功能)
             // Expanded(
             //   flex: 2,
             //   child: CustomButton(
@@ -1027,7 +1061,14 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       }
       Navigator.pop(context);
     } catch (e) {
-      print(e);
+      setState(() {
+        _btnIsLoadingUN = false;
+        _btnIsEnable = true;
+      });
+      Fluttertoast.showToast(
+        msg: e.error.message,
+        gravity: ToastGravity.CENTER,
+      );
     }
   }
 
@@ -1072,7 +1113,14 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       }
       Navigator.pop(context);
     } catch (e) {
-      print(e);
+      setState(() {
+        _btnIsLoadingR = false;
+        _btnIsEnable = true;
+      });
+      Fluttertoast.showToast(
+        msg: e.error.message,
+        gravity: ToastGravity.CENTER,
+      );
     }
   }
 
@@ -1184,15 +1232,11 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             Navigator.pushReplacementNamed(context, pageDepositRecordSucceed);
           }
         } catch (e) {
-          print(e);
           setState(() {
             _btnIsLoadingEAA = false;
             _btnIsEnable = true;
           });
-          Fluttertoast.showToast(
-            msg: e.toString(),
-            gravity: ToastGravity.CENTER,
-          );
+          _showErrorPage(e);
         }
       }
     }
