@@ -102,7 +102,9 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //转账费用
   List<String> transferFeeList = [];
+  List<String> transferFeeCodeList = [];
   int _transferFeeIndex = 0;
+  String _transferFeeCode = '';
   String _transferFee = '';
 
   //按钮是否能点击
@@ -728,6 +730,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
         gravity: ToastGravity.CENTER,
       );
     } else {
+      print('_transferFeeCode: ${_transferFeeCode}');
       Navigator.pushNamed(
         context,
         pageTransferInternationalPreview,
@@ -755,7 +758,8 @@ class _TransferInterPageState extends State<TransferInterPage> {
           payerName,
           _countryCode,
           rate,
-          _transferFeeIndex.toString(),
+          // _transferFeeIndex.toString(),
+          _transferFeeCode,
         ),
       );
     }
@@ -830,6 +834,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //转账费用
   _selectTransferFee() async {
+    print(transferFeeList);
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
@@ -841,9 +846,11 @@ class _TransferInterPageState extends State<TransferInterPage> {
     if (result != null && result != false) {
       setState(() {
         _transferFeeIndex = result;
+        _transferFeeCode = transferFeeCodeList[result];
         _transferFee = transferFeeList[result];
         _boolBut();
       });
+      print('_transferFeeCode: ${_transferFeeCode}');
     }
   }
 
@@ -1043,14 +1050,16 @@ class _TransferInterPageState extends State<TransferInterPage> {
   //获取转账费用列表
   Future _getTransferFeeList() async {
     // PublicParametersRepository()
-    ApiClientOpenAccount().getIdType(GetIdTypeReq("PAYS_METHOD")).then((data) {
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("PAY_METHOD")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         transferFeeList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {
           if (_language == 'zh_CN' || _language == 'zh_HK') {
             transferFeeList.add(e.cname);
+            transferFeeCodeList.add(e.code);
           } else {
             transferFeeList.add(e.name);
+            transferFeeCodeList.add(e.code);
           }
         });
         for (int i = 0; i < transferFeeList.length; i++) {
@@ -1072,7 +1081,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
     // TransferDataRepository()
     //     .getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift), 'getInfoBySwiftCode')
     Transfer()
-      ..getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift)).then((data) {
+      .getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift)).then((data) {
         if (this.mounted) {
           setState(() {
             _bankNameController.text =
