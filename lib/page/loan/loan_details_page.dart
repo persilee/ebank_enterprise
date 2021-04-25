@@ -83,9 +83,9 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
         elevation: 0,
       ),
       body:
-          // _isLoad
-          //     ? HsgLoading()
-          //     :
+          _isLoad
+              ? HsgLoading()
+              :
           CustomScrollView(
         slivers: _getContent(),
       ),
