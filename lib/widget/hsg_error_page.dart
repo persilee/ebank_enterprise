@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/util/screen_util.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
@@ -16,6 +17,7 @@ class HsgErrorPage extends StatelessWidget {
   final VoidCallback helpAction;
   final bool isEmptyPage;
   final bool isNeedLogin;
+  final AppException error;
 
   HsgErrorPage({
     this.icon,
@@ -26,12 +28,18 @@ class HsgErrorPage extends StatelessWidget {
     this.helpAction,
     this.isEmptyPage = false,
     this.isNeedLogin = false,
+    @required this.error,
   });
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    print(this.desc);
+    bool _isNeedLogin;
+    if (this.error is NeedLogin) {
+      _isNeedLogin = true;
+    } else {
+      _isNeedLogin = false;
+    }
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -65,7 +73,7 @@ class HsgErrorPage extends StatelessWidget {
                       bottom: 12,
                     ),
                     child: Text(
-                      this.title ?? S.current.error_title,
+                      this.title ?? this.error.code ??  S.current.error_title,
                       style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                   )
@@ -76,13 +84,13 @@ class HsgErrorPage extends StatelessWidget {
                 Text(
                   this.isEmptyPage
                       ? S.current.no_data_now
-                      : this.desc ?? S.current.error_desc,
+                      : this.desc ?? this.error.message ?? S.current.error_desc,
                   style: TextStyle(fontSize: 15, color: Colors.grey.shade400),
                 ),
-                this.isEmptyPage || this.isNeedLogin
+                this.isEmptyPage || _isNeedLogin
                     ? Container()
                     : GestureDetector(
-                        onTap: () => this.helpAction(),
+                        onTap: () => this.helpAction != null ? this.helpAction() : (){},
                         child: Icon(
                           IconFont.icon_info,
                           size: 18,
@@ -98,7 +106,7 @@ class HsgErrorPage extends StatelessWidget {
                 child: CustomButton(
                   height: 36.0,
                   clickCallback: () {
-                    if (this.isNeedLogin) {
+                    if (_isNeedLogin) {
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(builder: (BuildContext context) {
                         return LoginPage();
@@ -114,7 +122,7 @@ class HsgErrorPage extends StatelessWidget {
                     }
                   },
                   text: Text(
-                    this.buttonText ?? this.isNeedLogin
+                    this.buttonText ?? _isNeedLogin
                         ? S.current.login
                         : S.current.error_refresh,
                     style: TextStyle(fontSize: 16, color: Colors.white),
