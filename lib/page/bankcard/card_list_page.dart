@@ -38,6 +38,7 @@ class _CardListPageState extends State<CardListPage> {
   Map _totalbalMap = <int, CardBalBean>{};
   int _cardsLength = 0;
   bool _isLoading = false; //加载状态
+  int _showDetailsSetion = -1; //展示详情的区域，如果为-1就是全部不显示
 
   RefreshController _refreshController;
   ScrollController _scrollController;
