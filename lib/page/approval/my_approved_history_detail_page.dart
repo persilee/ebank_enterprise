@@ -59,7 +59,6 @@ class _MyApprovedHistoryDetailPageState
   final f = NumberFormat("#,##0.00", "en_US");
   final fj = NumberFormat("#,##0", "ja-JP");
   bool _isShowErrorPage = false;
-  AppException _error;
   Widget _hsgErrorPage;
 
   @override
@@ -114,26 +113,15 @@ class _MyApprovedHistoryDetailPageState
         _loadPostRepaymentData(_contractModel);
       }
     } catch (e) {
-      bool _isNeedLogin;
-      if (e.error is NeedLogin) {
-        _isNeedLogin = true;
-      } else {
-        _isNeedLogin = false;
-      }
       if (this.mounted) {
         setState(() {
           _isLoading = false;
-          _error = e.error;
           _isShowErrorPage = true;
           _hsgErrorPage = HsgErrorPage(
-            title: _error.code,
-            desc: _error.message,
-            isNeedLogin: _isNeedLogin,
-            buttonAction: _isNeedLogin
-                ? () {}
-                : () {
-                    _loadData();
-                  },
+            error: e.error,
+            buttonAction: () {
+              _loadData();
+            },
           );
         });
       }
@@ -205,6 +193,7 @@ class _MyApprovedHistoryDetailPageState
                 ? fj.format(double.parse(data?.totalAmount ?? '0')) ?? ''
                 : f.format(double.parse(data?.totalAmount ?? '0')) ?? ''));
         _isLoading = false;
+        _isShowErrorPage = false;
       });
     }
   }
@@ -251,6 +240,7 @@ class _MyApprovedHistoryDetailPageState
         _foreignTransferList.add(
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
         _isLoading = false;
+        _isShowErrorPage = false;
       });
     }
   }
@@ -306,6 +296,7 @@ class _MyApprovedHistoryDetailPageState
         _transferPlanList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
+        _isShowErrorPage = false;
       });
     }
   }
@@ -374,6 +365,7 @@ class _MyApprovedHistoryDetailPageState
         _internationalList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
+        _isShowErrorPage = false;
       });
     }
   }
@@ -426,6 +418,7 @@ class _MyApprovedHistoryDetailPageState
         _oneToOneList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
+        _isShowErrorPage = false;
       });
     }
   }
@@ -485,6 +478,7 @@ class _MyApprovedHistoryDetailPageState
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_settlement_amount, data?.settBal ?? ''));
         _isLoading = false;
+        _isShowErrorPage = false;
       });
     }
   }
@@ -523,6 +517,7 @@ class _MyApprovedHistoryDetailPageState
         _openTdList.add(_buildContentItem(
             S.current.approve_debit_account, data?.oppAc ?? ''));
         _isLoading = false;
+        _isShowErrorPage = false;
       });
     }
   }

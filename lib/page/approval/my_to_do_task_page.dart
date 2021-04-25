@@ -40,7 +40,6 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
   bool _isLoading = false;
   bool _isMoreData = false;
   bool _isShowErrorPage = false;
-  AppException _error;
   Widget _hsgErrorPage;
 
   @override
@@ -92,6 +91,9 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
                       )
                     : HsgErrorPage(
                         isEmptyPage: true,
+                        buttonAction: () {
+                          _loadData();
+                        },
                       ),
           );
   }
@@ -115,40 +117,25 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
           }
           _listData.addAll(response.rows);
           _isLoading = false;
+          _isShowErrorPage = false;
           if (response.rows.length <= 10 && response.totalPage <= _page) {
             _isMoreData = true;
           }
         });
       }
     } catch (e) {
-      print('runtimeType: ${e.error.runtimeType}');
-      print(e.error is NeedLogin);
-      print('error: ${e.toString()}');
-      bool _isNeedLogin;
-      if (e.error is NeedLogin) {
-        _isNeedLogin = true;
-      } else {
-        _isNeedLogin = false;
-      }
       if (this.mounted) {
         setState(() {
-          _error = e.error;
+          _isLoading = false;
           _isShowErrorPage = true;
           _hsgErrorPage = HsgErrorPage(
-            title: _error.code,
-            desc: _error.message,
-            isNeedLogin: _isNeedLogin,
-            buttonAction: _isNeedLogin
-                ? () {}
-                : () {
-                    _loadData();
-                  },
+            error: e.error,
+            buttonAction: () {
+              _loadData();
+            },
           );
         });
       }
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
