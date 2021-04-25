@@ -165,7 +165,8 @@ class _FeatureListPageState extends State<FeatureListPage> {
               String title = btnList[index]['btnTitle'];
               if (S.current.account_summary == title) {
                 //账户总览
-                Navigator.pushNamed(context, pageAccountOverview);
+                // Navigator.pushNamed(context, pageAccountOverview);
+                Navigator.pushNamed(context, pageAccountOverviewNew);
               } else if (S.of(context).my_account == title) {
                 //我的账户
                 Navigator.pushNamed(context, pageCardList);

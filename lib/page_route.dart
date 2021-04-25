@@ -4,6 +4,7 @@
 /// Date: 2020-12-07
 
 import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
+import 'package:ebank_mobile/page/accountOverview/account_overview_new_page.dart';
 import 'package:ebank_mobile/page/approval/approval_history_detail_page.dart';
 import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/approval/my_to_do_task_detail_page.dart';
@@ -148,7 +149,8 @@ var changeLgPs = '/change_loginpassword_page.dart';
 var changePayPS = '/change_pay_page.dart';
 var setPayPage = '/set_pay_page.dart';
 var iDcardVerification = '/id_cardVerification_page.dart';
-var pageAccountOverview = '/account_overview';
+var pageAccountOverview = '/account_overview_page.dart';
+var pageAccountOverviewNew = 'account_overview_new_page.dart';
 var pageDetailInfo = '/detail_info_page';
 var pageDetailList = '/detail_list_page';
 var pageDepositRecordSucceed = '/time_deposit_contract_succeed_page';
@@ -261,6 +263,7 @@ var appRoutes = {
   changePayPS: (context) => ChangePayPage(),
   iDcardVerification: (context) => IdIardVerificationPage(),
   pageAccountOverview: (context) => AccountOverviewPage(),
+  pageAccountOverviewNew: (context) => AccountOverviewNewPage(),
   pageDetailList: (context) => DetailListPage(),
   pageDetailInfo: (context) => DetailInfoPage(),
   pageTimeDepositRecord: (context) => TimeDepositRecordPage(),
