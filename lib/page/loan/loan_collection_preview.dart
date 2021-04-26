@@ -8,6 +8,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
 import 'package:ebank_mobile/page/loan/limit_details_page.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -15,6 +16,7 @@ import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
+import 'package:intl/intl.dart';
 import 'package:sp_util/sp_util.dart';
 
 class PageLoanCollectionPreview extends StatefulWidget {
@@ -31,7 +33,8 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
   LoanAccountDOList _accountInfo;
   String _interestRate = '';
   GetCreditlimitByCusteDTOList _limitCusteModel; //额度接口数据
-
+  final f = NumberFormat("#,##0.00", "en_US"); //USD有小数位的处理
+  final fj = NumberFormat("#,##0", "ja-JP"); //日元没有小数位的处理
   @override
   Widget build(BuildContext context) {
     Map listData = ModalRoute.of(context).settings.arguments;
@@ -91,15 +94,27 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
 
 //领用金额
   Widget _previewHeader() {
+    String ccyStr = _requstMap['ccy']; //币种
+    String _loanMount = _reviewMap['price'];
+
     return Container(
       padding: EdgeInsets.fromLTRB(0, 12.5, 0, 42.5),
-      child: _rowText(S.current.loan_Recipients_Amount, _reviewMap['price'],
-          HsgColors.aboutusTextCon, Color(0xFF232323), 14, 24),
+      child: _rowText(
+          S.current.loan_Recipients_Amount,
+          ccyStr == 'JPY'
+              ? fj.format(double.parse(_loanMount ?? '0')) ?? ''
+              : f.format(double.parse(_loanMount ?? '0')) ?? '',
+          HsgColors.aboutusTextCon,
+          Color(0xFF232323),
+          14,
+          24),
     );
   }
 
 //预览信息
   Widget _previewInfo() {
+    String ccyStr = _requstMap['ccy']; //币种
+    String _loanMount = _reviewMap['availableCredit'];
     return Container(
       color: Colors.white,
       child: Column(
@@ -110,21 +125,33 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
           ),
           _rowText(
               S.current.loan_Borrowing_limit,
-              _reviewMap['availableCredit'],
+              ccyStr == 'JPY'
+                  ? fj.format(double.parse(_loanMount ?? '0')) ?? ''
+                  : f.format(double.parse(_loanMount ?? '0')) ?? '',
+              HsgColors.aboutusTextCon,
+              HsgColors.secondDegreeText,
+              14,
+              14), //借款额度
+          _rowText(
+              S.current.loan_Borrowing_Period,
+              _reviewMap['timeLimit'], //期限
               HsgColors.aboutusTextCon,
               HsgColors.secondDegreeText,
               14,
               14),
-          _rowText(S.current.loan_Borrowing_Period, _reviewMap['timeLimit'],
-              HsgColors.aboutusTextCon, HsgColors.secondDegreeText, 14, 14),
           _rowText(S.current.repayment_ways, _reviewMap['repaymentMethod'],
               HsgColors.aboutusTextCon, HsgColors.secondDegreeText, 14, 14),
           _rowText(S.current.view_repayment_plan, _reviewMap['repayPlan'],
               HsgColors.aboutusTextCon, HsgColors.secondDegreeText, 14, 14),
           _rowText(S.current.loan_Total_Interest, _reviewMap['totalInterst'],
               HsgColors.aboutusTextCon, HsgColors.secondDegreeText, 14, 14),
-          _rowText(S.current.transfer_to_account, _reviewMap['payAcNo'],
-              HsgColors.aboutusTextCon, HsgColors.secondDegreeText, 14, 14),
+          _rowText(
+              S.current.transfer_to_account,
+              FormatUtil.formatSpace4(_reviewMap['payAcNo']),
+              HsgColors.aboutusTextCon,
+              HsgColors.secondDegreeText,
+              14,
+              14),
           _rowText(S.current.loan_Borrowing_Purposes, _reviewMap['loanPurpose'],
               HsgColors.aboutusTextCon, HsgColors.secondDegreeText, 14, 14),
           _finishBtn(),
@@ -251,26 +278,19 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
         'M', //结息周期单位
         _requstMap['planPayData'], //首次还息日期
         int.parse(repayDat), //还款指定日 年-月-日中的日
-        _accountInfo.endDt //_requstMap['matuDt'], //贷款到期日
+        _accountInfo.endDt, //_requstMap['matuDt'], //贷款到期日
+        _reviewMap['availableCredit'], //可借款额度
+        _requstMap['totalInterst'], //总利息
+        _requstMap['loanPurpose'] //贷款用途
         );
-
+    // 可借款额度 总利息  贷款用途
     SVProgressHUD.show();
     ApiClientLoan().loanFinalWithdrawInterface(req).then(
-      (data) {
+      (data) async {
         if (data != null) {
           SVProgressHUD.showSuccess(status: S.current.total_opration_audit_tip);
-          Future.delayed(Duration(minutes: 1500));
+          await Future.delayed(Duration(seconds: 1)); //延迟一秒再执行
           Navigator.of(context)..pop()..pop();
-          //   Navigator.of(context).pushAndRemoveUntil(
-          //       MaterialPageRoute(builder: (BuildContext context) {
-          //     return LimitDetailsPage();
-          //   }), (Route route) {
-          //     //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
-          //     if (route.settings?.name == "/limit_details_page") {
-          //       return true; //停止关闭
-          //     }
-          //     return false; //继续关闭
-          //   });
         }
         SVProgressHUD.dismiss();
       },

@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 交易密码弹窗
 /// Author: CaiTM
@@ -7,10 +9,12 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
+import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -250,6 +254,7 @@ class HsgPasswordDialog extends StatelessWidget {
   //验证交易密码
   _verifyTradePaw(String payPassword, BuildContext context, String resultPage,
       Object arguments) async {
+    SVProgressHUD.show();
     final prefs = await SharedPreferences.getInstance();
     String phoneNum = prefs.getString(ConfigKey.USER_PHONE);
     String areaCodeNum = prefs.getString(ConfigKey.USER_AREACODE);
@@ -257,6 +262,7 @@ class HsgPasswordDialog extends StatelessWidget {
     ApiClientPassword()
         .verifyTransPwdNoSms(VerifyTransPwdNoSmsReq(payPassword))
         .then((data) {
+      SVProgressHUD.dismiss();
       if (returnPasswordFunc != null) {
         returnPasswordFunc(password);
       }
@@ -289,12 +295,14 @@ class HsgPasswordDialog extends StatelessWidget {
       Navigator.pop(context, true);
     }).catchError((e) {
       print(e.toString());
+      print((e as DioError).message);
+
       // if (e.toString() == 'ECUST031') {
       //   Fluttertoast.showToast(msg: '交易密码错误！请重试',gravity: ToastGravity.CENTER,);
       // } else {
       //   Fluttertoast.showToast(msg: '未设置交易密码！',gravity: ToastGravity.CENTER,);
       // }
-
+      SVProgressHUD.dismiss();
       passwordList.clear();
       Fluttertoast.showToast(
         msg: e.toString(),

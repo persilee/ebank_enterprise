@@ -58,6 +58,15 @@ class LoanTrailCommitReq extends Object {
   //贷款到期日
   @JsonKey(name: 'matuDt')
   String matuDt;
+  //可借款额度
+  @JsonKey(name: 'loanAmount')
+  String loanAmount;
+  //总利息
+  @JsonKey(name: 'totalInt')
+  String totalInt;
+  //贷款用途
+  @JsonKey(name: 'loanPurpose')
+  String loanPurpose;
 
   LoanTrailCommitReq(
     this.lnac,
@@ -78,6 +87,9 @@ class LoanTrailCommitReq extends Object {
     this.fPaydt,
     this.repDay,
     this.matuDt,
+    this.loanAmount,
+    this.totalInt,
+    this.loanPurpose,
   );
 
   factory LoanTrailCommitReq.fromJson(Map<String, dynamic> srcJson) =>

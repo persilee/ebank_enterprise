@@ -24,6 +24,7 @@ import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_single_picker.dart';
+import 'package:ebank_mobile/widget/money_text_input_formatter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,6 +50,9 @@ class _LoanReferenceState extends State<LoanReference> {
   double max = 0; //贷款最大限额
   String iratCd1 = ''; //用户额度保存
   String interestRate = ''; //贷款利率
+
+  final f = NumberFormat("#,##0.00", "en_US"); //USD有小数位的处理
+  final fj = NumberFormat("#,##0", "ja-JP"); //日元没有小数位的处理
 
   var _recipientsController = new TextEditingController(); //领用金额输入框
 
@@ -85,7 +89,6 @@ class _LoanReferenceState extends State<LoanReference> {
 
   //获取借款期限
   Future _getLoanTimeList() async {
-    // PublicParametersRepository()
     ApiClientOpenAccount().getIdType(GetIdTypeReq("LOAN_TERM")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _deadLineLists.clear();
@@ -96,7 +99,6 @@ class _LoanReferenceState extends State<LoanReference> {
 
   //获取借款用途
   Future _getLoanPurposeList() async {
-    // PublicParametersRepository()
     ApiClientOpenAccount().getIdType(GetIdTypeReq("LOAN_PUR")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _goalLists.clear();
@@ -107,7 +109,6 @@ class _LoanReferenceState extends State<LoanReference> {
 
 //还款方式
   Future _getLoanRepayTypeList() async {
-    // PublicParametersRepository()
     ApiClientOpenAccount().getIdType(GetIdTypeReq("REPAY_TYPE")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _reimburseTypeLists.clear();
@@ -119,7 +120,6 @@ class _LoanReferenceState extends State<LoanReference> {
   //获取收款账户列表
   Future _loadTotalAccountData() async {
     SVProgressHUD.show();
-    // CardDataRepository()
     ApiClientAccount().getCardList(GetCardListReq()).then(
       (data) {
         SVProgressHUD.dismiss();
@@ -129,7 +129,7 @@ class _LoanReferenceState extends State<LoanReference> {
             _totalAccoutList.clear();
             _totalAccoutList.addAll(data.cardList);
             RemoteBankCard card = _totalAccoutList[0];
-            _loanAccount = card.cardNo;
+            _loanAccount = FormatUtil.formatSpace4(card.cardNo);
             _listDataMap['payAcNo'] = card.cardNo;
             _requestDataMap['payAcNo'] = card.cardNo;
           });
@@ -141,8 +141,6 @@ class _LoanReferenceState extends State<LoanReference> {
     });
   }
 
-// loan/interestRate/queryInterestRate
-
   @override
   void initState() {
     //网络请求，数据等都在这里进行创建
@@ -152,23 +150,27 @@ class _LoanReferenceState extends State<LoanReference> {
     _loadTotalAccountData(); //获取贷款账户列表
     _getLoanRepayTypeList(); //获取还款方式
 
+    _recipientsController.addListener(() {
+      //实时监听键盘的输入
+      String text = _recipientsController.text;
+      RegExp postalcode = new RegExp(r'^(0\d)');
+      if (postalcode.hasMatch(text)) {
+        _recipientsController.text = text.substring(1);
+        _recipientsController.selection =
+            TextSelection.collapsed(offset: _recipientsController.text.length);
+      }
+      if (double.parse(_recipientsController.text) > max) {
+        //不能超过最大限额
+        _recipientsController.text = formatDouble(max, 2);
+        _recipientsController.selection =
+            TextSelection.collapsed(offset: _recipientsController.text.length);
+      }
+    });
+
     focusnode.addListener(() {
+      //监听键盘的弹起与结束
       if (focusnode.hasFocus) {
         //得到焦点
-        String text = _recipientsController.text;
-        int length = text.length;
-
-        RegExp postalcode = new RegExp(r'^(0\d)');
-        if (postalcode.hasMatch(text)) {
-          _recipientsController.text = text.substring(1);
-          _recipientsController.selection = TextSelection.collapsed(
-              offset: _recipientsController.text.length);
-        }
-        if (double.parse(_recipientsController.text) > max) {
-          _recipientsController.text = formatDouble(max, 2);
-          _recipientsController.selection = TextSelection.collapsed(
-              offset: _recipientsController.text.length);
-        }
       } else {
         //失去焦点 去请求接口并计算
         _checkInputValueAndRate();
@@ -215,7 +217,6 @@ class _LoanReferenceState extends State<LoanReference> {
     var req = LoanIntereRateReq(
         accountInfo.bookBr, accountInfo.ccy, iratCd1, _mothCode);
     SVProgressHUD.show();
-    // ForexTradingRepository()
     ApiClientBill().loanGetRateInterface(req).then((data) {
       SVProgressHUD.dismiss();
       //获取利率在去进行试算
@@ -277,6 +278,9 @@ class _LoanReferenceState extends State<LoanReference> {
     LoanAccountDOList accountInfo = ModalRoute.of(context).settings.arguments;
     this.accountInfo = accountInfo;
     max = double.parse(accountInfo.bal); //保存可使用的额度
+    String balStr = accountInfo.ccy == 'JPY'
+        ? fj.format(double.parse(accountInfo.bal ?? '0')) ?? ''
+        : f.format(double.parse(accountInfo.bal ?? '0')) ?? '';
 
     return Scaffold(
         //防止挤压溢出
@@ -305,7 +309,7 @@ class _LoanReferenceState extends State<LoanReference> {
                         S.current.loan_detail_available_amount +
                             ' ' +
                             accountInfo.ccy +
-                            accountInfo.bal,
+                            balStr,
                         textAlign: TextAlign.left,
                         style:
                             TextStyle(color: Color(0xFF262626), fontSize: 15),
@@ -318,7 +322,7 @@ class _LoanReferenceState extends State<LoanReference> {
                           Container(
                             margin: EdgeInsets.only(right: 14.5, top: 10),
                             child: Text(
-                              'CNY',
+                              accountInfo.ccy,
                               style: TextStyle(
                                   color: Color(0xFF3394D4),
                                   fontSize: 21,
@@ -337,11 +341,6 @@ class _LoanReferenceState extends State<LoanReference> {
                                 color: HsgColors.firstDegreeText,
                               ),
                               decoration: InputDecoration(
-                                  // isCollapsed: true,
-                                  // contentPadding: EdgeInsets.symmetric(
-                                  //     vertical: 10, horizontal: 10),
-                                  // filled: true,
-                                  //  fillColor: Colors.green,
                                   border: InputBorder.none,
                                   hintText: '0.00',
                                   hintStyle: TextStyle(
@@ -350,10 +349,14 @@ class _LoanReferenceState extends State<LoanReference> {
                                       color: Color(0xFFCCCCCC))),
                               keyboardType: TextInputType.numberWithOptions(
                                   decimal: true),
-                              inputFormatters: [
+                              inputFormatters: <TextInputFormatter>[
+                                LengthLimitingTextInputFormatter(11),
                                 FilteringTextInputFormatter.allow(
-                                    RegExp('[0-9.]')),
-                                LengthLimitingTextInputFormatter(12),
+                                  RegExp(accountInfo.ccy == 'JPY'
+                                      ? "[0-9]"
+                                      : "[0-9.]"),
+                                ),
+                                MoneyTextInputFormatter(),
                               ],
                             ),
                           )
@@ -807,7 +810,6 @@ class _LoanReferenceState extends State<LoanReference> {
     _listDataMap["totalInterst"] = _trailModel.totInt; //总利息
     _listDataMap["price"] = _recipientsController.text; //金额
     _listDataMap["repayPlan"] = _trailStr; //计划
-    _listDataMap["availableCredit"] = accountInfo.bal; //可借款额度
 
     _requestDataMap["totalInterst"] = _trailModel.totInt; //总利息
     _requestDataMap["price"] = _recipientsController.text; //金额
@@ -817,6 +819,7 @@ class _LoanReferenceState extends State<LoanReference> {
     _requestDataMap["acNo"] = accountInfo.lnac; //贷款帐号
     _requestDataMap["interestRate"] = interestRate; //利率
     _requestDataMap["planPayData"] = _trailModel.payDt; //还款计划模型
+    _requestDataMap["ccy"] = _trailModel.ccy; //币种类型
 
     LoanTrialDTOList _lastModel = _trailList.last;
     _requestDataMap["matuDt"] = _lastModel.payDt;

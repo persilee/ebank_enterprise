@@ -6,12 +6,14 @@ import 'package:ebank_mobile/data/source/model/loan_application.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
+import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoanConfirmApplicationList extends StatefulWidget {
@@ -22,6 +24,9 @@ class LoanConfirmApplicationList extends StatefulWidget {
 class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
   Map _reviewMap = {};
   Map _requstMap = {};
+
+  final f = NumberFormat("#,##0.00", "en_US"); //USD有小数位的处理
+  final fj = NumberFormat("#,##0", "ja-JP"); //日元没有小数位的处理
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +73,13 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
           ),
         ));
   }
-// {reviewList: {prdtCode: 商业循环贷, timeLimit: 24个月, ccy: 4, loanPurpose: 项目贷款, payAcNo: 0101 2180 0000 1718, repaymentAcNo: 0101 2380 0000 1758, repaymentMethod: 等额本息, loanRate: 0.1, remark: 博大精深你是你, contact: 不是你, phone: 18607384, intentAmt: 1000},
-// requestList: {prdtCode: 1, termUnit: 24个月, termValue: 24, ccy: 4, loanPurpose: 1, payAcNo: 0101 2180 0000 1718, repaymentAcNo: 0101 2380 0000 1758, repaymentMethod: EPI, loanRate: 0.1, remark: 博大精深你是你, contact: 不是你, phone: 18607384, intentAmt: 1000}}
 
   //第一组
   Widget _firstGroup() {
+    String balStr = _reviewMap['ccy'] == 'JPY'
+        ? fj.format(double.parse(_reviewMap['intentAmt'] ?? '0')) ?? ''
+        : f.format(double.parse(_reviewMap['intentAmt'] ?? '0')) ?? '';
+
     return Container(
       color: Colors.white,
       child: Column(children: [
@@ -81,7 +88,7 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
             S.current.loan_New_product_column, _reviewMap['prdtCode']),
         _addLinne(),
         //申请金额
-        _textFieldCommonFunc(S.current.apply_amount, _reviewMap['intentAmt']),
+        _textFieldCommonFunc(S.current.apply_amount, balStr),
         _addLinne(),
         //贷款期限
         _textFieldCommonFunc(S.current.loan_duration, _reviewMap['timeLimit']),
@@ -93,12 +100,12 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
         _textFieldCommonFunc(S.current.loan_purpose, _reviewMap['loanPurpose']),
         _addLinne(),
         //放款帐号
-        _textFieldCommonFunc(
-            S.current.loan_Disbursement_Account_column, _reviewMap['payAcNo']),
+        _textFieldCommonFunc(S.current.loan_Disbursement_Account_column,
+            FormatUtil.formatSpace4(_reviewMap['payAcNo'])),
         _addLinne(),
         //还款帐号
         _textFieldCommonFunc(S.current.loan_Repayment_account_column,
-            _reviewMap['repaymentAcNo']),
+            FormatUtil.formatSpace4(_reviewMap['repaymentAcNo'])),
         _addLinne(),
         //还款方式
         _textFieldCommonFunc(S.current.loan_Repayment_method_column,
@@ -212,10 +219,9 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
         _requstMap['loanRate'], //利率
       ),
     )
-        .then((data) {
-      // SVProgressHUD.dismiss();
+        .then((data) async {
       SVProgressHUD.showSuccess(status: S.current.total_opration_audit_tip);
-      sleep(Duration(seconds: 1));
+      await sleep(Duration(seconds: 1));
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) {
         return IndexPage();
