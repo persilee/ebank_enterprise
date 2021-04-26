@@ -726,6 +726,7 @@
   "openAccount_industryNatureNotSelect_tip": "Please select the business/industry nature first!",
   "login_password_error_tip": "Password input error, you have made errNum wrong password entries today and have remainNum chances left.",
   "login_password_error_toMuch_tip": "Exceeded Password Entry Limit: The user is locked.",
+  "limited_customer_tip": "The account you are currently logged in is a restricted customer, please contact the enterprise service provider for quick account opening and conversion before proceeding with this operation.",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "transfer_from1": "Transfer From",
   "payer_currency": "Payer Currency",
@@ -741,8 +742,7 @@
   "transfer_msg_limit": "The amount transferred exceeds the limit of a single transaction",
   "request_client_timeout": "Request Client Timeout",
   "forex_trading_msg3": "This currency does not allow foreign exchange transactions during the holidays",
-  "time_deposit_record_Status_N":"Normal",
-  "time_deposit_record_Status_C":"Closed",
-  "total_opration_audit_tip":"Submitted successfully, awaiting for approval"
-
+  "time_deposit_record_Status_N": "Normal",
+  "time_deposit_record_Status_C": "Closed",
+  "total_opration_audit_tip": "Submitted successfully, awaiting for approval"
 }

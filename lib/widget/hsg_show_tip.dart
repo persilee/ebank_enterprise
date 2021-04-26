@@ -40,6 +40,24 @@ class HsgShowTip {
     });
   }
 
+  /// 受限客户
+  static void limitedCustomerTip({
+    BuildContext context,
+    Function(dynamic value) click,
+  }) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertDialog(
+            title: S.of(context).warm_prompt,
+            message: S.of(context).limited_customer_tip,
+            positiveButton: S.current.confirm,
+          );
+        }).then((value) {
+      click(value);
+    });
+  }
+
   ///没有设置交易密码提示
   static void shouldSetTranPasswordTip({
     BuildContext context,

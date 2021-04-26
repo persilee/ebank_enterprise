@@ -641,6 +641,7 @@
   "openAccount_industryNatureNotSelect_tip": "請先選擇商業/行業性質",
   "login_password_error_tip": "登入密碼錯誤，您當日已錯誤errNum次，當日還剩remainNum次機會。",
   "login_password_error_toMuch_tip": "登錄密碼錯誤次數超限：用戶被鎖定。",
+  "limited_customer_tip": "您當前登錄的賬號是受限客戶，請先聯繫企服商進行快速開戶轉正再進行本操作。",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家偉（開戶）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "transfer_from1": "付款方",
   "payer_currency": "轉出方幣種",
@@ -656,8 +657,7 @@
   "transfer_msg_limit": "轉賬金額超過卡單筆限額",
   "request_client_timeout": "請求客戶端超時",
   "forex_trading_msg3": "該幣種假期不允許進行外匯買賣轉載",
-  "time_deposit_record_Status_N":"正常",
-  "time_deposit_record_Status_C":"結清",
-  "total_opration_audit_tip":"提交成功,等待審核"
-
+  "time_deposit_record_Status_N": "正常",
+  "time_deposit_record_Status_C": "結清",
+  "total_opration_audit_tip": "提交成功,等待審核"
 }
