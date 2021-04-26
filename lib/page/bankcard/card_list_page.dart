@@ -35,10 +35,9 @@ class _CardListPageState extends State<CardListPage> {
   List<bool> _isShow = <bool>[];
 
   Map _cardLimitMap = <int, GetCardLimitByCardNoResp>{};
-  Map _totalbalMap = <int, CardBalBean>{};
+  Map _totalbalMap = <int, List<CardBalBean>>{};
   int _cardsLength = 0;
   bool _isLoading = false; //加载状态
-  int _showDetailsSetion = -1; //展示详情的区域，如果为-1就是全部不显示
 
   RefreshController _refreshController;
   ScrollController _scrollController;
@@ -148,39 +147,48 @@ class _CardListPageState extends State<CardListPage> {
       ),
       onTap: () {
         // _showContent(cards[position].cardNo, position);
+        for (int i = 0; i < _isShow.length; i++) {
+          if (_isShow[i] == true) {
+            _isShow[i] = false;
+          }
+        }
         _loadAndShowContent(cards[position].cardNo, position);
       },
     );
   }
 
   Widget _cardContent(RemoteBankCard card, int position) {
-    String ccy = '';
-    String totalAmt = '';
-    if (_totalbalMap.length > 0 && _totalbalMap[position].ccy != null) {
-      ccy = _totalbalMap[position].ccy;
+    List<Widget> contenttList = [];
+    if (_totalbalMap.length > 0) {
+      List<CardBalBean> balList = _totalbalMap[position];
+      balList.forEach((element) {
+        String ccy = element.ccy ?? '';
+        String totalAmt = element.currBal ?? '';
+        contenttList.add(
+          _infoFrame("${S.current.account_balance}($ccy)",
+              FormatUtil.formatSringToMoney(totalAmt)),
+        );
+      });
     }
-    if (_totalbalMap.length > 0 && _totalbalMap[position].currBal != null) {
-      totalAmt = _totalbalMap[position].currBal;
-    }
+    contenttList.add(
+      _infoFrame(S.current.single_transfer_limit,
+          FormatUtil.formatSringToMoney(_cardLimitMap[position].singleLimit)),
+    );
+    contenttList.add(
+      _infoFrame(
+          S.current.single_day_transfer_limit,
+          FormatUtil.formatSringToMoney(
+              _cardLimitMap[position].singleDayLimit)),
+    );
+    contenttList.add(
+      _infoFrame(S.current.single_day_transfer_count_limit,
+          _cardLimitMap[position].singleDayCountLimit.toString()),
+    );
     return Container(
       margin: EdgeInsets.only(top: 20, bottom: 100),
       color: Colors.white,
       child: Column(
-        children: [
-          _infoFrame("${S.current.account_balance}(${ccy})",
-              FormatUtil.formatSringToMoney(totalAmt)),
-          // FormatUtil.formatSringToMoney(_cardLimitList[position].totalAmt)),
-          _infoFrame(
-              S.current.single_transfer_limit,
-              FormatUtil.formatSringToMoney(
-                  _cardLimitMap[position].singleLimit)),
-          _infoFrame(
-              S.current.single_day_transfer_limit,
-              FormatUtil.formatSringToMoney(
-                  _cardLimitMap[position].singleDayLimit)),
-          _infoFrame(S.current.single_day_transfer_count_limit,
-              _cardLimitMap[position].singleDayCountLimit.toString()),
-        ],
+        children: contenttList,
       ),
     );
   }
@@ -372,7 +380,7 @@ class _CardListPageState extends State<CardListPage> {
                 setState(() {
                   //余额+币种
                   if (element.cardListBal.length > 0) {
-                    _totalbalMap[position] = element.cardListBal[0];
+                    _totalbalMap[position] = element.cardListBal;
                   }
 
                   // _totalbalMap[position].currBal;
@@ -397,9 +405,9 @@ class _CardListPageState extends State<CardListPage> {
     }
   }
 
-  void go2Detail(RemoteBankCard card) {
-    Navigator.pushNamed(context, pageCardDetail, arguments: card);
-  }
+  // void go2Detail(RemoteBankCard card) {
+  //   Navigator.pushNamed(context, pageCardDetail, arguments: card);
+  // }
 }
 
 Widget getCard(RemoteBankCard card, int position) {
