@@ -104,7 +104,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
   List<String> transferFeeList = [];
   List<String> transferFeeCodeList = [];
   int _transferFeeIndex = 0;
-  String _transferFeeCode = 'B';
+  String _transferFeeCode = '';
   String _transferFee = '';
 
   //按钮是否能点击
@@ -213,7 +213,9 @@ class _TransferInterPageState extends State<TransferInterPage> {
         payeeName = rowPartner.payeeName;
         // payerName = rowPartner.payerName;
         _payeeCcy = rowPartner.ccy;
-        _transferFee =
+        // _transferFee =
+        //     rowPartner.paysMethod == null ? '' : rowPartner.paysMethod;
+        _transferFeeCode =
             rowPartner.paysMethod == null ? '' : rowPartner.paysMethod;
         _bankNameController.text = _language == 'zh_CN'
             ? rowPartner.payeeBankLocalName
@@ -655,7 +657,6 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //增加转账伙伴图标
   Widget _getImage() {
-    _getTransferFeeList();
     return InkWell(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -679,17 +680,21 @@ class _TransferInterPageState extends State<TransferInterPage> {
                 payeeName = rowListPartner.payeeName;
                 // payerName = rowListPartner.payerName;
                 _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
-                if (rowListPartner.paysMethod != null) {
-                  _transferFee = rowListPartner.paysMethod == ''
-                      ? ''
-                      : rowListPartner.paysMethod;
-                }
+                // if (rowListPartner.paysMethod != null) {
+                //   _transferFee = rowListPartner.paysMethod == ''
+                //       ? ''
+                //       : rowListPartner.paysMethod;
+                // }
+                _transferFeeCode = rowListPartner.paysMethod == null
+                    ? ''
+                    : rowListPartner.paysMethod;
                 _payeeAddressController.text =
                     rowListPartner == null ? '' : rowListPartner.payeeAddress;
               }
               _boolBut();
               _rateCalculate();
               _loadLocalCcy();
+              _getTransferFeeList();
             });
           },
         );
@@ -1053,6 +1058,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
     ApiClientOpenAccount().getIdType(GetIdTypeReq("PAY_METHOD")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         transferFeeList.clear();
+        transferFeeCodeList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {
           if (_language == 'zh_CN' || _language == 'zh_HK') {
             transferFeeList.add(e.cname);
@@ -1062,17 +1068,18 @@ class _TransferInterPageState extends State<TransferInterPage> {
             transferFeeCodeList.add(e.code);
           }
         });
-        for (int i = 0; i < transferFeeList.length; i++) {
-          if (_transferFee == i.toString()) {
-            if (this.mounted) {
-              setState(() {
-                _transferFee = transferFeeList[i];
-              });
-            }
-            break;
+      }
+      for (int i = 0; i < transferFeeCodeList.length; i++) {
+        if (transferFeeCodeList[i] == _transferFeeCode) {
+          if (this.mounted) {
+            setState(() {
+              _transferFee = transferFeeList[i];
+            });
           }
+          break;
         }
       }
+      // }
     });
   }
 
@@ -1080,17 +1087,16 @@ class _TransferInterPageState extends State<TransferInterPage> {
   Future _getBankNameBySwift(String swift) async {
     // TransferDataRepository()
     //     .getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift), 'getInfoBySwiftCode')
-    Transfer()
-      .getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift)).then((data) {
-        if (this.mounted) {
-          setState(() {
-            _bankNameController.text =
-                data.swiftName1 + data.swiftName2 + data.swiftName3;
-            _boolBut();
-          });
-        }
-      }).catchError((e) {
-        print(e.toString());
-      });
+    Transfer().getInfoBySwiftCode(GetInfoBySwiftCodeReq(swift)).then((data) {
+      if (this.mounted) {
+        setState(() {
+          _bankNameController.text =
+              data.swiftName1 + data.swiftName2 + data.swiftName3;
+          _boolBut();
+        });
+      }
+    }).catchError((e) {
+      print(e.toString());
+    });
   }
 }
