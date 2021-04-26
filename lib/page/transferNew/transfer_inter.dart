@@ -104,7 +104,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
   List<String> transferFeeList = [];
   List<String> transferFeeCodeList = [];
   int _transferFeeIndex = 0;
-  String _transferFeeCode = '';
+  String _transferFeeCode = 'B';
   String _transferFee = '';
 
   //按钮是否能点击
