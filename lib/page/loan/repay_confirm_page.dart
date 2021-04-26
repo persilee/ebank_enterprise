@@ -82,24 +82,13 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
       debitAccount,
     );
     SVProgressHUD.show();
-    ApiClientLoan().postRepayment(req).then((data) {
+    ApiClientLoan().postRepayment(req).then((data) async {
       SVProgressHUD.dismiss();
       if (data != null) {
         SVProgressHUD.showSuccess(
             status: S.current.loan_application_input_comfir);
+        await Future.delayed(Duration(seconds: 1));
         Navigator.of(context)..pop()..pop();
-
-        // Navigator.of(context).pushAndRemoveUntil(
-        //     MaterialPageRoute(builder: (BuildContext context) {
-        //   return LoanDetailsPage();
-        // }), (Route route) {
-        //   //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
-        //   if (route.settings?.name == "/limit_details_page") {
-        //     //limit_details_page  loan_details_page
-        //     return true; //停止关闭
-        //   }
-        //   return false; //继续关闭
-        // });
       }
     }).catchError((e) {
       SVProgressHUD.dismiss();
