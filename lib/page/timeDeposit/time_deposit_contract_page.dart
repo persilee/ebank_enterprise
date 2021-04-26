@@ -11,6 +11,7 @@ import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
+import 'package:ebank_mobile/data/source/model/get_td_prod_inst_code.dart';
 import 'package:ebank_mobile/data/source/model/get_td_product_term_rate.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_contract.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_contract_trial.dart';
@@ -1086,6 +1087,33 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     });
   }
 
+  ///根据产品代码获取产品支持的待办指示
+  Future _getTdProdInstCode() async {
+    ApiClientTimeDeposit()
+        .getTdProdInstCode(
+            GetTdProductInstCodeReq(this.productList.bppdCode ?? ''))
+        .then((data) {
+      //     if () {
+
+      //     }
+      // if (data.insCodes != null) {
+      //   data.insCodes.forEach((element) {
+      //     if (this.mounted) {
+      //       setState(() {
+      //         if (instructionDatas != null || instructionDatas.length > 0) {
+
+      //         }
+      //       });
+      //     }
+      //   });
+    }).catchError((e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
+    });
+  }
+
   //获取到期指示列表
   Future _getInsCode() async {
     // PublicParametersRepository()
@@ -1103,6 +1131,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             });
           }
         });
+        // _getTdProdInstCode();
       }
     }).catchError((e) {
       Fluttertoast.showToast(

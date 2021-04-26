@@ -54,23 +54,27 @@ class TimeDepositContractReq extends Object {
   @JsonKey(name: 'tenor')
   String tenor;
 
+  ///取息账号 如果产品类型为020整存整取时，不能输入，为027存本取息时必需输入
+  @JsonKey(name: 'intAc')
+  String intAc;
+
   TimeDepositContractReq(
-    this.accuPeriod,
-    this.annualInterestRate,
-    this.auctCale,
-    this.bal,
-    this.bppdCode,
-    this.ccy,
-    this.ciNo,
-    this.depositType,
-    this.instCode,
-    this.oppAc,
-    this.payPassword,
-    this.prodName,
-    this.settDdAc,
-    this.smsCode,
-    this.tenor,
-  );
+      this.accuPeriod,
+      this.annualInterestRate,
+      this.auctCale,
+      this.bal,
+      this.bppdCode,
+      this.ccy,
+      this.ciNo,
+      this.depositType,
+      this.instCode,
+      this.oppAc,
+      this.payPassword,
+      this.prodName,
+      this.settDdAc,
+      this.smsCode,
+      this.tenor,
+      {this.intAc});
 
   factory TimeDepositContractReq.fromJson(Map<String, dynamic> srcJson) =>
       _$TimeDepositContractReqFromJson(srcJson);

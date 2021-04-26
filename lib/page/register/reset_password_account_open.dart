@@ -10,6 +10,7 @@ import 'package:ebank_mobile/page/forexTrading/forex_trading_page.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/format_text_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -147,8 +148,9 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                     false,
                     <TextInputFormatter>[
                       FilteringTextInputFormatter.allow(
-                          RegExp("[a-zA-Z0-9]")), //纯数字
+                          RegExp("[a-zA-Z0-9()]")), //纯数字
                       LengthLimitingTextInputFormatter(19),
+                      UpperCaseTextFormatter(),
                     ],
                   ), //确定按钮
                   //按钮
