@@ -445,10 +445,7 @@ class _MyApprovedHistoryDetailPageState
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_contract_no, data?.conNo ?? ''));
         _earlyRedTdList.add(_buildContentItem(
-            S.current.approve_certificates_deposit_amount,
-            data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.bal ?? '0')) ?? ''
-                : f.format(double.parse(data?.bal ?? '0')) ?? ''));
+            S.current.approve_certificates_deposit_amount, data?.bal ?? '0'));
         _earlyRedTdList.add(
             _buildContentItem(S.current.approve_currency, data?.ccy ?? ''));
         _earlyRedTdList.add(_buildContentItem(

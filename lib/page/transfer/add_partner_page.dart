@@ -57,6 +57,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   //转账费用
   String _transferFee = '';
   List<String> transferFeeList = [];
+  List<String> transferFeeCodeList = [];
+  String _transferFeeCode = '';
   int _transferFeeIndex = 0;
   //汇款用途
   String _feeUse = '';
@@ -76,7 +78,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   void initState() {
     super.initState();
     _getTransferFeeList();
-    _getFeeUseList();
+    // _getFeeUseList();
     _loadLocalCcy();
     //初始化
     _bankName = S.current.please_select;
@@ -113,14 +115,17 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
 //获取转账费用列表
   Future _getTransferFeeList() async {
     // PublicParametersRepository()
-    ApiClientOpenAccount().getIdType(GetIdTypeReq("PAYS_METHOD")).then((data) {
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("PAY_METHOD")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         transferFeeList.clear();
+        transferFeeCodeList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {
-          if (_language == 'zh_CN') {
+          if (_language == 'zh_CN' || _language == 'zh_HK') {
             transferFeeList.add(e.cname);
+            transferFeeCodeList.add(e.code);
           } else {
             transferFeeList.add(e.name);
+            transferFeeCodeList.add(e.code);
           }
         });
       }
@@ -206,7 +211,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       payeeBankLocalName,
       _aliasController.text,
       myTransferType,
-      _transferFeeIndex.toString(),
+      // _transferFeeIndex.toString(),
+      _transferFeeCode,
       _feeUseIndex.toString(),
     ))
         .then((data) {
@@ -616,6 +622,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         });
     if (result != null && result != false) {
       _transferFee = transferFeeList[result];
+      _transferFeeCode = transferFeeCodeList[result];
     }
     setState(() {
       _transferFeeIndex = result;
