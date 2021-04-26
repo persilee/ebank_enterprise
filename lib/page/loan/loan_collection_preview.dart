@@ -255,11 +255,11 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
         );
 
     SVProgressHUD.show();
-    // LoanDataRepository()
     ApiClientLoan().loanFinalWithdrawInterface(req).then(
       (data) {
         if (data != null) {
           SVProgressHUD.showSuccess(status: S.current.total_opration_audit_tip);
+          Future.delayed(Duration(minutes: 1500));
           Navigator.of(context)..pop()..pop();
           //   Navigator.of(context).pushAndRemoveUntil(
           //       MaterialPageRoute(builder: (BuildContext context) {
