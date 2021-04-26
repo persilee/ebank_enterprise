@@ -24,6 +24,8 @@ import 'package:ebank_mobile/data/source/model/approval/foreign_transfer_model.d
     as ForeignTransferModel;
 import 'package:ebank_mobile/data/source/model/approval/post_repayment_model.dart'
     as PostRepaymentModel;
+import 'package:ebank_mobile/data/source/model/approval/loan_with_drawal_model.dart'
+    as LoanWithDrawalModel;
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
@@ -32,6 +34,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
@@ -70,9 +73,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   List<Widget> _transferPlanList = [];
   List<Widget> _foreignTransferList = [];
   List<Widget> _postRepaymentList = [];
+  List<Widget> _loanWithDrawalList = [];
   List<Widget> _finishedList = [];
   final f = NumberFormat("#,##0.00", "en_US");
   final fj = NumberFormat("#,##0", "ja-JP");
+  bool _isShowErrorPage = false;
+  Widget _hsgErrorPage;
 
   @override
   void initState() {
@@ -125,10 +131,70 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       else if (_processKey == 'postRepaymentApproval') {
         _loadPostRepaymentData(_contractModel);
       }
+      // loanWithDrawalApproval - 贷款领用
+      else if (_processKey == 'loanWithDrawalApproval') {
+        _loanWithDrawalData(_contractModel);
+      }
     } catch (e) {
-      print('error: ${e.toString()}');
+      // if (this.mounted) {
+      //   setState(() {
+      //     _isLoading = false;
+      //     _isShowErrorPage = true;
+      //     _hsgErrorPage = HsgErrorPage(
+      //       error: e.error,
+      //       buttonAction: () {
+      //         _loadData();
+      //       },
+      //     );
+      //   });
+      // }
+    }
+  }
+
+  // loanWithDrawalApproval - 贷款领用
+  void _loanWithDrawalData(_contractModel) {
+    LoanWithDrawalModel.LoanWithDrawalModel loanWithDrawalModel =
+    LoanWithDrawalModel.LoanWithDrawalModel.fromJson(_contractModel);
+
+    LoanWithDrawalModel.OperateEndValue data =
+        loanWithDrawalModel.operateEndValue;
+
+    // 添加历史审批记录
+    if (loanWithDrawalModel.commentList.isNotEmpty) {
+      loanWithDrawalModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
+    print('loanWithDrawalModel: ${data.toJson()}');
+
+    if (this.mounted) {
       setState(() {
+        _loanWithDrawalList.clear();
+        _loanWithDrawalList
+            .add(_buildTitle(S.current.approve_loan_information));
+        _loanWithDrawalList.add(_buildContentItem(
+            '领用金额', // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.amt ?? '0')) ?? ''
+                : f.format(double.parse(data?.amt ?? '0')) ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            '可借款额度', ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            '借款期限', data?.iratTm ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            '还款方式', data?.repType ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            '首次还息日期', data?.fPaydt ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            '总利息', ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            '收款账户', data?.ddAc ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            '借款用途', ''));
         _isLoading = false;
+        _isShowErrorPage = false;
       });
     }
   }
@@ -151,9 +217,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     if (this.mounted) {
       setState(() {
+        _postRepaymentList.clear();
         _postRepaymentList.add(_buildTitle(S.current.approve_loan_information));
-        _postRepaymentList.add(_buildContentItem(S.current.approve_loan_account, data?.acNo ?? ''));
-        _postRepaymentList.add(_buildContentItem(S.current.approve_loan_currency, data?.ccy ?? ''));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_account, data?.acNo ?? ''));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_currency, data?.ccy ?? ''));
         _postRepaymentList.add(_buildContentItem(
             S.current.approve_loan_principal,
             // 处理日元没有小数
@@ -166,12 +235,15 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.outBal ?? '0')) ?? ''
                 : f.format(double.parse(data?.outBal ?? '0')) ?? ''));
-        _postRepaymentList.add(_buildContentItem(S.current.approve_loan_interest_rate, data?.exRate ?? ''));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_interest_rate, data?.exRate ?? ''));
         _postRepaymentList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
-        _postRepaymentList.add(_buildTitle(S.current.approve_loan_payment_information));
-        _postRepaymentList.add(_buildContentItem(S.current.approve_debit_account, data?.ddAc ?? ''));
+        _postRepaymentList
+            .add(_buildTitle(S.current.approve_loan_payment_information));
+        _postRepaymentList.add(_buildContentItem(
+            S.current.approve_debit_account, data?.ddAc ?? ''));
         _postRepaymentList.add(_buildContentItem(
             S.current.approve_repayment_principal,
             data?.ccy == 'JPY'
@@ -193,6 +265,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 ? fj.format(double.parse(data?.totalAmount ?? '0')) ?? ''
                 : f.format(double.parse(data?.totalAmount ?? '0')) ?? ''));
         _isLoading = false;
+        _isShowErrorPage = false;
       });
     }
   }
@@ -215,6 +288,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     if (this.mounted) {
       setState(() {
+        _foreignTransferList.clear();
         _foreignTransferList
             .add(_buildTitle(S.current.approve_foreign_exchange_information));
         _foreignTransferList.add(_buildContentItem(
@@ -239,6 +313,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _foreignTransferList.add(
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
         _isLoading = false;
+        _isShowErrorPage = false;
       });
     }
   }
@@ -261,6 +336,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     if (this.mounted) {
       setState(() {
+        _transferPlanList.clear();
         _transferPlanList
             .add(_buildTitle(S.current.approve_project_information));
         _transferPlanList.add(_buildContentItem(
@@ -298,6 +374,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _transferPlanList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
+        _isShowErrorPage = false;
       });
     }
   }
@@ -322,6 +399,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     if (this.mounted) {
       setState(() {
+        _internationalList.clear();
         _internationalList
             .add(_buildTitle(S.current.approve_gathering_information));
         _internationalList.add(_buildContentItem(
@@ -366,6 +444,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _internationalList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
+        _isShowErrorPage = false;
       });
     }
   }
@@ -388,6 +467,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     if (this.mounted) {
       setState(() {
+        _oneToOneList.clear();
         _oneToOneList.add(_buildTitle(S.current.approve_gathering_information));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_account, data?.payeeCardNo ?? ''));
@@ -418,6 +498,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _oneToOneList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
+        _isShowErrorPage = false;
       });
     }
   }
@@ -440,6 +521,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     if (this.mounted) {
       setState(() {
+        _earlyRedTdList.clear();
         _earlyRedTdList.add(_buildTitle(S.current.approve_basic_information));
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_contract_no, data?.conNo ?? ''));
@@ -481,6 +563,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_settlement_amount, data?.settBal ?? ''));
         _isLoading = false;
+        _isShowErrorPage = false;
       });
     }
   }
@@ -502,6 +585,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     if (this.mounted) {
       setState(() {
+        _openTdList.clear();
         _openTdList.add(_buildTitle(S.current.approve_basic_information));
         _openTdList.add(
             _buildContentItem(S.current.approve_product, data?.prodName ?? ''));
@@ -522,6 +606,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _openTdList.add(_buildContentItem(
             S.current.approve_debit_account, data?.oppAc ?? ''));
         _isLoading = false;
+        _isShowErrorPage = false;
       });
     }
   }
@@ -537,22 +622,24 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       ),
       body: _isLoading
           ? HsgLoading()
-          : SingleChildScrollView(
-              controller: _controller,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // 提示
-                  _tips(),
-                  // 根据processKey动态显示 任务详情
-                  _buildTaskDetail(_processKey),
-                  // 审批历史
-                  if (_finishedList.length > 0) _buildHistoryTask(context),
-                  // 我的审批
-                  _myApproval(context),
-                ],
-              ),
-            ),
+          : _isShowErrorPage
+              ? _hsgErrorPage
+              : SingleChildScrollView(
+                  controller: _controller,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // 提示
+                      _tips(),
+                      // 根据processKey动态显示 任务详情
+                      _buildTaskDetail(_processKey),
+                      // 审批历史
+                      if (_finishedList.length > 0) _buildHistoryTask(context),
+                      // 我的审批
+                      _myApproval(context),
+                    ],
+                  ),
+                ),
     );
   }
 
@@ -569,6 +656,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         if (_processKey == 'transferPlanApproval') ..._transferPlanList,
         if (_processKey == 'foreignTransferApproval') ..._foreignTransferList,
         if (_processKey == 'postRepaymentApproval') ..._postRepaymentList,
+        if (_processKey == 'loanWithDrawalApproval') ..._loanWithDrawalList,
       ],
     );
   }
@@ -684,7 +772,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       return Container(
         child: Row(
           children: [
-            // 驳回至发起人按钮
+            // 驳回至发起人按钮 （暂时去掉该功能)
             // Expanded(
             //   flex: 2,
             //   child: CustomButton(
@@ -1027,7 +1115,14 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       }
       Navigator.pop(context);
     } catch (e) {
-      print(e);
+      setState(() {
+        _btnIsLoadingUN = false;
+        _btnIsEnable = true;
+      });
+      Fluttertoast.showToast(
+        msg: e.error.message,
+        gravity: ToastGravity.CENTER,
+      );
     }
   }
 
@@ -1072,7 +1167,19 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       }
       Navigator.pop(context);
     } catch (e) {
-      print(e);
+      if (this.mounted) {
+        setState(() {
+          _btnIsLoadingR = false;
+          _btnIsEnable = true;
+          _isShowErrorPage = true;
+          _hsgErrorPage = HsgErrorPage(
+            error: e.error,
+            buttonAction: () {
+              _loadData();
+            },
+          );
+        });
+      }
     }
   }
 
@@ -1117,7 +1224,19 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       }
       Navigator.pop(context);
     } catch (e) {
-      print(e);
+      if (this.mounted) {
+        setState(() {
+          _btnIsLoadingRTS = false;
+          _btnIsEnable = true;
+          _isShowErrorPage = true;
+          _hsgErrorPage = HsgErrorPage(
+            error: e.error,
+            buttonAction: () {
+              _loadData();
+            },
+          );
+        });
+      }
     }
   }
 
@@ -1184,15 +1303,19 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             Navigator.pushReplacementNamed(context, pageDepositRecordSucceed);
           }
         } catch (e) {
-          print(e);
-          setState(() {
-            _btnIsLoadingEAA = false;
-            _btnIsEnable = true;
-          });
-          Fluttertoast.showToast(
-            msg: e.toString(),
-            gravity: ToastGravity.CENTER,
-          );
+          if (this.mounted) {
+            setState(() {
+              _btnIsLoadingEAA = false;
+              _btnIsEnable = true;
+              _isShowErrorPage = true;
+              _hsgErrorPage = HsgErrorPage(
+                error: e.error,
+                buttonAction: () {
+                  _loadData();
+                },
+              );
+            });
+          }
         }
       }
     }

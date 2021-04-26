@@ -22,6 +22,7 @@ import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
+import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,6 +48,8 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
   int _page = 1;
   bool _isLoading = false;
   bool _isMoreData = false;
+  bool _isShowErrorPage = false;
+  Widget _hsgErrorPage;
 
   @override
   void initState() {
@@ -68,33 +71,40 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
     super.build(context);
     return _isLoading
         ? HsgLoading()
-        : _listData.length > 0
-            ? CustomRefresh(
-                controller: _refreshController,
-                onLoading: () async {
-                  await _loadData(isLoadMore: true);
-                  //加载更多完成
-                  _refreshController.loadComplete();
-                  //显示没有更多数据
-                  if (_isMoreData) _refreshController.loadNoData();
-                },
-                onRefresh: () async {
-                  await _loadData();
-                  //刷新完成
-                  _refreshController.refreshCompleted();
-                  _refreshController.footerMode.value = LoadStatus.canLoading;
-                },
-                content: ListView.builder(
-                  padding:
-                      EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
-                  itemCount: _listData.length,
-                  controller: _scrollController,
-                  itemBuilder: (context, index) {
-                    return _todoInformation(_listData[index]);
-                  },
-                ),
-              )
-            : notDataContainer(context, S.current.no_data_now);
+        : CustomRefresh(
+            controller: _refreshController,
+            onLoading: () async {
+              await _loadData(isLoadMore: true);
+              //加载更多完成
+              _refreshController.loadComplete();
+              //显示没有更多数据
+              if (_isMoreData) _refreshController.loadNoData();
+            },
+            onRefresh: () async {
+              await _loadData();
+              //刷新完成
+              _refreshController.refreshCompleted();
+              _refreshController.footerMode.value = LoadStatus.canLoading;
+            },
+            content: _isShowErrorPage
+                ? _hsgErrorPage
+                : _listData.length > 0
+                    ? ListView.builder(
+                        padding: EdgeInsets.only(
+                            left: 12.0, right: 12.0, bottom: 18.0),
+                        itemCount: _listData.length,
+                        controller: _scrollController,
+                        itemBuilder: (context, index) {
+                          return _todoInformation(_listData[index]);
+                        },
+                      )
+                    : HsgErrorPage(
+                        isEmptyPage: true,
+                        buttonAction: () {
+                          _loadData();
+                        },
+                      ),
+          );
   }
 
   //加载数据
@@ -116,31 +126,25 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
           }
           _listData.addAll(response.rows);
           _isLoading = false;
+          _isShowErrorPage = false;
           if (response.rows.length <= 10 && response.totalPage <= _page) {
             _isMoreData = true;
           }
         });
       }
     } catch (e) {
-      print((e as DioError).error is NeedLogin);
-      print('error: ${e.toString()}');
-      setState(() {
-        _isLoading = false;
-      });
-      // if ((e as DioError).error is NeedLogin) {
-      //   Navigator.of(context).pushAndRemoveUntil(
-      //       MaterialPageRoute(builder: (BuildContext context) {
-      //         return LoginPage();
-      //       }), (Route route) {
-      //     print(route.settings?.name);
-      //     if (route.settings?.name == "/") {
-      //       return true;
-      //     }
-      //     return false;
-      //   });
-      // } else {
-      //   print('error: ${e.toString()}');
-      // }
+      if (this.mounted) {
+        setState(() {
+          _isLoading = false;
+          _isShowErrorPage = true;
+          _hsgErrorPage = HsgErrorPage(
+            error: e.error,
+            buttonAction: () {
+              _loadData();
+            },
+          );
+        });
+      }
     }
   }
 

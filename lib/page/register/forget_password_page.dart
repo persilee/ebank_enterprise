@@ -5,6 +5,7 @@ import 'package:ebank_mobile/data/source/model/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
+import 'package:ebank_mobile/data/source/model/login_Verfiy_phone.dart';
 
 import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/data/source/version_data_repository.dart';
@@ -14,6 +15,7 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/page/register/component/register_86.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
@@ -286,9 +288,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   //二次校验
   _checkRegisterBysencond() {
+    //检测用户是否注册的接口
     print('$_smsCode+_smsCode');
     HSProgressHUD.show();
-    // VersionDataRepository()
     ApiClientAccount()
         .checkPhone(CheckPhoneReq(_phoneNum.text, '2'))
         .then((data) {
@@ -312,15 +314,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               gravity: ToastGravity.CENTER,
             );
           } else {
-            Map listData = new Map();
-            listData = {
-              'userAccount': _userAccount,
-              'userPhone': _phoneNumListen,
-              'sms': _smsListen
-            };
-            Navigator.pushNamed(context, pageResetPasswordNoAccount,
-                arguments: listData); //pageResetPasswordOpenAccount
-            HSProgressHUD.dismiss();
+            //校验手机号是否已经开户
+            _verfiyPhoneRequest();
           }
         });
       }
@@ -330,6 +325,32 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         gravity: ToastGravity.CENTER,
       );
       HSProgressHUD.dismiss();
+    });
+  }
+
+//校验手机号是否已经开户
+  _verfiyPhoneRequest() {
+    LoginVerifyPhoneReq req = LoginVerifyPhoneReq('', '', _phoneNumListen);
+    ApiClientAccount().forgetVerifyPhoneOpenAccount(req).then((data) {
+      Map listData = new Map();
+      listData = {
+        'userAccount': _userAccount,
+        'userPhone': _phoneNumListen,
+        'sms': _smsListen
+      };
+      if (data != null) {
+        if (data.opened) {
+          //已开户才能进行设置
+          Navigator.pushNamed(context, pageResetPasswordOpenAccount,
+              arguments: listData);
+          HSProgressHUD.dismiss();
+        } else {
+          //未开户
+          Navigator.pushNamed(context, pageResetPasswordNoAccount,
+              arguments: listData);
+          HSProgressHUD.dismiss();
+        }
+      }
     });
   }
 
