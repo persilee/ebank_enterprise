@@ -28,7 +28,7 @@ class HsgErrorPage extends StatelessWidget {
     this.helpAction,
     this.isEmptyPage = false,
     this.isNeedLogin = false,
-    @required this.error,
+    this.error,
   });
 
   @override

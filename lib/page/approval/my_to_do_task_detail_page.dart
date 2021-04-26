@@ -154,7 +154,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // loanWithDrawalApproval - 贷款领用
   void _loanWithDrawalData(_contractModel) {
     LoanWithDrawalModel.LoanWithDrawalModel loanWithDrawalModel =
-    LoanWithDrawalModel.LoanWithDrawalModel.fromJson(_contractModel);
+        LoanWithDrawalModel.LoanWithDrawalModel.fromJson(_contractModel);
 
     LoanWithDrawalModel.OperateEndValue data =
         loanWithDrawalModel.operateEndValue;
@@ -179,20 +179,14 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.amt ?? '0')) ?? ''
                 : f.format(double.parse(data?.amt ?? '0')) ?? ''));
-        _loanWithDrawalList.add(_buildContentItem(
-            '可借款额度', ''));
-        _loanWithDrawalList.add(_buildContentItem(
-            '借款期限', data?.iratTm ?? ''));
-        _loanWithDrawalList.add(_buildContentItem(
-            '还款方式', data?.repType ?? ''));
-        _loanWithDrawalList.add(_buildContentItem(
-            '首次还息日期', data?.fPaydt ?? ''));
-        _loanWithDrawalList.add(_buildContentItem(
-            '总利息', ''));
-        _loanWithDrawalList.add(_buildContentItem(
-            '收款账户', data?.ddAc ?? ''));
-        _loanWithDrawalList.add(_buildContentItem(
-            '借款用途', ''));
+        _loanWithDrawalList.add(_buildContentItem('可借款额度', ''));
+        _loanWithDrawalList.add(_buildContentItem('借款期限', data?.iratTm ?? ''));
+        _loanWithDrawalList.add(_buildContentItem('还款方式', data?.repType ?? ''));
+        _loanWithDrawalList
+            .add(_buildContentItem('首次还息日期', data?.fPaydt ?? ''));
+        _loanWithDrawalList.add(_buildContentItem('总利息', ''));
+        _loanWithDrawalList.add(_buildContentItem('收款账户', data?.ddAc ?? ''));
+        _loanWithDrawalList.add(_buildContentItem('借款用途', ''));
         _isLoading = false;
         _isShowErrorPage = false;
       });
@@ -526,10 +520,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_contract_no, data?.conNo ?? ''));
         _earlyRedTdList.add(_buildContentItem(
-            S.current.approve_certificates_deposit_amount,
-            data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.bal ?? '0')) ?? ''
-                : f.format(double.parse(data?.bal ?? '0')) ?? ''));
+            S.current.approve_certificates_deposit_amount, data?.bal ?? '0'));
         _earlyRedTdList.add(
             _buildContentItem(S.current.approve_currency, data?.ccy ?? ''));
         _earlyRedTdList.add(_buildContentItem(
