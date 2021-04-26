@@ -869,6 +869,20 @@ class _HomePageState extends State<HomePage>
         );
         return;
       }
+      if (_belongCustStatus == '4' &&
+          [
+            S.current.transfer,
+            S.current.open_transfer,
+            S.current.deposit_open,
+            S.current.loan_apply,
+            S.current.foreign_exchange
+          ].contains(title)) {
+        HsgShowTip.limitedCustomerTip(
+          context: context,
+          click: (value) {},
+        );
+        return;
+      }
       if (S.current.transaction_details == title) {
         //收支明细
         Navigator.pushNamed(context, pageDetailList);
@@ -1053,8 +1067,8 @@ class _HomePageState extends State<HomePage>
         //     : model.localUserName; // 姓名
         // _userName = _userName == null ? model.userAccount : _userName;
         _characterName = _language == 'en'
-            ? model.roleEngName
-            : model.roleLocalName; //用户角色名称
+            ? model.custFirmRoleDTO.englishRoleName ?? ''
+            : model.custFirmRoleDTO.localRoleName ?? ''; //用户角色名称
         _belongCustStatus = model.belongCustStatus; //用户状态
         _lastLoginTime = model.lastLoginTime; // 上次登录时间
       });

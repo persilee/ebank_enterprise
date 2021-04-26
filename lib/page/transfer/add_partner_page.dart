@@ -113,7 +113,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
 //获取转账费用列表
   Future _getTransferFeeList() async {
     // PublicParametersRepository()
-    ApiClientOpenAccount().getIdType(GetIdTypeReq("PAYS_METHOD")).then((data) {
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("PAY_METHOD")).then((data) {
+      //PAY_METHOD//PAYS_METHOD
       if (data.publicCodeGetRedisRspDtoList != null) {
         transferFeeList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {

@@ -705,8 +705,8 @@ class _MinePageState extends State<MinePage>
         //     : model.localUserName; // 姓名
         // _userName = _userName == null ? model.userAccount : _userName;
         _characterName = _language == 'en'
-            ? model.roleEngName
-            : model.roleLocalName; //用户角色名称
+            ? model.custFirmRoleDTO.englishRoleName ?? ''
+            : model.custFirmRoleDTO.localRoleName ?? ''; //用户角色名称
         _belongCustStatus = model.belongCustStatus; //用户状态
         _lastLoginTime = model.lastLoginTime; // 上次登录时间
       });

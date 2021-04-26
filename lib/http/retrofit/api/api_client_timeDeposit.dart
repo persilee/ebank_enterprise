@@ -6,6 +6,7 @@ import 'package:ebank_mobile/data/source/model/get_deposit_limit_by_con_no.dart'
 import 'package:ebank_mobile/data/source/model/get_deposit_rate.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_trial.dart';
+import 'package:ebank_mobile/data/source/model/get_td_prod_inst_code.dart';
 import 'package:ebank_mobile/data/source/model/get_td_product_term_rate.dart';
 
 import 'package:ebank_mobile/data/source/model/time_deposit_contract.dart';
@@ -93,4 +94,9 @@ abstract class ApiClientTimeDeposit {
   @POST('/cust/bankcard/getCardListBalByUser')
   Future<GetCardListBalByUserResp> getCardListBalByUser(
       @Body() GetCardListBalByUserReq req);
+
+  /// 根据产品代码获取产品支持的待办指示
+  @POST('/tdep/timeDeposit/getTdProdInstCode')
+  Future<GetTdProductInstCodeResp> getTdProdInstCode(
+      @Body() GetTdProductInstCodeReq req);
 }

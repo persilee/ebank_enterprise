@@ -17,6 +17,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/format_text_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 
@@ -311,7 +312,8 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(30),
                             FilteringTextInputFormatter.allow(
-                                RegExp('[a-zA-Z0-9]')),
+                                RegExp('[a-zA-Z0-9()]')),
+                            UpperCaseTextFormatter(), //强制大写
                           ],
                         ),
 
