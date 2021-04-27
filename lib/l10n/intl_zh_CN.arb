@@ -593,6 +593,7 @@
   "approve_repayment_interest": "还款利息",
   "approve_fine_amount": "罚金",
   "approve_reimbursement_amount": "还款总额",
+  "approve_first_interest_date": "首次还息日期",
   "refresh_loosen_refresh": "松开刷新",
   "refresh_loading": "加载中...",
   "refresh_drop_down_refresh": "下拉刷新",

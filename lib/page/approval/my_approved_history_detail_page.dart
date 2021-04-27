@@ -18,6 +18,8 @@ import 'package:ebank_mobile/data/source/model/approval/foreign_transfer_model.d
     as ForeignTransferModel;
 import 'package:ebank_mobile/data/source/model/approval/post_repayment_model.dart'
     as PostRepaymentModel;
+import 'package:ebank_mobile/data/source/model/approval/loan_with_drawal_model.dart'
+    as LoanWithDrawalModel;
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
@@ -55,6 +57,7 @@ class _MyApprovedHistoryDetailPageState
   List<Widget> _transferPlanList = [];
   List<Widget> _foreignTransferList = [];
   List<Widget> _postRepaymentList = [];
+  List<Widget> _loanWithDrawalList = [];
   List<Widget> _finishedList = [];
   final f = NumberFormat("#,##0.00", "en_US");
   final fj = NumberFormat("#,##0", "ja-JP");
@@ -112,6 +115,10 @@ class _MyApprovedHistoryDetailPageState
       else if (_processKey == 'postRepaymentApproval') {
         _loadPostRepaymentData(_contractModel);
       }
+      // loanWithDrawalApproval - 贷款领用
+      else if (_processKey == 'loanWithDrawalApproval') {
+        _loanWithDrawalData(_contractModel);
+      }
     } catch (e) {
       if (this.mounted) {
         setState(() {
@@ -125,6 +132,60 @@ class _MyApprovedHistoryDetailPageState
           );
         });
       }
+    }
+  }
+
+  // loanWithDrawalApproval - 贷款领用
+  void _loanWithDrawalData(_contractModel) {
+    LoanWithDrawalModel.LoanWithDrawalModel loanWithDrawalModel =
+    LoanWithDrawalModel.LoanWithDrawalModel.fromJson(_contractModel);
+
+    LoanWithDrawalModel.OperateEndValue data =
+        loanWithDrawalModel.operateEndValue;
+
+    // 添加历史审批记录
+    if (loanWithDrawalModel.commentList.isNotEmpty) {
+      loanWithDrawalModel.commentList.forEach((data) {
+        // 暂时 commentList 都为空，里面的具体字段不明
+        // _finishedList.add(_buildAvatar('',''));
+      });
+    }
+
+    print('loanWithDrawalModel: ${data.toJson()}');
+
+    if (this.mounted) {
+      setState(() {
+        _loanWithDrawalList.clear();
+        _loanWithDrawalList
+            .add(_buildTitle(S.current.approve_loan_information));
+        _loanWithDrawalList.add(_buildContentItem(
+            S.current.loan_Recipients_Amount, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.amt ?? '0')) ?? ''
+                : f.format(double.parse(data?.amt ?? '0')) ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            S.current.loan_Borrowing_limit,
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.loanAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.loanAmount ?? '0')) ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            S.current.loan_Borrowing_Period, data?.iratTm ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            S.current.loan_Repayment_method_column, data?.repType ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            S.current.approve_first_interest_date, data?.fPaydt ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            S.current.loan_Total_Interest,
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.totalInt ?? '0')) ?? ''
+                : f.format(double.parse(data?.totalInt ?? '0')) ?? ''));
+        _loanWithDrawalList.add(
+            _buildContentItem(S.current.transfer_to_account, data?.ddAc ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            S.current.loan_Borrowing_Purposes, data?.loanPurpose ?? ''));
+        _isLoading = false;
+        _isShowErrorPage = false;
+      });
     }
   }
 
@@ -559,6 +620,7 @@ class _MyApprovedHistoryDetailPageState
         if (_processKey == 'transferPlanApproval') ..._transferPlanList,
         if (_processKey == 'foreignTransferApproval') ..._foreignTransferList,
         if (_processKey == 'postRepaymentApproval') ..._postRepaymentList,
+        if (_processKey == 'loanWithDrawalApproval') ..._loanWithDrawalList,
       ],
     );
   }
