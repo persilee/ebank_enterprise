@@ -138,7 +138,7 @@ class _MyApprovedHistoryDetailPageState
   // loanWithDrawalApproval - 贷款领用
   void _loanWithDrawalData(_contractModel) {
     LoanWithDrawalModel.LoanWithDrawalModel loanWithDrawalModel =
-        LoanWithDrawalModel.LoanWithDrawalModel.fromJson(_contractModel);
+    LoanWithDrawalModel.LoanWithDrawalModel.fromJson(_contractModel);
 
     LoanWithDrawalModel.OperateEndValue data =
         loanWithDrawalModel.operateEndValue;
@@ -163,20 +163,26 @@ class _MyApprovedHistoryDetailPageState
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.amt ?? '0')) ?? ''
                 : f.format(double.parse(data?.amt ?? '0')) ?? ''));
-        _loanWithDrawalList
-            .add(_buildContentItem(S.current.loan_Borrowing_limit, ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            S.current.loan_Borrowing_limit,
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.loanAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.loanAmount ?? '0')) ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
             S.current.loan_Borrowing_Period, data?.iratTm ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
             S.current.loan_Repayment_method_column, data?.repType ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
             S.current.approve_first_interest_date, data?.fPaydt ?? ''));
-        _loanWithDrawalList
-            .add(_buildContentItem(S.current.loan_Total_Interest, ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            S.current.loan_Total_Interest,
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.totalInt ?? '0')) ?? ''
+                : f.format(double.parse(data?.totalInt ?? '0')) ?? ''));
         _loanWithDrawalList.add(
             _buildContentItem(S.current.transfer_to_account, data?.ddAc ?? ''));
-        _loanWithDrawalList
-            .add(_buildContentItem(S.current.loan_Borrowing_Purposes, ''));
+        _loanWithDrawalList.add(_buildContentItem(
+            S.current.loan_Borrowing_Purposes, data?.loanPurpose ?? ''));
         _isLoading = false;
         _isShowErrorPage = false;
       });
