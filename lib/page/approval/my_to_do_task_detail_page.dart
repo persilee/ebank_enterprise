@@ -136,18 +136,18 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _loanWithDrawalData(_contractModel);
       }
     } catch (e) {
-      // if (this.mounted) {
-      //   setState(() {
-      //     _isLoading = false;
-      //     _isShowErrorPage = true;
-      //     _hsgErrorPage = HsgErrorPage(
-      //       error: e.error,
-      //       buttonAction: () {
-      //         _loadData();
-      //       },
-      //     );
-      //   });
-      // }
+      if (this.mounted) {
+        setState(() {
+          _isLoading = false;
+          _isShowErrorPage = true;
+          _hsgErrorPage = HsgErrorPage(
+            error: e.error,
+            buttonAction: () {
+              _loadData();
+            },
+          );
+        });
+      }
     }
   }
 
@@ -175,18 +175,18 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _loanWithDrawalList
             .add(_buildTitle(S.current.approve_loan_information));
         _loanWithDrawalList.add(_buildContentItem(
-            '领用金额', // 处理日元没有小数
+            S.current.loan_Recipients_Amount, // 处理日元没有小数
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.amt ?? '0')) ?? ''
                 : f.format(double.parse(data?.amt ?? '0')) ?? ''));
-        _loanWithDrawalList.add(_buildContentItem('可借款额度', ''));
-        _loanWithDrawalList.add(_buildContentItem('借款期限', data?.iratTm ?? ''));
-        _loanWithDrawalList.add(_buildContentItem('还款方式', data?.repType ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(S.current.loan_Borrowing_limit, ''));
+        _loanWithDrawalList.add(_buildContentItem(S.current.loan_Borrowing_Period, data?.iratTm ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(S.current.loan_Repayment_method_column, data?.repType ?? ''));
         _loanWithDrawalList
-            .add(_buildContentItem('首次还息日期', data?.fPaydt ?? ''));
-        _loanWithDrawalList.add(_buildContentItem('总利息', ''));
-        _loanWithDrawalList.add(_buildContentItem('收款账户', data?.ddAc ?? ''));
-        _loanWithDrawalList.add(_buildContentItem('借款用途', ''));
+            .add(_buildContentItem(S.current.approve_first_interest_date, data?.fPaydt ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(S.current.loan_Total_Interest, ''));
+        _loanWithDrawalList.add(_buildContentItem(S.current.transfer_to_account, data?.ddAc ?? ''));
+        _loanWithDrawalList.add(_buildContentItem(S.current.loan_Borrowing_Purposes, ''));
         _isLoading = false;
         _isShowErrorPage = false;
       });
