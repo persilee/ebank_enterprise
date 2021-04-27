@@ -72,6 +72,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   List<String> _cardCcyList = [];
   List<String> _cardBalList = [];
   List<List<CardBalBean>> myCardListBal;
+  String _prodType = '';
 
   double bal = 0.00;
   String instCode = '';
@@ -876,10 +877,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     } else {
       _payerAmount = AiDecimalAccuracy.parse(inputValue.text).toDouble();
 
-      print('_payerAmount: ${inputValue.text}');
-      print('corrCcy: $_cardCcy');
-      print('defaultCcy: $ccy');
-
       try {
         TransferTrialResp data = await ApiClient().transferTrial(
             TransferTrialReq(
@@ -1093,19 +1090,19 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         .getTdProdInstCode(
             GetTdProductInstCodeReq(this.productList.bppdCode ?? ''))
         .then((data) {
-      //     if () {
-
-      //     }
-      // if (data.insCodes != null) {
-      //   data.insCodes.forEach((element) {
-      //     if (this.mounted) {
-      //       setState(() {
-      //         if (instructionDatas != null || instructionDatas.length > 0) {
-
-      //         }
-      //       });
-      //     }
-      //   });
+      List<String> instructionDataList = [];
+      List<String> instructionList = [];
+      for (var i = 0; i < instructionDatas.length; i++) {
+        if (data.insCodes.contains(instructionDatas[i])) {
+          instructionDataList.add(instructionDatas[i]);
+          instructionList.add(instructions[i]);
+        }
+      }
+      setState(() {
+        instructionDatas = instructionDataList;
+        instructions = instructionList;
+        _prodType = data.prdAcCd ?? '';
+      });
     }).catchError((e) {
       Fluttertoast.showToast(
         msg: e.toString(),
@@ -1117,23 +1114,25 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   //获取到期指示列表
   Future _getInsCode() async {
     // PublicParametersRepository()
-    ApiClientOpenAccount().getIdType(GetIdTypeReq("EXP_IN")).then((data) {
-      if (data.publicCodeGetRedisRspDtoList != null) {
-        data.publicCodeGetRedisRspDtoList.forEach((element) {
-          if (this.mounted) {
-            setState(() {
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("EXP_IN")).then(
+      (data) {
+        if (data.publicCodeGetRedisRspDtoList != null) {
+          data.publicCodeGetRedisRspDtoList.forEach((element) {
+            if (this.mounted) {
+              // setState(() {
               if (language == 'zh_CN') {
                 instructions.add(element.cname);
               } else {
                 instructions.add(element.name);
               }
               instructionDatas.add(element.code);
-            });
-          }
-        });
-        // _getTdProdInstCode();
-      }
-    }).catchError((e) {
+              // });
+            }
+          });
+          _getTdProdInstCode();
+        }
+      },
+    ).catchError((e) {
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
@@ -1164,7 +1163,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       });
     }
     // HSProgressHUD.show();
-    print('accuPeriod===$accuPeriod');
     // TimeDepositDataRepository()
     ApiClientTimeDeposit()
         .getTimeDepositContract(
@@ -1183,7 +1181,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           prodName,
           settDdAc,
           smsCode,
-          tenor),
+          tenor,
+          intAc: _prodType == '020' ? '' : settDdAc),
     )
         .then((value) {
       if (this.mounted) {
@@ -1210,9 +1209,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
   //获取定期产品利率和存期
   Future _getTdProdTermRate() async {
-    print('productListCCy   +  ${productList.ccy}');
-    print('productList.bppdCode   +  ${productList.bppdCode}');
-
     if (this.mounted) {
       setState(() {
         _showTermRate = true;
