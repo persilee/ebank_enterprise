@@ -4,6 +4,7 @@
 /// Date: 2021-01-13
 
 import 'package:json_annotation/json_annotation.dart';
+
 part 'get_verificationByPhone_code.g.dart';
 
 //根据账户获取验证码
@@ -21,11 +22,19 @@ class SendSmsByPhoneNumberReq {
   @JsonKey(name: 'smsTemplateId')
   String smsTemplateId;
 
+  @JsonKey(name: 'msgChnnl')
+  String msgChnnl;
+
+  @JsonKey(name: 'msgBankId')
+  String msgBankId;
+
   SendSmsByPhoneNumberReq(
     this.areaCode,
     this.phoneNumber,
     this.smsType,
     this.smsTemplateId,
+    this.msgChnnl,
+  {this.msgBankId}
   );
 
   // @override

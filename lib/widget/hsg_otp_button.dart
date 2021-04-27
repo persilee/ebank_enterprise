@@ -69,7 +69,7 @@ class _HSGOTPButtonState extends State<HSGOTPButton> {
           //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
           // )
           .sendSmsByPhone(
-        SendSmsByPhoneNumberReq('', userPhone, widget.smsType, ''),
+        SendSmsByPhoneNumberReq('', userPhone, widget.smsType, '','MB'),
       )
           .then((data) {
         _startCountdown();
