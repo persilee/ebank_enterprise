@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/data/source/model/check_phone.dart';
+import 'package:ebank_mobile/data/source/model/check_sms.dart';
 import 'package:ebank_mobile/data/source/model/getFeedback.dart';
 import 'package:ebank_mobile/data/source/model/get_bank_info_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
@@ -62,6 +63,10 @@ abstract class ApiClientAccount {
   /// 校验用户是否注册接口
   @POST('/cust/regiser/checkPhone')
   Future<CheckPhoneResp> checkPhone(@Body() CheckPhoneReq req);
+
+  /// 短信验证码校验
+  @POST('/cust/codes/checkSms')
+  Future<CheckSmsResp> checkSms(@Body() CheckSmsReq req);
 
   /// 注册发送短信验证码
   @POST('/cust/codes/sendSmsRegister')

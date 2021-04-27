@@ -322,7 +322,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
     ApiClientPassword()
         .sendSmsByPhone(
       SendSmsByPhoneNumberReq(
-          _officeAreaCodeText, _phone, 'transactionPwd', 'SCNAORESTSPW'),
+          _officeAreaCodeText, _phone, 'transactionPwd', 'SCNAORESTSPW','MB'),
     )
         .then((data) {
       _startCountdown();

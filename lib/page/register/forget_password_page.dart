@@ -377,7 +377,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     ApiClientPassword()
         .sendSmsByPhone(
       SendSmsByPhoneNumberReq(
-          _officeAreaCodeText, _phoneNum.text, 'findPwd', 'SCNAOFTPW'),
+          _officeAreaCodeText, _phoneNum.text, 'findPwd', 'SCNAOFTPW','MB'),
     )
         .then((data) {
       if (mounted) {
