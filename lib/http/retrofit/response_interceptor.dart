@@ -12,7 +12,7 @@ class ResponseInterceptor extends Interceptor {
       if (baseResponse.msgCd == '0000') {
         response.data = baseResponse.body;
       } else {
-        if (baseResponse?.msgCd == 'SYS90018') {
+        if (baseResponse?.msgCd == 'SYS90018' || baseResponse?.msgCd == 'SYS90017') {
           return Future.error(NeedLogin());
         }
         return Future.error(

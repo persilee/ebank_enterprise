@@ -38,7 +38,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
 
   double conRate; //利率
   bool _isDate = false; //判断是否有数据
-  // bool _isMoreData = false; //是否加载更多
+  bool _isMoreData = true; //是否加载更多
   int _page = 1;
   int count = 0;
   ScrollController _scrollController;
@@ -76,7 +76,10 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
                   controller: _refreshController,
                   onLoading: () {
                     //加载更多完成
-                    _loadDeopstData(isLoadMore: true);
+                    if (_isMoreData) {
+                      //是否加载更多
+                      _loadDeopstData(isLoadMore: true);
+                    }
                   },
                   onRefresh: () {
                     //刷新完成
@@ -323,58 +326,6 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     return raisedButton;
   }
 
-// //获取定期存单列表
-//   Future<void> _loadDeopstData({bool isLoadMore = false}) async {
-//     isLoadMore ? _page++ : _page = 1;
-//     _isLoading = true;
-//     final prefs = await SharedPreferences.getInstance();
-//     bool excludeClosed = true;
-//     String ciNo = prefs.getString(ConfigKey.CUST_ID);
-//     Future.wait({
-//       DepositDataRepository().getDepositRecordRows(
-//           DepositRecordReq(ciNo, '', excludeClosed, _page, 10, ''),
-//           'getDepositRecord')
-//     }).then((value) {
-//       if (this.mounted) {
-//         setState(() {
-//           value.forEach((element) {
-//             if (element.rows.length != 0) {
-//               _refreshController.refreshCompleted();
-//               _refreshController.footerMode.value = LoadStatus.canLoading;
-//               count = element.count;
-//               _isDate = true;
-//               totalAmt = element.totalAmt;
-//               _defaultCcy = element.defaultCcy;
-//               if (isLoadMore == false && _page == 1) {
-//                 rowList.clear();
-//               }
-
-//               rowList.addAll(element.rows);
-//             } else {
-//               _isDate = false;
-//             }
-//             if (element.rows.length <= 10 && element.totalPage <= _page) {
-//               _isMoreData = true;
-//             }
-//           });
-//           _isLoading = false;
-//         });
-//       }
-//     }).catchError((e) {
-//       if (mounted) {
-//         setState(() {
-//           _isLoading = false;
-//         });
-//       }
-
-//       Fluttertoast.showToast(
-//         msg: e.toString(),
-//         gravity: ToastGravity.CENTER,
-//       );
-//       // HSProgressHUD.dismiss();
-//     });
-//   }
-
   //获取定期存单列表
   Future<void> _loadDeopstData({bool isLoadMore = false}) async {
     isLoadMore ? _page++ : _page = 1;
@@ -387,26 +338,26 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         DepositRecordReq(ciNo, '', excludeClosed, _page, 10, ''),
       )
     }).then((value) {
-      print('当前的页数$_page');
-
       if (this.mounted) {
-        setState(() {
-          value.forEach((element) {
+        value.forEach((element) {
+          setState(() {
             if (isLoadMore) {
               //加载更多
-              if (element.rows.length < 10) {
+              if (element.rows.length < 10 || element.totalPage == _page) {
+                _isMoreData = false;
                 //判断底部没有更多提示的
-                _refreshController.footerMode.value = LoadStatus.noMore;
+                _refreshController.loadComplete(); //加载完成
+                _refreshController.loadNoData();
                 rowList.addAll(element.rows);
-                _page = 1;
-                _isDate = false;
               } else {
-                _isDate = true;
+                _isMoreData = true;
                 rowList.addAll(element.rows);
+                _refreshController.loadComplete(); //加载完成
               }
-              _refreshController.refreshCompleted(); //刷新完成
             } else {
               //刷新
+              _refreshController.refreshCompleted(); //刷新完成
+
               if (element.rows.length == 0) {
                 //没有数据
                 _isDate = false;
@@ -415,43 +366,14 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
               }
               if (element.rows.length < 10) {
                 //判断底部没有更多提示的
-                _refreshController.footerMode.value = LoadStatus.noMore;
+                // _refreshController.footerMode.value = LoadStatus.noMore;
+                _refreshController.loadNoData();
                 rowList.addAll(element.rows);
               } else {
                 rowList.addAll(element.rows);
               }
             }
           });
-
-          // value.forEach((element) {
-          //   //遍历数组元素
-          //   _refreshController.refreshCompleted(); //刷新完成
-
-          //   totalAmt = element.totalAmt; //总金额
-          //   _defaultCcy = element.defaultCcy; //当前币种
-
-          //   if (element.rows.length > 0) {
-          //     //当前页数为1
-          //     rowList.addAll(element.rows);
-          //     // _refreshController.footerMode.value = LoadStatus.canLoading;
-          //     // rowList = element.rows == null ? [] : element.rows;
-          //   } else {
-          //     //页数是大于1的 但是后端返回的始终为1
-          //     // rowList.addAll(element.rows);
-          //     _refreshController.footerMode.value = LoadStatus.canLoading;
-          //   }
-
-          //   if (element.rows.length < 10 || element.totalPage <= _page) {
-          //     //判断底部没有更多提示的
-          //     _refreshController.footerMode.value = LoadStatus.noMore;
-          //   }
-
-          //   if (rowList == null || rowList.length == 0) {
-          //     _isDate = false;
-          //   } else {
-          //     _isDate = true;
-          //   }
-          // });
           _isLoading = false;
         });
       }

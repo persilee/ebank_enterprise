@@ -593,6 +593,7 @@
   "approve_repayment_interest": "还款利息",
   "approve_fine_amount": "罚金",
   "approve_reimbursement_amount": "还款总额",
+  "approve_first_interest_date": "首次还息日期",
   "refresh_loosen_refresh": "松开刷新",
   "refresh_loading": "加载中...",
   "refresh_drop_down_refresh": "下拉刷新",
@@ -727,6 +728,7 @@
   "openAccount_industryNatureNotSelect_tip": "请先选择商业/行业性质",
   "login_password_error_tip": "登录密码错误，您当日已经错误errNum次，当日还剩remainNum次机会。",
   "login_password_error_toMuch_tip": "登录密码错误次数超限：用户被锁定。",
+  "limited_customer_tip": "您当前登录的账号是受限客户，请先联系企服商进行快速开户转正再进行本操作。",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "transfer_from1": "付款方",
   "payer_currency": "转出方币种",
@@ -742,9 +744,7 @@
   "transfer_msg_limit": "转账金额超过卡单笔限额",
   "request_client_timeout": "请求客户端超时",
   "forex_trading_msg3": "该币种假期不允许进行外汇买卖转账",
-  "time_deposit_record_Status_N":"正常",
-  "time_deposit_record_Status_C":"结清",
-  "total_opration_audit_tip":"提交成功,等待审核"
-
-
+  "time_deposit_record_Status_N": "正常",
+  "time_deposit_record_Status_C": "结清",
+  "total_opration_audit_tip": "提交成功,等待审核"
 }
