@@ -135,7 +135,8 @@ class _ForgetUserNameState extends State<ForgetUserName> {
                           FilteringTextInputFormatter.allow(
                               RegExp("[0-9]")), //纯数字
                           LengthLimitingTextInputFormatter(6),
-                        ], //限制长度
+                        ],
+                        //限制长度
                         keyboardType: TextInputType.number,
                       ),
                     ),
@@ -285,8 +286,8 @@ class _ForgetUserNameState extends State<ForgetUserName> {
           _officeAreaCodeText, //地区号
           _phoneNum.text, //电话号
           'findAccount', //短信类型
-          'SCNAOFGUN' //smsTemplateId
-          ),
+          'SCNAOFGUN', //smsTemplateId,
+          'MB'),
     )
         .then((data) {
       if (mounted) {

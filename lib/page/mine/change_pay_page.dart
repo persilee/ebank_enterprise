@@ -345,7 +345,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
         // )
         .sendSmsByPhone(
       SendSmsByPhoneNumberReq(
-          _areaCodeStr, _phoneNo, 'transactionPwd', 'SCNAOCHGTSPW'),
+          _areaCodeStr, _phoneNo, 'transactionPwd', 'SCNAOCHGTSPW','MB'),
     )
         .then((data) {
       _startCountdown();
