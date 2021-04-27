@@ -82,13 +82,11 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
         centerTitle: true,
         elevation: 0,
       ),
-      body:
-          _isLoad
-              ? HsgLoading()
-              :
-          CustomScrollView(
-        slivers: _getContent(),
-      ),
+      body: _isLoad
+          ? HsgLoading()
+          : CustomScrollView(
+              slivers: _getContent(),
+            ),
     );
   }
 
@@ -300,11 +298,15 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
                 var rate = [
                   _rowText(
                       S.current.loan_principal,
-                      detailModel.loanAmt.toString() + ' ' + detailModel.ccy,
+                      FormatUtil.formatSringToMoney(detailModel.loanAmt) +
+                          ' ' +
+                          detailModel.ccy,
                       HsgColors.secondDegreeText), //金额
                   _rowText(
                       S.current.loan_balance2,
-                      detailModel.osAmt + " " + detailModel.ccy,
+                      FormatUtil.formatSringToMoney(detailModel.osAmt) +
+                          " " +
+                          detailModel.ccy,
                       HsgColors.secondDegreeText), //余额
                   _rowText(S.current.begin_time, detailModel.disbDate,
                       HsgColors.secondDegreeText), //开始时间
