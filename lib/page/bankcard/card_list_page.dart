@@ -137,6 +137,7 @@ class _CardListPageState extends State<CardListPage> {
 
   Widget getRow(BuildContext context, int position) {
     return GestureDetector(
+      key: GlobalKey(),
       child: Column(
         children: [
           getCard(cards[position], position),
@@ -152,6 +153,7 @@ class _CardListPageState extends State<CardListPage> {
             _isShow[i] = false;
           }
         }
+        // moveToSelectStore(position);
         _loadAndShowContent(cards[position].cardNo, position);
       },
     );
@@ -245,6 +247,13 @@ class _CardListPageState extends State<CardListPage> {
         overflow: TextOverflow.ellipsis,
       ),
     );
+  }
+
+  // 移动到指定的 index  对应某行
+  void moveToSelectStore(index) async {
+    var widgetOffset = Offset(0, 50 * index);
+    _scrollController.position
+        .moveTo(widgetOffset.dy, duration: Duration(milliseconds: 200));
   }
 
   _loadData() {
