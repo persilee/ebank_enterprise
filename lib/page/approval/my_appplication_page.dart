@@ -10,16 +10,20 @@ import 'package:dio/dio.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
+import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sp_util/sp_util.dart';
 
@@ -39,9 +43,12 @@ class _MyApplicationPageState extends State<MyApplicationPage>
   ScrollController _scrollController;
   RefreshController _refreshController;
   List<ApprovalTask> _listData = [];
+  List<IdType> _resultTypeList = [];
   int _page = 1;
   bool _isLoading = false;
   bool _isMoreData = false;
+  bool _isShowErrorPage = false;
+  Widget _hsgErrorPage;
 
   @override
   void initState() {
@@ -63,8 +70,7 @@ class _MyApplicationPageState extends State<MyApplicationPage>
     super.build(context);
     return _isLoading
         ? HsgLoading()
-        : _listData.length > 0
-            ? CustomRefresh(
+        : CustomRefresh(
                 controller: _refreshController,
                 onLoading: () async {
                   await _loadData(isLoadMore: true);
@@ -79,7 +85,10 @@ class _MyApplicationPageState extends State<MyApplicationPage>
                   _refreshController.refreshCompleted();
                   _refreshController.footerMode.value = LoadStatus.canLoading;
                 },
-                content: ListView.builder(
+                content:_isShowErrorPage
+                    ? _hsgErrorPage
+                    : _listData.length > 0
+                    ? ListView.builder(
                   padding:
                       EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
                   itemCount: _listData.length,
@@ -87,9 +96,13 @@ class _MyApplicationPageState extends State<MyApplicationPage>
                   itemBuilder: (context, index) {
                     return _todoInformation(_listData[index]);
                   },
+                ): HsgErrorPage(
+                  isEmptyPage: true,
+                  buttonAction: () {
+                    _loadData();
+                  },
                 ),
-              )
-            : notDataContainer(context, S.current.no_data_now);
+              );
   }
 
   //加载数据
@@ -97,6 +110,7 @@ class _MyApplicationPageState extends State<MyApplicationPage>
     isLoadMore ? _page++ : _page = 1;
     _isLoading = true;
     try {
+      GetIdTypeResp data = await ApiClientOpenAccount().getIdType(GetIdTypeReq('TASK_TATUS'));
       FindUserTodoTaskModel response = await ApiClient().findUserStartTask(
         FindTaskBody(
           finish: true,
@@ -112,6 +126,9 @@ class _MyApplicationPageState extends State<MyApplicationPage>
             _listData.clear();
           }
           _listData.addAll(response.rows);
+          if(data.publicCodeGetRedisRspDtoList.isNotEmpty) {
+            _resultTypeList = data.publicCodeGetRedisRspDtoList;
+          }
           _isLoading = false;
           if (response.rows.length <= 10 && response.totalPage <= _page) {
             _isMoreData = true;
@@ -119,30 +136,18 @@ class _MyApplicationPageState extends State<MyApplicationPage>
         });
       }
     } catch (e) {
-      print((e as DioError).error is NeedLogin);
-      print('error: ${e.toString()}');
-      setState(() {
-        _isLoading = false;
-      });
-      // if ((e as DioError).error is NeedLogin) {
-      //   Navigator.of(context).pushAndRemoveUntil(
-      //       MaterialPageRoute(builder: (BuildContext context) {
-      //         return LoginPage();
-      //       }), (Route route) {
-      //     print(route.settings?.name);
-      //     if (route.settings?.name == "/") {
-      //       return true;
-      //     }
-      //     return false;
-      //   });
-      // } else {
-      //   if(this.mounted) {
-      //     setState(() {
-      //       _isLoading = false;
-      //     });
-      //   }
-      //   print('error: ${e.toString()}');
-      // }
+      if (this.mounted) {
+        setState(() {
+          _isLoading = false;
+          _isShowErrorPage = true;
+          _hsgErrorPage = HsgErrorPage(
+            error: e.error,
+            buttonAction: () {
+              _loadData();
+            },
+          );
+        });
+      }
     }
   }
 
@@ -184,6 +189,15 @@ class _MyApplicationPageState extends State<MyApplicationPage>
 
   //待办列表右侧信息
   Widget _rightInfo(ApprovalTask approvalTask) {
+
+    String _result = '';
+    String _language = Intl.getCurrentLocale();
+    _resultTypeList.forEach((element) {
+      if(element.code == approvalTask?.result) {
+        _result = _language == 'zh_CN' ? element.cname : element.name;
+      }
+    });
+
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -213,7 +227,7 @@ class _MyApplicationPageState extends State<MyApplicationPage>
                 S.current.sponsor, approvalTask?.applicantName ?? ''),
             //审批结果
             _rowInformation(
-                S.current.approve_result, approvalTask?.result ?? ''),
+                S.current.approve_result, _result ?? ''),
             //审批时间
             _rowInformation(
                 S.current.approve_create_time, approvalTask?.createTime ?? ''),

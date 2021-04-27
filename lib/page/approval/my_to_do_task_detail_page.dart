@@ -12,6 +12,9 @@ import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_bo
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/international_transfer_detail_model.dart'
     as InternationalModel;
+import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_body.dart';
+import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_model.dart'
+    as TDEPModel;
 import 'package:ebank_mobile/data/source/model/approval/transfer_plan_detail_model.dart'
     as TransferPlanModel;
 import 'package:ebank_mobile/data/source/model/approval/early_red_td_contract_detail_model.dart'
@@ -26,8 +29,10 @@ import 'package:ebank_mobile/data/source/model/approval/post_repayment_model.dar
     as PostRepaymentModel;
 import 'package:ebank_mobile/data/source/model/approval/loan_with_drawal_model.dart'
     as LoanWithDrawalModel;
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -79,6 +84,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   final fj = NumberFormat("#,##0", "ja-JP");
   bool _isShowErrorPage = false;
   Widget _hsgErrorPage;
+  String _language = Intl.getCurrentLocale();
 
   @override
   void initState() {
@@ -572,11 +578,66 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   }
 
   // openTdContractApproval - 开立定期存单
-  void _loadOpenTdData(_contractModel) {
+  void _loadOpenTdData(_contractModel) async {
     OpenTDModel.OpenTdContractDetailModel openTdContractDetailModel =
         OpenTDModel.OpenTdContractDetailModel.fromJson(_contractModel);
     OpenTDModel.OperateEndValue data =
         openTdContractDetailModel?.operateEndValue;
+
+    // 获取中、英、繁产品名称
+    String _prodName = '';
+    try {
+      TDEPModel.TdepProductsModel tdepProductsModel = await ApiClient()
+              .getTdepProductsByPage(TdepProductsBody(page: 1, pageSize: 666));
+      List<TDEPModel.Rows> _list = tdepProductsModel.rows;
+      if (_list.isNotEmpty) {
+            _list.forEach((element) {
+              if (data?.prodName == element.lclName) {
+                if (_language == 'zh_CN') {
+                  _prodName = element.lclName;
+                } else if (_language == 'zh_HK') {
+                  _prodName = element.chName;
+                } else {
+                  _prodName = element.engName;
+                }
+              }
+            });
+          }
+    } catch (e) {
+      print(e);
+    }
+
+    // 获取存期
+    String _tenorName = '';
+    try {
+      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
+      List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
+      if(_tenorList.isNotEmpty) {
+            _tenorList.forEach((element) {
+              if(data?.tenor == element.code) {
+                _tenorName = _language == 'zh_CN' ? element.cname : element.name;
+              }
+            });
+          }
+    } catch (e) {
+      print(e);
+    }
+
+    // 获取到期指示
+    String _instCode = '';
+    try {
+      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('EXP_IN'));
+      List<IdType> _instList = getIdTypeResp.publicCodeGetRedisRspDtoList;
+      if(_instList.isNotEmpty) {
+        _instList.forEach((element) {
+          if(data?.instCode == element.code) {
+            _instCode = _language == 'zh_CN' ? element.cname : element.name;
+          }
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
 
     // 添加历史审批记录
     if (openTdContractDetailModel.commentList.isNotEmpty) {
@@ -590,20 +651,21 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       setState(() {
         _openTdList.clear();
         _openTdList.add(_buildTitle(S.current.approve_basic_information));
-        _openTdList.add(
-            _buildContentItem(S.current.approve_product, data?.prodName ?? ''));
+        _openTdList
+            .add(_buildContentItem(S.current.approve_product, _prodName ?? ''));
         _openTdList.add(_buildContentItem(
-            S.current.approve_terms_of_deposit, data?.tenor ?? ''));
+            S.current.approve_terms_of_deposit, _tenorName ?? ''));
         _openTdList.add(_buildContentItem(
             S.current.approve_amount,
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.bal ?? '0')) ?? ''
                 : f.format(double.parse(data?.bal ?? '0')) ?? ''));
-        _openTdList.add(_buildContentItem(S.current.approve_interest_rate, ''));
+        _openTdList.add(_buildContentItem(S.current.approve_interest_rate,
+            '${data?.annualInterestRate}%' ?? ''));
         _openTdList.add(_buildContentItem(
             S.current.approve_certificates_deposit_money, data?.ccy ?? ''));
         _openTdList.add(_buildContentItem(
-            S.current.approve_maturity_instructions, data?.instCode ?? ''));
+            S.current.approve_maturity_instructions, _instCode ?? ''));
         _openTdList.add(_buildContentItem(
             S.current.approve_settlement_account, data?.settDdAc ?? ''));
         _openTdList.add(_buildContentItem(

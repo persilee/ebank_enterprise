@@ -7,6 +7,8 @@ import 'package:ebank_mobile/data/source/model/approval/find_all_finished_task_m
 import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
+import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_body.dart';
+import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_model.dart';
 import 'package:ebank_mobile/data/source/model/city_for_country.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/find_user_application_task_detail.dart';
@@ -112,4 +114,11 @@ abstract class ApiClient {
     @Queries() BaseBody baseBody,
     @Part(fileName: "certificate.jpg") List<int> file,
   );
+
+
+  /*****************公共代码******************/
+  /// 查询定期产品名称
+  @POST('/tdep/timeDeposit/getTdepProductsByPage')
+  Future<TdepProductsModel> getTdepProductsByPage(
+      @Body() TdepProductsBody tdepProductsBody);
 }
