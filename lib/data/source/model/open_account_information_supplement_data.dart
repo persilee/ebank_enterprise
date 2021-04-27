@@ -4,6 +4,10 @@ part 'open_account_information_supplement_data.g.dart';
 
 @JsonSerializable()
 class OpenAccountInformationSupplementDataReq {
+  ///用户编号
+  @JsonKey(name: 'userId')
+  String userId;
+
   ///业务编号
   @JsonKey(name: 'businessId')
   String businessId;
@@ -69,6 +73,7 @@ class OpenAccountInformationSupplementDataReq {
   List<SignSpeakDTO> speakings;
 
   OpenAccountInformationSupplementDataReq({
+    this.userId,
     this.businessId,
     this.certificateType,
     this.compareImageData,

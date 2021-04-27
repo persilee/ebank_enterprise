@@ -98,6 +98,10 @@ class AuthIdentityResp {
   @JsonKey(name: 'isSuccess')
   bool isSuccess;
 
+  /// 人脸识别图片
+  @JsonKey(name: 'idFaceComparisonImg')
+  String idFaceComparisonImg;
+
   /** 
    * 1  回答错误次数 过多 
    * 2 AI面签过程中 挂断退出    
@@ -130,6 +134,7 @@ class AuthIdentityResp {
     this.compareImageData,
     this.backImage,
     this.isSuccess,
+    this.idFaceComparisonImg,
     this.outCode,
     this.errorMessage,
   );
