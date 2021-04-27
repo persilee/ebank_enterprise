@@ -812,7 +812,7 @@ class _TransferInternalPageState extends State<TransferInternalPage> {
     // VerificationCodeRepository()
     ApiClientPassword()
         .sendSmsByPhone(
-      SendSmsByPhoneNumberReq('', '13411111111', 'transactionPwd', ''),
+      SendSmsByPhoneNumberReq('', '13411111111', 'transactionPwd', '','MB'),
     )
         .then((data) {
       // _startCountdown();

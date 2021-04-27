@@ -84,6 +84,34 @@ class _UserInformationPageState extends State<UserInformationPage> {
       _changeUserInfoShow(_data);
     }
 
+    List<Widget> contentList = [];
+    contentList.add(
+      selectFrame(S.current.head_portrait, _headPortrait(), () {
+        // _headerInfoTapClick(context);
+        _getImage();
+      }, 70),
+    );
+    contentList.add(
+      _infoFrame(S.current.user_name, _userName),
+    );
+    contentList.add(
+      _infoFrame(S.current.phone_num, _userPhone),
+    );
+    if (['4', '5'].contains(_belongCustStatus)) {
+      contentList.add(
+        _infoFrame(S.current.character, _characterName),
+      );
+      contentList.add(
+        _infoFrame(S.current.company_name, _enterpriseName),
+      );
+    }
+    contentList.add(
+      selectFrame(S.current.language_switch, _hintText(_changeLangBtnTltle),
+          () {
+        _selectLanguage(context);
+      }, 50),
+    );
+
     return new Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).user_information),
@@ -94,24 +122,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
         width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.only(top: 15),
         child: Column(
-          children: [
-            selectFrame(S.current.head_portrait, _headPortrait(), () {
-              // _headerInfoTapClick(context);
-              _getImage();
-            }, 70),
-            _infoFrame(S.current.user_name, _userName),
-            _infoFrame(S.current.phone_num, _userPhone),
-            (_belongCustStatus == '5' || _belongCustStatus == '6')
-                ? _infoFrame(S.current.character, _characterName)
-                : Container(),
-            (_belongCustStatus == '5' || _belongCustStatus == '6')
-                ? _infoFrame(S.current.company_name, _enterpriseName)
-                : Container(),
-            selectFrame(
-                S.current.language_switch, _hintText(_changeLangBtnTltle), () {
-              _selectLanguage(context);
-            }, 50),
-          ],
+          children: contentList,
         ),
       ),
     );
@@ -438,13 +449,9 @@ class _UserInformationPageState extends State<UserInformationPage> {
           : model.englishUserName != null
               ? model.englishUserName
               : ''; // 姓名
-      _characterName = _language != 'en'
-          ? model.roleLocalName != null
-              ? model.roleLocalName
-              : ''
-          : model.roleEngName != null
-              ? model.roleEngName
-              : ''; //用户角色名称
+      _characterName = _language == 'en'
+          ? model.custFirmRoleDTO.englishRoleName ?? ''
+          : model.custFirmRoleDTO.localRoleName ?? ''; //用户角色名称
     });
   }
 }

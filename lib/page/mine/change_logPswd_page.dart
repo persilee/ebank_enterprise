@@ -288,7 +288,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     // VerificationCodeRepository()
     ApiClientPassword()
         .sendSmsByPhone(SendSmsByPhoneNumberReq(
-            _areaCodeStr, _phoneStr, 'modifyPwd', 'SCNAOCHGLPW'))
+            _areaCodeStr, _phoneStr, 'modifyPwd', 'SCNAOCHGLPW','MB'))
         .then((data) {
       _startCountdown();
       HSProgressHUD.dismiss();

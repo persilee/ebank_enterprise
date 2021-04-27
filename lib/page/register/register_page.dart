@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/check_phone.dart';
+import 'package:ebank_mobile/data/source/model/check_sms.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
@@ -275,7 +276,7 @@ class _RegisterPageState extends State<RegisterPage> {
     // VerificationCodeRepository()
     ApiClientPassword()
         .sendSmsByPhone(SendSmsByPhoneNumberReq(
-            _officeAreaCodeText, _phoneNum.text, 'register', 'SCNAOREGU'))
+            _officeAreaCodeText, _phoneNum.text, 'register', 'SCNAOREGU','MB',msgBankId:'999'))
         .then((value) {
       if (mounted) {
         setState(() {
@@ -297,29 +298,19 @@ class _RegisterPageState extends State<RegisterPage> {
 
   //二次校验
   _checkRegisterBysencond() {
-    print('$_smsCode+_smsCode');
     HSProgressHUD.show();
     // VersionDataRepository()
     ApiClientAccount()
-        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'))
+        .checkSms(CheckSmsReq(_phoneNum.text, 'register',_smsListen,'MB'))
         .then((data) {
       if (mounted) {
         setState(() {
           HSProgressHUD.dismiss();
-          _isRegister = data.register;
           //校验是否注册
-          if (_isRegister) {
+          if (!data.checkResult) {
             HSProgressHUD.dismiss();
             Fluttertoast.showToast(
               msg: S.current.num_is_register,
-              gravity: ToastGravity.CENTER,
-            );
-          }
-          //校验短信
-          else if (_sms.text != _smsCode) {
-            HSProgressHUD.dismiss();
-            Fluttertoast.showToast(
-              msg: S.current.verification_code_wrong,
               gravity: ToastGravity.CENTER,
             );
           } else {

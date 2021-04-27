@@ -851,7 +851,6 @@ class _HomePageState extends State<HomePage>
       _grids.add(adapter);
       _grids.add(padding);
     });
-
     return _grids;
   }
 

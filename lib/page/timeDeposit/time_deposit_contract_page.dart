@@ -1164,6 +1164,13 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     }
     // HSProgressHUD.show();
     // TimeDepositDataRepository()
+
+    String stlAc = settDdAc;
+    if (_prodType == '020' && instCode == '3') {
+      stlAc = '';
+    } else if (_prodType == '027' && instCode == '6') {
+      stlAc = '';
+    }
     ApiClientTimeDeposit()
         .getTimeDepositContract(
       TimeDepositContractReq(
@@ -1179,7 +1186,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           oppAc,
           payPassword,
           prodName,
-          settDdAc,
+          stlAc,
           smsCode,
           tenor,
           intAc: _prodType == '020' ? '' : settDdAc),
