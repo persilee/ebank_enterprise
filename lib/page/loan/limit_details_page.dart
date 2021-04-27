@@ -169,16 +169,12 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
       children: [
         contentRow(
             //贷款金额
-            S
-                .of(context)
-                .loan_principal, //FormatUtil.formatSringToMoney(loanDetail.amt.toString())
+            S.of(context).loan_principal,
             FormatUtil.formatSringToMoney(loanDetail.amt) + loanDetail.ccy,
             Color(0xFF1E1E1E)),
         contentRow(
             //贷款余额
-            S
-                .of(context)
-                .loan_balance2, //FormatUtil.formatSringToMoney(loanDetail.bal.toString())
+            S.of(context).loan_balance2,
             FormatUtil.formatSringToMoney(loanDetail.bal) + loanDetail.ccy,
             Color(0xFF1E1E1E)),
         contentRow(
