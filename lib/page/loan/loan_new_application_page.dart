@@ -169,8 +169,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
             _totalAccoutList.clear();
             _totalAccoutList.addAll(data.cardList);
             RemoteBankCard card = _totalAccoutList[0];
-            _loanAccount = card.cardNo; //放款帐号
-            _repayAccount = card.cardNo; //还款帐号
+            _loanAccount = FormatUtil.formatSpace4(card.cardNo); //放款帐号
+            _repayAccount = FormatUtil.formatSpace4(card.cardNo); //还款帐号
             _listDataMap['payAcNo'] = _loanAccount;
             _requestDataMap['payAcNo'] = _loanAccount;
             _listDataMap['repaymentAcNo'] = _repayAccount;
@@ -354,6 +354,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
             keyboardType: TextInputType.numberWithOptions(decimal: true),
             controller: _moneyController,
             callback: _checkloanIsClick,
+            isMoney: true,
           ),
           SelectInkWell(
             //贷款期限

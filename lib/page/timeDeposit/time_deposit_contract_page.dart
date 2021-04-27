@@ -11,6 +11,7 @@ import 'package:ebank_mobile/data/source/model/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
+import 'package:ebank_mobile/data/source/model/get_td_prod_inst_code.dart';
 import 'package:ebank_mobile/data/source/model/get_td_product_term_rate.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_contract.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_contract_trial.dart';
@@ -71,6 +72,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   List<String> _cardCcyList = [];
   List<String> _cardBalList = [];
   List<List<CardBalBean>> myCardListBal;
+  String _prodType = '';
 
   double bal = 0.00;
   String instCode = '';
@@ -875,10 +877,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     } else {
       _payerAmount = AiDecimalAccuracy.parse(inputValue.text).toDouble();
 
-      print('_payerAmount: ${inputValue.text}');
-      print('corrCcy: $_cardCcy');
-      print('defaultCcy: $ccy');
-
       try {
         TransferTrialResp data = await ApiClient().transferTrial(
             TransferTrialReq(
@@ -1086,25 +1084,55 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     });
   }
 
+  ///根据产品代码获取产品支持的待办指示
+  Future _getTdProdInstCode() async {
+    ApiClientTimeDeposit()
+        .getTdProdInstCode(
+            GetTdProductInstCodeReq(this.productList.bppdCode ?? ''))
+        .then((data) {
+      List<String> instructionDataList = [];
+      List<String> instructionList = [];
+      for (var i = 0; i < instructionDatas.length; i++) {
+        if (data.insCodes.contains(instructionDatas[i])) {
+          instructionDataList.add(instructionDatas[i]);
+          instructionList.add(instructions[i]);
+        }
+      }
+      setState(() {
+        instructionDatas = instructionDataList;
+        instructions = instructionList;
+        _prodType = data.prdAcCd ?? '';
+      });
+    }).catchError((e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        gravity: ToastGravity.CENTER,
+      );
+    });
+  }
+
   //获取到期指示列表
   Future _getInsCode() async {
     // PublicParametersRepository()
-    ApiClientOpenAccount().getIdType(GetIdTypeReq("EXP_IN")).then((data) {
-      if (data.publicCodeGetRedisRspDtoList != null) {
-        data.publicCodeGetRedisRspDtoList.forEach((element) {
-          if (this.mounted) {
-            setState(() {
+    ApiClientOpenAccount().getIdType(GetIdTypeReq("EXP_IN")).then(
+      (data) {
+        if (data.publicCodeGetRedisRspDtoList != null) {
+          data.publicCodeGetRedisRspDtoList.forEach((element) {
+            if (this.mounted) {
+              // setState(() {
               if (language == 'zh_CN') {
                 instructions.add(element.cname);
               } else {
                 instructions.add(element.name);
               }
               instructionDatas.add(element.code);
-            });
-          }
-        });
-      }
-    }).catchError((e) {
+              // });
+            }
+          });
+          _getTdProdInstCode();
+        }
+      },
+    ).catchError((e) {
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
@@ -1135,7 +1163,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       });
     }
     // HSProgressHUD.show();
-    print('accuPeriod===$accuPeriod');
     // TimeDepositDataRepository()
     ApiClientTimeDeposit()
         .getTimeDepositContract(
@@ -1154,7 +1181,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           prodName,
           settDdAc,
           smsCode,
-          tenor),
+          tenor,
+          intAc: _prodType == '020' ? '' : settDdAc),
     )
         .then((value) {
       if (this.mounted) {
@@ -1181,9 +1209,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
   //获取定期产品利率和存期
   Future _getTdProdTermRate() async {
-    print('productListCCy   +  ${productList.ccy}');
-    print('productList.bppdCode   +  ${productList.bppdCode}');
-
     if (this.mounted) {
       setState(() {
         _showTermRate = true;

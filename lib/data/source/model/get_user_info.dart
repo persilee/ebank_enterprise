@@ -178,6 +178,14 @@ class UserInfoResp extends Object {
   @JsonKey(name: 'areaCode')
   String areaCode;
 
+  /// 角色相关
+  @JsonKey(name: 'custFirmRoleDTO')
+  CustFirmRoleDTO custFirmRoleDTO;
+
+  /// 服务相关
+  @JsonKey(name: 'serviceTypeList')
+  List<ServiceType> serviceTypeList;
+
   UserInfoResp(
     this.userId,
     this.custId,
@@ -212,10 +220,129 @@ class UserInfoResp extends Object {
     this.processId,
     this.belongCustStatus,
     this.areaCode,
+    this.custFirmRoleDTO,
+    this.serviceTypeList,
   );
 
   factory UserInfoResp.fromJson(Map<String, dynamic> srcJson) =>
       _$UserInfoRespFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$UserInfoRespToJson(this);
+}
+
+@JsonSerializable()
+class CustFirmRoleDTO {
+  /// 角色代码
+  @JsonKey(name: 'roleCode')
+  String roleCode;
+
+  ///角色类型
+  @JsonKey(name: 'roleType')
+  String roleType;
+
+  /// 角色名称（本地）
+  @JsonKey(name: 'localRoleName')
+  String localRoleName;
+
+  /// 角色名称（英文）
+  @JsonKey(name: 'englishRoleName')
+  String englishRoleName;
+
+  /// 创建人
+  @JsonKey(name: 'createBy')
+  String createBy;
+
+  /// 修改人
+  @JsonKey(name: 'modifyBy')
+  String modifyBy;
+
+  /// 创建时间
+  @JsonKey(name: 'createTime')
+  String createTime;
+
+  /// 修改时间
+  @JsonKey(name: 'modifyTime')
+  String modifyTime;
+
+  CustFirmRoleDTO(
+    this.roleCode,
+    this.roleType,
+    this.localRoleName,
+    this.englishRoleName,
+    this.createBy,
+    this.modifyBy,
+    this.createTime,
+    this.modifyTime,
+  );
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  factory CustFirmRoleDTO.fromJson(Map<String, dynamic> srcJson) =>
+      _$CustFirmRoleDTOFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$CustFirmRoleDTOToJson(this);
+}
+
+@JsonSerializable()
+class ServiceType {
+  /// 服务类型
+  @JsonKey(name: 'serviceType')
+  String serviceType;
+
+  /// 排序方式
+  @JsonKey(name: 'sort')
+  int sort;
+
+  /// 服务类型名称（中文简体）
+  @JsonKey(name: 'serviceCname')
+  String serviceCname;
+
+  /// 服务类型名称（中文繁体）
+  @JsonKey(name: 'serviceHname')
+  String serviceHname;
+
+  /// 服务类型名称（英文）
+  @JsonKey(name: 'serviceEname')
+  String serviceEname;
+
+  /// 创建人
+  @JsonKey(name: 'createBy')
+  String createBy;
+
+  /// 修改人
+  @JsonKey(name: 'modifyBy')
+  String modifyBy;
+
+  /// 创建时间
+  @JsonKey(name: 'createTime')
+  String createTime;
+
+  /// 修改时间
+  @JsonKey(name: 'modifyTime')
+  String modifyTime;
+
+  ServiceType(
+    this.serviceType,
+    this.sort,
+    this.serviceCname,
+    this.serviceHname,
+    this.serviceEname,
+    this.createBy,
+    this.createTime,
+    this.modifyBy,
+    this.modifyTime,
+  );
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  factory ServiceType.fromJson(Map<String, dynamic> srcJson) =>
+      _$ServiceTypeFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$ServiceTypeToJson(this);
 }
