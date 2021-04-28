@@ -1,7 +1,7 @@
 import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-///定期开立购买页面
+/// 定期开立购买页面
 /// Author: wangluyao
 /// Date: 2020-12-14
 import 'package:ebank_mobile/config/hsg_colors.dart';

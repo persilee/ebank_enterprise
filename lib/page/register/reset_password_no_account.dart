@@ -34,6 +34,8 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
   String _phone;
   String _accountName;
   String _sms;
+  String _areaCode;
+
 
   @override
   // ignore: must_call_super
@@ -58,6 +60,7 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
     _accountName = listData['userAccount'];
     _phone = listData['userPhone'];
     _sms = listData['sms'];
+    _areaCode = listData['areaCode'];
 
     return Scaffold(
       appBar: AppBar(
@@ -195,48 +198,9 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
   _updateLoginPassword() async {
     final prefs = await SharedPreferences.getInstance();
     String userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
-    // RegExp characters = new RegExp(
-    //     "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
-    // RegExp letter = new RegExp("[a-zA-Z]");
-    // RegExp number = new RegExp("[0-9]");
-    // if (_newPassword.text != _confirmPassword.text) {
-    //   Fluttertoast.showToast(
-    //     msg: S.of(context).differentPwd,
-    //     gravity: ToastGravity.CENTER,
-    //   );
-    // }
-    // if ((_newPassword.text).contains(userAccount) == true) {
-    //   Fluttertoast.showToast(
-    //     msg: S.current.not_contain_password,
-    //     gravity: ToastGravity.CENTER,
-    //   );
-    // } else if ((_newPassword.text).length < 8 ||
-    //     (_newPassword.text).length > 16) {
-    //   Fluttertoast.showToast(
-    //     msg: S.current.password_8_16,
-    //     gravity: ToastGravity.CENTER,
-    //   );
-    // } else if (number.hasMatch(_newPassword.text) == false) {
-    //   Fluttertoast.showToast(
-    //     msg: S.current.password_need_num,
-    //     gravity: ToastGravity.CENTER,
-    //   );
-    // } else if (letter.hasMatch(_newPassword.text) == false) {
-    //   Fluttertoast.showToast(
-    //     msg: S.current.password_need_num,
-    //     gravity: ToastGravity.CENTER,
-    //   );
-    // } else if (characters.hasMatch(_newPassword.text) == false) {
-    //   Fluttertoast.showToast(
-    //     msg: S.current.password_need_num,
-    //     gravity: ToastGravity.CENTER,
-    //   );
-    // } else {
     String confirmPassword = EncryptUtil.aesEncode(_confirmPasswordListen);
-    // String newPassword = EncryptUtil.aesEncode(_newPasswordListen);
     print('');
     HSProgressHUD.show();
-    // UpdateLoginPawRepository()
     ApiClientPassword()
         .modifyPwdBySms(ModifyPwdBySmsReq(
       confirmPassword,
