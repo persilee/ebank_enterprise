@@ -113,7 +113,7 @@ class AppException implements Exception {
                 MaterialPageRoute(builder: (BuildContext context) {
                   return LoginPage();
                 }), (Route route) {
-              //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
+              //一直关闭，直到登录停止，停止时，整个应用只有登录页
               print(route.settings?.name);
               if (route.settings?.name == "/") {
                 return true; //停止关闭
