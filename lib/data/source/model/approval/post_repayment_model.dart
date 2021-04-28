@@ -1,23 +1,33 @@
-/// userId : "829377766448168960"
-/// userName : "HSG10 Maker"
-/// assignee : null
-/// processTitle : "postRepaymentApprovalTitle"
-/// processKey : "postRepaymentApproval"
+/// userId : "835838936357011456"
+/// userName : "李家伟"
+/// assigneeList : null
+/// approverNumbers : 0
+/// processTitle : "foreignTransferApprovalTitle"
+/// processKey : "foreignTransferApproval"
 /// businessKey : null
 /// tenantId : null
 /// operateBeforeValue : null
 /// operateEndValue : {"payPassword":null,"acNo":"80131380030007880001","ccy":"USD","prin":"1000000","outBal":"1000000","repaymentMethod":null,"trValDate":null,"principalAmount":"5000","interestAmount":"0","penaltyAmount":null,"compoundAmount":null,"totalAmount":"5000","setMethod":null,"ddAc":"8011208000001258","suspeac":null,"nostrac":null,"setlCcy":null,"exRate":null,"eqAmt":null,"instalNo":null,"refNo":null,"rescheduleType":null,"repaymentAcType":null,"repaymentAcNo":null,"repaymentCiName":null,"dueAmount":null}
 /// servCtr : "hbs-ebank-general-service"
 /// custId : null
+/// amount : null
+/// ccy : null
+/// authModel : null
+/// amountPosition : null
+/// serviceType : null
+/// authGroups : null
 /// commentList : []
-/// result : true
-/// taskKey : "TASK1"
+/// result : "2"
+/// taskKey : null
 /// taskCount : 1
+/// optBefJsonValue : null
+/// optEndJsonValue : null
 
 class PostRepaymentModel {
   String _userId;
   String _userName;
-  dynamic _assignee;
+  dynamic _assigneeList;
+  int _approverNumbers;
   String _processTitle;
   String _processKey;
   dynamic _businessKey;
@@ -26,14 +36,23 @@ class PostRepaymentModel {
   OperateEndValue _operateEndValue;
   String _servCtr;
   dynamic _custId;
+  dynamic _amount;
+  dynamic _ccy;
+  dynamic _authModel;
+  dynamic _amountPosition;
+  dynamic _serviceType;
+  dynamic _authGroups;
   List<dynamic> _commentList;
-  bool _result;
-  String _taskKey;
+  String _result;
+  dynamic _taskKey;
   int _taskCount;
+  dynamic _optBefJsonValue;
+  dynamic _optEndJsonValue;
 
   String get userId => _userId;
   String get userName => _userName;
-  dynamic get assignee => _assignee;
+  dynamic get assigneeList => _assigneeList;
+  int get approverNumbers => _approverNumbers;
   String get processTitle => _processTitle;
   String get processKey => _processKey;
   dynamic get businessKey => _businessKey;
@@ -42,15 +61,24 @@ class PostRepaymentModel {
   OperateEndValue get operateEndValue => _operateEndValue;
   String get servCtr => _servCtr;
   dynamic get custId => _custId;
+  dynamic get amount => _amount;
+  dynamic get ccy => _ccy;
+  dynamic get authModel => _authModel;
+  dynamic get amountPosition => _amountPosition;
+  dynamic get serviceType => _serviceType;
+  dynamic get authGroups => _authGroups;
   List<dynamic> get commentList => _commentList;
-  bool get result => _result;
-  String get taskKey => _taskKey;
+  String get result => _result;
+  dynamic get taskKey => _taskKey;
   int get taskCount => _taskCount;
+  dynamic get optBefJsonValue => _optBefJsonValue;
+  dynamic get optEndJsonValue => _optEndJsonValue;
 
   PostRepaymentModel({
       String userId, 
       String userName, 
-      dynamic assignee, 
+      dynamic assigneeList, 
+      int approverNumbers, 
       String processTitle, 
       String processKey, 
       dynamic businessKey, 
@@ -59,13 +87,22 @@ class PostRepaymentModel {
       OperateEndValue operateEndValue, 
       String servCtr, 
       dynamic custId, 
+      dynamic amount, 
+      dynamic ccy, 
+      dynamic authModel, 
+      dynamic amountPosition, 
+      dynamic serviceType, 
+      dynamic authGroups, 
       List<dynamic> commentList, 
-      bool result, 
-      String taskKey, 
-      int taskCount}){
+      String result, 
+      dynamic taskKey, 
+      int taskCount, 
+      dynamic optBefJsonValue, 
+      dynamic optEndJsonValue}){
     _userId = userId;
     _userName = userName;
-    _assignee = assignee;
+    _assigneeList = assigneeList;
+    _approverNumbers = approverNumbers;
     _processTitle = processTitle;
     _processKey = processKey;
     _businessKey = businessKey;
@@ -74,16 +111,25 @@ class PostRepaymentModel {
     _operateEndValue = operateEndValue;
     _servCtr = servCtr;
     _custId = custId;
+    _amount = amount;
+    _ccy = ccy;
+    _authModel = authModel;
+    _amountPosition = amountPosition;
+    _serviceType = serviceType;
+    _authGroups = authGroups;
     _commentList = commentList;
     _result = result;
     _taskKey = taskKey;
     _taskCount = taskCount;
+    _optBefJsonValue = optBefJsonValue;
+    _optEndJsonValue = optEndJsonValue;
 }
 
   PostRepaymentModel.fromJson(dynamic json) {
     _userId = json["userId"];
     _userName = json["userName"];
-    _assignee = json["assignee"];
+    _assigneeList = json["assigneeList"];
+    _approverNumbers = json["approverNumbers"];
     _processTitle = json["processTitle"];
     _processKey = json["processKey"];
     _businessKey = json["businessKey"];
@@ -92,6 +138,12 @@ class PostRepaymentModel {
     _operateEndValue = json["operateEndValue"] != null ? OperateEndValue.fromJson(json["operateEndValue"]) : null;
     _servCtr = json["servCtr"];
     _custId = json["custId"];
+    _amount = json["amount"];
+    _ccy = json["ccy"];
+    _authModel = json["authModel"];
+    _amountPosition = json["amountPosition"];
+    _serviceType = json["serviceType"];
+    _authGroups = json["authGroups"];
     if (json["commentList"] != null) {
       _commentList = [];
       json["commentList"].forEach((v) {
@@ -101,13 +153,16 @@ class PostRepaymentModel {
     _result = json["result"];
     _taskKey = json["taskKey"];
     _taskCount = json["taskCount"];
+    _optBefJsonValue = json["optBefJsonValue"];
+    _optEndJsonValue = json["optEndJsonValue"];
   }
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
     map["userId"] = _userId;
     map["userName"] = _userName;
-    map["assignee"] = _assignee;
+    map["assigneeList"] = _assigneeList;
+    map["approverNumbers"] = _approverNumbers;
     map["processTitle"] = _processTitle;
     map["processKey"] = _processKey;
     map["businessKey"] = _businessKey;
@@ -118,12 +173,20 @@ class PostRepaymentModel {
     }
     map["servCtr"] = _servCtr;
     map["custId"] = _custId;
+    map["amount"] = _amount;
+    map["ccy"] = _ccy;
+    map["authModel"] = _authModel;
+    map["amountPosition"] = _amountPosition;
+    map["serviceType"] = _serviceType;
+    map["authGroups"] = _authGroups;
     if (_commentList != null) {
       map["commentList"] = _commentList.map((v) => v.toJson()).toList();
     }
     map["result"] = _result;
     map["taskKey"] = _taskKey;
     map["taskCount"] = _taskCount;
+    map["optBefJsonValue"] = _optBefJsonValue;
+    map["optEndJsonValue"] = _optEndJsonValue;
     return map;
   }
 
