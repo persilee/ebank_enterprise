@@ -484,6 +484,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _oneToOneList.add(_buildContentItem(
             S.current.approve_account, data?.payeeCardNo ?? ''));
         _oneToOneList.add(_buildContentItem(
+            S.current.approve_name_account, data?.payeeName ?? ''));
+        _oneToOneList.add(_buildContentItem(
             S.current.approve_currency, data?.creditCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_amount,
@@ -516,12 +518,44 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   }
 
   // earlyRedTdContractApproval - 定期提前结清
-  void _loadEarlyRedData(_contractModel) {
+  void _loadEarlyRedData(_contractModel) async {
     EarlyRedModel.EarlyRedTdContractDetailModel earlyRedTdContractDetailModel =
         EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
 
     EarlyRedModel.OperateEndValue data =
         earlyRedTdContractDetailModel.operateEndValue;
+
+    // 获取存期
+    String _tenorName = '';
+    try {
+      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
+      List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
+      if(_tenorList.isNotEmpty) {
+        _tenorList.forEach((element) {
+          if(data?.tenor == element.code) {
+            _tenorName = _language == 'zh_CN' ? element.cname : element.name;
+          }
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    // 获取状态
+    String _statusName = '';
+    try {
+      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('TD_STATE'));
+      List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
+      if(_tenorList.isNotEmpty) {
+        _tenorList.forEach((element) {
+          if(data?.status == element.code) {
+            _statusName = _language == 'zh_CN' ? element.cname : element.name;
+          }
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
 
     // 添加历史审批记录
     if (earlyRedTdContractDetailModel.commentList.isNotEmpty) {
@@ -542,15 +576,18 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _earlyRedTdList.add(
             _buildContentItem(S.current.approve_currency, data?.ccy ?? ''));
         _earlyRedTdList.add(_buildContentItem(
-            S.current.approve_deposit_term, data?.tenor ?? ''));
+            S.current.approve_deposit_term, _tenorName ?? ''));
         _earlyRedTdList.add(
-            _buildContentItem(S.current.approve_state, data?.status ?? ''));
+            _buildContentItem(S.current.approve_state, _statusName ?? ''));
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_effective_date, data?.valueDate ?? ''));
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_maturity_date, data?.dueDate ?? ''));
         _earlyRedTdList.add(_buildContentItem(
-            S.current.approve_settle_the_principal_amount, data?.matAmt ?? ''));
+            S.current.approve_settle_the_principal_amount,
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.matAmt ?? '0')) ?? ''
+                : f.format(double.parse(data?.matAmt ?? '0')) ?? ''));
         _earlyRedTdList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
@@ -560,9 +597,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_prepay_interest, data?.eryInt ?? ''));
         _earlyRedTdList.add(_buildContentItem(S.current.approve_poundage,
-            f.format(double.parse(data?.hdlFee ?? '0')) ?? ''));
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.hdlFee ?? '0')) ?? ''
+                : f.format(double.parse(data?.hdlFee ?? '0')) ?? ''));
         _earlyRedTdList.add(_buildContentItem(S.current.approve_penalty,
-            f.format(double.parse(data?.pnltFee ?? '0')) ?? ''));
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.pnltFee ?? '0')) ?? ''
+                : f.format(double.parse(data?.pnltFee ?? '0')) ?? ''));
         _earlyRedTdList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
@@ -570,7 +611,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_settlement_account, data?.settDdAc ?? ''));
         _earlyRedTdList.add(_buildContentItem(
-            S.current.approve_settlement_amount, data?.settBal ?? ''));
+            S.current.approve_settlement_amount,
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.settBal ?? '0')) ?? ''
+                : f.format(double.parse(data?.settBal ?? '0')) ?? ''));
         _isLoading = false;
         _isShowErrorPage = false;
       });

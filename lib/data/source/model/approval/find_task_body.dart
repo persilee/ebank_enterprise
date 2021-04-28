@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 /// finish : true
 /// page : 1
 /// pageSize : 10
@@ -39,7 +41,7 @@ class FindTaskBody {
   String get custId => _custId;
 
   FindTaskBody({
-      bool finish, 
+      bool finish,
       int page, 
       int pageSize, 
       String processId, 

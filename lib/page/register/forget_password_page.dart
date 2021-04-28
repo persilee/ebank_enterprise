@@ -289,7 +289,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   //二次校验
   _checkRegisterBysencond() {
-    print('$_smsCode+_smsCode');
     HSProgressHUD.show();
     ApiClientAccount()
         .checkSms(CheckSmsReq(_phoneNum.text, 'findPwd',_smsListen,'MB'))
