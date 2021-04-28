@@ -106,22 +106,22 @@ class AppException implements Exception {
         break;
       case DioErrorType.DEFAULT:
         {
-          print('error.error.runtimeType: ${error.error.runtimeType}');
-          if (error.error is NeedLogin) {
+          if (error.error.code == 'SYS90018' ||
+              error.error.code == 'SYS90017') {
             // navigatorKey.currentState.push(MaterialPageRoute(
-            //     builder: (context) => HsgErrorPage(
-            //       title: error.error.code,
-            //       desc: error.error.message,
-            //     )));
+            //   builder: (context) => HsgErrorPage(
+            //     title: error.error.code,
+            //     desc: error.error.message,
+            //   ),
+            // ));
             return error.error = NeedLogin();
-            break;
           }
           if (error.error is SocketException) {
             return error.error = AppException("-1", "请查看是否连接网络！");
           } else {
             return error.error;
           }
-          return error.error = AppException("-1", "网络异常，请稍后重试！");
+          // return error.error = AppException("-1", "网络异常，请稍后重试！");
         }
         break;
       default:
@@ -154,5 +154,5 @@ class NeedLogin extends AppException implements BaseError {
   String get code => '401';
 
   @override
-  String get message => "请先登录";
+  String get message => "登录状态已失效，请重新登录！";
 }
