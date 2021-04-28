@@ -484,6 +484,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _oneToOneList.add(_buildContentItem(
             S.current.approve_account, data?.payeeCardNo ?? ''));
         _oneToOneList.add(_buildContentItem(
+            S.current.approve_name_account, data?.payeeName ?? ''));
+        _oneToOneList.add(_buildContentItem(
             S.current.approve_currency, data?.creditCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_amount,
