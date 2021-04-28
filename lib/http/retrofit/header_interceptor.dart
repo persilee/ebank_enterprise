@@ -17,7 +17,7 @@ class HeaderInterceptor extends Interceptor {
     }
     String locale = localeStr;
     options.headers.addAll({'x-kont-appkey': '6000000514984255'});
-    options.headers.addAll({'x_kont_token': 'token'});
+    options.headers.addAll({'x_kont_token': token});
     options.headers.addAll({'x_kont_locale': locale});
 
     return options;
