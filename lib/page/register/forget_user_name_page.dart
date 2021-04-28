@@ -3,19 +3,15 @@ import 'dart:async';
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 忘记用户名页面
 /// Author: pengyikang
-
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/check_phone.dart';
-import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+import 'package:ebank_mobile/data/source/model/check_sms.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
-import 'package:ebank_mobile/data/source/verification_code_repository.dart';
-import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/page/register/component/register_86.dart';
-import 'package:ebank_mobile/page/register/component/register_getSms.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
@@ -239,10 +235,9 @@ class _ForgetUserNameState extends State<ForgetUserName> {
     );
   }
 
-  //检验用户是否注册
+  //检验手机号码注册情况及验证码
   _checkRegister() {
     HSProgressHUD.show();
-    // VersionDataRepository()
     ApiClientAccount()
         .checkPhone(CheckPhoneReq(_phoneNum.text, '2'))
         .then((data) {
@@ -272,14 +267,6 @@ class _ForgetUserNameState extends State<ForgetUserName> {
 
   //获取验证码接口
   _getVerificationCode() async {
-    // if (!_isRegister) {
-    //   Fluttertoast.showToast(
-    //     msg: S.current.num_not_is_register,
-    //     gravity: ToastGravity.CENTER,
-    //   );
-    //   HSProgressHUD.dismiss();
-    // } else {
-    // VerificationCodeRepository()
     ApiClientPassword()
         .sendSmsByPhone(
       SendSmsByPhoneNumberReq(
@@ -287,7 +274,8 @@ class _ForgetUserNameState extends State<ForgetUserName> {
           _phoneNum.text, //电话号
           'findAccount', //短信类型
           'SCNAOFGUN', //smsTemplateId,
-          'MB'),
+          'MB',
+          msgBankId: '999'),
     )
         .then((data) {
       if (mounted) {
@@ -310,33 +298,21 @@ class _ForgetUserNameState extends State<ForgetUserName> {
 
   //二次校验
   _checkRegisterBysencond() {
-    print('$_smsCode+_smsCode');
     HSProgressHUD.show();
-    // VersionDataRepository()
     ApiClientAccount()
-        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'))
+        .checkSms(CheckSmsReq(_phoneNum.text, 'findAccount', _smsListen, 'MB'))
         .then((data) {
       if (mounted) {
         setState(() {
           HSProgressHUD.dismiss();
-          _isRegister = data.register;
           //校验是否注册
-          if (!_isRegister) {
+          if (!data.checkResult) {
+            HSProgressHUD.dismiss();
             Fluttertoast.showToast(
               msg: S.current.num_not_is_register,
               gravity: ToastGravity.CENTER,
             );
-            HSProgressHUD.dismiss();
-          }
-          //校验短信
-          else if (_sms.text != _smsCode) {
-            HSProgressHUD.dismiss();
-            Fluttertoast.showToast(
-              msg: S.current.verification_code_wrong,
-              gravity: ToastGravity.CENTER,
-            );
-          }
-          //跳转至下一页面
+          }   //跳转至下一页面
           else {
             Navigator.popAndPushNamed(context, pageFindUserNameSuccess,
                 arguments: _accountName);
