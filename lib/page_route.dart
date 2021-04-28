@@ -8,6 +8,7 @@ import 'package:ebank_mobile/page/accountOverview/account_overview_new_page.dart
 import 'package:ebank_mobile/page/approval/approval_history_detail_page.dart';
 import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/approval/my_to_do_task_detail_page.dart';
+import 'package:ebank_mobile/page/forexTrading/forex_trading_preview_page.dart';
 
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/loan/loan_collection_preview.dart';
@@ -171,6 +172,7 @@ var pageElectronicStatementDetail = '/electronic_statement_detail_page';
 var hsgPdfViewer = '/hsg_pdf_viewer';
 var pageTimeDepostProduct = '/time_depost_product_page';
 var pageForexTrading = '/forex_trading_page';
+var pageForexTradingPreview = '/forex_trading_preview_page';
 var pageExchangeRateInquiry = '/exchange_rate_inquiry_page';
 var pageTimeDepositContract = '/time_deposit_contract_page';
 var pageOpenTransfer = '/hsg_open_transfer_page';
@@ -281,6 +283,7 @@ var appRoutes = {
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
   // pageTimeDepositContract: (context) => TimeDepositContract(),
   pageForexTrading: (context) => ForexTradingPage(),
+  pageForexTradingPreview: (context) => ForexTradingPreviewPage(),
   // pageTaskApproval: (context) => TaskApprovalPage(),
   pageApplication: (context) => MyApplicationPage(),
   // pageApplicationTaskApproval: (context) => ApplicationTaskApprovalPage(),
