@@ -183,21 +183,20 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
   void _uploadImage() async {
     HSProgressHUD.show();
     try {
-      // if (_valueData.compareImageData != null &&
-      //     _valueData.compareImageData.length > 0 &&
-      //     _valueData.compareImageData[0].faceImgUrl != null &&
-      //     _valueData.compareImageData[0].faceImgUrl != '') {
-      //   String headerImgBase64 =
-      //       _valueData.compareImageData[0].faceImgUrl.replaceAll('\n', '');
-      //   headerImgBase64 = headerImgBase64.replaceAll('\\n', '');
-      //   Uint8List _bytes = base64Decode(
-      //     headerImgBase64,
-      //   );
-      //   Map response =
-      //       await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
-      //   _headerImgUrl = response['incompleteUrl'] ?? '';
-      // } else
-      if (_valueData.headerImg != null && _valueData.headerImg != '') {
+      if (_valueData.idFaceComparisonImg != null &&
+          _valueData.idFaceComparisonImg.length > 100 &&
+          _valueData.isSuccess == true &&
+          _valueData.certificateType == '1') {
+        String headerImgBase64 =
+            _valueData.idFaceComparisonImg.replaceAll('\n', '');
+        headerImgBase64 = headerImgBase64.replaceAll('\\n', '');
+        Uint8List _bytes = base64Decode(
+          headerImgBase64,
+        );
+        Map response =
+            await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
+        _headerImgUrl = response['incompleteUrl'] ?? '';
+      } else if (_valueData.headerImg != null && _valueData.headerImg != '') {
         String headerImgBase64 = _valueData.headerImg.replaceAll('\n', '');
         headerImgBase64 = headerImgBase64.replaceAll('\\n', '');
         Uint8List _bytes = base64Decode(
@@ -252,10 +251,11 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     final prefs = await SharedPreferences.getInstance();
     String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
     String areaCode = prefs.getString(ConfigKey.USER_AREACODE);
+    String userId = prefs.getString(ConfigKey.USER_ID);
 
     HSProgressHUD.show();
     OpenAccountInformationSupplementDataReq dataReq =
-        _getDataReq(phoneStr, areaCode);
+        _getDataReq(phoneStr, areaCode, userId);
     // OpenAccountRepository()
     ApiClientOpenAccount().supplementQuickPartnerInfo(dataReq).then(
       (value) {
@@ -313,40 +313,10 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     final prefs = await SharedPreferences.getInstance();
     String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
     String areaCodeStr = prefs.getString(ConfigKey.USER_AREACODE);
-
-    // String businessId = _valueData.businessId ?? '';
-    // String fileName = _valueData.fileName ?? '';
-    // String idNo = '';
-    // if (_valueData.certificateType == '1') {
-    //   InfoStrForCN infoStr = _valueData.infoStr;
-    //   idNo = infoStr.idNum ?? '';
-    // } else if (_valueData.certificateType == '2') {
-    //   InfoStrForHK infoStr = _valueData.infoStr;
-    //   idNo = infoStr.idNum ?? '';
-    // } else {
-    //   InfoStrForPassport infoStr = _valueData.infoStr;
-    //   idNo = infoStr.idNum ?? '';
-    // }
-    // String certificateType = _valueData.certificateType ?? '';
-    // List<SpeechFlowData> speechFlowData = _valueData.speechFlowData;
-
-    // List<SpeechFlowDataHS> speechFlowDataHSList = [];
-    // speechFlowData.forEach((element) {
-    //   SpeechFlowDataHS speechFlowDataHS = SpeechFlowDataHS(
-    //     element.problem,
-    //     element.timer,
-    //     element.answerArr.length > 0
-    //         ? element.answerArr[element.answerArr.length - 1]
-    //         : '',
-    //   );
-    //   speechFlowDataHSList.add(speechFlowDataHS);
-    // });
-
-    // FaceSignUploadDataReq dataReq = FaceSignUploadDataReq(businessId, fileName,
-    //     phoneStr, certificateType, idNo, speechFlowDataHSList);
+    String userId = prefs.getString(ConfigKey.USER_ID);
 
     OpenAccountInformationSupplementDataReq dataReq =
-        _getDataReq(phoneStr, areaCodeStr);
+        _getDataReq(phoneStr, areaCodeStr, userId);
     HSProgressHUD.show();
     // OpenAccountRepository()
     ApiClientOpenAccount().saveSignVideo(dataReq).then(
@@ -387,7 +357,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
 
   ///面签数据转换（面签返回的时间格式不正确，不能直接使用）
   OpenAccountInformationSupplementDataReq _getDataReq(
-      String phoneStr, String areaCodeStr) {
+      String phoneStr, String areaCodeStr, String userId) {
     // Map valueMap = _valueData.toJson();
 
     String businessId = _valueData.businessId;
@@ -400,6 +370,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     OpenAccountInformationSupplementDataReq dataReq =
         OpenAccountInformationSupplementDataReq();
     // dataReq = OpenAccountInformationSupplementDataReq.fromJson(valueMap);
+    dataReq.userId = userId;
     dataReq.headerPic = _headerImgUrl; //_valueData.headerImg;
     dataReq.idPic = _positiveImageUrl; //_valueData.positiveImage;
     dataReq.idPicBack = _backImageUrl; //_valueData.backImage;
@@ -420,14 +391,6 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     if (speechFlowData != null) {
       speechFlowData.forEach((element) {
         String timeStr = element.timer;
-        // var format = new DateFormat('yyyy-MM-dd');
-        // int timeInt = element.timer.length == 10
-        //     ? int.parse(element.timer) * 1000
-        //     : int.parse(element.timer);
-        // if (timeInt != 0) {
-        //   var date = new DateTime.fromMillisecondsSinceEpoch(timeInt);
-        //   timeStr = format.format(date);
-        // }
 
         SignSpeakDTO speechFlowDataHS = SignSpeakDTO(
           element.problem,
@@ -441,13 +404,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         signSpeakList.add(speechFlowDataHS);
       });
     }
-    // if (signSpeakList.length == 0) {
-    //   SignSpeakDTO speechFlowDataHSNull = SignSpeakDTO('', '', '');
-    //   signSpeakList.add(speechFlowDataHSNull);
-    // }
     dataReq.speakings = signSpeakList;
-
-    // Map infoStrForMap = jsonDecode(_valueData.infoStr);
 
     InfoStrForCN infoStrForCN;
     InfoStrForHK infoStrForHK;
@@ -552,20 +509,6 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     if (resultsDateStr == '长期') {
       resultsDateStr = '9999-12-31';
     }
-
-    // if (resultsDateStr.contains('-')) {
-    //   List<String> dataList = resultsDateStr.split('-');
-    //   if (dataList.length > 2) {
-    //     String one = dataList[0];
-    //     String two = dataList[1];
-    //     String three = dataList[2];
-    //     if (one.length == 4) {
-    //       resultsDateStr = one + '-' + two + '-' + three;
-    //     } else {
-    //       resultsDateStr = three + '-' + one + '-' + two;
-    //     }
-    //   }
-    // }
     return resultsDateStr;
   }
 
