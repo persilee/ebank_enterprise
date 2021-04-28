@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/main.dart';
+import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:flutter/material.dart';
 
@@ -106,21 +107,27 @@ class AppException implements Exception {
         break;
       case DioErrorType.DEFAULT:
         {
-          print('error.error.runtimeType: ${error.error.runtimeType}');
-          if(error.error is NeedLogin) {
-            // navigatorKey.currentState.push(MaterialPageRoute(
-            //     builder: (context) => HsgErrorPage(
-            //       title: error.error.code,
-            //       desc: error.error.message,
-            //     )));
+          if (error.error.code == 'SYS90018' ||
+              error.error.code == 'SYS90017') {
+            navigatorKey.currentState.pushAndRemoveUntil(
+                MaterialPageRoute(builder: (BuildContext context) {
+                  return LoginPage();
+                }), (Route route) {
+              //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
+              print(route.settings?.name);
+              if (route.settings?.name == "/") {
+                return true; //停止关闭
+              }
+              return false; //继续关闭
+            });
             return error.error = NeedLogin();
-            break;
-          } if(error.error is SocketException) {
+          }
+          if (error.error is SocketException) {
             return error.error = AppException("-1", "请查看是否连接网络！");
           } else {
             return error.error;
           }
-          return error.error = AppException("-1", "网络异常，请稍后重试！");
+          // return error.error = AppException("-1", "网络异常，请稍后重试！");
         }
         break;
       default:
@@ -148,10 +155,10 @@ abstract class BaseError {
   BaseError({this.code, this.message});
 }
 
-class NeedLogin extends AppException implements BaseError  {
+class NeedLogin extends AppException implements BaseError {
   @override
   String get code => '401';
 
   @override
-  String get message => "请先登录";
+  String get message => "登录状态已失效，请重新登录！";
 }

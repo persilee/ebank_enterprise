@@ -401,7 +401,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         _payerCcy != '' &&
         _payeeAcc != '' &&
         _payeeCcy != '' &&
-        _payerTransferController.text != '') {
+        (_payerTransferController.text != '' ||
+            _payeeTransferController.text != '')) {
       Transfer()
           .transferTrial(TransferTrialReq(
         opt: _opt,
@@ -453,37 +454,48 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         gravity: ToastGravity.CENTER,
       );
     } else {
-      HSProgressHUD.show();
-      ApiClientBill()
-          .foreignCcy(
-        ForeignCcyReq(
-          _payerTransferController.text,
-          _payerCcy,
-          _payerAcc,
-          _rate,
-          _time,
-          "",
-          "FXSPTIBK",
-          _payeeTransferController.text,
-          _payeeCcy,
-          _payeeAcc,
-          "",
-        ),
-      )
-          .then((data) {
-        HSProgressHUD.dismiss();
-        Fluttertoast.showToast(
-          msg: S.current.operate_success,
-          gravity: ToastGravity.CENTER,
-        );
-        Navigator.pop(context, pageIndex);
-      }).catchError((e) {
-        HSProgressHUD.dismiss();
-        Fluttertoast.showToast(
-          msg: e.error.message,
-          gravity: ToastGravity.CENTER,
-        );
-      });
+      Map _preview = new Map();
+      _preview['buyAmt'] = _payerTransferController.text;
+      _preview['buyCcy'] = _payerCcy;
+      _preview['buyDac'] = _payerAcc;
+      _preview['exRate'] = _rate;
+      _preview['exTime'] = _time;
+      _preview['prodCd'] = "FXSPTIBK";
+      _preview['sellAmt'] = _payeeTransferController.text;
+      _preview['sellCcy'] = _payeeCcy;
+      _preview['sellDac'] = _payeeAcc;
+      Navigator.pushNamed(context, pageForexTradingPreview,
+          arguments: _preview);
+      // ApiClientBill()
+      //     .foreignCcy(
+      //   ForeignCcyReq(
+      //     _payerTransferController.text,
+      //     _payerCcy,
+      //     _payerAcc,
+      //     _rate,
+      //     _time,
+      //     "",
+      //     "FXSPTIBK",
+      //     _payeeTransferController.text,
+      //     _payeeCcy,
+      //     _payeeAcc,
+      //     "",
+      //   ),
+      // )
+      //     .then((data) {
+      //   HSProgressHUD.dismiss();
+      //   Fluttertoast.showToast(
+      //     msg: S.current.operate_success,
+      //     gravity: ToastGravity.CENTER,
+      //   );
+      //   Navigator.pop(context, pageIndex);
+      // }).catchError((e) {
+      //   HSProgressHUD.dismiss();
+      //   Fluttertoast.showToast(
+      //     msg: e.error.message,
+      //     gravity: ToastGravity.CENTER,
+      //   );
+      // });
     }
   }
 

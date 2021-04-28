@@ -326,7 +326,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _isLoading = false;
     });
-    Navigator.pushNamed(context, pageIndexName);
+    Navigator.pushReplacementNamed(context, pageIndexName);
   }
 
   ///保存数据
