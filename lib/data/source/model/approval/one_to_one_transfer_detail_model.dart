@@ -1,23 +1,33 @@
-/// userId : "829377988633034752"
-/// userName : "HSG12 Checker"
-/// assignee : null
+/// userId : "831482031199223808"
+/// userName : "relaUser1"
+/// assigneeList : null
+/// approverNumbers : 0
 /// processTitle : "oneToOneTransferApprovalTitle"
 /// processKey : "oneToOneTransferApproval"
 /// businessKey : null
 /// tenantId : null
 /// operateBeforeValue : null
-/// operateEndValue : {"opt":"S","payerName":"玛丽","payerBankCode":"BRLPKZ20","payerCardNo":"0001208000001428","payeeBankCode":"BRLPKZ20","payeeCardNo":"0001208000001428","payeeName":"玛丽","debitAmount":"1000","creditAmount":"1000","remark":"","debitCurrency":"CNY","creditCurrency":"CNY","payPassword":"","smsCode":"","phone":null,"exchangeRate":"1"}
+/// operateEndValue : {"debitCurrency":"USD","payeeBankCode":"BRLPKZ20","smsCode":"","remark":"转账","debitAmount":"100","payerBankCode":"BRLPKZ20","payeeName":"duziqiye002","opt":"S","phone":null,"exchangeRate":"1","payerName":"朱先森","creditCurrency":"USD","creditAmount":"100","payPassword":"","payerCardNo":"8011238000005468","payeeCardNo":"8011248000006408"}
 /// servCtr : "hbs-ebank-general-service"
 /// custId : null
+/// amount : null
+/// ccy : null
+/// authModel : null
+/// amountPosition : null
+/// serviceType : null
+/// authGroups : null
 /// commentList : []
-/// result : true
-/// taskKey : "TASK1"
+/// result : "2"
+/// taskKey : null
 /// taskCount : 1
+/// optBefJsonValue : null
+/// optEndJsonValue : null
 
 class OneToOneTransferDetailModel {
   String _userId;
   String _userName;
-  dynamic _assignee;
+  dynamic _assigneeList;
+  int _approverNumbers;
   String _processTitle;
   String _processKey;
   dynamic _businessKey;
@@ -26,14 +36,23 @@ class OneToOneTransferDetailModel {
   OperateEndValue _operateEndValue;
   String _servCtr;
   dynamic _custId;
+  dynamic _amount;
+  dynamic _ccy;
+  dynamic _authModel;
+  dynamic _amountPosition;
+  dynamic _serviceType;
+  dynamic _authGroups;
   List<dynamic> _commentList;
-  bool _result;
-  String _taskKey;
+  String _result;
+  dynamic _taskKey;
   int _taskCount;
+  dynamic _optBefJsonValue;
+  dynamic _optEndJsonValue;
 
   String get userId => _userId;
   String get userName => _userName;
-  dynamic get assignee => _assignee;
+  dynamic get assigneeList => _assigneeList;
+  int get approverNumbers => _approverNumbers;
   String get processTitle => _processTitle;
   String get processKey => _processKey;
   dynamic get businessKey => _businessKey;
@@ -42,15 +61,24 @@ class OneToOneTransferDetailModel {
   OperateEndValue get operateEndValue => _operateEndValue;
   String get servCtr => _servCtr;
   dynamic get custId => _custId;
+  dynamic get amount => _amount;
+  dynamic get ccy => _ccy;
+  dynamic get authModel => _authModel;
+  dynamic get amountPosition => _amountPosition;
+  dynamic get serviceType => _serviceType;
+  dynamic get authGroups => _authGroups;
   List<dynamic> get commentList => _commentList;
-  bool get result => _result;
-  String get taskKey => _taskKey;
+  String get result => _result;
+  dynamic get taskKey => _taskKey;
   int get taskCount => _taskCount;
+  dynamic get optBefJsonValue => _optBefJsonValue;
+  dynamic get optEndJsonValue => _optEndJsonValue;
 
   OneToOneTransferDetailModel({
       String userId, 
       String userName, 
-      dynamic assignee, 
+      dynamic assigneeList, 
+      int approverNumbers, 
       String processTitle, 
       String processKey, 
       dynamic businessKey, 
@@ -59,13 +87,22 @@ class OneToOneTransferDetailModel {
       OperateEndValue operateEndValue, 
       String servCtr, 
       dynamic custId, 
+      dynamic amount, 
+      dynamic ccy, 
+      dynamic authModel, 
+      dynamic amountPosition, 
+      dynamic serviceType, 
+      dynamic authGroups, 
       List<dynamic> commentList, 
-      bool result, 
-      String taskKey, 
-      int taskCount}){
+      String result, 
+      dynamic taskKey, 
+      int taskCount, 
+      dynamic optBefJsonValue, 
+      dynamic optEndJsonValue}){
     _userId = userId;
     _userName = userName;
-    _assignee = assignee;
+    _assigneeList = assigneeList;
+    _approverNumbers = approverNumbers;
     _processTitle = processTitle;
     _processKey = processKey;
     _businessKey = businessKey;
@@ -74,16 +111,25 @@ class OneToOneTransferDetailModel {
     _operateEndValue = operateEndValue;
     _servCtr = servCtr;
     _custId = custId;
+    _amount = amount;
+    _ccy = ccy;
+    _authModel = authModel;
+    _amountPosition = amountPosition;
+    _serviceType = serviceType;
+    _authGroups = authGroups;
     _commentList = commentList;
     _result = result;
     _taskKey = taskKey;
     _taskCount = taskCount;
+    _optBefJsonValue = optBefJsonValue;
+    _optEndJsonValue = optEndJsonValue;
 }
 
   OneToOneTransferDetailModel.fromJson(dynamic json) {
     _userId = json["userId"];
     _userName = json["userName"];
-    _assignee = json["assignee"];
+    _assigneeList = json["assigneeList"];
+    _approverNumbers = json["approverNumbers"];
     _processTitle = json["processTitle"];
     _processKey = json["processKey"];
     _businessKey = json["businessKey"];
@@ -92,6 +138,12 @@ class OneToOneTransferDetailModel {
     _operateEndValue = json["operateEndValue"] != null ? OperateEndValue.fromJson(json["operateEndValue"]) : null;
     _servCtr = json["servCtr"];
     _custId = json["custId"];
+    _amount = json["amount"];
+    _ccy = json["ccy"];
+    _authModel = json["authModel"];
+    _amountPosition = json["amountPosition"];
+    _serviceType = json["serviceType"];
+    _authGroups = json["authGroups"];
     if (json["commentList"] != null) {
       _commentList = [];
       json["commentList"].forEach((v) {
@@ -101,13 +153,16 @@ class OneToOneTransferDetailModel {
     _result = json["result"];
     _taskKey = json["taskKey"];
     _taskCount = json["taskCount"];
+    _optBefJsonValue = json["optBefJsonValue"];
+    _optEndJsonValue = json["optEndJsonValue"];
   }
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
     map["userId"] = _userId;
     map["userName"] = _userName;
-    map["assignee"] = _assignee;
+    map["assigneeList"] = _assigneeList;
+    map["approverNumbers"] = _approverNumbers;
     map["processTitle"] = _processTitle;
     map["processKey"] = _processKey;
     map["businessKey"] = _businessKey;
@@ -118,141 +173,149 @@ class OneToOneTransferDetailModel {
     }
     map["servCtr"] = _servCtr;
     map["custId"] = _custId;
+    map["amount"] = _amount;
+    map["ccy"] = _ccy;
+    map["authModel"] = _authModel;
+    map["amountPosition"] = _amountPosition;
+    map["serviceType"] = _serviceType;
+    map["authGroups"] = _authGroups;
     if (_commentList != null) {
       map["commentList"] = _commentList.map((v) => v.toJson()).toList();
     }
     map["result"] = _result;
     map["taskKey"] = _taskKey;
     map["taskCount"] = _taskCount;
+    map["optBefJsonValue"] = _optBefJsonValue;
+    map["optEndJsonValue"] = _optEndJsonValue;
     return map;
   }
 
 }
 
-/// opt : "S"
-/// payerName : "玛丽"
-/// payerBankCode : "BRLPKZ20"
-/// payerCardNo : "0001208000001428"
+/// debitCurrency : "USD"
 /// payeeBankCode : "BRLPKZ20"
-/// payeeCardNo : "0001208000001428"
-/// payeeName : "玛丽"
-/// debitAmount : "1000"
-/// creditAmount : "1000"
-/// remark : ""
-/// debitCurrency : "CNY"
-/// creditCurrency : "CNY"
-/// payPassword : ""
 /// smsCode : ""
+/// remark : "转账"
+/// debitAmount : "100"
+/// payerBankCode : "BRLPKZ20"
+/// payeeName : "duziqiye002"
+/// opt : "S"
 /// phone : null
 /// exchangeRate : "1"
+/// payerName : "朱先森"
+/// creditCurrency : "USD"
+/// creditAmount : "100"
+/// payPassword : ""
+/// payerCardNo : "8011238000005468"
+/// payeeCardNo : "8011248000006408"
 
 class OperateEndValue {
-  String _opt;
-  String _payerName;
-  String _payerBankCode;
-  String _payerCardNo;
-  String _payeeBankCode;
-  String _payeeCardNo;
-  String _payeeName;
-  String _debitAmount;
-  String _creditAmount;
-  String _remark;
   String _debitCurrency;
-  String _creditCurrency;
-  String _payPassword;
+  String _payeeBankCode;
   String _smsCode;
+  String _remark;
+  String _debitAmount;
+  String _payerBankCode;
+  String _payeeName;
+  String _opt;
   dynamic _phone;
   String _exchangeRate;
+  String _payerName;
+  String _creditCurrency;
+  String _creditAmount;
+  String _payPassword;
+  String _payerCardNo;
+  String _payeeCardNo;
 
-  String get opt => _opt;
-  String get payerName => _payerName;
-  String get payerBankCode => _payerBankCode;
-  String get payerCardNo => _payerCardNo;
-  String get payeeBankCode => _payeeBankCode;
-  String get payeeCardNo => _payeeCardNo;
-  String get payeeName => _payeeName;
-  String get debitAmount => _debitAmount;
-  String get creditAmount => _creditAmount;
-  String get remark => _remark;
   String get debitCurrency => _debitCurrency;
-  String get creditCurrency => _creditCurrency;
-  String get payPassword => _payPassword;
+  String get payeeBankCode => _payeeBankCode;
   String get smsCode => _smsCode;
+  String get remark => _remark;
+  String get debitAmount => _debitAmount;
+  String get payerBankCode => _payerBankCode;
+  String get payeeName => _payeeName;
+  String get opt => _opt;
   dynamic get phone => _phone;
   String get exchangeRate => _exchangeRate;
+  String get payerName => _payerName;
+  String get creditCurrency => _creditCurrency;
+  String get creditAmount => _creditAmount;
+  String get payPassword => _payPassword;
+  String get payerCardNo => _payerCardNo;
+  String get payeeCardNo => _payeeCardNo;
 
   OperateEndValue({
-      String opt, 
-      String payerName, 
-      String payerBankCode, 
-      String payerCardNo, 
-      String payeeBankCode, 
-      String payeeCardNo, 
-      String payeeName, 
-      String debitAmount, 
-      String creditAmount, 
-      String remark, 
       String debitCurrency, 
-      String creditCurrency, 
-      String payPassword, 
+      String payeeBankCode, 
       String smsCode, 
+      String remark, 
+      String debitAmount, 
+      String payerBankCode, 
+      String payeeName, 
+      String opt, 
       dynamic phone, 
-      String exchangeRate}){
-    _opt = opt;
-    _payerName = payerName;
-    _payerBankCode = payerBankCode;
-    _payerCardNo = payerCardNo;
-    _payeeBankCode = payeeBankCode;
-    _payeeCardNo = payeeCardNo;
-    _payeeName = payeeName;
-    _debitAmount = debitAmount;
-    _creditAmount = creditAmount;
-    _remark = remark;
+      String exchangeRate, 
+      String payerName, 
+      String creditCurrency, 
+      String creditAmount, 
+      String payPassword, 
+      String payerCardNo, 
+      String payeeCardNo}){
     _debitCurrency = debitCurrency;
-    _creditCurrency = creditCurrency;
-    _payPassword = payPassword;
+    _payeeBankCode = payeeBankCode;
     _smsCode = smsCode;
+    _remark = remark;
+    _debitAmount = debitAmount;
+    _payerBankCode = payerBankCode;
+    _payeeName = payeeName;
+    _opt = opt;
     _phone = phone;
     _exchangeRate = exchangeRate;
+    _payerName = payerName;
+    _creditCurrency = creditCurrency;
+    _creditAmount = creditAmount;
+    _payPassword = payPassword;
+    _payerCardNo = payerCardNo;
+    _payeeCardNo = payeeCardNo;
 }
 
   OperateEndValue.fromJson(dynamic json) {
-    _opt = json["opt"];
-    _payerName = json["payerName"];
-    _payerBankCode = json["payerBankCode"];
-    _payerCardNo = json["payerCardNo"];
-    _payeeBankCode = json["payeeBankCode"];
-    _payeeCardNo = json["payeeCardNo"];
-    _payeeName = json["payeeName"];
-    _debitAmount = json["debitAmount"];
-    _creditAmount = json["creditAmount"];
-    _remark = json["remark"];
     _debitCurrency = json["debitCurrency"];
-    _creditCurrency = json["creditCurrency"];
-    _payPassword = json["payPassword"];
+    _payeeBankCode = json["payeeBankCode"];
     _smsCode = json["smsCode"];
+    _remark = json["remark"];
+    _debitAmount = json["debitAmount"];
+    _payerBankCode = json["payerBankCode"];
+    _payeeName = json["payeeName"];
+    _opt = json["opt"];
     _phone = json["phone"];
     _exchangeRate = json["exchangeRate"];
+    _payerName = json["payerName"];
+    _creditCurrency = json["creditCurrency"];
+    _creditAmount = json["creditAmount"];
+    _payPassword = json["payPassword"];
+    _payerCardNo = json["payerCardNo"];
+    _payeeCardNo = json["payeeCardNo"];
   }
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
-    map["opt"] = _opt;
-    map["payerName"] = _payerName;
-    map["payerBankCode"] = _payerBankCode;
-    map["payerCardNo"] = _payerCardNo;
-    map["payeeBankCode"] = _payeeBankCode;
-    map["payeeCardNo"] = _payeeCardNo;
-    map["payeeName"] = _payeeName;
-    map["debitAmount"] = _debitAmount;
-    map["creditAmount"] = _creditAmount;
-    map["remark"] = _remark;
     map["debitCurrency"] = _debitCurrency;
-    map["creditCurrency"] = _creditCurrency;
-    map["payPassword"] = _payPassword;
+    map["payeeBankCode"] = _payeeBankCode;
     map["smsCode"] = _smsCode;
+    map["remark"] = _remark;
+    map["debitAmount"] = _debitAmount;
+    map["payerBankCode"] = _payerBankCode;
+    map["payeeName"] = _payeeName;
+    map["opt"] = _opt;
     map["phone"] = _phone;
     map["exchangeRate"] = _exchangeRate;
+    map["payerName"] = _payerName;
+    map["creditCurrency"] = _creditCurrency;
+    map["creditAmount"] = _creditAmount;
+    map["payPassword"] = _payPassword;
+    map["payerCardNo"] = _payerCardNo;
+    map["payeeCardNo"] = _payeeCardNo;
     return map;
   }
 
