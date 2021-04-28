@@ -1,5 +1,3 @@
-
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
@@ -996,15 +994,16 @@ Future<T> showHsgBottomSheet<T>({
   RouteSettings routeSettings,
 }) =>
     showModalBottomSheet(
-        context: context,
-        builder: builder,
-        backgroundColor: backgroundColor,
-        elevation: elevation,
-        shape: shape,
-        clipBehavior: clipBehavior,
-        barrierColor: barrierColor,
-        isScrollControlled: isScrollControlled,
-        useRootNavigator: useRootNavigator,
-        isDismissible: isDismissible,
-        enableDrag: enableDrag,
-        routeSettings: routeSettings);
+      context: context,
+      builder: builder,
+      backgroundColor: backgroundColor,
+      elevation: elevation,
+      shape: shape,
+      clipBehavior: clipBehavior,
+      barrierColor: barrierColor,
+      isScrollControlled: isScrollControlled,
+      useRootNavigator: useRootNavigator,
+      isDismissible: isDismissible,
+      enableDrag: enableDrag,
+      routeSettings: routeSettings,
+    );

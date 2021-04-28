@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:flutter/material.dart';
 
@@ -109,17 +111,32 @@ class AppException implements Exception {
         {
           if (error.error.code == 'SYS90018' ||
               error.error.code == 'SYS90017') {
-            navigatorKey.currentState.pushAndRemoveUntil(
-                MaterialPageRoute(builder: (BuildContext context) {
-                  return LoginPage();
-                }), (Route route) {
-              //一直关闭，直到登录停止，停止时，整个应用只有登录页
-              print(route.settings?.name);
-              if (route.settings?.name == "/") {
-                return true; //停止关闭
+            showDialog(
+                // barrierDismissible: false,
+                context: navigatorKey.currentContext,
+                builder: (context) {
+                  return HsgAlertDialog(
+                    title: S.current.warm_prompt,
+                    message: error.error.code + ' ' + error.error.message,
+                    positiveButton: S.current.confirm,
+                  );
+                }).then((value) {
+              if (value == true) {
+                navigatorKey.currentState.pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return LoginPage();
+                  }),
+                  (Route route) {
+                    //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
+                    if (route.settings?.name == "/") {
+                      return true; //停止关闭
+                    }
+                    return false; //继续关闭
+                  },
+                );
               }
-              return false; //继续关闭
             });
+
             return error.error = NeedLogin();
           }
           if (error.error is SocketException) {
