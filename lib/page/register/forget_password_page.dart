@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/check_phone.dart';
+import 'package:ebank_mobile/data/source/model/check_sms.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
@@ -288,29 +289,19 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   //二次校验
   _checkRegisterBysencond() {
-    //检测用户是否注册的接口
     print('$_smsCode+_smsCode');
     HSProgressHUD.show();
     ApiClientAccount()
-        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'))
+        .checkSms(CheckSmsReq(_phoneNum.text, 'findPwd',_smsListen,'MB'))
         .then((data) {
       if (mounted) {
         setState(() {
           HSProgressHUD.dismiss();
-          _isRegister = data.register;
           //校验是否注册
-          if (!_isRegister) {
+          if (!data.checkResult) {
             HSProgressHUD.dismiss();
             Fluttertoast.showToast(
               msg: S.current.num_not_is_register,
-              gravity: ToastGravity.CENTER,
-            );
-          }
-          //校验短信
-          else if (_sms.text != _smsCode) {
-            HSProgressHUD.dismiss();
-            Fluttertoast.showToast(
-              msg: S.current.verification_code_wrong,
               gravity: ToastGravity.CENTER,
             );
           } else {
@@ -336,7 +327,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       listData = {
         'userAccount': _userAccount,
         'userPhone': _phoneNumListen,
-        'sms': _smsListen
+        'sms': _smsListen,
+        'areaCode':_officeAreaCodeText
       };
       if (data != null) {
         if (data.opened) {
@@ -377,7 +369,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     ApiClientPassword()
         .sendSmsByPhone(
       SendSmsByPhoneNumberReq(
-          _officeAreaCodeText, _phoneNum.text, 'findPwd', 'SCNAOFTPW','MB'),
+          _officeAreaCodeText, _phoneNum.text, 'findPwd', 'SCNAOFTPW','MB',msgBankId:'999'),
     )
         .then((data) {
       if (mounted) {
