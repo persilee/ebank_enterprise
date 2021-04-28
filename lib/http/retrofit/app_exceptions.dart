@@ -107,7 +107,7 @@ class AppException implements Exception {
       case DioErrorType.DEFAULT:
         {
           print('error.error.runtimeType: ${error.error.runtimeType}');
-          if(error.error is NeedLogin) {
+          if (error.error is NeedLogin) {
             // navigatorKey.currentState.push(MaterialPageRoute(
             //     builder: (context) => HsgErrorPage(
             //       title: error.error.code,
@@ -115,7 +115,8 @@ class AppException implements Exception {
             //     )));
             return error.error = NeedLogin();
             break;
-          } if(error.error is SocketException) {
+          }
+          if (error.error is SocketException) {
             return error.error = AppException("-1", "请查看是否连接网络！");
           } else {
             return error.error;
@@ -148,7 +149,7 @@ abstract class BaseError {
   BaseError({this.code, this.message});
 }
 
-class NeedLogin extends AppException implements BaseError  {
+class NeedLogin extends AppException implements BaseError {
   @override
   String get code => '401';
 
