@@ -32,7 +32,7 @@ class TimeDepositRecordPage extends StatefulWidget {
 
 class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   var ccy = ''; //币种
-  var totalAmt = ''; //定期存单总额
+  var _totalAmtCount = ''; //定期存单总额
   var _defaultCcy = ''; //默认币种
   List<DepositRecord> rowList = []; //定期存单列表
 
@@ -116,7 +116,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     return Container(
       padding: EdgeInsets.only(left: 0, top: 30, bottom: 10),
       child: Text(
-        FormatUtil.formatSringToMoney(totalAmt),
+        FormatUtil.formatSringToMoney(_totalAmtCount),
         textAlign: TextAlign.center,
         style: TextStyle(height: 1, fontSize: 40, color: Colors.white),
       ),
@@ -341,6 +341,8 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
       if (this.mounted) {
         value.forEach((element) {
           setState(() {
+            _defaultCcy = element.defaultCcy;
+            _totalAmtCount = element.totalAmt;
             if (isLoadMore) {
               //加载更多
               if (element.rows.length < 10 || element.totalPage == _page) {
