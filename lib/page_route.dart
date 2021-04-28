@@ -42,7 +42,6 @@ import 'package:ebank_mobile/page/timeDeposit/time_deposit_close_info.dart';
 
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
-import 'package:ebank_mobile/page/accountOverview/account_overview_page.dart';
 import 'package:ebank_mobile/page/approval/my_application_detail_page.dart';
 import 'package:ebank_mobile/page/approval/my_approved_history_page.dart';
 import 'package:ebank_mobile/page/approval/my_approved_history_detail_page.dart';
@@ -78,12 +77,13 @@ import 'package:ebank_mobile/page/timeDeposit/time_deposit_rate_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_open_transfer_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_open_transfer_preview_page.dart';
 
-import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_internal_preview_page.dart';
-import 'package:ebank_mobile/page/transfer/hsg_transfer_international_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_international_preview_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_detail_page.dart';
+import 'package:ebank_mobile/page/transfer/transfer_inline.dart';
+import 'package:ebank_mobile/page/transfer/transfer_inter.dart';
+import 'package:ebank_mobile/page/transfer/transfer_order.dart';
 import 'package:ebank_mobile/page/transfer/transfer_plan_details.dart';
 import 'package:ebank_mobile/page/transfer/transfer_plan_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_record_page.dart';
@@ -92,10 +92,7 @@ import 'package:ebank_mobile/page/transfer/add_partner_page.dart';
 import 'package:ebank_mobile/page/transfer/select_bank_page.dart';
 import 'package:ebank_mobile/page/transfer/select_city_page.dart';
 import 'package:ebank_mobile/page/transfer/select_branch_bank_page.dart';
-import 'package:ebank_mobile/page/transferNew/transfer_inline.dart';
-import 'package:ebank_mobile/page/transferNew/transfer_inter.dart';
-import 'package:ebank_mobile/page/transferNew/transfer_order.dart';
-import 'package:ebank_mobile/page/transferNew/transfer_success.dart';
+import 'package:ebank_mobile/page/transfer/transfer_success.dart';
 import 'package:ebank_mobile/page/userAgreement/user_agreement_page.dart';
 import 'package:ebank_mobile/widget/hsg_pdf_viewer.dart';
 import 'package:flutter/material.dart';
@@ -264,7 +261,6 @@ var appRoutes = {
   setPayPage: (context) => SetPayPage(),
   changePayPS: (context) => ChangePayPage(),
   iDcardVerification: (context) => IdIardVerificationPage(),
-  pageAccountOverview: (context) => AccountOverviewPage(),
   pageAccountOverviewNew: (context) => AccountOverviewNewPage(),
   pageDetailList: (context) => DetailListPage(),
   pageDetailInfo: (context) => DetailInfoPage(),
@@ -272,11 +268,9 @@ var appRoutes = {
   pageMyDepositRate: (context) => MyDepositRatePage(),
   pageDepositRecordSucceed: (context) => DepositContractSucceed(),
   //pageDepositInfo: (context) => PageDepositInfo(),
-  pageTrasferInternational: (context) => TransferInternationalPage(),
   pageFeatureList: (context) => FeatureListPage(),
   pageTransfer: (context) => TransferPage(),
   pageAuthorizationHistory: (context) => MyApprovedHistoryPage(),
-  pageTransferInternal: (context) => TransferInternalPage(),
   pageTransferOrderPreview: (context) => TransferOrderPreviewPage(),
   pageTransferInternalPreview: (context) => TransferInternalPreviewPage(),
   pageTransferInternationalPreview: (context) =>

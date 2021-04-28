@@ -812,7 +812,10 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
           _boolBut();
         }
       }).catchError((e) {
-        print(e.toString());
+       Fluttertoast.showToast(
+          msg: e.error.message,
+          gravity: ToastGravity.CENTER,
+        );
       });
     }
   }
