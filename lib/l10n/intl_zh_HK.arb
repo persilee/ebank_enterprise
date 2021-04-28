@@ -659,5 +659,6 @@
   "forex_trading_msg3": "該幣種假期不允許進行外匯買賣轉載",
   "time_deposit_record_Status_N": "正常",
   "time_deposit_record_Status_C": "結清",
-  "total_opration_audit_tip": "提交成功,等待審核"
+  "total_opration_audit_tip": "提交成功,等待審核",
+  "transfer_the_preview4": "外匯買賣預覽"
 }

@@ -745,5 +745,6 @@
   "forex_trading_msg3": "This currency does not allow foreign exchange transactions during the holidays",
   "time_deposit_record_Status_N": "Normal",
   "time_deposit_record_Status_C": "Closed",
-  "total_opration_audit_tip": "Submitted successfully, awaiting for approval"
+  "total_opration_audit_tip": "Submitted successfully, awaiting for approval",
+  "transfer_the_preview4": "Preview of Foreign Exchange Trading"
 }
