@@ -12,6 +12,7 @@ import 'package:ebank_mobile/data/source/model/update_login_password.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:ebank_mobile/data/source/model/send_message.dart';
 
 import '../base_dio.dart';
 
@@ -29,10 +30,16 @@ abstract class ApiClientPassword {
   Future<SendSmsByAccountResp> sendSmsByAccount(
       @Body() SendSmsByAccountReq req);
 
-  /// 获取验证码（通用）
+  /// 发送短信验证码
   @POST('/cust/codes/sendSms')
   Future<SendSmsByPhoneNumberResp> sendSmsByPhone(
       @Body() SendSmsByPhoneNumberReq req);
+
+  //发送通知短信
+  @POST('/cust/codes/sendMessage')
+  Future<SendMessageResp> sendMessage(
+      @Body() SendMessageReq req);
+
 
   /// 验证交易密码
   @POST('/cust/user/verifyTransPwdNoSms')

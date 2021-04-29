@@ -1,8 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/register_by_account.dart';
-import 'package:ebank_mobile/data/source/verification_code_repository.dart';
-import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
@@ -11,11 +8,10 @@ import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ebank_mobile/data/source/model/send_message.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 注册账号输入密码页面
@@ -214,7 +210,8 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
               arguments: listDataLogin //传值
               );
         });
-        _sendSmsRegister();
+        //发送异步通知短信
+        _sendMessage();
       }
     }).catchError((e) {
       HSProgressHUD.dismiss();
@@ -225,18 +222,15 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
     });
   }
 
-  //注册发送短信验证码接口获取--表示注册成功
-  _sendSmsRegister() async {
-    // VerificationCodeRepository()
+  //注册成功发送短信
+  _sendMessage() async {
     ApiClientPassword()
-        .sendSmsByPhone(SendSmsByPhoneNumberReq(
-            _areaCode, _userPhone, 'register', 'SCNAOCREGU','MB',msgBankId: '999'))
+        .sendMessage(SendMessageReq(
+            _areaCode, _userPhone, 'register', _registerAccount,'SCNAOCREGU','MB',msgBankId: '999'))
         .then((value) {
       if (mounted) {
         setState(() {
-          // _smsCode = value.smsCode;
           HSProgressHUD.dismiss();
-          // _isGetSms = true;
         });
       }
     }).catchError((e) {
