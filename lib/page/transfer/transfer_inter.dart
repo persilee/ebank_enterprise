@@ -349,7 +349,8 @@ class _TransferInterPageState extends State<TransferInterPage> {
             callback: _boolBut,
             length: 35,
             isRegEXp: true,
-            regExp: '[\u4e00-\u9fa5a-zA-Z0-9 ]',
+            // regExp: '[\u4e00-\u9fa5a-zA-Z0-9 ]',
+            regExp: '[a-zA-z0-9 \-\/\?\:\(\)\.\,\'\+]',
           ),
           Container(
             child: Text(
@@ -534,7 +535,9 @@ class _TransferInterPageState extends State<TransferInterPage> {
               controller: _payerAddressController,
               textAlign: TextAlign.end,
               inputFormatters: <TextInputFormatter>[
-                LengthLimitingTextInputFormatter(105) //限制长度
+                LengthLimitingTextInputFormatter(105), //限制长度
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-z0-9 \-\/\?\:\(\)\.\,\'\+]')),
               ],
               decoration: InputDecoration.collapsed(
                 // border: InputBorder.none,
@@ -855,7 +858,6 @@ class _TransferInterPageState extends State<TransferInterPage> {
         _transferFee = transferFeeList[result];
         _boolBut();
       });
-      print('_transferFeeCode: ${_transferFeeCode}');
     }
   }
 
@@ -1032,24 +1034,11 @@ class _TransferInterPageState extends State<TransferInterPage> {
   Future<void> _actualNameReqData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      payerName = (_language == 'zh_CN' || _language == 'zh_HK')
-          ? prefs.getString(ConfigKey.CUST_LOCAL_NAME)
-          : prefs.getString(ConfigKey.CUST_ENG_NAME);
+      // payerName = (_language == 'zh_CN' || _language == 'zh_HK')
+      //     ? prefs.getString(ConfigKey.CUST_LOCAL_NAME)
+      //     : prefs.getString(ConfigKey.CUST_ENG_NAME);
+      payerName = prefs.getString(ConfigKey.CUST_ENG_NAME);
     });
-    // String userID = prefs.getString(ConfigKey.USER_ID);
-    // // UserDataRepository()
-    // ApiClientPackaging().getUserInfo(GetUserInfoReq(userID)).then((data) {
-    //   if (this.mounted) {
-    //     setState(() {
-    //       payerName = data.actualName;
-    //     });
-    //   }
-    // }).catchError((e) {
-    //   Fluttertoast.showToast(
-    //     msg: e.toString(),
-    //     gravity: ToastGravity.CENTER,
-    //   );
-    // });
   }
 
   //获取转账费用列表
