@@ -88,6 +88,15 @@ class _MinePageState extends State<MinePage>
         });
       }
     });
+
+    EventBusUtils.getInstance().on<ChangeUserInfo>().listen((event) {
+      if (event.userInfo != null && _userInfoResp != null) {
+        setState(() {
+          _userInfoResp = event.userInfo;
+          _changeUserInfoShow(_userInfoResp);
+        });
+      }
+    });
   }
 
   @override
@@ -773,6 +782,8 @@ class _MinePageState extends State<MinePage>
       if (this.mounted) {
         _userInfoResp = data;
         _changeUserInfoShow(_userInfoResp);
+        EventBusUtils.getInstance()
+            .fire(ChangeUserInfo(userInfo: _userInfoResp, state: 100));
       }
     }).catchError((e) {
       Fluttertoast.showToast(
