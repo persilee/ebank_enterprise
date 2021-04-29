@@ -62,6 +62,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   DepositRecord deposit;
 
+  GetDepositTrialResp _trialResp;
+
   List<TotalAssetsCardListBal> cardList;
   //第二个接口所需变量
   var conMatAmt = '';
@@ -274,7 +276,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
       onTap: () {
         if (this.mounted) {
           setState(() {
-            _loadDepositData();
             _checkBoxValue = !_checkBoxValue;
           });
         }
@@ -356,8 +357,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   @override
   Widget build(BuildContext context) {
     deposit = ModalRoute.of(context).settings.arguments;
-    String conMatAmts = FormatUtil.formatSringToMoney('$conMatAmt');
-    String matAmts = FormatUtil.formatSringToMoney('$matAmt');
 
     String _language = Intl.getCurrentLocale();
     String _nameStr = '';
@@ -478,13 +477,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                 child: FlatButton(
                   onPressed: _checkBoxValue
                       ? () {
-                          _verificationDialog(
-                              S.current.confirm_to_early_settlement,
-                              S.current.contract_settlement_amt +
-                                  ' $ccy $conMatAmts\n' +
-                                  S.current.early_settlement_amt +
-                                  ' $ccy $matAmts',
-                              _select);
+                          _loadDepositData();
                         }
                       : null,
                   textColor: Colors.white,
@@ -507,13 +500,27 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     );
   }
 
+  _showTimeDepositEarlyTip() {
+    String conMatAmts = FormatUtil.formatSringToMoney('$conMatAmt');
+    String matAmts = FormatUtil.formatSringToMoney('$matAmt');
+    _verificationDialog(
+        S.current.confirm_to_early_settlement,
+        S.current.contract_settlement_amt +
+            ' $ccy $conMatAmts\n' +
+            S.current.early_settlement_amt +
+            ' $ccy $matAmts',
+        _select);
+  }
+
 //提前结清试算
   _loadDepositData() {
+    HSProgressHUD.show();
     Future.wait({
       // DepositDataRepository()
       ApiClientTimeDeposit()
           .getDepositTrial(GetDepositTrialReq(bal, conNos, bal))
     }).then((value) {
+      HSProgressHUD.dismiss();
       value.forEach((element) {
         if (this.mounted) {
           setState(() {
@@ -522,10 +529,14 @@ class _PageDepositInfo extends State<PageDepositInfo> {
             eryInt = element.eryInt;
             eryRate = element.eryRate;
             mainAc = element.mainAc;
+            _trialResp = element;
           });
         }
+
+        _showTimeDepositEarlyTip();
       });
     }).catchError((e) {
+      HSProgressHUD.dismiss();
       Fluttertoast.showToast(
         msg: "${e.toString()}",
         gravity: ToastGravity.CENTER,
@@ -585,17 +596,26 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     ApiClientTimeDeposit()
         .getDepositEarlyContract(
       GetDepositEarlyContractReq(
+        _trialResp.bal ?? '',
+        _trialResp.ccy ?? '',
+        double.parse(_trialResp.clsInt ?? '0'),
+        double.parse(_trialResp.clsRate ?? '0'),
         conNos,
+        _trialResp.mtDate ?? '',
         double.parse(eryInt),
         double.parse(eryRate),
-        0,
-        mainAc,
-        0,
-        0,
-        0,
-        _paymentAc,
-        // _changedSettAcTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), "")
-        '0101208000001528',
+        double.parse(_trialResp.hdlFee ?? '0'),
+        _trialResp.mainAc ?? '',
+        double.parse(_trialResp.matAmt ?? '0'),
+        double.parse(_trialResp.matBal ?? '0'),
+        double.parse(_trialResp.pnltFee ?? '0'),
+        double.parse(_trialResp.settBal ?? '0'),
+        widget.deposit.settDdAc ?? '',
+        '',
+        widget.deposit.tenor ?? '',
+        widget.deposit.settDdAc ?? '', //_paymentAc,
+        'all',
+        _trialResp.valDate ?? '',
       ),
     )
         .then((value) {
