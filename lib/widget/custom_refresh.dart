@@ -12,14 +12,14 @@ class CustomRefresh extends StatelessWidget {
   final VoidCallback onLoading;
   final Widget content;
 
-  const CustomRefresh(
-      {Key key,
-      this.controller,
-      this.onRefresh,
-      this.onLoading,
-      this.content,
-      Column child})
-      : super(key: key);
+  const CustomRefresh({
+    Key key,
+    this.controller,
+    this.onRefresh,
+    this.onLoading,
+    this.content,
+    Column child,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +64,11 @@ class CustomRefresh extends StatelessWidget {
                 if (mode == LoadStatus.idle) {
                   body = Row(
                     children: [
-                      Text(S.current.refresh_pull_loading,
-                          style: TextStyle(fontSize: 12),textAlign: TextAlign.center,),
+                      Text(
+                        S.current.refresh_pull_loading,
+                        style: TextStyle(fontSize: 12),
+                        textAlign: TextAlign.center,
+                      ),
                     ],
                   );
                 } else if (mode == LoadStatus.loading) {
@@ -84,20 +87,32 @@ class CustomRefresh extends StatelessWidget {
                           height: 16,
                         ),
                         Padding(padding: EdgeInsets.only(left: 10)),
-                        Text(S.current.refresh_loading,
-                            style: TextStyle(fontSize: 12), textAlign: TextAlign.center,)
+                        Text(
+                          S.current.refresh_loading,
+                          style: TextStyle(fontSize: 12),
+                          textAlign: TextAlign.center,
+                        )
                       ],
                     ),
                   );
                 } else if (mode == LoadStatus.failed) {
-                  body = Text(S.current.refresh_failed_retry,
-                      style: TextStyle(fontSize: 12), textAlign: TextAlign.center,);
+                  body = Text(
+                    S.current.refresh_failed_retry,
+                    style: TextStyle(fontSize: 12),
+                    textAlign: TextAlign.center,
+                  );
                 } else if (mode == LoadStatus.canLoading) {
-                  body = Text(S.current.refresh_load_more,
-                      style: TextStyle(fontSize: 12), textAlign: TextAlign.center,);
+                  body = Text(
+                    S.current.refresh_load_more,
+                    style: TextStyle(fontSize: 12),
+                    textAlign: TextAlign.center,
+                  );
                 } else {
-                  body = Text(S.current.refresh_no_more_data,
-                      style: TextStyle(fontSize: 12), textAlign: TextAlign.center,);
+                  body = Text(
+                    S.current.refresh_no_more_data,
+                    style: TextStyle(fontSize: 12),
+                    textAlign: TextAlign.center,
+                  );
                 }
                 return Container(
                   height: 55.0,

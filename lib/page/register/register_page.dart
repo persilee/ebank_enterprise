@@ -276,7 +276,8 @@ class _RegisterPageState extends State<RegisterPage> {
     // VerificationCodeRepository()
     ApiClientPassword()
         .sendSmsByPhone(SendSmsByPhoneNumberReq(
-            _officeAreaCodeText, _phoneNum.text, 'register', 'SCNAOREGU','MB',msgBankId:'999'))
+            _officeAreaCodeText, _phoneNum.text, 'register', 'SCNAOREGU', 'MB',
+            msgBankId: '999'))
         .then((value) {
       if (mounted) {
         setState(() {
@@ -301,7 +302,7 @@ class _RegisterPageState extends State<RegisterPage> {
     HSProgressHUD.show();
     // VersionDataRepository()
     ApiClientAccount()
-        .checkSms(CheckSmsReq(_phoneNum.text, 'register',_smsListen,'MB'))
+        .checkSms(CheckSmsReq(_phoneNum.text, 'register', _smsListen, 'MB'))
         .then((data) {
       if (mounted) {
         setState(() {
@@ -450,12 +451,14 @@ class _RegisterPageState extends State<RegisterPage> {
               text: S.current.loan_application_agreement1,
               style: AGREEMENT_TEXT_STYLE,
             ),
-            _conetentJump(S.current.loan_application_agreement2, '98822'),
+            _conetentJump(S.current.loan_application_agreement2,
+                'licenseAgreement'), //98822 企业用户服务协议
             TextSpan(
               text: S.current.loan_application_agreement3,
               style: AGREEMENT_TEXT_STYLE,
             ),
-            _conetentJump(S.current.loan_application_agreement4, '99868'),
+            _conetentJump(S.current.loan_application_agreement4,
+                'privacyPolicy'), //99868  用户服务协议
           ],
         ),
       ),

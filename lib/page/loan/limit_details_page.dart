@@ -12,6 +12,7 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
+import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -41,6 +42,9 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
   //下拉刷新数据
   RefreshController _refreshController;
 
+  bool _isShowErrorPage = false; //错误状态
+  Widget _loanErrorPage; //错误页
+
   var loanDetails = [];
 
   @override
@@ -60,7 +64,11 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
         ),
         body: CustomRefresh(
             controller: _refreshController, //绑定刷新控件
-            content: _isload ? HsgLoading() : _getlistViewList(context),
+            content: _isShowErrorPage
+                ? _loanErrorPage
+                : _isload
+                    ? HsgLoading()
+                    : _getlistViewList(context),
             onRefresh: () {
               //下拉刷新
               _loadData();
@@ -80,21 +88,27 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
     ciNo = cino;
 
     contactNo = "";
-    // LoanDataRepository()
     ApiClientLoan()
         .getLoanAccountList(LoanAccountMastModelReq(0, ciNo, contactNo))
         .then((data) {
       _refreshController.loadComplete();
       setState(() {
         _isload = false;
+        _isShowErrorPage = false;
         if (data.loanAccountDOList != null) {
           loanDetails.clear();
           loanDetails.addAll(data.loanAccountDOList);
         }
       });
     }).catchError((e) {
+      _isShowErrorPage = true;
       setState(() {
-        SVProgressHUD.showInfo(status: e.toString());
+        _loanErrorPage = HsgErrorPage(
+          error: e.error,
+          buttonAction: () {
+            _loadData();
+          },
+        );
         _refreshController.loadComplete();
         _isload = false;
       });
@@ -116,9 +130,15 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
   //生成ListView
   Widget _getlistViewList(BuildContext context) {
     if (_isload == false && loanDetails.length <= 0) {
-      return Container(
-        child: notDataContainer(context, S.current.no_data_now),
+      return HsgErrorPage(
+        isEmptyPage: true,
+        buttonAction: () {
+          _loadData();
+        },
       );
+      // Container(
+      //   child: notDataContainer(context, S.current.no_data_now),
+      // );
     } else {
       List<Widget> _list = new List();
       for (int i = 0; i < loanDetails.length; i++) {
