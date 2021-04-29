@@ -21,20 +21,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'hsg_text_field_dialog.dart';
 
 // ignore: must_be_immutable
-class HsgPasswordDialog extends StatelessWidget {
+class HsgPasswordDialog extends StatefulWidget {
   final String title;
 
   ///是否是需要拉起短信验证码
   final bool isDialog;
-  List<String> keyboardNum = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-  List<String> passwordList = [];
-  String password = '';
   String resultPage = '';
   Object arguments = '';
   Function(String password) returnPasswordFunc;
-
-  TextEditingController _editingController = TextEditingController();
-  String inputText = '';
 
   HsgPasswordDialog(
       {Key key,
@@ -45,10 +39,25 @@ class HsgPasswordDialog extends StatelessWidget {
       this.returnPasswordFunc});
 
   @override
+  _HsgPasswordDialogState createState() => _HsgPasswordDialogState();
+}
+
+class _HsgPasswordDialogState extends State<HsgPasswordDialog> {
+  List<String> keyboardNum = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+  List<String> passwordList = [];
+
+  String password = '';
+
+  TextEditingController _editingController = TextEditingController();
+
+  String inputText = '';
+
+  @override
   Widget build(BuildContext context) {
     Widget passwordBoxTitle;
 
-    if (title != null) {
+    if (widget.title != null) {
       passwordBoxTitle = Row(
         children: [
           Expanded(
@@ -56,7 +65,7 @@ class HsgPasswordDialog extends StatelessWidget {
               height: 40,
               alignment: Alignment.center,
               child: Text(
-                title,
+                widget.title,
                 style: TextStyle(
                   color: HsgColors.firstDegreeText,
                 ),
@@ -154,7 +163,6 @@ class HsgPasswordDialog extends StatelessWidget {
     );
   }
 
-  //密码框
   List<Widget> _passwordBox() {
     List<Widget> passwordbox = [];
     for (var i = 0; i < 6; i++) {
@@ -179,7 +187,6 @@ class HsgPasswordDialog extends StatelessWidget {
     return passwordbox;
   }
 
-  //键盘按钮1-9
   List<Widget> _keyboardButtonNum(BuildContext context) {
     List<Widget> keyboardBut = [];
     for (var item in keyboardNum) {
@@ -201,7 +208,8 @@ class HsgPasswordDialog extends StatelessWidget {
             if (passwordList.length == 6) {
               password = EncryptUtil.aesEncode(passwordList.join());
               // password = passwordList.join();
-              _verifyTradePaw(password, context, resultPage, arguments);
+              _verifyTradePaw(
+                  password, context, widget.resultPage, widget.arguments);
             }
           },
         ),
@@ -210,7 +218,6 @@ class HsgPasswordDialog extends StatelessWidget {
     return keyboardBut;
   }
 
-  //键盘按钮0
   FlatButton _keyboardButtonZero(BuildContext context) {
     return FlatButton(
       color: Colors.white,
@@ -229,13 +236,13 @@ class HsgPasswordDialog extends StatelessWidget {
         if (passwordList.length == 6) {
           // password = EncryptUtil.aesEncode(passwordList.join());
           password = passwordList.join();
-          _verifyTradePaw(password, context, resultPage, arguments);
+          _verifyTradePaw(
+              password, context, widget.resultPage, widget.arguments);
         }
       },
     );
   }
 
-  //键盘按钮删除
   FlatButton _keyboardButtonDel(BuildContext context) {
     return FlatButton(
       onPressed: () {
@@ -251,7 +258,6 @@ class HsgPasswordDialog extends StatelessWidget {
     );
   }
 
-  //验证交易密码
   _verifyTradePaw(String payPassword, BuildContext context, String resultPage,
       Object arguments) async {
     SVProgressHUD.show();
@@ -263,10 +269,10 @@ class HsgPasswordDialog extends StatelessWidget {
         .verifyTransPwdNoSms(VerifyTransPwdNoSmsReq(payPassword))
         .then((data) {
       SVProgressHUD.dismiss();
-      if (returnPasswordFunc != null) {
-        returnPasswordFunc(password);
+      if (widget.returnPasswordFunc != null) {
+        widget.returnPasswordFunc(password);
       }
-      if (this.isDialog) {
+      if (this.widget.isDialog) {
         showDialog(
             context: context,
             barrierDismissible: false,
@@ -294,16 +300,14 @@ class HsgPasswordDialog extends StatelessWidget {
       }
       Navigator.pop(context, true);
     }).catchError((e) {
-      print(e.toString());
-      print((e as DioError).message);
-
+      passwordList.clear();
+      (context as Element).markNeedsBuild();
       // if (e.toString() == 'ECUST031') {
       //   Fluttertoast.showToast(msg: '交易密码错误！请重试',gravity: ToastGravity.CENTER,);
       // } else {
       //   Fluttertoast.showToast(msg: '未设置交易密码！',gravity: ToastGravity.CENTER,);
       // }
       SVProgressHUD.dismiss();
-      passwordList.clear();
       Fluttertoast.showToast(
         msg: e.toString(),
         gravity: ToastGravity.CENTER,
