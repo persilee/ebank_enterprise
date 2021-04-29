@@ -112,6 +112,15 @@ class _HomePageState extends State<HomePage>
       }
     });
 
+    EventBusUtils.getInstance().on<ChangeUserInfo>().listen((event) {
+      if (event.userInfo != null && _data != null) {
+        setState(() {
+          _data = event.userInfo;
+          _changeUserInfoShow(_data);
+        });
+      }
+    });
+
     super.initState();
   }
 
@@ -874,6 +883,7 @@ class _HomePageState extends State<HomePage>
             S.current.open_transfer,
             S.current.deposit_open,
             S.current.loan_apply,
+            S.current.transfer_model,
             S.current.foreign_exchange
           ].contains(title)) {
         HsgShowTip.limitedCustomerTip(
@@ -1094,6 +1104,8 @@ class _HomePageState extends State<HomePage>
           _data = data;
           _changeUserInfoShow(_data);
           _verifyGotoTranPassword(context, data.passwordEnabled);
+          EventBusUtils.getInstance()
+              .fire(ChangeUserInfo(userInfo: _data, state: 100));
         });
       }
     }).catchError((e) {

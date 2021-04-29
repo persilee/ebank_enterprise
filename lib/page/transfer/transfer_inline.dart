@@ -323,7 +323,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             callback: _boolBut,
             length: 35,
             isRegEXp: true,
-            regExp: '[\u4e00-\u9fa5a-zA-Z0-9 ]',
+            regExp: '[\u4e00-\u9fa5a-zA-Z0-9 \-\/\?\:\(\)\.\,\'\+]',
           ),
           Container(
             // padding: EdgeInsets.only(right: 15, left: 15),
@@ -812,7 +812,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
           _boolBut();
         }
       }).catchError((e) {
-       Fluttertoast.showToast(
+        Fluttertoast.showToast(
           msg: e.error.message,
           gravity: ToastGravity.CENTER,
         );
@@ -828,18 +828,6 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
           ? prefs.getString(ConfigKey.CUST_LOCAL_NAME)
           : prefs.getString(ConfigKey.CUST_ENG_NAME);
     });
-    // ApiClientPackaging().getUserInfo(GetUserInfoReq(userID)).then((data) {
-    //   if (this.mounted) {
-    //     setState(() {
-    //       payerName = data?.actualName ?? '';
-    //     });
-    //   }
-    // }).catchError((e) {
-    //   Fluttertoast.showToast(
-    //     msg: e.toString(),
-    //     gravity: ToastGravity.CENTER,
-    //   );
-    // });
   }
 
   //根据账号查询名称
