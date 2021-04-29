@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:event_bus/event_bus.dart';
 
 ///event bus
@@ -35,4 +36,11 @@ class ChangeLanguage {
   int state;
 
   ChangeLanguage({this.language, this.state});
+}
+
+class ChangeUserInfo {
+  UserInfoResp userInfo;
+  int state;
+
+  ChangeUserInfo({this.userInfo, this.state});
 }

@@ -95,6 +95,7 @@ import 'package:ebank_mobile/page/transfer/select_city_page.dart';
 import 'package:ebank_mobile/page/transfer/select_branch_bank_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_success.dart';
 import 'package:ebank_mobile/page/userAgreement/user_agreement_page.dart';
+import 'package:ebank_mobile/widget/camera_page.dart';
 import 'package:ebank_mobile/widget/hsg_pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page/mine/mine_page.dart';
@@ -226,6 +227,7 @@ var pageTransferOrder = '/transfer_order.dart';
 var pageTransferSuccess = '/transfer_success.dart';
 var pageCityForCountrySelect = '/city_for_country_select_page.dart';
 var pageTimeDepositCloseDetail = '/time_deposit_close_info.dart';
+var pageCamera = '/camera_page.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -334,6 +336,7 @@ var appRoutes = {
   pageTransferSuccess: (context) => TransferSuccessPage(),
   // pageCityForCountrySelect: (context) => CityForCountrySelectPage(),
   pageTimeDepositCloseDetail: (context) => DepositCloseInfoPage(),
+  pageCamera: (context) => CameraPage(),
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
