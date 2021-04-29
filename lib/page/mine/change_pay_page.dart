@@ -3,11 +3,10 @@
 ///@author hlx
 ///
 import 'dart:async';
-import 'package:ebank_mobile/data/source/mine_pay_pwdApi.dart';
+
+import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
-import 'package:ebank_mobile/data/source/model/get_verification_code.dart';
 import 'package:ebank_mobile/data/source/model/set_payment_pwd.dart';
-import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -16,12 +15,9 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
-import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart';
-import 'package:ebank_mobile/data/source/user_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 
 class ChangePayPage extends StatefulWidget {
   @override
@@ -315,37 +311,15 @@ class _ChangePayPageState extends State<ChangePayPage> {
         _areaCodeStr = areacodeStr ?? '86';
       });
     }
-
-    // UserDataRepository()
-    //     .getUserInfo(
-    //   GetUserInfoReq(userID),
-    //   'getUserInfo',
-    // )
-    //     .then((data) {
-    //   if (this.mounted) {
-    //     setState(() {
-    //       _phoneNo = data.userPhone;
-    //     });
-    //   }
-    // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER,);
-    //   print('${e.toString()}');
-    // });
   }
 
   //获取验证码接口 -- 修改交易密码
   _getVerificationCode() async {
     HSProgressHUD.show();
-    // final prefs = await SharedPreferences.getInstance();
-    // String userAcc = prefs.getString(ConfigKey.USER_ACCOUNT);
-    // VerificationCodeRepository()
     ApiClientPassword()
-        // .sendSmsByAccount(
-        //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
-        // )
         .sendSmsByPhone(
       SendSmsByPhoneNumberReq(
-          _areaCodeStr, _phoneNo, 'transactionPwd', 'SCNAOCHGTSPW','MB'),
+          _areaCodeStr, _phoneNo, 'transactionPwd', 'SCNAOCHGTSPW','MB',msgBankId: '999'),
     )
         .then((data) {
       _startCountdown();

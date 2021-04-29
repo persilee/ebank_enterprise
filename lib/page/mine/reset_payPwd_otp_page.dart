@@ -2,26 +2,25 @@
 ///
 /// Author: zhangqirong
 /// Date: 2021-03-17
-
 import 'dart:async';
 import 'dart:ui';
-import 'package:ebank_mobile/data/source/model/country_region_model.dart';
+
+import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
+import 'package:ebank_mobile/data/source/model/set_transaction_password.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
-import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
-import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/services.dart';
-import 'package:ebank_mobile/data/source/user_data_repository.dart';
-import 'package:ebank_mobile/data/source/model/get_user_info.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/data/source/model/check_sms.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 
 class ResetPayPwdPage extends StatefulWidget {
   @override
@@ -38,7 +37,6 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   int countdownTime = 0;
   String _phone = '';
   String _smsCode = '';
-  // var _belongCustStatus = '0'; //用户状态
 
   @override
   void initState() {
@@ -58,7 +56,9 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).resetPayPsd),
+        title: Text(S
+            .of(context)
+            .resetPayPsd),
         centerTitle: true,
         elevation: 1,
       ),
@@ -71,12 +71,15 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
         child: Container(
           color: HsgColors.commonBackground,
           child: Form(
-              //绑定状态属性
+            //绑定状态属性
               key: _formKey,
               child: ListView(
                 children: <Widget>[
                   Container(
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
                     margin: EdgeInsets.only(bottom: 16, top: 16),
                     color: Colors.white,
                     padding: EdgeInsets.only(left: 20, right: 20),
@@ -86,13 +89,17 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                         Container(
                           padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(
-                            S.of(context).plaseSetPayPsd,
+                            S
+                                .of(context)
+                                .plaseSetPayPsd,
                             style: TextStyle(
                                 color: Color(0xEE7A7A7A), fontSize: 13),
                           ),
                         ),
                         //手机号
-                        _infoFrame(S.of(context).phone_num,
+                        _infoFrame(S
+                            .of(context)
+                            .phone_num,
                             '+' + _officeAreaCodeText + ' ' + _phone),
                         Container(
                           height: 50,
@@ -100,7 +107,9 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                             children: [
                               Container(
                                 width: 120,
-                                child: Text(S.of(context).sendmsm),
+                                child: Text(S
+                                    .of(context)
+                                    .sendmsm),
                               ),
                               Expanded(
                                 child: otpTextField(),
@@ -126,7 +135,9 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                   CustomButton(
                     margin: EdgeInsets.all(40),
                     text: Text(
-                      S.of(context).next_step,
+                      S
+                          .of(context)
+                          .next_step,
                       style: TextStyle(color: Colors.white),
                     ),
                     isEnable: _submit(),
@@ -145,7 +156,6 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   //获取用户信息
   _getUser() async {
     final prefs = await SharedPreferences.getInstance();
-    // String userID = prefs.getString(ConfigKey.USER_ID);
     String phoneStr = prefs.getString(ConfigKey.USER_PHONE);
     String areacodeStr = prefs.getString(ConfigKey.USER_AREACODE);
 
@@ -155,33 +165,11 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
         _officeAreaCodeText = areacodeStr ?? '86';
       });
     }
-    // UserDataRepository()
-    //     .getUserInfo(
-    //   GetUserInfoReq(userID),
-    //   'getUserInfo',
-    // )
-    //     .then((data) {
-    //   if (this.mounted) {
-    //     setState(() {
-    //       _belongCustStatus =
-    //           data.belongCustStatus != null ? data.belongCustStatus : ''; //用户状态
-    //       _phone = data.userPhone != null ? data.userPhone : ''; //手机号
-    //       if (data.areaCode != null) {
-    //         _officeAreaCodeText = data.areaCode; //区号
-    //       }
-    //     });
-    //   }
-    // }).catchError((e) {
-    //   Fluttertoast.showToast(
-    //     msg: e.toString(),
-    //     gravity: ToastGravity.CENTER,
-    //   );
-    //   print('${e.toString()}');
-    // });
   }
 
   //提交按钮
   _submitData() async {
+    HSProgressHUD.show();
     //请求验证手机号验证码，成功后跳转到身份验证界面
     RegExp number_6 = new RegExp(r'^\d{6}$');
     if (!number_6.hasMatch(_sms.text)) {
@@ -189,22 +177,41 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
         msg: S.current.sms_error,
         gravity: ToastGravity.CENTER,
       );
-    } else if (_smsCode != _sms.text) {
-      Fluttertoast.showToast(
-        msg: S.current.sms_verification_error,
-        gravity: ToastGravity.CENTER,
-      );
-    } else {
-      //请求-未写
-      HSProgressHUD.show();
-      //请求成功后跳转
-      Navigator.pushNamed(context, iDcardVerification, arguments: {
-        'areaCode': _officeAreaCodeText,
-        'phone': _phone,
-        'smsCode': _sms.text,
+    }else {
+      //校验短信验证码
+      ApiClientAccount()
+          .checkSms(CheckSmsReq(_phone, 'transactionPwd', _sms.text, 'MB'))
+          .then((data) {
+        if (mounted) {
+          setState(() {
+            HSProgressHUD.dismiss();
+            //校验是否注册
+            if (!data.checkResult) {
+              HSProgressHUD.dismiss();
+              Fluttertoast.showToast(
+                msg: S.current.num_not_is_register,
+                gravity: ToastGravity.CENTER,
+              );
+            }   //跳转至下一页面
+            else {
+              //请求成功后跳转
+              Navigator.pushNamed(context, iDcardVerification, arguments: {
+                'areaCode': _officeAreaCodeText,
+                'phone': _phone,
+                'smsCode': _sms.text,
+              });
+              //请求结束-无论成功与否
+              HSProgressHUD.dismiss();
+            }
+          });
+        }
+      }).catchError((e) {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+        HSProgressHUD.dismiss();
       });
-      //请求结束-无论成功与否
-      HSProgressHUD.dismiss();
     }
   }
 
@@ -291,9 +298,9 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       onPressed: (countdownTime > 0 || _phone == '')
           ? null
           : () {
-              FocusScope.of(context).requestFocus(FocusNode());
-              _getVerificationCode();
-            },
+        FocusScope.of(context).requestFocus(FocusNode());
+        _getVerificationCode();
+      },
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
       padding: EdgeInsets.symmetric(horizontal: 8),
       color: Color(0xeeEFF3FF),
@@ -308,7 +315,9 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       child: Text(
         countdownTime > 0
             ? '${countdownTime}s'
-            : S.of(context).getVerificationCode,
+            : S
+            .of(context)
+            .getVerificationCode,
         style: TextStyle(fontSize: 14),
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -322,7 +331,8 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
     ApiClientPassword()
         .sendSmsByPhone(
       SendSmsByPhoneNumberReq(
-          _officeAreaCodeText, _phone, 'transactionPwd', 'SCNAORESTSPW','MB'),
+          _officeAreaCodeText, _phone, 'transactionPwd', 'SCNAORESTSPW', 'MB',
+          msgBankId: '999'),
     )
         .then((data) {
       _startCountdown();
@@ -365,11 +375,9 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
     );
   }
 
-  Widget _inputList(
-    String labText,
-    String placeholderText,
-    TextEditingController inputValue,
-  ) {
+  Widget _inputList(String labText,
+      String placeholderText,
+      TextEditingController inputValue,) {
     return Container(
       height: 50.0,
       child: Row(
@@ -409,11 +417,16 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
             child: TextField(
               controller: inputValue,
               keyboardType: TextInputType.number,
-              maxLines: 1, //最大行数
-              autocorrect: true, //是否自动更正
-              autofocus: true, //是否自动对焦
-              obscureText: false, //是否是密码
-              textAlign: TextAlign.right, //文本对齐方式
+              maxLines: 1,
+              //最大行数
+              autocorrect: true,
+              //是否自动更正
+              autofocus: true,
+              //是否自动对焦
+              obscureText: false,
+              //是否是密码
+              textAlign: TextAlign.right,
+              //文本对齐方式
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
                 LengthLimitingTextInputFormatter(11), //限制长度
@@ -426,7 +439,8 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                 //内容提交(按回车)的回调
                 // print('submit $text');
               },
-              enabled: true, //是否禁用
+              enabled: true,
+              //是否禁用
               // inputFormatters: <TextInputFormatter>[
               //   LengthLimitingTextInputFormatter(6), //限制长度
               // ],
@@ -445,60 +459,3 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
     );
   }
 }
-
-// class InputList extends StatelessWidget {
-//   InputList(this.labText, this.placeholderText, this.inputValue,
-//       {this.isShow = false});
-//   final String labText;
-//   final String placeholderText;
-//   TextEditingController inputValue = TextEditingController();
-//   final bool isShow;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       height: 50.0,
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Text(this.labText),
-//           Expanded(
-//             child: TextField(
-//               controller: this.inputValue,
-//               keyboardType: TextInputType.number,
-//               maxLines: 1, //最大行数
-//               autocorrect: true, //是否自动更正
-//               autofocus: true, //是否自动对焦
-//               obscureText: false, //是否是密码
-//               textAlign: TextAlign.right, //文本对齐方式
-//               inputFormatters: <TextInputFormatter>[
-//                 FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
-//                 LengthLimitingTextInputFormatter(11), //限制长度
-//               ],
-//               onChanged: (text) {
-//                 //内容改变的回调
-//                 // print('change $text');
-//               },
-//               onSubmitted: (text) {
-//                 //内容提交(按回车)的回调
-//                 // print('submit $text');
-//               },
-//               enabled: true, //是否禁用
-//               // inputFormatters: <TextInputFormatter>[
-//               //   LengthLimitingTextInputFormatter(6), //限制长度
-//               // ],
-//               decoration: InputDecoration(
-//                 border: InputBorder.none,
-//                 hintText: this.placeholderText,
-//                 hintStyle: TextStyle(
-//                   fontSize: 15,
-//                   color: HsgColors.textHintColor,
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }

@@ -84,6 +84,12 @@ class GetDepositTrialResp extends Object {
   @JsonKey(name: 'terms')
   String terms;
 
+  @JsonKey(name: 'settBal')
+  String settBal;
+
+  @JsonKey(name: 'settDdAc')
+  String settDdAc;
+
   GetDepositTrialResp(
     this.conNo,
     this.mainAc,
@@ -104,6 +110,8 @@ class GetDepositTrialResp extends Object {
     this.pnltFee,
     this.matAmt,
     this.terms,
+    this.settBal,
+    this.settDdAc,
   );
 
   factory GetDepositTrialResp.fromJson(Map<String, dynamic> srcJson) =>

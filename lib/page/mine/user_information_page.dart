@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
+import 'package:ebank_mobile/util/compress_file.dart';
 import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/image_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -87,8 +88,8 @@ class _UserInformationPageState extends State<UserInformationPage> {
     List<Widget> contentList = [];
     contentList.add(
       selectFrame(S.current.head_portrait, _headPortrait(), () {
-        // _headerInfoTapClick(context);
-        _getImage();
+        _headerInfoTapClick(context);
+        // _getImage();
       }, 70),
     );
     contentList.add(
@@ -379,7 +380,8 @@ class _UserInformationPageState extends State<UserInformationPage> {
     if (result != null && result != false) {
       switch (result) {
         case 0:
-          _openGallery();
+          // _openGallery();
+          _getImage();
           break;
         case 1:
           _takePhoto();
@@ -393,13 +395,44 @@ class _UserInformationPageState extends State<UserInformationPage> {
   /*拍照*/
   _takePhoto() async {
     var image = await ImagePicker().getImage(source: ImageSource.camera);
-    if (image == null) {
-      return;
+    if (image != null) {
+      File file = File(image.path);
+      Uint8List imageData = await testCompressFile(file);
+      Navigator.pushNamed(context, imageEditorPage,
+          arguments: {'imageData': imageData}).then((value) async {
+        if (value != null) {
+          try {
+            var image =
+                await ApiClient().uploadAvatar(BaseBody(body: {}), value);
+            Fluttertoast.showToast(
+              msg: S.current.avatar_uploaded_successfully,
+              gravity: ToastGravity.CENTER,
+            );
+            String _headPortrait = image['headPortrait'] ?? '';
+            if (_headPortrait.isEmpty) {
+              UserInfoResp data = await ApiClient().getUserInfo(
+                  GetUserInfoReq(SpUtil.getString(ConfigKey.USER_ID)));
+              SpUtil.putString(ConfigKey.USER_AVATAR_URL, data.headPortrait);
+              EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
+                  headPortrait: _headPortrait, state: 300));
+            } else {
+              SpUtil.putString(ConfigKey.USER_AVATAR_URL, _headPortrait);
+              EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
+                  headPortrait: image['headPortrait'], state: 300));
+            }
+          } catch (e) {
+            print(e);
+          }
+        }
+      });
     }
-    setState(() {
-      _imgPath = image.path;
-      _uploadAvatar();
-    });
+    // if (image == null) {
+    //   return;
+    // }
+    // setState(() {
+    //   _imgPath = image.path;
+    //   _uploadAvatar();
+    // });
   }
 
   /*相册*/

@@ -874,6 +874,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       }
     } else if (_cardCcy == ccy) {
       _amount = FormatUtil.formatSringToMoney((inputValue.text).toString());
+      _checkAmount = inputValue.text;
     } else {
       _payerAmount = AiDecimalAccuracy.parse(inputValue.text).toDouble();
 

@@ -5,9 +5,14 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_pay_collect_detail.dart';
+import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class DetailInfoPage extends StatefulWidget {
   DetailInfoPage({Key key}) : super(key: key);
@@ -18,6 +23,14 @@ class DetailInfoPage extends StatefulWidget {
 
 class _DetailInfoPageState extends State<DetailInfoPage> {
   DdFinHisDTOList ddFinHist;
+  String _language = Intl.getCurrentLocale();
+  String _statusName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _getType();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +95,7 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
                 // 交易类型
                 ContentRow(
                   label: S.current.transaction_type,
-                  item: ddFinHist.txMmo,
+                  item: _statusName,
                 ),
 
                 //备注
@@ -96,6 +109,32 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
         ),
       ),
     );
+  }
+
+// 获取状态
+  Future _getType() async {
+    HSProgressHUD.show();
+    GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount()
+        .getIdType(GetIdTypeReq('TRANSFERTYPE'))
+        .then((data) {
+      List<IdType> _tenorList = data.publicCodeGetRedisRspDtoList;
+      if (_tenorList.isNotEmpty) {
+        _tenorList.forEach((element) {
+          if (ddFinHist.txMmo == element.code) {
+            if (this.mounted) {
+              setState(() {
+                _statusName =
+                    _language == 'zh_CN' ? element.cname : element.name;
+              });
+            }
+          }
+        });
+        HSProgressHUD.dismiss();
+      }
+    }).catchError((e) {
+      HSProgressHUD.dismiss();
+      print(e.toString());
+    });
   }
 }
 
