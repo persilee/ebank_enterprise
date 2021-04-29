@@ -730,7 +730,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         _industrialNatureTwoText = '';
         _getIndustrialNaturesTwo(data);
       }
-      // _dataReq.corporatinAttributes = data.code;
+      _dataReq.corporatinAttributes = data.code;
       _dataReq.corporatinAttributesIdType = data;
       setState(() {
         _industrialNatureText = industrialList[result];
@@ -770,7 +770,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
 
     if (result != null && result != false) {
       RedisRspDto data = _industrialNaturesTwo[result];
-      _dataReq.corporatinAttributes = data.code;
+      _dataReq.offeredProduct = data.code;
       _dataReq.corporatinAttributesIdTypeTwo = data;
       setState(() {
         _industrialNatureTwoText = industrialTwoList[result];
@@ -831,7 +831,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
 
     HSProgressHUD.show();
     SubPublicCodeByTypeReq req = SubPublicCodeByTypeReq(
-      'BIZ_IDU_SUB',
+      'PS', //BIZ_IDU_SUB
       userAccount,
       userId,
       data.code,

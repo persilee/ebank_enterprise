@@ -18,6 +18,10 @@ class OpenAccountQuickSubmitDataReq {
   @JsonKey(name: 'corporatinAttributes')
   String corporatinAttributes;
 
+  ///所提供服务
+  @JsonKey(name: 'offeredProduct')
+  String offeredProduct;
+
   ///公司类别
   @JsonKey(name: 'custCategory')
   String custCategory;
