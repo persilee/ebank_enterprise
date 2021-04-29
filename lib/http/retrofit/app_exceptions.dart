@@ -112,7 +112,7 @@ class AppException implements Exception {
           if (error.error.code == 'SYS90018' ||
               error.error.code == 'SYS90017') {
             showDialog(
-                // barrierDismissible: false,
+                barrierDismissible: false,
                 context: navigatorKey.currentContext,
                 builder: (context) {
                   return HsgAlertDialog(
