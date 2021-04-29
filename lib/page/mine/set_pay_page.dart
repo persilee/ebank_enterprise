@@ -1,7 +1,7 @@
-import 'package:ebank_mobile/data/source/mine_checInformantApi.dart';
+import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/set_transaction_password.dart';
 /**
-  @desc   重置交易密码
+  @desc   设置交易密码
   @author hlx
  */
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -12,7 +12,6 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
-import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -169,7 +168,6 @@ class _SetPayPageState extends State<SetPayPage> {
     String password = EncryptUtil.aesEncode(_confimPwd.text);
     print(password);
     HSProgressHUD.show();
-    // ChecInformantApiRepository()
     ApiClientPassword()
         .setTransactionPassword(
       SetTransactionPasswordReq(_certificateNo, _certificateType, password,
