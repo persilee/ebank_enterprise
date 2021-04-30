@@ -103,8 +103,8 @@ class _TransferInternalPreviewPageState
           _getRowContent(S.current.receipt_bank, transferData.bank),
           _getRowContent(S.current.bank_swift, transferData.bankSWIFT),
           // _getRowContent(S.current.middle_bank_swift, transferData.centerSWIFI),
-          _getRowContent(S.current.Transfer_fee, transferData.transferFee),
-          // _getRowContent(S.current.remittance_usage, transferData.purpose),
+          _getRowContent(S.current.transfer_fee, transferData.transferFee),
+          _getRowContent(S.current.approve_poundage, transferData.feeAmount),
           _getRowContent(
               S.current.transfer_postscript,
               transferData.transferRemark == ''
@@ -193,6 +193,8 @@ class _TransferInternalPreviewPageState
     String payeeAddress = transferData.transferIntoAdress;
     String countryCode = transferData.countryCode;
     String rate = transferData.rate;
+    String feeAmount = transferData.feeAmount;
+    String feeCode = transferData.feeCode;
     HSProgressHUD.show();
     Transfer()
         .getInterNationalTransfer(GetInternationalTransferReq(
@@ -220,6 +222,8 @@ class _TransferInternalPreviewPageState
       countryCode, //countryCode,
       custId,
       costOptionsIndex,
+      feeAmount,
+      feeCode,
     ))
         .then((value) {
       HSProgressHUD.dismiss();
@@ -231,17 +235,6 @@ class _TransferInternalPreviewPageState
         msg: e.error.message,
         gravity: ToastGravity.CENTER,
       );
-      // if (e.toString().contains("EGENE218")) {
-      //   Fluttertoast.showToast(
-      //     msg: S.of(context).transfer_msg_limit,
-      //     gravity: ToastGravity.CENTER,
-      //   );
-      // } else {
-      //   Fluttertoast.showToast(
-      //     msg: e.toString(),
-      //     gravity: ToastGravity.CENTER,
-      //   );
-      // }
     });
   }
 }

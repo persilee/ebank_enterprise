@@ -7,8 +7,13 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'header_interceptor.dart';
 
 class BaseDio {
+<<<<<<< HEAD
   // static const BASEURL = "http://161.189.48.75:5040/"; //dev
   static const BASEURL = "http://47.57.236.20:5040/"; //sit
+=======
+  static const BASEURL = "http://161.189.48.75:5040/"; //dev
+  // static const BASEURL = "http://47.57.236.20:5040/"; //sit
+>>>>>>> 03fe4d7b254f1519ab3c93a24f620db945db2df1
   // static const BASEURL = "http://47.242.2.219:5040/"; //uat
   //static const BASEURL = "http://192.168.201.65:5041/"; //local
   BaseDio._();
