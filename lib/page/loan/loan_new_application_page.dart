@@ -443,13 +443,13 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         children: [
           //联系人
           _textFieldCommonFunc(S.current.contact, _inputs, TextInputType.text,
-              _contactsController, _checkloanIsClick),
+              _contactsController, _checkloanIsClick, 30),
           //联系人手机号码
           _textFieldCommonFunc(S.current.contact_phone_num, _inputs,
-              TextInputType.number, _phoneController, _checkloanIsClick),
-          //联系人手机号码
+              TextInputType.number, _phoneController, _checkloanIsClick, 16),
+          //备注
           _textFieldCommonFunc(S.current.remark, _notRequired,
-              TextInputType.text, _remarkController, () {}),
+              TextInputType.text, _remarkController, () {}, 140),
         ],
       ),
     );
@@ -460,7 +460,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
       String hintText,
       TextInputType keyboard,
       TextEditingController controller,
-      VoidCallback callback) {
+      VoidCallback callback,
+      int length) {
     return TextFieldContainer(
       //备注
       title: title,
@@ -468,6 +469,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
       keyboardType: keyboard,
       controller: controller,
       callback: _checkloanIsClick,
+      length: length,
     );
   }
 

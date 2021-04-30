@@ -8,6 +8,7 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,9 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
 
   bool _isShow = false; //是否展开
   bool _isLoading = true; //显示加载中
+
+  bool _isHsgError = false; //是否是错误
+  Widget _hsgErrorPage; //错误
 
   @override
   void initState() {
@@ -82,7 +86,6 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
   Future _getLoanApplyforListData() async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
-    // LoanDataRepository()
     ApiClientLoan()
         .loanApplyforListData(LoanApplyFoyListReq(userID))
         .then((data) {
@@ -101,9 +104,13 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
     }).catchError((e) {
       setState(() {
         _isLoading = false;
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
+        _isHsgError = true;
+        _hsgErrorPage = HsgErrorPage(
+          //错误页
+          error: e.error,
+          buttonAction: () {
+            _getLoanApplyforListData();
+          },
         );
       });
     });
@@ -117,25 +124,34 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
         centerTitle: true,
         elevation: 1,
       ),
-      body: _isLoading
-          ? HsgLoading()
-          : Container(
-              color: HsgColors.commonBackground,
-              height: double.infinity,
-              child: ListView.builder(
-                itemCount: _productApplyList.length <= 0
-                    ? 1
-                    : _productApplyList.length, //数量
-                itemBuilder: (BuildContext context, int index) {
-                  return _productApplyList.length <= 0
-                      ? Container(
-                          margin: EdgeInsets.only(top: 200),
-                          child:
-                              notDataContainer(context, S.current.no_data_now))
-                      : _productApplyList[index];
-                },
-              ),
-            ),
+      body: _isHsgError
+          ? _hsgErrorPage
+          : _isLoading
+              ? HsgLoading()
+              : Container(
+                  color: HsgColors.commonBackground,
+                  height: double.infinity,
+                  child: ListView.builder(
+                    itemCount: _productApplyList.length <= 0
+                        ? 1
+                        : _productApplyList.length, //数量
+                    itemBuilder: (BuildContext context, int index) {
+                      return _productApplyList.length <= 0
+                          ? HsgErrorPage(
+                              isEmptyPage: true, //是否是空数据页面
+                              buttonAction: () {
+                                _getLoanApplyforListData();
+                              })
+                          : _productApplyList[index];
+
+                      // Container(
+                      //     margin: EdgeInsets.only(top: 200),
+                      //     child:
+                      //         notDataContainer(context, S.current.no_data_now))
+                      // : _productApplyList[index];
+                    },
+                  ),
+                ),
       // ),
     );
   }

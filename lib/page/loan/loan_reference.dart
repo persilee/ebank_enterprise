@@ -753,13 +753,14 @@ class _LoanReferenceState extends State<LoanReference> {
               text: S.current.loan_application_agreement1,
               style: AGREEMENT_TEXT_STYLE,
             ),
-            _conetentJump(S.current.loan_recipients_agreement1, '98822'), //
+            _conetentJump(S.current.loan_recipients_agreement1,
+                'personLoanContact'), //98822
             TextSpan(
               text: S.current.loan_application_agreement3,
               style: AGREEMENT_TEXT_STYLE,
             ),
-            _conetentJump(
-                S.current.loan_recipients_agreement2, '99868'), //用户服务协议
+            _conetentJump(S.current.loan_recipients_agreement2,
+                'authPersonCreditReport'), //用户服务协议
             TextSpan(
               text: S.current.loan_recipients_agreement3,
               style: AGREEMENT_TEXT_STYLE,
