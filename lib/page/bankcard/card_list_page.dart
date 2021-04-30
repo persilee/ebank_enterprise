@@ -70,7 +70,8 @@ class _CardListPageState extends State<CardListPage> {
           : _cardsLength > 0
               ? Container(
                   color: Colors.white,
-                  padding: EdgeInsets.all(6.0),
+                  padding:
+                      EdgeInsets.only(left: 6, right: 6, top: 10, bottom: 20),
                   child: CustomRefresh(
                     controller: _refreshController,
                     onLoading: () {

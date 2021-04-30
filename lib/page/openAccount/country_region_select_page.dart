@@ -9,12 +9,12 @@ import 'package:azlistview/azlistview.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
-import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
+import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/util/language.dart';
+import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lpinyin/lpinyin.dart';
 // import 'package:azlistview/azlistview.dart';
 
@@ -31,6 +31,8 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
   List<CountryRegionNewModel> _hotCityList = List();
   bool _isLoading = false;
   bool _isSelectCity = false;
+  bool _isShowErrorPage = false;
+  Widget _hsgErrorPage;
 
   int _suspensionHeight = 40;
   int _itemHeight = 50;
@@ -41,7 +43,7 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
   void initState() {
     super.initState();
     _initLanguage();
-    loadData();
+    _loadData();
   }
 
   _initLanguage() async {
@@ -59,17 +61,19 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
       children: <Widget>[
         Expanded(
           flex: 1,
-          child: AzListView(
-            data: _cityList,
-            topData: _hotCityList,
-            itemBuilder: (context, model) => _buildListItem(model),
-            suspensionWidget: _buildSusWidget(_suspensionTag),
-            isUseRealIndex: true,
-            itemHeight: _itemHeight,
-            suspensionHeight: _suspensionHeight,
-            onSusTagChanged: _onSusTagChanged,
-            //showCenterTip: false,
-          ),
+          child: _isShowErrorPage
+              ? _hsgErrorPage
+              : AzListView(
+                  data: _cityList,
+                  topData: _hotCityList,
+                  itemBuilder: (context, model) => _buildListItem(model),
+                  suspensionWidget: _buildSusWidget(_suspensionTag),
+                  isUseRealIndex: true,
+                  itemHeight: _itemHeight,
+                  suspensionHeight: _suspensionHeight,
+                  onSusTagChanged: _onSusTagChanged,
+                  //showCenterTip: false,
+                ),
         ),
       ],
     );
@@ -84,65 +88,76 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
           ? HsgLoading()
           : _cityList != null && _cityList.length > 0
               ? contentListView
-              : notDataContainer(context, S.current.no_data_now),
+              : HsgErrorPage(
+                  isEmptyPage: true,
+                  buttonAction: () {
+                    _loadData();
+                  },
+                ),
     );
   }
 
-  void loadData() async {
-    // HSProgressHUD.show();
+  void _loadData() async {
+    setState(() {
+      _isLoading = true;
+    });
+    //获取国家地区列表
+    ApiClientOpenAccount()
+        .getCountryList(CountryRegionNewListReq())
+        .then((data) {
+      setState(() {
+        _isLoading = false;
+        _isShowErrorPage = false;
+      });
+      if (data != null &&
+          data.countryCodeinfoDTOList != null &&
+          data.countryCodeinfoDTOList.length > 0) {
+        List list = data.countryCodeinfoDTOList;
+        list.forEach((value) {
+          CountryRegionNewModel model = value;
+          _cityList.add(
+            model,
+          );
+          if (['CN', 'HK'].contains(model.cntyCd)) {
+            //需要新增一个模型，共用后会无法改变tagIndex
+            CountryRegionNewModel modelHot = CountryRegionNewModel(
+                '',
+                '',
+                value.cntyCd,
+                value.cntyNm,
+                value.cntyCnm,
+                value.cntyTcnm,
+                value.areaCode,
+                '',
+                '★');
+            _hotCityList.add(modelHot);
+          }
+        });
+        _handleList(_cityList);
+        setState(() {
+          if (_hotCityList != null && _hotCityList.length > 0) {
+            _suspensionTag = _hotCityList[0].getSuspensionTag();
+          }
+        });
+      }
+    }).catchError((e) {
+      if (e is NeedLogin) {
+      } else {
+        _hsgErrorPage = HsgErrorPage(
+          error: e.error,
+          buttonAction: () {
+            _loadData();
+          },
+        );
+      }
 
-    // _isLoading = true;
-    // //获取国家地区列表
-    // ApiClientOpenAccount()
-    //     .getCountryList(CountryRegionNewListReq())
-    //     .then((data) {
-    //   // HSProgressHUD.dismiss();
-    //   setState(() {
-    //     _isLoading = false;
-    //   });
-    //   if (data != null &&
-    //       data.countryCodeinfoDTOList != null &&
-    //       data.countryCodeinfoDTOList.length > 0) {
-    //     List list = data.countryCodeinfoDTOList;
-    //     list.forEach((value) {
-    //       CountryRegionNewModel model = value;
-    //       _cityList.add(
-    //         model,
-    //       );
-    //       if (['CN', 'HK'].contains(model.cntyCd)) {
-    //         //需要新增一个模型，共用后会无法改变tagIndex
-    //         CountryRegionNewModel modelHot = CountryRegionNewModel(
-    //             '',
-    //             '',
-    //             value.cntyCd,
-    //             value.cntyNm,
-    //             value.cntyCnm,
-    //             value.cntyTcnm,
-    //             value.areaCode,
-    //             '',
-    //             '★');
-    //         _hotCityList.add(modelHot);
-    //       }
-    //     });
-    //     _handleList(_cityList);
-    //     setState(() {
-    //       if (_hotCityList != null && _hotCityList.length > 0) {
-    //         _suspensionTag = _hotCityList[0].getSuspensionTag();
-    //       }
-    //     });
-    //   }
-    // }).catchError((e) {
-    //   // HSProgressHUD.dismiss();
-    //   setState(() {
-    //     _isLoading = false;
-    //   });
-    //   Fluttertoast.showToast(
-    //     msg: e.toString(),
-    //     gravity: ToastGravity.CENTER,
-    //   );
-    // });
+      setState(() {
+        _isLoading = false;
+        _isShowErrorPage = true;
+      });
+    });
 
-    loadLocalData();
+    // loadLocalData();
   }
 
   void loadLocalData() async {
