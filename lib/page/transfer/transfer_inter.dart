@@ -23,6 +23,7 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -743,39 +744,6 @@ class _TransferInterPageState extends State<TransferInterPage> {
       );
     } else {
       _queryFee();
-      Navigator.pushNamed(
-        context,
-        pageTransferInternationalPreview,
-        arguments: TransferInternationalData(
-          _opt,
-          _payerAccount,
-          _payerTransferController.text,
-          _payerCcy,
-          "",
-          _payeeNameController.text,
-          _payeeAccountController.text,
-          _payeeTransferController.text,
-          _payeeCcy,
-          _payeeAddressController.text,
-          _countryText,
-          _bankNameController.text,
-          _bankSwiftController.text,
-          "",
-          _transferFee,
-          "",
-          _remarkController.text,
-          payeeBankCode,
-          payeeName,
-          payerBankCode,
-          payerName,
-          _countryCode,
-          rate,
-          // _transferFeeIndex.toString(),
-          _transferFeeCode,
-          _pFee,
-          _feeCode,
-        ),
-      );
     }
   }
 
@@ -1096,6 +1064,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
   }
 
   Future _queryFee() async {
+    HSProgressHUD.show();
     final prefs = await SharedPreferences.getInstance();
     String custId = prefs.getString(ConfigKey.CUST_ID);
     String ac = _payerAccount;
@@ -1104,8 +1073,46 @@ class _TransferInterPageState extends State<TransferInterPage> {
     Transfer().queryFee(QueryFeeReq(ac, amt, ccy, custId)).then((data) {
       _pFee = data.recordLists[0].pFee;
       _feeCode = data.recordLists[0].feeC;
+      Navigator.pushNamed(
+        context,
+        pageTransferInternationalPreview,
+        arguments: TransferInternationalData(
+          _opt,
+          _payerAccount,
+          _payerTransferController.text,
+          _payerCcy,
+          "",
+          _payeeNameController.text,
+          _payeeAccountController.text,
+          _payeeTransferController.text,
+          _payeeCcy,
+          _payeeAddressController.text,
+          _countryText,
+          _bankNameController.text,
+          _bankSwiftController.text,
+          "",
+          _transferFee,
+          "",
+          _remarkController.text,
+          payeeBankCode,
+          payeeName,
+          payerBankCode,
+          payerName,
+          _countryCode,
+          rate,
+          // _transferFeeIndex.toString(),
+          _transferFeeCode,
+          _pFee,
+          _feeCode,
+        ),
+      );
+      HSProgressHUD.dismiss();
     }).catchError((e) {
-      print(e.toString());
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: e.error.message,
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 }
