@@ -176,6 +176,8 @@ class _ForgetUserNameState extends State<ForgetUserName> {
                         ),
                         onPressed: _submit()
                             ? () {
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
                                 _checkRegisterBysencond();
                               }
                             : null,
@@ -201,7 +203,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
 
   //获取地区
   _selectRegionCode() {
-    print('区号');
+    FocusScope.of(context).requestFocus(FocusNode());
     Navigator.pushNamed(context, countryOrRegionSelectPage).then((value) {
       setState(() {
         _officeAreaCodeText = (value as CountryRegionNewModel).areaCode;
@@ -215,6 +217,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
       onPressed: countdownTime > 0
           ? null
           : () {
+              FocusScope.of(context).requestFocus(FocusNode());
               _checkRegister();
               FocusScope.of(context).requestFocus(FocusNode());
             },
@@ -312,7 +315,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
               msg: S.current.num_not_is_register,
               gravity: ToastGravity.CENTER,
             );
-          }   //跳转至下一页面
+          } //跳转至下一页面
           else {
             Navigator.popAndPushNamed(context, pageFindUserNameSuccess,
                 arguments: _accountName);

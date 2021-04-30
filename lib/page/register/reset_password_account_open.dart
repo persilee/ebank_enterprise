@@ -173,6 +173,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                       child: Text(S.of(context).next_step),
                       onPressed: _submit()
                           ? () {
+                              FocusScope.of(context).requestFocus(FocusNode());
                               _realNameAuth();
                             }
                           : null,
@@ -264,13 +265,6 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
     )
         .then((data) {
       HSProgressHUD.dismiss();
-      print(_cardNumber.text +
-          '-' +
-          _certTypeKey +
-          '-' +
-          _userPhone +
-          '-' +
-          _userName.text);
       if (data.enabled) {
         Navigator.pushNamed(context, pageResetPasswordNoAccount,
             arguments: listData);

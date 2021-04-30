@@ -1,6 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/modify_pwd_by_sms.dart';
-import 'package:ebank_mobile/data/source/update_login_paw_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
@@ -35,7 +34,6 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
   String _accountName;
   String _sms;
   String _areaCode;
-
 
   @override
   // ignore: must_call_super
@@ -137,6 +135,8 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                         ),
                         onPressed: _submit()
                             ? () async {
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
                                 final prefs =
                                     await SharedPreferences.getInstance();
                                 String userName =
