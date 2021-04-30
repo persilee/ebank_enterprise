@@ -12,6 +12,7 @@ import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
+import 'package:ebank_mobile/data/source/model/query_fee.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -22,6 +23,7 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -103,9 +105,9 @@ class _TransferInterPageState extends State<TransferInterPage> {
   //转账费用
   List<String> transferFeeList = [];
   List<String> transferFeeCodeList = [];
-  int _transferFeeIndex = 0;
-  String _transferFeeCode = '';
-  String _transferFee = '';
+  int _transferFeeIndex = 2;
+  String _transferFeeCode = 'S';
+  String _transferFee = '各自承担手续费';
 
   //按钮是否能点击
   bool _isClick = false;
@@ -117,6 +119,9 @@ class _TransferInterPageState extends State<TransferInterPage> {
   var _countryText = '';
   var _countryCode = '';
   String _language = Intl.getCurrentLocale();
+
+  String _pFee = '';
+  String _feeCode = '';
 
   @override
   void initState() {
@@ -564,7 +569,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
           children: [
             //转账费用
             SelectInkWell(
-              title: S.current.Transfer_fee,
+              title: S.current.transfer_fee,
               item: _transferFee,
               onTap: () {
                 FocusScope.of(context).requestFocus(FocusNode());
@@ -738,38 +743,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
         gravity: ToastGravity.CENTER,
       );
     } else {
-      print('_transferFeeCode: ${_transferFeeCode}');
-      Navigator.pushNamed(
-        context,
-        pageTransferInternationalPreview,
-        arguments: TransferInternationalData(
-          _opt,
-          _payerAccount,
-          _payerTransferController.text,
-          _payerCcy,
-          "",
-          _payeeNameController.text,
-          _payeeAccountController.text,
-          _payeeTransferController.text,
-          _payeeCcy,
-          _payeeAddressController.text,
-          _countryText,
-          _bankNameController.text,
-          _bankSwiftController.text,
-          "",
-          _transferFee,
-          "",
-          _remarkController.text,
-          payeeBankCode,
-          payeeName,
-          payerBankCode,
-          payerName,
-          _countryCode,
-          rate,
-          // _transferFeeIndex.toString(),
-          _transferFeeCode,
-        ),
-      );
+      _queryFee();
     }
   }
 
@@ -847,7 +821,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
         context: context,
         builder: (context) {
           return BottomMenu(
-            title: S.current.Transfer_fee,
+            title: S.current.transfer_fee,
             items: transferFeeList,
           );
         });
@@ -1086,6 +1060,59 @@ class _TransferInterPageState extends State<TransferInterPage> {
       }
     }).catchError((e) {
       print(e.toString());
+    });
+  }
+
+  Future _queryFee() async {
+    HSProgressHUD.show();
+    final prefs = await SharedPreferences.getInstance();
+    String custId = prefs.getString(ConfigKey.CUST_ID);
+    String ac = _payerAccount;
+    String amt = _payerTransferController.text;
+    String ccy = _payerCcy;
+    Transfer().queryFee(QueryFeeReq(ac, amt, ccy, custId)).then((data) {
+      _pFee = data.recordLists[0].pFee;
+      _feeCode = data.recordLists[0].feeC;
+      Navigator.pushNamed(
+        context,
+        pageTransferInternationalPreview,
+        arguments: TransferInternationalData(
+          _opt,
+          _payerAccount,
+          _payerTransferController.text,
+          _payerCcy,
+          "",
+          _payeeNameController.text,
+          _payeeAccountController.text,
+          _payeeTransferController.text,
+          _payeeCcy,
+          _payeeAddressController.text,
+          _countryText,
+          _bankNameController.text,
+          _bankSwiftController.text,
+          "",
+          _transferFee,
+          "",
+          _remarkController.text,
+          payeeBankCode,
+          payeeName,
+          payerBankCode,
+          payerName,
+          _countryCode,
+          rate,
+          // _transferFeeIndex.toString(),
+          _transferFeeCode,
+          _pFee,
+          _feeCode,
+        ),
+      );
+      HSProgressHUD.dismiss();
+    }).catchError((e) {
+      HSProgressHUD.dismiss();
+      Fluttertoast.showToast(
+        msg: e.error.message,
+        gravity: ToastGravity.CENTER,
+      );
     });
   }
 }

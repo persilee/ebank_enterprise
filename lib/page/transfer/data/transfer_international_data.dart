@@ -28,6 +28,8 @@ class TransferInternationalData {
   String countryCode;
   String rate;
   String opt;
+  String feeAmount;
+  String feeCode;
   TransferInternationalData(
     this.opt,
     this.transferOutAccount,
@@ -53,5 +55,7 @@ class TransferInternationalData {
     this.countryCode,
     this.rate,
     this.transferFeeIndex,
+    this.feeAmount,
+    this.feeCode,
   );
 }

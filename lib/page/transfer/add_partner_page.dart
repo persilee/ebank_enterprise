@@ -457,7 +457,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           Divider(height: 0.5, color: HsgColors.divider),
           //转账费用
           SelectInkWell(
-            title: S.current.Transfer_fee,
+            title: S.current.transfer_fee,
             item: _transferFee,
             onTap: () {
               FocusScope.of(context).requestFocus(FocusNode());
@@ -486,7 +486,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         context: context,
         builder: (context) {
           return BottomMenu(
-            title: S.current.Transfer_fee,
+            title: S.current.transfer_fee,
             items: transferFeeList,
           );
         });

@@ -164,7 +164,7 @@
   "receipt_bank": "收款銀行",
   "bank_swift": "銀行SWIFT",
   "middle_bank_swift": "中間行SWIFT",
-  "Transfer_fee": "轉賬費用",
+  "transfer_fee": "費用支付方式",
   "remittance_usage": "匯款用途",
   "remittance_address": "匯款地址",
   "collection_address": "收款地址",

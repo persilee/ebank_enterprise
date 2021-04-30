@@ -66,6 +66,12 @@ class GetInternationalTransferReq extends Object {
   @JsonKey(name: 'costOptions')
   String costOptions;
 
+  @JsonKey(name: 'feeAmount')
+  String feeAmount;
+
+  @JsonKey(name: 'feeCode')
+  String feeCode;
+
   GetInternationalTransferReq(
     this.opt,
     this.debitAmount,
@@ -87,6 +93,8 @@ class GetInternationalTransferReq extends Object {
     this.district,
     this.custId,
     this.costOptions,
+    this.feeAmount,
+    this.feeCode,
   );
 
   factory GetInternationalTransferReq.fromJson(Map<String, dynamic> srcJson) =>

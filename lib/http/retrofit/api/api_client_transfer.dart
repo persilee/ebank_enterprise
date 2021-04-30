@@ -14,6 +14,7 @@ import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_plan_details.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_plan_list.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_record.dart';
+import 'package:ebank_mobile/data/source/model/query_fee.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -95,4 +96,8 @@ abstract class Transfer {
   //检查节假日
   @POST('/ddep/transfer/getCcyHoliday')
   Future<GetCcyHolidayResp> getCcyHoliday(@Body() GetCcyHolidayReq req);
+
+  //查询费用
+  @POST('/ddep/fee/queryFee')
+  Future<QueryFeeResp> queryFee(@Body() QueryFeeReq req);
 }
