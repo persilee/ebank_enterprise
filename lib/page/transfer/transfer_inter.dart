@@ -12,6 +12,7 @@ import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
+import 'package:ebank_mobile/data/source/model/query_fee.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -117,6 +118,9 @@ class _TransferInterPageState extends State<TransferInterPage> {
   var _countryText = '';
   var _countryCode = '';
   String _language = Intl.getCurrentLocale();
+
+  String _pFee = '';
+  String _feeCode = '';
 
   @override
   void initState() {
@@ -738,7 +742,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
         gravity: ToastGravity.CENTER,
       );
     } else {
-      print('_transferFeeCode: ${_transferFeeCode}');
+      _queryFee();
       Navigator.pushNamed(
         context,
         pageTransferInternationalPreview,
@@ -768,6 +772,8 @@ class _TransferInterPageState extends State<TransferInterPage> {
           rate,
           // _transferFeeIndex.toString(),
           _transferFeeCode,
+          _pFee,
+          _feeCode,
         ),
       );
     }
@@ -1084,6 +1090,20 @@ class _TransferInterPageState extends State<TransferInterPage> {
           _boolBut();
         });
       }
+    }).catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  Future _queryFee() async {
+    final prefs = await SharedPreferences.getInstance();
+    String custId = prefs.getString(ConfigKey.CUST_ID);
+    String ac = _payerAccount;
+    String amt = _payerTransferController.text;
+    String ccy = _payerCcy;
+    Transfer().queryFee(QueryFeeReq(ac, amt, ccy, custId)).then((data) {
+      _pFee = data.recordLists[0].pFee;
+      _feeCode = data.recordLists[0].feeC;
     }).catchError((e) {
       print(e.toString());
     });
