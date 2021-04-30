@@ -14,6 +14,7 @@ import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.da
 import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -93,6 +94,9 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
 
   ///商业行业性质二级请求类型
   List<RedisRspDto> _industrialNaturesTwo = [];
+
+  bool _isShowErrorPage = false;
+  Widget _hsgErrorPage;
 
   @override
   void initState() {
@@ -790,10 +794,13 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         _documentTypes = data.publicCodeGetRedisRspDtoList;
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      if (e is NeedLogin) {
+      } else {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+      }
     });
 
     //获取公司类别类型CORP_TYPE
@@ -803,10 +810,13 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         _companyTypes = data.publicCodeGetRedisRspDtoList;
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      if (e is NeedLogin) {
+      } else {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+      }
     });
 
     //获取商业行业性质类型NOCI
@@ -816,10 +826,13 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         _industrialNatures = data.publicCodeGetRedisRspDtoList;
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      if (e is NeedLogin) {
+      } else {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+      }
     });
   }
 
@@ -843,10 +856,13 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       }
     }).catchError((e) {
       HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      if (e is NeedLogin) {
+      } else {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.CENTER,
+        );
+      }
     });
   }
 

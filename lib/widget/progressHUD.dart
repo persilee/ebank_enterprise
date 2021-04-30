@@ -5,6 +5,7 @@
 
 import 'dart:ui';
 
+import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -21,6 +22,18 @@ class HSProgressHUD {
     String status,
   }) {
     SVProgressHUD.show(status: status);
+  }
+
+  static void showToast(
+    AppException error,
+  ) {
+    String errorStr = error.code ?? '' + error.message ?? '';
+    SVProgressHUD.dismiss();
+    Fluttertoast.showToast(
+      msg: errorStr,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 2,
+    );
   }
 
   static void showProgress(

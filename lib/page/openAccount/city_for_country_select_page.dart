@@ -8,8 +8,10 @@ import 'package:ebank_mobile/data/source/model/city_for_country.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/language.dart';
+import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -28,6 +30,8 @@ class _CityForCountrySelectPageState extends State<CityForCountrySelectPage> {
   List<CityForCountryModel> _cityList = List();
   List<CityForCountryModel> _hotCityList = List();
   bool _isLoading = false;
+  bool _isShowErrorPage = false;
+  Widget _hsgErrorPage;
 
   int _suspensionHeight = 40;
   int _itemHeight = 50;
@@ -38,7 +42,7 @@ class _CityForCountrySelectPageState extends State<CityForCountrySelectPage> {
   @override
   void initState() {
     _initLanguage();
-    loadData();
+    _loadData();
     super.initState();
   }
 
@@ -90,20 +94,26 @@ class _CityForCountrySelectPageState extends State<CityForCountrySelectPage> {
           ? HsgLoading()
           : _cityList != null && _cityList.length > 0
               ? contentListView
-              : notDataContainer(context, S.current.no_data_now),
+              : HsgErrorPage(
+                  isEmptyPage: true,
+                  buttonAction: () {
+                    _loadData();
+                  },
+                ),
     );
   }
 
-  void loadData() async {
-    // HSProgressHUD.show();
-    _isLoading = true;
+  void _loadData() async {
+    setState(() {
+      _isLoading = true;
+    });
     ApiClientOpenAccount()
         .getCntAllBpCtCit(
             CityForCountryListReq(widget.countryData.cntyCd ?? ''))
         .then((data) {
-      // HSProgressHUD.dismiss();
       setState(() {
         _isLoading = false;
+        _isShowErrorPage = false;
       });
       if (data != null &&
           data.bpCtCitRspDTOS != null &&
@@ -125,14 +135,20 @@ class _CityForCountrySelectPageState extends State<CityForCountrySelectPage> {
         });
       }
     }).catchError((e) {
-      // HSProgressHUD.dismiss();
+      if (e is NeedLogin) {
+      } else {
+        _hsgErrorPage = HsgErrorPage(
+          error: e.error,
+          buttonAction: () {
+            _loadData();
+          },
+        );
+      }
+
       setState(() {
         _isLoading = false;
+        _isShowErrorPage = true;
       });
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
     });
   }
 
