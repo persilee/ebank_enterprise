@@ -137,7 +137,8 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                               ? () {
                                   // final prefs =
                                   //     await SharedPreferences.getInstance();
-
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
                                   //特殊字符
                                   RegExp characters = new RegExp(
                                       "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
@@ -225,8 +226,9 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
   //注册成功发送短信
   _sendMessage() async {
     ApiClientPassword()
-        .sendMessage(SendMessageReq(
-            _areaCode, _userPhone, 'register', _registerAccount,'SCNAOCREGU','MB',msgBankId: '999'))
+        .sendMessage(SendMessageReq(_areaCode, _userPhone, 'register',
+            _registerAccount, 'SCNAOCREGU', 'MB',
+            msgBankId: '999'))
         .then((value) {
       if (mounted) {
         setState(() {
