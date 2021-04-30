@@ -105,9 +105,9 @@ class _TransferInterPageState extends State<TransferInterPage> {
   //转账费用
   List<String> transferFeeList = [];
   List<String> transferFeeCodeList = [];
-  int _transferFeeIndex = 0;
-  String _transferFeeCode = '';
-  String _transferFee = '';
+  int _transferFeeIndex = 2;
+  String _transferFeeCode = 'S';
+  String _transferFee = '各自承担手续费';
 
   //按钮是否能点击
   bool _isClick = false;
@@ -569,7 +569,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
           children: [
             //转账费用
             SelectInkWell(
-              title: S.current.Transfer_fee,
+              title: S.current.transfer_fee,
               item: _transferFee,
               onTap: () {
                 FocusScope.of(context).requestFocus(FocusNode());
@@ -821,7 +821,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
         context: context,
         builder: (context) {
           return BottomMenu(
-            title: S.current.Transfer_fee,
+            title: S.current.transfer_fee,
             items: transferFeeList,
           );
         });
