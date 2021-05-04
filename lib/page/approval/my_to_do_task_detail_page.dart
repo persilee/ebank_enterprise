@@ -723,10 +723,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.hdlFee ?? '0')) ?? ''
                 : f.format(double.parse(data?.hdlFee ?? '0')) ?? ''));
-        _earlyRedTdList.add(_buildContentItem(S.current.approve_penalty,
-            data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.pnltFee ?? '0')) ?? ''
-                : f.format(double.parse(data?.pnltFee ?? '0')) ?? ''));
         _earlyRedTdList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );
