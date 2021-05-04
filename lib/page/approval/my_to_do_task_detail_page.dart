@@ -4,6 +4,8 @@
 /// Date: 2020-12-29
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/approval/card_bal_by_card_no_body.dart';
+import 'package:ebank_mobile/data/source/model/approval/card_bal_by_card_no_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/complete_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/complete_task_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_all_finished_task_model.dart';
@@ -29,6 +31,7 @@ import 'package:ebank_mobile/data/source/model/approval/post_repayment_model.dar
     as PostRepaymentModel;
 import 'package:ebank_mobile/data/source/model/approval/loan_with_drawal_model.dart'
     as LoanWithDrawalModel;
+import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
@@ -158,12 +161,45 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   }
 
   // loanWithDrawalApproval - 贷款领用
-  void _loanWithDrawalData(_contractModel) {
+  void _loanWithDrawalData(_contractModel) async {
     LoanWithDrawalModel.LoanWithDrawalModel loanWithDrawalModel =
         LoanWithDrawalModel.LoanWithDrawalModel.fromJson(_contractModel);
 
     LoanWithDrawalModel.OperateEndValue data =
         loanWithDrawalModel.operateEndValue;
+
+    // 获取贷款期限
+    String _iratTm = '';
+    try {
+      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
+      List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
+      if(_tenorList.isNotEmpty) {
+        _tenorList.forEach((element) {
+          if(data?.iratTm == element.code) {
+            _iratTm = _language == 'zh_CN' ? element.cname : element.name;
+          }
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    // 获取还款方式
+    String _repType = '';
+    try {
+      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('REPAY_TYPE'));
+      List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
+      if(_tenorList.isNotEmpty) {
+        _tenorList.forEach((element) {
+          if(data?.repType == element.code) {
+            _repType = _language == 'zh_CN' ? element.cname : element.name;
+          }
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+
 
     // 添加历史审批记录
     if (loanWithDrawalModel.commentList.isNotEmpty) {
@@ -191,9 +227,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 ? fj.format(double.parse(data?.loanAmount ?? '0')) ?? ''
                 : f.format(double.parse(data?.loanAmount ?? '0')) ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
-            S.current.loan_Borrowing_Period, data?.iratTm ?? ''));
+            S.current.loan_Borrowing_Period, _iratTm ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
-            S.current.loan_Repayment_method_column, data?.repType ?? ''));
+            S.current.loan_Repayment_method_column, _repType ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
             S.current.approve_first_interest_date, data?.fPaydt ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
@@ -283,12 +319,25 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   }
 
   // foreignTransferApproval - 外汇买卖
-  void _loadForeignTransferData(_contractModel) {
+  void _loadForeignTransferData(_contractModel) async {
     ForeignTransferModel.ForeignTransferModel foreignTransferModel =
         ForeignTransferModel.ForeignTransferModel.fromJson(_contractModel);
 
     ForeignTransferModel.OperateEndValue data =
         foreignTransferModel.operateEndValue;
+
+    // 获取可用余额
+    String _avaBal = '';
+    try {
+      CardBalByCardNoModel balByCardNo = await ApiClient().getCardBalByCardNo(CardBalByCardNoBody(cardNo: data?.buyDac));
+      balByCardNo.cardListBal.forEach((element) {
+        if(data?.buyCcy == element.ccy) {
+          _avaBal = element.avaBal;
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
 
     // 添加历史审批记录
     if (foreignTransferModel.commentList.isNotEmpty) {
@@ -307,6 +356,11 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             S.current.approve_debit_account_f, data?.buyDac ?? ''));
         _foreignTransferList.add(_buildContentItem(
             S.current.approve_debit_currency, data?.buyCcy ?? ''));
+        _foreignTransferList.add(_buildContentItem(
+            S.current.loan_detail_available_amount,
+            data?.buyCcy == 'JPY'
+                ? fj.format(double.parse(_avaBal)) ?? ''
+                : f.format(double.parse(_avaBal)) ?? ''));
         _foreignTransferList.add(_buildContentItem(
             S.current.approve_debit_amount,
             // 处理日元没有小数
@@ -392,7 +446,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   }
 
   // internationalTransferApproval - 国际汇款
-  void _loadInternationalData(_contractModel) {
+  void _loadInternationalData(_contractModel) async {
     InternationalModel.InternationalTransferDetailModel
         internationalTransferDetailModel =
         InternationalModel.InternationalTransferDetailModel.fromJson(
@@ -400,6 +454,52 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     InternationalModel.OperateEndValue data =
         internationalTransferDetailModel.operateEndValue;
+
+    // 获取可用余额
+    String _avaBal = '';
+    try {
+      CardBalByCardNoModel balByCardNo = await ApiClient().getCardBalByCardNo(CardBalByCardNoBody(cardNo: data?.payerCardNo));
+      balByCardNo.cardListBal.forEach((element) {
+        if(data?.debitCurrency == element.ccy) {
+          _avaBal = element.avaBal;
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
+
+    // 获取手续费支付方式
+    String _costOptions = '';
+    try {
+      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('PAY_METHOD'));
+      List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
+      if(_tenorList.isNotEmpty) {
+        _tenorList.forEach((element) {
+          if(data?.costOptions == element.code) {
+            _costOptions = _language == 'zh_CN' ? element.cname : element.name;
+          }
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    // 获取国家地区
+    String _district = '';
+    try {
+      CountryRegionNewListResp countryRegionNewListResp = await ApiClientOpenAccount()
+          .getCountryList(CountryRegionNewListReq());
+      List<CountryRegionNewModel> _countryRegionNewList = countryRegionNewListResp.countryCodeinfoDTOList;
+      if(_countryRegionNewList.isNotEmpty) {
+        _countryRegionNewList.forEach((element) {
+          if(data?.district == element.cntyCd) {
+            _district = _language == 'zh_CN' ? element.cntyCnm : element.cntyNm;
+          }
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
 
     // 添加历史审批记录
     if (internationalTransferDetailModel.commentList.isNotEmpty) {
@@ -428,7 +528,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _internationalList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
         _internationalList.add(_buildContentItem(
-            S.current.approve_country_region, data?.district ?? ''));
+            S.current.approve_country_region, _district ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_swift_code, data?.bankSwift ?? ''));
         _internationalList.add(_buildContentItem(
@@ -452,7 +552,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 ? fj.format(double.parse(data?.debitAmount ?? '0'))
                 : f.format(double.parse(data?.debitAmount ?? '0')) ?? ''));
         _internationalList.add(_buildContentItem(
-            S.current.approve_payment_method, data?.costOptions ?? ''));
+            S.current.loan_detail_available_amount,
+            data?.debitCurrency == 'JPY'
+                ? fj.format(double.parse(_avaBal)) ?? ''
+                : f.format(double.parse(_avaBal)) ?? ''));
+        _internationalList.add(_buildContentItem(
+            S.current.approve_payment_method, _costOptions ?? ''));
         _internationalList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
@@ -462,12 +567,25 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   }
 
   // oneToOneTransferApproval - 行内转账
-  void _loadOneToOneData(_contractModel) {
+  void _loadOneToOneData(_contractModel) async {
     OneToOneModel.OneToOneTransferDetailModel oneToOneTransferDetailModel =
         OneToOneModel.OneToOneTransferDetailModel.fromJson(_contractModel);
 
     OneToOneModel.OperateEndValue data =
         oneToOneTransferDetailModel.operateEndValue;
+
+    // 获取可用余额
+    String _avaBal = '';
+    try {
+      CardBalByCardNoModel balByCardNo = await ApiClient().getCardBalByCardNo(CardBalByCardNoBody(cardNo: data?.payerCardNo));
+      balByCardNo.cardListBal.forEach((element) {
+            if(data?.debitCurrency == element.ccy) {
+              _avaBal = element.avaBal;
+            }
+          });
+    } catch (e) {
+      print(e);
+    }
 
     // 添加历史审批记录
     if (oneToOneTransferDetailModel.commentList.isNotEmpty) {
@@ -506,9 +624,14 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             S.current.approve_currency, data?.debitCurrency ?? ''));
         _oneToOneList.add(_buildContentItem(
             S.current.approve_amount,
-            data?.creditCurrency == 'JPY'
+            data?.debitCurrency == 'JPY'
                 ? fj.format(double.parse(data?.debitAmount)) ?? ''
                 : f.format(double.parse(data?.debitAmount)) ?? ''));
+        _oneToOneList.add(_buildContentItem(
+            S.current.loan_detail_available_amount,
+            data?.debitCurrency == 'JPY'
+                ? fj.format(double.parse(_avaBal)) ?? ''
+                : f.format(double.parse(_avaBal)) ?? ''));
         _oneToOneList.add(
             _buildContentItem(S.current.approve_remark, data?.remark ?? ''));
         _isLoading = false;
@@ -723,10 +846,50 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   @override
   Widget build(BuildContext context) {
     String _processKey = widget.data.processKey;
+    String _titleCN = '';
+    switch(_processKey){
+      case 'openTdContractApproval': {
+        _titleCN = '开立定期存单审批';
+      }
+      break;
+      case 'oneToOneTransferApproval': {
+        _titleCN = '行内转账审批';
+      }
+      break;
+      case 'internationalTransferApproval': {
+        _titleCN = '国际转账审批';
+      }
+      break;
+      case 'earlyRedTdContractApproval': {
+        _titleCN = '定期提前结清审批';
+      }
+      break;
+      case 'foreignTransferApproval': {
+        _titleCN = '外汇买卖审批';
+      }
+      break;
+      case 'loanWithDrawalApproval': {
+        _titleCN = '贷款领用审批';
+      }
+      break;
+      case 'postRepaymentApproval': {
+        _titleCN = '提前还款审批';
+      }
+      break;
+      case 'loanRepaymentApproval': {
+        _titleCN = '计划还款审批';
+      }
+      break;
+      default:
+        {
+          _titleCN = '任务审批';
+        }
+    }
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(S.current.approve_task_approval_title),
+        title: _language == 'zh_CN' ? Text(_titleCN) : Text(widget.data.taskName + ' approval'),
         elevation: 0,
       ),
       body: _isLoading

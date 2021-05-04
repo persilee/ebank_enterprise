@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:ebank_mobile/data/source/model/approval/card_bal_by_card_no_body.dart';
+import 'package:ebank_mobile/data/source/model/approval/card_bal_by_card_no_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/complete_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/complete_task_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_all_finished_task_model.dart';
@@ -121,4 +123,9 @@ abstract class ApiClient {
   @POST('/tdep/timeDeposit/getTdepProductsByPage')
   Future<TdepProductsModel> getTdepProductsByPage(
       @Body() TdepProductsBody tdepProductsBody);
+
+  /// 查询可用余额
+  @POST('/cust/bankcard/getCardBalByCardNo')
+  Future<CardBalByCardNoModel> getCardBalByCardNo(
+      @Body() CardBalByCardNoBody cardBalByCardNoBody);
 }
