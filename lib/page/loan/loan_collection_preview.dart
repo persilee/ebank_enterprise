@@ -14,8 +14,8 @@ import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:intl/intl.dart';
 import 'package:sp_util/sp_util.dart';
 
@@ -284,19 +284,18 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
         _requstMap['loanPurpose'] //贷款用途
         );
     // 可借款额度 总利息  贷款用途
-    SVProgressHUD.show();
+    HSProgressHUD.show();
     ApiClientLoan().loanFinalWithdrawInterface(req).then(
       (data) async {
         if (data != null) {
-          SVProgressHUD.showSuccess(status: S.current.total_opration_audit_tip);
+          HSProgressHUD.showToastTip(S.current.total_opration_audit_tip);
           await Future.delayed(Duration(seconds: 1)); //延迟一秒再执行
           Navigator.of(context)..pop()..pop();
         }
-        SVProgressHUD.dismiss();
+        HSProgressHUD.dismiss();
       },
     ).catchError((e) {
-      SVProgressHUD.dismiss();
-      SVProgressHUD.showInfo(status: e.toString());
+      HSProgressHUD.showToast(e.error);
     });
   }
 }

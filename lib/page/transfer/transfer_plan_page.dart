@@ -15,9 +15,9 @@ import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_dotted_line.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TransferPlanPage extends StatefulWidget {
@@ -645,10 +645,7 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
         }
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
       if (this.mounted) {
         setState(() {
           _isLoading = false;

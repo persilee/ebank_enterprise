@@ -19,7 +19,6 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../page_route.dart';
 
@@ -203,8 +202,8 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
         onPressed: () {
           //需要先判断当前额度是否大于0
           if (double.parse(widget.loanAccountDetail.bal) <= 0) {
-            SVProgressHUD.showInfo(
-                status: S.current.loan_detail_available_insufficient);
+            HSProgressHUD.showToastTip(
+                S.current.loan_detail_available_insufficient);
           } else {
             //传值过去
             Navigator.pushNamed(context, pageLoanReference,
