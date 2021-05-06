@@ -750,6 +750,7 @@
   "transfer_the_preview4": "Preview of Foreign Exchange Trading",
   "longzhenqi_start":">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>龙振旗国际化起点>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "set_pay_password_isEqual":"The transaction password cannot be the same number",
+  "set_pay_password_regular":"The transaction Password cannot be consecutive numbers",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
 
 }
