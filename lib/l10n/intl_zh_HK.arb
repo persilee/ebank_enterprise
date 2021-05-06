@@ -634,7 +634,7 @@
   "loan_application_apply_processed": "已處理",
   "loan_application_input_comfir": "申請已提交,待審核",
   "mine_change_Trade_password": "證件信息不匹配,請重試",
-  "open_account_goto_ebank_tip": "尊敬的用戶，您好。由於您不是受邀客戶，請先通過企服商進行邀請，或者前往企業網銀進行開戶申請。",
+  "open_account_goto_ebank_tip": "尊敬的用戶，您尚未完成開戶，請聯繫銀行代理商進行快速開戶，或者前往企業網銀進行開戶。",
   "openAccount_faceSign_results_content": "面簽數據提交成功",
   "openAccount_industryNatureTwo": "商業/行業性質細分",
   "openAccount_industryNatureTwo_select": "商業/行業性質細分選擇",

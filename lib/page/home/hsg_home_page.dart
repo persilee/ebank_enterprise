@@ -87,10 +87,10 @@ class _HomePageState extends State<HomePage>
       },
     );
     // 网络请求
-    _loadData();
+    _loadData(true);
 
     EventBusUtils.getInstance().on<GetUserEvent>().listen((event) {
-      _loadData();
+      _loadData(false);
     });
 
     EventBusUtils.getInstance().on<ChangeHeadPortraitEvent>().listen((event) {
@@ -669,7 +669,7 @@ class _HomePageState extends State<HomePage>
             ),
             clickCallback: () {
               print('开户申请');
-              _openAccountClickFunction(context);
+              _openAccountClickFunction(context, false);
             },
           ),
         ],
@@ -701,7 +701,7 @@ class _HomePageState extends State<HomePage>
             height: 35,
             child: RaisedButton(
               onPressed: () {
-                _openAccountClickFunction(context);
+                _openAccountClickFunction(context, false);
               },
               child: Text(
                 S.of(context).open_account_reapply,
@@ -866,17 +866,10 @@ class _HomePageState extends State<HomePage>
   //功能点击事件
   VoidCallback _featureClickFunction(BuildContext context, String title) {
     return () {
-      // if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
-      //   HsgShowTip.notOpenAccountTip(
-      //     context: context,
-      //     click: (value) {
-      //       if (value == true) {
-      //         _openAccountClickFunction(context);
-      //       }
-      //     },
-      //   );
-      //   return;
-      // }
+      if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
+        _openAccountClickFunction(context, true);
+        return;
+      }
       if (_belongCustStatus == '4' &&
           [
             S.current.transfer,
@@ -948,17 +941,36 @@ class _HomePageState extends State<HomePage>
   }
 
   //开户点击事件
-  void _openAccountClickFunction(BuildContext context) {
+  void _openAccountClickFunction(BuildContext context, bool shouldTip) {
     if (_belongCustStatus == '1') {
-      ///提示，前往网银开户
-      HsgShowTip.notOpenAccountGotoEbankTip(
-        context: context,
-        click: (value) {},
-      );
-    } else {
+      _notQuickOpenAccTip(context);
+    } else if (shouldTip == false) {
       //前往快速开户
       Navigator.pushNamed(context, pageOpenAccountBasicData);
+    } else {
+      HsgShowTip.notOpenAccountTip(
+        context: context,
+        click: (value) {
+          if (value == true) {
+            //前往快速开户
+            Navigator.pushNamed(context, pageOpenAccountBasicData);
+          }
+        },
+      );
     }
+  }
+
+  // 非快速开户用户提示
+  void _notQuickOpenAccTip(BuildContext context) {
+    HsgShowTip.notOpenAccountGotoEbankTip(
+      context: context,
+      click: (value) {
+        if (value == true) {
+          // //前往网银开户, 点击前往面签码页面
+          // Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+        }
+      },
+    );
   }
 
   //校验是否提示设置交易密码
@@ -1084,7 +1096,7 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  Future<void> _loadData() async {
+  Future<void> _loadData(bool shouldTip) async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
 
@@ -1106,6 +1118,11 @@ class _HomePageState extends State<HomePage>
           _verifyGotoTranPassword(context, data.passwordEnabled);
           EventBusUtils.getInstance()
               .fire(ChangeUserInfo(userInfo: _data, state: 100));
+          if (shouldTip == true &&
+              ['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
+            _openAccountClickFunction(context, true);
+            return;
+          }
         });
       }
     }).catchError((e) {
