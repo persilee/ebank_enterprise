@@ -200,6 +200,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           onPressed: _submit()
                               ? () {
+                                  // 触摸收起键盘
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
                                   RegExp userName =
                                       new RegExp("[a-zA-Z0-9]{4,16}");
                                   //特殊字符
@@ -370,8 +373,8 @@ class _RegisterPageState extends State<RegisterPage> {
       onPressed: countdownTime > 0
           ? null
           : () {
-              _checkRegister();
               FocusScope.of(context).requestFocus(FocusNode());
+              _checkRegister();
             },
       //文字颜色
       textColor: HsgColors.blueTextColor,
@@ -402,6 +405,7 @@ class _RegisterPageState extends State<RegisterPage> {
   //选择地区方法
   _selectRegionCode() {
     print('区号');
+    FocusScope.of(context).requestFocus(FocusNode());
     Navigator.pushNamed(context, countryOrRegionSelectPage).then((value) {
       setState(() {
         _officeAreaCodeText = (value as CountryRegionNewModel).areaCode;
@@ -413,6 +417,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _roundCheckBox() {
     return GestureDetector(
       onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
         setState(() {
           _checkBoxValue = !_checkBoxValue;
         });
@@ -467,6 +472,7 @@ class _RegisterPageState extends State<RegisterPage> {
       style: AGREEMENT_JUMP_TEXT_STYLE,
       recognizer: TapGestureRecognizer()
         ..onTap = () {
+          FocusScope.of(context).requestFocus(FocusNode());
           Navigator.pushNamed(context, pageUserAgreement, arguments: arguments);
         },
     );

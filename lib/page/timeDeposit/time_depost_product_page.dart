@@ -22,6 +22,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -36,8 +37,10 @@ class TimeDepostProduct extends StatefulWidget {
 }
 
 class _TimeDepostProductState extends State<TimeDepostProduct> {
-  List<TdepProducHeadDTO> productList = []; //产品（大类）
-  List<List<TdepProductDTOList>> producDTOList = []; //子产品
+  // List<TdepProducHeadDTO> productList = []; //产品（大类）
+  // List<List<TdepProductDTOList>> producDTOList = []; //子产品
+  List producDTOList = []; //子产品 TdepProductDTOList
+
   String language = Intl.getCurrentLocale();
   String _changedCcy = S.current.hint_please_select; //筛选币种
   String _changedTerm = S.current.hint_please_select; //筛选存期
@@ -60,7 +63,10 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     _refreshController = RefreshController();
     _scrollController = ScrollController();
     _loadData(); //获取定期产品列表
-
+    inputValue.addListener(() {
+      //监听金额的输入要限制最低
+      print(inputValue.text);
+    });
 //接收通知
     NotificationCenter.instance.addObserver('timeDepositProduct', (object) {
       if (this.mounted) {
@@ -222,6 +228,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           //     RegExp('([1-9]\d*\.?\d*)|(0\.?\d*[1-9])?')),
         ],
         onChanged: (value) {
+          print(inputValue.text);
           // double.parse(value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
           // _bal = double.parse(value);
         },
@@ -584,27 +591,26 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   }
 
   //定期产品列表
-  Widget _titleSection(TdepProducHeadDTO tdepProductList,
-      List<TdepProductDTOList> tdepProducDTOList) {
+  Widget _titleSection(TdepProductDTOList productDetai) {
     //最小年利率
-    double minRate = double.parse(
-        FormatUtil.formatNum(double.parse(tdepProductList.minRate), 2));
+    double minRate = double.parse(FormatUtil.formatNum(
+        double.parse(productDetai.minRate), 2)); //tdepProductList.minRate
     //最大年利率
-    double maxRate = double.parse(
-        FormatUtil.formatNum(double.parse(tdepProductList.maxRate), 2));
+    double maxRate = double.parse(FormatUtil.formatNum(
+        double.parse(productDetai.maxRate), 2)); //tdepProductList.maxRate
     //判断选择的语言并根据语言选择产品名称
     String name;
     if (language == 'zh_CN') {
-      name = tdepProductList.lclName;
+      name = productDetai.lclName;
     } else {
-      name = tdepProductList.engName;
+      name = productDetai.engName;
     }
 
-    //定期产品信息
+    //定期产品信息 点击进入产品详情信息
     return FlatButton(
       padding: EdgeInsets.all(0),
       onPressed: () {
-        go2Detail(tdepProductList, tdepProducDTOList);
+        go2Detail(productDetai);
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -623,8 +629,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                 name, //产品名称
                 minRate, //最小利率
                 maxRate, //最大利率
-                tdepProductList.remark, //产品描述
-                tdepProductList.minAmt), //起存金额
+                productDetai.remark, //产品描述
+                productDetai.minAmt), //起存金额
           ),
         ],
       ),
@@ -694,8 +700,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
                                 itemCount: producDTOList.length,
                                 controller: _scrollController,
                                 itemBuilder: (context, index) {
-                                  return _titleSection(
-                                      productList[index], producDTOList[index]);
+                                  return _titleSection(producDTOList[index]);
                                 }),
                           )
                         : notDataContainer(context, S.current.no_data_now),
@@ -710,7 +715,6 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
 //获取定期产品列表
   Future<void> _loadData() async {
     _isLoading = true;
-    // TimeDepositDataRepository()
     ApiClientPackaging()
         .getGetTimeDepositProduct(TimeDepositProductReq(
             _accuPeriod == '' ? null : _accuPeriod,
@@ -721,26 +725,35 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
             10,
             ''))
         .then((data) {
-      if (data.length != 0) {
+      if (data.tdepProductDTOList.length != 0) {
         // List ccys = [];
         _isDate = true;
         _refreshController.refreshCompleted();
         _refreshController.footerMode.value = LoadStatus.canLoading;
         if (this.mounted) {
           setState(() {
-            productList.clear();
+            // productList.clear();
             producDTOList.clear();
-            data.forEach((element) {
-              productList.add(element.tdepProducHeadDTO);
-              producDTOList.add(element.tdepProductDTOList);
-              element.tdepProductDTOList.forEach((data) {
-                // ccys.add(data.ccy);
-                bool isContainer = ccyList.contains(data.ccy);
-                if (!isContainer) {
-                  ccyList.add(data.ccy);
-                }
-              });
+            producDTOList.addAll(data.tdepProductDTOList); //添加数据
+            data.tdepProductDTOList.forEach((element) {
+              //遍历数据拿到币种
+              bool isContainer = ccyList.contains(element.ccy);
+              if (!isContainer) {
+                ccyList.add(element.ccy);
+              }
             });
+
+            // data.forEach((element) {
+            //   productList.add(element.tdepProducHeadDTO);
+            //   producDTOList.add(element.tdepProductDTOList);
+            //   element.tdepProductDTOList.forEach((data) {
+            //     // ccys.add(data.ccy);
+            //     bool isContainer = ccyList.contains(data.ccy);
+            //     if (!isContainer) {
+            //       ccyList.add(data.ccy);
+            //     }
+            //   });
+            // });
             _isLoading = false;
           });
         }
@@ -877,14 +890,15 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
   }
 
 //页面跳转传值
-  void go2Detail(TdepProducHeadDTO tdepProduct,
-      List<TdepProductDTOList> tdepProducDTOList) {
+  void go2Detail(TdepProductDTOList detail) {
+    print(detail);
+    // TdepProductDTOList detail = tdepProducDTOList[0];
     Navigator.pushNamed(
       context,
       pageTimeDepositContract,
       arguments: {
-        'tdepProduct': tdepProduct,
-        'tdepProducDTOList': tdepProducDTOList
+        // 'tdepProduct': tdepProduct,
+        'tdepProducDTOList': detail //tdepProducDTOList
       },
     );
   }

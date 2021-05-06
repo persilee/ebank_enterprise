@@ -306,14 +306,7 @@ class _MinePageState extends State<MinePage>
               children: [
                 _flatBtnNuitWidget(S.of(context).my_account, true, () {
                   if (['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
-                    HsgShowTip.notOpenAccountTip(
-                      context: context,
-                      click: (value) {
-                        if (value == true) {
-                          _openAccountClickFunction(context);
-                        }
-                      },
-                    );
+                    _openAccountClickFunction(context, true);
                     return;
                   }
                   Navigator.pushNamed(context, pageCardList);
@@ -559,17 +552,36 @@ class _MinePageState extends State<MinePage>
   }
 
   //开户点击事件
-  void _openAccountClickFunction(BuildContext context) {
+  void _openAccountClickFunction(BuildContext context, bool shouldTip) {
     if (_belongCustStatus == '1') {
-      ///提示，前往网银开户
-      HsgShowTip.notOpenAccountGotoEbankTip(
-        context: context,
-        click: (value) {},
-      );
-    } else {
+      _notQuickOpenAccTip(context);
+    } else if (shouldTip == false) {
       //前往快速开户
       Navigator.pushNamed(context, pageOpenAccountBasicData);
+    } else {
+      HsgShowTip.notOpenAccountTip(
+        context: context,
+        click: (value) {
+          if (value == true) {
+            //前往快速开户
+            Navigator.pushNamed(context, pageOpenAccountBasicData);
+          }
+        },
+      );
     }
+  }
+
+  // 非快速开户用户提示
+  void _notQuickOpenAccTip(BuildContext context) {
+    HsgShowTip.notOpenAccountGotoEbankTip(
+      context: context,
+      click: (value) {
+        if (value == true) {
+          // //前往网银开户, 点击前往面签码页面
+          // Navigator.pushNamed(context, pageOpenAccountGetFaceSign);
+        }
+      },
+    );
   }
 
 //用户信息-已开户

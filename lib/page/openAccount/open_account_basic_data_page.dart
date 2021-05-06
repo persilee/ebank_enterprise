@@ -95,8 +95,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
   ///商业行业性质二级请求类型
   List<RedisRspDto> _industrialNaturesTwo = [];
 
-  bool _isShowErrorPage = false;
-  Widget _hsgErrorPage;
+  // bool _isShowErrorPage = false;
+  // Widget _hsgErrorPage;
 
   @override
   void initState() {

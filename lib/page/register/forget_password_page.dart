@@ -3,26 +3,21 @@ import 'dart:async';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/check_sms.dart';
-import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/login_Verfiy_phone.dart';
 
-import 'package:ebank_mobile/data/source/verification_code_repository.dart';
-import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/page/register/component/register_86.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
-import 'package:ebank_mobile/util/small_data_store.dart';
 
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 忘记登录密码
@@ -171,6 +166,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     child: Text(S.of(context).next_step),
                     onPressed: _submit()
                         ? () {
+                            FocusScope.of(context).requestFocus(FocusNode());
                             _checkRegisterBysencond();
                           }
                         : null,
@@ -208,7 +204,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   }
 
   _selectRegionCode() {
-    print('区号');
+    FocusScope.of(context).requestFocus(FocusNode());
     Navigator.pushNamed(context, countryOrRegionSelectPage).then((value) {
       setState(() {
         _officeAreaCodeText = (value as CountryRegionNewModel).areaCode;
@@ -230,8 +226,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       onPressed: countdownTime > 0
           ? null
           : () {
-              _checkRegister();
               FocusScope.of(context).requestFocus(FocusNode());
+              _checkRegister();
             },
       //  padding: EdgeInsets.only(left: 35),
       textColor: HsgColors.blueTextColor,
@@ -291,7 +287,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   _checkRegisterBysencond() {
     HSProgressHUD.show();
     ApiClientAccount()
-        .checkSms(CheckSmsReq(_phoneNum.text, 'findPwd',_smsListen,'MB'))
+        .checkSms(CheckSmsReq(_phoneNum.text, 'findPwd', _smsListen, 'MB'))
         .then((data) {
       if (mounted) {
         setState(() {
@@ -327,7 +323,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         'userAccount': _userAccount,
         'userPhone': _phoneNumListen,
         'sms': _smsListen,
-        'areaCode':_officeAreaCodeText
+        'areaCode': _officeAreaCodeText
       };
       if (data != null) {
         if (data.opened) {
@@ -368,7 +364,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     ApiClientPassword()
         .sendSmsByPhone(
       SendSmsByPhoneNumberReq(
-          _officeAreaCodeText, _phoneNum.text, 'findPwd', 'SCNAOFTPW','MB',msgBankId:'999'),
+          _officeAreaCodeText, _phoneNum.text, 'findPwd', 'SCNAOFTPW', 'MB',
+          msgBankId: '999'),
     )
         .then((data) {
       if (mounted) {
