@@ -526,7 +526,7 @@ class _HomePageState extends State<HomePage>
         borderRadius: BorderRadius.circular(55.0 / 2),
       ),
       padding: EdgeInsets.all(2.0),
-      child: Container(
+      child: GestureDetector(
         child: ClipOval(
           child: (_headPortraitUrl == null || _headPortraitUrl == '')
               ? Image(
@@ -540,6 +540,10 @@ class _HomePageState extends State<HomePage>
                   placeholder: 'images/home/heaerIcon/home_header_person.png',
                 ),
         ),
+        onTap: () {
+          //进入用户信息页面
+          Navigator.pushNamed(context, pageUserInformation, arguments: _data);
+        },
       ),
     );
   }
