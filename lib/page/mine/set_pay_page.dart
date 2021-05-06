@@ -184,9 +184,8 @@ class _SetPayPageState extends State<SetPayPage> {
     RegExp _regularnumber = new RegExp(
         r'[(?:(?:0(?=1)|1(?=2)|2(?=3)|3(?=4)|4(?=5)|5(?=6)|6(?=7)|7(?=8)|8(?=9)){2}|(?:9(?=8)|8(?=7)|7(?=6)|6(?=5)|5(?=4)|4(?=3)|3(?=2)|2(?=1)|1(?=0)){2})\\d]'); //正则
     if (_regularnumber.hasMatch(_newPwd.text)) {
-      Fluttertoast.showToast(
-        msg: S.current.set_pay_password_regular,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.set_pay_password_regular,
       );
       return;
     }
