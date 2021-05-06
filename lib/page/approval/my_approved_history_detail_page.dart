@@ -8,7 +8,7 @@ import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_bo
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_model.dart'
-as TDEPModel;
+    as TDEPModel;
 import 'package:ebank_mobile/data/source/model/approval/international_transfer_detail_model.dart'
     as InternationalModel;
 import 'package:ebank_mobile/data/source/model/approval/transfer_plan_detail_model.dart'
@@ -36,7 +36,6 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:sp_util/sp_util.dart';
 
@@ -147,7 +146,7 @@ class _MyApprovedHistoryDetailPageState
   // loanWithDrawalApproval - 贷款领用
   void _loanWithDrawalData(_contractModel) async {
     LoanWithDrawalModel.LoanWithDrawalModel loanWithDrawalModel =
-    LoanWithDrawalModel.LoanWithDrawalModel.fromJson(_contractModel);
+        LoanWithDrawalModel.LoanWithDrawalModel.fromJson(_contractModel);
 
     LoanWithDrawalModel.OperateEndValue data =
         loanWithDrawalModel.operateEndValue;
@@ -155,11 +154,12 @@ class _MyApprovedHistoryDetailPageState
     // 获取贷款期限
     String _iratTm = '';
     try {
-      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
+      GetIdTypeResp getIdTypeResp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
-      if(_tenorList.isNotEmpty) {
+      if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if(data?.iratTm == element.code) {
+          if (data?.iratTm == element.code) {
             _iratTm = _language == 'zh_CN' ? element.cname : element.name;
           }
         });
@@ -171,11 +171,12 @@ class _MyApprovedHistoryDetailPageState
     // 获取还款方式
     String _repType = '';
     try {
-      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('REPAY_TYPE'));
+      GetIdTypeResp getIdTypeResp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('REPAY_TYPE'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
-      if(_tenorList.isNotEmpty) {
+      if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if(data?.repType == element.code) {
+          if (data?.repType == element.code) {
             _repType = _language == 'zh_CN' ? element.cname : element.name;
           }
         });
@@ -183,7 +184,6 @@ class _MyApprovedHistoryDetailPageState
     } catch (e) {
       print(e);
     }
-
 
     // 添加历史审批记录
     if (loanWithDrawalModel.commentList.isNotEmpty) {
@@ -210,8 +210,8 @@ class _MyApprovedHistoryDetailPageState
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.loanAmount ?? '0')) ?? ''
                 : f.format(double.parse(data?.loanAmount ?? '0')) ?? ''));
-        _loanWithDrawalList.add(_buildContentItem(
-            S.current.loan_Borrowing_Period, _iratTm ?? ''));
+        _loanWithDrawalList.add(
+            _buildContentItem(S.current.loan_Borrowing_Period, _iratTm ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
             S.current.loan_Repayment_method_column, _repType ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
@@ -234,7 +234,7 @@ class _MyApprovedHistoryDetailPageState
   // postRepaymentApproval  - 提前还款
   void _loadPostRepaymentData(_contractModel) {
     PostRepaymentModel.PostRepaymentModel postRepaymentModel =
-    PostRepaymentModel.PostRepaymentModel.fromJson(_contractModel);
+        PostRepaymentModel.PostRepaymentModel.fromJson(_contractModel);
 
     PostRepaymentModel.OperateEndValue data =
         postRepaymentModel.operateEndValue;
@@ -305,7 +305,7 @@ class _MyApprovedHistoryDetailPageState
   // foreignTransferApproval - 外汇买卖
   void _loadForeignTransferData(_contractModel) async {
     ForeignTransferModel.ForeignTransferModel foreignTransferModel =
-    ForeignTransferModel.ForeignTransferModel.fromJson(_contractModel);
+        ForeignTransferModel.ForeignTransferModel.fromJson(_contractModel);
 
     ForeignTransferModel.OperateEndValue data =
         foreignTransferModel.operateEndValue;
@@ -313,9 +313,10 @@ class _MyApprovedHistoryDetailPageState
     // 获取可用余额
     String _avaBal = '';
     try {
-      CardBalByCardNoModel balByCardNo = await ApiClient().getCardBalByCardNo(CardBalByCardNoBody(cardNo: data?.buyDac));
+      CardBalByCardNoModel balByCardNo = await ApiClient()
+          .getCardBalByCardNo(CardBalByCardNoBody(cardNo: data?.buyDac));
       balByCardNo.cardListBal.forEach((element) {
-        if(data?.buyCcy == element.ccy) {
+        if (data?.buyCcy == element.ccy) {
           _avaBal = element.avaBal;
         }
       });
@@ -371,7 +372,7 @@ class _MyApprovedHistoryDetailPageState
   // transferPlanApproval - 预约转账
   void _loadTransferPlanData(_contractModel) {
     TransferPlanModel.TransferPlanDetailModel transferPlanDetailModel =
-    TransferPlanModel.TransferPlanDetailModel.fromJson(_contractModel);
+        TransferPlanModel.TransferPlanDetailModel.fromJson(_contractModel);
 
     TransferPlanModel.OperateEndValue data =
         transferPlanDetailModel.operateEndValue;
@@ -432,9 +433,9 @@ class _MyApprovedHistoryDetailPageState
   // internationalTransferApproval - 国际汇款
   void _loadInternationalData(_contractModel) async {
     InternationalModel.InternationalTransferDetailModel
-    internationalTransferDetailModel =
-    InternationalModel.InternationalTransferDetailModel.fromJson(
-        _contractModel);
+        internationalTransferDetailModel =
+        InternationalModel.InternationalTransferDetailModel.fromJson(
+            _contractModel);
 
     InternationalModel.OperateEndValue data =
         internationalTransferDetailModel.operateEndValue;
@@ -442,9 +443,10 @@ class _MyApprovedHistoryDetailPageState
     // 获取可用余额
     String _avaBal = '';
     try {
-      CardBalByCardNoModel balByCardNo = await ApiClient().getCardBalByCardNo(CardBalByCardNoBody(cardNo: data?.payerCardNo));
+      CardBalByCardNoModel balByCardNo = await ApiClient()
+          .getCardBalByCardNo(CardBalByCardNoBody(cardNo: data?.payerCardNo));
       balByCardNo.cardListBal.forEach((element) {
-        if(data?.debitCurrency == element.ccy) {
+        if (data?.debitCurrency == element.ccy) {
           _avaBal = element.avaBal;
         }
       });
@@ -455,11 +457,12 @@ class _MyApprovedHistoryDetailPageState
     // 获取手续费支付方式
     String _costOptions = '';
     try {
-      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('PAY_METHOD'));
+      GetIdTypeResp getIdTypeResp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('PAY_METHOD'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
-      if(_tenorList.isNotEmpty) {
+      if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if(data?.costOptions == element.code) {
+          if (data?.costOptions == element.code) {
             _costOptions = _language == 'zh_CN' ? element.cname : element.name;
           }
         });
@@ -471,12 +474,14 @@ class _MyApprovedHistoryDetailPageState
     // 获取国家地区
     String _district = '';
     try {
-      CountryRegionNewListResp countryRegionNewListResp = await ApiClientOpenAccount()
-          .getCountryList(CountryRegionNewListReq());
-      List<CountryRegionNewModel> _countryRegionNewList = countryRegionNewListResp.countryCodeinfoDTOList;
-      if(_countryRegionNewList.isNotEmpty) {
+      CountryRegionNewListResp countryRegionNewListResp =
+          await ApiClientOpenAccount()
+              .getCountryList(CountryRegionNewListReq());
+      List<CountryRegionNewModel> _countryRegionNewList =
+          countryRegionNewListResp.countryCodeinfoDTOList;
+      if (_countryRegionNewList.isNotEmpty) {
         _countryRegionNewList.forEach((element) {
-          if(data?.district == element.cntyCd) {
+          if (data?.district == element.cntyCd) {
             _district = _language == 'zh_CN' ? element.cntyCnm : element.cntyNm;
           }
         });
@@ -553,7 +558,7 @@ class _MyApprovedHistoryDetailPageState
   // oneToOneTransferApproval - 行内转账
   void _loadOneToOneData(_contractModel) async {
     OneToOneModel.OneToOneTransferDetailModel oneToOneTransferDetailModel =
-    OneToOneModel.OneToOneTransferDetailModel.fromJson(_contractModel);
+        OneToOneModel.OneToOneTransferDetailModel.fromJson(_contractModel);
 
     OneToOneModel.OperateEndValue data =
         oneToOneTransferDetailModel.operateEndValue;
@@ -561,9 +566,10 @@ class _MyApprovedHistoryDetailPageState
     // 获取可用余额
     String _avaBal = '';
     try {
-      CardBalByCardNoModel balByCardNo = await ApiClient().getCardBalByCardNo(CardBalByCardNoBody(cardNo: data?.payerCardNo));
+      CardBalByCardNoModel balByCardNo = await ApiClient()
+          .getCardBalByCardNo(CardBalByCardNoBody(cardNo: data?.payerCardNo));
       balByCardNo.cardListBal.forEach((element) {
-        if(data?.debitCurrency == element.ccy) {
+        if (data?.debitCurrency == element.ccy) {
           _avaBal = element.avaBal;
         }
       });
@@ -627,7 +633,7 @@ class _MyApprovedHistoryDetailPageState
   // earlyRedTdContractApproval - 定期提前结清
   void _loadEarlyRedData(_contractModel) async {
     EarlyRedModel.EarlyRedTdContractDetailModel earlyRedTdContractDetailModel =
-    EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
+        EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
 
     EarlyRedModel.OperateEndValue data =
         earlyRedTdContractDetailModel.operateEndValue;
@@ -635,11 +641,12 @@ class _MyApprovedHistoryDetailPageState
     // 获取存期
     String _tenorName = '';
     try {
-      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
+      GetIdTypeResp getIdTypeResp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
-      if(_tenorList.isNotEmpty) {
+      if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if(data?.tenor == element.code) {
+          if (data?.tenor == element.code) {
             _tenorName = _language == 'zh_CN' ? element.cname : element.name;
           }
         });
@@ -651,11 +658,12 @@ class _MyApprovedHistoryDetailPageState
     // 获取状态
     String _statusName = '';
     try {
-      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('TD_STATE'));
+      GetIdTypeResp getIdTypeResp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('TD_STATE'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
-      if(_tenorList.isNotEmpty) {
+      if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if(data?.status == element.code) {
+          if (data?.status == element.code) {
             _statusName = _language == 'zh_CN' ? element.cname : element.name;
           }
         });
@@ -684,8 +692,8 @@ class _MyApprovedHistoryDetailPageState
             _buildContentItem(S.current.approve_currency, data?.ccy ?? ''));
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_deposit_term, _tenorName ?? ''));
-        _earlyRedTdList.add(
-            _buildContentItem(S.current.approve_state, _statusName ?? ''));
+        _earlyRedTdList
+            .add(_buildContentItem(S.current.approve_state, _statusName ?? ''));
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_effective_date, data?.valueDate ?? ''));
         _earlyRedTdList.add(_buildContentItem(
@@ -703,7 +711,8 @@ class _MyApprovedHistoryDetailPageState
             S.current.approve_prepay_interest_rate, '${data?.eryRate}%' ?? ''));
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_prepay_interest, data?.eryInt ?? ''));
-        _earlyRedTdList.add(_buildContentItem(S.current.approve_poundage,
+        _earlyRedTdList.add(_buildContentItem(
+            S.current.approve_poundage,
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.hdlFee ?? '0')) ?? ''
                 : f.format(double.parse(data?.hdlFee ?? '0')) ?? ''));
@@ -727,7 +736,7 @@ class _MyApprovedHistoryDetailPageState
   // openTdContractApproval - 开立定期存单
   void _loadOpenTdData(_contractModel) async {
     OpenTDModel.OpenTdContractDetailModel openTdContractDetailModel =
-    OpenTDModel.OpenTdContractDetailModel.fromJson(_contractModel);
+        OpenTDModel.OpenTdContractDetailModel.fromJson(_contractModel);
     OpenTDModel.OperateEndValue data =
         openTdContractDetailModel?.operateEndValue;
 
@@ -757,11 +766,12 @@ class _MyApprovedHistoryDetailPageState
     // 获取存期
     String _tenorName = '';
     try {
-      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
+      GetIdTypeResp getIdTypeResp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
-      if(_tenorList.isNotEmpty) {
+      if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if(data?.tenor == element.code) {
+          if (data?.tenor == element.code) {
             _tenorName = _language == 'zh_CN' ? element.cname : element.name;
           }
         });
@@ -773,11 +783,12 @@ class _MyApprovedHistoryDetailPageState
     // 获取到期指示
     String _instCode = '';
     try {
-      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('EXP_IN'));
+      GetIdTypeResp getIdTypeResp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('EXP_IN'));
       List<IdType> _instList = getIdTypeResp.publicCodeGetRedisRspDtoList;
-      if(_instList.isNotEmpty) {
+      if (_instList.isNotEmpty) {
         _instList.forEach((element) {
-          if(data?.instCode == element.code) {
+          if (data?.instCode == element.code) {
             _instCode = _language == 'zh_CN' ? element.cname : element.name;
           }
         });
@@ -827,39 +838,47 @@ class _MyApprovedHistoryDetailPageState
   Widget build(BuildContext context) {
     String _processKey = widget.data.processKey;
     String _titleCN = '';
-    switch(_processKey){
-      case 'openTdContractApproval': {
-        _titleCN = '开立定期存单详情';
-      }
-      break;
-      case 'oneToOneTransferApproval': {
-        _titleCN = '行内转账详情';
-      }
-      break;
-      case 'internationalTransferApproval': {
-        _titleCN = '国际转账详情';
-      }
-      break;
-      case 'earlyRedTdContractApproval': {
-        _titleCN = '定期提前结清详情';
-      }
-      break;
-      case 'foreignTransferApproval': {
-        _titleCN = '外汇买卖详情';
-      }
-      break;
-      case 'loanWithDrawalApproval': {
-        _titleCN = '贷款领用详情';
-      }
-      break;
-      case 'postRepaymentApproval': {
-        _titleCN = '提前还款详情';
-      }
-      break;
-      case 'loanRepaymentApproval': {
-        _titleCN = '计划还款详情';
-      }
-      break;
+    switch (_processKey) {
+      case 'openTdContractApproval':
+        {
+          _titleCN = '开立定期存单详情';
+        }
+        break;
+      case 'oneToOneTransferApproval':
+        {
+          _titleCN = '行内转账详情';
+        }
+        break;
+      case 'internationalTransferApproval':
+        {
+          _titleCN = '国际转账详情';
+        }
+        break;
+      case 'earlyRedTdContractApproval':
+        {
+          _titleCN = '定期提前结清详情';
+        }
+        break;
+      case 'foreignTransferApproval':
+        {
+          _titleCN = '外汇买卖详情';
+        }
+        break;
+      case 'loanWithDrawalApproval':
+        {
+          _titleCN = '贷款领用详情';
+        }
+        break;
+      case 'postRepaymentApproval':
+        {
+          _titleCN = '提前还款详情';
+        }
+        break;
+      case 'loanRepaymentApproval':
+        {
+          _titleCN = '计划还款详情';
+        }
+        break;
       default:
         {
           _titleCN = '处理记录详情';
@@ -868,7 +887,9 @@ class _MyApprovedHistoryDetailPageState
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: _language == 'zh_CN' ? Text(_titleCN) : Text(widget.data.taskName + ' details'),
+        title: _language == 'zh_CN'
+            ? Text(_titleCN)
+            : Text(widget.data.taskName + ' details'),
         elevation: 0,
       ),
       body: _isLoading

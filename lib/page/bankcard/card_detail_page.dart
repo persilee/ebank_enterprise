@@ -17,9 +17,9 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/linear_loading.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'card_list_page.dart';
@@ -223,10 +223,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
         _isLoading = false;
       });
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: "Login Failed. Message: ${e.toString()}",
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 }

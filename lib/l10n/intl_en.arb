@@ -747,5 +747,8 @@
   "time_deposit_record_Status_N": "Normal",
   "time_deposit_record_Status_C": "Closed",
   "total_opration_audit_tip": "Submitted successfully, awaiting for approval",
-  "transfer_the_preview4": "Preview of Foreign Exchange Trading"
+  "transfer_the_preview4": "Preview of Foreign Exchange Trading",
+  "exit_prompt": "Click again to exit the application",
+  "enter_idNumber_tip": "Please enter the ID number!",
+  "not_find_bank": "No relevant bank was found!"
 }

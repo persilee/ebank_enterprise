@@ -12,10 +12,9 @@ import 'package:ebank_mobile/data/source/model/loan_repayment_record.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 
 class RepayRecordsPage extends StatefulWidget {
@@ -62,11 +61,11 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
     var req = new LoanRepaymentRecordReq(
       widget.loanDetail.contactNo, //合约号
     );
-    SVProgressHUD.show();
+    HSProgressHUD.show();
     ApiClientLoan().getScheduleRecordDetailList(req).then((data) {
       _isLoad = false;
       if (data.loanPrepaymentHistoryDTOList != null) {
-        SVProgressHUD.dismiss();
+        HSProgressHUD.dismiss();
         setState(() {
           lnScheduleList.clear();
           lnScheduleList.addAll(data.loanPrepaymentHistoryDTOList);
@@ -74,11 +73,7 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
       }
     }).catchError((e) {
       _isLoad = false;
-      SVProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -290,10 +285,9 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
               // InkWell(
               //   onTap: () {
               //     //跳转
-              //     Fluttertoast.showToast(
-              //       msg: '还款中...',
-              //       gravity: ToastGravity.CENTER,
-              //     );
+              // HSProgressHUD.showToastTip(
+              //   '还款中...',
+              // );
               // },
               // child: Text(
               //   repay,

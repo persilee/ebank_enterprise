@@ -5,7 +5,6 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -93,7 +92,7 @@ class _LoanProductState extends State<LoanProductListPage> {
   //       _isDate = false;
   //     }
   //   }).catchError((e) {
-  //     Fluttertoast.showToast(msg: "${e.toString()}",gravity: ToastGravity.CENTER,);
+  //     HSProgressHUD.showToast(e.error);
   //   });
   // }
 

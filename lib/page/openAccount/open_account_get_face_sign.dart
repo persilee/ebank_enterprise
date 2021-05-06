@@ -9,7 +9,6 @@ import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';

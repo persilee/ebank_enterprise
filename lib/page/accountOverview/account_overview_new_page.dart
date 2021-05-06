@@ -14,8 +14,8 @@ import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -654,10 +654,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
         _getAccountOverviewInfo();
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -720,10 +717,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
       }
     }).catchError((e) {
       _isLoading = false;
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 }

@@ -19,9 +19,9 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -125,9 +125,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         if (_payerTransferController.text.length > 0) {
           if (double.parse(_payerTransferController.text) <= 0) {
             _payerTransferController.text = '';
-            Fluttertoast.showToast(
-              msg: S.of(context).input_amount_msg1,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.of(context).input_amount_msg1,
             );
           } else {
             setState(() {
@@ -152,9 +151,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         if (_payeeTransferController.text.length > 0) {
           if (double.parse(_payeeTransferController.text) <= 0) {
             _payeeTransferController.text = '';
-            Fluttertoast.showToast(
-              msg: S.of(context).input_amount_msg1,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.of(context).input_amount_msg1,
             );
           } else {
             setState(() {
@@ -333,9 +331,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
               item: _payeeCcy == null ? '' : _payeeCcy,
               onTap: _isAccount
                   ? () {
-                      Fluttertoast.showToast(
-                        msg: S.of(context).please_current_payee_account,
-                        gravity: ToastGravity.CENTER,
+                      HSProgressHUD.showToastTip(
+                        S.of(context).please_current_payee_account,
                       );
                     }
                   : () {
@@ -539,20 +536,17 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
 
   _judgeDialog() {
     if (double.parse(_payerTransferController.text) > double.parse(_balance)) {
-      Fluttertoast.showToast(
-        msg: S.current.tdContract_balance_insufficient,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.tdContract_balance_insufficient,
       );
     } else if (_isAccount) {
-      Fluttertoast.showToast(
-        msg: S.current.account_no_exist,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.account_no_exist,
       );
     } else if (_payeeCcy == _payerCcy &&
         _payerAccount == _payeeAccountController.text) {
-      Fluttertoast.showToast(
-        msg: S.of(context).no_account_ccy_transfer,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.of(context).no_account_ccy_transfer,
       );
     } else {
       Navigator.pushNamed(
@@ -812,10 +806,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
           _boolBut();
         }
       }).catchError((e) {
-        Fluttertoast.showToast(
-          msg: e.error.message,
-          gravity: ToastGravity.CENTER,
-        );
+        HSProgressHUD.showToast(e.error);
       });
     }
   }
@@ -848,9 +839,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
           _isAccount = true;
         });
       }
-      Fluttertoast.showToast(
-        msg: S.current.no_account,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.no_account,
       );
     });
   }

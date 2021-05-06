@@ -14,7 +14,6 @@ import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lpinyin/lpinyin.dart';
 
 class CityForCountrySelectPage extends StatefulWidget {

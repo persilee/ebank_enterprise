@@ -22,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RepayInputPage extends StatefulWidget {

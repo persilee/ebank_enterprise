@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info/package_info.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sp_util/sp_util.dart';
@@ -94,9 +93,8 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
         break;
       case AppLifecycleState.paused: // 界面不可见，后台
         if (Platform.isAndroid) {
-          Fluttertoast.showToast(
-            msg: '${_packageInfo.appName}进入后台运行',
-            gravity: ToastGravity.CENTER,
+          HSProgressHUD.showToastTip(
+            '${_packageInfo.appName}进入后台运行',
           );
         }
         break;
@@ -224,18 +222,6 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
   _getPublicParameters() async {
     final prefs = await SharedPreferences.getInstance();
 
-    // //获取证件类型
-    // PublicParametersRepository()
-    //     .getIdType(GetIdTypeReq('TORPC'), 'GetIdTypeReq') //TORPC//CERT_TYPE
-    //     .then((data) {
-    //   if (data.publicCodeGetRedisRspDtoList != null) {}
-    // }).catchError((e) {
-    //   Fluttertoast.showToast(
-    //     msg: e.toString(),
-    //     gravity: ToastGravity.CENTER,
-    //   );
-    // });
-
     //获取本币
     // PublicParametersRepository()
     ApiClientOpenAccount().getLocalCurrency(GetLocalCurrencyReq()).then((data) {
@@ -248,10 +234,7 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
         prefs.setString(ConfigKey.LOCAL_CCY, '');
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.error.message,
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 }

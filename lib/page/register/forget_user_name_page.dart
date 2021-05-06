@@ -17,7 +17,6 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class ForgetUserName extends StatefulWidget {
   ForgetUserName({Key key}) : super(key: key);
@@ -249,9 +248,8 @@ class _ForgetUserNameState extends State<ForgetUserName> {
           _accountName = data.userAccount;
           _isRegister = data.register;
           if (!_isRegister) {
-            Fluttertoast.showToast(
-              msg: S.current.num_not_is_register,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.current.num_not_is_register,
             );
             HSProgressHUD.dismiss();
           } else {
@@ -260,11 +258,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -290,11 +284,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
     // }
   }
@@ -310,10 +300,8 @@ class _ForgetUserNameState extends State<ForgetUserName> {
           HSProgressHUD.dismiss();
           //校验是否注册
           if (!data.checkResult) {
-            HSProgressHUD.dismiss();
-            Fluttertoast.showToast(
-              msg: S.current.num_not_is_register,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.current.num_not_is_register,
             );
           } //跳转至下一页面
           else {
@@ -324,11 +312,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      HSProgressHUD.dismiss();
+      HSProgressHUD.showToast(e.error);
     });
   }
 

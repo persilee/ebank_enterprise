@@ -9,10 +9,9 @@ import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 
 class RepayPlanPage extends StatefulWidget {
@@ -72,10 +71,10 @@ class _RepayPlanState extends State<RepayPlanPage> {
         //  page,
         //  pageSize,
         'Q');
-    SVProgressHUD.show();
+    HSProgressHUD.show();
     // LoanDataRepository()
     ApiClientLoan().getSchedulePlanDetailList(req).then((data) {
-      SVProgressHUD.dismiss();
+      HSProgressHUD.dismiss();
       if (data.getLnAcScheduleRspDetlsDTOList != null) {
         setState(() {
           lnScheduleList.clear();
@@ -83,11 +82,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
         });
       }
     }).catchError((e) {
-      SVProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
     lnScheduleList.clear();
     // lnScheduleList.add(_list1);
@@ -345,10 +340,6 @@ class _RepayPlanState extends State<RepayPlanPage> {
                   Navigator.pushNamed(context, pageRepayInput,
                       arguments: widget.loanDetail);
                   //跳转
-                  // Fluttertoast.showToast(
-                  //   msg: '还款中...',
-                  //   gravity: ToastGravity.CENTER,
-                  // );
                 },
                 child: Text(
                   '', //repay

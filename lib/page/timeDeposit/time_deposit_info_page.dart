@@ -30,7 +30,6 @@ import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:sp_util/sp_util.dart';
 
@@ -536,11 +535,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         _showTimeDepositEarlyTip();
       });
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: "${e.toString()}",
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -625,13 +620,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
       if (this.mounted) {
         setState(() {});
       }
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: "${e.toString()}",
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
-    // HSProgressHUD.dismiss();
     // _showContractSucceedPage(context);
   }
 
@@ -717,10 +707,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         }
       },
     ).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -745,10 +732,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: "${e.toString()}",
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -775,10 +759,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         }
       });
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 

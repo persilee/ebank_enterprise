@@ -28,7 +28,6 @@ import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -562,7 +561,7 @@ class _MinePageState extends State<MinePage>
       HsgShowTip.notOpenAccountTip(
         context: context,
         click: (value) {
-          if (value == true) {
+          if (value == true && _belongCustStatus != '2') {
             //前往快速开户
             Navigator.pushNamed(context, pageOpenAccountBasicData);
           }
@@ -761,9 +760,8 @@ class _MinePageState extends State<MinePage>
   //上传头像
   _uploadAvatar() async {
     if (_imgPath == null || _imgPath == '') {
-      Fluttertoast.showToast(
-        msg: S.of(context).select_image_error,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.of(context).select_image_error,
       );
     } else {
       File file = File(_imgPath);
@@ -772,10 +770,7 @@ class _MinePageState extends State<MinePage>
             headPortrait: value['headPortrait'], state: 100));
         print(value);
       }).catchError((e) {
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
+        HSProgressHUD.showToast(e.error);
       });
     }
   }
@@ -798,11 +793,7 @@ class _MinePageState extends State<MinePage>
             .fire(ChangeUserInfo(userInfo: _userInfoResp, state: 100));
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      print('${e.toString()}');
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -844,18 +835,13 @@ class _MinePageState extends State<MinePage>
             //     new MaterialPageRoute(builder: (context) => new LoginPage()),
             //     (route) => false);
           });
-          Fluttertoast.showToast(
-            msg: S.of(context).logoutSuccess,
-            gravity: ToastGravity.CENTER,
+          HSProgressHUD.showToastTip(
+            S.of(context).logoutSuccess,
           );
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      HSProgressHUD.dismiss();
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -943,10 +929,7 @@ class _MinePageState extends State<MinePage>
         lastVersionName = value.versionName;
       });
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 

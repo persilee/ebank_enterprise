@@ -12,7 +12,6 @@ import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../page_route.dart';
 import 'data/transfer_internal_data.dart';
@@ -218,21 +217,13 @@ class _TransferInternalPreviewPageState
       print("==================跳转");
       Navigator.pushReplacementNamed(context, pageOperationResult);
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-          msg: e.error.message,
-          gravity: ToastGravity.CENTER,
-        );
+      HSProgressHUD.showToast(e.error);
       // if (e.toString().contains("EGENE218")) {
-      //   Fluttertoast.showToast(
-      //     msg: S.of(context).transfer_msg_limit,
-      //     gravity: ToastGravity.CENTER,
+      //   HSProgressHUD.showToastTip(
+      //     S.of(context).transfer_msg_limit,
       //   );
       // } else {
-      //   Fluttertoast.showToast(
-      //     msg: e.toString(),
-      //     gravity: ToastGravity.CENTER,
-      //   );
+      //   HSProgressHUD.showToast(e.error);
       // }
     });
   }

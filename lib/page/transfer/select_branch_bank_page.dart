@@ -1,6 +1,6 @@
-
 import 'package:ebank_mobile/data/source/model/get_branch_list.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 分支行
@@ -8,7 +8,6 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 /// Date: 2020-12-25
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 
@@ -161,9 +160,8 @@ class _SelectBranchBankPageState extends State<SelectBranchBankPage> {
                   });
                   if (_tempList.isEmpty) {
                     _searchController.text = '';
-                    Fluttertoast.showToast(
-                      msg: '没有找到相关分支行!',
-                      gravity: ToastGravity.CENTER,
+                    HSProgressHUD.showToastTip(
+                      '没有找到相关分支行!',
                     );
                   }
                 }

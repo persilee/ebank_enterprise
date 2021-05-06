@@ -18,13 +18,13 @@ import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/money_text_input_formatter.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../page_route.dart';
@@ -761,10 +761,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         _isDate = false;
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: "${e.toString()}",
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
       inputValue.text = '';
       _changedCcy = S.current.hint_please_select;
       _changedTerm = S.current.hint_please_select;
@@ -796,10 +793,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: "${e.toString()}",
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 

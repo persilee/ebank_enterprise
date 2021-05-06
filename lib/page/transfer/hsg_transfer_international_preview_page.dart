@@ -13,7 +13,6 @@ import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
@@ -229,12 +228,7 @@ class _TransferInternalPreviewPageState
       HSProgressHUD.dismiss();
       Navigator.pushReplacementNamed(context, pageOperationResult);
     }).catchError((e) {
-      print(e.toString());
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.error.message,
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 }

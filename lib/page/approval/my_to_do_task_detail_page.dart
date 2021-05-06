@@ -47,9 +47,9 @@ import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/hsg_text_field_dialog.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:sp_util/sp_util.dart';
 
@@ -171,11 +171,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     // 获取贷款期限
     String _iratTm = '';
     try {
-      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
+      GetIdTypeResp getIdTypeResp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
-      if(_tenorList.isNotEmpty) {
+      if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if(data?.iratTm == element.code) {
+          if (data?.iratTm == element.code) {
             _iratTm = _language == 'zh_CN' ? element.cname : element.name;
           }
         });
@@ -187,11 +188,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     // 获取还款方式
     String _repType = '';
     try {
-      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('REPAY_TYPE'));
+      GetIdTypeResp getIdTypeResp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('REPAY_TYPE'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
-      if(_tenorList.isNotEmpty) {
+      if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if(data?.repType == element.code) {
+          if (data?.repType == element.code) {
             _repType = _language == 'zh_CN' ? element.cname : element.name;
           }
         });
@@ -199,7 +201,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     } catch (e) {
       print(e);
     }
-
 
     // 添加历史审批记录
     if (loanWithDrawalModel.commentList.isNotEmpty) {
@@ -226,8 +227,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.loanAmount ?? '0')) ?? ''
                 : f.format(double.parse(data?.loanAmount ?? '0')) ?? ''));
-        _loanWithDrawalList.add(_buildContentItem(
-            S.current.loan_Borrowing_Period, _iratTm ?? ''));
+        _loanWithDrawalList.add(
+            _buildContentItem(S.current.loan_Borrowing_Period, _iratTm ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
             S.current.loan_Repayment_method_column, _repType ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
@@ -329,9 +330,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     // 获取可用余额
     String _avaBal = '';
     try {
-      CardBalByCardNoModel balByCardNo = await ApiClient().getCardBalByCardNo(CardBalByCardNoBody(cardNo: data?.buyDac));
+      CardBalByCardNoModel balByCardNo = await ApiClient()
+          .getCardBalByCardNo(CardBalByCardNoBody(cardNo: data?.buyDac));
       balByCardNo.cardListBal.forEach((element) {
-        if(data?.buyCcy == element.ccy) {
+        if (data?.buyCcy == element.ccy) {
           _avaBal = element.avaBal;
         }
       });
@@ -458,9 +460,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     // 获取可用余额
     String _avaBal = '';
     try {
-      CardBalByCardNoModel balByCardNo = await ApiClient().getCardBalByCardNo(CardBalByCardNoBody(cardNo: data?.payerCardNo));
+      CardBalByCardNoModel balByCardNo = await ApiClient()
+          .getCardBalByCardNo(CardBalByCardNoBody(cardNo: data?.payerCardNo));
       balByCardNo.cardListBal.forEach((element) {
-        if(data?.debitCurrency == element.ccy) {
+        if (data?.debitCurrency == element.ccy) {
           _avaBal = element.avaBal;
         }
       });
@@ -471,11 +474,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     // 获取手续费支付方式
     String _costOptions = '';
     try {
-      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('PAY_METHOD'));
+      GetIdTypeResp getIdTypeResp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('PAY_METHOD'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
-      if(_tenorList.isNotEmpty) {
+      if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if(data?.costOptions == element.code) {
+          if (data?.costOptions == element.code) {
             _costOptions = _language == 'zh_CN' ? element.cname : element.name;
           }
         });
@@ -487,12 +491,14 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     // 获取国家地区
     String _district = '';
     try {
-      CountryRegionNewListResp countryRegionNewListResp = await ApiClientOpenAccount()
-          .getCountryList(CountryRegionNewListReq());
-      List<CountryRegionNewModel> _countryRegionNewList = countryRegionNewListResp.countryCodeinfoDTOList;
-      if(_countryRegionNewList.isNotEmpty) {
+      CountryRegionNewListResp countryRegionNewListResp =
+          await ApiClientOpenAccount()
+              .getCountryList(CountryRegionNewListReq());
+      List<CountryRegionNewModel> _countryRegionNewList =
+          countryRegionNewListResp.countryCodeinfoDTOList;
+      if (_countryRegionNewList.isNotEmpty) {
         _countryRegionNewList.forEach((element) {
-          if(data?.district == element.cntyCd) {
+          if (data?.district == element.cntyCd) {
             _district = _language == 'zh_CN' ? element.cntyCnm : element.cntyNm;
           }
         });
@@ -577,12 +583,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     // 获取可用余额
     String _avaBal = '';
     try {
-      CardBalByCardNoModel balByCardNo = await ApiClient().getCardBalByCardNo(CardBalByCardNoBody(cardNo: data?.payerCardNo));
+      CardBalByCardNoModel balByCardNo = await ApiClient()
+          .getCardBalByCardNo(CardBalByCardNoBody(cardNo: data?.payerCardNo));
       balByCardNo.cardListBal.forEach((element) {
-            if(data?.debitCurrency == element.ccy) {
-              _avaBal = element.avaBal;
-            }
-          });
+        if (data?.debitCurrency == element.ccy) {
+          _avaBal = element.avaBal;
+        }
+      });
     } catch (e) {
       print(e);
     }
@@ -651,11 +658,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     // 获取存期
     String _tenorName = '';
     try {
-      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
+      GetIdTypeResp getIdTypeResp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
-      if(_tenorList.isNotEmpty) {
+      if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if(data?.tenor == element.code) {
+          if (data?.tenor == element.code) {
             _tenorName = _language == 'zh_CN' ? element.cname : element.name;
           }
         });
@@ -667,11 +675,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     // 获取状态
     String _statusName = '';
     try {
-      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('TD_STATE'));
+      GetIdTypeResp getIdTypeResp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('TD_STATE'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
-      if(_tenorList.isNotEmpty) {
+      if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if(data?.status == element.code) {
+          if (data?.status == element.code) {
             _statusName = _language == 'zh_CN' ? element.cname : element.name;
           }
         });
@@ -700,8 +709,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             _buildContentItem(S.current.approve_currency, data?.ccy ?? ''));
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_deposit_term, _tenorName ?? ''));
-        _earlyRedTdList.add(
-            _buildContentItem(S.current.approve_state, _statusName ?? ''));
+        _earlyRedTdList
+            .add(_buildContentItem(S.current.approve_state, _statusName ?? ''));
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_effective_date, data?.valueDate ?? ''));
         _earlyRedTdList.add(_buildContentItem(
@@ -719,7 +728,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             S.current.approve_prepay_interest_rate, '${data?.eryRate}%' ?? ''));
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_prepay_interest, data?.eryInt ?? ''));
-        _earlyRedTdList.add(_buildContentItem(S.current.approve_poundage,
+        _earlyRedTdList.add(_buildContentItem(
+            S.current.approve_poundage,
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.hdlFee ?? '0')) ?? ''
                 : f.format(double.parse(data?.hdlFee ?? '0')) ?? ''));
@@ -751,21 +761,21 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _prodName = '';
     try {
       TDEPModel.TdepProductsModel tdepProductsModel = await ApiClient()
-              .getTdepProductsByPage(TdepProductsBody(page: 1, pageSize: 666));
+          .getTdepProductsByPage(TdepProductsBody(page: 1, pageSize: 666));
       List<TDEPModel.Rows> _list = tdepProductsModel.rows;
       if (_list.isNotEmpty) {
-            _list.forEach((element) {
-              if (data?.prodName == element.lclName) {
-                if (_language == 'zh_CN') {
-                  _prodName = element.lclName;
-                } else if (_language == 'zh_HK') {
-                  _prodName = element.chName;
-                } else {
-                  _prodName = element.engName;
-                }
-              }
-            });
+        _list.forEach((element) {
+          if (data?.prodName == element.lclName) {
+            if (_language == 'zh_CN') {
+              _prodName = element.lclName;
+            } else if (_language == 'zh_HK') {
+              _prodName = element.chName;
+            } else {
+              _prodName = element.engName;
+            }
           }
+        });
+      }
     } catch (e) {
       print(e);
     }
@@ -773,15 +783,16 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     // 获取存期
     String _tenorName = '';
     try {
-      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
+      GetIdTypeResp getIdTypeResp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
-      if(_tenorList.isNotEmpty) {
-            _tenorList.forEach((element) {
-              if(data?.tenor == element.code) {
-                _tenorName = _language == 'zh_CN' ? element.cname : element.name;
-              }
-            });
+      if (_tenorList.isNotEmpty) {
+        _tenorList.forEach((element) {
+          if (data?.tenor == element.code) {
+            _tenorName = _language == 'zh_CN' ? element.cname : element.name;
           }
+        });
+      }
     } catch (e) {
       print(e);
     }
@@ -789,11 +800,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     // 获取到期指示
     String _instCode = '';
     try {
-      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(GetIdTypeReq('EXP_IN'));
+      GetIdTypeResp getIdTypeResp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('EXP_IN'));
       List<IdType> _instList = getIdTypeResp.publicCodeGetRedisRspDtoList;
-      if(_instList.isNotEmpty) {
+      if (_instList.isNotEmpty) {
         _instList.forEach((element) {
-          if(data?.instCode == element.code) {
+          if (data?.instCode == element.code) {
             _instCode = _language == 'zh_CN' ? element.cname : element.name;
           }
         });
@@ -843,39 +855,47 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   Widget build(BuildContext context) {
     String _processKey = widget.data.processKey;
     String _titleCN = '';
-    switch(_processKey){
-      case 'openTdContractApproval': {
-        _titleCN = '开立定期存单审批';
-      }
-      break;
-      case 'oneToOneTransferApproval': {
-        _titleCN = '行内转账审批';
-      }
-      break;
-      case 'internationalTransferApproval': {
-        _titleCN = '国际转账审批';
-      }
-      break;
-      case 'earlyRedTdContractApproval': {
-        _titleCN = '定期提前结清审批';
-      }
-      break;
-      case 'foreignTransferApproval': {
-        _titleCN = '外汇买卖审批';
-      }
-      break;
-      case 'loanWithDrawalApproval': {
-        _titleCN = '贷款领用审批';
-      }
-      break;
-      case 'postRepaymentApproval': {
-        _titleCN = '提前还款审批';
-      }
-      break;
-      case 'loanRepaymentApproval': {
-        _titleCN = '计划还款审批';
-      }
-      break;
+    switch (_processKey) {
+      case 'openTdContractApproval':
+        {
+          _titleCN = '开立定期存单审批';
+        }
+        break;
+      case 'oneToOneTransferApproval':
+        {
+          _titleCN = '行内转账审批';
+        }
+        break;
+      case 'internationalTransferApproval':
+        {
+          _titleCN = '国际转账审批';
+        }
+        break;
+      case 'earlyRedTdContractApproval':
+        {
+          _titleCN = '定期提前结清审批';
+        }
+        break;
+      case 'foreignTransferApproval':
+        {
+          _titleCN = '外汇买卖审批';
+        }
+        break;
+      case 'loanWithDrawalApproval':
+        {
+          _titleCN = '贷款领用审批';
+        }
+        break;
+      case 'postRepaymentApproval':
+        {
+          _titleCN = '提前还款审批';
+        }
+        break;
+      case 'loanRepaymentApproval':
+        {
+          _titleCN = '计划还款审批';
+        }
+        break;
       default:
         {
           _titleCN = '任务审批';
@@ -885,7 +905,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: _language == 'zh_CN' ? Text(_titleCN) : Text(widget.data.taskName + ' approval'),
+        title: _language == 'zh_CN'
+            ? Text(_titleCN)
+            : Text(widget.data.taskName + ' approval'),
         elevation: 0,
       ),
       body: _isLoading
@@ -1387,10 +1409,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _btnIsLoadingUN = false;
         _btnIsEnable = true;
       });
-      Fluttertoast.showToast(
-        msg: e.error.message,
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     }
   }
 
