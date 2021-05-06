@@ -49,13 +49,22 @@ class ApiClientPackaging {
   }
 
   //获取定期产品
-  Future<List<TimeDepositProductResp>> getGetTimeDepositProduct(
+  Future<TimeDepositProductResp> getGetTimeDepositProduct(
       TimeDepositProductReq req) {
-    Future<List<TimeDepositProductResp>> resp =
+    //这名字命名的我也是醉了
+    Future<TimeDepositProductResp> resp =
         ApiClientTimeDeposit().getGetTimeDepositProduct(req);
     resp.then((value) => {});
     return resp;
   }
+
+  // Future<List<TimeDepositProductResp>> getGetTimeDepositProduct(
+  //     TimeDepositProductReq req) { //这名字命名的我也是醉了
+  //   Future<List<TimeDepositProductResp>> resp =
+  //       ApiClientTimeDeposit().getGetTimeDepositProduct(req);
+  //   resp.then((value) => {});
+  //   return resp;
+  // }
 
   _saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();

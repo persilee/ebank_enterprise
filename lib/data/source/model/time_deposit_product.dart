@@ -46,32 +46,119 @@ class TimeDepositProductReq extends Object {
   Map<String, dynamic> toJson() => _$TimeDepositProductReqToJson(this);
 }
 
-List<TimeDepositProductResp> getTimeDepositProductRespList(List<dynamic> list) {
-  List<TimeDepositProductResp> result = [];
-  list.forEach((item) {
-    result.add(TimeDepositProductResp.fromJson(item));
-  });
-  return result;
-}
+// List<TimeDepositProductResp> getTimeDepositProductRespList(List<dynamic> list) {
+//   List<TimeDepositProductResp> result = [];
+//   list.forEach((item) {
+//     result.add(TimeDepositProductResp.fromJson(item));
+//   });
+//   return result;
+// }
 
+// @JsonSerializable()
+// class TimeDepositProductResp extends Object {
+//   @JsonKey(name: 'depositType')
+//   String depositType;
+
+//   @JsonKey(name: 'bppdCode')
+//   String bppdCode;
+
+//   @JsonKey(name: 'tdepProducHeadDTO')
+//   TdepProducHeadDTO tdepProducHeadDTO;
+
+//   @JsonKey(name: 'tdepProductDTOList')
+//   List<TdepProductDTOList> tdepProductDTOList;
+
+//   TimeDepositProductResp(
+//     this.depositType,
+//     this.bppdCode,
+//     this.tdepProducHeadDTO,
+//     this.tdepProductDTOList,
+//   );
+
+//   factory TimeDepositProductResp.fromJson(Map<String, dynamic> srcJson) =>
+//       _$TimeDepositProductRespFromJson(srcJson);
+
+//   Map<String, dynamic> toJson() => _$TimeDepositProductRespToJson(this);
+// }
+
+// @JsonSerializable()
+// class TdepProducHeadDTO extends Object {
+//   @JsonKey(name: 'prodType')
+//   String prodType;
+
+//   @JsonKey(name: 'bppdCode')
+//   String bppdCode;
+
+//   @JsonKey(name: 'engName')
+//   String engName;
+
+//   @JsonKey(name: 'lclName')
+//   String lclName;
+
+//   @JsonKey(name: 'minRate')
+//   String minRate;
+
+//   @JsonKey(name: 'maxRate')
+//   String maxRate;
+
+//   @JsonKey(name: 'remark')
+//   String remark;
+
+//   @JsonKey(name: 'minAmt')
+//   String minAmt;
+
+//   @JsonKey(name: 'statusNo')
+//   String statusNo;
+
+//   @JsonKey(name: 'ccy')
+//   String ccy;
+
+//   @JsonKey(name: 'insCode')
+//   String insCode;
+
+//   @JsonKey(name: 'minAuctCale')
+//   String minAuctCale;
+
+//   @JsonKey(name: 'minAccuPeriod')
+//   String minAccuPeriod;
+
+//   @JsonKey(name: 'maxAuctCale')
+//   String maxAuctCale;
+
+//   @JsonKey(name: 'maxAccuPeriod')
+//   String maxAccuPeriod;
+
+//   TdepProducHeadDTO(
+//     this.prodType,
+//     this.bppdCode,
+//     this.engName,
+//     this.lclName,
+//     this.minRate,
+//     this.maxRate,
+//     this.remark,
+//     this.minAmt,
+//     this.statusNo,
+//     this.ccy,
+//     this.insCode,
+//     this.minAuctCale,
+//     this.minAccuPeriod,
+//     this.maxAuctCale,
+//     this.maxAccuPeriod,
+//   );
+
+//   factory TdepProducHeadDTO.fromJson(Map<String, dynamic> srcJson) =>
+//       _$TdepProducHeadDTOFromJson(srcJson);
+
+//   Map<String, dynamic> toJson() => _$TdepProducHeadDTOToJson(this);
+// }
+
+//--------------------------定期开立新接口返回的数据
 @JsonSerializable()
 class TimeDepositProductResp extends Object {
-  @JsonKey(name: 'depositType')
-  String depositType;
-
-  @JsonKey(name: 'bppdCode')
-  String bppdCode;
-
-  @JsonKey(name: 'tdepProducHeadDTO')
-  TdepProducHeadDTO tdepProducHeadDTO;
-
-  @JsonKey(name: 'tdepProductDTOList')
+  @JsonKey(name: 'rows')
   List<TdepProductDTOList> tdepProductDTOList;
 
   TimeDepositProductResp(
-    this.depositType,
-    this.bppdCode,
-    this.tdepProducHeadDTO,
     this.tdepProductDTOList,
   );
 
@@ -79,77 +166,6 @@ class TimeDepositProductResp extends Object {
       _$TimeDepositProductRespFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$TimeDepositProductRespToJson(this);
-}
-
-@JsonSerializable()
-class TdepProducHeadDTO extends Object {
-  @JsonKey(name: 'prodType')
-  String prodType;
-
-  @JsonKey(name: 'bppdCode')
-  String bppdCode;
-
-  @JsonKey(name: 'engName')
-  String engName;
-
-  @JsonKey(name: 'lclName')
-  String lclName;
-
-  @JsonKey(name: 'minRate')
-  String minRate;
-
-  @JsonKey(name: 'maxRate')
-  String maxRate;
-
-  @JsonKey(name: 'remark')
-  String remark;
-
-  @JsonKey(name: 'minAmt')
-  String minAmt;
-
-  @JsonKey(name: 'statusNo')
-  String statusNo;
-
-  @JsonKey(name: 'ccy')
-  String ccy;
-
-  @JsonKey(name: 'insCode')
-  String insCode;
-
-  @JsonKey(name: 'minAuctCale')
-  String minAuctCale;
-
-  @JsonKey(name: 'minAccuPeriod')
-  String minAccuPeriod;
-
-  @JsonKey(name: 'maxAuctCale')
-  String maxAuctCale;
-
-  @JsonKey(name: 'maxAccuPeriod')
-  String maxAccuPeriod;
-
-  TdepProducHeadDTO(
-    this.prodType,
-    this.bppdCode,
-    this.engName,
-    this.lclName,
-    this.minRate,
-    this.maxRate,
-    this.remark,
-    this.minAmt,
-    this.statusNo,
-    this.ccy,
-    this.insCode,
-    this.minAuctCale,
-    this.minAccuPeriod,
-    this.maxAuctCale,
-    this.maxAccuPeriod,
-  );
-
-  factory TdepProducHeadDTO.fromJson(Map<String, dynamic> srcJson) =>
-      _$TdepProducHeadDTOFromJson(srcJson);
-
-  Map<String, dynamic> toJson() => _$TdepProducHeadDTOToJson(this);
 }
 
 @JsonSerializable()

@@ -27,9 +27,15 @@ abstract class ApiClientTimeDeposit {
     return _ApiClientTimeDeposit(dio, baseUrl: baseUrl);
   }
 
-  /// 获取定期产品
-  @POST('/tdep/timeDeposit/getTdepProducts')
-  Future<List<TimeDepositProductResp>> getGetTimeDepositProduct(
+  // 获取定期产品
+  // @POST(
+  //     '/tdep/timeDeposit/getTdepProducts') // 以前的接口tdep/timeDeposit/getTdepProducts  新的接口 /tdep/timeDeposit/getTdepProductsByPage
+  // Future<List<TimeDepositProductResp>> getGetTimeDepositProduct(
+  //     @Body() TimeDepositProductReq req);
+
+  @POST(
+      '/tdep/timeDeposit/getTdepProductsByPage') // 以前的接口tdep/timeDeposit/getTdepProducts
+  Future<TimeDepositProductResp> getGetTimeDepositProduct(
       @Body() TimeDepositProductReq req);
 
   //     //获取定期产品

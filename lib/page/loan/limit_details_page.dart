@@ -136,9 +136,6 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
           _loadData();
         },
       );
-      // Container(
-      //   child: notDataContainer(context, S.current.no_data_now),
-      // );
     } else {
       List<Widget> _list = new List();
       for (int i = 0; i < loanDetails.length; i++) {

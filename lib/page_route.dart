@@ -349,7 +349,7 @@ onGenerateRoute(RouteSettings settings) {
     return MaterialPageRoute(builder: (context) {
       Map data = settings.arguments;
       return TimeDepositContract(
-        productList: data['tdepProduct'],
+        // productList: data['tdepProduct'],
         producDTOList: data['tdepProducDTOList'],
       );
     });

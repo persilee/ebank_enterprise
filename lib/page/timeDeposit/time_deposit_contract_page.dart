@@ -39,15 +39,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../page_route.dart';
 
 class TimeDepositContract extends StatefulWidget {
-  final TdepProducHeadDTO productList;
-  final List<TdepProductDTOList> producDTOList;
-
-  TimeDepositContract({Key key, this.productList, this.producDTOList})
+  // final TdepProducHeadDTO productList; //头部文件
+  // final List<TdepProductDTOList> producDTOList;//详情列表文件
+  final TdepProductDTOList producDTOList;
+  TimeDepositContract({Key key, this.producDTOList}) // 哈哈标记  this.productList,
       : super(key: key);
 
   @override
   _TimeDepositContractState createState() =>
-      _TimeDepositContractState(productList, producDTOList);
+      _TimeDepositContractState(producDTOList); //哈哈标记
 }
 
 class _TimeDepositContractState extends State<TimeDepositContract> {
@@ -77,10 +77,11 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   double bal = 0.00;
   String instCode = '';
 
-  TdepProducHeadDTO productList;
-  List<TdepProductDTOList> producDTOList;
+  // TdepProducHeadDTO productList;
+  // List<TdepProductDTOList> producDTOList;//列表
+  TdepProductDTOList _detailProducDTOList;
 
-  _TimeDepositContractState(this.productList, this.producDTOList);
+  _TimeDepositContractState(this._detailProducDTOList); //哈哈标记 this.productList
 
   TimeDepositContractTrialReq contractTrialReq;
   TextEditingController inputValue = TextEditingController();
@@ -375,7 +376,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                 accuPeriod,
                 auctCale,
                 double.parse(inputValue.text),
-                productList.bppdCode,
+                _detailProducDTOList.bppdCode, //哈哈标记
                 ccy,
                 custID,
                 depositType,
@@ -400,7 +401,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             contentPadding: EdgeInsets.all(0),
             border: InputBorder.none,
             hintText: S.current.deposit_min_with_value +
-                FormatUtil.formatSringToMoney(_minAmt.toString()),
+                FormatUtil.formatSringToMoney(widget.producDTOList
+                    .minAmt), //占位文本   _minAmt.toString() producDTOList.minAmt
             hintStyle: TextStyle(
               color: HsgColors.hintText,
               fontSize: 18.0,
@@ -428,8 +430,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   }
 
   // 选择存款期限按钮
-  Widget _termChangeBtn(
-      BuildContext context, List<TdepProductDTOList> producDTOList) {
+  Widget _termChangeBtn(BuildContext context) {
+    //哈哈标记  List<TdepProductDTOList> producDTOList
     return Container(
       color: Colors.white,
       child: Column(
@@ -437,7 +439,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           Container(
             child: FlatButton(
               onPressed: () {
-                _selectTerm(context, producDTOList);
+                _selectTerm(context); //哈哈标记
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -564,8 +566,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   }
 
 //存款期限弹窗
-  _selectTerm(
-      BuildContext context, List<TdepProductDTOList> producDTOList) async {
+  _selectTerm(BuildContext context) async {
+    //哈哈标记  List<TdepProductDTOList> producDTOList
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
@@ -589,14 +591,15 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   }
 
   //产品名称和年利率
-  Widget _titleSection(
-      TdepProducHeadDTO tdepProduct, List<TdepProductDTOList> producDTOList) {
+  Widget _titleSection() {
+    // 哈哈标记 TdepProducHeadDTO tdepProduct
+    //List<TdepProductDTOList> producDTOList 哈哈标记
     String name;
     String language = Intl.getCurrentLocale();
     if (language == 'zh_CN') {
-      name = productList.lclName;
+      name = _detailProducDTOList.lclName;
     } else {
-      name = productList.engName;
+      name = _detailProducDTOList.engName; //哈哈
     }
     return Container(
       color: Colors.white,
@@ -767,14 +770,14 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
               rate,
               auctCale,
               bal,
-              productList.bppdCode,
+              _detailProducDTOList.bppdCode, //哈哈
               ccy,
               custID,
               depositType,
               instCode,
               _changedAccountTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
               '',
-              productList.engName,
+              _detailProducDTOList.engName, //哈哈标记改动
               _changedSettAcTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
               '',
               '',
@@ -805,12 +808,12 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                 children: [
                   _background(),
                   _titleSection(
-                    //产品名称和年利率
-                    productList,
-                    producDTOList,
-                  ),
+                      //产品名称和年利率
+                      // productList,
+                      // producDTOList,//哈哈标记
+                      ),
                   _remark(), // 产品描述
-                  _termChangeBtn(context, producDTOList), // 选择存款期限
+                  _termChangeBtn(context), // 选择存款期限
                   _inputPrincipal(card), // 本金输入框
                   _accountChangeBtn(), //选择付款账户
                   _line(),
@@ -1089,7 +1092,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   Future _getTdProdInstCode() async {
     ApiClientTimeDeposit()
         .getTdProdInstCode(
-            GetTdProductInstCodeReq(this.productList.bppdCode ?? ''))
+            GetTdProductInstCodeReq(this._detailProducDTOList.bppdCode ?? ''))
         .then((data) {
       List<String> instructionDataList = [];
       List<String> instructionList = [];
@@ -1225,8 +1228,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     // HSProgressHUD.show();
     // TimeDepositDataRepository()
     ApiClientTimeDeposit()
-        .getTdProductTermRate(
-            GetTdProductTermRateReq(productList.ccy, productList.bppdCode))
+        .getTdProductTermRate(GetTdProductTermRateReq(
+            _detailProducDTOList.ccy, _detailProducDTOList.bppdCode)) //哈哈标记
         .then((data) {
       if (this.mounted) {
         setState(() {
