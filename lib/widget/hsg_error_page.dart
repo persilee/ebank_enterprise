@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
@@ -42,6 +43,7 @@ class HsgErrorPage extends StatelessWidget {
     }
     return Scaffold(
       body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
         color: Colors.white,
         alignment: Alignment.center,
         child: Column(
@@ -73,28 +75,47 @@ class HsgErrorPage extends StatelessWidget {
                       bottom: 12,
                     ),
                     child: Text(
-                      this.title ?? this.error.code ??  S.current.error_title,
+                      this.title ?? this.error?.code ?? S.current.error_title,
                       style: TextStyle(fontSize: 16, color: Colors.grey),
+                      softWrap: true,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   )
                 : Container(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  this.isEmptyPage
-                      ? S.current.no_data_now
-                      : this.desc ?? this.error.message ?? S.current.error_desc,
-                  style: TextStyle(fontSize: 15, color: Colors.grey.shade400),
+                Flexible(
+                  fit: FlexFit.loose,
+                  flex: 3,
+                  child: Text(
+                    this.isEmptyPage
+                        ? S.current.no_data_now
+                        : this.desc ??
+                            this.error?.message ??
+                            S.current.error_desc,
+                    style: TextStyle(fontSize: 15, color: Colors.grey.shade400),
+                    softWrap: true,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 this.isEmptyPage || _isNeedLogin
                     ? Container()
-                    : GestureDetector(
-                        onTap: () => this.helpAction != null ? this.helpAction() : (){},
-                        child: Icon(
-                          IconFont.icon_info,
-                          size: 18,
-                          color: Colors.grey,
+                    : Flexible(
+                        fit: FlexFit.loose,
+                        flex: 1,
+                        child: GestureDetector(
+                          onTap: () => this.helpAction != null
+                              ? this.helpAction()
+                              : () {},
+                          child: Icon(
+                            IconFont.icon_info,
+                            size: 18,
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
               ],
