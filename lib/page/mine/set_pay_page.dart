@@ -138,24 +138,6 @@ class _SetPayPageState extends State<SetPayPage> {
 
   //提交按钮
   _submitData() async {
-    //for循环判断字符串是否都相等
-    bool isEqual = false;
-    String firstNum = _newPwd.text.substring(0, 1);
-    String tempText = _newPwd.text;
-    for (var i = 0; i < _newPwd.text.length; i++) {
-      String tempNum = tempText.substring(i, i + 1);
-      print(i);
-      if (tempNum == firstNum) {
-        //相等
-        firstNum = tempNum;
-        isEqual = true;
-      } else {
-        //不想等
-        isEqual = false;
-        break;
-      }
-    }
-
     if (_newPwd.text == null || _newPwd.text == '') {
       HSProgressHUD.showToastTip(
         S.of(context).please_input_the_payment_password,
@@ -175,9 +157,36 @@ class _SetPayPageState extends State<SetPayPage> {
       return;
     }
     //是否是相同的数字
+    bool isEqual = false;
+    String firstNum = _newPwd.text.substring(0, 1);
+    String tempText = _newPwd.text;
+    for (var i = 0; i < _newPwd.text.length; i++) {
+      String tempNum = tempText.substring(i, i + 1);
+      print(i);
+      if (tempNum == firstNum) {
+        //相等
+        firstNum = tempNum;
+        isEqual = true;
+      } else {
+        //不想等
+        isEqual = false;
+        break;
+      }
+    }
     if (isEqual == true) {
       HSProgressHUD.showToastTip(
         S.current.set_pay_password_isEqual,
+      );
+      return;
+    }
+
+    //正则校验是否是连续的数字
+    RegExp _regularnumber = new RegExp(
+        r'[(?:(?:0(?=1)|1(?=2)|2(?=3)|3(?=4)|4(?=5)|5(?=6)|6(?=7)|7(?=8)|8(?=9)){2}|(?:9(?=8)|8(?=7)|7(?=6)|6(?=5)|5(?=4)|4(?=3)|3(?=2)|2(?=1)|1(?=0)){2})\\d]'); //正则
+    if (_regularnumber.hasMatch(_newPwd.text)) {
+      Fluttertoast.showToast(
+        msg: S.current.set_pay_password_regular,
+        gravity: ToastGravity.CENTER,
       );
       return;
     }
