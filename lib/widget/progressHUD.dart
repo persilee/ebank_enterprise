@@ -27,7 +27,8 @@ class HSProgressHUD {
   static void showToast(
     AppException error,
   ) {
-    String errorStr = error.code ?? '' + error.message ?? '';
+    String errorStr = error.message ?? (error.code ?? '');
+    //(error.code ?? '') + (error.message ?? '');
     SVProgressHUD.dismiss();
     Fluttertoast.showToast(
       msg: errorStr,

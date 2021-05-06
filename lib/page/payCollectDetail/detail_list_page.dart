@@ -935,6 +935,7 @@ class _DetailListPageState extends State<DetailListPage> {
     }
   }
 
+  //点击跳转详情
   void _goToDetail(DdFinHisDTOList ddFinHist) {
     Navigator.pushNamed(context, pageDetailInfo, arguments: ddFinHist);
   }
