@@ -317,7 +317,7 @@ class _TransferPartnerState extends State<TransferPartner> {
           }
         });
       }).catchError((e) {
-        HSProgressHUD.showError(status: e.toString());
+        HSProgressHUD.showToast(e.error);
       });
   }
 
@@ -375,7 +375,7 @@ class _TransferPartnerState extends State<TransferPartner> {
             LeftScrollCloseTag('row.payeeCardNo'), Key(partner.payeeCardNo))
         .value = false;
     _deletePartner(partner.custId, partner.payeeCardNo);
-    HSProgressHUD.showSuccess(status: S.of(context).successfully_delete);
+    HSProgressHUD.showToastTip(S.of(context).successfully_delete);
   }
 
   //单条伙伴

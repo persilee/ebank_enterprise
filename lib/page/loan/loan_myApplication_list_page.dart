@@ -13,7 +13,6 @@ import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

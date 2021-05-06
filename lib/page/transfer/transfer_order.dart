@@ -23,10 +23,10 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -1022,21 +1022,18 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
 
   _judgeDialog() {
     if (double.parse(_payerTransferController.text) > double.parse(_balance)) {
-      Fluttertoast.showToast(
-        msg: intl.S.current.tdContract_balance_insufficient,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        intl.S.current.tdContract_balance_insufficient,
       );
     } else if (_isAccount) {
-      Fluttertoast.showToast(
-        msg: intl.S.current.account_no_exist,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        intl.S.current.account_no_exist,
       );
     }
     if (_payeeCcy == _payerCcy &&
         _payerAccount == _payeeAccountController.text) {
-      Fluttertoast.showToast(
-        msg: intl.S.of(context).no_account_ccy_transfer,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        intl.S.of(context).no_account_ccy_transfer,
       );
     } else {
       Map frequency;
@@ -1341,10 +1338,7 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -1365,9 +1359,8 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
           _isAccount = true;
         });
       }
-      Fluttertoast.showToast(
-        msg: intl.S.current.no_account,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        intl.S.current.no_account,
       );
     });
   }

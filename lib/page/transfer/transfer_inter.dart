@@ -27,7 +27,6 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -143,9 +142,8 @@ class _TransferInterPageState extends State<TransferInterPage> {
         if (_payerTransferController.text.length > 0) {
           if (double.parse(_payerTransferController.text) <= 0) {
             _payerTransferController.text = '';
-            Fluttertoast.showToast(
-              msg: S.of(context).input_amount_msg1,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.of(context).input_amount_msg1,
             );
           } else {
             setState(() {
@@ -170,9 +168,8 @@ class _TransferInterPageState extends State<TransferInterPage> {
         if (_payeeTransferController.text.length > 0) {
           if (double.parse(_payeeTransferController.text) <= 0) {
             _payeeTransferController.text = '';
-            Fluttertoast.showToast(
-              msg: S.of(context).input_amount_msg1,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.of(context).input_amount_msg1,
             );
           } else {
             setState(() {
@@ -732,15 +729,13 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   _judgeDialog() {
     if (double.parse(_payerTransferController.text) > double.parse(_balance)) {
-      Fluttertoast.showToast(
-        msg: S.current.tdContract_balance_insufficient,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.tdContract_balance_insufficient,
       );
     } else if (_payeeCcy == _payerCcy &&
         _payerAccount == _payeeAccountController.text) {
-      Fluttertoast.showToast(
-        msg: S.of(context).no_account_ccy_transfer,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.of(context).no_account_ccy_transfer,
       );
     } else {
       _queryFee();
@@ -1108,11 +1103,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
       );
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.error.message,
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 }

@@ -22,8 +22,8 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_money_caculate.dart';
 import 'package:sp_util/sp_util.dart';
 
@@ -80,18 +80,16 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
       double.parse(list.totAmt), //实际还款金额
       debitAccount,
     );
-    SVProgressHUD.show();
+    HSProgressHUD.show();
     ApiClientLoan().postRepayment(req).then((data) async {
-      SVProgressHUD.dismiss();
+      HSProgressHUD.dismiss();
       if (data != null) {
-        SVProgressHUD.showSuccess(
-            status: S.current.loan_application_input_comfir);
+        HSProgressHUD.showToastTip(S.current.loan_application_input_comfir);
         await Future.delayed(Duration(seconds: 1));
         Navigator.of(context)..pop()..pop();
       }
     }).catchError((e) {
-      SVProgressHUD.dismiss();
-      SVProgressHUD.showInfo(status: e.toString());
+      HSProgressHUD.showToast(e.error);
     });
   }
 

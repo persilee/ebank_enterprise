@@ -24,11 +24,11 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_single_picker.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../page_route.dart';
@@ -152,16 +152,16 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         _custId = data.custId;
       });
     }).catchError((e) {
-      SVProgressHUD.showInfo(status: e.toString());
+      HSProgressHUD.showToast(e.error);
     });
   }
 
   //获取放款以及还款帐号列表
   Future<void> _loadTotalAccountData() async {
-    SVProgressHUD.show();
+    HSProgressHUD.show();
     ApiClientAccount().getCardList(GetCardListReq()).then(
       (data) {
-        SVProgressHUD.dismiss();
+        HSProgressHUD.dismiss();
         if (data.cardList != null) {
           // if (mounted) {
           setState(() {
@@ -178,8 +178,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         }
       },
     ).catchError((e) {
-      SVProgressHUD.dismiss();
-      SVProgressHUD.showInfo(status: e.toString());
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -205,8 +204,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         });
       }
     }).catchError((e) {
-      SVProgressHUD.dismiss();
-      SVProgressHUD.showInfo(status: e.toString());
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -476,7 +474,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   void _openBottomSheet() async {
     //判断金额是否为0
     if (double.parse(_moneyController.text) <= 0) {
-      SVProgressHUD.showInfo(status: S.current.loan_application_amount_check);
+      HSProgressHUD.showToastTip(S.current.loan_application_amount_check);
       return;
     }
 

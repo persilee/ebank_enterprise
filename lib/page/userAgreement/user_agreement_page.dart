@@ -1,5 +1,6 @@
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/page/userAgreement/user_link_total_page.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 用户协议
@@ -7,7 +8,6 @@ import 'package:ebank_mobile/page/userAgreement/user_link_total_page.dart';
 /// Date: 2020-12-24
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:ebank_mobile/data/source/model/get_user_agreement.dart';
@@ -87,10 +87,7 @@ class _UserAgreementPageState extends State<UserAgreementPage> {
         // }
       });
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 }

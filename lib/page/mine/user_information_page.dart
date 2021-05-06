@@ -447,7 +447,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
   //上传头像
   _uploadAvatar() async {
     if (_imgPath == null || _imgPath == '') {
-      HSProgressHUD.showInfo(status: S.of(context).select_image_error);
+      HSProgressHUD.showToastTip(S.of(context).select_image_error);
     } else {
       File file = File(_imgPath);
       ApiClient().uploadAvatar(BaseBody(body: {}), file).then((value) {

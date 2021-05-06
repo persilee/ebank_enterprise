@@ -8,7 +8,6 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
@@ -69,18 +68,14 @@ class _HSGOTPButtonState extends State<HSGOTPButton> {
           //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
           // )
           .sendSmsByPhone(
-        SendSmsByPhoneNumberReq('', userPhone, widget.smsType, '','MB'),
+        SendSmsByPhoneNumberReq('', userPhone, widget.smsType, '', 'MB'),
       )
           .then((data) {
         _startCountdown();
         setState(() {});
         HSProgressHUD.dismiss();
       }).catchError((e) {
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
-        HSProgressHUD.dismiss();
+        HSProgressHUD.showToast(e.error);
       });
     }
 
