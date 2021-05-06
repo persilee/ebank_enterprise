@@ -998,6 +998,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     return Container(
       margin: EdgeInsets.only(left: 15, right: 15),
       child: TextField(
+        keyboardType: TextInputType.text,
         maxLines: 4,
         enabled: !_offstage,
         decoration: InputDecoration(

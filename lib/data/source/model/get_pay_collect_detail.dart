@@ -58,7 +58,10 @@ class GetRevenueByCardsResp extends Object {
   @JsonKey(name: 'nextKey')
   String nextKey;
 
-  GetRevenueByCardsResp(this.ddFinHisDTOList, this.nextKey);
+  @JsonKey(name: 'toatal')
+  String toatal;
+
+  GetRevenueByCardsResp(this.ddFinHisDTOList, this.nextKey, this.toatal);
   Map<String, dynamic> toJson() => _$GetRevenueByCardsRespToJson(this);
 
   factory GetRevenueByCardsResp.fromJson(Map<String, dynamic> srcJson) =>
