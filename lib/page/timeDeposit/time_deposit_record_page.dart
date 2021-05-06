@@ -74,18 +74,20 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           : _isDate
               ? CustomRefresh(
                   controller: _refreshController,
-                  onLoading: () {
+                  onLoading: () async {
                     //加载更多完成
                     if (_isMoreData) {
                       //是否加载更多
                       _loadDeopstData(isLoadMore: true);
                     }
                   },
-                  onRefresh: () {
+                  onRefresh: () async {
                     //刷新完成
                     _page = 1;
                     rowList.clear();
-                    _loadDeopstData();
+                    await _loadDeopstData();
+                    _refreshController.refreshCompleted();
+                    _refreshController.footerMode.value = LoadStatus.canLoading;
                   },
                   content: ListView.separated(
                     itemCount: rowList.length,
@@ -341,7 +343,8 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     String ciNo = prefs.getString(ConfigKey.CUST_ID);
     Future.wait({
       ApiClientTimeDeposit().getDepositRecordRows(
-        DepositRecordReq(ciNo, '', excludeClosed, _page, 10, '',isLoadMore ? 'Y': ''),
+        DepositRecordReq(
+            ciNo, '', excludeClosed, _page, 10, '', isLoadMore ? 'Y' : ''),
       )
     }).then((value) {
       if (this.mounted) {
@@ -372,12 +375,13 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
               } else {
                 _isDate = true;
               }
-              if (element.rows.length < 10) {
+              if (element.rows.length < 10 || element.totalPage == _page) {
                 //判断底部没有更多提示的
                 // _refreshController.footerMode.value = LoadStatus.noMore;
                 _refreshController.loadNoData();
                 rowList.addAll(element.rows);
               } else {
+                // _refreshController.loadComplete();
                 rowList.addAll(element.rows);
               }
             }
