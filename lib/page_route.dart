@@ -91,7 +91,6 @@ import 'package:ebank_mobile/page/transfer/transfer_record_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_partner_page.dart';
 import 'package:ebank_mobile/page/transfer/add_partner_page.dart';
 import 'package:ebank_mobile/page/transfer/select_bank_page.dart';
-import 'package:ebank_mobile/page/transfer/select_city_page.dart';
 import 'package:ebank_mobile/page/transfer/select_branch_bank_page.dart';
 import 'package:ebank_mobile/page/transfer/transfer_success.dart';
 import 'package:ebank_mobile/page/userAgreement/user_agreement_page.dart';
@@ -119,7 +118,6 @@ var pagePwdOperationSuccess = '/pwd_operation_success_page.dart';
 // var pageCardList = pageHome;
 
 var pageSelectBranchBank = "/select_branch_bank_page.dart";
-var pageSelectCity = "/select_city_page.dart";
 var pageSelectBank = "/select_bank_page.dart";
 var pageAddPartner = "/add_partner_page.dart";
 var pageTranferPartner = "/transfer_partner_page.dart";
@@ -244,7 +242,6 @@ var appRoutes = {
   pageCardList: (context) => CardListPage(),
   pageDialogDemo: (context) => DialogDemoPage(),
   pageSelectBank: (context) => SelectBankPage(),
-  pageSelectCity: (context) => SelectCityPage(),
   pageSelectBranchBank: (context) => SelectBranchBankPage(),
   pageAddPartner: (context) => AddPartnerPage(),
   pageTranferPartner: (context) => TransferPartner(),

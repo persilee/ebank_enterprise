@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/update_login_password.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 修改登录密码
 /// Author: hlx
@@ -16,7 +17,6 @@ import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangeLoPS extends StatefulWidget {
@@ -266,16 +266,13 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     _areaCodeStr = prefs.getString(ConfigKey.USER_AREACODE) ?? '86';
     ApiClientPassword()
         .sendSmsByPhone(SendSmsByPhoneNumberReq(
-            _areaCodeStr, _phoneStr, 'modifyPwd', 'SCNAOCHGLPW','MB',msgBankId: '999'))
+            _areaCodeStr, _phoneStr, 'modifyPwd', 'SCNAOCHGLPW', 'MB',
+            msgBankId: '999'))
         .then((data) {
       _startCountdown();
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -291,28 +288,24 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
     RegExp pwdRegExp = new RegExp(
         r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\[\]\{\}\#\%\^\*\+\=\_\\\|\~\<\>€£¥•\.\,\?\!‘\-\/\:\;\(\)\$\&\@“]).{8,16}$");
     if (!number_6.hasMatch(_sms.text)) {
-      Fluttertoast.showToast(
-        msg: S.current.sms_error,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.sms_error,
       );
     } else if (_newPwd.text != _confimPwd.text) {
-      Fluttertoast.showToast(
-        msg: S.current.differentPwd,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.differentPwd,
       );
     } else if (_oldPwd.text == _newPwd.text) {
-      Fluttertoast.showToast(
-        msg: S.current.differnet_old_new_pwd,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.differnet_old_new_pwd,
       );
       // } else if (number.hasMatch(_newPwd.text) == false ||
       //     letter.hasMatch(_newPwd.text) == false ||
       //     characters.hasMatch(_newPwd.text) == false ||
       //     ((_newPwd.text).length < 8 || (_newPwd.text).length > 16)) {
     } else if (!pwdRegExp.hasMatch(_newPwd.text)) {
-      Fluttertoast.showToast(
-        msg: S.current.password_need_num,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.password_need_num,
       );
     } else {
       HSProgressHUD.show();
@@ -323,19 +316,14 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
           .modifyLoginPassword(
               ModifyPasswordReq(newPwd, oldPwd, _sms.text, userID))
           .then((data) {
-        Fluttertoast.showToast(
-          msg: S.current.operate_success,
-          gravity: ToastGravity.CENTER,
+        HSProgressHUD.showToastTip(
+          S.current.operate_success,
         );
         Navigator.of(context)..pop();
         Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
         HSProgressHUD.dismiss();
       }).catchError((e) {
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
-        HSProgressHUD.dismiss();
+        HSProgressHUD.showToast(e.error);
       });
     }
   }

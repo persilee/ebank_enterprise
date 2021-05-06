@@ -8,7 +8,6 @@ import 'package:ebank_mobile/data/source/model/get_schedule_detail_list.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 
 class WaitRepayPlanPage extends StatefulWidget {
@@ -74,7 +73,7 @@ class _WaitRepayPlanState extends State<WaitRepayPlanPage> {
     //     });
     //   }
     // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+    //   HSProgressHUD.showToast(e.error);
     // });
     lnScheduleList.clear();
     // lnScheduleList.add(_list1);
@@ -308,7 +307,9 @@ class _WaitRepayPlanState extends State<WaitRepayPlanPage> {
               // InkWell(
               //   onTap: () {
               //     //跳转
-              //     Fluttertoast.showToast(msg: '还款中...',gravity: ToastGravity.CENTER,);
+              // HSProgressHUD.showToastTip(
+              //   '还款中...',
+              // );
               //   },
               //   child: Text(
               //     repay,

@@ -22,7 +22,6 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -757,9 +756,8 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
             .add(_language == 'en' ? element.engName : element.localName);
       });
     } else {
-      Fluttertoast.showToast(
-        msg: S.of(context).openAccount_industryNatureNotSelect_tip,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.of(context).openAccount_industryNatureNotSelect_tip,
       );
       return;
     }
@@ -796,10 +794,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     }).catchError((e) {
       if (e is NeedLogin) {
       } else {
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
+        HSProgressHUD.showToast(e.error);
       }
     });
 
@@ -812,10 +807,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     }).catchError((e) {
       if (e is NeedLogin) {
       } else {
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
+        HSProgressHUD.showToast(e.error);
       }
     });
 
@@ -828,10 +820,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     }).catchError((e) {
       if (e is NeedLogin) {
       } else {
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
+        HSProgressHUD.showToast(e.error);
       }
     });
   }
@@ -855,14 +844,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         _industrialNaturesTwo = data.publicCodeGetRedisRspDtoList;
       }
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      if (e is NeedLogin) {
-      } else {
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
-      }
+      HSProgressHUD.showToast(e.error);
     });
   }
 

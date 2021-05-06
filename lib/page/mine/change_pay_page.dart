@@ -16,7 +16,6 @@ import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangePayPage extends StatefulWidget {
@@ -185,27 +184,30 @@ class _ChangePayPageState extends State<ChangePayPage> {
 
     RegExp number_6 = new RegExp(r'^\d{6}$');
     if (!number_6.hasMatch(_sms.text)) {
-      //是否是6位数字
-      Fluttertoast.showToast(
-        msg: S.current.sms_error,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.sms_error,
+      );
+    } else if (_newPwd.text != _confimPwd.text) {
+      HSProgressHUD.showToastTip(
+        S.current.differentPwd,
+      );
+    } else if (_newPwd.text == _oldPwd.text) {
+      HSProgressHUD.showToastTip(
+        S.current.sms_error,
       );
     } else if (_newPwd.text != _confimPwd.text) {
       //两次密码是否相等
-      Fluttertoast.showToast(
-        msg: S.current.differentPwd,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.differentPwd,
       );
     } else if (_newPwd.text == _oldPwd.text) {
       //新密码等于旧密码
-      Fluttertoast.showToast(
-        msg: S.current.differnet_old_new_pwd,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.differnet_old_new_pwd,
       );
     } else if (!number_6.hasMatch(_newPwd.text)) {
-      Fluttertoast.showToast(
-        msg: S.current.set_pay_password_prompt,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.set_pay_password_prompt,
       );
     } else {
       HSProgressHUD.show();
@@ -214,20 +216,14 @@ class _ChangePayPageState extends State<ChangePayPage> {
         SetPaymentPwdReq(oldPwd, newPwd, userID, _sms.text),
       )
           .then((data) {
-        Fluttertoast.showToast(
-          msg: S.current.changPwsSuccess,
-          gravity: ToastGravity.CENTER,
+        HSProgressHUD.showToastTip(
+          S.current.changPwsSuccess,
         );
         Navigator.of(context)..pop();
         Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
         HSProgressHUD.dismiss();
       }).catchError((e) {
-        HSProgressHUD.dismiss();
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
-        print('${e.toString()}');
+        HSProgressHUD.showToast(e.error);
       });
     }
   }
@@ -334,11 +330,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      HSProgressHUD.dismiss();
+      HSProgressHUD.showToast(e.error);
     });
   }
 

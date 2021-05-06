@@ -36,6 +36,17 @@ class HSProgressHUD {
     );
   }
 
+  static void showToastTip(
+    String tipStr,
+  ) {
+    SVProgressHUD.dismiss();
+    Fluttertoast.showToast(
+      msg: tipStr,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 2,
+    );
+  }
+
   static void showProgress(
     num progress, {
     String status,

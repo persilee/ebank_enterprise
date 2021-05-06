@@ -23,7 +23,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_tableview/flutter_tableview.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:date_format/date_format.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -971,10 +970,7 @@ class _DetailListPageState extends State<DetailListPage> {
           _isLoading = false;
         });
       }
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -1026,11 +1022,7 @@ class _DetailListPageState extends State<DetailListPage> {
           _isLoading = false;
         });
       }
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      // HSProgressHUD.dismiss();
+      HSProgressHUD.showToast(e.error);
     });
   }
 

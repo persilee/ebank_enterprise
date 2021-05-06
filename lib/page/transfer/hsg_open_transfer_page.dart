@@ -22,13 +22,13 @@ import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -970,15 +970,13 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     // if (double.parse(_transferMoneyController.text) > double.parse(_limit) ||
     if (double.parse(_transferMoneyController.text) > double.parse(_balance)) {
       // if (double.parse(_limit) > double.parse(_balance)) {
-      Fluttertoast.showToast(
-        msg: S.current.tdContract_balance_insufficient,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.tdContract_balance_insufficient,
       );
       // }
       // else {
-      //   Fluttertoast.showToast(
-      //     msg: "超过限额",
-      //     gravity: ToastGravity.CENTER,
+      //   HSProgressHUD.showToastTip(
+      //     "超过限额",
       //   );
       // }
     } else {
@@ -1228,7 +1226,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
         });
       }
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+      // HSProgressHUD.showToast(e.error);
     });
   }
 }

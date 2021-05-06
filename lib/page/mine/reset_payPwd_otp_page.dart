@@ -17,7 +17,6 @@ import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ebank_mobile/data/source/model/check_sms.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
@@ -56,9 +55,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text(S
-            .of(context)
-            .resetPayPsd),
+        title: Text(S.of(context).resetPayPsd),
         centerTitle: true,
         elevation: 1,
       ),
@@ -71,15 +68,12 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
         child: Container(
           color: HsgColors.commonBackground,
           child: Form(
-            //绑定状态属性
+              //绑定状态属性
               key: _formKey,
               child: ListView(
                 children: <Widget>[
                   Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
+                    width: MediaQuery.of(context).size.width,
                     margin: EdgeInsets.only(bottom: 16, top: 16),
                     color: Colors.white,
                     padding: EdgeInsets.only(left: 20, right: 20),
@@ -89,17 +83,13 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                         Container(
                           padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(
-                            S
-                                .of(context)
-                                .plaseSetPayPsd,
+                            S.of(context).plaseSetPayPsd,
                             style: TextStyle(
                                 color: Color(0xEE7A7A7A), fontSize: 13),
                           ),
                         ),
                         //手机号
-                        _infoFrame(S
-                            .of(context)
-                            .phone_num,
+                        _infoFrame(S.of(context).phone_num,
                             '+' + _officeAreaCodeText + ' ' + _phone),
                         Container(
                           height: 50,
@@ -107,9 +97,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                             children: [
                               Container(
                                 width: 120,
-                                child: Text(S
-                                    .of(context)
-                                    .sendmsm),
+                                child: Text(S.of(context).sendmsm),
                               ),
                               Expanded(
                                 child: otpTextField(),
@@ -135,9 +123,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                   CustomButton(
                     margin: EdgeInsets.all(40),
                     text: Text(
-                      S
-                          .of(context)
-                          .next_step,
+                      S.of(context).next_step,
                       style: TextStyle(color: Colors.white),
                     ),
                     isEnable: _submit(),
@@ -173,11 +159,10 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
     //请求验证手机号验证码，成功后跳转到身份验证界面
     RegExp number_6 = new RegExp(r'^\d{6}$');
     if (!number_6.hasMatch(_sms.text)) {
-      Fluttertoast.showToast(
-        msg: S.current.sms_error,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.sms_error,
       );
-    }else {
+    } else {
       //校验短信验证码
       ApiClientAccount()
           .checkSms(CheckSmsReq(_phone, 'transactionPwd', _sms.text, 'MB'))
@@ -187,12 +172,10 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
             HSProgressHUD.dismiss();
             //校验是否注册
             if (!data.checkResult) {
-              HSProgressHUD.dismiss();
-              Fluttertoast.showToast(
-                msg: S.current.num_not_is_register,
-                gravity: ToastGravity.CENTER,
+              HSProgressHUD.showToastTip(
+                S.current.num_not_is_register,
               );
-            }   //跳转至下一页面
+            } //跳转至下一页面
             else {
               //请求成功后跳转
               Navigator.pushNamed(context, iDcardVerification, arguments: {
@@ -206,11 +189,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
           });
         }
       }).catchError((e) {
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
-        HSProgressHUD.dismiss();
+        HSProgressHUD.showToast(e.error);
       });
     }
   }
@@ -298,9 +277,9 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       onPressed: (countdownTime > 0 || _phone == '')
           ? null
           : () {
-        FocusScope.of(context).requestFocus(FocusNode());
-        _getVerificationCode();
-      },
+              FocusScope.of(context).requestFocus(FocusNode());
+              _getVerificationCode();
+            },
       //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间
       padding: EdgeInsets.symmetric(horizontal: 8),
       color: Color(0xeeEFF3FF),
@@ -315,9 +294,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       child: Text(
         countdownTime > 0
             ? '${countdownTime}s'
-            : S
-            .of(context)
-            .getVerificationCode,
+            : S.of(context).getVerificationCode,
         style: TextStyle(fontSize: 14),
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -344,11 +321,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -375,9 +348,11 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
     );
   }
 
-  Widget _inputList(String labText,
-      String placeholderText,
-      TextEditingController inputValue,) {
+  Widget _inputList(
+    String labText,
+    String placeholderText,
+    TextEditingController inputValue,
+  ) {
     return Container(
       height: 50.0,
       child: Row(

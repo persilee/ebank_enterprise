@@ -7,12 +7,7 @@ import 'dart:io';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_styles.dart';
-import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart';
-import 'package:ebank_mobile/data/source/model/login_Verfiy_phone.dart';
-import 'package:ebank_mobile/data/source/model/logout.dart';
-import 'package:ebank_mobile/data/source/user_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_packaging.dart';
 import 'package:ebank_mobile/main.dart';
 
@@ -25,7 +20,6 @@ import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
@@ -250,9 +244,8 @@ class _HomePageState extends State<HomePage>
     if (_lastTime == null ||
         DateTime.now().difference(_lastTime) > Duration(milliseconds: 2500)) {
       _lastTime = DateTime.now();
-      Fluttertoast.showToast(
-        msg: "再次点击退出应用",
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.exit_prompt,
       );
       return Future.value(false);
     }
@@ -297,19 +290,13 @@ class _HomePageState extends State<HomePage>
   //           exit(0);
   //           // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   //         });
-  //         Fluttertoast.showToast(
-  //           msg: S.of(context).logoutSuccess,
-  //           gravity: ToastGravity.CENTER,
-  //         );
+  // HSProgressHUD.showToastTip(
+  //   S.current.logoutSuccess,
+  // );
   //       });
   //     }
   //   }).catchError((e) {
-  //     Fluttertoast.showToast(
-  //       msg: e.toString(),
-  //       gravity: ToastGravity.CENTER,
-  //     );
-  //     HSProgressHUD.dismiss();
-  //     // print(e.toString());
+  //     HSProgressHUD.showToast(e.error);
   //   });
   // }
 
@@ -955,7 +942,7 @@ class _HomePageState extends State<HomePage>
       HsgShowTip.notOpenAccountTip(
         context: context,
         click: (value) {
-          if (value == true) {
+          if (value == true && _belongCustStatus != '2') {
             //前往快速开户
             Navigator.pushNamed(context, pageOpenAccountBasicData);
           }
@@ -1123,19 +1110,14 @@ class _HomePageState extends State<HomePage>
           EventBusUtils.getInstance()
               .fire(ChangeUserInfo(userInfo: _data, state: 100));
           if (shouldTip == true &&
-              ['0', '1', '2', '3', ''].contains(_belongCustStatus)) {
+              ['0', '1', '3', ''].contains(_belongCustStatus)) {
             _openAccountClickFunction(context, true);
             return;
           }
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      // HSProgressHUD.showError(status: e.toString());
-      print('${e.toString()}');
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -1158,9 +1140,7 @@ class _HomePageState extends State<HomePage>
 //       });
 //     }
 //   }).catchError((e) {
-//     Fluttertoast.showToast(msg: e.toString(), gravity: ToastGravity.CENTER,);
-//     // HSProgressHUD.showError(status: e.toString());
-//     print('${e.toString()}');
+//     HSProgressHUD.showToast(e.error);
 //   });
 // }
 }

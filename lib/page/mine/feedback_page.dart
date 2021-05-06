@@ -14,7 +14,6 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class FeedbackPage extends StatefulWidget {
   @override
@@ -129,19 +128,13 @@ class _FeedbackPageState extends State<FeedbackPage> {
       GetFeedBackReq(feedbackProblem, opinionPhone, opinionTheme, problemType),
     )
         .then((data) {
-      Fluttertoast.showToast(
-        msg: S.current.feedbackSuccess,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.feedbackSuccess,
       );
       Navigator.pop(context);
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      print('${e.toString()}');
+      HSProgressHUD.showToast(e.error);
     });
   }
 }

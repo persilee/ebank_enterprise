@@ -17,7 +17,6 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
@@ -342,9 +341,8 @@ class _UserInformationPageState extends State<UserInformationPage> {
           try {
             var image =
                 await ApiClient().uploadAvatar(BaseBody(body: {}), value);
-            Fluttertoast.showToast(
-              msg: S.current.avatar_uploaded_successfully,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.current.avatar_uploaded_successfully,
             );
             String _headPortrait = image['headPortrait'] ?? '';
             if (_headPortrait.isEmpty) {
@@ -404,9 +402,8 @@ class _UserInformationPageState extends State<UserInformationPage> {
           try {
             var image =
                 await ApiClient().uploadAvatar(BaseBody(body: {}), value);
-            Fluttertoast.showToast(
-              msg: S.current.avatar_uploaded_successfully,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.current.avatar_uploaded_successfully,
             );
             String _headPortrait = image['headPortrait'] ?? '';
             if (_headPortrait.isEmpty) {
@@ -458,10 +455,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
             headPortrait: value['headPortrait'], state: 300));
         print(value);
       }).catchError((e) {
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
+        HSProgressHUD.showToast(e.error);
       });
     }
   }

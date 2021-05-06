@@ -8,7 +8,6 @@
 // import 'package:ebank_mobile/widget/progressHUD.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
 
 // /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 // /// 注册账号短信验证
@@ -101,11 +100,7 @@
 //         });
 //       }
 //     }).catchError((e) {
-//       Fluttertoast.showToast(
-//         msg: e.toString(),
-//         gravity: ToastGravity.CENTER,
-//       );
-//       HSProgressHUD.dismiss();
+//       HSProgressHUD.showToast(e.error);
 //     });
 //     // }
 //   }
@@ -116,10 +111,8 @@
 //     // _isRegister ?
 //     if (widget.isRegister) {
 //       if (_isRegister) {
-//         HSProgressHUD.dismiss();
-//         Fluttertoast.showToast(
-//           msg: S.current.num_is_register,
-//           gravity: ToastGravity.CENTER,
+//         HSProgressHUD.showToastTip(
+//           S.current.num_is_register,
 //         );
 //       } else {
 //         VersionDataRepository()
@@ -136,19 +129,14 @@
 //             });
 //           }
 //         }).catchError((e) {
-//           HSProgressHUD.dismiss();
-//           Fluttertoast.showToast(
-//             msg: e.toString(),
-//             gravity: ToastGravity.CENTER,
-//           );
+//           HSProgressHUD.showToast(e.error);
 //         });
 //       }
 //     }
 //     if (widget.isForget) {
 //       if (!_isRegister) {
-//         Fluttertoast.showToast(
-//           msg: S.current.num_not_is_register,
-//           gravity: ToastGravity.CENTER,
+//         HSProgressHUD.showToastTip(
+//          S.current.num_not_is_register,
 //         );
 //       } else {
 //         VersionDataRepository()
@@ -164,11 +152,7 @@
 //             });
 //           }
 //         }).catchError((e) {
-//           HSProgressHUD.dismiss();
-//           Fluttertoast.showToast(
-//             msg: e.toString(),
-//             gravity: ToastGravity.CENTER,
-//           );
+//           HSProgressHUD.showToast(e.error);
 //         });
 //       }
 //     }
