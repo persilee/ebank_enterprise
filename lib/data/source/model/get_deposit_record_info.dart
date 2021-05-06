@@ -27,6 +27,9 @@ class DepositRecordReq {
   @JsonKey(name: 'stsNo')
   String stsNo;
 
+  @JsonKey(name: 'nextKey')
+  String nextKey;
+
   DepositRecordReq(
     this.ciNo,
     this.conNo,
@@ -34,6 +37,7 @@ class DepositRecordReq {
     this.page,
     this.pageSize,
     this.stsNo,
+    this.nextKey,
   );
 
   factory DepositRecordReq.fromJson(Map<String, dynamic> srcJson) =>

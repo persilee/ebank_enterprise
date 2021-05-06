@@ -341,7 +341,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     String ciNo = prefs.getString(ConfigKey.CUST_ID);
     Future.wait({
       ApiClientTimeDeposit().getDepositRecordRows(
-        DepositRecordReq(ciNo, '', excludeClosed, _page, 10, ''),
+        DepositRecordReq(ciNo, '', excludeClosed, _page, 10, '',isLoadMore ? 'Y': ''),
       )
     }).then((value) {
       if (this.mounted) {
