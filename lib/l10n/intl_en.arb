@@ -750,5 +750,9 @@
   "transfer_the_preview4": "Preview of Foreign Exchange Trading",
   "exit_prompt": "Click again to exit the application",
   "enter_idNumber_tip": "Please enter the ID number!",
-  "not_find_bank": "No relevant bank was found!"
+  "not_find_bank": "No relevant bank was found!",
+  "longzhenqi_start":">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>龙振旗国际化起点>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+  "set_pay_password_isEqual":"The transaction password cannot be the same number",
+  "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+
 }

@@ -181,6 +181,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
     String newPwd = EncryptUtil.aesEncode(_newPwd.text);
     print(oldPwd);
     print(newPwd);
+
     RegExp number_6 = new RegExp(r'^\d{6}$');
     if (!number_6.hasMatch(_sms.text)) {
       HSProgressHUD.showToastTip(
@@ -192,6 +193,16 @@ class _ChangePayPageState extends State<ChangePayPage> {
       );
     } else if (_newPwd.text == _oldPwd.text) {
       HSProgressHUD.showToastTip(
+        S.current.sms_error,
+      );
+    } else if (_newPwd.text != _confimPwd.text) {
+      //两次密码是否相等
+      HSProgressHUD.showToastTip(
+        S.current.differentPwd,
+      );
+    } else if (_newPwd.text == _oldPwd.text) {
+      //新密码等于旧密码
+      HSProgressHUD.showToastTip(
         S.current.differnet_old_new_pwd,
       );
     } else if (!number_6.hasMatch(_newPwd.text)) {
@@ -200,7 +211,6 @@ class _ChangePayPageState extends State<ChangePayPage> {
       );
     } else {
       HSProgressHUD.show();
-      // PaymentPwdRepository()
       ApiClientPassword()
           .updateTransPassword(
         SetPaymentPwdReq(oldPwd, newPwd, userID, _sms.text),
