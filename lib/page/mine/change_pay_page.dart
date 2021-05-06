@@ -182,18 +182,22 @@ class _ChangePayPageState extends State<ChangePayPage> {
     String newPwd = EncryptUtil.aesEncode(_newPwd.text);
     print(oldPwd);
     print(newPwd);
+
     RegExp number_6 = new RegExp(r'^\d{6}$');
     if (!number_6.hasMatch(_sms.text)) {
+      //是否是6位数字
       Fluttertoast.showToast(
         msg: S.current.sms_error,
         gravity: ToastGravity.CENTER,
       );
     } else if (_newPwd.text != _confimPwd.text) {
+      //两次密码是否相等
       Fluttertoast.showToast(
         msg: S.current.differentPwd,
         gravity: ToastGravity.CENTER,
       );
     } else if (_newPwd.text == _oldPwd.text) {
+      //新密码等于旧密码
       Fluttertoast.showToast(
         msg: S.current.differnet_old_new_pwd,
         gravity: ToastGravity.CENTER,
@@ -205,7 +209,6 @@ class _ChangePayPageState extends State<ChangePayPage> {
       );
     } else {
       HSProgressHUD.show();
-      // PaymentPwdRepository()
       ApiClientPassword()
           .updateTransPassword(
         SetPaymentPwdReq(oldPwd, newPwd, userID, _sms.text),
@@ -319,7 +322,8 @@ class _ChangePayPageState extends State<ChangePayPage> {
     ApiClientPassword()
         .sendSmsByPhone(
       SendSmsByPhoneNumberReq(
-          _areaCodeStr, _phoneNo, 'transactionPwd', 'SCNAOCHGTSPW','MB',msgBankId: '999'),
+          _areaCodeStr, _phoneNo, 'transactionPwd', 'SCNAOCHGTSPW', 'MB',
+          msgBankId: '999'),
     )
         .then((data) {
       _startCountdown();

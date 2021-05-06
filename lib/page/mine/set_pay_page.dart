@@ -139,6 +139,24 @@ class _SetPayPageState extends State<SetPayPage> {
 
   //提交按钮
   _submitData() async {
+    //for循环判断字符串是否都相等
+    bool isEqual = false;
+    String firstNum = _newPwd.text.substring(0, 1);
+    String tempText = _newPwd.text;
+    for (var i = 0; i < _newPwd.text.length; i++) {
+      String tempNum = tempText.substring(i, i + 1);
+      print(i);
+      if (tempNum == firstNum) {
+        //相等
+        firstNum = tempNum;
+        isEqual = true;
+      } else {
+        //不想等
+        isEqual = false;
+        break;
+      }
+    }
+
     if (_newPwd.text == null || _newPwd.text == '') {
       Fluttertoast.showToast(
         msg: S.of(context).please_input_the_payment_password,
@@ -156,6 +174,14 @@ class _SetPayPageState extends State<SetPayPage> {
     if (_newPwd.text.length != 6) {
       Fluttertoast.showToast(
         msg: S.of(context).set_pay_password_prompt,
+        gravity: ToastGravity.CENTER,
+      );
+      return;
+    }
+    //是否是相同的数字
+    if (isEqual == true) {
+      Fluttertoast.showToast(
+        msg: S.current.set_pay_password_isEqual,
         gravity: ToastGravity.CENTER,
       );
       return;

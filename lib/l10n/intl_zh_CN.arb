@@ -747,5 +747,9 @@
   "time_deposit_record_Status_N": "正常",
   "time_deposit_record_Status_C": "结清",
   "total_opration_audit_tip": "提交成功,等待审核",
-  "transfer_the_preview4": "外汇买卖预览"
+  "transfer_the_preview4": "外汇买卖预览",
+  "longzhenqi_start":">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>龙振旗国际化起点>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+  "set_pay_password_isEqual":"交易密码不能是相同的数字",
+  "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+
 }
