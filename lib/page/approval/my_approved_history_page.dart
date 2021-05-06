@@ -203,6 +203,46 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
       }
     });
 
+    String _taskTitle = '';
+    switch(approvalTask.processKey){
+      case 'openTdContractApproval': {
+        _taskTitle = _language == 'zh_CN' ? '开立定期存单' : approvalTask?.taskName;
+      }
+      break;
+      case 'oneToOneTransferApproval': {
+        _taskTitle = _language == 'zh_CN' ? '行内转账' : approvalTask?.taskName;
+      }
+      break;
+      case 'internationalTransferApproval': {
+        _taskTitle = _language == 'zh_CN' ? '国际转账' : approvalTask?.taskName;
+      }
+      break;
+      case 'earlyRedTdContractApproval': {
+        _taskTitle = _language == 'zh_CN' ? '定期提前结清' : approvalTask?.taskName;
+      }
+      break;
+      case 'foreignTransferApproval': {
+        _taskTitle = _language == 'zh_CN' ? '外汇买卖' : approvalTask?.taskName;
+      }
+      break;
+      case 'loanWithDrawalApproval': {
+        _taskTitle = _language == 'zh_CN' ? '贷款领用' : approvalTask?.taskName;
+      }
+      break;
+      case 'postRepaymentApproval': {
+        _taskTitle = _language == 'zh_CN' ? '提前还款' : approvalTask?.taskName;
+      }
+      break;
+      case 'loanRepaymentApproval': {
+        _taskTitle = _language == 'zh_CN' ? '计划还款' : approvalTask?.taskName;
+      }
+      break;
+      default:
+        {
+          _taskTitle = '';
+        }
+    }
+
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -222,7 +262,7 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             //待办任务名称
-            _taskName(approvalTask?.taskName ?? ''),
+            _taskName(_taskTitle),
             Padding(padding: EdgeInsets.only(top: 2.0)),
             //待办任务id
             _rowInformation(
