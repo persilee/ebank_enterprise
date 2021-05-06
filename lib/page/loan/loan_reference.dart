@@ -25,10 +25,10 @@ import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_single_picker.dart';
 import 'package:ebank_mobile/widget/money_text_input_formatter.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:intl/intl.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -119,10 +119,10 @@ class _LoanReferenceState extends State<LoanReference> {
 
   //获取收款账户列表
   Future _loadTotalAccountData() async {
-    SVProgressHUD.show();
+    HSProgressHUD.show();
     ApiClientAccount().getCardList(GetCardListReq()).then(
       (data) {
-        SVProgressHUD.dismiss();
+        HSProgressHUD.dismiss();
         if (data.cardList != null) {
           // if (mounted) {
           setState(() {
@@ -136,8 +136,7 @@ class _LoanReferenceState extends State<LoanReference> {
         }
       },
     ).catchError((e) {
-      SVProgressHUD.dismiss();
-      SVProgressHUD.showInfo(status: e.toString());
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -207,8 +206,7 @@ class _LoanReferenceState extends State<LoanReference> {
       setState(() {
         _recipientsController.text = '';
       });
-      SVProgressHUD.dismiss();
-      SVProgressHUD.showInfo(status: e.toString());
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -216,9 +214,9 @@ class _LoanReferenceState extends State<LoanReference> {
   Future<void> _loadGrossCalculationData() async {
     var req = LoanIntereRateReq(
         accountInfo.bookBr, accountInfo.ccy, iratCd1, _mothCode);
-    SVProgressHUD.show();
+    HSProgressHUD.show();
     ApiClientBill().loanGetRateInterface(req).then((data) {
-      SVProgressHUD.dismiss();
+      HSProgressHUD.dismiss();
       //获取利率在去进行试算
       if (mounted) {
         setState(() {
@@ -227,9 +225,7 @@ class _LoanReferenceState extends State<LoanReference> {
         });
       }
     }).catchError((e) {
-      print(e.toString());
-      SVProgressHUD.dismiss();
-      SVProgressHUD.showInfo(status: e.toString());
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -261,8 +257,7 @@ class _LoanReferenceState extends State<LoanReference> {
         });
       }
     }).catchError((e) {
-      SVProgressHUD.dismiss();
-      SVProgressHUD.showInfo(status: e.toString());
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -807,6 +802,7 @@ class _LoanReferenceState extends State<LoanReference> {
     };
   }
 
+//下一步 确定按钮
   _openBottomSheet() {
     //需要传值
     _listDataMap["totalInterst"] = _trailModel.totInt; //总利息

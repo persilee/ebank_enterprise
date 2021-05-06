@@ -12,7 +12,6 @@ import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class ForexTradingPreviewPage extends StatefulWidget {
   ForexTradingPreviewPage({Key key}) : super(key: key);
@@ -175,11 +174,7 @@ class _ForexTradingPreviewPageState extends State<ForexTradingPreviewPage> {
       Navigator.pushNamed(context, pageTransferSuccess,
           arguments: "pageTransferSuccess");
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.error.message,
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 }

@@ -10,7 +10,6 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -149,9 +148,8 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                                 RegExp minWord = new RegExp("[a-z]");
                                 if ((_newPassword.text !=
                                     _confirmPassword.text)) {
-                                  Fluttertoast.showToast(
-                                    msg: S.of(context).differentPwd,
-                                    gravity: ToastGravity.CENTER,
+                                  HSProgressHUD.showToastTip(
+                                    S.of(context).differentPwd,
                                   );
                                 } else if (characters
                                             .hasMatch(_newPassword.text) ==
@@ -165,9 +163,8 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                                     //((_newPassword.text).contains(userName) == true) ||
                                     (_newPassword.text.length < 8 ||
                                         _newPassword.text.length > 16)) {
-                                  Fluttertoast.showToast(
-                                    msg: S.current.password_need_num,
-                                    gravity: ToastGravity.CENTER,
+                                  HSProgressHUD.showToastTip(
+                                    S.current.password_need_num,
                                   );
                                 } else {
                                   _updateLoginPassword();
@@ -208,10 +205,8 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
       _accountName,
     ))
         .then((data) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: S.current.operate_success,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.operate_success,
       );
       Navigator.of(context).pushNamedAndRemoveUntil(
         pageResetPasswordSuccess,
@@ -221,11 +216,7 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
 
       //   Navigator.popAndPushNamed(context, pageResetPasswordSuccess);
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      HSProgressHUD.dismiss();
+      HSProgressHUD.showToast(e.error);
     });
   }
 //}

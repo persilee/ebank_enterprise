@@ -10,7 +10,6 @@ import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/model/send_message.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -147,9 +146,8 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                                   RegExp number = new RegExp("[0-9]");
                                   if ((_newPassword.text !=
                                       _confirmPassword.text)) {
-                                    Fluttertoast.showToast(
-                                      gravity: ToastGravity.CENTER,
-                                      msg: S.of(context).differentPwd,
+                                    HSProgressHUD.showToastTip(
+                                      S.of(context).differentPwd,
                                     );
                                   } else if (number.hasMatch(
                                               _newPassword.text) ==
@@ -162,9 +160,8 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
                                           false ||
                                       ((_newPassword.text).length < 8 ||
                                           (_newPassword.text).length > 16)) {
-                                    Fluttertoast.showToast(
-                                      msg: S.current.password_need_num,
-                                      gravity: ToastGravity.CENTER,
+                                    HSProgressHUD.showToastTip(
+                                      S.current.password_need_num,
                                     );
                                   } else {
                                     _registerByAccount();
@@ -191,7 +188,6 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
 
     print("$_registerAccount>>>>>>>>>>>>>>");
     HSProgressHUD.show();
-    // VersionDataRepository()
     ApiClientAccount()
         .registerByAccount(RegisterByAccountReq(
             _areaCode, password, _registerAccount, _userPhone, userType, _sms))
@@ -215,11 +211,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
         _sendMessage();
       }
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -236,11 +228,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
     // }
   }

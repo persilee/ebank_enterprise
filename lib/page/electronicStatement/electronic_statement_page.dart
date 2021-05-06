@@ -8,7 +8,6 @@ import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/hsg_pdf_viewer.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class ElectronicStatementPage extends StatefulWidget {
   @override
@@ -101,7 +100,8 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
 
   void _loadData() async {
     _isLoading = true;
-    StatementQueryListModel statementQueryListModel = await ApiClient().statementQueryList(StatementQueryListBody(
+    StatementQueryListModel statementQueryListModel =
+        await ApiClient().statementQueryList(StatementQueryListBody(
       startDate: '2021-03-01',
       endDate: '2021-04-20',
     ));
@@ -113,6 +113,7 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
 
   void openPDF(BuildContext context, String title) {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => HsgPdfViewer(title: title, data: _statementDTOS)));
+        builder: (context) =>
+            HsgPdfViewer(title: title, data: _statementDTOS)));
   }
 }

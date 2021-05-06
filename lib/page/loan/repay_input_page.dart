@@ -18,11 +18,10 @@ import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RepayInputPage extends StatefulWidget {
@@ -62,10 +61,10 @@ class _RepayInputPageState extends State<RepayInputPage> {
 
   //获取放款以及还款帐号列表
   Future<void> _loadTotalAccountData() async {
-    SVProgressHUD.show();
+    HSProgressHUD.show();
     ApiClientAccount().getCardList(GetCardListReq()).then(
       (data) {
-        SVProgressHUD.dismiss();
+        HSProgressHUD.dismiss();
         if (data.cardList != null) {
           setState(() {
             _totalAccoutList.clear();
@@ -78,8 +77,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
         }
       },
     ).catchError((e) {
-      SVProgressHUD.dismiss();
-      SVProgressHUD.showInfo(status: e.toString());
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -143,7 +141,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
   Future<void> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
-    SVProgressHUD.show();
+    HSProgressHUD.show();
     ApiClientLoan()
         .getLoanCaculate(
       GetLoanCaculateReq(
@@ -160,7 +158,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
           ),
     )
         .then((data) {
-      SVProgressHUD.dismiss();
+      HSProgressHUD.dismiss();
       if (data.postAdvanceRepaymentDTOList != null) {
         setState(() {
           //请求回来进行变更
@@ -175,8 +173,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
         });
       }
     }).catchError((e) {
-      SVProgressHUD.dismiss();
-      SVProgressHUD.showInfo(status: e.toString());
+      HSProgressHUD.showToast(e.error);
     });
   }
 

@@ -728,6 +728,7 @@
   "login_password_error_tip": "Password input error, you have made errNum wrong password entries today and have remainNum chances left.",
   "login_password_error_toMuch_tip": "Exceeded Password Entry Limit: The user is locked.",
   "limited_customer_tip": "The account you are currently logged in is a restricted customer, please contact the enterprise service provider for quick account opening and conversion before proceeding with this operation.",
+  "open_account_face_again": "Again",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "transfer_from1": "Transfer From",
   "payer_currency": "Payer Currency",
@@ -746,5 +747,13 @@
   "time_deposit_record_Status_N": "Normal",
   "time_deposit_record_Status_C": "Closed",
   "total_opration_audit_tip": "Submitted successfully, awaiting for approval",
-  "transfer_the_preview4": "Preview of Foreign Exchange Trading"
+  "transfer_the_preview4": "Preview of Foreign Exchange Trading",
+  "exit_prompt": "Click again to exit the application",
+  "enter_idNumber_tip": "Please enter the ID number!",
+  "not_find_bank": "No relevant bank was found!",
+  "longzhenqi_start":">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>龙振旗国际化起点>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+  "set_pay_password_isEqual":"The transaction password cannot be the same number",
+  "set_pay_password_regular":"The transaction Password cannot be consecutive numbers",
+  "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+
 }

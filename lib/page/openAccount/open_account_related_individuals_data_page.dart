@@ -17,7 +17,6 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -571,10 +570,7 @@ class _RelatedIndividualsDataPageState
         print('公共参数-称谓-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
 
     // //个人职位类别COPC
@@ -586,10 +582,7 @@ class _RelatedIndividualsDataPageState
     //     print('公共参数-个人职位类别-  ${data.publicCodeGetRedisRspDtoList}');
     //   }
     // }).catchError((e) {
-    //   Fluttertoast.showToast(
-    //     msg: e.toString(),
-    //     gravity: ToastGravity.CENTER,
-    //   );
+    //   HSProgressHUD.showToast(e.error);
     // });
 
     //个人证件类型
@@ -601,10 +594,7 @@ class _RelatedIndividualsDataPageState
         print('公共参数-个人证件类型-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -630,11 +620,7 @@ class _RelatedIndividualsDataPageState
       },
     ).catchError(
       (e) {
-        HSProgressHUD.dismiss();
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
+        HSProgressHUD.showToast(e.error);
       },
     );
   }

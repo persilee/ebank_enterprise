@@ -32,7 +32,6 @@ import 'package:ebank_mobile/widget/money_text_input_formatter.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -760,9 +759,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         ),
         clickCallback: () {
           if (double.parse(_cardBal) < double.parse(_checkAmount)) {
-            Fluttertoast.showToast(
-              msg: S.current.tdContract_balance_insufficient,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.current.tdContract_balance_insufficient,
             );
           } else {
             _loadContractData(
@@ -857,10 +855,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         }
       },
     ).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -896,10 +891,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           });
         }
       } catch (e) {
-        Fluttertoast.showToast(
-          msg: "${e.toString()}",
-          gravity: ToastGravity.CENTER,
-        );
+        HSProgressHUD.showToast(e.error);
       }
     }
   }
@@ -1045,10 +1037,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -1081,10 +1070,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         }
       });
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -1108,10 +1094,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         _prodType = data.prdAcCd ?? '';
       });
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -1137,10 +1120,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         }
       },
     ).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -1208,11 +1188,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       if (this.mounted) {
         setState(() {
           _isDeposit = false;
-          // HSProgressHUD.dismiss();
-          Fluttertoast.showToast(
-            msg: e.toString(),
-            gravity: ToastGravity.CENTER,
-          );
+          HSProgressHUD.showToast(e.error);
         });
       }
     });
@@ -1259,11 +1235,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       if (this.mounted) {
         setState(() {
           _showTermRate = false;
-          // HSProgressHUD.dismiss();
-          Fluttertoast.showToast(
-            msg: e.toString(),
-            gravity: ToastGravity.CENTER,
-          );
+          HSProgressHUD.showToast(e.error);
         });
       }
     });

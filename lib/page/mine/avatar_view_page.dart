@@ -10,8 +10,8 @@ import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/image_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sp_util/sp_util.dart';
 
 class AvatarViewPage extends StatefulWidget {
@@ -118,11 +118,10 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
   Future<void> _saveImg(String imgUrl) async {
     bool result = await saveNetworkImageToPhoto(imgUrl);
     print(result.toString() + imgUrl);
-    Fluttertoast.showToast(
-      msg: result
+    HSProgressHUD.showToastTip(
+      result
           ? S.current.avatar_picture_saved_successfully
           : S.current.avatar_picture_saved_failed,
-      gravity: ToastGravity.CENTER,
     );
   }
 
@@ -139,9 +138,8 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
               _clipImage = value;
               _isClipImage = true;
             });
-            Fluttertoast.showToast(
-              msg: S.current.avatar_uploaded_successfully,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.current.avatar_uploaded_successfully,
             );
             String _headPortrait = image['headPortrait'] ?? '';
             if (_headPortrait.isEmpty) {

@@ -24,11 +24,11 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_single_picker.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../page_route.dart';
@@ -128,10 +128,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         _custId = data.custId;
       });
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -386,10 +383,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
       _reqData();
       Navigator.pushNamed(context, pageOperationResult);
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -415,7 +409,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
     //           "getLoanApplication")
     //       .then((data) {})
     //       .catchError((e) {
-    //     Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+    //     HSProgressHUD.showToast(e.error);
     //   });
   }
 }

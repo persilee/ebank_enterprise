@@ -1,5 +1,4 @@
 import 'package:ebank_mobile/config/hsg_text_style.dart';
-import 'package:ebank_mobile/data/source/mine_checInformantApi.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 重置交易密码--身份证验证
@@ -12,7 +11,6 @@ import 'package:ebank_mobile/data/source/model/real_name_auth_by_three_factor.da
 
 // import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 // import 'package:ebank_mobile/data/source/model/set_transactionPassword.dart';
-import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
@@ -21,22 +19,12 @@ import 'package:ebank_mobile/util/format_text_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 
-// import 'package:ebank_mobile/util/encrypt_util.dart';
-// import 'package:ebank_mobile/util/small_data_store.dart';
-import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 
-// import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-// import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:async';
-
-// import 'package:ebank_mobile/data/source/verification_code_repository.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -135,7 +123,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   //       });
   //     }
   //   }).catchError((e) {
-  //     Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+  //     HSProgressHUD.showToast(e.error);
   //   });
   // }
 
@@ -151,10 +139,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
         idInformationList = data.publicCodeGetRedisRspDtoList;
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -490,7 +475,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   //     });
   //     HSProgressHUD.dismiss();
   //   }).catchError((e) {
-  //     Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+  //     HSProgressHUD.showToast(e.error);
   //     HSProgressHUD.dismiss();
   //   });
   // }
@@ -530,29 +515,23 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
         Navigator.pushNamed(context, setPayPage, arguments: map);
       } else {
         //证件信息不匹配
-        Fluttertoast.showToast(
-          msg: S.current.mine_change_Trade_password,
-          gravity: ToastGravity.CENTER,
+        HSProgressHUD.showToastTip(
+          S.current.mine_change_Trade_password,
         );
       }
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      print(e.toString());
+      HSProgressHUD.showToast(e.error);
     });
 
     // RegExp postalcode1 =
     //     new RegExp(r'(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x))$');
     // if (!postalcode1.hasMatch(_certNo.text)) {
-    //   Fluttertoast.showToast(msg: '请输入正确的身份证!',gravity: ToastGravity.CENTER,);
+    //   HSProgressHUD.showToastTip(msg: '请输入正确的身份证!');
     //   return;
     // }
     // RegExp postalcode2 = new RegExp(r'^\d{11}$');
     // if (!postalcode2.hasMatch(_phoneNo.text)) {
-    //   Fluttertoast.showToast(msg: '请输入正确的手机号!',gravity: ToastGravity.CENTER,);
+    //   HSProgressHUD.showToastTip(msg: '请输入正确的手机号!');
     //   return;
     // }
 
@@ -572,9 +551,9 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
     //     isShowIdCheckout = false;
     //   }
     //   HSProgressHUD.dismiss();
-    //   Fluttertoast.showToast(msg: S.current.operate_success,gravity: ToastGravity.CENTER,);
+    //   HSProgressHUD.showToastTip(msg: S.current.operate_success);
     // }).catchError((e) {
-    //   Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+    //   HSProgressHUD.showToastTip(msg: e.toString(),);
     //   HSProgressHUD.dismiss();
     // });
   }
@@ -593,12 +572,12 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
 //   final prefs = await SharedPreferences.getInstance();
 //   String userID = prefs.getString(ConfigKey.USER_ID);
 //   if (_newPwd.text != _confimPwd.text) {
-//     Fluttertoast.showToast(msg: S.of(context).differentPwd,gravity: ToastGravity.CENTER,);
+//     HSProgressHUD.showToastTip(msg: S.of(context).differentPwd,);
 //     return;
 //   }
 //   RegExp postalcode1 = new RegExp(r'^\d{6}$');
 //   if (!postalcode1.hasMatch(_newPwd.text)) {
-//     Fluttertoast.showToast(msg: S.of(context).set_pay_password_prompt,gravity: ToastGravity.CENTER,);
+//     HSProgressHUD.showToastTip(msg: S.of(context).set_pay_password_prompt,);
 //     return;
 //   }
 //   String password = EncryptUtil.aesEncode(_confimPwd.text);
@@ -619,11 +598,11 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
 //           'setTransactionPassword')
 //       .then((data) {
 //     HSProgressHUD.dismiss();
-//     Fluttertoast.showToast(msg: S.current.operate_success,gravity: ToastGravity.CENTER,);
+//     HSProgressHUD.showToastTip(msg: S.current.operate_success,);
 //     // Navigator.pushNamed(context, minePage);
 //     Navigator.pop(context);
 //   }).catchError((e) {
-//     Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+//     HSProgressHUD.showToastTip(msg: e.toString(),);
 //     HSProgressHUD.dismiss();
 //   });
 // }

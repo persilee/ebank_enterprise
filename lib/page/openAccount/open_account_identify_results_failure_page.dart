@@ -8,7 +8,6 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -46,6 +45,7 @@ class _OpenAccountIdentifyResultsFailurePageState
         elevation: 1,
         centerTitle: true,
         title: Text(S.of(context).openAccout_identify_results),
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         width: size.width,
@@ -165,20 +165,15 @@ class _OpenAccountIdentifyResultsFailurePageState
         );
       } else if (value.outCode == '6') {
       } else {
-        Fluttertoast.showToast(
-          msg: S.of(context).openAccout_identify_results_failure,
-          gravity: ToastGravity.CENTER,
+        HSProgressHUD.showToastTip(
+          S.of(context).openAccout_identify_results_failure,
         );
         if (value.outCode == '8') {
           Navigator.pop(context);
         }
       }
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: '${e.toString()}',
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 }

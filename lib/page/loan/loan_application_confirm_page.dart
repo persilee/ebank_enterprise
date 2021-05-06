@@ -10,9 +10,8 @@ import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -195,7 +194,7 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
     print(userAccount);
     print(userID);
 
-    SVProgressHUD.show();
+    HSProgressHUD.show();
     // LoanDataRepository()
     ApiClientLoan()
         .submitLoanApplication(
@@ -220,7 +219,7 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
       ),
     )
         .then((data) async {
-      SVProgressHUD.showSuccess(status: S.current.total_opration_audit_tip);
+      HSProgressHUD.showToastTip(S.current.total_opration_audit_tip);
       await sleep(Duration(seconds: 1));
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) {
@@ -234,8 +233,7 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
         return false; //继续关闭
       });
     }).catchError((e) {
-      SVProgressHUD.dismiss();
-      SVProgressHUD.showError(status: e.toString());
+      HSProgressHUD.showToast(e.error);
     });
   }
 }

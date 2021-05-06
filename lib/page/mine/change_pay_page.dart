@@ -16,7 +16,6 @@ import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangePayPage extends StatefulWidget {
@@ -182,49 +181,49 @@ class _ChangePayPageState extends State<ChangePayPage> {
     String newPwd = EncryptUtil.aesEncode(_newPwd.text);
     print(oldPwd);
     print(newPwd);
+
     RegExp number_6 = new RegExp(r'^\d{6}$');
     if (!number_6.hasMatch(_sms.text)) {
-      Fluttertoast.showToast(
-        msg: S.current.sms_error,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.sms_error,
       );
     } else if (_newPwd.text != _confimPwd.text) {
-      Fluttertoast.showToast(
-        msg: S.current.differentPwd,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.differentPwd,
       );
     } else if (_newPwd.text == _oldPwd.text) {
-      Fluttertoast.showToast(
-        msg: S.current.differnet_old_new_pwd,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.sms_error,
+      );
+    } else if (_newPwd.text != _confimPwd.text) {
+      //两次密码是否相等
+      HSProgressHUD.showToastTip(
+        S.current.differentPwd,
+      );
+    } else if (_newPwd.text == _oldPwd.text) {
+      //新密码等于旧密码
+      HSProgressHUD.showToastTip(
+        S.current.differnet_old_new_pwd,
       );
     } else if (!number_6.hasMatch(_newPwd.text)) {
-      Fluttertoast.showToast(
-        msg: S.current.set_pay_password_prompt,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.set_pay_password_prompt,
       );
     } else {
       HSProgressHUD.show();
-      // PaymentPwdRepository()
       ApiClientPassword()
           .updateTransPassword(
         SetPaymentPwdReq(oldPwd, newPwd, userID, _sms.text),
       )
           .then((data) {
-        Fluttertoast.showToast(
-          msg: S.current.changPwsSuccess,
-          gravity: ToastGravity.CENTER,
+        HSProgressHUD.showToastTip(
+          S.current.changPwsSuccess,
         );
         Navigator.of(context)..pop();
         Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
         HSProgressHUD.dismiss();
       }).catchError((e) {
-        HSProgressHUD.dismiss();
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
-        print('${e.toString()}');
+        HSProgressHUD.showToast(e.error);
       });
     }
   }
@@ -319,7 +318,8 @@ class _ChangePayPageState extends State<ChangePayPage> {
     ApiClientPassword()
         .sendSmsByPhone(
       SendSmsByPhoneNumberReq(
-          _areaCodeStr, _phoneNo, 'transactionPwd', 'SCNAOCHGTSPW','MB',msgBankId: '999'),
+          _areaCodeStr, _phoneNo, 'transactionPwd', 'SCNAOCHGTSPW', 'MB',
+          msgBankId: '999'),
     )
         .then((data) {
       _startCountdown();
@@ -330,11 +330,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      HSProgressHUD.dismiss();
+      HSProgressHUD.showToast(e.error);
     });
   }
 

@@ -934,7 +934,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     //     });
     //   }
     // }).catchError((e) {
-    //   // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+    //   // HSProgressHUD.showToast(e.error);
     // });
   }
 
@@ -958,7 +958,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         }
       }
     }).catchError((e) {
-      // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
+      // HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -998,8 +998,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
         // HSProgressHUD.dismiss();
       }).catchError((e) {
-        // Fluttertoast.showToast(msg: e.toString(),gravity: ToastGravity.CENTER,);
-        // HSProgressHUD.dismiss();
+        // HSProgressHUD.showToast(e.error);
+
         if (this.mounted) {
           setState(() {
             _isLoading = false;

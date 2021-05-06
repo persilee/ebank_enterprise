@@ -17,7 +17,6 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 忘记登录密码
@@ -263,9 +262,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
           _isRegister = data.register;
           _userAccount = data.userAccount;
           if (!_isRegister) {
-            Fluttertoast.showToast(
-              msg: S.current.num_not_is_register,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.current.num_not_is_register,
             );
             HSProgressHUD.dismiss();
           } else {
@@ -274,11 +272,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
     // }
   }
@@ -294,10 +288,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
           HSProgressHUD.dismiss();
           //校验是否注册
           if (!data.checkResult) {
-            HSProgressHUD.dismiss();
-            Fluttertoast.showToast(
-              msg: S.current.num_not_is_register,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.current.num_not_is_register,
             );
           } else {
             //校验手机号是否已经开户
@@ -306,11 +298,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      HSProgressHUD.dismiss();
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -377,11 +365,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
     // }
   }

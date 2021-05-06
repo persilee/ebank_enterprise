@@ -28,7 +28,6 @@ import 'package:flutter/gestures.dart';
 /// Date: 2020-03-15
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key key}) : super(key: key);
@@ -213,9 +212,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                       characters.hasMatch(_userName.text) ==
                                           true) {
                                     //校验用户名
-                                    Fluttertoast.showToast(
-                                      gravity: ToastGravity.CENTER,
-                                      msg: S.current.register_check_username,
+                                    HSProgressHUD.showToastTip(
+                                      S.current.register_check_username,
                                     );
                                   } else {
                                     _checkRegisterBysencond();
@@ -254,10 +252,8 @@ class _RegisterPageState extends State<RegisterPage> {
         setState(() {
           _isRegister = data.register;
           if (_isRegister) {
-            HSProgressHUD.dismiss();
-            Fluttertoast.showToast(
-              msg: S.current.num_is_register,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.current.num_is_register,
             );
           } else {
             _sendSmsRegister(_isRegister);
@@ -265,11 +261,7 @@ class _RegisterPageState extends State<RegisterPage> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      HSProgressHUD.dismiss();
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -291,11 +283,7 @@ class _RegisterPageState extends State<RegisterPage> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
     // }
   }
@@ -312,10 +300,8 @@ class _RegisterPageState extends State<RegisterPage> {
           HSProgressHUD.dismiss();
           //校验是否注册
           if (!data.checkResult) {
-            HSProgressHUD.dismiss();
-            Fluttertoast.showToast(
-              msg: S.current.num_is_register,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.current.num_is_register,
             );
           } else {
             Map listData = new Map();
@@ -332,11 +318,7 @@ class _RegisterPageState extends State<RegisterPage> {
         });
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      HSProgressHUD.dismiss();
+      HSProgressHUD.showToast(e.error);
     });
   }
 

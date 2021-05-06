@@ -13,7 +13,6 @@ import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -291,11 +290,7 @@ class _OpenAccountSelectDocumentTypePageState
         );
       }
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: '${e.toString()}',
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
       if (mounted) {
         setState(() {
           _isCanClick = true;

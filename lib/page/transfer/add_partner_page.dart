@@ -17,9 +17,9 @@ import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:ebank_mobile/widget/hsg_single_picker.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
 import 'package:intl/intl.dart';
 
@@ -196,17 +196,13 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     ))
         .then((data) {
       if (data != null) {
-        Fluttertoast.showToast(
-          msg: S.current.add_successful,
-          gravity: ToastGravity.CENTER,
+        HSProgressHUD.showToastTip(
+          S.current.add_successful,
         );
         Navigator.of(context).pop();
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -710,9 +706,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         if (_isAccount) {
           _loadData();
         } else {
-          Fluttertoast.showToast(
-            msg: S.current.account_no_exist,
-            gravity: ToastGravity.CENTER,
+          HSProgressHUD.showToastTip(
+            S.current.account_no_exist,
           );
         }
       };
@@ -767,9 +762,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         });
       }
     }).catchError(() {
-      // Fluttertoast.showToast(
-      //   msg: "银行SWIFT不存在",
-      //   gravity: ToastGravity.CENTER,
+      // HSProgressHUD.showToastTip(
+      //   "银行SWIFT不存在",
       // );
     });
   }
@@ -795,14 +789,12 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         });
       }
       if (e.toString().contains("SC6121")) {
-        Fluttertoast.showToast(
-          msg: S.of(context).request_client_timeout,
-          gravity: ToastGravity.CENTER,
+        HSProgressHUD.showToastTip(
+          S.of(context).request_client_timeout,
         );
       } else if (e.toString().contains("CI0114")) {
-        Fluttertoast.showToast(
-          msg: S.current.no_account,
-          gravity: ToastGravity.CENTER,
+        HSProgressHUD.showToastTip(
+          S.current.no_account,
         );
       }
     });

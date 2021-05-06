@@ -12,10 +12,9 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'hsg_text_field_dialog.dart';
@@ -260,7 +259,7 @@ class _HsgPasswordDialogState extends State<HsgPasswordDialog> {
 
   _verifyTradePaw(String payPassword, BuildContext context, String resultPage,
       Object arguments) async {
-    SVProgressHUD.show();
+    HSProgressHUD.show();
     final prefs = await SharedPreferences.getInstance();
     String phoneNum = prefs.getString(ConfigKey.USER_PHONE);
     String areaCodeNum = prefs.getString(ConfigKey.USER_AREACODE);
@@ -268,7 +267,7 @@ class _HsgPasswordDialogState extends State<HsgPasswordDialog> {
     ApiClientPassword()
         .verifyTransPwdNoSms(VerifyTransPwdNoSmsReq(payPassword))
         .then((data) {
-      SVProgressHUD.dismiss();
+      HSProgressHUD.dismiss();
       if (widget.returnPasswordFunc != null) {
         widget.returnPasswordFunc(password);
       }
@@ -303,15 +302,11 @@ class _HsgPasswordDialogState extends State<HsgPasswordDialog> {
       passwordList.clear();
       (context as Element).markNeedsBuild();
       // if (e.toString() == 'ECUST031') {
-      //   Fluttertoast.showToast(msg: '交易密码错误！请重试',gravity: ToastGravity.CENTER,);
+      //   HSProgressHUD.showToastTip('交易密码错误！请重试',);
       // } else {
-      //   Fluttertoast.showToast(msg: '未设置交易密码！',gravity: ToastGravity.CENTER,);
+      //   HSProgressHUD.showToastTip('未设置交易密码！',);
       // }
-      SVProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
       // (context as Element).markNeedsBuild();
     });
   }

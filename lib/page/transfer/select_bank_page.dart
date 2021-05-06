@@ -5,9 +5,9 @@
 
 import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 
 class SelectBankPage extends StatefulWidget {
@@ -161,9 +161,8 @@ class _SelectBankPageState extends State<SelectBankPage> {
                   });
                   if (_tempList.isEmpty) {
                     _searchController.text = '';
-                    Fluttertoast.showToast(
-                      msg: '没有找到相关银行!',
-                      gravity: ToastGravity.CENTER,
+                    HSProgressHUD.showToastTip(
+                      S.of(context).not_find_bank,
                     );
                   }
                 }

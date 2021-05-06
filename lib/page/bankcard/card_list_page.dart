@@ -9,7 +9,6 @@ import 'package:ebank_mobile/widget/hsg_loading.dart';
 /// Date: 2020-11-04
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -297,10 +296,7 @@ class _CardListPageState extends State<CardListPage> {
           _isLoading = false;
         });
       }
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -406,10 +402,7 @@ class _CardListPageState extends State<CardListPage> {
           HSProgressHUD.dismiss();
         }).catchError((e) {
           HSProgressHUD.dismiss();
-          Fluttertoast.showToast(
-            msg: e.toString(),
-            gravity: ToastGravity.CENTER,
-          );
+          HSProgressHUD.showToast(e.error);
         });
       }
     }

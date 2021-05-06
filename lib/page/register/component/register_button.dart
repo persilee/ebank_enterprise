@@ -34,8 +34,8 @@ Widget _getRegisterButton(
                         "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
                     if (userName.hasMatch(_userName.text) == false ||
                         characters.hasMatch(_userName.text) == true) {
-                      HSProgressHUD.showInfo(
-                          status: '用户名只能为4-16位字符、数字或者字母，不能包含特殊字符，不能重复');
+                      HSProgressHUD.showToastTip(
+                          '用户名只能为4-16位字符、数字或者字母，不能包含特殊字符，不能重复');
                     } else {
                       Navigator.pushNamed(context, pageRegisterConfirm);
                     }

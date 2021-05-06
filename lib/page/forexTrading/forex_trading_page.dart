@@ -22,7 +22,6 @@ import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class ForexTradingPage extends StatefulWidget {
   @override
@@ -74,9 +73,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         if (_payerTransferController.text.length > 0) {
           if (double.parse(_payerTransferController.text) <= 0) {
             _payerTransferController.text = '';
-            Fluttertoast.showToast(
-              msg: S.of(context).input_amount_msg1,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.of(context).input_amount_msg1,
             );
           } else {
             setState(() {
@@ -101,9 +99,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         if (_payeeTransferController.text.length > 0) {
           if (double.parse(_payeeTransferController.text) <= 0) {
             _payeeTransferController.text = '';
-            Fluttertoast.showToast(
-              msg: S.of(context).input_amount_msg1,
-              gravity: ToastGravity.CENTER,
+            HSProgressHUD.showToastTip(
+              S.of(context).input_amount_msg1,
             );
           } else {
             setState(() {
@@ -202,9 +199,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           item: _payerCcy,
           onTap: _payerAcc == ''
               ? () {
-                  Fluttertoast.showToast(
-                    msg: S.of(context).forex_trading_msg1,
-                    gravity: ToastGravity.CENTER,
+                  HSProgressHUD.showToastTip(
+                    S.of(context).forex_trading_msg1,
                   );
                 }
               : () {
@@ -241,9 +237,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
           item: _payeeCcy,
           onTap: _payeeAcc == ''
               ? () {
-                  Fluttertoast.showToast(
-                    msg: S.of(context).forex_trading_msg2,
-                    gravity: ToastGravity.CENTER,
+                  HSProgressHUD.showToastTip(
+                    S.of(context).forex_trading_msg2,
                   );
                 }
               : () {
@@ -357,10 +352,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         }
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -386,10 +378,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         HSProgressHUD.dismiss();
       }
     }).catchError((e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
       HSProgressHUD.dismiss();
     });
   }
@@ -432,10 +421,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         HSProgressHUD.dismiss();
       }).catchError((e) {
         HSProgressHUD.dismiss();
-        Fluttertoast.showToast(
-          msg: e.error.message,
-          gravity: ToastGravity.CENTER,
-        );
+        HSProgressHUD.showToast(e.error);
       });
     } else {
       HSProgressHUD.dismiss();
@@ -444,14 +430,12 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
 
   _submitFormData() async {
     if (double.parse(_payerTransferController.text) > double.parse(_balance)) {
-      Fluttertoast.showToast(
-        msg: S.current.tdContract_balance_insufficient,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.tdContract_balance_insufficient,
       );
     } else if (_payerCcy == _payeeCcy && _payerAcc == _payeeAcc) {
-      Fluttertoast.showToast(
-        msg: S.of(context).no_account_ccy_transfer,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.no_account_ccy_transfer,
       );
     } else {
       Map _preview = new Map();
@@ -484,17 +468,13 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
       // )
       //     .then((data) {
       //   HSProgressHUD.dismiss();
-      //   Fluttertoast.showToast(
-      //     msg: S.current.operate_success,
-      //     gravity: ToastGravity.CENTER,
-      //   );
+      // HSProgressHUD.showToastTip(
+      //   S.current.operate_success,
+      // );
       //   Navigator.pop(context, pageIndex);
       // }).catchError((e) {
       //   HSProgressHUD.dismiss();
-      //   Fluttertoast.showToast(
-      //     msg: e.error.message,
-      //     gravity: ToastGravity.CENTER,
-      //   );
+      // HSProgressHUD.showToast(e.error);
       // });
     }
   }
@@ -509,9 +489,8 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         });
       }
       if (_holidayFlg == 'Y') {
-        Fluttertoast.showToast(
-          msg: S.of(context).forex_trading_msg3,
-          gravity: ToastGravity.CENTER,
+        HSProgressHUD.showToastTip(
+          S.current.forex_trading_msg3,
         );
         if (this.mounted) {
           setState(() {

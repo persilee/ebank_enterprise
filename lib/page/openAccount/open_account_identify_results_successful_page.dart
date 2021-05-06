@@ -22,7 +22,6 @@ import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OpenAccountIdentifyResultsSuccessfulPage extends StatefulWidget {
@@ -67,6 +66,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         elevation: 1,
         centerTitle: true,
         title: Text(S.of(context).openAccout_identify_results),
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         width: size.width,
@@ -126,7 +126,16 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
                   }
                 },
               ),
-            )
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 15),
+              child: HsgButton.whiteButton(
+                title: S.of(context).open_account_face_again,
+                click: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -238,11 +247,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         _saveSignVideoNetwork();
       }
     } catch (e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     }
   }
 
@@ -269,11 +274,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
       },
     ).catchError(
       (e) {
-        HSProgressHUD.dismiss();
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
+        HSProgressHUD.showToast(e.error);
       },
     );
   }
@@ -299,11 +300,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
       },
     ).catchError(
       (e) {
-        HSProgressHUD.dismiss();
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
+        HSProgressHUD.showToast(e.error);
       },
     );
   }
@@ -329,11 +326,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
       },
     ).catchError(
       (e) {
-        HSProgressHUD.dismiss();
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
+        HSProgressHUD.showToast(e.error);
       },
     );
   }

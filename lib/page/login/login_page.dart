@@ -22,7 +22,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -308,10 +307,7 @@ class _LoginPageState extends State<LoginPage> {
           },
         );
       } else {
-        Fluttertoast.showToast(
-          msg: e.toString(),
-          gravity: ToastGravity.CENTER,
-        );
+        HSProgressHUD.showToast(e.error);
       }
     });
   }
@@ -354,17 +350,15 @@ class _LoginPageState extends State<LoginPage> {
   ///判断是否能点击登录按钮
   bool _judgeCanLogin() {
     if (_account.toString().length == 0 || _account == null) {
-      Fluttertoast.showToast(
-        msg: S.of(context).please_input_account,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.please_input_account,
       );
       return false;
     }
 
     if (_password.toString().length == 0 || _password == null) {
-      Fluttertoast.showToast(
-        msg: S.of(context).please_input_password,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.current.please_input_password,
       );
       return false;
     }

@@ -729,6 +729,7 @@
   "login_password_error_tip": "登录密码错误，您当日已经错误errNum次，当日还剩remainNum次机会。",
   "login_password_error_toMuch_tip": "登录密码错误次数超限：用户被锁定。",
   "limited_customer_tip": "您当前登录的账号是受限客户，请先联系企服商进行快速开户转正再进行本操作。",
+  "open_account_face_again": "再来一次",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "transfer_from1": "付款方",
   "payer_currency": "转出方币种",
@@ -747,5 +748,13 @@
   "time_deposit_record_Status_N": "正常",
   "time_deposit_record_Status_C": "结清",
   "total_opration_audit_tip": "提交成功,等待审核",
-  "transfer_the_preview4": "外汇买卖预览"
+  "transfer_the_preview4": "外汇买卖预览",
+  "exit_prompt": "再次点击退出应用",
+  "enter_idNumber_tip": "请输入证件号！",
+  "not_find_bank": "没有找到相关银行！",
+  "longzhenqi_start":">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>龙振旗国际化起点>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+  "set_pay_password_isEqual":"交易密码不能是相同的数字",
+  "set_pay_password_regular":"交易密码不能是连续的数字",
+  "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+
 }

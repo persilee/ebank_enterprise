@@ -13,7 +13,6 @@ import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SetPayPage extends StatefulWidget {
@@ -140,23 +139,53 @@ class _SetPayPageState extends State<SetPayPage> {
   //提交按钮
   _submitData() async {
     if (_newPwd.text == null || _newPwd.text == '') {
-      Fluttertoast.showToast(
-        msg: S.of(context).please_input_the_payment_password,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.of(context).please_input_the_payment_password,
       );
       return;
     }
     if (_newPwd.text != _confimPwd.text) {
-      Fluttertoast.showToast(
-        msg: S.of(context).differentPwd,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.of(context).differentPwd,
       );
       return;
     }
     if (_newPwd.text.length != 6) {
-      Fluttertoast.showToast(
-        msg: S.of(context).set_pay_password_prompt,
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.of(context).set_pay_password_prompt,
+      );
+      return;
+    }
+    //是否是相同的数字
+    bool isEqual = false;
+    String firstNum = _newPwd.text.substring(0, 1);
+    String tempText = _newPwd.text;
+    for (var i = 0; i < _newPwd.text.length; i++) {
+      String tempNum = tempText.substring(i, i + 1);
+      print(i);
+      if (tempNum == firstNum) {
+        //相等
+        firstNum = tempNum;
+        isEqual = true;
+      } else {
+        //不想等
+        isEqual = false;
+        break;
+      }
+    }
+    if (isEqual == true) {
+      HSProgressHUD.showToastTip(
+        S.current.set_pay_password_isEqual,
+      );
+      return;
+    }
+
+    //正则校验是否是连续的数字
+    RegExp _regularnumber = new RegExp(
+        r'[(?:(?:0(?=1)|1(?=2)|2(?=3)|3(?=4)|4(?=5)|5(?=6)|6(?=7)|7(?=8)|8(?=9)){2}|(?:9(?=8)|8(?=7)|7(?=6)|6(?=5)|5(?=4)|4(?=3)|3(?=2)|2(?=1)|1(?=0)){2})\\d]'); //正则
+    if (_regularnumber.hasMatch(_newPwd.text)) {
+      HSProgressHUD.showToastTip(
+        S.current.set_pay_password_regular,
       );
       return;
     }
@@ -180,11 +209,7 @@ class _SetPayPageState extends State<SetPayPage> {
       // Navigator.of(context).pop();
       Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 }

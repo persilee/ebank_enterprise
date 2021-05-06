@@ -16,7 +16,6 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -198,11 +197,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
         idInformationList = data.publicCodeGetRedisRspDtoList;
       }
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
+      HSProgressHUD.showToast(e.error);
     });
   }
 
@@ -243,9 +238,8 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
 
     //调用三要素验证，成功后进入人脸识别，识别成功后进入设置密码阶段
     if (_cardNumber.text.length <= 0) {
-      Fluttertoast.showToast(
-        msg: '请输入证件号!',
-        gravity: ToastGravity.CENTER,
+      HSProgressHUD.showToastTip(
+        S.of(context).enter_idNumber_tip,
       );
       return;
     }
@@ -271,12 +265,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.dismiss();
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        gravity: ToastGravity.CENTER,
-      );
-      print(e.toString());
+      HSProgressHUD.showToast(e.error);
     });
   }
 
