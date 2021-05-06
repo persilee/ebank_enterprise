@@ -46,6 +46,7 @@ class _OpenAccountIdentifyResultsFailurePageState
         elevation: 1,
         centerTitle: true,
         title: Text(S.of(context).openAccout_identify_results),
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         width: size.width,

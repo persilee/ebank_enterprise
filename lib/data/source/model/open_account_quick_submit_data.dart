@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/data/source/model/city_for_country.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
@@ -158,6 +159,14 @@ class Address {
   @JsonKey(name: 'addressCitySelectList')
   List<int> addressCitySelectList;
 
+  ///国家选择辅助字段
+  @JsonKey(name: 'countryAddressModel')
+  CountryRegionNewModel countryAddressModel;
+
+  ///城市选择辅助字段
+  @JsonKey(name: 'cityAddressModel')
+  CityForCountryModel cityAddressModel;
+
   Address({
     this.addressType,
     this.country,
@@ -166,7 +175,9 @@ class Address {
     this.detail,
     this.postCode,
     this.addressCityShowString,
-    this.addressCitySelectList,
+    // this.addressCitySelectList,
+    this.countryAddressModel,
+    this.cityAddressModel,
   });
 
   @override
