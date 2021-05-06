@@ -188,7 +188,6 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
 
     print("$_registerAccount>>>>>>>>>>>>>>");
     HSProgressHUD.show();
-    // VersionDataRepository()
     ApiClientAccount()
         .registerByAccount(RegisterByAccountReq(
             _areaCode, password, _registerAccount, _userPhone, userType, _sms))
