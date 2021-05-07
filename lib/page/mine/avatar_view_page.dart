@@ -96,7 +96,7 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
         builder: (context) => BottomMenu(
               items: [
                 S.current.avatar_select_from_your_phone_photo,
-                S.current.avatar_save_phone
+                // S.current.avatar_save_phone
               ],
             ));
     if (result != null && result != false) {
@@ -105,9 +105,9 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
         case 0:
           _getImage();
           break;
-        case 1:
-          _saveImg(widget.imgUrl);
-          break;
+        // case 1:
+        //   _saveImg(widget.imgUrl);
+        //   break;
       }
     } else {
       return;
