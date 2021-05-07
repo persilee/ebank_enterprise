@@ -765,7 +765,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       List<TDEPModel.Rows> _list = tdepProductsModel.rows;
       if (_list.isNotEmpty) {
         _list.forEach((element) {
-          if (data?.prodName == element.lclName) {
+          if (data?.bppdCode == element.bppdCode) {
             if (_language == 'zh_CN') {
               _prodName = element.lclName;
             } else if (_language == 'zh_HK') {
