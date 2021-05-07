@@ -54,7 +54,7 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
       ),
       body: Center(
         child: GestureDetector(
-          onLongPress: () => _saveImgPop(context),
+          // onLongPress: () => _saveImgPop(context),
           child: !_isClipImage
               ? FadeInImage.assetNetwork(
                   fit: BoxFit.cover,
