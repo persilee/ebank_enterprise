@@ -176,9 +176,10 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
             return IndexPage();
           }),
           (Route route) {
-            //一直关闭，直到我的时停止，停止时，整个应用只有我的和当前页面
+            //一直关闭，直到我的或者首页时停止，停止时，整个应用只有我的和当前页面
             print(route.settings?.name);
-            if (route.settings?.name == minePage) {
+            if (route.settings?.name == minePage ||
+                route.settings?.name == "/") {
               //'/'
               return true; //停止关闭
             }

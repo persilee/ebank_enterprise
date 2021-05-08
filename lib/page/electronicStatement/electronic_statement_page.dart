@@ -5,6 +5,7 @@ import 'package:ebank_mobile/data/source/model/statement/statement_query_list_bo
 import 'package:ebank_mobile/data/source/model/statement/statement_query_list_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
+import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/hsg_pdf_viewer.dart';
 import 'package:flutter/material.dart';
@@ -41,17 +42,19 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
       appBar: AppBar(
         title: Text(S.current.electronic_statement),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
       ),
       body: Container(
         color: HsgColors.commonBackground,
         child: _isLoading
             ? HsgLoading()
-            : ListView.builder(
-                itemCount: dataList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return _getList(context, index);
-                }),
+            : dataList.length <= 0
+                ? notDataContainer(context, S.current.no_data_now)
+                : ListView.builder(
+                    itemCount: dataList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return _getList(context, index);
+                    }),
       ),
     );
   }

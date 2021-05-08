@@ -354,6 +354,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                   }
 
                   _dataReq.idIssuePlace = data.cntyCd;
+                  _dataReq.registePlace = data.cntyCd;
                   _dataReq.idIssuePlaceCountryRegionModel = data;
                   setState(() {
                     _countryOrRegionText = showText;

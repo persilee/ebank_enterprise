@@ -178,7 +178,8 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
             } //跳转至下一页面
             else {
               //请求成功后跳转
-              Navigator.pushNamed(context, iDcardVerification, arguments: {
+              Navigator.pushNamed(context, setPayPage, arguments: {
+                //iDcardVerification
                 'areaCode': _officeAreaCodeText,
                 'phone': _phone,
                 'smsCode': _sms.text,

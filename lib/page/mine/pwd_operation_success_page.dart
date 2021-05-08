@@ -1,5 +1,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 
@@ -64,7 +66,22 @@ class _PwdOperationSuccessPageState extends State<PwdOperationSuccessPage> {
         style: TextStyle(color: Colors.white),
       ),
       clickCallback: () {
-        Navigator.of(context)..pop();
+        // Navigator.of(context)..pop();
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) {
+            return IndexPage();
+          }),
+          (Route route) {
+            //一直关闭，直到我的或者首页时停止，停止时，整个应用只有我的和当前页面
+            print(route.settings?.name);
+            if (route.settings?.name == minePage ||
+                route.settings?.name == "/") {
+              //'/'
+              return true; //停止关闭
+            }
+            return false; //继续关闭
+          },
+        );
       },
     );
   }

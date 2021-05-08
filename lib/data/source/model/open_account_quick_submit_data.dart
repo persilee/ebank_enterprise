@@ -39,6 +39,10 @@ class OpenAccountQuickSubmitDataReq {
   @JsonKey(name: 'idIssuePlace')
   String idIssuePlace;
 
+  ///注册国家地区
+  @JsonKey(name: 'registePlace')
+  String registePlace;
+
   ///证件号
   @JsonKey(name: 'idNo')
   String idNo;
@@ -94,6 +98,7 @@ class OpenAccountQuickSubmitDataReq {
     this.custNameEng,
     this.custNameLoc,
     this.idIssuePlace,
+    this.registePlace,
     this.idNo,
     this.idType,
     this.otherCategory,

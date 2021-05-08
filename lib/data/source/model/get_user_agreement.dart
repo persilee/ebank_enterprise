@@ -110,19 +110,29 @@ class GetUserAgreementResp {
   String pactId;
   @JsonKey(name: 'detailCnLink')
   String detailCnLink;
+
   @JsonKey(name: 'detailEnLink')
   String detailEnLink;
+
+  @JsonKey(name: 'detailLocalLink')
+  String detailLocalLink;
+
   @JsonKey(name: 'pactNameCn')
   String pactNameCn;
+
   @JsonKey(name: 'pactNameEn')
   String pactNameEn;
 
+  @JsonKey(name: 'pactNameLocal')
+  String pactNameLocal;
   GetUserAgreementResp(
     this.pactId,
     this.detailCnLink,
     this.detailEnLink,
+    this.detailLocalLink,
     this.pactNameCn,
     this.pactNameEn,
+    this.pactNameLocal,
   );
 
   @override
