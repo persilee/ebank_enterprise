@@ -564,7 +564,7 @@
   "approve_country_region": "国家/地区",
   "approve_swift_code": "SWIFT Code",
   "approve_collecting_bank": "收款银行",
-  "approve_payment_method": "费用支付方式",
+  "approve_payment_method": "转账费用",
   "approve_project_information": "计划信息",
   "approve_project_name": "计划名称",
   "approve_appointment_frequency": "预约频率",

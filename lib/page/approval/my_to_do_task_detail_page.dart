@@ -765,7 +765,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       List<TDEPModel.Rows> _list = tdepProductsModel.rows;
       if (_list.isNotEmpty) {
         _list.forEach((element) {
-          if (data?.prodName == element.lclName) {
+          if (data?.bppdCode == element.bppdCode) {
             if (_language == 'zh_CN') {
               _prodName = element.lclName;
             } else if (_language == 'zh_HK') {
@@ -1020,11 +1020,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     return Container(
       margin: EdgeInsets.only(left: 15, right: 15),
       child: TextField(
+        keyboardType: TextInputType.text,
         maxLines: 4,
-        enabled: !_offstage,
+        enabled: true,
         decoration: InputDecoration(
           fillColor: Color(0xffF7F7F7),
-          filled: _offstage,
+          filled: false,
           hintText: S.current.please_input + '...',
           hintStyle: TextStyle(fontSize: 14.0),
           disabledBorder: OutlineInputBorder(
@@ -1051,112 +1052,113 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   Widget _button() {
     return Container(
       width: MediaQuery.of(context).size.width - 30,
-      margin: EdgeInsets.only(top: 20, bottom: 15),
+      margin: EdgeInsets.only(top: 20, bottom: 10),
       child: _getToggleChild(),
     );
   }
 
   //根据输入框的状态判断底部按钮
   _getToggleChild() {
-    if (!_offstage) {
-      return Container(
-        child: Row(
-          children: [
-            // 驳回至发起人按钮 （暂时去掉该功能)
-            // Expanded(
-            //   flex: 2,
-            //   child: CustomButton(
-            //     isLoading: _btnIsLoadingRTS,
-            //     isEnable: _btnIsEnable,
-            //     isOutline: true,
-            //     margin: EdgeInsets.all(0),
-            //     text: Text(
-            //       S.current.reject_to_sponsor,
-            //       style: TextStyle(
-            //           color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
-            //           fontSize: 14.0),
-            //     ),
-            //     clickCallback: () {
-            //       if (_comment.length != 0) {
-            //         _rejectToStartTask();
-            //       } else {
-            //         _alertDialog();
-            //       }
-            //     },
-            //   ),
-            // ),
-            // Padding(padding: EdgeInsets.only(left: 10)),
-            // 驳回按钮
-            Expanded(
-              flex: 1,
-              child: CustomButton(
-                isLoading: _btnIsLoadingR,
-                isEnable: _btnIsEnable,
-                isOutline: true,
-                margin: EdgeInsets.all(0),
-                text: Text(
-                  S.current.reject,
-                  style: TextStyle(
-                      color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
-                      fontSize: 14.0),
-                ),
-                clickCallback: () {
-                  if (_comment.length != 0) {
-                    _rejectTask();
-                  } else {
-                    _alertDialog();
-                  }
-                },
-              ),
-            ),
-            Padding(padding: EdgeInsets.only(left: 10)),
-            // 解锁按钮
-            Expanded(
-              flex: 1,
-              child: CustomButton(
-                isLoading: _btnIsLoadingUN,
-                isEnable: _btnIsEnable,
-                margin: EdgeInsets.all(0),
-                text: Text(
-                  S.current.approval_unlock,
-                  style: TextStyle(
-                      color: _btnIsEnable ? Colors.white : Colors.grey,
-                      fontSize: 14.0),
-                ),
-                clickCallback: () {
-                  _doUnclaimTask();
-                },
-              ),
-            ),
-          ],
-        ),
-      );
-    } else {
-      // 锁定按钮
-      return Container(
-        width: 66.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            CustomButton(
-              isLoading: _btnIsLoadingL,
+    return Container(
+      child: Row(
+        children: [
+          // 驳回至发起人按钮 （暂时去掉该功能)
+          Expanded(
+            flex: 2,
+            child: CustomButton(
+              isLoading: _btnIsLoadingRTS,
               isEnable: _btnIsEnable,
+              isOutline: true,
               margin: EdgeInsets.all(0),
               text: Text(
-                S.current.approval_lock,
+                S.current.reject_to_sponsor,
                 style: TextStyle(
-                    color: _btnIsEnable ? Colors.white : Colors.grey,
+                    color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
                     fontSize: 14.0),
               ),
               clickCallback: () {
-                // 认领任务
-                _doClaimTask();
+                if (_comment.length != 0) {
+                  _rejectToStartTask();
+                } else {
+                  _alertDialog();
+                }
               },
             ),
-            // _buttonStyle(S.current.approval_lock),
-          ],
-        ),
-      );
+          ),
+          Padding(padding: EdgeInsets.only(left: 10)),
+          // 驳回按钮
+          Expanded(
+            flex: 1,
+            child: CustomButton(
+              isLoading: _btnIsLoadingR,
+              isEnable: _btnIsEnable,
+              isOutline: true,
+              margin: EdgeInsets.all(0),
+              text: Text(
+                S.current.reject,
+                style: TextStyle(
+                    color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
+                    fontSize: 14.0),
+              ),
+              clickCallback: () {
+                if (_comment.length != 0) {
+                  _rejectTask();
+                } else {
+                  _alertDialog();
+                }
+              },
+            ),
+          ),
+          Padding(padding: EdgeInsets.only(left: 10)),
+          // 解锁按钮
+          // Expanded(
+          //   flex: 1,
+          //   child: CustomButton(
+          //     isLoading: _btnIsLoadingUN,
+          //     isEnable: _btnIsEnable,
+          //     margin: EdgeInsets.all(0),
+          //     text: Text(
+          //       S.current.approval_unlock,
+          //       style: TextStyle(
+          //           color: _btnIsEnable ? Colors.white : Colors.grey,
+          //           fontSize: 14.0),
+          //     ),
+          //     clickCallback: () {
+          //       _doUnclaimTask();
+          //     },
+          //   ),
+          // ),
+        ],
+      ),
+    );
+    if (!_offstage) {
+
+    } else {
+      // 锁定按钮
+      // return Container(
+      //   width: 66.0,
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.end,
+      //     children: [
+      //       CustomButton(
+      //         isLoading: _btnIsLoadingL,
+      //         isEnable: _btnIsEnable,
+      //         margin: EdgeInsets.all(0),
+      //         text: Text(
+      //           S.current.approval_lock,
+      //           style: TextStyle(
+      //               color: _btnIsEnable ? Colors.white : Colors.grey,
+      //               fontSize: 14.0),
+      //         ),
+      //         clickCallback: () {
+      //           // 认领任务
+      //           _doClaimTask();
+      //         },
+      //       ),
+      //       // _buttonStyle(S.current.approval_lock),
+      //     ],
+      //   ),
+      // );
     }
   }
 
@@ -1175,34 +1177,28 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           _inputApprovalComments(),
           //底部按钮
           _button(),
-          !_offstage
-              ? Row(
-                  children: [
-                    Expanded(
-                      child: CustomButton(
-                        isLoading: _btnIsLoadingEAA,
-                        isEnable: _btnIsEnable,
-                        clickCallback: () {
-                          if (_comment.length != 0) {
-                            _completeTask();
-                          } else {
-                            _alertDialog();
-                          }
-                        },
-                        text: Text(
-                          S.current.examine_and_approve,
-                          style: TextStyle(fontSize: 13.0, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              : Container(),
-          !_offstage
-              ? SizedBox(
-                  height: 26.0,
-                )
-              : Container(),
+          Row(
+            children: [
+              Expanded(
+                child: CustomButton(
+                  isLoading: _btnIsLoadingEAA,
+                  isEnable: _btnIsEnable,
+                  clickCallback: () {
+                    if (_comment.length != 0) {
+                      _completeTask();
+                    } else {
+                      _alertDialog();
+                    }
+                  },
+                  text: Text(
+                    S.current.examine_and_approve,
+                    style: TextStyle(fontSize: 13.0, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(padding: EdgeInsets.only(bottom: 20.0)),
         ],
       ),
     );

@@ -298,10 +298,13 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
               children: [
                 Expanded(
                   child: Text(
-                    S.current.tdContract_min_amount +
-                        FormatUtil.formatSringToMoney(_minAmt.toString()) +
-                        S.current.tdContract_max_amount +
-                        FormatUtil.formatSringToMoney(_maxAmt.toString()),
+                    double.parse(_maxAmt) <= 0
+                        ? S.current.tdContract_min_amount +
+                            FormatUtil.formatSringToMoney(_minAmt.toString())
+                        : (S.current.tdContract_min_amount +
+                            FormatUtil.formatSringToMoney(_minAmt.toString()) +
+                            S.current.tdContract_max_amount +
+                            FormatUtil.formatSringToMoney(_maxAmt.toString())),
                     style: TextStyle(color: HsgColors.redText, fontSize: 13.0),
                   ),
                 ),
@@ -362,37 +365,25 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           onChanged: (value) {
             double.parse(value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
             //输入金额大于起存金额时进行网络请求,计算到期金额
-            if (double.parse(inputValue.text) >= double.parse(_minAmt) &&
-                double.parse(inputValue.text) <= double.parse(_maxAmt)) {
-              _isShow = false;
-              //获取预计支付金额
-              if (_cardCcy == ccy) {
-                _amount = inputValue.text;
+            if (double.parse(_maxAmt) > 0) {
+              //有做限制的
+              if (double.parse(inputValue.text) >= double.parse(_minAmt) &&
+                  double.parse(inputValue.text) <= double.parse(_maxAmt)) {
+                _requestTotalData(); //进行试算
               } else {
-                _rateCalculate();
+                matAmt = '0.00';
+                _amount = '0.00';
+                _isShow = true;
               }
-              _loadDepositData(
-                accuPeriod,
-                auctCale,
-                double.parse(inputValue.text),
-                _detailProducDTOList.bppdCode, //哈哈标记
-                ccy,
-                custID,
-                depositType,
-                '', // tenor
-              );
-              //获取预计支付金额
-              // inputValue.addListener(() {
-              //   if (_cardCcy == ccy) {
-              //     _amount = inputValue.text;
-              //   } else {
-              //     _rateCalculate();
-              //   }
-              // });
             } else {
-              matAmt = '0.00';
-              _amount = '0.00';
-              _isShow = true;
+              //存款没有限制
+              if (double.parse(inputValue.text) >= double.parse(_minAmt)) {
+                _requestTotalData(); //进行试算
+              } else {
+                matAmt = '0.00';
+                _amount = '0.00';
+                _isShow = true;
+              }
             }
           },
           keyboardType: TextInputType.number,
@@ -409,6 +400,26 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           ),
         ),
       ),
+    );
+  }
+
+  void _requestTotalData() {
+    _isShow = false;
+    //获取预计支付金额
+    if (_cardCcy == ccy) {
+      _amount = inputValue.text;
+    } else {
+      _rateCalculate();
+    }
+    _loadDepositData(
+      accuPeriod,
+      auctCale,
+      double.parse(inputValue.text),
+      _detailProducDTOList.bppdCode, //哈哈标记
+      ccy,
+      custID,
+      depositType,
+      '', // tenor
     );
   }
 
@@ -566,7 +577,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
 //存款期限弹窗
   _selectTerm(BuildContext context) async {
-    //哈哈标记  List<TdepProductDTOList> producDTOList
     final result = await showHsgBottomSheet(
       context: context,
       builder: (context) => BottomMenu(
@@ -582,6 +592,14 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           accuPeriod = _accuPeriods[result];
           auctCale = _auctCales[result];
           rate = FormatUtil.formatNum(double.parse(_changedRateTitle), 2);
+          //选择之后需要进行试算
+          if (double.parse(inputValue.text) >= double.parse(_minAmt)) {
+            _requestTotalData(); //进行试算
+          } else {
+            matAmt = '0.00';
+            _amount = '0.00';
+            _isShow = true;
+          }
         } else {
           return;
         }
@@ -1026,7 +1044,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       String ciNo,
       String depositType,
       String tenor) async {
-    // TimeDepositDataRepository()
     ApiClientTimeDeposit()
         .getTimeDepositContractTrial(TimeDepositContractTrialReq(
             accuPeriod, auctCale, bal, bppdCode, ccy, ciNo, depositType, tenor))
@@ -1201,8 +1218,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         _showTermRate = true;
       });
     }
-    // HSProgressHUD.show();
-    // TimeDepositDataRepository()
+
     ApiClientTimeDeposit()
         .getTdProductTermRate(GetTdProductTermRateReq(
             _detailProducDTOList.ccy, _detailProducDTOList.bppdCode)) //哈哈标记

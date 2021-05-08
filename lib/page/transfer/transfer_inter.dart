@@ -207,18 +207,25 @@ class _TransferInterPageState extends State<TransferInterPage> {
     setState(() {
       if (_arguments != null && !check) {
         Rows rowPartner = _arguments;
-        _payeeNameController.text = rowPartner.payeeName;
+        if(rowPartner.payeeName.isEmpty) {
+          payeeName = _payeeNameController.text;
+        } else {
+          _payeeNameController.text = rowPartner.payeeName;
+          payeeName = rowPartner.payeeName;
+        }
         _payeeAccountController.text = rowPartner.payeeCardNo;
         _remarkController.text = rowPartner.remark;
         payeeBankCode = rowPartner.bankCode;
         payerBankCode = rowPartner.payerBankCode;
-        payeeName = rowPartner.payeeName;
+
         // payerName = rowPartner.payerName;
         _payeeCcy = rowPartner.ccy;
-        // _transferFee =
-        //     rowPartner.paysMethod == null ? '' : rowPartner.paysMethod;
-        _transferFeeCode =
-            rowPartner.paysMethod == null ? '' : rowPartner.paysMethod;
+        if(rowPartner.paysMethod == null) {
+          _transferFeeCode = '';
+          _transferFee = '';
+        } else {
+          _transferFeeCode = rowPartner.paysMethod;
+        }
         _bankNameController.text = _language == 'zh_CN'
             ? rowPartner.payeeBankLocalName
             : rowPartner.payeeBankEngName;
@@ -449,7 +456,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
           _getLine(),
           //银行SWIFT
           TextFieldContainer(
-            title: S.current.bank_swift,
+            title: S.current.approve_swift_code,
             hintText: S.current.please_input,
             keyboardType: TextInputType.text,
             controller: _bankSwiftController,
@@ -685,14 +692,12 @@ class _TransferInterPageState extends State<TransferInterPage> {
                 payeeName = rowListPartner.payeeName;
                 // payerName = rowListPartner.payerName;
                 _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
-                // if (rowListPartner.paysMethod != null) {
-                //   _transferFee = rowListPartner.paysMethod == ''
-                //       ? ''
-                //       : rowListPartner.paysMethod;
-                // }
-                _transferFeeCode = rowListPartner.paysMethod == null
-                    ? ''
-                    : rowListPartner.paysMethod;
+                if(rowListPartner.paysMethod == null) {
+                  _transferFeeCode = '';
+                  _transferFee = '';
+                } else {
+                  _transferFeeCode = rowListPartner.paysMethod;
+                }
                 _payeeAddressController.text =
                     rowListPartner == null ? '' : rowListPartner.payeeAddress;
               }

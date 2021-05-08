@@ -69,6 +69,8 @@ class _DetailListPageState extends State<DetailListPage> {
   bool _isLoading = true; //加载状态
   RefreshController _refreshController;
   ScrollController _scrollController = ScrollController(); //滚动监听
+  String _turnKey = '';
+  int _total = 15;
 
   @override
   // ignore: must_call_super
@@ -110,16 +112,25 @@ class _DetailListPageState extends State<DetailListPage> {
                     ? CustomRefresh(
                         controller: _refreshController,
                         //上拉加载
-                        onLoading: () {
-                          _refreshController.loadNoData();
+                        onLoading: () async {
+                          if(_turnKey.isEmpty && _total < 15) {
+                            _refreshController.loadNoData();
+                            return;
+                          }
+                          await _getRevenueByCards(_startDate, _accNoList, isLoadMore: true);
+                          _refreshController.loadComplete();
                         },
                         //下拉刷新
                         onRefresh: () {
                           //刷新完成
                           if (_position != 0) {
                             _getRevenueByCards(_startDate, _accNoList);
+                            _refreshController.refreshCompleted();
+                            _refreshController.footerMode.value = LoadStatus.canLoading;
                           } else {
                             _getRevenueByCards(_startDate, _allAccNoList);
+                            _refreshController.refreshCompleted();
+                            _refreshController.footerMode.value = LoadStatus.canLoading;
                           }
                         },
                         content: _buildFlutterTableView(),
@@ -976,11 +987,13 @@ class _DetailListPageState extends State<DetailListPage> {
   }
 
   //获取所有历史记录
-  _getRevenueByCards(String localDateStart, List<String> cards) async {
+  _getRevenueByCards(String localDateStart, List<String> cards,
+      {bool isLoadMore = false}) async {
     String localCcy;
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
-    print('custID+$custID');
+
+    print('_turnKey: $_turnKey');
 
     // String accNo = _accNoList.toString();
     if (_cardList.length < 1) {
@@ -999,8 +1012,8 @@ class _DetailListPageState extends State<DetailListPage> {
         '$_endDate', //结束时间     '$_endDate'
         '$_startDate', //开始时间   '$_startDate'
         1, //分页page
-        20, //分页pageSize
-        // turnKey: '20210401000000003088000220210414150720', //分页key
+        10, //分页pageSize
+        turnKey: _turnKey, //分页key
         acNo: '$selectAccNo',
         ciNo: '$custID',
       ), //'818000000113'
@@ -1010,10 +1023,13 @@ class _DetailListPageState extends State<DetailListPage> {
       if (data.ddFinHisDTOList != null) {
         if (mounted) {
           setState(() {
-            ddFinHisDTOList = data.ddFinHisDTOList;
+            if(isLoadMore == false) {
+              ddFinHisDTOList.clear();
+            }
+            ddFinHisDTOList.addAll(data.ddFinHisDTOList);
+            _turnKey = data.nextKey;
+            _total = int.parse(data.toatal);
             _isLoading = false;
-            _refreshController.refreshCompleted();
-            _refreshController.footerMode.value = LoadStatus.canLoading;
           });
         }
       }

@@ -99,6 +99,7 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
         }
         break;
       case AppLifecycleState.detached: // APP结束时调用
+        print('APP结束时调用');
         break;
     }
   }
