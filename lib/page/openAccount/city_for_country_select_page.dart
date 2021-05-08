@@ -9,7 +9,6 @@ import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
-import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
@@ -67,17 +66,19 @@ class _CityForCountrySelectPageState extends State<CityForCountrySelectPage> {
       children: <Widget>[
         Expanded(
           flex: 1,
-          child: AzListView(
-            data: _cityList,
-            topData: _hotCityList,
-            itemBuilder: (context, model) => _buildListItem(model),
-            suspensionWidget: _buildSusWidget(_suspensionTag),
-            isUseRealIndex: true,
-            itemHeight: _itemHeight,
-            suspensionHeight: _suspensionHeight,
-            onSusTagChanged: _onSusTagChanged,
-            //showCenterTip: false,
-          ),
+          child: _isShowErrorPage
+              ? _hsgErrorPage
+              : AzListView(
+                  data: _cityList,
+                  topData: _hotCityList,
+                  itemBuilder: (context, model) => _buildListItem(model),
+                  suspensionWidget: _buildSusWidget(_suspensionTag),
+                  isUseRealIndex: true,
+                  itemHeight: _itemHeight,
+                  suspensionHeight: _suspensionHeight,
+                  onSusTagChanged: _onSusTagChanged,
+                  //showCenterTip: false,
+                ),
         ),
       ],
     );

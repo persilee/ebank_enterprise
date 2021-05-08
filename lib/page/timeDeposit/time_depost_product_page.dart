@@ -758,7 +758,12 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
           });
         }
       } else {
-        _isDate = false;
+        if (mounted) {
+          setState(() {
+            _isDate = false;
+            _isLoading = false;
+          });
+        }
       }
     }).catchError((e) {
       HSProgressHUD.showToast(e.error);

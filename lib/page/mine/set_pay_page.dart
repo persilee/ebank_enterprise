@@ -210,7 +210,7 @@ class _SetPayPageState extends State<SetPayPage> {
     ApiClientPassword().setTransactionPassword(req).then((data) {
       HSProgressHUD.dismiss();
       prefs.setBool(ConfigKey.USER_PASSWORDENABLED, true);
-      Navigator.of(context)..pop()..pop(); //..pop();
+      // Navigator.of(context)..pop()..pop(); //..pop();
       // Navigator.of(context).pop();
       Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
     }).catchError((e) {

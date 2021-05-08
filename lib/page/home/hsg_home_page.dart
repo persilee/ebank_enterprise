@@ -1097,11 +1097,6 @@ class _HomePageState extends State<HomePage>
       GetUserInfoReq(userID),
     )
         .then((data) {
-      print('$data');
-      // if (['0', '1', '3'].contains(data.belongCustStatus)) {
-      //   _getInviteeStatusByPhoneNetwork();
-      // }
-
       if (this.mounted) {
         setState(() {
           _data = data;
