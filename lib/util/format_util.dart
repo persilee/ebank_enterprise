@@ -54,7 +54,7 @@ class FormatUtil {
     if (isEmpty(num)) num = '0';
     if (ccy == "JPY") {
       double numDouble =
-          double.parse(formatNum(double.parse(num), 0, type: 'floor'));
+          double.parse(num);
 
       NumberFormat numberFormat = NumberFormat('###,##0;');
 
@@ -62,12 +62,11 @@ class FormatUtil {
       return string;
     } else {
       double numDouble =
-          double.parse(formatNum(double.parse(num), 2, type: 'floor'));
+          double.parse(num);
 
       NumberFormat numberFormat = NumberFormat('###,##0.00;');
 
       String string = numberFormat.format(numDouble);
-
       return string;
     }
   }
@@ -78,6 +77,8 @@ class FormatUtil {
   ///location 几位
   static String formatNum(double num, int location, {String type}) {
     int multiplier = pow(10, location);
+
+    print('multiplier $multiplier');
 
     num = num * multiplier;
 

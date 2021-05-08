@@ -7,14 +7,19 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'header_interceptor.dart';
 
 class BaseDio {
+<<<<<<< HEAD
   // static const BASEURL = "http://52.82.102.241:5040/"; //dev
   // static const BASEURL = "http://47.57.236.20:5040/"; //sit
   static const BASEURL = "http://47.242.2.219:5040/"; //uat
+=======
+  static const BASEURL = "http://52.82.102.241:5040/"; //dev
+  // static const BASEURL = "http://47.57.236.20:5040/"; //sit
+  // static const BASEURL = "http://47.242.2.219:5040/"; //uat
+>>>>>>> af9197ac305a699484403c8a82ac954d306a668c
   //static const BASEURL = "http://192.168.201.65:5041/"; //local
   BaseDio._();
 
   static BaseDio _instance;
-
   static BaseDio getInstance() {
     _instance ??= BaseDio._();
 
