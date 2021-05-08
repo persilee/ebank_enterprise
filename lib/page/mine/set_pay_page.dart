@@ -182,7 +182,7 @@ class _SetPayPageState extends State<SetPayPage> {
 
     //正则校验是否是连续的数字
     RegExp _regularnumber = new RegExp(
-        r'[(?:(?:0(?=1)|1(?=2)|2(?=3)|3(?=4)|4(?=5)|5(?=6)|6(?=7)|7(?=8)|8(?=9)){2}|(?:9(?=8)|8(?=7)|7(?=6)|6(?=5)|5(?=4)|4(?=3)|3(?=2)|2(?=1)|1(?=0)){2})\\d]'); //正则
+        r'(123|234|345|456|567|678|789|987|876|765|654|543|432|321)'); //正则
     if (_regularnumber.hasMatch(_newPwd.text)) {
       HSProgressHUD.showToastTip(
         S.current.set_pay_password_regular,
