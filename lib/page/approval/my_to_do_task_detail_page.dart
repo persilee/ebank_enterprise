@@ -1062,7 +1062,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     return Container(
       child: Row(
         children: [
-          // 驳回至发起人按钮 （暂时去掉该功能)
+          // 驳回至发起人按钮
           Expanded(
             flex: 2,
             child: CustomButton(
@@ -1109,7 +1109,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
               },
             ),
           ),
-          Padding(padding: EdgeInsets.only(left: 10)),
+          // Padding(padding: EdgeInsets.only(left: 10)),
           // 解锁按钮
           // Expanded(
           //   flex: 1,
