@@ -932,7 +932,9 @@ class _HomePageState extends State<HomePage>
   }
 
   //开户点击事件
-  void _openAccountClickFunction(BuildContext context, bool shouldTip) {
+  void _openAccountClickFunction(BuildContext context, bool shouldTip) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool(ConfigKey.NEED_OPEN_ACCOUNT, false);
     if (_belongCustStatus == '1') {
       _notQuickOpenAccTip(context);
     } else if (shouldTip == false) {
@@ -1090,6 +1092,7 @@ class _HomePageState extends State<HomePage>
   Future<void> _loadData(bool shouldTip) async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
+    bool needOpenAcc = prefs.getBool(ConfigKey.NEED_OPEN_ACCOUNT);
 
     // UserDataRepository()
     ApiClientPackaging()
@@ -1105,6 +1108,7 @@ class _HomePageState extends State<HomePage>
           EventBusUtils.getInstance()
               .fire(ChangeUserInfo(userInfo: _data, state: 100));
           if (shouldTip == true &&
+              needOpenAcc == true &&
               ['0', '1', '3', ''].contains(_belongCustStatus)) {
             _openAccountClickFunction(context, true);
             return;

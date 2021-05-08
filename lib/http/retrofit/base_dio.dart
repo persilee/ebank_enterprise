@@ -8,13 +8,8 @@ import 'header_interceptor.dart';
 
 class BaseDio {
   // static const BASEURL = "http://52.82.102.241:5040/"; //dev
-<<<<<<< HEAD
   // static const BASEURL = "http://47.57.236.20:5040/"; //sit
   static const BASEURL = "http://47.242.2.219:5040/"; //uat
-=======
-  static const BASEURL = "http://47.57.236.20:5040/"; //sit
-  // static const BASEURL = "http://47.242.2.219:5040/"; //uat
->>>>>>> 655baedf82c35406d01f75c028c2afec9363a250
   //static const BASEURL = "http://192.168.201.65:5041/"; //local
   BaseDio._();
 
