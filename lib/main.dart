@@ -86,6 +86,7 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
+    print('state: $state');
     switch (state) {
       case AppLifecycleState.inactive: // 处于这种状态的应用程序应该假设它们可能在任何时候暂停。
         break;
@@ -106,6 +107,7 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    print('APP结束时调用');
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }

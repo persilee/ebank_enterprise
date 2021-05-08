@@ -1063,29 +1063,28 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       child: Row(
         children: [
           // 驳回至发起人按钮
-          Expanded(
-            flex: 2,
-            child: CustomButton(
-              isLoading: _btnIsLoadingRTS,
-              isEnable: _btnIsEnable,
-              isOutline: true,
-              margin: EdgeInsets.all(0),
-              text: Text(
-                S.current.reject_to_sponsor,
-                style: TextStyle(
-                    color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
-                    fontSize: 14.0),
-              ),
-              clickCallback: () {
-                if (_comment.length != 0) {
-                  _rejectToStartTask();
-                } else {
-                  _alertDialog();
-                }
-              },
-            ),
-          ),
-          Padding(padding: EdgeInsets.only(left: 10)),
+          // Expanded(
+          //   flex: 2,
+          //   child: CustomButton(
+          //     isLoading: _btnIsLoadingRTS,
+          //     isEnable: _btnIsEnable,
+          //     isOutline: true,
+          //     margin: EdgeInsets.all(0),
+          //     text: Text(
+          //       S.current.reject_to_sponsor,
+          //       style: TextStyle(
+          //           color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
+          //           fontSize: 14.0),
+          //     ),
+          //     clickCallback: () {
+          //       if (_comment.length != 0) {
+          //         _rejectToStartTask();
+          //       } else {
+          //         _alertDialog();
+          //       }
+          //     },
+          //   ),
+          // ),
           // 驳回按钮
           Expanded(
             flex: 1,
@@ -1107,6 +1106,26 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                   _alertDialog();
                 }
               },
+            ),
+          ),
+          Padding(padding: EdgeInsets.only(left: 10)),
+          Expanded(
+            flex: 1,
+            child: CustomButton(
+              isLoading: _btnIsLoadingEAA,
+              isEnable: _btnIsEnable,
+              margin: EdgeInsets.all(0),
+              clickCallback: () {
+                if (_comment.length != 0) {
+                  _completeTask();
+                } else {
+                  _alertDialog();
+                }
+              },
+              text: Text(
+                S.current.examine_and_approve,
+                style: TextStyle(fontSize: 13.0, color: Colors.white),
+              ),
             ),
           ),
           // Padding(padding: EdgeInsets.only(left: 10)),
@@ -1177,27 +1196,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           _inputApprovalComments(),
           //底部按钮
           _button(),
-          Row(
-            children: [
-              Expanded(
-                child: CustomButton(
-                  isLoading: _btnIsLoadingEAA,
-                  isEnable: _btnIsEnable,
-                  clickCallback: () {
-                    if (_comment.length != 0) {
-                      _completeTask();
-                    } else {
-                      _alertDialog();
-                    }
-                  },
-                  text: Text(
-                    S.current.examine_and_approve,
-                    style: TextStyle(fontSize: 13.0, color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
           Padding(padding: EdgeInsets.only(bottom: 20.0)),
         ],
       ),
