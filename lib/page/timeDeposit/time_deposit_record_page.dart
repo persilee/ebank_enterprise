@@ -6,14 +6,15 @@
  */
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
+import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
+import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
@@ -37,13 +38,13 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   List<DepositRecord> rowList = []; //定期存单列表
 
   double conRate; //利率
-  bool _isDate = false; //判断是否有数据
-  bool _isMoreData = true; //是否加载更多
   int _page = 1;
-  int count = 0;
+  int _totalPage = 10;
   ScrollController _scrollController;
   RefreshController _refreshController;
   bool _isLoading = false; //加载状态
+  bool _isShowErrorPage = false;
+  Widget _hsgErrorPage;
 
   @override
   void initState() {
@@ -68,42 +69,54 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(),
-      body: _isLoading
-          ? HsgLoading()
-          : _isDate
-              ? CustomRefresh(
-                  controller: _refreshController,
-                  onLoading: () async {
-                    //加载更多完成
-                    if (_isMoreData) {
-                      //是否加载更多
-                      _loadDeopstData(isLoadMore: true);
-                    }
-                  },
-                  onRefresh: () async {
-                    //刷新完成
-                    _page = 1;
-                    rowList.clear();
-                    await _loadDeopstData();
-                    _refreshController.refreshCompleted();
-                    _refreshController.footerMode.value = LoadStatus.canLoading;
-                  },
-                  content: ListView.separated(
-                    itemCount: rowList.length,
-                    controller: _scrollController,
-                    itemBuilder: (context, index) {
-                      return _recordList(rowList[index]);
-                    },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        Divider(
-                      height: 10.0,
-                      color: Colors.transparent,
-                    ),
-                  ),
-                )
-              : notDataContainer(context, S.current.no_data_now),
-    );
+        appBar: _appBar(),
+        body: _isLoading
+            ? HsgLoading()
+            :
+            // : rowList.isNotEmpty && rowList.length > 0
+            //     ?
+            CustomRefresh(
+                controller: _refreshController,
+                onLoading: () async {
+                  //加载更多完成
+                  // if (_isMoreData) {
+                  //是否加载更多
+                  _page++;
+                  _loadDeopstData();
+                  // }
+                },
+                onRefresh: () async {
+                  //刷新完成
+                  _page = 1;
+                  // rowList.clear();
+                  await _loadDeopstData();
+                  _refreshController.refreshCompleted();
+                  _refreshController.footerMode.value = LoadStatus.canLoading;
+                },
+                content: _isShowErrorPage
+                    ? _hsgErrorPage
+                    : rowList.isNotEmpty && rowList.length > 0
+                        ? ListView.separated(
+                            itemCount: rowList.length,
+                            controller: _scrollController,
+                            itemBuilder: (context, index) {
+                              return _recordList(rowList[index]);
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) => Divider(
+                              height: 10.0,
+                              color: Colors.transparent,
+                            ),
+                          )
+                        : HsgErrorPage(
+                            isEmptyPage: true,
+                            buttonAction: () {
+                              _loadDeopstData();
+                            },
+                          ),
+              )
+        // : notDataContainer(context, S.current.no_data_now),
+        );
   }
 
   //存单总额（币种）
@@ -335,67 +348,59 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   }
 
   //获取定期存单列表
-  Future<void> _loadDeopstData({bool isLoadMore = false}) async {
-    isLoadMore ? _page++ : _page = 1;
+  Future<void> _loadDeopstData() async {
     _isLoading = true;
     final prefs = await SharedPreferences.getInstance();
     bool excludeClosed = true;
     String ciNo = prefs.getString(ConfigKey.CUST_ID);
     Future.wait({
       ApiClientTimeDeposit().getDepositRecordRows(
-        DepositRecordReq(
-            ciNo, '', excludeClosed, _page, 10, '', isLoadMore ? 'Y' : ''),
+        DepositRecordReq(ciNo, '', excludeClosed, _page, _totalPage, '',
+            _page > 1 ? 'Y' : ''),
       )
     }).then((value) {
       if (this.mounted) {
+        setState(() {
+          _isLoading = false;
+          _isShowErrorPage = false;
+        });
         value.forEach((element) {
           setState(() {
             _totalAmtStr = element.totalAmt;
             _defaultCcy = element.defaultCcy;
-            if (isLoadMore) {
-              //加载更多
-              if (element.rows.length < 10 || element.totalPage == _page) {
-                _isMoreData = false;
-                //判断底部没有更多提示的
-                _refreshController.loadComplete(); //加载完成
-                _refreshController.loadNoData();
-                rowList.addAll(element.rows);
-              } else {
-                _isMoreData = true;
-                rowList.addAll(element.rows);
-                _refreshController.loadComplete(); //加载完成
-              }
+            if (_page == 1) {
+              rowList = element.rows;
             } else {
-              //刷新
-              _refreshController.refreshCompleted(); //刷新完成
+              rowList.addAll(element.rows);
+            }
 
-              if (element.rows.length == 0) {
-                //没有数据
-                _isDate = false;
-              } else {
-                _isDate = true;
-              }
-              if (element.rows.length < 10 || element.totalPage == _page) {
-                //判断底部没有更多提示的
-                // _refreshController.footerMode.value = LoadStatus.noMore;
-                _refreshController.loadNoData();
-                rowList.addAll(element.rows);
-              } else {
-                // _refreshController.loadComplete();
-                rowList.addAll(element.rows);
-              }
+            if (element.rows.length < _totalPage ||
+                element.toatalPage == _page) {
+              _refreshController.loadComplete(); //加载完成
+              _refreshController.loadNoData();
             }
           });
           _isLoading = false;
         });
       }
     }).catchError((e) {
+      if (e is NeedLogin) {
+      } else {
+        _hsgErrorPage = HsgErrorPage(
+          error: e.error,
+          buttonAction: () {
+            _loadDeopstData();
+          },
+        );
+      }
+
       if (mounted) {
         setState(() {
           _isLoading = false;
+          _isShowErrorPage = true;
         });
       }
-      HSProgressHUD.showToast(e.error);
+      // HSProgressHUD.showToast(e.error);
     });
   }
 

@@ -23,6 +23,7 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
@@ -121,6 +122,10 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   String _modify;
 
+  bool _btnIsLoadingR = false; // 提前结清按钮
+  bool _btnIsLoadingUN = false; // 返回按钮
+  bool _btnIsEnable = true;
+
   //获取网络请求
   @override
   void initState() {
@@ -161,10 +166,10 @@ class _PageDepositInfo extends State<PageDepositInfo> {
       String leftText, String rightText, bool isShowLine, bool isOptional) {
     return Container(
       padding: EdgeInsets.zero,
-      height: language == "en" &&
-              leftText == S.current.tdInfo_interest_settlement_account
-          ? 57
-          : 45,
+      // height: language == "en" &&
+      //         leftText == S.current.tdInfo_interest_settlement_account
+      //     ? 57
+      //     : 45,
       child: FlatButton(
         padding: EdgeInsets.zero,
         child: _unit(leftText, rightText, isShowLine, isOptional),
@@ -301,18 +306,24 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   //勾选协议
   Widget _agreement() {
     return Container(
-      margin: EdgeInsets.only(top: 15),
+      margin: EdgeInsets.only(
+        top: 15,
+      ),
       width: MediaQuery.of(context).size.width - 32,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _roundCheckBox(),
+          // _roundCheckBox(),
           Container(
+            margin: EdgeInsets.only(left: 15),
             width: MediaQuery.of(context).size.width - 52,
             padding: EdgeInsets.zero,
             child: Text(
               S.current.select_content,
-              style: TextStyle(color: HsgColors.toDoDetailText, fontSize: 12),
+              style: TextStyle(
+                color: HsgColors.toDoDetailText,
+                fontSize: 12,
+              ),
             ),
           ),
         ],
@@ -454,37 +465,38 @@ class _PageDepositInfo extends State<PageDepositInfo> {
               ),
             ),
             _agreement(),
+            _btnWidget(),
 
-            Container(
-              height: 45,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: !_checkBoxValue
-                      ? [HsgColors.btnDisabled, HsgColors.btnDisabled]
-                      : [
-                          Color(0xFF1775BA),
-                          Color(0xFF3A9ED1),
-                        ],
-                ),
-                borderRadius: BorderRadius.circular(2.5),
-              ),
-              margin: EdgeInsets.fromLTRB(40, 20, 40, 15),
-              child: ButtonTheme(
-                height: 45,
-                child: FlatButton(
-                  onPressed: _checkBoxValue
-                      ? () {
-                          _loadDepositData();
-                        }
-                      : null,
-                  textColor: Colors.white,
-                  disabledColor: HsgColors.btnDisabled,
-                  child: (Text(S.current.repayment_type2)),
-                ),
-              ),
-            ),
+            // Container(
+            //   height: 45,
+            //   decoration: BoxDecoration(
+            //     gradient: LinearGradient(
+            //       begin: Alignment.topLeft,
+            //       end: Alignment.bottomRight,
+            //       colors: !_checkBoxValue
+            //           ? [HsgColors.btnDisabled, HsgColors.btnDisabled]
+            //           : [
+            //               Color(0xFF1775BA),
+            //               Color(0xFF3A9ED1),
+            //             ],
+            //     ),
+            //     borderRadius: BorderRadius.circular(2.5),
+            //   ),
+            //   margin: EdgeInsets.fromLTRB(40, 20, 40, 15),
+            //   child: ButtonTheme(
+            //     height: 45,
+            //     child: FlatButton(
+            //       onPressed: _checkBoxValue
+            //           ? () {
+            //               _loadDepositData();
+            //             }
+            //           : null,
+            //       textColor: Colors.white,
+            //       disabledColor: HsgColors.btnDisabled,
+            //       child: (Text(S.current.repayment_type2)),
+            //     ),
+            //   ),
+            // ),
             Container(
               color: HsgColors.commonBackground,
               padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
@@ -495,6 +507,65 @@ class _PageDepositInfo extends State<PageDepositInfo> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _btnWidget() {
+    return Container(
+      child: Row(
+        children: [
+          // 提前结清按钮
+          Expanded(
+            flex: 1,
+            child: CustomButton(
+              isLoading: _btnIsLoadingR,
+              isEnable: _btnIsEnable,
+              isOutline: true,
+              margin: EdgeInsets.all(15),
+              text: Text(
+                S.current.repayment_type2,
+                style: TextStyle(
+                    color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
+                    fontSize: 14.0),
+              ),
+              clickCallback: () {
+                if (this.mounted) {
+                  setState(() {
+                    _btnIsLoadingR = true;
+                    _btnIsEnable = false;
+                  });
+                }
+                _loadDepositData();
+              },
+            ),
+          ),
+          Padding(padding: EdgeInsets.only(left: 5)),
+          // 返回按钮
+          Expanded(
+            flex: 1,
+            child: CustomButton(
+              isLoading: _btnIsLoadingUN,
+              isEnable: _btnIsEnable,
+              margin: EdgeInsets.all(15),
+              text: Text(
+                S.of(context).hs_go_back,
+                style: TextStyle(
+                    color: _btnIsEnable ? Colors.white : Colors.grey,
+                    fontSize: 14.0),
+              ),
+              clickCallback: () {
+                if (this.mounted) {
+                  setState(() {
+                    _btnIsLoadingUN = true;
+                    _btnIsEnable = false;
+                  });
+                }
+                Navigator.of(context)..pop();
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -529,6 +600,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
             eryRate = element.eryRate;
             mainAc = element.mainAc;
             _trialResp = element;
+            _btnIsLoadingR = false;
+            _btnIsEnable = true;
           });
         }
 

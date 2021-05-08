@@ -30,11 +30,16 @@ class HSProgressHUD {
     String errorStr = error.message ?? (error.code ?? '');
     //(error.code ?? '') + (error.message ?? '');
     SVProgressHUD.dismiss();
-    Fluttertoast.showToast(
-      msg: errorStr,
-      gravity: ToastGravity.CENTER,
-      timeInSecForIosWeb: 2,
-    );
+    if (error.code == 'SYS90018' ||
+        error.code == 'SYS90017' ||
+        error is NeedLogin) {
+    } else {
+      Fluttertoast.showToast(
+        msg: errorStr,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 2,
+      );
+    }
   }
 
   static void showToastTip(

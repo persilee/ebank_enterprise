@@ -30,17 +30,18 @@ class SetTransactionPasswordReq {
   @JsonKey(name: 'userAccount')
   String userAccount;
 
-  SetTransactionPasswordReq(
-      this.certificateNo,
-      this.certificateType,
-      this.payPassword,
-      this.phoneNumber,
-      this.userId,
-      this.userAccount,
-      this.verify,
-      this.smsCode,
-      this.actualName,
-      this.cardNo);
+  SetTransactionPasswordReq({
+    this.certificateNo,
+    this.certificateType,
+    this.payPassword,
+    this.phoneNumber,
+    this.userId,
+    this.userAccount,
+    this.verify,
+    this.smsCode,
+    this.actualName,
+    this.cardNo,
+  });
 
   @override
   String toString() {

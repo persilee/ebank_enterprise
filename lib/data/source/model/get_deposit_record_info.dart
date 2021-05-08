@@ -60,6 +60,9 @@ class DepositRecordResp extends Object {
   @JsonKey(name: 'totalPage')
   int totalPage;
 
+  @JsonKey(name: 'toatalPage')
+  int toatalPage;
+
   @JsonKey(name: 'rows')
   List<DepositRecord> rows;
 
@@ -74,6 +77,7 @@ class DepositRecordResp extends Object {
     this.pageSize,
     this.count,
     this.totalPage,
+    this.toatalPage,
     this.rows,
     this.totalAmt,
     this.defaultCcy,

@@ -14,7 +14,6 @@ class BaseDio {
   BaseDio._();
 
   static BaseDio _instance;
-
   static BaseDio getInstance() {
     _instance ??= BaseDio._();
 

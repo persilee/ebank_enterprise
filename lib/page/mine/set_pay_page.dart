@@ -181,31 +181,36 @@ class _SetPayPageState extends State<SetPayPage> {
     }
 
     //正则校验是否是连续的数字
-    RegExp _regularnumber = new RegExp(
-        r'(123|234|345|456|567|678|789|987|876|765|654|543|432|321)'); //正则
-    if (_regularnumber.hasMatch(_newPwd.text)) {
-      HSProgressHUD.showToastTip(
-        S.current.set_pay_password_regular,
-      );
-      return;
-    }
+    // RegExp _regularnumber = new RegExp(
+    //     r'(123|234|345|456|567|678|789|987|876|765|654|543|432|321)'); //正则
+    // if (_regularnumber.hasMatch(_newPwd.text)) {
+    //   HSProgressHUD.showToastTip(
+    //     S.current.set_pay_password_regular,
+    //   );
+    //   return;
+    // }
 
     HSProgressHUD.show();
     final prefs = await SharedPreferences.getInstance();
-    _userId = prefs.getString(ConfigKey.USER_ID);
-    _userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
-    String password = EncryptUtil.aesEncode(_confimPwd.text);
-    print(password);
-    HSProgressHUD.show();
-    ApiClientPassword()
-        .setTransactionPassword(
-      SetTransactionPasswordReq(_certificateNo, _certificateType, password,
-          _phoneNumber, _userId, _userAccount, false, _smsCode, '', ''),
-    )
-        .then((data) {
+    _userId = prefs.getString(ConfigKey.USER_ID) ?? '';
+    _userAccount = prefs.getString(ConfigKey.USER_ACCOUNT) ?? '';
+    String password = EncryptUtil.aesEncode(_confimPwd.text) ?? '';
+    SetTransactionPasswordReq req = SetTransactionPasswordReq(
+      userId: _userId,
+      userAccount: _userAccount,
+      certificateNo: (_certificateNo ?? '1'),
+      certificateType: (_certificateType ?? '1'),
+      phoneNumber: (_phoneNumber ?? '1'),
+      payPassword: password,
+      verify: false,
+      smsCode: (_smsCode ?? ''),
+      actualName: '',
+      cardNo: '',
+    );
+    ApiClientPassword().setTransactionPassword(req).then((data) {
       HSProgressHUD.dismiss();
       prefs.setBool(ConfigKey.USER_PASSWORDENABLED, true);
-      Navigator.of(context)..pop()..pop(); //..pop();
+      // Navigator.of(context)..pop()..pop(); //..pop();
       // Navigator.of(context).pop();
       Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
     }).catchError((e) {
