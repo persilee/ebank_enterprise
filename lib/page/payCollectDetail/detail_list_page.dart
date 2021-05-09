@@ -98,6 +98,8 @@ class _DetailListPageState extends State<DetailListPage> {
         elevation: 0,
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             height: 40,
@@ -124,10 +126,12 @@ class _DetailListPageState extends State<DetailListPage> {
                         onRefresh: () {
                           //刷新完成
                           if (_position != 0) {
+                            _turnKey = '';
                             _getRevenueByCards(_startDate, _accNoList);
                             _refreshController.refreshCompleted();
                             _refreshController.footerMode.value = LoadStatus.canLoading;
                           } else {
+                            _turnKey = '';
                             _getRevenueByCards(_startDate, _allAccNoList);
                             _refreshController.refreshCompleted();
                             _refreshController.footerMode.value = LoadStatus.canLoading;
@@ -465,8 +469,10 @@ class _DetailListPageState extends State<DetailListPage> {
           });
           Navigator.of(context).pop();
           if (_position != 0) {
+            _turnKey = '';
             _getRevenueByCards(_startDate, _accNoList);
           } else {
+            _turnKey = '';
             _getRevenueByCards(_startDate, _allAccNoList);
           }
         },
