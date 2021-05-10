@@ -271,7 +271,7 @@ class _RegisterPageState extends State<RegisterPage> {
     // VerificationCodeRepository()
     ApiClientPassword()
         .sendSmsByPhone(SendSmsByPhoneNumberReq(
-            _officeAreaCodeText, _phoneNum.text, 'register', 'SCNAOREGU', 'MB',
+            _officeAreaCodeText, _phoneNum.text, 'register', 'SCNAOREGU', 'MB',userAccount: _userName.text,
             msgBankId: '999'))
         .then((value) {
       if (mounted) {
