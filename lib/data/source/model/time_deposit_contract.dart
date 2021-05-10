@@ -59,22 +59,23 @@ class TimeDepositContractReq extends Object {
   String intAc;
 
   TimeDepositContractReq(
-      this.accuPeriod,
-      this.annualInterestRate,
-      this.auctCale,
-      this.bal,
-      this.bppdCode,
-      this.ccy,
-      this.ciNo,
-      this.depositType,
-      this.instCode,
-      this.oppAc,
-      this.payPassword,
-      this.prodName,
-      this.settDdAc,
-      this.smsCode,
-      this.tenor,
-      {this.intAc});
+    this.accuPeriod,
+    this.annualInterestRate,
+    this.auctCale,
+    this.bal,
+    this.bppdCode,
+    this.ccy,
+    this.ciNo,
+    this.depositType,
+    this.instCode,
+    this.oppAc,
+    this.payPassword,
+    this.prodName,
+    this.settDdAc,
+    this.smsCode,
+    this.tenor, {
+    this.intAc,
+  });
 
   factory TimeDepositContractReq.fromJson(Map<String, dynamic> srcJson) =>
       _$TimeDepositContractReqFromJson(srcJson);

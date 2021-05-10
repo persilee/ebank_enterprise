@@ -37,7 +37,7 @@ class HSProgressHUD {
       Fluttertoast.showToast(
         msg: errorStr,
         gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 2,
+        timeInSecForIosWeb: 4,
       );
     }
   }
@@ -49,7 +49,7 @@ class HSProgressHUD {
     Fluttertoast.showToast(
       msg: tipStr,
       gravity: ToastGravity.CENTER,
-      timeInSecForIosWeb: 2,
+      timeInSecForIosWeb: 4,
     );
   }
 

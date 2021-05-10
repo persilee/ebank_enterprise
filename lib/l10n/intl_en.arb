@@ -510,7 +510,7 @@
   "tdInfo_continuation_of_principal_and_interest": "Continuation Of Principal And Interest",
   "tdInfo_principal_renewal": "Principal Renewal",
   "tdContract_min_amount": "The amount entered need to be greater than or equal to ",
-  "tdContract_max_amount": ", less than or equal to ",
+  "tdContract_max_amount": "The amount entered need to be less than or equal to ",
   "wangluyao_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<王璐瑶（定期）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "zhangqirong_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>张其荣（我的）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "in_all": "There are",

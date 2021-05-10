@@ -614,26 +614,26 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   //点击提前结清
   _openBottomSheet(BuildContext context) async {
-    bool passwordEnabled = SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED);
-    // 判断是否设置交易密码，如果没有设置，跳转到设置密码页面，
-    if (!passwordEnabled) {
-      HsgShowTip.shouldSetTranPasswordTip(
-        context: context,
-        click: (value) {
-          if (value == true) {
-            //前往设置交易密码
-            Navigator.pushNamed(context, pageResetPayPwdOtp);
-          }
-        },
-      );
-    } else {
-      // 输入交易密码
-      bool isPassword = await _didBottomSheet();
-      // 如果交易密码正确，处理审批逻辑
-      if (isPassword) {
-        _contractEarly(context); //领用
-      }
-    }
+    // bool passwordEnabled = SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED);
+    // // 判断是否设置交易密码，如果没有设置，跳转到设置密码页面，
+    // if (!passwordEnabled) {
+    //   HsgShowTip.shouldSetTranPasswordTip(
+    //     context: context,
+    //     click: (value) {
+    //       if (value == true) {
+    //         //前往设置交易密码
+    //         Navigator.pushNamed(context, pageResetPayPwdOtp);
+    //       }
+    //     },
+    //   );
+    // } else {
+    //   // 输入交易密码
+    //   bool isPassword = await _didBottomSheet();
+    //   // 如果交易密码正确，处理审批逻辑
+    //   if (isPassword) {
+    _contractEarly(context); //领用
+    //   }
+    // }
   }
 
   //交易密码窗口
