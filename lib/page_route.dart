@@ -373,7 +373,10 @@ onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageAuthorizationTaskApprovalHistoryDetail) {
     return MaterialPageRoute(builder: (context) {
       Map<String, dynamic> arguments = settings.arguments;
-      return ApprovalHistoryDetailPage();
+      return ApprovalHistoryDetailPage(
+        title: arguments['title'],
+        data: arguments['data'],
+      );
     });
   }
   if (settings.name == pageTransferPlanDetails) {

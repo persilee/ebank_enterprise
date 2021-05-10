@@ -6,6 +6,7 @@ import 'package:ebank_mobile/data/source/model/approval/find_all_finished_task_m
 import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
+import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_detail_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_model.dart'
     as TDEPModel;
@@ -66,6 +67,7 @@ class _MyApprovedHistoryDetailPageState
   List<Widget> _postRepaymentList = [];
   List<Widget> _loanWithDrawalList = [];
   List<Widget> _finishedList = [];
+  List<dynamic> _commentList = [];
   final f = NumberFormat("#,##0.00", "en_US");
   final fj = NumberFormat("#,##0", "ja-JP");
   bool _isShowErrorPage = false;
@@ -579,9 +581,9 @@ class _MyApprovedHistoryDetailPageState
 
     // 添加历史审批记录
     if (oneToOneTransferDetailModel.commentList.isNotEmpty) {
+      _commentList = oneToOneTransferDetailModel.commentList;
       oneToOneTransferDetailModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
@@ -799,9 +801,9 @@ class _MyApprovedHistoryDetailPageState
 
     // 添加历史审批记录
     if (openTdContractDetailModel.commentList.isNotEmpty) {
+      // _commentList = openTdContractDetailModel.commentList;
       openTdContractDetailModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        // _finishedList.add(_buildAvatar(data?.userName ?? ''));g
       });
     }
 
@@ -934,7 +936,7 @@ class _MyApprovedHistoryDetailPageState
       child: GestureDetector(
         onTap: () {
           Navigator.pushNamed(
-              context, pageAuthorizationTaskApprovalHistoryDetail);
+              context, pageAuthorizationTaskApprovalHistoryDetail, arguments: {"data": _commentList});
         },
         child: _buildHistoryItem(S.current.approve_approval_history, true),
       ),
@@ -1075,7 +1077,7 @@ class _MyApprovedHistoryDetailPageState
     );
   }
 
-  Container _buildAvatar(String imageUrl, String name) {
+  Container _buildAvatar(String name, [String imageUrl]) {
     return Container(
       padding: EdgeInsets.only(right: 6.0),
       child: Row(
@@ -1088,7 +1090,7 @@ class _MyApprovedHistoryDetailPageState
               ClipOval(
                 child: Image(
                   image: AssetImage(
-                      'images/home/heaerIcon/home_header_person.png'),
+                      imageUrl ?? 'images/home/heaerIcon/home_header_person.png'),
                   fit: BoxFit.cover,
                   height: 22.0,
                   width: 22.0,
