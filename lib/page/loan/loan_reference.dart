@@ -172,8 +172,8 @@ class _LoanReferenceState extends State<LoanReference> {
         //得到焦点
       } else {
         //失去焦点 去请求接口并计算
-        _checkInputValueAndRate();
-        _loadQueryIntereRateData();
+        _checkInputValueAndRate(); //校验
+        _loadQueryIntereRateData(); //试算
       }
     });
   }
@@ -226,6 +226,7 @@ class _LoanReferenceState extends State<LoanReference> {
       }
     }).catchError((e) {
       HSProgressHUD.showToast(e.error);
+      HSProgressHUD.dismiss();
     });
   }
 
