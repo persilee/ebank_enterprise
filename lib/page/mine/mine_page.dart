@@ -811,8 +811,16 @@ class _MinePageState extends State<MinePage>
         }).then((value) {
       if (value == true) {
         _loginOut();
+        _removeSmsCode();
       }
     });
+  }
+
+  //清除短信验证码
+  _removeSmsCode() async {
+    final prefs = await SharedPreferences.getInstance();
+    String userPhone = prefs.getString(ConfigKey.USER_PHONE);
+    ApiClientAccount().removeSmsCodeRequest(userPhone);
   }
 
   //退出

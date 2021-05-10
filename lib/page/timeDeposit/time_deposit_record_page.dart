@@ -356,7 +356,9 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         });
         value.forEach((element) {
           setState(() {
-            _totalAmtStr = element.totalAmt;
+            if (_page == 1) {
+              _totalAmtStr = element.totalAmt;
+            }
             _defaultCcy = element.defaultCcy;
             if (_page == 1) {
               rowList = element.rows;
