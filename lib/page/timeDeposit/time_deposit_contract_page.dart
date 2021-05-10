@@ -298,19 +298,33 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
               children: [
                 Expanded(
                   child: Text(
-                    double.parse(_maxAmt) <= 0
-                        ? S.current.tdContract_min_amount +
-                            FormatUtil.formatSringToMoney(_minAmt.toString())
-                        : (S.current.tdContract_min_amount +
-                            FormatUtil.formatSringToMoney(_minAmt.toString()) +
-                            S.current.tdContract_max_amount +
-                            FormatUtil.formatSringToMoney(_maxAmt.toString())),
-                    style: TextStyle(color: HsgColors.redText, fontSize: 13.0),
+                    _amountPromptShowStr(),
+                    style: TextStyle(
+                      color: HsgColors.redText,
+                      fontSize: 13.0,
+                    ),
                   ),
                 ),
               ],
             ),
           );
+  }
+
+  String _amountPromptShowStr() {
+    String showStr = '';
+
+    if (double.parse(_maxAmt) <= 0) {
+      showStr = S.current.tdContract_min_amount +
+          FormatUtil.formatSringToMoney(_minAmt.toString());
+    } else if (double.parse(inputValue.text) <= double.parse(_minAmt)) {
+      showStr = S.current.tdContract_min_amount +
+          FormatUtil.formatSringToMoney(_minAmt.toString());
+    } else {
+      showStr = S.current.tdContract_max_amount +
+          FormatUtil.formatSringToMoney(_maxAmt.toString());
+    }
+
+    return showStr;
   }
 
   //到期本息
@@ -321,7 +335,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         children: [
           Container(
             child: Text(
-              S.current.contract_principal_and_interest,
+              S.current.contract_settlement_amt,
               style: TextStyle(
                 color: HsgColors.secondDegreeText,
                 fontSize: 13.0,
@@ -366,7 +380,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             double.parse(value.replaceAll(RegExp('/^0*(0\.|[1-9])/'), '\$1'));
             //输入金额大于起存金额时进行网络请求,计算到期金额
             if (double.parse(_maxAmt) > 0) {
-              //有做限制的
+              // 有做限制的
               if (double.parse(inputValue.text) >= double.parse(_minAmt) &&
                   double.parse(inputValue.text) <= double.parse(_maxAmt)) {
                 _requestTotalData(); //进行试算
@@ -613,10 +627,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     //List<TdepProductDTOList> producDTOList 哈哈标记
     String name;
     String language = Intl.getCurrentLocale();
-    if (language == 'zh_CN') {
-      name = _detailProducDTOList.lclName;
+    if (language.contains('en')) {
+      name = _detailProducDTOList.engName;
     } else {
-      name = _detailProducDTOList.engName; //哈哈
+      name = _detailProducDTOList.lclName;
     }
     return Container(
       color: Colors.white,
@@ -781,23 +795,69 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
               S.current.tdContract_balance_insufficient,
             );
           } else {
-            _loadContractData(
+            String productName;
+            String language = Intl.getCurrentLocale();
+            if (language.contains('en')) {
+              productName = _detailProducDTOList.engName;
+            } else {
+              productName = _detailProducDTOList.lclName;
+            }
+
+            String oppAc =
+                _changedAccountTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), "");
+            String settDdAc =
+                _changedSettAcTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), "");
+            String stlAc = settDdAc;
+            if (_prodType == '020' && instCode == '3') {
+              stlAc = '';
+            } else if (_prodType == '027' && instCode == '6') {
+              stlAc = '';
+            }
+
+            TimeDepositContractReq reqData = TimeDepositContractReq(
               accuPeriod,
               rate,
               auctCale,
               bal,
-              _detailProducDTOList.bppdCode, //哈哈
+              _detailProducDTOList.bppdCode,
               ccy,
               custID,
               depositType,
               instCode,
-              _changedAccountTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
+              oppAc,
               '',
-              _detailProducDTOList.engName, //哈哈标记改动
-              _changedSettAcTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
+              _detailProducDTOList.engName,
+              stlAc,
               '',
               '',
+              intAc: _prodType == '020' ? '' : settDdAc,
             );
+
+            Navigator.pushNamed(context, pageTimeDepositContractPreview,
+                arguments: {
+                  'productName': productName ?? '',
+                  'depositTerm': _changedTermBtnTiTle ?? '',
+                  'instructions': _changedInstructionTitle ?? '',
+                  'reqData': reqData
+                });
+
+            // _loadContractData(
+            //   accuPeriod,
+            //   rate,
+            //   auctCale,
+            //   bal,
+            //   _detailProducDTOList.bppdCode, //哈哈
+            //   ccy,
+            //   custID,
+            //   depositType,
+            //   instCode,
+            //   _changedAccountTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
+            //   '',
+            //   _detailProducDTOList.engName, //哈哈标记改动
+            //   _changedSettAcTitle.replaceAll(new RegExp(r"\s+\b|\b\s"), ""),
+            //   '',
+            //   '',
+            // );
           }
         },
       ),

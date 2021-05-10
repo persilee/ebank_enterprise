@@ -168,7 +168,7 @@ class _CardListPageState extends State<CardListPage> {
         String totalAmt = element.currBal ?? '';
         contenttList.add(
           _infoFrame("${S.current.account_balance}($ccy)",
-              FormatUtil.formatSringToMoney(totalAmt)),
+              FormatUtil.formatSringToMoney(totalAmt, ccy)),
         );
       });
     }
