@@ -134,7 +134,7 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 }

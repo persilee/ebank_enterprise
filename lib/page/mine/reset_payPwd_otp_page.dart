@@ -36,6 +36,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   int countdownTime = 0;
   String _phone = '';
   String _smsCode = '';
+  bool _clickSmsBtn = false;
 
   @override
   void initState() {
@@ -196,7 +197,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   }
 
   bool _submit() {
-    if (_sms.text.length > 0) {
+    if (_sms.text.length > 0 && _clickSmsBtn == true) {
       return true;
     } else {
       return false;
@@ -317,6 +318,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       if (this.mounted) {
         setState(() {
           // _sms.text = '123456';
+          _clickSmsBtn = true;
         });
         _smsCode = data.smsCode;
       }
