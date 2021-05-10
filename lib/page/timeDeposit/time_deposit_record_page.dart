@@ -69,54 +69,44 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: _appBar(),
-        body: _isLoading
-            ? HsgLoading()
-            :
-            // : rowList.isNotEmpty && rowList.length > 0
-            //     ?
-            CustomRefresh(
-                controller: _refreshController,
-                onLoading: () async {
-                  //加载更多完成
-                  // if (_isMoreData) {
-                  //是否加载更多
-                  _page++;
-                  _loadDeopstData();
-                  // }
-                },
-                onRefresh: () async {
-                  //刷新完成
-                  _page = 1;
-                  // rowList.clear();
-                  await _loadDeopstData();
-                  _refreshController.refreshCompleted();
-                  _refreshController.footerMode.value = LoadStatus.canLoading;
-                },
-                content: _isShowErrorPage
-                    ? _hsgErrorPage
-                    : rowList.isNotEmpty && rowList.length > 0
-                        ? ListView.separated(
-                            itemCount: rowList.length,
-                            controller: _scrollController,
-                            itemBuilder: (context, index) {
-                              return _recordList(rowList[index]);
-                            },
-                            separatorBuilder:
-                                (BuildContext context, int index) => Divider(
-                              height: 10.0,
-                              color: Colors.transparent,
-                            ),
-                          )
-                        : HsgErrorPage(
-                            isEmptyPage: true,
-                            buttonAction: () {
-                              _loadDeopstData();
-                            },
+      appBar: _appBar(),
+      body: _isLoading
+          ? HsgLoading()
+          : CustomRefresh(
+              controller: _refreshController,
+              onLoading: () {
+                //是否加载更多
+                _page++;
+                _loadDeopstData();
+              },
+              onRefresh: () {
+                //刷新完成
+                _page = 1;
+                _loadDeopstData();
+              },
+              content: _isShowErrorPage
+                  ? _hsgErrorPage
+                  : rowList.isNotEmpty && rowList.length > 0
+                      ? ListView.separated(
+                          itemCount: rowList.length,
+                          controller: _scrollController,
+                          itemBuilder: (context, index) {
+                            return _recordList(rowList[index]);
+                          },
+                          separatorBuilder: (BuildContext context, int index) =>
+                              Divider(
+                            height: 10.0,
+                            color: Colors.transparent,
                           ),
-              )
-        // : notDataContainer(context, S.current.no_data_now),
-        );
+                        )
+                      : HsgErrorPage(
+                          isEmptyPage: true,
+                          buttonAction: () {
+                            _loadDeopstData();
+                          },
+                        ),
+            ),
+    );
   }
 
   //存单总额（币种）
@@ -376,8 +366,13 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
 
             if (element.rows.length < _totalPage ||
                 element.toatalPage == _page) {
+              _refreshController.refreshCompleted();
               _refreshController.loadComplete(); //加载完成
               _refreshController.loadNoData();
+            } else {
+              _refreshController.refreshCompleted();
+              _refreshController.loadComplete(); //加载完成
+              _refreshController.footerMode.value = LoadStatus.canLoading;
             }
           });
           _isLoading = false;

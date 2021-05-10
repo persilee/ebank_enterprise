@@ -42,6 +42,7 @@ import 'package:ebank_mobile/page/timeDeposit/time_deposit_close_info.dart';
 // import 'package:ebank_mobile/page/mine/qliyan_demo_page.dart';
 
 import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_page.dart';
+import 'package:ebank_mobile/page/timeDeposit/time_deposit_contract_preview_page.dart';
 import 'package:ebank_mobile/page/timeDeposit/time_depost_product_page.dart';
 import 'package:ebank_mobile/page/approval/my_application_detail_page.dart';
 import 'package:ebank_mobile/page/approval/my_approved_history_page.dart';
@@ -174,6 +175,7 @@ var pageForexTrading = '/forex_trading_page';
 var pageForexTradingPreview = '/forex_trading_preview_page';
 var pageExchangeRateInquiry = '/exchange_rate_inquiry_page';
 var pageTimeDepositContract = '/time_deposit_contract_page';
+var pageTimeDepositContractPreview = '/time_deposit_contract_preview_page.dart';
 var pageOpenTransfer = '/hsg_open_transfer_page';
 var pageTaskApproval = '/task_approval_page';
 var pageUserAgreement = '/user_agreement_page';
@@ -281,6 +283,7 @@ var appRoutes = {
   hsgPdfViewer: (context) => HsgPdfViewer(),
   pageTimeDepostProduct: (context) => TimeDepostProduct(),
   // pageTimeDepositContract: (context) => TimeDepositContract(),
+  pageTimeDepositContractPreview: (context) => TimeDepositContractPreviewPage(),
   pageForexTrading: (context) => ForexTradingPage(),
   pageForexTradingPreview: (context) => ForexTradingPreviewPage(),
   // pageTaskApproval: (context) => TaskApprovalPage(),

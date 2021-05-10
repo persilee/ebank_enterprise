@@ -663,7 +663,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     setState(() {
       //付款方卡号
       _payerAccount = _data.cardList[0].cardNo;
-      // payerBankCode = payeeBankCode = _data.cardList[0].bankCode;
+      // payerBankCode = payeeBankCode = _data.cardList[0].bankCode; //哈哈 先隐藏掉
       // payerName = _data.cardList[0].ciName;
       _data.cardList.forEach((e) {
         _payerAccountList.add(e.cardNo);
