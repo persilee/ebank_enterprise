@@ -172,8 +172,8 @@ class _LoanReferenceState extends State<LoanReference> {
         //得到焦点
       } else {
         //失去焦点 去请求接口并计算
-        _checkInputValueAndRate();
-        _loadQueryIntereRateData();
+        _checkInputValueAndRate(); //校验
+        _loadQueryIntereRateData(); //试算
       }
     });
   }
@@ -226,6 +226,7 @@ class _LoanReferenceState extends State<LoanReference> {
       }
     }).catchError((e) {
       HSProgressHUD.showToast(e.error);
+      HSProgressHUD.dismiss();
     });
   }
 
@@ -749,13 +750,13 @@ class _LoanReferenceState extends State<LoanReference> {
               style: AGREEMENT_TEXT_STYLE,
             ),
             _conetentJump(S.current.loan_recipients_agreement1,
-                'personLoanContact'), //98822
+                'personLoanContact'), //《个人消费贷款合同》
             TextSpan(
               text: S.current.loan_application_agreement3,
               style: AGREEMENT_TEXT_STYLE,
             ),
             _conetentJump(S.current.loan_recipients_agreement2,
-                'authPersonCreditReport'), //用户服务协议
+                'authPersonCreditReport'), //《个人信用报告查询授权书》
             TextSpan(
               text: S.current.loan_recipients_agreement3,
               style: AGREEMENT_TEXT_STYLE,

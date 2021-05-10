@@ -440,7 +440,7 @@ class _RegisterPageState extends State<RegisterPage> {
               style: AGREEMENT_TEXT_STYLE,
             ),
             _conetentJump(S.current.loan_application_agreement4,
-                'privacyPolicy'), //99868  用户服务协议
+                'privacyPolicy'), //99868  用户服务协议与隐私政策
           ],
         ),
       ),

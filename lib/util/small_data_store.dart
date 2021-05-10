@@ -30,6 +30,8 @@ class ConfigKey {
   static const ENGLISH_USER_NAME = "english_user_name";
   static const CUST_LOCAL_NAME = "cust_local_name";
   static const CUST_ENG_NAME = "cust_eng_name";
+
+  static const NEED_OPEN_ACCOUNT = "need_open_account";
 }
 
 class InputFormartterRegExp {

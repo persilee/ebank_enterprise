@@ -479,6 +479,12 @@ class _UserInformationPageState extends State<UserInformationPage> {
       _characterName = _language == 'en'
           ? model.custFirmRoleDTO.englishRoleName ?? ''
           : model.custFirmRoleDTO.localRoleName ?? ''; //用户角色名称
+
+      _userName = _userName == ''
+          ? model.userAccount != null
+              ? model.userAccount
+              : ''
+          : _userName;
     });
   }
 }

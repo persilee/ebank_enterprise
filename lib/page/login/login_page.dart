@@ -295,9 +295,9 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _isLoading = false;
       });
-      HSProgressHUD.dismiss();
 
       if (e.toString().contains('ECUST009')) {
+        HSProgressHUD.dismiss();
         HsgShowTip.loginPasswordErrorToMuchTip(
           context,
           (value) => {
@@ -307,7 +307,7 @@ class _LoginPageState extends State<LoginPage> {
           },
         );
       } else {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       }
     });
   }

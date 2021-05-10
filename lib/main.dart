@@ -86,6 +86,7 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
+    print('state: $state');
     switch (state) {
       case AppLifecycleState.inactive: // 处于这种状态的应用程序应该假设它们可能在任何时候暂停。
         break;
@@ -96,6 +97,8 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
           HSProgressHUD.showToastTip(
             '${_packageInfo.appName}进入后台运行',
           );
+        } else {
+          print('这是苹果问题');
         }
         break;
       case AppLifecycleState.detached: // APP结束时调用
@@ -106,6 +109,7 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    print('APP结束时调用');
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -131,64 +135,70 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
     );
     SystemChrome.setSystemUIOverlayStyle(style);
     ScreenUtil.init(width: 360, height: 920, allowFontScaling: true);
-    return RefreshConfiguration(
-      footerTriggerDistance: 15,
-      headerTriggerDistance: 90.0,
-      maxOverScrollExtent: 100,
-      dragSpeedRatio: 0.91,
-      headerBuilder: () => MaterialClassicHeader(),
-      footerBuilder: () => ClassicFooter(),
-      enableLoadingWhenNoData: false,
-      enableRefreshVibrate: false,
-      enableLoadMoreVibrate: false,
-      hideFooterWhenNotFull: true,
-      shouldFooterFollowWhenNotFull: (state) {
-        return false;
+    return WillPopScope(
+      onWillPop: () async {
+        //do something here before pop
+        return true;
       },
-      child: MaterialApp(
-        navigatorKey: navigatorKey,
-        debugShowCheckedModeBanner: false,
-        title: 'HSGBank',
-        theme: ThemeData(
-          appBarTheme: AppBarTheme(
-            centerTitle: true,
-            elevation: 1,
-            textTheme: TextTheme(
-              headline6: TextStyle(
-                fontStyle: FontStyle.normal,
-                fontSize: 18,
-                color: Color(0xff262626),
+      child: RefreshConfiguration(
+        footerTriggerDistance: 15,
+        headerTriggerDistance: 90.0,
+        maxOverScrollExtent: 100,
+        dragSpeedRatio: 0.91,
+        headerBuilder: () => MaterialClassicHeader(),
+        footerBuilder: () => ClassicFooter(),
+        enableLoadingWhenNoData: false,
+        enableRefreshVibrate: false,
+        enableLoadMoreVibrate: false,
+        hideFooterWhenNotFull: true,
+        shouldFooterFollowWhenNotFull: (state) {
+          return false;
+        },
+        child: MaterialApp(
+          navigatorKey: navigatorKey,
+          debugShowCheckedModeBanner: false,
+          title: 'HSGBank',
+          theme: ThemeData(
+            appBarTheme: AppBarTheme(
+              centerTitle: true,
+              elevation: 1,
+              textTheme: TextTheme(
+                headline6: TextStyle(
+                  fontStyle: FontStyle.normal,
+                  fontSize: 18,
+                  color: Color(0xff262626),
+                ),
               ),
             ),
+            splashColor: HsgColors.itemClickColor,
+            primaryColor: HsgColors.primaryLight,
+            primaryColorDark: HsgColors.primaryDark,
+            backgroundColor: HsgColors.commonBackground,
+            dividerTheme:
+                DividerThemeData(thickness: 0.7, color: HsgColors.divider),
           ),
-          splashColor: HsgColors.itemClickColor,
-          primaryColor: HsgColors.primaryLight,
-          primaryColorDark: HsgColors.primaryDark,
-          backgroundColor: HsgColors.commonBackground,
-          dividerTheme:
-              DividerThemeData(thickness: 0.7, color: HsgColors.divider),
-        ),
-        initialRoute: pageHome,
-        routes: appRoutes,
-        onGenerateRoute: (settings) => onGenerateRoute(settings),
-        localizationsDelegates: [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate
-        ],
-        // ignore: missing_return
-        localeResolutionCallback: (locale, supportedLocales) {
-          _initLang(locale);
-        },
-        supportedLocales: S.delegate.supportedLocales,
-        builder: (context, child) => Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: GestureDetector(
-            onTap: () {
-              hideKeyboard(context);
-            },
-            child: child,
+          initialRoute: pageHome,
+          routes: appRoutes,
+          onGenerateRoute: (settings) => onGenerateRoute(settings),
+          localizationsDelegates: [
+            S.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate
+          ],
+          // ignore: missing_return
+          localeResolutionCallback: (locale, supportedLocales) {
+            _initLang(locale);
+          },
+          supportedLocales: S.delegate.supportedLocales,
+          builder: (context, child) => Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: GestureDetector(
+              onTap: () {
+                hideKeyboard(context);
+              },
+              child: child,
+            ),
           ),
         ),
       ),
