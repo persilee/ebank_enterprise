@@ -189,9 +189,9 @@ class _MyApprovedHistoryDetailPageState
 
     // 添加历史审批记录
     if (loanWithDrawalModel.commentList.isNotEmpty) {
+      _commentList = loanWithDrawalModel.commentList;
       loanWithDrawalModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
@@ -243,9 +243,9 @@ class _MyApprovedHistoryDetailPageState
 
     // 添加历史审批记录
     if (postRepaymentModel.commentList.isNotEmpty) {
+      _commentList = postRepaymentModel.commentList;
       postRepaymentModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
@@ -328,9 +328,9 @@ class _MyApprovedHistoryDetailPageState
 
     // 添加历史审批记录
     if (foreignTransferModel.commentList.isNotEmpty) {
+      _commentList = foreignTransferModel.commentList;
       foreignTransferModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
@@ -381,9 +381,9 @@ class _MyApprovedHistoryDetailPageState
 
     // 添加历史审批记录
     if (transferPlanDetailModel.commentList.isNotEmpty) {
+      _commentList = transferPlanDetailModel.commentList;
       transferPlanDetailModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
@@ -494,9 +494,9 @@ class _MyApprovedHistoryDetailPageState
 
     // 添加历史审批记录
     if (internationalTransferDetailModel.commentList.isNotEmpty) {
+      _commentList = internationalTransferDetailModel.commentList;
       internationalTransferDetailModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
@@ -676,9 +676,9 @@ class _MyApprovedHistoryDetailPageState
 
     // 添加历史审批记录
     if (earlyRedTdContractDetailModel.commentList.isNotEmpty) {
+      _commentList = earlyRedTdContractDetailModel.commentList;
       earlyRedTdContractDetailModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
@@ -801,9 +801,9 @@ class _MyApprovedHistoryDetailPageState
 
     // 添加历史审批记录
     if (openTdContractDetailModel.commentList.isNotEmpty) {
-      // _commentList = openTdContractDetailModel.commentList;
+      _commentList = openTdContractDetailModel.commentList;
       openTdContractDetailModel.commentList.forEach((data) {
-        // _finishedList.add(_buildAvatar(data?.userName ?? ''));g
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
