@@ -275,7 +275,7 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
                 S.current.approve_result, _result ?? ''),
             //审批时间
             _rowInformation(
-                S.current.approve_create_time, approvalTask?.createTime ?? ''),
+                S.current.approve_create_time, approvalTask?.endTime ?? ''),
           ],
         ),
       ),

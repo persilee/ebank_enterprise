@@ -89,6 +89,7 @@ class ApprovalTask {
   String _applicantId;
   dynamic _applicantName;
   String _createTime;
+  String _endTime;
   String _result;
   String _businessKey;
   String _tenantId;
@@ -103,6 +104,7 @@ class ApprovalTask {
   String get applicantId => _applicantId;
   dynamic get applicantName => _applicantName;
   String get createTime => _createTime;
+  String get endTime => _endTime;
   String get result => _result;
   String get businessKey => _businessKey;
   String get tenantId => _tenantId;
@@ -131,6 +133,7 @@ class ApprovalTask {
     _applicantId = applicantId;
     _applicantName = applicantName;
     _createTime = createTime;
+    _endTime = endTime;
     _result = result;
     _businessKey = businessKey;
     _tenantId = tenantId;
@@ -147,6 +150,7 @@ class ApprovalTask {
     _applicantId = json["applicantId"];
     _applicantName = json["applicantName"];
     _createTime = json["createTime"];
+    _endTime = json["endTime"];
     _result = json["result"];
     _businessKey = json["businessKey"];
     _tenantId = json["tenantId"];
@@ -164,6 +168,7 @@ class ApprovalTask {
     map["applicantId"] = _applicantId;
     map["applicantName"] = _applicantName;
     map["createTime"] = _createTime;
+    map["endTime"] = _endTime;
     map["result"] = _result;
     map["businessKey"] = _businessKey;
     map["tenantId"] = _tenantId;
