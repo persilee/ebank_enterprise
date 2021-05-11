@@ -710,9 +710,9 @@ class _PageDepositInfo extends State<PageDepositInfo> {
       _modify = S.current.tdEarlyRed_modify_expiration_instruction;
     } else {
       //提前结清
-      CheckPayPassword(context, () {
-        _contractEarly(context);
-      });
+      // CheckPayPassword(context, () {
+      _contractEarly(context);
+      // });
     }
   }
 

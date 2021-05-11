@@ -165,9 +165,9 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
         onPressed: () {
           //弹出底部弹窗输入密码
           // _openBottomSheet();
-          CheckPayPassword(context, () {
-            _loadData(); //还款
-          });
+          // CheckPayPassword(context, () {
+          _loadData(); //还款
+          // });
         },
         shape: RoundedRectangleBorder(
           side: BorderSide.none,

@@ -44,10 +44,9 @@ class _TimeDepositContractPreviewPageState
               child: HsgButton.button(
                 title: S.current.confirm,
                 click: () {
-                  // _loadContractData(_timeDepositReq);
-                  CheckPayPassword(context, () {
-                    _loadContractData(_timeDepositReq);
-                  });
+                  // CheckPayPassword(context, () {
+                  _loadContractData(_timeDepositReq);
+                  // });
                 },
                 isColor: true,
               ),

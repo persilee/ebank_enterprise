@@ -51,10 +51,9 @@ class _TransferInternalPreviewPageState
               child: HsgButton.button(
                 title: S.current.confirm,
                 click: () {
-                  // _loadData(transferData);
-                  CheckPayPassword(context, () {
-                    _loadData(transferData);
-                  });
+                  // CheckPayPassword(context, () {
+                  _loadData(transferData);
+                  // });
                 },
                 isColor: true,
               ),

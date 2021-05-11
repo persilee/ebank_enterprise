@@ -41,10 +41,9 @@ class _ForexTradingPreviewPageState extends State<ForexTradingPreviewPage> {
               child: HsgButton.button(
                 title: S.current.confirm,
                 click: () {
-                  // _loadData(_preview);
-                  CheckPayPassword(context, () {
-                    _loadData(_preview);
-                  });
+                  // CheckPayPassword(context, () {
+                  _loadData(_preview);
+                  // });
                 },
                 isColor: true,
               ),
