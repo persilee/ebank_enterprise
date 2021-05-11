@@ -16,7 +16,6 @@ import 'my_appplication_page.dart';
 import 'my_to_do_task_page.dart';
 
 class ApprovalPage extends StatefulWidget {
-
   @override
   _ApprovalPageState createState() => _ApprovalPageState();
 }
@@ -24,10 +23,16 @@ class ApprovalPage extends StatefulWidget {
 class _ApprovalPageState extends State<ApprovalPage>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   List tabs;
+  ScrollController _controllerMyToDoTask;
+  ScrollController _controllerMyApprovedHistory;
+  ScrollController _controllerMyApplication;
 
   @override
   void initState() {
     super.initState();
+    _controllerMyToDoTask = ScrollController();
+    _controllerMyApprovedHistory = ScrollController();
+    _controllerMyApplication = ScrollController();
   }
 
   @override
@@ -75,7 +80,7 @@ class _ApprovalPageState extends State<ApprovalPage>
       child: Builder(builder: (BuildContext context) {
         final TabController tabController = DefaultTabController.of(context);
         tabController.addListener(() {
-          print(tabController.indexIsChanging);
+          print(tabController.index);
         });
         return Scaffold(
           body: Container(
@@ -83,9 +88,47 @@ class _ApprovalPageState extends State<ApprovalPage>
             color: Color(int.parse('0xffF8F8F8')),
             child: Column(
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text(S.of(context).approval, style: TextStyle(fontSize: 17.0),),
+                GestureDetector(
+                  onDoubleTap: () {
+                    print('onDoubleTap');
+                    switch(tabController.index) {
+                      case 0: {
+                        print('aaaaaaaaa');
+                        _controllerMyToDoTask.animateTo(
+                          _controllerMyToDoTask.position.minScrollExtent,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.linear,
+                        );
+                      }
+                      break;
+                      case 1: {
+                        _controllerMyApprovedHistory.animateTo(
+                          _controllerMyToDoTask.position.minScrollExtent,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.linear,
+                        );
+                      }
+                      break;
+                      case 2: {
+                        _controllerMyApplication.animateTo(
+                          _controllerMyToDoTask.position.minScrollExtent,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.linear,
+                        );
+                      }
+                      break;
+                    }
+
+                  },
+                  child: Container(
+                    width: ScreenUtil.instance.width,
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    child: Text(
+                      S.of(context).approval,
+                      style: TextStyle(fontSize: 17.0),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
                 Divider(
                   thickness: 0,
@@ -99,10 +142,16 @@ class _ApprovalPageState extends State<ApprovalPage>
                     child: CustomTabBar.TabBarView(
                       controller: tabController,
                       children: [
-                        MyToDoTaskPage(title: S.current.my_to_do_list),
+                        MyToDoTaskPage(
+                            title: S.current.my_to_do_list,
+                            controller: _controllerMyToDoTask),
                         MyApprovedHistoryPage(
-                            title: S.current.authorization_history),
-                        MyApplicationPage(title: S.current.my_application)
+                            title: S.current.authorization_history,
+                            controller: _controllerMyApprovedHistory
+                        ),
+                        MyApplicationPage(title: S.current.my_application,
+                          controller: _controllerMyApplication,
+                        )
                       ],
                     ),
                   ),

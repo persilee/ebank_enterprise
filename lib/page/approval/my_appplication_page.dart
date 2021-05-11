@@ -29,8 +29,9 @@ import 'package:sp_util/sp_util.dart';
 
 class MyApplicationPage extends StatefulWidget {
   final title;
+  final ScrollController controller;
 
-  MyApplicationPage({Key key, this.title}) : super(key: key);
+  MyApplicationPage({Key key, this.title, this.controller}) : super(key: key);
 
   @override
   _MyApplicationPageState createState() => _MyApplicationPageState();
@@ -54,7 +55,7 @@ class _MyApplicationPageState extends State<MyApplicationPage>
   void initState() {
     super.initState();
     _refreshController = RefreshController();
-    _scrollController = ScrollController();
+    // _scrollController = ScrollController();
     _loadData();
   }
 
@@ -92,7 +93,7 @@ class _MyApplicationPageState extends State<MyApplicationPage>
                   padding:
                       EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
                   itemCount: _listData.length,
-                  controller: _scrollController,
+                  controller: widget.controller,
                   itemBuilder: (context, index) {
                     return _todoInformation(_listData[index]);
                   },

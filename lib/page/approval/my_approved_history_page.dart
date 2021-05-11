@@ -37,8 +37,9 @@ import '../../page_route.dart';
 
 class MyApprovedHistoryPage extends StatefulWidget {
   final title;
+  final ScrollController controller;
 
-  MyApprovedHistoryPage({Key key, this.title}) : super(key: key);
+  MyApprovedHistoryPage({Key key, this.title, this.controller}) : super(key: key);
 
   @override
   _MyApprovedHistoryPageState createState() => _MyApprovedHistoryPageState();
@@ -60,7 +61,7 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
   void initState() {
     super.initState();
     _refreshController = RefreshController();
-    _scrollController = ScrollController();
+    // _scrollController = ScrollController();
     _loadData();
   }
 
@@ -98,7 +99,7 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
                         padding: EdgeInsets.only(
                             left: 12.0, right: 12.0, bottom: 18.0),
                         itemCount: _listData.length,
-                        controller: _scrollController,
+                        controller: widget.controller,
                         itemBuilder: (context, index) {
                           return _todoInformation(_listData[index]);
                         },

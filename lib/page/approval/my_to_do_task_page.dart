@@ -25,8 +25,9 @@ import '../../page_route.dart';
 
 class MyToDoTaskPage extends StatefulWidget {
   final title;
+  final ScrollController controller;
 
-  MyToDoTaskPage({Key key, this.title}) : super(key: key);
+  MyToDoTaskPage({Key key, this.title, this.controller}) : super(key: key);
 
   @override
   _MyToDoTaskPageState createState() => _MyToDoTaskPageState();
@@ -47,7 +48,7 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
   void initState() {
     super.initState();
     _refreshController = RefreshController();
-    _scrollController = ScrollController();
+    // _scrollController = ScrollController();
     _loadData();
   }
 
@@ -85,7 +86,7 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
                         padding: EdgeInsets.only(
                             left: 12.0, right: 12.0, bottom: 18.0),
                         itemCount: _listData.length,
-                        controller: _scrollController,
+                        controller: widget.controller,
                         itemBuilder: (context, index) {
                           return _todoInformation(_listData[index]);
                         },
