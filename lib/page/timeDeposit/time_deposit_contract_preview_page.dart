@@ -182,8 +182,11 @@ class _TimeDepositContractPreviewPageState
         setState(() {
           HSProgressHUD.dismiss();
           // _isDeposit = false;
-          Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
-              arguments: 'timeDepositProduct');
+          Navigator.of(context)
+            ..pop()
+            ..pop()
+            ..pushNamed(pageDepositRecordSucceed,
+                arguments: 'timeDepositProduct');
         });
       }
     }).catchError((e) {

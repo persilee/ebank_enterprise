@@ -15,12 +15,14 @@ import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
+import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/util/status_bar_util.dart';
@@ -50,6 +52,7 @@ class _HomePageState extends State<HomePage>
   DateTime _lastTime;
 
   ScrollController _sctrollController;
+  RefreshController _refreshController;
 
   changeLanguage(Locale locale) {
     setState(() {
@@ -62,6 +65,7 @@ class _HomePageState extends State<HomePage>
   void initState() {
     StatusBarUtil.setStatusBar(Brightness.light, color: Colors.transparent);
     _sctrollController = ScrollController();
+    _refreshController = RefreshController();
     // 监听滚动
     _sctrollController.addListener(
       () {
@@ -229,8 +233,14 @@ class _HomePageState extends State<HomePage>
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: _homeAppbar(_opacity, _changeLangBtnTltle),
-        body: Container(
-          child: CustomScrollView(
+        body: CustomRefresh(
+          controller: _refreshController,
+          onRefresh: () async {
+            //刷新完成
+            await _loadData(false);
+            _refreshController.refreshCompleted();
+          },
+          content: CustomScrollView(
             shrinkWrap: true,
             controller: _sctrollController,
             slivers: slivers,
@@ -1075,11 +1085,14 @@ class _HomePageState extends State<HomePage>
         _headPortraitUrl = model.headPortrait; //头像地址
         _enterpriseName =
             _language == 'en' ? model.custEngName : model.custLocalName; // 企业名称
-        _userName = model.userAccount;
-        // _language == 'en'
-        //     ? model.englishUserName
-        //     : model.localUserName; // 姓名
-        // _userName = _userName == null ? model.userAccount : _userName;
+        _userName = _language == 'en'
+            ? model.englishUserName
+            : model.localUserName; // 姓名
+        _userName = (_userName == null ||
+                _userName == '' ||
+                !(['4', '5'].contains(_belongCustStatus)))
+            ? model.userAccount
+            : _userName;
         _characterName = _language == 'en'
             ? model.custFirmRoleDTO.englishRoleName ?? ''
             : model.custFirmRoleDTO.localRoleName ?? ''; //用户角色名称

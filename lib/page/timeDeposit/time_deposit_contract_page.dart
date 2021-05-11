@@ -98,17 +98,12 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   String _minAmt = '';
   String _maxAmt = '';
   bool _isShow = false;
-  bool _showTermRate = false;
+  // bool _showTermRate = false;
   bool _isDeposit = false;
 
   void initState() {
     super.initState();
-    _getTdProdTermRate();
-
-    //网络请求
-    _loadData();
-    // _first();
-    _getInsCode();
+    _network();
   }
 
 //背景色
@@ -420,11 +415,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   void _requestTotalData() {
     _isShow = false;
     //获取预计支付金额
-    if (_cardCcy == ccy) {
-      _amount = inputValue.text;
-    } else {
-      _rateCalculate();
-    }
+    _rateCalculate();
+
     _loadDepositData(
       accuPeriod,
       auctCale,
@@ -606,18 +598,20 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           accuPeriod = _accuPeriods[result];
           auctCale = _auctCales[result];
           rate = FormatUtil.formatNum(double.parse(_changedRateTitle), 2);
-          //选择之后需要进行试算
-          if (double.parse(inputValue.text) >= double.parse(_minAmt)) {
-            _requestTotalData(); //进行试算
-          } else {
-            matAmt = '0.00';
-            _amount = '0.00';
-            _isShow = true;
-          }
-        } else {
-          return;
         }
       });
+
+      //选择之后需要进行试算
+      if (double.parse(inputValue.text) >= double.parse(_minAmt)) {
+        _requestTotalData(); //进行试算
+        setState(() {});
+      } else {
+        setState(() {
+          matAmt = '0.00';
+          _amount = '0.00';
+          _isShow = true;
+        });
+      }
     }
   }
 
@@ -878,63 +872,79 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           // 触摸收起键盘
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: _showTermRate
-            ? HsgLoading()
-            : ListView(
-                children: [
-                  _background(),
-                  _titleSection(
-                      //产品名称和年利率
-                      // productList,
-                      // producDTOList,//哈哈标记
-                      ),
-                  _remark(), // 产品描述
-                  _termChangeBtn(context), // 选择存款期限
-                  _inputPrincipal(card), // 本金输入框
-                  _accountChangeBtn(), //选择付款账户
-                  _line(),
-                  _ccyChangeBtn(), //选择支付币种
-                  _line(),
-                  _expectedPayment(),
-                  _line(),
-                  _settAcChangeBtn(), //结算账户
-                  _line(),
-                  _instructionChangeBtn(), //选择到期指示
-                  _submitButton(),
-                ],
-              ),
+        child:
+            // _showTermRate
+            //     ? HsgLoading()
+            // :
+            ListView(
+          children: [
+            _background(),
+            _titleSection(
+                //产品名称和年利率
+                // productList,
+                // producDTOList,//哈哈标记
+                ),
+            _remark(), // 产品描述
+            _termChangeBtn(context), // 选择存款期限
+            _inputPrincipal(card), // 本金输入框
+            _accountChangeBtn(), //选择付款账户
+            _line(),
+            _ccyChangeBtn(), //选择支付币种
+            _line(),
+            _expectedPayment(),
+            _line(),
+            _settAcChangeBtn(), //结算账户
+            _line(),
+            _instructionChangeBtn(), //选择到期指示
+            _submitButton(),
+          ],
+        ),
       ),
     );
   }
 
+  Future<void> _network() async {
+    HSProgressHUD.show();
+
+    await _getTdProdTermRate();
+
+    await _loadData();
+
+    await _getInsCode();
+
+    HSProgressHUD.dismiss();
+  }
+
 //获取卡列表
-  Future<void> _loadData() async {
+  Future<bool> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
     custID = prefs.getString(ConfigKey.CUST_ID);
     // CardDataRepository()
-    ApiClientAccount().getCardList(GetCardListReq()).then(
-      (data) {
-        if (data.cardList != null) {
-          if (this.mounted) {
-            setState(() {
-              cards.clear();
-              // cards.addAll(data.cardList);
-              data.cardList.forEach((element) {
-                bool isContainer = cards.contains(element.cardNo);
-                if (!isContainer) {
-                  cards.add(element.cardNo);
-                }
-              });
-              cards = cards.toSet().toList();
-              _changedAccountTitle = FormatUtil.formatSpace4(cards[0]);
-              _getCardBal(cards[0].replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
+    try {
+      GetCardListResp resp =
+          await ApiClientAccount().getCardList(GetCardListReq());
+      if (resp.cardList != null) {
+        if (this.mounted) {
+          setState(() {
+            cards.clear();
+            // cards.addAll(data.cardList);
+            resp.cardList.forEach((element) {
+              bool isContainer = cards.contains(element.cardNo);
+              if (!isContainer) {
+                cards.add(element.cardNo);
+              }
             });
-          }
+            cards = cards.toSet().toList();
+            _changedAccountTitle = FormatUtil.formatSpace4(cards[0]);
+            _getCardBal(cards[0].replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
+          });
         }
-      },
-    ).catchError((e) {
+      }
+      return true;
+    } catch (e) {
       HSProgressHUD.showToast(e.error);
-    });
+      return false;
+    }
   }
 
   //汇率换算
@@ -1152,145 +1162,151 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   }
 
   ///根据产品代码获取产品支持的待办指示
-  Future _getTdProdInstCode() async {
-    ApiClientTimeDeposit()
-        .getTdProdInstCode(
-            GetTdProductInstCodeReq(this._detailProducDTOList.bppdCode ?? ''))
-        .then((data) {
-      List<String> instructionDataList = [];
-      List<String> instructionList = [];
-      for (var i = 0; i < instructionDatas.length; i++) {
-        if (data.insCodes.contains(instructionDatas[i])) {
-          instructionDataList.add(instructionDatas[i]);
-          instructionList.add(instructions[i]);
+  Future<bool> _getTdProdInstCode() async {
+    try {
+      GetTdProductInstCodeResp resp = await ApiClientTimeDeposit()
+          .getTdProdInstCode(GetTdProductInstCodeReq(
+              this._detailProducDTOList.bppdCode ?? ''));
+      if (resp != null) {
+        List<String> instructionDataList = [];
+        List<String> instructionList = [];
+        for (var i = 0; i < instructionDatas.length; i++) {
+          if (resp.insCodes.contains(instructionDatas[i])) {
+            instructionDataList.add(instructionDatas[i]);
+            instructionList.add(instructions[i]);
+          }
         }
+        setState(() {
+          instructionDatas = instructionDataList;
+          instructions = instructionList;
+          _prodType = resp.prdAcCd ?? '';
+        });
       }
-      setState(() {
-        instructionDatas = instructionDataList;
-        instructions = instructionList;
-        _prodType = data.prdAcCd ?? '';
-      });
-    }).catchError((e) {
+      return true;
+    } catch (e) {
       HSProgressHUD.showToast(e.error);
-    });
+      return false;
+    }
   }
 
   //获取到期指示列表
-  Future _getInsCode() async {
+  Future<bool> _getInsCode() async {
     // PublicParametersRepository()
-    ApiClientOpenAccount().getIdType(GetIdTypeReq("EXP_IN")).then(
-      (data) {
-        if (data.publicCodeGetRedisRspDtoList != null) {
-          data.publicCodeGetRedisRspDtoList.forEach((element) {
-            if (this.mounted) {
-              // setState(() {
-              if (language == 'zh_CN') {
-                instructions.add(element.cname);
-              } else {
-                instructions.add(element.name);
-              }
-              instructionDatas.add(element.code);
-              // });
+    try {
+      GetIdTypeResp resp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq("EXP_IN"));
+      if (resp.publicCodeGetRedisRspDtoList != null) {
+        resp.publicCodeGetRedisRspDtoList.forEach((element) {
+          if (this.mounted) {
+            // setState(() {
+            if (language == 'zh_CN') {
+              instructions.add(element.cname);
+            } else {
+              instructions.add(element.name);
             }
-          });
-          _getTdProdInstCode();
-        }
-      },
-    ).catchError((e) {
+            instructionDatas.add(element.code);
+            // });
+          }
+        });
+        return _getTdProdInstCode();
+      }
+      return false;
+    } catch (e) {
       HSProgressHUD.showToast(e.error);
-    });
+      return false;
+    }
   }
 
-  //立即存入接口
-  Future<void> _loadContractData(
-      String accuPeriod,
-      String annualInterestRate,
-      String auctCale,
-      double bal,
-      String bppdCode,
-      String ccy,
-      String ciNo,
-      String depositType,
-      String instCode,
-      String oppAc,
-      String payPassword,
-      String prodName,
-      String settDdAc,
-      String smsCode,
-      String tenor) async {
-    if (this.mounted) {
-      setState(() {
-        _isDeposit = true;
-      });
-    }
-    // HSProgressHUD.show();
-    // TimeDepositDataRepository()
+  // //立即存入接口
+  // Future<void> _loadContractData(
+  //     String accuPeriod,
+  //     String annualInterestRate,
+  //     String auctCale,
+  //     double bal,
+  //     String bppdCode,
+  //     String ccy,
+  //     String ciNo,
+  //     String depositType,
+  //     String instCode,
+  //     String oppAc,
+  //     String payPassword,
+  //     String prodName,
+  //     String settDdAc,
+  //     String smsCode,
+  //     String tenor) async {
+  //   if (this.mounted) {
+  //     setState(() {
+  //       _isDeposit = true;
+  //     });
+  //   }
+  //   // HSProgressHUD.show();
+  //   // TimeDepositDataRepository()
 
-    String stlAc = settDdAc;
-    if (_prodType == '020' && instCode == '3') {
-      stlAc = '';
-    } else if (_prodType == '027' && instCode == '6') {
-      stlAc = '';
-    }
-    ApiClientTimeDeposit()
-        .getTimeDepositContract(
-      TimeDepositContractReq(
-          accuPeriod,
-          annualInterestRate,
-          auctCale,
-          bal,
-          bppdCode,
-          ccy,
-          ciNo,
-          depositType,
-          instCode,
-          oppAc,
-          payPassword,
-          prodName,
-          stlAc,
-          smsCode,
-          tenor,
-          intAc: _prodType == '020' ? '' : settDdAc),
-    )
-        .then((value) {
-      if (this.mounted) {
-        setState(() {
-          // HSProgressHUD.dismiss();
-          _isDeposit = false;
-          Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
-              arguments: 'timeDepositProduct');
-        });
-      }
-    }).catchError((e) {
-      if (this.mounted) {
-        setState(() {
-          _isDeposit = false;
-          HSProgressHUD.showToast(e.error);
-        });
-      }
-    });
-  }
+  //   String stlAc = settDdAc;
+  //   if (_prodType == '020' && instCode == '3') {
+  //     stlAc = '';
+  //   } else if (_prodType == '027' && instCode == '6') {
+  //     stlAc = '';
+  //   }
+  //   ApiClientTimeDeposit()
+  //       .getTimeDepositContract(
+  //     TimeDepositContractReq(
+  //         accuPeriod,
+  //         annualInterestRate,
+  //         auctCale,
+  //         bal,
+  //         bppdCode,
+  //         ccy,
+  //         ciNo,
+  //         depositType,
+  //         instCode,
+  //         oppAc,
+  //         payPassword,
+  //         prodName,
+  //         stlAc,
+  //         smsCode,
+  //         tenor,
+  //         intAc: _prodType == '020' ? '' : settDdAc),
+  //   )
+  //       .then((value) {
+  //     if (this.mounted) {
+  //       setState(() {
+  //         // HSProgressHUD.dismiss();
+  //         _isDeposit = false;
+  //         Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
+  //             arguments: 'timeDepositProduct');
+  //       });
+  //     }
+  //   }).catchError((e) {
+  //     if (this.mounted) {
+  //       setState(() {
+  //         _isDeposit = false;
+  //         HSProgressHUD.showToast(e.error);
+  //       });
+  //     }
+  //   });
+  // }
 
   //获取定期产品利率和存期
-  Future _getTdProdTermRate() async {
-    if (this.mounted) {
-      setState(() {
-        _showTermRate = true;
-      });
-    }
-
-    ApiClientTimeDeposit()
-        .getTdProductTermRate(GetTdProductTermRateReq(
-            _detailProducDTOList.ccy, _detailProducDTOList.bppdCode)) //哈哈标记
-        .then((data) {
+  Future<bool> _getTdProdTermRate() async {
+    // if (this.mounted) {
+    //   setState(() {
+    //     _showTermRate = true;
+    //   });
+    // }
+    // HSProgressHUD.show();
+    try {
+      GetTdProductTermRateResp resp = await ApiClientTimeDeposit()
+          .getTdProductTermRate(GetTdProductTermRateReq(
+              _detailProducDTOList.ccy, _detailProducDTOList.bppdCode));
       if (this.mounted) {
         setState(() {
-          if (data != null) {
-            ccy = data.ccy;
-            _minAmt = data.minAmt;
-            _maxAmt = data.maxAmt;
-            if (data.recordLists != null) {
-              data.recordLists.forEach((value) {
+          if (resp != null) {
+            ccy = resp.ccy;
+            _minAmt = resp.minAmt;
+            _maxAmt = resp.maxAmt;
+            if (resp.recordLists != null) {
+              resp.recordLists.forEach((value) {
                 _termCodes.add(value.term);
                 _rates.add(value.intRat);
               });
@@ -1305,15 +1321,12 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           }
         });
         // HSProgressHUD.dismiss();
-        _showTermRate = false;
+        // _showTermRate = false;
       }
-    }).catchError((e) {
-      if (this.mounted) {
-        setState(() {
-          _showTermRate = false;
-          HSProgressHUD.showToast(e.error);
-        });
-      }
-    });
+      return true;
+    } catch (e) {
+      HSProgressHUD.showToast(e.error);
+      return false;
+    }
   }
 }

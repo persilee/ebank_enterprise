@@ -3,6 +3,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
 import 'package:ebank_mobile/page/home/hsg_home_page.dart';
 import 'package:ebank_mobile/page/mine/mine_page.dart';
+import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/status_bar_util.dart';
 import 'package:flutter/material.dart';
 
@@ -117,6 +118,10 @@ class _IndexPageState extends State<IndexPage> {
       //     curve: Curves.easeIn, duration: Duration(milliseconds: 160));
       _pageController.jumpToPage(currentIndex);
     });
+    // if (index == 0) {
+    //   EventBusUtils.getInstance()
+    //       .fire(GetUserEvent(msg: "通知重新获取用户信息getUser", state: 200));
+    // }
   }
 
   /*切换页面*/
