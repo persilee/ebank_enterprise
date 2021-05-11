@@ -155,7 +155,7 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
           opacity: animation,
           child: SizeTransition(
             sizeFactor: animation,
-            child: _selectionTimeData(context),
+            child: _selectionTimeData(popcontext),
           ),
         );
       },
@@ -181,7 +181,7 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
         ));
   }
 
-//筛选条件文本
+  //筛选条件文本
   Widget _condition() {
     return Container(
       width: (MediaQuery.of(context).size.width - 30) / 5 * 2,
@@ -197,7 +197,7 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
     return Container(
       width: (MediaQuery.of(context).size.width - 90) / 5 * 3,
       child: Text(
-        '20210301-20210601',
+        _start + '-' + _end,
         style: TextStyle(
             color: HsgColors.firstDegreeText,
             fontSize: 13,
@@ -207,7 +207,7 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
     );
   }
 
-// 设置单侧边框的样式
+  // 设置单侧边框的样式
   BorderSide _lineBorderSide() {
     return BorderSide(
       color: HsgColors.divider,
@@ -248,9 +248,8 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //自定义时间
-                  _timeText(Intl.S.current.user_defined),
-                  _userDefind(popcontext),
+                  _timeText(Intl.S.current.user_defined), //自定义时间文本
+                  _userDefind(popcontext), //时间选择文本
                   //按钮
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -273,7 +272,7 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
     print(name);
     return Container(
       margin: EdgeInsets.fromLTRB(10, 5, 5, 5),
-      width: MediaQuery.of(context).size.width / 2.7,
+      width: MediaQuery.of(popcontext).size.width / 2.7,
       height: 30,
       decoration: BoxDecoration(
         color: Color(0xffECECEC),
@@ -373,7 +372,7 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
             _endDate = DateFormat('yyyy-MM-dd').format(dateTime);
           }
         });
-        // (popcontext as Element).markNeedsBuild();
+        (popcontext as Element).markNeedsBuild();
       },
     );
   }
@@ -445,11 +444,7 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
             dataList.clear();
           });
           Navigator.of(context).pop();
-          // if (_position != 0) {
-          // _getRevenueByCards(_startDate, _accNoList);
-          // } else {
-          // _getRevenueByCards(_startDate, _allAccNoList);
-          // }
+          _loadData();
         },
       ),
     );
