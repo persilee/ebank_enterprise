@@ -28,14 +28,12 @@ class SendSmsByPhoneNumberReq {
   @JsonKey(name: 'msgBankId')
   String msgBankId;
 
-  SendSmsByPhoneNumberReq(
-    this.areaCode,
-    this.phoneNumber,
-    this.smsType,
-    this.smsTemplateId,
-    this.msgChnnl,
-  {this.msgBankId}
-  );
+  @JsonKey(name: 'userAccount')
+  String userAccount;
+
+  SendSmsByPhoneNumberReq(this.areaCode, this.phoneNumber, this.smsType,
+      this.smsTemplateId, this.msgChnnl, {this.userAccount,
+      this.msgBankId});
 
   // @override
   // String toString() {

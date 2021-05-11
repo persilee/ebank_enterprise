@@ -97,6 +97,8 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
           HSProgressHUD.showToastTip(
             '${_packageInfo.appName}进入后台运行',
           );
+        } else {
+          print('这是苹果问题');
         }
         break;
       case AppLifecycleState.detached: // APP结束时调用

@@ -73,7 +73,6 @@ class _RegisterPageState extends State<RegisterPage> {
       setState(() {
         _userNameListen = _userName.text;
       });
-      print("$_userNameListen>>>>>>>>>");
     });
   }
 
@@ -199,25 +198,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           onPressed: _submit()
                               ? () {
-                                  // 触摸收起键盘
-                                  FocusScope.of(context)
-                                      .requestFocus(FocusNode());
-                                  RegExp userName =
-                                      new RegExp("[a-zA-Z0-9]{4,16}");
-                                  //特殊字符
-                                  RegExp characters = new RegExp(
-                                      "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
-                                  if (userName.hasMatch(_userName.text) ==
-                                          false ||
-                                      characters.hasMatch(_userName.text) ==
-                                          true) {
-                                    //校验用户名
-                                    HSProgressHUD.showToastTip(
-                                      S.current.register_check_username,
-                                    );
-                                  } else {
-                                    _checkRegisterBysencond();
+                                  if (_checkClick()) {
+                                    return;
                                   }
+                                  _checkRegisterBysencond();
                                 }
                               : null,
                         ),
@@ -239,6 +223,37 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+  }
+
+  bool _checkClick() {
+    FocusScope.of(context).requestFocus(FocusNode());
+    bool isError = true;
+    // 触摸收起键盘
+
+    RegExp userName = new RegExp("[a-zA-Z0-9]{4,16}");
+    //特殊字符
+    RegExp characters = new RegExp(
+        "[ ,\\`,\\~,\\!,\\@,\#,\$,\\%,\\^,\\+,\\*,\\&,\\\\,\\/,\\?,\\|,\\:,\\.,\\<,\\>,\\{,\\},\\(,\\),\\'',\\;,\\=,\",\\,,\\-,\\_,\\[,\\],]");
+    if (_phoneNum.text == null || _phoneNum.text == '') {
+      // 请输入手机号
+      HSProgressHUD.showToastTip(
+        S.current.please_input_mobile_num,
+      );
+    } else if (_userName.text == null || _userName.text == '') {
+      // 请输入用户名
+      HSProgressHUD.showToastTip(
+        S.current.please_input_username,
+      );
+    } else if (userName.hasMatch(_userName.text) == false ||
+        characters.hasMatch(_userName.text) == true) {
+      //校验用户名
+      HSProgressHUD.showToastTip(
+        S.current.register_check_username,
+      );
+    } else {
+      isError = false;
+    }
+    return isError;
   }
 
   //检验用户是否注册及发短信
@@ -267,12 +282,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   //获取注册发送短信验证码接口
   _sendSmsRegister(bool _isRegister) async {
-    print('$_isRegister>>>>>>>>');
     // VerificationCodeRepository()
     ApiClientPassword()
         .sendSmsByPhone(SendSmsByPhoneNumberReq(
             _officeAreaCodeText, _phoneNum.text, 'register', 'SCNAOREGU', 'MB',
-            msgBankId: '999'))
+            userAccount: _userName.text, msgBankId: '999'))
         .then((value) {
       if (mounted) {
         setState(() {
@@ -355,7 +369,9 @@ class _RegisterPageState extends State<RegisterPage> {
       onPressed: countdownTime > 0
           ? null
           : () {
-              FocusScope.of(context).requestFocus(FocusNode());
+              if (_checkClick()) {
+                return;
+              }
               _checkRegister();
             },
       //文字颜色
@@ -386,7 +402,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   //选择地区方法
   _selectRegionCode() {
-    print('区号');
     FocusScope.of(context).requestFocus(FocusNode());
     Navigator.pushNamed(context, countryOrRegionSelectPage).then((value) {
       setState(() {

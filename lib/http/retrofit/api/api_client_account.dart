@@ -108,4 +108,8 @@ abstract class ApiClientAccount {
   @POST('/cust/user/getUserStatusByPhone')
   Future<LoginVerifyPhoneResp> forgetVerifyPhoneOpenAccount(
       @Body() LoginVerifyPhoneReq req);
+
+  ///退出登录的时候清除验证码
+  @POST('/cust/codes/removeSmsCode')
+  Future removeSmsCodeRequest(@Body() String userPhone);
 }

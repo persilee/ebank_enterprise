@@ -7,9 +7,11 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sp_util/sp_util.dart';
 
 class PasswordManagementPage extends StatefulWidget {
   @override
@@ -104,7 +106,7 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
                   //修改交易密码
                   (['0', '1', '2', '3', ''].contains(_belongCustStatus))
                       ? _notOpenAccountTip()
-                      : Navigator.pushNamed(context, changePayPS);
+                      : _pushChangePayPassword();
                 }),
                 // _flatBtnNuitWidget(S.of(context).changPayPws, true, () {
                 //   Navigator.pushNamed(context, changePayPS);
@@ -127,6 +129,24 @@ class _PasswordManagementPageState extends State<PasswordManagementPage> {
         ],
       ),
     );
+  }
+
+  void _pushChangePayPassword() {
+    bool passwordEnabled = SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED);
+    // 判断是否设置交易密码，如果没有设置，跳转到设置密码页面，
+    if (!passwordEnabled) {
+      HsgShowTip.shouldSetTranPasswordTip(
+        context: context,
+        click: (value) {
+          if (value == true) {
+            //前往设置交易密码
+            Navigator.pushNamed(context, pageResetPayPwdOtp);
+          }
+        },
+      );
+    } else {
+      Navigator.pushNamed(context, changePayPS);
+    }
   }
 
   _notOpenAccountTip() {
