@@ -18,6 +18,7 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/pay_password_check.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
@@ -163,7 +164,10 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
         padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
         onPressed: () {
           //弹出底部弹窗输入密码
-          _openBottomSheet();
+          // _openBottomSheet();
+          // CheckPayPassword(context, () {
+          _loadData(); //还款
+          // });
         },
         shape: RoundedRectangleBorder(
           side: BorderSide.none,
@@ -191,47 +195,6 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
         ),
       ),
     );
-  }
-
-  //点击确认按钮
-  void _openBottomSheet() async {
-    bool passwordEnabled = SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED);
-    // 判断是否设置交易密码，如果没有设置，跳转到设置密码页面，
-    if (!passwordEnabled) {
-      HsgShowTip.shouldSetTranPasswordTip(
-        context: context,
-        click: (value) {
-          if (value == true) {
-            //前往设置交易密码
-            Navigator.pushNamed(context, pageResetPayPwdOtp);
-          }
-        },
-      );
-    } else {
-      // 输入交易密码
-      bool isPassword = await _didBottomSheet();
-      // 如果交易密码正确，处理审批逻辑
-      if (isPassword) {
-        _loadData(); //还款
-      }
-    }
-  }
-
-  //交易密码窗口
-  Future<bool> _didBottomSheet() async {
-    final isPassword = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return HsgPasswordDialog(
-            title: S.current.input_password,
-            isDialog: false,
-          );
-        });
-    if (isPassword != null && isPassword == true) {
-      return true;
-    }
-    FocusManager.instance.primaryFocus?.unfocus();
-    return false;
   }
 
   Widget _getPadding(double l, double t, double r, double b) {
