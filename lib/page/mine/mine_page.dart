@@ -719,11 +719,14 @@ class _MinePageState extends State<MinePage>
         _headPortraitUrl = model.headPortrait; //头像地址
         _enterpriseName =
             _language == 'en' ? model.custEngName : model.custLocalName; // 企业名称
-        _userName = model.userAccount;
-        // _language == 'en'
-        //     ? model.englishUserName
-        //     : model.localUserName; // 姓名
-        // _userName = _userName == null ? model.userAccount : _userName;
+        _userName = _language == 'en'
+            ? model.englishUserName
+            : model.localUserName; // 姓名
+        _userName = (_userName == null ||
+                _userName == '' ||
+                !(['4', '5'].contains(_belongCustStatus)))
+            ? model.userAccount
+            : _userName;
         _characterName = _language == 'en'
             ? model.custFirmRoleDTO.englishRoleName ?? ''
             : model.custFirmRoleDTO.localRoleName ?? ''; //用户角色名称
