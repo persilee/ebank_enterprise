@@ -55,7 +55,7 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                 height: 45,
                 child: FlatButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.of(context)..pop();
                   },
                   color: HsgColors.accent,
                   child: (Text(S.current.complete,
