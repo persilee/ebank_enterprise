@@ -54,19 +54,19 @@ class _IndexPageState extends State<IndexPage> {
             ),
             label: S.current.home,
           ),
-          // BottomNavigationBarItem(
-          //   icon: Image(
-          //     image: AssetImage('images/tabbar/tabbar_approval_normal.png'),
-          //     width: 24,
-          //     height: 24,
-          //   ),
-          //   activeIcon: Image(
-          //     image: AssetImage('images/tabbar/tabbar_approval_select.png'),
-          //     width: 24,
-          //     height: 24,
-          //   ),
-          //   label: S.current.approval,
-          // ),
+          BottomNavigationBarItem(
+            icon: Image(
+              image: AssetImage('images/tabbar/tabbar_approval_normal.png'),
+              width: 24,
+              height: 24,
+            ),
+            activeIcon: Image(
+              image: AssetImage('images/tabbar/tabbar_approval_select.png'),
+              width: 24,
+              height: 24,
+            ),
+            label: S.current.approval,
+          ),
           BottomNavigationBarItem(
             icon: Image(
               image: AssetImage('images/tabbar/tabbar_mine_normal.png'),
@@ -92,7 +92,7 @@ class _IndexPageState extends State<IndexPage> {
       body: PageView(
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
-        children: [HomePage(), MinePage()], //, ApprovalPage()
+        children: [HomePage(), ApprovalPage(), MinePage()],
         onPageChanged: (page) {
           if (page == 0)
             StatusBarUtil.setStatusBar(Brightness.light,
