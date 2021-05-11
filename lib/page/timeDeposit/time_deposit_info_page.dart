@@ -6,22 +6,20 @@
  */
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/card_data_repository.dart';
-import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_early_contract.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_trial.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/get_td_prod_inst_code.dart';
 import 'package:ebank_mobile/data/source/model/update_time_deposit_con_info.dart';
-import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
-import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/pay_password_check.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -40,7 +38,7 @@ class PageDepositInfo extends StatefulWidget {
   PageDepositInfo({Key key, this.deposit}) : super(key: key);
 
   @override
-  _PageDepositInfo createState() => _PageDepositInfo(deposit);
+  _PageDepositInfo createState() => _PageDepositInfo();
 }
 
 class _PageDepositInfo extends State<PageDepositInfo> {
@@ -59,8 +57,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   var conNos = '';
 
   var settDbAc = '';
-
-  DepositRecord deposit;
 
   GetDepositTrialResp _trialResp;
 
@@ -96,7 +92,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   var transferAc = '';
 
-  _PageDepositInfo(this.deposit);
+  // _PageDepositInfo(widget.deposit);
 
   List<String> cards = [];
 
@@ -366,7 +362,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   @override
   Widget build(BuildContext context) {
-    deposit = ModalRoute.of(context).settings.arguments;
+    // deposit = ModalRoute.of(context).settings.arguments;
 
     String _language = Intl.getCurrentLocale();
     String _nameStr = '';
@@ -612,47 +608,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     });
   }
 
-  //点击提前结清
-  _openBottomSheet(BuildContext context) async {
-    // bool passwordEnabled = SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED);
-    // // 判断是否设置交易密码，如果没有设置，跳转到设置密码页面，
-    // if (!passwordEnabled) {
-    //   HsgShowTip.shouldSetTranPasswordTip(
-    //     context: context,
-    //     click: (value) {
-    //       if (value == true) {
-    //         //前往设置交易密码
-    //         Navigator.pushNamed(context, pageResetPayPwdOtp);
-    //       }
-    //     },
-    //   );
-    // } else {
-    //   // 输入交易密码
-    //   bool isPassword = await _didBottomSheet();
-    //   // 如果交易密码正确，处理审批逻辑
-    //   if (isPassword) {
-    _contractEarly(context); //领用
-    //   }
-    // }
-  }
-
-  //交易密码窗口
-  Future<bool> _didBottomSheet() async {
-    final isPassword = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return HsgPasswordDialog(
-            title: S.current.input_password,
-            isDialog: false,
-          );
-        });
-    if (isPassword != null && isPassword == true) {
-      return true;
-    }
-    FocusManager.instance.primaryFocus?.unfocus();
-    return false;
-  }
-
 // 提前结清接口调整
   _contractEarly(BuildContext context) {
     if (this.mounted) {
@@ -700,19 +655,19 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
   //获取详情
   _getDetail() {
-    conNos = deposit.conNo;
-    ccy = deposit.ccy;
-    bal = deposit.bal;
-    _paymentAc = deposit.openDrAc;
-    _changedSettAcTitle = deposit.settDdAc;
-    valDate = deposit.valDate;
-    mtDate = deposit.mtDate;
-    productName = deposit.engName;
-    auctCale = deposit.auctCale;
-    _changedInstCode = deposit.instCode;
-    _changedSettAc = deposit.settDdAc;
+    conNos = widget.deposit.conNo;
+    ccy = widget.deposit.ccy;
+    bal = widget.deposit.bal;
+    _paymentAc = widget.deposit.openDrAc;
+    _changedSettAcTitle = widget.deposit.settDdAc;
+    valDate = widget.deposit.valDate;
+    mtDate = widget.deposit.mtDate;
+    productName = widget.deposit.engName;
+    auctCale = widget.deposit.auctCale;
+    _changedInstCode = widget.deposit.instCode;
+    _changedSettAc = widget.deposit.settDdAc;
 
-    switch (deposit.accuPeriod) {
+    switch (widget.deposit.accuPeriod) {
       case '1':
         _termUnit = S.current.tdContract_day;
         break;
@@ -723,7 +678,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         _termUnit = S.current.year;
         break;
     }
-    switch (deposit.instCode) {
+    switch (widget.deposit.instCode) {
       case '1':
         instruction = S.current.tdInfo_transfer_to_current_account;
         break;
@@ -755,7 +710,9 @@ class _PageDepositInfo extends State<PageDepositInfo> {
       _modify = S.current.tdEarlyRed_modify_expiration_instruction;
     } else {
       //提前结清
-      _openBottomSheet(context);
+      // CheckPayPassword(context, () {
+      _contractEarly(context);
+      // });
     }
   }
 
@@ -784,25 +741,53 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     });
   }
 
+  ///根据产品代码获取产品支持的待办指示
+  Future _getTdProdInstCode() async {
+    ApiClientTimeDeposit()
+        .getTdProdInstCode(
+            GetTdProductInstCodeReq(widget.deposit.prdCode ?? ''))
+        .then((data) {
+      HSProgressHUD.dismiss();
+      List<String> instructionDataList = [];
+      List<String> instructionList = [];
+      for (var i = 0; i < instCodes.length; i++) {
+        if (data.insCodes.contains(instCodes[i])) {
+          instructionDataList.add(instCodes[i]);
+          instructionList.add(instructions[i]);
+        }
+      }
+      setState(() {
+        instCodes = instructionDataList;
+        instructions = instructionList;
+      });
+    }).catchError((e) {
+      HSProgressHUD.showToast(e.error);
+    });
+  }
+
 //获取到期指示列表
   Future _getInsCode() async {
     // PublicParametersRepository()
+    HSProgressHUD.show();
     ApiClientOpenAccount().getIdType(GetIdTypeReq("EXP_IN")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         instructions.clear();
         instCodes.clear();
         data.publicCodeGetRedisRspDtoList.forEach((element) {
           if (this.mounted) {
-            setState(() {
-              instCodes.add(element.code);
-              if (language == 'zh_CN') {
-                instructions.add(element.cname);
-              } else {
-                instructions.add(element.name);
-              }
-            });
+            // setState(() {
+            instCodes.add(element.code);
+            if (language == 'zh_CN') {
+              instructions.add(element.cname);
+            } else {
+              instructions.add(element.name);
+            }
+            // });
           }
         });
+        _getTdProdInstCode();
+      } else {
+        HSProgressHUD.dismiss();
       }
     }).catchError((e) {
       HSProgressHUD.showToast(e.error);
@@ -819,10 +804,12 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     String settIntAc,
   ) async {
     // TimeDepositDataRepository()
+    HSProgressHUD.show();
     ApiClientTimeDeposit()
         .updateTimeDepositConInfo(UpdateTdConInfoReq(
             ccy, conNo, instCode, intAcCcy, settDdAc, settIntAc))
         .then((data) {
+      HSProgressHUD.dismiss();
       setState(() {
         if (_modify == S.current.tdEarlyRed_modify_expiration_instruction) {
           instruction = _changedInstruction;

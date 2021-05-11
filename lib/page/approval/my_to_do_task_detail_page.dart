@@ -12,6 +12,7 @@ import 'package:ebank_mobile/data/source/model/approval/find_all_finished_task_m
 import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
+import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_detail_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/international_transfer_detail_model.dart'
     as InternationalModel;
 import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_body.dart';
@@ -32,10 +33,12 @@ import 'package:ebank_mobile/data/source/model/approval/post_repayment_model.dar
 import 'package:ebank_mobile/data/source/model/approval/loan_with_drawal_model.dart'
     as LoanWithDrawalModel;
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
+import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -83,6 +86,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   List<Widget> _postRepaymentList = [];
   List<Widget> _loanWithDrawalList = [];
   List<Widget> _finishedList = [];
+  List<dynamic> _commentList = [];
   final f = NumberFormat("#,##0.00", "en_US");
   final fj = NumberFormat("#,##0", "ja-JP");
   bool _isShowErrorPage = false;
@@ -163,7 +167,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // loanWithDrawalApproval - 贷款领用
   void _loanWithDrawalData(_contractModel) async {
     LoanWithDrawalModel.LoanWithDrawalModel loanWithDrawalModel =
-        LoanWithDrawalModel.LoanWithDrawalModel.fromJson(_contractModel);
+    LoanWithDrawalModel.LoanWithDrawalModel.fromJson(_contractModel);
 
     LoanWithDrawalModel.OperateEndValue data =
         loanWithDrawalModel.operateEndValue;
@@ -172,7 +176,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _iratTm = '';
     try {
       GetIdTypeResp getIdTypeResp =
-          await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
+      await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
@@ -189,7 +193,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _repType = '';
     try {
       GetIdTypeResp getIdTypeResp =
-          await ApiClientOpenAccount().getIdType(GetIdTypeReq('REPAY_TYPE'));
+      await ApiClientOpenAccount().getIdType(GetIdTypeReq('REPAY_TYPE'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
@@ -204,9 +208,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     // 添加历史审批记录
     if (loanWithDrawalModel.commentList.isNotEmpty) {
+      _commentList = loanWithDrawalModel.commentList;
       loanWithDrawalModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
@@ -251,16 +255,16 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // postRepaymentApproval  - 提前还款
   void _loadPostRepaymentData(_contractModel) {
     PostRepaymentModel.PostRepaymentModel postRepaymentModel =
-        PostRepaymentModel.PostRepaymentModel.fromJson(_contractModel);
+    PostRepaymentModel.PostRepaymentModel.fromJson(_contractModel);
 
     PostRepaymentModel.OperateEndValue data =
         postRepaymentModel.operateEndValue;
 
     // 添加历史审批记录
     if (postRepaymentModel.commentList.isNotEmpty) {
+      _commentList = postRepaymentModel.commentList;
       postRepaymentModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
@@ -322,7 +326,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // foreignTransferApproval - 外汇买卖
   void _loadForeignTransferData(_contractModel) async {
     ForeignTransferModel.ForeignTransferModel foreignTransferModel =
-        ForeignTransferModel.ForeignTransferModel.fromJson(_contractModel);
+    ForeignTransferModel.ForeignTransferModel.fromJson(_contractModel);
 
     ForeignTransferModel.OperateEndValue data =
         foreignTransferModel.operateEndValue;
@@ -343,9 +347,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     // 添加历史审批记录
     if (foreignTransferModel.commentList.isNotEmpty) {
+      _commentList = foreignTransferModel.commentList;
       foreignTransferModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
@@ -389,16 +393,16 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // transferPlanApproval - 预约转账
   void _loadTransferPlanData(_contractModel) {
     TransferPlanModel.TransferPlanDetailModel transferPlanDetailModel =
-        TransferPlanModel.TransferPlanDetailModel.fromJson(_contractModel);
+    TransferPlanModel.TransferPlanDetailModel.fromJson(_contractModel);
 
     TransferPlanModel.OperateEndValue data =
         transferPlanDetailModel.operateEndValue;
 
     // 添加历史审批记录
     if (transferPlanDetailModel.commentList.isNotEmpty) {
+      _commentList = transferPlanDetailModel.commentList;
       transferPlanDetailModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
@@ -450,9 +454,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // internationalTransferApproval - 国际汇款
   void _loadInternationalData(_contractModel) async {
     InternationalModel.InternationalTransferDetailModel
-        internationalTransferDetailModel =
-        InternationalModel.InternationalTransferDetailModel.fromJson(
-            _contractModel);
+    internationalTransferDetailModel =
+    InternationalModel.InternationalTransferDetailModel.fromJson(
+        _contractModel);
 
     InternationalModel.OperateEndValue data =
         internationalTransferDetailModel.operateEndValue;
@@ -475,7 +479,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _costOptions = '';
     try {
       GetIdTypeResp getIdTypeResp =
-          await ApiClientOpenAccount().getIdType(GetIdTypeReq('PAY_METHOD'));
+      await ApiClientOpenAccount().getIdType(GetIdTypeReq('PAY_METHOD'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
@@ -492,8 +496,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _district = '';
     try {
       CountryRegionNewListResp countryRegionNewListResp =
-          await ApiClientOpenAccount()
-              .getCountryList(CountryRegionNewListReq());
+      await ApiClientOpenAccount()
+          .getCountryList(CountryRegionNewListReq());
       List<CountryRegionNewModel> _countryRegionNewList =
           countryRegionNewListResp.countryCodeinfoDTOList;
       if (_countryRegionNewList.isNotEmpty) {
@@ -507,11 +511,23 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       print(e);
     }
 
+    // 获取收款银行
+    String _payeeBank = '';
+    if(data.bankSwift.isNotEmpty) {
+      try {
+        GetInfoBySwiftCodeResp getInfoBySwiftCodeResp =
+        await Transfer().getInfoBySwiftCode(GetInfoBySwiftCodeReq(data.bankSwift));
+        _payeeBank = getInfoBySwiftCodeResp.swiftName1 + getInfoBySwiftCodeResp.swiftName2 + getInfoBySwiftCodeResp.swiftName3;
+      } catch (e) {
+        print(e);
+      }
+    }
+
     // 添加历史审批记录
     if (internationalTransferDetailModel.commentList.isNotEmpty) {
+      _commentList = internationalTransferDetailModel.commentList;
       internationalTransferDetailModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
@@ -538,7 +554,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _internationalList.add(_buildContentItem(
             S.current.approve_swift_code, data?.bankSwift ?? ''));
         _internationalList.add(_buildContentItem(
-            S.current.approve_collecting_bank, data?.payeeBankCode ?? ''));
+            S.current.approve_collecting_bank, data?.payeeBankCode ?? _payeeBank ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_collection_address, data?.payeeAddress ?? ''));
         _internationalList.add(
@@ -575,7 +591,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // oneToOneTransferApproval - 行内转账
   void _loadOneToOneData(_contractModel) async {
     OneToOneModel.OneToOneTransferDetailModel oneToOneTransferDetailModel =
-        OneToOneModel.OneToOneTransferDetailModel.fromJson(_contractModel);
+    OneToOneModel.OneToOneTransferDetailModel.fromJson(_contractModel);
 
     OneToOneModel.OperateEndValue data =
         oneToOneTransferDetailModel.operateEndValue;
@@ -596,9 +612,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     // 添加历史审批记录
     if (oneToOneTransferDetailModel.commentList.isNotEmpty) {
+      _commentList = oneToOneTransferDetailModel.commentList;
       oneToOneTransferDetailModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
@@ -650,7 +666,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // earlyRedTdContractApproval - 定期提前结清
   void _loadEarlyRedData(_contractModel) async {
     EarlyRedModel.EarlyRedTdContractDetailModel earlyRedTdContractDetailModel =
-        EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
+    EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
 
     EarlyRedModel.OperateEndValue data =
         earlyRedTdContractDetailModel.operateEndValue;
@@ -659,7 +675,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _tenorName = '';
     try {
       GetIdTypeResp getIdTypeResp =
-          await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
+      await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
@@ -676,7 +692,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _statusName = '';
     try {
       GetIdTypeResp getIdTypeResp =
-          await ApiClientOpenAccount().getIdType(GetIdTypeReq('TD_STATE'));
+      await ApiClientOpenAccount().getIdType(GetIdTypeReq('TD_STATE'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
@@ -691,9 +707,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     // 添加历史审批记录
     if (earlyRedTdContractDetailModel.commentList.isNotEmpty) {
+      _commentList = earlyRedTdContractDetailModel.commentList;
       earlyRedTdContractDetailModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
@@ -753,7 +769,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // openTdContractApproval - 开立定期存单
   void _loadOpenTdData(_contractModel) async {
     OpenTDModel.OpenTdContractDetailModel openTdContractDetailModel =
-        OpenTDModel.OpenTdContractDetailModel.fromJson(_contractModel);
+    OpenTDModel.OpenTdContractDetailModel.fromJson(_contractModel);
     OpenTDModel.OperateEndValue data =
         openTdContractDetailModel?.operateEndValue;
 
@@ -784,7 +800,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _tenorName = '';
     try {
       GetIdTypeResp getIdTypeResp =
-          await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
+      await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
@@ -801,7 +817,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _instCode = '';
     try {
       GetIdTypeResp getIdTypeResp =
-          await ApiClientOpenAccount().getIdType(GetIdTypeReq('EXP_IN'));
+      await ApiClientOpenAccount().getIdType(GetIdTypeReq('EXP_IN'));
       List<IdType> _instList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_instList.isNotEmpty) {
         _instList.forEach((element) {
@@ -816,9 +832,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     // 添加历史审批记录
     if (openTdContractDetailModel.commentList.isNotEmpty) {
+      _commentList = openTdContractDetailModel.commentList;
       openTdContractDetailModel.commentList.forEach((data) {
-        // 暂时 commentList 都为空，里面的具体字段不明
-        // _finishedList.add(_buildAvatar('',''));
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
 
@@ -1320,7 +1336,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     );
   }
 
-  Container _buildAvatar(String imageUrl, String name) {
+  Container _buildAvatar(String name, [String imageUrl]) {
     return Container(
       padding: EdgeInsets.only(right: 6.0),
       child: Row(

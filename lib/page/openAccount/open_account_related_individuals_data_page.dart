@@ -69,8 +69,8 @@ class _RelatedIndividualsDataPageState
   void initState() {
     _getPublicParameters();
 
-    _partner.partnerTypeIdType = null;
-    _partner.partnerType = '002';
+    _partner.partnerTypeIdType = [];
+    _partner.partnerType = ['002'];
 
     _documentNumberTEC.addListener(() {
       _documentNumberText = _documentNumberTEC.text;
@@ -513,8 +513,8 @@ class _RelatedIndividualsDataPageState
 
     if (result != null && result != false) {
       IdType data = _categoryTypes[result];
-      _partner.partnerTypeIdType = data;
-      _partner.partnerType = data.code;
+      _partner.partnerTypeIdType = [data];
+      _partner.partnerType = [data.code];
       setState(() {
         _categoryText = categoryList[result];
         _nextBtnEnabled = _judgeButtonIsEnabled();

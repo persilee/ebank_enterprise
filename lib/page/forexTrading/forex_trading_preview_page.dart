@@ -8,6 +8,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_bill.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/pay_password_check.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
@@ -40,7 +41,9 @@ class _ForexTradingPreviewPageState extends State<ForexTradingPreviewPage> {
               child: HsgButton.button(
                 title: S.current.confirm,
                 click: () {
+                  // CheckPayPassword(context, () {
                   _loadData(_preview);
+                  // });
                 },
                 isColor: true,
               ),

@@ -213,7 +213,7 @@ class Partner {
 
   ///类别
   @JsonKey(name: 'partnerType')
-  String partnerType;
+  List<String> partnerType;
 
   ///区号
   @JsonKey(name: 'areaCode')
@@ -246,7 +246,7 @@ class Partner {
 
   ///类别
   @JsonKey(name: 'partnerTypeIdType')
-  IdType partnerTypeIdType;
+  List<IdType> partnerTypeIdType;
 
   ///称呼
   @JsonKey(name: 'appellationIdType')

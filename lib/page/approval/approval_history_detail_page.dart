@@ -5,7 +5,7 @@ import 'package:transparent_image/transparent_image.dart';
 
 class ApprovalHistoryDetailPage extends StatefulWidget {
   final title;
-  final List<CommentList> data;
+  final List<dynamic> data;
 
   ApprovalHistoryDetailPage({Key key, this.title, this.data})
       : super(key: key);

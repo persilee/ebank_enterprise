@@ -1,3 +1,5 @@
+import '../find_user_application_task_detail.dart';
+
 /// userId : "835838936357011456"
 /// userName : "李家伟"
 /// assigneeList : null
@@ -42,7 +44,7 @@ class PostRepaymentModel {
   dynamic _amountPosition;
   dynamic _serviceType;
   dynamic _authGroups;
-  List<dynamic> _commentList;
+  List<CommentList> _commentList;
   String _result;
   dynamic _taskKey;
   int _taskCount;
@@ -67,7 +69,7 @@ class PostRepaymentModel {
   dynamic get amountPosition => _amountPosition;
   dynamic get serviceType => _serviceType;
   dynamic get authGroups => _authGroups;
-  List<dynamic> get commentList => _commentList;
+  List<CommentList> get commentList => _commentList;
   String get result => _result;
   dynamic get taskKey => _taskKey;
   int get taskCount => _taskCount;
@@ -93,7 +95,7 @@ class PostRepaymentModel {
       dynamic amountPosition, 
       dynamic serviceType, 
       dynamic authGroups, 
-      List<dynamic> commentList, 
+      List<CommentList> commentList,
       String result, 
       dynamic taskKey, 
       int taskCount, 
@@ -147,7 +149,7 @@ class PostRepaymentModel {
     if (json["commentList"] != null) {
       _commentList = [];
       json["commentList"].forEach((v) {
-        // _commentList.add(dynamic.fromJson(v));
+        _commentList.add(CommentList.fromJson(v));
       });
     }
     _result = json["result"];
