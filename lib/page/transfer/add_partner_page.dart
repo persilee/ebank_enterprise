@@ -774,6 +774,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       if (this.mounted) {
         setState(() {
           _nameController.text = data.ciName;
+          _bankCode = data.bankCode;
           _isAccount = true;
           if (_ccy != '') {
             _isInputed = true;

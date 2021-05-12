@@ -207,7 +207,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
     setState(() {
       if (_arguments != null && !check) {
         Rows rowPartner = _arguments;
-        if(rowPartner.payeeName.isEmpty) {
+        if (rowPartner.payeeName.isEmpty) {
           payeeName = _payeeNameController.text;
         } else {
           _payeeNameController.text = rowPartner.payeeName;
@@ -220,7 +220,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
         // payerName = rowPartner.payerName;
         _payeeCcy = rowPartner.ccy;
-        if(rowPartner.paysMethod == null) {
+        if (rowPartner.paysMethod == null) {
           _transferFeeCode = '';
           _transferFee = '';
         } else {
@@ -688,11 +688,12 @@ class _TransferInterPageState extends State<TransferInterPage> {
                     ? rowListPartner.payeeBankLocalName
                     : rowListPartner.payeeBankEngName;
                 _bankSwiftController.text = rowListPartner.bankSwift;
+                payeeBankCode = rowListPartner.bankCode;
                 payerBankCode = rowListPartner.payerBankCode;
                 payeeName = rowListPartner.payeeName;
                 // payerName = rowListPartner.payerName;
                 _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
-                if(rowListPartner.paysMethod == null) {
+                if (rowListPartner.paysMethod == null) {
                   _transferFeeCode = '';
                   _transferFee = '';
                 } else {
@@ -882,7 +883,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
               setState(() {
                 //付款方卡号
                 _payerAccount = element.cardList[0].cardNo;
-                payerBankCode = payeeBankCode = element.cardList[0].bankCode;
+                // payerBankCode = payeeBankCode = element.cardList[0].bankCode;
                 element.cardList.forEach((e) {
                   _payerAccountList.add(e.cardNo);
                 });

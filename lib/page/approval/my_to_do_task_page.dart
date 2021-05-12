@@ -98,9 +98,10 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
   }
 
   //加载数据
-  Future<void> _loadData({bool isLoadMore = false, bool isLoading = false}) async {
+  Future<void> _loadData(
+      {bool isLoadMore = false, bool isLoading = false}) async {
     isLoadMore ? _page++ : _page = 1;
-    if(this.mounted && isLoading) {
+    if (this.mounted && isLoading) {
       setState(() {
         _isLoading = true;
       });
@@ -118,7 +119,7 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
           if (isLoadMore == false && _page == 1) {
             _listData.clear();
           }
-          // _listData.addAll(response.rows);
+          _listData.addAll(response.rows);
           _isLoading = false;
           _isShowErrorPage = false;
           if (response.rows.length <= 10 && response.totalPage <= _page) {
@@ -192,39 +193,47 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
   Widget _rightInfo(ApprovalTask approvalTask) {
     String _language = Intl.getCurrentLocale();
     String _taskTitle = '';
-    switch(approvalTask.processKey){
-      case 'openTdContractApproval': {
-        _taskTitle = _language == 'zh_CN' ? '开立定期存单' : approvalTask?.taskName;
-      }
-      break;
-      case 'oneToOneTransferApproval': {
-        _taskTitle = _language == 'zh_CN' ? '行内转账' : approvalTask?.taskName;
-      }
-      break;
-      case 'internationalTransferApproval': {
-        _taskTitle = _language == 'zh_CN' ? '国际转账' : approvalTask?.taskName;
-      }
-      break;
-      case 'earlyRedTdContractApproval': {
-        _taskTitle = _language == 'zh_CN' ? '定期提前结清' : approvalTask?.taskName;
-      }
-      break;
-      case 'foreignTransferApproval': {
-        _taskTitle = _language == 'zh_CN' ? '外汇买卖' : approvalTask?.taskName;
-      }
-      break;
-      case 'loanWithDrawalApproval': {
-        _taskTitle = _language == 'zh_CN' ? '贷款领用' : approvalTask?.taskName;
-      }
-      break;
-      case 'postRepaymentApproval': {
-        _taskTitle = _language == 'zh_CN' ? '提前还款' : approvalTask?.taskName;
-      }
-      break;
-      case 'loanRepaymentApproval': {
-        _taskTitle = _language == 'zh_CN' ? '计划还款' : approvalTask?.taskName;
-      }
-      break;
+    switch (approvalTask.processKey) {
+      case 'openTdContractApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '开立定期存单' : approvalTask?.taskName;
+        }
+        break;
+      case 'oneToOneTransferApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '行内转账' : approvalTask?.taskName;
+        }
+        break;
+      case 'internationalTransferApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '国际转账' : approvalTask?.taskName;
+        }
+        break;
+      case 'earlyRedTdContractApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '定期提前结清' : approvalTask?.taskName;
+        }
+        break;
+      case 'foreignTransferApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '外汇买卖' : approvalTask?.taskName;
+        }
+        break;
+      case 'loanWithDrawalApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '贷款领用' : approvalTask?.taskName;
+        }
+        break;
+      case 'postRepaymentApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '提前还款' : approvalTask?.taskName;
+        }
+        break;
+      case 'loanRepaymentApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '计划还款' : approvalTask?.taskName;
+        }
+        break;
       default:
         {
           _taskTitle = '';
