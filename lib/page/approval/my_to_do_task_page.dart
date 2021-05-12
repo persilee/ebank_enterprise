@@ -91,16 +91,20 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
                     : HsgErrorPage(
                         isEmptyPage: true,
                         buttonAction: () {
-                          _loadData();
+                          _loadData(isLoading: true);
                         },
                       ),
           );
   }
 
   //加载数据
-  Future<void> _loadData({bool isLoadMore = false}) async {
+  Future<void> _loadData({bool isLoadMore = false, bool isLoading = false}) async {
     isLoadMore ? _page++ : _page = 1;
-    _isLoading = true;
+    if(this.mounted && isLoading) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     try {
       FindUserTodoTaskModel response = await ApiClient().findUserTodoTask(
         FindTaskBody(
@@ -114,7 +118,7 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
           if (isLoadMore == false && _page == 1) {
             _listData.clear();
           }
-          _listData.addAll(response.rows);
+          // _listData.addAll(response.rows);
           _isLoading = false;
           _isShowErrorPage = false;
           if (response.rows.length <= 10 && response.totalPage <= _page) {
@@ -130,7 +134,7 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
           _hsgErrorPage = HsgErrorPage(
             error: e.error,
             buttonAction: () {
-              _loadData();
+              _loadData(isLoading: true);
             },
           );
         });

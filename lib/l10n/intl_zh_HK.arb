@@ -595,6 +595,7 @@
   "approve_first_interest_date": "首次還息日期",
   "approve_history_successful": "成功",
   "approve_history_failure": "失敗",
+  "approve_history_details": "審批歷史詳情",
   "refresh_loosen_refresh": "鬆開刷新",
   "refresh_loading": "加載中...",
   "refresh_drop_down_refresh": "下拉刷新",

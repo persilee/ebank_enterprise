@@ -89,8 +89,12 @@ class _MyApprovedHistoryDetailPageState
     _controller.dispose();
   }
 
-  void _loadData() async {
-    _isLoading = true;
+  void _loadData({bool isLoading = false}) async {
+    if(this.mounted && isLoading) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     String _processKey = widget.data.processKey;
     String _taskId = widget.data.taskId;
     var _contractModel;
@@ -139,7 +143,7 @@ class _MyApprovedHistoryDetailPageState
           _hsgErrorPage = HsgErrorPage(
             error: e.error,
             buttonAction: () {
-              _loadData();
+              _loadData(isLoading: true);
             },
           );
         });

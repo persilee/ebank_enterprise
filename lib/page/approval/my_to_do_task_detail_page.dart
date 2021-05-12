@@ -106,8 +106,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     _controller.dispose();
   }
 
-  void _loadData() async {
-    _isLoading = true;
+  void _loadData({bool isLoading = false}) async {
+    if(this.mounted && isLoading) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     String _processKey = widget.data.processKey;
     String _taskId = widget.data.taskId;
     var _contractModel;
@@ -156,7 +160,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           _hsgErrorPage = HsgErrorPage(
             error: e.error,
             buttonAction: () {
-              _loadData();
+              _loadData(isLoading: true);
             },
           );
         });
@@ -1038,7 +1042,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       child: TextField(
         keyboardType: TextInputType.text,
         maxLines: 4,
-        enabled: true,
+        enabled: _offstage,
         decoration: InputDecoration(
           fillColor: Color(0xffF7F7F7),
           filled: false,
@@ -1445,6 +1449,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       setState(() {
         _btnIsLoadingR = true;
         _btnIsEnable = false;
+        _offstage = false;
       });
     }
     try {
@@ -1460,6 +1465,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         setState(() {
           _btnIsLoadingR = false;
           _btnIsEnable = true;
+          _offstage = true;
         });
       }
       Navigator.pop(context);
@@ -1468,11 +1474,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         setState(() {
           _btnIsLoadingR = false;
           _btnIsEnable = true;
+          _offstage = true;
           _isShowErrorPage = true;
           _hsgErrorPage = HsgErrorPage(
             error: e.error,
             buttonAction: () {
-              _loadData();
+              _loadData(isLoading: true);
             },
           );
         });
@@ -1529,7 +1536,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           _hsgErrorPage = HsgErrorPage(
             error: e.error,
             buttonAction: () {
-              _loadData();
+              _loadData(isLoading: true);
             },
           );
         });
@@ -1581,6 +1588,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
           setState(() {
             _btnIsLoadingEAA = true;
             _btnIsEnable = false;
+            _offstage = false;
           });
         }
         try {
@@ -1596,6 +1604,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             setState(() {
               _btnIsLoadingEAA = false;
               _btnIsEnable = true;
+              _offstage = true;
             });
             Navigator.pushReplacementNamed(context, pageDepositRecordSucceed);
           }
@@ -1604,11 +1613,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             setState(() {
               _btnIsLoadingEAA = false;
               _btnIsEnable = true;
+              _offstage = true;
               _isShowErrorPage = true;
               _hsgErrorPage = HsgErrorPage(
                 error: e.error,
                 buttonAction: () {
-                  _loadData();
+                  _loadData(isLoading: true);
                 },
               );
             });

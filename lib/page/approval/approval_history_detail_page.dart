@@ -49,7 +49,7 @@ class _ApprovalHistoryDetailPageState
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('审批历史详情'),
+        title: Text(S.current.approve_history_details),
       ),
       body: SingleChildScrollView(
         child: Container(

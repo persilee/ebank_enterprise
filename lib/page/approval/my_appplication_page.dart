@@ -97,16 +97,20 @@ class _MyApplicationPageState extends State<MyApplicationPage>
                 ): HsgErrorPage(
                   isEmptyPage: true,
                   buttonAction: () {
-                    _loadData();
+                    _loadData(isLoading: true);
                   },
                 ),
               );
   }
 
   //加载数据
-  Future<void> _loadData({bool isLoadMore = false}) async {
+  Future<void> _loadData({bool isLoadMore = false, bool isLoading = false}) async {
     isLoadMore ? _page++ : _page = 1;
-    _isLoading = true;
+    if(this.mounted && isLoading) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     try {
       GetIdTypeResp data = await ApiClientOpenAccount().getIdType(GetIdTypeReq('TASK_TATUS'));
       FindUserTodoTaskModel response = await ApiClient().findUserStartTask(
@@ -141,7 +145,7 @@ class _MyApplicationPageState extends State<MyApplicationPage>
           _hsgErrorPage = HsgErrorPage(
             error: e.error,
             buttonAction: () {
-              _loadData();
+              _loadData(isLoading: true);
             },
           );
         });
