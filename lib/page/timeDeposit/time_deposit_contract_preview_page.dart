@@ -8,6 +8,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/pay_password_check.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,9 @@ class _TimeDepositContractPreviewPageState
               child: HsgButton.button(
                 title: S.current.confirm,
                 click: () {
+                  // CheckPayPassword(context, () {
                   _loadContractData(_timeDepositReq);
+                  // });
                 },
                 isColor: true,
               ),
@@ -179,8 +182,11 @@ class _TimeDepositContractPreviewPageState
         setState(() {
           HSProgressHUD.dismiss();
           // _isDeposit = false;
-          Navigator.popAndPushNamed(context, pageDepositRecordSucceed,
-              arguments: 'timeDepositProduct');
+          Navigator.of(context)
+            ..pop()
+            ..pop()
+            ..pushNamed(pageDepositRecordSucceed,
+                arguments: 'timeDepositProduct');
         });
       }
     }).catchError((e) {

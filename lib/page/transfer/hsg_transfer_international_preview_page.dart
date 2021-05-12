@@ -2,6 +2,7 @@ import 'package:ebank_mobile/data/source/model/get_international_transfer.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/pay_password_check.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
@@ -10,10 +11,14 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 /// Date: 2021-03-17
 
 import 'package:ebank_mobile/widget/hsg_button.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sp_util/sp_util.dart';
 
 import '../../page_route.dart';
 import 'data/transfer_international_data.dart';
@@ -47,7 +52,9 @@ class _TransferInternalPreviewPageState
               child: HsgButton.button(
                 title: S.current.confirm,
                 click: () {
+                  // CheckPayPassword(context, () {
                   _loadData(transferData);
+                  // });
                 },
                 isColor: true,
               ),

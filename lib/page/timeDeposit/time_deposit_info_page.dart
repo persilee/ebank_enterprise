@@ -19,14 +19,18 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/pay_password_check.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:intl/intl.dart';
+import 'package:sp_util/sp_util.dart';
 
 class PageDepositInfo extends StatefulWidget {
   final DepositRecord deposit;
@@ -604,47 +608,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     });
   }
 
-  //点击提前结清
-  _openBottomSheet(BuildContext context) async {
-    // bool passwordEnabled = SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED);
-    // // 判断是否设置交易密码，如果没有设置，跳转到设置密码页面，
-    // if (!passwordEnabled) {
-    //   HsgShowTip.shouldSetTranPasswordTip(
-    //     context: context,
-    //     click: (value) {
-    //       if (value == true) {
-    //         //前往设置交易密码
-    //         Navigator.pushNamed(context, pageResetPayPwdOtp);
-    //       }
-    //     },
-    //   );
-    // } else {
-    //   // 输入交易密码
-    //   bool isPassword = await _didBottomSheet();
-    //   // 如果交易密码正确，处理审批逻辑
-    //   if (isPassword) {
-    _contractEarly(context); //领用
-    //   }
-    // }
-  }
-
-  //交易密码窗口
-  Future<bool> _didBottomSheet() async {
-    final isPassword = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return HsgPasswordDialog(
-            title: S.current.input_password,
-            isDialog: false,
-          );
-        });
-    if (isPassword != null && isPassword == true) {
-      return true;
-    }
-    FocusManager.instance.primaryFocus?.unfocus();
-    return false;
-  }
-
 // 提前结清接口调整
   _contractEarly(BuildContext context) {
     if (this.mounted) {
@@ -747,7 +710,9 @@ class _PageDepositInfo extends State<PageDepositInfo> {
       _modify = S.current.tdEarlyRed_modify_expiration_instruction;
     } else {
       //提前结清
-      _openBottomSheet(context);
+      // CheckPayPassword(context, () {
+      _contractEarly(context);
+      // });
     }
   }
 
