@@ -6,8 +6,6 @@
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
-import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
-import 'package:ebank_mobile/data/source/time_deposit_data_repository.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_packaging.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';

@@ -1,5 +1,4 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
 import 'package:ebank_mobile/data/source/model/loan_calculate_interest.dart';
 import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';

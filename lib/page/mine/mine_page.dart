@@ -11,8 +11,6 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_last_version.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/logout.dart';
-import 'package:ebank_mobile/data/source/user_data_repository.dart';
-import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
@@ -518,7 +516,7 @@ class _MinePageState extends State<MinePage>
         children: [
           Container(
             margin: EdgeInsets.only(top: 7),
-            child: _nameInfo((MediaQuery.of(context).size.width / 3 * 2 - 20)),
+            child: _nameInfo((MediaQuery.of(context).size.width - 120)),
           ),
           Container(
             margin: EdgeInsets.only(top: 7),
@@ -591,7 +589,7 @@ class _MinePageState extends State<MinePage>
         _enterpriseInfo(),
         Container(
           margin: EdgeInsets.only(top: 7),
-          child: _nameInfo((MediaQuery.of(context).size.width / 3 * 2 - 20)),
+          child: _nameInfo((MediaQuery.of(context).size.width - 120)),
         ),
         Container(
           margin: EdgeInsets.only(top: 10),
@@ -610,8 +608,8 @@ class _MinePageState extends State<MinePage>
     String enterpriseNameShowStr =
         _enterpriseName == null ? '' : _enterpriseName;
     return Container(
-      constraints: BoxConstraints(
-          maxWidth: (MediaQuery.of(context).size.width / 3 * 2 - 20)),
+      constraints:
+          BoxConstraints(maxWidth: (MediaQuery.of(context).size.width - 120)),
       height: 22,
       child: Text(
         enterpriseNameShowStr,

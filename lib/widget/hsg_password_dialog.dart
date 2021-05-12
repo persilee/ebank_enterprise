@@ -7,7 +7,6 @@ import 'package:dio/dio.dart';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
-import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/util/encrypt_util.dart';

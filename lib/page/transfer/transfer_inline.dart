@@ -500,6 +500,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
                 _payeeNameController.text = rowListPartner.payeeName;
                 _payeeAccountController.text = rowListPartner.payeeCardNo;
                 _remarkController.text = rowListPartner.remark;
+                payeeBankCode = rowListPartner.bankCode;
+                payerBankCode = rowListPartner.payerBankCode;
                 // _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
                 _payeeCcy = rowListPartner.ccy;
                 _isAccount = false;

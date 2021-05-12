@@ -1,14 +1,10 @@
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/login.dart';
-import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: non_constant_identifier_names
 void SaveUserData(LoginResp resp, {String password}) async {
-  ///登录页面清空数据
-  HsgHttp().clearUserCache();
-
   final prefs = await SharedPreferences.getInstance();
   prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
   prefs.setString(ConfigKey.USER_ID, resp.userId);
@@ -29,9 +25,6 @@ void SaveUserData(LoginResp resp, {String password}) async {
 
 // ignore: non_constant_identifier_names
 void SaveUserDataForGetUser(UserInfoResp resp) async {
-  ///登录页面清空数据
-  HsgHttp().clearUserCache();
-
   final prefs = await SharedPreferences.getInstance();
   prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
   prefs.setString(ConfigKey.USER_ID, resp.userId);

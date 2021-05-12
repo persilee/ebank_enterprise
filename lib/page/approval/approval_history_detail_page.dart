@@ -1,5 +1,6 @@
 import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_detail_model.dart';
 import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -35,10 +36,10 @@ class _ApprovalHistoryDetailPageState
 
   _loadData() {
     widget.data.forEach((element) {
-      _commentList.add(_buildContentItem('审批人', element.userName));
-      _commentList.add(_buildContentItem('审批时间', element.time));
-      _commentList.add(_buildContentItem('审批意见', element.comment));
-      _commentList.add(_buildContentItem('审批结果', element.result == true ? '成功' : '失败'));
+      _commentList.add(_buildContentItem(S.current.approver, element.userName));
+      _commentList.add(_buildContentItem(S.current.approver_time, element.time));
+      _commentList.add(_buildContentItem(S.current.approver_opinion, element.comment));
+      _commentList.add(_buildContentItem(S.current.approver_result, element.result == true ? S.current.approve_history_successful : S.current.approve_history_failure));
       _commentList.add(Padding(padding: EdgeInsets.only(top: 15)));
     });
   }
@@ -48,7 +49,7 @@ class _ApprovalHistoryDetailPageState
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('审批历史详情'),
+        title: Text(S.current.approve_history_details),
       ),
       body: SingleChildScrollView(
         child: Container(

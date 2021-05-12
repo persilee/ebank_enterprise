@@ -6,8 +6,6 @@ import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
-import 'package:ebank_mobile/data/source/open_account_repository.dart';
-import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -69,7 +67,7 @@ class _RelatedIndividualsDataPageState
   void initState() {
     _getPublicParameters();
 
-    _partner.partnerTypeIdType = [];
+    _partner.partnerTypeIdType = null;
     _partner.partnerType = ['002'];
 
     _documentNumberTEC.addListener(() {
@@ -493,36 +491,36 @@ class _RelatedIndividualsDataPageState
     }
   }
 
-  /// 类别输入值
-  void _selectCategory(BuildContext context) async {
-    List<String> categoryList = [];
-    if (_categoryTypes.length > 0) {
-      categoryList = [];
-      String _language = Intl.getCurrentLocale();
-      _categoryTypes.forEach((element) {
-        categoryList.add(_language == 'en' ? element.name : element.cname);
-      });
-    }
-    final result = await showHsgBottomSheet(
-      context: context,
-      builder: (context) => BottomMenu(
-        title: S.of(context).openAccout_capacity,
-        items: categoryList,
-      ),
-    );
+  // /// 类别输入值
+  // void _selectCategory(BuildContext context) async {
+  //   List<String> categoryList = [];
+  //   if (_categoryTypes.length > 0) {
+  //     categoryList = [];
+  //     String _language = Intl.getCurrentLocale();
+  //     _categoryTypes.forEach((element) {
+  //       categoryList.add(_language == 'en' ? element.name : element.cname);
+  //     });
+  //   }
+  //   final result = await showHsgBottomSheet(
+  //     context: context,
+  //     builder: (context) => BottomMenu(
+  //       title: S.of(context).openAccout_capacity,
+  //       items: categoryList,
+  //     ),
+  //   );
 
-    if (result != null && result != false) {
-      IdType data = _categoryTypes[result];
-      _partner.partnerTypeIdType = [data];
-      _partner.partnerType = [data.code];
-      setState(() {
-        _categoryText = categoryList[result];
-        _nextBtnEnabled = _judgeButtonIsEnabled();
-      });
-    } else {
-      return;
-    }
-  }
+  //   if (result != null && result != false) {
+  //     IdType data = _categoryTypes[result];
+  //     _partner.partnerTypeIdType = [data];
+  //     _partner.partnerType = [data.code];
+  //     setState(() {
+  //       _categoryText = categoryList[result];
+  //       _nextBtnEnabled = _judgeButtonIsEnabled();
+  //     });
+  //   } else {
+  //     return;
+  //   }
+  // }
 
   /// 证件类型输入值
   void _selectDocumentType(BuildContext context) async {

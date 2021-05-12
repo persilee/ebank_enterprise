@@ -25,8 +25,9 @@ import '../../page_route.dart';
 
 class MyToDoTaskPage extends StatefulWidget {
   final title;
+  final ScrollController controller;
 
-  MyToDoTaskPage({Key key, this.title}) : super(key: key);
+  MyToDoTaskPage({Key key, this.title, this.controller}) : super(key: key);
 
   @override
   _MyToDoTaskPageState createState() => _MyToDoTaskPageState();
@@ -34,7 +35,6 @@ class MyToDoTaskPage extends StatefulWidget {
 
 class _MyToDoTaskPageState extends State<MyToDoTaskPage>
     with AutomaticKeepAliveClientMixin {
-  ScrollController _scrollController;
   RefreshController _refreshController;
   List<ApprovalTask> _listData = [];
   int _page = 1;
@@ -47,14 +47,12 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
   void initState() {
     super.initState();
     _refreshController = RefreshController();
-    _scrollController = ScrollController();
     _loadData();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _scrollController.dispose();
     _refreshController.dispose();
   }
 
@@ -85,7 +83,7 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
                         padding: EdgeInsets.only(
                             left: 12.0, right: 12.0, bottom: 18.0),
                         itemCount: _listData.length,
-                        controller: _scrollController,
+                        controller: widget.controller,
                         itemBuilder: (context, index) {
                           return _todoInformation(_listData[index]);
                         },
@@ -93,16 +91,21 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
                     : HsgErrorPage(
                         isEmptyPage: true,
                         buttonAction: () {
-                          _loadData();
+                          _loadData(isLoading: true);
                         },
                       ),
           );
   }
 
   //加载数据
-  Future<void> _loadData({bool isLoadMore = false}) async {
+  Future<void> _loadData(
+      {bool isLoadMore = false, bool isLoading = false}) async {
     isLoadMore ? _page++ : _page = 1;
-    _isLoading = true;
+    if (this.mounted && isLoading) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     try {
       FindUserTodoTaskModel response = await ApiClient().findUserTodoTask(
         FindTaskBody(
@@ -132,7 +135,7 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
           _hsgErrorPage = HsgErrorPage(
             error: e.error,
             buttonAction: () {
-              _loadData();
+              _loadData(isLoading: true);
             },
           );
         });
@@ -190,39 +193,47 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
   Widget _rightInfo(ApprovalTask approvalTask) {
     String _language = Intl.getCurrentLocale();
     String _taskTitle = '';
-    switch(approvalTask.processKey){
-      case 'openTdContractApproval': {
-        _taskTitle = _language == 'zh_CN' ? '开立定期存单' : approvalTask?.taskName;
-      }
-      break;
-      case 'oneToOneTransferApproval': {
-        _taskTitle = _language == 'zh_CN' ? '行内转账' : approvalTask?.taskName;
-      }
-      break;
-      case 'internationalTransferApproval': {
-        _taskTitle = _language == 'zh_CN' ? '国际转账' : approvalTask?.taskName;
-      }
-      break;
-      case 'earlyRedTdContractApproval': {
-        _taskTitle = _language == 'zh_CN' ? '定期提前结清' : approvalTask?.taskName;
-      }
-      break;
-      case 'foreignTransferApproval': {
-        _taskTitle = _language == 'zh_CN' ? '外汇买卖' : approvalTask?.taskName;
-      }
-      break;
-      case 'loanWithDrawalApproval': {
-        _taskTitle = _language == 'zh_CN' ? '贷款领用' : approvalTask?.taskName;
-      }
-      break;
-      case 'postRepaymentApproval': {
-        _taskTitle = _language == 'zh_CN' ? '提前还款' : approvalTask?.taskName;
-      }
-      break;
-      case 'loanRepaymentApproval': {
-        _taskTitle = _language == 'zh_CN' ? '计划还款' : approvalTask?.taskName;
-      }
-      break;
+    switch (approvalTask.processKey) {
+      case 'openTdContractApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '开立定期存单' : approvalTask?.taskName;
+        }
+        break;
+      case 'oneToOneTransferApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '行内转账' : approvalTask?.taskName;
+        }
+        break;
+      case 'internationalTransferApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '国际转账' : approvalTask?.taskName;
+        }
+        break;
+      case 'earlyRedTdContractApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '定期提前结清' : approvalTask?.taskName;
+        }
+        break;
+      case 'foreignTransferApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '外汇买卖' : approvalTask?.taskName;
+        }
+        break;
+      case 'loanWithDrawalApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '贷款领用' : approvalTask?.taskName;
+        }
+        break;
+      case 'postRepaymentApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '提前还款' : approvalTask?.taskName;
+        }
+        break;
+      case 'loanRepaymentApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '计划还款' : approvalTask?.taskName;
+        }
+        break;
       default:
         {
           _taskTitle = '';

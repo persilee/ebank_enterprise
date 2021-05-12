@@ -1,5 +1,3 @@
-import 'package:ebank_mobile/data/source/loan_data_repository.dart';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///贷款详情界面
 /// Author: fangluyao

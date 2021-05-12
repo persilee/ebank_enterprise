@@ -548,8 +548,8 @@ class _HomePageState extends State<HomePage>
   //企业信息
   Widget _enterpriseInfo() {
     return Container(
-      constraints: BoxConstraints(
-          maxWidth: (MediaQuery.of(context).size.width / 3 * 2 - 20)),
+      constraints:
+          BoxConstraints(maxWidth: (MediaQuery.of(context).size.width - 120)),
       height: 22,
       child: Text(
         _enterpriseName == null ? '' : _enterpriseName,
@@ -565,8 +565,8 @@ class _HomePageState extends State<HomePage>
   //用户名
   Widget _nameInfo() {
     return Container(
-      constraints: BoxConstraints(
-          maxWidth: (MediaQuery.of(context).size.width / 3 * 2 - 160)),
+      constraints:
+          BoxConstraints(maxWidth: (MediaQuery.of(context).size.width - 120)),
       child: Text(
         _userName == null ? '' : _userName,
         overflow: TextOverflow.ellipsis,

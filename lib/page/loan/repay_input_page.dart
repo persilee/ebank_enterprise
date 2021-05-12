@@ -3,7 +3,6 @@
 /// Author: zhangqirong
 /// Date: 2020-12-16
 
-import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_money_caculate.dart';
