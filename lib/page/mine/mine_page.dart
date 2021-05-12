@@ -811,7 +811,7 @@ class _MinePageState extends State<MinePage>
         }).then((value) {
       if (value == true) {
         _loginOut();
-        _removeSmsCode();
+        // _removeSmsCode();
       }
     });
   }

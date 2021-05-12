@@ -226,7 +226,7 @@ class _LoanReferenceState extends State<LoanReference> {
       }
     }).catchError((e) {
       HSProgressHUD.showToast(e.error);
-      HSProgressHUD.dismiss();
+      // HSProgressHUD.dismiss();
     });
   }
 

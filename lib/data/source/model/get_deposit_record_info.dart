@@ -139,6 +139,9 @@ class DepositRecord extends Object {
   @JsonKey(name: 'conSts')
   String conSts;
 
+  @JsonKey(name: 'expTdAml')
+  String expTdAml; //当前存款收益
+
   DepositRecord(
     this.engName,
     this.lclName,
@@ -156,6 +159,7 @@ class DepositRecord extends Object {
     this.mtDate,
     this.instCode,
     this.conSts,
+    this.expTdAml,
   );
 
   factory DepositRecord.fromJson(Map<String, dynamic> srcJson) =>
