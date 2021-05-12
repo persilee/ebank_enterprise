@@ -202,6 +202,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     );
 
     String _statusText = '';
+
     if (rows.conSts == 'C') {
       //状态为关闭显示 结清
       _statusText = S.current.time_deposit_record_Status_C;
@@ -241,6 +242,22 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           )
         ],
       ),
+      // //到期本息以及收益
+      // Row(
+      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //   children: [
+      //     Text(
+      //       rows.conSts == 'C'
+      //           ? S.current.contract_principal_and_interest
+      //           : S.current.time_deposit_record_earnings,
+      //       style: TextStyle(fontSize: 15, color: HsgColors.toDoDetailText),
+      //     ),
+      //     Text(
+      //       rows.expTdAml + ' ' + rows.ccy,
+      //       style: TextStyle(fontSize: 15, color: HsgColors.aboutusTextCon),
+      //     )
+      //   ],
+      // ),
       //利率
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -304,7 +321,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
       ),
       Divider(height: 0, color: HsgColors.textHintColor),
       SizedBox(
-        height: 125,
+        height: 120,
         child: Padding(
           //底部控件
           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
