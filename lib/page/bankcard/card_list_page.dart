@@ -9,7 +9,6 @@ import 'package:ebank_mobile/widget/hsg_loading.dart';
 /// Date: 2020-11-04
 
 import 'package:flutter/material.dart';
-import 'package:ebank_mobile/data/source/card_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';

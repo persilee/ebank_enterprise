@@ -6,7 +6,6 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/find_user_application_task_detail.dart';
 import 'package:ebank_mobile/data/source/model/get_my_application.dart';
-import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:flutter/material.dart';

@@ -1,8 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
-import 'package:ebank_mobile/data/source/card_data_repository.dart';
-import 'package:ebank_mobile/data/source/forex_trading_repository.dart';
-import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/application_loan.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
@@ -11,7 +8,6 @@ import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
 import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
 import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
 import 'package:ebank_mobile/data/source/model/loan_trial_rate.dart';
-import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_bill.dart';

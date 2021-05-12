@@ -4,7 +4,6 @@
 /// Date: 2020-12-18
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
 import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
@@ -12,7 +11,6 @@ import 'package:ebank_mobile/data/source/model/loan_prepayment_model.dart';
 import 'package:ebank_mobile/data/source/model/my_approval_data.dart';
 import 'package:ebank_mobile/data/source/model/post_repayment.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
-import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
 import 'package:ebank_mobile/page_route.dart';

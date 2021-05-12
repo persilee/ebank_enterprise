@@ -1,12 +1,8 @@
-import 'package:ebank_mobile/data/source/bank_data_repository.dart';
-
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
 /// Date: 2020-11-05
 
-import 'package:ebank_mobile/data/source/card_data_repository.dart';
-import 'package:ebank_mobile/data/source/deposit_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_bank_info_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';

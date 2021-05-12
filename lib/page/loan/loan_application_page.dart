@@ -5,14 +5,10 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
-import 'package:ebank_mobile/data/source/loan_data_repository.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/loan_application.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
-import 'package:ebank_mobile/data/source/public_parameters_repository.dart';
-import 'package:ebank_mobile/data/source/user_data_repository.dart';
-import 'package:ebank_mobile/data/source/verify_trade_paw_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_packaging.dart';

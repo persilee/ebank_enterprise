@@ -15,7 +15,6 @@ import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_mode
 import 'package:ebank_mobile/data/source/model/find_user_finished_task.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/my_approval_data.dart';
-import 'package:ebank_mobile/data/source/need_to_be_dealt_with_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -39,7 +38,8 @@ class MyApprovedHistoryPage extends StatefulWidget {
   final title;
   final ScrollController controller;
 
-  MyApprovedHistoryPage({Key key, this.title, this.controller}) : super(key: key);
+  MyApprovedHistoryPage({Key key, this.title, this.controller})
+      : super(key: key);
 
   @override
   _MyApprovedHistoryPageState createState() => _MyApprovedHistoryPageState();
@@ -111,15 +111,17 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
   }
 
   //加载数据
-  Future<void> _loadData({bool isLoadMore = false, bool isLoading = false}) async {
+  Future<void> _loadData(
+      {bool isLoadMore = false, bool isLoading = false}) async {
     isLoadMore ? _page++ : _page = 1;
-    if(this.mounted && isLoading) {
+    if (this.mounted && isLoading) {
       setState(() {
         _isLoading = true;
       });
     }
     try {
-      GetIdTypeResp data = await ApiClientOpenAccount().getIdType(GetIdTypeReq('TASK_TATUS'));
+      GetIdTypeResp data =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('TASK_TATUS'));
       FindUserTodoTaskModel response = await ApiClient().findUserFinishedTask(
         FindTaskBody(
             page: _page,
@@ -133,7 +135,7 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
             _listData.clear();
           }
           _listData.addAll(response.rows);
-          if(data.publicCodeGetRedisRspDtoList.isNotEmpty) {
+          if (data.publicCodeGetRedisRspDtoList.isNotEmpty) {
             _resultTypeList = data.publicCodeGetRedisRspDtoList;
           }
           _isLoading = false;
@@ -200,45 +202,53 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
     String _result = '';
     String _language = Intl.getCurrentLocale();
     _resultTypeList.forEach((element) {
-      if(element.code == approvalTask?.result) {
+      if (element.code == approvalTask?.result) {
         _result = _language == 'zh_CN' ? element.cname : element.name;
       }
     });
 
     String _taskTitle = '';
-    switch(approvalTask.processKey){
-      case 'openTdContractApproval': {
-        _taskTitle = _language == 'zh_CN' ? '开立定期存单' : approvalTask?.taskName;
-      }
-      break;
-      case 'oneToOneTransferApproval': {
-        _taskTitle = _language == 'zh_CN' ? '行内转账' : approvalTask?.taskName;
-      }
-      break;
-      case 'internationalTransferApproval': {
-        _taskTitle = _language == 'zh_CN' ? '国际转账' : approvalTask?.taskName;
-      }
-      break;
-      case 'earlyRedTdContractApproval': {
-        _taskTitle = _language == 'zh_CN' ? '定期提前结清' : approvalTask?.taskName;
-      }
-      break;
-      case 'foreignTransferApproval': {
-        _taskTitle = _language == 'zh_CN' ? '外汇买卖' : approvalTask?.taskName;
-      }
-      break;
-      case 'loanWithDrawalApproval': {
-        _taskTitle = _language == 'zh_CN' ? '贷款领用' : approvalTask?.taskName;
-      }
-      break;
-      case 'postRepaymentApproval': {
-        _taskTitle = _language == 'zh_CN' ? '提前还款' : approvalTask?.taskName;
-      }
-      break;
-      case 'loanRepaymentApproval': {
-        _taskTitle = _language == 'zh_CN' ? '计划还款' : approvalTask?.taskName;
-      }
-      break;
+    switch (approvalTask.processKey) {
+      case 'openTdContractApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '开立定期存单' : approvalTask?.taskName;
+        }
+        break;
+      case 'oneToOneTransferApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '行内转账' : approvalTask?.taskName;
+        }
+        break;
+      case 'internationalTransferApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '国际转账' : approvalTask?.taskName;
+        }
+        break;
+      case 'earlyRedTdContractApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '定期提前结清' : approvalTask?.taskName;
+        }
+        break;
+      case 'foreignTransferApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '外汇买卖' : approvalTask?.taskName;
+        }
+        break;
+      case 'loanWithDrawalApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '贷款领用' : approvalTask?.taskName;
+        }
+        break;
+      case 'postRepaymentApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '提前还款' : approvalTask?.taskName;
+        }
+        break;
+      case 'loanRepaymentApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '计划还款' : approvalTask?.taskName;
+        }
+        break;
       default:
         {
           _taskTitle = '';
@@ -273,8 +283,7 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
             _rowInformation(
                 S.current.sponsor, approvalTask?.applicantName ?? ''),
             //审批结果
-            _rowInformation(
-                S.current.approve_result, _result ?? ''),
+            _rowInformation(S.current.approve_result, _result ?? ''),
             //审批时间
             _rowInformation(
                 S.current.approve_create_time, approvalTask?.endTime ?? ''),

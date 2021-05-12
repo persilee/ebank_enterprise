@@ -11,8 +11,6 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/get_last_version.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/logout.dart';
-import 'package:ebank_mobile/data/source/user_data_repository.dart';
-import 'package:ebank_mobile/data/source/version_data_repository.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';

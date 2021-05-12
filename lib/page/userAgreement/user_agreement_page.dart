@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:ebank_mobile/data/source/model/get_user_agreement.dart';
-import 'package:ebank_mobile/data/source/user_agreement_repository.dart';
 
 class UserAgreementPage extends StatefulWidget {
   final String pactId;

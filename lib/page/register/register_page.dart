@@ -7,8 +7,6 @@ import 'package:ebank_mobile/data/source/model/check_sms.dart';
 import 'package:ebank_mobile/data/source/model/country_region_model.dart';
 import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
-import 'package:ebank_mobile/data/source/verification_code_repository.dart';
-import 'package:ebank_mobile/data/source/version_data_repository.dart';
 
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
