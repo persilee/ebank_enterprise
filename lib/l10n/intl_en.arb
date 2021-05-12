@@ -595,6 +595,8 @@
   "approve_fine_amount": "Contractual fine",
   "approve_reimbursement_amount": "Reimbursement amount",
   "approve_first_interest_date": "First interest repayment date",
+  "approve_history_successful": "Successful",
+  "approve_history_failure": "Failure",
   "refresh_loosen_refresh": "Loosen the refresh",
   "refresh_loading": "Loading...",
   "refresh_drop_down_refresh": "Drop-down refresh",

@@ -41,7 +41,6 @@ enum LoadingStatus { STATUS_LOADING, STATUS_COMPLETED, STATUS_IDEL }
 
 class _MyApplicationPageState extends State<MyApplicationPage>
     with AutomaticKeepAliveClientMixin {
-  ScrollController _scrollController;
   RefreshController _refreshController;
   List<ApprovalTask> _listData = [];
   List<IdType> _resultTypeList = [];
@@ -55,14 +54,12 @@ class _MyApplicationPageState extends State<MyApplicationPage>
   void initState() {
     super.initState();
     _refreshController = RefreshController();
-    // _scrollController = ScrollController();
     _loadData();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _scrollController.dispose();
     _refreshController.dispose();
   }
 

@@ -36,6 +36,14 @@ class _ApprovalPageState extends State<ApprovalPage>
   }
 
   @override
+  void dispose() {
+    _controllerMyToDoTask.dispose();
+    _controllerMyApprovedHistory.dispose();
+    _controllerMyApplication.dispose();
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
@@ -90,10 +98,8 @@ class _ApprovalPageState extends State<ApprovalPage>
               children: [
                 GestureDetector(
                   onDoubleTap: () {
-                    print('onDoubleTap');
                     switch(tabController.index) {
                       case 0: {
-                        print('aaaaaaaaa');
                         _controllerMyToDoTask.animateTo(
                           _controllerMyToDoTask.position.minScrollExtent,
                           duration: Duration(milliseconds: 500),
@@ -118,7 +124,6 @@ class _ApprovalPageState extends State<ApprovalPage>
                       }
                       break;
                     }
-
                   },
                   child: Container(
                     width: ScreenUtil.instance.width,

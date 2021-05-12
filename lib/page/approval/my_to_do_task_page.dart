@@ -35,7 +35,6 @@ class MyToDoTaskPage extends StatefulWidget {
 
 class _MyToDoTaskPageState extends State<MyToDoTaskPage>
     with AutomaticKeepAliveClientMixin {
-  ScrollController _scrollController;
   RefreshController _refreshController;
   List<ApprovalTask> _listData = [];
   int _page = 1;
@@ -48,14 +47,12 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
   void initState() {
     super.initState();
     _refreshController = RefreshController();
-    // _scrollController = ScrollController();
     _loadData();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _scrollController.dispose();
     _refreshController.dispose();
   }
 
