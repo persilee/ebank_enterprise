@@ -1,4 +1,3 @@
-import 'package:ebank_mobile/http/hsg_http.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:flutter/material.dart';
 import 'package:sp_util/sp_util.dart';
