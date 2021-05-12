@@ -54,7 +54,7 @@ class _MyApplicationPageState extends State<MyApplicationPage>
   void initState() {
     super.initState();
     _refreshController = RefreshController();
-    _loadData();
+    _loadData(isLoading: true);
   }
 
   @override
@@ -69,50 +69,53 @@ class _MyApplicationPageState extends State<MyApplicationPage>
     return _isLoading
         ? HsgLoading()
         : CustomRefresh(
-                controller: _refreshController,
-                onLoading: () async {
-                  await _loadData(isLoadMore: true);
-                  //加载更多完成
-                  _refreshController.loadComplete();
-                  //显示没有更多数据
-                  if (_isMoreData) _refreshController.loadNoData();
-                },
-                onRefresh: () async {
-                  await _loadData();
-                  //刷新完成
-                  _refreshController.refreshCompleted();
-                  _refreshController.footerMode.value = LoadStatus.canLoading;
-                },
-                content:_isShowErrorPage
-                    ? _hsgErrorPage
-                    : _listData.length > 0
+            controller: _refreshController,
+            onLoading: () async {
+              await _loadData(isLoadMore: true);
+              //加载更多完成
+              _refreshController.loadComplete();
+              //显示没有更多数据
+              if (_isMoreData) _refreshController.loadNoData();
+            },
+            onRefresh: () async {
+              await _loadData();
+              //刷新完成
+              _refreshController.refreshCompleted();
+              _refreshController.footerMode.value = LoadStatus.canLoading;
+            },
+            content: _isShowErrorPage
+                ? _hsgErrorPage
+                : _listData.length > 0
                     ? ListView.builder(
-                  padding:
-                      EdgeInsets.only(left: 12.0, right: 12.0, bottom: 18.0),
-                  itemCount: _listData.length,
-                  controller: widget.controller,
-                  itemBuilder: (context, index) {
-                    return _todoInformation(_listData[index]);
-                  },
-                ): HsgErrorPage(
-                  isEmptyPage: true,
-                  buttonAction: () {
-                    _loadData(isLoading: true);
-                  },
-                ),
-              );
+                        padding: EdgeInsets.only(
+                            left: 12.0, right: 12.0, bottom: 18.0),
+                        itemCount: _listData.length,
+                        controller: widget.controller,
+                        itemBuilder: (context, index) {
+                          return _todoInformation(_listData[index]);
+                        },
+                      )
+                    : HsgErrorPage(
+                        isEmptyPage: true,
+                        buttonAction: () {
+                          _loadData(isLoading: true);
+                        },
+                      ),
+          );
   }
 
   //加载数据
-  Future<void> _loadData({bool isLoadMore = false, bool isLoading = false}) async {
+  Future<void> _loadData(
+      {bool isLoadMore = false, bool isLoading = false}) async {
     isLoadMore ? _page++ : _page = 1;
-    if(this.mounted && isLoading) {
+    if (this.mounted && isLoading) {
       setState(() {
         _isLoading = true;
       });
     }
     try {
-      GetIdTypeResp data = await ApiClientOpenAccount().getIdType(GetIdTypeReq('TASK_TATUS'));
+      GetIdTypeResp data =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('TASK_TATUS'));
       FindUserTodoTaskModel response = await ApiClient().findUserStartTask(
         FindTaskBody(
           finish: true,
@@ -128,7 +131,7 @@ class _MyApplicationPageState extends State<MyApplicationPage>
             _listData.clear();
           }
           _listData.addAll(response.rows);
-          if(data.publicCodeGetRedisRspDtoList.isNotEmpty) {
+          if (data.publicCodeGetRedisRspDtoList.isNotEmpty) {
             _resultTypeList = data.publicCodeGetRedisRspDtoList;
           }
           _isLoading = false;
@@ -191,49 +194,56 @@ class _MyApplicationPageState extends State<MyApplicationPage>
 
   //待办列表右侧信息
   Widget _rightInfo(ApprovalTask approvalTask) {
-
     String _result = '';
     String _language = Intl.getCurrentLocale();
     _resultTypeList.forEach((element) {
-      if(element.code == approvalTask?.result) {
+      if (element.code == approvalTask?.result) {
         _result = _language == 'zh_CN' ? element.cname : element.name;
       }
     });
 
     String _taskTitle = '';
-    switch(approvalTask.processKey){
-      case 'openTdContractApproval': {
-        _taskTitle = _language == 'zh_CN' ? '开立定期存单' : approvalTask?.taskName;
-      }
-      break;
-      case 'oneToOneTransferApproval': {
-        _taskTitle = _language == 'zh_CN' ? '行内转账' : approvalTask?.taskName;
-      }
-      break;
-      case 'internationalTransferApproval': {
-        _taskTitle = _language == 'zh_CN' ? '国际转账' : approvalTask?.taskName;
-      }
-      break;
-      case 'earlyRedTdContractApproval': {
-        _taskTitle = _language == 'zh_CN' ? '定期提前结清' : approvalTask?.taskName;
-      }
-      break;
-      case 'foreignTransferApproval': {
-        _taskTitle = _language == 'zh_CN' ? '外汇买卖' : approvalTask?.taskName;
-      }
-      break;
-      case 'loanWithDrawalApproval': {
-        _taskTitle = _language == 'zh_CN' ? '贷款领用' : approvalTask?.taskName;
-      }
-      break;
-      case 'postRepaymentApproval': {
-        _taskTitle = _language == 'zh_CN' ? '提前还款' : approvalTask?.taskName;
-      }
-      break;
-      case 'loanRepaymentApproval': {
-        _taskTitle = _language == 'zh_CN' ? '计划还款' : approvalTask?.taskName;
-      }
-      break;
+    switch (approvalTask.processKey) {
+      case 'openTdContractApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '开立定期存单' : approvalTask?.taskName;
+        }
+        break;
+      case 'oneToOneTransferApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '行内转账' : approvalTask?.taskName;
+        }
+        break;
+      case 'internationalTransferApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '国际转账' : approvalTask?.taskName;
+        }
+        break;
+      case 'earlyRedTdContractApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '定期提前结清' : approvalTask?.taskName;
+        }
+        break;
+      case 'foreignTransferApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '外汇买卖' : approvalTask?.taskName;
+        }
+        break;
+      case 'loanWithDrawalApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '贷款领用' : approvalTask?.taskName;
+        }
+        break;
+      case 'postRepaymentApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '提前还款' : approvalTask?.taskName;
+        }
+        break;
+      case 'loanRepaymentApproval':
+        {
+          _taskTitle = _language == 'zh_CN' ? '计划还款' : approvalTask?.taskName;
+        }
+        break;
       default:
         {
           _taskTitle = '';
@@ -268,8 +278,7 @@ class _MyApplicationPageState extends State<MyApplicationPage>
             _rowInformation(
                 S.current.sponsor, approvalTask?.applicantName ?? ''),
             //审批结果
-            _rowInformation(
-                S.current.approve_result, _result ?? ''),
+            _rowInformation(S.current.approve_result, _result ?? ''),
             //审批时间
             _rowInformation(
                 S.current.approve_create_time, approvalTask?.createTime ?? ''),

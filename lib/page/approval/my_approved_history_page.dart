@@ -60,7 +60,7 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
   void initState() {
     super.initState();
     _refreshController = RefreshController();
-    _loadData();
+    _loadData(isLoading: true);
   }
 
   @override
