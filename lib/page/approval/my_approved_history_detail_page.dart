@@ -26,9 +26,9 @@ import 'package:ebank_mobile/data/source/model/approval/post_repayment_model.dar
     as PostRepaymentModel;
 import 'package:ebank_mobile/data/source/model/approval/loan_with_drawal_model.dart'
     as LoanWithDrawalModel;
-import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -90,7 +90,7 @@ class _MyApprovedHistoryDetailPageState
   }
 
   void _loadData({bool isLoading = false}) async {
-    if(this.mounted && isLoading) {
+    if (this.mounted && isLoading) {
       setState(() {
         _isLoading = true;
       });
@@ -500,11 +500,13 @@ class _MyApprovedHistoryDetailPageState
 
     // 获取收款银行
     String _payeeBank = '';
-    if(data.bankSwift.isNotEmpty) {
+    if (data.bankSwift.isNotEmpty) {
       try {
-        GetInfoBySwiftCodeResp getInfoBySwiftCodeResp =
-        await Transfer().getInfoBySwiftCode(GetInfoBySwiftCodeReq(data.bankSwift));
-        _payeeBank = getInfoBySwiftCodeResp.swiftName1 + getInfoBySwiftCodeResp.swiftName2 + getInfoBySwiftCodeResp.swiftName3;
+        GetInfoBySwiftCodeResp getInfoBySwiftCodeResp = await Transfer()
+            .getInfoBySwiftCode(GetInfoBySwiftCodeReq(data.bankSwift));
+        _payeeBank = getInfoBySwiftCodeResp.swiftName1 +
+            getInfoBySwiftCodeResp.swiftName2 +
+            getInfoBySwiftCodeResp.swiftName3;
       } catch (e) {
         print(e);
       }
@@ -541,7 +543,8 @@ class _MyApprovedHistoryDetailPageState
         _internationalList.add(_buildContentItem(
             S.current.approve_swift_code, data?.bankSwift ?? ''));
         _internationalList.add(_buildContentItem(
-            S.current.approve_collecting_bank, data?.payeeBankCode ?? _payeeBank ?? ''));
+            S.current.approve_collecting_bank,
+            data?.payeeBankCode ?? _payeeBank ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_collection_address, data?.payeeAddress ?? ''));
         _internationalList.add(
@@ -954,7 +957,8 @@ class _MyApprovedHistoryDetailPageState
       child: GestureDetector(
         onTap: () {
           Navigator.pushNamed(
-              context, pageAuthorizationTaskApprovalHistoryDetail, arguments: {"data": _commentList});
+              context, pageAuthorizationTaskApprovalHistoryDetail,
+              arguments: {"data": _commentList});
         },
         child: _buildHistoryItem(S.current.approve_approval_history, true),
       ),
@@ -1107,8 +1111,8 @@ class _MyApprovedHistoryDetailPageState
             children: [
               ClipOval(
                 child: Image(
-                  image: AssetImage(
-                      imageUrl ?? 'images/home/heaerIcon/home_header_person.png'),
+                  image: AssetImage(imageUrl ??
+                      'images/home/heaerIcon/home_header_person.png'),
                   fit: BoxFit.cover,
                   height: 22.0,
                   width: 22.0,

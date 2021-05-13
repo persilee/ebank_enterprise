@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/data/source/model/account/get_card_limit_by_card_no.dart';
+import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
@@ -9,12 +11,10 @@ import 'package:ebank_mobile/widget/hsg_loading.dart';
 /// Date: 2020-11-04
 
 import 'package:flutter/material.dart';
-import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';

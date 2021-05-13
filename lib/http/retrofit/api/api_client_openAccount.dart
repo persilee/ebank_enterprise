@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:ebank_mobile/data/source/model/city_for_country.dart';
-import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
-import 'package:ebank_mobile/data/source/model/face_sign_businessid.dart';
+import 'package:ebank_mobile/data/source/model/account/face_sign_businessid.dart';
 import 'package:ebank_mobile/data/source/model/get_invitee_status_by_phone.dart';
 
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/city_for_country.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/open_account_Industry_two_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_get_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_information_supplement_data.dart';

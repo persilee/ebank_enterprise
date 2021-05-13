@@ -6,8 +6,8 @@
  */
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
-import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/account/get_account_overview_info.dart';
+import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_early_contract.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_trial.dart';

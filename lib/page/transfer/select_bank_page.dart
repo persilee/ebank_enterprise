@@ -1,9 +1,10 @@
+import 'package:ebank_mobile/data/source/model/account/get_bank_list.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 选择银行
 /// Author: zhangqirong
 /// Date: 2020-12-25
 
-import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';

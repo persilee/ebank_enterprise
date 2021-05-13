@@ -5,7 +5,7 @@ import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 /// Author: wangluyao
 /// Date: 2020-12-28
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/get_user_info.dart';

@@ -6,8 +6,8 @@ import 'dart:convert';
 /// Date: 2021-03-17
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/open_account_Industry_two_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_get_data.dart';
 import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';

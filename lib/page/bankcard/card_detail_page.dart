@@ -1,11 +1,13 @@
+import 'package:ebank_mobile/data/source/model/account/get_bank_info_by_card_no.dart';
+import 'package:ebank_mobile/data/source/model/account/get_card_limit_by_card_no.dart';
+import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/account/get_card_list_bal_by_user.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
 /// Date: 2020-11-05
 
-import 'package:ebank_mobile/data/source/model/get_bank_info_by_card_no.dart';
-import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
-import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
@@ -15,7 +17,6 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/linear_loading.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
-import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'card_list_page.dart';

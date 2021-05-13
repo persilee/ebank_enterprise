@@ -4,11 +4,12 @@
 /// Date: 2020-12-24
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/add_partner.dart';
+import 'package:ebank_mobile/data/source/model/account/get_bank_list.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
-import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
+import 'package:ebank_mobile/data/source/model/transfer/add_partner.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
@@ -20,7 +21,6 @@ import 'package:ebank_mobile/widget/hsg_single_picker.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
 import 'package:intl/intl.dart';
 
 class AddPartnerPage extends StatefulWidget {

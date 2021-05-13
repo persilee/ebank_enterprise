@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:ebank_mobile/data/source/model/check_phone.dart';
-import 'package:ebank_mobile/data/source/model/check_sms.dart';
+import 'package:ebank_mobile/data/source/model/account/check_phone.dart';
+import 'package:ebank_mobile/data/source/model/account/check_sms.dart';
+import 'package:ebank_mobile/data/source/model/account/get_bank_info_by_card_no.dart';
+import 'package:ebank_mobile/data/source/model/account/get_bank_list.dart';
+import 'package:ebank_mobile/data/source/model/account/get_branch_list.dart';
+import 'package:ebank_mobile/data/source/model/account/get_card_limit_by_card_no.dart';
+import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/getFeedback.dart';
-import 'package:ebank_mobile/data/source/model/get_bank_info_by_card_no.dart';
-import 'package:ebank_mobile/data/source/model/get_bank_list.dart';
-import 'package:ebank_mobile/data/source/model/get_branch_list.dart';
-import 'package:ebank_mobile/data/source/model/get_card_limit_by_card_no.dart';
-import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_last_version.dart';
 import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
 

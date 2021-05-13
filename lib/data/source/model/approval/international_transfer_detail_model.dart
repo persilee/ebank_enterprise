@@ -1,4 +1,4 @@
-import '../find_user_application_task_detail.dart';
+import 'package:ebank_mobile/data/source/model/approval/find_user_application_task_detail.dart';
 
 /// userId : "829378511096512512"
 /// userName : "HSG16 Checker"
@@ -76,31 +76,31 @@ class InternationalTransferDetailModel {
   dynamic get optBefJsonValue => _optBefJsonValue;
   dynamic get optEndJsonValue => _optEndJsonValue;
 
-  InternationalTransferDetailModel({
-      String userId, 
-      String userName, 
-      dynamic assigneeList, 
-      int approverNumbers, 
-      String processTitle, 
-      String processKey, 
-      dynamic businessKey, 
-      dynamic tenantId, 
-      dynamic operateBeforeValue, 
-      OperateEndValue operateEndValue, 
-      String servCtr, 
-      dynamic custId, 
-      dynamic amount, 
-      dynamic ccy, 
-      dynamic authModel, 
-      dynamic amountPosition, 
-      dynamic serviceType, 
-      dynamic authGroups, 
+  InternationalTransferDetailModel(
+      {String userId,
+      String userName,
+      dynamic assigneeList,
+      int approverNumbers,
+      String processTitle,
+      String processKey,
+      dynamic businessKey,
+      dynamic tenantId,
+      dynamic operateBeforeValue,
+      OperateEndValue operateEndValue,
+      String servCtr,
+      dynamic custId,
+      dynamic amount,
+      dynamic ccy,
+      dynamic authModel,
+      dynamic amountPosition,
+      dynamic serviceType,
+      dynamic authGroups,
       List<CommentList> commentList,
-      String result, 
-      dynamic taskKey, 
-      int taskCount, 
-      dynamic optBefJsonValue, 
-      dynamic optEndJsonValue}){
+      String result,
+      dynamic taskKey,
+      int taskCount,
+      dynamic optBefJsonValue,
+      dynamic optEndJsonValue}) {
     _userId = userId;
     _userName = userName;
     _assigneeList = assigneeList;
@@ -125,7 +125,7 @@ class InternationalTransferDetailModel {
     _taskCount = taskCount;
     _optBefJsonValue = optBefJsonValue;
     _optEndJsonValue = optEndJsonValue;
-}
+  }
 
   InternationalTransferDetailModel.fromJson(dynamic json) {
     _userId = json["userId"];
@@ -137,7 +137,9 @@ class InternationalTransferDetailModel {
     _businessKey = json["businessKey"];
     _tenantId = json["tenantId"];
     _operateBeforeValue = json["operateBeforeValue"];
-    _operateEndValue = json["operateEndValue"] != null ? OperateEndValue.fromJson(json["operateEndValue"]) : null;
+    _operateEndValue = json["operateEndValue"] != null
+        ? OperateEndValue.fromJson(json["operateEndValue"])
+        : null;
     _servCtr = json["servCtr"];
     _custId = json["custId"];
     _amount = json["amount"];
@@ -191,7 +193,6 @@ class InternationalTransferDetailModel {
     map["optEndJsonValue"] = _optEndJsonValue;
     return map;
   }
-
 }
 
 /// payeeAddress4 : null
@@ -279,34 +280,34 @@ class OperateEndValue {
   String get creditAmount => _creditAmount;
   String get payPassword => _payPassword;
 
-  OperateEndValue({
-      dynamic payeeAddress4, 
-      String debitCurrency, 
-      dynamic payeeName4, 
-      dynamic payeeName3, 
-      String payeeBankCode, 
-      String smsCode, 
-      String remark, 
-      dynamic payeeAddress2, 
-      dynamic payeeAddress3, 
-      String payerBankCode, 
-      String payeeName, 
-      String exchangeRate, 
-      String custId, 
-      String payerName, 
-      String payerCardNo, 
-      String payeeCardNo, 
-      String costOptions, 
-      String bankSwift, 
-      String debitAmount, 
-      String payeeAddress, 
-      String opt, 
-      dynamic phone, 
-      String district, 
-      dynamic payeeName2, 
-      String creditCurrency, 
-      String creditAmount, 
-      String payPassword}){
+  OperateEndValue(
+      {dynamic payeeAddress4,
+      String debitCurrency,
+      dynamic payeeName4,
+      dynamic payeeName3,
+      String payeeBankCode,
+      String smsCode,
+      String remark,
+      dynamic payeeAddress2,
+      dynamic payeeAddress3,
+      String payerBankCode,
+      String payeeName,
+      String exchangeRate,
+      String custId,
+      String payerName,
+      String payerCardNo,
+      String payeeCardNo,
+      String costOptions,
+      String bankSwift,
+      String debitAmount,
+      String payeeAddress,
+      String opt,
+      dynamic phone,
+      String district,
+      dynamic payeeName2,
+      String creditCurrency,
+      String creditAmount,
+      String payPassword}) {
     _payeeAddress4 = payeeAddress4;
     _debitCurrency = debitCurrency;
     _payeeName4 = payeeName4;
@@ -334,7 +335,7 @@ class OperateEndValue {
     _creditCurrency = creditCurrency;
     _creditAmount = creditAmount;
     _payPassword = payPassword;
-}
+  }
 
   OperateEndValue.fromJson(dynamic json) {
     _payeeAddress4 = json["payeeAddress4"];
@@ -397,5 +398,4 @@ class OperateEndValue {
     map["payPassword"] = _payPassword;
     return map;
   }
-
 }

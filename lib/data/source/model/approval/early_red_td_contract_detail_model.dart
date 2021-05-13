@@ -1,4 +1,4 @@
-import '../find_user_application_task_detail.dart';
+import 'package:ebank_mobile/data/source/model/approval/find_user_application_task_detail.dart';
 
 /// userId : "835838936357011456"
 /// userName : "李家伟"
@@ -76,31 +76,31 @@ class EarlyRedTdContractDetailModel {
   dynamic get optBefJsonValue => _optBefJsonValue;
   dynamic get optEndJsonValue => _optEndJsonValue;
 
-  EarlyRedTdContractDetailModel({
-      String userId, 
-      String userName, 
-      dynamic assigneeList, 
-      int approverNumbers, 
-      String processTitle, 
-      String processKey, 
-      dynamic businessKey, 
-      dynamic tenantId, 
-      dynamic operateBeforeValue, 
-      OperateEndValue operateEndValue, 
-      String servCtr, 
-      dynamic custId, 
-      dynamic amount, 
-      dynamic ccy, 
-      dynamic authModel, 
-      dynamic amountPosition, 
-      dynamic serviceType, 
-      dynamic authGroups, 
+  EarlyRedTdContractDetailModel(
+      {String userId,
+      String userName,
+      dynamic assigneeList,
+      int approverNumbers,
+      String processTitle,
+      String processKey,
+      dynamic businessKey,
+      dynamic tenantId,
+      dynamic operateBeforeValue,
+      OperateEndValue operateEndValue,
+      String servCtr,
+      dynamic custId,
+      dynamic amount,
+      dynamic ccy,
+      dynamic authModel,
+      dynamic amountPosition,
+      dynamic serviceType,
+      dynamic authGroups,
       List<CommentList> commentList,
-      String result, 
-      dynamic taskKey, 
-      int taskCount, 
-      dynamic optBefJsonValue, 
-      dynamic optEndJsonValue}){
+      String result,
+      dynamic taskKey,
+      int taskCount,
+      dynamic optBefJsonValue,
+      dynamic optEndJsonValue}) {
     _userId = userId;
     _userName = userName;
     _assigneeList = assigneeList;
@@ -125,7 +125,7 @@ class EarlyRedTdContractDetailModel {
     _taskCount = taskCount;
     _optBefJsonValue = optBefJsonValue;
     _optEndJsonValue = optEndJsonValue;
-}
+  }
 
   EarlyRedTdContractDetailModel.fromJson(dynamic json) {
     _userId = json["userId"];
@@ -137,7 +137,9 @@ class EarlyRedTdContractDetailModel {
     _businessKey = json["businessKey"];
     _tenantId = json["tenantId"];
     _operateBeforeValue = json["operateBeforeValue"];
-    _operateEndValue = json["operateEndValue"] != null ? OperateEndValue.fromJson(json["operateEndValue"]) : null;
+    _operateEndValue = json["operateEndValue"] != null
+        ? OperateEndValue.fromJson(json["operateEndValue"])
+        : null;
     _servCtr = json["servCtr"];
     _custId = json["custId"];
     _amount = json["amount"];
@@ -191,7 +193,6 @@ class EarlyRedTdContractDetailModel {
     map["optEndJsonValue"] = _optEndJsonValue;
     return map;
   }
-
 }
 
 /// eryRate : "0"
@@ -258,27 +259,27 @@ class OperateEndValue {
   String get hdlFee => _hdlFee;
   dynamic get status => _status;
 
-  OperateEndValue({
-      String eryRate, 
-      dynamic matBal, 
-      String conNo, 
-      String matAmt, 
-      String settBal, 
-      String settDdAc, 
-      dynamic clsRate, 
-      String transferAc, 
-      dynamic dueDate, 
-      dynamic valueDate, 
-      dynamic bal, 
-      dynamic type, 
-      dynamic tenor, 
-      dynamic clsInt, 
-      String mainAc, 
-      String pnltFee, 
-      dynamic ccy, 
-      String eryInt, 
-      String hdlFee, 
-      dynamic status}){
+  OperateEndValue(
+      {String eryRate,
+      dynamic matBal,
+      String conNo,
+      String matAmt,
+      String settBal,
+      String settDdAc,
+      dynamic clsRate,
+      String transferAc,
+      dynamic dueDate,
+      dynamic valueDate,
+      dynamic bal,
+      dynamic type,
+      dynamic tenor,
+      dynamic clsInt,
+      String mainAc,
+      String pnltFee,
+      dynamic ccy,
+      String eryInt,
+      String hdlFee,
+      dynamic status}) {
     _eryRate = eryRate;
     _matBal = matBal;
     _conNo = conNo;
@@ -299,7 +300,7 @@ class OperateEndValue {
     _eryInt = eryInt;
     _hdlFee = hdlFee;
     _status = status;
-}
+  }
 
   OperateEndValue.fromJson(dynamic json) {
     _eryRate = json["eryRate"];
@@ -348,5 +349,4 @@ class OperateEndValue {
     map["status"] = _status;
     return map;
   }
-
 }

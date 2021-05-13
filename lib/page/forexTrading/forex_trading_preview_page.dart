@@ -3,7 +3,7 @@
 /// Author: fangluyao
 /// Date: 2021-04-28
 
-import 'package:ebank_mobile/data/source/model/foreign_ccy.dart';
+import 'package:ebank_mobile/data/source/model/other/foreign_ccy.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_bill.dart';
 import 'package:ebank_mobile/page_route.dart';

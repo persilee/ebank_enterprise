@@ -1,5 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/face_sign_businessid.dart';
+import 'package:ebank_mobile/data/source/model/account/face_sign_businessid.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/util/format_text_util.dart';

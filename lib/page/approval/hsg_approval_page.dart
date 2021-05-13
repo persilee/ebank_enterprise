@@ -4,7 +4,7 @@
 /// Date: 2020-12-03
 ///
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/feature_demo/my_tab_indicator.dart';
+import 'package:ebank_mobile/widget/my_tab_indicator.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/approval/my_approved_history_page.dart';
 import 'package:ebank_mobile/util/screen_util.dart';
@@ -98,31 +98,34 @@ class _ApprovalPageState extends State<ApprovalPage>
               children: [
                 GestureDetector(
                   onDoubleTap: () {
-                    switch(tabController.index) {
-                      case 0: {
-                        _controllerMyToDoTask.animateTo(
-                          _controllerMyToDoTask.position.minScrollExtent,
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.linear,
-                        );
-                      }
-                      break;
-                      case 1: {
-                        _controllerMyApprovedHistory.animateTo(
-                          _controllerMyToDoTask.position.minScrollExtent,
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.linear,
-                        );
-                      }
-                      break;
-                      case 2: {
-                        _controllerMyApplication.animateTo(
-                          _controllerMyToDoTask.position.minScrollExtent,
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.linear,
-                        );
-                      }
-                      break;
+                    switch (tabController.index) {
+                      case 0:
+                        {
+                          _controllerMyToDoTask.animateTo(
+                            _controllerMyToDoTask.position.minScrollExtent,
+                            duration: Duration(milliseconds: 500),
+                            curve: Curves.linear,
+                          );
+                        }
+                        break;
+                      case 1:
+                        {
+                          _controllerMyApprovedHistory.animateTo(
+                            _controllerMyToDoTask.position.minScrollExtent,
+                            duration: Duration(milliseconds: 500),
+                            curve: Curves.linear,
+                          );
+                        }
+                        break;
+                      case 2:
+                        {
+                          _controllerMyApplication.animateTo(
+                            _controllerMyToDoTask.position.minScrollExtent,
+                            duration: Duration(milliseconds: 500),
+                            curve: Curves.linear,
+                          );
+                        }
+                        break;
                     }
                   },
                   child: Container(
@@ -152,9 +155,9 @@ class _ApprovalPageState extends State<ApprovalPage>
                             controller: _controllerMyToDoTask),
                         MyApprovedHistoryPage(
                             title: S.current.authorization_history,
-                            controller: _controllerMyApprovedHistory
-                        ),
-                        MyApplicationPage(title: S.current.my_application,
+                            controller: _controllerMyApprovedHistory),
+                        MyApplicationPage(
+                          title: S.current.my_application,
                           controller: _controllerMyApplication,
                         )
                       ],
