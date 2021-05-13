@@ -934,7 +934,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     //     });
     //   }
     // }).catchError((e) {
-    //   // HSProgressHUD.showToast(e.error);
+    //   // HSProgressHUD.showToast(e);
     // });
   }
 
@@ -958,7 +958,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
         }
       }
     }).catchError((e) {
-      // HSProgressHUD.showToast(e.error);
+      // HSProgressHUD.showToast(e);
     });
   }
 
@@ -998,7 +998,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
         // HSProgressHUD.dismiss();
       }).catchError((e) {
-        // HSProgressHUD.showToast(e.error);
+        // HSProgressHUD.showToast(e);
 
         if (this.mounted) {
           setState(() {

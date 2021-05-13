@@ -202,7 +202,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         Navigator.of(context).pop();
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

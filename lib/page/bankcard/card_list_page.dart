@@ -295,7 +295,7 @@ class _CardListPageState extends State<CardListPage> {
           _isLoading = false;
         });
       }
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -401,7 +401,7 @@ class _CardListPageState extends State<CardListPage> {
           HSProgressHUD.dismiss();
         }).catchError((e) {
           HSProgressHUD.dismiss();
-          HSProgressHUD.showToast(e.error);
+          HSProgressHUD.showToast(e);
         });
       }
     }

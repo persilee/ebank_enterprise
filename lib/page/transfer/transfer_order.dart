@@ -1338,7 +1338,7 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

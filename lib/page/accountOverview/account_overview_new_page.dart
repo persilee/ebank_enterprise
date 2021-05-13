@@ -657,7 +657,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
         _getAccountOverviewInfo();
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -720,7 +720,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
       }
     }).catchError((e) {
       _isLoading = false;
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 }

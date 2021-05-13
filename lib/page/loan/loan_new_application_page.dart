@@ -147,7 +147,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         _custId = data.custId;
       });
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -173,7 +173,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         }
       },
     ).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -199,7 +199,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

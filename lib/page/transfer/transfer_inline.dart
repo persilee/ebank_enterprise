@@ -808,7 +808,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
           _boolBut();
         }
       }).catchError((e) {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       });
     }
   }

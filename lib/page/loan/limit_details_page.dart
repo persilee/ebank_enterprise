@@ -1,5 +1,5 @@
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
-/// 额度详情
+/// 我的贷款列表
 /// Author: zhangqirong
 /// Date: 2020-12-03
 
@@ -86,6 +86,11 @@ class _LimitDetailsState extends State<LimitDetailsPage> {
     ciNo = cino;
 
     contactNo = "";
+
+    setState(() {
+      _isload = true;
+    });
+
     ApiClientLoan()
         .getLoanAccountList(LoanAccountMastModelReq(0, ciNo, contactNo))
         .then((data) {

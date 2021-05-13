@@ -938,7 +938,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       }
       return true;
     } catch (e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
       return false;
     }
   }
@@ -975,7 +975,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           });
         }
       } catch (e) {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       }
     }
   }
@@ -1120,7 +1120,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -1153,7 +1153,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         }
       });
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -1180,7 +1180,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       }
       return true;
     } catch (e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
       return false;
     }
   }
@@ -1208,7 +1208,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       }
       return false;
     } catch (e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
       return false;
     }
   }
@@ -1277,7 +1277,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   //     if (this.mounted) {
   //       setState(() {
   //         _isDeposit = false;
-  //         HSProgressHUD.showToast(e.error);
+  //         HSProgressHUD.showToast(e);
   //       });
   //     }
   //   });
@@ -1321,7 +1321,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
       }
       return true;
     } catch (e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
       return false;
     }
   }

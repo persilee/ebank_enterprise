@@ -167,7 +167,7 @@ class _OpenAccountGetFaceSignPageState
           }
         },
       ).catchError((e) {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       });
     }
   }

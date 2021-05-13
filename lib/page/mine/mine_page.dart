@@ -771,7 +771,7 @@ class _MinePageState extends State<MinePage>
             headPortrait: value['headPortrait'], state: 100));
         print(value);
       }).catchError((e) {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       });
     }
   }
@@ -794,7 +794,7 @@ class _MinePageState extends State<MinePage>
             .fire(ChangeUserInfo(userInfo: _userInfoResp, state: 100));
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -850,7 +850,7 @@ class _MinePageState extends State<MinePage>
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -938,7 +938,7 @@ class _MinePageState extends State<MinePage>
         lastVersionName = value.versionName;
       });
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

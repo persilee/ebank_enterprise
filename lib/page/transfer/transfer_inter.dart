@@ -1109,7 +1109,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
       );
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 }

@@ -568,7 +568,7 @@ class _RelatedIndividualsDataPageState
         print('公共参数-称谓-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
 
     // //个人职位类别COPC
@@ -580,7 +580,7 @@ class _RelatedIndividualsDataPageState
     //     print('公共参数-个人职位类别-  ${data.publicCodeGetRedisRspDtoList}');
     //   }
     // }).catchError((e) {
-    //   HSProgressHUD.showToast(e.error);
+    //   HSProgressHUD.showToast(e);
     // });
 
     //个人证件类型
@@ -592,7 +592,7 @@ class _RelatedIndividualsDataPageState
         print('公共参数-个人证件类型-  ${data.publicCodeGetRedisRspDtoList}');
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -618,7 +618,7 @@ class _RelatedIndividualsDataPageState
       },
     ).catchError(
       (e) {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       },
     );
   }

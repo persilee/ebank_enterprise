@@ -604,7 +604,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         _showTimeDepositEarlyTip();
       });
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -648,7 +648,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
       if (this.mounted) {
         setState(() {});
       }
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
     // _showContractSucceedPage(context);
   }
@@ -737,7 +737,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         }
       },
     ).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -761,7 +761,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         instructions = instructionList;
       });
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -790,7 +790,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         HSProgressHUD.dismiss();
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -819,7 +819,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         }
       });
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

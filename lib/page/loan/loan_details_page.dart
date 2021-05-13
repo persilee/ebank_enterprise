@@ -63,7 +63,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
       setState(() {
         _isLoad = false;
       });
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
     loanDetailsArr.clear();
   }

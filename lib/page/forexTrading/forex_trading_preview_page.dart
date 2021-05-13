@@ -177,7 +177,7 @@ class _ForexTradingPreviewPageState extends State<ForexTradingPreviewPage> {
       Navigator.pushNamed(context, pageTransferSuccess,
           arguments: "pageTransferSuccess");
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 }

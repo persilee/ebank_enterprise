@@ -107,7 +107,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   }
 
   void _loadData({bool isLoading = false}) async {
-    if(this.mounted && isLoading) {
+    if (this.mounted && isLoading) {
       setState(() {
         _isLoading = true;
       });
@@ -171,7 +171,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // loanWithDrawalApproval - 贷款领用
   void _loanWithDrawalData(_contractModel) async {
     LoanWithDrawalModel.LoanWithDrawalModel loanWithDrawalModel =
-    LoanWithDrawalModel.LoanWithDrawalModel.fromJson(_contractModel);
+        LoanWithDrawalModel.LoanWithDrawalModel.fromJson(_contractModel);
 
     LoanWithDrawalModel.OperateEndValue data =
         loanWithDrawalModel.operateEndValue;
@@ -180,7 +180,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _iratTm = '';
     try {
       GetIdTypeResp getIdTypeResp =
-      await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
@@ -197,7 +197,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _repType = '';
     try {
       GetIdTypeResp getIdTypeResp =
-      await ApiClientOpenAccount().getIdType(GetIdTypeReq('REPAY_TYPE'));
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('REPAY_TYPE'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
@@ -259,7 +259,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // postRepaymentApproval  - 提前还款
   void _loadPostRepaymentData(_contractModel) {
     PostRepaymentModel.PostRepaymentModel postRepaymentModel =
-    PostRepaymentModel.PostRepaymentModel.fromJson(_contractModel);
+        PostRepaymentModel.PostRepaymentModel.fromJson(_contractModel);
 
     PostRepaymentModel.OperateEndValue data =
         postRepaymentModel.operateEndValue;
@@ -330,7 +330,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // foreignTransferApproval - 外汇买卖
   void _loadForeignTransferData(_contractModel) async {
     ForeignTransferModel.ForeignTransferModel foreignTransferModel =
-    ForeignTransferModel.ForeignTransferModel.fromJson(_contractModel);
+        ForeignTransferModel.ForeignTransferModel.fromJson(_contractModel);
 
     ForeignTransferModel.OperateEndValue data =
         foreignTransferModel.operateEndValue;
@@ -397,7 +397,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // transferPlanApproval - 预约转账
   void _loadTransferPlanData(_contractModel) {
     TransferPlanModel.TransferPlanDetailModel transferPlanDetailModel =
-    TransferPlanModel.TransferPlanDetailModel.fromJson(_contractModel);
+        TransferPlanModel.TransferPlanDetailModel.fromJson(_contractModel);
 
     TransferPlanModel.OperateEndValue data =
         transferPlanDetailModel.operateEndValue;
@@ -458,9 +458,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // internationalTransferApproval - 国际汇款
   void _loadInternationalData(_contractModel) async {
     InternationalModel.InternationalTransferDetailModel
-    internationalTransferDetailModel =
-    InternationalModel.InternationalTransferDetailModel.fromJson(
-        _contractModel);
+        internationalTransferDetailModel =
+        InternationalModel.InternationalTransferDetailModel.fromJson(
+            _contractModel);
 
     InternationalModel.OperateEndValue data =
         internationalTransferDetailModel.operateEndValue;
@@ -483,7 +483,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _costOptions = '';
     try {
       GetIdTypeResp getIdTypeResp =
-      await ApiClientOpenAccount().getIdType(GetIdTypeReq('PAY_METHOD'));
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('PAY_METHOD'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
@@ -500,8 +500,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _district = '';
     try {
       CountryRegionNewListResp countryRegionNewListResp =
-      await ApiClientOpenAccount()
-          .getCountryList(CountryRegionNewListReq());
+          await ApiClientOpenAccount()
+              .getCountryList(CountryRegionNewListReq());
       List<CountryRegionNewModel> _countryRegionNewList =
           countryRegionNewListResp.countryCodeinfoDTOList;
       if (_countryRegionNewList.isNotEmpty) {
@@ -517,11 +517,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     // 获取收款银行
     String _payeeBank = '';
-    if(data.bankSwift.isNotEmpty) {
+    if (data.bankSwift.isNotEmpty) {
       try {
-        GetInfoBySwiftCodeResp getInfoBySwiftCodeResp =
-        await Transfer().getInfoBySwiftCode(GetInfoBySwiftCodeReq(data.bankSwift));
-        _payeeBank = getInfoBySwiftCodeResp.swiftName1 + getInfoBySwiftCodeResp.swiftName2 + getInfoBySwiftCodeResp.swiftName3;
+        GetInfoBySwiftCodeResp getInfoBySwiftCodeResp = await Transfer()
+            .getInfoBySwiftCode(GetInfoBySwiftCodeReq(data.bankSwift));
+        _payeeBank = getInfoBySwiftCodeResp.swiftName1 +
+            getInfoBySwiftCodeResp.swiftName2 +
+            getInfoBySwiftCodeResp.swiftName3;
       } catch (e) {
         print(e);
       }
@@ -558,7 +560,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _internationalList.add(_buildContentItem(
             S.current.approve_swift_code, data?.bankSwift ?? ''));
         _internationalList.add(_buildContentItem(
-            S.current.approve_collecting_bank, data?.payeeBankCode ?? _payeeBank ?? ''));
+            S.current.approve_collecting_bank,
+            data?.payeeBankCode ?? _payeeBank ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_collection_address, data?.payeeAddress ?? ''));
         _internationalList.add(
@@ -595,7 +598,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // oneToOneTransferApproval - 行内转账
   void _loadOneToOneData(_contractModel) async {
     OneToOneModel.OneToOneTransferDetailModel oneToOneTransferDetailModel =
-    OneToOneModel.OneToOneTransferDetailModel.fromJson(_contractModel);
+        OneToOneModel.OneToOneTransferDetailModel.fromJson(_contractModel);
 
     OneToOneModel.OperateEndValue data =
         oneToOneTransferDetailModel.operateEndValue;
@@ -670,7 +673,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // earlyRedTdContractApproval - 定期提前结清
   void _loadEarlyRedData(_contractModel) async {
     EarlyRedModel.EarlyRedTdContractDetailModel earlyRedTdContractDetailModel =
-    EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
+        EarlyRedModel.EarlyRedTdContractDetailModel.fromJson(_contractModel);
 
     EarlyRedModel.OperateEndValue data =
         earlyRedTdContractDetailModel.operateEndValue;
@@ -679,7 +682,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _tenorName = '';
     try {
       GetIdTypeResp getIdTypeResp =
-      await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
@@ -696,7 +699,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _statusName = '';
     try {
       GetIdTypeResp getIdTypeResp =
-      await ApiClientOpenAccount().getIdType(GetIdTypeReq('TD_STATE'));
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('TD_STATE'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
@@ -773,7 +776,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   // openTdContractApproval - 开立定期存单
   void _loadOpenTdData(_contractModel) async {
     OpenTDModel.OpenTdContractDetailModel openTdContractDetailModel =
-    OpenTDModel.OpenTdContractDetailModel.fromJson(_contractModel);
+        OpenTDModel.OpenTdContractDetailModel.fromJson(_contractModel);
     OpenTDModel.OperateEndValue data =
         openTdContractDetailModel?.operateEndValue;
 
@@ -804,7 +807,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _tenorName = '';
     try {
       GetIdTypeResp getIdTypeResp =
-      await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('AUCT'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
@@ -821,7 +824,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     String _instCode = '';
     try {
       GetIdTypeResp getIdTypeResp =
-      await ApiClientOpenAccount().getIdType(GetIdTypeReq('EXP_IN'));
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('EXP_IN'));
       List<IdType> _instList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_instList.isNotEmpty) {
         _instList.forEach((element) {
@@ -1171,7 +1174,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       ),
     );
     if (!_offstage) {
-
     } else {
       // 锁定按钮
       // return Container(
@@ -1423,7 +1425,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _btnIsLoadingUN = false;
         _btnIsEnable = true;
       });
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     }
   }
 

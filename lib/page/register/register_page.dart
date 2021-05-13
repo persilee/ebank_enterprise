@@ -274,7 +274,7 @@ class _RegisterPageState extends State<RegisterPage> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -295,7 +295,7 @@ class _RegisterPageState extends State<RegisterPage> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
     // }
   }
@@ -330,7 +330,7 @@ class _RegisterPageState extends State<RegisterPage> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

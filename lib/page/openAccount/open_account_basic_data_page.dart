@@ -795,7 +795,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     }).catchError((e) {
       if (e is NeedLogin) {
       } else {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       }
     });
 
@@ -808,7 +808,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     }).catchError((e) {
       if (e is NeedLogin) {
       } else {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       }
     });
 
@@ -821,7 +821,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
     }).catchError((e) {
       if (e is NeedLogin) {
       } else {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       }
     });
   }
@@ -845,7 +845,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
         _industrialNaturesTwo = data.publicCodeGetRedisRspDtoList;
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

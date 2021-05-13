@@ -258,7 +258,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -284,7 +284,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
     // }
   }
@@ -312,7 +312,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

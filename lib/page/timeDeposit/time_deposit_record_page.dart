@@ -414,7 +414,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           _isShowErrorPage = true;
         });
       }
-      // HSProgressHUD.showToast(e.error);
+      // HSProgressHUD.showToast(e);
     });
   }
 

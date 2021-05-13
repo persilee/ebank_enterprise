@@ -76,7 +76,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
         }
       },
     ).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -172,7 +172,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

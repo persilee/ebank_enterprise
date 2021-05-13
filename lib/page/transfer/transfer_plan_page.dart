@@ -645,7 +645,7 @@ class _TransferPlanPageState extends State<TransferPlanPage> {
         }
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
       if (this.mounted) {
         setState(() {
           _isLoading = false;

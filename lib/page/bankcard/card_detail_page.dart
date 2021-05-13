@@ -219,7 +219,7 @@ class _CardDetailPageState extends State<CardDetailPage> {
         _isLoading = false;
       });
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 }

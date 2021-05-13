@@ -5,6 +5,8 @@
 
 import 'dart:ui';
 
+import 'package:dio/dio.dart';
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
@@ -25,20 +27,28 @@ class HSProgressHUD {
   }
 
   static void showToast(
-    AppException error,
+    dynamic showContent,
   ) {
+    SVProgressHUD.dismiss();
+
+    AppException error;
+
+    if (showContent is AppException) {
+      error = showContent;
+    } else if (showContent is DioError && showContent.error is AppException) {
+      error = showContent.error;
+    } else {
+      showFluttertoast(S.current.error_tip_noDataError);
+      return;
+    }
+
     String errorStr = error.message ?? (error.code ?? '');
     //(error.code ?? '') + (error.message ?? '');
-    SVProgressHUD.dismiss();
     if (error.code == 'SYS90018' ||
         error.code == 'SYS90017' ||
         error is NeedLogin) {
     } else {
-      Fluttertoast.showToast(
-        msg: errorStr,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 4,
-      );
+      showFluttertoast(errorStr);
     }
   }
 
@@ -46,11 +56,7 @@ class HSProgressHUD {
     String tipStr,
   ) {
     SVProgressHUD.dismiss();
-    Fluttertoast.showToast(
-      msg: tipStr,
-      gravity: ToastGravity.CENTER,
-      timeInSecForIosWeb: 4,
-    );
+    showFluttertoast(tipStr);
   }
 
   static void showProgress(
@@ -98,5 +104,13 @@ class HSProgressHUD {
 
   static void showImage({String status}) {
     SVProgressHUD.showImage(status: status);
+  }
+
+  static void showFluttertoast(String content) {
+    Fluttertoast.showToast(
+      msg: content,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 4,
+    );
   }
 }

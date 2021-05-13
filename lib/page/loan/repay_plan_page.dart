@@ -81,7 +81,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
     lnScheduleList.clear();
     // lnScheduleList.add(_list1);

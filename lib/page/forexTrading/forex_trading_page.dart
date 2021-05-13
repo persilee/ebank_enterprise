@@ -352,7 +352,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         }
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -378,7 +378,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         HSProgressHUD.dismiss();
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
       HSProgressHUD.dismiss();
     });
   }
@@ -421,7 +421,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
         HSProgressHUD.dismiss();
       }).catchError((e) {
         HSProgressHUD.dismiss();
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       });
     } else {
       HSProgressHUD.dismiss();
@@ -474,7 +474,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
       //   Navigator.pop(context, pageIndex);
       // }).catchError((e) {
       //   HSProgressHUD.dismiss();
-      // HSProgressHUD.showToast(e.error);
+      // HSProgressHUD.showToast(e);
       // });
     }
   }

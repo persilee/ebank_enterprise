@@ -248,7 +248,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         _saveSignVideoNetwork();
       }
     } catch (e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     }
   }
 
@@ -275,7 +275,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
       },
     ).catchError(
       (e) {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       },
     );
   }
@@ -301,7 +301,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
       },
     ).catchError(
       (e) {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       },
     );
   }
@@ -327,7 +327,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
       },
     ).catchError(
       (e) {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       },
     );
   }

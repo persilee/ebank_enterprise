@@ -272,7 +272,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
     // }
   }
@@ -298,7 +298,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -365,7 +365,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
     // }
   }

@@ -317,7 +317,7 @@ class _TransferPartnerState extends State<TransferPartner> {
           }
         });
       }).catchError((e) {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       });
   }
 

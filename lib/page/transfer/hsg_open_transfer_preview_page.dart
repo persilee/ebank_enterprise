@@ -226,7 +226,7 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
           arguments: "pageTransferSuccess");
       // setState(() {});
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 }

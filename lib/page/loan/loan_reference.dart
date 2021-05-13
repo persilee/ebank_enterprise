@@ -132,7 +132,7 @@ class _LoanReferenceState extends State<LoanReference> {
         }
       },
     ).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -202,7 +202,7 @@ class _LoanReferenceState extends State<LoanReference> {
       setState(() {
         _recipientsController.text = '';
       });
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -221,7 +221,8 @@ class _LoanReferenceState extends State<LoanReference> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      // HSProgressHUD.dismiss();
+      HSProgressHUD.showToast(e);
       // HSProgressHUD.dismiss();
     });
   }
@@ -254,7 +255,7 @@ class _LoanReferenceState extends State<LoanReference> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

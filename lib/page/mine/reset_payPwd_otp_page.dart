@@ -191,7 +191,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
           });
         }
       }).catchError((e) {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       });
     }
   }
@@ -324,7 +324,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
