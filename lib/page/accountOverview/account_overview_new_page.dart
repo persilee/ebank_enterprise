@@ -52,11 +52,11 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
   // ignore: must_call_super
   void initState() {
     _refreshController = new RefreshController();
-    _getAccountOverviewInfo();
+    // _getAccountOverviewInfo();
     // 网络请求
-    setState(() {
-      _getCardList();
-    });
+    // setState(() {
+    _getCardList();
+    // });
   }
 
   @override
@@ -642,6 +642,9 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
 
   Future<void> _getCardList() async {
     // CardDataRepository()
+    setState(() {
+      _isLoading = true;
+    });
     ApiClientAccount().getCardList(GetCardListReq()).then((data) {
       if (data.cardList != null) {
         if (mounted) {
