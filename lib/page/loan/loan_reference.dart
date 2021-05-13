@@ -190,7 +190,7 @@ class _LoanReferenceState extends State<LoanReference> {
           setState(() {
             GetCreditlimitByCusteDTOList custcd =
                 data.getCreditlimitByCusteDTOList[0];
-            iratCd1 = custcd.iratCd1 != '' ? custcd.iratCd1 : 'E10';
+            iratCd1 = custcd.iratCd1;
             _limitCusteModel = custcd;
             _checkInputValueAndRate(); //利率判断
           });
@@ -523,6 +523,8 @@ class _LoanReferenceState extends State<LoanReference> {
       list.forEach((e) {
         if (_language == 'zh_CN') {
           tempList.add(e.cname);
+        } else if (_language == 'zh_HK') {
+          tempList.add(e.chName);
         } else {
           tempList.add(e.name);
         }

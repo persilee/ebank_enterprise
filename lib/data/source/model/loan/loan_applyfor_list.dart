@@ -7,8 +7,16 @@ class LoanApplyFoyListReq extends Object {
   @JsonKey(name: 'userId')
   String userId;
 
+  @JsonKey(name: 'page')
+  int page;
+
+  @JsonKey(name: 'pageSize')
+  int pageSize;
+
   LoanApplyFoyListReq(
     this.userId,
+    this.page,
+    this.pageSize,
   );
 
   factory LoanApplyFoyListReq.fromJson(Map<String, dynamic> srcJson) =>
@@ -18,10 +26,25 @@ class LoanApplyFoyListReq extends Object {
 
 @JsonSerializable()
 class LoanApplyFoyListResp extends Object {
-  @JsonKey(name: 'loanRecordDOList')
+  @JsonKey(name: 'page')
+  int page;
+
+  @JsonKey(name: 'pageSize')
+  int pageSize;
+
+  @JsonKey(name: 'count')
+  int count;
+
+  @JsonKey(name: 'totalPage')
+  int totalPage;
+
+  @JsonKey(name: 'rows')
   List<LoanRecordDOList> loanRecordDOList;
 
   LoanApplyFoyListResp(
+    this.page,
+    this.count,
+    this.totalPage,
     this.loanRecordDOList,
   );
 

@@ -11,6 +11,7 @@ class BaseDio {
   // static const BASEURL = "http://47.57.236.20:5040/"; //sit
   static const BASEURL = "http://47.242.2.219:5040/"; //uat
 //  static const BASEURL = "http://192.168.201.65:5041/"; //local
+
   BaseDio._();
 
   static BaseDio _instance;

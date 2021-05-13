@@ -171,7 +171,13 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       idCardList = [];
       String _language = Intl.getCurrentLocale();
       idInformationList.forEach((element) {
-        idCardList.add(_language == 'en' ? element.name : element.cname);
+        if (_language == 'en') {
+          idCardList.add(element.name);
+        } else if (_language == 'zh_HK') {
+          idCardList.add(element.chName);
+        } else {
+          idCardList.add(element.cname);
+        }
       });
     }
 

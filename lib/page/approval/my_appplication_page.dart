@@ -198,7 +198,13 @@ class _MyApplicationPageState extends State<MyApplicationPage>
     String _language = Intl.getCurrentLocale();
     _resultTypeList.forEach((element) {
       if (element.code == approvalTask?.result) {
-        _result = _language == 'zh_CN' ? element.cname : element.name;
+        if (_language == 'zh_CN') {
+          _result = element.cname;
+        } else if (_language == 'zh_HK') {
+          _result = element.chName;
+        } else {
+          _result = element.name;
+        }
       }
     });
 

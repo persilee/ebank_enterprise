@@ -363,6 +363,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   @override
   Widget build(BuildContext context) {
     // deposit = ModalRoute.of(context).settings.arguments;
+    print(widget.deposit.toJson());
 
     String _language = Intl.getCurrentLocale();
     String _nameStr = '';
@@ -634,7 +635,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         double.parse(_trialResp.pnltFee ?? '0'),
         double.parse(_trialResp.settBal ?? '0'),
         widget.deposit.settDdAc ?? '',
-        '',
+        widget.deposit.conSts ?? '',
         widget.deposit.tenor ?? '',
         widget.deposit.settDdAc ?? '', //_paymentAc,
         'all',
@@ -779,6 +780,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
             instCodes.add(element.code);
             if (language == 'zh_CN') {
               instructions.add(element.cname);
+            } else if (language == 'zh_HK') {
+              instructions.add(element.chName);
             } else {
               instructions.add(element.name);
             }

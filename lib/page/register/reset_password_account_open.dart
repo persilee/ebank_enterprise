@@ -14,6 +14,7 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -38,6 +39,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
   List<IdType> idInformationList = []; //证件类型信息
   String _certTypeKey; //身份校验的key
   String _accountName; //前面传过来用户登录名
+  String _language = Intl.getCurrentLocale();
 
   Map listData = new Map();
   @override
@@ -206,7 +208,13 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
 
     if (idInformationList != null) {
       idInformationList.forEach((element) {
-        obj.add(element.cname);
+        if (_language == 'zh_CN') {
+          obj.add(element.cname);
+        } else if (_language == 'zh_HK') {
+          obj.add(element.chName);
+        } else {
+          obj.add(element.name);
+        }
         indList.add(element.code);
       });
     }

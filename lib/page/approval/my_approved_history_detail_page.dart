@@ -168,7 +168,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.iratTm == element.code) {
-            _iratTm = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _iratTm = element.cname;
+            } else if (_language == 'zh_HK') {
+              _iratTm = element.chName;
+            } else {
+              _iratTm = element.name;
+            }
           }
         });
       }
@@ -185,7 +191,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.repType == element.code) {
-            _repType = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _repType = element.cname;
+            } else if (_language == 'zh_HK') {
+              _repType = element.chName;
+            } else {
+              _repType = element.name;
+            }
           }
         });
       }
@@ -471,7 +483,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.costOptions == element.code) {
-            _costOptions = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _costOptions = element.cname;
+            } else if (_language == 'zh_HK') {
+              _costOptions = element.chName;
+            } else {
+              _costOptions = element.name;
+            }
           }
         });
       }
@@ -670,7 +688,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.tenor == element.code) {
-            _tenorName = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _tenorName = element.cname;
+            } else if (_language == 'zh_HK') {
+              _tenorName = element.chName;
+            } else {
+              _tenorName = element.name;
+            }
           }
         });
       }
@@ -687,7 +711,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.status == element.code) {
-            _statusName = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _statusName = element.cname;
+            } else if (_language == 'zh_HK') {
+              _statusName = element.chName;
+            } else {
+              _statusName = element.name;
+            }
           }
         });
       }
@@ -795,7 +825,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.tenor == element.code) {
-            _tenorName = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _tenorName = element.cname;
+            } else if (_language == 'zh_HK') {
+              _tenorName = element.chName;
+            } else {
+              _tenorName = element.name;
+            }
           }
         });
       }
@@ -812,7 +848,13 @@ class _MyApprovedHistoryDetailPageState
       if (_instList.isNotEmpty) {
         _instList.forEach((element) {
           if (data?.instCode == element.code) {
-            _instCode = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _instCode = element.cname;
+            } else if (_language == 'zh_HK') {
+              _instCode = element.chName;
+            } else {
+              _instCode = element.name;
+            }
           }
         });
       }
