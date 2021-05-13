@@ -73,7 +73,7 @@ class _UserAgreementPageState extends State<UserAgreementPage> {
         _controller.loadUrl(pactUrl);
       });
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 }

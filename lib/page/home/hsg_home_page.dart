@@ -306,7 +306,7 @@ class _HomePageState extends State<HomePage>
   //       });
   //     }
   //   }).catchError((e) {
-  //     HSProgressHUD.showToast(e.error);
+  //     HSProgressHUD.showToast(e);
   //   });
   // }
 
@@ -1129,7 +1129,7 @@ class _HomePageState extends State<HomePage>
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -1152,7 +1152,7 @@ class _HomePageState extends State<HomePage>
 //       });
 //     }
 //   }).catchError((e) {
-//     HSProgressHUD.showToast(e.error);
+//     HSProgressHUD.showToast(e);
 //   });
 // }
 }

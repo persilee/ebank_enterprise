@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhanggenhua
@@ -5,7 +7,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 
 class CardLimitManagerPage extends StatefulWidget {
   CardLimitManagerPage({Key key}) : super(key: key);

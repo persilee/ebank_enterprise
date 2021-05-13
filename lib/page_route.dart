@@ -3,7 +3,6 @@
 /// Author: zhanggenhua
 /// Date: 2020-12-07
 
-import 'package:ebank_mobile/feature_demo/dialog_demo.dart';
 import 'package:ebank_mobile/page/accountOverview/account_overview_new_page.dart';
 import 'package:ebank_mobile/page/approval/approval_history_detail_page.dart';
 import 'package:ebank_mobile/page/approval/hsg_approval_page.dart';
@@ -242,7 +241,6 @@ var appRoutes = {
   pageTransferRecord: (context) => TrsnsferRecordPage(),
   pageTransferDetail: (context) => TransferDetailPage(),
   pageCardList: (context) => CardListPage(),
-  pageDialogDemo: (context) => DialogDemoPage(),
   pageSelectBank: (context) => SelectBankPage(),
   pageSelectBranchBank: (context) => SelectBranchBankPage(),
   pageAddPartner: (context) => AddPartnerPage(),

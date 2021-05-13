@@ -224,13 +224,13 @@ class _TransferInternalPreviewPageState
       HSProgressHUD.dismiss();
       Navigator.pushReplacementNamed(context, pageOperationResult);
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
       // if (e.toString().contains("EGENE218")) {
       //   HSProgressHUD.showToastTip(
       //     S.of(context).transfer_msg_limit,
       //   );
       // } else {
-      //   HSProgressHUD.showToast(e.error);
+      //   HSProgressHUD.showToast(e);
       // }
     });
   }

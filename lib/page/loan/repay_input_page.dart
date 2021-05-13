@@ -1,9 +1,10 @@
+import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///
 /// Author: zhangqirong
 /// Date: 2020-12-16
 
-import 'package:ebank_mobile/data/source/model/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 import 'package:ebank_mobile/data/source/model/get_loan_money_caculate.dart';
 import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
@@ -76,7 +77,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
         }
       },
     ).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -172,7 +173,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

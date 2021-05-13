@@ -71,7 +71,7 @@ class _RepayRecordsState extends State<RepayRecordsPage> {
       }
     }).catchError((e) {
       _isLoad = false;
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

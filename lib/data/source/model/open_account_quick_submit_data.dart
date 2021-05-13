@@ -1,7 +1,6 @@
-import 'package:ebank_mobile/data/source/model/city_for_country.dart';
-import 'package:ebank_mobile/data/source/model/country_region_model.dart';
-import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/city_for_country.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/open_account_Industry_two_data.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司

@@ -6,7 +6,7 @@
 import 'dart:convert';
 
 import 'package:azlistview/azlistview.dart';
-import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';

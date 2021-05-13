@@ -272,7 +272,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       _startCountdown();
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -323,7 +323,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
         Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
         HSProgressHUD.dismiss();
       }).catchError((e) {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       });
     }
   }

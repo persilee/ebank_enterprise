@@ -232,7 +232,7 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
         return false; //继续关闭
       });
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 }

@@ -6,8 +6,8 @@
  */
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
-import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/account/get_account_overview_info.dart';
+import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_early_contract.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_trial.dart';
@@ -605,7 +605,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         _showTimeDepositEarlyTip();
       });
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -649,7 +649,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
       if (this.mounted) {
         setState(() {});
       }
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
     // _showContractSucceedPage(context);
   }
@@ -738,7 +738,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         }
       },
     ).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -762,7 +762,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         instructions = instructionList;
       });
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -791,7 +791,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         HSProgressHUD.dismiss();
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -820,7 +820,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         }
       });
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

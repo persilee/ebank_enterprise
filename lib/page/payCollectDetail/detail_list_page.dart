@@ -5,7 +5,7 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
-import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_pay_collect_detail.dart';
 import 'package:ebank_mobile/data/source/model/get_transfer_record.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
@@ -115,11 +115,12 @@ class _DetailListPageState extends State<DetailListPage> {
                         controller: _refreshController,
                         //上拉加载
                         onLoading: () async {
-                          if(_turnKey.isEmpty && _total < 15) {
+                          if (_turnKey.isEmpty && _total < 15) {
                             _refreshController.loadNoData();
                             return;
                           }
-                          await _getRevenueByCards(_startDate, _accNoList, isLoadMore: true);
+                          await _getRevenueByCards(_startDate, _accNoList,
+                              isLoadMore: true);
                           _refreshController.loadComplete();
                         },
                         //下拉刷新
@@ -129,12 +130,14 @@ class _DetailListPageState extends State<DetailListPage> {
                             _turnKey = '';
                             _getRevenueByCards(_startDate, _accNoList);
                             _refreshController.refreshCompleted();
-                            _refreshController.footerMode.value = LoadStatus.canLoading;
+                            _refreshController.footerMode.value =
+                                LoadStatus.canLoading;
                           } else {
                             _turnKey = '';
                             _getRevenueByCards(_startDate, _allAccNoList);
                             _refreshController.refreshCompleted();
-                            _refreshController.footerMode.value = LoadStatus.canLoading;
+                            _refreshController.footerMode.value =
+                                LoadStatus.canLoading;
                           }
                         },
                         content: _buildFlutterTableView(),
@@ -989,7 +992,7 @@ class _DetailListPageState extends State<DetailListPage> {
           _isLoading = false;
         });
       }
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -1030,7 +1033,7 @@ class _DetailListPageState extends State<DetailListPage> {
       if (data.ddFinHisDTOList != null) {
         if (mounted) {
           setState(() {
-            if(isLoadMore == false) {
+            if (isLoadMore == false) {
               ddFinHisDTOList.clear();
             }
             ddFinHisDTOList.addAll(data.ddFinHisDTOList);
@@ -1046,7 +1049,7 @@ class _DetailListPageState extends State<DetailListPage> {
           _isLoading = false;
         });
       }
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

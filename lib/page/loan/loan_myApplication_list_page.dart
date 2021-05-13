@@ -53,7 +53,7 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
       }
       _getLoanRepayTypeList();
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -68,12 +68,15 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
       }
       _getLoanApplyforListData(); //获取列表数据
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
   //获取列表数据
   Future _getLoanApplyforListData() async {
+    setState(() {
+      _isLoading = true; //显示加载中
+    });
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
     ApiClientLoan()

@@ -1,8 +1,8 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
-import 'package:ebank_mobile/data/source/model/application_loan.dart';
-import 'package:ebank_mobile/data/source/model/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/loan/application_loan.dart';
 import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
 import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
 import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
@@ -132,7 +132,7 @@ class _LoanReferenceState extends State<LoanReference> {
         }
       },
     ).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -202,7 +202,7 @@ class _LoanReferenceState extends State<LoanReference> {
       setState(() {
         _recipientsController.text = '';
       });
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -221,7 +221,8 @@ class _LoanReferenceState extends State<LoanReference> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      // HSProgressHUD.dismiss();
+      HSProgressHUD.showToast(e);
       // HSProgressHUD.dismiss();
     });
   }
@@ -254,7 +255,7 @@ class _LoanReferenceState extends State<LoanReference> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

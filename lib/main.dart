@@ -244,7 +244,7 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
         prefs.setString(ConfigKey.LOCAL_CCY, '');
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 }

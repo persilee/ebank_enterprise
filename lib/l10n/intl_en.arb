@@ -757,7 +757,10 @@
   "longzhenqi_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>龙振旗国际化起点>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "set_pay_password_isEqual": "The transaction password cannot be the same number",
   "set_pay_password_regular": "The transaction Password cannot be consecutive numbers",
-  "time_deposit_record_earnings":"Accumulated earnings",
+  "time_deposit_record_earnings": "Accumulated earnings",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
+  "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
+  "error_tip_noDataError": "Data is abnormal, no data is returned!",
+  "error_tip_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<错误提示<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "hs_go_back": "Return"
 }
