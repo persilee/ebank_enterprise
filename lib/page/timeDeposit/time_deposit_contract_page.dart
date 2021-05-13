@@ -6,14 +6,14 @@ import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 /// Date: 2020-12-14
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
-import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
-import 'package:ebank_mobile/data/source/model/get_td_prod_inst_code.dart';
-import 'package:ebank_mobile/data/source/model/get_td_product_term_rate.dart';
+import 'package:ebank_mobile/data/source/model/account/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/other/forex_trading.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_contract.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_contract_trial.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_td_prod_inst_code.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_td_product_term_rate.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';

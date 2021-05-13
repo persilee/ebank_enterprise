@@ -1,9 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/data/source/model/account/checkout_informant.dart';
-
-import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
-import 'package:ebank_mobile/data/source/model/get_verification_code.dart';
-import 'package:ebank_mobile/data/source/model/modify_pwd_by_sms.dart';
+import 'package:ebank_mobile/data/source/model/mine/get_verificationByPhone_code.dart';
+import 'package:ebank_mobile/data/source/model/mine/get_verification_code.dart';
+import 'package:ebank_mobile/data/source/model/mine/modify_pwd_by_sms.dart';
 import 'package:ebank_mobile/data/source/model/real_name_auth_by_three_factor.dart';
 import 'package:ebank_mobile/data/source/model/reset_forget_password.dart';
 import 'package:ebank_mobile/data/source/model/set_payment_pwd.dart';

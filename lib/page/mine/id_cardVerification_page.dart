@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 重置交易密码--身份证验证
@@ -6,7 +7,6 @@ import 'package:ebank_mobile/config/hsg_text_style.dart';
 /// Date: 2020-12-31
 // import 'package:ebank_mobile/data/source/card_data_repository.dart';
 // import 'package:ebank_mobile/data/source/mine_checInformantApi.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/real_name_auth_by_three_factor.dart';
 
 // import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';

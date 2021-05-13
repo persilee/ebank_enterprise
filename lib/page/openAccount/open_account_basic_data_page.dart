@@ -6,12 +6,12 @@ import 'dart:convert';
 /// Date: 2021-03-17
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/open_account_Industry_two_data.dart';
-import 'package:ebank_mobile/data/source/model/open_account_get_data.dart';
-import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
-import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/open_account_get_data.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/open_account_quick_submit_data.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/open_account_save_data.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';

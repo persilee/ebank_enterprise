@@ -1,7 +1,7 @@
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/city_for_country.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/open_account_Industry_two_data.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
 /// 快速开户上传公司信息模型（第一次数据提交）

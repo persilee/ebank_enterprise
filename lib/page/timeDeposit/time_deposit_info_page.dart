@@ -8,11 +8,11 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/account/get_account_overview_info.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
-import 'package:ebank_mobile/data/source/model/get_deposit_early_contract.dart';
-import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
-import 'package:ebank_mobile/data/source/model/get_deposit_trial.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
-import 'package:ebank_mobile/data/source/model/get_td_prod_inst_code.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_early_contract.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_record_info.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_trial.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_td_prod_inst_code.dart';
 import 'package:ebank_mobile/data/source/model/update_time_deposit_con_info.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';

@@ -4,11 +4,9 @@
 /// Date: 2020-12-18
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
-import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
-import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
-import 'package:ebank_mobile/data/source/model/loan_prepayment_model.dart';
-import 'package:ebank_mobile/data/source/model/my_approval_data.dart';
+import 'package:ebank_mobile/data/source/model/loan/get_loan_money_caculate.dart';
+import 'package:ebank_mobile/data/source/model/loan/loan_detail_modelList.dart';
+import 'package:ebank_mobile/data/source/model/loan/loan_prepayment_model.dart';
 import 'package:ebank_mobile/data/source/model/post_repayment.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -23,7 +21,6 @@ import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
-import 'package:ebank_mobile/data/source/model/get_loan_money_caculate.dart';
 import 'package:sp_util/sp_util.dart';
 
 import 'limit_details_page.dart';

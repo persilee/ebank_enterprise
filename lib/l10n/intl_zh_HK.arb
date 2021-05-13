@@ -647,7 +647,7 @@
   "openAccout_registeredAddress_details": "註冊公司地址詳情",
   "openAccout_zipCode": "郵編",
   "openAccout_areaCode": "區號",
-  "openAccout_officePhoneNo": "辦事處電話號碼",
+  "openAccout_officePhoneNo": "辦事處固定電話",
   "openAccout_theSameForRegister": "和註冊公司地址相同",
   "openAccout_businessAddress": "主要營業地址",
   "openAccout_businessAddress_details": "主要營業地址詳情",

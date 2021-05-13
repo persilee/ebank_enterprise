@@ -4,7 +4,7 @@
 /// Date: 2020-12-03
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
+import 'package:ebank_mobile/data/source/model/loan/loan_account_model.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page_route.dart';
