@@ -47,7 +47,7 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
   void initState() {
     super.initState();
     _refreshController = RefreshController();
-    _loadData();
+    _loadData(isLoading: true);
   }
 
   @override

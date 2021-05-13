@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:ebank_mobile/data/source/model/checkout_informant.dart';
+import 'package:ebank_mobile/data/source/model/account/checkout_informant.dart';
 
 import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/get_verification_code.dart';
@@ -37,9 +37,7 @@ abstract class ApiClientPassword {
 
   //发送通知短信
   @POST('/cust/codes/sendMessage')
-  Future<SendMessageResp> sendMessage(
-      @Body() SendMessageReq req);
-
+  Future<SendMessageResp> sendMessage(@Body() SendMessageReq req);
 
   /// 验证交易密码
   @POST('/cust/user/verifyTransPwdNoSms')

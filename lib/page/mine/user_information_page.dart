@@ -455,7 +455,7 @@ class _UserInformationPageState extends State<UserInformationPage> {
             headPortrait: value['headPortrait'], state: 300));
         print(value);
       }).catchError((e) {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       });
     }
   }

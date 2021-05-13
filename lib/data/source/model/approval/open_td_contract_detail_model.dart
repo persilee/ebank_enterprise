@@ -1,4 +1,4 @@
-import '../find_user_application_task_detail.dart';
+import 'package:ebank_mobile/data/source/model/approval/find_user_application_task_detail.dart';
 
 /// userId : "829378395983839232"
 /// userName : "HSG15 Checker"
@@ -76,31 +76,31 @@ class OpenTdContractDetailModel {
   dynamic get optBefJsonValue => _optBefJsonValue;
   dynamic get optEndJsonValue => _optEndJsonValue;
 
-  OpenTdContractDetailModel({
-      String userId, 
-      String userName, 
-      dynamic assigneeList, 
-      int approverNumbers, 
-      String processTitle, 
-      String processKey, 
-      dynamic businessKey, 
-      dynamic tenantId, 
-      dynamic operateBeforeValue, 
-      OperateEndValue operateEndValue, 
-      String servCtr, 
-      dynamic custId, 
-      dynamic amount, 
-      dynamic ccy, 
-      dynamic authModel, 
-      dynamic amountPosition, 
-      dynamic serviceType, 
-      dynamic authGroups, 
+  OpenTdContractDetailModel(
+      {String userId,
+      String userName,
+      dynamic assigneeList,
+      int approverNumbers,
+      String processTitle,
+      String processKey,
+      dynamic businessKey,
+      dynamic tenantId,
+      dynamic operateBeforeValue,
+      OperateEndValue operateEndValue,
+      String servCtr,
+      dynamic custId,
+      dynamic amount,
+      dynamic ccy,
+      dynamic authModel,
+      dynamic amountPosition,
+      dynamic serviceType,
+      dynamic authGroups,
       List<CommentList> commentList,
-      String result, 
-      dynamic taskKey, 
-      int taskCount, 
-      dynamic optBefJsonValue, 
-      dynamic optEndJsonValue}){
+      String result,
+      dynamic taskKey,
+      int taskCount,
+      dynamic optBefJsonValue,
+      dynamic optEndJsonValue}) {
     _userId = userId;
     _userName = userName;
     _assigneeList = assigneeList;
@@ -125,7 +125,7 @@ class OpenTdContractDetailModel {
     _taskCount = taskCount;
     _optBefJsonValue = optBefJsonValue;
     _optEndJsonValue = optEndJsonValue;
-}
+  }
 
   OpenTdContractDetailModel.fromJson(dynamic json) {
     _userId = json["userId"];
@@ -137,7 +137,9 @@ class OpenTdContractDetailModel {
     _businessKey = json["businessKey"];
     _tenantId = json["tenantId"];
     _operateBeforeValue = json["operateBeforeValue"];
-    _operateEndValue = json["operateEndValue"] != null ? OperateEndValue.fromJson(json["operateEndValue"]) : null;
+    _operateEndValue = json["operateEndValue"] != null
+        ? OperateEndValue.fromJson(json["operateEndValue"])
+        : null;
     _servCtr = json["servCtr"];
     _custId = json["custId"];
     _amount = json["amount"];
@@ -191,7 +193,6 @@ class OpenTdContractDetailModel {
     map["optEndJsonValue"] = _optEndJsonValue;
     return map;
   }
-
 }
 
 /// auctCale : "1"
@@ -246,23 +247,23 @@ class OperateEndValue {
   String get payPassword => _payPassword;
   String get depositType => _depositType;
 
-  OperateEndValue({
-      String auctCale, 
-      String oppAc, 
-      String bppdCode, 
-      String settDdAc, 
-      String smsCode, 
-      String ciNo, 
-      String intAc, 
-      String bal, 
-      String tenor, 
-      String accuPeriod, 
-      String annualInterestRate, 
-      String prodName, 
-      String ccy, 
-      String instCode, 
-      String payPassword, 
-      String depositType}){
+  OperateEndValue(
+      {String auctCale,
+      String oppAc,
+      String bppdCode,
+      String settDdAc,
+      String smsCode,
+      String ciNo,
+      String intAc,
+      String bal,
+      String tenor,
+      String accuPeriod,
+      String annualInterestRate,
+      String prodName,
+      String ccy,
+      String instCode,
+      String payPassword,
+      String depositType}) {
     _auctCale = auctCale;
     _oppAc = oppAc;
     _bppdCode = bppdCode;
@@ -279,7 +280,7 @@ class OperateEndValue {
     _instCode = instCode;
     _payPassword = payPassword;
     _depositType = depositType;
-}
+  }
 
   OperateEndValue.fromJson(dynamic json) {
     _auctCale = json["auctCale"];
@@ -320,5 +321,4 @@ class OperateEndValue {
     map["depositType"] = _depositType;
     return map;
   }
-
 }

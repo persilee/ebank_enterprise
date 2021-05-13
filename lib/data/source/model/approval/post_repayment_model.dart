@@ -1,4 +1,4 @@
-import '../find_user_application_task_detail.dart';
+import 'package:ebank_mobile/data/source/model/approval/find_user_application_task_detail.dart';
 
 /// userId : "835838936357011456"
 /// userName : "李家伟"
@@ -76,31 +76,31 @@ class PostRepaymentModel {
   dynamic get optBefJsonValue => _optBefJsonValue;
   dynamic get optEndJsonValue => _optEndJsonValue;
 
-  PostRepaymentModel({
-      String userId, 
-      String userName, 
-      dynamic assigneeList, 
-      int approverNumbers, 
-      String processTitle, 
-      String processKey, 
-      dynamic businessKey, 
-      dynamic tenantId, 
-      dynamic operateBeforeValue, 
-      OperateEndValue operateEndValue, 
-      String servCtr, 
-      dynamic custId, 
-      dynamic amount, 
-      dynamic ccy, 
-      dynamic authModel, 
-      dynamic amountPosition, 
-      dynamic serviceType, 
-      dynamic authGroups, 
+  PostRepaymentModel(
+      {String userId,
+      String userName,
+      dynamic assigneeList,
+      int approverNumbers,
+      String processTitle,
+      String processKey,
+      dynamic businessKey,
+      dynamic tenantId,
+      dynamic operateBeforeValue,
+      OperateEndValue operateEndValue,
+      String servCtr,
+      dynamic custId,
+      dynamic amount,
+      dynamic ccy,
+      dynamic authModel,
+      dynamic amountPosition,
+      dynamic serviceType,
+      dynamic authGroups,
       List<CommentList> commentList,
-      String result, 
-      dynamic taskKey, 
-      int taskCount, 
-      dynamic optBefJsonValue, 
-      dynamic optEndJsonValue}){
+      String result,
+      dynamic taskKey,
+      int taskCount,
+      dynamic optBefJsonValue,
+      dynamic optEndJsonValue}) {
     _userId = userId;
     _userName = userName;
     _assigneeList = assigneeList;
@@ -125,7 +125,7 @@ class PostRepaymentModel {
     _taskCount = taskCount;
     _optBefJsonValue = optBefJsonValue;
     _optEndJsonValue = optEndJsonValue;
-}
+  }
 
   PostRepaymentModel.fromJson(dynamic json) {
     _userId = json["userId"];
@@ -137,7 +137,9 @@ class PostRepaymentModel {
     _businessKey = json["businessKey"];
     _tenantId = json["tenantId"];
     _operateBeforeValue = json["operateBeforeValue"];
-    _operateEndValue = json["operateEndValue"] != null ? OperateEndValue.fromJson(json["operateEndValue"]) : null;
+    _operateEndValue = json["operateEndValue"] != null
+        ? OperateEndValue.fromJson(json["operateEndValue"])
+        : null;
     _servCtr = json["servCtr"];
     _custId = json["custId"];
     _amount = json["amount"];
@@ -191,7 +193,6 @@ class PostRepaymentModel {
     map["optEndJsonValue"] = _optEndJsonValue;
     return map;
   }
-
 }
 
 /// payPassword : null
@@ -276,33 +277,33 @@ class OperateEndValue {
   dynamic get repaymentCiName => _repaymentCiName;
   dynamic get dueAmount => _dueAmount;
 
-  OperateEndValue({
-      dynamic payPassword, 
-      String acNo, 
-      String ccy, 
-      String prin, 
-      String outBal, 
-      dynamic repaymentMethod, 
-      dynamic trValDate, 
-      String principalAmount, 
-      String interestAmount, 
-      dynamic penaltyAmount, 
-      dynamic compoundAmount, 
-      String totalAmount, 
-      dynamic setMethod, 
-      String ddAc, 
-      dynamic suspeac, 
-      dynamic nostrac, 
-      dynamic setlCcy, 
-      dynamic exRate, 
-      dynamic eqAmt, 
-      dynamic instalNo, 
-      dynamic refNo, 
-      dynamic rescheduleType, 
-      dynamic repaymentAcType, 
-      dynamic repaymentAcNo, 
-      dynamic repaymentCiName, 
-      dynamic dueAmount}){
+  OperateEndValue(
+      {dynamic payPassword,
+      String acNo,
+      String ccy,
+      String prin,
+      String outBal,
+      dynamic repaymentMethod,
+      dynamic trValDate,
+      String principalAmount,
+      String interestAmount,
+      dynamic penaltyAmount,
+      dynamic compoundAmount,
+      String totalAmount,
+      dynamic setMethod,
+      String ddAc,
+      dynamic suspeac,
+      dynamic nostrac,
+      dynamic setlCcy,
+      dynamic exRate,
+      dynamic eqAmt,
+      dynamic instalNo,
+      dynamic refNo,
+      dynamic rescheduleType,
+      dynamic repaymentAcType,
+      dynamic repaymentAcNo,
+      dynamic repaymentCiName,
+      dynamic dueAmount}) {
     _payPassword = payPassword;
     _acNo = acNo;
     _ccy = ccy;
@@ -329,7 +330,7 @@ class OperateEndValue {
     _repaymentAcNo = repaymentAcNo;
     _repaymentCiName = repaymentCiName;
     _dueAmount = dueAmount;
-}
+  }
 
   OperateEndValue.fromJson(dynamic json) {
     _payPassword = json["payPassword"];
@@ -390,5 +391,4 @@ class OperateEndValue {
     map["dueAmount"] = _dueAmount;
     return map;
   }
-
 }

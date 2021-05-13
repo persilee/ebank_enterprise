@@ -256,7 +256,7 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
         HSProgressHUD.dismiss();
       },
     ).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 }

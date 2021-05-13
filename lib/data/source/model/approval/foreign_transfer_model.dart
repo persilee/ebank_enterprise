@@ -1,4 +1,4 @@
-import '../find_user_application_task_detail.dart';
+import 'package:ebank_mobile/data/source/model/approval/find_user_application_task_detail.dart';
 
 /// userId : "835838936357011456"
 /// userName : "李家伟"
@@ -76,31 +76,31 @@ class ForeignTransferModel {
   dynamic get optBefJsonValue => _optBefJsonValue;
   dynamic get optEndJsonValue => _optEndJsonValue;
 
-  ForeignTransferModel({
-      String userId, 
-      String userName, 
-      dynamic assigneeList, 
-      int approverNumbers, 
-      String processTitle, 
-      String processKey, 
-      dynamic businessKey, 
-      dynamic tenantId, 
-      dynamic operateBeforeValue, 
-      OperateEndValue operateEndValue, 
-      String servCtr, 
-      dynamic custId, 
-      dynamic amount, 
-      dynamic ccy, 
-      dynamic authModel, 
-      dynamic amountPosition, 
-      dynamic serviceType, 
-      dynamic authGroups, 
+  ForeignTransferModel(
+      {String userId,
+      String userName,
+      dynamic assigneeList,
+      int approverNumbers,
+      String processTitle,
+      String processKey,
+      dynamic businessKey,
+      dynamic tenantId,
+      dynamic operateBeforeValue,
+      OperateEndValue operateEndValue,
+      String servCtr,
+      dynamic custId,
+      dynamic amount,
+      dynamic ccy,
+      dynamic authModel,
+      dynamic amountPosition,
+      dynamic serviceType,
+      dynamic authGroups,
       List<CommentList> commentList,
-      String result, 
-      dynamic taskKey, 
-      int taskCount, 
-      dynamic optBefJsonValue, 
-      dynamic optEndJsonValue}){
+      String result,
+      dynamic taskKey,
+      int taskCount,
+      dynamic optBefJsonValue,
+      dynamic optEndJsonValue}) {
     _userId = userId;
     _userName = userName;
     _assigneeList = assigneeList;
@@ -125,7 +125,7 @@ class ForeignTransferModel {
     _taskCount = taskCount;
     _optBefJsonValue = optBefJsonValue;
     _optEndJsonValue = optEndJsonValue;
-}
+  }
 
   ForeignTransferModel.fromJson(dynamic json) {
     _userId = json["userId"];
@@ -137,7 +137,9 @@ class ForeignTransferModel {
     _businessKey = json["businessKey"];
     _tenantId = json["tenantId"];
     _operateBeforeValue = json["operateBeforeValue"];
-    _operateEndValue = json["operateEndValue"] != null ? OperateEndValue.fromJson(json["operateEndValue"]) : null;
+    _operateEndValue = json["operateEndValue"] != null
+        ? OperateEndValue.fromJson(json["operateEndValue"])
+        : null;
     _servCtr = json["servCtr"];
     _custId = json["custId"];
     _amount = json["amount"];
@@ -191,7 +193,6 @@ class ForeignTransferModel {
     map["optEndJsonValue"] = _optEndJsonValue;
     return map;
   }
-
 }
 
 /// buyCcy : "USD"
@@ -234,19 +235,19 @@ class OperateEndValue {
   String get sellDac => _sellDac;
   dynamic get availableBalance => _availableBalance;
 
-  OperateEndValue({
-      String buyCcy, 
-      String prodCd, 
-      String buyAmt, 
-      String buyDac, 
-      String smsCode, 
-      String exRate, 
-      String sellAmt, 
-      String exTime, 
-      String sellCcy, 
-      String payPassword, 
-      String sellDac, 
-      dynamic availableBalance}){
+  OperateEndValue(
+      {String buyCcy,
+      String prodCd,
+      String buyAmt,
+      String buyDac,
+      String smsCode,
+      String exRate,
+      String sellAmt,
+      String exTime,
+      String sellCcy,
+      String payPassword,
+      String sellDac,
+      dynamic availableBalance}) {
     _buyCcy = buyCcy;
     _prodCd = prodCd;
     _buyAmt = buyAmt;
@@ -259,7 +260,7 @@ class OperateEndValue {
     _payPassword = payPassword;
     _sellDac = sellDac;
     _availableBalance = availableBalance;
-}
+  }
 
   OperateEndValue.fromJson(dynamic json) {
     _buyCcy = json["buyCcy"];
@@ -292,5 +293,4 @@ class OperateEndValue {
     map["availableBalance"] = _availableBalance;
     return map;
   }
-
 }

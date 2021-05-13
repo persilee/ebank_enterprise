@@ -290,7 +290,7 @@ class _OpenAccountSelectDocumentTypePageState
         );
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
       if (mounted) {
         setState(() {
           _isCanClick = true;

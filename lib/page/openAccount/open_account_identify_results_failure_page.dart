@@ -173,7 +173,7 @@ class _OpenAccountIdentifyResultsFailurePageState
         }
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 }

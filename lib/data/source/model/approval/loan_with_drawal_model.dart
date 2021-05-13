@@ -1,4 +1,4 @@
-import '../find_user_application_task_detail.dart';
+import 'package:ebank_mobile/data/source/model/approval/find_user_application_task_detail.dart';
 
 /// userId : "829378641161879552"
 /// userName : "HSG17 Checker"
@@ -76,31 +76,31 @@ class LoanWithDrawalModel {
   dynamic get optBefJsonValue => _optBefJsonValue;
   dynamic get optEndJsonValue => _optEndJsonValue;
 
-  LoanWithDrawalModel({
-      String userId, 
-      String userName, 
-      dynamic assigneeList, 
-      int approverNumbers, 
-      String processTitle, 
-      String processKey, 
-      dynamic businessKey, 
-      dynamic tenantId, 
-      dynamic operateBeforeValue, 
-      OperateEndValue operateEndValue, 
-      String servCtr, 
-      dynamic custId, 
-      dynamic amount, 
-      dynamic ccy, 
-      dynamic authModel, 
-      dynamic amountPosition, 
-      dynamic serviceType, 
-      dynamic authGroups, 
+  LoanWithDrawalModel(
+      {String userId,
+      String userName,
+      dynamic assigneeList,
+      int approverNumbers,
+      String processTitle,
+      String processKey,
+      dynamic businessKey,
+      dynamic tenantId,
+      dynamic operateBeforeValue,
+      OperateEndValue operateEndValue,
+      String servCtr,
+      dynamic custId,
+      dynamic amount,
+      dynamic ccy,
+      dynamic authModel,
+      dynamic amountPosition,
+      dynamic serviceType,
+      dynamic authGroups,
       List<CommentList> commentList,
-      String result, 
-      dynamic taskKey, 
-      int taskCount, 
-      dynamic optBefJsonValue, 
-      dynamic optEndJsonValue}){
+      String result,
+      dynamic taskKey,
+      int taskCount,
+      dynamic optBefJsonValue,
+      dynamic optEndJsonValue}) {
     _userId = userId;
     _userName = userName;
     _assigneeList = assigneeList;
@@ -125,7 +125,7 @@ class LoanWithDrawalModel {
     _taskCount = taskCount;
     _optBefJsonValue = optBefJsonValue;
     _optEndJsonValue = optEndJsonValue;
-}
+  }
 
   LoanWithDrawalModel.fromJson(dynamic json) {
     _userId = json["userId"];
@@ -137,7 +137,9 @@ class LoanWithDrawalModel {
     _businessKey = json["businessKey"];
     _tenantId = json["tenantId"];
     _operateBeforeValue = json["operateBeforeValue"];
-    _operateEndValue = json["operateEndValue"] != null ? OperateEndValue.fromJson(json["operateEndValue"]) : null;
+    _operateEndValue = json["operateEndValue"] != null
+        ? OperateEndValue.fromJson(json["operateEndValue"])
+        : null;
     _servCtr = json["servCtr"];
     _custId = json["custId"];
     _amount = json["amount"];
@@ -191,7 +193,6 @@ class LoanWithDrawalModel {
     map["optEndJsonValue"] = _optEndJsonValue;
     return map;
   }
-
 }
 
 /// onRate : "1.34335353"
@@ -261,28 +262,28 @@ class OperateEndValue {
   String get iratCd => _iratCd;
   String get totalInt => _totalInt;
 
-  OperateEndValue({
-      String onRate, 
-      String inRate, 
-      String repType, 
-      String intRat, 
-      String setPerd, 
-      String matuDt, 
-      String amt, 
-      String ddAc, 
-      String loanAmount, 
-      String fltNmth, 
-      String fPaydt, 
-      String iratTm, 
-      int repDay, 
-      String intNper, 
-      String lnac, 
-      String insType, 
-      String setUnit, 
-      String ccy, 
-      String loanPurpose, 
-      String iratCd, 
-      String totalInt}){
+  OperateEndValue(
+      {String onRate,
+      String inRate,
+      String repType,
+      String intRat,
+      String setPerd,
+      String matuDt,
+      String amt,
+      String ddAc,
+      String loanAmount,
+      String fltNmth,
+      String fPaydt,
+      String iratTm,
+      int repDay,
+      String intNper,
+      String lnac,
+      String insType,
+      String setUnit,
+      String ccy,
+      String loanPurpose,
+      String iratCd,
+      String totalInt}) {
     _onRate = onRate;
     _inRate = inRate;
     _repType = repType;
@@ -304,7 +305,7 @@ class OperateEndValue {
     _loanPurpose = loanPurpose;
     _iratCd = iratCd;
     _totalInt = totalInt;
-}
+  }
 
   OperateEndValue.fromJson(dynamic json) {
     _onRate = json["onRate"];
@@ -355,5 +356,4 @@ class OperateEndValue {
     map["totalInt"] = _totalInt;
     return map;
   }
-
 }

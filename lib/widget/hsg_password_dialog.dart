@@ -305,7 +305,7 @@ class _HsgPasswordDialogState extends State<HsgPasswordDialog> {
       // } else {
       //   HSProgressHUD.showToastTip('未设置交易密码！',);
       // }
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
       // (context as Element).markNeedsBuild();
     });
   }

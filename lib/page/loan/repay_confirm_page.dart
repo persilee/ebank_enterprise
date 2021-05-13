@@ -88,7 +88,7 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
         Navigator.of(context)..pop()..pop();
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

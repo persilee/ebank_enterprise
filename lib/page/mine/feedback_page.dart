@@ -133,7 +133,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
       Navigator.pop(context);
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 }

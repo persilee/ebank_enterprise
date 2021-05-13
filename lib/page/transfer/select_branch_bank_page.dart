@@ -1,4 +1,4 @@
-import 'package:ebank_mobile/data/source/model/get_branch_list.dart';
+import 'package:ebank_mobile/data/source/model/account/get_branch_list.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 

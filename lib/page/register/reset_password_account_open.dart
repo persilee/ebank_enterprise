@@ -197,7 +197,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
         idInformationList = data.publicCodeGetRedisRspDtoList;
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -271,7 +271,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

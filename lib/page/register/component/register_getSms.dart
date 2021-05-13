@@ -100,7 +100,7 @@
 //         });
 //       }
 //     }).catchError((e) {
-//       HSProgressHUD.showToast(e.error);
+//       HSProgressHUD.showToast(e);
 //     });
 //     // }
 //   }
@@ -129,7 +129,7 @@
 //             });
 //           }
 //         }).catchError((e) {
-//           HSProgressHUD.showToast(e.error);
+//           HSProgressHUD.showToast(e);
 //         });
 //       }
 //     }
@@ -152,7 +152,7 @@
 //             });
 //           }
 //         }).catchError((e) {
-//           HSProgressHUD.showToast(e.error);
+//           HSProgressHUD.showToast(e);
 //         });
 //       }
 //     }

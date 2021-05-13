@@ -216,7 +216,7 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
 
       //   Navigator.popAndPushNamed(context, pageResetPasswordSuccess);
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 //}

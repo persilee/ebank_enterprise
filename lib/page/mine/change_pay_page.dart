@@ -223,7 +223,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
         Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
         HSProgressHUD.dismiss();
       }).catchError((e) {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       });
     }
   }
@@ -330,7 +330,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
       }
       HSProgressHUD.dismiss();
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

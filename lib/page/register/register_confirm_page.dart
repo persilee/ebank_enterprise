@@ -211,7 +211,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
         _sendMessage();
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -228,7 +228,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
     // }
   }

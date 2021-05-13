@@ -82,7 +82,7 @@ class _LoanInterestRatePageState extends State<LoanInterestRatePage> {
         });
       });
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

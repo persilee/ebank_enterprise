@@ -214,7 +214,7 @@ class _SetPayPageState extends State<SetPayPage> {
       // Navigator.of(context).pop();
       Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 }

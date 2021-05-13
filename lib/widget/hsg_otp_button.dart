@@ -74,7 +74,7 @@ class _HSGOTPButtonState extends State<HSGOTPButton> {
         setState(() {});
         HSProgressHUD.dismiss();
       }).catchError((e) {
-        HSProgressHUD.showToast(e.error);
+        HSProgressHUD.showToast(e);
       });
     }
 

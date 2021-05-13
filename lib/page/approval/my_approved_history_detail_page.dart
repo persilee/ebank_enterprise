@@ -26,9 +26,9 @@ import 'package:ebank_mobile/data/source/model/approval/post_repayment_model.dar
     as PostRepaymentModel;
 import 'package:ebank_mobile/data/source/model/approval/loan_with_drawal_model.dart'
     as LoanWithDrawalModel;
-import 'package:ebank_mobile/data/source/model/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -80,7 +80,7 @@ class _MyApprovedHistoryDetailPageState
   void initState() {
     super.initState();
     _controller = ScrollController();
-    _loadData();
+    _loadData(isLoading: true);
   }
 
   @override

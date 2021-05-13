@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:ebank_mobile/data/source/model/account_overview_all_data.dart';
-import 'package:ebank_mobile/data/source/model/application_loan.dart';
-import 'package:ebank_mobile/data/source/model/foreign_ccy.dart';
-import 'package:ebank_mobile/data/source/model/forex_trading.dart';
-import 'package:ebank_mobile/data/source/model/get_account_overview_info.dart';
+import 'package:ebank_mobile/data/source/model/account/account_overview_all_data.dart';
+import 'package:ebank_mobile/data/source/model/account/get_account_overview_info.dart';
 import 'package:ebank_mobile/data/source/model/get_electronic_statement.dart';
 import 'package:ebank_mobile/data/source/model/get_ex_rate.dart';
 import 'package:ebank_mobile/data/source/model/get_pay_collect_detail.dart';
+import 'package:ebank_mobile/data/source/model/loan/application_loan.dart';
+import 'package:ebank_mobile/data/source/model/other/foreign_ccy.dart';
+import 'package:ebank_mobile/data/source/model/other/forex_trading.dart';
 
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';

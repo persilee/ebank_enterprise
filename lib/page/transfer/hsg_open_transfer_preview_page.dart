@@ -1,4 +1,4 @@
-import 'package:ebank_mobile/data/source/model/add_transfer_plan.dart';
+import 'package:ebank_mobile/data/source/model/transfer/add_transfer_plan.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
 import 'package:ebank_mobile/util/format_util.dart';
@@ -226,7 +226,7 @@ class _TransferOrderPreviewPageState extends State<TransferOrderPreviewPage> {
           arguments: "pageTransferSuccess");
       // setState(() {});
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 }

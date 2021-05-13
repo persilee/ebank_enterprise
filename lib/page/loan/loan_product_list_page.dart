@@ -92,7 +92,7 @@ class _LoanProductState extends State<LoanProductListPage> {
   //       _isDate = false;
   //     }
   //   }).catchError((e) {
-  //     HSProgressHUD.showToast(e.error);
+  //     HSProgressHUD.showToast(e);
   //   });
   // }
 

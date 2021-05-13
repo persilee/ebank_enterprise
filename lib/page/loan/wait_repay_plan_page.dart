@@ -72,7 +72,7 @@ class _WaitRepayPlanState extends State<WaitRepayPlanPage> {
     //     });
     //   }
     // }).catchError((e) {
-    //   HSProgressHUD.showToast(e.error);
+    //   HSProgressHUD.showToast(e);
     // });
     lnScheduleList.clear();
     // lnScheduleList.add(_list1);

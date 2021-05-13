@@ -123,7 +123,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   //       });
   //     }
   //   }).catchError((e) {
-  //     HSProgressHUD.showToast(e.error);
+  //     HSProgressHUD.showToast(e);
   //   });
   // }
 
@@ -139,7 +139,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
         idInformationList = data.publicCodeGetRedisRspDtoList;
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -481,7 +481,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
   //     });
   //     HSProgressHUD.dismiss();
   //   }).catchError((e) {
-  //     HSProgressHUD.showToast(e.error);
+  //     HSProgressHUD.showToast(e);
   //     HSProgressHUD.dismiss();
   //   });
   // }
@@ -526,7 +526,7 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
         );
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
 
     // RegExp postalcode1 =

@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:ebank_mobile/data/source/model/get_card_list_bal_by_user.dart';
+import 'package:ebank_mobile/data/source/model/account/get_card_list_bal_by_user.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_early_contract.dart';
 import 'package:ebank_mobile/data/source/model/get_deposit_limit_by_con_no.dart';

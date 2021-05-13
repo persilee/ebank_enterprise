@@ -764,7 +764,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         }
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
       inputValue.text = '';
       _changedCcy = S.current.hint_please_select;
       _changedTerm = S.current.hint_please_select;
@@ -798,7 +798,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
         });
       }
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 

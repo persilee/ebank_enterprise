@@ -128,7 +128,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         _custId = data.custId;
       });
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -383,7 +383,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
       _reqData();
       Navigator.pushNamed(context, pageOperationResult);
     }).catchError((e) {
-      HSProgressHUD.showToast(e.error);
+      HSProgressHUD.showToast(e);
     });
   }
 
@@ -409,7 +409,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
     //           "getLoanApplication")
     //       .then((data) {})
     //       .catchError((e) {
-    //     HSProgressHUD.showToast(e.error);
+    //     HSProgressHUD.showToast(e);
     //   });
   }
 }

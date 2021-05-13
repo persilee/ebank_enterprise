@@ -193,7 +193,7 @@ class _TimeDepositContractPreviewPageState
       if (this.mounted) {
         setState(() {
           // _isDeposit = false;
-          HSProgressHUD.showToast(e.error);
+          HSProgressHUD.showToast(e);
         });
       }
     });
