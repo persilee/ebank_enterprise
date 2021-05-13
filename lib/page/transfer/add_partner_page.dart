@@ -118,8 +118,11 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         transferFeeList.clear();
         transferFeeCodeList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {
-          if (_language == 'zh_CN' || _language == 'zh_HK') {
+          if (_language == 'zh_CN') {
             transferFeeList.add(e.cname);
+            transferFeeCodeList.add(e.code);
+          } else if (_language == 'zh_HK') {
+            transferFeeList.add(e.chName);
             transferFeeCodeList.add(e.code);
           } else {
             transferFeeList.add(e.name);

@@ -8,9 +8,7 @@ class GetIdTypeReq extends Object {
   @JsonKey(name: 'type')
   String type;
 
-  GetIdTypeReq(
-    this.type 
-  );
+  GetIdTypeReq(this.type);
 
   factory GetIdTypeReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetIdTypeReqFromJson(srcJson);
@@ -48,12 +46,14 @@ class IdType extends Object {
   String name;
   @JsonKey(name: 'type')
   String type;
-
+  @JsonKey(name: 'chName')
+  String chName;
   IdType(
     this.code,
     this.cname,
     this.name,
     this.type,
+    this.chName,
   );
 
   @override

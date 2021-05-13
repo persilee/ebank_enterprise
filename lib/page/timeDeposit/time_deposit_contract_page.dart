@@ -1197,6 +1197,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             // setState(() {
             if (language == 'zh_CN') {
               instructions.add(element.cname);
+            } else if (language == 'zh_HK') {
+              instructions.add(element.chName);
             } else {
               instructions.add(element.name);
             }

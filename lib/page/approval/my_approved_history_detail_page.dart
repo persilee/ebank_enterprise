@@ -90,7 +90,7 @@ class _MyApprovedHistoryDetailPageState
   }
 
   void _loadData({bool isLoading = false}) async {
-    if(this.mounted && isLoading) {
+    if (this.mounted && isLoading) {
       setState(() {
         _isLoading = true;
       });
@@ -168,7 +168,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.iratTm == element.code) {
-            _iratTm = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _iratTm = element.cname;
+            } else if (_language == 'zh_HK') {
+              _iratTm = element.chName;
+            } else {
+              _iratTm = element.name;
+            }
           }
         });
       }
@@ -185,7 +191,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.repType == element.code) {
-            _repType = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _repType = element.cname;
+            } else if (_language == 'zh_HK') {
+              _repType = element.chName;
+            } else {
+              _repType = element.name;
+            }
           }
         });
       }
@@ -471,7 +483,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.costOptions == element.code) {
-            _costOptions = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _costOptions = element.cname;
+            } else if (_language == 'zh_HK') {
+              _costOptions = element.chName;
+            } else {
+              _costOptions = element.name;
+            }
           }
         });
       }
@@ -500,11 +518,13 @@ class _MyApprovedHistoryDetailPageState
 
     // 获取收款银行
     String _payeeBank = '';
-    if(data.bankSwift.isNotEmpty) {
+    if (data.bankSwift.isNotEmpty) {
       try {
-        GetInfoBySwiftCodeResp getInfoBySwiftCodeResp =
-        await Transfer().getInfoBySwiftCode(GetInfoBySwiftCodeReq(data.bankSwift));
-        _payeeBank = getInfoBySwiftCodeResp.swiftName1 + getInfoBySwiftCodeResp.swiftName2 + getInfoBySwiftCodeResp.swiftName3;
+        GetInfoBySwiftCodeResp getInfoBySwiftCodeResp = await Transfer()
+            .getInfoBySwiftCode(GetInfoBySwiftCodeReq(data.bankSwift));
+        _payeeBank = getInfoBySwiftCodeResp.swiftName1 +
+            getInfoBySwiftCodeResp.swiftName2 +
+            getInfoBySwiftCodeResp.swiftName3;
       } catch (e) {
         print(e);
       }
@@ -541,7 +561,8 @@ class _MyApprovedHistoryDetailPageState
         _internationalList.add(_buildContentItem(
             S.current.approve_swift_code, data?.bankSwift ?? ''));
         _internationalList.add(_buildContentItem(
-            S.current.approve_collecting_bank, data?.payeeBankCode ?? _payeeBank ?? ''));
+            S.current.approve_collecting_bank,
+            data?.payeeBankCode ?? _payeeBank ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_collection_address, data?.payeeAddress ?? ''));
         _internationalList.add(
@@ -667,7 +688,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.tenor == element.code) {
-            _tenorName = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _tenorName = element.cname;
+            } else if (_language == 'zh_HK') {
+              _tenorName = element.chName;
+            } else {
+              _tenorName = element.name;
+            }
           }
         });
       }
@@ -684,7 +711,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.status == element.code) {
-            _statusName = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _statusName = element.cname;
+            } else if (_language == 'zh_HK') {
+              _statusName = element.chName;
+            } else {
+              _statusName = element.name;
+            }
           }
         });
       }
@@ -792,7 +825,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.tenor == element.code) {
-            _tenorName = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _tenorName = element.cname;
+            } else if (_language == 'zh_HK') {
+              _tenorName = element.chName;
+            } else {
+              _tenorName = element.name;
+            }
           }
         });
       }
@@ -809,7 +848,13 @@ class _MyApprovedHistoryDetailPageState
       if (_instList.isNotEmpty) {
         _instList.forEach((element) {
           if (data?.instCode == element.code) {
-            _instCode = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _instCode = element.cname;
+            } else if (_language == 'zh_HK') {
+              _instCode = element.chName;
+            } else {
+              _instCode = element.name;
+            }
           }
         });
       }
@@ -954,7 +999,8 @@ class _MyApprovedHistoryDetailPageState
       child: GestureDetector(
         onTap: () {
           Navigator.pushNamed(
-              context, pageAuthorizationTaskApprovalHistoryDetail, arguments: {"data": _commentList});
+              context, pageAuthorizationTaskApprovalHistoryDetail,
+              arguments: {"data": _commentList});
         },
         child: _buildHistoryItem(S.current.approve_approval_history, true),
       ),
@@ -1107,8 +1153,8 @@ class _MyApprovedHistoryDetailPageState
             children: [
               ClipOval(
                 child: Image(
-                  image: AssetImage(
-                      imageUrl ?? 'images/home/heaerIcon/home_header_person.png'),
+                  image: AssetImage(imageUrl ??
+                      'images/home/heaerIcon/home_header_person.png'),
                   fit: BoxFit.cover,
                   height: 22.0,
                   width: 22.0,

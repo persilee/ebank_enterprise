@@ -122,8 +122,13 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
           if (ddFinHist.txMmo == element.code) {
             if (this.mounted) {
               setState(() {
-                _statusName =
-                    _language == 'zh_CN' ? element.cname : element.name;
+                if (_language == 'zh_CN') {
+                  _statusName = element.cname;
+                } else if (_language == 'zh_HK') {
+                  _statusName = element.chName;
+                } else {
+                  _statusName = element.name;
+                }
               });
             }
           }

@@ -467,7 +467,13 @@ class _RelatedIndividualsDataPageState
       appellationList = [];
       String _language = Intl.getCurrentLocale();
       _appellationTypes.forEach((element) {
-        appellationList.add(_language == 'en' ? element.name : element.cname);
+        if (_language == 'en') {
+          appellationList.add(element.name);
+        } else if (_language == 'zh_HK') {
+          appellationList.add(element.chName);
+        } else {
+          appellationList.add(element.cname);
+        }
       });
     }
     final result = await showHsgBottomSheet(
@@ -533,7 +539,13 @@ class _RelatedIndividualsDataPageState
       documentList = [];
       String _language = Intl.getCurrentLocale();
       _documentTypes.forEach((element) {
-        documentList.add(_language == 'en' ? element.name : element.cname);
+        if (_language == 'en') {
+          documentList.add(element.name);
+        } else if (_language == 'zh_HK') {
+          documentList.add(element.chName);
+        } else {
+          documentList.add(element.cname);
+        }
       });
     }
     final result = await showHsgBottomSheet(

@@ -646,7 +646,13 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       documentList = [];
       String _language = Intl.getCurrentLocale();
       _documentTypes.forEach((element) {
-        documentList.add(_language == 'en' ? element.name : element.cname);
+        if (_language == 'en') {
+          documentList.add(element.name);
+        } else if (_language == 'zh_HK') {
+          documentList.add(element.chName);
+        } else {
+          documentList.add(element.cname);
+        }
       });
     }
     final result = await showHsgBottomSheet(
@@ -682,7 +688,13 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       companyList = [];
       String _language = Intl.getCurrentLocale();
       _companyTypes.forEach((element) {
-        companyList.add(_language == 'en' ? element.name : element.cname);
+        if (_language == 'en') {
+          companyList.add(element.name);
+        } else if (_language == 'zh_HK') {
+          companyList.add(element.chName);
+        } else {
+          companyList.add(element.cname);
+        }
       });
     }
     final result = await showHsgBottomSheet(
@@ -716,7 +728,13 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       industrialList = [];
       String _language = Intl.getCurrentLocale();
       _industrialNatures.forEach((element) {
-        industrialList.add(_language == 'en' ? element.name : element.cname);
+        if (_language == 'en') {
+          industrialList.add(element.name);
+        } else if (_language == 'zh_HK') {
+          industrialList.add(element.chName);
+        } else {
+          industrialList.add(element.cname);
+        }
       });
     }
 
@@ -753,8 +771,13 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       industrialTwoList = [];
       String _language = Intl.getCurrentLocale();
       _industrialNaturesTwo.forEach((element) {
-        industrialTwoList
-            .add(_language == 'en' ? element.engName : element.localName);
+        if (_language == 'en') {
+          industrialTwoList.add(element.engName);
+        } else if (_language == 'zh_HK') {
+          industrialTwoList.add(element.chName);
+        } else {
+          industrialTwoList.add(element.localName);
+        }
       });
     } else {
       HSProgressHUD.showToastTip(

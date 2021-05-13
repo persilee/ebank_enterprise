@@ -787,6 +787,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
             setState(() {
               if (language == 'zh_CN') {
                 terms.add(element.cname);
+              } else if (language == 'zh_HK') {
+                terms.add(element.chName);
               } else {
                 terms.add(element.name);
               }

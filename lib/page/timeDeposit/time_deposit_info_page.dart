@@ -779,6 +779,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
             instCodes.add(element.code);
             if (language == 'zh_CN') {
               instructions.add(element.cname);
+            } else if (language == 'zh_HK') {
+              instructions.add(element.chName);
             } else {
               instructions.add(element.name);
             }

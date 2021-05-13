@@ -6,12 +6,14 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoanMyApplicationListPage extends StatefulWidget {
@@ -36,9 +38,19 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
   bool _isHsgError = false; //是否是错误
   Widget _hsgErrorPage; //错误
 
+  int _page = 1;
+
+  //显示是否在加载中
+  bool _isload = true;
+  bool _isloadMore = false;
+
+  //下拉刷新数据
+  RefreshController _refreshController;
+
   @override
   void initState() {
     super.initState();
+    _refreshController = RefreshController();
     _getLoanPurposeList();
   }
 
@@ -66,21 +78,21 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
         _reimburseTypeLists.clear();
         _reimburseTypeLists.addAll(data.publicCodeGetRedisRspDtoList);
       }
-      _getLoanApplyforListData(); //获取列表数据
+      _getLoanApplyforListData(_isloadMore); //获取列表数据
     }).catchError((e) {
       HSProgressHUD.showToast(e.error);
     });
   }
 
   //获取列表数据
-  Future _getLoanApplyforListData() async {
+  Future _getLoanApplyforListData(bool isLoadMore) async {
+    isLoadMore ? _page++ : _page = 1;
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
     ApiClientLoan()
-        .loanApplyforListData(LoanApplyFoyListReq(userID))
+        .loanApplyforListData(LoanApplyFoyListReq(userID, _page, 12))
         .then((data) {
       setState(() {
-        _isLoading = false;
         if (data.loanRecordDOList != null) {
           //数组不为空
           for (int i = 0; i < data.loanRecordDOList.length; i++) {
@@ -89,7 +101,12 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
                 .add(ExpandBox(i, listData, _goalLists, _reimburseTypeLists));
             _isShowList.add(false);
           }
+          if (data.loanRecordDOList.length < 12) {
+            _refreshController.loadNoData(); //暂无更多数据的操作
+          }
         }
+        _isLoading = false;
+        _refreshController.refreshCompleted(); //刷新成功的操作
       });
     }).catchError((e) {
       setState(() {
@@ -99,7 +116,7 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
           //错误页
           error: e.error,
           buttonAction: () {
-            _getLoanApplyforListData();
+            _getLoanApplyforListData(_isloadMore);
           },
         );
       });
@@ -114,14 +131,30 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
         centerTitle: true,
         elevation: 1,
       ),
-      body: _isHsgError
-          ? _hsgErrorPage
-          : _isLoading
-              ? HsgLoading()
-              : Container(
-                  color: HsgColors.commonBackground,
-                  height: double.infinity,
-                  child: ListView.builder(
+      body: CustomRefresh(
+        onRefresh: () {
+          //下拉刷新
+          _productApplyList.clear();
+          _isloadMore = false;
+          _getLoanApplyforListData(_isloadMore);
+          // _refreshController.refreshCompleted(); //刷新成功的操作
+        },
+        onLoading: () {
+          //上拉加载更多
+          _isloadMore = true;
+          _getLoanApplyforListData(_isloadMore);
+        },
+        controller: _refreshController, //绑定刷新控件
+        content: _isHsgError
+            ? _hsgErrorPage
+            : _isLoading
+                ? HsgLoading()
+                :
+                // Container(
+                //     color: HsgColors.commonBackground,
+                //     height: double.infinity,
+                //     child:
+                ListView.builder(
                     itemCount: _productApplyList.length <= 0
                         ? 1
                         : _productApplyList.length, //数量
@@ -130,19 +163,13 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
                           ? HsgErrorPage(
                               isEmptyPage: true, //是否是空数据页面
                               buttonAction: () {
-                                _getLoanApplyforListData();
+                                _getLoanApplyforListData(_isloadMore);
                               })
                           : _productApplyList[index];
-
-                      // Container(
-                      //     margin: EdgeInsets.only(top: 200),
-                      //     child:
-                      //         notDataContainer(context, S.current.no_data_now))
-                      // : _productApplyList[index];
                     },
+                    // ),
                   ),
-                ),
-      // ),
+      ),
     );
   }
 }
@@ -281,6 +308,8 @@ class _ExpandBoxState extends State<ExpandBox> {
       if (typeData.code == listData.loanPurpse) {
         if (_language == 'zh_CN') {
           _loanPurpse = typeData.cname;
+        } else if (_language == 'zh_HK') {
+          _loanPurpse = typeData.chName;
         } else {
           _loanPurpse = typeData.name;
         }
@@ -292,6 +321,8 @@ class _ExpandBoxState extends State<ExpandBox> {
       if (typeData.code == listData.repaymentMethod) {
         if (_language == 'zh_CN') {
           _repaymentMethod = typeData.cname;
+        } else if (_language == 'zh_HK') {
+          _repaymentMethod = typeData.chName;
         } else {
           _repaymentMethod = typeData.name;
         }

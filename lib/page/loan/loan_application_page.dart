@@ -89,6 +89,8 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         data.publicCodeGetRedisRspDtoList.forEach((e) {
           if (_language == 'zh_CN') {
             _deadLineLists.add(e.cname);
+          } else if (_language == 'zh_HK') {
+            _deadLineLists.add(e.chName);
           } else {
             _deadLineLists.add(e.name);
           }
@@ -106,6 +108,8 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         data.publicCodeGetRedisRspDtoList.forEach((e) {
           if (_language == 'zh_CN') {
             _goalLists.add(e.cname);
+          } else if (_language == 'zh_HK') {
+            _goalLists.add(e.chName);
           } else {
             _goalLists.add(e.name);
           }

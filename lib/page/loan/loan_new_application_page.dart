@@ -598,6 +598,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     list.forEach((e) {
       if (_language == 'zh_CN') {
         tempList.add(e.cname);
+      } else if (_language == 'zh_HK') {
+        tempList.add(e.chName);
       } else {
         tempList.add(e.name);
       }
