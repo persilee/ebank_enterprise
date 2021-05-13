@@ -948,17 +948,26 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     double _payerAmount = 0;
     if ((inputValue.text).length == 0 ||
         double.parse(inputValue.text) < double.parse(_minAmt) ||
-        double.parse(inputValue.text) > double.parse(_maxAmt)) {
+        (double.parse(_maxAmt) > 0 &&
+            double.parse(inputValue.text) > double.parse(_maxAmt))) {
       if (this.mounted) {
         setState(() {
           _amount = '0.00';
         });
       }
     } else if (_cardCcy == ccy) {
-      _amount = FormatUtil.formatSringToMoney((inputValue.text).toString());
-      _checkAmount = inputValue.text;
+      if (mounted) {
+        setState(() {
+          _amount = FormatUtil.formatSringToMoney((inputValue.text).toString());
+          _checkAmount = inputValue.text;
+        });
+      }
     } else {
-      _payerAmount = AiDecimalAccuracy.parse(inputValue.text).toDouble();
+      if (mounted) {
+        setState(() {
+          _payerAmount = AiDecimalAccuracy.parse(inputValue.text).toDouble();
+        });
+      }
 
       try {
         TransferTrialResp data = await ApiClient().transferTrial(
