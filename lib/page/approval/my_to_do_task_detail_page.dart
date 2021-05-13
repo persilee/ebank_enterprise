@@ -97,7 +97,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   void initState() {
     super.initState();
     _controller = ScrollController();
-    _loadData();
+    _loadData(isLoading: true);
   }
 
   @override

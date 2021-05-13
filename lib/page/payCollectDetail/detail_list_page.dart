@@ -974,6 +974,7 @@ class _DetailListPageState extends State<DetailListPage> {
               _cardIcon.add(item.imageUrl);
             });
             _cardList = _cardList.toSet().toList();
+
             _getRevenueByCards(_startDate, _allAccNoList);
           } else if (data.cardList == null) {
             setState(() {
