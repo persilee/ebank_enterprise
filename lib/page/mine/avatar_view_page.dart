@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'dart:io';
 
-import 'package:ebank_mobile/data/source/model/get_user_info.dart';
+import 'package:ebank_mobile/data/source/model/account/get_user_info.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';

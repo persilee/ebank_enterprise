@@ -1,9 +1,10 @@
+import 'package:ebank_mobile/data/source/model/transfer/get_transfer_record.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///转账详情界面
 /// Author: fangluyao
 /// Date: 2020-12-24
 
-import 'package:ebank_mobile/data/source/model/get_transfer_record.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

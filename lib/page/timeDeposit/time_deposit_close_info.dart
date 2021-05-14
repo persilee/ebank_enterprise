@@ -1,5 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_record_info.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/cupertino.dart';

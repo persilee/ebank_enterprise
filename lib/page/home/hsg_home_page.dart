@@ -7,6 +7,7 @@ import 'dart:io';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_styles.dart';
+import 'package:ebank_mobile/data/source/model/account/get_user_info.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_packaging.dart';
 import 'package:ebank_mobile/main.dart';
@@ -24,7 +25,6 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/util/status_bar_util.dart';
 
 import '../../page_route.dart';

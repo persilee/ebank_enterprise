@@ -7,7 +7,7 @@
 
 import 'dart:ui';
 
-import 'package:ebank_mobile/data/source/model/get_deposit_rate.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_rate.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';

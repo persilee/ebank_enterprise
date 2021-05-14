@@ -8,8 +8,8 @@ import 'dart:convert';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/city_for_country.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
-import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
-import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/open_account_quick_submit_data.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/open_account_save_data.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -161,6 +161,9 @@ class _OpenAccountContactInformationPageState
   ///通讯邮编输入监听
   TextEditingController _communicationsZipCodeTEC = TextEditingController();
 
+  ///办事处电话号码区号输入监听
+  TextEditingController _officePhoneAreaCodeTEC = TextEditingController();
+
   ///办事处电话号码输入监听
   TextEditingController _officePhoneTEC = TextEditingController();
 
@@ -220,6 +223,13 @@ class _OpenAccountContactInformationPageState
         _nextBtnEnabled = _judgeButtonIsEnabled();
       });
     });
+    _officePhoneAreaCodeTEC.addListener(() {
+      _officeAreaCodeText = _officePhoneAreaCodeTEC.text;
+      widget.dataReq.telCountryCode = _officeAreaCodeText;
+      setState(() {
+        _nextBtnEnabled = _judgeButtonIsEnabled();
+      });
+    });
     _officePhoneTEC.addListener(() {
       _officePhoneText = _officePhoneTEC.text;
       widget.dataReq.telNumber = _officePhoneText;
@@ -243,6 +253,7 @@ class _OpenAccountContactInformationPageState
     _businessZipCodeTEC.dispose();
     _correspondenceAddressTEC.dispose();
     _communicationsZipCodeTEC.dispose();
+    _officePhoneAreaCodeTEC.dispose();
     _officePhoneTEC.dispose();
     super.dispose();
   }
@@ -844,25 +855,37 @@ class _OpenAccountContactInformationPageState
   Widget _officePhoneColumn(BuildContext context) {
     List<Widget> children = [
       Container(
-        child: _oneLayerSelectWidget(
+        child: _oneLayerInputWidget(
           context,
           S.of(context).openAccout_areaCode,
-          _officeAreaCodeText,
-          S.of(context).please_select,
+          S.of(context).please_enter,
+          _officePhoneAreaCodeTEC,
           false,
-          () {
-            print('区号');
-            Navigator.pushNamed(context, countryOrRegionSelectPage)
-                .then((value) {
-              CountryRegionNewModel data = value;
-              setState(() {
-                _officeAreaCodeText = '+ ${data.areaCode}';
-                widget.dataReq.telCountryCode = data.areaCode;
-                _nextBtnEnabled = _judgeButtonIsEnabled();
-              });
-            });
-          },
+          <TextInputFormatter>[
+            LengthLimitingTextInputFormatter(5),
+            FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+          ],
+          TextInputType.number,
         ),
+        // child: _oneLayerSelectWidget(
+        //   context,
+        //   S.of(context).openAccout_areaCode,
+        //   _officeAreaCodeText,
+        //   S.of(context).please_select,
+        //   false,
+        //   () {
+        //     print('区号');
+        //     Navigator.pushNamed(context, countryOrRegionSelectPage)
+        //         .then((value) {
+        //       CountryRegionNewModel data = value;
+        //       setState(() {
+        //         _officeAreaCodeText = '+ ${data.areaCode}';
+        //         widget.dataReq.telCountryCode = data.areaCode;
+        //         _nextBtnEnabled = _judgeButtonIsEnabled();
+        //       });
+        //     });
+        //   },
+        // ),
       ),
       Container(
         child: _oneLayerInputWidget(
@@ -1339,7 +1362,8 @@ class _OpenAccountContactInformationPageState
     if (this.mounted) {
       setState(() {
         // String _language = Intl.getCurrentLocale();
-        _officeAreaCodeText = widget.dataReq.telCountryCode;
+        _officePhoneAreaCodeTEC.text =
+            _officeAreaCodeText = widget.dataReq.telCountryCode;
         _officePhoneTEC.text = _officePhoneText = widget.dataReq.telNumber;
 
         if (widget.dataReq.addressList != null &&

@@ -1,13 +1,14 @@
+import 'package:ebank_mobile/data/source/model/loan/get_loan_list.dart';
+import 'package:ebank_mobile/data/source/model/loan/get_schedule_detail_list.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 待还记录页面
 /// Author: zhangqirong
 /// Date: 2020-12-15
 
-import 'package:ebank_mobile/data/source/model/get_schedule_detail_list.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 
 class WaitRepayPlanPage extends StatefulWidget {
   @override

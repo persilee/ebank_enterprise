@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
+import 'package:ebank_mobile/data/source/model/mine/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/update_login_password.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司

@@ -649,7 +649,7 @@
   "openAccout_registeredAddress_details": "Address Details of Registered Company",
   "openAccout_zipCode": "Zip Code",
   "openAccout_areaCode": "Area Code",
-  "openAccout_officePhoneNo": "Office Tel No.",
+  "openAccout_officePhoneNo": "Office Fixed-line Tel No.",
   "openAccout_theSameForRegister": "Same Address as Registered Company",
   "openAccout_businessAddress": "Business Address",
   "openAccout_businessAddress_details": "Details of Principal Business Addresses",

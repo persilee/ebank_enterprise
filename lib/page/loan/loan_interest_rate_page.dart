@@ -1,9 +1,10 @@
+import 'package:ebank_mobile/data/source/model/loan/get_loan_rate.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///贷款利率界面
 /// Author: fangluyao
 /// Date: 2020-12-07
 
-import 'package:ebank_mobile/data/source/model/get_loan_rate.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';

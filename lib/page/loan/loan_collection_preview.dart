@@ -1,8 +1,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/loan_account_model.dart';
-import 'package:ebank_mobile/data/source/model/loan_calculate_interest.dart';
-import 'package:ebank_mobile/data/source/model/loan_creditlimit_cust.dart';
-import 'package:ebank_mobile/data/source/model/loan_trail_commit.dart';
+import 'package:ebank_mobile/data/source/model/loan/loan_account_model.dart';
+import 'package:ebank_mobile/data/source/model/loan/loan_creditlimit_cust.dart';
+import 'package:ebank_mobile/data/source/model/loan/loan_trail_commit.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
 import 'package:ebank_mobile/page/loan/limit_details_page.dart';

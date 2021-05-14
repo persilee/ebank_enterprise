@@ -4,7 +4,7 @@
 /// Date: 2020-12-11
 
 import 'package:ebank_mobile/config/hsg_text_style.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_packaging.dart';

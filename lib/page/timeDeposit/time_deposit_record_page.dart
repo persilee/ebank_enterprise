@@ -6,9 +6,9 @@
  */
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_record_info.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
@@ -78,8 +78,8 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         setState(() {
-        typeList.addAll(_tenorList);                          
-            });
+          typeList.addAll(_tenorList);
+        });
       }
     } catch (e) {
       print(e);
@@ -222,17 +222,17 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     );
 
     String _statusText = '';
-      typeList.forEach((element) {
-          if (rows.conSts == element.code) {
-            if (_languageType == 'zh_CN') {
-              _statusText = element.cname;
-            } else if (_languageType == 'zh_HK') {
-              _statusText = element.chName;
-            } else {
-              _statusText = element.name;
-            }
-          }
-        });
+    typeList.forEach((element) {
+      if (rows.conSts == element.code) {
+        if (_languageType == 'zh_CN') {
+          _statusText = element.cname;
+        } else if (_languageType == 'zh_HK') {
+          _statusText = element.chName;
+        } else {
+          _statusText = element.name;
+        }
+      }
+    });
     // if (rows.conSts == 'C') {
     //   //状态为关闭显示 结清
     //   _statusText = S.current.time_deposit_record_Status_C;

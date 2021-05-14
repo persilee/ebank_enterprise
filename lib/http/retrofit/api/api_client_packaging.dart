@@ -1,6 +1,6 @@
-import 'package:ebank_mobile/data/source/model/get_user_info.dart';
-import 'package:ebank_mobile/data/source/model/login.dart';
-import 'package:ebank_mobile/data/source/model/logout.dart';
+import 'package:ebank_mobile/data/source/model/account/get_user_info.dart';
+import 'package:ebank_mobile/data/source/model/login_register/login.dart';
+import 'package:ebank_mobile/data/source/model/login_register/logout.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';

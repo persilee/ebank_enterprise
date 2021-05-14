@@ -1,5 +1,5 @@
-import 'package:ebank_mobile/data/source/model/get_user_info.dart';
-import 'package:ebank_mobile/data/source/model/login.dart';
+import 'package:ebank_mobile/data/source/model/account/get_user_info.dart';
+import 'package:ebank_mobile/data/source/model/login_register/login.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

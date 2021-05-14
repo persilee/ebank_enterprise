@@ -6,7 +6,7 @@ import 'dart:async';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/account/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/account/check_sms.dart';
-import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
+import 'package:ebank_mobile/data/source/model/mine/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';

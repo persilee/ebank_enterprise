@@ -4,7 +4,7 @@
 /// Date: 2020-11-30
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/loan_trial_rate.dart';
+import 'package:ebank_mobile/data/source/model/loan/loan_trial_rate.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
