@@ -6,6 +6,8 @@
  */
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_record_info.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
@@ -36,6 +38,8 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   var _totalAmtStr = ''; //定期存单总额
   var _defaultCcy = ''; //默认币种
   List<DepositRecord> rowList = []; //定期存单列表
+  List<IdType> typeList = []; //定期公共代码接口
+  String _languageType = Intl.getCurrentLocale();
 
   double conRate; //利率
   int _page = 1;
@@ -49,11 +53,11 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   @override
   void initState() {
     super.initState();
+    _loadPublicStatus();
     _refreshController = RefreshController();
     _scrollController = ScrollController();
     //获取定期存单列表
     _loadDeopstData();
-
     //接收通知
     NotificationCenter.instance.addObserver('load', (object) {
       if (this.mounted) {
@@ -64,6 +68,22 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         });
       }
     });
+  }
+
+  void _loadPublicStatus() async {
+// 获取状态
+    try {
+      GetIdTypeResp getIdTypeResp =
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('TD_STATE'));
+      List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
+      if (_tenorList.isNotEmpty) {
+        setState(() {
+          typeList.addAll(_tenorList);
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -202,14 +222,24 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     );
 
     String _statusText = '';
-
-    if (rows.conSts == 'C') {
-      //状态为关闭显示 结清
-      _statusText = S.current.time_deposit_record_Status_C;
-    } else if (rows.conSts == 'N') {
-      //显示正常
-      _statusText = S.current.time_deposit_record_Status_N;
-    }
+    typeList.forEach((element) {
+      if (rows.conSts == element.code) {
+        if (_languageType == 'zh_CN') {
+          _statusText = element.cname;
+        } else if (_languageType == 'zh_HK') {
+          _statusText = element.chName;
+        } else {
+          _statusText = element.name;
+        }
+      }
+    });
+    // if (rows.conSts == 'C') {
+    //   //状态为关闭显示 结清
+    //   _statusText = S.current.time_deposit_record_Status_C;
+    // } else if (rows.conSts == 'N') {
+    //   //显示正常
+    //   _statusText = S.current.time_deposit_record_Status_N;
+    // }
 
     var _orderStatus = Row(
       //当前订单状态
