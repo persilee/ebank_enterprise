@@ -178,13 +178,14 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     // 获取贷款期限
     String _iratTm = '';
+    String repayDat = data?.iratTm.substring(data?.iratTm.length - 2);
     try {
       GetIdTypeResp getIdTypeResp =
           await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if (data?.iratTm == element.code) {
+          if (repayDat == element.code) {
             if (_language == 'zh_CN') {
               _iratTm = element.cname;
             } else if (_language == 'zh_HK') {

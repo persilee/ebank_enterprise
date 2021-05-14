@@ -88,7 +88,13 @@ class _LoanReferenceState extends State<LoanReference> {
     ApiClientOpenAccount().getIdType(GetIdTypeReq("LOAN_TERM")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _deadLineLists.clear();
-        _deadLineLists.addAll(data.publicCodeGetRedisRspDtoList);
+        for (int i = 0; i < data.publicCodeGetRedisRspDtoList.length; i++) {
+          IdType type = data.publicCodeGetRedisRspDtoList[i];
+          if (type.code != '24') {
+            _deadLineLists.add(type);
+          }
+        }
+        // _deadLineLists.addAll(data.publicCodeGetRedisRspDtoList);
       }
     });
   }
@@ -108,7 +114,14 @@ class _LoanReferenceState extends State<LoanReference> {
     ApiClientOpenAccount().getIdType(GetIdTypeReq("REPAY_TYPE")).then((data) {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _reimburseTypeLists.clear();
-        _reimburseTypeLists.addAll(data.publicCodeGetRedisRspDtoList);
+
+        for (int i = 0; i < data.publicCodeGetRedisRspDtoList.length; i++) {
+          IdType type = data.publicCodeGetRedisRspDtoList[i];
+          if (type.code == 'FPI') {
+            _reimburseTypeLists.add(type);
+          }
+        }
+        // _reimburseTypeLists.addAll(data.publicCodeGetRedisRspDtoList);
       }
     });
   }
@@ -184,7 +197,6 @@ class _LoanReferenceState extends State<LoanReference> {
       accountInfo.lmtNo,
       'L',
     );
-    // LoanDataRepository()
     ApiClientLoan().loanCreditlimitInterface(req).then((data) {
       if (data.getCreditlimitByCusteDTOList != null) {
         //判断数据不为空
