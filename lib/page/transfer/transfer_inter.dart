@@ -284,6 +284,10 @@ class _TransferInterPageState extends State<TransferInterPage> {
                     S.of(context).transfer_from_name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
                 Container(
@@ -293,6 +297,10 @@ class _TransferInterPageState extends State<TransferInterPage> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.end,
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
               ],
@@ -527,7 +535,10 @@ class _TransferInterPageState extends State<TransferInterPage> {
                   margin: EdgeInsets.only(top: 15),
                   child: Text(
                     topText,
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: HsgColors.firstDegreeText,
+                    ),
                     textAlign: TextAlign.start,
                   ),
                 ),
@@ -621,6 +632,10 @@ class _TransferInterPageState extends State<TransferInterPage> {
               S.current.transfer_from_account,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: HsgColors.firstDegreeText,
+                fontSize: 15,
+              ),
             ),
           ),
           InkWell(

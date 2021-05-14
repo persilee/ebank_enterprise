@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -41,7 +42,14 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   Widget _getTipW() {
-    return Center(child: Text('No Cameras'));
+    return Center(
+        child: Text(
+      'No Cameras',
+      style: TextStyle(
+        color: HsgColors.firstDegreeText,
+        fontSize: 15,
+      ),
+    ));
   }
 
   Widget _getCameraW(BuildContext context) {

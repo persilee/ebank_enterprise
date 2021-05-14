@@ -191,7 +191,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           //color: Colors.blue,
                           child: Text(
                             S.current.next_step,
-                            style: (TextStyle(color: Colors.white)),
+                            style: (TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            )),
                           ),
                           onPressed: _submit()
                               ? () {
@@ -378,7 +381,6 @@ class _RegisterPageState extends State<RegisterPage> {
         countdownTime > 0
             ? '${countdownTime}s'
             : S.of(context).getVerificationCode,
-        style: TextStyle(fontSize: 14),
         textAlign: TextAlign.right,
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

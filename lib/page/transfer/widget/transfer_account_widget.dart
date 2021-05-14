@@ -105,7 +105,13 @@ class TransferAccount extends StatelessWidget {
         children: [
           Container(
             padding: EdgeInsets.only(left: 15),
-            child: Text(S.current.transfer_amount),
+            child: Text(
+              S.current.transfer_amount,
+              style: TextStyle(
+                color: HsgColors.firstDegreeText,
+                fontSize: 15,
+              ),
+            ),
           ),
           Container(
             child: FlatButton(
@@ -205,6 +211,10 @@ class TransferAccount extends StatelessWidget {
               S.current.transfer_from_account,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: HsgColors.firstDegreeText,
+                fontSize: 15,
+              ),
             ),
           ),
           InkWell(
@@ -281,9 +291,13 @@ class TransferAccount extends StatelessWidget {
   //               S.current.estimated_collection_amount,
   //               maxLines: 2,
   //               overflow: TextOverflow.ellipsis,
+  // style: TextStyle(
+  //                     color: HsgColors.firstDegreeText,
+  //                     fontSize: 15,
+  //                   ),
   //             ),
   //           ),
-  //           Text(FormatUtil.formatSringToMoney(amount)),
+  //           Text(FormatUtil.formatSringToMoney(amount),style:),
   //         ],
   //       ));
   // }
@@ -302,6 +316,10 @@ class TransferAccount extends StatelessWidget {
               S.current.estimated_collection_amount,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: HsgColors.firstDegreeText,
+                fontSize: 15,
+              ),
             ),
           ),
           Column(

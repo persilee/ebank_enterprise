@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
@@ -45,7 +46,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       child: Text(
                         S.current.changPwsSuccess,
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: HsgColors.firstDegreeText,
+                        ),
                       ),
                     )
                   ],

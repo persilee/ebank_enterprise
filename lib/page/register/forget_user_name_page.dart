@@ -4,6 +4,7 @@ import 'dart:async';
 /// 忘记用户名页面
 /// Author: pengyikang
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/account/check_sms.dart';
 import 'package:ebank_mobile/data/source/model/mine/get_verificationByPhone_code.dart';
@@ -170,7 +171,10 @@ class _ForgetUserNameState extends State<ForgetUserName> {
                         disabledColor: HsgColors.btnDisabled,
                         child: Text(
                           S.current.submit,
-                          style: (TextStyle(color: Colors.white)),
+                          style: (TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                          )),
                           //textDirection: Colors.white,
                         ),
                         onPressed: _submit()
@@ -230,7 +234,6 @@ class _ForgetUserNameState extends State<ForgetUserName> {
         countdownTime > 0
             ? '${countdownTime}s'
             : S.of(context).getVerificationCode,
-        style: TextStyle(fontSize: 14),
         textAlign: TextAlign.right,
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

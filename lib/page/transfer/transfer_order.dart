@@ -216,6 +216,7 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
                 style: TextStyle(
                   fontSize: 14.0,
                   height: 3.0,
+                  color: HsgColors.firstDegreeText,
                 ),
               ),
               onTap: () {
@@ -700,7 +701,13 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
             child: Row(
               children: [
                 Container(
-                  child: Text(intl.S.current.appointment_frequency),
+                  child: Text(
+                    intl.S.current.appointment_frequency,
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
+                      fontSize: 15,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -737,6 +744,10 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
                     intl.S.of(context).transfer_from_name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
                 Container(
@@ -746,6 +757,10 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.end,
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
               ],
@@ -929,6 +944,10 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
               intl.S.current.transfer_from_account,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: HsgColors.firstDegreeText,
+                fontSize: 15,
+              ),
             ),
           ),
           InkWell(

@@ -66,6 +66,7 @@ class _HsgPasswordDialogState extends State<HsgPasswordDialog> {
                 widget.title,
                 style: TextStyle(
                   color: HsgColors.firstDegreeText,
+                  fontSize: 15,
                 ),
               ),
             ),

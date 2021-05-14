@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/set_transaction_password.dart';
 /**
   @desc   设置交易密码
@@ -112,7 +113,10 @@ class _SetPayPageState extends State<SetPayPage> {
                   margin: EdgeInsets.all(40),
                   text: Text(
                     S.of(context).next_step,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
                   ),
                   isEnable: _submit(),
                   clickCallback: () {
@@ -235,7 +239,10 @@ class InputList extends StatelessWidget {
         children: [
           Container(
             width: 180,
-            child: Text(this.labText),
+            child: Text(
+              this.labText,
+              style: FIRST_DEGREE_TEXT_STYLE,
+            ),
           ),
           Expanded(
             child: TextField(

@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/get_bank_info_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_limit_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
@@ -78,10 +79,18 @@ class _CardDetailPageState extends State<CardDetailPage> {
                   child: Row(
                     children: [
                       Expanded(
-                          child: Text("${S.current.account_balance}(CNY)")),
+                        child: Text(
+                          "${S.current.account_balance}(CNY)",
+                          style: FIRST_DEGREE_TEXT_STYLE,
+                        ),
+                      ),
                       Container(
-                        child: Text(FormatUtil.formatSringToMoney(totalBalance),
-                            style: TextStyle(color: Colors.grey)),
+                        child: Text(
+                          FormatUtil.formatSringToMoney(totalBalance),
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
                       )
                     ],
                   ),
@@ -115,11 +124,16 @@ class _CardDetailPageState extends State<CardDetailPage> {
                       child: Row(
                         children: [
                           Expanded(
-                              child: Text(S.current.transaction_amount_limit)),
+                            child: Text(
+                              S.current.transaction_amount_limit,
+                              style: FIRST_DEGREE_TEXT_STYLE,
+                            ),
+                          ),
                           Container(
                             child: Text(
-                                FormatUtil.formatSringToMoney(singleLimit),
-                                style: TextStyle(color: Colors.grey)),
+                              FormatUtil.formatSringToMoney(singleLimit),
+                              style: TextStyle(color: Colors.grey),
+                            ),
                           )
                         ],
                       ),
@@ -132,12 +146,16 @@ class _CardDetailPageState extends State<CardDetailPage> {
                       child: Row(
                         children: [
                           Expanded(
-                              child:
-                                  Text(S.current.daily_amount_of_transcation)),
+                            child: Text(
+                              S.current.daily_amount_of_transcation,
+                              style: FIRST_DEGREE_TEXT_STYLE,
+                            ),
+                          ),
                           Container(
                             child: Text(
-                                FormatUtil.formatSringToMoney(dailyLimitAmt),
-                                style: TextStyle(color: Colors.grey)),
+                              FormatUtil.formatSringToMoney(dailyLimitAmt),
+                              style: TextStyle(color: Colors.grey),
+                            ),
                           )
                         ],
                       ),
@@ -151,11 +169,16 @@ class _CardDetailPageState extends State<CardDetailPage> {
                       child: Row(
                         children: [
                           Expanded(
-                              child:
-                                  Text(S.current.daily_number_of_transaction)),
+                            child: Text(
+                              S.current.daily_number_of_transaction,
+                              style: FIRST_DEGREE_TEXT_STYLE,
+                            ),
+                          ),
                           Container(
-                            child: Text(dailyLimit,
-                                style: TextStyle(color: Colors.grey)),
+                            child: Text(
+                              dailyLimit,
+                              style: TextStyle(color: Colors.grey),
+                            ),
                           )
                         ],
                       ),
@@ -170,9 +193,17 @@ class _CardDetailPageState extends State<CardDetailPage> {
   _getCcyRow(CardBalBean bal) {
     return Row(
       children: [
-        Expanded(child: Text(bal.ccy)),
+        Expanded(
+          child: Text(
+            bal.ccy,
+            style: FIRST_DEGREE_TEXT_STYLE,
+          ),
+        ),
         Container(
-          child: Text(bal.equAmt, style: TextStyle(color: Colors.grey)),
+          child: Text(
+            bal.equAmt,
+            style: TextStyle(color: Colors.grey),
+          ),
         )
       ],
     );

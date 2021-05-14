@@ -5,6 +5,7 @@
 import 'dart:async';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/mine/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/set_payment_pwd.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -123,7 +124,10 @@ class _ChangePayPageState extends State<ChangePayPage> {
                           children: [
                             Container(
                               width: 120,
-                              child: Text(S.of(context).sendmsm),
+                              child: Text(
+                                S.of(context).sendmsm,
+                                style: FIRST_DEGREE_TEXT_STYLE,
+                              ),
                             ),
                             Expanded(
                               child: otpTextField(),
@@ -156,7 +160,10 @@ class _ChangePayPageState extends State<ChangePayPage> {
                   margin: EdgeInsets.all(40),
                   text: Text(
                     S.of(context).submit,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
                   ),
                   isEnable: _submit(),
                   clickCallback: () {
@@ -376,7 +383,10 @@ class InputList extends StatelessWidget {
         children: [
           Container(
             width: 180,
-            child: Text(this.labText),
+            child: Text(
+              this.labText,
+              style: FIRST_DEGREE_TEXT_STYLE,
+            ),
           ),
           Expanded(
             child: TextField(

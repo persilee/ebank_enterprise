@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,13 @@ Widget getRegisterRegion(
                     alignment: Alignment.centerRight,
                     height: MediaQuery.of(context).size.height / 20,
                     width: MediaQuery.of(context).size.width / 6.8,
-                    child: Text('+$_officeAreaCodeText')),
+                    child: Text(
+                      '+$_officeAreaCodeText',
+                      style: TextStyle(
+                        color: HsgColors.firstDegreeText,
+                        fontSize: 15,
+                      ),
+                    )),
                 Container(
                   height: MediaQuery.of(context).size.height / 20,
                   width: MediaQuery.of(context).size.width / 18,

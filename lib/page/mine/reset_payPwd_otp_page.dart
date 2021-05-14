@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/check_sms.dart';
 import 'package:ebank_mobile/data/source/model/mine/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
@@ -98,7 +99,10 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                             children: [
                               Container(
                                 width: 120,
-                                child: Text(S.of(context).sendmsm),
+                                child: Text(
+                                  S.of(context).sendmsm,
+                                  style: FIRST_DEGREE_TEXT_STYLE,
+                                ),
                               ),
                               Expanded(
                                 child: otpTextField(),
@@ -125,7 +129,10 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                     margin: EdgeInsets.all(40),
                     text: Text(
                       S.of(context).next_step,
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
                     ),
                     isEnable: _submit(),
                     clickCallback: () {
@@ -297,7 +304,9 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
         countdownTime > 0
             ? '${countdownTime}s'
             : S.of(context).getVerificationCode,
-        style: TextStyle(fontSize: 14),
+        style: TextStyle(
+          fontSize: 14,
+        ),
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
@@ -361,7 +370,10 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(labText),
+          Text(
+            labText,
+            style: FIRST_DEGREE_TEXT_STYLE,
+          ),
           InkWell(
             onTap: () {
               print('区号');
@@ -383,7 +395,10 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
                 children: [
                   Text(
                     '+' + _officeAreaCodeText,
-                    style: TextStyle(color: HsgColors.hintText),
+                    style: TextStyle(
+                      color: HsgColors.hintText,
+                      fontSize: 14,
+                    ),
                   ),
                   Icon(Icons.arrow_drop_down_outlined,
                       color: HsgColors.hintText),

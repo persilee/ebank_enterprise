@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/real_name_auth_by_three_factor.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -120,13 +121,20 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                               _certType == ''
                                   ? Text(
                                       S.current.register_select_documents,
+                                      style: FIRST_DEGREE_TEXT_STYLE,
                                     )
-                                  : Text(_certType),
+                                  : Text(
+                                      _certType,
+                                      style: FIRST_DEGREE_TEXT_STYLE,
+                                    ),
                               Row(
                                 children: [
                                   Padding(
                                       padding: EdgeInsets.only(right: 12),
-                                      child: Text('')),
+                                      child: Text(
+                                        '',
+                                        style: FIRST_DEGREE_TEXT_STYLE,
+                                      )),
                                   Container(
                                       child: Icon(
                                     Icons.expand_more,
@@ -169,7 +177,10 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                     height: 44.0,
                     width: MediaQuery.of(context).size.width,
                     child: FlatButton(
-                      child: Text(S.of(context).next_step),
+                      child: Text(
+                        S.of(context).next_step,
+                        style: TextStyle(fontSize: 15),
+                      ),
                       onPressed: _submit()
                           ? () {
                               FocusScope.of(context).requestFocus(FocusNode());

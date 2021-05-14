@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/config/hsg_colors.dart';
+
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
 ///操作成功页面
 /// Author: fangluyao
@@ -39,7 +41,11 @@ class _TransferSuccessPageState extends State<TransferSuccessPage> {
               ),
               Text(
                 S.of(context).operation_successful,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: HsgColors.firstDegreeText,
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 80),

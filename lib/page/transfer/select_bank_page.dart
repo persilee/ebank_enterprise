@@ -175,7 +175,10 @@ class _SelectBankPageState extends State<SelectBankPage> {
               alignment: Alignment.centerRight,
               child: Text(
                 S.current.search,
-                style: TextStyle(color: Color(0xFF4871FF)),
+                style: TextStyle(
+                  color: Color(0xFF4871FF),
+                  fontSize: 15,
+                ),
               ),
             ),
           ),
@@ -224,7 +227,10 @@ class _SelectBankPageState extends State<SelectBankPage> {
                   ),
                   Text(
                     bank.localName,
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: HsgColors.firstDegreeText,
+                    ),
                   )
                 ],
               ),

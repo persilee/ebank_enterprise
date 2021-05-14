@@ -154,7 +154,10 @@ class _RepayConfirmPageState extends State<RepayConfirmPage> {
       child: RaisedButton(
         child: Text(
           S.of(context).confirm_message,
-          style: TextStyle(fontSize: 15, color: Colors.white),
+          style: TextStyle(
+            fontSize: 15,
+            color: Colors.white,
+          ),
         ),
         padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
         onPressed: () {
