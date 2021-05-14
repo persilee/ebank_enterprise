@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,10 @@ Widget getRegisterTitle(String title) {
     margin: EdgeInsets.fromLTRB(26.5, 0, 0, 34),
     child: Text(
       title,
-      style: TextStyle(fontSize: 24),
+      style: TextStyle(
+        fontSize: 24,
+        color: HsgColors.firstDegreeText,
+      ),
     ),
   );
 }

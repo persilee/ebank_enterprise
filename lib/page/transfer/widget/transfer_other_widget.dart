@@ -28,7 +28,13 @@ Widget transferOtherWidget(BuildContext context, String remark,
       children: [
         Container(
           width: MediaQuery.of(context).size.width / 4,
-          child: Text(S.current.transfer_postscript),
+          child: Text(
+            S.current.transfer_postscript,
+            style: TextStyle(
+              color: HsgColors.firstDegreeText,
+              fontSize: 15,
+            ),
+          ),
         ),
         Expanded(
           child: Container(

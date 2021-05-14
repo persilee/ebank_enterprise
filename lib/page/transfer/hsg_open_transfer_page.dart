@@ -194,6 +194,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                 style: TextStyle(
                   fontSize: 14.0,
                   height: 3.0,
+                  color: HsgColors.firstDegreeText,
                 ),
               ),
               onTap: () {
@@ -365,7 +366,10 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       child: Text(
         btnTitle,
         style: TextStyle(
-            color: textColor, fontSize: 14.0, fontWeight: FontWeight.normal),
+          color: textColor,
+          fontSize: 14.0,
+          fontWeight: FontWeight.normal,
+        ),
       ),
     );
   }
@@ -801,7 +805,13 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             child: Row(
               children: [
                 Container(
-                  child: Text(intl.S.current.appointment_frequency),
+                  child: Text(
+                    intl.S.current.appointment_frequency,
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
+                      fontSize: 15,
+                    ),
+                  ),
                 ),
               ],
             ),

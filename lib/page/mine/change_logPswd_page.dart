@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/mine/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/update_login_password.dart';
 
@@ -123,7 +124,10 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                           children: [
                             Container(
                               width: 120,
-                              child: Text(S.of(context).sendmsm),
+                              child: Text(
+                                S.of(context).sendmsm,
+                                style: FIRST_DEGREE_TEXT_STYLE,
+                              ),
                             ),
                             Expanded(
                               child: otpTextField(),
@@ -149,7 +153,10 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
                   margin: EdgeInsets.all(40),
                   text: Text(
                     S.of(context).submit,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
                   ),
                   isEnable: _submit(),
                   clickCallback: () {
@@ -224,7 +231,9 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
         countdownTime > 0
             ? '${countdownTime}s'
             : S.of(context).getVerificationCode,
-        style: TextStyle(fontSize: 14),
+        style: TextStyle(
+          fontSize: 14,
+        ),
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
@@ -345,7 +354,13 @@ class InputList extends StatelessWidget {
         children: [
           Container(
             width: 105,
-            child: Text(this.labText),
+            child: Text(
+              this.labText,
+              style: TextStyle(
+                color: HsgColors.firstDegreeText,
+                fontSize: 15,
+              ),
+            ),
           ),
           Expanded(
             child: TextField(

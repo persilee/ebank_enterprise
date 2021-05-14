@@ -162,9 +162,10 @@ class _MyApplicationPageState extends State<MyApplicationPage>
       taskName,
       textAlign: TextAlign.left,
       style: TextStyle(
-          fontSize: 15.0,
-          color: HsgColors.aboutusTextCon,
-          fontWeight: FontWeight.bold),
+        fontSize: 15.0,
+        color: HsgColors.aboutusTextCon,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 

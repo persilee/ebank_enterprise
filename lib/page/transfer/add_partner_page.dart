@@ -624,7 +624,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           width: 150,
           child: Text(
             left,
-            style: TextStyle(color: HsgColors.firstDegreeText),
+            style: TextStyle(
+              color: HsgColors.firstDegreeText,
+              fontSize: 15,
+            ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -656,7 +659,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                 )
               : Text(
                   _income,
-                  style: TextStyle(fontSize: 14),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: HsgColors.firstDegreeText,
+                  ),
                   textAlign: TextAlign.right,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,

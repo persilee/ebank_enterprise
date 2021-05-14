@@ -37,12 +37,15 @@ class _OpenAccountGetFaceSignPageState
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(S.of(context).face_sign_Interviews,
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                      color: HsgColors.secondDegreeText,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500)),
+              Text(
+                S.of(context).face_sign_Interviews,
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  color: HsgColors.secondDegreeText,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ],
           ),
         ),
@@ -101,14 +104,19 @@ class _OpenAccountGetFaceSignPageState
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(S.of(context).face_sign_TipsTitle,
-                  maxLines: 100,
-                  style: TextStyle(
-                    color: Color(0xff9c9c9c),
-                    fontSize: 13,
-                  ),
-                  strutStyle:
-                      StrutStyle(forceStrutHeight: true, height: 1, leading: 1))
+              Text(
+                S.of(context).face_sign_TipsTitle,
+                maxLines: 100,
+                style: TextStyle(
+                  color: Color(0xff9c9c9c),
+                  fontSize: 13,
+                ),
+                strutStyle: StrutStyle(
+                  forceStrutHeight: true,
+                  height: 1,
+                  leading: 1,
+                ),
+              ),
             ],
           ),
         ),

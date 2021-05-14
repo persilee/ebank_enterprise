@@ -455,7 +455,10 @@ class _LoanReferenceState extends State<LoanReference> {
                           Container(
                             child: Text(
                               _totalInterest,
-                              style: TextStyle(color: Color(0xFF9C9C9C)),
+                              style: TextStyle(
+                                color: Color(0xFF9C9C9C),
+                                fontSize: 14,
+                              ),
                             ),
                           )
                         ],
@@ -658,8 +661,11 @@ class _LoanReferenceState extends State<LoanReference> {
                   Container(
                     child: Text(
                       title,
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: HsgColors.firstDegreeText,
+                      ),
                       textAlign: TextAlign.left,
                     ),
                   ),
@@ -669,7 +675,9 @@ class _LoanReferenceState extends State<LoanReference> {
                         ? Text(
                             S.current.loan_Estimated_time_account,
                             style: TextStyle(
-                                fontSize: 13, color: HsgColors.describeText),
+                              fontSize: 13,
+                              color: HsgColors.describeText,
+                            ),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                           )
@@ -688,7 +696,10 @@ class _LoanReferenceState extends State<LoanReference> {
                   padding: EdgeInsets.only(right: 12),
                   child: item == ''
                       ? Text(S.current.please_select,
-                          style: TextStyle(color: HsgColors.textHintColor),
+                          style: TextStyle(
+                            color: HsgColors.textHintColor,
+                            fontSize: 14,
+                          ),
                           textAlign: TextAlign.end) //占位文本
                       : Text(
                           //文本
@@ -696,6 +707,7 @@ class _LoanReferenceState extends State<LoanReference> {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           textAlign: TextAlign.end,
+                          style: FIRST_DEGREE_TEXT_STYLE,
                         ),
                 ),
                 Container(

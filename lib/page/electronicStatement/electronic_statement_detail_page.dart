@@ -5,6 +5,7 @@
 
 import 'dart:io';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,10 @@ class _ElectronicStatementDetailPageState
             children: [
               Container(
                 padding: EdgeInsets.only(top: 10),
-                child: Text(S.current.share),
+                child: Text(
+                  S.current.share,
+                  style: FIRST_DEGREE_TEXT_STYLE,
+                ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 25, bottom: 20),
@@ -91,7 +95,10 @@ class _ElectronicStatementDetailPageState
                   alignment: Alignment.center,
                   height: 45,
                   color: Colors.white,
-                  child: Text(S.current.cancel),
+                  child: Text(
+                    S.current.cancel,
+                    style: FIRST_DEGREE_TEXT_STYLE,
+                  ),
                 ),
                 onTap: () {
                   Navigator.pop(context);
@@ -127,7 +134,10 @@ class _ElectronicStatementDetailPageState
           padding: EdgeInsets.only(top: 8),
           child: Text(
             S.current.we_chat,
-            style: TextStyle(color: HsgColors.secondDegreeText),
+            style: TextStyle(
+              color: HsgColors.secondDegreeText,
+              fontSize: 14,
+            ),
           ),
         )
       ],
@@ -157,7 +167,10 @@ class _ElectronicStatementDetailPageState
           padding: EdgeInsets.only(top: 8),
           child: Text(
             S.current.moments,
-            style: TextStyle(color: HsgColors.secondDegreeText),
+            style: TextStyle(
+              color: HsgColors.secondDegreeText,
+              fontSize: 14,
+            ),
           ),
         )
       ],
@@ -187,7 +200,10 @@ class _ElectronicStatementDetailPageState
           padding: EdgeInsets.only(top: 8),
           child: Text(
             S.current.download,
-            style: TextStyle(color: HsgColors.secondDegreeText),
+            style: TextStyle(
+              color: HsgColors.secondDegreeText,
+              fontSize: 14,
+            ),
           ),
         )
       ],

@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/transfer/get_transfer_by_account.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
@@ -72,7 +73,10 @@ class _TransferInternalPreviewPageState
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(S.current.transfer_amount),
+                Text(
+                  S.current.transfer_amount,
+                  style: FIRST_DEGREE_TEXT_STYLE,
+                ),
                 Container(
                   width: (MediaQuery.of(context).size.width - 40) / 2,
                   child: Text(

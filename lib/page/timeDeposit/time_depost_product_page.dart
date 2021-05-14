@@ -121,7 +121,10 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       width: (MediaQuery.of(context).size.width - 56) / 5 * 2,
       child: Text(
         S.current.screening_conditions,
-        style: TextStyle(fontSize: 13),
+        style: TextStyle(
+          fontSize: 13,
+          color: HsgColors.firstDegreeText,
+        ),
       ),
     );
   }
@@ -495,7 +498,10 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       alignment: Alignment.centerLeft,
       child: Text(
         productName,
-        style: TextStyle(fontSize: 15),
+        style: TextStyle(
+          fontSize: 15,
+          color: HsgColors.firstDegreeText,
+        ),
       ),
     );
   }

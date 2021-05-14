@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/widget/hsg_otp_button.dart';
 import 'package:flutter/material.dart';
@@ -7,17 +8,18 @@ class HsgTipsDialog extends StatelessWidget {
   final Widget child;
   final VoidCallback confirmCallback;
 
-  HsgTipsDialog({this.title,this.child, this.confirmCallback});
+  HsgTipsDialog({this.title, this.child, this.confirmCallback});
 
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
       contentPadding: EdgeInsets.only(bottom: 0),
       title: Center(
-        child: this.title ?? Text(
-          S.current.prompt,
-          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
-        ),
+        child: this.title ??
+            Text(
+              S.current.prompt,
+              style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
+            ),
       ),
       children: <Widget>[
         Padding(
@@ -91,7 +93,11 @@ class HsgTextFieldDialog extends StatelessWidget {
       title: Center(
         child: Text(
           S.current.field_dialog_title,
-          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 14.0,
+            fontWeight: FontWeight.bold,
+            color: HsgColors.firstDegreeText,
+          ),
         ),
       ),
       children: <Widget>[
@@ -164,7 +170,10 @@ class HsgTextFieldDialog extends StatelessWidget {
                         onPressed: this.sendCallback,
                         child: Text(
                           S.current.field_dialog_send,
-                          style: TextStyle(color: Colors.blueAccent),
+                          style: TextStyle(
+                            color: Colors.blueAccent,
+                            fontSize: 15,
+                          ),
                         ))
                   ],
                 ),

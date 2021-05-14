@@ -4,6 +4,7 @@
 /// Date: 2020-12-30
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_application_task_detail.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_my_application.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -177,6 +178,7 @@ class _MyApplicationDetailPageState extends State<MyApplicationDetailPage> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
+                  color: HsgColors.firstDegreeText,
                 ),
               ),
             ),
@@ -300,10 +302,16 @@ class _MyApplicationDetailPageState extends State<MyApplicationDetailPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            child: Text(leftText),
+            child: Text(
+              leftText,
+              style: FIRST_DEGREE_TEXT_STYLE,
+            ),
           ),
           Container(
-            child: Text(rightText),
+            child: Text(
+              rightText,
+              style: TRANSFER_RECORD_POP_TEXT_STYLE,
+            ),
           )
         ],
       ),
@@ -322,6 +330,7 @@ class _MyApplicationDetailPageState extends State<MyApplicationDetailPage> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
+                  color: HsgColors.firstDegreeText,
                 ),
               ),
             )

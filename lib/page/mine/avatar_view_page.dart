@@ -40,7 +40,10 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
         elevation: 0.0,
         title: Text(
           S.current.avatar_title,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+          ),
         ),
         actions: [
           GestureDetector(

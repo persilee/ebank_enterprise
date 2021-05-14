@@ -602,7 +602,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
           intl.S.of(context).reset,
           style: TextStyle(
             fontSize: 13,
-            // color: HsgColors.accent,
+            color: HsgColors.firstDegreeText,
           ),
         ),
         onPressed: () {

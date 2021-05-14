@@ -99,7 +99,9 @@ class _HSGOTPButtonState extends State<HSGOTPButton> {
         countdownTime > 0
             ? '${countdownTime}s'
             : S.of(context).getVerificationCode,
-        style: TextStyle(fontSize: 14),
+        style: TextStyle(
+          fontSize: 14,
+        ),
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );

@@ -51,7 +51,10 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
                 Center(
                   child: Text(
                     S.current.transaction_amount,
-                    style: TextStyle(color: HsgColors.describeText),
+                    style: TextStyle(
+                      color: HsgColors.describeText,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
                 Center(
@@ -167,7 +170,10 @@ class ContentRow extends StatelessWidget {
           Expanded(
             child: Text(
               item != '' && item != null ? item : '',
-              style: TextStyle(color: HsgColors.describeText),
+              style: TextStyle(
+                color: HsgColors.describeText,
+                fontSize: 15,
+              ),
               maxLines: 3,
               textAlign: TextAlign.right,
             ),

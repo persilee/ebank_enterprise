@@ -341,7 +341,10 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                     margin: EdgeInsets.all(40),
                     text: Text(
                       S.of(context).next_step,
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
                     ),
                     isEnable: _submit(),
                     clickCallback: () {
@@ -637,7 +640,10 @@ class InputList extends StatelessWidget {
               children: [
                 Container(
                   width: 160,
-                  child: Text(this.labText),
+                  child: Text(
+                    this.labText,
+                    style: FIRST_DEGREE_TEXT_STYLE,
+                  ),
                 ),
                 Expanded(
                   child: TextField(
@@ -703,15 +709,26 @@ class SelectInkWell extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(title),
+            Text(
+              title,
+              style: FIRST_DEGREE_TEXT_STYLE,
+            ),
             Row(
               children: [
                 Padding(
                   padding: EdgeInsets.only(right: 12),
                   child: item == ''
-                      ? Text(S.current.please_select,
-                          style: TextStyle(color: HsgColors.textHintColor))
-                      : Text(item),
+                      ? Text(
+                          S.current.please_select,
+                          style: TextStyle(
+                            color: HsgColors.textHintColor,
+                            fontSize: 14,
+                          ),
+                        )
+                      : Text(
+                          item,
+                          style: FIRST_DEGREE_TEXT_STYLE,
+                        ),
                 ),
                 Image(
                   color: HsgColors.firstDegreeText,

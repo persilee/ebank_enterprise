@@ -91,7 +91,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   margin: EdgeInsets.all(40),
                   text: Text(
                     S.of(context).submit,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
                   ),
                   isEnable: _submit(),
                   clickCallback: () {

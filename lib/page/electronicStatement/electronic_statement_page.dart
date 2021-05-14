@@ -187,7 +187,10 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
       width: (MediaQuery.of(context).size.width - 30) / 5 * 2,
       child: Text(
         Intl.S.current.transaction_time,
-        style: TextStyle(fontSize: 13),
+        style: TextStyle(
+          fontSize: 13,
+          color: HsgColors.firstDegreeText,
+        ),
       ),
     );
   }

@@ -1038,8 +1038,11 @@ class _MyApprovedHistoryDetailPageState
                 children: [
                   Text(
                     title,
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: HsgColors.firstDegreeText,
+                    ),
                   ),
                 ],
               ),
@@ -1070,7 +1073,10 @@ class _MyApprovedHistoryDetailPageState
                   flex: 1,
                   child: Text(
                     name,
-                    style: TextStyle(fontSize: 13.0),
+                    style: TextStyle(
+                      fontSize: 13.0,
+                      color: HsgColors.secondDegreeText,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -1080,7 +1086,9 @@ class _MyApprovedHistoryDetailPageState
                   child: Text(
                     value,
                     style: TextStyle(
-                        fontSize: 13.0, color: Color(int.parse('0xff7A7A7A'))),
+                      fontSize: 13.0,
+                      color: HsgColors.firstDegreeText,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.end,
@@ -1113,8 +1121,11 @@ class _MyApprovedHistoryDetailPageState
                 children: [
                   Text(
                     title,
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: HsgColors.firstDegreeText,
+                    ),
                   ),
                   Spacer(),
                   isShowAvatar
@@ -1164,6 +1175,7 @@ class _MyApprovedHistoryDetailPageState
                 name,
                 style: TextStyle(
                   fontSize: 10,
+                  color: HsgColors.firstDegreeText,
                 ),
               ),
             ],

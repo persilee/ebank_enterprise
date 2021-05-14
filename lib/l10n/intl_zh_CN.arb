@@ -324,7 +324,7 @@
   "operate_success": "操作成功！",
   "selling_price": "银行卖出价",
   "buying_price": "银行买入价",
-  "rate_notes1": "服务时间为每日7:00-23:00。牌价仅供参考，交易时以实际成交牌价为准。更新于",
+  "rate_notes1": "牌价仅供参考，交易时以实际成交牌价为准。",
   "rate_notes2": "。单位为1外币换算港币。",
   "lastLoginTime": "上次登录时间：",
   "fingerprintLogin": "指纹登录",

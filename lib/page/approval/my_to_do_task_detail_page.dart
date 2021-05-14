@@ -4,6 +4,7 @@
 /// Date: 2020-12-29
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/approval/card_bal_by_card_no_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/card_bal_by_card_no_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/complete_task_body.dart';
@@ -1074,7 +1075,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         children: [
           Text(
             S.current.approval_comment,
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(
+              fontSize: 14,
+              color: HsgColors.firstDegreeText,
+            ),
           ),
         ],
       ),
@@ -1282,8 +1286,11 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 children: [
                   Text(
                     title,
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: HsgColors.firstDegreeText,
+                    ),
                   ),
                 ],
               ),
@@ -1314,7 +1321,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                   flex: 1,
                   child: Text(
                     name,
-                    style: TextStyle(fontSize: 13.0),
+                    style: TextStyle(
+                      fontSize: 13.0,
+                      color: HsgColors.firstDegreeText,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -1324,7 +1334,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                   child: Text(
                     value,
                     style: TextStyle(
-                        fontSize: 13.0, color: Color(int.parse('0xff7A7A7A'))),
+                      fontSize: 13.0,
+                      color: HsgColors.secondDegreeText,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.end,
@@ -1357,8 +1369,11 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 children: [
                   Text(
                     title,
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: HsgColors.firstDegreeText,
+                    ),
                   ),
                   Spacer(),
                   isShowAvatar
@@ -1408,6 +1423,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 name,
                 style: TextStyle(
                   fontSize: 10,
+                  color: HsgColors.firstDegreeText,
                 ),
               ),
             ],
@@ -1478,7 +1494,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         context: context,
         builder: (context) {
           return HsgTipsDialog(
-            child: Text(S.current.approve_reject_tip),
+            child: Text(
+              S.current.approve_reject_tip,
+              style: FIRST_DEGREE_TEXT_STYLE,
+            ),
             confirmCallback: () {
               FocusManager.instance.primaryFocus?.unfocus();
               Navigator.pop(context);
@@ -1538,7 +1557,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         context: context,
         builder: (context) {
           return HsgTipsDialog(
-            child: Text(S.current.approve_reject_to_start_tip),
+            child: Text(
+              S.current.approve_reject_to_start_tip,
+              style: FIRST_DEGREE_TEXT_STYLE,
+            ),
             confirmCallback: () {
               FocusManager.instance.primaryFocus?.unfocus();
               Navigator.pop(context);

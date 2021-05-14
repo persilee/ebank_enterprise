@@ -354,7 +354,10 @@ class _MinePageState extends State<MinePage>
                 child: Center(
                   child: Text(
                     S.of(context).loginOut,
-                    style: TextStyle(color: HsgColors.redTextColor),
+                    style: TextStyle(
+                      color: HsgColors.redTextColor,
+                      fontSize: 14,
+                    ),
                   ),
                 ),
               ),
@@ -920,7 +923,10 @@ class _MinePageState extends State<MinePage>
           child: Center(
             child: Text(
               '版本更新' + lastVersionName,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+              ),
             ),
           ),
         ),

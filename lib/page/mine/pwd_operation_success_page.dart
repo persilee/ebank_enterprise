@@ -43,7 +43,11 @@ class _PwdOperationSuccessPageState extends State<PwdOperationSuccessPage> {
                 ),
                 Text(
                   S.of(context).operation_successful,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: HsgColors.firstDegreeText,
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 80),
@@ -63,7 +67,10 @@ class _PwdOperationSuccessPageState extends State<PwdOperationSuccessPage> {
       margin: EdgeInsets.all(40),
       text: Text(
         S.of(context).complete,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+        ),
       ),
       clickCallback: () {
         // Navigator.of(context)..pop();

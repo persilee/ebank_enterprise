@@ -549,7 +549,7 @@ class _DetailListPageState extends State<DetailListPage> {
           intl.S.of(context).reset,
           style: TextStyle(
             fontSize: 13,
-            // color: HsgColors.accent,
+            color: HsgColors.firstDegreeText,
           ),
         ),
         onPressed: () {

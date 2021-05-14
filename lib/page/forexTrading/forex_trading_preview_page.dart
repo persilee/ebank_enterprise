@@ -1,3 +1,6 @@
+import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
+
 /// Copyright (c) 2021 深圳高阳寰球科技有限公司
 ///外汇买卖预览
 /// Author: fangluyao
@@ -62,7 +65,10 @@ class _ForexTradingPreviewPageState extends State<ForexTradingPreviewPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(S.current.transfer_amount),
+                Text(
+                  S.current.transfer_amount,
+                  style: FIRST_DEGREE_TEXT_STYLE,
+                ),
                 Container(
                   width: (MediaQuery.of(context).size.width - 40) / 2,
                   child: Text(
@@ -71,7 +77,10 @@ class _ForexTradingPreviewPageState extends State<ForexTradingPreviewPage> {
                         FormatUtil.formatSringToMoney(
                           _preview['buyAmt'],
                         ),
-                    style: TextStyle(color: Color(0xff232323), fontSize: 20),
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
+                      fontSize: 20,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.end,

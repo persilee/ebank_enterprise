@@ -44,7 +44,13 @@ class SelectInkWell extends StatelessWidget {
         children: [
           Container(
             width: MediaQuery.of(context).size.width / 3,
-            child: Text(title),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: HsgColors.firstDegreeText,
+                fontSize: 15,
+              ),
+            ),
           ),
           Row(
             children: [
@@ -54,7 +60,10 @@ class SelectInkWell extends StatelessWidget {
                 child: item == ''
                     ? Text(
                         S.current.please_select,
-                        style: TextStyle(color: HsgColors.textHintColor),
+                        style: TextStyle(
+                          color: HsgColors.textHintColor,
+                          fontSize: 15,
+                        ),
                         textAlign: TextAlign.end,
                       )
                     : Text(
@@ -62,6 +71,10 @@ class SelectInkWell extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.end,
+                        style: TextStyle(
+                          color: HsgColors.firstDegreeText,
+                          fontSize: 15,
+                        ),
                       ),
               ),
               Image(
@@ -128,6 +141,10 @@ class TextFieldContainer extends StatelessWidget {
               title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: HsgColors.firstDegreeText,
+                fontSize: 15,
+              ),
             ),
           ),
           Expanded(

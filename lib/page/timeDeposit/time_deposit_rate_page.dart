@@ -7,6 +7,7 @@
 
 import 'dart:ui';
 
+import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_rate.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
 import 'package:flutter/material.dart';
@@ -163,6 +164,7 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: Color(0xFF333450),
+                  fontSize: 15,
                 ),
               ),
             ),
@@ -171,6 +173,10 @@ class _MyDepositRatePage extends State<MyDepositRatePage> {
                 auctCale + accuPeriod,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: HsgColors.firstDegreeText,
+                  fontSize: 15,
+                ),
               ),
             ),
           ],

@@ -129,7 +129,10 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                         disabledColor: HsgColors.btnDisabled,
                         child: Text(
                           S.current.confirm,
-                          style: (TextStyle(color: Colors.white)),
+                          style: (TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                          )),
                           //textDirection: Colors.white,
                         ),
                         onPressed: _submit()

@@ -6,6 +6,7 @@
 import 'dart:convert';
 
 import 'package:azlistview/azlistview.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -255,7 +256,10 @@ class _CountryOrRegionSelectPageState extends State<CountryOrRegionSelectPage> {
         SizedBox(
           height: _itemHeight.toDouble(),
           child: ListTile(
-            title: Text(name),
+            title: Text(
+              name,
+              style: FIRST_DEGREE_TEXT_STYLE,
+            ),
             onTap: () {
               print("OnItemClick: $model");
               if (_isSelectCity) {
