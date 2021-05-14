@@ -226,9 +226,11 @@ class _TransferInterPageState extends State<TransferInterPage> {
         } else {
           _transferFeeCode = rowPartner.paysMethod;
         }
-        _bankNameController.text = _language == 'zh_CN'
-            ? rowPartner.payeeBankLocalName
-            : rowPartner.payeeBankEngName;
+        if (_language == 'zh_CN' || _language == 'zh_HK') {
+          _bankNameController.text = rowPartner.payeeBankLocalName;
+        } else {
+          _bankNameController.text = rowPartner.payeeBankEngName;
+        }
         _bankSwiftController.text = rowPartner.bankSwift;
         _countryText = rowPartner.district;
         _countryCode = rowPartner.district;
@@ -684,9 +686,11 @@ class _TransferInterPageState extends State<TransferInterPage> {
                 _payeeCcy = rowListPartner.ccy;
                 _countryText = rowListPartner.district;
                 _countryCode = rowListPartner.district;
-                _bankNameController.text = _language == 'zh_CN'
-                    ? rowListPartner.payeeBankLocalName
-                    : rowListPartner.payeeBankEngName;
+                if (_language == 'zh_CN' || _language == 'zh_HK') {
+                  _bankNameController.text = rowListPartner.payeeBankLocalName;
+                } else {
+                  _bankNameController.text = rowListPartner.payeeBankEngName;
+                }
                 _bankSwiftController.text = rowListPartner.bankSwift;
                 payeeBankCode = rowListPartner.bankCode;
                 payerBankCode = rowListPartner.payerBankCode;

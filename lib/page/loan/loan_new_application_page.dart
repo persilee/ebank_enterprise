@@ -556,7 +556,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
       setState(() {
         IdType type = list[result];
         _ccyId = result;
-        _listDataMap['ccy'] = tempList[index];
+        _listDataMap['ccy'] = type.code;
         _requestDataMap['ccy'] = type.code;
         _currency = tempList[result];
         _checkloanIsClick();
