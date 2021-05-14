@@ -560,8 +560,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _internationalList.add(_buildContentItem(
             S.current.approve_swift_code, data?.bankSwift ?? ''));
         _internationalList.add(_buildContentItem(
-            S.current.approve_collecting_bank,
-            data?.payeeBankCode ?? _payeeBank ?? ''));
+            S.current.approve_collecting_bank, _payeeBank ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_collection_address, data?.payeeAddress ?? ''));
         _internationalList.add(

@@ -37,6 +37,8 @@ class _TransferInternalPreviewPageState
   Widget build(BuildContext context) {
     TransferInternationalData transferData =
         ModalRoute.of(context).settings.arguments;
+
+    print('transferDataBuild：${transferData.toString()}');
     return Scaffold(
         appBar: AppBar(
           title: Text(S.current.transfer_the_preview2),
@@ -177,6 +179,7 @@ class _TransferInternalPreviewPageState
   }
 
   Future _loadData(TransferInternationalData transferData) async {
+
     final prefs = await SharedPreferences.getInstance();
     String custId = prefs.getString(ConfigKey.CUST_ID);
     String opt = transferData.opt;
@@ -202,6 +205,7 @@ class _TransferInternalPreviewPageState
     String feeAmount = transferData.feeAmount;
     String feeCode = transferData.feeCode;
     HSProgressHUD.show();
+    print('payeeNamePrint: $payeeName');
     Transfer()
         .getInterNationalTransfer(GetInternationalTransferReq(
       opt,

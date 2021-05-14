@@ -204,40 +204,43 @@ class _TransferInterPageState extends State<TransferInterPage> {
   @override
   Widget build(BuildContext context) {
     var _arguments = ModalRoute.of(context).settings.arguments;
-    setState(() {
-      if (_arguments != null && !check) {
-        Rows rowPartner = _arguments;
-        if (rowPartner.payeeName.isEmpty) {
-          payeeName = _payeeNameController.text;
-        } else {
-          _payeeNameController.text = rowPartner.payeeName;
-          payeeName = rowPartner.payeeName;
-        }
-        _payeeAccountController.text = rowPartner.payeeCardNo;
-        _remarkController.text = rowPartner.remark;
-        payeeBankCode = rowPartner.bankCode;
-        payerBankCode = rowPartner.payerBankCode;
-
-        // payerName = rowPartner.payerName;
-        _payeeCcy = rowPartner.ccy;
-        if (rowPartner.paysMethod == null) {
-          _transferFeeCode = '';
-          _transferFee = '';
-        } else {
-          _transferFeeCode = rowPartner.paysMethod;
-        }
-        _bankNameController.text = _language == 'zh_CN'
-            ? rowPartner.payeeBankLocalName
-            : rowPartner.payeeBankEngName;
-        _bankSwiftController.text = rowPartner.bankSwift;
-        _countryText = rowPartner.district;
-        _countryCode = rowPartner.district;
-        _payeeAddressController.text =
-            rowPartner == null ? '' : rowPartner.payeeAddress;
-        _boolBut();
-        check = true;
+    if (_arguments != null && !check) {
+      print('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
+      Rows rowPartner = _arguments;
+      if (rowPartner.payeeName.isEmpty) {
+        print('payeeNameText: ${payeeName}');
+        payeeName = _payeeNameController.text;
+      } else {
+        _payeeNameController.text = rowPartner.payeeName;
+        payeeName = rowPartner.payeeName;
+        print('payeeNamePartner: ${payeeName}');
       }
-    });
+      _payeeAccountController.text = rowPartner.payeeCardNo;
+      _remarkController.text = rowPartner.remark;
+      payeeBankCode = rowPartner.bankCode;
+      payerBankCode = rowPartner.payerBankCode;
+
+      // payerName = rowPartner.payerName;
+      _payeeCcy = rowPartner.ccy;
+      if (rowPartner.paysMethod == null) {
+        _transferFeeCode = '';
+        _transferFee = '';
+      } else {
+        _transferFeeCode = rowPartner.paysMethod;
+      }
+      _bankNameController.text = _language == 'zh_CN'
+          ? rowPartner.payeeBankLocalName
+          : rowPartner.payeeBankEngName;
+      _bankSwiftController.text = rowPartner.bankSwift;
+      _countryText = rowPartner.district;
+      _countryCode = rowPartner.district;
+      _payeeAddressController.text =
+      rowPartner == null ? '' : rowPartner.payeeAddress;
+      _boolBut();
+      check = true;
+    }
+    print('payeeNameBuild: ${payeeName}');
+    print('payeeBankCodeBuild: ${payeeBankCode}');
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.transfer_type_1),
@@ -669,8 +672,10 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //增加转账伙伴图标
   Widget _getImage() {
+
     return InkWell(
       onTap: () {
+        print('IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII');
         FocusScope.of(context).requestFocus(FocusNode());
         Navigator.pushNamed(context, pageTranferPartner, arguments: '2').then(
           (value) {
@@ -690,7 +695,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
                 _bankSwiftController.text = rowListPartner.bankSwift;
                 payeeBankCode = rowListPartner.bankCode;
                 payerBankCode = rowListPartner.payerBankCode;
-                payeeName = rowListPartner.payeeName;
+                payeeName = _payeeNameController.text;
                 // payerName = rowListPartner.payerName;
                 _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
                 if (rowListPartner.paysMethod == null) {
@@ -1065,6 +1070,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
   }
 
   Future _queryFee() async {
+    print('YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY');
     HSProgressHUD.show();
     final prefs = await SharedPreferences.getInstance();
     String custId = prefs.getString(ConfigKey.CUST_ID);
