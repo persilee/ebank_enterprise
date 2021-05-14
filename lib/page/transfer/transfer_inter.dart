@@ -1077,6 +1077,12 @@ class _TransferInterPageState extends State<TransferInterPage> {
     String ac = _payerAccount;
     String amt = _payerTransferController.text;
     String ccy = _payerCcy;
+    if(payeeName.isEmpty) {
+      payeeName = _payeeNameController.text;
+    }
+    if(payeeBankCode.isEmpty) {
+      payeeBankCode = _bankSwiftController.text;
+    }
     Transfer().queryFee(QueryFeeReq(ac, amt, ccy, custId)).then((data) {
       _pFee = data.recordLists[0].pFee;
       _feeCode = data.recordLists[0].feeC;
