@@ -10,9 +10,11 @@ import 'package:ebank_mobile/data/source/model/account/get_card_list_bal_by_user
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
+import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
+import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +65,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(),
+      // body: _contentListView(),
       body: Column(
         children: [
           _isLoading
@@ -83,7 +86,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
                       _refreshController.footerMode.value =
                           LoadStatus.canLoading;
                     },
-                    content: _listView(),
+                    content: _contentListView(),
                   ),
                 ),
         ],
@@ -121,19 +124,25 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
               Color(0xFF3A9ED1),
             ], begin: Alignment.centerLeft, end: Alignment.centerRight),
           ),
-          child: _accountOverviewColumn(),
+          child: Column(
+            children: [
+              _accountOverviewColumn(),
+              // Container(
+              //   color: HsgColors.backgroundColor,
+              //   height: 12,
+              // ),
+              // isTotalAsset ? _assetsTDAndDD(context, 1) : Container(),
+            ],
+          ),
         ),
-        preferredSize: Size(30, 155),
+        preferredSize: Size(30, 135), //200
       ),
     );
   }
 
-  _listView() {
-    return ListView(
+  _contentListView() {
+    Widget _listView = ListView(
       children: [
-        Container(
-          height: 12,
-        ),
         //  活期
         isTotalAsset
             ? Container(
@@ -269,13 +278,83 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
                 : Container()
             : Container(),
 
-        // Container(
-        //   child: Container(
-        //     height: 20,
-        //   ),
-        // ),
+        Container(
+          child: Container(
+            height: 20,
+          ),
+        ),
       ],
     );
+
+    Widget _headerAdapter = SliverToBoxAdapter(
+      child: Container(
+        height: 12,
+      ),
+    );
+
+    Widget _noDataWidget = Container(
+      height: MediaQuery.of(context).size.height / 2,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image(
+            image: AssetImage('images/noDataIcon/no_data_record.png'),
+            width: 160,
+          ),
+          Text(
+            S.current.no_data_now,
+            style: FIRST_DEGREE_TEXT_STYLE,
+          )
+        ],
+      ),
+    );
+
+    Widget _ddSliverView = ddList.length > 0
+        ? SliverList(
+            delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return _ddListView(index);
+            },
+            childCount: ddList.length,
+          ))
+        : SliverToBoxAdapter(
+            child: _noDataWidget,
+          );
+
+    Widget _tdSliverView = tdList.length > 0
+        ? SliverList(
+            delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return _tdListView(index);
+            },
+            childCount: tdList.length,
+          ))
+        : SliverToBoxAdapter(
+            child: _noDataWidget,
+          );
+
+    Widget _lnSliverView = lnList.length > 0
+        ? SliverList(
+            delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return _lnListView(index);
+            },
+            childCount: lnList.length,
+          ))
+        : SliverToBoxAdapter(
+            child: _noDataWidget,
+          );
+
+    Widget _scrollView = CustomScrollView(
+      slivers: <Widget>[
+        _headerAdapter,
+        _ddSliverView,
+        // _tdSliverView,
+        _lnSliverView,
+      ],
+    );
+
+    return _listView;
   }
 
   //贷款列表
@@ -595,6 +674,91 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
         ),
       ),
     );
+  }
+
+//定期和活期列表的选项卡
+  Widget _assetsTDAndDD(BuildContext context, int selectIndex) {
+    Widget _contentWidget = Row(
+      children: [
+        _assetsWidget(
+          context,
+          true,
+          S.current.demand_deposit,
+          ddCcy + ' ' + FormatUtil.formatSringToMoney(ddTotal),
+        ),
+        _assetsWidget(
+          context,
+          false,
+          S.current.time_deposits,
+          localCcy + ' ' + FormatUtil.formatSringToMoney(tdTotal),
+        ),
+        Container(
+          height: 10,
+        ),
+      ],
+    );
+
+    Widget _assetsTDDDWidget = Container(
+      color: Color(0xFFE2E8EC),
+      child: _contentWidget,
+    );
+
+    return _assetsTDDDWidget;
+  }
+
+//活期和定期列表的选项卡模板
+  Widget _assetsWidget(
+    BuildContext context,
+    bool isSelect,
+    String titleStr,
+    String contentStr,
+  ) {
+    Widget _assetsWidget = Container(
+      width: MediaQuery.of(context).size.width / 2,
+      padding: EdgeInsets.only(left: 15, right: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 8),
+            child: Text(
+              titleStr,
+              style: TextStyle(
+                color:
+                    isSelect ? Color(0xFF3497CD) : HsgColors.secondDegreeText,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 5),
+            child: Text(
+              contentStr,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: TextStyle(
+                color:
+                    isSelect ? Color(0xFF3497CD) : HsgColors.secondDegreeText,
+                fontSize: 13,
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 8),
+            height: 3,
+            // color: Color(0xFF3497CD),
+            decoration: BoxDecoration(
+              color: isSelect ? Color(0xFF3497CD) : Colors.transparent,
+              borderRadius: BorderRadius.all(
+                Radius.circular(1.5),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    return _assetsWidget;
   }
 
   //净资产
