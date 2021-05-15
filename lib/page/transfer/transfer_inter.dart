@@ -204,42 +204,40 @@ class _TransferInterPageState extends State<TransferInterPage> {
   @override
   Widget build(BuildContext context) {
     var _arguments = ModalRoute.of(context).settings.arguments;
-    setState(() {
-      if (_arguments != null && !check) {
-        Rows rowPartner = _arguments;
-        if (rowPartner.payeeName.isEmpty) {
-          payeeName = _payeeNameController.text;
-        } else {
-          _payeeNameController.text = rowPartner.payeeName;
-          payeeName = rowPartner.payeeName;
-        }
-        _payeeAccountController.text = rowPartner.payeeCardNo;
-        _remarkController.text = rowPartner.remark;
-        payeeBankCode = rowPartner.bankCode;
-        payerBankCode = rowPartner.payerBankCode;
-
-        // payerName = rowPartner.payerName;
-        _payeeCcy = rowPartner.ccy;
-        if (rowPartner.paysMethod == null) {
-          _transferFeeCode = '';
-          _transferFee = '';
-        } else {
-          _transferFeeCode = rowPartner.paysMethod;
-        }
-        if (_language == 'zh_CN' || _language == 'zh_HK') {
-          _bankNameController.text = rowPartner.payeeBankLocalName;
-        } else {
-          _bankNameController.text = rowPartner.payeeBankEngName;
-        }
-        _bankSwiftController.text = rowPartner.bankSwift;
-        _countryText = rowPartner.district;
-        _countryCode = rowPartner.district;
-        _payeeAddressController.text =
-            rowPartner == null ? '' : rowPartner.payeeAddress;
-        _boolBut();
-        check = true;
+    if (_arguments != null && !check) {
+      Rows rowPartner = _arguments;
+      if (rowPartner.payeeName.isEmpty) {
+        print('payeeNameText: ${payeeName}');
+        payeeName = _payeeNameController.text;
+      } else {
+        _payeeNameController.text = rowPartner.payeeName;
+        payeeName = rowPartner.payeeName;
+        print('payeeNamePartner: ${payeeName}');
       }
-    });
+      _payeeAccountController.text = rowPartner.payeeCardNo;
+      _remarkController.text = rowPartner.remark;
+      payeeBankCode = rowPartner.bankCode;
+      payerBankCode = rowPartner.payerBankCode;
+
+      // payerName = rowPartner.payerName;
+      _payeeCcy = rowPartner.ccy;
+      if (rowPartner.paysMethod == null) {
+        _transferFeeCode = '';
+        _transferFee = '';
+      } else {
+        _transferFeeCode = rowPartner.paysMethod;
+      }
+      _bankNameController.text = _language == 'zh_CN'
+          ? rowPartner.payeeBankLocalName
+          : rowPartner.payeeBankEngName;
+      _bankSwiftController.text = rowPartner.bankSwift;
+      _countryText = rowPartner.district;
+      _countryCode = rowPartner.district;
+      _payeeAddressController.text =
+      rowPartner == null ? '' : rowPartner.payeeAddress;
+      _boolBut();
+      check = true;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.transfer_type_1),
@@ -687,6 +685,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //增加转账伙伴图标
   Widget _getImage() {
+
     return InkWell(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -710,7 +709,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
                 _bankSwiftController.text = rowListPartner.bankSwift;
                 payeeBankCode = rowListPartner.bankCode;
                 payerBankCode = rowListPartner.payerBankCode;
-                payeeName = rowListPartner.payeeName;
+                payeeName = _payeeNameController.text;
                 // payerName = rowListPartner.payerName;
                 _payeeCcy = _payeeCcy == '' ? rowListPartner.ccy : _payeeCcy;
                 if (rowListPartner.paysMethod == null) {
@@ -837,7 +836,6 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //转账费用
   _selectTransferFee() async {
-    print(transferFeeList);
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
@@ -1094,6 +1092,12 @@ class _TransferInterPageState extends State<TransferInterPage> {
     String ac = _payerAccount;
     String amt = _payerTransferController.text;
     String ccy = _payerCcy;
+    if(payeeName.isEmpty) {
+      payeeName = _payeeNameController.text;
+    }
+    if(payeeBankCode.isEmpty) {
+      payeeBankCode = _bankSwiftController.text;
+    }
     Transfer().queryFee(QueryFeeReq(ac, amt, ccy, custId)).then((data) {
       _pFee = data.recordLists[0].pFee;
       _feeCode = data.recordLists[0].feeC;
