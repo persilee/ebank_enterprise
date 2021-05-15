@@ -205,15 +205,12 @@ class _TransferInterPageState extends State<TransferInterPage> {
   Widget build(BuildContext context) {
     var _arguments = ModalRoute.of(context).settings.arguments;
     if (_arguments != null && !check) {
-      print('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
       Rows rowPartner = _arguments;
       if (rowPartner.payeeName.isEmpty) {
-        print('payeeNameText: ${payeeName}');
         payeeName = _payeeNameController.text;
       } else {
         _payeeNameController.text = rowPartner.payeeName;
         payeeName = rowPartner.payeeName;
-        print('payeeNamePartner: ${payeeName}');
       }
       _payeeAccountController.text = rowPartner.payeeCardNo;
       _remarkController.text = rowPartner.remark;
@@ -239,8 +236,6 @@ class _TransferInterPageState extends State<TransferInterPage> {
       _boolBut();
       check = true;
     }
-    print('payeeNameBuild: ${payeeName}');
-    print('payeeBankCodeBuild: ${payeeBankCode}');
     return Scaffold(
       appBar: AppBar(
         title: Text(S.current.transfer_type_1),
@@ -675,7 +670,6 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
     return InkWell(
       onTap: () {
-        print('IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII');
         FocusScope.of(context).requestFocus(FocusNode());
         Navigator.pushNamed(context, pageTranferPartner, arguments: '2').then(
           (value) {
@@ -822,7 +816,6 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //转账费用
   _selectTransferFee() async {
-    print(transferFeeList);
     final result = await showHsgBottomSheet(
         context: context,
         builder: (context) {
@@ -1070,7 +1063,6 @@ class _TransferInterPageState extends State<TransferInterPage> {
   }
 
   Future _queryFee() async {
-    print('YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY');
     HSProgressHUD.show();
     final prefs = await SharedPreferences.getInstance();
     String custId = prefs.getString(ConfigKey.CUST_ID);
