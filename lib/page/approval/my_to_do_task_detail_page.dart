@@ -4,6 +4,7 @@
 /// Date: 2020-12-29
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/approval/card_bal_by_card_no_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/card_bal_by_card_no_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/complete_task_body.dart';
@@ -32,9 +33,9 @@ import 'package:ebank_mobile/data/source/model/approval/post_repayment_model.dar
     as PostRepaymentModel;
 import 'package:ebank_mobile/data/source/model/approval/loan_with_drawal_model.dart'
     as LoanWithDrawalModel;
-import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/transfer/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -178,14 +179,21 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     // 获取贷款期限
     String _iratTm = '';
+    String repayDat = data?.iratTm.substring(data?.iratTm.length - 2);
     try {
       GetIdTypeResp getIdTypeResp =
           await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if (data?.iratTm == element.code) {
-            _iratTm = _language == 'zh_CN' ? element.cname : element.name;
+          if (repayDat == element.code) {
+            if (_language == 'zh_CN') {
+              _iratTm = element.cname;
+            } else if (_language == 'zh_HK') {
+              _iratTm = element.chName;
+            } else {
+              _iratTm = element.name;
+            }
           }
         });
       }
@@ -202,7 +210,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.repType == element.code) {
-            _repType = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _repType = element.cname;
+            } else if (_language == 'zh_HK') {
+              _repType = element.chName;
+            } else {
+              _repType = element.name;
+            }
           }
         });
       }
@@ -488,7 +502,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.costOptions == element.code) {
-            _costOptions = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _costOptions = element.cname;
+            } else if (_language == 'zh_HK') {
+              _costOptions = element.chName;
+            } else {
+              _costOptions = element.name;
+            }
           }
         });
       }
@@ -686,7 +706,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.tenor == element.code) {
-            _tenorName = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _tenorName = element.cname;
+            } else if (_language == 'zh_HK') {
+              _tenorName = element.chName;
+            } else {
+              _tenorName = element.name;
+            }
           }
         });
       }
@@ -703,7 +729,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.status == element.code) {
-            _statusName = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _statusName = element.cname;
+            } else if (_language == 'zh_HK') {
+              _statusName = element.chName;
+            } else {
+              _statusName = element.name;
+            }
           }
         });
       }
@@ -811,7 +843,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.tenor == element.code) {
-            _tenorName = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _tenorName = element.cname;
+            } else if (_language == 'zh_HK') {
+              _tenorName = element.chName;
+            } else {
+              _tenorName = element.name;
+            }
           }
         });
       }
@@ -828,7 +866,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       if (_instList.isNotEmpty) {
         _instList.forEach((element) {
           if (data?.instCode == element.code) {
-            _instCode = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _instCode = element.cname;
+            } else if (_language == 'zh_HK') {
+              _instCode = element.chName;
+            } else {
+              _instCode = element.name;
+            }
           }
         });
       }
@@ -1030,7 +1074,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         children: [
           Text(
             S.current.approval_comment,
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(
+              fontSize: 14,
+              color: HsgColors.firstDegreeText,
+            ),
           ),
         ],
       ),
@@ -1045,6 +1092,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         keyboardType: TextInputType.text,
         maxLines: 4,
         enabled: _offstage,
+        style: TEXTFIELD_TEXT_STYLE,
         decoration: InputDecoration(
           fillColor: Color(0xffF7F7F7),
           filled: false,
@@ -1238,8 +1286,11 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 children: [
                   Text(
                     title,
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: HsgColors.firstDegreeText,
+                    ),
                   ),
                 ],
               ),
@@ -1270,7 +1321,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                   flex: 1,
                   child: Text(
                     name,
-                    style: TextStyle(fontSize: 13.0),
+                    style: TextStyle(
+                      fontSize: 13.0,
+                      color: HsgColors.firstDegreeText,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -1280,7 +1334,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                   child: Text(
                     value,
                     style: TextStyle(
-                        fontSize: 13.0, color: Color(int.parse('0xff7A7A7A'))),
+                      fontSize: 13.0,
+                      color: HsgColors.secondDegreeText,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.end,
@@ -1313,8 +1369,11 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 children: [
                   Text(
                     title,
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: HsgColors.firstDegreeText,
+                    ),
                   ),
                   Spacer(),
                   isShowAvatar
@@ -1364,6 +1423,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 name,
                 style: TextStyle(
                   fontSize: 10,
+                  color: HsgColors.firstDegreeText,
                 ),
               ),
             ],
@@ -1434,7 +1494,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         context: context,
         builder: (context) {
           return HsgTipsDialog(
-            child: Text(S.current.approve_reject_tip),
+            child: Text(
+              S.current.approve_reject_tip,
+              style: FIRST_DEGREE_TEXT_STYLE,
+            ),
             confirmCallback: () {
               FocusManager.instance.primaryFocus?.unfocus();
               Navigator.pop(context);
@@ -1494,7 +1557,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         context: context,
         builder: (context) {
           return HsgTipsDialog(
-            child: Text(S.current.approve_reject_to_start_tip),
+            child: Text(
+              S.current.approve_reject_to_start_tip,
+              style: FIRST_DEGREE_TEXT_STYLE,
+            ),
             confirmCallback: () {
               FocusManager.instance.primaryFocus?.unfocus();
               Navigator.pop(context);

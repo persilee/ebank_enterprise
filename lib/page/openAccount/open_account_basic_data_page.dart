@@ -6,12 +6,13 @@ import 'dart:convert';
 /// Date: 2021-03-17
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/open_account_Industry_two_data.dart';
-import 'package:ebank_mobile/data/source/model/open_account_get_data.dart';
-import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
-import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/open_account_get_data.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/open_account_quick_submit_data.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/open_account_save_data.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
@@ -436,10 +437,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               // textDirection: TextDirection.ltr,
               maxLines: 2,
               inputFormatters: inputFormatters,
-              style: TextStyle(
-                fontSize: 15,
-                color: HsgColors.firstDegreeText,
-              ),
+              style: TEXTFIELD_TEXT_STYLE,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: placeholderStr,
@@ -502,10 +500,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                 // obscureText: this.isCiphertext,
                 textAlign: TextAlign.right,
                 inputFormatters: inputFormatters,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: HsgColors.firstDegreeText,
-                ),
+                style: TEXTFIELD_TEXT_STYLE,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: placeholderStr,
@@ -579,10 +574,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                 // obscureText: this.isCiphertext,
                 textAlign: TextAlign.right,
                 maxLines: 1,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: HsgColors.firstDegreeText,
-                ),
+                style: FIRST_DEGREE_TEXT_STYLE,
                 decoration: InputDecoration(
                   // isCollapsed: true,
                   border: InputBorder.none,
@@ -646,7 +638,13 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       documentList = [];
       String _language = Intl.getCurrentLocale();
       _documentTypes.forEach((element) {
-        documentList.add(_language == 'en' ? element.name : element.cname);
+        if (_language == 'en') {
+          documentList.add(element.name);
+        } else if (_language == 'zh_HK') {
+          documentList.add(element.chName);
+        } else {
+          documentList.add(element.cname);
+        }
       });
     }
     final result = await showHsgBottomSheet(
@@ -682,7 +680,13 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       companyList = [];
       String _language = Intl.getCurrentLocale();
       _companyTypes.forEach((element) {
-        companyList.add(_language == 'en' ? element.name : element.cname);
+        if (_language == 'en') {
+          companyList.add(element.name);
+        } else if (_language == 'zh_HK') {
+          companyList.add(element.chName);
+        } else {
+          companyList.add(element.cname);
+        }
       });
     }
     final result = await showHsgBottomSheet(
@@ -716,7 +720,13 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       industrialList = [];
       String _language = Intl.getCurrentLocale();
       _industrialNatures.forEach((element) {
-        industrialList.add(_language == 'en' ? element.name : element.cname);
+        if (_language == 'en') {
+          industrialList.add(element.name);
+        } else if (_language == 'zh_HK') {
+          industrialList.add(element.chName);
+        } else {
+          industrialList.add(element.cname);
+        }
       });
     }
 
@@ -753,8 +763,13 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
       industrialTwoList = [];
       String _language = Intl.getCurrentLocale();
       _industrialNaturesTwo.forEach((element) {
-        industrialTwoList
-            .add(_language == 'en' ? element.engName : element.localName);
+        if (_language == 'en') {
+          industrialTwoList.add(element.engName);
+        } else if (_language == 'zh_HK') {
+          industrialTwoList.add(element.chName);
+        } else {
+          industrialTwoList.add(element.localName);
+        }
       });
     } else {
       HSProgressHUD.showToastTip(

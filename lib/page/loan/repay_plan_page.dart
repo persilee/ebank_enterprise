@@ -1,17 +1,17 @@
+import 'package:ebank_mobile/data/source/model/loan/get_schedule_detail_list.dart';
+import 'package:ebank_mobile/data/source/model/loan/loan_detail_modelList.dart';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 还款计划页面
 /// Author: zhangqirong
 /// Date: 2020-12-10
 
-import 'package:ebank_mobile/data/source/model/get_schedule_detail_list.dart';
-import 'package:ebank_mobile/data/source/model/loan_detail_modelList.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_loan.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/data/source/model/get_loan_list.dart';
 
 class RepayPlanPage extends StatefulWidget {
   final LnAcMastAppDOList loanDetail; //上界面传回来的模型

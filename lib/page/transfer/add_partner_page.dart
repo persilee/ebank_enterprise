@@ -6,10 +6,10 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/account/get_bank_list.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
-import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/transfer/add_partner.dart';
+import 'package:ebank_mobile/data/source/model/transfer/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
@@ -118,8 +118,11 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         transferFeeList.clear();
         transferFeeCodeList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {
-          if (_language == 'zh_CN' || _language == 'zh_HK') {
+          if (_language == 'zh_CN') {
             transferFeeList.add(e.cname);
+            transferFeeCodeList.add(e.code);
+          } else if (_language == 'zh_HK') {
+            transferFeeList.add(e.chName);
             transferFeeCodeList.add(e.code);
           } else {
             transferFeeList.add(e.name);
@@ -621,7 +624,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           width: 150,
           child: Text(
             left,
-            style: TextStyle(color: HsgColors.firstDegreeText),
+            style: TextStyle(
+              color: HsgColors.firstDegreeText,
+              fontSize: 15,
+            ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -653,7 +659,10 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
                 )
               : Text(
                   _income,
-                  style: TextStyle(fontSize: 14),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: HsgColors.firstDegreeText,
+                  ),
                   textAlign: TextAlign.right,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,

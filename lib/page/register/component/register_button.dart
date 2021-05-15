@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 
@@ -22,8 +23,11 @@ Widget _getRegisterButton(
           child: RaisedButton(
             color: Colors.blue,
             child: Text(
-              '下一步',
-              style: (TextStyle(color: Colors.white)),
+              S.current.next_step,
+              style: (TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+              )),
               //textDirection: Colors.white,
             ),
             onPressed: _submit()

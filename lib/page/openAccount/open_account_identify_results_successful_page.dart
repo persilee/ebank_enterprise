@@ -8,8 +8,8 @@ import 'dart:typed_data';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
-import 'package:ebank_mobile/data/source/model/open_account_information_supplement_data.dart';
-import 'package:ebank_mobile/data/source/model/open_account_quick_data.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/open_account_information_supplement_data.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/open_account_quick_data.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';

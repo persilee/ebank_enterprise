@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:ebank_mobile/data/source/model/account/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/approval/card_bal_by_card_no_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/card_bal_by_card_no_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/complete_task_body.dart';
@@ -12,7 +13,6 @@ import 'package:ebank_mobile/data/source/model/approval/find_user_application_ta
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_model.dart';
-import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/other/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/statement/statement_query_list_body.dart';
 import 'package:ebank_mobile/data/source/model/statement/statement_query_list_model.dart';

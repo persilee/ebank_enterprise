@@ -4,7 +4,7 @@
 /// Date: 2020-11-30
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/loan_trial_rate.dart';
+import 'package:ebank_mobile/data/source/model/loan/loan_trial_rate.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +46,10 @@ class HsgAlertDialog extends StatelessWidget {
         child: Text(
           message,
           textAlign: TextAlign.center,
+          style: TextStyle(
+            color: HsgColors.firstDegreeText,
+            fontSize: 15,
+          ),
         ),
       );
     }
@@ -247,6 +251,10 @@ class HsgSingleChoiceDialog extends StatelessWidget {
           items[position],
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: HsgColors.firstDegreeText,
+            fontSize: 15,
+          ),
         ),
       ),
       Padding(
@@ -395,7 +403,10 @@ class BottomMenu extends StatelessWidget {
         child: Center(
           child: Text(
             items[position],
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(
+              fontSize: 16,
+              color: HsgColors.firstDegreeText,
+            ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -464,7 +475,7 @@ class HsgBottomSingleChoice extends StatelessWidget {
             child: Text(
               S.current.cancel,
               style: TextStyle(
-                // fontSize: 16,
+                fontSize: 15,
                 color: HsgColors.secondDegreeText,
                 fontWeight: FontWeight.normal,
               ),
@@ -540,6 +551,10 @@ class HsgBottomSingleChoice extends StatelessWidget {
           items[position],
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: HsgColors.firstDegreeText,
+            fontSize: 15,
+          ),
         ),
       ),
       Padding(
@@ -633,7 +648,7 @@ class HsgBottomTrailPlanChiose extends StatelessWidget {
             child: Text(
               S.current.cancel,
               style: TextStyle(
-                // fontSize: 16,
+                fontSize: 15,
                 color: HsgColors.secondDegreeText,
                 fontWeight: FontWeight.normal,
               ),
@@ -872,7 +887,7 @@ class HsgBottomCardChoice extends StatelessWidget {
             child: Text(
               S.current.cancel,
               style: TextStyle(
-                // fontSize: 16,
+                fontSize: 15,
                 color: HsgColors.secondDegreeText,
                 fontWeight: FontWeight.normal,
               ),
@@ -944,6 +959,10 @@ class HsgBottomCardChoice extends StatelessWidget {
           items[position],
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: HsgColors.firstDegreeText,
+            fontSize: 15,
+          ),
         ),
       ),
       Padding(

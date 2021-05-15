@@ -133,7 +133,10 @@ class _ApprovalPageState extends State<ApprovalPage>
                     padding: EdgeInsets.symmetric(vertical: 16.0),
                     child: Text(
                       S.of(context).approval,
-                      style: TextStyle(fontSize: 17.0),
+                      style: TextStyle(
+                        fontSize: 17.0,
+                        color: HsgColors.firstDegreeText,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ),

@@ -6,9 +6,9 @@
 import 'dart:ui';
 import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/get_ex_rate.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/other/forex_trading.dart';
+import 'package:ebank_mobile/data/source/model/other/get_ex_rate.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_bill.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -60,8 +60,9 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   // ignore: must_call_super
   void initState() {
     // 网络请求
-    _getCcyList();
     _getExchangeRateList();
+    _getCcyList();
+
     // _focusNode.addListener(() {
     //   _amountConversion();
     // });
@@ -125,8 +126,11 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
               color: HsgColors.commonBackground,
               padding: EdgeInsets.fromLTRB(18, 12, 18, 12),
               child: Text(
-                S.current.rate_notes1 + updateDate + S.current.rate_notes2,
-                style: TextStyle(color: HsgColors.describeText),
+                S.current.rate_notes1, // + updateDate + S.current.rate_notes2,
+                style: TextStyle(
+                  color: HsgColors.describeText,
+                  fontSize: 15,
+                ),
               ),
             ),
             Container(
@@ -230,7 +234,10 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
                 child: Center(
                   child: Text(
                     rateList[index].ccy,
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: HsgColors.firstDegreeText,
+                    ),
                   ),
                 ),
               ),
@@ -246,7 +253,10 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
                 child: Center(
                   child: Text(
                     rateList[index].fxSell,
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: HsgColors.firstDegreeText,
+                    ),
                   ),
                 ),
               ),
@@ -254,7 +264,10 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
                 child: Center(
                   child: Text(
                     rateList[index].fxBuy,
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: HsgColors.firstDegreeText,
+                    ),
                   ),
                 ),
               ),
@@ -290,6 +303,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
       focusNode: _focusNode,
       style: TextStyle(
         fontSize: 20,
+        color: HsgColors.firstDegreeText,
       ),
       textAlign: TextAlign.center,
       decoration: InputDecoration(
@@ -562,7 +576,11 @@ class CurrencyInkWell extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(item, style: TextStyle(fontSize: 20)),
+          Text(item,
+              style: TextStyle(
+                fontSize: 20,
+                color: HsgColors.firstDegreeText,
+              )),
           Icon(
             Icons.arrow_drop_down,
             size: 25,

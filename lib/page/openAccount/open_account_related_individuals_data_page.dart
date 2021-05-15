@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
-import 'package:ebank_mobile/data/source/model/open_account_quick_submit_data.dart';
-import 'package:ebank_mobile/data/source/model/open_account_save_data.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/open_account_quick_submit_data.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/open_account_save_data.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -324,10 +325,7 @@ class _RelatedIndividualsDataPageState
                 // obscureText: this.isCiphertext,
                 textAlign: TextAlign.right,
                 inputFormatters: inputFormatters,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: HsgColors.firstDegreeText,
-                ),
+                style: TEXTFIELD_TEXT_STYLE,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: placeholderStr,
@@ -399,10 +397,7 @@ class _RelatedIndividualsDataPageState
                 controller: textEC,
                 textAlign: TextAlign.right,
                 maxLines: 1,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: HsgColors.firstDegreeText,
-                ),
+                style: FIRST_DEGREE_TEXT_STYLE,
                 decoration: InputDecoration(
                   // isCollapsed: true,
                   border: InputBorder.none,
@@ -466,7 +461,13 @@ class _RelatedIndividualsDataPageState
       appellationList = [];
       String _language = Intl.getCurrentLocale();
       _appellationTypes.forEach((element) {
-        appellationList.add(_language == 'en' ? element.name : element.cname);
+        if (_language == 'en') {
+          appellationList.add(element.name);
+        } else if (_language == 'zh_HK') {
+          appellationList.add(element.chName);
+        } else {
+          appellationList.add(element.cname);
+        }
       });
     }
     final result = await showHsgBottomSheet(
@@ -532,7 +533,13 @@ class _RelatedIndividualsDataPageState
       documentList = [];
       String _language = Intl.getCurrentLocale();
       _documentTypes.forEach((element) {
-        documentList.add(_language == 'en' ? element.name : element.cname);
+        if (_language == 'en') {
+          documentList.add(element.name);
+        } else if (_language == 'zh_HK') {
+          documentList.add(element.chName);
+        } else {
+          documentList.add(element.cname);
+        }
       });
     }
     final result = await showHsgBottomSheet(

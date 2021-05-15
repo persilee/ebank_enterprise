@@ -6,10 +6,10 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_ccy_list.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/account/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
-import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
-import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/data/source/model/other/forex_trading.dart';
+import 'package:ebank_mobile/data/source/model/transfer/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
@@ -243,6 +243,10 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
                     S.of(context).transfer_from_name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
                 Container(
@@ -252,6 +256,10 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.end,
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
               ],
@@ -441,6 +449,10 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
               S.current.transfer_from_account,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: HsgColors.firstDegreeText,
+                fontSize: 15,
+              ),
             ),
           ),
           InkWell(

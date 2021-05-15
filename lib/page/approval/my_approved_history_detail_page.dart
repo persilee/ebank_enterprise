@@ -26,9 +26,9 @@ import 'package:ebank_mobile/data/source/model/approval/post_repayment_model.dar
     as PostRepaymentModel;
 import 'package:ebank_mobile/data/source/model/approval/loan_with_drawal_model.dart'
     as LoanWithDrawalModel;
-import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/transfer/get_info_by_swift_code.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -168,7 +168,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.iratTm == element.code) {
-            _iratTm = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _iratTm = element.cname;
+            } else if (_language == 'zh_HK') {
+              _iratTm = element.chName;
+            } else {
+              _iratTm = element.name;
+            }
           }
         });
       }
@@ -185,7 +191,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.repType == element.code) {
-            _repType = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _repType = element.cname;
+            } else if (_language == 'zh_HK') {
+              _repType = element.chName;
+            } else {
+              _repType = element.name;
+            }
           }
         });
       }
@@ -471,7 +483,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.costOptions == element.code) {
-            _costOptions = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _costOptions = element.cname;
+            } else if (_language == 'zh_HK') {
+              _costOptions = element.chName;
+            } else {
+              _costOptions = element.name;
+            }
           }
         });
       }
@@ -670,7 +688,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.tenor == element.code) {
-            _tenorName = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _tenorName = element.cname;
+            } else if (_language == 'zh_HK') {
+              _tenorName = element.chName;
+            } else {
+              _tenorName = element.name;
+            }
           }
         });
       }
@@ -687,7 +711,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.status == element.code) {
-            _statusName = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _statusName = element.cname;
+            } else if (_language == 'zh_HK') {
+              _statusName = element.chName;
+            } else {
+              _statusName = element.name;
+            }
           }
         });
       }
@@ -795,7 +825,13 @@ class _MyApprovedHistoryDetailPageState
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
           if (data?.tenor == element.code) {
-            _tenorName = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _tenorName = element.cname;
+            } else if (_language == 'zh_HK') {
+              _tenorName = element.chName;
+            } else {
+              _tenorName = element.name;
+            }
           }
         });
       }
@@ -812,7 +848,13 @@ class _MyApprovedHistoryDetailPageState
       if (_instList.isNotEmpty) {
         _instList.forEach((element) {
           if (data?.instCode == element.code) {
-            _instCode = _language == 'zh_CN' ? element.cname : element.name;
+            if (_language == 'zh_CN') {
+              _instCode = element.cname;
+            } else if (_language == 'zh_HK') {
+              _instCode = element.chName;
+            } else {
+              _instCode = element.name;
+            }
           }
         });
       }
@@ -996,8 +1038,11 @@ class _MyApprovedHistoryDetailPageState
                 children: [
                   Text(
                     title,
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: HsgColors.firstDegreeText,
+                    ),
                   ),
                 ],
               ),
@@ -1028,7 +1073,10 @@ class _MyApprovedHistoryDetailPageState
                   flex: 1,
                   child: Text(
                     name,
-                    style: TextStyle(fontSize: 13.0),
+                    style: TextStyle(
+                      fontSize: 13.0,
+                      color: HsgColors.secondDegreeText,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -1038,7 +1086,9 @@ class _MyApprovedHistoryDetailPageState
                   child: Text(
                     value,
                     style: TextStyle(
-                        fontSize: 13.0, color: Color(int.parse('0xff7A7A7A'))),
+                      fontSize: 13.0,
+                      color: HsgColors.firstDegreeText,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.end,
@@ -1071,8 +1121,11 @@ class _MyApprovedHistoryDetailPageState
                 children: [
                   Text(
                     title,
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: HsgColors.firstDegreeText,
+                    ),
                   ),
                   Spacer(),
                   isShowAvatar
@@ -1122,6 +1175,7 @@ class _MyApprovedHistoryDetailPageState
                 name,
                 style: TextStyle(
                   fontSize: 10,
+                  color: HsgColors.firstDegreeText,
                 ),
               ),
             ],

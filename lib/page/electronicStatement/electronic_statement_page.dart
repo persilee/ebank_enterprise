@@ -1,7 +1,7 @@
 import 'package:date_format/date_format.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
-import 'package:ebank_mobile/data/source/model/get_electronic_statement.dart';
+import 'package:ebank_mobile/data/source/model/statement/get_electronic_statement.dart';
 import 'package:ebank_mobile/data/source/model/statement/statement_query_list_body.dart';
 import 'package:ebank_mobile/data/source/model/statement/statement_query_list_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as Intl;
@@ -187,7 +187,10 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
       width: (MediaQuery.of(context).size.width - 30) / 5 * 2,
       child: Text(
         Intl.S.current.transaction_time,
-        style: TextStyle(fontSize: 13),
+        style: TextStyle(
+          fontSize: 13,
+          color: HsgColors.firstDegreeText,
+        ),
       ),
     );
   }

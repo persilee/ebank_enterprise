@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 重置交易密码--身份证验证
@@ -6,7 +7,6 @@ import 'package:ebank_mobile/config/hsg_text_style.dart';
 /// Date: 2020-12-31
 // import 'package:ebank_mobile/data/source/card_data_repository.dart';
 // import 'package:ebank_mobile/data/source/mine_checInformantApi.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/real_name_auth_by_three_factor.dart';
 
 // import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
@@ -171,7 +171,13 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
       idCardList = [];
       String _language = Intl.getCurrentLocale();
       idInformationList.forEach((element) {
-        idCardList.add(_language == 'en' ? element.name : element.cname);
+        if (_language == 'en') {
+          idCardList.add(element.name);
+        } else if (_language == 'zh_HK') {
+          idCardList.add(element.chName);
+        } else {
+          idCardList.add(element.cname);
+        }
       });
     }
 
@@ -335,7 +341,10 @@ class _IdIardVerificationPageState extends State<IdIardVerificationPage> {
                     margin: EdgeInsets.all(40),
                     text: Text(
                       S.of(context).next_step,
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
                     ),
                     isEnable: _submit(),
                     clickCallback: () {
@@ -631,7 +640,10 @@ class InputList extends StatelessWidget {
               children: [
                 Container(
                   width: 160,
-                  child: Text(this.labText),
+                  child: Text(
+                    this.labText,
+                    style: FIRST_DEGREE_TEXT_STYLE,
+                  ),
                 ),
                 Expanded(
                   child: TextField(
@@ -660,6 +672,7 @@ class InputList extends StatelessWidget {
                       // print('submit $text');
                     },
                     enabled: true,
+                    style: TEXTFIELD_TEXT_STYLE,
                     //是否禁用
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -697,15 +710,26 @@ class SelectInkWell extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(title),
+            Text(
+              title,
+              style: FIRST_DEGREE_TEXT_STYLE,
+            ),
             Row(
               children: [
                 Padding(
                   padding: EdgeInsets.only(right: 12),
                   child: item == ''
-                      ? Text(S.current.please_select,
-                          style: TextStyle(color: HsgColors.textHintColor))
-                      : Text(item),
+                      ? Text(
+                          S.current.please_select,
+                          style: TextStyle(
+                            color: HsgColors.textHintColor,
+                            fontSize: 14,
+                          ),
+                        )
+                      : Text(
+                          item,
+                          style: FIRST_DEGREE_TEXT_STYLE,
+                        ),
                 ),
                 Image(
                   color: HsgColors.firstDegreeText,

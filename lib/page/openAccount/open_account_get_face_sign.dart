@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/face_sign_businessid.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -37,12 +38,15 @@ class _OpenAccountGetFaceSignPageState
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(S.of(context).face_sign_Interviews,
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                      color: HsgColors.secondDegreeText,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500)),
+              Text(
+                S.of(context).face_sign_Interviews,
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  color: HsgColors.secondDegreeText,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ],
           ),
         ),
@@ -60,6 +64,7 @@ class _OpenAccountGetFaceSignPageState
                 child: TextField(
                   //是否自动更正
                   controller: _codeSignTextF,
+                  style: TEXTFIELD_TEXT_STYLE,
                   // autocorrect: true,
                   //是否自动获得焦点
                   // autofocus: true,
@@ -101,14 +106,19 @@ class _OpenAccountGetFaceSignPageState
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(S.of(context).face_sign_TipsTitle,
-                  maxLines: 100,
-                  style: TextStyle(
-                    color: Color(0xff9c9c9c),
-                    fontSize: 13,
-                  ),
-                  strutStyle:
-                      StrutStyle(forceStrutHeight: true, height: 1, leading: 1))
+              Text(
+                S.of(context).face_sign_TipsTitle,
+                maxLines: 100,
+                style: TextStyle(
+                  color: Color(0xff9c9c9c),
+                  fontSize: 13,
+                ),
+                strutStyle: StrutStyle(
+                  forceStrutHeight: true,
+                  height: 1,
+                  leading: 1,
+                ),
+              ),
             ],
           ),
         ),

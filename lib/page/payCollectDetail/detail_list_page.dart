@@ -6,8 +6,8 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
-import 'package:ebank_mobile/data/source/model/get_pay_collect_detail.dart';
-import 'package:ebank_mobile/data/source/model/get_transfer_record.dart';
+import 'package:ebank_mobile/data/source/model/account/get_pay_collect_detail.dart';
+import 'package:ebank_mobile/data/source/model/transfer/get_transfer_record.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_bill.dart';
@@ -549,7 +549,7 @@ class _DetailListPageState extends State<DetailListPage> {
           intl.S.of(context).reset,
           style: TextStyle(
             fontSize: 13,
-            // color: HsgColors.accent,
+            color: HsgColors.firstDegreeText,
           ),
         ),
         onPressed: () {
@@ -610,9 +610,7 @@ class _DetailListPageState extends State<DetailListPage> {
               FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
               LengthLimitingTextInputFormatter(12),
             ],
-            style: TextStyle(
-              fontSize: 14,
-            ),
+            style: FIRST_DEGREE_TEXT_STYLE,
             autocorrect: false,
             autofocus: false,
             keyboardType: TextInputType.numberWithOptions(decimal: true),

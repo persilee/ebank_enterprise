@@ -534,7 +534,16 @@ class ItemContainer extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [Text(title), Text(item)],
+        children: [
+          Text(
+            title,
+            style: FIRST_DEGREE_TEXT_STYLE,
+          ),
+          Text(
+            item,
+            style: FIRST_DEGREE_TEXT_STYLE,
+          )
+        ],
       ),
     );
   }

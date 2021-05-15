@@ -52,14 +52,20 @@ class _FindUserNameSuccessState extends State<FindUserNameSuccess> {
                       child: Text(
                         S.current.find_username,
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: HsgColors.firstDegreeText,
+                        ),
                       ),
                     ),
                     Container(
                       child: Text(
                         '${S.current.login_account_placeholder} :$_userName',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: HsgColors.firstDegreeText,
+                        ),
                       ),
                     )
                   ],

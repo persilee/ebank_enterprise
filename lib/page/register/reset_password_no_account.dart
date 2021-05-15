@@ -1,5 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/modify_pwd_by_sms.dart';
+import 'package:ebank_mobile/data/source/model/mine/modify_pwd_by_sms.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
@@ -129,7 +129,10 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
                         disabledColor: HsgColors.btnDisabled,
                         child: Text(
                           S.current.confirm,
-                          style: (TextStyle(color: Colors.white)),
+                          style: (TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                          )),
                           //textDirection: Colors.white,
                         ),
                         onPressed: _submit()

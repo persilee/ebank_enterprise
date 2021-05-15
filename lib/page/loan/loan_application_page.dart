@@ -5,9 +5,8 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
-import 'package:ebank_mobile/data/source/model/get_user_info.dart';
-import 'package:ebank_mobile/data/source/model/loan_application.dart';
+import 'package:ebank_mobile/data/source/model/account/get_user_info.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -89,6 +88,8 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         data.publicCodeGetRedisRspDtoList.forEach((e) {
           if (_language == 'zh_CN') {
             _deadLineLists.add(e.cname);
+          } else if (_language == 'zh_HK') {
+            _deadLineLists.add(e.chName);
           } else {
             _deadLineLists.add(e.name);
           }
@@ -106,6 +107,8 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
         data.publicCodeGetRedisRspDtoList.forEach((e) {
           if (_language == 'zh_CN') {
             _goalLists.add(e.cname);
+          } else if (_language == 'zh_HK') {
+            _goalLists.add(e.chName);
           } else {
             _goalLists.add(e.name);
           }

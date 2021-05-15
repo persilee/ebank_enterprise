@@ -56,7 +56,9 @@ class _ImageEditorPageState extends State<ImageEditorPage> {
                   cropAspectRatio: CropAspectRatios.ratio1_1,
                   editorMaskColorHandler:
                       (BuildContext context, bool pointerDown) {
-                    return pointerDown ? Colors.white.withOpacity(0.36) : Colors.black;
+                    return pointerDown
+                        ? Colors.white.withOpacity(0.36)
+                        : Colors.black;
                   },
                 );
               },
@@ -74,7 +76,10 @@ class _ImageEditorPageState extends State<ImageEditorPage> {
                   onPressed: () => Navigator.pop(context),
                   child: Text(
                     S.current.cancel,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
                   ),
                 ),
                 IconButton(
@@ -82,7 +87,7 @@ class _ImageEditorPageState extends State<ImageEditorPage> {
                     Icons.rotate_right,
                     color: Colors.white,
                   ),
-                  onPressed: (){
+                  onPressed: () {
                     editorKey.currentState.rotate(right: true);
                   },
                 ),
@@ -91,13 +96,16 @@ class _ImageEditorPageState extends State<ImageEditorPage> {
                     Icons.rotate_left,
                     color: Colors.white,
                   ),
-                  onPressed: (){
+                  onPressed: () {
                     editorKey.currentState.rotate(right: false);
                   },
                 ),
                 CustomButton(
                   height: 32.0,
-                  text: Text(S.current.confirm, style: TextStyle(color: Colors.white, fontSize: 14.0),),
+                  text: Text(
+                    S.current.confirm,
+                    style: TextStyle(color: Colors.white, fontSize: 14.0),
+                  ),
                   clickCallback: () => cropImage(),
                 ),
               ],
@@ -112,7 +120,8 @@ class _ImageEditorPageState extends State<ImageEditorPage> {
     if (_cropping) {
       return;
     }
-    File file = await cropImageDataWithNativeLibrary(state: editorKey.currentState);
+    File file =
+        await cropImageDataWithNativeLibrary(state: editorKey.currentState);
     Navigator.pop(context, file);
     _cropping = false;
   }

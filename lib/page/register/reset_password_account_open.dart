@@ -1,5 +1,6 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/real_name_auth_by_three_factor.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -14,6 +15,7 @@ import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -38,6 +40,7 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
   List<IdType> idInformationList = []; //证件类型信息
   String _certTypeKey; //身份校验的key
   String _accountName; //前面传过来用户登录名
+  String _language = Intl.getCurrentLocale();
 
   Map listData = new Map();
   @override
@@ -118,13 +121,20 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                               _certType == ''
                                   ? Text(
                                       S.current.register_select_documents,
+                                      style: FIRST_DEGREE_TEXT_STYLE,
                                     )
-                                  : Text(_certType),
+                                  : Text(
+                                      _certType,
+                                      style: FIRST_DEGREE_TEXT_STYLE,
+                                    ),
                               Row(
                                 children: [
                                   Padding(
                                       padding: EdgeInsets.only(right: 12),
-                                      child: Text('')),
+                                      child: Text(
+                                        '',
+                                        style: FIRST_DEGREE_TEXT_STYLE,
+                                      )),
                                   Container(
                                       child: Icon(
                                     Icons.expand_more,
@@ -167,7 +177,10 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
                     height: 44.0,
                     width: MediaQuery.of(context).size.width,
                     child: FlatButton(
-                      child: Text(S.of(context).next_step),
+                      child: Text(
+                        S.of(context).next_step,
+                        style: TextStyle(fontSize: 15),
+                      ),
                       onPressed: _submit()
                           ? () {
                               FocusScope.of(context).requestFocus(FocusNode());
@@ -206,7 +219,13 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
 
     if (idInformationList != null) {
       idInformationList.forEach((element) {
-        obj.add(element.cname);
+        if (_language == 'zh_CN') {
+          obj.add(element.cname);
+        } else if (_language == 'zh_HK') {
+          obj.add(element.chName);
+        } else {
+          obj.add(element.name);
+        }
         indList.add(element.code);
       });
     }

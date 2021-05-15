@@ -3,7 +3,8 @@
 /// Author: lijiawei
 /// Date: 2020-12-04
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/login.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/model/login_register/login.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_packaging.dart';
@@ -507,11 +508,7 @@ class InputView extends StatelessWidget {
                   inputFormatters: this.inputFormatters,
                   controller: textEC,
                   obscureText: this.isCiphertext,
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: HsgColors.firstDegreeText,
-                  ),
-
+                  style: TEXTFIELD_TEXT_STYLE,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: this.textFieldPlaceholder,

@@ -1,10 +1,9 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
-import 'package:ebank_mobile/data/source/model/get_user_info.dart';
-import 'package:ebank_mobile/data/source/model/loan_application.dart';
-import 'package:ebank_mobile/data/source/model/loan_product_list.dart';
+import 'package:ebank_mobile/data/source/model/account/get_user_info.dart';
+import 'package:ebank_mobile/data/source/model/loan/loan_product_list.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
@@ -557,7 +556,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
       setState(() {
         IdType type = list[result];
         _ccyId = result;
-        _listDataMap['ccy'] = tempList[index];
+        _listDataMap['ccy'] = type.code;
         _requestDataMap['ccy'] = type.code;
         _currency = tempList[result];
         _checkloanIsClick();
@@ -598,6 +597,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     list.forEach((e) {
       if (_language == 'zh_CN') {
         tempList.add(e.cname);
+      } else if (_language == 'zh_HK') {
+        tempList.add(e.chName);
       } else {
         tempList.add(e.name);
       }

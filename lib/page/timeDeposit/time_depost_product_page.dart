@@ -4,7 +4,7 @@
 /// Date: 2020-12-11
 
 import 'package:ebank_mobile/config/hsg_text_style.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_packaging.dart';
@@ -121,7 +121,10 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       width: (MediaQuery.of(context).size.width - 56) / 5 * 2,
       child: Text(
         S.current.screening_conditions,
-        style: TextStyle(fontSize: 13),
+        style: TextStyle(
+          fontSize: 13,
+          color: HsgColors.firstDegreeText,
+        ),
       ),
     );
   }
@@ -495,7 +498,10 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
       alignment: Alignment.centerLeft,
       child: Text(
         productName,
-        style: TextStyle(fontSize: 15),
+        style: TextStyle(
+          fontSize: 15,
+          color: HsgColors.firstDegreeText,
+        ),
       ),
     );
   }
@@ -787,6 +793,8 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
             setState(() {
               if (language == 'zh_CN') {
                 terms.add(element.cname);
+              } else if (language == 'zh_HK') {
+                terms.add(element.chName);
               } else {
                 terms.add(element.name);
               }

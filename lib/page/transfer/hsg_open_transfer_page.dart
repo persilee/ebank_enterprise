@@ -6,11 +6,11 @@ import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 /// Date: 2020-12-28
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
-import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
-import 'package:ebank_mobile/data/source/model/get_user_info.dart';
+import 'package:ebank_mobile/data/source/model/account/get_single_card_bal.dart';
+import 'package:ebank_mobile/data/source/model/account/get_user_info.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/transfer/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
-import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_packaging.dart';
@@ -194,6 +194,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
                 style: TextStyle(
                   fontSize: 14.0,
                   height: 3.0,
+                  color: HsgColors.firstDegreeText,
                 ),
               ),
               onTap: () {
@@ -365,7 +366,10 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
       child: Text(
         btnTitle,
         style: TextStyle(
-            color: textColor, fontSize: 14.0, fontWeight: FontWeight.normal),
+          color: textColor,
+          fontSize: 14.0,
+          fontWeight: FontWeight.normal,
+        ),
       ),
     );
   }
@@ -801,7 +805,13 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
             child: Row(
               children: [
                 Container(
-                  child: Text(intl.S.current.appointment_frequency),
+                  child: Text(
+                    intl.S.current.appointment_frequency,
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
+                      fontSize: 15,
+                    ),
+                  ),
                 ),
               ],
             ),

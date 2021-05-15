@@ -65,6 +65,8 @@ class RedisRspDto extends Object {
   String localName;
   @JsonKey(name: 'engName')
   String engName;
+  @JsonKey(name: 'chName')
+  String chName;
 
   RedisRspDto(
     this.code,
@@ -73,6 +75,7 @@ class RedisRspDto extends Object {
     this.type,
     this.localName,
     this.engName,
+    this.chName,
   );
 
   @override

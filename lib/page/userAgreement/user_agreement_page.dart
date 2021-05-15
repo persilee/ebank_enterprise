@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/data/source/model/account/get_user_agreement.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 
@@ -9,7 +10,6 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:ebank_mobile/data/source/model/get_user_agreement.dart';
 
 class UserAgreementPage extends StatefulWidget {
   final String pactId;

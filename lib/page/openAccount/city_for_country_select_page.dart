@@ -4,6 +4,7 @@
 // Date: 2021-04-17
 
 import 'package:azlistview/azlistview.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/city_for_country.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -207,7 +208,10 @@ class _CityForCountrySelectPageState extends State<CityForCountrySelectPage> {
         SizedBox(
           height: _itemHeight.toDouble(),
           child: ListTile(
-            title: Text(name),
+            title: Text(
+              name,
+              style: FIRST_DEGREE_TEXT_STYLE,
+            ),
             onTap: () {
               Map popMap = {
                 'countryModel': widget.countryData,

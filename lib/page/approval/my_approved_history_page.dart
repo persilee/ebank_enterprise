@@ -13,8 +13,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_finished_task.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
-import 'package:ebank_mobile/data/source/model/my_approval_data.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -167,9 +166,10 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
       taskName,
       textAlign: TextAlign.left,
       style: TextStyle(
-          fontSize: 15.0,
-          color: HsgColors.aboutusTextCon,
-          fontWeight: FontWeight.bold),
+        fontSize: 15.0,
+        color: HsgColors.aboutusTextCon,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 
@@ -203,7 +203,13 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
     String _language = Intl.getCurrentLocale();
     _resultTypeList.forEach((element) {
       if (element.code == approvalTask?.result) {
-        _result = _language == 'zh_CN' ? element.cname : element.name;
+        if (_language == 'zh_CN') {
+          _result = element.cname;
+        } else if (_language == 'zh_HK') {
+          _result = element.chName;
+        } else {
+          _result = element.name;
+        }
       }
     });
 

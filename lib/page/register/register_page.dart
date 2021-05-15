@@ -4,7 +4,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/account/check_sms.dart';
-import 'package:ebank_mobile/data/source/model/get_verificationByPhone_code.dart';
+import 'package:ebank_mobile/data/source/model/mine/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -148,6 +148,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                           keyboardType: TextInputType.number,
+                          style: TEXTFIELD_TEXT_STYLE,
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(
                                 RegExp("[0-9]")), //纯数字
@@ -191,7 +192,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           //color: Colors.blue,
                           child: Text(
                             S.current.next_step,
-                            style: (TextStyle(color: Colors.white)),
+                            style: (TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            )),
                           ),
                           onPressed: _submit()
                               ? () {
@@ -378,7 +382,6 @@ class _RegisterPageState extends State<RegisterPage> {
         countdownTime > 0
             ? '${countdownTime}s'
             : S.of(context).getVerificationCode,
-        style: TextStyle(fontSize: 14),
         textAlign: TextAlign.right,
       ),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

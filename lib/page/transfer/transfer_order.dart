@@ -5,12 +5,12 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
+import 'package:ebank_mobile/data/source/model/account/get_single_card_bal.dart';
+import 'package:ebank_mobile/data/source/model/account/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
-import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
-import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
-import 'package:ebank_mobile/data/source/model/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/other/forex_trading.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/transfer/get_transfer_partner_list.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_bill.dart';
@@ -216,6 +216,7 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
                 style: TextStyle(
                   fontSize: 14.0,
                   height: 3.0,
+                  color: HsgColors.firstDegreeText,
                 ),
               ),
               onTap: () {
@@ -700,7 +701,13 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
             child: Row(
               children: [
                 Container(
-                  child: Text(intl.S.current.appointment_frequency),
+                  child: Text(
+                    intl.S.current.appointment_frequency,
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
+                      fontSize: 15,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -737,6 +744,10 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
                     intl.S.of(context).transfer_from_name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
                 Container(
@@ -746,6 +757,10 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.end,
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
               ],
@@ -929,6 +944,10 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
               intl.S.current.transfer_from_account,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: HsgColors.firstDegreeText,
+                fontSize: 15,
+              ),
             ),
           ),
           InkWell(

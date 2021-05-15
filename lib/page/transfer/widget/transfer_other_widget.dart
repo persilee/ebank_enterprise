@@ -6,6 +6,7 @@
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,13 @@ Widget transferOtherWidget(BuildContext context, String remark,
       children: [
         Container(
           width: MediaQuery.of(context).size.width / 4,
-          child: Text(S.current.transfer_postscript),
+          child: Text(
+            S.current.transfer_postscript,
+            style: TextStyle(
+              color: HsgColors.firstDegreeText,
+              fontSize: 15,
+            ),
+          ),
         ),
         Expanded(
           child: Container(
@@ -36,12 +43,13 @@ Widget transferOtherWidget(BuildContext context, String remark,
               // onChanged: (remark) {
               //   transferChange(remark);
               // },
+              style: FIRST_DEGREE_TEXT_STYLE,
               controller: _remarkController,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: S.current.transfer,
                 hintStyle: TextStyle(
-                  fontSize: 13.5,
+                  fontSize: 14,
                   color: HsgColors.textHintColor,
                 ),
               ),

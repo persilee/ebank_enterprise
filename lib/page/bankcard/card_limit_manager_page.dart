@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
@@ -35,8 +36,16 @@ class _CardLimitManagerPageState extends State<CardLimitManagerPage> {
             color: Colors.white,
             child: Row(
               children: [
-                Expanded(child: Text('Account No.')),
-                Text(card.cardNo)
+                Expanded(
+                  child: Text(
+                    'Account No.',
+                    style: FIRST_DEGREE_TEXT_STYLE,
+                  ),
+                ),
+                Text(
+                  card.cardNo,
+                  style: FIRST_DEGREE_TEXT_STYLE,
+                )
               ],
             ),
           ),
@@ -56,14 +65,19 @@ class _CardLimitManagerPageState extends State<CardLimitManagerPage> {
                     Container(
                       child: Row(
                         children: [
-                          Expanded(child: Text('Transaction Amount Limit')),
+                          Expanded(
+                            child: Text(
+                              'Transaction Amount Limit',
+                              style: FIRST_DEGREE_TEXT_STYLE,
+                            ),
+                          ),
                           Container(
                             width: 130,
                             height: 22,
                             child: TextField(
                               autofocus: true,
                               textAlign: TextAlign.right,
-                              style: TextStyle(fontSize: 14),
+                              style: FIRST_DEGREE_TEXT_STYLE,
                               controller: tranAmtLimitController,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
@@ -87,13 +101,17 @@ class _CardLimitManagerPageState extends State<CardLimitManagerPage> {
                     Container(
                       child: Row(
                         children: [
-                          Expanded(child: Text('Daily Amount of Transaction')),
+                          Expanded(
+                              child: Text(
+                            'Daily Amount of Transaction',
+                            style: FIRST_DEGREE_TEXT_STYLE,
+                          )),
                           Container(
                             width: 130,
                             height: 22,
                             child: TextField(
                               textAlign: TextAlign.right,
-                              style: TextStyle(fontSize: 14),
+                              style: FIRST_DEGREE_TEXT_STYLE,
                               controller: tranDailyAmtLimitController,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
@@ -118,13 +136,17 @@ class _CardLimitManagerPageState extends State<CardLimitManagerPage> {
                     Container(
                       child: Row(
                         children: [
-                          Expanded(child: Text('Daily Number of Transaction')),
+                          Expanded(
+                              child: Text(
+                            'Daily Number of Transaction',
+                            style: FIRST_DEGREE_TEXT_STYLE,
+                          )),
                           Container(
                             width: 130,
                             height: 22,
                             child: TextField(
                               textAlign: TextAlign.right,
-                              style: TextStyle(fontSize: 14),
+                              style: FIRST_DEGREE_TEXT_STYLE,
                               controller: tranDailyNumLimitController,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
@@ -147,7 +169,10 @@ class _CardLimitManagerPageState extends State<CardLimitManagerPage> {
               child: FlatButton(
                   child: Text(
                     'Modify',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
                   ),
                   onPressed: () {},
                   color: Colors.blue,

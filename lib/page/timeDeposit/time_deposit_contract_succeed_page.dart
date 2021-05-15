@@ -42,7 +42,11 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
                   padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
                   child: Text(
                     S.current.operation_successful,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: HsgColors.firstDegreeText,
+                    ),
                   ),
                 )
               ],
@@ -51,16 +55,22 @@ class _DepositContractSucceed extends State<DepositContractSucceed> {
           Container(
             margin: EdgeInsets.fromLTRB(30, 75, 30, 0),
             child: ButtonTheme(
-                minWidth: 5,
-                height: 45,
-                child: FlatButton(
-                  onPressed: () {
-                    Navigator.of(context)..pop();
-                  },
-                  color: HsgColors.accent,
-                  child: (Text(S.current.complete,
-                      style: TextStyle(color: Colors.white))),
-                )),
+              minWidth: 5,
+              height: 45,
+              child: FlatButton(
+                onPressed: () {
+                  Navigator.of(context)..pop();
+                },
+                color: HsgColors.accent,
+                child: Text(
+                  S.current.complete,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ),
           )
         ],
       ),

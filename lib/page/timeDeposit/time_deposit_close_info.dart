@@ -1,5 +1,6 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_record_info.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:flutter/cupertino.dart';
@@ -62,10 +63,15 @@ class _DepositCloseInfoState extends State<DepositCloseInfoPage> {
               //付款账户
               child: Row(
                 children: [
-                  Expanded(child: Text(S.current.payment_account)),
+                  Expanded(
+                      child: Text(
+                    S.current.payment_account,
+                    style: FIRST_DEGREE_TEXT_STYLE,
+                  )),
                   Container(
                     child: Text(
                       FormatUtil.formatSpace4(deposit.openDrAc),
+                      style: FIRST_DEGREE_TEXT_STYLE,
                     ),
                   )
                 ],
@@ -83,8 +89,15 @@ class _DepositCloseInfoState extends State<DepositCloseInfoPage> {
                     child: Row(
                       children: [
                         Expanded(
-                            child: Text(_nameStr,
-                                style: TextStyle(fontWeight: FontWeight.bold))),
+                          child: Text(
+                            _nameStr,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: HsgColors.firstDegreeText,
+                            ),
+                          ),
+                        ),
                         Container()
                       ],
                     ),
@@ -150,7 +163,7 @@ class _DepositCloseInfoState extends State<DepositCloseInfoPage> {
                   width: (MediaQuery.of(context).size.width - 42) / 7 * 3,
                   child: Text(
                     leftText,
-                    style: TextStyle(fontWeight: FontWeight.normal),
+                    style: FIRST_DEGREE_TEXT_STYLE,
                   ),
                 ),
               ),
@@ -158,7 +171,7 @@ class _DepositCloseInfoState extends State<DepositCloseInfoPage> {
                 width: (MediaQuery.of(context).size.width - 42) / 7 * 4,
                 child: Text(
                   rightText,
-                  style: TextStyle(fontWeight: FontWeight.normal),
+                  style: FIRST_DEGREE_TEXT_STYLE,
                   textAlign: TextAlign.right,
                 ),
               ),

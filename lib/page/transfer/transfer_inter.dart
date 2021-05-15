@@ -6,13 +6,13 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
-import 'package:ebank_mobile/data/source/model/get_info_by_swift_code.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
-import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
-import 'package:ebank_mobile/data/source/model/get_transfer_partner_list.dart';
+import 'package:ebank_mobile/data/source/model/account/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/other/forex_trading.dart';
-import 'package:ebank_mobile/data/source/model/query_fee.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
+import 'package:ebank_mobile/data/source/model/transfer/get_info_by_swift_code.dart';
+import 'package:ebank_mobile/data/source/model/transfer/get_transfer_partner_list.dart';
+import 'package:ebank_mobile/data/source/model/transfer/query_fee.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -207,10 +207,12 @@ class _TransferInterPageState extends State<TransferInterPage> {
     if (_arguments != null && !check) {
       Rows rowPartner = _arguments;
       if (rowPartner.payeeName.isEmpty) {
+        print('payeeNameText: ${payeeName}');
         payeeName = _payeeNameController.text;
       } else {
         _payeeNameController.text = rowPartner.payeeName;
         payeeName = rowPartner.payeeName;
+        print('payeeNamePartner: ${payeeName}');
       }
       _payeeAccountController.text = rowPartner.payeeCardNo;
       _remarkController.text = rowPartner.remark;
@@ -282,6 +284,10 @@ class _TransferInterPageState extends State<TransferInterPage> {
                     S.of(context).transfer_from_name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
                 Container(
@@ -291,6 +297,10 @@ class _TransferInterPageState extends State<TransferInterPage> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.end,
+                    style: TextStyle(
+                      color: HsgColors.firstDegreeText,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
               ],
@@ -525,7 +535,10 @@ class _TransferInterPageState extends State<TransferInterPage> {
                   margin: EdgeInsets.only(top: 15),
                   child: Text(
                     topText,
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: HsgColors.firstDegreeText,
+                    ),
                     textAlign: TextAlign.start,
                   ),
                 ),
@@ -541,6 +554,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
               autofocus: false,
               controller: _payerAddressController,
               textAlign: TextAlign.end,
+              style: TEXTFIELD_TEXT_STYLE,
               inputFormatters: <TextInputFormatter>[
                 LengthLimitingTextInputFormatter(105), //限制长度
                 FilteringTextInputFormatter.allow(
@@ -619,6 +633,10 @@ class _TransferInterPageState extends State<TransferInterPage> {
               S.current.transfer_from_account,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: HsgColors.firstDegreeText,
+                fontSize: 15,
+              ),
             ),
           ),
           InkWell(
@@ -683,9 +701,11 @@ class _TransferInterPageState extends State<TransferInterPage> {
                 _payeeCcy = rowListPartner.ccy;
                 _countryText = rowListPartner.district;
                 _countryCode = rowListPartner.district;
-                _bankNameController.text = _language == 'zh_CN'
-                    ? rowListPartner.payeeBankLocalName
-                    : rowListPartner.payeeBankEngName;
+                if (_language == 'zh_CN' || _language == 'zh_HK') {
+                  _bankNameController.text = rowListPartner.payeeBankLocalName;
+                } else {
+                  _bankNameController.text = rowListPartner.payeeBankEngName;
+                }
                 _bankSwiftController.text = rowListPartner.bankSwift;
                 payeeBankCode = rowListPartner.bankCode;
                 payerBankCode = rowListPartner.payerBankCode;
@@ -1022,8 +1042,11 @@ class _TransferInterPageState extends State<TransferInterPage> {
         transferFeeList.clear();
         transferFeeCodeList.clear();
         data.publicCodeGetRedisRspDtoList.forEach((e) {
-          if (_language == 'zh_CN' || _language == 'zh_HK') {
+          if (_language == 'zh_CN') {
             transferFeeList.add(e.cname);
+            transferFeeCodeList.add(e.code);
+          } else if (_language == 'zh_HK') {
+            transferFeeList.add(e.chName);
             transferFeeCodeList.add(e.code);
           } else {
             transferFeeList.add(e.name);

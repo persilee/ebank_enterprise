@@ -1,3 +1,4 @@
+import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_detail_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -82,8 +83,11 @@ class _ApprovalHistoryDetailPageState extends State<ApprovalHistoryDetailPage> {
                 children: [
                   Text(
                     title,
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: HsgColors.firstDegreeText,
+                    ),
                   ),
                 ],
               ),
@@ -113,12 +117,17 @@ class _ApprovalHistoryDetailPageState extends State<ApprovalHistoryDetailPage> {
                 children: [
                   Text(
                     name,
-                    style: TextStyle(fontSize: 13.0),
+                    style: TextStyle(
+                      fontSize: 13.0,
+                      color: HsgColors.firstDegreeText,
+                    ),
                   ),
                   Text(
                     value,
                     style: TextStyle(
-                        fontSize: 13.0, color: Color(int.parse('0xff7A7A7A'))),
+                      fontSize: 13.0,
+                      color: HsgColors.secondDegreeText,
+                    ),
                   ),
                 ],
               ),

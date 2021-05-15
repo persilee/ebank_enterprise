@@ -6,14 +6,14 @@ import 'package:ai_decimal_accuracy/ai_decimal_accuracy.dart';
 /// Date: 2020-12-14
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
-import 'package:ebank_mobile/data/source/model/get_public_parameters.dart';
-import 'package:ebank_mobile/data/source/model/get_single_card_bal.dart';
-import 'package:ebank_mobile/data/source/model/get_td_prod_inst_code.dart';
-import 'package:ebank_mobile/data/source/model/get_td_product_term_rate.dart';
+import 'package:ebank_mobile/data/source/model/account/get_single_card_bal.dart';
 import 'package:ebank_mobile/data/source/model/other/forex_trading.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_contract.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_contract_trial.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_td_prod_inst_code.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_td_product_term_rate.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
@@ -948,17 +948,26 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
     double _payerAmount = 0;
     if ((inputValue.text).length == 0 ||
         double.parse(inputValue.text) < double.parse(_minAmt) ||
-        double.parse(inputValue.text) > double.parse(_maxAmt)) {
+        (double.parse(_maxAmt) > 0 &&
+            double.parse(inputValue.text) > double.parse(_maxAmt))) {
       if (this.mounted) {
         setState(() {
           _amount = '0.00';
         });
       }
     } else if (_cardCcy == ccy) {
-      _amount = FormatUtil.formatSringToMoney((inputValue.text).toString());
-      _checkAmount = inputValue.text;
+      if (mounted) {
+        setState(() {
+          _amount = FormatUtil.formatSringToMoney((inputValue.text).toString());
+          _checkAmount = inputValue.text;
+        });
+      }
     } else {
-      _payerAmount = AiDecimalAccuracy.parse(inputValue.text).toDouble();
+      if (mounted) {
+        setState(() {
+          _payerAmount = AiDecimalAccuracy.parse(inputValue.text).toDouble();
+        });
+      }
 
       try {
         TransferTrialResp data = await ApiClient().transferTrial(
@@ -1197,6 +1206,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             // setState(() {
             if (language == 'zh_CN') {
               instructions.add(element.cname);
+            } else if (language == 'zh_HK') {
+              instructions.add(element.chName);
             } else {
               instructions.add(element.name);
             }

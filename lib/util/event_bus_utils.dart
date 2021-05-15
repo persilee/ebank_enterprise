@@ -1,4 +1,4 @@
-import 'package:ebank_mobile/data/source/model/get_user_info.dart';
+import 'package:ebank_mobile/data/source/model/account/get_user_info.dart';
 import 'package:event_bus/event_bus.dart';
 
 ///event bus

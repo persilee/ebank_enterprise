@@ -1,17 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list_bal_by_user.dart';
-import 'package:ebank_mobile/data/source/model/get_deposit_by_card_no.dart';
-import 'package:ebank_mobile/data/source/model/get_deposit_early_contract.dart';
-import 'package:ebank_mobile/data/source/model/get_deposit_limit_by_con_no.dart';
-import 'package:ebank_mobile/data/source/model/get_deposit_rate.dart';
-import 'package:ebank_mobile/data/source/model/get_deposit_record_info.dart';
-import 'package:ebank_mobile/data/source/model/get_deposit_trial.dart';
-import 'package:ebank_mobile/data/source/model/get_td_prod_inst_code.dart';
-import 'package:ebank_mobile/data/source/model/get_td_product_term_rate.dart';
 
 import 'package:ebank_mobile/data/source/model/time_deposit_contract.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_contract_trial.dart';
 import 'package:ebank_mobile/data/source/model/time_deposit_product.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_by_card_no.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_early_contract.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_limit_by_con_no.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_rate.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_record_info.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_trial.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_td_prod_inst_code.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_td_product_term_rate.dart';
 import 'package:ebank_mobile/data/source/model/update_time_deposit_con_info.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';

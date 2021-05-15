@@ -3,7 +3,7 @@
 /// Author: pengyikang
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/source/model/login.dart';
+import 'package:ebank_mobile/data/source/model/login_register/login.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_packaging.dart';
@@ -64,8 +64,11 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
                     padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
                     child: Text(
                       S.current.register_success,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: HsgColors.firstDegreeText,
+                      ),
                     ),
                   )
                 ],
@@ -77,7 +80,10 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
               height: 50,
               text: Text(
                 S.current.complete,
-                style: TextStyle(fontSize: 14, color: Colors.white),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white,
+                ),
               ),
               clickCallback: () {
                 _login();

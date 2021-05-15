@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +27,7 @@ Widget getRegisterRow(
       inputFormatters: inputFormatters,
       controller: controlText,
       obscureText: password,
+      style: TEXTFIELD_TEXT_STYLE,
       // textAlign: TextAlign.right,
       // onChanged: ,
       decoration: InputDecoration(
