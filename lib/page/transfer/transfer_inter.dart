@@ -556,6 +556,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
               autofocus: false,
               controller: _payerAddressController,
               textAlign: TextAlign.end,
+              style: TEXTFIELD_TEXT_STYLE,
               inputFormatters: <TextInputFormatter>[
                 LengthLimitingTextInputFormatter(105), //限制长度
                 FilteringTextInputFormatter.allow(

@@ -1093,6 +1093,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         keyboardType: TextInputType.text,
         maxLines: 4,
         enabled: _offstage,
+        style: TEXTFIELD_TEXT_STYLE,
         decoration: InputDecoration(
           fillColor: Color(0xffF7F7F7),
           filled: false,

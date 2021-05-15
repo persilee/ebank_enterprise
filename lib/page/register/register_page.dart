@@ -148,6 +148,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                           keyboardType: TextInputType.number,
+                          style: TEXTFIELD_TEXT_STYLE,
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(
                                 RegExp("[0-9]")), //纯数字

@@ -303,6 +303,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
       focusNode: _focusNode,
       style: TextStyle(
         fontSize: 20,
+        color: HsgColors.firstDegreeText,
       ),
       textAlign: TextAlign.center,
       decoration: InputDecoration(

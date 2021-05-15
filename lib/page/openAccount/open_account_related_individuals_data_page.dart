@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/open_account_quick_submit_data.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/open_account_save_data.dart';
@@ -324,10 +325,7 @@ class _RelatedIndividualsDataPageState
                 // obscureText: this.isCiphertext,
                 textAlign: TextAlign.right,
                 inputFormatters: inputFormatters,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: HsgColors.firstDegreeText,
-                ),
+                style: TEXTFIELD_TEXT_STYLE,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: placeholderStr,
@@ -399,10 +397,7 @@ class _RelatedIndividualsDataPageState
                 controller: textEC,
                 textAlign: TextAlign.right,
                 maxLines: 1,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: HsgColors.firstDegreeText,
-                ),
+                style: FIRST_DEGREE_TEXT_STYLE,
                 decoration: InputDecoration(
                   // isCollapsed: true,
                   border: InputBorder.none,

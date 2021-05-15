@@ -346,6 +346,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       onChanged: (text) {
         setState(() {});
       },
+      style: TEXTFIELD_TEXT_STYLE,
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.allow(RegExp("[0-9]")),
         LengthLimitingTextInputFormatter(6), //限制长度
@@ -437,6 +438,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
               // inputFormatters: <TextInputFormatter>[
               //   LengthLimitingTextInputFormatter(6), //限制长度
               // ],
+              style: TEXTFIELD_TEXT_STYLE,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: placeholderText,

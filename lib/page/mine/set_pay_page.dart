@@ -253,6 +253,7 @@ class InputList extends StatelessWidget {
               autofocus: true, //是否自动对焦
               obscureText: true, //是否是密码
               textAlign: TextAlign.right, //文本对齐方式
+              style: TEXTFIELD_TEXT_STYLE,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
                 LengthLimitingTextInputFormatter(6), //限制长度

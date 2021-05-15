@@ -62,6 +62,7 @@ Widget getRegisterRegion(
               autocorrect: false,
               //是否自动获得焦点
               autofocus: true,
+              style: TEXTFIELD_TEXT_STYLE,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
                 LengthLimitingTextInputFormatter(11),

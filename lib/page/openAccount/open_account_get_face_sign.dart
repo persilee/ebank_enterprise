@@ -1,4 +1,5 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/face_sign_businessid.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -63,6 +64,7 @@ class _OpenAccountGetFaceSignPageState
                 child: TextField(
                   //是否自动更正
                   controller: _codeSignTextF,
+                  style: TEXTFIELD_TEXT_STYLE,
                   // autocorrect: true,
                   //是否自动获得焦点
                   // autofocus: true,

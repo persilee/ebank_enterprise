@@ -27,3 +27,5 @@ const AGREEMENT_JUMP_TEXT_STYLE =
 const HINET_TEXT_STYLE =
     TextStyle(fontSize: 15, color: HsgColors.textHintColor);
 const CONTENT_PADDING = EdgeInsets.only(left: 15, right: 15);
+const TEXTFIELD_TEXT_STYLE =
+    TextStyle(fontSize: 15, color: HsgColors.firstDegreeText);

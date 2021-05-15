@@ -119,6 +119,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
                         //_isInput,
                         //是否自动获得焦点
                         autofocus: true,
+                        style: TEXTFIELD_TEXT_STYLE,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: S.current.please_input_sms,
