@@ -6,6 +6,7 @@ import 'dart:convert';
 /// Date: 2021-03-17
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/open_account_Industry_two_data.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/open_account_get_data.dart';
@@ -436,10 +437,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
               // textDirection: TextDirection.ltr,
               maxLines: 2,
               inputFormatters: inputFormatters,
-              style: TextStyle(
-                fontSize: 15,
-                color: HsgColors.firstDegreeText,
-              ),
+              style: TEXTFIELD_TEXT_STYLE,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: placeholderStr,
@@ -502,10 +500,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                 // obscureText: this.isCiphertext,
                 textAlign: TextAlign.right,
                 inputFormatters: inputFormatters,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: HsgColors.firstDegreeText,
-                ),
+                style: TEXTFIELD_TEXT_STYLE,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: placeholderStr,
@@ -579,10 +574,7 @@ class _OpenAccountBasicDataPageState extends State<OpenAccountBasicDataPage> {
                 // obscureText: this.isCiphertext,
                 textAlign: TextAlign.right,
                 maxLines: 1,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: HsgColors.firstDegreeText,
-                ),
+                style: FIRST_DEGREE_TEXT_STYLE,
                 decoration: InputDecoration(
                   // isCollapsed: true,
                   border: InputBorder.none,

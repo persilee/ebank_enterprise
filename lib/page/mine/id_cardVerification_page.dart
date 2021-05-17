@@ -672,6 +672,7 @@ class InputList extends StatelessWidget {
                       // print('submit $text');
                     },
                     enabled: true,
+                    style: TEXTFIELD_TEXT_STYLE,
                     //是否禁用
                     decoration: InputDecoration(
                       border: InputBorder.none,

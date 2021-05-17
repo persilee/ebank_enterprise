@@ -506,9 +506,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
               FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
               LengthLimitingTextInputFormatter(12),
             ],
-            style: TextStyle(
-              fontSize: 14,
-            ),
+            style: FIRST_DEGREE_TEXT_STYLE,
             autocorrect: false,
             autofocus: false,
             keyboardType: TextInputType.numberWithOptions(decimal: true),

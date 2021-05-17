@@ -7,6 +7,7 @@
  */
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -119,6 +120,7 @@ Widget _fiveRowRight(Function nameChanges, String hintText, String forSelect,
         //是否自动获得焦点
         autofocus: false,
         controller: _controller,
+        style: FIRST_DEGREE_TEXT_STYLE,
         textAlign: TextAlign.right,
         decoration: InputDecoration(
           border: InputBorder.none,

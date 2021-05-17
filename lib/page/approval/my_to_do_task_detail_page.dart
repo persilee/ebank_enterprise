@@ -580,8 +580,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _internationalList.add(_buildContentItem(
             S.current.approve_swift_code, data?.bankSwift ?? ''));
         _internationalList.add(_buildContentItem(
-            S.current.approve_collecting_bank,
-            data?.payeeBankCode ?? _payeeBank ?? ''));
+            S.current.approve_collecting_bank, _payeeBank ?? ''));
         _internationalList.add(_buildContentItem(
             S.current.approve_collection_address, data?.payeeAddress ?? ''));
         _internationalList.add(
@@ -1094,6 +1093,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         keyboardType: TextInputType.text,
         maxLines: 4,
         enabled: _offstage,
+        style: TEXTFIELD_TEXT_STYLE,
         decoration: InputDecoration(
           fillColor: Color(0xffF7F7F7),
           filled: false,

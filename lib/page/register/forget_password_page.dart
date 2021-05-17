@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/account/check_sms.dart';
 import 'package:ebank_mobile/data/source/model/login_register/login_Verfiy_phone.dart';
@@ -119,6 +120,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                           //是否自动获得焦点
                           autofocus: true,
                           enabled: true,
+                          style: TEXTFIELD_TEXT_STYLE,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: S.current.please_input_sms,
@@ -192,6 +194,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       textAlign: TextAlign.end,
       keyboardType: TextInputType.number,
       controller: _sms,
+      style: FIRST_DEGREE_TEXT_STYLE,
       decoration: InputDecoration.collapsed(
         hintText: S.current.please_input,
         hintStyle: TextStyle(

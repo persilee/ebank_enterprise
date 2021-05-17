@@ -181,6 +181,7 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       onChanged: (text) {
         setState(() {});
       },
+      style: TEXTFIELD_TEXT_STYLE,
       decoration: InputDecoration.collapsed(
         hintText: S.current.please_enter,
         hintStyle: TextStyle(
@@ -370,6 +371,7 @@ class InputList extends StatelessWidget {
               autofocus: false, //是否自动对焦
               obscureText: true, //是否是密码
               textAlign: TextAlign.right, //文本对齐方式
+              style: TEXTFIELD_TEXT_STYLE,
               inputFormatters: <TextInputFormatter>[
                 // FilteringTextInputFormatter.allow(RegExp("[0-9]")), //纯数字
                 LengthLimitingTextInputFormatter(16), //限制长度

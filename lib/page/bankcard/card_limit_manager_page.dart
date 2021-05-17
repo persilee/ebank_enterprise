@@ -77,7 +77,7 @@ class _CardLimitManagerPageState extends State<CardLimitManagerPage> {
                             child: TextField(
                               autofocus: true,
                               textAlign: TextAlign.right,
-                              style: TextStyle(fontSize: 14),
+                              style: FIRST_DEGREE_TEXT_STYLE,
                               controller: tranAmtLimitController,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
@@ -111,7 +111,7 @@ class _CardLimitManagerPageState extends State<CardLimitManagerPage> {
                             height: 22,
                             child: TextField(
                               textAlign: TextAlign.right,
-                              style: TextStyle(fontSize: 14),
+                              style: FIRST_DEGREE_TEXT_STYLE,
                               controller: tranDailyAmtLimitController,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
@@ -146,7 +146,7 @@ class _CardLimitManagerPageState extends State<CardLimitManagerPage> {
                             height: 22,
                             child: TextField(
                               textAlign: TextAlign.right,
-                              style: TextStyle(fontSize: 14),
+                              style: FIRST_DEGREE_TEXT_STYLE,
                               controller: tranDailyNumLimitController,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
