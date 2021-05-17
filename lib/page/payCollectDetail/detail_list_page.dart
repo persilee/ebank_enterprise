@@ -2,7 +2,7 @@
 /// 收支明细
 /// Author: CaiTM
 /// Date: 2020-12-07
-
+import 'package:date_format/date_format.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
@@ -23,10 +23,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_tableview/flutter_tableview.dart';
-import 'package:date_format/date_format.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
@@ -469,6 +467,8 @@ class _DetailListPageState extends State<DetailListPage> {
             _time = _start + "—" + _end;
             _page = 1;
             _transferHistoryList.clear();
+            ddFinHisDTOList.clear();
+            _isLoading = true;
           });
           Navigator.of(context).pop();
           if (_position != 0) {
@@ -946,8 +946,12 @@ class _DetailListPageState extends State<DetailListPage> {
       if (_position != 0) {
         _accNoList.clear();
         _accNoList.add(_cardList[result]);
+        _isLoading = true;
+        _turnKey = '';
         _getRevenueByCards(_startDate, _accNoList);
       } else {
+        _turnKey = '';
+        _isLoading = true;
         _getRevenueByCards(_startDate, _allAccNoList);
       }
     }
