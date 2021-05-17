@@ -2,7 +2,6 @@
 ///跨行转账
 /// Author: fangluyao
 /// Date: 2021-04-15
-
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
@@ -17,7 +16,6 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
-import 'package:ebank_mobile/page/transfer/data/transfer_international_data.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
@@ -31,6 +29,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../page_route.dart';
+import 'data/transfer_international_data.dart';
 
 class TransferInterPage extends StatefulWidget {
   TransferInterPage({Key key}) : super(key: key);
@@ -234,7 +233,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
       _countryText = rowPartner.district;
       _countryCode = rowPartner.district;
       _payeeAddressController.text =
-      rowPartner == null ? '' : rowPartner.payeeAddress;
+          rowPartner == null ? '' : rowPartner.payeeAddress;
       _boolBut();
       check = true;
     }
@@ -685,7 +684,6 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   //增加转账伙伴图标
   Widget _getImage() {
-
     return InkWell(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -1092,48 +1090,54 @@ class _TransferInterPageState extends State<TransferInterPage> {
     String ac = _payerAccount;
     String amt = _payerTransferController.text;
     String ccy = _payerCcy;
-    if(payeeName.isEmpty) {
+    if (payeeName.isEmpty) {
       payeeName = _payeeNameController.text;
     }
-    if(payeeBankCode.isEmpty) {
+    if (payeeBankCode.isEmpty) {
       payeeBankCode = _bankSwiftController.text;
     }
     Transfer().queryFee(QueryFeeReq(ac, amt, ccy, custId)).then((data) {
       _pFee = data.recordLists[0].pFee;
       _feeCode = data.recordLists[0].feeC;
-      Navigator.pushNamed(
-        context,
-        pageTransferInternationalPreview,
-        arguments: TransferInternationalData(
-          _opt,
-          _payerAccount,
-          _payerTransferController.text,
-          _payerCcy,
-          "",
-          _payeeNameController.text,
-          _payeeAccountController.text,
-          _payeeTransferController.text,
-          _payeeCcy,
-          _payeeAddressController.text,
-          _countryText,
-          _bankNameController.text,
-          _bankSwiftController.text,
-          "",
-          _transferFee,
-          "",
-          _remarkController.text,
-          payeeBankCode,
-          payeeName,
-          payerBankCode,
-          payerName,
-          _countryCode,
-          rate,
-          // _transferFeeIndex.toString(),
-          _transferFeeCode,
-          _pFee,
-          _feeCode,
-        ),
-      );
+      if (double.parse(_pFee) > double.parse(amt)) {
+        HSProgressHUD.showToastTip(
+          S.current.transfer_less_than_feeAmount,
+        );
+      } else {
+        Navigator.pushNamed(
+          context,
+          pageTransferInternationalPreview,
+          arguments: TransferInternationalData(
+            _opt,
+            _payerAccount,
+            _payerTransferController.text,
+            _payerCcy,
+            "",
+            _payeeNameController.text,
+            _payeeAccountController.text,
+            _payeeTransferController.text,
+            _payeeCcy,
+            _payeeAddressController.text,
+            _countryText,
+            _bankNameController.text,
+            _bankSwiftController.text,
+            "",
+            _transferFee,
+            "",
+            _remarkController.text,
+            payeeBankCode,
+            payeeName,
+            payerBankCode,
+            payerName,
+            _countryCode,
+            rate,
+            // _transferFeeIndex.toString(),
+            _transferFeeCode,
+            _pFee,
+            _feeCode,
+          ),
+        );
+      }
       HSProgressHUD.dismiss();
     }).catchError((e) {
       HSProgressHUD.showToast(e);

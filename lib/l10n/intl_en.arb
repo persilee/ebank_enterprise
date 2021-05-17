@@ -616,6 +616,7 @@
   "error_refresh": "Refresh",
   "error_title": "Unknown error",
   "error_desc": "Please refresh...",
+  "transfer_less_than_feeAmount": "The transfer amount must not be less than the commission amount",
   "lishaoying_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李少颖（待办）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "lijiawei_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>李家伟（开户）>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "openAccout_basicInformation": "General Information",

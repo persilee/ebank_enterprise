@@ -128,7 +128,7 @@ packages:
       name: camera
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.7.0+2"
+    version: "0.7.0+4"
   camera_platform_interface:
     dependency: transitive
     description:
@@ -717,7 +717,7 @@ packages:
       name: popup_window
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.2"
   pretty_dio_logger:
     dependency: "direct main"
     description:
