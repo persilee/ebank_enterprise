@@ -96,11 +96,6 @@ abstract class ApiClientTimeDeposit {
   @POST('/tdep/timeDeposit/getStaticInterestRate')
   Future<DepositRateResp> getDepositRate(@Body() GetDepositRate req);
 
-  /// 获取多张卡余额 ----账户汇总
-  @POST('/cust/bankcard/getCardListBalByUser')
-  Future<GetCardListBalByUserResp> getCardListBalByUser(
-      @Body() GetCardListBalByUserReq req);
-
   /// 根据产品代码获取产品支持的待办指示
   @POST('/tdep/timeDeposit/getTdProdInstCode')
   Future<GetTdProductInstCodeResp> getTdProdInstCode(

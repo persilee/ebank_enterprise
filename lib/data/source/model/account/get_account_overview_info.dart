@@ -18,9 +18,9 @@ class GetTotalAssetsReq {
   String ccy;
 
   GetTotalAssetsReq(
-    this.userId,
+    // this.userId,
     this.ciNo,
-    this.ccy,
+    // this.ccy,
   );
 
   @override
@@ -48,8 +48,14 @@ class GetTotalAssetsResp extends Object {
   @JsonKey(name: 'netAssets')
   String netAssets;
 
+  @JsonKey(name: 'ddTotal')
+  String ddTotal;
+
   @JsonKey(name: 'tdTotal')
   String tdTotal;
+
+  @JsonKey(name: 'lnTotal')
+  String lnTotal;
 
   @JsonKey(name: 'cardListBal')
   List<TotalAssetsCardListBal> cardListBal;
@@ -62,7 +68,9 @@ class GetTotalAssetsResp extends Object {
     this.totalAssets,
     this.totalLiability,
     this.netAssets,
+    this.ddTotal,
     this.tdTotal,
+    this.lnTotal,
     this.cardListBal,
     this.tedpListBal,
   );
@@ -175,37 +183,37 @@ class GetCardListBalByUserReqToGetAccount {
       _$GetCardListBalByUserReqToGetAccountToJson(this);
 }
 
-@JsonSerializable()
-class GetCardListBalByUserResp extends Object {
-  @JsonKey(name: 'cardListBalByAccount')
-  List<CardListBalByAccount> cardListBal;
-  @JsonKey(name: 'totalAmt')
-  String totalAmt;
-  @JsonKey(name: 'defaultCcy')
-  String defaultCcy;
-  @JsonKey(name: 'ddTotalAmt')
-  String ddTotalAmt;
-  @JsonKey(name: 'tdTotalAmt')
-  String tdTotalAmt;
+// @JsonSerializable()
+// class GetCardListBalByUserResp extends Object {
+//   @JsonKey(name: 'cardListBalByAccount')
+//   List<CardListBalByAccount> cardListBal;
+//   @JsonKey(name: 'totalAmt')
+//   String totalAmt;
+//   @JsonKey(name: 'defaultCcy')
+//   String defaultCcy;
+//   @JsonKey(name: 'ddTotalAmt')
+//   String ddTotalAmt;
+//   @JsonKey(name: 'tdTotalAmt')
+//   String tdTotalAmt;
 
-  GetCardListBalByUserResp(
-    this.cardListBal,
-    this.totalAmt,
-    this.defaultCcy,
-    this.ddTotalAmt,
-    this.tdTotalAmt,
-  );
+//   GetCardListBalByUserResp(
+//     this.cardListBal,
+//     this.totalAmt,
+//     this.defaultCcy,
+//     this.ddTotalAmt,
+//     this.tdTotalAmt,
+//   );
 
-  @override
-  String toString() {
-    return toJson().toString();
-  }
+//   @override
+//   String toString() {
+//     return toJson().toString();
+//   }
 
-  factory GetCardListBalByUserResp.fromJson(Map<String, dynamic> srcJson) =>
-      _$GetCardListBalByUserRespFromJson(srcJson);
+//   factory GetCardListBalByUserResp.fromJson(Map<String, dynamic> srcJson) =>
+//       _$GetCardListBalByUserRespFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$GetCardListBalByUserRespToJson(this);
-}
+//   Map<String, dynamic> toJson() => _$GetCardListBalByUserRespToJson(this);
+// }
 
 @JsonSerializable()
 class CardListBalByAccount extends Object {
