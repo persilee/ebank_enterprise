@@ -793,7 +793,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         );
         _earlyRedTdList.add(_buildTitle(S.current.approve_billing_info));
         _earlyRedTdList.add(_buildContentItem(
-            S.current.approve_settlement_account, data?.settDdAc ?? ''));
+            S.current.approve_settlement_account,
+            data?.transferAc ?? '')); //data?.settDdAc
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_settlement_amount,
             data?.ccy == 'JPY'

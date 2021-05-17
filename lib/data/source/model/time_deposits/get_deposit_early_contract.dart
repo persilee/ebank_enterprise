@@ -40,19 +40,20 @@ class GetDepositEarlyContractReq extends Object {
 
   @JsonKey(name: 'mainAc')
   String mainAc;
-
+  //结清金额
   @JsonKey(name: 'matAmt')
   double matAmt;
-
+  //部分结清金额
   @JsonKey(name: 'matBal')
   double matBal;
 
   @JsonKey(name: 'pnltFee')
   double pnltFee;
 
+  //还款金额。部分还是全部
   @JsonKey(name: 'settBal')
   double settBal;
-
+  //结算账户
   @JsonKey(name: 'settDdAc')
   String settDdAc;
 
@@ -61,7 +62,7 @@ class GetDepositEarlyContractReq extends Object {
 
   @JsonKey(name: 'tenor')
   String tenor;
-
+  //转入账户
   @JsonKey(name: 'transferAc')
   String transferAc;
 
