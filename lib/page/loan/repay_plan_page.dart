@@ -217,9 +217,8 @@ class _RepayPlanState extends State<RepayPlanPage> {
     // 未到期 1.未还款 2，部分还款 3.已还款 不显示还款
     // 已到期未逾期 1.未还款 2，部分还款 3.已还款  显示还款
     // 已逾期 1.未还款 2，部分还款 3.已还款  显示还款
-    //
     // 存在逾期未还款。需要先还逾期的，再还当前期数。
-    //
+
     // var instalType = lnSchedule.paySts; //还款状态 0：未还 1：逾期 2：已还
     // var repay = '还款'; //还款
     // switch (instalType) {

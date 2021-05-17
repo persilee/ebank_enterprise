@@ -56,6 +56,7 @@ class _UserAgreementPageState extends State<UserAgreementPage> {
     HSProgressHUD.show();
     ApiClientAccount().getUserPact(GetUserAgreementReq(pactId)).then((data) {
       String _language = Intl.getCurrentLocale();
+      HSProgressHUD.dismiss();
       setState(() {
         if (_language == 'zh_CN') {
           //简体中文

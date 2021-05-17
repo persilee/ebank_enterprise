@@ -24,6 +24,7 @@ import 'package:ebank_mobile/util/pay_password_check.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
+import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 
@@ -123,6 +124,10 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   bool _btnIsLoadingUN = false; // 返回按钮
   bool _btnIsEnable = true;
 
+  bool _isAllSettlement = false; //部分结清，全部结清
+
+  var _moneyController = new TextEditingController(); //申请金额文本监听器
+  var _editMoney = ''; //编辑的金额
   //获取网络请求
   @override
   void initState() {
@@ -130,6 +135,20 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     _getInsCode();
     _getDetail();
     _loadData();
+    _moneyController.addListener(() {
+      if (_moneyController.text.length > 0 &&
+          double.parse(_moneyController.text) > double.parse(bal)) {
+        //不能超过最大限额
+        _moneyController.text = bal; //formatDouble(bal, 2);
+        _editMoney = bal;
+        _moneyController.selection =
+            TextSelection.collapsed(offset: _moneyController.text.length);
+        HSProgressHUD.showToastTip(S.current.time_deposit_withdrawals_tips);
+      } else {
+        _editMoney = _moneyController.text;
+      }
+      print(_moneyController.text);
+    });
   }
 
   //右箭头图标
@@ -452,8 +471,18 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                   //币种
                   _unit(S.current.currency, ccy, true, false),
                   //存入金额
-                  _unit(S.current.deposit_amount,
-                      FormatUtil.formatSringToMoney(bal), true, false),
+                  // _unit(S.current.deposit_amount,
+                  //     FormatUtil.formatSringToMoney(bal), true, false),
+                  TextFieldContainer(
+                    //申请金额
+                    title: S.current.deposit_amount,
+                    hintText: S.current.please_input + S.current.amount,
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    controller: _moneyController,
+                    callback: _checkloanIsClick,
+                    isMoney: true,
+                  ),
                   //存期
                   _unit(S.current.deposit_term, auctCale + _termUnit, true,
                       false),
@@ -535,12 +564,19 @@ class _PageDepositInfo extends State<PageDepositInfo> {
               isOutline: true,
               margin: EdgeInsets.all(15),
               text: Text(
-                S.current.repayment_type2,
+                _isAllSettlement
+                    ? S.current.repayment_type2
+                    : S.current.time_deposit_change_Settlement,
                 style: TextStyle(
                     color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
                     fontSize: 14.0),
               ),
               clickCallback: () {
+                if (_editMoney.length <= 0) {
+                  HSProgressHUD.showToastTip(
+                      S.current.please_input + S.current.amount);
+                  return;
+                }
                 if (this.mounted) {
                   setState(() {
                     _btnIsLoadingR = true;
@@ -584,12 +620,25 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   _showTimeDepositEarlyTip() {
     String conMatAmts = FormatUtil.formatSringToMoney('$conMatAmt');
     String matAmts = FormatUtil.formatSringToMoney('$matAmt');
+    var _appendTitle = '';
+    if (_isAllSettlement) {
+      _appendTitle = S.current.contract_settlement_amt +
+          ' $ccy $conMatAmts\n' +
+          S.current.early_settlement_amt +
+          ' $ccy $matAmts';
+    } else {
+      _appendTitle = S.current.contract_settlement_amt +
+          ' $ccy $conMatAmts\n' +
+          S.current.time_deposit_Settlement_title +
+          ' ' +
+          ' $ccy $matAmts';
+    }
+
     _verificationDialog(
-        S.current.confirm_to_early_settlement,
-        S.current.contract_settlement_amt +
-            ' $ccy $conMatAmts\n' +
-            S.current.early_settlement_amt +
-            ' $ccy $matAmts',
+        _isAllSettlement
+            ? S.current.confirm_to_early_settlement
+            : S.current.time_deposit_change_Settlement,
+        _appendTitle,
         _select);
   }
 
@@ -597,16 +646,16 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   _loadDepositData() {
     HSProgressHUD.show();
     Future.wait({
-      // DepositDataRepository()
-      ApiClientTimeDeposit()
-          .getDepositTrial(GetDepositTrialReq(bal, conNos, bal))
+      ApiClientTimeDeposit().getDepositTrial(
+          GetDepositTrialReq(bal, conNos, _editMoney)) // bal  bal
     }).then((value) {
       HSProgressHUD.dismiss();
       value.forEach((element) {
         if (this.mounted) {
           setState(() {
             conMatAmt = element.conMatAmt;
-            matAmt = element.matAmt;
+            matAmt =
+                _isAllSettlement ? element.matAmt : element.matBal; // 需要做判断
             eryInt = element.eryInt;
             eryRate = element.eryRate;
             mainAc = element.mainAc;
@@ -623,6 +672,19 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     });
   }
 
+  //判断是部分还清还会全部还清
+  _checkloanIsClick() {
+    if (double.parse(_moneyController.text) < double.parse(bal)) {
+      print('部分还清');
+      setState(() {});
+      _isAllSettlement = false;
+    } else {
+      print('全部还清');
+      setState(() {});
+      _isAllSettlement = true;
+    }
+  }
+
 // 提前结清接口调整
   _contractEarly(BuildContext context) {
     if (this.mounted) {
@@ -630,33 +692,30 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     }
 
     HSProgressHUD.show();
-    // DepositDataRepository()
-    ApiClientTimeDeposit()
-        .getDepositEarlyContract(
-      GetDepositEarlyContractReq(
-        _trialResp.bal ?? '',
-        _trialResp.ccy ?? '',
-        double.parse(_trialResp.clsInt ?? '0'),
-        double.parse(_trialResp.clsRate ?? '0'),
-        conNos,
-        _trialResp.mtDate ?? '',
-        double.parse(eryInt),
-        double.parse(eryRate),
-        double.parse(_trialResp.hdlFee ?? '0'),
-        _trialResp.mainAc ?? '',
-        double.parse(_trialResp.matAmt ?? '0'),
-        double.parse(_trialResp.matBal ?? '0'),
-        double.parse(_trialResp.pnltFee ?? '0'),
-        double.parse(_trialResp.settBal ?? '0'),
-        widget.deposit.settDdAc ?? '',
-        widget.deposit.conSts ?? '',
-        widget.deposit.tenor ?? '',
-        widget.deposit.settDdAc ?? '', //_paymentAc,
-        'all',
-        _trialResp.valDate ?? '',
-      ),
-    )
-        .then((value) {
+    GetDepositEarlyContractReq req = GetDepositEarlyContractReq(
+      _trialResp.bal ?? '',
+      _trialResp.ccy ?? '',
+      double.parse(_trialResp.clsInt ?? '0'),
+      double.parse(_trialResp.clsRate ?? '0'),
+      conNos,
+      _trialResp.mtDate ?? '',
+      double.parse(eryInt),
+      double.parse(eryRate),
+      double.parse(_trialResp.hdlFee ?? '0'),
+      _trialResp.mainAc ?? '',
+      double.parse(_trialResp.matAmt ?? '0'),
+      double.parse(_trialResp.matBal ?? '0'),
+      double.parse(_trialResp.pnltFee ?? '0'),
+      double.parse(_editMoney), //_trialResp.settBal ?? '0'
+      widget.deposit.settDdAc ?? '', //
+      widget.deposit.conSts ?? '',
+      widget.deposit.tenor ?? '',
+      _changedSettAcTitle ?? widget.deposit.settDdAc, //_paymentAc,转入账户
+      _isAllSettlement ? 'all' : 'part',
+      _trialResp.valDate ?? '',
+    );
+
+    ApiClientTimeDeposit().getDepositEarlyContract(req).then((value) {
       HSProgressHUD.dismiss();
       _showContractSucceedPage(context);
     }).catchError((e) {
@@ -849,4 +908,6 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     Navigator.pushReplacementNamed(context, pageDepositRecordSucceed,
         arguments: 'timeDepositRecord');
   }
+
+  String formatDouble(String bal, int i) {}
 }
