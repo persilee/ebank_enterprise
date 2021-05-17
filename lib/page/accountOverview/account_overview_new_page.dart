@@ -1,3 +1,5 @@
+import 'dart:wasm';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 账户总览
 /// Author: CaiTM
@@ -5,14 +7,18 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/model/account/get_account_overview_info.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list_bal_by_user.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_bill.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
+import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
+import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
@@ -34,35 +40,65 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
   String tdTotal = '0';
   String lnTotal = '0';
 
+  int pageSize = 10;
+  String ddNextKey = '';
+  String tdNextKey = '';
+  String lnNextKey = '';
+  bool isShowDD = true;
+  bool isShowTD = false;
+  bool isShowLN = false;
+
   List<CardListBal> ddList = [];
   List<TedpListBal> tdList = [];
   List<LnListBal> lnList = [];
   List<String> cardNoList = [];
-  bool _isLoading = false;
+  bool _isLoading = true;
   bool _isNegative = false;
 
   //判断是否是总资产
   bool isTotalAsset = true;
-  //判断是否为总负债
-  bool isTotalLiabilities = false;
 
   RefreshController _refreshController;
+
+  bool _isDDLoading = true;
+  bool _isTDLoading = true;
+  bool _isLNLoading = true;
+  RefreshController _ddRefreshController;
+  RefreshController _tdRefreshController;
+  RefreshController _lnRefreshController;
 
   @override
   // ignore: must_call_super
   void initState() {
     _refreshController = new RefreshController();
+
+    _ddRefreshController = new RefreshController();
+    _tdRefreshController = new RefreshController();
+    _lnRefreshController = new RefreshController();
     // _getAccountOverviewInfo();
     // 网络请求
     // setState(() {
+    // _loadAssets();
+    // _loadDDNetWork();
     _getCardList();
     // });
+  }
+
+  @override
+  void dispose() {
+    _refreshController.dispose();
+
+    _ddRefreshController.dispose();
+    _tdRefreshController.dispose();
+    _lnRefreshController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(),
+      // body: _contentListView(),
       body: Column(
         children: [
           _isLoading
@@ -83,7 +119,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
                       _refreshController.footerMode.value =
                           LoadStatus.canLoading;
                     },
-                    content: _listView(),
+                    content: _contentListView(),
                   ),
                 ),
         ],
@@ -121,19 +157,25 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
               Color(0xFF3A9ED1),
             ], begin: Alignment.centerLeft, end: Alignment.centerRight),
           ),
-          child: _accountOverviewColumn(),
+          child: Column(
+            children: [
+              _accountOverviewColumn(),
+              // Container(
+              //   color: HsgColors.backgroundColor,
+              //   height: 12,
+              // ),
+              // isTotalAsset ? _assetsTDAndDD(context) : _liabilitiesLn(context),
+            ],
+          ),
         ),
-        preferredSize: Size(30, 155),
+        preferredSize: Size(30, 135), //200//135
       ),
     );
   }
 
-  _listView() {
-    return ListView(
+  _contentListView() {
+    Widget _listView = ListView(
       children: [
-        Container(
-          height: 12,
-        ),
         //  活期
         isTotalAsset
             ? Container(
@@ -216,7 +258,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
             : Container(),
 
         // 贷款
-        isTotalLiabilities
+        (!isTotalAsset)
             ? (lnTotal != '0')
                 ? Container(
                     color: Colors.white,
@@ -247,14 +289,14 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
                     ),
                   )
             : Container(),
-        isTotalLiabilities
+        (!isTotalAsset)
             ? (lnTotal != '0')
                 ? Container(
                     child: _lnTotalColumn(),
                   )
                 : Container()
             : Container(),
-        isTotalLiabilities
+        (!isTotalAsset)
             ? (lnTotal != '0')
                 ? Container(
                     child: ListView.builder(
@@ -269,13 +311,125 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
                 : Container()
             : Container(),
 
-        // Container(
-        //   child: Container(
-        //     height: 20,
-        //   ),
-        // ),
+        Container(
+          child: Container(
+            height: 20,
+          ),
+        ),
       ],
     );
+
+    Widget _headerAdapter = SliverToBoxAdapter(
+      child: Container(
+        height: 12,
+      ),
+    );
+
+    Widget _noDataWidget = Container(
+      height: MediaQuery.of(context).size.height / 2 + 10,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image(
+            image: AssetImage('images/noDataIcon/no_data_record.png'),
+            width: 160,
+          ),
+          Text(
+            S.current.no_data_now,
+            style: FIRST_DEGREE_TEXT_STYLE,
+          )
+        ],
+      ),
+    );
+
+    Widget _ddSliverView = ddList.length > 0
+        ? SliverList(
+            delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return _ddListView(index);
+            },
+            childCount: ddList.length,
+          ))
+        : SliverToBoxAdapter(
+            child: _noDataWidget,
+          );
+
+    Widget _tdSliverView = tdList.length > 0
+        ? SliverList(
+            delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return _tdListView(index);
+            },
+            childCount: tdList.length,
+          ))
+        : SliverToBoxAdapter(
+            child: _noDataWidget,
+          );
+
+    Widget _lnSliverView = lnList.length > 0
+        ? SliverList(
+            delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return _lnListView(index);
+            },
+            childCount: lnList.length,
+          ))
+        : SliverToBoxAdapter(
+            child: _noDataWidget,
+          );
+
+    List<Widget> showSlivers = [];
+    RefreshController refreshC;
+    Widget contentW;
+
+    if (isTotalAsset) {
+      showSlivers.add(_headerAdapter);
+      if (isShowDD) {
+        showSlivers.add(_ddSliverView);
+        refreshC = _ddRefreshController;
+        contentW = _isDDLoading
+            ? Expanded(
+                child: HsgLoading(),
+              )
+            : CustomScrollView(slivers: showSlivers);
+      } else {
+        showSlivers.add(_tdSliverView);
+        refreshC = _tdRefreshController;
+        contentW = _isTDLoading
+            ? Expanded(
+                child: HsgLoading(),
+              )
+            : CustomScrollView(slivers: showSlivers);
+      }
+    } else {
+      showSlivers.add(_headerAdapter);
+      showSlivers.add(_lnSliverView);
+      refreshC = _lnRefreshController;
+      contentW = _isLNLoading
+          ? Expanded(
+              child: HsgLoading(),
+            )
+          : CustomScrollView(slivers: showSlivers);
+    }
+
+    Widget _scrollView = CustomRefresh(
+      controller: refreshC,
+      onRefresh: () async {
+        // //刷新完成
+        // await _loadData(false);
+        await _loadListNetWorkEntr();
+        refreshC.refreshCompleted();
+        refreshC.footerMode.value = LoadStatus.canLoading;
+      },
+      onLoading: () async {
+        await _loadListNetWorkEntr();
+        refreshC.loadComplete();
+      },
+      content: contentW,
+    );
+
+    // return _scrollView;
+    return _listView;
   }
 
   //贷款列表
@@ -473,7 +627,8 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
                 setState(() {
                   print('点击总资产');
                   isTotalAsset = true;
-                  isTotalLiabilities = false;
+                  int showIndex = isShowDD ? 0 : 1;
+                  changeShowJudge(showIndex);
                 });
               },
               child: _netAssets(
@@ -494,7 +649,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
               onTap: () {
                 setState(() {
                   isTotalAsset = false;
-                  isTotalLiabilities = true;
+                  changeShowJudge(2);
                   print("点击总负债 $isTotalAsset");
                 });
               },
@@ -597,6 +752,151 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     );
   }
 
+//资产定期和活期列表的选项卡
+  Widget _assetsTDAndDD(BuildContext context) {
+    Widget _contentWidget = Row(
+      children: [
+        _assetsWidget(
+          context,
+          isShowDD,
+          S.current.demand_deposit,
+          ddCcy + ' ' + FormatUtil.formatSringToMoney(ddTotal),
+          () {
+            if (isShowDD == true) {
+              return;
+            }
+            changeShowJudge(0);
+          },
+        ),
+        _assetsWidget(
+          context,
+          isShowTD,
+          S.current.time_deposits,
+          localCcy + ' ' + FormatUtil.formatSringToMoney(tdTotal),
+          () {
+            if (isShowTD == true) {
+              return;
+            }
+            changeShowJudge(1);
+          },
+        ),
+        Container(
+          height: 10,
+        ),
+      ],
+    );
+
+    Widget _assetsTDDDWidget = Container(
+      color: Color(0xFFE2E8EC),
+      child: _contentWidget,
+    );
+
+    return _assetsTDDDWidget;
+  }
+
+  //负债贷款列表的选项卡
+  Widget _liabilitiesLn(BuildContext context) {
+    Widget _contentWidget = Row(
+      children: [
+        _assetsWidget(
+          context,
+          isShowLN,
+          S.current.loan,
+          localCcy + ' ' + FormatUtil.formatSringToMoney(lnTotal),
+          () {
+            if (isShowLN == true) {
+              return;
+            }
+            changeShowJudge(2);
+          },
+        ),
+        // _assetsWidget(
+        //   context,
+        //   false,
+        //   S.current.credit_card,
+        //   localCcy + ' ' + FormatUtil.formatSringToMoney(tdTotal),
+        // ),
+        Container(
+          height: 10,
+        ),
+      ],
+    );
+
+    Widget _liabilitiesLnWidget = Container(
+      color: Color(0xFFE2E8EC),
+      child: _contentWidget,
+    );
+
+    return _liabilitiesLnWidget;
+  }
+
+//活期和定期列表的选项卡模板
+  Widget _assetsWidget(
+    BuildContext context,
+    bool isSelect,
+    String titleStr,
+    String contentStr,
+    VoidCallback callback,
+  ) {
+    Widget _showConttentWidget = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 8),
+          child: Text(
+            titleStr,
+            style: TextStyle(
+              color: isSelect ? Color(0xFF3497CD) : HsgColors.secondDegreeText,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 5),
+          child: Text(
+            contentStr,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: TextStyle(
+              color: isSelect ? Color(0xFF3497CD) : HsgColors.secondDegreeText,
+              fontSize: 13,
+            ),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 8),
+          height: 3,
+          // color: Color(0xFF3497CD),
+          decoration: BoxDecoration(
+            color: isSelect ? Color(0xFF3497CD) : Colors.transparent,
+            borderRadius: BorderRadius.all(
+              Radius.circular(1.5),
+            ),
+          ),
+        ),
+      ],
+    );
+
+    Widget _btnWidget = FlatButton(
+      onPressed: () {
+        callback();
+      },
+      child: Container(),
+    );
+    Widget _assetsWidget = Container(
+      width: MediaQuery.of(context).size.width / 2,
+      padding: EdgeInsets.only(left: 15, right: 15),
+      child: Stack(
+        children: [
+          _showConttentWidget,
+          _btnWidget,
+        ],
+      ),
+    );
+
+    return _assetsWidget;
+  }
+
   //净资产
   Column _totalAssets() {
     return Column(
@@ -642,18 +942,18 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
 
   Future<void> _getCardList() async {
     // CardDataRepository()
-    setState(() {
-      _isLoading = true;
-    });
+    // setState(() {
+    //   _isLoading = true;
+    // });
     ApiClientAccount().getCardList(GetCardListReq()).then((data) {
       if (data.cardList != null) {
-        if (mounted) {
-          setState(() {
-            data.cardList.forEach((item) {
-              cardNoList.add(item.cardNo);
-            });
-          });
-        }
+        // if (mounted) {
+        //   setState(() {
+        data.cardList.forEach((item) {
+          cardNoList.add(item.cardNo);
+        });
+        // });
+        // }
         _getAccountOverviewInfo();
       }
     }).catchError((e) {
@@ -666,17 +966,15 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
 
-    setState(() {
-      localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
-    });
+    // setState(() {
+    localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
+    // });
     // 一个接口拿活期，定期总额
     // DepositDataRepository()
-    ApiClientTimeDeposit()
+    ApiClientBill()
         .getCardListBalByUser(
       GetCardListBalByUserReq(
         '',
-        cardNoList,
-        localCcy,
         custID,
       ),
     )
@@ -694,10 +992,10 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
             }
             //定期列表
             tdList = data.tedpListBal;
-            // if (data.tdTotalAmt != '0') {
-            //定期合计
-            tdTotal = data.tdTotalAmt;
-            //  }
+            if (data.tdTotalAmt != '0') {
+              //定期合计
+              tdTotal = data.tdTotalAmt;
+            }
             //总负债
             lnTotal = data.lnTotalAmt;
             //贷款列表
@@ -722,5 +1020,168 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
       _isLoading = false;
       HSProgressHUD.showToast(e);
     });
+  }
+
+  void changeShowJudge(int showIndex) {
+    if (isTotalAsset) {
+      isShowDD = false;
+      isShowTD = false;
+    } else {
+      isShowLN = false;
+    }
+
+    switch (showIndex) {
+      case 0:
+        isShowDD = true;
+        if (_isDDLoading == true) {
+          _loadListNetWorkEntr();
+        }
+        break;
+      case 1:
+        isShowTD = true;
+        if (_isTDLoading == true) {
+          _loadListNetWorkEntr();
+        }
+        break;
+      case 2:
+        isShowLN = true;
+        if (_isLNLoading == true) {
+          _loadListNetWorkEntr();
+        }
+        break;
+      default:
+    }
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void _loadAssets() async {
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID);
+    localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
+
+    try {
+      GetTotalAssetsResp resp =
+          await ApiClientBill().getTotalAssets(GetTotalAssetsReq(custID));
+      setState(() {
+        totalAssets = resp.totalAssets;
+        netAssets = resp.netAssets;
+        totalLiabilities = resp.totalLiability;
+        ddTotal = resp.ddTotal;
+        tdTotal = resp.tdTotal;
+        lnTotal = resp.lnTotal;
+      });
+    } catch (e) {
+      HSProgressHUD.showToast(e);
+    }
+  }
+
+  Future<void> _loadListNetWorkEntr() async {
+    // 0 DD 1 TD 2 LN
+    int currentlyShowIndex = 0;
+    if (isTotalAsset) {
+      if (isShowDD) {
+        currentlyShowIndex = 0;
+      } else {
+        currentlyShowIndex = 1;
+      }
+    } else {
+      // if (isShowLN) {
+      //   currentlyShowIndex = 2;
+      // } else {
+      currentlyShowIndex = 2;
+      // }
+    }
+
+    switch (currentlyShowIndex) {
+      case 0:
+        return _loadDDNetWork();
+        break;
+      case 1:
+        return _loadTDNetWork();
+        break;
+      case 2:
+        return _loadLNNetWork();
+        break;
+      default:
+        return _loadDDNetWork();
+    }
+  }
+
+  Future<void> _loadDDNetWork() async {
+    try {
+      GetCardListBalByUserResp resp = await _loadListNetWork('SA', ddNextKey);
+      if (mounted) {
+        _isDDLoading = false;
+        if (ddNextKey == '' && ddNextKey == null) {
+          ddList = resp.cardListBal;
+        } else {
+          ddList.addAll(resp.cardListBal);
+        }
+        ddNextKey = resp.nextKey;
+
+        if (resp.nextKey == null && resp.nextKey == '') {
+          _ddRefreshController.loadNoData();
+        }
+      }
+    } catch (e) {
+      HSProgressHUD.showToast(e);
+    }
+  }
+
+  Future<void> _loadTDNetWork() async {
+    try {
+      GetCardListBalByUserResp resp = await _loadListNetWork('TD', tdNextKey);
+      if (mounted) {
+        _isTDLoading = false;
+        if (tdNextKey == '' && tdNextKey == null) {
+          tdList = resp.tedpListBal;
+        } else {
+          tdList.addAll(resp.tedpListBal);
+        }
+        tdNextKey = resp.nextKey;
+
+        if (resp.nextKey == null && resp.nextKey == '') {
+          _tdRefreshController.loadNoData();
+        }
+      }
+    } catch (e) {
+      HSProgressHUD.showToast(e);
+    }
+  }
+
+  Future<void> _loadLNNetWork() async {
+    try {
+      GetCardListBalByUserResp resp = await _loadListNetWork('LN', lnNextKey);
+      if (mounted) {
+        _isLNLoading = false;
+        if (lnNextKey == '' && lnNextKey == null) {
+          lnList = resp.lnListBal;
+        } else {
+          lnList.addAll(resp.lnListBal);
+        }
+        lnNextKey = resp.nextKey;
+
+        if (resp.nextKey == null && resp.nextKey == '') {
+          _lnRefreshController.loadNoData();
+        }
+      }
+    } catch (e) {
+      HSProgressHUD.showToast(e);
+    }
+  }
+
+  Future<GetCardListBalByUserResp> _loadListNetWork(
+      String accountType, String nextKey) async {
+    //SA：储蓄账户，CA往来账户，TD定期账户，LN贷款账户，不传查所有
+
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID);
+    return ApiClientBill().getCardListBalByUser(GetCardListBalByUserReq(
+      accountType,
+      custID,
+      nextKey: nextKey,
+    ));
   }
 }

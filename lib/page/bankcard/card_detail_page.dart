@@ -12,6 +12,7 @@ import 'package:ebank_mobile/data/source/model/account/get_single_card_bal.dart'
 
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_bill.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
@@ -222,8 +223,10 @@ class _CardDetailPageState extends State<CardDetailPage> {
       // CardDataRepository()
       ApiClientAccount().getCardLimitByCardNo(GetCardLimitByCardNoReq(cardNo)),
       // DepositDataRepository()
-      ApiClientTimeDeposit()
-          .getCardListBalByUser(GetCardListBalByUserReq('', [], '', ciNo))
+      ApiClientBill().getCardListBalByUser(GetCardListBalByUserReq(
+        '',
+        ciNo,
+      ))
     }).then((value) {
       value.forEach((element) {
         if (element is GetSingleCardBalResp) {

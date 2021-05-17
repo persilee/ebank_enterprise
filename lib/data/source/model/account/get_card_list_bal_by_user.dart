@@ -17,12 +17,16 @@ class GetCardListBalByUserReq extends Object {
   @JsonKey(name: 'ciNo')
   String ciNo;
 
+  @JsonKey(name: 'nextKey')
+  String nextKey;
+
   GetCardListBalByUserReq(
     this.accountType,
-    this.cardNoList,
+    this.ciNo, {
     this.ccy,
-    this.ciNo,
-  );
+    this.cardNoList,
+    this.nextKey,
+  });
 
   factory GetCardListBalByUserReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetCardListBalByUserReqFromJson(srcJson);
@@ -56,15 +60,20 @@ class GetCardListBalByUserResp extends Object {
   @JsonKey(name: 'lnListBal')
   List<LnListBal> lnListBal;
 
+  @JsonKey(name: 'nextKey')
+  String nextKey;
+
   GetCardListBalByUserResp(
-      this.cardListBal,
-      this.ddTotalAmt,
-      this.defaultCcy,
-      this.tdTotalAmt,
-      this.tedpListBal,
-      this.totalAmt,
-      this.lnTotalAmt,
-      this.lnListBal);
+    this.cardListBal,
+    this.ddTotalAmt,
+    this.defaultCcy,
+    this.tdTotalAmt,
+    this.tedpListBal,
+    this.totalAmt,
+    this.lnTotalAmt,
+    this.lnListBal,
+    this.nextKey,
+  );
 
   factory GetCardListBalByUserResp.fromJson(Map<String, dynamic> srcJson) =>
       _$GetCardListBalByUserRespFromJson(srcJson);
@@ -157,6 +166,7 @@ class TedpListBal extends Object {
 
   Map<String, dynamic> toJson() => _$TedpListBalToJson(this);
 }
+
 //贷款
 @JsonSerializable()
 class LnListBal extends Object {
