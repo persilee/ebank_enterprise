@@ -11,6 +11,7 @@ class CustomRefresh extends StatelessWidget {
   final VoidCallback onRefresh;
   final VoidCallback onLoading;
   final Widget content;
+  final bool enablePullUp;
 
   const CustomRefresh({
     Key key,
@@ -18,6 +19,7 @@ class CustomRefresh extends StatelessWidget {
     this.onRefresh,
     this.onLoading,
     this.content,
+    this.enablePullUp,
     Column child,
   }) : super(key: key);
 
@@ -32,7 +34,7 @@ class CustomRefresh extends StatelessWidget {
           child: SmartRefresher(
             controller: this.controller,
             enablePullDown: true,
-            enablePullUp: true,
+            enablePullUp: this.enablePullUp ?? true,
             header: CustomHeader(
               builder: (BuildContext context, RefreshStatus mode) {
                 Widget body;
@@ -63,6 +65,7 @@ class CustomRefresh extends StatelessWidget {
                 Widget body;
                 if (mode == LoadStatus.idle) {
                   body = Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         S.current.refresh_pull_loading,

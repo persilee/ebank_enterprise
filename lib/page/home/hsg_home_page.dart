@@ -235,6 +235,7 @@ class _HomePageState extends State<HomePage>
         appBar: _homeAppbar(_opacity, _changeLangBtnTltle),
         body: CustomRefresh(
           controller: _refreshController,
+          enablePullUp: false,
           onRefresh: () async {
             //刷新完成
             await _loadData(false);

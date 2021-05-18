@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:ebank_mobile/data/source/model/account/account_overview_all_data.dart';
 import 'package:ebank_mobile/data/source/model/account/get_account_overview_info.dart';
+import 'package:ebank_mobile/data/source/model/account/get_card_list_bal_by_user.dart';
 import 'package:ebank_mobile/data/source/model/account/get_pay_collect_detail.dart';
 import 'package:ebank_mobile/data/source/model/loan/application_loan.dart';
 import 'package:ebank_mobile/data/source/model/other/foreign_ccy.dart';
@@ -57,17 +58,22 @@ abstract class ApiClientBill {
   @POST('cust/minio/getFilePath')
   Future<GetFilePathResp> getFilePath(@Body() GetFilePathReq req);
 
-  /// 根据UserID获取用户多张卡余额（欧亚修改的账户总览接口）
-  @POST('/cust/bankcard/getCardListBalByUser')
-  Future<AccOverviewDataResp> getCardListBalById(
-      @Body() AccOverviewDataReq req);
+  // /// 根据UserID获取用户多张卡余额（欧亚修改的账户总览接口）
+  // @POST('/cust/bankcard/getCardListBalByUser')
+  // Future<AccOverviewDataResp> getCardListBalById(
+  //     @Body() AccOverviewDataReq req);
 
   /// 总资产
   @POST('/ddep/revenue/getTotalAssets')
   Future<GetTotalAssetsResp> getTotalAssets(@Body() GetTotalAssetsReq req);
 
-  /// 活期
+  /// 获取多张卡余额 ----账户汇总
   @POST('/cust/bankcard/getCardListBalByUser')
   Future<GetCardListBalByUserResp> getCardListBalByUser(
-      @Body() GetCardListBalByUserReqToGetAccount req);
+      @Body() GetCardListBalByUserReq req);
+
+  // /// 活期
+  // @POST('/cust/bankcard/getCardListBalByUser')
+  // Future<GetCardListBalByUserResp> getCardListBalByUser(
+  //     @Body() GetCardListBalByUserReqToGetAccount req);
 }

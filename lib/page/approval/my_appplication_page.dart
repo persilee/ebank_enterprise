@@ -196,9 +196,15 @@ class _MyApplicationPageState extends State<MyApplicationPage>
   //待办列表右侧信息
   Widget _rightInfo(ApprovalTask approvalTask) {
     String _result = '';
+    String _approveTime = '';
     String _language = Intl.getCurrentLocale();
     _resultTypeList.forEach((element) {
       if (element.code == approvalTask?.result) {
+        if(element.code == '0' || element.code == '2'){
+          _approveTime = S.current.creation_time;
+        } else {
+          _approveTime = S.current.approve_create_time;
+        }
         if (_language == 'zh_CN') {
           _result = element.cname;
         } else if (_language == 'zh_HK') {
@@ -288,7 +294,7 @@ class _MyApplicationPageState extends State<MyApplicationPage>
             _rowInformation(S.current.approve_result, _result ?? ''),
             //审批时间
             _rowInformation(
-                S.current.approve_create_time, approvalTask?.createTime ?? ''),
+                _approveTime, approvalTask?.createTime ?? ''),
           ],
         ),
       ),
