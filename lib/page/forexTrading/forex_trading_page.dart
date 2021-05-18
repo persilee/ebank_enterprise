@@ -447,6 +447,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
       _preview['sellAmt'] = _payeeTransferController.text;
       _preview['sellCcy'] = _payeeCcy;
       _preview['sellDac'] = _payeeAcc;
+      _preview['opt'] = _opt;
       Navigator.pushNamed(context, pageForexTradingPreview,
           arguments: _preview);
       // ApiClientBill()

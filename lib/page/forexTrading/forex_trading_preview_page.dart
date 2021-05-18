@@ -168,18 +168,18 @@ class _ForexTradingPreviewPageState extends State<ForexTradingPreviewPage> {
     Future.wait({
       ApiClientBill().foreignCcy(
         ForeignCcyReq(
-          _preview['buyAmt'],
-          _preview['buyCcy'],
-          _preview['buyDac'],
-          _preview['exRate'],
-          _preview['exTime'],
-          "",
-          _preview['prodCd'],
-          _preview['sellAmt'],
-          _preview['sellCcy'],
-          _preview['sellDac'],
-          "",
-        ),
+            _preview['buyAmt'],
+            _preview['buyCcy'],
+            _preview['buyDac'],
+            _preview['exRate'],
+            _preview['exTime'],
+            "",
+            _preview['prodCd'],
+            _preview['sellAmt'],
+            _preview['sellCcy'],
+            _preview['sellDac'],
+            "",
+            _preview['opt']),
       )
     }).then((value) {
       HSProgressHUD.dismiss();

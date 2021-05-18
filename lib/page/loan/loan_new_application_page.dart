@@ -509,12 +509,14 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
               text: S.current.loan_application_agreement1,
               style: AGREEMENT_TEXT_STYLE,
             ),
-            _conetentJump(S.current.loan_application_agreement2, '98822'),
+            _conetentJump(
+                S.current.loan_application_agreement2, 'licenseAgreement'),
             TextSpan(
               text: S.current.loan_application_agreement3,
               style: AGREEMENT_TEXT_STYLE,
             ),
-            _conetentJump(S.current.loan_application_agreement4, '99868'),
+            _conetentJump(
+                S.current.loan_application_agreement4, 'privacyPolicy'),
           ],
         ),
       ),

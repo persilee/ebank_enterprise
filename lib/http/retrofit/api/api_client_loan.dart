@@ -9,6 +9,7 @@ import 'package:ebank_mobile/data/source/model/loan/loan_creditlimit_cust.dart';
 import 'package:ebank_mobile/data/source/model/loan/loan_detail_modelList.dart';
 import 'package:ebank_mobile/data/source/model/loan/loan_prepayment_model.dart';
 import 'package:ebank_mobile/data/source/model/loan/loan_product_list.dart';
+import 'package:ebank_mobile/data/source/model/loan/loan_repayment_confim.dart';
 import 'package:ebank_mobile/data/source/model/loan/loan_repayment_record.dart';
 import 'package:ebank_mobile/data/source/model/loan/loan_trail_commit.dart';
 import 'package:ebank_mobile/data/source/model/loan/loan_trial_rate.dart';
@@ -102,4 +103,9 @@ abstract class ApiClientLoan {
   @POST('loan/contracts/getCreditlimitByCust')
   Future<LoanGetCreditlimitResp> loanCreditlimitInterface(
       @Body() LoanGetCreditlimitReq req);
+
+  /// 贷款还款计划手动还款接口
+  @POST('loan/repayments/loanRepayment')
+  Future<LoanRepaymentConfimResp> loanRepaymentInterface(
+      @Body() LoanRepaymentConfimReq req);
 }

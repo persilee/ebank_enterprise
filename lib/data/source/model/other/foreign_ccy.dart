@@ -37,6 +37,9 @@ class ForeignCcyReq extends Object {
   @JsonKey(name: 'smsCode')
   String smsCode;
 
+  @JsonKey(name: 'opt')
+  String opt;
+
   ForeignCcyReq(
     this.buyAmt,
     this.buyCcy,
@@ -49,6 +52,7 @@ class ForeignCcyReq extends Object {
     this.sellCcy,
     this.sellDac,
     this.smsCode,
+    this.opt,
   );
 
   factory ForeignCcyReq.fromJson(Map<String, dynamic> srcJson) =>
