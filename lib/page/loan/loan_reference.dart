@@ -113,13 +113,13 @@ class _LoanReferenceState extends State<LoanReference> {
       if (data.publicCodeGetRedisRspDtoList != null) {
         _reimburseTypeLists.clear();
 
-        for (int i = 0; i < data.publicCodeGetRedisRspDtoList.length; i++) {
-          IdType type = data.publicCodeGetRedisRspDtoList[i];
-          if (type.code == 'FPI') {
-            _reimburseTypeLists.add(type);
-          }
-        }
-        // _reimburseTypeLists.addAll(data.publicCodeGetRedisRspDtoList);
+        // for (int i = 0; i < data.publicCodeGetRedisRspDtoList.length; i++) {
+        //   IdType type = data.publicCodeGetRedisRspDtoList[i];
+        //   if (type.code == 'FPI') {
+        //     _reimburseTypeLists.add(type);
+        //   }
+        // }
+        _reimburseTypeLists.addAll(data.publicCodeGetRedisRspDtoList);
       }
     });
   }

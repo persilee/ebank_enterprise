@@ -884,10 +884,10 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
             _termChangeBtn(context), // 选择存款期限
             _inputPrincipal(card), // 本金输入框
             _accountChangeBtn(), //选择付款账户
-            _line(),
-            _ccyChangeBtn(), //选择支付币种
-            _line(),
-            _expectedPayment(),
+            // _line(),
+            // _ccyChangeBtn(), //选择支付币种
+            // _line(),
+            // _expectedPayment(),
             _line(),
             _settAcChangeBtn(), //结算账户
             _line(),
@@ -930,7 +930,8 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
                 cards.add(element.cardNo);
               }
             });
-            cards = cards.toSet().toList();
+            // cards = cards.toSet().toList();
+
             _changedAccountTitle = FormatUtil.formatSpace4(cards[0]);
             _getCardBal(cards[0].replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
           });
@@ -1146,8 +1147,22 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           setState(() {
             // if (_cardBal == '' || _cardCcy == S.current.hint_please_select) {
             if (element.cardListBal.length > 0) {
-              _cardBal = element.cardListBal[0].currBal;
-              _cardCcy = element.cardListBal[0].ccy;
+              bool isHaveCcy = false;
+              element.cardListBal.forEach((elementValue) {
+                if (elementValue.ccy == ccy) {
+                  _cardBal = elementValue.currBal;
+                  isHaveCcy = true;
+                }
+              });
+
+              _cardCcy = ccy;
+
+              if (isHaveCcy == false) {
+                _cardBal = '0';
+              }
+
+              // _cardBal = element.cardListBal[0].currBal;
+              // _cardCcy = element.cardListBal[0].ccy;
             }
             // }
             _cardBalList.clear();

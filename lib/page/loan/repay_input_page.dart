@@ -6,6 +6,7 @@ import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
 /// Date: 2020-12-16
 
 import 'package:ebank_mobile/data/source/model/loan/get_loan_money_caculate.dart';
+import 'package:ebank_mobile/data/source/model/loan/get_schedule_detail_list.dart';
 import 'package:ebank_mobile/data/source/model/loan/loan_detail_modelList.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
@@ -30,28 +31,30 @@ class RepayInputPage extends StatefulWidget {
 class _RepayInputPageState extends State<RepayInputPage> {
   LnAcMastAppDOList loanDetail; //合约帐号信息
   PostAdvanceRepaymentDTOList list; //利息计算信息
+  GetLnAcScheduleRspDetlsDTOList planDetail; //还款计划信息
 
   Map message = new Map();
-  var currency = ''; //币种
   double max = 0; //还款最大值(贷款余额)
-  var loanInterest = ''; //贷款利率
 
-  var _debitAccount = ''; //扣款账号
   int _debit_Index = 0; //帐号索引
   List _totalAccoutList = []; //帐号列表
 
+  var acNo = ''; //贷款账号
+  var currency = ''; //币种
+  var instalNo = ''; //贷款本金
+  var isInterestCharge = ''; //贷款余额
+  var loanInterest = ''; //贷款利率
+  var _debitAccount = ''; //扣款账号
+  var repayPrincipal = ''; //输入的还款金额
   var _repayInterest = ''; //还款利息
   var _fine = ''; //罚金
   var _totalRepay = ''; //还款总额
-  bool _isBtnDisabled = false;
-  bool _isButton = false;
 
-  var acNo = '';
-  var instalNo = '';
-  var isInterestCharge = '';
-  var repayPrincipal = ''; //还款金额
   var repaymentMethod = '';
   var rescheduleType = 'I';
+
+  bool _isBtnDisabled = false;
+  bool _isButton = false;
 
   //创建文本控制器实例
   TextEditingController _inputController = new TextEditingController();
@@ -175,10 +178,21 @@ class _RepayInputPageState extends State<RepayInputPage> {
     });
   }
 
+  //提前还款初始值进行赋值
+  _parameterSetValue() {
+    acNo = this.loanDetail.acNo; //贷款账号
+    currency = this.loanDetail.ccy; //币种
+    instalNo = this.loanDetail.loanAmt; //贷款本金
+    isInterestCharge = this.loanDetail.osAmt; //贷款余额
+    loanInterest = this.loanDetail.intRate + "%"; //贷款利率
+  }
+
   @override
   Widget build(BuildContext context) {
-    LnAcMastAppDOList loanDetail = ModalRoute.of(context).settings.arguments;
-    this.loanDetail = loanDetail;
+    // LnAcMastAppDOList
+    LnAcMastAppDOList detail = ModalRoute.of(context).settings.arguments;
+    this.loanDetail = detail;
+    _parameterSetValue(); //先进行赋值
 
     var container1 = Container(
       color: Colors.white,
@@ -187,18 +201,17 @@ class _RepayInputPageState extends State<RepayInputPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           //贷款账号
-          _contentColumn(S.of(context).loan_account, loanDetail.acNo),
+          _contentColumn(S.of(context).loan_account, acNo),
           //币种
-          _contentColumn(S.of(context).currency, loanDetail.ccy), //ccy
+          _contentColumn(S.of(context).currency, currency), //ccy
           //贷款本金
           _contentColumn(S.of(context).loan_principal,
-              FormatUtil.formatSringToMoney(loanDetail.loanAmt)), //loanAmt
+              FormatUtil.formatSringToMoney(instalNo)), //loanAmt
           //贷款余额
           _contentColumn(S.of(context).loan_balance2,
-              FormatUtil.formatSringToMoney(loanDetail.osAmt)), //osAmt
+              FormatUtil.formatSringToMoney(isInterestCharge)), //osAmt
           //贷款利率
-          _contentColumn(
-              S.of(context).loan_interest_rate, loanDetail.intRate + "%"),
+          _contentColumn(S.of(context).loan_interest_rate, loanInterest),
         ],
       ),
     );

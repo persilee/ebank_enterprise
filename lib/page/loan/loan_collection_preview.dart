@@ -181,8 +181,9 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
   _loanWithdrawalCommit() {
     String payData = _requstMap['planPayData'];
     String repayDat = payData.substring(payData.length - 2);
+
     String repay = _requstMap['repaymentMethod']; //还款方式
-    String insType = '';
+    String insType = ''; //本利和公式
     String payType = ''; //还款方式
 
     if (repay == 'EPI') {

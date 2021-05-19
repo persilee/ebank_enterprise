@@ -70,17 +70,16 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
   @override
   // ignore: must_call_super
   void initState() {
-    _refreshController = new RefreshController();
+    _refreshController = RefreshController();
 
-    _ddRefreshController = new RefreshController();
-    _tdRefreshController = new RefreshController();
-    _lnRefreshController = new RefreshController();
-    // _getAccountOverviewInfo();
+    _ddRefreshController = RefreshController();
+    _tdRefreshController = RefreshController();
+    _lnRefreshController = RefreshController();
     // 网络请求
     // setState(() {
-    // _loadAssets();
-    // _loadDDNetWork();
-    _getCardList();
+    _loadAssets();
+    _loadDDNetWork();
+    // _getCardList();
     // });
   }
 
@@ -98,32 +97,32 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(),
-      // body: _contentListView(),
-      body: Column(
-        children: [
-          _isLoading
-              ? Expanded(
-                  child: HsgLoading(),
-                )
-              : Expanded(
-                  child: CustomRefresh(
-                    controller: _refreshController,
-                    onLoading: () {
-                      //加载更多完成
-                      _refreshController.loadComplete();
-                      //显示没有更多数据
-                      _refreshController.loadNoData();
-                    },
-                    onRefresh: () {
-                      _refreshController.refreshCompleted();
-                      _refreshController.footerMode.value =
-                          LoadStatus.canLoading;
-                    },
-                    content: _contentListView(),
-                  ),
-                ),
-        ],
-      ),
+      body: _contentListView(),
+      // body: Column(
+      //   children: [
+      //     _isLoading
+      //         ? Expanded(
+      //             child: HsgLoading(),
+      //           )
+      //         : Expanded(
+      //             child: CustomRefresh(
+      //               controller: _refreshController,
+      //               onLoading: () {
+      //                 //加载更多完成
+      //                 _refreshController.loadComplete();
+      //                 //显示没有更多数据
+      //                 _refreshController.loadNoData();
+      //               },
+      //               onRefresh: () {
+      //                 _refreshController.refreshCompleted();
+      //                 _refreshController.footerMode.value =
+      //                     LoadStatus.canLoading;
+      //               },
+      //               content: _contentListView(),
+      //             ),
+      //           ),
+      //   ],
+      // ),
     );
   }
 
@@ -160,15 +159,15 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
           child: Column(
             children: [
               _accountOverviewColumn(),
-              // Container(
-              //   color: HsgColors.backgroundColor,
-              //   height: 12,
-              // ),
-              // isTotalAsset ? _assetsTDAndDD(context) : _liabilitiesLn(context),
+              Container(
+                color: HsgColors.backgroundColor,
+                height: 12,
+              ),
+              isTotalAsset ? _assetsTDAndDD(context) : _liabilitiesLn(context),
             ],
           ),
         ),
-        preferredSize: Size(30, 135), //200//135
+        preferredSize: Size(30, 200), //200//135
       ),
     );
   }
@@ -325,20 +324,24 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
       ),
     );
 
-    Widget _noDataWidget = Container(
-      height: MediaQuery.of(context).size.height / 2 + 10,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image(
-            image: AssetImage('images/noDataIcon/no_data_record.png'),
-            width: 160,
-          ),
-          Text(
-            S.current.no_data_now,
-            style: FIRST_DEGREE_TEXT_STYLE,
-          )
-        ],
+    double height = MediaQuery.of(context).size.height - 200 - 100;
+    Widget _noDataWidget = SliverToBoxAdapter(
+      child: Container(
+        height: height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Expanded(child: Container()),
+            Image(
+              image: AssetImage('images/noDataIcon/no_data_record.png'),
+              width: 160,
+            ),
+            Text(
+              S.current.no_data_now,
+              style: FIRST_DEGREE_TEXT_STYLE,
+            ),
+          ],
+        ),
       ),
     );
 
@@ -350,9 +353,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
             },
             childCount: ddList.length,
           ))
-        : SliverToBoxAdapter(
-            child: _noDataWidget,
-          );
+        : _noDataWidget;
 
     Widget _tdSliverView = tdList.length > 0
         ? SliverList(
@@ -362,9 +363,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
             },
             childCount: tdList.length,
           ))
-        : SliverToBoxAdapter(
-            child: _noDataWidget,
-          );
+        : _noDataWidget;
 
     Widget _lnSliverView = lnList.length > 0
         ? SliverList(
@@ -374,9 +373,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
             },
             childCount: lnList.length,
           ))
-        : SliverToBoxAdapter(
-            child: _noDataWidget,
-          );
+        : _noDataWidget;
 
     List<Widget> showSlivers = [];
     RefreshController refreshC;
@@ -416,20 +413,29 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
       controller: refreshC,
       onRefresh: () async {
         // //刷新完成
-        // await _loadData(false);
+        if (isTotalAsset) {
+          if (isShowDD) {
+            ddNextKey = '';
+          } else {
+            tdNextKey = '';
+          }
+        } else {
+          lnNextKey = '';
+        }
+
         await _loadListNetWorkEntr();
         refreshC.refreshCompleted();
         refreshC.footerMode.value = LoadStatus.canLoading;
       },
       onLoading: () async {
         await _loadListNetWorkEntr();
-        refreshC.loadComplete();
+        // refreshC.loadComplete();
       },
       content: contentW,
     );
 
-    // return _scrollView;
-    return _listView;
+    return _scrollView;
+    // return _listView;
   }
 
   //贷款列表
@@ -1071,6 +1077,10 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
         ddTotal = resp.ddTotal;
         tdTotal = resp.tdTotal;
         lnTotal = resp.lnTotal;
+        // //判断是否为负数
+        //     if (lnTotalCompute > netAssets) {
+        //       _isNegative = true;
+        //     }
       });
     } catch (e) {
       HSProgressHUD.showToast(e);
@@ -1088,9 +1098,9 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
       }
     } else {
       // if (isShowLN) {
-      //   currentlyShowIndex = 2;
-      // } else {
       currentlyShowIndex = 2;
+      // } else {
+      // currentlyShowIndex = 2;
       // }
     }
 
@@ -1105,7 +1115,6 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
         return _loadLNNetWork();
         break;
       default:
-        return _loadDDNetWork();
     }
   }
 
@@ -1113,19 +1122,29 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     try {
       GetCardListBalByUserResp resp = await _loadListNetWork('SA', ddNextKey);
       if (mounted) {
-        _isDDLoading = false;
-        if (ddNextKey == '' && ddNextKey == null) {
-          ddList = resp.cardListBal;
-        } else {
-          ddList.addAll(resp.cardListBal);
-        }
-        ddNextKey = resp.nextKey;
+        setState(() {
+          _isDDLoading = false;
+          if (ddNextKey == '' || ddNextKey == null) {
+            ddList = resp.cardListBal;
+          } else {
+            ddList.addAll(resp.cardListBal);
+          }
+          ddNextKey = resp.nextKey;
 
-        if (resp.nextKey == null && resp.nextKey == '') {
-          _ddRefreshController.loadNoData();
-        }
+          _ddRefreshController.loadComplete();
+          if (resp.nextKey == null || resp.nextKey == '') {
+            _ddRefreshController.loadNoData();
+          } else {
+            _ddRefreshController.footerMode.value = LoadStatus.canLoading;
+          }
+        });
       }
     } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLNLoading = false;
+        });
+      }
       HSProgressHUD.showToast(e);
     }
   }
@@ -1134,19 +1153,29 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     try {
       GetCardListBalByUserResp resp = await _loadListNetWork('TD', tdNextKey);
       if (mounted) {
-        _isTDLoading = false;
-        if (tdNextKey == '' && tdNextKey == null) {
-          tdList = resp.tedpListBal;
-        } else {
-          tdList.addAll(resp.tedpListBal);
-        }
-        tdNextKey = resp.nextKey;
+        setState(() {
+          _isTDLoading = false;
+          if (tdNextKey == '' || tdNextKey == null) {
+            tdList = resp.tedpListBal;
+          } else {
+            tdList.addAll(resp.tedpListBal);
+          }
+          tdNextKey = resp.nextKey;
 
-        if (resp.nextKey == null && resp.nextKey == '') {
-          _tdRefreshController.loadNoData();
-        }
+          _tdRefreshController.loadComplete();
+          if (resp.nextKey == null || resp.nextKey == '') {
+            _tdRefreshController.loadNoData();
+          } else {
+            _tdRefreshController.footerMode.value = LoadStatus.canLoading;
+          }
+        });
       }
     } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLNLoading = false;
+        });
+      }
       HSProgressHUD.showToast(e);
     }
   }
@@ -1155,19 +1184,29 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     try {
       GetCardListBalByUserResp resp = await _loadListNetWork('LN', lnNextKey);
       if (mounted) {
-        _isLNLoading = false;
-        if (lnNextKey == '' && lnNextKey == null) {
-          lnList = resp.lnListBal;
-        } else {
-          lnList.addAll(resp.lnListBal);
-        }
-        lnNextKey = resp.nextKey;
+        setState(() {
+          _isLNLoading = false;
+          if (lnNextKey == '' || lnNextKey == null) {
+            lnList = resp.lnListBal;
+          } else {
+            lnList.addAll(resp.lnListBal);
+          }
+          lnNextKey = resp.nextKey;
 
-        if (resp.nextKey == null && resp.nextKey == '') {
-          _lnRefreshController.loadNoData();
-        }
+          _tdRefreshController.loadComplete();
+          if (resp.nextKey == null || resp.nextKey == '') {
+            _lnRefreshController.loadNoData();
+          } else {
+            _lnRefreshController.footerMode.value = LoadStatus.canLoading;
+          }
+        });
       }
     } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLNLoading = false;
+        });
+      }
       HSProgressHUD.showToast(e);
     }
   }

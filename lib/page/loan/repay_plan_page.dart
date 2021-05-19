@@ -219,21 +219,21 @@ class _RepayPlanState extends State<RepayPlanPage> {
     // 已逾期 1.未还款 2，部分还款 3.已还款  显示还款
     // 存在逾期未还款。需要先还逾期的，再还当前期数。
 
-    // var instalType = lnSchedule.paySts; //还款状态 0：未还 1：逾期 2：已还
-    // var repay = '还款'; //还款
-    // switch (instalType) {
-    //   case '0':
-    //     instalType = ' (未还) ';
-    //     break;
-    //   case '1':
-    //     instalType = ' (部分还款) ';
-    //     break;
-    //   case '2':
-    //     instalType = ' (全部还款) ';
-    //     repay = '';
-    //     break;
-    //   default:
-    // }
+    var instalType = lnSchedule.paySts; //还款状态 0：未还 1：逾期 2：已还
+    var repay = '还款'; //还款
+    switch (instalType) {
+      case '0':
+        instalType = ' (未还) ';
+        break;
+      case '1':
+        instalType = ' (逾期) '; //(部分还款)
+        break;
+      case '2':
+        instalType = ' (全部还款) ';
+        repay = '';
+        break;
+      default:
+    }
 
     double currentPenAmt = double.parse(lnSchedule.payPrin) -
         double.parse(lnSchedule.recPrin); //当前本金金额
@@ -329,18 +329,22 @@ class _RepayPlanState extends State<RepayPlanPage> {
                 style: TextStyle(fontSize: 14, color: Color(0xFF4D4D4D)),
               ),
               Text(
-                '', //instalType
+                instalType, //instalType
                 style: TextStyle(fontSize: 13, color: Color(0xFF9C9C9C)),
               ),
               InkWell(
                 onTap: () {
-                  //跳转提前还款
-                  Navigator.pushNamed(context, pageRepayInput,
-                      arguments: widget.loanDetail);
+                  //跳转loan_plan提前还款
+                  Map detailMap = Map();
+                  detailMap['detailModel'] = lnSchedule;
+                  detailMap['loanDetail'] = widget.loanDetail; //0不是还款计划
+
+                  Navigator.pushNamed(context, pageRepaymentPlan,
+                      arguments: detailMap); //需要传不同的参数进去
                   //跳转
                 },
                 child: Text(
-                  '', //repay
+                  repay, //repay
                   style: TextStyle(
                       fontSize: 13,
                       color: Color(0xFF4871FF),

@@ -11,6 +11,8 @@ import 'package:ebank_mobile/page/forexTrading/forex_trading_preview_page.dart';
 
 import 'package:ebank_mobile/page/home/hsg_feature_list_page.dart';
 import 'package:ebank_mobile/page/loan/loan_collection_preview.dart';
+import 'package:ebank_mobile/page/loan/loan_plan_input_confim.dart';
+import 'package:ebank_mobile/page/loan/loan_plan_input_page.dart';
 import 'package:ebank_mobile/page/loan/loan_reference.dart';
 import 'package:ebank_mobile/page/mine/avatar_view_page.dart';
 import 'package:ebank_mobile/page/mine/image_editor_page.dart';
@@ -227,6 +229,8 @@ var pageTransferSuccess = '/transfer_success.dart';
 var pageCityForCountrySelect = '/city_for_country_select_page.dart';
 var pageTimeDepositCloseDetail = '/time_deposit_close_info.dart';
 var pageCamera = '/camera_page.dart';
+var pageRepaymentPlan = '/loan_plan_input_page.dart';
+var pageRepaymentInputConfirm = '/loan_plan_input_confim.dart';
 
 var appRoutes = {
   pageLogin: (context) => LoginPage(),
@@ -335,6 +339,8 @@ var appRoutes = {
   // pageCityForCountrySelect: (context) => CityForCountrySelectPage(),
   pageTimeDepositCloseDetail: (context) => DepositCloseInfoPage(),
   pageCamera: (context) => CameraPage(),
+  pageRepaymentPlan: (context) => RepaymentPlanInputPage(), //还款计划的提前还款页面
+  pageRepaymentInputConfirm: (context) => InputPlanConfimPage(), //还款计划的提前还款确认页面
 };
 onGenerateRoute(RouteSettings settings) {
   if (settings.name == pageCardDetail) {
