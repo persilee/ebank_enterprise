@@ -2,37 +2,35 @@
 /// 任务审批页面
 /// Author: wangluyao
 /// Date: 2020-12-29
-import 'package:dio/dio.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/approval/card_bal_by_card_no_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/card_bal_by_card_no_model.dart';
 import 'package:ebank_mobile/data/source/model/approval/complete_task_body.dart';
-import 'package:ebank_mobile/data/source/model/approval/complete_task_model.dart';
-import 'package:ebank_mobile/data/source/model/approval/find_all_finished_task_model.dart';
+import 'package:ebank_mobile/data/source/model/approval/early_red_td_contract_detail_model.dart'
+    as EarlyRedModel;
 import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
-import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_detail_model.dart';
+import 'package:ebank_mobile/data/source/model/approval/foreign_transfer_model.dart'
+    as ForeignTransferModel;
 import 'package:ebank_mobile/data/source/model/approval/international_transfer_detail_model.dart'
     as InternationalModel;
+import 'package:ebank_mobile/data/source/model/approval/loan_repayment_model.dart'
+    as LoanRepaymentModel;
+import 'package:ebank_mobile/data/source/model/approval/loan_with_drawal_model.dart'
+    as LoanWithDrawalModel;
+import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_detail_model.dart'
+    as OneToOneModel;
+import 'package:ebank_mobile/data/source/model/approval/open_td_contract_detail_model.dart'
+    as OpenTDModel;
+import 'package:ebank_mobile/data/source/model/approval/post_repayment_model.dart'
+    as PostRepaymentModel;
 import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_model.dart'
     as TDEPModel;
 import 'package:ebank_mobile/data/source/model/approval/transfer_plan_detail_model.dart'
     as TransferPlanModel;
-import 'package:ebank_mobile/data/source/model/approval/early_red_td_contract_detail_model.dart'
-    as EarlyRedModel;
-import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_detail_model.dart'
-    as OneToOneModel;
-import 'package:ebank_mobile/data/source/model/approval/open_td_contract_detail_model.dart'
-    as OpenTDModel;
-import 'package:ebank_mobile/data/source/model/approval/foreign_transfer_model.dart'
-    as ForeignTransferModel;
-import 'package:ebank_mobile/data/source/model/approval/post_repayment_model.dart'
-    as PostRepaymentModel;
-import 'package:ebank_mobile/data/source/model/approval/loan_with_drawal_model.dart'
-    as LoanWithDrawalModel;
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/transfer/get_info_by_swift_code.dart';
@@ -40,8 +38,6 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
-import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
-import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
@@ -86,6 +82,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   List<Widget> _foreignTransferList = [];
   List<Widget> _postRepaymentList = [];
   List<Widget> _loanWithDrawalList = [];
+  List<Widget> _loanRepaymentList = [];
   List<Widget> _finishedList = [];
   List<dynamic> _commentList = [];
   final f = NumberFormat("#,##0.00", "en_US");
@@ -153,6 +150,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       else if (_processKey == 'loanWithDrawalApproval') {
         _loanWithDrawalData(_contractModel);
       }
+      // loanRepaymentApproval - 计划还款
+      else if (_processKey == 'loanRepaymentApproval') {
+        _loanRepaymentData(_contractModel);
+      }
     } catch (e) {
       if (this.mounted) {
         setState(() {
@@ -169,6 +170,33 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     }
   }
 
+  // loanRepaymentApproval - 计划还款
+  void _loanRepaymentData(_contractModel) async {
+    LoanRepaymentModel.LoanRepaymentModel loanRepaymentModel =
+        LoanRepaymentModel.LoanRepaymentModel.fromJson(_contractModel);
+
+    LoanRepaymentModel.OperateEndValue data =
+        loanRepaymentModel.operateEndValue;
+
+    // 添加历史审批记录
+    if (loanRepaymentModel.commentList.isNotEmpty) {
+      _commentList = loanRepaymentModel.commentList;
+      loanRepaymentModel.commentList.forEach((data) {
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
+      });
+    }
+
+    if (this.mounted) {
+      setState(() {
+        _loanRepaymentList.clear();
+        _loanRepaymentList.add(_buildTitle(S.current.approve_loan_information));
+
+        _isLoading = false;
+        _isShowErrorPage = false;
+      });
+    }
+  }
+
   // loanWithDrawalApproval - 贷款领用
   void _loanWithDrawalData(_contractModel) async {
     LoanWithDrawalModel.LoanWithDrawalModel loanWithDrawalModel =
@@ -179,7 +207,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     // 获取贷款期限
     String _iratTm = '';
-    String repayDat = data?.iratTm.substring(data?.iratTm.length - 2);
+    String repayDat = data?.iratTm?.substring(data.iratTm.length - 2) ?? '';
     try {
       GetIdTypeResp getIdTypeResp =
           await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
@@ -231,8 +259,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
-
-    print('loanWithDrawalModel: ${data.toJson()}');
 
     if (this.mounted) {
       setState(() {
@@ -1014,6 +1040,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         if (_processKey == 'foreignTransferApproval') ..._foreignTransferList,
         if (_processKey == 'postRepaymentApproval') ..._postRepaymentList,
         if (_processKey == 'loanWithDrawalApproval') ..._loanWithDrawalList,
+        if (_processKey == 'loanRepaymentApproval') ..._loanRepaymentList,
       ],
     );
   }
