@@ -36,7 +36,8 @@ class _InputPlanConfimPageState extends State<InputPlanConfimPage> {
   var _debitAccount = ''; //扣款账号
   var repayPrincipal = ''; //输入的还款金额
   var _repayInterest = ''; //还款利息
-  var _fine = ''; //罚金
+  var _fine = ''; //利息罚息
+  var _principel = ''; //本金罚息
   var _totalRepay = ''; //还款总额
 
 //还款计划进入
@@ -46,7 +47,8 @@ class _InputPlanConfimPageState extends State<InputPlanConfimPage> {
     loanInterest = this.planDetail.curRate + "%"; //贷款利率
 
     _repayInterest = this.planDetail.payInt; //还款利息
-    _fine = this.planDetail.payCom; //罚金
+    _fine = this.planDetail.payCom; //利息罚息
+    _principel = this.planDetail.payPen; //本金罚息
     _totalRepay = this.planDetail.payAmt; //还款总额
   }
 
@@ -94,9 +96,12 @@ class _InputPlanConfimPageState extends State<InputPlanConfimPage> {
           //还款利息
           _contentColumn(S.of(context).repayment_interest,
               FormatUtil.formatSringToMoney(_repayInterest)), //需要计算
-          //罚金
-          _contentColumn(
-              S.of(context).fine, FormatUtil.formatSringToMoney(_fine)),
+          //本金罚金
+          _contentColumn(S.of(context).loan_plan_principal_penalty,
+              FormatUtil.formatSringToMoney(_principel)),
+          //利息罚金
+          _contentColumn(S.of(context).loan_plan_interest_payment,
+              FormatUtil.formatSringToMoney(_fine)),
           //还款总额
           _contentColumn(S.of(context).total_repayment,
               FormatUtil.formatSringToMoney(_totalRepay)),
@@ -150,14 +155,17 @@ class _InputPlanConfimPageState extends State<InputPlanConfimPage> {
       LoanRepaymentConfimReq req = LoanRepaymentConfimReq(
           acNo, //贷款合约
           planDetail.ccy, //贷款货币
+          _fine, //还复利金额利息罚息
           _debitAccount, //结算活期账户
           _repayInterest, //还款利息金额
           loanDetail.osAmt, //贷款余额
+          _principel, //罚息
           loanDetail.loanAmt, //贷款本金
           instalNo, //还本金金额
-          loanDetail.prodTyp,
-          _totalRepay,
-          '');
+          loanDetail.prodTyp, //产品代码
+          _totalRepay, //实际还款金额
+          '' //支付密码
+          );
       HSProgressHUD.show();
       ApiClientLoan().loanRepaymentInterface(req).then(
         (data) async {

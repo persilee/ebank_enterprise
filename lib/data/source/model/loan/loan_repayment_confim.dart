@@ -7,12 +7,14 @@ class LoanRepaymentConfimReq extends Object {
   //合约号
   @JsonKey(name: 'acNo')
   String acNo;
+
   //币种
   @JsonKey(name: 'ccy')
   String ccy;
 
-  // @JsonKey(name: 'compoundAmount')
-  // String compoundAmount;
+  //还复利金额 利息罚息
+  @JsonKey(name: 'compoundAmount')
+  String compoundAmount;
 
   //活期账户
   @JsonKey(name: 'ddAc')
@@ -21,15 +23,19 @@ class LoanRepaymentConfimReq extends Object {
   //还利息金额
   @JsonKey(name: 'interestAmount')
   String interestAmount;
+
   //贷款余额
   @JsonKey(name: 'outBal')
   String outBal;
-  //
-  // @JsonKey(name: 'penaltyAmount')
-  // String penaltyAmount;
+
+  // // 罚息金额
+  @JsonKey(name: 'penaltyAmount')
+  String penaltyAmount;
+
   //贷款本金
   @JsonKey(name: 'prin')
   String prin;
+
   //还本金金额
   @JsonKey(name: 'principalAmount')
   String principalAmount;
@@ -37,9 +43,11 @@ class LoanRepaymentConfimReq extends Object {
   //产品代码
   @JsonKey(name: 'prodCode')
   String prodCode;
+
   //实际还款金额
   @JsonKey(name: 'totalAmount')
   String totalAmount;
+
   //密码
   @JsonKey(name: 'payPassword')
   String payPassword;
@@ -47,11 +55,11 @@ class LoanRepaymentConfimReq extends Object {
   LoanRepaymentConfimReq(
     this.acNo,
     this.ccy,
+    this.compoundAmount,
     this.ddAc,
-    // this.compoundAmount,
     this.interestAmount,
     this.outBal,
-    // this.penaltyAmount,
+    this.penaltyAmount,
     this.prin,
     this.principalAmount,
     this.prodCode,

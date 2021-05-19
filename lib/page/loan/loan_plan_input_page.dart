@@ -41,7 +41,8 @@ class _RepaymentPlanInputState extends State<RepaymentPlanInputPage> {
   var _debitAccount = ''; //扣款账号
   var repayPrincipal = ''; //输入的还款金额
   var _repayInterest = ''; //还款利息
-  var _fine = ''; //罚金
+  var _fine = ''; //利息罚息
+  var _principel = ''; //本金罚息
   var _totalRepay = ''; //还款总额
 
   var repaymentMethod = '';
@@ -63,7 +64,6 @@ class _RepaymentPlanInputState extends State<RepaymentPlanInputPage> {
             _totalAccoutList.addAll(data.cardList);
             RemoteBankCard card = _totalAccoutList[0];
             _debitAccount = card.cardNo; //放款帐号
-            // loanDetail.repaymentAcNo = card.cardNo;
           });
         }
       },
@@ -92,9 +92,9 @@ class _RepaymentPlanInputState extends State<RepaymentPlanInputPage> {
     loanInterest = this.planDetail.curRate + "%"; //贷款利率
 
     _repayInterest = this.planDetail.payInt; //还款利息
-    _fine = this.planDetail.payCom; //罚金
+    _fine = this.planDetail.payCom; //利息罚息
+    _principel = this.planDetail.payPen; //本金罚息
     _totalRepay = this.planDetail.payAmt; //还款总额
-    // _inputController.text = this.planDetail.payAmt;
   }
 
   @override
@@ -147,9 +147,12 @@ class _RepaymentPlanInputState extends State<RepaymentPlanInputPage> {
           //还款利息
           _contentColumn(S.of(context).repayment_interest,
               FormatUtil.formatSringToMoney(_repayInterest)), //需要计算
-          //罚金
-          _contentColumn(
-              S.of(context).fine, FormatUtil.formatSringToMoney(_fine)),
+          //本金罚金
+          _contentColumn(S.of(context).loan_plan_principal_penalty,
+              FormatUtil.formatSringToMoney(_principel)),
+          //利息罚金
+          _contentColumn(S.of(context).loan_plan_interest_payment,
+              FormatUtil.formatSringToMoney(_fine)),
           //还款总额
           _contentColumn(S.of(context).total_repayment,
               FormatUtil.formatSringToMoney(_totalRepay)),

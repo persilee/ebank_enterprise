@@ -763,6 +763,8 @@
   "time_deposit_withdrawals_tips": "不能超过最大存入金额",
   "time_deposit_change_Settlement": "部分结清",
   "time_deposit_Settlement_title": "部分结清本息总额: ",
+  "loan_plan_principal_penalty": "本金罰息",
+  "loan_plan_interest_payment": "利息罰息",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "数据异常，未返回数据！",

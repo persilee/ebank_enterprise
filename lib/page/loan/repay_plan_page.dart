@@ -33,24 +33,6 @@ class _RepayPlanState extends State<RepayPlanPage> {
   String pageSize;
   //还款状态
   String repaymentStatus;
-  // GetLnAcScheduleRspDetlsDTOList _list1 = new GetLnAcScheduleRspDetlsDTOList(
-  //   "50000085",
-  //   "0",
-  //   "30",
-  //   0,
-  //   0,
-  //   "2020-02-01",
-  //   "2014.67",
-  //   "NORMAL",
-  //   "ALL",
-  //   "14.67",
-  //   "2020-03-20",
-  //   "200",
-  //   "2000",
-  //   "2020-03-20",
-  //   "2020-03-20",
-  //   "0",
-  // );
 
   @override
   void initState() {
@@ -84,9 +66,6 @@ class _RepayPlanState extends State<RepayPlanPage> {
       HSProgressHUD.showToast(e);
     });
     lnScheduleList.clear();
-    // lnScheduleList.add(_list1);
-    // lnScheduleList.add(_list2);
-    // lnScheduleList.add(_list3);
   }
 
   @override
@@ -368,8 +347,12 @@ class _RepayPlanState extends State<RepayPlanPage> {
                     S.of(context).interest_amt +
                     " " +
                     interestAmt +
+                    ' ' +
+                    S.of(context).loan_plan_principal_penalty +
                     " " +
-                    S.of(context).punishment_interest +
+                    lnSchedule.payPen +
+                    ' ' +
+                    S.of(context).loan_plan_interest_payment +
                     " " +
                     amorIntAmt,
                 maxLines: 250,

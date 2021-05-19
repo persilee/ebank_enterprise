@@ -762,6 +762,8 @@
   "time_deposit_withdrawals_tips": "Cannot exceed the maximum deposit amount",
   "time_deposit_change_Settlement": "Partial Settlement",
   "time_deposit_Settlement_title": "Partial Settlement Amt: ",
+  "loan_plan_principal_penalty": "Principal penalty",
+  "loan_plan_interest_payment": "Interest payment",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "Data is abnormal, no data is returned!",
