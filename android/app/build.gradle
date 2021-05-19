@@ -24,6 +24,8 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+//引用插件
+apply plugin: 'seal'
 
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
@@ -77,6 +79,40 @@ android {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
+
+  //rammus集成alipush
+  def manifestPath = [
+            // for AAR of Release
+            // see note below
+            projectRoot + '/build-cache',
+            projectRoot + '/rammus',
+            // for AAR of SNAPSHOT
+            projectRoot + '/app/build/intermediates/exploded-aar'
+    ]
+
+    def removeAttrs = [
+            'android:theme'
+    ]
+
+    def replaceValues = [
+            'android:theme'
+    ]
+
+
+    seal {
+        enabled = true
+        manifests = manifestPath
+
+        appAttrs {
+            enabled = true
+            attrsShouldRemove = removeAttrs
+        }
+
+        appReplaceValues {
+            enabled = true
+            valuesShouldRemove = replaceValues
+        }
+    }
 }
 
 flutter {

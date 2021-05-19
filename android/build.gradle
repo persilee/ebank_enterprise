@@ -11,6 +11,8 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        //添加插件
+        classpath 'me.xx2bab.gradle:seal-manifest-precheck-plugin:1.0.0' 
     }
 }
 
