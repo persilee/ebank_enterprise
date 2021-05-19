@@ -40,7 +40,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
   String tdTotal = '0';
   String lnTotal = '0';
 
-  int pageSize = 10;
+  // int pageSize = 10;
   String ddNextKey = '';
   String tdNextKey = '';
   String lnNextKey = '';
@@ -52,13 +52,13 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
   List<TedpListBal> tdList = [];
   List<LnListBal> lnList = [];
   List<String> cardNoList = [];
-  bool _isLoading = true;
+  // bool _isLoading = true;
   bool _isNegative = false;
 
   //判断是否是总资产
   bool isTotalAsset = true;
 
-  RefreshController _refreshController;
+  // RefreshController _refreshController;
 
   bool _isDDLoading = true;
   bool _isTDLoading = true;
@@ -70,22 +70,21 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
   @override
   // ignore: must_call_super
   void initState() {
-    _refreshController = RefreshController();
+    // _refreshController = RefreshController();
 
     _ddRefreshController = RefreshController();
     _tdRefreshController = RefreshController();
     _lnRefreshController = RefreshController();
     // 网络请求
     // setState(() {
-    _loadAssets();
-    _loadDDNetWork();
+    _loadFirstNetWork();
     // _getCardList();
     // });
   }
 
   @override
   void dispose() {
-    _refreshController.dispose();
+    // _refreshController.dispose();
 
     _ddRefreshController.dispose();
     _tdRefreshController.dispose();
@@ -173,150 +172,150 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
   }
 
   _contentListView() {
-    Widget _listView = ListView(
-      children: [
-        //  活期
-        isTotalAsset
-            ? Container(
-                color: Colors.white,
-                padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                child: Text(
-                  S.current.demand_deposit,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      color: HsgColors.aboutusTextCon),
-                ),
-              )
-            : Container(),
-        //活期合计
-        isTotalAsset
-            ? Container(
-                child: _ddTotalColumn(),
-              )
-            : Container(),
-        //活期列表
-        isTotalAsset
-            ? Container(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: ddList.length,
-                  itemBuilder: (context, index) {
-                    return _ddListView(index);
-                  },
-                ),
-              )
-            : Container(),
-        isTotalAsset
-            ? Container(
-                height: 12,
-              )
-            : Container(),
+    // Widget _listView = ListView(
+    //   children: [
+    //     //  活期
+    //     isTotalAsset
+    //         ? Container(
+    //             color: Colors.white,
+    //             padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+    //             child: Text(
+    //               S.current.demand_deposit,
+    //               style: TextStyle(
+    //                   fontWeight: FontWeight.bold,
+    //                   fontSize: 15,
+    //                   color: HsgColors.aboutusTextCon),
+    //             ),
+    //           )
+    //         : Container(),
+    //     //活期合计
+    //     isTotalAsset
+    //         ? Container(
+    //             child: _ddTotalColumn(),
+    //           )
+    //         : Container(),
+    //     //活期列表
+    //     isTotalAsset
+    //         ? Container(
+    //             child: ListView.builder(
+    //               shrinkWrap: true,
+    //               physics: const NeverScrollableScrollPhysics(),
+    //               itemCount: ddList.length,
+    //               itemBuilder: (context, index) {
+    //                 return _ddListView(index);
+    //               },
+    //             ),
+    //           )
+    //         : Container(),
+    //     isTotalAsset
+    //         ? Container(
+    //             height: 12,
+    //           )
+    //         : Container(),
 
-        // 定期
-        (tdTotal != '0')
-            ? isTotalAsset
-                ? Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                    child: Text(
-                      S.current.time_deposits,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: HsgColors.aboutusTextCon),
-                    ))
-                : Container()
-            : Container(),
-        (tdTotal != '0')
-            ? isTotalAsset
-                ? Container(
-                    child: _tdTotalColumn(),
-                  )
-                : Container()
-            : Container(),
-        (tdTotal != '0')
-            ? isTotalAsset
-                ? Container(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: tdList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return _tdListView(index);
-                      },
-                    ),
-                  )
-                : Container()
-            : Container(),
-        isTotalAsset
-            ? Container(
-                height: 12,
-              )
-            : Container(),
+    //     // 定期
+    //     (tdTotal != '0')
+    //         ? isTotalAsset
+    //             ? Container(
+    //                 color: Colors.white,
+    //                 padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+    //                 child: Text(
+    //                   S.current.time_deposits,
+    //                   style: TextStyle(
+    //                       fontWeight: FontWeight.bold,
+    //                       fontSize: 15,
+    //                       color: HsgColors.aboutusTextCon),
+    //                 ))
+    //             : Container()
+    //         : Container(),
+    //     (tdTotal != '0')
+    //         ? isTotalAsset
+    //             ? Container(
+    //                 child: _tdTotalColumn(),
+    //               )
+    //             : Container()
+    //         : Container(),
+    //     (tdTotal != '0')
+    //         ? isTotalAsset
+    //             ? Container(
+    //                 child: ListView.builder(
+    //                   shrinkWrap: true,
+    //                   physics: const NeverScrollableScrollPhysics(),
+    //                   itemCount: tdList.length,
+    //                   itemBuilder: (BuildContext context, int index) {
+    //                     return _tdListView(index);
+    //                   },
+    //                 ),
+    //               )
+    //             : Container()
+    //         : Container(),
+    //     isTotalAsset
+    //         ? Container(
+    //             height: 12,
+    //           )
+    //         : Container(),
 
-        // 贷款
-        (!isTotalAsset)
-            ? (lnTotal != '0')
-                ? Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                    child: Text(
-                      S.current.loan,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: HsgColors.aboutusTextCon),
-                    ),
-                  )
-                : Container(
-                    height: MediaQuery.of(context).size.height / 2,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image(
-                          image: AssetImage(
-                              'images/noDataIcon/no_data_record.png'),
-                          width: 160,
-                        ),
-                        Text(
-                          S.current.no_data_now,
-                          style: FIRST_DEGREE_TEXT_STYLE,
-                        )
-                      ],
-                    ),
-                  )
-            : Container(),
-        (!isTotalAsset)
-            ? (lnTotal != '0')
-                ? Container(
-                    child: _lnTotalColumn(),
-                  )
-                : Container()
-            : Container(),
-        (!isTotalAsset)
-            ? (lnTotal != '0')
-                ? Container(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: lnList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return _lnListView(index);
-                      },
-                    ),
-                  )
-                : Container()
-            : Container(),
+    //     // 贷款
+    //     (!isTotalAsset)
+    //         ? (lnTotal != '0')
+    //             ? Container(
+    //                 color: Colors.white,
+    //                 padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+    //                 child: Text(
+    //                   S.current.loan,
+    //                   style: TextStyle(
+    //                       fontWeight: FontWeight.bold,
+    //                       fontSize: 15,
+    //                       color: HsgColors.aboutusTextCon),
+    //                 ),
+    //               )
+    //             : Container(
+    //                 height: MediaQuery.of(context).size.height / 2,
+    //                 child: Column(
+    //                   mainAxisAlignment: MainAxisAlignment.center,
+    //                   children: [
+    //                     Image(
+    //                       image: AssetImage(
+    //                           'images/noDataIcon/no_data_record.png'),
+    //                       width: 160,
+    //                     ),
+    //                     Text(
+    //                       S.current.no_data_now,
+    //                       style: FIRST_DEGREE_TEXT_STYLE,
+    //                     )
+    //                   ],
+    //                 ),
+    //               )
+    //         : Container(),
+    //     (!isTotalAsset)
+    //         ? (lnTotal != '0')
+    //             ? Container(
+    //                 child: _lnTotalColumn(),
+    //               )
+    //             : Container()
+    //         : Container(),
+    //     (!isTotalAsset)
+    //         ? (lnTotal != '0')
+    //             ? Container(
+    //                 child: ListView.builder(
+    //                   shrinkWrap: true,
+    //                   physics: const NeverScrollableScrollPhysics(),
+    //                   itemCount: lnList.length,
+    //                   itemBuilder: (BuildContext context, int index) {
+    //                     return _lnListView(index);
+    //                   },
+    //                 ),
+    //               )
+    //             : Container()
+    //         : Container(),
 
-        Container(
-          child: Container(
-            height: 20,
-          ),
-        ),
-      ],
-    );
+    //     Container(
+    //       child: Container(
+    //         height: 20,
+    //       ),
+    //     ),
+    //   ],
+    // );
 
     Widget _headerAdapter = SliverToBoxAdapter(
       child: Container(
@@ -385,28 +384,21 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
         showSlivers.add(_ddSliverView);
         refreshC = _ddRefreshController;
         contentW = _isDDLoading
-            ? Expanded(
-                child: HsgLoading(),
-              )
+            ? HsgLoading()
             : CustomScrollView(slivers: showSlivers);
       } else {
         showSlivers.add(_tdSliverView);
         refreshC = _tdRefreshController;
         contentW = _isTDLoading
-            ? Expanded(
-                child: HsgLoading(),
-              )
+            ? HsgLoading()
             : CustomScrollView(slivers: showSlivers);
       }
     } else {
       showSlivers.add(_headerAdapter);
       showSlivers.add(_lnSliverView);
       refreshC = _lnRefreshController;
-      contentW = _isLNLoading
-          ? Expanded(
-              child: HsgLoading(),
-            )
-          : CustomScrollView(slivers: showSlivers);
+      contentW =
+          _isLNLoading ? HsgLoading() : CustomScrollView(slivers: showSlivers);
     }
 
     Widget _scrollView = CustomRefresh(
@@ -464,30 +456,30 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     );
   }
 
-  Column _lnTotalColumn() {
-    return Column(
-      children: [
-        Container(height: 0.5, color: HsgColors.divider),
-        Container(
-          color: Colors.white,
-          padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                S.current.total,
-                style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-              ),
-              Text(
-                FormatUtil.formatSringToMoney(lnTotal) + ' ' + localCcy,
-                style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+  // Column _lnTotalColumn() {
+  //   return Column(
+  //     children: [
+  //       Container(height: 0.5, color: HsgColors.divider),
+  //       Container(
+  //         color: Colors.white,
+  //         padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Text(
+  //               S.current.total,
+  //               style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+  //             ),
+  //             Text(
+  //               FormatUtil.formatSringToMoney(lnTotal) + ' ' + localCcy,
+  //               style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   //定期列表
   Container _tdListView(int index) {
@@ -513,30 +505,30 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     );
   }
 
-  Column _tdTotalColumn() {
-    return Column(
-      children: [
-        Container(height: 0.5, color: HsgColors.divider),
-        Container(
-          color: Colors.white,
-          padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                S.current.total,
-                style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-              ),
-              Text(
-                FormatUtil.formatSringToMoney(tdTotal) + ' ' + localCcy,
-                style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+  // Column _tdTotalColumn() {
+  //   return Column(
+  //     children: [
+  //       Container(height: 0.5, color: HsgColors.divider),
+  //       Container(
+  //         color: Colors.white,
+  //         padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Text(
+  //               S.current.total,
+  //               style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+  //             ),
+  //             Text(
+  //               FormatUtil.formatSringToMoney(tdTotal) + ' ' + localCcy,
+  //               style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   //活期列表
   Container _ddListView(int index) {
@@ -562,30 +554,30 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     );
   }
 
-  Column _ddTotalColumn() {
-    return Column(
-      children: [
-        Container(height: 0.5, color: HsgColors.divider),
-        Container(
-          color: Colors.white,
-          padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                S.current.total,
-                style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-              ),
-              Text(
-                FormatUtil.formatSringToMoney(ddTotal) + ' ' + ddCcy,
-                style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+  // Column _ddTotalColumn() {
+  //   return Column(
+  //     children: [
+  //       Container(height: 0.5, color: HsgColors.divider),
+  //       Container(
+  //         color: Colors.white,
+  //         padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Text(
+  //               S.current.total,
+  //               style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
+  //             ),
+  //             Text(
+  //               FormatUtil.formatSringToMoney(ddTotal) + ' ' + ddCcy,
+  //               style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Column _accountOverviewColumn() {
     Color colorOne;
@@ -677,21 +669,21 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     );
   }
 
-  Column _totalLiability() {
-    return Column(
-      children: [
-        Text(
-          S.current.total_liability,
-          style: TextStyle(fontSize: 14, color: Colors.white54),
-        ),
-        Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
-        Text(
-          localCcy + ' ' + FormatUtil.formatSringToMoney(totalLiabilities),
-          style: TextStyle(fontSize: 14, color: Colors.white),
-        ),
-      ],
-    );
-  }
+  // Column _totalLiability() {
+  //   return Column(
+  //     children: [
+  //       Text(
+  //         S.current.total_liability,
+  //         style: TextStyle(fontSize: 14, color: Colors.white54),
+  //       ),
+  //       Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
+  //       Text(
+  //         localCcy + ' ' + FormatUtil.formatSringToMoney(totalLiabilities),
+  //         style: TextStyle(fontSize: 14, color: Colors.white),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Container _netAssets(
     String title,
@@ -946,87 +938,87 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     );
   }
 
-  Future<void> _getCardList() async {
-    // CardDataRepository()
-    // setState(() {
-    //   _isLoading = true;
-    // });
-    ApiClientAccount().getCardList(GetCardListReq()).then((data) {
-      if (data.cardList != null) {
-        // if (mounted) {
-        //   setState(() {
-        data.cardList.forEach((item) {
-          cardNoList.add(item.cardNo);
-        });
-        // });
-        // }
-        _getAccountOverviewInfo();
-      }
-    }).catchError((e) {
-      HSProgressHUD.showToast(e);
-    });
-  }
+  // Future<void> _getCardList() async {
+  //   // CardDataRepository()
+  //   // setState(() {
+  //   //   _isLoading = true;
+  //   // });
+  //   ApiClientAccount().getCardList(GetCardListReq()).then((data) {
+  //     if (data.cardList != null) {
+  //       // if (mounted) {
+  //       //   setState(() {
+  //       data.cardList.forEach((item) {
+  //         cardNoList.add(item.cardNo);
+  //       });
+  //       // });
+  //       // }
+  //       _getAccountOverviewInfo();
+  //     }
+  //   }).catchError((e) {
+  //     HSProgressHUD.showToast(e);
+  //   });
+  // }
 
-  _getAccountOverviewInfo() async {
-    _isLoading = true;
-    final prefs = await SharedPreferences.getInstance();
-    String custID = prefs.getString(ConfigKey.CUST_ID);
+  // _getAccountOverviewInfo() async {
+  //   _isLoading = true;
+  //   final prefs = await SharedPreferences.getInstance();
+  //   String custID = prefs.getString(ConfigKey.CUST_ID);
 
-    // setState(() {
-    localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
-    // });
-    // 一个接口拿活期，定期总额
-    // DepositDataRepository()
-    ApiClientBill()
-        .getCardListBalByUser(
-      GetCardListBalByUserReq(
-        '',
-        custID,
-      ),
-    )
-        .then((data) {
-      if (data.cardListBal != null) {
-        if (mounted) {
-          setState(() {
-            //总资产
-            netAssets = data.totalAmt;
-            //活期列表
-            ddList = data.cardListBal;
-            if (data.ddTotalAmt != '0') {
-              //活期合计
-              ddTotal = data.ddTotalAmt;
-            }
-            //定期列表
-            tdList = data.tedpListBal;
-            if (data.tdTotalAmt != '0') {
-              //定期合计
-              tdTotal = data.tdTotalAmt;
-            }
-            //总负债
-            lnTotal = data.lnTotalAmt;
-            //贷款列表
-            lnList = data.lnListBal;
+  //   // setState(() {
+  //   localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
+  //   // });
+  //   // 一个接口拿活期，定期总额
+  //   // DepositDataRepository()
+  //   ApiClientBill()
+  //       .getCardListBalByUser(
+  //     GetCardListBalByUserReq(
+  //       '',
+  //       custID,
+  //     ),
+  //   )
+  //       .then((data) {
+  //     if (data.cardListBal != null) {
+  //       if (mounted) {
+  //         setState(() {
+  //           //总资产
+  //           netAssets = data.totalAmt;
+  //           //活期列表
+  //           ddList = data.cardListBal;
+  //           if (data.ddTotalAmt != '0') {
+  //             //活期合计
+  //             ddTotal = data.ddTotalAmt;
+  //           }
+  //           //定期列表
+  //           tdList = data.tedpListBal;
+  //           if (data.tdTotalAmt != '0') {
+  //             //定期合计
+  //             tdTotal = data.tdTotalAmt;
+  //           }
+  //           //总负债
+  //           lnTotal = data.lnTotalAmt;
+  //           //贷款列表
+  //           lnList = data.lnListBal;
 
-            ddCcy = data.defaultCcy == null ? localCcy : data.defaultCcy;
-            //净资产
-            var netAssetCompute = double.parse(netAssets);
-            var lnTotalCompute = double.parse(lnTotal);
-            //判断是否为负数
-            if (lnTotalCompute > netAssetCompute) {
-              _isNegative = true;
-            }
-            double totalAssetsCompute = netAssetCompute - lnTotalCompute;
-            print('totalAssetsCompute=$totalAssetsCompute');
-            totalAssets = totalAssetsCompute.toStringAsFixed(2);
-            _isLoading = false;
-          });
-        }
-      }
-    }).catchError((e) {
-      _isLoading = false;
-      HSProgressHUD.showToast(e);
-    });
-  }
+  //           ddCcy = data.defaultCcy == null ? localCcy : data.defaultCcy;
+  //           //净资产
+  //           var netAssetCompute = double.parse(netAssets);
+  //           var lnTotalCompute = double.parse(lnTotal);
+  //           //判断是否为负数
+  //           if (lnTotalCompute > netAssetCompute) {
+  //             _isNegative = true;
+  //           }
+  //           double totalAssetsCompute = netAssetCompute - lnTotalCompute;
+  //           print('totalAssetsCompute=$totalAssetsCompute');
+  //           totalAssets = totalAssetsCompute.toStringAsFixed(2);
+  //           _isLoading = false;
+  //         });
+  //       }
+  //     }
+  //   }).catchError((e) {
+  //     _isLoading = false;
+  //     HSProgressHUD.showToast(e);
+  //   });
+  // }
 
   void changeShowJudge(int showIndex) {
     if (isTotalAsset) {
@@ -1038,31 +1030,43 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
 
     switch (showIndex) {
       case 0:
-        isShowDD = true;
+        if (mounted) {
+          setState(() {
+            isShowDD = true;
+          });
+        }
         if (_isDDLoading == true) {
           _loadListNetWorkEntr();
         }
         break;
       case 1:
-        isShowTD = true;
+        if (mounted) {
+          setState(() {
+            isShowTD = true;
+          });
+        }
         if (_isTDLoading == true) {
           _loadListNetWorkEntr();
         }
         break;
       case 2:
-        isShowLN = true;
+        if (mounted) {
+          setState(() {
+            isShowLN = true;
+          });
+        }
         if (_isLNLoading == true) {
           _loadListNetWorkEntr();
         }
         break;
       default:
     }
-    if (mounted) {
-      setState(() {});
-    }
+    // if (mounted) {
+    //   setState(() {});
+    // }
   }
 
-  void _loadAssets() async {
+  Future<void> _loadAssets() async {
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
     localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
@@ -1085,6 +1089,11 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     } catch (e) {
       HSProgressHUD.showToast(e);
     }
+  }
+
+  void _loadFirstNetWork() async {
+    await _loadAssets();
+    _loadDDNetWork();
   }
 
   Future<void> _loadListNetWorkEntr() async {
