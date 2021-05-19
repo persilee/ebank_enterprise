@@ -1,31 +1,29 @@
-import 'package:dio/dio.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/approval/card_bal_by_card_no_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/card_bal_by_card_no_model.dart';
-import 'package:ebank_mobile/data/source/model/approval/find_all_finished_task_model.dart';
-import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
-import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_body.dart';
-import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
-import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_detail_model.dart';
-import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_body.dart';
-import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_model.dart'
-    as TDEPModel;
-import 'package:ebank_mobile/data/source/model/approval/international_transfer_detail_model.dart'
-    as InternationalModel;
-import 'package:ebank_mobile/data/source/model/approval/transfer_plan_detail_model.dart'
-    as TransferPlanModel;
 import 'package:ebank_mobile/data/source/model/approval/early_red_td_contract_detail_model.dart'
     as EarlyRedModel;
+import 'package:ebank_mobile/data/source/model/approval/find_todo_task_detail_body.dart';
+import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
+import 'package:ebank_mobile/data/source/model/approval/foreign_transfer_model.dart'
+    as ForeignTransferModel;
+import 'package:ebank_mobile/data/source/model/approval/international_transfer_detail_model.dart'
+    as InternationalModel;
+import 'package:ebank_mobile/data/source/model/approval/loan_repayment_model.dart'
+    as LoanRepaymentModel;
+import 'package:ebank_mobile/data/source/model/approval/loan_with_drawal_model.dart'
+    as LoanWithDrawalModel;
 import 'package:ebank_mobile/data/source/model/approval/one_to_one_transfer_detail_model.dart'
     as OneToOneModel;
 import 'package:ebank_mobile/data/source/model/approval/open_td_contract_detail_model.dart'
     as OpenTDModel;
-import 'package:ebank_mobile/data/source/model/approval/foreign_transfer_model.dart'
-    as ForeignTransferModel;
 import 'package:ebank_mobile/data/source/model/approval/post_repayment_model.dart'
     as PostRepaymentModel;
-import 'package:ebank_mobile/data/source/model/approval/loan_with_drawal_model.dart'
-    as LoanWithDrawalModel;
+import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_body.dart';
+import 'package:ebank_mobile/data/source/model/approval/publicCode/tdep_products_model.dart'
+    as TDEPModel;
+import 'package:ebank_mobile/data/source/model/approval/transfer_plan_detail_model.dart'
+    as TransferPlanModel;
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/transfer/get_info_by_swift_code.dart';
@@ -33,14 +31,10 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
-import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
-import 'package:ebank_mobile/page/login/login_page.dart';
-import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sp_util/sp_util.dart';
 
 import '../../page_route.dart';
 
@@ -68,6 +62,7 @@ class _MyApprovedHistoryDetailPageState
   List<Widget> _foreignTransferList = [];
   List<Widget> _postRepaymentList = [];
   List<Widget> _loanWithDrawalList = [];
+  List<Widget> _loanRepaymentList = [];
   List<Widget> _finishedList = [];
   List<dynamic> _commentList = [];
   final f = NumberFormat("#,##0.00", "en_US");
@@ -148,6 +143,65 @@ class _MyApprovedHistoryDetailPageState
           );
         });
       }
+    }
+  }
+
+  // loanRepaymentApproval - 计划还款
+  void _loanRepaymentData(_contractModel) async {
+    LoanRepaymentModel.LoanRepaymentModel loanRepaymentModel =
+        LoanRepaymentModel.LoanRepaymentModel.fromJson(_contractModel);
+
+    LoanRepaymentModel.OperateEndValue data =
+        loanRepaymentModel.operateEndValue;
+
+    // 添加历史审批记录
+    if (loanRepaymentModel.commentList.isNotEmpty) {
+      _commentList = loanRepaymentModel.commentList;
+      loanRepaymentModel.commentList.forEach((data) {
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
+      });
+    }
+
+    if (this.mounted) {
+      setState(() {
+        _loanRepaymentList.clear();
+        _loanRepaymentList.add(_buildTitle(S.current.approve_loan_information));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_account, data?.acNo ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_currency, data?.ccy ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_principal, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.prin ?? '0')) ?? ''
+                : f.format(double.parse(data?.prin ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_interest_rate, data?.exRate ?? ''));
+        _loanRepaymentList.add(
+          Padding(padding: EdgeInsets.only(top: 15)),
+        );
+        _loanRepaymentList
+            .add(_buildTitle(S.current.approve_repayment_interest));
+        _loanRepaymentList
+            .add(_buildContentItem(S.current.debit_account, data?.ddAc ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_repayment_interest, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.interestAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.interestAmount ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_fine_amount, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_reimbursement_amount, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.totalAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.totalAmount ?? '0')) ?? ''));
+        _isLoading = false;
+        _isShowErrorPage = false;
+      });
     }
   }
 
@@ -989,6 +1043,7 @@ class _MyApprovedHistoryDetailPageState
         if (_processKey == 'foreignTransferApproval') ..._foreignTransferList,
         if (_processKey == 'postRepaymentApproval') ..._postRepaymentList,
         if (_processKey == 'loanWithDrawalApproval') ..._loanWithDrawalList,
+        if (_processKey == 'loanRepaymentApproval') ..._loanRepaymentList,
       ],
     );
   }
