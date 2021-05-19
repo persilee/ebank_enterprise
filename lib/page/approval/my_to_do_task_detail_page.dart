@@ -197,8 +197,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _loanRepaymentList.add(_buildContentItem(
             S.current.approve_loan_principal, // 处理日元没有小数
             data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.prin ?? '0')) ?? ''
-                : f.format(double.parse(data?.prin ?? '0')) ?? ''));
+                ? fj.format(double.parse(data?.principalAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.principalAmount ?? '0')) ?? ''));
         _loanRepaymentList.add(_buildContentItem(
             S.current.approve_loan_interest_rate, data?.exRate ?? ''));
         _loanRepaymentList.add(
@@ -209,16 +209,25 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _loanRepaymentList
             .add(_buildContentItem(S.current.debit_account, data?.ddAc ?? ''));
         _loanRepaymentList.add(_buildContentItem(
+            //扣款账号
             S.current.approve_repayment_interest, // 处理日元没有小数
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.interestAmount ?? '0')) ?? ''
                 : f.format(double.parse(data?.interestAmount ?? '0')) ?? ''));
         _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_fine_amount, // 处理日元没有小数
+            //本金罚息
+            S.current.loan_plan_principal_penalty, // 处理日元没有小数
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''
                 : f.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''));
         _loanRepaymentList.add(_buildContentItem(
+            //利息罚息
+            S.current.loan_plan_interest_payment, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.compoundAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.compoundAmount ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            //还款总额
             S.current.approve_reimbursement_amount, // 处理日元没有小数
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.totalAmount ?? '0')) ?? ''

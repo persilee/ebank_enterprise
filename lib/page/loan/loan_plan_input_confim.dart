@@ -155,11 +155,11 @@ class _InputPlanConfimPageState extends State<InputPlanConfimPage> {
       LoanRepaymentConfimReq req = LoanRepaymentConfimReq(
           acNo, //贷款合约
           planDetail.ccy, //贷款货币
-          _fine, //还复利金额利息罚息
+          _fine, //还复利金额 ->利息罚息
           _debitAccount, //结算活期账户
-          _repayInterest, //还款利息金额
+          _repayInterest, //还款利息
           loanDetail.osAmt, //贷款余额
-          _principel, //罚息
+          _principel, //本金罚息
           loanDetail.loanAmt, //贷款本金
           instalNo, //还本金金额
           loanDetail.prodTyp, //产品代码
