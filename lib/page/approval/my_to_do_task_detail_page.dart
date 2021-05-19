@@ -190,7 +190,39 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       setState(() {
         _loanRepaymentList.clear();
         _loanRepaymentList.add(_buildTitle(S.current.approve_loan_information));
-
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_account, data?.acNo ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_currency, data?.ccy ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_principal, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.prin ?? '0')) ?? ''
+                : f.format(double.parse(data?.prin ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_interest_rate, data?.exRate ?? ''));
+        _loanRepaymentList.add(
+          Padding(padding: EdgeInsets.only(top: 15)),
+        );
+        _loanRepaymentList
+            .add(_buildTitle(S.current.approve_repayment_interest));
+        _loanRepaymentList
+            .add(_buildContentItem(S.current.debit_account, data?.ddAc ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_repayment_interest, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.interestAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.interestAmount ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_fine_amount, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_reimbursement_amount, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.totalAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.totalAmount ?? '0')) ?? ''));
         _isLoading = false;
         _isShowErrorPage = false;
       });
