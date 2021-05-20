@@ -60,7 +60,7 @@ class _InputPlanConfimPageState extends State<InputPlanConfimPage> {
     this.planDetail = detail;
 
     LnAcMastAppDOList loanDetails = mapDetail['loanDetail'];
-    acNo = loanDetails.acNo; //贷款账号
+    acNo = loanDetails.contactNo; //贷款账号
     loanDetail = loanDetails;
 
     _debitAccount = mapDetail['debitAcc'];
@@ -73,7 +73,7 @@ class _InputPlanConfimPageState extends State<InputPlanConfimPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           //贷款账号
-          _contentColumn(S.of(context).loan_account, acNo),
+          _contentColumn(S.of(context).contract_number, acNo),
           //币种
           _contentColumn(S.of(context).currency, currency), //ccy
           //还款本金

@@ -99,6 +99,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
 
   void initState() {
     super.initState();
+    _minAmt = widget.producDTOList.minAmt; //最小值从前面的界面带过来
     _network();
   }
 
@@ -1325,7 +1326,7 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
         setState(() {
           if (resp != null) {
             ccy = resp.ccy;
-            _minAmt = resp.minAmt;
+            // _minAmt = resp.minAmt;
             _maxAmt = resp.maxAmt;
             if (resp.recordLists != null) {
               resp.recordLists.forEach((value) {

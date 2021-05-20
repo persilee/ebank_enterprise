@@ -190,8 +190,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       setState(() {
         _loanRepaymentList.clear();
         _loanRepaymentList.add(_buildTitle(S.current.approve_loan_information));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_loan_account, data?.acNo ?? ''));
+        _loanRepaymentList.add(
+            _buildContentItem(S.current.contract_number, data?.acNo ?? ''));
         _loanRepaymentList.add(_buildContentItem(
             S.current.approve_loan_currency, data?.ccy ?? ''));
         _loanRepaymentList.add(_buildContentItem(

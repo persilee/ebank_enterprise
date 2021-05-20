@@ -184,7 +184,7 @@ class TdepProductDTOList extends Object {
 
   @JsonKey(name: 'remark')
   String remark;
-
+  //起存金额
   @JsonKey(name: 'minAmt')
   String minAmt;
 

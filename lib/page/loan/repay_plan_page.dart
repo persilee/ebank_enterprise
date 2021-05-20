@@ -199,16 +199,16 @@ class _RepayPlanState extends State<RepayPlanPage> {
     // 存在逾期未还款。需要先还逾期的，再还当前期数。
 
     var instalType = lnSchedule.paySts; //还款状态 0：未还 1：逾期 2：已还
-    var repay = '还款'; //还款
+    var repay = S.current.repayment_with_under; //还款
     switch (instalType) {
       case '0':
-        instalType = ' (未还) ';
+        instalType = ' (' + S.current.loan_plan_status_unreimbursed + ') ';
         break;
       case '1':
-        instalType = ' (逾期) '; //(部分还款)
+        instalType = ' (' + S.current.installment_status3 + ') '; //(部分还款)
         break;
       case '2':
-        instalType = ' (全部还款) ';
+        instalType = ' (' + S.current.loan_plan_status + ') '; //全部还清
         repay = '';
         break;
       default:
@@ -216,8 +216,10 @@ class _RepayPlanState extends State<RepayPlanPage> {
 
     double currentPenAmt = double.parse(lnSchedule.payPrin) -
         double.parse(lnSchedule.recPrin); //当前本金金额
+
     double currentInterestAmt =
         double.parse(lnSchedule.payInt) - double.parse(lnSchedule.recInt); //利息
+
     double currentAmorIntAmt =
         (double.parse(lnSchedule.payPen) + double.parse(lnSchedule.payCom)) -
             (double.parse(lnSchedule.recPen) +

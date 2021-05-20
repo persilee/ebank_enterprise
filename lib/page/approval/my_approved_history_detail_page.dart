@@ -129,6 +129,9 @@ class _MyApprovedHistoryDetailPageState
       // loanWithDrawalApproval - 贷款领用
       else if (_processKey == 'loanWithDrawalApproval') {
         _loanWithDrawalData(_contractModel);
+      } //计划还款
+      else if (_processKey == 'loanRepaymentApproval') {
+        _loanRepaymentData(_contractModel);
       }
     } catch (e) {
       if (this.mounted) {
@@ -143,65 +146,6 @@ class _MyApprovedHistoryDetailPageState
           );
         });
       }
-    }
-  }
-
-  // loanRepaymentApproval - 计划还款
-  void _loanRepaymentData(_contractModel) async {
-    LoanRepaymentModel.LoanRepaymentModel loanRepaymentModel =
-        LoanRepaymentModel.LoanRepaymentModel.fromJson(_contractModel);
-
-    LoanRepaymentModel.OperateEndValue data =
-        loanRepaymentModel.operateEndValue;
-
-    // 添加历史审批记录
-    if (loanRepaymentModel.commentList.isNotEmpty) {
-      _commentList = loanRepaymentModel.commentList;
-      loanRepaymentModel.commentList.forEach((data) {
-        _finishedList.add(_buildAvatar(data?.userName ?? ''));
-      });
-    }
-
-    if (this.mounted) {
-      setState(() {
-        _loanRepaymentList.clear();
-        _loanRepaymentList.add(_buildTitle(S.current.approve_loan_information));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_loan_account, data?.acNo ?? ''));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_loan_currency, data?.ccy ?? ''));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_loan_principal, // 处理日元没有小数
-            data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.prin ?? '0')) ?? ''
-                : f.format(double.parse(data?.prin ?? '0')) ?? ''));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_loan_interest_rate, data?.exRate ?? ''));
-        _loanRepaymentList.add(
-          Padding(padding: EdgeInsets.only(top: 15)),
-        );
-        _loanRepaymentList
-            .add(_buildTitle(S.current.approve_repayment_interest));
-        _loanRepaymentList
-            .add(_buildContentItem(S.current.debit_account, data?.ddAc ?? ''));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_repayment_interest, // 处理日元没有小数
-            data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.interestAmount ?? '0')) ?? ''
-                : f.format(double.parse(data?.interestAmount ?? '0')) ?? ''));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_fine_amount, // 处理日元没有小数
-            data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''
-                : f.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_reimbursement_amount, // 处理日元没有小数
-            data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.totalAmount ?? '0')) ?? ''
-                : f.format(double.parse(data?.totalAmount ?? '0')) ?? ''));
-        _isLoading = false;
-        _isShowErrorPage = false;
-      });
     }
   }
 
@@ -325,8 +269,8 @@ class _MyApprovedHistoryDetailPageState
       setState(() {
         _postRepaymentList.clear();
         _postRepaymentList.add(_buildTitle(S.current.approve_loan_information));
-        _postRepaymentList.add(_buildContentItem(
-            S.current.approve_loan_account, data?.acNo ?? ''));
+        _postRepaymentList.add(
+            _buildContentItem(S.current.contract_number, data?.acNo ?? ''));
         _postRepaymentList.add(_buildContentItem(
             S.current.approve_loan_currency, data?.ccy ?? ''));
         _postRepaymentList.add(_buildContentItem(
@@ -367,6 +311,74 @@ class _MyApprovedHistoryDetailPageState
                 : f.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''));
         _postRepaymentList.add(_buildContentItem(
             S.current.approve_reimbursement_amount,
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.totalAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.totalAmount ?? '0')) ?? ''));
+        _isLoading = false;
+        _isShowErrorPage = false;
+      });
+    }
+  }
+
+// loanRepaymentApproval - 计划还款
+  void _loanRepaymentData(_contractModel) async {
+    LoanRepaymentModel.LoanRepaymentModel loanRepaymentModel =
+        LoanRepaymentModel.LoanRepaymentModel.fromJson(_contractModel);
+
+    LoanRepaymentModel.OperateEndValue data =
+        loanRepaymentModel.operateEndValue;
+
+    // 添加历史审批记录
+    if (loanRepaymentModel.commentList.isNotEmpty) {
+      _commentList = loanRepaymentModel.commentList;
+      loanRepaymentModel.commentList.forEach((data) {
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
+      });
+    }
+
+    if (this.mounted) {
+      setState(() {
+        _loanRepaymentList.clear();
+        _loanRepaymentList.add(_buildTitle(S.current.approve_loan_information));
+        _loanRepaymentList.add(
+            _buildContentItem(S.current.contract_number, data?.acNo ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_currency, data?.ccy ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_principal, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.principalAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.principalAmount ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_interest_rate, data?.exRate ?? ''));
+        _loanRepaymentList.add(
+          Padding(padding: EdgeInsets.only(top: 15)),
+        );
+        _loanRepaymentList
+            .add(_buildTitle(S.current.approve_repayment_interest));
+        _loanRepaymentList
+            .add(_buildContentItem(S.current.debit_account, data?.ddAc ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            //扣款账号
+            S.current.approve_repayment_interest, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.interestAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.interestAmount ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            //本金罚息
+            S.current.loan_plan_principal_penalty, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            //利息罚息
+            S.current.loan_plan_interest_payment, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.compoundAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.compoundAmount ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            //还款总额
+            S.current.approve_reimbursement_amount, // 处理日元没有小数
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.totalAmount ?? '0')) ?? ''
                 : f.format(double.parse(data?.totalAmount ?? '0')) ?? ''));

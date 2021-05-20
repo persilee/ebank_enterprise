@@ -106,7 +106,7 @@ class _RepaymentPlanInputState extends State<RepaymentPlanInputPage> {
 
     LnAcMastAppDOList loanDetails = mapDetail['loanDetail'];
     loanDetail = loanDetails;
-    this.acNo = loanDetails.acNo; //贷款账号
+    this.acNo = loanDetails.contactNo; //贷款账号
     _planParameterSetValue();
 
     var container1 = Container(
@@ -116,7 +116,7 @@ class _RepaymentPlanInputState extends State<RepaymentPlanInputPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           //贷款账号
-          _contentColumn(S.of(context).loan_account, acNo),
+          _contentColumn(S.of(context).contract_number, acNo),
           //币种
           _contentColumn(S.of(context).currency, currency), //ccy
           //还款本金

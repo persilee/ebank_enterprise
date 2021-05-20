@@ -765,6 +765,8 @@
   "time_deposit_Settlement_title": "部分结清本息总额: ",
   "loan_plan_principal_penalty": "本金罚息",
   "loan_plan_interest_payment": "利息罚息",
+  "loan_plan_status":"本期已还清",
+  "loan_plan_status_unreimbursed":"未还",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "数据异常，未返回数据！",
