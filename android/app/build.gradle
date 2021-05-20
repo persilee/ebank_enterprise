@@ -79,40 +79,6 @@ android {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
-
-  //rammus集成alipush
-  def manifestPath = [
-            // for AAR of Release
-            // see note below
-            projectRoot + '/build-cache',
-            projectRoot + '/rammus',
-            // for AAR of SNAPSHOT
-            projectRoot + '/app/build/intermediates/exploded-aar'
-    ]
-
-    def removeAttrs = [
-            'android:theme'
-    ]
-
-    def replaceValues = [
-            'android:theme'
-    ]
-
-
-    seal {
-        enabled = true
-        manifests = manifestPath
-
-        appAttrs {
-            enabled = true
-            attrsShouldRemove = removeAttrs
-        }
-
-        appReplaceValues {
-            enabled = true
-            valuesShouldRemove = replaceValues
-        }
-    }
 }
 
 flutter {

@@ -3,4 +3,7 @@
 #import <SigningEyeSDK/SigningEyeSDK.h>
 @interface AppDelegate : FlutterAppDelegate <SEVideoManagerDelegate,SigningESDKDelegate>
 
+//单例
++ (AppDelegate *)shareAppDelegate;
+
 @end

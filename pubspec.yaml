@@ -74,7 +74,6 @@ dependencies:
   event_bus: ^1.1.1
   camera: ^0.7.0+2
   flutter_image_compress: ^0.7.0
-  rammus: ^1.2.1
 
 dev_dependencies:
   flutter_test:
