@@ -61,11 +61,14 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [GeneratedPluginRegistrant registerWithRegistry:self];
     
+    [self initCloudPush];
+    [self registerAPNS:application];
+    
     // 点击通知将App从关闭状态启动时，将通知打开回执上报
     // [CloudPushSDK handleLaunching:launchOptions];(Deprecated from v1.8.1)
     [CloudPushSDK sendNotificationAck:launchOptions];
-    [CloudPushSDK bindAccount:@"brillink" withCallback:^(CloudPushCallbackResult *res) {
-    }];
+    
+    
     return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
@@ -180,6 +183,11 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [CloudPushSDK asyncInit:@"333441016" appSecret:@"1c04ef22c4cc4cc787351ff734e68d7d" callback:^(CloudPushCallbackResult *res) {
         if (res.success) {
             NSLog(@"Push SDK init success, deviceId: %@.", [CloudPushSDK getDeviceId]);
+            [CloudPushSDK bindAccount:@"brillink" withCallback:^(CloudPushCallbackResult *res) {
+                if (res.success) {
+                    NSLog(@"00000000000000000");
+                }
+            }];
         } else {
             NSLog(@"Push SDK init failed, error: %@", res.error);
         }
@@ -192,15 +200,19 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
  *    @param     application
  */
 - (void)registerAPNS:(UIApplication *)application {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000
     if (@available(iOS 10.0, *)) {
     UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
             center.delegate = self;
             [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error){
                 if( !error ){
-                    [[UIApplication sharedApplication] registerForRemoteNotifications];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [[UIApplication sharedApplication] registerForRemoteNotifications];
+                    });
                 }
             }];
     }
+#else
     else {
         // iOS 8 - 10 Notifications
         [application registerUserNotificationSettings:
@@ -209,6 +221,10 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
                                            categories:nil]];
         [application registerForRemoteNotifications];
     }
+//xcode baseSDK为7.0以下的
+
+#endif
+    
 }
 /*
  *  苹果推送注册成功回调，将苹果返回的deviceToken上传到CloudPush服务器
