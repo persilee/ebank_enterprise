@@ -10,6 +10,7 @@
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		472CB9F226560057007FE68E /* AliyunEmasServices-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 472CB9F126560057007FE68E /* AliyunEmasServices-Info.plist */; };
+		474E5E6326579D7800743AAC /* AppDelegate+HSPushDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 474E5E6226579D7800743AAC /* AppDelegate+HSPushDelegate.m */; };
 		477981AB26241EA800ABB56A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 477981AD26241EA800ABB56A /* InfoPlist.strings */; };
 		4779823D2627D9E700ABB56A /* SigningResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4779822B2627D9E500ABB56A /* SigningResources.bundle */; };
 		4779824B2627D9E700ABB56A /* SigningEyeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4779823C2627D9E700ABB56A /* SigningEyeSDK.framework */; };
@@ -124,6 +125,8 @@
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		472CB9F126560057007FE68E /* AliyunEmasServices-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AliyunEmasServices-Info.plist"; sourceTree = "<group>"; };
+		474E5E6126579D7800743AAC /* AppDelegate+HSPushDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+HSPushDelegate.h"; sourceTree = "<group>"; };
+		474E5E6226579D7800743AAC /* AppDelegate+HSPushDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+HSPushDelegate.m"; sourceTree = "<group>"; };
 		477981AC26241EA800ABB56A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		477981AE26241EAD00ABB56A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		477981AF26241EAE00ABB56A /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -645,6 +648,8 @@
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 				686D0B512600EB9800781075 /* AppDelegate.h */,
 				686D0B502600EB9800781075 /* AppDelegate.m */,
+				474E5E6126579D7800743AAC /* AppDelegate+HSPushDelegate.h */,
+				474E5E6226579D7800743AAC /* AppDelegate+HSPushDelegate.m */,
 				686D0B532600ED4300781075 /* main.m */,
 			);
 			path = Runner;
@@ -870,6 +875,7 @@
 				6815D75C26047BED007BFC9D /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				6815D79726048767007BFC9D /* IQUIView+Hierarchy.m in Sources */,
 				6815D74D26047BED007BFC9D /* AFHTTPSessionManager.m in Sources */,
+				474E5E6326579D7800743AAC /* AppDelegate+HSPushDelegate.m in Sources */,
 				686D0AF12600B3D400781075 /* MJProperty.m in Sources */,
 				6815D74F26047BED007BFC9D /* AFURLSessionManager.m in Sources */,
 				686D0AF42600B3D400781075 /* NSObject+MJClass.m in Sources */,
