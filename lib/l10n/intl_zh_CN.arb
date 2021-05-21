@@ -767,6 +767,7 @@
   "loan_plan_interest_payment": "利息罚息",
   "loan_plan_status":"本期已还清",
   "loan_plan_status_unreimbursed":"未还",
+  "loan_available_credit": "剩余额度",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "数据异常，未返回数据！",

@@ -42,8 +42,10 @@ class _LoanReferenceState extends State<LoanReference> {
   String _totalInterest = ''; //总利息
   String _mothCode = ''; //月份编码
   double max = 0; //贷款最大限额
-  String iratCd1 = ''; //用户额度保存
+  String iratCd1 = ''; //用户额度编号保存
   String interestRate = ''; //贷款利率
+  String _balStr = ''; //可用额度
+  bool _isload = false; //是否已加载
 
   final f = NumberFormat("#,##0.00", "en_US"); //USD有小数位的处理
   final fj = NumberFormat("#,##0", "ja-JP"); //日元没有小数位的处理
@@ -180,7 +182,7 @@ class _LoanReferenceState extends State<LoanReference> {
       } else {
         //失去焦点 去请求接口并计算
         _checkInputValueAndRate(); //校验
-        _loadQueryIntereRateData(); //试算
+        // _loadQueryIntereRateData(); //试算
       }
     });
   }
@@ -197,19 +199,26 @@ class _LoanReferenceState extends State<LoanReference> {
     );
     ApiClientLoan().loanCreditlimitInterface(req).then((data) {
       if (data.getCreditlimitByCusteDTOList != null) {
+        HSProgressHUD.dismiss();
         //判断数据不为空
         if (mounted) {
-          setState(() {
-            GetCreditlimitByCusteDTOList custcd =
-                data.getCreditlimitByCusteDTOList[0];
-            iratCd1 = custcd.iratCd1;
-            _limitCusteModel = custcd;
-            _checkInputValueAndRate(); //利率判断
-          });
+          _isload = true;
+          // setState(() {
+          GetCreditlimitByCusteDTOList custcd =
+              data.getCreditlimitByCusteDTOList[0];
+          iratCd1 = custcd.iratCd1;
+          _limitCusteModel = custcd;
+          max = double.parse(custcd.avaBal); //保存可使用的额度
+          _balStr = accountInfo.ccy == 'JPY'
+              ? fj.format(double.parse(_limitCusteModel.avaBal ?? '0')) ?? ''
+              : f.format(double.parse(_limitCusteModel.avaBal ?? '0')) ?? '';
+          _checkInputValueAndRate(); //利率判断
+          // });
         }
       }
     }).catchError((e) {
       setState(() {
+        _isload = false;
         _recipientsController.text = '';
       });
       HSProgressHUD.showToast(e);
@@ -231,9 +240,7 @@ class _LoanReferenceState extends State<LoanReference> {
         });
       }
     }).catchError((e) {
-      // HSProgressHUD.dismiss();
       HSProgressHUD.showToast(e);
-      // HSProgressHUD.dismiss();
     });
   }
 
@@ -280,10 +287,9 @@ class _LoanReferenceState extends State<LoanReference> {
   Widget build(BuildContext context) {
     LoanAccountDOList accountInfo = ModalRoute.of(context).settings.arguments;
     this.accountInfo = accountInfo;
-    max = double.parse(accountInfo.bal); //保存可使用的额度
-    String balStr = accountInfo.ccy == 'JPY'
-        ? fj.format(double.parse(accountInfo.bal ?? '0')) ?? ''
-        : f.format(double.parse(accountInfo.bal ?? '0')) ?? '';
+    if (!_isload) {
+      _loadQueryIntereRateData(); //获取用户的授信额度
+    }
 
     return Scaffold(
         //防止挤压溢出
@@ -309,10 +315,12 @@ class _LoanReferenceState extends State<LoanReference> {
                       //可用额度
                       width: MediaQuery.of(context).size.width,
                       child: Text(
-                        S.current.loan_detail_available_amount +
-                            ' ' +
+                        S.current.remaining_available_amount +
+                            ': ' +
+                            '(' +
                             accountInfo.ccy +
-                            balStr,
+                            ') ' +
+                            _balStr,
                         textAlign: TextAlign.left,
                         style:
                             TextStyle(color: Color(0xFF262626), fontSize: 15),
@@ -834,7 +842,7 @@ class _LoanReferenceState extends State<LoanReference> {
     _requestDataMap["totalInterst"] = _trailModel.totInt; //总利息
     _requestDataMap["price"] = _recipientsController.text; //金额
     _listDataMap["repayPlan"] = _trailStr; //计划
-    _listDataMap["availableCredit"] = accountInfo.bal; //可用额度
+    _listDataMap["availableCredit"] = _limitCusteModel.avaBal; //可用额度
 
     _requestDataMap["acNo"] = accountInfo.lnac; //贷款帐号
     _requestDataMap["interestRate"] = interestRate; //利率

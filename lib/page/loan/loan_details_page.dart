@@ -262,7 +262,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
                     _verticalMoulding(),
                     //余额额度
                     _loanMoney(
-                        S.current.loan_detail_available_amount +
+                        S.current.loan_available_credit +
                             ' (' +
                             widget.loanAccountDetail.ccy +
                             ')',
