@@ -63,6 +63,8 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [self initCloudPush];
     [self registerAPNS:application];
+    [self registerMessageReceive];
+//    [self listenerOnChannelOpened];
     
     // 点击通知将App从关闭状态启动时，将通知打开回执上报
     // [CloudPushSDK handleLaunching:launchOptions];(Deprecated from v1.8.1)
@@ -266,43 +268,40 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSLog(@"1111111 Receive message title: %@, content: %@.", title, body);
 }
 
-- (void)listenerOnChannelOpened {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(onChannelOpened:)
-                                                 name:@"CCPDidChannelConnectedSuccess"
-                                               object:nil];
-}
-// 通道打开通知
-- (void)onChannelOpened:(NSNotification *)notification {
-    CCPSysMessage *message = [notification object];
-    NSString *title = [[NSString alloc] initWithData:message.title encoding:NSUTF8StringEncoding];
-    NSString *body = [[NSString alloc] initWithData:message.body encoding:NSUTF8StringEncoding];
-    NSLog(@"22222 Receive message title: %@, content: %@.", title, body);
-}
+//- (void)listenerOnChannelOpened {
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(onChannelOpened:)
+//                                                 name:@"CCPDidChannelConnectedSuccess"
+//                                               object:nil];
+//}
+//// 通道打开通知
+//- (void)onChannelOpened:(NSNotification *)notification {
+//    NSLog(@"22222 notification: %@", notification);
+//}
 
-//iOS 10 -
-/**
- *  App处于打开状态时，点击打开通知；
- */
-- (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler {
-    NSLog(@"Receive one notification.");
-    // 取得APNS通知内容
-    NSDictionary *aps = [userInfo valueForKey:@"aps"];
-    // 内容
-    NSString *content = [aps valueForKey:@"alert"];
-    // badge数量
-    NSInteger badge = [[aps valueForKey:@"badge"] integerValue];
-    // 播放声音
-    NSString *sound = [aps valueForKey:@"sound"];
-    // 取得Extras字段内容
-    NSString *Extras = [userInfo valueForKey:@"Extras"]; //服务端中Extras字段，key是自己定义的
-    NSLog(@"3333content = [%@], badge = [%ld], sound = [%@], Extras = [%@]", content, (long)badge, sound, Extras);
-    // iOS badge 清0
-    application.applicationIconBadgeNumber = 0;
-    // 通知打开回执上报
-    // [CloudPushSDK handleReceiveRemoteNotification:userInfo];(Deprecated from v1.8.1)
-    [CloudPushSDK sendNotificationAck:userInfo];
-}
+////iOS 10 -
+///**
+// *  App处于打开状态时，点击打开通知；
+// */
+//- (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler {
+//    NSLog(@"Receive one notification.");
+//    // 取得APNS通知内容
+//    NSDictionary *aps = [userInfo valueForKey:@"aps"];
+//    // 内容
+//    NSString *content = [aps valueForKey:@"alert"];
+//    // badge数量
+//    NSInteger badge = [[aps valueForKey:@"badge"] integerValue];
+//    // 播放声音
+//    NSString *sound = [aps valueForKey:@"sound"];
+//    // 取得Extras字段内容
+//    NSString *Extras = [userInfo valueForKey:@"Extras"]; //服务端中Extras字段，key是自己定义的
+//    NSLog(@"3333content = [%@], badge = [%ld], sound = [%@], Extras = [%@]", content, (long)badge, sound, Extras);
+//    // iOS badge 清0
+//    application.applicationIconBadgeNumber = 0;
+//    // 通知打开回执上报
+//    // [CloudPushSDK handleReceiveRemoteNotification:userInfo];(Deprecated from v1.8.1)
+//    [CloudPushSDK sendNotificationAck:userInfo];
+//}
 
 //iOS 10 +
 /**

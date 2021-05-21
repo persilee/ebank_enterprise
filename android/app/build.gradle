@@ -26,6 +26,8 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 //引用插件
 apply plugin: 'seal'
+//引用阿里的统一集成EMAS的配置文件路径
+apply plugin: 'com.aliyun.ams.emas-services'
 
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')

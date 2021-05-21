@@ -4,83 +4,83 @@
 <dict>
 	<key>config</key>
 	<dict>
-            <key>emas.appKey</key>
-            <string>333441016</string>
-            <key>emas.appSecret</key>
-            <string>1c04ef22c4cc4cc787351ff734e68d7d</string>
-            <key>emas.bundleId</key>
-            <string>com.example.ebank-mobile-enterprise</string>
-            <key>hotfix.idSecret</key>
-            <string>333441016-2</string>
-            <key>hotfix.rsaSecret</key>
-            <string>MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCNEfjKmTvqflphUTGELN11F6j19xbRH7EqajYlMaZ4XIokIIq7t7o1Qmp5MxBccawdPuipu2kLl/nK4rOWlmBKkzWeN+WSKEKamhTfWvT5BMNlUtyLD4TUsS+p2J2FgRyqaXq6Iq+VC1cDA0jqAqzI5OcKAtlv/yqWgklXgjaq/5YCK6GFn85RH4oCypSQzpfWHEKrOLgE4QqvhlzCmm280xJB19ZfindWjZANclDfxhnOn4ke6E22mkoIWlE5jTvSJ8BKVS2PEi8cs6nIwQfT7/lya0U4vfPzfTF9NwmOfIJ9eow+mLPvYlX6qRaY+wdCQHZxtS34HLyNbdy3+oldAgMBAAECggEALd5DE7ThO2yb/HqG7CAeXZ00zczqeVKhq1XfhxZut0H3lKmUElc5z2lp70CAOF6phNTYl5+dFyzyBlrR48u/QWA+FdS861n11gj1cm5Dqtg2pDJeDUUdfn6iLcqF5UvGw04Knoz6pC6MuykNQzFddvCegq3Mf1LrSQbRzAdFuTFnUXR/imNJljG5bbi5v4mu6OmEIZ78WwE425ymr+s2uHXsB6yTKzK2Nt4CW/sHazUOV3wruy8l+vnHrMdR+Rb3yt9ksPoxRiM8E2VJOK9eJwdjS9gTA3rw/EGsyt2p1Dz7PeDgupYMkS5joI1joLdmdT6ju9uBWxE3S5WjomzQ7QKBgQDO3OSSJeGePzzhxrXkSMJnTotCM4raIHewLkGxSDMUR7g4bibKqLfCaorTHuf623SxNFnku2zrdIvQBux1b2l/Xv5SDOUivUnCbxGqVjk/+QYZIOqTNNMsHDWGChfvcqxdhdYPK8d2crMs9SMQ26d/eL0aqdjhxm1mw1DM1WbuZwKBgQCulExk6bXZvuEEDNEqe04OKchGvvqliTuMA/J7Ag03B7NMg7uuBaJoHIHgVhgFVHrQMLanBwB+YXBwxbiZSfEr/750LqyZrrVzy3hycWHLmUCQLyatq/QMs3uzUv3KqcgBX1fn6vVjOCWFhAoln2ZakmSgsoV1xEHZkflqLeWnmwKBgHt1F7EljI6OPT6eAmZZCjTvimsbKc5evC/Ym3o7lciPuSFslBg1M16DiZDQjDCKEw3DKbc6KJopd1vTFgJMWNEcl3nOml3uTHwPH6LiTM6iR4Jtw7HRQAq+Vy9FDN3qOXajboqlXSiS8d5t+tyPy1pna6zjGz4714USIkHtRr4XAoGBAJn85xGP8D57lqDq6UiOcMAfbK+yXwXKcYLELIsBuURT/3w7Kj2KbMFme8y0RAXXiWi/vyy/CVlweyyNypEzXo5Py99RGB+KsjTMQZa4melraT6EyJoh9WeKnU8EoiWz8l37il9fqUj2SmplmEmtOywiuq3gKcZB8U+G6bgVed+HAoGBALco6PRKjTvYHguDw7T0NXV6oG1IIBf/9YOse0wS+kLWmw17kzI1mkF21m15PHWm56ahoODu31oNbksUNbQ6NGlLTbyZIAjNDWVWl7rgx/xEAZVUUb+w2CFErKlG9boourLZtTSBEz3tYWGhsAbeHt9y9T9BVI0r6qczNuZjeZX0</string>
-            <key>httpdns.accountId</key>
-            <string>182473</string>
-            <key>httpdns.secretKey</key>
-            <string>031d89bfd2f0b1c13abd9c70d8520144</string>
-            <key>appmonitor.tlog.rsaSecret</key>
-            <string>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCRxjrWIC6vqa1nW8ojIc4uicsAgWE+9B7JMN7a2OD940+GdgMoPt3F40VInCGSicdyIxAGbmXyxTwu5dIFhCn3TfHCrJYNXjyEcwLCZWJ/DpQGNH+2zAI+uDVS81/AOTbDpU0eg3GjD3E8ZbwNrAz9QofQppkEIXfmwOn1XG+pdQIDAQAB</string>
-            <key>appmonitor.rsaSecret</key>
-            <string>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCRxjrWIC6vqa1nW8ojIc4uicsAgWE+9B7JMN7a2OD940+GdgMoPt3F40VInCGSicdyIxAGbmXyxTwu5dIFhCn3TfHCrJYNXjyEcwLCZWJ/DpQGNH+2zAI+uDVS81/AOTbDpU0eg3GjD3E8ZbwNrAz9QofQppkEIXfmwOn1XG+pdQIDAQAB</string>
-    	</dict>
+		<key>emas.appKey</key>
+		<string>333441016</string>
+		<key>emas.appSecret</key>
+		<string>1c04ef22c4cc4cc787351ff734e68d7d</string>
+		<key>emas.bundleId</key>
+		<string>com.example.ebank-mobile-enterprise</string>
+		<key>hotfix.idSecret</key>
+		<string>333441016-2</string>
+		<key>hotfix.rsaSecret</key>
+		<string>MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCNEfjKmTvqflphUTGELN11F6j19xbRH7EqajYlMaZ4XIokIIq7t7o1Qmp5MxBccawdPuipu2kLl/nK4rOWlmBKkzWeN+WSKEKamhTfWvT5BMNlUtyLD4TUsS+p2J2FgRyqaXq6Iq+VC1cDA0jqAqzI5OcKAtlv/yqWgklXgjaq/5YCK6GFn85RH4oCypSQzpfWHEKrOLgE4QqvhlzCmm280xJB19ZfindWjZANclDfxhnOn4ke6E22mkoIWlE5jTvSJ8BKVS2PEi8cs6nIwQfT7/lya0U4vfPzfTF9NwmOfIJ9eow+mLPvYlX6qRaY+wdCQHZxtS34HLyNbdy3+oldAgMBAAECggEALd5DE7ThO2yb/HqG7CAeXZ00zczqeVKhq1XfhxZut0H3lKmUElc5z2lp70CAOF6phNTYl5+dFyzyBlrR48u/QWA+FdS861n11gj1cm5Dqtg2pDJeDUUdfn6iLcqF5UvGw04Knoz6pC6MuykNQzFddvCegq3Mf1LrSQbRzAdFuTFnUXR/imNJljG5bbi5v4mu6OmEIZ78WwE425ymr+s2uHXsB6yTKzK2Nt4CW/sHazUOV3wruy8l+vnHrMdR+Rb3yt9ksPoxRiM8E2VJOK9eJwdjS9gTA3rw/EGsyt2p1Dz7PeDgupYMkS5joI1joLdmdT6ju9uBWxE3S5WjomzQ7QKBgQDO3OSSJeGePzzhxrXkSMJnTotCM4raIHewLkGxSDMUR7g4bibKqLfCaorTHuf623SxNFnku2zrdIvQBux1b2l/Xv5SDOUivUnCbxGqVjk/+QYZIOqTNNMsHDWGChfvcqxdhdYPK8d2crMs9SMQ26d/eL0aqdjhxm1mw1DM1WbuZwKBgQCulExk6bXZvuEEDNEqe04OKchGvvqliTuMA/J7Ag03B7NMg7uuBaJoHIHgVhgFVHrQMLanBwB+YXBwxbiZSfEr/750LqyZrrVzy3hycWHLmUCQLyatq/QMs3uzUv3KqcgBX1fn6vVjOCWFhAoln2ZakmSgsoV1xEHZkflqLeWnmwKBgHt1F7EljI6OPT6eAmZZCjTvimsbKc5evC/Ym3o7lciPuSFslBg1M16DiZDQjDCKEw3DKbc6KJopd1vTFgJMWNEcl3nOml3uTHwPH6LiTM6iR4Jtw7HRQAq+Vy9FDN3qOXajboqlXSiS8d5t+tyPy1pna6zjGz4714USIkHtRr4XAoGBAJn85xGP8D57lqDq6UiOcMAfbK+yXwXKcYLELIsBuURT/3w7Kj2KbMFme8y0RAXXiWi/vyy/CVlweyyNypEzXo5Py99RGB+KsjTMQZa4melraT6EyJoh9WeKnU8EoiWz8l37il9fqUj2SmplmEmtOywiuq3gKcZB8U+G6bgVed+HAoGBALco6PRKjTvYHguDw7T0NXV6oG1IIBf/9YOse0wS+kLWmw17kzI1mkF21m15PHWm56ahoODu31oNbksUNbQ6NGlLTbyZIAjNDWVWl7rgx/xEAZVUUb+w2CFErKlG9boourLZtTSBEz3tYWGhsAbeHt9y9T9BVI0r6qczNuZjeZX0</string>
+		<key>httpdns.accountId</key>
+		<string>182473</string>
+		<key>httpdns.secretKey</key>
+		<string>031d89bfd2f0b1c13abd9c70d8520144</string>
+		<key>appmonitor.tlog.rsaSecret</key>
+		<string>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCRxjrWIC6vqa1nW8ojIc4uicsAgWE+9B7JMN7a2OD940+GdgMoPt3F40VInCGSicdyIxAGbmXyxTwu5dIFhCn3TfHCrJYNXjyEcwLCZWJ/DpQGNH+2zAI+uDVS81/AOTbDpU0eg3GjD3E8ZbwNrAz9QofQppkEIXfmwOn1XG+pdQIDAQAB</string>
+		<key>appmonitor.rsaSecret</key>
+		<string>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCRxjrWIC6vqa1nW8ojIc4uicsAgWE+9B7JMN7a2OD940+GdgMoPt3F40VInCGSicdyIxAGbmXyxTwu5dIFhCn3TfHCrJYNXjyEcwLCZWJ/DpQGNH+2zAI+uDVS81/AOTbDpU0eg3GjD3E8ZbwNrAz9QofQppkEIXfmwOn1XG+pdQIDAQAB</string>
+	</dict>
 	<key>services</key>
 	<dict>
-          	<key>hotfix_service</key>
-       	<dict>
+		<key>hotfix_service</key>
+		<dict>
 			<key>status</key>
 			<integer>1</integer>
 			<key>version</key>
 			<string>1.0.0-1</string>
 		</dict>
-         	<key>feedback_service</key>
-       	<dict>
+		<key>feedback_service</key>
+		<dict>
 			<key>status</key>
 			<integer>1</integer>
 			<key>version</key>
 			<string>3.3.8</string>
 		</dict>
-         	<key>tlog_service</key>
-       	<dict>
+		<key>tlog_service</key>
+		<dict>
 			<key>status</key>
 			<integer>1</integer>
 			<key>version</key>
 			<string>1.0.0.2</string>
 		</dict>
-         	<key>httpdns_service</key>
-       	<dict>
+		<key>httpdns_service</key>
+		<dict>
 			<key>status</key>
 			<integer>1</integer>
 			<key>version</key>
 			<string>2.0.1</string>
 		</dict>
-         	<key>apm_service</key>
-       	<dict>
+		<key>apm_service</key>
+		<dict>
 			<key>status</key>
 			<integer>1</integer>
 			<key>version</key>
 			<string>1.1.1</string>
 		</dict>
-         	<key>crashreporter_service</key>
-       	<dict>
+		<key>crashreporter_service</key>
+		<dict>
 			<key>status</key>
 			<integer>1</integer>
 			<key>version</key>
 			<string>1.2.0</string>
 		</dict>
-         	<key>man_service</key>
-       	<dict>
+		<key>man_service</key>
+		<dict>
 			<key>status</key>
 			<integer>0</integer>
 			<key>version</key>
 			<string>1.0.13</string>
 		</dict>
-         	<key>cps_service</key>
-       	<dict>
+		<key>cps_service</key>
+		<dict>
 			<key>status</key>
 			<integer>1</integer>
 			<key>version</key>
 			<string>1.9.9.5</string>
 		</dict>
-    	</dict>
+	</dict>
 </dict>
 </plist>
