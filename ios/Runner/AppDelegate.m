@@ -56,7 +56,9 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
             
         } else {
             // 3.2.如果调用的是VideoMethodCall的方法, 那么通过封装的另外一个方法实现回调
-            result(FlutterMethodNotImplemented);
+            if (result) {
+                result(FlutterMethodNotImplemented);
+            }
         }
     }];
     
@@ -141,7 +143,9 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
         
         NSLog(@"认证结果转换------------%@",resultValue);
         
-        self.resultBlock(resultValue);
+        if (self.resultBlock) {
+            self.resultBlock(resultValue);
+        }
     }else{//用户操作失败等问题统一在这里处理
         NSLog(@"报错信息------------%@ %@ %u",videoResult.error.desc, videoResult.certificationResul, videoResult.error.errorType);
     }
