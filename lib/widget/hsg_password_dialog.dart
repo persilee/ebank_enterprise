@@ -22,19 +22,17 @@ import 'hsg_text_field_dialog.dart';
 class HsgPasswordDialog extends StatefulWidget {
   final String title;
 
-  ///是否是需要拉起短信验证码
-  final bool isDialog;
   String resultPage = '';
   Object arguments = '';
   Function(String password) returnPasswordFunc;
 
-  HsgPasswordDialog(
-      {Key key,
-      this.title,
-      this.resultPage,
-      this.arguments,
-      this.isDialog = false,
-      this.returnPasswordFunc});
+  HsgPasswordDialog({
+    Key key,
+    this.title,
+    this.resultPage,
+    this.arguments,
+    this.returnPasswordFunc,
+  });
 
   @override
   _HsgPasswordDialogState createState() => _HsgPasswordDialogState();
@@ -46,10 +44,6 @@ class _HsgPasswordDialogState extends State<HsgPasswordDialog> {
   List<String> passwordList = [];
 
   String password = '';
-
-  TextEditingController _editingController = TextEditingController();
-
-  String inputText = '';
 
   @override
   Widget build(BuildContext context) {
@@ -233,8 +227,8 @@ class _HsgPasswordDialogState extends State<HsgPasswordDialog> {
           (context as Element).markNeedsBuild();
         }
         if (passwordList.length == 6) {
-          // password = EncryptUtil.aesEncode(passwordList.join());
-          password = passwordList.join();
+          password = EncryptUtil.aesEncode(passwordList.join());
+          // password = passwordList.join();
           _verifyTradePaw(
               password, context, widget.resultPage, widget.arguments);
         }
@@ -260,39 +254,12 @@ class _HsgPasswordDialogState extends State<HsgPasswordDialog> {
   _verifyTradePaw(String payPassword, BuildContext context, String resultPage,
       Object arguments) async {
     HSProgressHUD.show();
-    final prefs = await SharedPreferences.getInstance();
-    String phoneNum = prefs.getString(ConfigKey.USER_PHONE);
-    String areaCodeNum = prefs.getString(ConfigKey.USER_AREACODE);
-    // VerifyTradePawRepository()
     ApiClientPassword()
         .verifyTransPwdNoSms(VerifyTransPwdNoSmsReq(payPassword))
         .then((data) {
       HSProgressHUD.dismiss();
       if (widget.returnPasswordFunc != null) {
         widget.returnPasswordFunc(password);
-      }
-      if (this.widget.isDialog) {
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return HsgTextFieldDialog(
-                areaCode: areaCodeNum != null ? areaCodeNum : '',
-                phoneNum: phoneNum != null ? phoneNum : '',
-                editingController: _editingController,
-                onChanged: (value) {
-                  inputText = value;
-                  print(inputText);
-                },
-                confirmCallback: () {
-                  Navigator.pushNamed(context, resultPage,
-                      arguments: arguments);
-                },
-                sendCallback: () {
-                  print('发送验证码');
-                },
-              );
-            });
       }
       if (resultPage == '') {
         Navigator.pushNamed(context, resultPage, arguments: arguments);

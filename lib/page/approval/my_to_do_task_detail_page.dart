@@ -39,6 +39,7 @@ import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/pay_password_check.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -1687,7 +1688,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         builder: (context) {
           return HsgPasswordDialog(
             title: S.current.input_password,
-            isDialog: false,
           );
         });
     if (isPassword != null && isPassword == true) {
@@ -1701,65 +1701,56 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   void _completeTask() async {
     print(
         'USER_PASSWORDENABLED: ${SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED)}');
-    bool passwordEnabled = SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED);
-    // 判断是否设置交易密码，如果没有设置，跳转到设置密码页面，
-    // 否则，输入交易密码
-    if (!passwordEnabled) {
-      HsgShowTip.shouldSetTranPasswordTip(
-        context: context,
-        click: (value) {
-          if (value == true) {
-            //前往设置交易密码
-            Navigator.pushNamed(context, pageResetPayPwdOtp);
-          }
-        },
+
+    // String passwordStr = await CheckPayPassword(context, () {
+    //   _completeTaskNetwork();
+    // });
+    String passwordStr = await CheckPayPassword(context, (value) {
+      _completeTaskNetwork();
+    });
+    print(passwordStr);
+  }
+
+  void _completeTaskNetwork() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (this.mounted) {
+      setState(() {
+        _btnIsLoadingEAA = true;
+        _btnIsEnable = false;
+        _offstage = false;
+      });
+    }
+    try {
+      // 请求审批接口
+      var data = await ApiClient().completeTask(
+        CompleteTaskBody(
+          approveResult: true,
+          comment: _comment,
+          taskId: widget.data.taskId,
+        ),
       );
-    } else {
-      // 输入交易密码
-      bool isPassword = await _openBottomSheet();
-      // 如果交易密码正确，处理审批逻辑
-      if (isPassword) {
-        FocusManager.instance.primaryFocus?.unfocus();
-        if (this.mounted) {
-          setState(() {
-            _btnIsLoadingEAA = true;
-            _btnIsEnable = false;
-            _offstage = false;
-          });
-        }
-        try {
-          // 请求审批接口
-          var data = await ApiClient().completeTask(
-            CompleteTaskBody(
-              approveResult: true,
-              comment: _comment,
-              taskId: widget.data.taskId,
-            ),
+      if (this.mounted) {
+        setState(() {
+          _btnIsLoadingEAA = false;
+          _btnIsEnable = true;
+          _offstage = true;
+        });
+        Navigator.pushReplacementNamed(context, pageDepositRecordSucceed);
+      }
+    } catch (e) {
+      if (this.mounted) {
+        setState(() {
+          _btnIsLoadingEAA = false;
+          _btnIsEnable = true;
+          _offstage = true;
+          _isShowErrorPage = true;
+          _hsgErrorPage = HsgErrorPage(
+            error: e.error,
+            buttonAction: () {
+              _loadData(isLoading: true);
+            },
           );
-          if (this.mounted) {
-            setState(() {
-              _btnIsLoadingEAA = false;
-              _btnIsEnable = true;
-              _offstage = true;
-            });
-            Navigator.pushReplacementNamed(context, pageDepositRecordSucceed);
-          }
-        } catch (e) {
-          if (this.mounted) {
-            setState(() {
-              _btnIsLoadingEAA = false;
-              _btnIsEnable = true;
-              _offstage = true;
-              _isShowErrorPage = true;
-              _hsgErrorPage = HsgErrorPage(
-                error: e.error,
-                buttonAction: () {
-                  _loadData(isLoading: true);
-                },
-              );
-            });
-          }
-        }
+        });
       }
     }
   }

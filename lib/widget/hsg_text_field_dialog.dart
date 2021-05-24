@@ -69,23 +69,18 @@ class HsgTextFieldDialog extends StatelessWidget {
   final String areaCode;
   final String phoneNum;
   final TextEditingController editingController;
-  final ValueChanged<String> onChanged;
-  final VoidCallback confirmCallback;
-  final VoidCallback sendCallback;
+  final Function(String otpStr) returnOtpStrFunc;
 
-  const HsgTextFieldDialog(
-      {Key key,
-      this.areaCode,
-      this.phoneNum,
-      @required this.editingController,
-      this.onChanged,
-      this.confirmCallback,
-      this.sendCallback})
-      : super(key: key);
+  const HsgTextFieldDialog({
+    Key key,
+    this.areaCode,
+    this.phoneNum,
+    @required this.editingController,
+    this.returnOtpStrFunc,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var field_dialog_confirm;
     String showPhone = this.phoneNum != null ? this.phoneNum : '';
     String showAreaCode = this.areaCode != null ? this.areaCode : '';
     return SimpleDialog(
@@ -140,7 +135,9 @@ class HsgTextFieldDialog extends StatelessWidget {
                       child: TextField(
                         keyboardType: TextInputType.number,
                         controller: this.editingController,
-                        onChanged: this.onChanged,
+                        onChanged: (String input) {
+                          print(input);
+                        },
                         autofocus: true,
                         style: TextStyle(
                           fontSize: 14.0,
@@ -167,7 +164,9 @@ class HsgTextFieldDialog extends StatelessWidget {
                     //   otpCallback: () {},
                     // )
                     TextButton(
-                        onPressed: this.sendCallback,
+                        onPressed: () {
+                          print('发送验证码');
+                        },
                         child: Text(
                           S.current.field_dialog_send,
                           style: TextStyle(
@@ -201,16 +200,19 @@ class HsgTextFieldDialog extends StatelessWidget {
                 ),
               )),
               Expanded(
-                  child: TextButton(
-                onPressed: this.confirmCallback,
-                child: Text(
-                  S.current.field_dialog_confirm,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.blueAccent,
+                child: TextButton(
+                  onPressed: () {
+                    print('校验验证码');
+                  },
+                  child: Text(
+                    S.current.field_dialog_confirm,
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      color: Colors.blueAccent,
+                    ),
                   ),
                 ),
-              )),
+              ),
             ],
           ),
         ),
