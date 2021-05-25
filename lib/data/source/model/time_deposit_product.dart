@@ -9,6 +9,12 @@ part 'time_deposit_product.g.dart';
 
 @JsonSerializable()
 class TimeDepositProductReq extends Object {
+  /// P - 个人；
+  /// C - 企业；
+  /// F - 金融机构；
+  @JsonKey(name: 'customerType')
+  String customerType;
+
   @JsonKey(name: 'accuPeriod')
   String accuPeriod;
 
@@ -31,6 +37,7 @@ class TimeDepositProductReq extends Object {
   String sort;
 
   TimeDepositProductReq(
+    this.customerType,
     this.accuPeriod,
     this.auctCale,
     this.ccy,
