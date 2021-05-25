@@ -8,9 +8,22 @@ import 'header_interceptor.dart';
 
 class BaseDio {
   // static const BASEURL = "http://52.82.102.241:5040/"; //dev
-  static const BASEURL = "http://47.57.236.20:5040/"; //sit
+  // static const BASEURL = "http://47.57.236.20:5040/"; //sit
   // static const BASEURL = "http://47.242.2.219:5040/"; //uat
-//  static const BASEURL = "http://192.168.201.65:5041/"; //local
+  // static const BASEURL = "http://192.168.201.65:5041/"; //local
+
+  static const TYPEINT = 2;
+  static const BASEURLDEV =
+      TYPEINT == 1 ? "http://52.82.102.241:5040/" : ''; //sit
+  static const BASEURLSIT =
+      TYPEINT == 2 ? "http://47.57.236.20:5040/" : ''; //sit
+  static const BASEURLUAT =
+      TYPEINT == 3 ? "http://47.242.2.219:5040/" : ''; //sit
+  static const BASEURLLOCAL =
+      TYPEINT == 4 ? "http://192.168.201.65:5041/" : ''; //sit
+
+  static const BASEURLUSE =
+      BASEURLDEV + BASEURLSIT + BASEURLUAT + BASEURLLOCAL; //使用方法
 
   BaseDio._();
 

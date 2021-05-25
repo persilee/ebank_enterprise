@@ -5,6 +5,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
+import 'package:ebank_mobile/page/mine/app_update.dart';
 import 'package:ebank_mobile/splash_page.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/screen_util.dart';
@@ -78,6 +79,7 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
     _initPackageInfo();
     // _initLanguage();
     _getPublicParameters();
+    // AppUpdateCheck(context);
     WidgetsBinding.instance.addObserver(this);
   }
 

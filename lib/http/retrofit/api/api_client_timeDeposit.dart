@@ -20,7 +20,7 @@ import '../base_dio.dart';
 
 part 'api_client_timeDeposit.g.dart';
 
-@RestApi(baseUrl: BaseDio.BASEURL)
+@RestApi(baseUrl: BaseDio.BASEURLUSE)
 abstract class ApiClientTimeDeposit {
   factory ApiClientTimeDeposit({Dio dio, String baseUrl}) {
     dio ??= BaseDio.getInstance().getDio();

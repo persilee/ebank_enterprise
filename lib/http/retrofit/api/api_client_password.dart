@@ -17,7 +17,7 @@ import '../base_dio.dart';
 
 part 'api_client_password.g.dart';
 
-@RestApi(baseUrl: BaseDio.BASEURL)
+@RestApi(baseUrl: BaseDio.BASEURLUSE)
 abstract class ApiClientPassword {
   factory ApiClientPassword({Dio dio, String baseUrl}) {
     dio ??= BaseDio.getInstance().getDio();

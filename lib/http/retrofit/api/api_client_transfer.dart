@@ -22,7 +22,7 @@ import '../base_dio.dart';
 
 part 'api_client_transfer.g.dart';
 
-@RestApi(baseUrl: BaseDio.BASEURL)
+@RestApi(baseUrl: BaseDio.BASEURLUSE)
 abstract class Transfer {
   factory Transfer({Dio dio, String baseUrl}) {
     dio ??= BaseDio.getInstance().getDio();
