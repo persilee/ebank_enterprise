@@ -7,6 +7,7 @@ import 'package:ebank_mobile/config/hsg_text_style.dart';
 /// Date: 2021-01-11
 
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page/transfer/hsg_transfer_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -70,17 +71,30 @@ class _OperationResultPageState extends State<OperationResultPage> {
         onPressed: () {
           // Navigator.of(context).pushReplacement(
           //     new MaterialPageRoute(builder: (context) => new IndexPage()));
+          // Navigator.of(context).pushAndRemoveUntil(
+          //     MaterialPageRoute(builder: (BuildContext context) {
+          //   return TransferPage();
+          // }), (Route route) {
+          //   //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
+          //   print(route.settings?.name);
+          //   if (route.settings?.name == "/hsg_index_page") {
+          //     return true; //停止关闭
+          //   }
+          //   return false; //继续关闭
+          // });
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (BuildContext context) {
-            return TransferPage();
-          }), (Route route) {
-            //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
-            print(route.settings?.name);
-            if (route.settings?.name == "/hsg_index_page") {
-              return true; //停止关闭
-            }
-            return false; //继续关闭
-          });
+            MaterialPageRoute(builder: (BuildContext context) {
+              return IndexPage();
+            }),
+            (Route route) {
+              //一直关闭，直到首页时停止，停止时，整个应用只有首页和当前页面
+              print(route.settings?.name);
+              if (route.settings?.name == "/") {
+                return true; //停止关闭
+              }
+              return false; //继续关闭
+            },
+          );
         },
         child: Text(name),
         color: Colors.blue,

@@ -183,7 +183,6 @@ class _TransferInternalPreviewPageState
   }
 
   Future _loadData(TransferInternationalData transferData) async {
-
     final prefs = await SharedPreferences.getInstance();
     String custId = prefs.getString(ConfigKey.CUST_ID);
     String opt = transferData.opt;
