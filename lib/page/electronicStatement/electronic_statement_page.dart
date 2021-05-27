@@ -10,6 +10,7 @@ import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/hsg_pdf_viewer.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:intl/intl.dart';
@@ -123,15 +124,26 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
 
   void _loadData() async {
     _isLoading = true;
-    StatementQueryListModel statementQueryListModel =
-        await ApiClient().statementQueryList(StatementQueryListBody(
-      startDate: _startDate,
-      endDate: _endDate,
-    ));
-    setState(() {
-      dataList.addAll(statementQueryListModel.statementDTOS);
-      _isLoading = false;
-    });
+    try {
+      StatementQueryListModel statementQueryListModel =
+          await ApiClient().statementQueryList(StatementQueryListBody(
+        startDate: _startDate,
+        endDate: '2022-12-31', //_endDate,
+      ));
+      if (mounted) {
+        setState(() {
+          dataList.addAll(statementQueryListModel.statementDTOS);
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+      HSProgressHUD.showToast(e);
+    }
   }
 
   void openPDF(BuildContext context, String title) {
