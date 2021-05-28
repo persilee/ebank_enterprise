@@ -1240,11 +1240,11 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                     fontSize: 14.0),
               ),
               clickCallback: () {
-                if (_comment.length != 0) {
-                  _rejectTask();
-                } else {
-                  _alertDialog();
-                }
+                // if (_comment.length != 0) {
+                _rejectTask();
+                // } else {
+                //   _alertDialog();
+                // }
               },
             ),
           ),
@@ -1256,11 +1256,11 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
               isEnable: _btnIsEnable,
               margin: EdgeInsets.all(0),
               clickCallback: () {
-                if (_comment.length != 0) {
-                  _completeTask();
-                } else {
-                  _alertDialog();
-                }
+                // if (_comment.length != 0) {
+                _completeTask();
+                // } else {
+                //   _alertDialog();
+                // }
               },
               text: Text(
                 S.current.examine_and_approve,
