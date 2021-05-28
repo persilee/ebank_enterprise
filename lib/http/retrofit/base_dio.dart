@@ -14,7 +14,7 @@ class BaseDio {
 
   static const TYPEINT = 2;
   static const BASEURLDEV =
-      TYPEINT == 1 ? "http://52.82.102.241:5040/" : ''; //dev
+      TYPEINT == 1 ? "http://192.168.200.100:5040/" : ''; //dev
   static const BASEURLSIT =
       TYPEINT == 2 ? "http://47.57.236.20:5040/" : ''; //sit
   static const BASEURLUAT =

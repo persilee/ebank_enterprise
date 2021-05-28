@@ -53,7 +53,7 @@ class HsgTipsDialog extends StatelessWidget {
                   S.current.field_dialog_confirm,
                   style: TextStyle(
                     fontSize: 14.0,
-                    color: Colors.blueAccent,
+                    color: HsgColors.accent,
                   ),
                 ),
               )),
@@ -159,21 +159,22 @@ class HsgTextFieldDialog extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(right: 14),
                     ),
-                    // HSGOTPButton(
-                    //   'sendSms',
-                    //   otpCallback: () {},
-                    // )
-                    TextButton(
-                        onPressed: () {
-                          print('发送验证码');
-                        },
-                        child: Text(
-                          S.current.field_dialog_send,
-                          style: TextStyle(
-                            color: Colors.blueAccent,
-                            fontSize: 15,
-                          ),
-                        ))
+                    HSGOTPButton(
+                      'sendSms',
+                      isCutdown: false,
+                      otpCallback: () {},
+                    ),
+                    // TextButton(
+                    //     onPressed: () {
+                    //       print('发送验证码');
+                    //     },
+                    //     child: Text(
+                    //       S.current.field_dialog_send,
+                    //       style: TextStyle(
+                    //         color: Colors.blueAccent,
+                    //         fontSize: 15,
+                    //       ),
+                    //     ))
                   ],
                 ),
               ),
@@ -208,7 +209,7 @@ class HsgTextFieldDialog extends StatelessWidget {
                     S.current.field_dialog_confirm,
                     style: TextStyle(
                       fontSize: 14.0,
-                      color: Colors.blueAccent,
+                      color: HsgColors.accent,
                     ),
                   ),
                 ),

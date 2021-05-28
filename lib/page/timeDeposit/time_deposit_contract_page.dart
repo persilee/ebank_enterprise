@@ -430,15 +430,16 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   Widget _remark() {
     return Container(
       color: HsgColors.commonBackground,
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.only(top: 10.0, left: 15.0, bottom: 10.0),
-      child: Text(
-        S.current.no_advance_withdrawal,
-        style: TextStyle(
-          color: HsgColors.describeText,
-          fontSize: 12.0,
-        ),
-      ),
+      height: 10,
+      // width: MediaQuery.of(context).size.width,
+      // padding: EdgeInsets.only(top: 10.0, left: 15.0, bottom: 10.0),
+      // child: Text(
+      //   S.current.no_advance_withdrawal,
+      //   style: TextStyle(
+      //     color: HsgColors.describeText,
+      //     fontSize: 12.0,
+      //   ),
+      // ),
     );
   }
 

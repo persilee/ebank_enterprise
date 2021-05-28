@@ -8,6 +8,7 @@ class CustomButton extends StatelessWidget {
   final Gradient gradientColor;
   final BorderRadiusGeometry borderRadius;
   final bool isOutline;
+  final bool isShowLine;
   final VoidCallback clickCallback;
   final bool isEnable;
   final bool isLoading;
@@ -20,6 +21,7 @@ class CustomButton extends StatelessWidget {
     this.gradientColor,
     this.borderRadius,
     this.isOutline = false,
+    this.isShowLine = true,
     this.clickCallback,
     this.isEnable = true,
     this.isLoading = false,
@@ -55,34 +57,52 @@ class CustomButton extends StatelessWidget {
           elevation: 1, // 正常时阴影隐藏
           shadowColor: Colors.transparent,
           minimumSize: Size(66, 44),
-          side: isOutline
+          side: isOutline && isShowLine
               ? BorderSide(color: Color(0xff3394D4), width: 1)
               : BorderSide(color: Colors.transparent, width: 0),
         ),
-        onPressed: isEnable ? clickCallback ?? () {} : null,
-        child: isLoading ? LayoutBuilder(
-          builder: (context, constraints) {
-            print(constraints.maxHeight);
-            return SizedBox(
-              width: constraints.maxHeight / 2,
-              height: constraints.maxHeight / 2,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xff3394D4)),
-                backgroundColor: Color(0xff3394D4).withOpacity(0.6),
-                strokeWidth: 1.0,
+        onPressed: isEnable
+            ? clickCallback ?? () {}
+            : isShowLine
+                ? null
+                : () {},
+        child: isLoading
+            ? isShowLine
+                ? LayoutBuilder(builder: (context, constraints) {
+                    print(constraints.maxHeight);
+                    return SizedBox(
+                      width: constraints.maxHeight / 2,
+                      height: constraints.maxHeight / 2,
+                      child: CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(Color(0xff3394D4)),
+                        backgroundColor: Color(0xff3394D4).withOpacity(0.6),
+                        strokeWidth: 1.0,
+                      ),
+                    );
+                  })
+                : SizedBox(
+                    // width: constraints.maxHeight / 2,
+                    // height: constraints.maxHeight / 2,
+                    child: CircularProgressIndicator(
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Color(0xff3394D4)),
+                      backgroundColor: Color(0xff3394D4).withOpacity(0.6),
+                      strokeWidth: 1.0,
+                    ),
+                  )
+            : Container(
+                alignment: Alignment.center,
+                child: text ??
+                    Text(
+                      'button',
+                      style: TextStyle(
+                          color: isOutline && isShowLine
+                              ? (isEnable ? Color(0xff3394D4) : Colors.grey)
+                              : Colors.white,
+                          fontSize: 14.0),
+                    ),
               ),
-            );
-          }
-        ) : Container(
-          alignment: Alignment.center,
-          child: text ??
-              Text(
-                'button',
-                style: TextStyle(
-                    color: isOutline ? (isEnable ? Color(0xff3394D4) : Colors.grey) : Colors.white,
-                    fontSize: 14.0),
-              ),
-        ),
       ),
     );
   }
