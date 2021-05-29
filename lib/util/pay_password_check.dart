@@ -103,16 +103,48 @@ Future<String> _didShowDialogForOTP(
           editingController: _editingController,
           returnOtpStrFunc: (value) {
             inputStr = value;
-            print(inputStr);
             callback({
               'otpStr': inputStr ?? '',
             });
           },
         );
       });
-  if (isCheck != null && isCheck == true) {
-    return inputStr;
-  }
+  print(isCheck);
   FocusManager.instance.primaryFocus?.unfocus();
-  return '';
+  return inputStr ?? '';
+}
+
+// ignore: non_constant_identifier_names
+Future<Map> CheckPasswordAndOTP(
+    BuildContext context, Function(Map resultsData) callback) async {
+  String passwordStr =
+      await CheckPayPassword(context, (resultsData) => () async {});
+  String otpStr = '';
+  if (passwordStr == null || passwordStr == '') {
+    callback({
+      'password': '',
+      'otpStr': '',
+      'check': false,
+    });
+  } else {
+    otpStr = await CheckOTP(context, (resultsDataOTP) => () {});
+    if (otpStr == null || otpStr == '') {
+      callback({
+        'password': '',
+        'otpStr': '',
+        'check': false,
+      });
+    } else {
+      callback({
+        'password': passwordStr ?? '',
+        'otpStr': otpStr ?? '',
+        'check': true,
+      });
+    }
+  }
+  Map returnData = {
+    'password': passwordStr ?? '',
+    'otpStr': otpStr ?? '',
+  };
+  return returnData;
 }

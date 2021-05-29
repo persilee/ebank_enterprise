@@ -55,6 +55,7 @@ class _HSGOTPButtonState extends State<HSGOTPButton> {
 
   //倒计时方法
   _startCountdown() {
+    _countdownTime = widget.time;
     final call = (timer) {
       if (mounted) {
         setState(() {
@@ -77,6 +78,7 @@ class _HSGOTPButtonState extends State<HSGOTPButton> {
         _btnIsEnable = false;
       });
     }
+    widget.otpCallback();
     final prefs = await SharedPreferences.getInstance();
     String userAreacode = prefs.getString(ConfigKey.USER_AREACODE);
     String userPhone = prefs.getString(ConfigKey.USER_PHONE);

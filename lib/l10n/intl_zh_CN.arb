@@ -429,9 +429,9 @@
   "account_management": "账户管理",
   "card_list": "卡片列表",
   "field_dialog_send": "发送",
-  "field_dialog_hint_text": "请输入安全码",
+  "field_dialog_hint_text": "请输入验证码",
   "field_dialog_phone_number": "手机号",
-  "field_dialog_title": "安全码校验",
+  "field_dialog_title": "验证码校验",
   "field_dialog_cancel": "取消",
   "field_dialog_confirm": "确认",
   "transaction_type": "交易类型",
@@ -768,12 +768,13 @@
   "time_deposit_Settlement_title": "部分结清本息总额: ",
   "loan_plan_principal_penalty": "本金罚息",
   "loan_plan_interest_payment": "利息罚息",
-  "loan_plan_status":"本期已还清",
-  "loan_plan_status_unreimbursed":"未还",
+  "loan_plan_status": "本期已还清",
+  "loan_plan_status_unreimbursed": "未还",
   "loan_available_credit": "剩余额度",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "数据异常，未返回数据！",
   "error_tip_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<错误提示<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-  "hs_go_back": "返回"
+  "hs_go_back": "返回",
+  "place_get_otp_tip": "请先获取验证码"
 }

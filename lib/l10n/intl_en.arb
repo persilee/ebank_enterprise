@@ -767,12 +767,13 @@
   "time_deposit_Settlement_title": "Partial Settlement Amt: ",
   "loan_plan_principal_penalty": "Principal penalty",
   "loan_plan_interest_payment": "Interest payment",
-  "loan_plan_status":"Current period repaid",
-  "loan_plan_status_unreimbursed":"Unreimbursed",
+  "loan_plan_status": "Current period repaid",
+  "loan_plan_status_unreimbursed": "Unreimbursed",
   "loan_available_credit": "Remaining amount",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "Data is abnormal, no data is returned!",
   "error_tip_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<错误提示<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-  "hs_go_back": "Return"
+  "hs_go_back": "Return",
+  "place_get_otp_tip": "Please get the verification code first"
 }

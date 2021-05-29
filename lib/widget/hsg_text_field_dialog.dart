@@ -1,7 +1,11 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/account/check_sms.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/widget/hsg_otp_button.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class HsgTipsDialog extends StatelessWidget {
   final Widget title;
@@ -83,6 +87,32 @@ class HsgTextFieldDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     String showPhone = this.phoneNum != null ? this.phoneNum : '';
     String showAreaCode = this.areaCode != null ? this.areaCode : '';
+    bool isClickOtpBtn = false;
+
+    ///校验短信验证码
+    _checkSms() async {
+      HSProgressHUD.show();
+      //请求验证手机号验证码，成功后跳转到身份验证界面
+      RegExp number_6 = new RegExp(r'^\d{6}$');
+      if (!number_6.hasMatch(this.editingController.text)) {
+        HSProgressHUD.showToastTip(
+          S.current.sms_error,
+        );
+      } else {
+        //校验短信验证码
+        ApiClientAccount()
+            .checkSms(CheckSmsReq(
+                showPhone, 'modifyPwd', this.editingController.text, 'MB'))
+            .then((data) {
+          HSProgressHUD.dismiss();
+          this.returnOtpStrFunc(this.editingController.text ?? '');
+          Navigator.pop(context);
+        }).catchError((e) {
+          HSProgressHUD.showToast(e);
+        });
+      }
+    }
+
     return SimpleDialog(
       contentPadding: EdgeInsets.only(bottom: 0),
       title: Center(
@@ -144,6 +174,11 @@ class HsgTextFieldDialog extends StatelessWidget {
                           color: Colors.black87,
                           fontWeight: FontWeight.w300,
                         ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp("[0-9]")), //纯数字
+                          LengthLimitingTextInputFormatter(6),
+                        ],
                         //输入文本的样式
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(0.0),
@@ -161,8 +196,10 @@ class HsgTextFieldDialog extends StatelessWidget {
                     ),
                     HSGOTPButton(
                       'sendSms',
-                      isCutdown: false,
-                      otpCallback: () {},
+                      isCutdown: true,
+                      otpCallback: () {
+                        isClickOtpBtn = true;
+                      },
                     ),
                     // TextButton(
                     //     onPressed: () {
@@ -204,6 +241,13 @@ class HsgTextFieldDialog extends StatelessWidget {
                 child: TextButton(
                   onPressed: () {
                     print('校验验证码');
+                    if (isClickOtpBtn) {
+                      _checkSms();
+                    } else {
+                      HSProgressHUD.showToastTip(
+                        S.of(context).place_get_otp_tip,
+                      );
+                    }
                   },
                   child: Text(
                     S.current.field_dialog_confirm,
