@@ -12,11 +12,11 @@ class LoanTrailCommitReq extends Object {
   String ccy;
   //贷款本金 ,
   @JsonKey(name: 'amt')
-  int amt;
+  double amt;
   //利率代码 ,
   @JsonKey(name: 'iratCd')
   String iratCd;
-  //贷款期限
+  //贷款期限 利率档期
   @JsonKey(name: 'iratTm')
   String iratTm;
   //参考利率
@@ -62,35 +62,39 @@ class LoanTrailCommitReq extends Object {
   @JsonKey(name: 'loanAmount')
   String loanAmount;
   //总利息
-  @JsonKey(name: 'totalInt')
-  String totalInt;
+  // @JsonKey(name: 'totalInt')
+  // String totalInt;
   //贷款用途
   @JsonKey(name: 'loanPurpose')
   String loanPurpose;
 
+  //额度接口的还款方式
+  @JsonKey(name: 'lnInsType')
+  String lnInsType;
+
   LoanTrailCommitReq(
-    this.lnac,
-    this.ccy,
-    this.amt,
-    this.iratCd,
-    this.iratTm,
-    this.intRat,
-    this.fltNmth,
-    this.onRate,
-    this.intNper,
-    this.inRate,
-    this.ddAc,
-    this.repType,
-    this.insType,
-    this.setPerd,
-    this.setUnit,
-    this.fPaydt,
-    this.repDay,
-    this.matuDt,
-    this.loanAmount,
-    this.totalInt,
-    this.loanPurpose,
-  );
+      this.lnac,
+      this.ccy,
+      this.amt,
+      this.iratCd,
+      this.iratTm,
+      this.intRat,
+      this.fltNmth,
+      this.onRate,
+      this.intNper,
+      this.inRate,
+      this.ddAc,
+      this.repType,
+      this.insType,
+      this.setPerd,
+      this.setUnit,
+      this.fPaydt,
+      this.repDay,
+      this.matuDt,
+      this.loanAmount,
+      // this.totalInt,
+      this.loanPurpose,
+      this.lnInsType);
 
   factory LoanTrailCommitReq.fromJson(Map<String, dynamic> srcJson) =>
       _$LoanTrailCommitReqFromJson(srcJson);

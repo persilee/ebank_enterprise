@@ -4,6 +4,7 @@ import 'package:ebank_mobile/data/source/model/account/get_account_overview_info
 import 'package:ebank_mobile/data/source/model/account/get_card_list_bal_by_user.dart';
 import 'package:ebank_mobile/data/source/model/account/get_pay_collect_detail.dart';
 import 'package:ebank_mobile/data/source/model/loan/application_loan.dart';
+import 'package:ebank_mobile/data/source/model/loan/loan_get_new_rate.dart';
 import 'package:ebank_mobile/data/source/model/other/foreign_ccy.dart';
 import 'package:ebank_mobile/data/source/model/other/forex_trading.dart';
 import 'package:ebank_mobile/data/source/model/other/get_ex_rate.dart';
@@ -53,6 +54,11 @@ abstract class ApiClientBill {
   @POST('loan/interestRate/queryInterestRate')
   Future<LoantIntereRateResp> loanGetRateInterface(
       @Body() LoanIntereRateReq req);
+
+  /// 贷款领用界面获取利率新的接口
+  @POST('loan/contracts/trialCalculationRate')
+  Future<LoanGetNewRateResp> loanGetNewRateInterface(
+      @Body() LoanGetNewRateReq req);
 
   /// 电子结单
   @POST('cust/minio/getFilePath')

@@ -159,13 +159,14 @@ class _MyApprovedHistoryDetailPageState
 
     // 获取贷款期限
     String _iratTm = '';
+    int repayDat = int.parse(data?.iratTm);
     try {
       GetIdTypeResp getIdTypeResp =
           await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if (data?.iratTm == element.code) {
+          if (repayDat.toString() == element.code) {
             if (_language == 'zh_CN') {
               _iratTm = element.cname;
             } else if (_language == 'zh_HK') {
@@ -188,13 +189,36 @@ class _MyApprovedHistoryDetailPageState
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if (data?.repType == element.code) {
+          if (data?.lnInsType == element.code) {
             if (_language == 'zh_CN') {
               _repType = element.cname;
             } else if (_language == 'zh_HK') {
               _repType = element.chName;
             } else {
               _repType = element.name;
+            }
+          }
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    //借款用途
+    String _purposesUse = '';
+    try {
+      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount()
+          .getIdType(GetIdTypeReq('LOAN_PUR')); //现在REPAY_TYPE_LN  以前的REPAY_TYPE
+      List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
+      if (_tenorList.isNotEmpty) {
+        _tenorList.forEach((element) {
+          if (data?.loanPurpose == element.code) {
+            if (_language == 'zh_CN') {
+              _purposesUse = element.cname;
+            } else if (_language == 'zh_HK') {
+              _purposesUse = element.chName;
+            } else {
+              _purposesUse = element.name;
             }
           }
         });
@@ -234,15 +258,15 @@ class _MyApprovedHistoryDetailPageState
             S.current.loan_Repayment_method_column, _repType ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
             S.current.approve_first_interest_date, data?.fPaydt ?? ''));
-        _loanWithDrawalList.add(_buildContentItem(
-            S.current.loan_Total_Interest,
-            data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.totalInt ?? '0')) ?? ''
-                : f.format(double.parse(data?.totalInt ?? '0')) ?? ''));
+        // _loanWithDrawalList.add(_buildContentItem(
+        //     S.current.loan_Total_Interest,
+        //     data?.ccy == 'JPY'
+        //         ? fj.format(double.parse(data?.totalInt ?? '0')) ?? ''
+        //         : f.format(double.parse(data?.totalInt ?? '0')) ?? ''));
         _loanWithDrawalList.add(
             _buildContentItem(S.current.transfer_to_account, data?.ddAc ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
-            S.current.loan_Borrowing_Purposes, data?.loanPurpose ?? ''));
+            S.current.loan_Borrowing_Purposes, _purposesUse ?? ''));
         _isLoading = false;
         _isShowErrorPage = false;
       });
@@ -623,14 +647,15 @@ class _MyApprovedHistoryDetailPageState
         _internationalList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
         _internationalList.add(_buildContentItem(
-            S.current.approve_country_region, _district ?? ''));
+            S.current.approve_country_region, _district ?? '')); //国家/地区
         _internationalList.add(_buildContentItem(
-            S.current.approve_swift_code, data?.bankSwift ?? ''));
+            S.current.approve_swift_code, data?.bankSwift ?? '')); //swift code
         _internationalList.add(_buildContentItem(
             S.current.approve_collecting_bank,
-            data?.payeeBankCode ?? _payeeBank ?? ''));
+            _payeeBank ?? '')); //收款银行  data?.payeeBankCode ?? _payeeBank ?? ""
         _internationalList.add(_buildContentItem(
-            S.current.approve_collection_address, data?.payeeAddress ?? ''));
+            S.current.approve_collection_address,
+            data?.payeeAddress ?? '')); //收款地址
         _internationalList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );

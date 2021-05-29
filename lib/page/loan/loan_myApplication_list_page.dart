@@ -381,10 +381,13 @@ class _ExpandBoxState extends State<ExpandBox> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                columnName,
-                style: TextStyle(),
-                textAlign: TextAlign.start,
+              Container(
+                width: 150,
+                child: Text(
+                  columnName,
+                  style: TextStyle(),
+                  textAlign: TextAlign.start,
+                ),
               ),
               Text(
                 detailStr,
