@@ -721,6 +721,7 @@ class _TimeDepostProductState extends State<TimeDepostProduct> {
     _isLoading = true;
     ApiClientPackaging()
         .getGetTimeDepositProduct(TimeDepositProductReq(
+            'C',
             _accuPeriod == '' ? null : _accuPeriod,
             _auctCale == '' ? null : _auctCale,
             _changedCcy == S.current.hint_please_select ? null : _changedCcy,

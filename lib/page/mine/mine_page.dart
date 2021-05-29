@@ -907,46 +907,46 @@ class _MinePageState extends State<MinePage>
     });
   }
 
-  //版本更新按钮
-  Widget _version() {
-    return Container(
-      margin: EdgeInsets.only(right: 16),
-      height: 50,
-      color: Colors.blue[200],
-      child: FlatButton(
-        height: 50.0,
-        onPressed: () {
-          _getLastVersion();
-        },
-        child: Container(
-          width: 90,
-          child: Center(
-            child: Text(
-              '版本更新' + lastVersionName,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  // //版本更新按钮
+  // Widget _version() {
+  //   return Container(
+  //     margin: EdgeInsets.only(right: 16),
+  //     height: 50,
+  //     color: Colors.blue[200],
+  //     child: FlatButton(
+  //       height: 50.0,
+  //       onPressed: () {
+  //         _getLastVersion();
+  //       },
+  //       child: Container(
+  //         width: 90,
+  //         child: Center(
+  //           child: Text(
+  //             '版本更新' + lastVersionName,
+  //             style: TextStyle(
+  //               color: Colors.white,
+  //               fontSize: 14,
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  //版本更新接口
-  _getLastVersion() async {
-    // VersionDataRepository()
-    ApiClientAccount()
-        .getlastVersion(GetLastVersionReq('0', '1'))
-        .then((value) {
-      setState(() {
-        lastVersionName = value.versionName;
-      });
-    }).catchError((e) {
-      HSProgressHUD.showToast(e);
-    });
-  }
+  // //版本更新接口
+  // _getLastVersion() async {
+  //   // VersionDataRepository()
+  //   ApiClientAccount()
+  //       .getlastVersion(GetLastVersionReq('0', '1'))
+  //       .then((value) {
+  //     setState(() {
+  //       lastVersionName = value.versionName;
+  //     });
+  //   }).catchError((e) {
+  //     HSProgressHUD.showToast(e);
+  //   });
+  // }
 
   @override
   bool get wantKeepAlive => true;

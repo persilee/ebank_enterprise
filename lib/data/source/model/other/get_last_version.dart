@@ -9,16 +9,23 @@ part 'get_last_version.g.dart';
 
 @JsonSerializable()
 class GetLastVersionReq extends Object {
+  /// 平台用户类型 1 个人， 2 企业
+  @JsonKey(name: 'platUserType')
+  String platUserType;
+
+  /// 系统类型 0:Android 1：IOS
   @JsonKey(name: 'systemType')
   String systemType;
 
+  /// 版本号
   @JsonKey(name: 'versionId')
   String versionId;
 
-  GetLastVersionReq(
+  GetLastVersionReq({
+    this.platUserType,
     this.systemType,
     this.versionId,
-  );
+  });
 
   factory GetLastVersionReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetLastVersionReqFromJson(srcJson);

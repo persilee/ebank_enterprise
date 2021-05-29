@@ -39,6 +39,7 @@ import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/pay_password_check.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -1273,11 +1274,11 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                     fontSize: 14.0),
               ),
               clickCallback: () {
-                if (_comment.length != 0) {
-                  _rejectTask();
-                } else {
-                  _alertDialog();
-                }
+                // if (_comment.length != 0) {
+                _rejectTask();
+                // } else {
+                //   _alertDialog();
+                // }
               },
             ),
           ),
@@ -1289,11 +1290,11 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
               isEnable: _btnIsEnable,
               margin: EdgeInsets.all(0),
               clickCallback: () {
-                if (_comment.length != 0) {
-                  _completeTask();
-                } else {
-                  _alertDialog();
-                }
+                // if (_comment.length != 0) {
+                _completeTask();
+                // } else {
+                //   _alertDialog();
+                // }
               },
               text: Text(
                 S.current.examine_and_approve,
@@ -1714,86 +1715,86 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     }
   }
 
-  //交易密码窗口
-  Future<bool> _openBottomSheet() async {
-    final isPassword = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return HsgPasswordDialog(
-            title: S.current.input_password,
-            isDialog: false,
-          );
-        });
-    if (isPassword != null && isPassword == true) {
-      return true;
-    }
-    FocusManager.instance.primaryFocus?.unfocus();
-    return false;
-  }
+  // //交易密码窗口
+  // Future<bool> _openBottomSheet() async {
+  //   final isPassword = await showHsgBottomSheet(
+  //       context: context,
+  //       builder: (context) {
+  //         return HsgPasswordDialog(
+  //           title: S.current.input_password,
+  //         );
+  //       });
+  //   if (isPassword != null && isPassword == true) {
+  //     return true;
+  //   }
+  //   FocusManager.instance.primaryFocus?.unfocus();
+  //   return false;
+  // }
 
   // 完成任务
   void _completeTask() async {
     print(
         'USER_PASSWORDENABLED: ${SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED)}');
-    bool passwordEnabled = SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED);
-    // 判断是否设置交易密码，如果没有设置，跳转到设置密码页面，
-    // 否则，输入交易密码
-    if (!passwordEnabled) {
-      HsgShowTip.shouldSetTranPasswordTip(
-        context: context,
-        click: (value) {
-          if (value == true) {
-            //前往设置交易密码
-            Navigator.pushNamed(context, pageResetPayPwdOtp);
-          }
-        },
+
+    String _processKey = widget.data.processKey;
+
+    /// oneToOneTransferApproval - 行内转账
+    if (_processKey == 'oneToOneTransferApproval') {
+      CheckPayPassword(context, (value) {
+        _completeTaskNetwork();
+      });
+    }
+
+    /// internationalTransferApproval - 国际汇款
+    else if (_processKey == 'internationalTransferApproval') {
+      CheckPasswordAndOTP(context, (value) {
+        if (value['check'] == true) {
+          _completeTaskNetwork();
+        }
+      });
+    }
+  }
+
+  void _completeTaskNetwork() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (this.mounted) {
+      setState(() {
+        _btnIsLoadingEAA = true;
+        _btnIsEnable = false;
+        _offstage = false;
+      });
+    }
+    try {
+      // 请求审批接口
+      var data = await ApiClient().completeTask(
+        CompleteTaskBody(
+          approveResult: true,
+          comment: _comment,
+          taskId: widget.data.taskId,
+        ),
       );
-    } else {
-      // 输入交易密码
-      bool isPassword = await _openBottomSheet();
-      // 如果交易密码正确，处理审批逻辑
-      if (isPassword) {
-        FocusManager.instance.primaryFocus?.unfocus();
-        if (this.mounted) {
-          setState(() {
-            _btnIsLoadingEAA = true;
-            _btnIsEnable = false;
-            _offstage = false;
-          });
-        }
-        try {
-          // 请求审批接口
-          var data = await ApiClient().completeTask(
-            CompleteTaskBody(
-              approveResult: true,
-              comment: _comment,
-              taskId: widget.data.taskId,
-            ),
+      if (this.mounted) {
+        setState(() {
+          _btnIsLoadingEAA = false;
+          _btnIsEnable = true;
+          _offstage = true;
+        });
+        Navigator.pushReplacementNamed(context, pageDepositRecordSucceed);
+      }
+    } catch (e) {
+      if (this.mounted) {
+        setState(() {
+          _btnIsLoadingEAA = false;
+          _btnIsEnable = true;
+          _offstage = true;
+          _isShowErrorPage = true;
+          _hsgErrorPage = HsgErrorPage(
+            error: e.error,
+            buttonAction: () {
+              _loadData(isLoading: true);
+            },
           );
-          if (this.mounted) {
-            setState(() {
-              _btnIsLoadingEAA = false;
-              _btnIsEnable = true;
-              _offstage = true;
-            });
-            Navigator.pushReplacementNamed(context, pageDepositRecordSucceed);
-          }
-        } catch (e) {
-          if (this.mounted) {
-            setState(() {
-              _btnIsLoadingEAA = false;
-              _btnIsEnable = true;
-              _offstage = true;
-              _isShowErrorPage = true;
-              _hsgErrorPage = HsgErrorPage(
-                error: e.error,
-                buttonAction: () {
-                  _loadData(isLoading: true);
-                },
-              );
-            });
-          }
-        }
+        });
       }
     }
   }

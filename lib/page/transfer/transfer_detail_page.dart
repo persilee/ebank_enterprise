@@ -84,8 +84,14 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
                   S.of(context).payee_address, _transferHistory.payeeAddress),
               _rowWidget(S.of(context).bank_swift, _transferHistory.bankSwift),
               // _rowWidget(S.of(context).middle_bank_swift, ""),
-              _rowWidget(S.of(context).other_fee, _transferHistory.costOptions),
-              // _rowWidget(S.of(context).remittance_usage,
+              _rowWidget(
+                  S.of(context).approve_payment_method,
+                  _transferHistory.costOptions == 'B'
+                      ? S.current.service_charge1
+                      : _transferHistory.costOptions == 'O'
+                          ? S.current.service_charge2
+                          : S.current.service_charge3),
+              // _rowWidget(S.of(context).remittance_usage,s
               //     _transferHistory.remittancePurposes),
             ],
           );
