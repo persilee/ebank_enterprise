@@ -105,7 +105,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
   List<String> transferFeeCodeList = [];
   int _transferFeeIndex = 2;
   String _transferFeeCode = 'S';
-  String _transferFee = '各自承担手续费';
+  String _transferFee = S.current.service_charge3;
 
   //按钮是否能点击
   bool _isClick = false;

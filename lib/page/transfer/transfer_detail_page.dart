@@ -87,11 +87,11 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
               _rowWidget(
                   S.of(context).approve_payment_method,
                   _transferHistory.costOptions == 'B'
-                      ? '收款人承担手续费'
+                      ? S.current.service_charge1
                       : _transferHistory.costOptions == 'O'
-                          ? '付款方承担手续费'
-                          : '各自承担手续费'),
-              // _rowWidget(S.of(context).remittance_usage,
+                          ? S.current.service_charge2
+                          : S.current.service_charge3),
+              // _rowWidget(S.of(context).remittance_usage,s
               //     _transferHistory.remittancePurposes),
             ],
           );
