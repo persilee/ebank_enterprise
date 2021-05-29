@@ -220,7 +220,7 @@ var pageLoanNewApplictionNav = '/loan_new_application_page.dart';
 var pageLoanProductlistNav = '/loan_product_list_page.dart';
 var pageLoanConfirmNav = '/loan_application_confirm_page.dart';
 var pageLoanMyApplicationList = '/loan_myApplication_list_page.dart';
-var pageLoanReference = 'loan_reference.dart';
+var pageLoanReference = '/loan_reference.dart';
 var pageLoanCollectionPreview = '/loan_collection_preview.dart';
 var pageTransferInline = '/transfer_inline.dart';
 var pageTransferInter = '/transfer_inter.dart';
@@ -330,7 +330,7 @@ var appRoutes = {
   pageLoanProductlistNav: (context) => LoanProductListPage(),
   pageLoanConfirmNav: (context) => LoanConfirmApplicationList(),
   pageLoanMyApplicationList: (context) => LoanMyApplicationListPage(), //贷款 我的申请
-  pageLoanReference: (context) => LoanReference(),
+  // pageLoanReference: (context) => LoanReference(),
   pageLoanCollectionPreview: (context) => PageLoanCollectionPreview(), //贷款领用预览
   pageTransferInline: (context) => TransferInlinePage(),
   pageTransferInter: (context) => TransferInterPage(),
@@ -478,6 +478,16 @@ onGenerateRoute(RouteSettings settings) {
       Map<String, dynamic> arguments = settings.arguments;
       return CityForCountrySelectPage(
         countryData: arguments['data'],
+      );
+    });
+  }
+
+  if (settings.name == pageLoanReference) {
+    //跳转贷款领用界面传值
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return LoanReference(
+        accountInfo: arguments['data'],
       );
     });
   }

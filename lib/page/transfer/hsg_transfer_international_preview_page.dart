@@ -209,8 +209,7 @@ class _TransferInternalPreviewPageState
     String feeCode = transferData.feeCode;
     HSProgressHUD.show();
     print('payeeNamePrint: $payeeName');
-    Transfer()
-        .getInterNationalTransfer(GetInternationalTransferReq(
+    GetInternationalTransferReq req = GetInternationalTransferReq(
       opt,
       //付款金额
       debitAmount,
@@ -237,8 +236,8 @@ class _TransferInternalPreviewPageState
       costOptionsIndex,
       feeAmount,
       feeCode,
-    ))
-        .then((value) {
+    );
+    Transfer().getInterNationalTransfer(req).then((value) {
       HSProgressHUD.dismiss();
       Navigator.pushReplacementNamed(context, pageOperationResult);
     }).catchError((e) {

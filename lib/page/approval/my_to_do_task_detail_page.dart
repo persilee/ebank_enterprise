@@ -250,13 +250,15 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     // 获取贷款期限
     String _iratTm = '';
     String repayDat = data?.iratTm?.substring(data.iratTm.length - 2) ?? '';
+    int repayDatStr = int.parse(repayDat);
+    // int repayDat = int.parse(data?.iratTm);
     try {
       GetIdTypeResp getIdTypeResp =
           await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if (repayDat == element.code) {
+          if (repayDatStr.toString() == element.code) {
             if (_language == 'zh_CN') {
               _iratTm = element.cname;
             } else if (_language == 'zh_HK') {
@@ -274,12 +276,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     // 获取还款方式
     String _repType = '';
     try {
-      GetIdTypeResp getIdTypeResp =
-          await ApiClientOpenAccount().getIdType(GetIdTypeReq('REPAY_TYPE'));
+      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(
+          GetIdTypeReq('REPAY_TYPE_LN')); //现在REPAY_TYPE_LN  以前的REPAY_TYPE
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if (data?.repType == element.code) {
+          if (data?.lnInsType == element.code) {
             if (_language == 'zh_CN') {
               _repType = element.cname;
             } else if (_language == 'zh_HK') {
@@ -293,6 +295,34 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     } catch (e) {
       print(e);
     }
+    //借款用途
+    String _purposesUse = '';
+    try {
+      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount()
+          .getIdType(GetIdTypeReq('LOAN_PUR')); //现在REPAY_TYPE_LN  以前的REPAY_TYPE
+      List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
+      if (_tenorList.isNotEmpty) {
+        _tenorList.forEach((element) {
+          if (data?.loanPurpose == element.code) {
+            if (_language == 'zh_CN') {
+              _purposesUse = element.cname;
+            } else if (_language == 'zh_HK') {
+              _purposesUse = element.chName;
+            } else {
+              _purposesUse = element.name;
+            }
+          }
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+    // ApiClientOpenAccount().getIdType(GetIdTypeReq("LOAN_PUR")).then((data) {
+    //   if (data.publicCodeGetRedisRspDtoList != null) {
+    //     _goalLists.clear();
+    //     _goalLists.addAll(data.publicCodeGetRedisRspDtoList);
+    //   }
+    // });
 
     // 添加历史审批记录
     if (loanWithDrawalModel.commentList.isNotEmpty) {
@@ -311,7 +341,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             S.current.loan_Recipients_Amount, // 处理日元没有小数
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.amt ?? '0')) ?? ''
-                : f.format(double.parse(data?.amt ?? '0')) ?? ''));
+                : f.format(double.parse(data?.amt ?? '0')) ?? '')); //金额
+        _loanWithDrawalList.add(_buildContentItem(
+            S.current.loan_collection_currency, data.ccy ?? '')); //币种
+
         _loanWithDrawalList.add(_buildContentItem(
             S.current.loan_Borrowing_limit,
             data?.ccy == 'JPY'
@@ -320,18 +353,19 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _loanWithDrawalList.add(
             _buildContentItem(S.current.loan_Borrowing_Period, _iratTm ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
-            S.current.loan_Repayment_method_column, _repType ?? ''));
+            S.current.loan_Repayment_method_column, _repType ?? '')); //还款方式
+        // _loanWithDrawalList.add(_buildContentItem(
+        //     S.current.approve_first_interest_date,
+        //     data?.fPaydt ?? '')); //首次还息日期
+        // _loanWithDrawalList.add(_buildContentItem(
+        //     S.current.loan_Total_Interest,
+        //     data?.ccy == 'JPY'
+        //         ? fj.format(double.parse(data?.totalInt ?? '0')) ?? ''
+        //         : f.format(double.parse(data?.totalInt ?? '0')) ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
-            S.current.approve_first_interest_date, data?.fPaydt ?? ''));
+            S.current.transfer_to_account, data?.ddAc ?? '')); //收款账户
         _loanWithDrawalList.add(_buildContentItem(
-            S.current.loan_Total_Interest,
-            data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.totalInt ?? '0')) ?? ''
-                : f.format(double.parse(data?.totalInt ?? '0')) ?? ''));
-        _loanWithDrawalList.add(
-            _buildContentItem(S.current.transfer_to_account, data?.ddAc ?? ''));
-        _loanWithDrawalList.add(_buildContentItem(
-            S.current.loan_Borrowing_Purposes, data?.loanPurpose ?? ''));
+            S.current.loan_Borrowing_Purposes, _purposesUse ?? '')); //借款用途
         _isLoading = false;
         _isShowErrorPage = false;
       });

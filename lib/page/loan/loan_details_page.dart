@@ -205,7 +205,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           } else {
             //传值过去
             Navigator.pushNamed(context, pageLoanReference,
-                arguments: widget.loanAccountDetail);
+                arguments: {'data': widget.loanAccountDetail});
           }
         },
       ),

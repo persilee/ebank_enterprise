@@ -100,6 +100,7 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
         child: Column(
           children: [
             Container(
+              //兑换币种选择
               color: Colors.white,
               padding: EdgeInsets.fromLTRB(70, 25, 70, 0),
               alignment: Alignment.center,
@@ -518,7 +519,6 @@ class _ExchangeRateInquiryPageState extends State<ExchangeRateInquiryPage> {
   //获取币种买入卖出列表
   Future _getExchangeRateList() async {
     _isLoading = true;
-    // ForexTradingRepository()
     ApiClientBill().getExRate(GetExRateReq()).then((data) {
       if (data != null) {
         rateList.clear();
