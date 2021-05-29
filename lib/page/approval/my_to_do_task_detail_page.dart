@@ -1767,6 +1767,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         }
       });
     }
+
+    /// 其他审批另行判断
+    else {
+      CheckPayPassword(context, (value) {
+        _completeTaskNetwork();
+      });
+    }
   }
 
   void _completeTaskNetwork() async {
