@@ -1681,34 +1681,44 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     }
   }
 
-  //交易密码窗口
-  Future<bool> _openBottomSheet() async {
-    final isPassword = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return HsgPasswordDialog(
-            title: S.current.input_password,
-          );
-        });
-    if (isPassword != null && isPassword == true) {
-      return true;
-    }
-    FocusManager.instance.primaryFocus?.unfocus();
-    return false;
-  }
+  // //交易密码窗口
+  // Future<bool> _openBottomSheet() async {
+  //   final isPassword = await showHsgBottomSheet(
+  //       context: context,
+  //       builder: (context) {
+  //         return HsgPasswordDialog(
+  //           title: S.current.input_password,
+  //         );
+  //       });
+  //   if (isPassword != null && isPassword == true) {
+  //     return true;
+  //   }
+  //   FocusManager.instance.primaryFocus?.unfocus();
+  //   return false;
+  // }
 
   // 完成任务
   void _completeTask() async {
     print(
         'USER_PASSWORDENABLED: ${SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED)}');
 
-    // String passwordStr = await CheckPayPassword(context, () {
-    //   _completeTaskNetwork();
-    // });
-    String passwordStr = await CheckPayPassword(context, (value) {
-      _completeTaskNetwork();
-    });
-    print(passwordStr);
+    String _processKey = widget.data.processKey;
+
+    /// oneToOneTransferApproval - 行内转账
+    if (_processKey == 'oneToOneTransferApproval') {
+      CheckPayPassword(context, (value) {
+        _completeTaskNetwork();
+      });
+    }
+
+    /// internationalTransferApproval - 国际汇款
+    else if (_processKey == 'internationalTransferApproval') {
+      CheckPasswordAndOTP(context, (value) {
+        if (value['check'] == true) {
+          _completeTaskNetwork();
+        }
+      });
+    }
   }
 
   void _completeTaskNetwork() async {
