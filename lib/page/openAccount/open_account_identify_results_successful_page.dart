@@ -453,7 +453,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         dataReq.hkCertificateInfo.firthIssueDate = _changeDate(
             infoStrForHK.firstIssueDate); // infoStrForHK.firstIssueDate;
         dataReq.hkCertificateInfo.currentIssueDate =
-            _changeDate(infoStrForHK.currentIssueDate);
+            _changeDateForHKCurrentIssueDate(infoStrForHK.currentIssueDate);
         // infoStrForHK.currentIssueDate;
         break;
 
@@ -498,6 +498,29 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     }
     String resultsDateStr = dateStr.replaceAll('/', '-');
     resultsDateStr = resultsDateStr.replaceAll('.', '-');
+
+    if (resultsDateStr == '长期') {
+      resultsDateStr = '9999-12-31';
+    }
+    return resultsDateStr;
+  }
+
+  String _changeDateForHKCurrentIssueDate(String dateStr) {
+    if (dateStr == null || dateStr.length < 6) {
+      return '';
+    }
+    String resultsDateStr = dateStr;
+    List dataList = dateStr.split('-');
+    if (dataList.length > 2) {
+      DateTime dateTime = DateTime.now();
+      String getYearStr = dataList[0];
+      if (int.parse(getYearStr) > (dateTime.year % 100)) {
+        dataList[0] = '${dateTime.year / 100 - 1}' + '$getYearStr';
+      } else {
+        dataList[0] = '${dateTime.year / 100}' + '$getYearStr';
+      }
+      resultsDateStr = dataList[0] + dataList[1] + dataList[2];
+    }
 
     if (resultsDateStr == '长期') {
       resultsDateStr = '9999-12-31';
