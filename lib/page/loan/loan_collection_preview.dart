@@ -159,13 +159,13 @@ class _PageLoanCollectionPreviewState extends State<PageLoanCollectionPreview> {
               HsgColors.secondDegreeText,
               14,
               14), //还款方式
-          _rowText(
-              S.current.view_repayment_plan,
-              _reviewMap['repayPlan'],
-              HsgColors.aboutusTextCon,
-              HsgColors.secondDegreeText,
-              14,
-              14), //还款计划
+          // _rowText(
+          //     S.current.view_repayment_plan,
+          //     _reviewMap['repayPlan'],
+          //     HsgColors.aboutusTextCon,
+          //     HsgColors.secondDegreeText,
+          //     14,
+          //     14), //还款计划
           // _rowText(S.current.loan_Total_Interest, _reviewMap['totalInterst'],
           // HsgColors.aboutusTextCon, HsgColors.secondDegreeText, 14, 14),总利息
           _rowText(

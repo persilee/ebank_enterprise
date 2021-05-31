@@ -328,13 +328,13 @@ class _LoanReferenceState extends State<LoanReference> {
   Future<String> _calculateTotalRateValue(
       String buyCcy, String sellCcy, String inputStr) async {
     try {
-      HSProgressHUD.show();
+      HSProgressHUD.show(); //当前是买入价
       TransferTrialReq req = TransferTrialReq(
-          opt: "S",
-          buyCcy: buyCcy,
-          sellCcy: sellCcy,
-          buyAmount: inputStr,
-          sellAmount: '0',
+          opt: "B",
+          buyCcy: sellCcy,
+          sellCcy: buyCcy,
+          buyAmount: '0',
+          sellAmount: inputStr,
           exGroup: 'SMR' //昨日汇率，只有领用接口才能传值
           );
       TransferTrialResp resp = await Transfer().transferTrial(req);
@@ -397,6 +397,8 @@ class _LoanReferenceState extends State<LoanReference> {
           }
           if (_recipientsController.text == '' ||
               double.parse(_recipientsController.text) < 0) {
+            //那么其他的选项都得变更数值才行。
+            _cleanInputDataStr();
             //判断自己本身有没有输入金额
             _isShowInputText = true;
           } else {
@@ -456,6 +458,23 @@ class _LoanReferenceState extends State<LoanReference> {
               _documentsCcy, _getCcy, documentTotalAmount.toString()); //计算兑换金额
         }
         _checkInputValueAndRate(); //校验成功即可去进行利率获取
+      }
+    });
+  }
+
+//当输入空的时候清空其他的选项字段值
+  _cleanInputDataStr() {
+    setState(() {
+      if (_financingZero) {
+        //融资比例大于0。
+
+      } else {
+        //没有融资比例
+        _conversionTotalAmount = '0.00'; //领用换算金额
+        _totalAmount = '0.00'; //最终提款金额
+        _trailList.clear(); //清空还款计划
+        _deadLine = ''; //贷款期限
+        _dateCode = ''; //贷款期限编
       }
     });
   }
@@ -529,7 +548,7 @@ class _LoanReferenceState extends State<LoanReference> {
       if (mounted) {
         setState(() {
           _rateModel = data; //保存利率模型
-          _loadTrialDate(); //拿到利率进行试算
+          // _loadTrialDate(); //拿到利率进行试算
         });
       }
     }).catchError((e) {
@@ -539,8 +558,6 @@ class _LoanReferenceState extends State<LoanReference> {
         _dateCode = "";
         _mothCode = '';
       });
-      // String _deadLine = ''; //贷款期限
-      // String _dateCode = ''; //贷款期限编码
       HSProgressHUD.showToast(e);
     });
   }
@@ -548,15 +565,19 @@ class _LoanReferenceState extends State<LoanReference> {
 //领用试算的接口
   Future _loadTrialDate() async {
     _trailList.clear();
+    // _rateModel.repType == "";  周期：额度的期限 单位：M 还款方式：1   期数：1
+    // repType 有值 还款方式：本利和公式  期数：期限/还款周期
+
     var req = LoanTrailReq(
       _getCcy, //货币
-      '1', //频率 还款周期
-      'M', //频率单位
-      _reimburseCode, //还款方式
+      _rateModel.setPeRd, //频率 还款周期
+      _rateModel.setUnit, //频率单位
+      _rateModel.repType, //还款方式
       double.parse(_totalAmount), //贷款本金
       double.parse(_rateModel.intRat), //贷款利率
       _dateCode, //总期数
     );
+
     ApiClientLoan().loanPilotComputingInterface(req).then((data) {
       if (data.loanTrialDTOList != null) {
         setState(() {
@@ -838,14 +859,17 @@ class _LoanReferenceState extends State<LoanReference> {
                         //最终提款金额
                         S.current.loan_get_total_amount,
                         _totalAmount),
-                    // //还款计划
-                    Container(
-                        color: Colors.white,
-                        child: selectInkWellToBlackTitle(
-                          S.current.repayment_plan,
-                          _trailStr,
-                          _repamentPlanAlert(),
-                        )),
+                    Divider(
+                      height: 0,
+                    ),
+                    // // //还款计划
+                    // Container(
+                    //     color: Colors.white,
+                    //     child: selectInkWellToBlackTitle(
+                    //       S.current.repayment_plan,
+                    //       _trailStr,
+                    //       _repamentPlanAlert(),
+                    //     )),
                     //还款方式
                     _creatCommonColumn(S.current.repayment_ways, _reimburseStr),
                     Divider(
