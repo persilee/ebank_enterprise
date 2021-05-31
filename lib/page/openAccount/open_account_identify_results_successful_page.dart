@@ -519,8 +519,30 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
       } else {
         dataList[0] = '${dateTime.year / 100}' + '$getYearStr';
       }
-      resultsDateStr = dataList[0] + dataList[1] + dataList[2];
+      resultsDateStr = dataList[0] + '-' + dataList[1] + '-' + dataList[2];
     }
+
+    if (resultsDateStr == '长期') {
+      resultsDateStr = '9999-12-31';
+    }
+    return resultsDateStr;
+  }
+
+  String _changeDateForOther(String dateStr) {
+    if (dateStr == null || dateStr.length < 6) {
+      return '';
+    }
+    String resultsDateStr = dateStr;
+    DateTime dateTime = DateTime.now();
+    String getYearStr = resultsDateStr.substring(0, 2);
+    String getMonthStr = resultsDateStr.substring(2, 2);
+    String getDayStr = resultsDateStr.substring(4, 2);
+    if (int.parse(getYearStr) > (dateTime.year % 100)) {
+      getYearStr = '${dateTime.year / 100 - 1}' + '$getYearStr';
+    } else {
+      getYearStr = '${dateTime.year / 100}' + '$getYearStr';
+    }
+    resultsDateStr = getYearStr + '-' + getMonthStr + '-' + getDayStr;
 
     if (resultsDateStr == '长期') {
       resultsDateStr = '9999-12-31';

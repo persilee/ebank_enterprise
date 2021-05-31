@@ -504,6 +504,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 : f.format(double.parse(data?.sellAmt ?? '0')) ?? ''));
         _foreignTransferList.add(
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
+        _foreignTransferList.add(
+            _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
         _isLoading = false;
         _isShowErrorPage = false;
       });

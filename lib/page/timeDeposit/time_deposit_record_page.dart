@@ -44,6 +44,8 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   double conRate; //利率
   int _page = 1;
   int _totalPage = 10;
+  String _stsNo = 'N';
+  bool _isNomal = true; //是否是正常
   ScrollController _scrollController;
   RefreshController _refreshController;
   bool _isLoading = false; //加载状态
@@ -133,7 +135,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   Widget _totalCcy() {
     return Container(
       margin: EdgeInsets.only(bottom: 12),
-      padding: EdgeInsets.only(left: 0, top: 10, bottom: 30),
+      padding: EdgeInsets.only(left: 0, top: 10, bottom: 20),
       child: Text(
         ' ${S.current.receipts_total_amt} (' + _defaultCcy + ')',
         textAlign: TextAlign.center,
@@ -150,6 +152,71 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         FormatUtil.formatSringToMoney(_totalAmtStr),
         textAlign: TextAlign.center,
         style: TextStyle(height: 1, fontSize: 40, color: Colors.white),
+      ),
+    );
+  }
+
+  Widget _selectBtn(String title, bool isSelect, VoidCallback callback) {
+    FlatButton btn = FlatButton(
+      onPressed: () {
+        if (isSelect) {
+          return;
+        }
+        callback();
+      },
+      child: Text(
+        title,
+        style: TextStyle(
+          color: isSelect ? HsgColors.accent : HsgColors.canceledBtn,
+          fontSize: 15,
+        ),
+      ),
+    );
+    return Container(
+      width: MediaQuery.of(context).size.width / 2,
+      child: btn,
+    );
+  }
+
+  //存单状态选择
+  Widget _selectBtnWidget() {
+    return Container(
+      color: HsgColors.backgroundColor,
+      height: 50,
+      // padding: EdgeInsets.only(left: 0, top: 30, bottom: 10),
+      child: Row(
+        children: [
+          _selectBtn(
+            '正常',
+            _isNomal,
+            () {
+              print('正常');
+              if (mounted) {
+                setState(() {
+                  _isNomal = true;
+                });
+              }
+              _page = 1;
+              _stsNo = 'N';
+              _loadDeopstData();
+            },
+          ),
+          _selectBtn(
+            '已结清',
+            !_isNomal,
+            () {
+              print('已结清');
+              if (mounted) {
+                setState(() {
+                  _isNomal = false;
+                });
+              }
+              _page = 1;
+              _stsNo = 'C';
+              _loadDeopstData();
+            },
+          ),
+        ],
       ),
     );
   }
@@ -190,11 +257,12 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
               children: [
                 _totalAmt(),
                 _totalCcy(),
+                _selectBtnWidget(),
               ],
             ),
           ),
         ),
-        preferredSize: Size(30, 150),
+        preferredSize: Size(30, 170),
       ),
     );
   }
@@ -388,12 +456,17 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
   Future<void> _loadDeopstData() async {
     _isLoading = true;
     final prefs = await SharedPreferences.getInstance();
-    bool excludeClosed = true;
     String ciNo = prefs.getString(ConfigKey.CUST_ID);
     Future.wait({
       ApiClientTimeDeposit().getDepositRecordRows(
-        DepositRecordReq(ciNo, '', excludeClosed, _page, _totalPage, '',
-            _page > 1 ? 'Y' : ''),
+        DepositRecordReq(
+          ciNo: ciNo,
+          conNo: '',
+          page: _page,
+          pageSize: _totalPage,
+          stsNo: _stsNo,
+          nextKey: _page > 1 ? 'Y' : '',
+        ),
       )
     }).then((value) {
       if (this.mounted) {
