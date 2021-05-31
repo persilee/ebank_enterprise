@@ -45,8 +45,6 @@ import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
-import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
-import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/hsg_text_field_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
@@ -274,27 +272,41 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     }
 
     // 获取还款方式
-    String _repType = '';
+    String _repType = "";
     try {
       GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(
           GetIdTypeReq('REPAY_TYPE_LN')); //现在REPAY_TYPE_LN  以前的REPAY_TYPE
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
-        _tenorList.forEach((element) {
-          if (data?.lnInsType == element.code) {
+        for (int i = 0;
+            i < getIdTypeResp.publicCodeGetRedisRspDtoList.length;
+            i++) {
+          IdType type = getIdTypeResp.publicCodeGetRedisRspDtoList[i];
+          if (data?.lnInsType == "" && type.code == "0") {
             if (_language == 'zh_CN') {
-              _repType = element.cname;
+              _repType = type.cname;
             } else if (_language == 'zh_HK') {
-              _repType = element.chName;
+              _repType = type.chName;
             } else {
-              _repType = element.name;
+              _repType = type.name;
+            }
+          } else {
+            if (data?.lnInsType == type.code) {
+              if (_language == 'zh_CN') {
+                _repType = type.cname;
+              } else if (_language == 'zh_HK') {
+                _repType = type.chName;
+              } else {
+                _repType = type.name;
+              }
             }
           }
-        });
+        }
       }
     } catch (e) {
       print(e);
     }
+
     //借款用途
     String _purposesUse = '';
     try {
@@ -1129,7 +1141,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       child: GestureDetector(
         onTap: () {
           Navigator.pushNamed(
-              context, pageAuthorizationTaskApprovalHistoryDetail);
+              context, pageAuthorizationTaskApprovalHistoryDetail,
+              arguments: {"data": _commentList});
         },
         child: _buildHistoryItem(S.current.approve_approval_history, true),
       ),

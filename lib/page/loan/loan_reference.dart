@@ -152,7 +152,7 @@ class _LoanReferenceState extends State<LoanReference> {
       if (data.publicCodeGetRedisRspDtoList != null) {
         for (int i = 0; i < data.publicCodeGetRedisRspDtoList.length; i++) {
           IdType type = data.publicCodeGetRedisRspDtoList[i];
-          if (_limitCusteModel.lnInsType == '') {
+          if (_limitCusteModel.lnInsType == '' && type.code == "0") {
             _checkReimburse(data.publicCodeGetRedisRspDtoList[0]);
             _reimburseCode = type.code;
           } else {

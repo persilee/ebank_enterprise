@@ -159,14 +159,15 @@ class _MyApprovedHistoryDetailPageState
 
     // 获取贷款期限
     String _iratTm = '';
-    int repayDat = int.parse(data?.iratTm);
+    String repayDat = data?.iratTm?.substring(data.iratTm.length - 2) ?? '';
+    int repayDatStr = int.parse(repayDat);
     try {
       GetIdTypeResp getIdTypeResp =
           await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if (repayDat.toString() == element.code) {
+          if (repayDatStr.toString() == element.code) {
             if (_language == 'zh_CN') {
               _iratTm = element.cname;
             } else if (_language == 'zh_HK') {
@@ -185,20 +186,33 @@ class _MyApprovedHistoryDetailPageState
     String _repType = '';
     try {
       GetIdTypeResp getIdTypeResp =
-          await ApiClientOpenAccount().getIdType(GetIdTypeReq('REPAY_TYPE'));
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('REPAY_TYPE_LN'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
-        _tenorList.forEach((element) {
-          if (data?.lnInsType == element.code) {
+        for (int i = 0;
+            i < getIdTypeResp.publicCodeGetRedisRspDtoList.length;
+            i++) {
+          IdType type = getIdTypeResp.publicCodeGetRedisRspDtoList[i];
+          if (data?.lnInsType == "" && type.code == "0") {
             if (_language == 'zh_CN') {
-              _repType = element.cname;
+              _repType = type.cname;
             } else if (_language == 'zh_HK') {
-              _repType = element.chName;
+              _repType = type.chName;
             } else {
-              _repType = element.name;
+              _repType = type.name;
+            }
+          } else {
+            if (data?.lnInsType == type.code) {
+              if (_language == 'zh_CN') {
+                _repType = type.cname;
+              } else if (_language == 'zh_HK') {
+                _repType = type.chName;
+              } else {
+                _repType = type.name;
+              }
             }
           }
-        });
+        }
       }
     } catch (e) {
       print(e);
@@ -251,13 +265,15 @@ class _MyApprovedHistoryDetailPageState
             S.current.loan_Borrowing_limit,
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.loanAmount ?? '0')) ?? ''
-                : f.format(double.parse(data?.loanAmount ?? '0')) ?? ''));
+                : f.format(double.parse(data?.loanAmount ?? '0')) ?? '')); //
+        _loanWithDrawalList.add(_buildContentItem(
+            S.current.loan_collection_currency, data.ccy ?? '')); //币种
         _loanWithDrawalList.add(
             _buildContentItem(S.current.loan_Borrowing_Period, _iratTm ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
             S.current.loan_Repayment_method_column, _repType ?? ''));
-        _loanWithDrawalList.add(_buildContentItem(
-            S.current.approve_first_interest_date, data?.fPaydt ?? ''));
+        // _loanWithDrawalList.add(_buildContentItem(
+        //     S.current.approve_first_interest_date, data?.fPaydt ?? ''));//首次还息日期
         // _loanWithDrawalList.add(_buildContentItem(
         //     S.current.loan_Total_Interest,
         //     data?.ccy == 'JPY'
