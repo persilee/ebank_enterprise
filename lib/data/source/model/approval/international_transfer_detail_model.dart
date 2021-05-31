@@ -50,6 +50,8 @@ class InternationalTransferDetailModel {
   int _taskCount;
   dynamic _optBefJsonValue;
   dynamic _optEndJsonValue;
+  String _createTime;
+  String _dueTime;
 
   String get userId => _userId;
   String get userName => _userName;
@@ -75,32 +77,37 @@ class InternationalTransferDetailModel {
   int get taskCount => _taskCount;
   dynamic get optBefJsonValue => _optBefJsonValue;
   dynamic get optEndJsonValue => _optEndJsonValue;
+  String get createTime => _createTime;
+  String get dueTime => _dueTime;
 
-  InternationalTransferDetailModel(
-      {String userId,
-      String userName,
-      dynamic assigneeList,
-      int approverNumbers,
-      String processTitle,
-      String processKey,
-      dynamic businessKey,
-      dynamic tenantId,
-      dynamic operateBeforeValue,
-      OperateEndValue operateEndValue,
-      String servCtr,
-      dynamic custId,
-      dynamic amount,
-      dynamic ccy,
-      dynamic authModel,
-      dynamic amountPosition,
-      dynamic serviceType,
-      dynamic authGroups,
-      List<CommentList> commentList,
-      String result,
-      dynamic taskKey,
-      int taskCount,
-      dynamic optBefJsonValue,
-      dynamic optEndJsonValue}) {
+  InternationalTransferDetailModel({
+    String userId,
+    String userName,
+    dynamic assigneeList,
+    int approverNumbers,
+    String processTitle,
+    String processKey,
+    dynamic businessKey,
+    dynamic tenantId,
+    dynamic operateBeforeValue,
+    OperateEndValue operateEndValue,
+    String servCtr,
+    dynamic custId,
+    dynamic amount,
+    dynamic ccy,
+    dynamic authModel,
+    dynamic amountPosition,
+    dynamic serviceType,
+    dynamic authGroups,
+    List<CommentList> commentList,
+    String result,
+    dynamic taskKey,
+    int taskCount,
+    dynamic optBefJsonValue,
+    dynamic optEndJsonValue,
+    String createTime,
+    String dueTime,
+  }) {
     _userId = userId;
     _userName = userName;
     _assigneeList = assigneeList;
@@ -125,6 +132,8 @@ class InternationalTransferDetailModel {
     _taskCount = taskCount;
     _optBefJsonValue = optBefJsonValue;
     _optEndJsonValue = optEndJsonValue;
+    _createTime = createTime;
+    _dueTime = dueTime;
   }
 
   InternationalTransferDetailModel.fromJson(dynamic json) {
@@ -159,6 +168,8 @@ class InternationalTransferDetailModel {
     _taskCount = json["taskCount"];
     _optBefJsonValue = json["optBefJsonValue"];
     _optEndJsonValue = json["optEndJsonValue"];
+    _createTime = json["createTime"];
+    _dueTime = json["dueTime"];
   }
 
   Map<String, dynamic> toJson() {
@@ -191,6 +202,8 @@ class InternationalTransferDetailModel {
     map["taskCount"] = _taskCount;
     map["optBefJsonValue"] = _optBefJsonValue;
     map["optEndJsonValue"] = _optEndJsonValue;
+    map["createTime"] = _createTime;
+    map["dueTime"] = _dueTime;
     return map;
   }
 }

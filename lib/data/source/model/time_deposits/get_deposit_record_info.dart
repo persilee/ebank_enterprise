@@ -9,36 +9,38 @@ part 'get_deposit_record_info.g.dart';
 
 @JsonSerializable()
 class DepositRecordReq {
+  ///客户号
   @JsonKey(name: 'ciNo')
   String ciNo;
 
+  ///合约号
   @JsonKey(name: 'conNo')
   String conNo;
 
-  @JsonKey(name: 'excludeClosed')
-  bool excludeClosed;
-
+  ///页数
   @JsonKey(name: 'page')
   int page;
 
+  ///每页条数
   @JsonKey(name: 'pageSize')
   int pageSize;
 
+  ///存单状态 不传查所有，C 已结清 N 正常
   @JsonKey(name: 'stsNo')
   String stsNo;
 
+  ///下一页
   @JsonKey(name: 'nextKey')
   String nextKey;
 
-  DepositRecordReq(
+  DepositRecordReq({
     this.ciNo,
     this.conNo,
-    this.excludeClosed,
     this.page,
     this.pageSize,
     this.stsNo,
     this.nextKey,
-  );
+  });
 
   factory DepositRecordReq.fromJson(Map<String, dynamic> srcJson) =>
       _$DepositRecordReqFromJson(srcJson);
