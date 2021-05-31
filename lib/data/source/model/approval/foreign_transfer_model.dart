@@ -50,6 +50,7 @@ class ForeignTransferModel {
   int _taskCount;
   dynamic _optBefJsonValue;
   dynamic _optEndJsonValue;
+  String _dueTime;
 
   String get userId => _userId;
   String get userName => _userName;
@@ -75,32 +76,35 @@ class ForeignTransferModel {
   int get taskCount => _taskCount;
   dynamic get optBefJsonValue => _optBefJsonValue;
   dynamic get optEndJsonValue => _optEndJsonValue;
+  String get dueTime => _dueTime;
 
-  ForeignTransferModel(
-      {String userId,
-      String userName,
-      dynamic assigneeList,
-      int approverNumbers,
-      String processTitle,
-      String processKey,
-      dynamic businessKey,
-      dynamic tenantId,
-      dynamic operateBeforeValue,
-      OperateEndValue operateEndValue,
-      String servCtr,
-      dynamic custId,
-      dynamic amount,
-      dynamic ccy,
-      dynamic authModel,
-      dynamic amountPosition,
-      dynamic serviceType,
-      dynamic authGroups,
-      List<CommentList> commentList,
-      String result,
-      dynamic taskKey,
-      int taskCount,
-      dynamic optBefJsonValue,
-      dynamic optEndJsonValue}) {
+  ForeignTransferModel({
+    String userId,
+    String userName,
+    dynamic assigneeList,
+    int approverNumbers,
+    String processTitle,
+    String processKey,
+    dynamic businessKey,
+    dynamic tenantId,
+    dynamic operateBeforeValue,
+    OperateEndValue operateEndValue,
+    String servCtr,
+    dynamic custId,
+    dynamic amount,
+    dynamic ccy,
+    dynamic authModel,
+    dynamic amountPosition,
+    dynamic serviceType,
+    dynamic authGroups,
+    List<CommentList> commentList,
+    String result,
+    dynamic taskKey,
+    int taskCount,
+    dynamic optBefJsonValue,
+    dynamic optEndJsonValue,
+    String dueTime,
+  }) {
     _userId = userId;
     _userName = userName;
     _assigneeList = assigneeList;
@@ -125,6 +129,7 @@ class ForeignTransferModel {
     _taskCount = taskCount;
     _optBefJsonValue = optBefJsonValue;
     _optEndJsonValue = optEndJsonValue;
+    _dueTime = dueTime;
   }
 
   ForeignTransferModel.fromJson(dynamic json) {
@@ -159,6 +164,7 @@ class ForeignTransferModel {
     _taskCount = json["taskCount"];
     _optBefJsonValue = json["optBefJsonValue"];
     _optEndJsonValue = json["optEndJsonValue"];
+    _dueTime = json["dueTime"];
   }
 
   Map<String, dynamic> toJson() {
@@ -191,6 +197,7 @@ class ForeignTransferModel {
     map["taskCount"] = _taskCount;
     map["optBefJsonValue"] = _optBefJsonValue;
     map["optEndJsonValue"] = _optEndJsonValue;
+    map["dueTime"] = _dueTime;
     return map;
   }
 }
@@ -221,6 +228,7 @@ class OperateEndValue {
   String _payPassword;
   String _sellDac;
   dynamic _availableBalance;
+  String _dueTime;
 
   String get buyCcy => _buyCcy;
   String get prodCd => _prodCd;
@@ -234,20 +242,23 @@ class OperateEndValue {
   String get payPassword => _payPassword;
   String get sellDac => _sellDac;
   dynamic get availableBalance => _availableBalance;
+  String get dueTime => _dueTime;
 
-  OperateEndValue(
-      {String buyCcy,
-      String prodCd,
-      String buyAmt,
-      String buyDac,
-      String smsCode,
-      String exRate,
-      String sellAmt,
-      String exTime,
-      String sellCcy,
-      String payPassword,
-      String sellDac,
-      dynamic availableBalance}) {
+  OperateEndValue({
+    String buyCcy,
+    String prodCd,
+    String buyAmt,
+    String buyDac,
+    String smsCode,
+    String exRate,
+    String sellAmt,
+    String exTime,
+    String sellCcy,
+    String payPassword,
+    String sellDac,
+    dynamic availableBalance,
+    String dueTime,
+  }) {
     _buyCcy = buyCcy;
     _prodCd = prodCd;
     _buyAmt = buyAmt;
@@ -260,6 +271,7 @@ class OperateEndValue {
     _payPassword = payPassword;
     _sellDac = sellDac;
     _availableBalance = availableBalance;
+    _dueTime = dueTime;
   }
 
   OperateEndValue.fromJson(dynamic json) {
@@ -275,6 +287,7 @@ class OperateEndValue {
     _payPassword = json["payPassword"];
     _sellDac = json["sellDac"];
     _availableBalance = json["availableBalance"];
+    _dueTime = json["dueTime"];
   }
 
   Map<String, dynamic> toJson() {
@@ -291,6 +304,7 @@ class OperateEndValue {
     map["payPassword"] = _payPassword;
     map["sellDac"] = _sellDac;
     map["availableBalance"] = _availableBalance;
+    map["dueTime"] = _dueTime;
     return map;
   }
 }

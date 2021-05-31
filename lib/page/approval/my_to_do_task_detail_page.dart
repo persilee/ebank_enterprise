@@ -95,6 +95,15 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     super.initState();
     _controller = ScrollController();
     _loadData(isLoading: true);
+
+    var today = DateTime.now().microsecond;
+
+    var date = DateTime.parse("2021-05-31 15:32:41").microsecond;
+
+    // data.difference(today);
+
+    print(
+        '《》《》《》《》《》比较两个时间 差 小时数：${date - today}'); //  比较两个时间 差 小时数：-726:29:40.000000
   }
 
   @override
@@ -518,6 +527,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
         _foreignTransferList.add(
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
+        // _foreignTransferList
+        //     .add(_buildContentItem('到期时间', data?.dueTime ?? ''));
+        // _foreignTransferList.add(_buildContentItem('剩余时间', data?.exRate ?? ''));
         _isLoading = false;
         _isShowErrorPage = false;
       });
