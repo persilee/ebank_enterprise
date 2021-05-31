@@ -262,6 +262,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     HSProgressHUD.show();
     OpenAccountInformationSupplementDataReq dataReq =
         _getDataReq(phoneStr, areaCode, userId);
+    print('<><><><><>$dataReq');
     ApiClientOpenAccount().supplementQuickPartnerInfo(dataReq).then(
       (value) {
         print(value);
@@ -468,23 +469,26 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
             _changeDate(infoStrForPassport.dateOfBirth);
         // infoStrForPassport.dateOfBirth.replaceAll('/', '-');
         dataReq.passportInfo.issuingCountry = infoStrForPassport.issuingCountry;
-        if (infoStrForPassport.dateOfExpiration.contains('-')) {
-          List dataList = infoStrForPassport.dateOfExpiration.split('-');
-          if (dataList.length > 1) {
-            dataReq.passportInfo.idIssueDate =
-                _changeDate(dataList[0]); // dataList[0].replaceAll('.', '-');
-            dataReq.passportInfo.idDueDate =
-                _changeDate(dataList[1]); // dataList[1].replaceAll('.', '-');
-          } else {
-            dataReq.passportInfo.idIssueDate =
-                _changeDate(infoStrForPassport.dateOfExpiration);
-            // infoStrForPassport.dateOfExpiration.replaceAll('.', '-');
-          }
-        } else {
-          dataReq.passportInfo.idIssueDate =
-              _changeDate(infoStrForPassport.dateOfExpiration);
-          // infoStrForPassport.dateOfExpiration.replaceAll('.', '-');
-        }
+        dataReq.passportInfo.idDueDate = _changeDateForOther(
+            infoStrForPassport.dateOfExpiration ?? '',
+            isGreater: true);
+        // if (infoStrForPassport.dateOfExpiration.contains('-')) {
+        //   List dataList = infoStrForPassport.dateOfExpiration.split('-');
+        //   if (dataList.length > 1) {
+        //     dataReq.passportInfo.idIssueDate =
+        //         _changeDate(dataList[0]); // dataList[0].replaceAll('.', '-');
+        //     dataReq.passportInfo.idDueDate =
+        //         _changeDate(dataList[1]); // dataList[1].replaceAll('.', '-');
+        //   } else {
+        //     dataReq.passportInfo.idIssueDate =
+        //         _changeDate(infoStrForPassport.dateOfExpiration);
+        //     // infoStrForPassport.dateOfExpiration.replaceAll('.', '-');
+        //   }
+        // } else {
+        //   dataReq.passportInfo.idIssueDate =
+        //       _changeDate(infoStrForPassport.dateOfExpiration);
+        //   // infoStrForPassport.dateOfExpiration.replaceAll('.', '-');
+        // }
         break;
       default:
     }
@@ -509,38 +513,45 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     if (dateStr == null || dateStr.length < 6) {
       return '';
     }
-    String resultsDateStr = dateStr;
-    List dataList = dateStr.split('-');
-    if (dataList.length > 2) {
-      DateTime dateTime = DateTime.now();
-      String getYearStr = dataList[0];
-      if (int.parse(getYearStr) > (dateTime.year % 100)) {
-        dataList[0] = '${dateTime.year / 100 - 1}' + '$getYearStr';
-      } else {
-        dataList[0] = '${dateTime.year / 100}' + '$getYearStr';
-      }
-      resultsDateStr = dataList[0] + '-' + dataList[1] + '-' + dataList[2];
-    }
+    String resultsDateStr = dateStr.replaceAll('-', '');
+    resultsDateStr = dateStr.replaceAll('/', '');
+    resultsDateStr = resultsDateStr.replaceAll('.', '-');
+    resultsDateStr = _changeDateForOther(resultsDateStr, isGreater: true);
+    // String resultsDateStr = dateStr;
+    // List dataList = dateStr.split('-');
+    // if (dataList.length > 2) {
+    //   DateTime dateTime = DateTime.now();
+    //   String getYearStr = dataList[0];
+    //   if (int.parse(getYearStr) > (dateTime.year % 100)) {
+    //     dataList[0] = '${dateTime.year / 100 - 1}' + '$getYearStr';
+    //   } else {
+    //     dataList[0] = '${dateTime.year / 100}' + '$getYearStr';
+    //   }
+    //   resultsDateStr = dataList[0] + '-' + dataList[1] + '-' + dataList[2];
+    // }
 
-    if (resultsDateStr == '长期') {
-      resultsDateStr = '9999-12-31';
-    }
+    // if (resultsDateStr == '长期') {
+    //   resultsDateStr = '9999-12-31';
+    // }
     return resultsDateStr;
   }
 
-  String _changeDateForOther(String dateStr) {
+  String _changeDateForOther(
+    String dateStr, {
+    bool isGreater = false,
+  }) {
     if (dateStr == null || dateStr.length < 6) {
       return '';
     }
     String resultsDateStr = dateStr;
     DateTime dateTime = DateTime.now();
     String getYearStr = resultsDateStr.substring(0, 2);
-    String getMonthStr = resultsDateStr.substring(2, 2);
-    String getDayStr = resultsDateStr.substring(4, 2);
-    if (int.parse(getYearStr) > (dateTime.year % 100)) {
-      getYearStr = '${dateTime.year / 100 - 1}' + '$getYearStr';
+    String getMonthStr = resultsDateStr.substring(2, 4);
+    String getDayStr = resultsDateStr.substring(4, 6);
+    if (int.parse(getYearStr) > (dateTime.year % 100) && (!isGreater)) {
+      getYearStr = '${dateTime.year ~/ 100 - 1}' + '$getYearStr';
     } else {
-      getYearStr = '${dateTime.year / 100}' + '$getYearStr';
+      getYearStr = '${dateTime.year ~/ 100}' + '$getYearStr';
     }
     resultsDateStr = getYearStr + '-' + getMonthStr + '-' + getDayStr;
 
