@@ -1,3 +1,5 @@
+import 'dart:async';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 任务审批页面
 /// Author: wangluyao
@@ -89,6 +91,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   bool _isShowErrorPage = false;
   Widget _hsgErrorPage;
   String _language = Intl.getCurrentLocale();
+  Timer _timer;
+  int _countdownTime;
+  String _endTimeStr;
 
   @override
   void initState() {
@@ -463,6 +468,14 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     ForeignTransferModel.OperateEndValue data =
         foreignTransferModel.operateEndValue;
 
+    var today = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    var date = (data == null || data.dueTime == null || data.dueTime == '')
+        ? today
+        : DateTime.parse(data.dueTime).millisecondsSinceEpoch ~/ 1000;
+
+    _startCountdown(date - today);
+    _endTimeStr = _endTimeShow(_countdownTime);
+
     // 获取可用余额
     String _avaBal = '';
     try {
@@ -518,6 +531,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
         _foreignTransferList.add(
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
+        _foreignTransferList.add(_buildContentItem(
+            S.current.task_due_time, data?.dueTime ?? '')); //'到期时间'
+        _foreignTransferList.add(_buildContentItem(
+            S.current.task_last_time, _endTimeStr ?? '')); //'剩余时间'
         _isLoading = false;
         _isShowErrorPage = false;
       });
@@ -1753,6 +1770,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     String _processKey = widget.data.processKey;
 
+    /// foreignTransferApproval - 外汇买卖
+    if (_processKey == 'foreignTransferApproval' &&
+        (_countdownTime == 0 || _countdownTime == null)) {
+      HSProgressHUD.showToastTip(S.of(context).task_complete_timeout_tip);
+      return;
+    }
+
     /// oneToOneTransferApproval - 行内转账
     if (_processKey == 'oneToOneTransferApproval') {
       CheckPayPassword(context, (value) {
@@ -1774,6 +1798,36 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       CheckPayPassword(context, (value) {
         _completeTaskNetwork();
       });
+    }
+  }
+
+  //倒计时方法
+  _startCountdown(int time) {
+    if (time < 0) {
+      return;
+    }
+    _countdownTime = time;
+    final call = (timer) {
+      if (mounted) {
+        setState(() {
+          if (_countdownTime < 1) {
+            _timer.cancel();
+          } else {
+            _countdownTime -= 1;
+          }
+        });
+      }
+    };
+    _timer = Timer.periodic(Duration(seconds: 1), call);
+  }
+
+  String _endTimeShow(int time) {
+    if (time == 0) {
+      return '00:00';
+    } else if (time < 60) {
+      return '00:$time';
+    } else {
+      return '${time ~/ 60}:${time % 60}';
     }
   }
 

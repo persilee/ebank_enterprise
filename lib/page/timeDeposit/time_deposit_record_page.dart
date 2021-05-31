@@ -187,7 +187,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
       child: Row(
         children: [
           _selectBtn(
-            '正常',
+            S.of(context).time_deposit_record_Status_N,
             _isNomal,
             () {
               print('正常');
@@ -202,7 +202,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
             },
           ),
           _selectBtn(
-            '已结清',
+            S.of(context).time_deposit_record_Status_C,
             !_isNomal,
             () {
               print('已结清');
