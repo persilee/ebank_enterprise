@@ -10,9 +10,11 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/open_account_information_supplement_data.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/open_account_quick_data.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
+import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/http/retrofit/base_body.dart';
 import 'package:ebank_mobile/page/index_page/hsg_index_page.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -50,6 +52,15 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
 
   ///反面照
   String _backImageUrl = '';
+
+  ///性别
+  List<IdType> _genderTypes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getPublicParameters();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -408,7 +419,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         dataReq.mainlandCertificateInfo = ChinaMainlandCertificateInfoDTO();
         dataReq.mainlandCertificateInfo.fullNameLoc = infoStrForCN.name;
         dataReq.mainlandCertificateInfo.idNo = infoStrForCN.idNum;
-        dataReq.mainlandCertificateInfo.gender = infoStrForCN.sex;
+        dataReq.mainlandCertificateInfo.gender =
+            _changeGenderString(infoStrForCN.sex);
         dataReq.mainlandCertificateInfo.nation = infoStrForCN.nation;
         dataReq.mainlandCertificateInfo.birthdate =
             _changeDate(infoStrForCN.birth);
@@ -445,7 +457,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         dataReq.hkCertificateInfo.idNo = infoStrForHK.idNum;
         dataReq.hkCertificateInfo.fullNameEng = infoStrForHK.enName;
         dataReq.hkCertificateInfo.telexCode = infoStrForHK.telexCode;
-        dataReq.hkCertificateInfo.gender = infoStrForHK.sex;
+        dataReq.hkCertificateInfo.gender =
+            _changeGenderString(infoStrForHK.sex);
         dataReq.hkCertificateInfo.symbol = infoStrForHK.symbol;
         dataReq.hkCertificateInfo.birthdate =
             _changeDate(infoStrForHK.birthday);
@@ -462,7 +475,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         dataReq.passportInfo = PassportInfoDTO();
         dataReq.passportInfo.fullNameLoc = infoStrForPassport.name;
         dataReq.passportInfo.idNo = infoStrForPassport.idNum;
-        dataReq.passportInfo.gender = infoStrForPassport.sex;
+        dataReq.passportInfo.gender =
+            _changeGenderString(infoStrForPassport.sex);
         dataReq.passportInfo.nationality = infoStrForPassport.nationality;
         dataReq.passportInfo.birthdate =
             _changeDate(infoStrForPassport.dateOfBirth);
@@ -605,5 +619,48 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
       }
     }
     return dateString;
+  }
+
+  ///转换性别
+  String _changeGenderString(String genderStr) {
+    if (_genderTypes.length == 0) {
+      return genderStr;
+    } else {
+      String manCode = '';
+      String femaleCode = '';
+      String unknownCode = '';
+      _genderTypes.forEach((element) {
+        if (element.cname.contains('男')) {
+          manCode = element.code;
+        } else if (element.cname.contains('女')) {
+          femaleCode = element.code;
+        } else {
+          unknownCode = element.code;
+        }
+      });
+      if (genderStr.contains('男') || genderStr == 'M') {
+        return manCode;
+      } else if (genderStr.contains('女') || genderStr == 'F') {
+        return femaleCode;
+      } else {
+        return unknownCode;
+      }
+    }
+  }
+
+  //获取公共参数
+  void _getPublicParameters() async {
+    //获取性别
+    ApiClientOpenAccount().getIdType(GetIdTypeReq('GENDER')) //CGCT//FIRM_CERT
+        .then((data) {
+      if (data.publicCodeGetRedisRspDtoList != null) {
+        _genderTypes = data.publicCodeGetRedisRspDtoList;
+      }
+    }).catchError((e) {
+      if (e is NeedLogin) {
+      } else {
+        HSProgressHUD.showToast(e);
+      }
+    });
   }
 }
