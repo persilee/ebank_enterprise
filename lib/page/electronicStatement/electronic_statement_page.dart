@@ -25,15 +25,18 @@ class ElectronicStatementPage extends StatefulWidget {
 }
 
 class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
-  String _startDate = DateFormat('yyyy-MM-01').format(DateTime.now());
-  String _endDate = DateFormat('yyyy-MM-dd').format(DateTime.now()); //结束时间
+  // String _startDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  // String _endDate = DateFormat('yyyy-MM-dd').format(DateTime.now()); //结束时间
   String _end = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示结束时间
   String _start = formatDate(
-      DateTime(DateTime.now().year, DateTime.now().month, 1),
+      DateTime(
+          DateTime.now().year, DateTime.now().month - 6, DateTime.now().day),
       [yyyy, mm, dd]); //显示开始时间
-  String _time; //拼接时间
+  // String _startDate;
+  // String _endDate;
+  // String _time; //拼接时间
 
-  GetFilePathResp _fileData;
+  // GetFilePathResp _fileData;
   StatementDTOS _statementDTOS;
   List<StatementDTOS> dataList = [];
   bool _isLoading = false;
@@ -159,8 +162,8 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
     try {
       StatementQueryListModel statementQueryListModel =
           await ApiClient().statementQueryList(StatementQueryListBody(
-        startDate: _startDate,
-        endDate: '2022-12-31', //_endDate, //'2022-12-31', //
+        startDate: DateFormat('yyyy-MM-dd').format(DateTime.parse(_start)),
+        endDate: DateFormat('yyyy-MM-dd').format(DateTime.parse(_end)),
       ));
       if (mounted) {
         setState(() {
@@ -424,10 +427,10 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
         ),
       ),
       minDateTime: DateTime.parse('1900-01-01'),
-      maxDateTime: DateTime.now(),
+      // maxDateTime: DateTime.now(),
       initialDateTime: i == 0
-          ? DateTime.parse(_startDate)
-          : DateTime.parse(_endDate), //DateTime.now(),
+          ? DateTime.parse(_start)
+          : DateTime.parse(_end), //DateTime.now(),
       dateFormat: 'yyyy-MM-dd',
       locale: DateTimePickerLocale.zh_cn,
       //确定
@@ -435,10 +438,10 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
         setState(() {
           if (i == 0) {
             _start = formatDate(dateTime, [yyyy, mm, dd]);
-            _startDate = DateFormat('yyyy-MM-dd').format(dateTime);
+            // _startDate = DateFormat('yyyy-MM-dd').format(dateTime);
           } else {
             _end = formatDate(dateTime, [yyyy, mm, dd]);
-            _endDate = DateFormat('yyyy-MM-dd').format(dateTime);
+            // _endDate = DateFormat('yyyy-MM-dd').format(dateTime);
           }
         });
         (popcontext as Element).markNeedsBuild();
@@ -508,7 +511,7 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
         ),
         onPressed: () {
           setState(() {
-            _time = _start + "—" + _end;
+            // _time = _start + "—" + _end;
             // _page = 1;
             dataList.clear();
           });

@@ -262,7 +262,6 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     HSProgressHUD.show();
     OpenAccountInformationSupplementDataReq dataReq =
         _getDataReq(phoneStr, areaCode, userId);
-    print('<><><><><>$dataReq');
     ApiClientOpenAccount().supplementQuickPartnerInfo(dataReq).then(
       (value) {
         print(value);
@@ -503,6 +502,11 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     String resultsDateStr = dateStr.replaceAll('/', '-');
     resultsDateStr = resultsDateStr.replaceAll('.', '-');
 
+    List dataList = dateStr.split('-');
+    if (dataList.length > 2 && dataList[2].length == 4) {
+      resultsDateStr = dataList[2] + '-' + dataList[1] + '-' + dataList[0];
+    }
+
     if (resultsDateStr == '长期') {
       resultsDateStr = '9999-12-31';
     }
@@ -513,9 +517,10 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     if (dateStr == null || dateStr.length < 6) {
       return '';
     }
-    String resultsDateStr = dateStr.replaceAll('-', '');
-    resultsDateStr = dateStr.replaceAll('/', '');
-    resultsDateStr = resultsDateStr.replaceAll('.', '-');
+    String resultsDateStr = dateStr;
+    resultsDateStr = resultsDateStr.replaceAll('-', '');
+    resultsDateStr = resultsDateStr.replaceAll('/', '');
+    resultsDateStr = resultsDateStr.replaceAll('.', '');
     resultsDateStr = _changeDateForOther(resultsDateStr, isGreater: true);
     // String resultsDateStr = dateStr;
     // List dataList = dateStr.split('-');
