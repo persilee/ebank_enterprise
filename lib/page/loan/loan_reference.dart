@@ -533,6 +533,14 @@ class _LoanReferenceState extends State<LoanReference> {
         });
       }
     }).catchError((e) {
+      //需要把利率的接口
+      setState(() {
+        _deadLine = '';
+        _dateCode = "";
+        _mothCode = '';
+      });
+      // String _deadLine = ''; //贷款期限
+      // String _dateCode = ''; //贷款期限编码
       HSProgressHUD.showToast(e);
     });
   }
