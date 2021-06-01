@@ -485,6 +485,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         dataReq.passportInfo.idDueDate = _changeDateForOther(
             infoStrForPassport.dateOfExpiration ?? '',
             isGreater: true);
+
+        dataReq.isSuccess = '0';
         // if (infoStrForPassport.dateOfExpiration.contains('-')) {
         //   List dataList = infoStrForPassport.dateOfExpiration.split('-');
         //   if (dataList.length > 1) {

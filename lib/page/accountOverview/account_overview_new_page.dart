@@ -36,7 +36,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
   String totalLiabilities = '0.00';
   String localCcy = '';
   String ddTotal = '0';
-  String ddCcy = '';
+  // String ddCcy = '';
   String tdTotal = '0';
   String lnTotal = '0';
 
@@ -758,7 +758,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
           context,
           isShowDD,
           S.current.demand_deposit,
-          ddCcy + ' ' + FormatUtil.formatSringToMoney(ddTotal),
+          localCcy + ' ' + FormatUtil.formatSringToMoney(ddTotal),
           () {
             if (isShowDD == true) {
               return;
