@@ -468,13 +468,13 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     ForeignTransferModel.OperateEndValue data =
         foreignTransferModel.operateEndValue;
 
-    var today = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    var date = (data == null || data.dueTime == null || data.dueTime == '')
-        ? today
-        : DateTime.parse(data.dueTime).millisecondsSinceEpoch ~/ 1000;
+    // var today = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    // var date = (data == null || data.dueTime == null || data.dueTime == '')
+    //     ? today
+    //     : DateTime.parse(data.dueTime).millisecondsSinceEpoch ~/ 1000;
 
-    _startCountdown(date - today);
-    _endTimeStr = _endTimeShow(_countdownTime);
+    // _startCountdown(date - today);
+    // _endTimeStr = _endTimeShow(_countdownTime);
 
     // 获取可用余额
     String _avaBal = '';
@@ -531,10 +531,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
         _foreignTransferList.add(
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
-        _foreignTransferList.add(_buildContentItem(
-            S.current.task_due_time, data?.dueTime ?? '')); //'到期时间'
-        _foreignTransferList.add(_buildContentItem(
-            S.current.task_last_time, _endTimeStr ?? '')); //'剩余时间'
+        // _foreignTransferList.add(_buildContentItem(
+        //     S.current.task_due_time, data?.dueTime ?? '')); //'到期时间'
+        // _foreignTransferList.add(_buildContentItem(
+        //     S.current.task_last_time, _endTimeStr ?? '')); //'剩余时间'
         _isLoading = false;
         _isShowErrorPage = false;
       });
@@ -1770,12 +1770,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     String _processKey = widget.data.processKey;
 
-    /// foreignTransferApproval - 外汇买卖
-    if (_processKey == 'foreignTransferApproval' &&
-        (_countdownTime == 0 || _countdownTime == null)) {
-      HSProgressHUD.showToastTip(S.of(context).task_complete_timeout_tip);
-      return;
-    }
+    // /// foreignTransferApproval - 外汇买卖
+    // if (_processKey == 'foreignTransferApproval' &&
+    //     (_countdownTime == 0 || _countdownTime == null)) {
+    //   HSProgressHUD.showToastTip(S.of(context).task_complete_timeout_tip);
+    //   return;
+    // }
 
     /// oneToOneTransferApproval - 行内转账
     if (_processKey == 'oneToOneTransferApproval') {
