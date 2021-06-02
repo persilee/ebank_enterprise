@@ -756,7 +756,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
 
   _judgeDialog() {
     //判断是不是冻结户,不是正常户
-    if (_rollOutModel.acSts != 'N') {
+    if (_rollOutModel.acSts != 'N' && _rollOutModel.acSts != '8') {
       HSProgressHUD.showToastTip(
         S.current.transfer_account_error_tip,
       );
