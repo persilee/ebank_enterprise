@@ -257,8 +257,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                 _transferHistory.transferType == '0'
                     ? intl.S.current.transfer_type_0_short
                     : intl.S.current.transfer_type_1_short),
-            _rowContent(
-                intl.S.of(context).transfer_status, _transferHistory.status),
+            // _rowContent(
+            //     intl.S.of(context).transfer_status, _transferHistory.status),
           ],
         ),
       ),

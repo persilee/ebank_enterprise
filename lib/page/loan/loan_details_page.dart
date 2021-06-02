@@ -402,7 +402,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           //查看还款计划
           if (loanDetail.status == 'M') {
             //结清状态不能看计划
-            HSProgressHUD.showToast(S.current.loan_early_pay_reminder);
+            HSProgressHUD.showToastTip(S.current.loan_early_pay_reminder);
             return;
           }
           Navigator.pushNamed(context, pageRepayPlan,
