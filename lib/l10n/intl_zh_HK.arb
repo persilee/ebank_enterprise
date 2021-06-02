@@ -788,6 +788,7 @@
   "time_deposit_Withdrawal_Early": "提前支取",
   "transfer_account_error_tip": "當前轉出賬戶狀態異常",
   "loan_early_pay_reminder": "當前合約已結清",
+  "transfer_add_partner_nameErr":"收款方名稱有誤",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "數據異常，未返回數據！",
