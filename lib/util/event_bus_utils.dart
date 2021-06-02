@@ -44,3 +44,10 @@ class ChangeUserInfo {
 
   ChangeUserInfo({this.userInfo, this.state});
 }
+
+///更新定期列表
+class UpdateTDRecordEvent {
+  String msg;
+
+  UpdateTDRecordEvent({this.msg});
+}

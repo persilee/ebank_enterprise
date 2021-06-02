@@ -786,8 +786,8 @@
   "loan_get_max_tips": "Cannot be greater than",
   "time_deposit_Withdrawal_amount": "Withdrawal amount",
   "time_deposit_Withdrawal_Early": "Early withdrawal",
-  "transfer_account_error_tip":"The current transfer account is abnormal",
-  "loan_early_pay_reminder":"The current contract has been settled",
+  "transfer_account_error_tip": "The current transfer account is abnormal",
+  "loan_early_pay_reminder": "The current contract has been settled",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "Data is abnormal, no data is returned!",
@@ -796,5 +796,6 @@
   "place_get_otp_tip": "Please get the verification code first",
   "task_due_time": "Due Time",
   "task_last_time": "Remaining Time",
-  "task_complete_timeout_tip": "The approval time limit has expired, please approve within the specified time!"
+  "task_complete_timeout_tip": "The approval time limit has expired, please approve within the specified time!",
+  "electronic_statement_date": "Statement date"
 }

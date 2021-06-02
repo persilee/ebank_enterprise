@@ -786,8 +786,8 @@
   "loan_get_max_tips": "不能大于",
   "time_deposit_Withdrawal_amount": "支取金額",
   "time_deposit_Withdrawal_Early": "提前支取",
-  "transfer_account_error_tip":"當前轉出賬戶狀態異常",
-  "loan_early_pay_reminder":"當前合約已結清",
+  "transfer_account_error_tip": "當前轉出賬戶狀態異常",
+  "loan_early_pay_reminder": "當前合約已結清",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "數據異常，未返回數據！",
@@ -796,5 +796,6 @@
   "place_get_otp_tip": "請先獲取驗證碼",
   "task_due_time": "到期時間",
   "task_last_time": "剩餘時間",
-  "task_complete_timeout_tip": "已經超過審批時限，請在規定時間內審批！"
+  "task_complete_timeout_tip": "已經超過審批時限，請在規定時間內審批！",
+  "electronic_statement_date": "結單日期"
 }

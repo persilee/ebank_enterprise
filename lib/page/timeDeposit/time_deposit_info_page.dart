@@ -19,6 +19,7 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
@@ -895,6 +896,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         } else {
           _changedSettAcTitle = _changedSettAc;
         }
+        EventBusUtils.getInstance().fire(UpdateTDRecordEvent());
         // _showContractSucceedPage(context);
       });
     }).catchError((e) {
