@@ -664,6 +664,12 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         _showTimeDepositEarlyTip();
       });
     }).catchError((e) {
+      if (this.mounted) {
+        setState(() {
+          _btnIsLoadingR = false;
+          _btnIsEnable = true;
+        });
+      }
       HSProgressHUD.showToast(e);
     });
   }
@@ -889,6 +895,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         } else {
           _changedSettAcTitle = _changedSettAc;
         }
+        // _showContractSucceedPage(context);
       });
     }).catchError((e) {
       HSProgressHUD.showToast(e);
