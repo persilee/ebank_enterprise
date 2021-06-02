@@ -789,6 +789,7 @@
   "transfer_account_error_tip":"The current transfer account is abnormal",
   "loan_early_pay_reminder":"The current contract has been settled",
   "transfer_add_partner_nameErr":"Transfer To Name Error",
+  "transfer_collection_error_tip":"The current receiving account status is abnormal",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "Data is abnormal, no data is returned!",
