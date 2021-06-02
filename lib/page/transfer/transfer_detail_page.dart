@@ -1,4 +1,6 @@
+import 'package:ebank_mobile/data/source/model/transfer/get_internatinal_detail.dart';
 import 'package:ebank_mobile/data/source/model/transfer/get_transfer_record.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///转账详情界面
@@ -6,21 +8,42 @@ import 'package:ebank_mobile/data/source/model/transfer/get_transfer_record.dart
 /// Date: 2020-12-24
 
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 
 class TransferDetailPage extends StatefulWidget {
+  final TransferRecord transferHistory;
+  TransferDetailPage({Key key, this.transferHistory}) : super(key: key);
   @override
   _TransferDetailPageState createState() => _TransferDetailPageState();
 }
 
 class _TransferDetailPageState extends State<TransferDetailPage> {
   @override
+  void initState() {
+    super.initState();
+    _loadListData();
+  }
+
+//加载详情数据
+  _loadListData() {
+    TransferInterModelReq req = TransferInterModelReq(widget.transferHistory.id,
+        widget.transferHistory.status, widget.transferHistory.transferType);
+    Transfer().getInternationalStatusInterface(req).then((data) {
+      print(data);
+    }).catchError((e) {
+      HSProgressHUD.showToast(e);
+    });
+    ;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    TransferRecord _transferHistory = ModalRoute.of(context).settings.arguments;
-    print(_transferHistory.toString);
+    //  = ModalRoute.of(context).settings.arguments;
+    // print(_transferHistory.toString);
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).transfer_detail),
@@ -33,7 +56,7 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.only(top: 20),
-            child: _transfer(_transferHistory),
+            child: _transfer(widget.transferHistory),
           ),
         ],
       ),

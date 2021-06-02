@@ -107,6 +107,9 @@ class _TransferInterPageState extends State<TransferInterPage> {
   String _transferFeeCode = 'S';
   String _transferFee = S.current.service_charge3;
 
+  RemoteBankCard _rollOutModel; //转出方账户模型
+  List _rollOutList = []; //转出方账户列表
+
   //按钮是否能点击
   bool _isClick = false;
   var check = false;
@@ -751,6 +754,13 @@ class _TransferInterPageState extends State<TransferInterPage> {
   }
 
   _judgeDialog() {
+    //判断是不是冻结户,不是正常户
+    if (_rollOutModel.acSts != 'N') {
+      HSProgressHUD.showToastTip(
+        S.current.transfer_account_error_tip,
+      );
+      return;
+    }
     if (double.parse(_payerTransferController.text) > double.parse(_balance)) {
       HSProgressHUD.showToastTip(
         S.current.tdContract_balance_insufficient,
@@ -827,6 +837,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
       setState(() {
         _payerAccountIndex = result;
         _payerAccount = _payerAccountList[result];
+        _rollOutModel = _rollOutList[result];
       });
       _loadData(_payerAccount);
     }
@@ -892,6 +903,8 @@ class _TransferInterPageState extends State<TransferInterPage> {
       value.forEach((element) {
         //通过绑定手机号查询卡列表接口POST
         if (element is GetCardListResp) {
+          _rollOutList = element.cardList;
+          _rollOutModel = element.cardList[0];
           if (this.mounted) {
             if (element != null &&
                 element.cardList != null &&

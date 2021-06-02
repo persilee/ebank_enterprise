@@ -218,8 +218,9 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _contentWidget(TransferRecord _transferHistory) {
     return InkWell(
       onTap: () {
+        //点击跳转详情
         Navigator.pushNamed(context, pageTransferDetail,
-            arguments: _transferHistory);
+            arguments: {"transferHistory": _transferHistory});
       },
       child: Container(
         width: MediaQuery.of(context).size.width,

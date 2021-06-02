@@ -381,6 +381,7 @@ class _LoanReferenceState extends State<LoanReference> {
       if (focusnode.hasFocus) {
         //得到焦点
       } else {
+        //此监听方法是是输入框有值才会走
         //失去焦点 去请求接口并计算
         if (double.parse(_recipientsController.text) < min) {
           //不能小于最低限额
@@ -390,19 +391,20 @@ class _LoanReferenceState extends State<LoanReference> {
         }
 
         setState(() {
-          if (_documentHasLength) {
-            _isShowDocument = false;
-          } else {
-            _isShowDocument = true;
-          }
           if (_recipientsController.text == '' ||
-              double.parse(_recipientsController.text) < 0) {
+              double.parse(_recipientsController.text) <= 0) {
             //那么其他的选项都得变更数值才行。
             _cleanInputDataStr();
             //判断自己本身有没有输入金额
             _isShowInputText = true;
           } else {
             _isShowInputText = false;
+          }
+
+          if (_documentHasLength) {
+            _isShowDocument = false;
+          } else {
+            _isShowDocument = true;
           }
         });
 
@@ -440,7 +442,7 @@ class _LoanReferenceState extends State<LoanReference> {
             _isShowInputText = true;
           }
           if (_documentsAmountController.text == '' ||
-              double.parse(_documentsAmountController.text) < 0) {
+              double.parse(_documentsAmountController.text) <= 0) {
             //判断自己本身有没有输入金额
             _isShowDocument = true;
           } else {

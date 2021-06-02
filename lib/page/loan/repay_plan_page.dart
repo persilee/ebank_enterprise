@@ -55,6 +55,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
     HSProgressHUD.show();
     // LoanDataRepository()
     ApiClientLoan().getSchedulePlanDetailList(req).then((data) {
+      lnScheduleList.clear();
       HSProgressHUD.dismiss();
       if (data.getLnAcScheduleRspDetlsDTOList != null) {
         setState(() {
@@ -65,7 +66,6 @@ class _RepayPlanState extends State<RepayPlanPage> {
     }).catchError((e) {
       HSProgressHUD.showToast(e);
     });
-    lnScheduleList.clear();
   }
 
   @override
@@ -316,12 +316,10 @@ class _RepayPlanState extends State<RepayPlanPage> {
               InkWell(
                 onTap: () {
                   //跳转loan_plan提前还款
-                  Map detailMap = Map();
-                  detailMap['detailModel'] = lnSchedule;
-                  detailMap['loanDetail'] = widget.loanDetail; //0不是还款计划
-
-                  Navigator.pushNamed(context, pageRepaymentPlan,
-                      arguments: detailMap); //需要传不同的参数进去
+                  Navigator.pushNamed(context, pageRepaymentPlan, arguments: {
+                    'loanDetail': widget.loanDetail,
+                    'planDetail': lnSchedule
+                  }); //需要传不同的参数进去
                   //跳转
                 },
                 child: Text(

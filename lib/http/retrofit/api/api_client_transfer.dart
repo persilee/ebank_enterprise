@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/model/transfer/add_transfer_plan.dart';
 import 'package:ebank_mobile/data/source/model/transfer/cancel_transfer_plan.dart';
 import 'package:ebank_mobile/data/source/model/transfer/delete_partner.dart';
 import 'package:ebank_mobile/data/source/model/transfer/get_info_by_swift_code.dart';
+import 'package:ebank_mobile/data/source/model/transfer/get_internatinal_detail.dart';
 import 'package:ebank_mobile/data/source/model/transfer/get_international_transfer.dart';
 import 'package:ebank_mobile/data/source/model/transfer/get_transfer_by_account.dart';
 import 'package:ebank_mobile/data/source/model/transfer/get_transfer_partner_list.dart';
@@ -100,4 +101,9 @@ abstract class Transfer {
   //查询费用
   @POST('/ddep/fee/queryFee')
   Future<QueryFeeResp> queryFee(@Body() QueryFeeReq req);
+
+  //国际转账获取状态接口
+  @POST('/ddep/history/getTransferRecord')
+  Future<TransferInterModelResp> getInternationalStatusInterface(
+      @Body() TransferInterModelReq req);
 }

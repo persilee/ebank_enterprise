@@ -471,18 +471,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                   //币种
                   _unit(S.current.currency, ccy, true, false),
                   //存入金额
-                  // _unit(S.current.deposit_amount,
-                  //     FormatUtil.formatSringToMoney(bal), true, false),
-                  TextFieldContainer(
-                    //申请金额
-                    title: S.current.deposit_amount,
-                    hintText: S.current.please_input + S.current.amount,
-                    keyboardType:
-                        TextInputType.numberWithOptions(decimal: true),
-                    controller: _moneyController,
-                    callback: _checkloanIsClick,
-                    isMoney: true,
-                  ),
+                  _unit(S.current.approve_certificates_deposit_amount,
+                      FormatUtil.formatSringToMoney(bal), true, false),
                   //存期
                   _unit(S.current.deposit_term, auctCale + _termUnit, true,
                       false),
@@ -499,8 +489,18 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                           ? S.current.tdInfo_interest_settlement_account
                           : S.current.settlement_account,
                       FormatUtil.formatSpace4(_changedSettAcTitle),
-                      false,
+                      true,
                       true),
+                  TextFieldContainer(
+                    //申请金额
+                    title: S.current.time_deposit_Withdrawal_amount,
+                    hintText: S.current.please_input + S.current.amount,
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    controller: _moneyController,
+                    callback: _checkloanIsClick,
+                    isMoney: true,
+                  ),
                 ],
               ),
             ),
@@ -564,9 +564,10 @@ class _PageDepositInfo extends State<PageDepositInfo> {
               isOutline: true,
               margin: EdgeInsets.all(15),
               text: Text(
-                _isAllSettlement
-                    ? S.current.repayment_type2
-                    : S.current.time_deposit_change_Settlement,
+                // _isAllSettlement
+                //     ? S.current.repayment_type2
+                // : S.current.time_deposit_change_Settlement,
+                S.current.time_deposit_Withdrawal_Early,
                 style: TextStyle(
                     color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
                     fontSize: 14.0),

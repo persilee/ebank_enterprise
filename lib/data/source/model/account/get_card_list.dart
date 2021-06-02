@@ -62,6 +62,9 @@ class RemoteBankCard extends Object {
   @JsonKey(name: 'phoneNumber')
   String phoneNumber;
 
+  @JsonKey(name: 'acSts')
+  String acSts;
+
   RemoteBankCard(
     this.bankCode,
     this.bankEngName,
@@ -73,6 +76,7 @@ class RemoteBankCard extends Object {
     this.imageUrl,
     this.own,
     this.phoneNumber,
+    this.acSts,
   );
   @override
   String toString() {

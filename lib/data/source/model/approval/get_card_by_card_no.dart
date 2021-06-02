@@ -40,6 +40,9 @@ class GetCardByCardNoResp extends Object {
   @JsonKey(name: 'phoneNumber')
   String phoneNumber;
 
+  @JsonKey(name: 'status')
+  String status;
+
   GetCardByCardNoResp(
     this.bankCode,
     this.cardNo,
@@ -48,6 +51,7 @@ class GetCardByCardNoResp extends Object {
     this.custId,
     this.own,
     this.phoneNumber,
+    this.status,
   );
 
   factory GetCardByCardNoResp.fromJson(Map<String, dynamic> srcJson) =>

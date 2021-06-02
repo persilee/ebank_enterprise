@@ -52,6 +52,10 @@ class LoanRepaymentConfimReq extends Object {
   @JsonKey(name: 'payPassword')
   String payPassword;
 
+  //还款日期
+  @JsonKey(name: 'repaymentDay')
+  String repaymentDay;
+
   LoanRepaymentConfimReq(
     this.acNo,
     this.ccy,
@@ -65,6 +69,7 @@ class LoanRepaymentConfimReq extends Object {
     this.prodCode,
     this.totalAmount,
     this.payPassword,
+    this.repaymentDay,
   );
 
   factory LoanRepaymentConfimReq.fromJson(Map<String, dynamic> srcJson) =>
