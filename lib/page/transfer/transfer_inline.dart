@@ -100,6 +100,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
 
   RemoteBankCard _rollOutModel; //转出方账户模型
   List _rollOutList = []; //转出方账户列表
+  GetCardByCardNoResp _collectionModel; //收款方模型
 
   @override
   void initState() {
@@ -553,12 +554,21 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
 
   _judgeDialog() {
     //判断是不是冻结户,不是正常户
-    if (_rollOutModel.acSts != 'N') {
+    if (_rollOutModel.acSts != 'N' && _rollOutModel.acSts != '8') {
+      //转出方
       HSProgressHUD.showToastTip(
         S.current.transfer_account_error_tip,
       );
       return;
     }
+    if (_collectionModel.status != 'N' && _collectionModel.status != '1') {
+      //收款方
+      HSProgressHUD.showToastTip(
+        S.current.transfer_collection_error_tip,
+      );
+      return;
+    }
+
     if (double.parse(_payerTransferController.text) > double.parse(_balance)) {
       HSProgressHUD.showToastTip(
         S.current.tdContract_balance_insufficient,
@@ -856,6 +866,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
       if (this.mounted) {
         setState(() {
           _payeeNameController.text = data.ciName;
+          _collectionModel = data;
           payeeBankCode = data.bankCode;
           payerBankCode = data.bankCode;
           _isAccount = false;
