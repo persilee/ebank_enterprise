@@ -13,6 +13,7 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/page/approval/widget/notificationCenter.dart';
+import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
@@ -61,14 +62,9 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
     //获取定期存单列表
     _loadDeopstData();
     //接收通知
-    NotificationCenter.instance.addObserver('load', (object) {
-      if (this.mounted) {
-        setState(() {
-          if (object) {
-            _loadDeopstData();
-          }
-        });
-      }
+    EventBusUtils.getInstance().on<UpdateTDRecordEvent>().listen((event) {
+      _page = 1;
+      _loadDeopstData();
     });
   }
 
