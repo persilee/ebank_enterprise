@@ -121,7 +121,7 @@ class TransferInterModelResp extends Object {
 
   @JsonKey(name: 'remitterAddress')
   String remitterAddress;
-
+  //N成功，P处理中，E失败
   @JsonKey(name: 'status')
   String status;
 

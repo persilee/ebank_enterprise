@@ -596,12 +596,13 @@ class _TransferInterPageState extends State<TransferInterPage> {
             ),
             _getLine(),
             TextFieldContainer(
-              title: S.current.transfer_postscript,
-              hintText: S.current.transfer,
-              keyboardType: TextInputType.text,
-              controller: _remarkController,
-              callback: _boolBut,
-            ),
+                title: S.current.transfer_postscript,
+                hintText: S.current.transfer,
+                keyboardType: TextInputType.text,
+                controller: _remarkController,
+                callback: _boolBut,
+                isRegEXp: true,
+                regExp: '[a-zA-z0-9 \-\/\?\:\(\)\.\,\'\+]'),
           ],
         ));
   }

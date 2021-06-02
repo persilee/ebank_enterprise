@@ -5,6 +5,7 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/account/get_bank_list.dart';
+import 'package:ebank_mobile/data/source/model/account/get_card_ccy_list.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
@@ -68,6 +69,12 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   List<String> _ccyList = [];
   int _ccyIndex = 0;
 
+//行内转账的币种列表
+  List<String> _inlineCcyList = [];
+  int _inlineIndex = 0;
+  String _inlineCcy = '';
+  bool _isInline = true; //true行内转账  false国际转账
+
   var _swiftFocusNode = FocusNode();
   var _accountFocusNode = FocusNode();
   bool _isAccount = false; //行内转账时，账号是否存在
@@ -92,7 +99,33 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       if (_acountController.text.length > 0 &&
           _transferType == S.current.transfer_type_0 &&
           !_accountFocusNode.hasFocus) {
-        _getCardByCardNo(_acountController.text);
+        // if (_isInline) {
+        //   //行内需要去加载特定的币种
+        //   _getCardByCardNo(_acountController.text); //获取收款人名称
+        //   _getCardCcyList(_acountController.text); //根据名称获取币种
+        // } else {
+        _getCardByCardNo(_acountController.text); //获取收款人名称
+        // }
+      }
+    });
+  }
+
+//获取账号支持币种
+  Future _getCardCcyList(String cardNo) async {
+    Transfer().getCardCcyList(GetCardCcyListReq(cardNo)).then((data) {
+      if (data.recordLists != null) {
+        _inlineCcyList.clear();
+        data.recordLists.forEach((e) {
+          _inlineCcyList.add(e.ccy);
+        });
+      }
+      _inlineIndex = 0;
+      for (int i = 0; i < _inlineCcyList.length; i++) {
+        if (_inlineCcy == _inlineCcyList[i]) {
+          break;
+        } else {
+          _inlineIndex++;
+        }
       }
     });
   }
@@ -531,6 +564,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           if (_transferType == S.current.transfer_type_1) {
             _showInternational = true;
             _isAccount = true;
+            _isInline = true;
             //初始化行内转账的内容
             _acountController.text = '';
             _nameController.text = '';
@@ -540,6 +574,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           } else if (_transferType == S.current.transfer_type_0) {
             _showInternational = false;
             _isAccount = false;
+            _isInline = false;
             //初始化国际转账的内容
             _centerSwiftController.text = '';
             _payeeAdressController.text = '';
