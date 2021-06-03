@@ -364,7 +364,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
               if (_acountController.text.length > 0) {
                 _payCcyDialog();
               } else {
-                HSProgressHUD.showToastTip('hint_input_receipt_account');
+                HSProgressHUD.showToastTip(
+                    S.current.hint_input_receipt_account);
               }
             } else {
               _payCcyDialog();
