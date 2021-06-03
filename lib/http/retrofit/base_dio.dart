@@ -23,12 +23,15 @@ class BaseDio {
       TYPEINT == 4 ? "http://192.168.201.65:5041/" : ''; //local
   static const BASEURLDEVOLD =
       TYPEINT == 5 ? "http://52.82.102.241:5040/" : ''; //旧 Dev
+  static const BASEURLDFDEV =
+      TYPEINT == 6 ? "http://192.168.200.102:5040/" : ''; //东方 Dev
 
   static const BASEURLUSE = BASEURLDEV +
       BASEURLSIT +
       BASEURLUAT +
       BASEURLLOCAL +
-      BASEURLDEVOLD; //使用方法
+      BASEURLDEVOLD +
+      BASEURLDFDEV; //使用方法
 
   BaseDio._();
 

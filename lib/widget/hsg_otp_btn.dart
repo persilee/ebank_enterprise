@@ -9,12 +9,14 @@ class HSGOTPBtn extends StatefulWidget {
   final int time;
   bool isCutdown;
   final VoidCallback otpCallback;
+  bool isEndCutdown;
 
   HSGOTPBtn({
     Key key,
     this.time = 120,
     this.isCutdown = false,
     this.otpCallback,
+    this.isEndCutdown = false,
   }) : super(key: key);
 
   @override
@@ -34,6 +36,11 @@ class _HSGOTPBtnState extends State<HSGOTPBtn> {
     if (widget.isCutdown) {
       _startCountdown();
     }
+
+    if (widget.isEndCutdown) {
+      _countdownTime = 0;
+    }
+
     super.initState();
   }
 
@@ -45,7 +52,7 @@ class _HSGOTPBtnState extends State<HSGOTPBtn> {
     }
   }
 
-  //倒计时方法
+//倒计时方法
   _startCountdown() {
     _countdownTime = widget.time;
     final call = (timer) {

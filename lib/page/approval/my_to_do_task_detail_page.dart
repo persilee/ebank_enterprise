@@ -92,7 +92,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   Widget _hsgErrorPage;
   String _language = Intl.getCurrentLocale();
   Timer _timer;
-  int _countdownTime;
+  int _endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   String _endTimeStr;
 
   @override
@@ -468,13 +468,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     ForeignTransferModel.OperateEndValue data =
         foreignTransferModel.operateEndValue;
 
-    // var today = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     // var date = (data == null || data.dueTime == null || data.dueTime == '')
-    //     ? today
+    //     ? DateTime.now().millisecondsSinceEpoch ~/ 1000
     //     : DateTime.parse(data.dueTime).millisecondsSinceEpoch ~/ 1000;
 
-    // _startCountdown(date - today);
-    // _endTimeStr = _endTimeShow(_countdownTime);
+    // _startCountdown(date);
+    // _endTimeStr = _endTimeShow(_endSeconds);
 
     // 获取可用余额
     String _avaBal = '';
@@ -1772,7 +1771,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
     // /// foreignTransferApproval - 外汇买卖
     // if (_processKey == 'foreignTransferApproval' &&
-    //     (_countdownTime == 0 || _countdownTime == null)) {
+    //     (_endSeconds <= DateTime.now().millisecondsSinceEpoch ~/ 1000)) {
     //   HSProgressHUD.showToastTip(S.of(context).task_complete_timeout_tip);
     //   return;
     // }
@@ -1803,17 +1802,15 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
   //倒计时方法
   _startCountdown(int time) {
-    if (time < 0) {
+    if (time <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {
       return;
     }
-    _countdownTime = time;
+    _endSeconds = time;
     final call = (timer) {
       if (mounted) {
         setState(() {
-          if (_countdownTime < 1) {
+          if (_endSeconds < DateTime.now().millisecondsSinceEpoch ~/ 1000) {
             _timer.cancel();
-          } else {
-            _countdownTime -= 1;
           }
         });
       }

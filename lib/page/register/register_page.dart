@@ -46,7 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _userName = TextEditingController(); //用户名
   String _userNameListen;
   Timer _timer;
-  int countdownTime = 0;
+  int endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   bool _checkBoxValue = false; //复选框默认值
   bool _isGetSms = false; //是否点击获取验证码
   bool _isRegister = false;
@@ -341,14 +341,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
   //倒计时方法
   _startCountdown() {
-    countdownTime = 120;
+    endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000 + 120;
     final call = (timer) {
       if (mounted) {
         setState(() {
-          if (countdownTime < 1) {
+          if (endSeconds < DateTime.now().millisecondsSinceEpoch ~/ 1000) {
             _timer.cancel();
-          } else {
-            countdownTime -= 1;
           }
         });
       }
@@ -369,7 +367,7 @@ class _RegisterPageState extends State<RegisterPage> {
 //发送短信
   FlatButton _otpButton() {
     return FlatButton(
-      onPressed: countdownTime > 0
+      onPressed: endSeconds > DateTime.now().millisecondsSinceEpoch ~/ 1000
           ? null
           : () {
               if (_checkClick()) {
@@ -381,8 +379,8 @@ class _RegisterPageState extends State<RegisterPage> {
       textColor: HsgColors.blueTextColor,
       disabledTextColor: HsgColors.blueTextColor,
       child: Text(
-        countdownTime > 0
-            ? '${countdownTime}s'
+        endSeconds > DateTime.now().millisecondsSinceEpoch ~/ 1000
+            ? '${endSeconds - DateTime.now().millisecondsSinceEpoch ~/ 1000}s'
             : S.of(context).getVerificationCode,
         textAlign: TextAlign.right,
       ),
@@ -397,6 +395,7 @@ class _RegisterPageState extends State<RegisterPage> {
   //     },
   //   );
   //   otpBtn.isCutdown = true;
+
   //   return otpBtn;
   // }
 

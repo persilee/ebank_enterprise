@@ -35,7 +35,7 @@ class _ChangePayPageState extends State<ChangePayPage> {
   String _phoneNo = '';
   String _areaCodeStr = '';
   Timer _timer;
-  int countdownTime = 0;
+  int endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
   @override
   void dispose() {
@@ -248,14 +248,12 @@ class _ChangePayPageState extends State<ChangePayPage> {
 
   //倒计时方法
   _startCountdown() {
-    countdownTime = 120;
+    endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000 + 120;
     final call = (timer) {
       if (this.mounted) {
         setState(() {
-          if (countdownTime < 1) {
+          if (endSeconds < DateTime.now().millisecondsSinceEpoch ~/ 1000) {
             _timer.cancel();
-          } else {
-            countdownTime -= 1;
           }
         });
       }
@@ -275,7 +273,9 @@ class _ChangePayPageState extends State<ChangePayPage> {
 
   //获取验证码按钮
   FlatButton _otpButton() {
-    bool otpEnable = (countdownTime == 0 && _otpEnable());
+    bool otpEnable =
+        (endSeconds <= DateTime.now().millisecondsSinceEpoch ~/ 1000 &&
+            _otpEnable());
     return FlatButton(
       onPressed: otpEnable
           ? () {
@@ -295,8 +295,8 @@ class _ChangePayPageState extends State<ChangePayPage> {
       disabledTextColor: Colors.white,
       disabledColor: HsgColors.hintText,
       child: Text(
-        countdownTime > 0
-            ? '${countdownTime}s'
+        endSeconds > DateTime.now().millisecondsSinceEpoch ~/ 1000
+            ? '${endSeconds - DateTime.now().millisecondsSinceEpoch ~/ 1000}s'
             : S.of(context).getVerificationCode,
         style: TextStyle(fontSize: 14),
       ),
