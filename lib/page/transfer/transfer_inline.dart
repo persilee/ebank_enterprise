@@ -199,6 +199,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         check = true;
         _isAccount = false;
         _boolBut();
+        _getCardByCardNo(_payeeAccountController.text);
         _getCardCcyList(_payeeAccountController.text);
       }
     });
@@ -554,19 +555,23 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
 
   _judgeDialog() {
     //判断是不是冻结户,不是正常户
-    if (_rollOutModel.acSts != 'N' && _rollOutModel.acSts != '8') {
-      //转出方
-      HSProgressHUD.showToastTip(
-        S.current.transfer_account_error_tip,
-      );
-      return;
+    if (_rollOutModel != null) {
+      if (_rollOutModel.acSts != 'N' && _rollOutModel.acSts != '8') {
+        //转出方
+        HSProgressHUD.showToastTip(
+          S.current.transfer_account_error_tip,
+        );
+        return;
+      }
     }
-    if (_collectionModel.status != 'N' && _collectionModel.status != '1') {
-      //收款方
-      HSProgressHUD.showToastTip(
-        S.current.transfer_collection_error_tip,
-      );
-      return;
+    if (_collectionModel != null) {
+      if (_collectionModel.status != 'N' && _collectionModel.status != '1') {
+        //收款方
+        HSProgressHUD.showToastTip(
+          S.current.transfer_collection_error_tip,
+        );
+        return;
+      }
     }
 
     if (double.parse(_payerTransferController.text) > double.parse(_balance)) {

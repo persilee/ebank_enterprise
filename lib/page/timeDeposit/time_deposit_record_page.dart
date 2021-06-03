@@ -44,7 +44,8 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
 
   double conRate; //利率
   int _page = 1;
-  int _totalPage = 10;
+  int _pageSize = 10;
+  int _totalPage = 1;
   String _stsNo = 'N';
   bool _isNomal = true; //是否是正常
   ScrollController _scrollController;
@@ -459,7 +460,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
           ciNo: ciNo,
           conNo: '',
           page: _page,
-          pageSize: _totalPage,
+          pageSize: _pageSize,
           stsNo: _stsNo,
           nextKey: _page > 1 ? 'Y' : '',
         ),
@@ -473,6 +474,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
         value.forEach((element) {
           setState(() {
             if (_page == 1) {
+              _totalPage = element.toatalPage;
               _totalAmtStr = element.totalAmt;
             }
             _defaultCcy = element.defaultCcy;
@@ -482,8 +484,7 @@ class _TimeDepositRecordPageState extends State<TimeDepositRecordPage> {
               rowList.addAll(element.rows);
             }
 
-            if (element.rows.length < _totalPage ||
-                element.toatalPage == _page) {
+            if (element.rows.length < _pageSize || _totalPage == _page) {
               _refreshController.refreshCompleted();
               _refreshController.loadComplete(); //加载完成
               _refreshController.loadNoData();

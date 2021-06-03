@@ -446,7 +446,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
           Text(
             //unpaidPrincipal
             FormatUtil.formatSringToMoney(
-                    lnList[index].currBal, lnList[index].ccy) +
+                    lnList[index].avaBal, lnList[index].ccy) +
                 ' ' +
                 lnList[index].ccy,
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
