@@ -391,7 +391,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
   // Widget _otpButton() {
   //   HSGOTPBtn otpBtn = HSGOTPBtn(
-  //     // isCutdown: true,
+  //     isCutdown: true,
   //     otpCallback: () {
   //       print('object');
   //     },
