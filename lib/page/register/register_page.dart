@@ -15,6 +15,8 @@ import 'package:ebank_mobile/page/register/component/register_86.dart';
 import 'package:ebank_mobile/page/register/component/register_row.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/hsg_otp_btn.dart';
+import 'package:ebank_mobile/widget/hsg_otp_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 
 import 'package:flutter/gestures.dart';
@@ -387,6 +389,16 @@ class _RegisterPageState extends State<RegisterPage> {
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }
+  // Widget _otpButton() {
+  //   HSGOTPBtn otpBtn = HSGOTPBtn(
+  //     // isCutdown: true,
+  //     otpCallback: () {
+  //       print('object');
+  //     },
+  //   );
+  //   otpBtn.isCutdown = true;
+  //   return otpBtn;
+  // }
 
   bool _submit() {
     if (_phoneNum.text != '' &&
