@@ -479,7 +479,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
             _changeGenderString(infoStrForPassport.sex);
         dataReq.passportInfo.nationality = infoStrForPassport.nationality;
         dataReq.passportInfo.birthdate =
-            _changeDate(infoStrForPassport.dateOfBirth);
+            _changeDateForOther(infoStrForPassport.dateOfBirth);
         // infoStrForPassport.dateOfBirth.replaceAll('/', '-');
         dataReq.passportInfo.issuingCountry = infoStrForPassport.issuingCountry;
         dataReq.passportInfo.idDueDate = _changeDateForOther(
