@@ -161,14 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Container(
                         alignment: Alignment.centerRight,
                         width: MediaQuery.of(context).size.width / 3,
-                        child:
-                            // HSGOTPBtn(
-                            //   120,
-                            //   otpCallback: () {
-                            //     print('object');
-                            //   },
-                            // ),
-                            _otpButton(),
+                        child: _otpButton(),
                       )
                     ],
                   ),
@@ -396,6 +389,16 @@ class _RegisterPageState extends State<RegisterPage> {
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }
+  // Widget _otpButton() {
+  //   HSGOTPBtn otpBtn = HSGOTPBtn(
+  //     // isCutdown: true,
+  //     otpCallback: () {
+  //       print('object');
+  //     },
+  //   );
+  //   otpBtn.isCutdown = true;
+  //   return otpBtn;
+  // }
 
   bool _submit() {
     if (_phoneNum.text != '' &&
