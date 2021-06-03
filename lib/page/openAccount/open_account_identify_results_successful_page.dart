@@ -273,6 +273,8 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     HSProgressHUD.show();
     OpenAccountInformationSupplementDataReq dataReq =
         _getDataReq(phoneStr, areaCode, userId);
+    // print('<><><>$dataReq');
+    // HSProgressHUD.dismiss();
     ApiClientOpenAccount().supplementQuickPartnerInfo(dataReq).then(
       (value) {
         print(value);

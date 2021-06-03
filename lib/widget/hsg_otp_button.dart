@@ -31,14 +31,16 @@ class HSGOTPButton extends StatefulWidget {
 
 class _HSGOTPButtonState extends State<HSGOTPButton> {
   Timer _timer;
-  int _countdownTime;
+  int _endSeconds;
 
   bool _btnIsLoading = false;
   bool _btnIsEnable = true;
 
   @override
   void initState() {
-    _countdownTime = widget.isCutdown == true ? widget.time : 0;
+    _endSeconds = widget.isCutdown == true
+        ? DateTime.now().millisecondsSinceEpoch ~/ 1000 + widget.time
+        : DateTime.now().millisecondsSinceEpoch ~/ 1000;
     if (widget.isCutdown) {
       _getVerificationCode();
     }
@@ -55,14 +57,12 @@ class _HSGOTPButtonState extends State<HSGOTPButton> {
 
   //倒计时方法
   _startCountdown() {
-    _countdownTime = widget.time;
+    _endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000 + widget.time;
     final call = (timer) {
       if (mounted) {
         setState(() {
-          if (_countdownTime < 1) {
+          if (_endSeconds < DateTime.now().millisecondsSinceEpoch ~/ 1000) {
             _timer.cancel();
-          } else {
-            _countdownTime -= 1;
           }
         });
       }
@@ -99,7 +99,7 @@ class _HSGOTPButtonState extends State<HSGOTPButton> {
     }).catchError((e) {
       if (mounted) {
         setState(() {
-          _countdownTime = 0;
+          _endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000;
           _btnIsLoading = false;
           _btnIsEnable = true;
         });
@@ -117,8 +117,8 @@ class _HSGOTPButtonState extends State<HSGOTPButton> {
       isShowLine: false,
       margin: EdgeInsets.all(0),
       text: Text(
-        _countdownTime > 0
-            ? '${_countdownTime}s'
+        _endSeconds > DateTime.now().millisecondsSinceEpoch ~/ 1000
+            ? '${_endSeconds - DateTime.now().millisecondsSinceEpoch ~/ 1000}s'
             : S.of(context).getVerificationCode,
         style: TextStyle(
           color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
@@ -129,32 +129,5 @@ class _HSGOTPButtonState extends State<HSGOTPButton> {
         _getVerificationCode();
       },
     );
-    // MaterialButton(
-    //   onPressed: _countdownTime > 0
-    //       ? null
-    //       : () {
-    //           _getVerificationCode();
-    //         },
-    //   //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间asdfa
-    //   padding: EdgeInsets.symmetric(horizontal: 8),
-    //   //文字颜色
-    //   textColor: HsgColors.blueTextColor,
-    //   // borderSide: BorderSide(color: HsgColors.blueTextColor, width: 0),
-    //   //画圆角
-    //   shape: RoundedRectangleBorder(
-    //     borderRadius: BorderRadius.circular(4),
-    //   ),
-    //   disabledTextColor: HsgColors.describeText,
-    //   // disabledBorderColor: HsgColors.describeText,
-    //   child: Text(
-    //     _countdownTime > 0
-    //         ? '${_countdownTime}s'
-    //         : S.of(context).getVerificationCode,
-    //     style: TextStyle(
-    //       fontSize: 14,
-    //     ),
-    //   ),
-    //   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-    // );
   }
 }

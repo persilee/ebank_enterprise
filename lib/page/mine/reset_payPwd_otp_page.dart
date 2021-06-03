@@ -34,7 +34,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   TextEditingController _sms = TextEditingController();
   String _officeAreaCodeText = '86';
   Timer _timer;
-  int countdownTime = 0;
+  int endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   String _phone = '';
   String _smsCode = '';
   bool _clickSmsBtn = false;
@@ -213,14 +213,12 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
 
   //倒计时方法
   _startCountdown() {
-    countdownTime = 120;
+    endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000 + 120;
     final call = (timer) {
       if (this.mounted) {
         setState(() {
-          if (countdownTime < 1) {
+          if (endSeconds < DateTime.now().millisecondsSinceEpoch ~/ 1000) {
             _timer.cancel();
-          } else {
-            countdownTime -= 1;
           }
         });
       }
@@ -283,7 +281,8 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
   //获取验证码按钮
   FlatButton _otpButton() {
     return FlatButton(
-      onPressed: (countdownTime > 0 || _phone == '')
+      onPressed: (endSeconds > DateTime.now().millisecondsSinceEpoch ~/ 1000 ||
+              _phone == '')
           ? null
           : () {
               FocusScope.of(context).requestFocus(FocusNode());
@@ -301,8 +300,8 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
       disabledTextColor: Colors.white,
       disabledColor: HsgColors.hintText,
       child: Text(
-        countdownTime > 0
-            ? '${countdownTime}s'
+        endSeconds > DateTime.now().millisecondsSinceEpoch ~/ 1000
+            ? '${endSeconds - DateTime.now().millisecondsSinceEpoch ~/ 1000}s'
             : S.of(context).getVerificationCode,
         style: TextStyle(
           fontSize: 14,
