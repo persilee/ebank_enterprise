@@ -25,7 +25,7 @@ class DepositRecordReq {
   @JsonKey(name: 'pageSize')
   int pageSize;
 
-  ///存单状态 不传查所有，C 已结清 N 正常
+  ///存单状态 不传查所有，S 已结清 N 正常
   @JsonKey(name: 'stsNo')
   String stsNo;
 
