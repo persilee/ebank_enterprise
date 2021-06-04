@@ -410,6 +410,11 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           break;
         case 2:
           //提前还款
+          if (loanDetail.status == 'M') {
+            //结清状态不能看计划
+            HSProgressHUD.showToastTip(S.current.loan_early_pay_reminder);
+            return;
+          }
           Navigator.pushNamed(context, pageRepayInput, arguments: loanDetail)
               .then((data) {
             setState(() {

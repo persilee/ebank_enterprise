@@ -34,11 +34,12 @@ class _ApprovalHistoryDetailPageState extends State<ApprovalHistoryDetailPage> {
 
   _loadData() {
     widget.data.forEach((element) {
-      _commentList.add(_buildContentItem(S.current.approver, element.userName));
       _commentList
-          .add(_buildContentItem(S.current.approver_time, element.time));
+          .add(_buildContentItem(S.current.approver, element.userName ?? ''));
       _commentList
-          .add(_buildContentItem(S.current.approver_opinion, element.comment));
+          .add(_buildContentItem(S.current.approver_time, element.time ?? ""));
+      _commentList.add(
+          _buildContentItem(S.current.approver_opinion, element.comment ?? ""));
       _commentList.add(_buildContentItem(
           S.current.approver_result,
           element.result == true
