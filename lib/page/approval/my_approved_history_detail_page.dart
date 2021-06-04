@@ -304,7 +304,6 @@ class _MyApprovedHistoryDetailPageState
         _finishedList.add(_buildAvatar(data?.userName ?? ''));
       });
     }
-
     if (this.mounted) {
       setState(() {
         _postRepaymentList.clear();

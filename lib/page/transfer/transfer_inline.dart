@@ -119,6 +119,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
 
     //转出金额焦点监听
     _payerTransferFocusNode.addListener(() {
+      //判断两币种必须输入
       if (_payerTransferFocusNode.hasFocus) {
         if (_payerTransferController.text.length > 0) {
           setState(() {
@@ -135,9 +136,12 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
           } else {
             setState(() {
               _opt = 'S';
+              _checkTransferCcy();
               _rateCalculate();
             });
           }
+        } else {
+          print(_payerTransferController.text);
         }
       }
       _boolBut();
@@ -168,6 +172,12 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
       }
       _boolBut();
     });
+  }
+
+  _checkTransferCcy() {
+    if (_payeeCcy.length <= 0 || _payerCcy.length <= 0) {
+      return;
+    }
   }
 
   @override
@@ -611,7 +621,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     }
   }
 
-  //币种弹窗
+  //币种弹窗 付款币种
   Future _payerCcyDialog() async {
     final result = await showDialog(
       context: context,
@@ -634,6 +644,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     }
   }
 
+  //收款币种
   Future _payeeCcyDialog() async {
     final result = await showDialog(
       context: context,
@@ -742,12 +753,13 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
   }
 
   _loadData(String cardNo) async {
+    HSProgressHUD.show();
     final prefs = await SharedPreferences.getInstance();
     _localeCcy = prefs.getString(ConfigKey.LOCAL_CCY);
-    // CardDataRepository()
     ApiClientAccount()
         .getCardBalByCardNo(GetSingleCardBalReq(cardNo))
         .then((element) {
+      HSProgressHUD.dismiss();
       if (this.mounted) {
         setState(() {
           //初始币种和余额
@@ -793,7 +805,9 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
           _rateCalculate();
         });
       }
-    }).catchError((e) {});
+    }).catchError((e) {
+      HSProgressHUD.dismiss();
+    });
   }
 
   //获取账号支持币种
