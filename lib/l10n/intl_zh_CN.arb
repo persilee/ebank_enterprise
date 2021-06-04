@@ -791,6 +791,9 @@
   "loan_early_pay_reminder": "当前合约已结清",
   "transfer_add_partner_nameErr": "收款方名称有误",
   "transfer_collection_error_tip": "当前收款账户状态异常",
+  "time_depotion_minimum_retain_tip": "剩余金额小于最小留存金额,",
+  "time_depotion_minimum_retain_amount": "最小留存金额: ",
+  "time_depotion_withdraw_count": "剩余支取次数: ",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "数据异常，未返回数据！",
@@ -816,5 +819,6 @@
   "task_due_time": "到期时间",
   "task_last_time": "剩余时间",
   "task_complete_timeout_tip": "已经超过审批时限，请在规定时间内审批！",
-  "electronic_statement_date": "结单日期"
+  "electronic_statement_date": "结单日期",
+  "test": "测试"
 }

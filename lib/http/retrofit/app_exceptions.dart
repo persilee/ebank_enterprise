@@ -153,7 +153,6 @@ class AppException implements Exception {
                 );
               }
             });
-
             return error.error = NeedLogin();
           } else {
             return error.error;
