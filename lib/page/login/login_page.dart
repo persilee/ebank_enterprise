@@ -10,6 +10,7 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_packaging.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/main.dart';
+import 'package:ebank_mobile/page/mine/app_update.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/login_save_user_data.dart';
@@ -47,6 +48,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+
+    // AppUpdateCheck(context);
 
     HSProgressHUD.dismiss();
     // 添加监听

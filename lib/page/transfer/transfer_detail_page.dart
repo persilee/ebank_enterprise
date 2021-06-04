@@ -1,4 +1,7 @@
+import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/source/model/transfer/get_internatinal_detail.dart';
 import 'package:ebank_mobile/data/source/model/transfer/get_transfer_record.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
 
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 ///转账详情界面
@@ -6,21 +9,45 @@ import 'package:ebank_mobile/data/source/model/transfer/get_transfer_record.dart
 /// Date: 2020-12-24
 
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 
 class TransferDetailPage extends StatefulWidget {
+  final TransferRecord transferHistory;
+  TransferDetailPage({Key key, this.transferHistory}) : super(key: key);
   @override
   _TransferDetailPageState createState() => _TransferDetailPageState();
 }
 
 class _TransferDetailPageState extends State<TransferDetailPage> {
+  TransferInterModelResp _dataModel;
+  @override
+  void initState() {
+    super.initState();
+    _loadListData();
+  }
+
+//加载详情数据
+  _loadListData() {
+    TransferInterModelReq req = TransferInterModelReq(widget.transferHistory.id,
+        widget.transferHistory.status, widget.transferHistory.transferType);
+    Transfer().getInternationalStatusInterface(req).then((data) {
+      setState(() {
+        _dataModel = data;
+      });
+    }).catchError((e) {
+      HSProgressHUD.showToast(e);
+    });
+    ;
+  }
+
   @override
   Widget build(BuildContext context) {
-    TransferRecord _transferHistory = ModalRoute.of(context).settings.arguments;
-    print(_transferHistory.toString);
+    //  = ModalRoute.of(context).settings.arguments;
+    // print(_transferHistory.toString);
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).transfer_detail),
@@ -33,7 +60,7 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.only(top: 20),
-            child: _transfer(_transferHistory),
+            child: _transfer(widget.transferHistory),
           ),
         ],
       ),
@@ -42,12 +69,32 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
 
 //转账内容
   Widget _transfer(TransferRecord _transferHistory) {
+    TextStyle _rightStyle;
+    String _rightText;
+    if (_dataModel != null) {
+      if (_dataModel.status == "N") {
+        //成功
+        _rightStyle = TextStyle(color: HsgColors.describeText, fontSize: 14);
+        _rightText = S.of(context).success;
+      } else if (_dataModel.status == "P") {
+        //处理中
+        _rightStyle = TextStyle(color: HsgColors.blueTextColor, fontSize: 14);
+        _rightText = S.of(context).on_processing;
+      } else if (_dataModel.status == "E") {
+        //失败
+        _rightStyle = TextStyle(color: Color(0xffA61F23), fontSize: 14);
+        _rightText = S.of(context).failed;
+      }
+    }
+
     return Container(
       padding: CONTENT_PADDING,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           _transferAccount(_transferHistory),
+          _rowWidget(S.of(context).transfer_status, _rightText,
+              rightTextStyle: _rightStyle), //状态
           _rowWidget(S.of(context).payee_name, _transferHistory.receiveName),
           _rowWidget(S.of(context).receipt_side_account,
               FormatUtil.formatSpace4(_transferHistory.receiveCardNo)),
@@ -84,8 +131,14 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
                   S.of(context).payee_address, _transferHistory.payeeAddress),
               _rowWidget(S.of(context).bank_swift, _transferHistory.bankSwift),
               // _rowWidget(S.of(context).middle_bank_swift, ""),
-              _rowWidget(S.of(context).other_fee, _transferHistory.costOptions),
-              // _rowWidget(S.of(context).remittance_usage,
+              _rowWidget(
+                  S.of(context).approve_payment_method,
+                  _transferHistory.costOptions == 'B'
+                      ? S.current.service_charge1
+                      : _transferHistory.costOptions == 'O'
+                          ? S.current.service_charge2
+                          : S.current.service_charge3),
+              // _rowWidget(S.of(context).remittance_usage,s
               //     _transferHistory.remittancePurposes),
             ],
           );
@@ -117,7 +170,8 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
   }
 
 //单行内容
-  Widget _rowWidget(String left, String rifht) {
+  Widget _rowWidget(String left, String rifht,
+      {TextStyle rightTextStyle = FIRST_DESCRIBE_TEXT_STYLE}) {
     return Column(
       children: [
         Row(
@@ -135,7 +189,7 @@ class _TransferDetailPageState extends State<TransferDetailPage> {
             Expanded(
               child: Text(
                 rifht == null ? '' : rifht,
-                style: FIRST_DESCRIBE_TEXT_STYLE,
+                style: rightTextStyle,
                 textAlign: TextAlign.right,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

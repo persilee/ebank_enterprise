@@ -41,57 +41,58 @@ class LoanAccountMastModelResp extends Object {
 
 @JsonSerializable()
 class LoanAccountDOList extends Object {
+  //贷款金额
   @JsonKey(name: 'amt')
   String amt;
-
+//贷款余额
   @JsonKey(name: 'bal')
   String bal;
-
+//机构号
   @JsonKey(name: 'bookBr')
   int bookBr;
-
+//币种
   @JsonKey(name: 'ccy')
   String ccy;
-
+//客户名称
   @JsonKey(name: 'ciName')
   String ciName;
-
+//客户号
   @JsonKey(name: 'ciNo')
   String ciNo;
-
+//销户日期
   @JsonKey(name: 'clsDt')
   String clsDt;
-
+//结束日期
   @JsonKey(name: 'endDt')
   String endDt;
-
+//最低提款币种
   @JsonKey(name: 'lmtCcy')
   String lmtCcy;
-
+//最低提款金额
   @JsonKey(name: 'lmtMamt')
   int lmtMamt;
-
+//额度号
   @JsonKey(name: 'lmtNo')
   String lmtNo;
-
+//资金来源
   @JsonKey(name: 'lnSource')
   String lnSource;
-
+//贷款用途
   @JsonKey(name: 'lnUsaCd')
   String lnUsaCd;
-
+//贷款账户
   @JsonKey(name: 'lnac')
   String lnac;
-
+//贷款产品
   @JsonKey(name: 'prodTyp')
   String prodTyp;
-
+//额度循环类型
   @JsonKey(name: 'revolving')
   String revolving;
-
+//状态
   @JsonKey(name: 'status')
   String status;
-
+//开始日期
   @JsonKey(name: 'valDt')
   String valDt;
 

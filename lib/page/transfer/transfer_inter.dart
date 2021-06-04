@@ -105,7 +105,10 @@ class _TransferInterPageState extends State<TransferInterPage> {
   List<String> transferFeeCodeList = [];
   int _transferFeeIndex = 2;
   String _transferFeeCode = 'S';
-  String _transferFee = '各自承担手续费';
+  String _transferFee = S.current.service_charge3;
+
+  RemoteBankCard _rollOutModel; //转出方账户模型
+  List _rollOutList = []; //转出方账户列表
 
   //按钮是否能点击
   bool _isClick = false;
@@ -593,12 +596,13 @@ class _TransferInterPageState extends State<TransferInterPage> {
             ),
             _getLine(),
             TextFieldContainer(
-              title: S.current.transfer_postscript,
-              hintText: S.current.transfer,
-              keyboardType: TextInputType.text,
-              controller: _remarkController,
-              callback: _boolBut,
-            ),
+                title: S.current.transfer_postscript,
+                hintText: S.current.transfer,
+                keyboardType: TextInputType.text,
+                controller: _remarkController,
+                callback: _boolBut,
+                isRegEXp: true,
+                regExp: '[a-zA-z0-9 \-\/\?\:\(\)\.\,\'\+]'),
           ],
         ));
   }
@@ -751,6 +755,16 @@ class _TransferInterPageState extends State<TransferInterPage> {
   }
 
   _judgeDialog() {
+    //判断是不是冻结户,不是正常户
+    if (_rollOutModel != null) {
+      if (_rollOutModel.acSts != 'N' && _rollOutModel.acSts != '8') {
+        HSProgressHUD.showToastTip(
+          S.current.transfer_account_error_tip,
+        );
+        return;
+      }
+    }
+
     if (double.parse(_payerTransferController.text) > double.parse(_balance)) {
       HSProgressHUD.showToastTip(
         S.current.tdContract_balance_insufficient,
@@ -827,6 +841,7 @@ class _TransferInterPageState extends State<TransferInterPage> {
       setState(() {
         _payerAccountIndex = result;
         _payerAccount = _payerAccountList[result];
+        _rollOutModel = _rollOutList[result];
       });
       _loadData(_payerAccount);
     }
@@ -892,6 +907,8 @@ class _TransferInterPageState extends State<TransferInterPage> {
       value.forEach((element) {
         //通过绑定手机号查询卡列表接口POST
         if (element is GetCardListResp) {
+          _rollOutList = element.cardList;
+          _rollOutModel = element.cardList[0];
           if (this.mounted) {
             if (element != null &&
                 element.cardList != null &&

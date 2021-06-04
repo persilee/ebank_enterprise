@@ -174,4 +174,25 @@ class HsgShowTip {
       click(value);
     });
   }
+
+  /// 版本更新提示
+  static void versionUpdateTip({
+    BuildContext context,
+    bool barrierDismissible = true,
+    Function(dynamic value) click,
+  }) {
+    showDialog(
+        context: context,
+        barrierDismissible: barrierDismissible,
+        builder: (context) {
+          return HsgAlertDialog(
+            title: S.of(context).warm_prompt,
+            message: '您的APP有新的版本更新，请前往更新！',
+            positiveButton: S.current.confirm,
+            negativeButton: barrierDismissible ? S.current.cancel : null,
+          );
+        }).then((value) {
+      click(value);
+    });
+  }
 }

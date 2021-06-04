@@ -98,6 +98,10 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
   bool _isAccount = true; //账号是否存在
   var _opt = '';
 
+  RemoteBankCard _rollOutModel; //转出方账户模型
+  List _rollOutList = []; //转出方账户列表
+  GetCardByCardNoResp _collectionModel; //收款方模型
+
   @override
   void initState() {
     super.initState();
@@ -195,6 +199,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         check = true;
         _isAccount = false;
         _boolBut();
+        _getCardByCardNo(_payeeAccountController.text);
         _getCardCcyList(_payeeAccountController.text);
       }
     });
@@ -549,6 +554,26 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
   }
 
   _judgeDialog() {
+    //判断是不是冻结户,不是正常户
+    if (_rollOutModel != null) {
+      if (_rollOutModel.acSts != 'N' && _rollOutModel.acSts != '8') {
+        //转出方
+        HSProgressHUD.showToastTip(
+          S.current.transfer_account_error_tip,
+        );
+        return;
+      }
+    }
+    if (_collectionModel != null) {
+      if (_collectionModel.status != 'N' && _collectionModel.status != '1') {
+        //收款方
+        HSProgressHUD.showToastTip(
+          S.current.transfer_collection_error_tip,
+        );
+        return;
+      }
+    }
+
     if (double.parse(_payerTransferController.text) > double.parse(_balance)) {
       HSProgressHUD.showToastTip(
         S.current.tdContract_balance_insufficient,
@@ -647,6 +672,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
       setState(() {
         _payerAccountIndex = result;
         _payerAccount = _payerAccountList[result];
+        _rollOutModel = _rollOutList[result];
       });
       _loadData(_payerAccount);
     }
@@ -677,6 +703,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     setState(() {
       //付款方卡号
       _payerAccount = _data.cardList[0].cardNo;
+      _rollOutModel = _data.cardList[0]; //保存模型
+      _rollOutList = _data.cardList;
       // payerBankCode = payeeBankCode = _data.cardList[0].bankCode; //哈哈 先隐藏掉
       // payerName = _data.cardList[0].ciName;
       _data.cardList.forEach((e) {
@@ -843,6 +871,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
       if (this.mounted) {
         setState(() {
           _payeeNameController.text = data.ciName;
+          _collectionModel = data;
           payeeBankCode = data.bankCode;
           payerBankCode = data.bankCode;
           _isAccount = false;

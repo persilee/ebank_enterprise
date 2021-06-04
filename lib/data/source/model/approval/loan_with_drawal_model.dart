@@ -239,6 +239,7 @@ class OperateEndValue {
   String _loanPurpose;
   String _iratCd;
   String _totalInt;
+  String _lnInsType;
 
   String get onRate => _onRate;
   String get inRate => _inRate;
@@ -261,6 +262,7 @@ class OperateEndValue {
   String get loanPurpose => _loanPurpose;
   String get iratCd => _iratCd;
   String get totalInt => _totalInt;
+  String get lnInsType => _lnInsType;
 
   OperateEndValue(
       {String onRate,
@@ -283,7 +285,8 @@ class OperateEndValue {
       String ccy,
       String loanPurpose,
       String iratCd,
-      String totalInt}) {
+      String totalInt,
+      String lnInsType}) {
     _onRate = onRate;
     _inRate = inRate;
     _repType = repType;
@@ -305,6 +308,7 @@ class OperateEndValue {
     _loanPurpose = loanPurpose;
     _iratCd = iratCd;
     _totalInt = totalInt;
+    _lnInsType = lnInsType;
   }
 
   OperateEndValue.fromJson(dynamic json) {
@@ -329,6 +333,7 @@ class OperateEndValue {
     _loanPurpose = json["loanPurpose"];
     _iratCd = json["iratCd"];
     _totalInt = json["totalInt"];
+    _lnInsType = json["lnInsType"];
   }
 
   Map<String, dynamic> toJson() {
@@ -354,6 +359,7 @@ class OperateEndValue {
     map["loanPurpose"] = _loanPurpose;
     map["iratCd"] = _iratCd;
     map["totalInt"] = _totalInt;
+    map["lnInsType"] = _lnInsType;
     return map;
   }
 }

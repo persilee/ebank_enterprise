@@ -16,6 +16,7 @@ import 'package:ebank_mobile/data/source/model/mine/getFeedback.dart';
 import 'package:ebank_mobile/data/source/model/other/get_last_version.dart';
 import 'package:ebank_mobile/data/source/model/register_by_account.dart';
 import 'package:ebank_mobile/data/source/model/send_sms_register.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_retained_withdraw.dart';
 import 'package:ebank_mobile/http/retrofit/base_response.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
@@ -24,7 +25,7 @@ import '../base_dio.dart';
 
 part 'api_client_account.g.dart';
 
-@RestApi(baseUrl: BaseDio.BASEURL)
+@RestApi(baseUrl: BaseDio.BASEURLUSE)
 abstract class ApiClientAccount {
   factory ApiClientAccount({Dio dio, String baseUrl}) {
     dio ??= BaseDio.getInstance().getDio();
@@ -111,4 +112,14 @@ abstract class ApiClientAccount {
   ///退出登录的时候清除验证码
   @POST('/cust/codes/removeSmsCode')
   Future removeSmsCodeRequest(@Body() String userPhone);
+
+  ///定期存单获取最小留存金额
+  @POST('/tdep/timeDeposit/getTdProdTermRate')
+  Future<TimeDepositRetainedResp> regularMinimumAmountRetained(
+      @Body() TimeDepositRetainedReq req);
+
+  ///定期存单获取剩余部分支取次数
+  @POST('/tdep/timeDeposit/getTdInfoByConNo')
+  Future<TimeDepositWithdrawResp> regularNumberWithdrawals(
+      @Body() TimeDepositWithdrawReq req);
 }

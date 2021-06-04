@@ -32,7 +32,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
   String _phoneNumListen;
   String _smsListen;
   Timer _timer;
-  int countdownTime = 0;
+  int endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   String _accountName;
   bool _isRegister;
   bool _isInput = false; //判断是否点击获取验证码
@@ -218,7 +218,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
   //发送短信
   FlatButton _otpButton() {
     return FlatButton(
-      onPressed: countdownTime > 0
+      onPressed: endSeconds > DateTime.now().millisecondsSinceEpoch ~/ 1000
           ? null
           : () {
               FocusScope.of(context).requestFocus(FocusNode());
@@ -232,8 +232,8 @@ class _ForgetUserNameState extends State<ForgetUserName> {
 
       disabledTextColor: HsgColors.blueTextColor,
       child: Text(
-        countdownTime > 0
-            ? '${countdownTime}s'
+        endSeconds > DateTime.now().millisecondsSinceEpoch ~/ 1000
+            ? '${endSeconds - DateTime.now().millisecondsSinceEpoch ~/ 1000}s'
             : S.of(context).getVerificationCode,
         textAlign: TextAlign.right,
       ),
@@ -322,15 +322,15 @@ class _ForgetUserNameState extends State<ForgetUserName> {
 
   //倒计时方法
   _startCountdown() {
-    countdownTime = 120;
+    endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000 + 120;
     final call = (timer) {
-      setState(() {
-        if (countdownTime < 1) {
-          _timer.cancel();
-        } else {
-          countdownTime -= 1;
-        }
-      });
+      if (mounted) {
+        setState(() {
+          if (endSeconds < DateTime.now().millisecondsSinceEpoch ~/ 1000) {
+            _timer.cancel();
+          }
+        });
+      }
     };
     _timer = Timer.periodic(Duration(seconds: 1), call);
   }

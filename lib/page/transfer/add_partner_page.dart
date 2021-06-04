@@ -5,6 +5,7 @@
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/account/get_bank_list.dart';
+import 'package:ebank_mobile/data/source/model/account/get_card_ccy_list.dart';
 import 'package:ebank_mobile/data/source/model/approval/get_card_by_card_no.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
@@ -68,6 +69,13 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
   List<String> _ccyList = [];
   int _ccyIndex = 0;
 
+  //行内转账的币种相关逻辑
+  List<String> _inlineCcyList = [];
+  int _inlineIndex = 0;
+  String _inlineCcy = '';
+  bool _isInline = true; //true行内转账  false国际转账
+  String _userTrueName = ''; //真实名字
+
   var _swiftFocusNode = FocusNode();
   var _accountFocusNode = FocusNode();
   bool _isAccount = false; //行内转账时，账号是否存在
@@ -92,7 +100,38 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       if (_acountController.text.length > 0 &&
           _transferType == S.current.transfer_type_0 &&
           !_accountFocusNode.hasFocus) {
-        _getCardByCardNo(_acountController.text);
+        if (_isInline) {
+          //行内需要去加载特定的币种
+          _getCardByCardNo(_acountController.text); //获取收款人名称
+          _getCardCcyList(_acountController.text); //根据名称获取币种
+        } else {
+          _getCardByCardNo(_acountController.text); //获取收款人名称
+        }
+      } else {
+        _inlineCcy = '';
+        _bankCode = '';
+      }
+    });
+  }
+
+//获取账号支持币种
+  Future _getCardCcyList(String cardNo) async {
+    HSProgressHUD.show();
+    Transfer().getCardCcyList(GetCardCcyListReq(cardNo)).then((data) {
+      HSProgressHUD.dismiss();
+      if (data.recordLists != null) {
+        _inlineCcyList.clear();
+        data.recordLists.forEach((e) {
+          _inlineCcyList.add(e.ccy);
+        });
+      }
+      _inlineIndex = 0;
+      for (int i = 0; i < _inlineCcyList.length; i++) {
+        if (_inlineCcy == _inlineCcyList[i]) {
+          break;
+        } else {
+          _inlineIndex++;
+        }
       }
     });
   }
@@ -135,6 +174,13 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
 
   //加载数据
   _loadData() {
+    if (_isInline) {
+      if (_nameController.text != _userTrueName) {
+        HSProgressHUD.showToastTip(S.current.transfer_add_partner_nameErr);
+        return; //行内真实转账名字不存在
+      }
+    }
+
     String myTransferType;
     String _centerSwiftReq;
     String _payeeAdressReq;
@@ -310,10 +356,20 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         //收款方币种
         SelectInkWell(
           title: S.current.transfer_from_ccy,
-          item: _ccy,
+          item: _isInline ? _inlineCcy : _ccy,
           onTap: () {
             FocusScope.of(context).requestFocus(FocusNode());
-            _payCcyDialog();
+            if (_isInline) {
+              //需要先判断是否有输入账号，需要根据账号去获取币种
+              if (_acountController.text.length > 0) {
+                _payCcyDialog();
+              } else {
+                HSProgressHUD.showToastTip(
+                    S.current.hint_input_receipt_account);
+              }
+            } else {
+              _payCcyDialog();
+            }
           },
         ),
         Divider(height: 0.5, color: HsgColors.divider),
@@ -531,6 +587,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           if (_transferType == S.current.transfer_type_1) {
             _showInternational = true;
             _isAccount = true;
+            _isInline = false;
+            _inlineCcy = '';
+            _inlineIndex = 0;
             //初始化行内转账的内容
             _acountController.text = '';
             _nameController.text = '';
@@ -540,6 +599,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           } else if (_transferType == S.current.transfer_type_0) {
             _showInternational = false;
             _isAccount = false;
+            _isInline = true;
+            _inlineCcy = '';
+            _inlineIndex = 0;
             //初始化国际转账的内容
             _centerSwiftController.text = '';
             _payeeAdressController.text = '';
@@ -685,7 +747,7 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       if (_nameController.text.length > 0 &&
               _acountController.text.length > 0 &&
               _transferType != S.current.please_select &&
-              _ccy != ''
+              (_ccy != '' || _inlineCcy != '')
           // &&_isAccount
           ) {
         if (_showInternational) {
@@ -732,17 +794,22 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
       builder: (context) {
         return HsgSingleChoiceDialog(
           title: S.of(context).currency_choice,
-          items: _ccyList,
+          items: _isInline ? _inlineCcyList : _ccyList,
           positiveButton: S.of(context).confirm,
           negativeButton: S.of(context).cancel,
-          lastSelectedPosition: _ccyIndex,
+          lastSelectedPosition: _isInline ? _inlineIndex : _ccyIndex,
         );
       },
     );
     if (result != null && result != false) {
       setState(() {
-        _ccyIndex = result;
-        _ccy = _ccyList[result];
+        if (_isInline) {
+          _inlineIndex = result;
+          _inlineCcy = _inlineCcyList[result];
+        } else {
+          _ccyIndex = result;
+          _ccy = _ccyList[result];
+        }
       });
       _check();
     }
@@ -782,10 +849,11 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo)).then((data) {
       if (this.mounted) {
         setState(() {
-          _nameController.text = data.ciName;
+          // _nameController.text =
+          _userTrueName = data.ciName;
           _bankCode = data.bankCode;
           _isAccount = true;
-          if (_ccy != '') {
+          if (_ccy != '' || _inlineCcy != '') {
             _isInputed = true;
           } else {
             _isInputed = false;

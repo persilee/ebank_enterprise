@@ -5,6 +5,7 @@ import 'package:ebank_mobile/data/source/model/mine/get_verificationByPhone_code
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,12 +14,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class HSGOTPButton extends StatefulWidget {
   final int time;
   final String smsType;
+  final bool isCutdown;
   final VoidCallback otpCallback;
 
   const HSGOTPButton(
     this.smsType, {
     Key key,
     this.time = 120,
+    this.isCutdown = false,
     this.otpCallback,
   }) : super(key: key);
 
@@ -28,6 +31,21 @@ class HSGOTPButton extends StatefulWidget {
 
 class _HSGOTPButtonState extends State<HSGOTPButton> {
   Timer _timer;
+  int _endSeconds;
+
+  bool _btnIsLoading = false;
+  bool _btnIsEnable = true;
+
+  @override
+  void initState() {
+    _endSeconds = widget.isCutdown == true
+        ? DateTime.now().millisecondsSinceEpoch ~/ 1000 + widget.time
+        : DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    if (widget.isCutdown) {
+      _getVerificationCode();
+    }
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -37,73 +55,79 @@ class _HSGOTPButtonState extends State<HSGOTPButton> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    int countdownTime = widget.time;
-
-    //倒计时方法
-    _startCountdown() {
-      final call = (timer) {
+  //倒计时方法
+  _startCountdown() {
+    _endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000 + widget.time;
+    final call = (timer) {
+      if (mounted) {
         setState(() {
-          if (countdownTime < 1) {
+          if (_endSeconds < DateTime.now().millisecondsSinceEpoch ~/ 1000) {
             _timer.cancel();
-          } else {
-            countdownTime -= 1;
           }
         });
-      };
-      _timer = Timer.periodic(Duration(seconds: 1), call);
-    }
+      }
+    };
+    _timer = Timer.periodic(Duration(seconds: 1), call);
+  }
 
-    //获取验证码接口
-    _getVerificationCode() async {
-      HSProgressHUD.show();
-      final prefs = await SharedPreferences.getInstance();
-      String userPhone = prefs.getString(ConfigKey.USER_PHONE);
-      userPhone = userPhone != null ? userPhone : '';
-      // VerificationCodeRepository()
-      ApiClientPassword()
-          // .sendSmsByAccount(
-          //     SendSmsByAccountReq('modifyPwd', userAcc), 'SendSmsByAccountReq')
-          // )
-          .sendSmsByPhone(
-        SendSmsByPhoneNumberReq('', userPhone, widget.smsType, '', 'MB'),
-      )
-          .then((data) {
-        _startCountdown();
-        setState(() {});
-        HSProgressHUD.dismiss();
-      }).catchError((e) {
-        HSProgressHUD.showToast(e);
+  //获取验证码接口
+  _getVerificationCode() async {
+    if (mounted) {
+      setState(() {
+        _btnIsLoading = true;
+        _btnIsEnable = false;
       });
     }
+    widget.otpCallback();
+    final prefs = await SharedPreferences.getInstance();
+    String userAreacode = prefs.getString(ConfigKey.USER_AREACODE);
+    String userPhone = prefs.getString(ConfigKey.USER_PHONE);
+    userAreacode = userAreacode != null ? userAreacode : '';
+    userPhone = userPhone != null ? userPhone : '';
+    ApiClientPassword()
+        .sendSmsByPhone(SendSmsByPhoneNumberReq(
+            userAreacode, userPhone, 'modifyPwd', 'SCNAOCHGLPW', 'MB',
+            msgBankId: '999'))
+        .then((data) {
+      if (mounted) {
+        setState(() {
+          _btnIsLoading = false;
+          _btnIsEnable = true;
+        });
+      }
+      _startCountdown();
+    }).catchError((e) {
+      if (mounted) {
+        setState(() {
+          _endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+          _btnIsLoading = false;
+          _btnIsEnable = true;
+        });
+      }
+      HSProgressHUD.showToast(e);
+    });
+  }
 
-    return OutlineButton(
-      onPressed: countdownTime > 0
-          ? null
-          : () {
-              _getVerificationCode();
-            },
-      //为什么要设置左右padding，因为如果不设置，那么会挤压文字空间asdfa
-      padding: EdgeInsets.symmetric(horizontal: 8),
-      //文字颜色
-      textColor: HsgColors.blueTextColor,
-      borderSide: BorderSide(color: HsgColors.blueTextColor, width: 0.5),
-      //画圆角
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
-      ),
-      disabledTextColor: HsgColors.describeText,
-      disabledBorderColor: HsgColors.describeText,
-      child: Text(
-        countdownTime > 0
-            ? '${countdownTime}s'
+  @override
+  Widget build(BuildContext context) {
+    return CustomButton(
+      isLoading: _btnIsLoading,
+      isEnable: _btnIsEnable,
+      isOutline: true,
+      isShowLine: false,
+      margin: EdgeInsets.all(0),
+      text: Text(
+        _endSeconds > DateTime.now().millisecondsSinceEpoch ~/ 1000
+            ? '${_endSeconds - DateTime.now().millisecondsSinceEpoch ~/ 1000}s'
             : S.of(context).getVerificationCode,
         style: TextStyle(
-          fontSize: 14,
+          color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
+          fontSize: 14.0,
         ),
       ),
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      clickCallback: () {
+        _getVerificationCode();
+      },
     );
   }
 }

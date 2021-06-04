@@ -205,7 +205,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           } else {
             //传值过去
             Navigator.pushNamed(context, pageLoanReference,
-                arguments: widget.loanAccountDetail);
+                arguments: {'data': widget.loanAccountDetail});
           }
         },
       ),
@@ -262,7 +262,7 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
                     _verticalMoulding(),
                     //余额额度
                     _loanMoney(
-                        S.current.loan_detail_available_amount +
+                        S.current.loan_available_credit +
                             ' (' +
                             widget.loanAccountDetail.ccy +
                             ')',
@@ -400,6 +400,11 @@ class _LoanDetailsPageState extends State<LoanDetailsPage> {
           break;
         case 1:
           //查看还款计划
+          if (loanDetail.status == 'M') {
+            //结清状态不能看计划
+            HSProgressHUD.showToastTip(S.current.loan_early_pay_reminder);
+            return;
+          }
           Navigator.pushNamed(context, pageRepayPlan,
               arguments: {'data': loanDetail});
           break;

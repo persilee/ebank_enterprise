@@ -8,11 +8,15 @@ import 'package:ebank_mobile/generated/l10n.dart' as Intl;
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
+import 'package:ebank_mobile/widget/custom_refresh.dart';
+import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:ebank_mobile/widget/hsg_pdf_viewer.dart';
+import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ElectronicStatementPage extends StatefulWidget {
   @override
@@ -21,23 +25,36 @@ class ElectronicStatementPage extends StatefulWidget {
 }
 
 class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
-  String _startDate = DateFormat('yyyy-MM-01').format(DateTime.now());
-  String _endDate = DateFormat('yyyy-MM-dd').format(DateTime.now()); //结束时间
+  // String _startDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  // String _endDate = DateFormat('yyyy-MM-dd').format(DateTime.now()); //结束时间
   String _end = formatDate(DateTime.now(), [yyyy, mm, dd]); //显示结束时间
   String _start = formatDate(
-      DateTime(DateTime.now().year, DateTime.now().month, 1),
+      DateTime(
+          DateTime.now().year, DateTime.now().month - 6, DateTime.now().day),
       [yyyy, mm, dd]); //显示开始时间
-  String _time; //拼接时间
+  // String _startDate;
+  // String _endDate;
+  // String _time; //拼接时间
 
-  GetFilePathResp _fileData;
+  // GetFilePathResp _fileData;
   StatementDTOS _statementDTOS;
   List<StatementDTOS> dataList = [];
   bool _isLoading = false;
+  RefreshController _refreshController;
+  bool _isShowErrorPage = false;
+  Widget _hsgErrorPage;
 
   @override
   void initState() {
-    super.initState();
+    _refreshController = RefreshController();
     _loadData();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _refreshController.dispose();
+    super.dispose();
   }
 
   @override
@@ -56,25 +73,40 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
                 color: Colors.white,
                 padding: EdgeInsets.only(left: 10),
                 child: _creatScreenAlert()),
-            Container(
-              //底部的列表数据
-              color: HsgColors.commonBackground,
-              child: _isLoading
-                  ? HsgLoading()
-                  : dataList.length <= 0
-                      ? Padding(
-                          padding: EdgeInsets.only(top: 100),
-                          child: Container(
-                            child: notDataContainer(
-                                context, Intl.S.current.no_data_now),
-                          ),
-                        )
-                      : ListView.builder(
-                          itemCount: dataList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return _getList(context, index);
-                          }),
-            ),
+            Expanded(
+              child: Container(
+                //底部的列表数据
+                color: HsgColors.commonBackground,
+                child: CustomRefresh(
+                  controller: _refreshController,
+                  enablePullUp: false,
+                  onRefresh: () async {
+                    await _loadData();
+                    //刷新完成
+                    _refreshController.refreshCompleted();
+                    _refreshController.footerMode.value = LoadStatus.canLoading;
+                  },
+                  content: _isLoading
+                      ? HsgLoading()
+                      : _isShowErrorPage
+                          ? _hsgErrorPage
+                          : dataList.length <= 0
+                              ? HsgErrorPage(
+                                  isEmptyPage: true,
+                                  buttonAction: () {
+                                    _loadData();
+                                  },
+                                )
+                              : ListView.builder(
+                                  itemCount: dataList.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return _getList(context, index);
+                                  },
+                                ),
+                ),
+              ),
+            )
           ],
         ));
   }
@@ -121,17 +153,47 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
     );
   }
 
-  void _loadData() async {
-    _isLoading = true;
-    StatementQueryListModel statementQueryListModel =
-        await ApiClient().statementQueryList(StatementQueryListBody(
-      startDate: _startDate,
-      endDate: _endDate,
-    ));
-    setState(() {
-      dataList.addAll(statementQueryListModel.statementDTOS);
-      _isLoading = false;
-    });
+  Future<bool> _loadData() async {
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
+    try {
+      StatementQueryListModel statementQueryListModel =
+          await ApiClient().statementQueryList(StatementQueryListBody(
+        startDate: DateFormat('yyyy-MM-dd').format(DateTime.parse(_start)),
+        endDate: DateFormat('yyyy-MM-dd').format(DateTime.parse(_end)),
+      ));
+      if (mounted) {
+        setState(() {
+          // dataList.addAll(statementQueryListModel.statementDTOS);
+          if (statementQueryListModel != null) {
+            dataList = statementQueryListModel.statementDTOS == null
+                ? ''
+                : statementQueryListModel.statementDTOS;
+          }
+          _isLoading = false;
+          _isShowErrorPage = false;
+        });
+      }
+      return true;
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _isShowErrorPage = true;
+          _hsgErrorPage = HsgErrorPage(
+            error: e.error,
+            buttonAction: () {
+              _loadData();
+            },
+          );
+        });
+      }
+      // HSProgressHUD.showToast(e);
+      return false;
+    }
   }
 
   void openPDF(BuildContext context, String title) {
@@ -165,20 +227,23 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
   //筛选条件title
   Widget _screenTitle() {
     return Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            bottom: _lineBorderSide(),
-          ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: _lineBorderSide(),
         ),
-        padding: EdgeInsets.fromLTRB(10, 12, 10, 12),
-        child: Row(
-          children: [
-            _condition(), //左侧文本
-            _checked(), //占位文本
-            _rightArrow(HsgColors.nextPageIcon) //图标文件
-          ],
-        ));
+      ),
+      // padding: EdgeInsets.fromLTRB(10, 12, 10, 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _condition(), //左侧文本
+          _checked(), //占位文本
+          _rightArrow(HsgColors.nextPageIcon), //图标文件
+        ],
+      ),
+    );
   }
 
   //筛选条件文本
@@ -186,11 +251,12 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
     return Container(
       width: (MediaQuery.of(context).size.width - 30) / 5 * 2,
       child: Text(
-        Intl.S.current.transaction_time,
+        Intl.S.current.electronic_statement_date,
         style: TextStyle(
           fontSize: 13,
           color: HsgColors.firstDegreeText,
         ),
+        overflow: TextOverflow.clip,
       ),
     );
   }
@@ -202,10 +268,12 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
       child: Text(
         _start + '-' + _end,
         style: TextStyle(
-            color: HsgColors.firstDegreeText,
-            fontSize: 13,
-            fontWeight: FontWeight.normal),
+          color: HsgColors.firstDegreeText,
+          fontSize: 13,
+          fontWeight: FontWeight.normal,
+        ),
         textAlign: TextAlign.right,
+        overflow: TextOverflow.clip,
       ),
     );
   }
@@ -222,11 +290,12 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
   //右箭头图标
   Widget _rightArrow(Color color) {
     return Container(
-      width: 20,
-      height: 20,
+      // width: 20,
+      // height: 30,
       child: Icon(
         Icons.arrow_drop_down,
         color: color,
+        // size: 22,
       ),
     );
   }
@@ -358,10 +427,10 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
         ),
       ),
       minDateTime: DateTime.parse('1900-01-01'),
-      maxDateTime: DateTime.now(),
+      // maxDateTime: DateTime.now(),
       initialDateTime: i == 0
-          ? DateTime.parse(_startDate)
-          : DateTime.parse(_endDate), //DateTime.now(),
+          ? DateTime.parse(_start)
+          : DateTime.parse(_end), //DateTime.now(),
       dateFormat: 'yyyy-MM-dd',
       locale: DateTimePickerLocale.zh_cn,
       //确定
@@ -369,10 +438,10 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
         setState(() {
           if (i == 0) {
             _start = formatDate(dateTime, [yyyy, mm, dd]);
-            _startDate = DateFormat('yyyy-MM-dd').format(dateTime);
+            // _startDate = DateFormat('yyyy-MM-dd').format(dateTime);
           } else {
             _end = formatDate(dateTime, [yyyy, mm, dd]);
-            _endDate = DateFormat('yyyy-MM-dd').format(dateTime);
+            // _endDate = DateFormat('yyyy-MM-dd').format(dateTime);
           }
         });
         (popcontext as Element).markNeedsBuild();
@@ -442,7 +511,7 @@ class _ElectronicStatementPageState extends State<ElectronicStatementPage> {
         ),
         onPressed: () {
           setState(() {
-            _time = _start + "—" + _end;
+            // _time = _start + "—" + _end;
             // _page = 1;
             dataList.clear();
           });

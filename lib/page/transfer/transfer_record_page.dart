@@ -218,8 +218,9 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   Widget _contentWidget(TransferRecord _transferHistory) {
     return InkWell(
       onTap: () {
+        //点击跳转详情
         Navigator.pushNamed(context, pageTransferDetail,
-            arguments: _transferHistory);
+            arguments: {"transferHistory": _transferHistory});
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -256,8 +257,8 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
                 _transferHistory.transferType == '0'
                     ? intl.S.current.transfer_type_0_short
                     : intl.S.current.transfer_type_1_short),
-            _rowContent(
-                intl.S.of(context).transfer_status, _transferHistory.status),
+            // _rowContent(
+            //     intl.S.of(context).transfer_status, _transferHistory.status),
           ],
         ),
       ),

@@ -55,6 +55,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
     HSProgressHUD.show();
     // LoanDataRepository()
     ApiClientLoan().getSchedulePlanDetailList(req).then((data) {
+      lnScheduleList.clear();
       HSProgressHUD.dismiss();
       if (data.getLnAcScheduleRspDetlsDTOList != null) {
         setState(() {
@@ -65,7 +66,6 @@ class _RepayPlanState extends State<RepayPlanPage> {
     }).catchError((e) {
       HSProgressHUD.showToast(e);
     });
-    lnScheduleList.clear();
   }
 
   @override
@@ -199,16 +199,16 @@ class _RepayPlanState extends State<RepayPlanPage> {
     // 存在逾期未还款。需要先还逾期的，再还当前期数。
 
     var instalType = lnSchedule.paySts; //还款状态 0：未还 1：逾期 2：已还
-    var repay = '还款'; //还款
+    var repay = S.current.repayment_with_under; //还款
     switch (instalType) {
       case '0':
-        instalType = ' (未还) ';
+        instalType = ' (' + S.current.loan_plan_status_unreimbursed + ') ';
         break;
       case '1':
-        instalType = ' (逾期) '; //(部分还款)
+        instalType = ' (' + S.current.installment_status3 + ') '; //(部分还款)
         break;
       case '2':
-        instalType = ' (全部还款) ';
+        instalType = ' (' + S.current.loan_plan_status + ') '; //全部还清
         repay = '';
         break;
       default:
@@ -216,8 +216,10 @@ class _RepayPlanState extends State<RepayPlanPage> {
 
     double currentPenAmt = double.parse(lnSchedule.payPrin) -
         double.parse(lnSchedule.recPrin); //当前本金金额
+
     double currentInterestAmt =
         double.parse(lnSchedule.payInt) - double.parse(lnSchedule.recInt); //利息
+
     double currentAmorIntAmt =
         (double.parse(lnSchedule.payPen) + double.parse(lnSchedule.payCom)) -
             (double.parse(lnSchedule.recPen) +
@@ -314,12 +316,10 @@ class _RepayPlanState extends State<RepayPlanPage> {
               InkWell(
                 onTap: () {
                   //跳转loan_plan提前还款
-                  Map detailMap = Map();
-                  detailMap['detailModel'] = lnSchedule;
-                  detailMap['loanDetail'] = widget.loanDetail; //0不是还款计划
-
-                  Navigator.pushNamed(context, pageRepaymentPlan,
-                      arguments: detailMap); //需要传不同的参数进去
+                  Navigator.pushNamed(context, pageRepaymentPlan, arguments: {
+                    'loanDetail': widget.loanDetail,
+                    'planDetail': lnSchedule
+                  }); //需要传不同的参数进去
                   //跳转
                 },
                 child: Text(

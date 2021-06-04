@@ -6,27 +6,18 @@
  * Copyright (c) 2020 深圳高阳寰球科技有限公司
  */
 
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_task_body.dart';
 import 'package:ebank_mobile/data/source/model/approval/find_user_todo_task_model.dart';
-import 'package:ebank_mobile/data/source/model/approval/find_user_finished_task.dart';
 import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
-import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
-import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
-import 'package:ebank_mobile/page/login/login_page.dart';
-import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sp_util/sp_util.dart';
@@ -54,6 +45,8 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
   bool _isMoreData = false;
   bool _isShowErrorPage = false;
   Widget _hsgErrorPage;
+  final f = NumberFormat("#,##0.00", "en_US");
+  final fj = NumberFormat("#,##0", "ja-JP");
 
   @override
   void initState() {
@@ -288,6 +281,16 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
             //发起人
             _rowInformation(
                 S.current.sponsor, approvalTask?.applicantName ?? ''),
+            //客户号
+            _rowInformation(
+                S.current.approve_account, approvalTask?.businessKey ?? ''),
+            //金额
+            _rowInformation(
+                S.current.approve_amount,
+                approvalTask?.ccy == 'JPY'
+                    ? '${approvalTask?.ccy} ${fj.format(double.parse(approvalTask?.amount ?? '0'))}'
+                    : '${approvalTask?.ccy} ${f.format(double.parse(approvalTask?.amount ?? '0'))}' ??
+                        ''),
             //审批结果
             _rowInformation(S.current.approve_result, _result ?? ''),
             //审批时间
@@ -302,7 +305,7 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
   //待办列表
   Widget _todoInformation(ApprovalTask approvalTask) {
     return Container(
-      height: 166.0,
+      height: 206.0,
       padding: EdgeInsets.only(top: 16),
       child: GestureDetector(
         onTap: () {
@@ -359,7 +362,7 @@ class _MyApprovedHistoryPageState extends State<MyApprovedHistoryPage>
       padding: EdgeInsets.only(right: 10.0, top: 6.0),
       child: SizedBox(
         width: 1.0,
-        height: 146.0,
+        height: 186.0,
         child: DecoratedBox(
           decoration: BoxDecoration(color: HsgColors.divider),
         ),

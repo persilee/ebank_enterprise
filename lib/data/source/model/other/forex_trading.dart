@@ -97,6 +97,8 @@ class TransferTrialReq {
   String buyAmount;
   @JsonKey(name: 'sellAmount')
   String sellAmount;
+  @JsonKey(name: 'exGroup')
+  String exGroup;
 
   TransferTrialReq({
     this.opt,
@@ -104,6 +106,7 @@ class TransferTrialReq {
     this.sellCcy,
     this.buyAmount,
     this.sellAmount,
+    this.exGroup,
   });
 
   factory TransferTrialReq.fromJson(Map<String, dynamic> srcJson) =>

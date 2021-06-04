@@ -42,7 +42,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   String _phoneNumListen;
   String _smsListen;
   Timer _timer;
-  int countdownTime = 0;
+  int endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   bool _isRegister;
   String _userAccount;
   bool _isInput = false; //判断是否点击获取验证码
@@ -225,7 +225,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   FlatButton _otpButton() {
     return FlatButton(
-      onPressed: countdownTime > 0
+      onPressed: endSeconds > DateTime.now().millisecondsSinceEpoch ~/ 1000
           ? null
           : () {
               FocusScope.of(context).requestFocus(FocusNode());
@@ -235,8 +235,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       textColor: HsgColors.blueTextColor,
       disabledTextColor: HsgColors.blueTextColor,
       child: Text(
-        countdownTime > 0
-            ? '${countdownTime}s'
+        endSeconds > DateTime.now().millisecondsSinceEpoch ~/ 1000
+            ? '${endSeconds - DateTime.now().millisecondsSinceEpoch ~/ 1000}s'
             : S.of(context).getVerificationCode,
         style: TextStyle(fontSize: 14),
         textAlign: TextAlign.right,
@@ -334,15 +334,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   //倒计时方法
   _startCountdown() {
-    countdownTime = 120;
+    endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000 + 120;
     final call = (timer) {
-      setState(() {
-        if (countdownTime < 1) {
-          _timer.cancel();
-        } else {
-          countdownTime -= 1;
-        }
-      });
+      if (mounted) {
+        setState(() {
+          if (endSeconds < DateTime.now().millisecondsSinceEpoch ~/ 1000) {
+            _timer.cancel();
+          }
+        });
+      }
     };
     HSProgressHUD.dismiss();
 

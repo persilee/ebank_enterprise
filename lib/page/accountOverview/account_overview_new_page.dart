@@ -36,7 +36,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
   String totalLiabilities = '0.00';
   String localCcy = '';
   String ddTotal = '0';
-  String ddCcy = '';
+  // String ddCcy = '';
   String tdTotal = '0';
   String lnTotal = '0';
 
@@ -446,7 +446,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
           Text(
             //unpaidPrincipal
             FormatUtil.formatSringToMoney(
-                    lnList[index].currBal, lnList[index].ccy) +
+                    lnList[index].avaBal, lnList[index].ccy) +
                 ' ' +
                 lnList[index].ccy,
             style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
@@ -614,7 +614,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
         //净资产
         Padding(
           padding: EdgeInsets.only(bottom: 30),
-          child: _totalAssets(),
+          child: _netAssets(),
         ),
         Row(
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -629,10 +629,10 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
                   changeShowJudge(showIndex);
                 });
               },
-              child: _netAssets(
+              child: _totalHeader(
                   S.current.total_assets,
                   localCcy,
-                  netAssets, //总资产金额
+                  totalAssets, //总资产金额
                   colorOne,
                   0,
                   bottomRight,
@@ -651,7 +651,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
                   print("点击总负债 $isTotalAsset");
                 });
               },
-              child: _netAssets(
+              child: _totalHeader(
                   S.current.total_liability,
                   localCcy,
                   lnTotal, //总负债金额
@@ -685,7 +685,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
   //   );
   // }
 
-  Container _netAssets(
+  Container _totalHeader(
     String title,
     String localCcy,
     String netAssets, //金额
@@ -758,7 +758,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
           context,
           isShowDD,
           S.current.demand_deposit,
-          ddCcy + ' ' + FormatUtil.formatSringToMoney(ddTotal),
+          localCcy + ' ' + FormatUtil.formatSringToMoney(ddTotal),
           () {
             if (isShowDD == true) {
               return;
@@ -896,7 +896,7 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
   }
 
   //净资产
-  Column _totalAssets() {
+  Column _netAssets() {
     return Column(
       children: [
         Container(
@@ -911,8 +911,8 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
           padding: EdgeInsets.only(left: 18),
           child: Text(
             _isNegative
-                ? localCcy + ' -' + FormatUtil.formatSringToMoney(totalAssets)
-                : localCcy + ' ' + FormatUtil.formatSringToMoney(totalAssets),
+                ? localCcy + ' -' + FormatUtil.formatSringToMoney(netAssets)
+                : localCcy + ' ' + FormatUtil.formatSringToMoney(netAssets),
             style: TextStyle(
                 fontSize: 22.5,
                 color: Colors.white,

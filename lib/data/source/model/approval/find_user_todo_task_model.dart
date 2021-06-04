@@ -1,9 +1,9 @@
 /// sort : null
-/// page : 3
+/// page : 1
 /// pageSize : 10
-/// count : 32
-/// totalPage : 4
-/// rows : [{"processId":"185652","processKey":"oneToOneTransferApproval","processTitle":"oneToOneTransferApprovalTitle","taskId":"185669","taskName":"Interanal Transfer Approval","assign":null,"owner":null,"applicantId":"789537104068608000","applicantName":null,"createTime":"2021-03-27 15:07:41","result":"1","businessKey":"0101238000001758","tenantId":"EB"},{"processId":"185504","processKey":"oneToOneTransferApproval","processTitle":"oneToOneTransferApprovalTitle","taskId":"185521","taskName":"Interanal Transfer Approval","assign":null,"owner":null,"applicantId":"789537104068608000","applicantName":null,"createTime":"2021-03-27 11:39:11","result":"1","businessKey":"0101208000001528","tenantId":"EB"},{"processId":"185310","processKey":"oneToOneTransferApproval","processTitle":"oneToOneTransferApprovalTitle","taskId":"185327","taskName":"Interanal Transfer Approval","assign":null,"owner":null,"applicantId":"989185387615485957","applicantName":null,"createTime":"2021-03-26 19:20:16","result":"1","businessKey":"0101208000001528","tenantId":"EB"},{"processId":"185291","processKey":"oneToOneTransferApproval","processTitle":"oneToOneTransferApprovalTitle","taskId":"185308","taskName":"Interanal Transfer Approval","assign":null,"owner":null,"applicantId":"989185387615485957","applicantName":null,"createTime":"2021-03-26 19:19:50","result":"1","businessKey":"0101268000001878","tenantId":"EB"},{"processId":"185272","processKey":"oneToOneTransferApproval","processTitle":"oneToOneTransferApprovalTitle","taskId":"185289","taskName":"Interanal Transfer Approval","assign":null,"owner":null,"applicantId":"989185387615485957","applicantName":null,"createTime":"2021-03-26 19:18:32","result":"1","businessKey":"0101238000001758","tenantId":"EB"},{"processId":"185253","processKey":"oneToOneTransferApproval","processTitle":"oneToOneTransferApprovalTitle","taskId":"185270","taskName":"Interanal Transfer Approval","assign":null,"owner":null,"applicantId":"989185387615485960","applicantName":null,"createTime":"2021-03-26 19:15:04","result":"1","businessKey":"0101238000001538","tenantId":"EB"},{"processId":"185152","processKey":"earlyRedTdContractApproval","processTitle":"earlyRedTdContractApprovalTitle","taskId":"185169","taskName":"Time Deposit Withdrawal Approval","assign":null,"owner":null,"applicantId":"989185387615485956","applicantName":null,"createTime":"2021-03-26 17:50:50","result":"1","businessKey":"01018580000007680002","tenantId":"EB"},{"processId":"185133","processKey":"earlyRedTdContractApproval","processTitle":"earlyRedTdContractApprovalTitle","taskId":"185150","taskName":"Time Deposit Withdrawal Approval","assign":null,"owner":null,"applicantId":"989185387615485956","applicantName":null,"createTime":"2021-03-26 17:50:42","result":"1","businessKey":"01018580000007680001","tenantId":"EB"},{"processId":"185095","processKey":"openTdContractApproval","processTitle":"openTdContractApprovalTitle","taskId":"185112","taskName":"Open Time Deposit Contract Approval","assign":null,"owner":null,"applicantId":"989185387615485956","applicantName":null,"createTime":"2021-03-26 17:49:55","result":"1","businessKey":"0101238000001758","tenantId":"EB"},{"processId":"185076","processKey":"earlyRedTdContractApproval","processTitle":"earlyRedTdContractApprovalTitle","taskId":"185093","taskName":"Time Deposit Withdrawal Approval","assign":null,"owner":null,"applicantId":"989185387615485956","applicantName":null,"createTime":"2021-03-26 17:45:03","result":"1","businessKey":"01018580000007680001","tenantId":"EB"}]
+/// count : 94
+/// totalPage : 10
+/// rows : [{"processId":"338131","processKey":"internationalTransferApproval","processTitle":"internationalTransferApprovalTitle","taskId":"338250","taskName":"International Transfer","assign":"829378511096512512","owner":null,"applicantId":"829379514709573632","applicantName":"HSG19 Checker","createTime":"2021-05-29 10:39:57","result":"2","businessKey":"8011218000003938","tenantId":"EB","endTime":null,"amount":"258","ccy":"USD"},{"processId":"335470","processKey":"internationalTransferApproval","processTitle":"internationalTransferApprovalTitle","taskId":"335589","taskName":"International Transfer","assign":"829378511096512512","owner":null,"applicantId":"829378163250298880","applicantName":"HSG13 Checker","createTime":"2021-05-27 11:37:50","result":"2","businessKey":"8011218000003938","tenantId":"EB","endTime":null,"amount":"20","ccy":"USD"},{"processId":"335243","processKey":"oneToOneTransferApproval","processTitle":"oneToOneTransferApprovalTitle","taskId":"335362","taskName":"Internal Transfer","assign":"829378511096512512","owner":null,"applicantId":"829378163250298880","applicantName":"HSG13 Checker","createTime":"2021-05-27 11:32:57","result":"2","businessKey":"8011218000003938","tenantId":"EB","endTime":null,"amount":"10","ccy":"USD"},{"processId":"328174","processKey":"internationalTransferApproval","processTitle":"internationalTransferApprovalTitle","taskId":"328288","taskName":"International Transfer","assign":"829378511096512512","owner":null,"applicantId":"829377766448168960","applicantName":"HSG10 Maker","createTime":"2021-05-24 20:05:21","result":"2","businessKey":"0001208000001428","tenantId":"EB","endTime":null,"amount":"111","ccy":"USD"},{"processId":"325664","processKey":"loanWithDrawalApproval","processTitle":"loanWithDrawalApprovalTitle","taskId":"325778","taskName":"Loan Drawdown","assign":"829378511096512512","owner":null,"applicantId":"829378511096512512","applicantName":"HSG16 Checker","createTime":"2021-05-21 11:39:53","result":"2","businessKey":"0001208000001428","tenantId":"EB","endTime":null,"amount":"2525","ccy":"USD"},{"processId":"325443","processKey":"oneToOneTransferApproval","processTitle":"oneToOneTransferApprovalTitle","taskId":"325557","taskName":"Internal Transfer","assign":"829378511096512512","owner":null,"applicantId":"829377766448168960","applicantName":"HSG10 Maker","createTime":"2021-05-21 10:52:40","result":"2","businessKey":"0001208000001428","tenantId":"EB","endTime":null,"amount":"255","ccy":"USD"},{"processId":"324916","processKey":"postRepaymentApproval","processTitle":"postRepaymentApprovalTitle","taskId":"325030","taskName":"Prepayment","assign":"829378511096512512","owner":null,"applicantId":"829377766448168960","applicantName":"HSG10 Maker","createTime":"2021-05-20 16:41:51","result":"2","businessKey":"80131680030007980001","tenantId":"EB","endTime":null,"amount":"83071.66","ccy":"USD"},{"processId":"323316","processKey":"loanRepaymentApproval","processTitle":"loanRepaymentApprovalTitle","taskId":"323430","taskName":"Loan Repayment","assign":"829378511096512512","owner":null,"applicantId":"829378511096512512","applicantName":"HSG16 Checker","createTime":"2021-05-20 09:53:18","result":"2","businessKey":"8013168003000798","tenantId":"EB","endTime":null,"amount":"84281.14","ccy":"USD"},{"processId":"322963","processKey":"loanRepaymentApproval","processTitle":"loanRepaymentApprovalTitle","taskId":"323073","taskName":"Loan Repayment","assign":"829378511096512512","owner":null,"applicantId":"829378511096512512","applicantName":"HSG16 Checker","createTime":"2021-05-19 17:00:35","result":"2","businessKey":"8013168003000798","tenantId":"EB","endTime":null,"amount":"84241.58","ccy":"USD"},{"processId":"322647","processKey":"loanRepaymentApproval","processTitle":"loanRepaymentApprovalTitle","taskId":"322757","taskName":"Loan Repayment","assign":"829378511096512512","owner":null,"applicantId":"829378511096512512","applicantName":"HSG16 Checker","createTime":"2021-05-19 16:54:15","result":"2","businessKey":"8013168003000798","tenantId":"EB","endTime":null,"amount":"84241.58","ccy":"USD"}]
 
 class FindUserTodoTaskModel {
   dynamic _sort;
@@ -20,20 +20,20 @@ class FindUserTodoTaskModel {
   int get totalPage => _totalPage;
   List<ApprovalTask> get rows => _rows;
 
-  FindUserTodoTaskModel({
-      dynamic sort, 
-      int page, 
-      int pageSize, 
-      int count, 
-      int totalPage, 
-      List<ApprovalTask> rows}){
+  FindUserTodoTaskModel(
+      {dynamic sort,
+      int page,
+      int pageSize,
+      int count,
+      int totalPage,
+      List<ApprovalTask> rows}) {
     _sort = sort;
     _page = page;
     _pageSize = pageSize;
     _count = count;
     _totalPage = totalPage;
     _rows = rows;
-}
+  }
 
   FindUserTodoTaskModel.fromJson(dynamic json) {
     _sort = json["sort"];
@@ -61,22 +61,24 @@ class FindUserTodoTaskModel {
     }
     return map;
   }
-
 }
 
-/// processId : "185652"
-/// processKey : "oneToOneTransferApproval"
-/// processTitle : "oneToOneTransferApprovalTitle"
-/// taskId : "185669"
-/// taskName : "Interanal Transfer Approval"
-/// assign : null
+/// processId : "338131"
+/// processKey : "internationalTransferApproval"
+/// processTitle : "internationalTransferApprovalTitle"
+/// taskId : "338250"
+/// taskName : "International Transfer"
+/// assign : "829378511096512512"
 /// owner : null
-/// applicantId : "789537104068608000"
-/// applicantName : null
-/// createTime : "2021-03-27 15:07:41"
-/// result : "1"
-/// businessKey : "0101238000001758"
+/// applicantId : "829379514709573632"
+/// applicantName : "HSG19 Checker"
+/// createTime : "2021-05-29 10:39:57"
+/// result : "2"
+/// businessKey : "8011218000003938"
 /// tenantId : "EB"
+/// endTime : null
+/// amount : "258"
+/// ccy : "USD"
 
 class ApprovalTask {
   String _processId;
@@ -84,45 +86,52 @@ class ApprovalTask {
   String _processTitle;
   String _taskId;
   String _taskName;
-  dynamic _assign;
+  String _assign;
   dynamic _owner;
   String _applicantId;
-  dynamic _applicantName;
+  String _applicantName;
   String _createTime;
-  String _endTime;
   String _result;
   String _businessKey;
   String _tenantId;
+  dynamic _endTime;
+  String _amount;
+  String _ccy;
 
   String get processId => _processId;
   String get processKey => _processKey;
   String get processTitle => _processTitle;
   String get taskId => _taskId;
   String get taskName => _taskName;
-  dynamic get assign => _assign;
+  String get assign => _assign;
   dynamic get owner => _owner;
   String get applicantId => _applicantId;
-  dynamic get applicantName => _applicantName;
+  String get applicantName => _applicantName;
   String get createTime => _createTime;
-  String get endTime => _endTime;
   String get result => _result;
   String get businessKey => _businessKey;
   String get tenantId => _tenantId;
+  dynamic get endTime => _endTime;
+  String get amount => _amount;
+  String get ccy => _ccy;
 
-  ApprovalTask({
-      String processId, 
-      String processKey, 
-      String processTitle, 
-      String taskId, 
-      String taskName, 
-      dynamic assign, 
-      dynamic owner, 
-      String applicantId, 
-      dynamic applicantName, 
-      String createTime, 
-      String result, 
-      String businessKey, 
-      String tenantId}){
+  ApprovalTask(
+      {String processId,
+      String processKey,
+      String processTitle,
+      String taskId,
+      String taskName,
+      String assign,
+      dynamic owner,
+      String applicantId,
+      String applicantName,
+      String createTime,
+      String result,
+      String businessKey,
+      String tenantId,
+      dynamic endTime,
+      String amount,
+      String ccy}) {
     _processId = processId;
     _processKey = processKey;
     _processTitle = processTitle;
@@ -133,11 +142,13 @@ class ApprovalTask {
     _applicantId = applicantId;
     _applicantName = applicantName;
     _createTime = createTime;
-    _endTime = endTime;
     _result = result;
     _businessKey = businessKey;
     _tenantId = tenantId;
-}
+    _endTime = endTime;
+    _amount = amount;
+    _ccy = ccy;
+  }
 
   ApprovalTask.fromJson(dynamic json) {
     _processId = json["processId"];
@@ -150,10 +161,12 @@ class ApprovalTask {
     _applicantId = json["applicantId"];
     _applicantName = json["applicantName"];
     _createTime = json["createTime"];
-    _endTime = json["endTime"];
     _result = json["result"];
     _businessKey = json["businessKey"];
     _tenantId = json["tenantId"];
+    _endTime = json["endTime"];
+    _amount = json["amount"];
+    _ccy = json["ccy"];
   }
 
   Map<String, dynamic> toJson() {
@@ -168,11 +181,12 @@ class ApprovalTask {
     map["applicantId"] = _applicantId;
     map["applicantName"] = _applicantName;
     map["createTime"] = _createTime;
-    map["endTime"] = _endTime;
     map["result"] = _result;
     map["businessKey"] = _businessKey;
     map["tenantId"] = _tenantId;
+    map["endTime"] = _endTime;
+    map["amount"] = _amount;
+    map["ccy"] = _ccy;
     return map;
   }
-
 }

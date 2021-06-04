@@ -8,6 +8,7 @@ import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/loan/get_loan_money_caculate.dart';
 import 'package:ebank_mobile/data/source/model/loan/get_schedule_detail_list.dart';
 import 'package:ebank_mobile/data/source/model/loan/loan_detail_modelList.dart';
+import 'package:ebank_mobile/data/source/model/loan/loan_prepayment_model.dart';
 import 'package:ebank_mobile/data/source/model/loan/loan_repayment_confim.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
@@ -60,7 +61,7 @@ class _InputPlanConfimPageState extends State<InputPlanConfimPage> {
     this.planDetail = detail;
 
     LnAcMastAppDOList loanDetails = mapDetail['loanDetail'];
-    acNo = loanDetails.acNo; //贷款账号
+    acNo = loanDetails.contactNo; //贷款账号
     loanDetail = loanDetails;
 
     _debitAccount = mapDetail['debitAcc'];
@@ -73,7 +74,7 @@ class _InputPlanConfimPageState extends State<InputPlanConfimPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           //贷款账号
-          _contentColumn(S.of(context).loan_account, acNo),
+          _contentColumn(S.of(context).contract_number, acNo),
           //币种
           _contentColumn(S.of(context).currency, currency), //ccy
           //还款本金
@@ -151,35 +152,75 @@ class _InputPlanConfimPageState extends State<InputPlanConfimPage> {
 //点击进入下一步
   _getBtnClickListener(BuildContext context) {
     return () {
-      //最终提交
-      LoanRepaymentConfimReq req = LoanRepaymentConfimReq(
-          acNo, //贷款合约
-          planDetail.ccy, //贷款货币
-          _fine, //还复利金额利息罚息
-          _debitAccount, //结算活期账户
-          _repayInterest, //还款利息金额
-          loanDetail.osAmt, //贷款余额
-          _principel, //罚息
-          loanDetail.loanAmt, //贷款本金
-          instalNo, //还本金金额
-          loanDetail.prodTyp, //产品代码
-          _totalRepay, //实际还款金额
-          '' //支付密码
-          );
-      HSProgressHUD.show();
-      ApiClientLoan().loanRepaymentInterface(req).then(
-        (data) async {
-          HSProgressHUD.dismiss();
-          if (data != null) {
-            HSProgressHUD.showToastTip(S.current.loan_application_input_comfir);
-            await Future.delayed(Duration(seconds: 1));
-            Navigator.of(context)..pop()..pop();
-          }
-        },
-      ).catchError((e) {
-        HSProgressHUD.showToast(e);
-      });
+      if (planDetail.paySts == '0') {
+        //那这里就是走的提前还款接口
+        _prepaymentIntereface();
+      } else {
+        _paymentPlanIntereface();
+      }
     };
+  }
+
+//提前还款的接口
+  _prepaymentIntereface() {
+    var req = LoanPrepaymentModelReq(
+      acNo, //合约号
+      loanDetail.ccy,
+      double.parse(_totalRepay), //折算后的金额就是实际还款的金额
+      double.parse(_repayInterest), //还利息金额
+      double.parse(loanDetail.osAmt), //贷款的余额
+      double.parse(loanDetail.loanAmt), //贷款本金
+      double.parse(instalNo), //还本金金额
+      loanDetail.repaymentMethod, //还息方式
+      // '1', //结算方式
+      loanDetail.ccy, //结算货币
+      double.parse(_totalRepay), //实际还款金额
+      _debitAccount,
+    );
+    HSProgressHUD.show();
+    ApiClientLoan().postRepayment(req).then((data) async {
+      HSProgressHUD.dismiss();
+      if (data != null) {
+        HSProgressHUD.showToastTip(S.current.loan_application_input_comfir);
+        await Future.delayed(Duration(seconds: 1));
+        Navigator.of(context)..pop()..pop();
+      }
+    }).catchError((e) {
+      HSProgressHUD.showToast(e);
+    });
+  }
+
+//还款计划的接口
+  _paymentPlanIntereface() {
+    //最终提交
+    LoanRepaymentConfimReq req = LoanRepaymentConfimReq(
+        acNo, //贷款合约
+        planDetail.ccy, //贷款货币
+        _fine, //还复利金额 ->利息罚息
+        _debitAccount, //结算活期账户
+        _repayInterest, //还款利息
+        loanDetail.osAmt, //贷款余额
+        _principel, //本金罚息
+        loanDetail.loanAmt, //贷款本金
+        instalNo, //还本金金额
+        loanDetail.prodTyp, //产品代码
+        _totalRepay, //实际还款金额
+        '', //支付密码
+        planDetail.payDt //还款日期
+        );
+    HSProgressHUD.show();
+    ApiClientLoan().loanRepaymentInterface(req).then(
+      (data) async {
+        HSProgressHUD.dismiss();
+        if (data != null) {
+          HSProgressHUD.showToastTip(S.current.loan_application_input_comfir);
+          await Future.delayed(Duration(seconds: 1));
+          Navigator.of(context)..pop()..pop();
+        }
+      },
+    ).catchError((e) {
+      HSProgressHUD.showToast(e);
+    });
   }
 
   Widget _getPadding(double l, double t, double r, double b) {

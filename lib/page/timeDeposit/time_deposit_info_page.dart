@@ -12,6 +12,7 @@ import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_early_contract.dart';
 import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_record_info.dart';
+import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_retained_withdraw.dart';
 import 'package:ebank_mobile/data/source/model/time_deposits/get_deposit_trial.dart';
 import 'package:ebank_mobile/data/source/model/time_deposits/get_td_prod_inst_code.dart';
 import 'package:ebank_mobile/data/source/model/update_time_deposit_con_info.dart';
@@ -19,20 +20,16 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/format_util.dart';
-import 'package:ebank_mobile/util/pay_password_check.dart';
-import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
-import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
-import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:intl/intl.dart';
-import 'package:sp_util/sp_util.dart';
 
 class PageDepositInfo extends StatefulWidget {
   final DepositRecord deposit;
@@ -119,6 +116,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   String _termUnit = '';
 
   String _modify;
+  String _minLeft; //提取后留存的最低金额
+  String _surPartNum; //支取次数
 
   bool _btnIsLoadingR = false; // 提前结清按钮
   bool _btnIsLoadingUN = false; // 返回按钮
@@ -135,6 +134,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
     _getInsCode();
     _getDetail();
     _loadData();
+    _getMinimumAmountRetained();
+    _getsNumberWithdrawals();
     _moneyController.addListener(() {
       if (_moneyController.text.length > 0 &&
           double.parse(_moneyController.text) > double.parse(bal)) {
@@ -148,6 +149,31 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         _editMoney = _moneyController.text;
       }
       print(_moneyController.text);
+    });
+  }
+
+//获取最低留存金额
+  _getMinimumAmountRetained() {
+    TimeDepositRetainedReq req =
+        TimeDepositRetainedReq(widget.deposit.ccy, widget.deposit.prdCode);
+    //  使用字段 minLeft
+    ApiClientAccount().regularMinimumAmountRetained(req).then((data) {
+      if (data != null) {
+        _minLeft = data.minLeft;
+      }
+    });
+  }
+
+//获取支取次数
+  _getsNumberWithdrawals() {
+    //  支取次数 surPartNum
+    TimeDepositWithdrawReq req = TimeDepositWithdrawReq(widget.deposit.conNo);
+    ApiClientAccount().regularNumberWithdrawals(req).then((data) {
+      if (data.resArray != null) {
+        //保存次数
+        ResArray dataArr = data.resArray[0];
+        _surPartNum = dataArr.surPartNum;
+      }
     });
   }
 
@@ -471,18 +497,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                   //币种
                   _unit(S.current.currency, ccy, true, false),
                   //存入金额
-                  // _unit(S.current.deposit_amount,
-                  //     FormatUtil.formatSringToMoney(bal), true, false),
-                  TextFieldContainer(
-                    //申请金额
-                    title: S.current.deposit_amount,
-                    hintText: S.current.please_input + S.current.amount,
-                    keyboardType:
-                        TextInputType.numberWithOptions(decimal: true),
-                    controller: _moneyController,
-                    callback: _checkloanIsClick,
-                    isMoney: true,
-                  ),
+                  _unit(S.current.approve_certificates_deposit_amount,
+                      FormatUtil.formatSringToMoney(bal), true, false),
                   //存期
                   _unit(S.current.deposit_term, auctCale + _termUnit, true,
                       false),
@@ -499,8 +515,18 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                           ? S.current.tdInfo_interest_settlement_account
                           : S.current.settlement_account,
                       FormatUtil.formatSpace4(_changedSettAcTitle),
-                      false,
+                      true,
                       true),
+                  TextFieldContainer(
+                    //申请金额
+                    title: S.current.time_deposit_Withdrawal_amount,
+                    hintText: S.current.please_input + S.current.amount,
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    controller: _moneyController,
+                    callback: _checkloanIsClick,
+                    isMoney: true,
+                  ),
                 ],
               ),
             ),
@@ -564,19 +590,43 @@ class _PageDepositInfo extends State<PageDepositInfo> {
               isOutline: true,
               margin: EdgeInsets.all(15),
               text: Text(
-                _isAllSettlement
-                    ? S.current.repayment_type2
-                    : S.current.time_deposit_change_Settlement,
+                // _isAllSettlement
+                //     ? S.current.repayment_type2
+                // : S.current.time_deposit_change_Settlement,
+                S.current.time_deposit_Withdrawal_Early,
                 style: TextStyle(
                     color: _btnIsEnable ? Color(0xff3394D4) : Colors.grey,
                     fontSize: 14.0),
               ),
               clickCallback: () {
                 if (_editMoney.length <= 0) {
+                  //判断输入的金额是否为0
                   HSProgressHUD.showToastTip(
                       S.current.please_input + S.current.amount);
                   return;
                 }
+                if (double.parse(_editMoney) >= double.parse(bal)) {
+                  //全部提取
+                } else {
+                  //判断相减是否大于最小留存金额
+                  double minAmount =
+                      double.parse(bal) - double.parse(_editMoney);
+                  if (minAmount < double.parse(_minLeft)) {
+                    HSProgressHUD.showToastTip(
+                        S.current.time_depotion_minimum_retain_tip +
+                            S.current.time_depotion_minimum_retain_amount +
+                            _minLeft);
+                    return;
+                  }
+                  //在判断提取次数是否大于0
+                  if (double.parse(_surPartNum) <= 0) {
+                    HSProgressHUD.showToastTip(
+                        S.current.time_depotion_withdraw_count + _surPartNum);
+                    return;
+                  }
+                }
+
+                //判断当前金额是否是最大金额，是就不需要判断次数
                 if (this.mounted) {
                   setState(() {
                     _btnIsLoadingR = true;
@@ -668,6 +718,12 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         _showTimeDepositEarlyTip();
       });
     }).catchError((e) {
+      if (this.mounted) {
+        setState(() {
+          _btnIsLoadingR = false;
+          _btnIsEnable = true;
+        });
+      }
       HSProgressHUD.showToast(e);
     });
   }
@@ -893,6 +949,8 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         } else {
           _changedSettAcTitle = _changedSettAc;
         }
+        EventBusUtils.getInstance().fire(UpdateTDRecordEvent());
+        // _showContractSucceedPage(context);
       });
     }).catchError((e) {
       HSProgressHUD.showToast(e);

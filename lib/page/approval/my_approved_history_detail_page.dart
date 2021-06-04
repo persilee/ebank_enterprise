@@ -129,6 +129,9 @@ class _MyApprovedHistoryDetailPageState
       // loanWithDrawalApproval - 贷款领用
       else if (_processKey == 'loanWithDrawalApproval') {
         _loanWithDrawalData(_contractModel);
+      } //计划还款
+      else if (_processKey == 'loanRepaymentApproval') {
+        _loanRepaymentData(_contractModel);
       }
     } catch (e) {
       if (this.mounted) {
@@ -146,65 +149,6 @@ class _MyApprovedHistoryDetailPageState
     }
   }
 
-  // loanRepaymentApproval - 计划还款
-  void _loanRepaymentData(_contractModel) async {
-    LoanRepaymentModel.LoanRepaymentModel loanRepaymentModel =
-        LoanRepaymentModel.LoanRepaymentModel.fromJson(_contractModel);
-
-    LoanRepaymentModel.OperateEndValue data =
-        loanRepaymentModel.operateEndValue;
-
-    // 添加历史审批记录
-    if (loanRepaymentModel.commentList.isNotEmpty) {
-      _commentList = loanRepaymentModel.commentList;
-      loanRepaymentModel.commentList.forEach((data) {
-        _finishedList.add(_buildAvatar(data?.userName ?? ''));
-      });
-    }
-
-    if (this.mounted) {
-      setState(() {
-        _loanRepaymentList.clear();
-        _loanRepaymentList.add(_buildTitle(S.current.approve_loan_information));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_loan_account, data?.acNo ?? ''));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_loan_currency, data?.ccy ?? ''));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_loan_principal, // 处理日元没有小数
-            data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.prin ?? '0')) ?? ''
-                : f.format(double.parse(data?.prin ?? '0')) ?? ''));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_loan_interest_rate, data?.exRate ?? ''));
-        _loanRepaymentList.add(
-          Padding(padding: EdgeInsets.only(top: 15)),
-        );
-        _loanRepaymentList
-            .add(_buildTitle(S.current.approve_repayment_interest));
-        _loanRepaymentList
-            .add(_buildContentItem(S.current.debit_account, data?.ddAc ?? ''));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_repayment_interest, // 处理日元没有小数
-            data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.interestAmount ?? '0')) ?? ''
-                : f.format(double.parse(data?.interestAmount ?? '0')) ?? ''));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_fine_amount, // 处理日元没有小数
-            data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''
-                : f.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_reimbursement_amount, // 处理日元没有小数
-            data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.totalAmount ?? '0')) ?? ''
-                : f.format(double.parse(data?.totalAmount ?? '0')) ?? ''));
-        _isLoading = false;
-        _isShowErrorPage = false;
-      });
-    }
-  }
-
   // loanWithDrawalApproval - 贷款领用
   void _loanWithDrawalData(_contractModel) async {
     LoanWithDrawalModel.LoanWithDrawalModel loanWithDrawalModel =
@@ -215,13 +159,15 @@ class _MyApprovedHistoryDetailPageState
 
     // 获取贷款期限
     String _iratTm = '';
+    String repayDat = data?.iratTm?.substring(data.iratTm.length - 2) ?? '';
+    int repayDatStr = int.parse(repayDat);
     try {
       GetIdTypeResp getIdTypeResp =
           await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if (data?.iratTm == element.code) {
+          if (repayDatStr.toString() == element.code) {
             if (_language == 'zh_CN') {
               _iratTm = element.cname;
             } else if (_language == 'zh_HK') {
@@ -240,17 +186,53 @@ class _MyApprovedHistoryDetailPageState
     String _repType = '';
     try {
       GetIdTypeResp getIdTypeResp =
-          await ApiClientOpenAccount().getIdType(GetIdTypeReq('REPAY_TYPE'));
+          await ApiClientOpenAccount().getIdType(GetIdTypeReq('REPAY_TYPE_LN'));
+      List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
+      if (_tenorList.isNotEmpty) {
+        for (int i = 0;
+            i < getIdTypeResp.publicCodeGetRedisRspDtoList.length;
+            i++) {
+          IdType type = getIdTypeResp.publicCodeGetRedisRspDtoList[i];
+          if (data?.lnInsType == "" && type.code == "0") {
+            if (_language == 'zh_CN') {
+              _repType = type.cname;
+            } else if (_language == 'zh_HK') {
+              _repType = type.chName;
+            } else {
+              _repType = type.name;
+            }
+          } else {
+            if (data?.lnInsType == type.code) {
+              if (_language == 'zh_CN') {
+                _repType = type.cname;
+              } else if (_language == 'zh_HK') {
+                _repType = type.chName;
+              } else {
+                _repType = type.name;
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    //借款用途
+    String _purposesUse = '';
+    try {
+      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount()
+          .getIdType(GetIdTypeReq('LOAN_PUR')); //现在REPAY_TYPE_LN  以前的REPAY_TYPE
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if (data?.repType == element.code) {
+          if (data?.loanPurpose == element.code) {
             if (_language == 'zh_CN') {
-              _repType = element.cname;
+              _purposesUse = element.cname;
             } else if (_language == 'zh_HK') {
-              _repType = element.chName;
+              _purposesUse = element.chName;
             } else {
-              _repType = element.name;
+              _purposesUse = element.name;
             }
           }
         });
@@ -283,22 +265,24 @@ class _MyApprovedHistoryDetailPageState
             S.current.loan_Borrowing_limit,
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.loanAmount ?? '0')) ?? ''
-                : f.format(double.parse(data?.loanAmount ?? '0')) ?? ''));
+                : f.format(double.parse(data?.loanAmount ?? '0')) ?? '')); //
+        _loanWithDrawalList.add(_buildContentItem(
+            S.current.loan_collection_currency, data.ccy ?? '')); //币种
         _loanWithDrawalList.add(
             _buildContentItem(S.current.loan_Borrowing_Period, _iratTm ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
             S.current.loan_Repayment_method_column, _repType ?? ''));
-        _loanWithDrawalList.add(_buildContentItem(
-            S.current.approve_first_interest_date, data?.fPaydt ?? ''));
-        _loanWithDrawalList.add(_buildContentItem(
-            S.current.loan_Total_Interest,
-            data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.totalInt ?? '0')) ?? ''
-                : f.format(double.parse(data?.totalInt ?? '0')) ?? ''));
+        // _loanWithDrawalList.add(_buildContentItem(
+        //     S.current.approve_first_interest_date, data?.fPaydt ?? ''));//首次还息日期
+        // _loanWithDrawalList.add(_buildContentItem(
+        //     S.current.loan_Total_Interest,
+        //     data?.ccy == 'JPY'
+        //         ? fj.format(double.parse(data?.totalInt ?? '0')) ?? ''
+        //         : f.format(double.parse(data?.totalInt ?? '0')) ?? ''));
         _loanWithDrawalList.add(
             _buildContentItem(S.current.transfer_to_account, data?.ddAc ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
-            S.current.loan_Borrowing_Purposes, data?.loanPurpose ?? ''));
+            S.current.loan_Borrowing_Purposes, _purposesUse ?? ''));
         _isLoading = false;
         _isShowErrorPage = false;
       });
@@ -325,8 +309,8 @@ class _MyApprovedHistoryDetailPageState
       setState(() {
         _postRepaymentList.clear();
         _postRepaymentList.add(_buildTitle(S.current.approve_loan_information));
-        _postRepaymentList.add(_buildContentItem(
-            S.current.approve_loan_account, data?.acNo ?? ''));
+        _postRepaymentList.add(
+            _buildContentItem(S.current.contract_number, data?.acNo ?? ''));
         _postRepaymentList.add(_buildContentItem(
             S.current.approve_loan_currency, data?.ccy ?? ''));
         _postRepaymentList.add(_buildContentItem(
@@ -367,6 +351,74 @@ class _MyApprovedHistoryDetailPageState
                 : f.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''));
         _postRepaymentList.add(_buildContentItem(
             S.current.approve_reimbursement_amount,
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.totalAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.totalAmount ?? '0')) ?? ''));
+        _isLoading = false;
+        _isShowErrorPage = false;
+      });
+    }
+  }
+
+// loanRepaymentApproval - 计划还款
+  void _loanRepaymentData(_contractModel) async {
+    LoanRepaymentModel.LoanRepaymentModel loanRepaymentModel =
+        LoanRepaymentModel.LoanRepaymentModel.fromJson(_contractModel);
+
+    LoanRepaymentModel.OperateEndValue data =
+        loanRepaymentModel.operateEndValue;
+
+    // 添加历史审批记录
+    if (loanRepaymentModel.commentList.isNotEmpty) {
+      _commentList = loanRepaymentModel.commentList;
+      loanRepaymentModel.commentList.forEach((data) {
+        _finishedList.add(_buildAvatar(data?.userName ?? ''));
+      });
+    }
+
+    if (this.mounted) {
+      setState(() {
+        _loanRepaymentList.clear();
+        _loanRepaymentList.add(_buildTitle(S.current.approve_loan_information));
+        _loanRepaymentList.add(
+            _buildContentItem(S.current.contract_number, data?.acNo ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_currency, data?.ccy ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_principal, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.principalAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.principalAmount ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            S.current.approve_loan_interest_rate, data?.exRate ?? ''));
+        _loanRepaymentList.add(
+          Padding(padding: EdgeInsets.only(top: 15)),
+        );
+        _loanRepaymentList
+            .add(_buildTitle(S.current.approve_repayment_interest));
+        _loanRepaymentList
+            .add(_buildContentItem(S.current.debit_account, data?.ddAc ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            //扣款账号
+            S.current.approve_repayment_interest, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.interestAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.interestAmount ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            //本金罚息
+            S.current.loan_plan_principal_penalty, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            //利息罚息
+            S.current.loan_plan_interest_payment, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.compoundAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.compoundAmount ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            //还款总额
+            S.current.approve_reimbursement_amount, // 处理日元没有小数
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.totalAmount ?? '0')) ?? ''
                 : f.format(double.parse(data?.totalAmount ?? '0')) ?? ''));
@@ -611,14 +663,15 @@ class _MyApprovedHistoryDetailPageState
         _internationalList.add(_buildContentItem(
             S.current.approve_reference_rate, data?.exchangeRate ?? ''));
         _internationalList.add(_buildContentItem(
-            S.current.approve_country_region, _district ?? ''));
+            S.current.approve_country_region, _district ?? '')); //国家/地区
         _internationalList.add(_buildContentItem(
-            S.current.approve_swift_code, data?.bankSwift ?? ''));
+            S.current.approve_swift_code, data?.bankSwift ?? '')); //swift code
         _internationalList.add(_buildContentItem(
             S.current.approve_collecting_bank,
-            data?.payeeBankCode ?? _payeeBank ?? ''));
+            _payeeBank ?? '')); //收款银行  data?.payeeBankCode ?? _payeeBank ?? ""
         _internationalList.add(_buildContentItem(
-            S.current.approve_collection_address, data?.payeeAddress ?? ''));
+            S.current.approve_collection_address,
+            data?.payeeAddress ?? '')); //收款地址
         _internationalList.add(
           Padding(padding: EdgeInsets.only(top: 15)),
         );

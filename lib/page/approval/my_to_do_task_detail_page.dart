@@ -1,3 +1,5 @@
+import 'dart:async';
+
 /// Copyright (c) 2020 深圳高阳寰球科技有限公司
 /// 任务审批页面
 /// Author: wangluyao
@@ -39,13 +41,12 @@ import 'package:ebank_mobile/http/retrofit/api/api_client.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/pay_password_check.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
-import 'package:ebank_mobile/widget/hsg_password_dialog.dart';
-import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:ebank_mobile/widget/hsg_text_field_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/cupertino.dart';
@@ -90,6 +91,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   bool _isShowErrorPage = false;
   Widget _hsgErrorPage;
   String _language = Intl.getCurrentLocale();
+  Timer _timer;
+  int _endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+  String _endTimeStr = '0:00';
+  // int date = DateTime.now().millisecondsSinceEpoch ~/ 1000 + 10;
 
   @override
   void initState() {
@@ -190,15 +195,15 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       setState(() {
         _loanRepaymentList.clear();
         _loanRepaymentList.add(_buildTitle(S.current.approve_loan_information));
-        _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_loan_account, data?.acNo ?? ''));
+        _loanRepaymentList.add(
+            _buildContentItem(S.current.contract_number, data?.acNo ?? ''));
         _loanRepaymentList.add(_buildContentItem(
             S.current.approve_loan_currency, data?.ccy ?? ''));
         _loanRepaymentList.add(_buildContentItem(
             S.current.approve_loan_principal, // 处理日元没有小数
             data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.prin ?? '0')) ?? ''
-                : f.format(double.parse(data?.prin ?? '0')) ?? ''));
+                ? fj.format(double.parse(data?.principalAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.principalAmount ?? '0')) ?? ''));
         _loanRepaymentList.add(_buildContentItem(
             S.current.approve_loan_interest_rate, data?.exRate ?? ''));
         _loanRepaymentList.add(
@@ -209,16 +214,25 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _loanRepaymentList
             .add(_buildContentItem(S.current.debit_account, data?.ddAc ?? ''));
         _loanRepaymentList.add(_buildContentItem(
+            //扣款账号
             S.current.approve_repayment_interest, // 处理日元没有小数
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.interestAmount ?? '0')) ?? ''
                 : f.format(double.parse(data?.interestAmount ?? '0')) ?? ''));
         _loanRepaymentList.add(_buildContentItem(
-            S.current.approve_fine_amount, // 处理日元没有小数
+            //本金罚息
+            S.current.loan_plan_principal_penalty, // 处理日元没有小数
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''
                 : f.format(double.parse(data?.penaltyAmount ?? '0')) ?? ''));
         _loanRepaymentList.add(_buildContentItem(
+            //利息罚息
+            S.current.loan_plan_interest_payment, // 处理日元没有小数
+            data?.ccy == 'JPY'
+                ? fj.format(double.parse(data?.compoundAmount ?? '0')) ?? ''
+                : f.format(double.parse(data?.compoundAmount ?? '0')) ?? ''));
+        _loanRepaymentList.add(_buildContentItem(
+            //还款总额
             S.current.approve_reimbursement_amount, // 处理日元没有小数
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.totalAmount ?? '0')) ?? ''
@@ -240,13 +254,15 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     // 获取贷款期限
     String _iratTm = '';
     String repayDat = data?.iratTm?.substring(data.iratTm.length - 2) ?? '';
+    int repayDatStr = int.parse(repayDat);
+    // int repayDat = int.parse(data?.iratTm);
     try {
       GetIdTypeResp getIdTypeResp =
           await ApiClientOpenAccount().getIdType(GetIdTypeReq('LOAN_TERM'));
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if (repayDat == element.code) {
+          if (repayDatStr.toString() == element.code) {
             if (_language == 'zh_CN') {
               _iratTm = element.cname;
             } else if (_language == 'zh_HK') {
@@ -262,20 +278,56 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     }
 
     // 获取还款方式
-    String _repType = '';
+    String _repType = "";
     try {
-      GetIdTypeResp getIdTypeResp =
-          await ApiClientOpenAccount().getIdType(GetIdTypeReq('REPAY_TYPE'));
+      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount().getIdType(
+          GetIdTypeReq('REPAY_TYPE_LN')); //现在REPAY_TYPE_LN  以前的REPAY_TYPE
+      List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
+      if (_tenorList.isNotEmpty) {
+        for (int i = 0;
+            i < getIdTypeResp.publicCodeGetRedisRspDtoList.length;
+            i++) {
+          IdType type = getIdTypeResp.publicCodeGetRedisRspDtoList[i];
+          if (data?.lnInsType == "" && type.code == "0") {
+            if (_language == 'zh_CN') {
+              _repType = type.cname;
+            } else if (_language == 'zh_HK') {
+              _repType = type.chName;
+            } else {
+              _repType = type.name;
+            }
+          } else {
+            if (data?.lnInsType == type.code) {
+              if (_language == 'zh_CN') {
+                _repType = type.cname;
+              } else if (_language == 'zh_HK') {
+                _repType = type.chName;
+              } else {
+                _repType = type.name;
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    //借款用途
+    String _purposesUse = '';
+    try {
+      GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount()
+          .getIdType(GetIdTypeReq('LOAN_PUR')); //现在REPAY_TYPE_LN  以前的REPAY_TYPE
       List<IdType> _tenorList = getIdTypeResp.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
-          if (data?.repType == element.code) {
+          if (data?.loanPurpose == element.code) {
             if (_language == 'zh_CN') {
-              _repType = element.cname;
+              _purposesUse = element.cname;
             } else if (_language == 'zh_HK') {
-              _repType = element.chName;
+              _purposesUse = element.chName;
             } else {
-              _repType = element.name;
+              _purposesUse = element.name;
             }
           }
         });
@@ -283,6 +335,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     } catch (e) {
       print(e);
     }
+    // ApiClientOpenAccount().getIdType(GetIdTypeReq("LOAN_PUR")).then((data) {
+    //   if (data.publicCodeGetRedisRspDtoList != null) {
+    //     _goalLists.clear();
+    //     _goalLists.addAll(data.publicCodeGetRedisRspDtoList);
+    //   }
+    // });
 
     // 添加历史审批记录
     if (loanWithDrawalModel.commentList.isNotEmpty) {
@@ -301,7 +359,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             S.current.loan_Recipients_Amount, // 处理日元没有小数
             data?.ccy == 'JPY'
                 ? fj.format(double.parse(data?.amt ?? '0')) ?? ''
-                : f.format(double.parse(data?.amt ?? '0')) ?? ''));
+                : f.format(double.parse(data?.amt ?? '0')) ?? '')); //金额
+        _loanWithDrawalList.add(_buildContentItem(
+            S.current.loan_collection_currency, data.ccy ?? '')); //币种
+
         _loanWithDrawalList.add(_buildContentItem(
             S.current.loan_Borrowing_limit,
             data?.ccy == 'JPY'
@@ -310,18 +371,19 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         _loanWithDrawalList.add(
             _buildContentItem(S.current.loan_Borrowing_Period, _iratTm ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
-            S.current.loan_Repayment_method_column, _repType ?? ''));
+            S.current.loan_Repayment_method_column, _repType ?? '')); //还款方式
+        // _loanWithDrawalList.add(_buildContentItem(
+        //     S.current.approve_first_interest_date,
+        //     data?.fPaydt ?? '')); //首次还息日期
+        // _loanWithDrawalList.add(_buildContentItem(
+        //     S.current.loan_Total_Interest,
+        //     data?.ccy == 'JPY'
+        //         ? fj.format(double.parse(data?.totalInt ?? '0')) ?? ''
+        //         : f.format(double.parse(data?.totalInt ?? '0')) ?? ''));
         _loanWithDrawalList.add(_buildContentItem(
-            S.current.approve_first_interest_date, data?.fPaydt ?? ''));
+            S.current.transfer_to_account, data?.ddAc ?? '')); //收款账户
         _loanWithDrawalList.add(_buildContentItem(
-            S.current.loan_Total_Interest,
-            data?.ccy == 'JPY'
-                ? fj.format(double.parse(data?.totalInt ?? '0')) ?? ''
-                : f.format(double.parse(data?.totalInt ?? '0')) ?? ''));
-        _loanWithDrawalList.add(
-            _buildContentItem(S.current.transfer_to_account, data?.ddAc ?? ''));
-        _loanWithDrawalList.add(_buildContentItem(
-            S.current.loan_Borrowing_Purposes, data?.loanPurpose ?? ''));
+            S.current.loan_Borrowing_Purposes, _purposesUse ?? '')); //借款用途
         _isLoading = false;
         _isShowErrorPage = false;
       });
@@ -407,6 +469,12 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     ForeignTransferModel.OperateEndValue data =
         foreignTransferModel.operateEndValue;
 
+    // int date = (data == null || data.dueTime == null || data.dueTime == '')
+    //     ? DateTime.now().millisecondsSinceEpoch ~/ 1000
+    //     : DateTime.parse(data.dueTime).millisecondsSinceEpoch ~/ 1000;
+
+    // _startCountdown(date);
+
     // 获取可用余额
     String _avaBal = '';
     try {
@@ -460,6 +528,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 : f.format(double.parse(data?.sellAmt ?? '0')) ?? ''));
         _foreignTransferList.add(
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
+        _foreignTransferList.add(
+            _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
+        // _foreignTransferList.add(_buildContentItem(
+        //     S.current.task_due_time, data?.dueTime ?? '')); //'到期时间'
         _isLoading = false;
         _isShowErrorPage = false;
       });
@@ -1083,7 +1155,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
       child: GestureDetector(
         onTap: () {
           Navigator.pushNamed(
-              context, pageAuthorizationTaskApprovalHistoryDetail);
+              context, pageAuthorizationTaskApprovalHistoryDetail,
+              arguments: {"data": _commentList});
         },
         child: _buildHistoryItem(S.current.approve_approval_history, true),
       ),
@@ -1189,6 +1262,16 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
   //根据输入框的状态判断底部按钮
   _getToggleChild() {
+    String _completeTaskStr = S.current.examine_and_approve;
+    // (widget.data.processKey == 'foreignTransferApproval' &&
+    //         _endTimeStr != '0:00')
+    //     ? S.current.examine_and_approve + '  ' + _endTimeStr
+    //     : S.current.examine_and_approve;
+    bool _completeTaskIsEnable = _btnIsEnable;
+    // (widget.data.processKey == 'foreignTransferApproval' &&
+    //         _endTimeStr == '0:00')
+    //     ? false
+    //     : _btnIsEnable;
     return Container(
       child: Row(
         children: [
@@ -1230,11 +1313,11 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                     fontSize: 14.0),
               ),
               clickCallback: () {
-                if (_comment.length != 0) {
-                  _rejectTask();
-                } else {
-                  _alertDialog();
-                }
+                // if (_comment.length != 0) {
+                _rejectTask();
+                // } else {
+                //   _alertDialog();
+                // }
               },
             ),
           ),
@@ -1243,17 +1326,17 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             flex: 1,
             child: CustomButton(
               isLoading: _btnIsLoadingEAA,
-              isEnable: _btnIsEnable,
+              isEnable: _completeTaskIsEnable,
               margin: EdgeInsets.all(0),
               clickCallback: () {
-                if (_comment.length != 0) {
-                  _completeTask();
-                } else {
-                  _alertDialog();
-                }
+                // if (_comment.length != 0) {
+                _completeTask();
+                // } else {
+                //   _alertDialog();
+                // }
               },
               text: Text(
-                S.current.examine_and_approve,
+                _completeTaskStr,
                 style: TextStyle(fontSize: 13.0, color: Colors.white),
               ),
             ),
@@ -1671,86 +1754,131 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     }
   }
 
-  //交易密码窗口
-  Future<bool> _openBottomSheet() async {
-    final isPassword = await showHsgBottomSheet(
-        context: context,
-        builder: (context) {
-          return HsgPasswordDialog(
-            title: S.current.input_password,
-            isDialog: false,
-          );
-        });
-    if (isPassword != null && isPassword == true) {
-      return true;
-    }
-    FocusManager.instance.primaryFocus?.unfocus();
-    return false;
-  }
+  // //交易密码窗口
+  // Future<bool> _openBottomSheet() async {
+  //   final isPassword = await showHsgBottomSheet(
+  //       context: context,
+  //       builder: (context) {
+  //         return HsgPasswordDialog(
+  //           title: S.current.input_password,
+  //         );
+  //       });
+  //   if (isPassword != null && isPassword == true) {
+  //     return true;
+  //   }
+  //   FocusManager.instance.primaryFocus?.unfocus();
+  //   return false;
+  // }
 
   // 完成任务
   void _completeTask() async {
     print(
         'USER_PASSWORDENABLED: ${SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED)}');
-    bool passwordEnabled = SpUtil.getBool(ConfigKey.USER_PASSWORDENABLED);
-    // 判断是否设置交易密码，如果没有设置，跳转到设置密码页面，
-    // 否则，输入交易密码
-    if (!passwordEnabled) {
-      HsgShowTip.shouldSetTranPasswordTip(
-        context: context,
-        click: (value) {
-          if (value == true) {
-            //前往设置交易密码
-            Navigator.pushNamed(context, pageResetPayPwdOtp);
+
+    String _processKey = widget.data.processKey;
+
+    // /// foreignTransferApproval - 外汇买卖
+    // if (_processKey == 'foreignTransferApproval' &&
+    //     (_endSeconds <= DateTime.now().millisecondsSinceEpoch ~/ 1000)) {
+    //   HSProgressHUD.showToastTip(S.of(context).task_complete_timeout_tip);
+    //   return;
+    // }
+
+    /// oneToOneTransferApproval - 行内转账
+    if (_processKey == 'oneToOneTransferApproval') {
+      CheckPayPassword(context, (value) {
+        _completeTaskNetwork();
+      });
+    }
+
+    /// internationalTransferApproval - 国际汇款
+    else if (_processKey == 'internationalTransferApproval') {
+      CheckPasswordAndOTP(context, (value) {
+        if (value['check'] == true) {
+          _completeTaskNetwork();
+        }
+      });
+    }
+
+    /// 其他审批另行判断
+    else {
+      CheckPayPassword(context, (value) {
+        _completeTaskNetwork();
+      });
+    }
+  }
+
+  //倒计时方法
+  _startCountdown(int time) {
+    if (time <= DateTime.now().millisecondsSinceEpoch ~/ 1000) {
+      return;
+    }
+    _endSeconds = time;
+    final call = (timer) {
+      if (mounted) {
+        setState(() {
+          if (_endSeconds < DateTime.now().millisecondsSinceEpoch ~/ 1000) {
+            _timer.cancel();
+            return;
           }
-        },
-      );
+          _endTimeStr = _endTimeShow(
+              _endSeconds - DateTime.now().millisecondsSinceEpoch ~/ 1000);
+        });
+      }
+    };
+    _timer = Timer.periodic(Duration(seconds: 1), call);
+  }
+
+  String _endTimeShow(int time) {
+    if (time == 0) {
+      return '0:00';
+    } else if (time % 60 < 10) {
+      return '${time ~/ 60}:0${time % 60}';
     } else {
-      // 输入交易密码
-      bool isPassword = await _openBottomSheet();
-      // 如果交易密码正确，处理审批逻辑
-      if (isPassword) {
-        FocusManager.instance.primaryFocus?.unfocus();
-        if (this.mounted) {
-          setState(() {
-            _btnIsLoadingEAA = true;
-            _btnIsEnable = false;
-            _offstage = false;
-          });
-        }
-        try {
-          // 请求审批接口
-          var data = await ApiClient().completeTask(
-            CompleteTaskBody(
-              approveResult: true,
-              comment: _comment,
-              taskId: widget.data.taskId,
-            ),
+      return '${time ~/ 60}:${time % 60}';
+    }
+  }
+
+  void _completeTaskNetwork() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (this.mounted) {
+      setState(() {
+        _btnIsLoadingEAA = true;
+        _btnIsEnable = false;
+        _offstage = false;
+      });
+    }
+    try {
+      // 请求审批接口
+      var data = await ApiClient().completeTask(
+        CompleteTaskBody(
+          approveResult: true,
+          comment: _comment,
+          taskId: widget.data.taskId,
+        ),
+      );
+      if (this.mounted) {
+        setState(() {
+          _btnIsLoadingEAA = false;
+          _btnIsEnable = true;
+          _offstage = true;
+        });
+        Navigator.pushReplacementNamed(context, pageDepositRecordSucceed);
+      }
+    } catch (e) {
+      if (this.mounted) {
+        setState(() {
+          _btnIsLoadingEAA = false;
+          _btnIsEnable = true;
+          _offstage = true;
+          _isShowErrorPage = true;
+          _hsgErrorPage = HsgErrorPage(
+            error: e.error,
+            buttonAction: () {
+              _loadData(isLoading: true);
+            },
           );
-          if (this.mounted) {
-            setState(() {
-              _btnIsLoadingEAA = false;
-              _btnIsEnable = true;
-              _offstage = true;
-            });
-            Navigator.pushReplacementNamed(context, pageDepositRecordSucceed);
-          }
-        } catch (e) {
-          if (this.mounted) {
-            setState(() {
-              _btnIsLoadingEAA = false;
-              _btnIsEnable = true;
-              _offstage = true;
-              _isShowErrorPage = true;
-              _hsgErrorPage = HsgErrorPage(
-                error: e.error,
-                buttonAction: () {
-                  _loadData(isLoading: true);
-                },
-              );
-            });
-          }
-        }
+        });
       }
     }
   }

@@ -143,22 +143,20 @@ class _RepayInputPageState extends State<RepayInputPage> {
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID);
     HSProgressHUD.show();
-    ApiClientLoan()
-        .getLoanCaculate(
-      GetLoanCaculateReq(
-          loanDetail.contactNo, //贷款放款编号
-          loanDetail.br, //机构号
-          loanDetail.ccy, //币种
-          custID, //客户号
-          loanDetail.osAmt, //贷款余额
-          loanDetail.loanAmt, //贷款本金
-          _inputController.text, //还本金额
-          loanDetail.prodTyp, //产品类型
-          loanDetail.repaymentMethod, //还息方式
-          loanDetail.disbDate //生效日期
-          ),
-    )
-        .then((data) {
+    GetLoanCaculateReq req = GetLoanCaculateReq(
+        loanDetail.contactNo, //贷款放款编号
+        loanDetail.br, //机构号
+        loanDetail.ccy, //币种
+        custID, //客户号
+        loanDetail.osAmt, //贷款余额
+        loanDetail.loanAmt, //贷款本金
+        _inputController.text, //还本金额
+        loanDetail.prodTyp, //产品类型
+        loanDetail.repaymentMethod, //还息方式
+        loanDetail.disbDate //生效日期
+        );
+
+    ApiClientLoan().getLoanCaculate(req).then((data) {
       HSProgressHUD.dismiss();
       if (data.postAdvanceRepaymentDTOList != null) {
         setState(() {

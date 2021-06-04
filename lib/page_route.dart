@@ -220,7 +220,7 @@ var pageLoanNewApplictionNav = '/loan_new_application_page.dart';
 var pageLoanProductlistNav = '/loan_product_list_page.dart';
 var pageLoanConfirmNav = '/loan_application_confirm_page.dart';
 var pageLoanMyApplicationList = '/loan_myApplication_list_page.dart';
-var pageLoanReference = 'loan_reference.dart';
+var pageLoanReference = '/loan_reference.dart';
 var pageLoanCollectionPreview = '/loan_collection_preview.dart';
 var pageTransferInline = '/transfer_inline.dart';
 var pageTransferInter = '/transfer_inter.dart';
@@ -243,7 +243,7 @@ var appRoutes = {
   pageOperationResult: (context) => OperationResultPage(),
   pageLoanInterestRate: (context) => LoanInterestRatePage(),
   pageTransferRecord: (context) => TrsnsferRecordPage(),
-  pageTransferDetail: (context) => TransferDetailPage(),
+  // pageTransferDetail: (context) => TransferDetailPage(),
   pageCardList: (context) => CardListPage(),
   pageSelectBank: (context) => SelectBankPage(),
   pageSelectBranchBank: (context) => SelectBranchBankPage(),
@@ -330,7 +330,7 @@ var appRoutes = {
   pageLoanProductlistNav: (context) => LoanProductListPage(),
   pageLoanConfirmNav: (context) => LoanConfirmApplicationList(),
   pageLoanMyApplicationList: (context) => LoanMyApplicationListPage(), //贷款 我的申请
-  pageLoanReference: (context) => LoanReference(),
+  // pageLoanReference: (context) => LoanReference(),
   pageLoanCollectionPreview: (context) => PageLoanCollectionPreview(), //贷款领用预览
   pageTransferInline: (context) => TransferInlinePage(),
   pageTransferInter: (context) => TransferInterPage(),
@@ -339,7 +339,7 @@ var appRoutes = {
   // pageCityForCountrySelect: (context) => CityForCountrySelectPage(),
   pageTimeDepositCloseDetail: (context) => DepositCloseInfoPage(),
   pageCamera: (context) => CameraPage(),
-  pageRepaymentPlan: (context) => RepaymentPlanInputPage(), //还款计划的提前还款页面
+  // pageRepaymentPlan: (context) => RepaymentPlanInputPage(), //还款计划的提前还款页面
   pageRepaymentInputConfirm: (context) => InputPlanConfimPage(), //还款计划的提前还款确认页面
 };
 onGenerateRoute(RouteSettings settings) {
@@ -482,5 +482,32 @@ onGenerateRoute(RouteSettings settings) {
     });
   }
 
+  if (settings.name == pageLoanReference) {
+    //跳转贷款领用界面传值
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return LoanReference(
+        accountInfo: arguments['data'],
+      );
+    });
+  }
+
+  if (settings.name == pageRepaymentPlan) {
+    //还款计划跳转提前还款界面传参
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return RepaymentPlanInputPage(
+          loanDetail: arguments['loanDetail'],
+          planDetail: arguments['planDetail']);
+    });
+  }
+  //跨行转账详情
+  if (settings.name == pageTransferDetail) {
+    //还款计划跳转提前还款界面传参
+    return MaterialPageRoute(builder: (context) {
+      Map<String, dynamic> arguments = settings.arguments;
+      return TransferDetailPage(transferHistory: arguments['transferHistory']);
+    });
+  }
   return null;
 }
