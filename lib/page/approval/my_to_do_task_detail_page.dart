@@ -93,7 +93,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   String _language = Intl.getCurrentLocale();
   Timer _timer;
   int _endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-  String _endTimeStr;
+  String _endTimeStr = '0:00';
+  // int date = DateTime.now().millisecondsSinceEpoch ~/ 1000 + 10;
 
   @override
   void initState() {
@@ -468,12 +469,11 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     ForeignTransferModel.OperateEndValue data =
         foreignTransferModel.operateEndValue;
 
-    // var date = (data == null || data.dueTime == null || data.dueTime == '')
+    // int date = (data == null || data.dueTime == null || data.dueTime == '')
     //     ? DateTime.now().millisecondsSinceEpoch ~/ 1000
     //     : DateTime.parse(data.dueTime).millisecondsSinceEpoch ~/ 1000;
 
     // _startCountdown(date);
-    // _endTimeStr = _endTimeShow(_endSeconds);
 
     // 获取可用余额
     String _avaBal = '';
@@ -532,8 +532,6 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
         // _foreignTransferList.add(_buildContentItem(
         //     S.current.task_due_time, data?.dueTime ?? '')); //'到期时间'
-        // _foreignTransferList.add(_buildContentItem(
-        //     S.current.task_last_time, _endTimeStr ?? '')); //'剩余时间'
         _isLoading = false;
         _isShowErrorPage = false;
       });
@@ -1264,6 +1262,16 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
   //根据输入框的状态判断底部按钮
   _getToggleChild() {
+    String _completeTaskStr = S.current.examine_and_approve;
+    // (widget.data.processKey == 'foreignTransferApproval' &&
+    //         _endTimeStr != '0:00')
+    //     ? S.current.examine_and_approve + '  ' + _endTimeStr
+    //     : S.current.examine_and_approve;
+    bool _completeTaskIsEnable = _btnIsEnable;
+    // (widget.data.processKey == 'foreignTransferApproval' &&
+    //         _endTimeStr == '0:00')
+    //     ? false
+    //     : _btnIsEnable;
     return Container(
       child: Row(
         children: [
@@ -1318,7 +1326,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             flex: 1,
             child: CustomButton(
               isLoading: _btnIsLoadingEAA,
-              isEnable: _btnIsEnable,
+              isEnable: _completeTaskIsEnable,
               margin: EdgeInsets.all(0),
               clickCallback: () {
                 // if (_comment.length != 0) {
@@ -1328,7 +1336,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 // }
               },
               text: Text(
-                S.current.examine_and_approve,
+                _completeTaskStr,
                 style: TextStyle(fontSize: 13.0, color: Colors.white),
               ),
             ),
@@ -1811,7 +1819,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
         setState(() {
           if (_endSeconds < DateTime.now().millisecondsSinceEpoch ~/ 1000) {
             _timer.cancel();
+            return;
           }
+          _endTimeStr = _endTimeShow(
+              _endSeconds - DateTime.now().millisecondsSinceEpoch ~/ 1000);
         });
       }
     };
@@ -1820,9 +1831,9 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
 
   String _endTimeShow(int time) {
     if (time == 0) {
-      return '00:00';
-    } else if (time < 60) {
-      return '00:$time';
+      return '0:00';
+    } else if (time % 60 < 10) {
+      return '${time ~/ 60}:0${time % 60}';
     } else {
       return '${time ~/ 60}:${time % 60}';
     }
