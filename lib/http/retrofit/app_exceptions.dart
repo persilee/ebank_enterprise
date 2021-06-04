@@ -28,22 +28,26 @@ class AppException implements Exception {
     switch (error.type) {
       case DioErrorType.CANCEL:
         {
-          return error.error = AppException("-1", "请求已被取消，请重新请求");
+          return error.error =
+              AppException("-1", S.current.network_error_cancel);
         }
         break;
       case DioErrorType.CONNECT_TIMEOUT:
         {
-          return error.error = AppException("-1", "网络连接超时，请检查网络设置");
+          return error.error =
+              AppException("-1", S.current.network_error_connect_timeout);
         }
         break;
       case DioErrorType.SEND_TIMEOUT:
         {
-          return error.error = AppException("-1", "网络请求超时，请稍后重试！");
+          return error.error =
+              AppException("-1", S.current.network_error_send_timeout);
         }
         break;
       case DioErrorType.RECEIVE_TIMEOUT:
         {
-          return error.error = AppException("-1", "响应超时，请稍后重试！");
+          return error.error =
+              AppException("-1", S.current.network_error_receive_timeout);
         }
         break;
       case DioErrorType.RESPONSE:
@@ -53,47 +57,56 @@ class AppException implements Exception {
             switch (errCode) {
               case 400:
                 {
-                  return error.error = AppException("400", "请求语法错误");
+                  return error.error =
+                      AppException("400", S.current.network_error_http_400);
                 }
                 break;
               case 401:
                 {
-                  return error.error = AppException("401", "没有权限");
+                  return error.error =
+                      AppException("401", S.current.network_error_http_401);
                 }
                 break;
               case 403:
                 {
-                  return error.error = AppException("403", "服务器拒绝执行");
+                  return error.error =
+                      AppException("403", S.current.network_error_http_403);
                 }
                 break;
               case 404:
                 {
-                  return error.error = AppException("404", "无法连接服务器");
+                  return error.error =
+                      AppException("404", S.current.network_error_http_404);
                 }
                 break;
               case 405:
                 {
-                  return error.error = AppException("405", "请求方法被禁止");
+                  return error.error =
+                      AppException("405", S.current.network_error_http_405);
                 }
                 break;
               case 500:
                 {
-                  return error.error = AppException("500", "服务器内部错误");
+                  return error.error =
+                      AppException("500", S.current.network_error_http_500);
                 }
                 break;
               case 502:
                 {
-                  return error.error = AppException("502", "无效的请求");
+                  return error.error =
+                      AppException("502", S.current.network_error_http_502);
                 }
                 break;
               case 503:
                 {
-                  return error.error = AppException("503", "服务器挂了");
+                  return error.error =
+                      AppException("503", S.current.network_error_http_503);
                 }
                 break;
               case 505:
                 {
-                  return error.error = AppException("505", "不支持HTTP协议请求");
+                  return error.error =
+                      AppException("505", S.current.network_error_http_505);
                 }
                 break;
               default:
@@ -103,13 +116,17 @@ class AppException implements Exception {
                 }
             }
           } on Exception catch (_) {
-            return error.error = AppException("-1", "未知错误");
+            return error.error =
+                AppException("-1", S.current.network_error_http_unknown);
           }
         }
         break;
       case DioErrorType.DEFAULT:
         {
-          if (error.error.code == 'SYS90018' ||
+          if (error.error is SocketException) {
+            return error.error =
+                AppException("-1", S.current.network_error_no_internet);
+          } else if (error.error.code == 'SYS90018' ||
               error.error.code == 'SYS90017') {
             showDialog(
                 barrierDismissible: false,
@@ -138,9 +155,6 @@ class AppException implements Exception {
             });
 
             return error.error = NeedLogin();
-          }
-          if (error.error is SocketException) {
-            return error.error = AppException("-1", "请查看是否连接网络！");
           } else {
             return error.error;
           }
@@ -177,5 +191,5 @@ class NeedLogin extends AppException implements BaseError {
   String get code => '401';
 
   @override
-  String get message => "登录状态已失效，请重新登录！";
+  String get message => S.current.network_error_not_login;
 }
