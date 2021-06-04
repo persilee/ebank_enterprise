@@ -16,10 +16,8 @@
     [self initCloudPush];
     [self registerAPNS:application];
     [self registerMessageReceive];
-//    [self listenerOnChannelOpened];
     
     // 点击通知将App从关闭状态启动时，将通知打开回执上报
-    // [CloudPushSDK handleLaunching:launchOptions];(Deprecated from v1.8.1)
     [CloudPushSDK sendNotificationAck:launchOptions];
 }
 

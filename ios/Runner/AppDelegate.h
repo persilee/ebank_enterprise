@@ -1,8 +1,10 @@
 #import <Flutter/Flutter.h>
 #import <UIKit/UIKit.h>
-#import <SigningEyeSDK/SigningEyeSDK.h>
 
-@interface AppDelegate : FlutterAppDelegate <SEVideoManagerDelegate,SigningESDKDelegate>
+@interface AppDelegate : FlutterAppDelegate
+
+@property (nonatomic, strong) FlutterResult resultBlock;
+@property (nonatomic, strong) NSDictionary *bodyDictData;
 
 //单例
 + (AppDelegate *)shareAppDelegate;

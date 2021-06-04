@@ -6,10 +6,13 @@
 //
 
 #import "AppDelegate.h"
+#import <SigningEyeSDK/SigningEyeSDK.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AppDelegate (HSQlyDelegate)
+@interface AppDelegate (HSQlyDelegate) <SEVideoManagerDelegate,SigningESDKDelegate>
+
+- (void)initializeQly:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
 
 @end
 

@@ -16,9 +16,9 @@ PODS:
   - connectivity (0.0.1):
     - Flutter
     - Reachability
-  - EMASRest (11.1.1.2)
   - device_info (0.0.1):
     - Flutter
+  - EMASRest (11.1.1.2)
   - Flutter (1.0.0)
   - flutter_image_compress (0.0.1):
     - Flutter
@@ -156,11 +156,8 @@ SPEC CHECKSUMS:
   AlicloudUtils: 66e0ba6ece62d7dd05e9dd95674b2c7811624c2f
   camera: a0ca5080336f7af47b88436e5e26da3dee5568f0
   connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
-<<<<<<< HEAD
-  EMASRest: 5ccda23f59b05cdd3a6e321c17e37e8125d7eea4
-=======
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
->>>>>>> brillinkDEVNew
+  EMASRest: 5ccda23f59b05cdd3a6e321c17e37e8125d7eea4
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_image_compress: 082f8daaf6c1b0c9fe798251c750ef0ecd98d7ae
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
