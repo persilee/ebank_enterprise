@@ -8,6 +8,8 @@
 #import "AppDelegate+HSPushDelegate.h"
 #import <CloudPushSDK/CloudPushSDK.h>
 #import <UserNotifications/UserNotifications.h>
+#import "MJExtension.h"
+#import "UtilsMacros.h"
 
 @implementation AppDelegate (HSPushDelegate)
 
@@ -17,14 +19,85 @@
     [self registerAPNS:application];
     [self registerMessageReceive];
     
+    // 1.获取FlutterViewController(是应用程序的默认Controller)
+    FlutterViewController* controller = (FlutterViewController*)self.window.rootViewController;
+    
+    // 2.获取MethodChannel(方法通道)
+    FlutterMethodChannel* batteryChannel = [FlutterMethodChannel
+                                            methodChannelWithName:@"com.hsg.bank.brillink/ali-push"
+                                            binaryMessenger:controller.binaryMessenger];
+    
+    // 3.监听方法调用(会调用传入的回调函数)
+    __weak typeof(self) weakSelf = self;
+    [batteryChannel setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result){
+        __strong __typeof(weakSelf)strongSelf = weakSelf;
+        
+        if ([@"aliPushSetParameters" isEqualToString:call.method]) {//是设置推送参数
+            NSDictionary *bodyDictData = [call.arguments mj_JSONObject];
+            
+            NSString *tenantId = [bodyDictData objectForKey:@"body"];
+            NSDictionary *jsonflutter = [tenantId mj_JSONObject];
+            strongSelf.bodyDictPushSetData = jsonflutter;
+            
+            int typeInt = [[jsonflutter objectForKey:@"type"] intValue];
+            NSArray * parametersArray = [jsonflutter objectForKey:@"parameters"];
+            [weakSelf bindPushType:typeInt parameters:parametersArray callback:^(CloudPushCallbackResult *res) {
+                NSString *resultValue  = [res mj_JSONString];
+                if (self.resultPushSetBlock) {
+                    self.resultPushSetBlock(resultValue);
+                }
+            }];
+            strongSelf.resultPushSetBlock = result;
+            
+        } else if ([@"aliPushCancelParameters" isEqualToString:call.method]) {//是取消设置的参数
+            NSDictionary *bodyDictData = [call.arguments mj_JSONObject];
+            
+            NSString *tenantId = [bodyDictData objectForKey:@"body"];
+            NSDictionary *jsonflutter = [tenantId mj_JSONObject];
+            strongSelf.bodyDictPushCancelData = jsonflutter;
+            
+            int typeInt = [[jsonflutter objectForKey:@"type"] intValue];
+            NSArray * parametersArray = [jsonflutter objectForKey:@"parameters"];
+            [weakSelf unbindPushType:typeInt parameters:parametersArray callback:^(CloudPushCallbackResult *res) {
+                NSString *resultValue  = [res mj_JSONString];
+                if (self.resultPushCancelBlock) {
+                    self.resultPushCancelBlock(resultValue);
+                }
+            }];
+            strongSelf.resultPushCancelBlock = result;
+            
+        } else {
+            // 3.2.如果调用的是VideoMethodCall的方法, 那么通过封装的另外一个方法实现回调
+            if (result) {
+                result(FlutterMethodNotImplemented);
+            }
+        }
+    }];
+    
+    //单项通信管道，原生向Flutter发送消息
+    FlutterEventChannel *eventChannel = [FlutterEventChannel eventChannelWithName:@"com.hsg.bank.brillink/ali-push-event" binaryMessenger:controller.binaryMessenger];
+    [eventChannel setStreamHandler:self];
+    
     // 点击通知将App从关闭状态启动时，将通知打开回执上报
     [CloudPushSDK sendNotificationAck:launchOptions];
+}
+
+
+#pragma mark - FlutterStreamHandler
+- (FlutterError* _Nullable)onListenWithArguments:(id _Nullable)arguments
+                                       eventSink:(FlutterEventSink)eventSink{
+    self.eventSink = eventSink;
+    return nil;
+}
+ 
+- (FlutterError* _Nullable)onCancelWithArguments:(id _Nullable)arguments {
+    return nil;
 }
 
 #pragma mark - aliPush 设置参数
 /// 推送设置参数
 /// @param type 1 account 2 tags 3 alias
-/// @param parameters 设置的值，统一为字符串数组，除了tags其他只能传一个元素
+/// @param parameters 设置的值，统一为字符串数组，除了tags其他只能传一个元素，多余的参数不处理
 - (void)bindPushType:(int)type parameters:(NSArray<NSString *> *)parameters callback:(CallbackHandler)callback
 {
     if (parameters == NULL || parameters == nil || parameters.count == 0) {
@@ -59,7 +132,7 @@
 
 /// 取消设置的推送参数
 /// @param type 1 account 2 tags 3 alias
-/// @param parameters 需要取消的值，统一为字符串数组，除了tags其他只能传一个元素（account不用传，alias传空则会取消设备绑定的所有别名）
+/// @param parameters 需要取消的值，统一为字符串数组，除了tags其他只能传一个元素，多余的参数不处理（account不用传，alias传空则会取消设备绑定的所有别名）
 - (void)unbindPushType:(int)type parameters:(NSArray<NSString *> *)parameters callback:(CallbackHandler)callback
 {
     switch (type) {
@@ -105,11 +178,6 @@
     [CloudPushSDK asyncInit:@"333441016" appSecret:@"1c04ef22c4cc4cc787351ff734e68d7d" callback:^(CloudPushCallbackResult *res) {
         if (res.success) {
             NSLog(@"Push SDK init success, deviceId: %@.", [CloudPushSDK getDeviceId]);
-            [CloudPushSDK bindAccount:@"brillink" withCallback:^(CloudPushCallbackResult *res) {
-                if (res.success) {
-                    NSLog(@"00000000000000000");
-                }
-            }];
         } else {
             NSLog(@"Push SDK init failed, error: %@", res.error);
         }
@@ -183,9 +251,20 @@
  */
 - (void)onMessageReceived:(NSNotification *)notification {
     CCPSysMessage *message = [notification object];
+    NSString *messageType = [NSString stringWithFormat:@"%hhu", message.messageType];
     NSString *title = [[NSString alloc] initWithData:message.title encoding:NSUTF8StringEncoding];
     NSString *body = [[NSString alloc] initWithData:message.body encoding:NSUTF8StringEncoding];
-    NSLog(@"1111111 Receive message title: %@, content: %@.", title, body);
+    NSDictionary *dict = @{
+        @"messageType" : messageType == NULL || messageType == nil ? @"" : messageType,
+        @"title" : title == NULL || title == nil ? @"" : title,
+        @"body" : body == NULL || body == nil ? @"" : body,
+    };
+    
+    if (self.resultPushMessageBlock) {
+        self.resultPushMessageBlock([dict mj_JSONString]);
+    }
+    
+    NSLog(@"1111111 Receive message title: %@, content: %@.   %hhu", title, body, message.messageType);
 }
 
 //iOS 10 +
@@ -251,7 +330,33 @@
     NSString *extras = [userInfo valueForKey:@"Extras"];
     // 通知打开回执上报
     [CloudPushSDK sendNotificationAck:userInfo];
-    NSLog(@"99999Notification, date: %@, title: %@, subtitle: %@, body: %@, badge: %d, extras: %@.", noticeDate, title, subtitle, body, badge, extras);
+    
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    fmt.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+
+    NSString *noticeDateStr = [fmt stringFromDate:noticeDate];
+    
+    NSDictionary *dict = @{
+        @"noticeDate" : noticeDateStr,
+        @"title" : NOTNULLString(title),
+        @"subtitle" : NOTNULLString(subtitle),
+        @"body" : NOTNULLString(body),
+        @"badge" : @(badge),
+        @"userInfo" : NOTNULLObject(userInfo),
+    };
+    
+    if (userInfo != NULL || userInfo != nil) {
+        if (self.resultPushNotificationBlock) {
+            self.resultPushNotificationBlock([dict mj_JSONString]);
+        }
+    }
+    
+    if (self.eventSink) {
+        self.eventSink([dict mj_JSONString]);
+    }
+    
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badge];
+    NSLog(@"99999Notification, date: %@, title: %@, subtitle: %@, body: %@, badge: %d, extras: %@. userInfo: %@", noticeDate, title, subtitle, body, badge, extras, [userInfo mj_JSONString]);
 }
 
 @end

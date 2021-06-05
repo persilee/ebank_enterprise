@@ -7,7 +7,7 @@ import 'dart:typed_data';
 /// Date: 2021-03-22
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
-import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
+import 'package:ebank_mobile/data/model/qly/auth_identity_bean.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/open_account_information_supplement_data.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/open_account_quick_data.dart';
 import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
