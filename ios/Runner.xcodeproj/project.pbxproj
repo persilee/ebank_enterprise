@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
+		472CB9F226560057007FE68E /* AliyunEmasServices-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 472CB9F126560057007FE68E /* AliyunEmasServices-Info.plist */; };
+		474E5E6326579D7800743AAC /* AppDelegate+HSPushDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 474E5E6226579D7800743AAC /* AppDelegate+HSPushDelegate.m */; };
+		474E5E6626589F7000743AAC /* AppDelegate+HSQlyDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 474E5E6526589F7000743AAC /* AppDelegate+HSQlyDelegate.m */; };
 		477981AB26241EA800ABB56A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 477981AD26241EA800ABB56A /* InfoPlist.strings */; };
 		4779823D2627D9E700ABB56A /* SigningResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4779822B2627D9E500ABB56A /* SigningResources.bundle */; };
 		4779824B2627D9E700ABB56A /* SigningEyeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4779823C2627D9E700ABB56A /* SigningEyeSDK.framework */; };
@@ -122,6 +125,11 @@
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
+		472CB9F126560057007FE68E /* AliyunEmasServices-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AliyunEmasServices-Info.plist"; sourceTree = "<group>"; };
+		474E5E6126579D7800743AAC /* AppDelegate+HSPushDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+HSPushDelegate.h"; sourceTree = "<group>"; };
+		474E5E6226579D7800743AAC /* AppDelegate+HSPushDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+HSPushDelegate.m"; sourceTree = "<group>"; };
+		474E5E6426589F7000743AAC /* AppDelegate+HSQlyDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+HSQlyDelegate.h"; sourceTree = "<group>"; };
+		474E5E6526589F7000743AAC /* AppDelegate+HSQlyDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+HSQlyDelegate.m"; sourceTree = "<group>"; };
 		477981AC26241EA800ABB56A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		477981AE26241EAD00ABB56A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		477981AF26241EAE00ABB56A /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -140,6 +148,7 @@
 		477982942627E02300ABB56A /* YTTrackProWB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YTTrackProWB.framework; sourceTree = "<group>"; };
 		477982952627E02300ABB56A /* NextCV.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NextCV.framework; sourceTree = "<group>"; };
 		477982962627E02300ABB56A /* WBCloudReflectionFaceVerify_framework.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WBCloudReflectionFaceVerify_framework.podspec; sourceTree = "<group>"; };
+		47F938842656153800AAF11C /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		6805F576739CE86F7DAD4B3A /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		6815D71A26047BED007BFC9D /* .ruby-gemset */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ".ruby-gemset"; sourceTree = "<group>"; };
 		6815D71B26047BED007BFC9D /* .cocoadocs.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .cocoadocs.yml; sourceTree = "<group>"; };
@@ -627,6 +636,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				47F938842656153800AAF11C /* Runner.entitlements */,
 				477981AD26241EA800ABB56A /* InfoPlist.strings */,
 				68B784512601F86F001F2648 /* Define */,
 				686D0AD82600B3D400781075 /* QianliyanSDK */,
@@ -635,11 +645,16 @@
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
 				97C147021CF9000F007C117D /* Info.plist */,
+				472CB9F126560057007FE68E /* AliyunEmasServices-Info.plist */,
 				1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */,
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 				686D0B512600EB9800781075 /* AppDelegate.h */,
 				686D0B502600EB9800781075 /* AppDelegate.m */,
+				474E5E6426589F7000743AAC /* AppDelegate+HSQlyDelegate.h */,
+				474E5E6526589F7000743AAC /* AppDelegate+HSQlyDelegate.m */,
+				474E5E6126579D7800743AAC /* AppDelegate+HSPushDelegate.h */,
+				474E5E6226579D7800743AAC /* AppDelegate+HSPushDelegate.m */,
 				686D0B532600ED4300781075 /* main.m */,
 			);
 			path = Runner;
@@ -743,6 +758,7 @@
 				477982A32627E02300ABB56A /* WBCloudReflectionFaceVerify_framework.podspec in Resources */,
 				6815D79D26048767007BFC9D /* README.md in Resources */,
 				6815D75326047BED007BFC9D /* ci.yml in Resources */,
+				472CB9F226560057007FE68E /* AliyunEmasServices-Info.plist in Resources */,
 				6815D74B26047BED007BFC9D /* .ruby-version in Resources */,
 				6815D74826047BED007BFC9D /* .ruby-gemset in Resources */,
 				477981AB26241EA800ABB56A /* InfoPlist.strings in Resources */,
@@ -864,6 +880,7 @@
 				6815D75C26047BED007BFC9D /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				6815D79726048767007BFC9D /* IQUIView+Hierarchy.m in Sources */,
 				6815D74D26047BED007BFC9D /* AFHTTPSessionManager.m in Sources */,
+				474E5E6326579D7800743AAC /* AppDelegate+HSPushDelegate.m in Sources */,
 				686D0AF12600B3D400781075 /* MJProperty.m in Sources */,
 				6815D74F26047BED007BFC9D /* AFURLSessionManager.m in Sources */,
 				686D0AF42600B3D400781075 /* NSObject+MJClass.m in Sources */,
@@ -879,6 +896,7 @@
 				686D0AF52600B3D400781075 /* NSObject+MJCoding.m in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 				686D0AEF2600B3D400781075 /* NSObject+MJKeyValue.m in Sources */,
+				474E5E6626589F7000743AAC /* AppDelegate+HSQlyDelegate.m in Sources */,
 				6815D79526048767007BFC9D /* IQPreviousNextView.m in Sources */,
 				686D0AED2600B3D400781075 /* MJPropertyKey.m in Sources */,
 			);
@@ -973,6 +991,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
@@ -986,7 +1005,7 @@
 					"$(PROJECT_DIR)/Runner/QianliyanSDK/WBCloudReflectionFaceVerify_framework/Libs",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1126,6 +1145,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
@@ -1139,7 +1159,7 @@
 					"$(PROJECT_DIR)/Runner/QianliyanSDK/WBCloudReflectionFaceVerify_framework/Libs",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1171,6 +1191,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
@@ -1184,7 +1205,7 @@
 					"$(PROJECT_DIR)/Runner/QianliyanSDK/WBCloudReflectionFaceVerify_framework/Libs",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

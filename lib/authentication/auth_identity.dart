@@ -4,7 +4,7 @@
 /// Date: 2021-03-15
 ///
 
-import 'package:ebank_mobile/data/model/auth_identity_bean.dart';
+import 'package:ebank_mobile/data/model/qly/auth_identity_bean.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 
