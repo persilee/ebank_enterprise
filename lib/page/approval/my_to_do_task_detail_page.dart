@@ -94,6 +94,7 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   Timer _timer;
   int _endSeconds = DateTime.now().millisecondsSinceEpoch ~/ 1000;
   String _endTimeStr = '0:00';
+  bool _isCutDown = false;
   // int date = DateTime.now().millisecondsSinceEpoch ~/ 1000 + 10;
 
   @override
@@ -469,11 +470,18 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     ForeignTransferModel.OperateEndValue data =
         foreignTransferModel.operateEndValue;
 
-    // int date = (data == null || data.dueTime == null || data.dueTime == '')
-    //     ? DateTime.now().millisecondsSinceEpoch ~/ 1000
-    //     : DateTime.parse(data.dueTime).millisecondsSinceEpoch ~/ 1000;
+    if (data != null && data.dueTime != null) {
+      if (mounted) {
+        setState(() {
+          _isCutDown = true;
+        });
+      }
+      int date = (data == null || data.dueTime == null || data.dueTime == '')
+          ? DateTime.now().millisecondsSinceEpoch ~/ 1000
+          : DateTime.parse(data.dueTime).millisecondsSinceEpoch ~/ 1000;
 
-    // _startCountdown(date);
+      _startCountdown(date);
+    }
 
     // 获取可用余额
     String _avaBal = '';
@@ -530,8 +538,11 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
         _foreignTransferList.add(
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
-        // _foreignTransferList.add(_buildContentItem(
-        //     S.current.task_due_time, data?.dueTime ?? '')); //'到期时间'
+        if (data != null && data.dueTime != null) {
+          _foreignTransferList.add(_buildContentItem(
+              S.current.task_due_time, data?.dueTime ?? '')); //'到期时间'
+        }
+
         _isLoading = false;
         _isShowErrorPage = false;
       });
@@ -1263,15 +1274,18 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
   //根据输入框的状态判断底部按钮
   _getToggleChild() {
     String _completeTaskStr = S.current.examine_and_approve;
-    // (widget.data.processKey == 'foreignTransferApproval' &&
-    //         _endTimeStr != '0:00')
-    //     ? S.current.examine_and_approve + '  ' + _endTimeStr
-    //     : S.current.examine_and_approve;
     bool _completeTaskIsEnable = _btnIsEnable;
-    // (widget.data.processKey == 'foreignTransferApproval' &&
-    //         _endTimeStr == '0:00')
-    //     ? false
-    //     : _btnIsEnable;
+    if (_isCutDown == true) {
+      _completeTaskStr = (widget.data.processKey == 'foreignTransferApproval' &&
+              _endTimeStr != '0:00')
+          ? S.current.examine_and_approve + '  ' + _endTimeStr
+          : S.current.examine_and_approve;
+      _completeTaskIsEnable =
+          (widget.data.processKey == 'foreignTransferApproval' &&
+                  _endTimeStr == '0:00')
+              ? false
+              : _btnIsEnable;
+    }
     return Container(
       child: Row(
         children: [
