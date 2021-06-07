@@ -24,8 +24,6 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-//引用插件
-apply plugin: 'seal'
 //引用阿里的统一集成EMAS的配置文件路径
 apply plugin: 'com.aliyun.ams.emas-services'
 
@@ -117,5 +115,21 @@ dependencies {
   implementation 'com.tbruyelle.rxpermissions:rxpermissions:0.9.4@aar'
   implementation 'org.greenrobot:greendao:3.2.2'
   implementation 'com.github.yellowcath:VideoProcessor:2.4.2'
+
+
+  ///阿里推送
+  implementation 'com.aliyun.ams:alicloud-android-push:3.3.0'
+  ///华为依赖
+  implementation 'com.aliyun.ams:alicloud-android-third-push-huawei:3.3.0'
+  ///小米依赖
+  implementation 'com.aliyun.ams:alicloud-android-third-push-xiaomi:3.3.0'
+  ///OPPO依赖
+  implementation 'com.aliyun.ams:alicloud-android-third-push-oppo:3.3.0'
+  ///vivo依赖
+  implementation 'com.aliyun.ams:alicloud-android-third-push-vivo:3.3.0'
+  ///魅族依赖
+  implementation 'com.aliyun.ams:alicloud-android-third-push-meizu:3.3.0'
+  ///谷歌依赖
+  implementation 'com.aliyun.ams:alicloud-android-third-push-fcm:3.3.0'
 
 }

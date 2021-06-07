@@ -36,15 +36,6 @@ class HsgApplication : AppApplication() {
 
     initCloudChannel(this);
 
-    // 获取隐私政策签署状态
-    // 获取隐私政策签署状态
-    val sign = true
-
-    if (sign) {
-      registerPush()
-    } else {
-      // 没签，等签署之后再调用registerPush()
-    }
   }
 
   /** A tree which logs important information for crash reporting.  */
@@ -72,25 +63,14 @@ class HsgApplication : AppApplication() {
   private fun initCloudChannel(applicationContext: Context) {
     PushServiceFactory.init(applicationContext)
     val pushService: CloudPushService = PushServiceFactory.getCloudPushService()
-    pushService.register(applicationContext, object : CommonCallback() {
-      fun onSuccess(response: String?) {
+    pushService.register(applicationContext, object : CommonCallback {
+      override fun onSuccess(response: String?) {
         Log.d(TAG, "init cloudchannel success")
       }
 
-      fun onFailed(errorCode: String, errorMessage: String) {
+      override fun onFailed(errorCode: String, errorMessage: String) {
         Log.d(TAG, "init cloudchannel failed -- errorcode:$errorCode -- errorMessage:$errorMessage")
       }
-    })
-  }
-
-  /**
-   * 建立推送通道
-   */
-  fun registerPush() {
-    val pushService: CloudPushService = PushServiceFactory.getCloudPushService()
-    pushService.register(Bugly.applicationContext, object : CommonCallback() {
-      fun onSuccess(response: String?) {}
-      fun onFailed(errorCode: String?, errorMessage: String?) {}
     })
   }
 
