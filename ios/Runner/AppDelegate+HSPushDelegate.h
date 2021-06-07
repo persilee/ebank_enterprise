@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AppDelegate (HSPushDelegate)<FlutterStreamHandler>
+@interface AppDelegate (HSPushDelegate)
 
 - (void)initializePush:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
 
