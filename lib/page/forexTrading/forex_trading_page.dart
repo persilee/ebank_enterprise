@@ -413,7 +413,7 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
               _payeeTransferController.text = data.optExAmt;
             }
             _rate = data.optExRate;
-            _time = data.optTrTime;
+            _time = '${data.optTrTime}';
           });
           _boolBut();
         }
