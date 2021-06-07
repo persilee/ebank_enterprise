@@ -465,7 +465,7 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         dataReq.hkCertificateInfo.birthdate =
             _changeDate(infoStrForHK.birthday);
         // infoStrForHK.birthday.replaceAll('/', '-');
-        dataReq.hkCertificateInfo.firthIssueDate = _changeDate(
+        dataReq.hkCertificateInfo.firthIssueDate = _changeFirthIssueDate(
             infoStrForHK.firstIssueDate); // infoStrForHK.firstIssueDate;
         dataReq.hkCertificateInfo.currentIssueDate =
             _changeDateForHKCurrentIssueDate(infoStrForHK.currentIssueDate);
@@ -540,22 +540,6 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     resultsDateStr = resultsDateStr.replaceAll('/', '');
     resultsDateStr = resultsDateStr.replaceAll('.', '');
     resultsDateStr = _changeDateForOther(resultsDateStr, isGreater: true);
-    // String resultsDateStr = dateStr;
-    // List dataList = dateStr.split('-');
-    // if (dataList.length > 2) {
-    //   DateTime dateTime = DateTime.now();
-    //   String getYearStr = dataList[0];
-    //   if (int.parse(getYearStr) > (dateTime.year % 100)) {
-    //     dataList[0] = '${dateTime.year / 100 - 1}' + '$getYearStr';
-    //   } else {
-    //     dataList[0] = '${dateTime.year / 100}' + '$getYearStr';
-    //   }
-    //   resultsDateStr = dataList[0] + '-' + dataList[1] + '-' + dataList[2];
-    // }
-
-    // if (resultsDateStr == '长期') {
-    //   resultsDateStr = '9999-12-31';
-    // }
     return resultsDateStr;
   }
 
@@ -581,6 +565,41 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
     if (resultsDateStr == '长期') {
       resultsDateStr = '9999-12-31';
     }
+    return resultsDateStr;
+  }
+
+  String _changeFirthIssueDate(String dateStr) {
+    if (dateStr == null || dateStr.length == 0) {
+      return '';
+    }
+    String resultsDateStr = dateStr;
+    resultsDateStr = resultsDateStr.replaceAll('(', '');
+    resultsDateStr = resultsDateStr.replaceAll(')', '');
+    resultsDateStr = resultsDateStr.replaceAll('-', '');
+
+    if (resultsDateStr != null && resultsDateStr.length == 4) {
+      DateTime dateTime = DateTime.now();
+      String getMonthStr = resultsDateStr.substring(0, 2);
+      String getYearStr = resultsDateStr.substring(2, 4);
+      if (int.parse(getYearStr) > (dateTime.year % 100)) {
+        getYearStr = '${dateTime.year ~/ 100 - 1}' + '$getYearStr';
+      } else {
+        getYearStr = '${dateTime.year ~/ 100}' + '$getYearStr';
+      }
+
+      resultsDateStr = getYearStr + '-' + getMonthStr + '-' + '01';
+      if (dateTime.isBefore(DateTime.parse(resultsDateStr))) {
+        getYearStr = '${int.parse(getYearStr) - 100}';
+        resultsDateStr = getYearStr + '-' + getMonthStr + '-' + '01';
+      }
+    } else {
+      resultsDateStr = dateStr;
+    }
+
+    if (resultsDateStr == '长期') {
+      resultsDateStr = '9999-12-31';
+    }
+
     return resultsDateStr;
   }
 
