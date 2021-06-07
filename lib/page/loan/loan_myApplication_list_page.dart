@@ -382,7 +382,7 @@ class _ExpandBoxState extends State<ExpandBox> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                width: 150,
+                width: 120,
                 child: Text(
                   columnName,
                   style: TextStyle(),

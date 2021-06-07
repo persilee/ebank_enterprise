@@ -103,6 +103,7 @@ class _RepaymentPlanInputState extends State<RepaymentPlanInputPage> {
       HSProgressHUD.dismiss();
       if (data.postAdvanceRepaymentDTOList != null) {
         setState(() {
+          _isBtnDisabled = true;
           //请求回来进行变更
           PostAdvanceRepaymentDTOList list =
               data.postAdvanceRepaymentDTOList[0];
@@ -113,6 +114,7 @@ class _RepaymentPlanInputState extends State<RepaymentPlanInputPage> {
         });
       }
     }).catchError((e) {
+      _isBtnDisabled = false;
       HSProgressHUD.showToast(e);
     });
   }
@@ -122,7 +124,15 @@ class _RepaymentPlanInputState extends State<RepaymentPlanInputPage> {
     super.initState();
     _loadTotalAccountData();
     _planParameterSetValue();
-    _calculateRepaymentAmount(); //金额试算
+    if (widget.planDetail.paySts == '1') {
+      _isBtnDisabled = true;
+      _repayInterest = widget.planDetail.payInt; //还款利息
+      _fine = widget.planDetail.payCom; //利息罚息
+      _totalRepay = widget.planDetail.payAmt; //还款总额
+    } else {
+      //需要判断当前还款是否逾期，如果是逾期的就不需要去试算
+      _calculateRepaymentAmount(); //金额试算
+    }
   }
 
   @override
@@ -147,15 +157,6 @@ class _RepaymentPlanInputState extends State<RepaymentPlanInputPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Map mapDetail = ModalRoute.of(context).settings.arguments;
-    //从还款计划进入
-    // GetLnAcScheduleRspDetlsDTOList detail = mapDetail['detailModel'];
-    // this.planDetail = detail;
-
-    // LnAcMastAppDOList loanDetails = mapDetail['loanDetail'];
-    // loanDetail = loanDetails;
-    // this.acNo = loanDetails.contactNo; //贷款账号
-
     var container1 = Container(
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -215,7 +216,7 @@ class _RepaymentPlanInputState extends State<RepaymentPlanInputPage> {
           style: TextStyle(fontSize: 15, color: Colors.white),
         ),
         padding: EdgeInsets.fromLTRB(50, 15, 50, 15),
-        onPressed: _getBtnClickListener(context),
+        onPressed: _isBtnDisabled ? _getBtnClickListener(context) : () {},
         shape: RoundedRectangleBorder(
           side: BorderSide.none,
           borderRadius: BorderRadius.all(Radius.circular(4)),
@@ -280,26 +281,26 @@ class _RepaymentPlanInputState extends State<RepaymentPlanInputPage> {
 
   //点击进入下一步
   _getBtnClickListener(BuildContext context) {
-    // if (_isBtnDisabled) {
-    return () {
-      if (widget.planDetail.paySts == '0') {
-        //那这里就是走的提前还款接口
-        Map message = Map();
-        message['accountModel'] = widget.loanDetail;
-        message['calculateModel'] = list;
-        message['totalRepay'] = _totalRepay; //还款总额
-        Navigator.pushNamed(context, pageRepayConfirm, arguments: message);
-      } else {
-        //走还款计划接口
-        Map detailMap = Map();
-        detailMap['detailModel'] = widget.planDetail;
-        detailMap['loanDetail'] = widget.loanDetail;
-        detailMap['debitAcc'] = _debitAccount;
-        Navigator.pushNamed(context, pageRepaymentInputConfirm,
-            arguments: detailMap);
-      }
-    };
-    // }
+    if (_isBtnDisabled) {
+      return () {
+        if (widget.planDetail.paySts == '0') {
+          //那这里就是走的提前还款接口
+          Map message = Map();
+          message['accountModel'] = widget.loanDetail;
+          message['calculateModel'] = list;
+          message['totalRepay'] = _totalRepay; //还款总额
+          Navigator.pushNamed(context, pageRepayConfirm, arguments: message);
+        } else {
+          //走还款计划接口
+          Map detailMap = Map();
+          detailMap['detailModel'] = widget.planDetail;
+          detailMap['loanDetail'] = widget.loanDetail;
+          detailMap['debitAcc'] = _debitAccount;
+          Navigator.pushNamed(context, pageRepaymentInputConfirm,
+              arguments: detailMap);
+        }
+      };
+    }
   }
 
   //直接删除多余的小数(不四舍五入、向上或向下)
