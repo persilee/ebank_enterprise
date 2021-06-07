@@ -553,7 +553,7 @@ class _MinePageState extends State<MinePage>
 
   //开户点击事件
   void _openAccountClickFunction(BuildContext context, bool shouldTip) {
-    if (_belongCustStatus == '1') {
+    if (_belongCustStatus == '1' || _belongCustStatus == '') {
       _notQuickOpenAccTip(context);
     } else if (shouldTip == false) {
       //前往快速开户
