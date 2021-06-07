@@ -315,12 +315,29 @@ class _RepayPlanState extends State<RepayPlanPage> {
               ),
               InkWell(
                 onTap: () {
-                  //跳转loan_plan提前还款
-                  Navigator.pushNamed(context, pageRepaymentPlan, arguments: {
-                    'loanDetail': widget.loanDetail,
-                    'planDetail': lnSchedule
-                  }); //需要传不同的参数进去
-                  //跳转
+                  if (lnSchedule.paySts == '1') {
+                    //逾期就直接去还款了。不是提前还款
+                    // if (settings.name == pageRepaymentPlan) {
+                    //   //还款计划跳转提前还款界面传参
+                    //   return MaterialPageRoute(builder: (context) {
+                    //     Map<String, dynamic> arguments = settings.arguments;
+                    //     return RepaymentPlanInputPage(
+                    //         loanDetail: arguments['loanDetail'],
+                    //         planDetail: arguments['planDetail']);
+                    //   });
+                    // }
+// Navigator.pushNamed(context, pageRepaymentPlan, arguments: {
+//                       'loanDetail': widget.loanDetail,
+//                       'planDetail': lnSchedule
+//                     }); //
+
+                  } else {
+                    //跳转loan_plan提前还款
+                    Navigator.pushNamed(context, pageRepaymentPlan, arguments: {
+                      'loanDetail': widget.loanDetail,
+                      'planDetail': lnSchedule
+                    }); //需要传不同的参数进去
+                  }
                 },
                 child: Text(
                   repay, //repay
