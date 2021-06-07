@@ -5,11 +5,17 @@
 
 package com.hsg.bank
 
+import android.content.Context
 import android.util.Log
+import com.alibaba.sdk.android.push.CloudPushService
+import com.alibaba.sdk.android.push.CommonCallback
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory
 import com.bufeng.videoSDKbase.AppApplication
 import com.hsg.bank.brillink.BuildConfig
+import com.tencent.bugly.webank.Bugly
 import io.flutter.FlutterInjector
 import timber.log.Timber
+
 
 /**
  * @author zhanggenhua
@@ -27,6 +33,9 @@ class HsgApplication : AppApplication() {
     super.onCreate()
     Timber.d("签里眼SDK初始化耗时：${System.currentTimeMillis() - startTime}")
     FlutterInjector.instance().flutterLoader().startInitialization(this)
+
+    initCloudChannel(this);
+
   }
 
   /** A tree which logs important information for crash reporting.  */
@@ -45,4 +54,24 @@ class HsgApplication : AppApplication() {
       }
     }
   }
+
+  /**
+   * 初始化云推送通道
+   * @param applicationContext
+   */
+  private val TAG: String? = "Init"
+  private fun initCloudChannel(applicationContext: Context) {
+    PushServiceFactory.init(applicationContext)
+    val pushService: CloudPushService = PushServiceFactory.getCloudPushService()
+    pushService.register(applicationContext, object : CommonCallback {
+      override fun onSuccess(response: String?) {
+        Log.d(TAG, "init cloudchannel success")
+      }
+
+      override fun onFailed(errorCode: String, errorMessage: String) {
+        Log.d(TAG, "init cloudchannel failed -- errorcode:$errorCode -- errorMessage:$errorMessage")
+      }
+    })
+  }
+
 }

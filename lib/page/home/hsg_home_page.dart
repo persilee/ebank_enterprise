@@ -946,7 +946,7 @@ class _HomePageState extends State<HomePage>
   void _openAccountClickFunction(BuildContext context, bool shouldTip) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool(ConfigKey.NEED_OPEN_ACCOUNT, false);
-    if (_belongCustStatus == '1') {
+    if (_belongCustStatus == '1' || _belongCustStatus == '') {
       _notQuickOpenAccTip(context);
     } else if (shouldTip == false) {
       //前往快速开户

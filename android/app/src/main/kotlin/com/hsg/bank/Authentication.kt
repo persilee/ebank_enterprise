@@ -36,3 +36,7 @@ fun startAuth(
     }
   })
 }
+
+fun startAuthPush(){
+
+}

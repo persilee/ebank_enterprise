@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:ebank_mobile/authentication/ali_push.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/data/model/push/ali_push_modal.dart';
 import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
@@ -81,6 +83,9 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
     _getPublicParameters();
     // AppUpdateCheck(context);
     WidgetsBinding.instance.addObserver(this);
+
+    _setAliPushParameters();
+    AliPush().startListenAliPush();
   }
 
   // 监听APP运行状态
@@ -248,5 +253,15 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
     }).catchError((e) {
       HSProgressHUD.showToast(e);
     });
+  }
+
+  _setAliPushParameters() async {
+    ParametersReq req = ParametersReq(1, ['brillink1']);
+    try {
+      ParametersResp resp = await AliPush().aliPushSetParameters(req);
+      print('${resp.success}');
+    } catch (e) {
+      print('$e');
+    }
   }
 }
