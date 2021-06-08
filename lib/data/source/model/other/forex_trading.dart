@@ -122,7 +122,7 @@ class TransferTrialResp {
   @JsonKey(name: 'optExAmt')
   String optExAmt;
   @JsonKey(name: 'optTrTime')
-  String optTrTime;
+  var optTrTime;
 
   TransferTrialResp(
     this.optExRate,

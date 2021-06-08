@@ -470,15 +470,19 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
     ForeignTransferModel.OperateEndValue data =
         foreignTransferModel.operateEndValue;
 
-    if (data != null && data.dueTime != null) {
+    if (foreignTransferModel != null && foreignTransferModel.dueTime != null) {
       if (mounted) {
         setState(() {
           _isCutDown = true;
         });
       }
-      int date = (data == null || data.dueTime == null || data.dueTime == '')
+      int date = (foreignTransferModel == null ||
+              foreignTransferModel.dueTime == null ||
+              foreignTransferModel.dueTime == '')
           ? DateTime.now().millisecondsSinceEpoch ~/ 1000
-          : DateTime.parse(data.dueTime).millisecondsSinceEpoch ~/ 1000;
+          : DateTime.parse(foreignTransferModel.dueTime)
+                  .millisecondsSinceEpoch ~/
+              1000;
 
       _startCountdown(date);
     }
@@ -538,9 +542,10 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
         _foreignTransferList.add(
             _buildContentItem(S.current.rate_of_exchange, data?.exRate ?? ''));
-        if (data != null && data.dueTime != null) {
-          _foreignTransferList.add(_buildContentItem(
-              S.current.task_due_time, data?.dueTime ?? '')); //'到期时间'
+        if (foreignTransferModel != null &&
+            foreignTransferModel.dueTime != null) {
+          _foreignTransferList.add(_buildContentItem(S.current.task_due_time,
+              foreignTransferModel?.dueTime ?? '')); //'到期时间'
         }
 
         _isLoading = false;
