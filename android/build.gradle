@@ -14,8 +14,8 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        // 添加emas-services插件
-        classpath 'com.aliyun.ams:emas-services:1.0.1'
+//        // 添加emas-services插件
+//        classpath 'com.aliyun.ams:emas-services:1.0.1'
     }
 }
 
@@ -23,9 +23,9 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+//        maven { url 'https://maven.aliyun.com/repository/google' }
+//        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+//        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
         maven { url "https://jitpack.io" }
 //        maven {
 //            url 'http://maven.aliyun.com/nexus/content/repositories/releases/'

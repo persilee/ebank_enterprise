@@ -131,11 +131,11 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   @override
   void initState() {
     super.initState();
-    _getInsCode();
     _getDetail();
     _loadData();
     _getMinimumAmountRetained();
-    _getsNumberWithdrawals();
+    _getInsCode();
+
     _moneyController.addListener(() {
       if (_moneyController.text.length > 0 &&
           double.parse(_moneyController.text) > double.parse(bal)) {
@@ -165,7 +165,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
   }
 
 //获取支取次数
-  _getsNumberWithdrawals() {
+  Future _getsNumberWithdrawals() async {
     //  支取次数 surPartNum
     TimeDepositWithdrawReq req = TimeDepositWithdrawReq(widget.deposit.conNo);
     ApiClientAccount().regularNumberWithdrawals(req).then((data) {
@@ -890,7 +890,9 @@ class _PageDepositInfo extends State<PageDepositInfo> {
         instCodes = instructionDataList;
         instructions = instructionList;
       });
+      _getsNumberWithdrawals();
     }).catchError((e) {
+      _getsNumberWithdrawals();
       HSProgressHUD.showToast(e);
     });
   }
