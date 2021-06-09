@@ -39,7 +39,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   var _isLoading = false;
   var _changeLangBtnTltle = '';
-
+  List<String> _relevanceList = []; //关联账户列表
   TextEditingController _accountTC = TextEditingController(); //fangluyao
   TextEditingController _passwordTC = TextEditingController(); //b0S25X5Y
   var _account = ''; //'blk101';HSG20
@@ -48,6 +48,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    _relevanceList = ['HSG10', '15000000016', '18603070086'];
 
     // AppUpdateCheck(context);
 
@@ -292,6 +293,7 @@ class _LoginPageState extends State<LoginPage> {
           },
         );
       } else {
+        // _payerCcyDialog();判断是否有多种客户号
         _saveUserConfig(context, value);
       }
     }).catchError((e) {
@@ -333,6 +335,29 @@ class _LoginPageState extends State<LoginPage> {
     SaveUserData(resp, password: _password);
 
     _showMainPage(context);
+  }
+
+  //登录企业号查看是否有关联的数据
+  Future _payerCcyDialog() async {
+    final result = await showDialog(
+      context: context,
+      builder: (context) {
+        return HsgSingleChoiceDialog(
+          title: S.of(context).login_relevance_account_tip,
+          items: _relevanceList,
+          positiveButton: S.of(context).confirm,
+          negativeButton: S.of(context).cancel,
+          lastSelectedPosition: 0,
+        );
+      },
+    );
+    if (result != null && result != false) {
+      setState(() {
+        // _payerIndex = result;
+        // _payerCcy = _payerCcyList[result];
+      });
+      // _loadData(_payerAccount);
+    }
   }
 
   ///获取保存的数据

@@ -256,9 +256,17 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
   }
 
   _setAliPushParameters() async {
-    ParametersReq req = ParametersReq(2, ['haha3', 'haha4']);
+    ParametersReq req = ParametersReq(1, ['brillink']);
     try {
       ParametersResp resp = await AliPush().aliPushSetParameters(req);
+      print('${resp.success}');
+    } catch (e) {
+      print('$e');
+    }
+
+    ParametersReq req2 = ParametersReq(2, ['haha3', 'haha4']);
+    try {
+      ParametersResp resp = await AliPush().aliPushSetParameters(req2);
       print('${resp.success}');
     } catch (e) {
       print('$e');

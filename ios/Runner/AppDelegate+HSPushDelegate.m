@@ -33,38 +33,46 @@
         __strong __typeof(weakSelf)strongSelf = weakSelf;
         
         if ([@"aliPushSetParameters" isEqualToString:call.method]) {//是设置推送参数
-//            NSDictionary *bodyDictData = [call.arguments mj_JSONObject];
-//
-//            NSString *tenantId = [bodyDictData objectForKey:@"body"];
-//            NSDictionary *jsonflutter = [tenantId mj_JSONObject];
-//            strongSelf.bodyDictPushSetData = jsonflutter;
-//
-//            int typeInt = [[jsonflutter objectForKey:@"type"] intValue];
-//            NSArray * parametersArray = [jsonflutter objectForKey:@"parameters"];
-//            [weakSelf bindPushType:typeInt parameters:parametersArray callback:^(CloudPushCallbackResult *res) {
-//                NSString *resultValue  = [res mj_JSONString];
-//                if (self.resultPushSetBlock) {
-//                    self.resultPushSetBlock(resultValue);
-//                }
-//            }];
-//            strongSelf.resultPushSetBlock = result;
+           NSDictionary *bodyDictData = [call.arguments mj_JSONObject];
+
+           NSString *tenantId = [bodyDictData objectForKey:@"body"];
+           NSDictionary *jsonflutter = [tenantId mj_JSONObject];
+           strongSelf.bodyDictPushSetData = jsonflutter;
+
+           int typeInt = [[jsonflutter objectForKey:@"type"] intValue];
+           NSArray * parametersArray = [jsonflutter objectForKey:@"parameters"];
+           [weakSelf bindPushType:typeInt parameters:parametersArray callback:^(CloudPushCallbackResult *res) {
+               NSLog(@"。。。。。。。。%d %@",res.success, res.error);
+               NSDictionary *dict = @{
+                   @"success" : @(res.success),
+               };
+               NSString *resultValue = [dict mj_JSONString];
+               if (self.resultPushSetBlock) {
+                   self.resultPushSetBlock(resultValue);
+               }
+           }];
+           strongSelf.resultPushSetBlock = result;
             
         } else if ([@"aliPushCancelParameters" isEqualToString:call.method]) {//是取消设置的参数
-//            NSDictionary *bodyDictData = [call.arguments mj_JSONObject];
-//
-//            NSString *tenantId = [bodyDictData objectForKey:@"body"];
-//            NSDictionary *jsonflutter = [tenantId mj_JSONObject];
-//            strongSelf.bodyDictPushCancelData = jsonflutter;
-//
-//            int typeInt = [[jsonflutter objectForKey:@"type"] intValue];
-//            NSArray * parametersArray = [jsonflutter objectForKey:@"parameters"];
-//            [weakSelf unbindPushType:typeInt parameters:parametersArray callback:^(CloudPushCallbackResult *res) {
-//                NSString *resultValue  = [res mj_JSONString];
-//                if (self.resultPushCancelBlock) {
-//                    self.resultPushCancelBlock(resultValue);
-//                }
-//            }];
-//            strongSelf.resultPushCancelBlock = result;
+           NSDictionary *bodyDictData = [call.arguments mj_JSONObject];
+
+           NSString *tenantId = [bodyDictData objectForKey:@"body"];
+           NSDictionary *jsonflutter = [tenantId mj_JSONObject];
+           strongSelf.bodyDictPushCancelData = jsonflutter;
+
+           int typeInt = [[jsonflutter objectForKey:@"type"] intValue];
+           NSArray * parametersArray = [jsonflutter objectForKey:@"parameters"];
+           [weakSelf unbindPushType:typeInt parameters:parametersArray callback:^(CloudPushCallbackResult *res) {
+               NSDictionary *dict = @{
+                   @"success" : @(res.success),
+               };
+               NSString *resultValue = [dict mj_JSONString];
+
+               if (self.resultPushCancelBlock) {
+                   self.resultPushCancelBlock(resultValue);
+               }
+           }];
+           strongSelf.resultPushCancelBlock = result;
             
         } else {
             // 3.2.如果调用的是VideoMethodCall的方法, 那么通过封装的另外一个方法实现回调
@@ -98,7 +106,7 @@
 /// 推送设置参数
 /// @param type 1 account 2 tags 3 alias
 /// @param parameters 设置的值，统一为字符串数组，除了tags其他只能传一个元素，多余的参数不处理
-- (void)bindPushType:(int)type parameters:(NSArray<NSString *> *)parameters callback:(CallbackHandler)callback
+- (void)bindPushType:(int)type parameters:(NSArray *)parameters callback:(CallbackHandler)callback
 {
     if (parameters == NULL || parameters == nil || parameters.count == 0) {
         if (callback) {

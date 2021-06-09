@@ -19,6 +19,7 @@ class AliPush {
         {"body": jsonEncode(req)},
       );
       final resultMap = jsonDecode(result);
+      print(resultMap);
       return Future.value(ParametersResp.fromJson(resultMap));
     } on PlatformException catch (e) {
       return Future.error(e);

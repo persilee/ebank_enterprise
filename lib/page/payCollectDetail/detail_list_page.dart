@@ -1028,6 +1028,7 @@ class _DetailListPageState extends State<DetailListPage> {
         turnKey: _turnKey, //分页key
         acNo: '$selectAccNo',
         ciNo: '$custID',
+        trnType: "NL",
       ), //'818000000113'
     )
         .then((data) {

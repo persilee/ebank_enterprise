@@ -32,7 +32,9 @@ class ParametersResp {
   @JsonKey(name: 'success')
   bool success;
 
-  ParametersResp();
+  ParametersResp(
+    this.success,
+  );
 
   factory ParametersResp.fromJson(Map<String, dynamic> srcJson) =>
       _$ParametersRespFromJson(srcJson);

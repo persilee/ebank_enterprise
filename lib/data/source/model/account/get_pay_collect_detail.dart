@@ -33,16 +33,12 @@ class GetRevenueByCardsReq extends Object {
   @JsonKey(name: 'ciNo')
   String ciNo;
 
-  GetRevenueByCardsReq(
-    this.ccy,
-    this.localDateEnd,
-    this.localDateStart,
-    this.page,
-    this.pageSize, {
-    this.turnKey,
-    this.acNo,
-    this.ciNo,
-  });
+  @JsonKey(name: 'trnType')
+  String trnType;
+
+  GetRevenueByCardsReq(this.ccy, this.localDateEnd, this.localDateStart,
+      this.page, this.pageSize,
+      {this.turnKey, this.acNo, this.ciNo, this.trnType});
 
   factory GetRevenueByCardsReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetRevenueByCardsReqFromJson(srcJson);

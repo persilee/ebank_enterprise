@@ -793,6 +793,7 @@
   "time_depotion_minimum_retain_tip": "剩余金額小於最小留存金額,",
   "time_depotion_minimum_retain_amount": "最小留存金額: ",
   "time_depotion_withdraw_count": "剩余支取次數: ",
+  "login_relevance_account_tip": "選擇客戶號",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "數據異常，未返回數據！",
