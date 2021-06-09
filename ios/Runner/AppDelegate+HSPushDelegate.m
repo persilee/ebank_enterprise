@@ -40,8 +40,9 @@
            strongSelf.bodyDictPushSetData = jsonflutter;
 
            int typeInt = [[jsonflutter objectForKey:@"type"] intValue];
-           NSArray * parametersArray = [jsonflutter objectForKey:@"parameters"];
-           [weakSelf bindPushType:typeInt parameters:parametersArray callback:^(CloudPushCallbackResult *res) {
+           NSMutableArray *paraArr = [[jsonflutter objectForKey:@"parameters"] mutableCopy];
+        
+           [weakSelf bindPushType:typeInt parameters:paraArr callback:^(CloudPushCallbackResult *res) {
                NSLog(@"。。。。。。。。%d %@",res.success, res.error);
                NSDictionary *dict = @{
                    @"success" : @(res.success),
@@ -108,6 +109,7 @@
 /// @param parameters 设置的值，统一为字符串数组，除了tags其他只能传一个元素，多余的参数不处理
 - (void)bindPushType:(int)type parameters:(NSArray *)parameters callback:(CallbackHandler)callback
 {
+    
     if (parameters == NULL || parameters == nil || parameters.count == 0) {
         if (callback) {
             callback(nil);
