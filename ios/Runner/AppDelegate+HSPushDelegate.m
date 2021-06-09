@@ -33,38 +33,38 @@
         __strong __typeof(weakSelf)strongSelf = weakSelf;
         
         if ([@"aliPushSetParameters" isEqualToString:call.method]) {//是设置推送参数
-            NSDictionary *bodyDictData = [call.arguments mj_JSONObject];
-            
-            NSString *tenantId = [bodyDictData objectForKey:@"body"];
-            NSDictionary *jsonflutter = [tenantId mj_JSONObject];
-            strongSelf.bodyDictPushSetData = jsonflutter;
-            
-            int typeInt = [[jsonflutter objectForKey:@"type"] intValue];
-            NSArray * parametersArray = [jsonflutter objectForKey:@"parameters"];
-            [weakSelf bindPushType:typeInt parameters:parametersArray callback:^(CloudPushCallbackResult *res) {
-                NSString *resultValue  = [res mj_JSONString];
-                if (self.resultPushSetBlock) {
-                    self.resultPushSetBlock(resultValue);
-                }
-            }];
-            strongSelf.resultPushSetBlock = result;
+//            NSDictionary *bodyDictData = [call.arguments mj_JSONObject];
+//
+//            NSString *tenantId = [bodyDictData objectForKey:@"body"];
+//            NSDictionary *jsonflutter = [tenantId mj_JSONObject];
+//            strongSelf.bodyDictPushSetData = jsonflutter;
+//
+//            int typeInt = [[jsonflutter objectForKey:@"type"] intValue];
+//            NSArray * parametersArray = [jsonflutter objectForKey:@"parameters"];
+//            [weakSelf bindPushType:typeInt parameters:parametersArray callback:^(CloudPushCallbackResult *res) {
+//                NSString *resultValue  = [res mj_JSONString];
+//                if (self.resultPushSetBlock) {
+//                    self.resultPushSetBlock(resultValue);
+//                }
+//            }];
+//            strongSelf.resultPushSetBlock = result;
             
         } else if ([@"aliPushCancelParameters" isEqualToString:call.method]) {//是取消设置的参数
-            NSDictionary *bodyDictData = [call.arguments mj_JSONObject];
-            
-            NSString *tenantId = [bodyDictData objectForKey:@"body"];
-            NSDictionary *jsonflutter = [tenantId mj_JSONObject];
-            strongSelf.bodyDictPushCancelData = jsonflutter;
-            
-            int typeInt = [[jsonflutter objectForKey:@"type"] intValue];
-            NSArray * parametersArray = [jsonflutter objectForKey:@"parameters"];
-            [weakSelf unbindPushType:typeInt parameters:parametersArray callback:^(CloudPushCallbackResult *res) {
-                NSString *resultValue  = [res mj_JSONString];
-                if (self.resultPushCancelBlock) {
-                    self.resultPushCancelBlock(resultValue);
-                }
-            }];
-            strongSelf.resultPushCancelBlock = result;
+//            NSDictionary *bodyDictData = [call.arguments mj_JSONObject];
+//
+//            NSString *tenantId = [bodyDictData objectForKey:@"body"];
+//            NSDictionary *jsonflutter = [tenantId mj_JSONObject];
+//            strongSelf.bodyDictPushCancelData = jsonflutter;
+//
+//            int typeInt = [[jsonflutter objectForKey:@"type"] intValue];
+//            NSArray * parametersArray = [jsonflutter objectForKey:@"parameters"];
+//            [weakSelf unbindPushType:typeInt parameters:parametersArray callback:^(CloudPushCallbackResult *res) {
+//                NSString *resultValue  = [res mj_JSONString];
+//                if (self.resultPushCancelBlock) {
+//                    self.resultPushCancelBlock(resultValue);
+//                }
+//            }];
+//            strongSelf.resultPushCancelBlock = result;
             
         } else {
             // 3.2.如果调用的是VideoMethodCall的方法, 那么通过封装的另外一个方法实现回调
