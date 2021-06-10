@@ -275,10 +275,12 @@ class _LoginPageState extends State<LoginPage> {
     HSProgressHUD.show();
 
     String password = EncryptUtil.aesEncode(_password);
-
     // UserDataRepository()
     ApiClientPackaging()
-        .login(LoginReq(username: _account, password: password))
+        .login(LoginReq(
+      username: _account,
+      password: password,
+    ))
         .then((value) {
       HSProgressHUD.dismiss();
       if (value.errorCode == 'ECUST010') {
