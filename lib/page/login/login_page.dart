@@ -335,7 +335,7 @@ class _LoginPageState extends State<LoginPage> {
   ///保存数据
   _saveUserConfig(BuildContext context, LoginResp resp) {
     SaveUserData(resp, password: _password);
-
+    print('hhhhhhh');
     _showMainPage(context);
   }
 
