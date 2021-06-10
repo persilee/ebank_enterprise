@@ -267,7 +267,7 @@ class _LoginPageState extends State<LoginPage> {
     if (!_judgeCanLogin()) {
       return;
     }
-
+    print('aaaaaaa');
     setState(() {
       _isLoading = true;
     });
