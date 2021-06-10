@@ -25,12 +25,14 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
   var _isLoading = false;
   String _account;
   String password;
+  String _userPhone;
   Map listDataLogin = new Map();
   @override
   Widget build(BuildContext context) {
     listDataLogin = ModalRoute.of(context).settings.arguments;
     _account = listDataLogin['accountName'];
     password = listDataLogin['password'];
+    _userPhone = listDataLogin['userPhone'];
     print('$_account >>>>>>>>>loginaccount');
     print('$password >>>>>>>>>loginpassword');
 
@@ -129,7 +131,8 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
     HSProgressHUD.show();
     // UserDataRepository()
     ApiClientPackaging()
-        .login(LoginReq(username: _account, password: password))
+        .login(LoginReq(
+            username: _account, password: password, userPhone: _userPhone))
         .then((value) {
       if (mounted) {
         setState(() {

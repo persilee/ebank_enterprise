@@ -260,6 +260,8 @@ class _LoginPageState extends State<LoginPage> {
   _login(BuildContext context) async {
     // 触摸收起键盘
     FocusScope.of(context).requestFocus(FocusNode());
+    final prefs = await SharedPreferences.getInstance();
+    String _userPhone = prefs.getString(ConfigKey.USER_PHONE);
 
     //登录以输入框的值为准
     _account = _accountTC.text;
@@ -278,9 +280,7 @@ class _LoginPageState extends State<LoginPage> {
     // UserDataRepository()
     ApiClientPackaging()
         .login(LoginReq(
-      username: _account,
-      password: password,
-    ))
+            username: _account, password: password, userPhone: _userPhone))
         .then((value) {
       HSProgressHUD.dismiss();
       if (value.errorCode == 'ECUST010') {
@@ -335,7 +335,7 @@ class _LoginPageState extends State<LoginPage> {
   ///保存数据
   _saveUserConfig(BuildContext context, LoginResp resp) {
     SaveUserData(resp, password: _password);
-    print('hhhhhhh');
+
     _showMainPage(context);
   }
 
