@@ -172,19 +172,25 @@ class _MyApplicationPageState extends State<MyApplicationPage>
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          leftText,
-          style: TextStyle(
-            fontSize: 14.0,
-            color: HsgColors.toDoDetailText,
+        Expanded(
+          flex: 1,
+          child: Text(
+            leftText,
+            style: TextStyle(
+              fontSize: 14.0,
+              color: HsgColors.toDoDetailText,
+            ),
           ),
         ),
-        Text(
-          rightText,
-          textAlign: TextAlign.right,
-          style: TextStyle(
-            fontSize: 14.0,
-            color: HsgColors.aboutusTextCon,
+        Expanded(
+          flex: 2,
+          child: Text(
+            rightText,
+            textAlign: TextAlign.right,
+            style: TextStyle(
+              fontSize: 14.0,
+              color: HsgColors.aboutusTextCon,
+            ),
           ),
         ),
       ],

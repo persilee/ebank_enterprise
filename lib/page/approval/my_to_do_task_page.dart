@@ -170,7 +170,7 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
           ),
         ),
         Expanded(
-          flex: 1,
+          flex: 2,
           child: Text(
             rightText,
             textAlign: TextAlign.right,
