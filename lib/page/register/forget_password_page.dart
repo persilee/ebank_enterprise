@@ -50,7 +50,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   String _smsCode = '';
 
   /// 区号
-  String _officeAreaCodeText = '';
+  String _officeAreaCodeText = '86';
 
   @override
   // ignore: must_call_super
