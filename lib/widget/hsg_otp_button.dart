@@ -82,7 +82,7 @@ class _HSGOTPButtonState extends State<HSGOTPButton> {
     final prefs = await SharedPreferences.getInstance();
     String userAreacode = prefs.getString(ConfigKey.USER_AREACODE);
     String userPhone = prefs.getString(ConfigKey.USER_PHONE);
-    userAreacode = userAreacode != null ? userAreacode : '';
+    userAreacode = userAreacode != null ? userAreacode : '86';
     userPhone = userPhone != null ? userPhone : '';
     ApiClientPassword()
         .sendSmsByPhone(SendSmsByPhoneNumberReq(

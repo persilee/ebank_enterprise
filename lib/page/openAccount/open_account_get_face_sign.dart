@@ -143,7 +143,7 @@ class _OpenAccountGetFaceSignPageState
   void _didFaceSignCommit() async {
     final prefs = await SharedPreferences.getInstance();
     String userPhone = prefs.getString(ConfigKey.USER_PHONE) ?? '';
-    String areaCode = prefs.getString(ConfigKey.USER_AREACODE) ?? '';
+    String areaCode = prefs.getString(ConfigKey.USER_AREACODE) ?? '86';
 
     if (_codeSignTextF.text.length > 0 && userPhone.length > 0) {
       //根据电话以及输入文本这里去请求businessId
