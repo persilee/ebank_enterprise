@@ -296,7 +296,12 @@ class _LoginPageState extends State<LoginPage> {
         );
       } else {
         // _payerCcyDialog();判断是否有多种客户号
-        _saveUserConfig(context, value);
+        if (value.custInfoList != null && value.custInfoList.length > 0) {
+          //有多个就需要弹窗进行展示
+          _payerCcyDialog(value, context);
+        } else {
+          _saveUserConfig(context, value);
+        }
       }
     }).catchError((e) {
       setState(() {
@@ -334,19 +339,31 @@ class _LoginPageState extends State<LoginPage> {
 
   ///保存数据
   _saveUserConfig(BuildContext context, LoginResp resp) {
-    SaveUserData(resp, password: _password);
+    SaveUserData(resp, password: _password); //保存userID
 
     _showMainPage(context);
   }
 
   //登录企业号查看是否有关联的数据
-  Future _payerCcyDialog() async {
+  Future _payerCcyDialog(LoginResp resp, BuildContext context) async {
+    List<String> nameStr = [];
+    String _language = Intl.getCurrentLocale();
+    if (_language == 'en') {
+      for (CustInfoList custInfoList in resp.custInfoList) {
+        nameStr.add(custInfoList.custNameEng);
+      }
+    } else {
+      for (CustInfoList custInfoList in resp.custInfoList) {
+        nameStr.add(custInfoList.custNameLoc);
+      }
+    }
+
     final result = await showDialog(
       context: context,
       builder: (context) {
         return HsgSingleChoiceDialog(
           title: S.of(context).login_relevance_account_tip,
-          items: _relevanceList,
+          items: nameStr,
           positiveButton: S.of(context).confirm,
           negativeButton: S.of(context).cancel,
           lastSelectedPosition: 0,
@@ -354,11 +371,8 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
     if (result != null && result != false) {
-      setState(() {
-        // _payerIndex = result;
-        // _payerCcy = _payerCcyList[result];
-      });
-      // _loadData(_payerAccount);
+      //在这里保存userid 和custID
+      _saveUserConfig(context, resp);
     }
   }
 

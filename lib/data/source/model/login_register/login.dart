@@ -44,6 +44,7 @@ class LoginResp {
   bool passwordEnabled;
   int passwordErrors;
   String belongCustStatus;
+  List<CustInfoList> custInfoList;
 
   ///错误码
   String errorCode;
@@ -61,10 +62,38 @@ class LoginResp {
     this.passwordErrors,
     this.belongCustStatus,
     this.errorCode,
+    this.custInfoList,
   );
 
   factory LoginResp.fromJson(Map<String, dynamic> srcJson) =>
       _$LoginRespFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$LoginRespToJson(this);
+}
+
+@JsonSerializable()
+class CustInfoList extends Object {
+  @JsonKey(name: 'businessId')
+  String businessId;
+
+  @JsonKey(name: 'custNameLoc')
+  String custNameLoc;
+
+  @JsonKey(name: 'custNameEng')
+  String custNameEng;
+
+  @JsonKey(name: 'custId')
+  String custId;
+
+  CustInfoList(
+    this.businessId,
+    this.custNameLoc,
+    this.custNameEng,
+    this.custId,
+  );
+
+  factory CustInfoList.fromJson(Map<String, dynamic> srcJson) =>
+      _$CustInfoListFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$CustInfoListToJson(this);
 }
