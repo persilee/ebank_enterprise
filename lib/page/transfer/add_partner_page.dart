@@ -78,6 +78,8 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
 
   var _swiftFocusNode = FocusNode();
   var _accountFocusNode = FocusNode();
+  var _nameFocusNode = FocusNode(); //名称监听
+
   bool _isAccount = false; //行内转账时，账号是否存在
 
   bool _isSelect = true;
@@ -102,16 +104,29 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           !_accountFocusNode.hasFocus) {
         if (_isInline) {
           //行内需要去加载特定的币种
-          _getCardByCardNo(_acountController.text); //获取收款人名称
+          _checkAccountOrNameJust();
+          _checkNameIntereface(_acountController.text); //获取收款人名称
           _getCardCcyList(_acountController.text); //根据名称获取币种
         } else {
-          _getCardByCardNo(_acountController.text); //获取收款人名称
+          _checkNameIntereface(_acountController.text); //获取收款人名称
         }
       } else {
         _inlineCcy = '';
         _bankCode = '';
       }
     });
+    _nameFocusNode.addListener(() {
+      if (_isInline) {
+        //是行内的。需要去验证接口
+        _checkAccountOrNameJust();
+      }
+    });
+  }
+
+  _checkAccountOrNameJust() {
+    if (_acountController.text.length > 0 && _nameController.text.length > 0) {
+      _getCardByCardNo(_acountController.text, _nameController.text);
+    }
   }
 
 //获取账号支持币种
@@ -345,7 +360,9 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           hintText: S.current.please_input,
           keyboardType: TextInputType.text,
           controller: _nameController,
+          focusNode: _nameFocusNode,
           callback: _check,
+          isUpperCase: true,
           length: 35,
           isRegEXp: true,
           regExp: _transferType == S.current.transfer_type_0
@@ -844,15 +861,13 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
     });
   }
 
-  //根据账号查询名称
-  Future _getCardByCardNo(String cardNo) async {
-    Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo)).then((data) {
+//获取bankcode以及其他的信息
+  Future _checkNameIntereface(String cardNo) async {
+    Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo, '')).then((data) {
       if (this.mounted) {
         setState(() {
-          // _nameController.text =
           _userTrueName = data.ciName;
           _bankCode = data.bankCode;
-          _isAccount = true;
           if (_ccy != '' || _inlineCcy != '') {
             _isInputed = true;
           } else {
@@ -861,11 +876,6 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
         });
       }
     }).catchError((e) {
-      if (this.mounted) {
-        setState(() {
-          _isAccount = false;
-        });
-      }
       if (e.toString().contains("SC6121")) {
         HSProgressHUD.showToastTip(
           S.of(context).request_client_timeout,
@@ -875,6 +885,33 @@ class _AddPartnerPageState extends State<AddPartnerPage> {
           S.current.no_account,
         );
       }
+    });
+  }
+
+  //根据账号查询名称
+  Future _getCardByCardNo(String cardNo, String nameStr) async {
+    Transfer()
+        .getCardByCheckName(GetCardByCardNoReq(cardNo, nameStr))
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          if (data.rtnFlg == 'Y') {
+            //Y是存在，N不存在
+            _isAccount = true;
+          } else {
+            _isAccount = false;
+          }
+        });
+      }
+    }).catchError((e) {
+      if (this.mounted) {
+        setState(() {
+          _isAccount = false;
+        });
+      }
+      HSProgressHUD.showToastTip(
+        S.current.no_account,
+      );
     });
   }
 }

@@ -794,6 +794,7 @@
   "time_depotion_minimum_retain_amount": "Minimum retention amount: ",
   "time_depotion_withdraw_count": "Remaining withdrawal times: ",
   "login_relevance_account_tip": "Select company",
+  "transfer_inline_account_tip": "Incorrect account or name",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "Data is abnormal, no data is returned!",

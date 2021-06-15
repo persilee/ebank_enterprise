@@ -98,6 +98,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
   bool _isAccount = true; //账号是否存在
   var _opt = '';
 
+  var _payeeNameFocusNode = FocusNode(); //收款方名称监听
+
   RemoteBankCard _rollOutModel; //转出方账户模型
   List _rollOutList = []; //转出方账户列表
   GetCardByCardNoResp _collectionModel; //收款方模型
@@ -112,8 +114,17 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     _payeeAccountFocusNode.addListener(() {
       if (_payeeAccountController.text.length > 0 &&
           !_payeeAccountFocusNode.hasFocus) {
-        _getCardByCardNo(_payeeAccountController.text);
+        _checkAccountOrNameJust();
+        _checkNameIntereface(_payeeAccountController.text);
         _getCardCcyList(_payeeAccountController.text);
+      }
+    });
+
+    _payeeNameFocusNode.addListener(() {
+      //收款名称监听
+      if (_payeeNameController.text.length > 0 &&
+          !_payeeNameFocusNode.hasFocus) {
+        _checkAccountOrNameJust();
       }
     });
 
@@ -174,6 +185,13 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     });
   }
 
+  _checkAccountOrNameJust() {
+    if (_payeeAccountController.text.length > 0 &&
+        _payeeNameController.text.length > 0) {
+      _getCardByCardNo(_payeeAccountController.text, _payeeNameController.text);
+    }
+  }
+
   _checkTransferCcy() {
     if (_payeeCcy.length <= 0 || _payerCcy.length <= 0) {
       return;
@@ -209,7 +227,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         check = true;
         _isAccount = false;
         _boolBut();
-        _getCardByCardNo(_payeeAccountController.text);
+        _getCardByCardNo(
+            _payeeAccountController.text, _payeeNameController.text);
         _getCardCcyList(_payeeAccountController.text);
       }
     });
@@ -341,10 +360,12 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             hintText: S.of(context).hint_input_receipt_name,
             keyboardType: TextInputType.text,
             controller: _payeeNameController,
+            focusNode: _payeeNameFocusNode,
             callback: _boolBut,
             length: 35,
             isRegEXp: true,
             regExp: '[\u4e00-\u9fa5a-zA-Z0-9 \-\/\?\:\(\)\.\,\'\+]',
+            isUpperCase: true,
           ),
           Container(
             // padding: EdgeInsets.only(right: 15, left: 15),
@@ -877,19 +898,37 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     });
   }
 
-  //根据账号查询名称
-  Future _getCardByCardNo(String cardNo) async {
-    // TransferDataRepository()
-    //     .getCardByCardNo(GetCardByCardNoReq(cardNo), 'getCardByCardNo')
-    Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo)).then((data) {
+//获取bankcode以及其他的信息
+  Future _checkNameIntereface(String cardNo) async {
+    Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo, '')).then((data) {
       if (this.mounted) {
         setState(() {
-          _payeeNameController.text = data.ciName;
           _collectionModel = data;
           payeeBankCode = data.bankCode;
           payerBankCode = data.bankCode;
-          _isAccount = false;
           _boolBut();
+        });
+      }
+    }).catchError((e) {
+      HSProgressHUD.showToastTip(
+        S.current.no_account,
+      );
+    });
+  }
+
+  //根据账号查询名称
+  Future _getCardByCardNo(String cardNo, String nameStr) async {
+    Transfer()
+        .getCardByCheckName(GetCardByCardNoReq(cardNo, nameStr))
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          if (data.rtnFlg == 'Y') {
+            //Y是存在，N不存在
+            _isAccount = false;
+          } else {
+            _isAccount = true;
+          }
         });
       }
     }).catchError((e) {

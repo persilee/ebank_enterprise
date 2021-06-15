@@ -7,9 +7,10 @@ class GetCardByCardNoReq extends Object {
   @JsonKey(name: 'cardNo')
   String cardNo;
 
-  GetCardByCardNoReq(
-    this.cardNo,
-  );
+  @JsonKey(name: 'acEnm')
+  String acEnm;
+
+  GetCardByCardNoReq(this.cardNo, this.acEnm);
 
   factory GetCardByCardNoReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetCardByCardNoReqFromJson(srcJson);
@@ -43,6 +44,9 @@ class GetCardByCardNoResp extends Object {
   @JsonKey(name: 'status')
   String status;
 
+  @JsonKey(name: 'rtnFlg')
+  String rtnFlg; //Y 成功 N 不成功
+
   GetCardByCardNoResp(
     this.bankCode,
     this.cardNo,
@@ -52,6 +56,7 @@ class GetCardByCardNoResp extends Object {
     this.own,
     this.phoneNumber,
     this.status,
+    this.rtnFlg,
   );
 
   factory GetCardByCardNoResp.fromJson(Map<String, dynamic> srcJson) =>

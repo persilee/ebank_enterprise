@@ -64,7 +64,12 @@ abstract class Transfer {
       @Body() GetInfoBySwiftCodeReq req);
 
   //根据账号查询名称
-  @POST('/cust/bankcard/getCardByCardNo')
+  @POST('/cust/bankcard/checkAcName') //cust/bankcard/getCardByCardNo
+  Future<GetCardByCardNoResp> getCardByCheckName(
+      @Body() GetCardByCardNoReq req);
+
+  //根据账号查询名称
+  @POST('cust/bankcard/getCardByCardNo') //cust/bankcard/getCardByCardNo
   Future<GetCardByCardNoResp> getCardByCardNo(@Body() GetCardByCardNoReq req);
 
   //根据账号查询支持币种

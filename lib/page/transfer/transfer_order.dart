@@ -1364,7 +1364,7 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
   //根据账号查询名称
   Future _getCardByCardNo(String cardNo) async {
     // TransferDataRepository()
-    Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo)).then((data) {
+    Transfer().getCardByCardNo(GetCardByCardNoReq(cardNo, '')).then((data) {
       if (this.mounted) {
         setState(() {
           _payeeNameController.text = data.ciName;
