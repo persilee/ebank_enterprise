@@ -141,7 +141,7 @@ class HsgTextFieldDialog extends StatelessWidget {
                   ),
                   Padding(padding: EdgeInsets.only(right: 10)),
                   Text(
-                    showAreaCode + showPhone,
+                    '+' + showAreaCode + ' ' + showPhone,
                     style: TextStyle(fontSize: 14.0, color: Colors.black38),
                   ),
                 ],
