@@ -12,12 +12,20 @@ class CheckPhoneReq extends Object {
   @JsonKey(name: 'userPhone')
   String userPhone;
 
+  @JsonKey(name: 'userAccount')
+  String userAccount;
+
   @JsonKey(name: 'userType')
   String userType;
 
+  @JsonKey(name: 'checkType')
+  String checkType;
+
   CheckPhoneReq(
     this.userPhone,
+    this.userAccount,
     this.userType,
+    this.checkType,
   );
 
   factory CheckPhoneReq.fromJson(Map<String, dynamic> srcJson) =>

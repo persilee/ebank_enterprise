@@ -264,7 +264,7 @@ class _RegisterPageState extends State<RegisterPage> {
     HSProgressHUD.show();
     // VersionDataRepository()
     ApiClientAccount()
-        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'))
+        .checkPhone(CheckPhoneReq(_phoneNumListen, _userNameListen, '2', '0'))
         .then((data) {
       if (mounted) {
         setState(() {

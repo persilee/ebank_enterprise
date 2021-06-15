@@ -258,7 +258,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     HSProgressHUD.show();
     // VersionDataRepository()
     ApiClientAccount()
-        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'))
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '', '2', '1'))
         .then((data) {
       if (mounted) {
         setState(() {

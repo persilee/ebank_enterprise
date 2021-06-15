@@ -245,7 +245,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
   _checkRegister() {
     HSProgressHUD.show();
     ApiClientAccount()
-        .checkPhone(CheckPhoneReq(_phoneNum.text, '2'))
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '', '2', '1'))
         .then((data) {
       if (mounted) {
         setState(() {

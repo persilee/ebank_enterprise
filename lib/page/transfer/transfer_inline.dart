@@ -98,6 +98,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
   bool _isAccount = true; //账号是否存在
   var _opt = '';
 
+  var _payeeNameFocusNode = FocusNode();
+
   RemoteBankCard _rollOutModel; //转出方账户模型
   List _rollOutList = []; //转出方账户列表
   GetCardByCardNoResp _collectionModel; //收款方模型
@@ -108,11 +110,11 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     // _loadLocalCcy();
     _loadTransferData();
     _actualNameReqData();
-
+    //收款方账户
     _payeeAccountFocusNode.addListener(() {
       if (_payeeAccountController.text.length > 0 &&
           !_payeeAccountFocusNode.hasFocus) {
-        _getCardByCardNo(_payeeAccountController.text);
+        _getCardByCardNo(_payeeAccountController.text); //需要判断两个输入了才能去验证
         _getCardCcyList(_payeeAccountController.text);
       }
     });
