@@ -1113,7 +1113,7 @@ class _HomePageState extends State<HomePage>
     // UserDataRepository()
     ApiClientPackaging()
         .getUserInfo(
-      GetUserInfoReq(userID, custID),
+      GetUserInfoReq(userID),
     )
         .then((data) {
       if (this.mounted) {

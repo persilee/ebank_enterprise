@@ -1352,9 +1352,7 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
     String custID = prefs.getString(ConfigKey.CUST_ID);
 
     // UserDataRepository()
-    ApiClientPackaging()
-        .getUserInfo(GetUserInfoReq(userID, custID))
-        .then((data) {
+    ApiClientPackaging().getUserInfo(GetUserInfoReq(userID)).then((data) {
       if (this.mounted) {
         setState(() {
           payerName = data.actualName;

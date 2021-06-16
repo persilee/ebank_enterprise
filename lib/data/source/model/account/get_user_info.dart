@@ -15,7 +15,7 @@ class GetUserInfoReq extends Object {
   @JsonKey(name: 'custId')
   String custId;
 
-  GetUserInfoReq(this.userId, this.custId);
+  GetUserInfoReq(this.userId, {this.custId});
 
   factory GetUserInfoReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetUserInfoReqFromJson(srcJson);

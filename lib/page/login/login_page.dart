@@ -260,70 +260,72 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录操作
   _login(BuildContext context) async {
-    // 触摸收起键盘
-    FocusScope.of(context).requestFocus(FocusNode());
-    final prefs = await SharedPreferences.getInstance();
-    String _userPhone = prefs.getString(ConfigKey.USER_PHONE);
+    _loadData(context, '852871871056576512', '801000000498');
 
-    //登录以输入框的值为准
-    _account = _accountTC.text;
-    _password = _passwordTC.text;
-    if (!_judgeCanLogin()) {
-      return;
-    }
+    // // 触摸收起键盘
+    // FocusScope.of(context).requestFocus(FocusNode());
+    // final prefs = await SharedPreferences.getInstance();
+    // String _userPhone = prefs.getString(ConfigKey.USER_PHONE);
 
-    setState(() {
-      _isLoading = true;
-    });
+    // //登录以输入框的值为准
+    // _account = _accountTC.text;
+    // _password = _passwordTC.text;
+    // if (!_judgeCanLogin()) {
+    //   return;
+    // }
 
-    HSProgressHUD.show();
+    // setState(() {
+    //   _isLoading = true;
+    // });
 
-    String password = EncryptUtil.aesEncode(_password);
-    // UserDataRepository()
-    ApiClientPackaging()
-        .login(LoginReq(
-            username: _account, password: password, userPhone: _userPhone))
-        .then((value) {
-      HSProgressHUD.dismiss();
-      if (value.errorCode == 'ECUST010') {
-        HsgShowTip.loginPasswordErrorTip(
-          context,
-          value.passwordErrors,
-          5,
-          (value) => {
-            setState(() {
-              _isLoading = false;
-            })
-          },
-        );
-      } else {
-        // _payerCcyDialog();判断是否有多种客户号
-        // if (value.custInfoList != null && value.custInfoList.length > 0) {
-        //   //有多个就需要弹窗进行展示
-        //   _payerCcyDialog(value, context);
-        // } else {
-        _saveUserConfig(context, value.userId, value.custId);
-      }
-      // }
-    }).catchError((e) {
-      setState(() {
-        _isLoading = false;
-      });
+    // HSProgressHUD.show();
 
-      if (e.toString().contains('ECUST009')) {
-        HSProgressHUD.dismiss();
-        HsgShowTip.loginPasswordErrorToMuchTip(
-          context,
-          (value) => {
-            setState(() {
-              _isLoading = false;
-            })
-          },
-        );
-      } else {
-        HSProgressHUD.showToast(e);
-      }
-    });
+    // String password = EncryptUtil.aesEncode(_password);
+    // // UserDataRepository()
+    // ApiClientPackaging()
+    //     .login(LoginReq(
+    //         username: _account, password: password, userPhone: _userPhone))
+    //     .then((value) {
+    //   HSProgressHUD.dismiss();
+    //   if (value.errorCode == 'ECUST010') {
+    //     HsgShowTip.loginPasswordErrorTip(
+    //       context,
+    //       value.passwordErrors,
+    //       5,
+    //       (value) => {
+    //         setState(() {
+    //           _isLoading = false;
+    //         })
+    //       },
+    //     );
+    //   } else {
+    //     // _payerCcyDialog();判断是否有多种客户号
+    //     // if (value.custInfoList != null && value.custInfoList.length > 0) {
+    //     //   //有多个就需要弹窗进行展示
+    //     //   _payerCcyDialog(value, context);
+    //     // } else {
+    //     _saveUserConfig(context, value.userId, value.custId);
+    //   }
+    //   // }
+    // }).catchError((e) {
+    //   setState(() {
+    //     _isLoading = false;
+    //   });
+
+    //   if (e.toString().contains('ECUST009')) {
+    //     HSProgressHUD.dismiss();
+    //     HsgShowTip.loginPasswordErrorToMuchTip(
+    //       context,
+    //       (value) => {
+    //         setState(() {
+    //           _isLoading = false;
+    //         })
+    //       },
+    //     );
+    //   } else {
+    //     HSProgressHUD.showToast(e);
+    //   }
+    // });
   }
 
   //注册
@@ -341,10 +343,10 @@ class _LoginPageState extends State<LoginPage> {
 
   ///保存数据
   _saveUserConfig(BuildContext context, String userID, String custID) {
-    SaveUserData(userID, custID); //保存userID
-    _showMainPage(context);
+    // SaveUserData(userID, custID); //保存userID
+    // _showMainPage(context);
 
-    // _loadData(context, userID, custID);
+    _loadData(context, userID, custID);
   }
 
   //登录企业号查看是否有关联的数据
@@ -380,25 +382,24 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // Future<void> _loadData(
-  //     BuildContext context, String userID, String custID) async {
-  //   ApiClientPackaging()
-  //       .getUserInfo(
-  //     GetUserInfoReq(userID, custID),
-  //   )
-  //       .then((data) {
-  //     if (this.mounted) {
-  //       setState(() {
-  //         _showMainPage(context);
-  //       });
-  //     }
-  //   }).catchError((e) {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //     HSProgressHUD.showToast(e);
-  //   });
-  // }
+  _loadData(BuildContext context, String userID, String custID) async {
+    ApiClientPackaging()
+        .getUserInfo(
+      GetUserInfoReq(userID, custId: custID),
+    )
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          _showMainPage(context);
+        });
+      }
+    }).catchError((e) {
+      setState(() {
+        _isLoading = false;
+      });
+      HSProgressHUD.showToast(e);
+    });
+  }
 
   ///获取保存的数据
   void _getUserConfig() async {

@@ -145,9 +145,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     String custID = prefs.getString(ConfigKey.CUST_ID);
 
     // UserDataRepository()
-    ApiClientPackaging()
-        .getUserInfo(GetUserInfoReq(userID, custID))
-        .then((data) {
+    ApiClientPackaging().getUserInfo(GetUserInfoReq(userID)).then((data) {
       setState(() {
         _custId = data.custId;
       });

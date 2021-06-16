@@ -147,8 +147,8 @@ class _AvatarViewPageState extends State<AvatarViewPage> {
             String _headPortrait = image['headPortrait'] ?? '';
             if (_headPortrait.isEmpty) {
               UserInfoResp data = await ApiClient().getUserInfo(GetUserInfoReq(
-                  SpUtil.getString(ConfigKey.USER_ID),
-                  SpUtil.getString(ConfigKey.CUST_ID)));
+                  SpUtil.getString(ConfigKey
+                      .USER_ID))); //SpUtil.getString(ConfigKey.CUST_ID)
               _headPortrait = data.headPortrait;
               SpUtil.putString(ConfigKey.USER_AVATAR_URL, data.headPortrait);
               EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
