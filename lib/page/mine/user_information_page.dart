@@ -346,8 +346,9 @@ class _UserInformationPageState extends State<UserInformationPage> {
             );
             String _headPortrait = image['headPortrait'] ?? '';
             if (_headPortrait.isEmpty) {
-              UserInfoResp data = await ApiClient().getUserInfo(
-                  GetUserInfoReq(SpUtil.getString(ConfigKey.USER_ID)));
+              UserInfoResp data = await ApiClient().getUserInfo(GetUserInfoReq(
+                  SpUtil.getString(ConfigKey.USER_ID),
+                  SpUtil.getString(ConfigKey.CUST_ID)));
               SpUtil.putString(ConfigKey.USER_AVATAR_URL, data.headPortrait);
               EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
                   headPortrait: _headPortrait, state: 300));
@@ -407,8 +408,9 @@ class _UserInformationPageState extends State<UserInformationPage> {
             );
             String _headPortrait = image['headPortrait'] ?? '';
             if (_headPortrait.isEmpty) {
-              UserInfoResp data = await ApiClient().getUserInfo(
-                  GetUserInfoReq(SpUtil.getString(ConfigKey.USER_ID)));
+              UserInfoResp data = await ApiClient().getUserInfo(GetUserInfoReq(
+                  SpUtil.getString(ConfigKey.USER_ID),
+                  SpUtil.getString(ConfigKey.CUST_ID)));
               SpUtil.putString(ConfigKey.USER_AVATAR_URL, data.headPortrait);
               EventBusUtils.getInstance().fire(ChangeHeadPortraitEvent(
                   headPortrait: _headPortrait, state: 300));

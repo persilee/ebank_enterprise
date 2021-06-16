@@ -4,10 +4,10 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: non_constant_identifier_names
-void SaveUserData(LoginResp resp, {String password}) async {
+void SaveUserData(String userId, String custId) async {
   final prefs = await SharedPreferences.getInstance();
   // prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
-  prefs.setString(ConfigKey.USER_ID, resp.userId);
+  prefs.setString(ConfigKey.USER_ID, userId);
   // prefs.setString(ConfigKey.USER_PHONE, resp.userPhone);
   // prefs.setString(ConfigKey.USER_AREACODE, resp.areaCode);
   // prefs.setString(ConfigKey.USER_TYPE, resp.userType);
@@ -16,10 +16,10 @@ void SaveUserData(LoginResp resp, {String password}) async {
   // prefs.setString(ConfigKey.USER_AVATAR_URL, resp.headPortrait);
 
   // prefs.setString(ConfigKey.USER_PASSWORD, password);
-  if (resp.custId == null || resp.custId == '') {
+  if (custId == null || custId == '') {
     prefs.setString(ConfigKey.CUST_ID, '');
   } else {
-    prefs.setString(ConfigKey.CUST_ID, resp.custId);
+    prefs.setString(ConfigKey.CUST_ID, custId);
   }
 }
 

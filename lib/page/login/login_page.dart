@@ -4,6 +4,7 @@
 /// Date: 2020-12-04
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/model/account/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/login_register/login.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
@@ -12,6 +13,7 @@ import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/page/mine/app_update.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/login_save_user_data.dart';
 import 'package:ebank_mobile/util/screen_util.dart';
@@ -296,13 +298,13 @@ class _LoginPageState extends State<LoginPage> {
         );
       } else {
         // _payerCcyDialog();判断是否有多种客户号
-        if (value.custInfoList != null && value.custInfoList.length > 0) {
-          //有多个就需要弹窗进行展示
-          _payerCcyDialog(value, context);
-        } else {
-          _saveUserConfig(context, value);
-        }
+        // if (value.custInfoList != null && value.custInfoList.length > 0) {
+        //   //有多个就需要弹窗进行展示
+        //   _payerCcyDialog(value, context);
+        // } else {
+        _saveUserConfig(context, value.userId, value.custId);
       }
+      // }
     }).catchError((e) {
       setState(() {
         _isLoading = false;
@@ -338,10 +340,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   ///保存数据
-  _saveUserConfig(BuildContext context, LoginResp resp) {
-    SaveUserData(resp, password: _password); //保存userID
-
+  _saveUserConfig(BuildContext context, String userID, String custID) {
+    SaveUserData(userID, custID); //保存userID
     _showMainPage(context);
+
+    // _loadData(context, userID, custID);
   }
 
   //登录企业号查看是否有关联的数据
@@ -371,10 +374,31 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
     if (result != null && result != false) {
+      CustInfoList listRep = resp.custInfoList[result];
       //在这里保存userid 和custID
-      _saveUserConfig(context, resp);
+      _saveUserConfig(context, listRep.userId, listRep.custId);
     }
   }
+
+  // Future<void> _loadData(
+  //     BuildContext context, String userID, String custID) async {
+  //   ApiClientPackaging()
+  //       .getUserInfo(
+  //     GetUserInfoReq(userID, custID),
+  //   )
+  //       .then((data) {
+  //     if (this.mounted) {
+  //       setState(() {
+  //         _showMainPage(context);
+  //       });
+  //     }
+  //   }).catchError((e) {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //     HSProgressHUD.showToast(e);
+  //   });
+  // }
 
   ///获取保存的数据
   void _getUserConfig() async {

@@ -99,7 +99,7 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
 
   ///保存数据
   _saveUserConfig(BuildContext context, LoginResp resp) async {
-    SaveUserData(resp);
+    SaveUserData(resp.userId, resp.custId);
 
     _showMainPage(context);
   }

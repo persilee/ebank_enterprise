@@ -85,11 +85,15 @@ class CustInfoList extends Object {
   @JsonKey(name: 'custId')
   String custId;
 
+ @JsonKey(name: 'userId')
+  String userId;
+
   CustInfoList(
     this.businessId,
     this.custNameLoc,
     this.custNameEng,
     this.custId,
+    this.userId
   );
 
   factory CustInfoList.fromJson(Map<String, dynamic> srcJson) =>

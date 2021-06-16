@@ -783,11 +783,12 @@ class _MinePageState extends State<MinePage>
   _getUser() async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
+    String custID = prefs.getString(ConfigKey.CUST_ID);
 
     // UserDataRepository()
     ApiClientPackaging()
         .getUserInfo(
-      GetUserInfoReq(userID),
+      GetUserInfoReq(userID, custID),
     )
         .then((data) {
       if (this.mounted) {
