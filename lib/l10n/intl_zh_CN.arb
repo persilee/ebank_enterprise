@@ -442,7 +442,7 @@
   "transfer_into_currency ": "转入币种",
   "amount": "金额",
   "custom_autofilter": "自定义筛选",
-  "transfer_type_0_short": "本行",
+  "transfer_type_0_short": "行内",
   "transfer_type_1_short": "跨行",
   "add_payee": "添加收款人",
   "bank_name": "银行名称",
