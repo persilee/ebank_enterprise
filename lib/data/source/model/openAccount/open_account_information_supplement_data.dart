@@ -201,6 +201,10 @@ class HKCertificateInfoDTO {
   @JsonKey(name: 'currentIssueDate')
   String currentIssueDate;
 
+  ///证件过期日期
+  @JsonKey(name: 'idDueDate')
+  String idDueDate;
+
   HKCertificateInfoDTO({
     this.fullNameLoc,
     this.idNo,
@@ -211,6 +215,7 @@ class HKCertificateInfoDTO {
     this.birthdate,
     this.firthIssueDate,
     this.currentIssueDate,
+    this.idDueDate = '9999-12-31',
   });
   factory HKCertificateInfoDTO.fromJson(Map<String, dynamic> srcJson) =>
       _$HKCertificateInfoDTOFromJson(srcJson);
