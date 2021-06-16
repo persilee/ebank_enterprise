@@ -20,7 +20,8 @@ class ApiClientPackaging {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool(ConfigKey.NEED_OPEN_ACCOUNT, true);
 
-    if (resp.msgCd == '0000' || resp.msgCd == 'ECUST010') {
+    if (resp.msgCd == '0000') {
+      // || resp.msgCd == 'ECUST010') {
       LoginResp loginResp = LoginResp.fromJson(resp.body);
       loginResp.errorCode = resp.msgCd;
       return loginResp;

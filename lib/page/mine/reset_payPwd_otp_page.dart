@@ -189,7 +189,7 @@ class _ResetPayPwdPageState extends State<ResetPayPwdPage> {
               Navigator.pushNamed(context, setPayPage, arguments: {
                 //iDcardVerification
                 'areaCode': _officeAreaCodeText,
-                'phone': _phone,
+                'phoneNumber': _phone,
                 'smsCode': _sms.text,
               });
               //请求结束-无论成功与否

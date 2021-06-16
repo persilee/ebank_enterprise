@@ -260,72 +260,72 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录操作
   _login(BuildContext context) async {
-    _loadData(context, '852871871056576512', '801000000498');
+    // _loadData(context, '852871871056576512', '801000000498');
 
     // // 触摸收起键盘
-    // FocusScope.of(context).requestFocus(FocusNode());
-    // final prefs = await SharedPreferences.getInstance();
-    // String _userPhone = prefs.getString(ConfigKey.USER_PHONE);
+    FocusScope.of(context).requestFocus(FocusNode());
+    final prefs = await SharedPreferences.getInstance();
+    String _userPhone = prefs.getString(ConfigKey.USER_PHONE);
 
-    // //登录以输入框的值为准
-    // _account = _accountTC.text;
-    // _password = _passwordTC.text;
-    // if (!_judgeCanLogin()) {
-    //   return;
-    // }
+    //登录以输入框的值为准
+    _account = _accountTC.text;
+    _password = _passwordTC.text;
+    if (!_judgeCanLogin()) {
+      return;
+    }
 
-    // setState(() {
-    //   _isLoading = true;
-    // });
+    setState(() {
+      _isLoading = true;
+    });
 
-    // HSProgressHUD.show();
+    HSProgressHUD.show();
 
-    // String password = EncryptUtil.aesEncode(_password);
-    // // UserDataRepository()
-    // ApiClientPackaging()
-    //     .login(LoginReq(
-    //         username: _account, password: password, userPhone: _userPhone))
-    //     .then((value) {
-    //   HSProgressHUD.dismiss();
-    //   if (value.errorCode == 'ECUST010') {
-    //     HsgShowTip.loginPasswordErrorTip(
-    //       context,
-    //       value.passwordErrors,
-    //       5,
-    //       (value) => {
-    //         setState(() {
-    //           _isLoading = false;
-    //         })
-    //       },
-    //     );
-    //   } else {
-    //     // _payerCcyDialog();判断是否有多种客户号
-    //     // if (value.custInfoList != null && value.custInfoList.length > 0) {
-    //     //   //有多个就需要弹窗进行展示
-    //     //   _payerCcyDialog(value, context);
-    //     // } else {
-    //     _saveUserConfig(context, value.userId, value.custId);
-    //   }
-    //   // }
-    // }).catchError((e) {
-    //   setState(() {
-    //     _isLoading = false;
-    //   });
+    String password = EncryptUtil.aesEncode(_password);
+    // UserDataRepository()
+    ApiClientPackaging()
+        .login(LoginReq(
+            username: _account, password: password, userPhone: _userPhone))
+        .then((value) {
+      HSProgressHUD.dismiss();
+      if (value.errorCode == 'ECUST010') {
+        HsgShowTip.loginPasswordErrorTip(
+          context,
+          value.passwordErrors,
+          5,
+          (value) => {
+            setState(() {
+              _isLoading = false;
+            })
+          },
+        );
+      } else {
+        // 判断是否有多种客户号
+        if (value.custInfoList != null && value.custInfoList.length > 0) {
+          //有多个就需要弹窗进行展示
+          _payerCcyDialog(value, context);
+        } else {
+          _saveUserConfig(context, value.userId, value.custId);
+        }
+      }
+    }).catchError((e) {
+      setState(() {
+        _isLoading = false;
+      });
 
-    //   if (e.toString().contains('ECUST009')) {
-    //     HSProgressHUD.dismiss();
-    //     HsgShowTip.loginPasswordErrorToMuchTip(
-    //       context,
-    //       (value) => {
-    //         setState(() {
-    //           _isLoading = false;
-    //         })
-    //       },
-    //     );
-    //   } else {
-    //     HSProgressHUD.showToast(e);
-    //   }
-    // });
+      if (e.toString().contains('ECUST009')) {
+        HSProgressHUD.dismiss();
+        HsgShowTip.loginPasswordErrorToMuchTip(
+          context,
+          (value) => {
+            setState(() {
+              _isLoading = false;
+            })
+          },
+        );
+      } else {
+        HSProgressHUD.showToast(e);
+      }
+    });
   }
 
   //注册
@@ -343,7 +343,7 @@ class _LoginPageState extends State<LoginPage> {
 
   ///保存数据
   _saveUserConfig(BuildContext context, String userID, String custID) {
-    // SaveUserData(userID, custID); //保存userID
+    SaveUserData(userID, custID); //保存userID
     // _showMainPage(context);
 
     _loadData(context, userID, custID);
@@ -375,14 +375,18 @@ class _LoginPageState extends State<LoginPage> {
         );
       },
     );
-    if (result != null && result != false) {
+    if (result != null) {
+      setState(() {
+        _isLoading = false;
+      });
       CustInfoList listRep = resp.custInfoList[result];
       //在这里保存userid 和custID
       _saveUserConfig(context, listRep.userId, listRep.custId);
     }
   }
 
-  _loadData(BuildContext context, String userID, String custID) async {
+  //获取用户信息
+  _loadData(BuildContext context, String userID, String custID) {
     ApiClientPackaging()
         .getUserInfo(
       GetUserInfoReq(userID, custId: custID),

@@ -321,10 +321,12 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
       HSProgressHUD.show();
       final prefs = await SharedPreferences.getInstance();
       String userID = prefs.getString(ConfigKey.USER_ID);
-      // UpdateLoginPawRepository()
+      String account = prefs.getString(ConfigKey.USER_ACCOUNT);
+      String phone = prefs.getString(ConfigKey.USER_PHONE);
+
       ApiClientPassword()
-          .modifyLoginPassword(
-              ModifyPasswordReq(newPwd, oldPwd, _sms.text, userID))
+          .modifyLoginPassword(ModifyPasswordReq(
+              newPwd, oldPwd, _sms.text, userID, account, phone, 'modifyPwd'))
           .then((data) {
         HSProgressHUD.showToastTip(
           S.current.operate_success,
