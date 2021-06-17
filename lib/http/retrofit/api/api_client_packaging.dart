@@ -1,3 +1,5 @@
+import 'package:ebank_mobile/authentication/ali_push.dart';
+import 'package:ebank_mobile/data/model/push/ali_push_modal.dart';
 import 'package:ebank_mobile/data/source/model/account/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/login_register/login.dart';
 import 'package:ebank_mobile/data/source/model/login_register/logout.dart';
@@ -23,6 +25,19 @@ class ApiClientPackaging {
     if (resp.msgCd == '0000' || resp.msgCd == 'ECUST010') {
       LoginResp loginResp = LoginResp.fromJson(resp.body);
       loginResp.errorCode = resp.msgCd;
+
+      if (resp.msgCd == '0000' &&
+          loginResp != null &&
+          loginResp.userId != null) {
+        ParametersReq req2 = ParametersReq(2, [loginResp.userId]);
+        try {
+          ParametersResp resp = await AliPush().aliPushSetParameters(req2);
+          print('alipush___${resp.success}');
+        } catch (e) {
+          print('$e');
+        }
+      }
+
       return loginResp;
     } else if (resp.msgCd == 'ECUST009') {
       return Future.error(AppException(resp?.msgCd, resp?.msgInfo));
@@ -43,11 +58,18 @@ class ApiClientPackaging {
   }
 
   /// 安全退出
-  Future<LogoutResp> logout(LogoutReq req) {
-    Future<LogoutResp> resp = ApiClientAccount().logout(req);
-    resp.then((value) => {
-          RemoveUserDataNotAll(),
-        });
+  Future<LogoutResp> logout(LogoutReq req) async {
+    LogoutResp resp = await ApiClientAccount().logout(req);
+    if (req.userId != null && req.userId != '') {
+      ParametersReq req2 = ParametersReq(2, [req.userId]);
+      try {
+        ParametersResp resp = await AliPush().aliPushCancelParameters(req2);
+        print('alipush---${resp.success}');
+      } catch (e) {
+        print('$e');
+      }
+    }
+    RemoveUserDataNotAll();
     return resp;
   }
 

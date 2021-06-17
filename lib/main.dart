@@ -256,7 +256,7 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
   }
 
   _setAliPushParameters() async {
-    ParametersReq req = ParametersReq(1, ['brillink']);
+    ParametersReq req = ParametersReq(1, ['brillink_C']);
     try {
       ParametersResp resp = await AliPush().aliPushSetParameters(req);
       print('${resp.success}');
@@ -264,10 +264,10 @@ class _HSGBankAppState extends State<HSGBankApp> with WidgetsBindingObserver {
       print('$e');
     }
 
-    ParametersReq req2 = ParametersReq(2, ['haha3', 'haha4']);
+    ParametersReq req2 = ParametersReq(2, ['男性', '90后']);
     try {
       ParametersResp resp = await AliPush().aliPushSetParameters(req2);
-      print('${resp.success}');
+      print('alipush___${resp.success}');
     } catch (e) {
       print('$e');
     }

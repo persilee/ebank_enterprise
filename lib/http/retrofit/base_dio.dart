@@ -14,7 +14,7 @@ class BaseDio {
 
   static const VERSIONIOS = '1';
   static const VERSIONANDROID = '1';
-  static const TYPEINT = 1;
+  static const TYPEINT = 2;
   static const BASEURLDEV =
       TYPEINT == 1 ? "http://192.168.200.100:5040/" : ''; //dev
   static const BASEURLSIT =
