@@ -128,24 +128,37 @@ void AppUpdateCheck(BuildContext context) async {
 
   initPlatformState();
 
-  HsgShowTip.versionUpdateTip(
-    context: context,
-    barrierDismissible: false,
-    click: (value) {
-      print('<><><>');
-      openUrl();
-    },
-  );
+  String _systemTypeStr = '0';
+  if (Platform.isIOS) {
+    _systemTypeStr = '1';
+  }
+
+  String _versionIdStr = BaseDio.VERSIONANDROID;
+  if (Platform.isIOS) {
+    _versionIdStr = BaseDio.VERSIONIOS;
+  }
 
   ///版本更新接口
   ApiClientAccount()
       .getlastVersion(GetLastVersionReq(
     platUserType: '2',
-    systemType: '0',
-    versionId: '1',
+    systemType: _systemTypeStr,
+    versionId: _versionIdStr,
   ))
       .then((value) {
     GetLastVersionResp resp = value;
     print('_+_+_+_+_+_+$resp');
+    bool isForceUpdate = resp.forceUpdate == '1';
+    HsgShowTip.versionUpdateTip(
+      context: context,
+      showTipStr: resp.updateText ?? '',
+      barrierDismissible: !isForceUpdate,
+      click: (value) {
+        print('<><><>');
+        if (value == true) {
+          openUrl();
+        }
+      },
+    );
   });
 }

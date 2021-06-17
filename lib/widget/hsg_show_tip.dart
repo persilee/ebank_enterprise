@@ -178,16 +178,18 @@ class HsgShowTip {
   /// 版本更新提示
   static void versionUpdateTip({
     BuildContext context,
+    String showTipStr = '',
     bool barrierDismissible = true,
     Function(dynamic value) click,
   }) {
+    if (showTipStr == '') showTipStr = S.of(context).version_update_tip;
     showDialog(
         context: context,
         barrierDismissible: barrierDismissible,
         builder: (context) {
           return HsgAlertDialog(
             title: S.of(context).warm_prompt,
-            message: '您的APP有新的版本更新，请前往更新！',
+            message: showTipStr,
             positiveButton: S.current.confirm,
             negativeButton: barrierDismissible ? S.current.cancel : null,
           );

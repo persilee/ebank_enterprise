@@ -820,5 +820,6 @@
   "task_due_time": "到期時間",
   "task_last_time": "剩餘時間",
   "task_complete_timeout_tip": "已經超過審批時限，請在規定時間內審批！",
-  "electronic_statement_date": "結單日期"
+  "electronic_statement_date": "結單日期",
+  "version_update_tip": "您的APP有新的版本更新，請前往更新！"
 }

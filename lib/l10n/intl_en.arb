@@ -821,5 +821,5 @@
   "task_last_time": "Remaining Time",
   "task_complete_timeout_tip": "The approval time limit has expired, please approve within the specified time!",
   "electronic_statement_date": "Statement date",
-  "test": "测试"
+  "version_update_tip": "Your APP has a new version update, please go to update!"
 }
