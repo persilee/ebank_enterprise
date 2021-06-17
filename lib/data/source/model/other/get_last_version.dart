@@ -10,6 +10,10 @@ part 'get_last_version.g.dart';
 @JsonSerializable()
 class GetLastVersionReq extends Object {
   /// 平台用户类型 1 个人， 2 企业
+  ///
+  /// P - 个人；
+  /// C - 企业；
+  /// F - 金融机构；
   @JsonKey(name: 'platUserType')
   String platUserType;
 

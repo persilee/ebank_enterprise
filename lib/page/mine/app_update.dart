@@ -141,7 +141,7 @@ void AppUpdateCheck(BuildContext context) async {
   ///版本更新接口
   ApiClientAccount()
       .getlastVersion(GetLastVersionReq(
-    platUserType: '2',
+    platUserType: 'C',
     systemType: _systemTypeStr,
     versionId: _versionIdStr,
   ))
