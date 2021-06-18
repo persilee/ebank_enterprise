@@ -24,7 +24,10 @@ class HeaderInterceptor extends Interceptor {
     }
     String locale = localeStr;
 
-    int urlType = SpUtil.getInt(ConfigKey.URL_TYPE) ?? TYPEINT;
+    int urlType = SpUtil.getInt(ConfigKey.URL_TYPE) ?? 0;
+    if (urlType == 0) {
+      urlType = TYPEINT;
+    }
     String baseUrl = "http://192.168.200.100:5040/";
     switch (urlType) {
       case 1: //dev
