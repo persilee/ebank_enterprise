@@ -1026,3 +1026,148 @@ Future<T> showHsgBottomSheet<T>({
       enableDrag: enableDrag,
       routeSettings: routeSettings,
     );
+
+/// 登录接口多账户选择弹窗
+class HsgLoginAccountSelectAlert extends StatelessWidget {
+  final String title;
+  final List<Map> items; //账户与公司名称
+  final String positiveButton;
+  final String negativeButton;
+  final lastSelectedPosition; //最后选中的标记
+
+  HsgLoginAccountSelectAlert({
+    Key key,
+    this.title,
+    this.items,
+    this.positiveButton,
+    this.negativeButton,
+    this.lastSelectedPosition = -1,
+  }) : super(key: key) {
+    // 上次选中的位置由调用者保存
+    _selectedPosition = -1;
+    if (lastSelectedPosition != -1) {
+      _selectedPosition = lastSelectedPosition;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget titleWidget;
+    Widget contentWidget;
+    Widget actionsWidget;
+    if (title != null) {
+      titleWidget = _titleWidget(title);
+    }
+
+    if (items != null && items.length > 0) {
+      final EdgeInsets contentPadding = EdgeInsets.fromLTRB(0, 0, 0, 20);
+      contentWidget = Padding(
+        padding: contentPadding,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: items.length,
+          itemBuilder: (BuildContext context, int position) {
+            return _getItemRow(position, context, _selectedPosition);
+          },
+        ),
+      );
+    }
+
+    var hasActions = false;
+    if (positiveButton != null || negativeButton != null) {
+      hasActions = true;
+      actionsWidget = _actionsWidget(
+        positiveButton,
+        negativeButton,
+        context,
+        () {
+          if (items.length > 0) {
+            Navigator.of(context).pop(_selectedPosition);
+          } else {
+            Navigator.pop(context);
+          }
+        },
+      );
+    }
+
+    List<Widget> columnChildren = <Widget>[
+      if (title != null) titleWidget,
+      if (items != null && items.length > 0)
+        Flexible(
+          child: contentWidget,
+        ),
+      if (hasActions)
+        Divider(
+          height: 1,
+        ),
+      if (hasActions) actionsWidget,
+    ];
+
+    final dialogChild = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: columnChildren,
+    );
+
+    return Dialog(
+      child: dialogChild,
+      shape: _dialogShape,
+    );
+  }
+
+  Widget _getItemRow(int position, BuildContext context, int selectedPosition) {
+    Map mapDict = items[position];
+    List<Widget> rowChildren = [
+      Expanded(
+          child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start, //纵轴使用cross， 横轴使用main对应
+          children: [
+            Text(
+              mapDict['account'],
+              maxLines: 1,
+              textAlign: TextAlign.left,
+              // overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: HsgColors.firstDegreeText,
+                fontSize: 15,
+              ),
+            ),
+            Text(
+              mapDict['companyName'] ?? '',
+              textAlign: TextAlign.left,
+              maxLines: 1,
+              // overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: HsgColors.firstDegreeText,
+                fontSize: 15,
+              ),
+            ),
+          ],
+        ),
+      )),
+      Padding(
+        padding: EdgeInsets.only(left: 10),
+        child: Image.asset(
+          position == selectedPosition
+              ? 'images/common/check_btn_common_checked.png'
+              : 'images/common/check_btn_common_no_check.png',
+          height: 18,
+          width: 18,
+        ),
+      ),
+    ];
+    return InkWell(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
+        child: Row(
+          children: rowChildren,
+        ),
+      ),
+      onTap: () {
+        _selectedPosition = position;
+        (context as Element).markNeedsBuild();
+      },
+    );
+  }
+}

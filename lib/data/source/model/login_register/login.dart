@@ -45,6 +45,7 @@ class LoginResp {
   int passwordErrors;
   String belongCustStatus;
   List<CustInfoList> custInfoList;
+  List<UserInfoList> userInfoList;
 
   ///错误码
   String errorCode;
@@ -85,19 +86,37 @@ class CustInfoList extends Object {
   @JsonKey(name: 'custId')
   String custId;
 
- @JsonKey(name: 'userId')
+  @JsonKey(name: 'userId')
   String userId;
 
-  CustInfoList(
-    this.businessId,
-    this.custNameLoc,
-    this.custNameEng,
-    this.custId,
-    this.userId
-  );
+  CustInfoList(this.businessId, this.custNameLoc, this.custNameEng, this.custId,
+      this.userId);
 
   factory CustInfoList.fromJson(Map<String, dynamic> srcJson) =>
       _$CustInfoListFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$CustInfoListToJson(this);
+}
+
+@JsonSerializable()
+class UserInfoList extends Object {
+  @JsonKey(name: 'userAccount')
+  String userAccount;
+
+  @JsonKey(name: 'localUserName')
+  String localUserName;
+
+  @JsonKey(name: 'englishUserName')
+  String englishUserName;
+
+  @JsonKey(name: 'userId')
+  String userId;
+
+  UserInfoList(
+      this.userAccount, this.localUserName, this.englishUserName, this.userId);
+
+  factory UserInfoList.fromJson(Map<String, dynamic> srcJson) =>
+      _$UserInfoListFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$UserInfoListToJson(this);
 }

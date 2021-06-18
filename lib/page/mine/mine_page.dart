@@ -717,12 +717,13 @@ class _MinePageState extends State<MinePage>
   void _changeUserInfoShow(UserInfoResp model) {
     if (this.mounted) {
       setState(() {
-        _headPortraitUrl = model.headPortrait; //头像地址
-        _enterpriseName =
-            _language == 'en' ? model.custEngName : model.custLocalName; // 企业名称
+        _headPortraitUrl = model.headPortrait ?? ''; //头像地址
+        _enterpriseName = _language == 'en'
+            ? model.custEngName ?? ''
+            : model.custLocalName ?? ''; // 企业名称
         _userName = _language == 'en'
-            ? model.englishUserName
-            : model.localUserName; // 姓名
+            ? model.englishUserName ?? ''
+            : model.localUserName ?? ''; // 姓名
         _userName = (_userName == null ||
                 _userName == '' ||
                 !(['4', '5'].contains(_belongCustStatus)))
@@ -788,7 +789,7 @@ class _MinePageState extends State<MinePage>
     // UserDataRepository()
     ApiClientPackaging()
         .getUserInfo(
-      GetUserInfoReq(userID),
+      GetUserInfoReq(userID, custId: custID),
     )
         .then((data) {
       if (this.mounted) {
@@ -838,6 +839,8 @@ class _MinePageState extends State<MinePage>
       HSProgressHUD.dismiss();
       if (this.mounted) {
         setState(() {
+          prefs.remove('loginName');
+          prefs.clear();
           Future.delayed(Duration.zero, () {
             Navigator.of(context).pushNamedAndRemoveUntil(
                 pageLogin, ModalRoute.withName(""), //清除旧栈需要保留的栈 不清除就不写这句

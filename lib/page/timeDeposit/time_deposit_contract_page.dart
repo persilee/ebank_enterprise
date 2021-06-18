@@ -1190,19 +1190,21 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
           .getTdProdInstCode(GetTdProductInstCodeReq(
               this._detailProducDTOList.bppdCode ?? ''));
       if (resp != null) {
-        List<String> instructionDataList = [];
-        List<String> instructionList = [];
-        for (var i = 0; i < instructionDatas.length; i++) {
-          if (resp.insCodes.contains(instructionDatas[i])) {
-            instructionDataList.add(instructionDatas[i]);
-            instructionList.add(instructions[i]);
+        if (this.mounted) {
+          List<String> instructionDataList = [];
+          List<String> instructionList = [];
+          for (var i = 0; i < instructionDatas.length; i++) {
+            if (resp.insCodes.contains(instructionDatas[i])) {
+              instructionDataList.add(instructionDatas[i]);
+              instructionList.add(instructions[i]);
+            }
           }
+          setState(() {
+            instructionDatas = instructionDataList;
+            instructions = instructionList;
+            _prodType = resp.prdAcCd ?? '';
+          });
         }
-        setState(() {
-          instructionDatas = instructionDataList;
-          instructions = instructionList;
-          _prodType = resp.prdAcCd ?? '';
-        });
       }
       return true;
     } catch (e) {

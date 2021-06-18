@@ -176,7 +176,6 @@ class _LoginPageState extends State<LoginPage> {
                           child: ForgetButton(S.current.forget_username, () {
                             setState(() {
                               Navigator.pushNamed(context, pageForgetUserName);
-                              print('忘记密码');
                             });
                           }),
                         )
@@ -281,7 +280,6 @@ class _LoginPageState extends State<LoginPage> {
     HSProgressHUD.show();
 
     String password = EncryptUtil.aesEncode(_password);
-    // UserDataRepository()
     ApiClientPackaging()
         .login(LoginReq(
             username: _account, password: password, userPhone: _userPhone))
@@ -300,11 +298,16 @@ class _LoginPageState extends State<LoginPage> {
         );
       } else {
         // 判断是否有多种客户号
-        if (value.custInfoList != null && value.custInfoList.length > 0) {
+        if (value.userInfoList != null && value.userInfoList.length > 0) {
           //有多个就需要弹窗进行展示
           _payerCcyDialog(value, context);
         } else {
-          _saveUserConfig(context, value.userId, value.custId);
+          if (value.custInfoList != null && value.custInfoList.length > 0) {
+            CustInfoList custValue = value.custInfoList[0];
+            _saveUserConfig(context, value.userId, custValue.custId);
+          } else {
+            _saveUserConfig(context, value.userId, value.custId);
+          }
         }
       }
     }).catchError((e) {
@@ -351,24 +354,35 @@ class _LoginPageState extends State<LoginPage> {
 
   //登录企业号查看是否有关联的数据
   Future _payerCcyDialog(LoginResp resp, BuildContext context) async {
-    List<String> nameStr = [];
+    List<Map> nameList = [];
     String _language = Intl.getCurrentLocale();
-    if (_language == 'en') {
-      for (CustInfoList custInfoList in resp.custInfoList) {
-        nameStr.add(custInfoList.custNameEng);
+
+    for (int i = 0; i < resp.userInfoList.length; i++) {
+      UserInfoList userRep = resp.userInfoList[i];
+      Map compList = Map();
+      compList['account'] = userRep.userAccount; //先把账号加进去
+      compList['companyName'] = '';
+
+      for (int i = 0; i < resp.custInfoList.length; i++) {
+        CustInfoList custRep = resp.custInfoList[i];
+        if (userRep.userId == custRep.userId) {
+          //找到了
+          if (_language == 'en') {
+            compList['companyName'] = custRep.custNameEng;
+          } else {
+            compList['companyName'] = custRep.custNameLoc;
+          }
+        }
       }
-    } else {
-      for (CustInfoList custInfoList in resp.custInfoList) {
-        nameStr.add(custInfoList.custNameLoc);
-      }
+      nameList.add(compList);
     }
 
     final result = await showDialog(
       context: context,
       builder: (context) {
-        return HsgSingleChoiceDialog(
+        return HsgLoginAccountSelectAlert(
           title: S.of(context).login_relevance_account_tip,
-          items: nameStr,
+          items: nameList,
           positiveButton: S.of(context).confirm,
           negativeButton: S.of(context).cancel,
           lastSelectedPosition: 0,
@@ -379,9 +393,26 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _isLoading = false;
       });
-      CustInfoList listRep = resp.custInfoList[result];
-      //在这里保存userid 和custID
-      _saveUserConfig(context, listRep.userId, listRep.custId);
+      if (resp.custInfoList == null || resp.custInfoList.length <= 0) {
+        //没有公司，直接拿userID去使用
+        UserInfoList listRep = resp.userInfoList[result];
+        _saveUserConfig(context, listRep.userId, '');
+        return;
+      }
+      if (resp.custInfoList != null || resp.custInfoList.length > 0) {
+        UserInfoList listRep = resp.userInfoList[result];
+
+        //拿到userID到公司列表里面进行匹配
+        for (int i = 0; i < resp.custInfoList.length; i++) {
+          CustInfoList custRep = resp.custInfoList[i];
+          if (listRep.userId == custRep.userId) {
+            _saveUserConfig(context, listRep.userId, custRep.custId);
+            return;
+          }
+        }
+        //没有匹配的userID，就直接调用getUSer方法，cust传空
+        _saveUserConfig(context, listRep.userId, '');
+      }
     }
   }
 

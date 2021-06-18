@@ -125,7 +125,7 @@ class _LoanApplicationState extends State<LoanApplicationPage> {
 
     // UserDataRepository()
     ApiClientPackaging()
-        .getUserInfo(GetUserInfoReq(userID))
+        .getUserInfo(GetUserInfoReq(userID, custId: custID))
         .then((data) {
       setState(() {
         _custId = data.custId;
