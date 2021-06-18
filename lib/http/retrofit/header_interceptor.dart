@@ -6,6 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:sp_util/sp_util.dart';
 
 class HeaderInterceptor extends Interceptor {
+  static const VERSIONIOS = '1';
+  static const VERSIONANDROID = '1';
+
+  static const TYPEINT = 2;
+
   @override
   Future onRequest(RequestOptions options) async {
     String token = SpUtil.getString(ConfigKey.NET_TOKEN);
@@ -19,7 +24,7 @@ class HeaderInterceptor extends Interceptor {
     }
     String locale = localeStr;
 
-    int urlType = SpUtil.getInt(ConfigKey.URL_TYPE) ?? BaseDio.TYPEINT;
+    int urlType = SpUtil.getInt(ConfigKey.URL_TYPE) ?? TYPEINT;
     String baseUrl = "http://192.168.200.100:5040/";
     switch (urlType) {
       case 1: //dev

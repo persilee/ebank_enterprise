@@ -9,7 +9,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_packaging.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
-import 'package:ebank_mobile/http/retrofit/base_dio.dart';
+import 'package:ebank_mobile/http/retrofit/header_interceptor.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/page/mine/app_update.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -54,7 +54,8 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     _relevanceList = ['HSG10', '15000000016', '18603070086'];
 
-    int urlType = SpUtil.getInt(ConfigKey.URL_TYPE) ?? BaseDio.TYPEINT;
+    int urlType =
+        SpUtil.getInt(ConfigKey.URL_TYPE) ?? HeaderInterceptor.TYPEINT;
     switch (urlType) {
       case 1: //dev
         _nowBaseUrlType = "DEV";
@@ -144,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   //填充左侧，使button自适应宽度
                   Container(
-                    child: BaseDio.TYPEINT == 2
+                    child: HeaderInterceptor.TYPEINT == 2
                         ? _baseUrlSelectButton()
                         : Container(),
                   ),
