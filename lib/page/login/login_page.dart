@@ -54,8 +54,10 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     _relevanceList = ['HSG10', '15000000016', '18603070086'];
 
-    int urlType =
-        SpUtil.getInt(ConfigKey.URL_TYPE) ?? HeaderInterceptor.TYPEINT;
+    int urlType = SpUtil.getInt(ConfigKey.URL_TYPE) ?? 0;
+    if (urlType == 0) {
+      urlType = HeaderInterceptor.TYPEINT;
+    }
     switch (urlType) {
       case 1: //dev
         _nowBaseUrlType = "DEV";
