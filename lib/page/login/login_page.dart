@@ -9,6 +9,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_packaging.dart';
 import 'package:ebank_mobile/http/retrofit/app_exceptions.dart';
+import 'package:ebank_mobile/http/retrofit/base_dio.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/page/mine/app_update.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -25,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sp_util/sp_util.dart';
 
 import '../../util/encrypt_util.dart';
 import '../../widget/progressHUD.dart';
@@ -45,10 +47,35 @@ class _LoginPageState extends State<LoginPage> {
   var _account = ''; //'blk101';HSG20
   var _password = ''; //'4N0021S8';Qwe123456~
 
+  String _nowBaseUrlType = '未知';
+
   @override
   void initState() {
     super.initState();
     _relevanceList = ['HSG10', '15000000016', '18603070086'];
+
+    int urlType = SpUtil.getInt(ConfigKey.URL_TYPE) ?? BaseDio.TYPEINT;
+    switch (urlType) {
+      case 1: //dev
+        _nowBaseUrlType = "DEV";
+        break;
+      case 2: //sit
+        _nowBaseUrlType = "SIT";
+        break;
+      case 3: //uat
+        _nowBaseUrlType = "UAT";
+        break;
+      case 4: //local
+        _nowBaseUrlType = "LOCAL";
+        break;
+      case 5: //旧 Dev
+        _nowBaseUrlType = "DEV_OLD";
+        break;
+      case 6: //东方 Dev1
+        _nowBaseUrlType = "DEV_东方";
+        break;
+      default:
+    }
 
     // AppUpdateCheck(context);
 
@@ -113,8 +140,14 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               margin: EdgeInsets.only(top: 20),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   //填充左侧，使button自适应宽度
+                  Container(
+                    child: BaseDio.TYPEINT == 2
+                        ? _baseUrlSelectButton()
+                        : Container(),
+                  ),
                   Expanded(child: Container()),
                   LanguageChangeBtn(_changeLangBtnTltle),
                 ],
@@ -207,24 +240,25 @@ class _LoginPageState extends State<LoginPage> {
             ),
 
             Container(
-                child: Row(
-              children: [
-                //注册按钮
-                Container(
-                  margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
-                  child: UnderButtonView(
-                      S.current.register, () => _regesiter(context), false),
-                ),
-                //登录按钮
-                Container(
-                  margin: EdgeInsets.only(
-                    top: 40,
+              child: Row(
+                children: [
+                  //注册按钮
+                  Container(
+                    margin: EdgeInsets.only(top: 40, left: 36.0, right: 36.0),
+                    child: UnderButtonView(
+                        S.current.register, () => _regesiter(context), false),
                   ),
-                  child: UnderButtonView(S.of(context).login,
-                      _isLoading ? null : () => _login(context), true),
-                )
-              ],
-            )),
+                  //登录按钮
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: 40,
+                    ),
+                    child: UnderButtonView(S.of(context).login,
+                        _isLoading ? null : () => _login(context), true),
+                  )
+                ],
+              ),
+            ),
 
             // Spacer(),
           ],
@@ -394,6 +428,80 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     return true;
+  }
+
+  Widget _baseUrlSelectButton() {
+    return Container(
+      child: FlatButton(
+        onPressed: () {
+          _selectBaseUrlType(context);
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              child: Text(
+                '当前服务器：' + _nowBaseUrlType,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            Container(
+              child: Icon(
+                Icons.arrow_drop_down_outlined,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _selectBaseUrlType(BuildContext context) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    List<String> baseUrlTypes = [
+      'DEV',
+      'DEV_OLD',
+      'SIT',
+      'DEV',
+    ];
+    final result = await showHsgBottomSheet(
+        context: context,
+        builder: (context) => BottomMenu(
+              title: '选择环境',
+              items: baseUrlTypes,
+            ));
+    int baseUrlType = -1;
+    if (result != null && result != false) {
+      switch (result) {
+        case 0:
+          _nowBaseUrlType = 'DEV';
+          baseUrlType = 1;
+          break;
+        case 1:
+          _nowBaseUrlType = 'DEV_OLD';
+          baseUrlType = 5;
+          break;
+        case 2:
+          _nowBaseUrlType = 'SIT';
+          baseUrlType = 2;
+          break;
+        case 3:
+          _nowBaseUrlType = 'UAT';
+          baseUrlType = 3;
+          break;
+      }
+    } else {
+      return;
+    }
+
+    if (baseUrlType != -1) {
+      SpUtil.putInt(ConfigKey.URL_TYPE, baseUrlType);
+      setState(() {});
+    }
   }
 }
 

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:ebank_mobile/http/retrofit/base_dio.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
+import 'package:flutter/material.dart';
 import 'package:sp_util/sp_util.dart';
 
 class HeaderInterceptor extends Interceptor {
@@ -16,6 +18,32 @@ class HeaderInterceptor extends Interceptor {
       localeStr = 'en_US';
     }
     String locale = localeStr;
+
+    int urlType = SpUtil.getInt(ConfigKey.URL_TYPE) ?? BaseDio.TYPEINT;
+    String baseUrl = "http://192.168.200.100:5040/";
+    switch (urlType) {
+      case 1: //dev
+        baseUrl = "http://192.168.200.100:5040/";
+        break;
+      case 2: //sit
+        baseUrl = "http://47.57.236.20:5040/";
+        break;
+      case 3: //uat
+        baseUrl = "http://47.242.2.219:5040/";
+        break;
+      case 4: //local
+        baseUrl = "http://192.168.201.65:5041/";
+        break;
+      case 5: //旧 Dev
+        baseUrl = "http://52.82.102.241:5040/";
+        break;
+      case 6: //东方 Dev1
+        baseUrl = "http://192.168.200.102:5040/";
+        break;
+      default:
+    }
+
+    options.baseUrl = baseUrl;
     options.headers.addAll({'x-kont-channel': 'CMBK'});
     options.headers.addAll({'x-kont-appkey': '6000000514984257'});
     options.headers.addAll({'x_kont_token': token});

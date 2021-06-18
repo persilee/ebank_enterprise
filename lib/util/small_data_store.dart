@@ -32,6 +32,8 @@ class ConfigKey {
   static const CUST_ENG_NAME = "cust_eng_name";
 
   static const NEED_OPEN_ACCOUNT = "need_open_account";
+
+  static const URL_TYPE = "url_type";
 }
 
 class InputFormartterRegExp {
