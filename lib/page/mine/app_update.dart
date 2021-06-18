@@ -13,14 +13,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 // ignore: non_constant_identifier_names
 void AppUpdateCheck(BuildContext context) async {
-  final PackageInfo info = await PackageInfo.fromPlatform();
+  // final PackageInfo info = await PackageInfo.fromPlatform();
   // print(info.appName);
   // print(info.buildNumber);
   // print(info.packageName);
   // print(info.version);
 
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  Map<String, dynamic> _deviceData = <String, dynamic>{};
+  // Map<String, dynamic> _deviceData = <String, dynamic>{};
 
   Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
     return <String, dynamic>{
@@ -86,7 +86,7 @@ void AppUpdateCheck(BuildContext context) async {
       };
     }
 
-    _deviceData = deviceData;
+    // _deviceData = deviceData;
   }
 
   openUrl() async {
@@ -129,9 +129,9 @@ void AppUpdateCheck(BuildContext context) async {
 
   initPlatformState();
 
-  String _systemTypeStr = '0';
+  String _systemTypeStr = '1';
   if (Platform.isIOS) {
-    _systemTypeStr = '1';
+    _systemTypeStr = '0';
   }
 
   String _versionIdStr = HeaderInterceptor.VERSIONANDROID;
@@ -149,17 +149,21 @@ void AppUpdateCheck(BuildContext context) async {
       .then((value) {
     GetLastVersionResp resp = value;
     print('_+_+_+_+_+_+$resp');
-    bool isForceUpdate = resp.forceUpdate == '1';
-    HsgShowTip.versionUpdateTip(
-      context: context,
-      showTipStr: resp.updateText ?? '',
-      barrierDismissible: !isForceUpdate,
-      click: (value) {
-        print('<><><>');
-        if (value == true) {
-          openUrl();
-        }
-      },
-    );
+    if (resp != null &&
+        resp.bundleId != null &&
+        int.parse(_versionIdStr) < int.parse(resp.bundleId)) {
+      bool isForceUpdate = resp.forceUpdate == '1';
+      HsgShowTip.versionUpdateTip(
+        context: context,
+        showTipStr: resp.updateText ?? '',
+        barrierDismissible: !isForceUpdate,
+        click: (value) {
+          print('<><><>');
+          if (value == true) {
+            openUrl();
+          }
+        },
+      );
+    }
   });
 }

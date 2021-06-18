@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
       default:
     }
 
-    // AppUpdateCheck(context);
+    AppUpdateCheck(context);
 
     HSProgressHUD.dismiss();
     // 添加监听

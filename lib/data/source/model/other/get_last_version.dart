@@ -17,7 +17,7 @@ class GetLastVersionReq extends Object {
   @JsonKey(name: 'platUserType')
   String platUserType;
 
-  /// 系统类型 0:Android 1：IOS
+  /// 系统类型 1:Android 0：IOS
   @JsonKey(name: 'systemType')
   String systemType;
 
