@@ -1,7 +1,7 @@
 #import <Flutter/Flutter.h>
 #import <UIKit/UIKit.h>
 
-@interface AppDelegate : FlutterAppDelegate
+@interface AppDelegate : FlutterAppDelegate 
 
 ///签里眼的回调相关
 @property (nonatomic, strong) FlutterResult resultBlock;

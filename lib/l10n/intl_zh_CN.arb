@@ -822,5 +822,5 @@
   "task_last_time": "剩余时间",
   "task_complete_timeout_tip": "已经超过审批时限，请在规定时间内审批！",
   "electronic_statement_date": "结单日期",
-  "test": "测试"
+  "version_update_tip": "您的APP有新的版本更新，请前往更新！"
 }

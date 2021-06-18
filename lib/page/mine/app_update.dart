@@ -4,6 +4,7 @@ import 'package:device_info/device_info.dart';
 import 'package:ebank_mobile/data/source/model/other/get_last_version.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/base_dio.dart';
+import 'package:ebank_mobile/http/retrofit/header_interceptor.dart';
 import 'package:ebank_mobile/widget/hsg_show_tip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -91,7 +92,7 @@ void AppUpdateCheck(BuildContext context) async {
   openUrl() async {
     var url = '';
     if (Platform.isAndroid) {
-      switch (BaseDio.TYPEINT) {
+      switch (HeaderInterceptor.TYPEINT) {
         case 1:
           url = 'https://www.pgyer.com/nUA8';
           break;
@@ -105,7 +106,7 @@ void AppUpdateCheck(BuildContext context) async {
           url = 'https://www.pgyer.com/nUA8';
       }
     } else if (Platform.isIOS) {
-      switch (BaseDio.TYPEINT) {
+      switch (HeaderInterceptor.TYPEINT) {
         case 1:
           url = 'https://www.pgyer.com/Gjv6';
           break;
@@ -128,24 +129,37 @@ void AppUpdateCheck(BuildContext context) async {
 
   initPlatformState();
 
-  HsgShowTip.versionUpdateTip(
-    context: context,
-    barrierDismissible: false,
-    click: (value) {
-      print('<><><>');
-      openUrl();
-    },
-  );
+  String _systemTypeStr = '0';
+  if (Platform.isIOS) {
+    _systemTypeStr = '1';
+  }
+
+  String _versionIdStr = HeaderInterceptor.VERSIONANDROID;
+  if (Platform.isIOS) {
+    _versionIdStr = HeaderInterceptor.VERSIONIOS;
+  }
 
   ///版本更新接口
   ApiClientAccount()
       .getlastVersion(GetLastVersionReq(
-    platUserType: '2',
-    systemType: '0',
-    versionId: '1',
+    platUserType: 'C',
+    systemType: _systemTypeStr,
+    versionId: _versionIdStr,
   ))
       .then((value) {
     GetLastVersionResp resp = value;
     print('_+_+_+_+_+_+$resp');
+    bool isForceUpdate = resp.forceUpdate == '1';
+    HsgShowTip.versionUpdateTip(
+      context: context,
+      showTipStr: resp.updateText ?? '',
+      barrierDismissible: !isForceUpdate,
+      click: (value) {
+        print('<><><>');
+        if (value == true) {
+          openUrl();
+        }
+      },
+    );
   });
 }
