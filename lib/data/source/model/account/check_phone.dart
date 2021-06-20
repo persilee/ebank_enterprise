@@ -16,9 +16,9 @@ class CheckPhoneReq extends Object {
   String userType;
 
   CheckPhoneReq(
-    this.userPhone,
-    this.userType,
-  );
+    this.userPhone, {
+    this.userType = '2',
+  });
 
   factory CheckPhoneReq.fromJson(Map<String, dynamic> srcJson) =>
       _$CheckPhoneReqFromJson(srcJson);
