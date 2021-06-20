@@ -13,10 +13,14 @@ class FaceSignIDReq extends Object {
   @JsonKey(name: 'sigCode')
   String sigCode;
 
+  @JsonKey(name: 'userId')
+  String userId;
+
   FaceSignIDReq(
     this.phone,
     this.areaCode,
     this.sigCode,
+    this.userId,
   );
 
   factory FaceSignIDReq.fromJson(Map<String, dynamic> srcJson) =>

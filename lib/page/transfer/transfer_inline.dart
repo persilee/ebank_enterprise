@@ -110,7 +110,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
     // _loadLocalCcy();
     _loadTransferData();
     _actualNameReqData();
-
+    //收款方账户
     _payeeAccountFocusNode.addListener(() {
       if (_payeeAccountController.text.length > 0 &&
           !_payeeAccountFocusNode.hasFocus) {

@@ -203,6 +203,7 @@ class _RegisterConfirmPageState extends State<RegisterConfirmPage> {
           listDataLogin = {
             'accountName': _registerAccount,
             'password': password,
+            'userPhone': _userPhone,
           };
           //传值跳转到指定页面
           Navigator.of(context).pushNamedAndRemoveUntil(pageRegisterSuccess,

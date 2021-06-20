@@ -9,21 +9,24 @@ part 'update_login_password.g.dart';
 
 @JsonSerializable()
 class ModifyPasswordReq {
-  @JsonKey(name: 'newPassword')
+  @JsonKey(name: 'newPassword') //新密码
   String newPassword;
-  @JsonKey(name: 'password')
+  @JsonKey(name: 'password') //旧密码
   String password;
-  @JsonKey(name: 'smsCode')
+  @JsonKey(name: 'smsCode') //短信码
   String smsCode;
-  @JsonKey(name: 'userId')
+  @JsonKey(name: 'userId') //用户ID
   String userId;
+  @JsonKey(name: 'userAccount') //用户账号
+  String userAccount;
+  @JsonKey(name: 'userPhone') //用户手机号
+  String userPhone;
+  @JsonKey(
+      name: 'modifyPwdType') //修改密码类型:modifyPwd-修改登录密码，transactionPwd-修改支付密码
+  String modifyPwdType;
 
-  ModifyPasswordReq(
-    this.newPassword,
-    this.password,
-    this.smsCode,
-    this.userId,
-  );
+  ModifyPasswordReq(this.newPassword, this.password, this.smsCode, this.userId,
+      this.userAccount, this.userPhone, this.modifyPwdType);
 
   @override
   String toString() {

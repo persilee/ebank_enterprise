@@ -12,9 +12,10 @@ class GetUserInfoReq extends Object {
   @JsonKey(name: 'userId')
   String userId;
 
-  GetUserInfoReq(
-    this.userId,
-  );
+  @JsonKey(name: 'custId')
+  String custId;
+
+  GetUserInfoReq(this.userId, {this.custId});
 
   factory GetUserInfoReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetUserInfoReqFromJson(srcJson);

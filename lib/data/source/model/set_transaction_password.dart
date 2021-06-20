@@ -9,39 +9,58 @@ part 'set_transaction_password.g.dart';
 //提交身份验证信息
 @JsonSerializable()
 class SetTransactionPasswordReq {
-  @JsonKey(name: 'actualName')
-  String actualName;
-  @JsonKey(name: 'cardNo')
-  String cardNo;
-  @JsonKey(name: 'certificateNo') //证件号
-  String certificateNo;
-  @JsonKey(name: 'certificateType') //证件类型
-  String certificateType;
-  @JsonKey(name: 'payPassword') //交易密码
-  String payPassword;
-  @JsonKey(name: 'phoneNumber') //手机号
-  String phoneNumber;
-  @JsonKey(name: 'userId') //用户Id
+  // @JsonKey(name: 'actualName')
+  // String actualName;
+  // @JsonKey(name: 'cardNo')
+  // String cardNo;
+  // @JsonKey(name: 'certificateNo') //证件号
+  // String certificateNo;
+  // @JsonKey(name: 'certificateType') //证件类型
+  // String certificateType;
+  // @JsonKey(name: 'payPassword') //交易密码
+  // String payPassword;
+  // @JsonKey(name: 'phoneNumber') //手机号
+  // String phoneNumber;
+  // @JsonKey(name: 'userId') //用户Id
+  // String userId;
+  // @JsonKey(name: 'verify') //false
+  // bool verify;
+  // @JsonKey(name: 'smsCode')
+  // String smsCode;
+  // @JsonKey(name: 'userAccount')
+  // String userAccount;
+
+  @JsonKey(name: 'userId')
   String userId;
-  @JsonKey(name: 'verify') //false
-  bool verify;
+  @JsonKey(name: 'idType')
+  String idType;
+  @JsonKey(name: 'idNo')
+  String idNo;
+  @JsonKey(name: 'phone')
+  String phone;
   @JsonKey(name: 'smsCode')
   String smsCode;
-  @JsonKey(name: 'userAccount')
-  String userAccount;
+  @JsonKey(name: 'payPassword')
+  String payPassword;
 
-  SetTransactionPasswordReq({
-    this.certificateNo,
-    this.certificateType,
-    this.payPassword,
-    this.phoneNumber,
-    this.userId,
-    this.userAccount,
-    this.verify,
-    this.smsCode,
-    this.actualName,
-    this.cardNo,
-  });
+  SetTransactionPasswordReq(
+      {this.userId,
+      this.idType,
+      this.idNo,
+      this.phone,
+      this.smsCode,
+      this.payPassword
+      // this.certificateNo,
+      // this.certificateType,
+      // this.payPassword,
+      // this.phoneNumber,
+      // this.userId,
+      // this.userAccount,
+      // this.verify,
+      // this.smsCode,
+      // this.actualName,
+      // this.cardNo,
+      });
 
   @override
   String toString() {

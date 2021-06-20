@@ -142,8 +142,12 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   Future<void> _custIdReqData() async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
+    String custID = prefs.getString(ConfigKey.CUST_ID);
+
     // UserDataRepository()
-    ApiClientPackaging().getUserInfo(GetUserInfoReq(userID)).then((data) {
+    ApiClientPackaging()
+        .getUserInfo(GetUserInfoReq(userID, custId: custID))
+        .then((data) {
       setState(() {
         _custId = data.custId;
       });

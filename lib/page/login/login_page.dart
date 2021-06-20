@@ -4,6 +4,7 @@
 /// Date: 2020-12-04
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/model/account/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/login_register/login.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
@@ -13,6 +14,7 @@ import 'package:ebank_mobile/http/retrofit/header_interceptor.dart';
 import 'package:ebank_mobile/main.dart';
 import 'package:ebank_mobile/page/mine/app_update.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/language.dart';
 import 'package:ebank_mobile/util/login_save_user_data.dart';
 import 'package:ebank_mobile/util/screen_util.dart';
@@ -216,7 +218,6 @@ class _LoginPageState extends State<LoginPage> {
                           child: ForgetButton(S.current.forget_username, () {
                             setState(() {
                               Navigator.pushNamed(context, pageForgetUserName);
-                              print('忘记密码');
                             });
                           }),
                         )
@@ -301,8 +302,12 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录操作
   _login(BuildContext context) async {
-    // 触摸收起键盘
+    // _loadData(context, '852871871056576512', '801000000498');
+
+    // // 触摸收起键盘
     FocusScope.of(context).requestFocus(FocusNode());
+    final prefs = await SharedPreferences.getInstance();
+    String _userPhone = prefs.getString(ConfigKey.USER_PHONE);
 
     //登录以输入框的值为准
     _account = _accountTC.text;
@@ -318,12 +323,9 @@ class _LoginPageState extends State<LoginPage> {
     HSProgressHUD.show();
 
     String password = EncryptUtil.aesEncode(_password);
-    // UserDataRepository()
     ApiClientPackaging()
         .login(LoginReq(
-      username: _account,
-      password: password,
-    ))
+            username: _account, password: password, userPhone: _userPhone))
         .then((value) {
       HSProgressHUD.dismiss();
       if (value.errorCode == 'ECUST010') {
@@ -338,8 +340,18 @@ class _LoginPageState extends State<LoginPage> {
           },
         );
       } else {
-        // _payerCcyDialog();判断是否有多种客户号
-        _saveUserConfig(context, value);
+        // 判断是否有多种客户号
+        if (value.userInfoList != null && value.userInfoList.length > 0) {
+          //有多个就需要弹窗进行展示
+          _payerCcyDialog(value, context);
+        } else {
+          if (value.custInfoList != null && value.custInfoList.length > 0) {
+            CustInfoList custValue = value.custInfoList[0];
+            _saveUserConfig(context, value.userId, custValue.custId);
+          } else {
+            _saveUserConfig(context, value.userId, value.custId);
+          }
+        }
       }
     }).catchError((e) {
       setState(() {
@@ -376,33 +388,95 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   ///保存数据
-  _saveUserConfig(BuildContext context, LoginResp resp) {
-    SaveUserData(resp, password: _password);
+  _saveUserConfig(BuildContext context, String userID, String custID) {
+    SaveUserData(userID, custID); //保存userID
+    // _showMainPage(context);
 
-    _showMainPage(context);
+    _loadData(context, userID, custID);
   }
 
   //登录企业号查看是否有关联的数据
-  Future _payerCcyDialog() async {
+  Future _payerCcyDialog(LoginResp resp, BuildContext context) async {
+    List<Map> nameList = [];
+    String _language = Intl.getCurrentLocale();
+
+    for (int i = 0; i < resp.userInfoList.length; i++) {
+      UserInfoList userRep = resp.userInfoList[i];
+      Map compList = Map();
+      compList['account'] = userRep.userAccount; //先把账号加进去
+      compList['companyName'] = '';
+
+      for (int i = 0; i < resp.custInfoList.length; i++) {
+        CustInfoList custRep = resp.custInfoList[i];
+        if (userRep.userId == custRep.userId) {
+          //找到了
+          if (_language == 'en') {
+            compList['companyName'] = custRep.custNameEng;
+          } else {
+            compList['companyName'] = custRep.custNameLoc;
+          }
+        }
+      }
+      nameList.add(compList);
+    }
+//HsgSingleChoiceDialog
     final result = await showDialog(
       context: context,
       builder: (context) {
-        return HsgSingleChoiceDialog(
+        return HsgLoginAccountSelectAlert(
           title: S.of(context).login_relevance_account_tip,
-          items: _relevanceList,
+          items: nameList,
           positiveButton: S.of(context).confirm,
           negativeButton: S.of(context).cancel,
           lastSelectedPosition: 0,
         );
       },
     );
-    if (result != null && result != false) {
+    if (result != null) {
       setState(() {
-        // _payerIndex = result;
-        // _payerCcy = _payerCcyList[result];
+        _isLoading = false;
       });
-      // _loadData(_payerAccount);
+      if (resp.custInfoList == null || resp.custInfoList.length <= 0) {
+        //没有公司，直接拿userID去使用
+        UserInfoList listRep = resp.userInfoList[result];
+        _saveUserConfig(context, listRep.userId, '');
+        return;
+      }
+      if (resp.custInfoList != null || resp.custInfoList.length > 0) {
+        UserInfoList listRep = resp.userInfoList[result];
+
+        //拿到userID到公司列表里面进行匹配
+        for (int i = 0; i < resp.custInfoList.length; i++) {
+          CustInfoList custRep = resp.custInfoList[i];
+          if (listRep.userId == custRep.userId) {
+            _saveUserConfig(context, listRep.userId, custRep.custId);
+            return;
+          }
+        }
+        //没有匹配的userID，就直接调用getUSer方法，cust传空
+        _saveUserConfig(context, listRep.userId, '');
+      }
     }
+  }
+
+  //获取用户信息
+  _loadData(BuildContext context, String userID, String custID) {
+    ApiClientPackaging()
+        .getUserInfo(
+      GetUserInfoReq(userID, custId: custID),
+    )
+        .then((data) {
+      if (this.mounted) {
+        setState(() {
+          _showMainPage(context);
+        });
+      }
+    }).catchError((e) {
+      setState(() {
+        _isLoading = false;
+      });
+      HSProgressHUD.showToast(e);
+    });
   }
 
   ///获取保存的数据
