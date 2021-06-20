@@ -8,6 +8,7 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/mine/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/set_payment_pwd.dart';
+import 'package:ebank_mobile/data/source/model/update_login_password.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/page_route.dart';
@@ -218,13 +219,17 @@ class _ChangePayPageState extends State<ChangePayPage> {
       );
     } else {
       HSProgressHUD.show();
+      final prefs = await SharedPreferences.getInstance();
+      String userID = prefs.getString(ConfigKey.USER_ID);
+      String account = prefs.getString(ConfigKey.USER_ACCOUNT);
+      String phone = prefs.getString(ConfigKey.USER_PHONE);
+
       ApiClientPassword()
-          .updateTransPassword(
-        SetPaymentPwdReq(oldPwd, newPwd, userID, _sms.text),
-      )
+          .modifyLoginPassword(ModifyPasswordReq(newPwd, oldPwd, _sms.text,
+              userID, account, phone, 'transactionPwd'))
           .then((data) {
         HSProgressHUD.showToastTip(
-          S.current.changPwsSuccess,
+          S.current.operate_success,
         );
         Navigator.of(context)..pop();
         Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
@@ -232,6 +237,21 @@ class _ChangePayPageState extends State<ChangePayPage> {
       }).catchError((e) {
         HSProgressHUD.showToast(e);
       });
+
+      // ApiClientPassword()
+      //     .updateTransPassword(
+      //   SetPaymentPwdReq(oldPwd, newPwd, userID, _sms.text),
+      // )
+      //     .then((data) {
+      //   HSProgressHUD.showToastTip(
+      //     S.current.changPwsSuccess,
+      //   );
+      //   Navigator.of(context)..pop();
+      //   Navigator.pushReplacementNamed(context, pagePwdOperationSuccess);
+      //   HSProgressHUD.dismiss();
+      // }).catchError((e) {
+      //   HSProgressHUD.showToast(e);
+      // });
     }
   }
 

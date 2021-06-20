@@ -143,7 +143,8 @@ class _OpenAccountGetFaceSignPageState
   void _didFaceSignCommit() async {
     final prefs = await SharedPreferences.getInstance();
     String userPhone = prefs.getString(ConfigKey.USER_PHONE) ?? '';
-    String areaCode = prefs.getString(ConfigKey.USER_AREACODE) ?? '86';
+    String areaCode = prefs.getString(ConfigKey.USER_AREACODE) ?? '';
+    String userID = prefs.getString(ConfigKey.USER_ID) ?? '';
 
     if (_codeSignTextF.text.length > 0 && userPhone.length > 0) {
       //根据电话以及输入文本这里去请求businessId
@@ -152,7 +153,7 @@ class _OpenAccountGetFaceSignPageState
       // OpenAccountRepository()
       ApiClientOpenAccount()
           .getFaceSignBusiness(
-              FaceSignIDReq(userPhone, areaCode, _codeSignTextF.text))
+              FaceSignIDReq(userPhone, areaCode, _codeSignTextF.text, userID))
           .then(
         (value) {
           HSProgressHUD.dismiss();

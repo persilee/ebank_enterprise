@@ -12,11 +12,20 @@ class CheckPhoneReq extends Object {
   @JsonKey(name: 'userPhone')
   String userPhone;
 
+  @JsonKey(name: 'userAccount')
+  String userAccount;
+
   @JsonKey(name: 'userType')
   String userType;
 
+  ///检查类型 0：注册检查userAccount 1：忘记功能检查userPhone
+  @JsonKey(name: 'checkType')
+  String checkType;
+
   CheckPhoneReq(
-    this.userPhone, {
+    this.userPhone,
+    this.userAccount,
+    this.checkType, {
     this.userType = '2',
   });
 

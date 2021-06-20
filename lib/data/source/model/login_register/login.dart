@@ -44,6 +44,8 @@ class LoginResp {
   bool passwordEnabled;
   int passwordErrors;
   String belongCustStatus;
+  List<CustInfoList> custInfoList;
+  List<UserInfoList> userInfoList;
 
   ///错误码
   String errorCode;
@@ -61,10 +63,60 @@ class LoginResp {
     this.passwordErrors,
     this.belongCustStatus,
     this.errorCode,
+    this.custInfoList,
   );
 
   factory LoginResp.fromJson(Map<String, dynamic> srcJson) =>
       _$LoginRespFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$LoginRespToJson(this);
+}
+
+@JsonSerializable()
+class CustInfoList extends Object {
+  @JsonKey(name: 'businessId')
+  String businessId;
+
+  @JsonKey(name: 'custNameLoc')
+  String custNameLoc;
+
+  @JsonKey(name: 'custNameEng')
+  String custNameEng;
+
+  @JsonKey(name: 'custId')
+  String custId;
+
+  @JsonKey(name: 'userId')
+  String userId;
+
+  CustInfoList(this.businessId, this.custNameLoc, this.custNameEng, this.custId,
+      this.userId);
+
+  factory CustInfoList.fromJson(Map<String, dynamic> srcJson) =>
+      _$CustInfoListFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$CustInfoListToJson(this);
+}
+
+@JsonSerializable()
+class UserInfoList extends Object {
+  @JsonKey(name: 'userAccount')
+  String userAccount;
+
+  @JsonKey(name: 'localUserName')
+  String localUserName;
+
+  @JsonKey(name: 'englishUserName')
+  String englishUserName;
+
+  @JsonKey(name: 'userId')
+  String userId;
+
+  UserInfoList(
+      this.userAccount, this.localUserName, this.englishUserName, this.userId);
+
+  factory UserInfoList.fromJson(Map<String, dynamic> srcJson) =>
+      _$UserInfoListFromJson(srcJson);
+
+  Map<String, dynamic> toJson() => _$UserInfoListToJson(this);
 }

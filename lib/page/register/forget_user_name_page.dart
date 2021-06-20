@@ -244,7 +244,9 @@ class _ForgetUserNameState extends State<ForgetUserName> {
   //检验手机号码注册情况及验证码
   _checkRegister() {
     HSProgressHUD.show();
-    ApiClientAccount().checkPhone(CheckPhoneReq(_phoneNum.text)).then((data) {
+    ApiClientAccount()
+        .checkPhone(CheckPhoneReq(_phoneNum.text, '', '1'))
+        .then((data) {
       if (mounted) {
         setState(() {
           _accountName = data.userAccount;

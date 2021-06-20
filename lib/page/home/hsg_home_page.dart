@@ -1106,12 +1106,14 @@ class _HomePageState extends State<HomePage>
   Future<void> _loadData(bool shouldTip) async {
     final prefs = await SharedPreferences.getInstance();
     String userID = prefs.getString(ConfigKey.USER_ID);
+    String custID = prefs.getString(ConfigKey.CUST_ID);
+
     bool needOpenAcc = prefs.getBool(ConfigKey.NEED_OPEN_ACCOUNT);
 
     // UserDataRepository()
     ApiClientPackaging()
         .getUserInfo(
-      GetUserInfoReq(userID),
+      GetUserInfoReq(userID, custId: custID),
     )
         .then((data) {
       if (this.mounted) {

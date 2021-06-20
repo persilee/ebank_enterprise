@@ -199,17 +199,14 @@ class _SetPayPageState extends State<SetPayPage> {
     _userId = prefs.getString(ConfigKey.USER_ID) ?? '';
     _userAccount = prefs.getString(ConfigKey.USER_ACCOUNT) ?? '';
     String password = EncryptUtil.aesEncode(_confimPwd.text) ?? '';
+
     SetTransactionPasswordReq req = SetTransactionPasswordReq(
       userId: _userId,
-      userAccount: _userAccount,
-      certificateNo: (_certificateNo ?? '1'),
-      certificateType: (_certificateType ?? '1'),
-      phoneNumber: (_phoneNumber ?? '1'),
+      idNo: (_certificateNo ?? '1'),
+      idType: (_certificateType ?? '1'),
+      phone: (_phoneNumber ?? '1'),
       payPassword: password,
-      verify: false,
       smsCode: (_smsCode ?? ''),
-      actualName: '',
-      cardNo: '',
     );
     ApiClientPassword().setTransactionPassword(req).then((data) {
       HSProgressHUD.dismiss();
