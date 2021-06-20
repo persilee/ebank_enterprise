@@ -37,9 +37,9 @@ class RealNameAuthByThreeFactorReq extends Object {
     this.certType,
     this.phoneNo,
     this.realName,
-    this.userId, [
+    this.userId, {
     this.userType = '2',
-  ]);
+  });
 
   factory RealNameAuthByThreeFactorReq.fromJson(Map<String, dynamic> srcJson) =>
       _$RealNameAuthByThreeFactorReqFromJson(srcJson);

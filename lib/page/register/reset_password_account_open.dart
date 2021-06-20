@@ -271,13 +271,15 @@ class ResetPasswordAccountOpenState extends State<ResetPasswordAccountOpen> {
         '-' +
         _userName.text);
     // Navigator.pushNamed(context, setPayPage);
+    RealNameAuthByThreeFactorReq req = RealNameAuthByThreeFactorReq(
+      _cardNumber.text,
+      _certTypeKey,
+      _userPhone,
+      _userName.text,
+      userID,
+    );
     HSProgressHUD.show();
-    ApiClientPassword()
-        .realNameAuth(
-      RealNameAuthByThreeFactorReq(
-          _cardNumber.text, _certTypeKey, _userPhone, _userName.text, userID),
-    )
-        .then((data) {
+    ApiClientPassword().realNameAuth(req).then((data) {
       HSProgressHUD.dismiss();
       if (data.enabled) {
         Navigator.pushNamed(context, pageResetPasswordNoAccount,
