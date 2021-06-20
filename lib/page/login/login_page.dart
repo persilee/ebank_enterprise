@@ -77,6 +77,12 @@ class _LoginPageState extends State<LoginPage> {
       case 6: //东方 Dev1
         _nowBaseUrlType = "DEV_东方";
         break;
+      case 98: //生产企业
+        _nowBaseUrlType = "PROD";
+        break;
+      case 99: //生产个人
+        _nowBaseUrlType = "PROD";
+        break;
       default:
     }
 
@@ -470,6 +476,7 @@ class _LoginPageState extends State<LoginPage> {
       'DEV_OLD',
       'SIT',
       'UAT',
+      'PROD',
     ];
     final result = await showHsgBottomSheet(
         context: context,
@@ -495,6 +502,10 @@ class _LoginPageState extends State<LoginPage> {
         case 3:
           _nowBaseUrlType = 'UAT';
           baseUrlType = 3;
+          break;
+        case 4:
+          _nowBaseUrlType = 'PROD';
+          baseUrlType = 98;
           break;
       }
     } else {
