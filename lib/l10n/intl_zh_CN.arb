@@ -795,6 +795,7 @@
   "time_depotion_minimum_retain_amount": "最小留存金额: ",
   "time_depotion_withdraw_count": "剩余支取次数: ",
   "login_relevance_account_tip": "选择公司",
+  "login_company_name_none": "无",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "数据异常，未返回数据！",

@@ -376,7 +376,7 @@ class _LoginPageState extends State<LoginPage> {
       }
       nameList.add(compList);
     }
-
+//HsgSingleChoiceDialog
     final result = await showDialog(
       context: context,
       builder: (context) {

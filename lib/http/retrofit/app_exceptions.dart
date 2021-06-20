@@ -7,6 +7,7 @@ import 'package:ebank_mobile/page/login/login_page.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_error_page.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// 自定义异常
 class AppException implements Exception {
@@ -25,6 +26,13 @@ class AppException implements Exception {
 
   factory AppException.create(DioError error) {
     print('error.type: ${error.type}');
+
+    _cleanUserName() async {
+      final prefs = await SharedPreferences.getInstance();
+      prefs.remove('loginName');
+      prefs.clear();
+    }
+
     switch (error.type) {
       case DioErrorType.CANCEL:
         {
@@ -128,6 +136,7 @@ class AppException implements Exception {
                 AppException("-1", S.current.network_error_no_internet);
           } else if (error.error.code == 'SYS90018' ||
               error.error.code == 'SYS90017') {
+            _cleanUserName();
             showDialog(
                 barrierDismissible: false,
                 context: navigatorKey.currentContext,

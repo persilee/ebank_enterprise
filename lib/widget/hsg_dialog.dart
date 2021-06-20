@@ -1117,6 +1117,7 @@ class HsgLoginAccountSelectAlert extends StatelessWidget {
 
   Widget _getItemRow(int position, BuildContext context, int selectedPosition) {
     Map mapDict = items[position];
+    String companyText = mapDict['companyName'];
     List<Widget> rowChildren = [
       Expanded(
           child: Container(
@@ -1124,7 +1125,7 @@ class HsgLoginAccountSelectAlert extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start, //纵轴使用cross， 横轴使用main对应
           children: [
             Text(
-              mapDict['account'],
+              S.current.approve_name_account + ': ' + mapDict['account'],
               maxLines: 1,
               textAlign: TextAlign.left,
               // overflow: TextOverflow.ellipsis,
@@ -1133,8 +1134,15 @@ class HsgLoginAccountSelectAlert extends StatelessWidget {
                 fontSize: 15,
               ),
             ),
+            SizedBox(
+              height: 5,
+            ),
             Text(
-              mapDict['companyName'] ?? '',
+              S.current.company_name +
+                  ': ' +
+                  (companyText != ''
+                      ? companyText
+                      : S.current.login_company_name_none),
               textAlign: TextAlign.left,
               maxLines: 1,
               // overflow: TextOverflow.ellipsis,
