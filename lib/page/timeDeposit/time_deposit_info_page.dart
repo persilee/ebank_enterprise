@@ -499,7 +499,7 @@ class _PageDepositInfo extends State<PageDepositInfo> {
                   //币种
                   _unit(S.current.currency, ccy, true, false),
                   //存入金额
-                  _unit(S.current.approve_certificates_deposit_amount,
+                  _unit(S.current.deposit_amount,
                       FormatUtil.formatSringToMoney(bal), true, false),
                   //存期
                   _unit(S.current.deposit_term, auctCale + _termUnit, true,

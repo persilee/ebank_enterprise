@@ -845,8 +845,8 @@ class _MyApprovedHistoryDetailPageState
         _earlyRedTdList.add(_buildTitle(S.current.approve_basic_information));
         _earlyRedTdList.add(_buildContentItem(
             S.current.approve_contract_no, data?.conNo ?? ''));
-        _earlyRedTdList.add(_buildContentItem(
-            S.current.approve_certificates_deposit_amount, data?.bal ?? '0'));
+        _earlyRedTdList
+            .add(_buildContentItem(S.current.deposit_amount, data?.bal ?? '0'));
         _earlyRedTdList.add(
             _buildContentItem(S.current.approve_currency, data?.ccy ?? ''));
         _earlyRedTdList.add(_buildContentItem(
