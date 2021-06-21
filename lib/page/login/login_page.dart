@@ -347,9 +347,11 @@ class _LoginPageState extends State<LoginPage> {
         } else {
           if (value.custInfoList != null && value.custInfoList.length > 0) {
             CustInfoList custValue = value.custInfoList[0];
-            _saveUserConfig(context, value.userId, custValue.custId);
+            _saveUserConfig(
+                context, value.userId, custValue.custId, value.userAccount);
           } else {
-            _saveUserConfig(context, value.userId, value.custId);
+            _saveUserConfig(
+                context, value.userId, value.custId, value.userAccount);
           }
         }
       }
@@ -388,8 +390,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   ///保存数据
-  _saveUserConfig(BuildContext context, String userID, String custID) {
-    SaveUserData(userID, custID); //保存userID
+  _saveUserConfig(
+      BuildContext context, String userID, String custID, String userAccount) {
+    SaveUserData(userID, custID, userAccount); //保存userID
     // _showMainPage(context);
 
     _loadData(context, userID, custID);
@@ -439,7 +442,7 @@ class _LoginPageState extends State<LoginPage> {
       if (resp.custInfoList == null || resp.custInfoList.length <= 0) {
         //没有公司，直接拿userID去使用
         UserInfoList listRep = resp.userInfoList[result];
-        _saveUserConfig(context, listRep.userId, '');
+        _saveUserConfig(context, listRep.userId, '', listRep.userAccount);
         return;
       }
       if (resp.custInfoList != null || resp.custInfoList.length > 0) {
@@ -449,12 +452,13 @@ class _LoginPageState extends State<LoginPage> {
         for (int i = 0; i < resp.custInfoList.length; i++) {
           CustInfoList custRep = resp.custInfoList[i];
           if (listRep.userId == custRep.userId) {
-            _saveUserConfig(context, listRep.userId, custRep.custId);
+            _saveUserConfig(
+                context, listRep.userId, custRep.custId, listRep.userAccount);
             return;
           }
         }
         //没有匹配的userID，就直接调用getUSer方法，cust传空
-        _saveUserConfig(context, listRep.userId, '');
+        _saveUserConfig(context, listRep.userId, '', listRep.userAccount);
       }
     }
   }

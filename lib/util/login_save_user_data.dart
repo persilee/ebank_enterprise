@@ -4,9 +4,9 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: non_constant_identifier_names
-void SaveUserData(String userId, String custId) async {
+void SaveUserData(String userId, String custId, String userAccount) async {
   final prefs = await SharedPreferences.getInstance();
-  // prefs.setString(ConfigKey.USER_ACCOUNT, resp.userAccount);
+  prefs.setString(ConfigKey.USER_ACCOUNT, userAccount);
   prefs.setString(ConfigKey.USER_ID, userId);
   // prefs.setString(ConfigKey.USER_PHONE, resp.userPhone);
   // prefs.setString(ConfigKey.USER_AREACODE, resp.areaCode);

@@ -61,7 +61,7 @@ class HeaderInterceptor extends Interceptor {
     options.headers.addAll({'x-kont-channel': 'CMBK'});
     options.headers.addAll({'x-kont-appkey': '6000000514984257'});
     options.headers.addAll({'x-kont-token': token});
-    options.headers.addAll({'x-kont-locale': locale});
+    options.headers.addAll({'x_kont_locale': locale});
 
     return options;
   }
