@@ -839,8 +839,9 @@ class _MinePageState extends State<MinePage>
       HSProgressHUD.dismiss();
       if (this.mounted) {
         setState(() {
-          prefs.remove('loginName');
-          prefs.clear();
+          // prefs.remove('loginName');
+          // prefs.clear();
+          // print(userID = prefs.getString(ConfigKey.USER_ID));
           Future.delayed(Duration.zero, () {
             Navigator.of(context).pushNamedAndRemoveUntil(
                 pageLogin, ModalRoute.withName(""), //清除旧栈需要保留的栈 不清除就不写这句

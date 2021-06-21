@@ -71,6 +71,9 @@ class ApiClientPackaging {
       }
     }
     RemoveUserDataNotAll();
+    final prefs = await SharedPreferences.getInstance();
+    String userID = prefs.getString(ConfigKey.USER_ACCOUNT);
+    print('USER_ACCOUNT<><><><>$userID');
     return resp;
   }
 

@@ -274,7 +274,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
                 Container(
                   width: MediaQuery.of(context).size.width / 2.5,
                   child: Text(
-                    S.of(context).transfer_from_name,
+                    S.of(context).approve_name_account,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -308,7 +308,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
           Container(
             color: Colors.white,
             child: SelectInkWell(
-              title: S.of(context).payer_currency,
+              title: S.of(context).currency,
               item: _payerCcy == null ? '' : _payerCcy,
               onTap: () {
                 FocusScope.of(context).requestFocus(FocusNode());
@@ -343,8 +343,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
         children: [
           _titleName(S.of(context).receipt_side),
           TextFieldContainer(
-            title: S.of(context).receipt_side_account,
-            hintText: S.of(context).hint_input_receipt_account,
+            title: S.of(context).approve_account,
+            hintText: S.of(context).please_input,
             widget: _getImage(),
             keyboardType: TextInputType.number,
             controller: _payeeAccountController,
@@ -356,8 +356,8 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             isWidget: true,
           ),
           TextFieldContainer(
-            title: S.of(context).receipt_side_name,
-            hintText: S.of(context).hint_input_receipt_name,
+            title: S.of(context).approve_name_account,
+            hintText: S.of(context).please_input,
             keyboardType: TextInputType.text,
             controller: _payeeNameController,
             focusNode: _payeeNameFocusNode,
@@ -371,7 +371,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
             // padding: EdgeInsets.only(right: 15, left: 15),
             color: Colors.white,
             child: SelectInkWell(
-              title: S.current.transfer_from_ccy,
+              title: S.current.currency,
               item: _payeeCcy == null ? '' : _payeeCcy,
               onTap: _isAccount
                   ? () {
@@ -447,7 +447,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: TextFieldContainer(
-        title: S.current.transfer_postscript,
+        title: S.current.postscript,
         hintText: S.current.transfer,
         keyboardType: TextInputType.text,
         controller: _remarkController,
@@ -482,7 +482,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
           Container(
             width: 120,
             child: Text(
-              S.current.transfer_from_account,
+              S.current.account_num,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -509,7 +509,7 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
                             TextStyle(color: Color(0xff262626), fontSize: 14),
                       ),
                       Text(
-                        S.current.balance_with_value +
+                        S.current.available_balance +
                             '：' +
                             _payerCcy +
                             ' ' +
@@ -729,8 +729,10 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
 
   //默认初始卡号
   _loadTransferData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID) ?? '';
     GetCardListResp _data =
-        await ApiClientAccount().getCardList(GetCardListReq());
+        await ApiClientAccount().getCardList(GetCardListReq(custID));
 
     setState(() {
       //付款方卡号

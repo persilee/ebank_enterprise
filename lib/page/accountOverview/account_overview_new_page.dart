@@ -265,22 +265,14 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
       color: Colors.white,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Text(
-            lnList[index].cardNo,
-            //acNo
-            style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-          ),
-          Text(
-            //unpaidPrincipal
-            FormatUtil.formatSringToMoney(
-                    lnList[index].avaBal, lnList[index].ccy) +
-                ' ' +
-                lnList[index].ccy,
-            style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
-          )
+          _getRowW(S.current.account_number, lnList[index].cardNo),
+          _getRowW(S.current.currency, lnList[index].ccy),
+          _getRowW(S.of(context).loan_amount,
+              FormatUtil.formatSringToMoney(lnList[index].currBal)),
+          _getRowW(S.of(context).loan_balance2,
+              FormatUtil.formatSringToMoney(lnList[index].avaBal)),
         ],
       ),
     );
@@ -291,20 +283,12 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
       color: Colors.white,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Text(
-            tdList[index].cardNo, //.cardNo,
-            style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-          ),
-          Text(
-            FormatUtil.formatSringToMoney(
-                    tdList[index].currBal, tdList[index].ccy) +
-                ' ' +
-                tdList[index].ccy, //currbal
-            style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
-          )
+          _getRowW(S.current.account_number, tdList[index].cardNo),
+          _getRowW(S.current.currency, tdList[index].ccy),
+          _getRowW(S.of(context).overview_account_currBal,
+              FormatUtil.formatSringToMoney(tdList[index].currBal)),
         ],
       ),
     );
@@ -312,52 +296,38 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
 
   //活期列表
   Container _ddListView(int index) {
-    Widget _getRowW(String leftStr, String rightStr) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            leftStr,
-            style: TextStyle(fontSize: 15, color: HsgColors.secondDegreeText),
-          ),
-          Text(
-            rightStr,
-            style: TextStyle(fontSize: 15, color: HsgColors.secondDegreeText),
-          )
-        ],
-      );
-    }
-
     return Container(
-        padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
-        color: Colors.white,
-        child: Column(
-          children: [
-            _getRowW('账号', ddList[index].cardNo),
-            _getRowW('币种', ddList[index].cardNo),
-            _getRowW(
-                '账面余额', FormatUtil.formatSringToMoney(ddList[index].currBal)),
-            _getRowW(
-                '可用余额', FormatUtil.formatSringToMoney(ddList[index].avaBal))
-          ],
+      padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
+      color: Colors.white,
+      child: Column(
+        children: [
+          _getRowW(S.current.account_number, ddList[index].cardNo),
+          _getRowW(S.current.currency, ddList[index].ccy),
+          _getRowW(S.of(context).overview_account_currBal,
+              FormatUtil.formatSringToMoney(ddList[index].currBal)),
+          _getRowW(S.of(context).available_balance,
+              FormatUtil.formatSringToMoney(ddList[index].avaBal))
+        ],
+      ),
+    );
+  }
+
+  Widget _getRowW(String leftStr, String rightStr) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          leftStr,
+          //Color(0xFF8D8D8D)
+          style: TextStyle(fontSize: 15, color: HsgColors.secondDegreeText),
+        ),
+        Text(
+          rightStr,
+          //Color(0xFF262626)
+          style: TextStyle(fontSize: 15, color: HsgColors.secondDegreeText),
         )
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   children: [
-        //     Text(
-        //       ddList[index].cardNo,
-        //       style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-        //     ),
-        //     Text(
-        //       FormatUtil.formatSringToMoney(
-        //               ddList[index].currBal, ddList[index].ccy) +
-        //           ' ' +
-        //           ddList[index].ccy,
-        //       style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
-        //     )
-        //   ],
-        // ),
-        );
+      ],
+    );
   }
 
   Column _accountOverviewColumn() {
@@ -751,8 +721,8 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
 
   Future<void> _loadAssets() async {
     final prefs = await SharedPreferences.getInstance();
-    String custID = prefs.getString(ConfigKey.CUST_ID);
-    localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
+    String custID = prefs.getString(ConfigKey.CUST_ID) ?? '';
+    localCcy = prefs.getString(ConfigKey.LOCAL_CCY) ?? '';
 
     try {
       GetTotalAssetsResp resp =

@@ -7,10 +7,12 @@ import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/account/get_pay_collect_detail.dart';
+import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/transfer/get_transfer_record.dart';
 import 'package:ebank_mobile/generated/l10n.dart' as intl;
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_bill.dart';
+import 'package:ebank_mobile/http/retrofit/api/api_client_openAccount.dart';
 import 'package:ebank_mobile/util/format_util.dart';
 import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_pop_window_button.dart';
@@ -69,6 +71,8 @@ class _DetailListPageState extends State<DetailListPage> {
   ScrollController _scrollController = ScrollController(); //滚动监听
   String _turnKey = '';
   int _total = 15;
+  List<IdType> _tenorList = [];
+  String _language = Intl.getCurrentLocale();
 
   @override
   // ignore: must_call_super
@@ -76,9 +80,8 @@ class _DetailListPageState extends State<DetailListPage> {
     // 网络请求
     //
     setState(() {
-      _getCardList();
+      _getType();
     });
-    //_getRevenueByCards(_startDate, _allAccNoList);
     _refreshController = RefreshController();
     // //下拉刷新
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -782,6 +785,16 @@ class _DetailListPageState extends State<DetailListPage> {
                 style: TextStyle(fontSize: 12, color: Color(0xFFACACAC)),
               ),
             ),
+            Container(
+              width: 130,
+              alignment: Alignment.centerRight,
+              child: Text(
+                _getTypeStr(dtoData.txMmo ?? ''),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 12, color: Color(0xFFACACAC)),
+              ),
+            ),
           ],
         ),
       ],
@@ -963,9 +976,10 @@ class _DetailListPageState extends State<DetailListPage> {
   }
 
   //获取账号
-  _getCardList() {
-    // CardDataRepository()
-    ApiClientAccount().getCardList(GetCardListReq()).then((data) {
+  _getCardList() async {
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID) ?? '';
+    ApiClientAccount().getCardList(GetCardListReq(custID)).then((data) {
       if (mounted) {
         setState(() {
           if (data.cardList != null) {
@@ -1053,6 +1067,40 @@ class _DetailListPageState extends State<DetailListPage> {
         });
       }
       HSProgressHUD.showToast(e);
+    });
+  }
+
+  String _getTypeStr(String txMmo) {
+    if (_tenorList.length == 0) {
+      return txMmo;
+    }
+    String _statusName = '';
+    if (_tenorList.isNotEmpty) {
+      _tenorList.forEach(
+        (element) {
+          if (txMmo == element.code) {
+            if (_language == 'zh_CN') {
+              _statusName = element.cname;
+            } else if (_language == 'zh_HK') {
+              _statusName = element.chName;
+            } else {
+              _statusName = element.name;
+            }
+          }
+        },
+      );
+    }
+    return _statusName;
+  }
+
+  // 获取状态
+  Future _getType() async {
+    ApiClientOpenAccount().getIdType(GetIdTypeReq('TRANSFERTYPE')).then((data) {
+      _tenorList = data.publicCodeGetRedisRspDtoList;
+      _getCardList();
+    }).catchError((e) {
+      _getCardList();
+      print(e.toString());
     });
   }
 

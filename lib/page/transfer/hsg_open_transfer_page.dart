@@ -1082,10 +1082,11 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
     }
   }
 
-  _loadTransferData() {
+  _loadTransferData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID) ?? '';
     Future.wait({
-      // CardDataRepository()
-      ApiClientAccount().getCardList(GetCardListReq()),
+      ApiClientAccount().getCardList(GetCardListReq(custID)),
     }).then((value) {
       value.forEach((element) {
         //通过绑定手机号查询卡列表接口POST

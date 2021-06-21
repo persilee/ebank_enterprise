@@ -145,7 +145,7 @@
   "single_day_transfer_count_limit": "單日筆數",
   "transfer_from": "轉出賬號",
   "balance_with_value": "余額",
-  "receipt_side": "收款方",
+  "receipt_side": "收款信息",
   "receipt_side_name": "收款方名稱",
   "receipt_side_account": "收款人賬號",
   "transfer_postscript": "轉賬附言",
@@ -737,7 +737,7 @@
   "limited_customer_tip": "您當前登錄的賬號是受限客戶，請先聯繫企服商進行快速開戶轉正再進行本操作。",
   "open_account_face_again": "再來一次",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家偉（開戶）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-  "transfer_from1": "付款方",
+  "transfer_from1": "付款信息",
   "payer_currency": "轉出方幣種",
   "transfer_to_amount": "轉入金額",
   "transfer_from_name": "轉出方名稱",
@@ -822,5 +822,7 @@
   "task_last_time": "剩餘時間",
   "task_complete_timeout_tip": "已經超過審批時限，請在規定時間內審批！",
   "electronic_statement_date": "結單日期",
-  "version_update_tip": "您的APP有新的版本更新，請前往更新！"
+  "version_update_tip": "您的APP有新的版本更新，請前往更新！",
+  "overview_account_currBal": "账面余额",
+  "detail_info_transaction_status": "交易状态"
 }

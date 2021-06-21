@@ -22,6 +22,7 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_timeDeposit.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/event_bus_utils.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
@@ -30,6 +31,7 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PageDepositInfo extends StatefulWidget {
   final DepositRecord deposit;
@@ -848,8 +850,9 @@ class _PageDepositInfo extends State<PageDepositInfo> {
 
 //获取卡列表
   Future<void> _loadData() async {
-    // CardDataRepository()
-    ApiClientAccount().getCardList(GetCardListReq()).then(
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID) ?? '';
+    ApiClientAccount().getCardList(GetCardListReq(custID)).then(
       (data) {
         if (data.cardList != null) {
           if (this.mounted) {

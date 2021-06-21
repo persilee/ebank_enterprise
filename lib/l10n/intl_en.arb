@@ -822,5 +822,7 @@
   "task_last_time": "Remaining Time",
   "task_complete_timeout_tip": "The approval time limit has expired, please approve within the specified time!",
   "electronic_statement_date": "Statement date",
-  "version_update_tip": "Your APP has a new version update, please go to update!"
+  "version_update_tip": "Your APP has a new version update, please go to update!",
+  "overview_account_currBal": "Account balance",
+  "detail_info_transaction_status": "Transaction Status"
 }
