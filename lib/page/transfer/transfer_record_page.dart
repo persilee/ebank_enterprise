@@ -940,7 +940,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
   //获取银行卡
   _getCardList() async {
     final prefs = await SharedPreferences.getInstance();
-    String custID = prefs.getString(ConfigKey.CUST_ID);
+    String custID = prefs.getString(ConfigKey.CUST_ID) ?? '';
     ApiClientAccount().getCardList(GetCardListReq(custID)).then((data) {
       if (data.cardList != null) {
         if (this.mounted) {

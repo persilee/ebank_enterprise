@@ -145,7 +145,7 @@
   "single_day_transfer_count_limit": "单日笔数",
   "transfer_from": "转出账号",
   "balance_with_value": "余额",
-  "receipt_side": "收款方",
+  "receipt_side": "收款信息",
   "receipt_side_name": "收款方名称",
   "receipt_side_account": "收款人账号",
   "transfer_postscript": "转账附言",
@@ -270,7 +270,7 @@
   "remarks": "备注",
   "deposit_now": "立即存入",
   "product_name": "产品名称",
-  "year_interest_rate": "年利率",
+  "year_interest_rate": "参考年利率",
   "deposit_time_limit": "存款期限",
   "contract_principal_and_interest": "到期本息",
   "months": "个月",
@@ -738,7 +738,7 @@
   "limited_customer_tip": "您当前登录的账号是受限客户，请先联系企服商进行快速开户转正再进行本操作。",
   "open_account_face_again": "再来一次",
   "lijiawei_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<李家伟（开户）<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
-  "transfer_from1": "付款方",
+  "transfer_from1": "付款信息",
   "payer_currency": "转出方币种",
   "transfer_to_amount": "转入金额",
   "transfer_from_name": "转出方名称",
@@ -824,5 +824,7 @@
   "task_last_time": "剩余时间",
   "task_complete_timeout_tip": "已经超过审批时限，请在规定时间内审批！",
   "electronic_statement_date": "结单日期",
-  "version_update_tip": "您的APP有新的版本更新，请前往更新！"
+  "version_update_tip": "您的APP有新的版本更新，请前往更新！",
+  "overview_account_currBal": "账面余额",
+  "detail_info_transaction_status": "交易状态"
 }

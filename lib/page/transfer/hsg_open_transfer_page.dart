@@ -1084,7 +1084,7 @@ class _OpenTransferPageState extends State<OpenTransferPage> {
 
   _loadTransferData() async {
     final prefs = await SharedPreferences.getInstance();
-    String custID = prefs.getString(ConfigKey.CUST_ID);
+    String custID = prefs.getString(ConfigKey.CUST_ID) ?? '';
     Future.wait({
       ApiClientAccount().getCardList(GetCardListReq(custID)),
     }).then((value) {

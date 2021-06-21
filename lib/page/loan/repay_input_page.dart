@@ -62,9 +62,9 @@ class _RepayInputPageState extends State<RepayInputPage> {
 
   //获取放款以及还款帐号列表
   Future<void> _loadTotalAccountData() async {
-    final prefs = await SharedPreferences.getInstance();
-    String custID = prefs.getString(ConfigKey.CUST_ID);
     HSProgressHUD.show();
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID) ?? '';
     ApiClientAccount().getCardList(GetCardListReq(custID)).then(
       (data) {
         HSProgressHUD.dismiss();

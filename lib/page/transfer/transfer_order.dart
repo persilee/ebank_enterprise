@@ -1200,8 +1200,7 @@ class _TransferOrderPageState extends State<TransferOrderPage> {
   //默认初始卡号
   _loadTransferData() async {
     final prefs = await SharedPreferences.getInstance();
-    String custID = prefs.getString(ConfigKey.CUST_ID);
-
+    String custID = prefs.getString(ConfigKey.CUST_ID) ?? '';
     Future.wait({
       ApiClientAccount().getCardList(GetCardListReq(custID)),
     }).then((value) {

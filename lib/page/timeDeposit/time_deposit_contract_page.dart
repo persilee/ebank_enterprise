@@ -917,7 +917,6 @@ class _TimeDepositContractState extends State<TimeDepositContract> {
   Future<bool> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
     custID = prefs.getString(ConfigKey.CUST_ID);
-
     try {
       GetCardListResp resp =
           await ApiClientAccount().getCardList(GetCardListReq(custID));

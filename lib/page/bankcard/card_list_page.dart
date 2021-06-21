@@ -266,8 +266,7 @@ class _CardListPageState extends State<CardListPage> {
       }
     }
     final prefs = await SharedPreferences.getInstance();
-    String custID = prefs.getString(ConfigKey.CUST_ID);
-
+    String custID = prefs.getString(ConfigKey.CUST_ID) ?? '';
     ApiClientAccount().getCardList(GetCardListReq(custID)).then((data) {
       if (data.cardList != null) {
         if (this.mounted) {

@@ -183,9 +183,9 @@ class _LoanReferenceState extends State<LoanReference> {
 
   //获取收款账户列表
   Future _loadTotalAccountData() async {
-    final prefs = await SharedPreferences.getInstance();
-    String custID = prefs.getString(ConfigKey.CUST_ID);
     HSProgressHUD.show();
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID) ?? '';
     ApiClientAccount().getCardList(GetCardListReq(custID)).then(
       (data) {
         HSProgressHUD.dismiss();

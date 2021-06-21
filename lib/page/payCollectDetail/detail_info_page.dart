@@ -24,11 +24,13 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
   DdFinHisDTOList ddFinHist;
   String _language = Intl.getCurrentLocale();
   String _statusName = '';
+  String _transactionStatusStr = '';
 
   @override
   void initState() {
     super.initState();
     _getType();
+    _getTransactionStatus();
   }
 
   @override
@@ -99,10 +101,15 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
                   label: S.current.transaction_type,
                   item: _statusName,
                 ),
+                // 交易类型
+                ContentRow(
+                  label: S.current.detail_info_transaction_status,
+                  item: _transactionStatusStr,
+                ),
 
                 //备注
                 ContentRow(
-                  label: S.current.remarks,
+                  label: S.current.postscript,
                   item: ddFinHist.narrative,
                 ),
               ],
@@ -116,9 +123,7 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
 // 获取状态
   Future _getType() async {
     HSProgressHUD.show();
-    GetIdTypeResp getIdTypeResp = await ApiClientOpenAccount()
-        .getIdType(GetIdTypeReq('TRANSFERTYPE'))
-        .then((data) {
+    ApiClientOpenAccount().getIdType(GetIdTypeReq('TRANSFERTYPE')).then((data) {
       List<IdType> _tenorList = data.publicCodeGetRedisRspDtoList;
       if (_tenorList.isNotEmpty) {
         _tenorList.forEach((element) {
@@ -131,6 +136,35 @@ class _DetailInfoPageState extends State<DetailInfoPage> {
                   _statusName = element.chName;
                 } else {
                   _statusName = element.name;
+                }
+              });
+            }
+          }
+        });
+        HSProgressHUD.dismiss();
+      }
+    }).catchError((e) {
+      HSProgressHUD.dismiss();
+      print(e.toString());
+    });
+  }
+
+  // 获取状态
+  Future _getTransactionStatus() async {
+    HSProgressHUD.show();
+    ApiClientOpenAccount().getIdType(GetIdTypeReq('TRADE_STATE')).then((data) {
+      List<IdType> _statusList = data.publicCodeGetRedisRspDtoList;
+      if (_statusList.isNotEmpty) {
+        _statusList.forEach((element) {
+          if (ddFinHist.txSts == element.code) {
+            if (this.mounted) {
+              setState(() {
+                if (_language == 'zh_CN') {
+                  _transactionStatusStr = element.cname;
+                } else if (_language == 'zh_HK') {
+                  _transactionStatusStr = element.chName;
+                } else {
+                  _transactionStatusStr = element.name;
                 }
               });
             }

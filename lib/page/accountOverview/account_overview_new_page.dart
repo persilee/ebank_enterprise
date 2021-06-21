@@ -97,31 +97,6 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     return Scaffold(
       appBar: _appBar(),
       body: _contentListView(),
-      // body: Column(
-      //   children: [
-      //     _isLoading
-      //         ? Expanded(
-      //             child: HsgLoading(),
-      //           )
-      //         : Expanded(
-      //             child: CustomRefresh(
-      //               controller: _refreshController,
-      //               onLoading: () {
-      //                 //加载更多完成
-      //                 _refreshController.loadComplete();
-      //                 //显示没有更多数据
-      //                 _refreshController.loadNoData();
-      //               },
-      //               onRefresh: () {
-      //                 _refreshController.refreshCompleted();
-      //                 _refreshController.footerMode.value =
-      //                     LoadStatus.canLoading;
-      //               },
-      //               content: _contentListView(),
-      //             ),
-      //           ),
-      //   ],
-      // ),
     );
   }
 
@@ -172,151 +147,6 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
   }
 
   _contentListView() {
-    // Widget _listView = ListView(
-    //   children: [
-    //     //  活期
-    //     isTotalAsset
-    //         ? Container(
-    //             color: Colors.white,
-    //             padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-    //             child: Text(
-    //               S.current.demand_deposit,
-    //               style: TextStyle(
-    //                   fontWeight: FontWeight.bold,
-    //                   fontSize: 15,
-    //                   color: HsgColors.aboutusTextCon),
-    //             ),
-    //           )
-    //         : Container(),
-    //     //活期合计
-    //     isTotalAsset
-    //         ? Container(
-    //             child: _ddTotalColumn(),
-    //           )
-    //         : Container(),
-    //     //活期列表
-    //     isTotalAsset
-    //         ? Container(
-    //             child: ListView.builder(
-    //               shrinkWrap: true,
-    //               physics: const NeverScrollableScrollPhysics(),
-    //               itemCount: ddList.length,
-    //               itemBuilder: (context, index) {
-    //                 return _ddListView(index);
-    //               },
-    //             ),
-    //           )
-    //         : Container(),
-    //     isTotalAsset
-    //         ? Container(
-    //             height: 12,
-    //           )
-    //         : Container(),
-
-    //     // 定期
-    //     (tdTotal != '0')
-    //         ? isTotalAsset
-    //             ? Container(
-    //                 color: Colors.white,
-    //                 padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-    //                 child: Text(
-    //                   S.current.time_deposits,
-    //                   style: TextStyle(
-    //                       fontWeight: FontWeight.bold,
-    //                       fontSize: 15,
-    //                       color: HsgColors.aboutusTextCon),
-    //                 ))
-    //             : Container()
-    //         : Container(),
-    //     (tdTotal != '0')
-    //         ? isTotalAsset
-    //             ? Container(
-    //                 child: _tdTotalColumn(),
-    //               )
-    //             : Container()
-    //         : Container(),
-    //     (tdTotal != '0')
-    //         ? isTotalAsset
-    //             ? Container(
-    //                 child: ListView.builder(
-    //                   shrinkWrap: true,
-    //                   physics: const NeverScrollableScrollPhysics(),
-    //                   itemCount: tdList.length,
-    //                   itemBuilder: (BuildContext context, int index) {
-    //                     return _tdListView(index);
-    //                   },
-    //                 ),
-    //               )
-    //             : Container()
-    //         : Container(),
-    //     isTotalAsset
-    //         ? Container(
-    //             height: 12,
-    //           )
-    //         : Container(),
-
-    //     // 贷款
-    //     (!isTotalAsset)
-    //         ? (lnTotal != '0')
-    //             ? Container(
-    //                 color: Colors.white,
-    //                 padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-    //                 child: Text(
-    //                   S.current.loan,
-    //                   style: TextStyle(
-    //                       fontWeight: FontWeight.bold,
-    //                       fontSize: 15,
-    //                       color: HsgColors.aboutusTextCon),
-    //                 ),
-    //               )
-    //             : Container(
-    //                 height: MediaQuery.of(context).size.height / 2,
-    //                 child: Column(
-    //                   mainAxisAlignment: MainAxisAlignment.center,
-    //                   children: [
-    //                     Image(
-    //                       image: AssetImage(
-    //                           'images/noDataIcon/no_data_record.png'),
-    //                       width: 160,
-    //                     ),
-    //                     Text(
-    //                       S.current.no_data_now,
-    //                       style: FIRST_DEGREE_TEXT_STYLE,
-    //                     )
-    //                   ],
-    //                 ),
-    //               )
-    //         : Container(),
-    //     (!isTotalAsset)
-    //         ? (lnTotal != '0')
-    //             ? Container(
-    //                 child: _lnTotalColumn(),
-    //               )
-    //             : Container()
-    //         : Container(),
-    //     (!isTotalAsset)
-    //         ? (lnTotal != '0')
-    //             ? Container(
-    //                 child: ListView.builder(
-    //                   shrinkWrap: true,
-    //                   physics: const NeverScrollableScrollPhysics(),
-    //                   itemCount: lnList.length,
-    //                   itemBuilder: (BuildContext context, int index) {
-    //                     return _lnListView(index);
-    //                   },
-    //                 ),
-    //               )
-    //             : Container()
-    //         : Container(),
-
-    //     Container(
-    //       child: Container(
-    //         height: 20,
-    //       ),
-    //     ),
-    //   ],
-    // );
-
     Widget _headerAdapter = SliverToBoxAdapter(
       child: Container(
         height: 12,
@@ -435,149 +265,70 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
       color: Colors.white,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Text(
-            lnList[index].cardNo,
-            //acNo
-            style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-          ),
-          Text(
-            //unpaidPrincipal
-            FormatUtil.formatSringToMoney(
-                    lnList[index].avaBal, lnList[index].ccy) +
-                ' ' +
-                lnList[index].ccy,
-            style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
-          )
+          _getRowW(S.current.account_number, lnList[index].cardNo),
+          _getRowW(S.current.currency, lnList[index].ccy),
+          _getRowW(S.of(context).loan_amount,
+              FormatUtil.formatSringToMoney(lnList[index].currBal)),
+          _getRowW(S.of(context).loan_balance2,
+              FormatUtil.formatSringToMoney(lnList[index].avaBal)),
         ],
       ),
     );
   }
-
-  // Column _lnTotalColumn() {
-  //   return Column(
-  //     children: [
-  //       Container(height: 0.5, color: HsgColors.divider),
-  //       Container(
-  //         color: Colors.white,
-  //         padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             Text(
-  //               S.current.total,
-  //               style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-  //             ),
-  //             Text(
-  //               FormatUtil.formatSringToMoney(lnTotal) + ' ' + localCcy,
-  //               style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   //定期列表
   Container _tdListView(int index) {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
       color: Colors.white,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Text(
-            tdList[index].cardNo, //.cardNo,
-            style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-          ),
-          Text(
-            FormatUtil.formatSringToMoney(
-                    tdList[index].currBal, tdList[index].ccy) +
-                ' ' +
-                tdList[index].ccy, //currbal
-            style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
-          )
+          _getRowW(S.current.account_number, tdList[index].cardNo),
+          _getRowW(S.current.currency, tdList[index].ccy),
+          _getRowW(S.of(context).overview_account_currBal,
+              FormatUtil.formatSringToMoney(tdList[index].currBal)),
         ],
       ),
     );
   }
-
-  // Column _tdTotalColumn() {
-  //   return Column(
-  //     children: [
-  //       Container(height: 0.5, color: HsgColors.divider),
-  //       Container(
-  //         color: Colors.white,
-  //         padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             Text(
-  //               S.current.total,
-  //               style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-  //             ),
-  //             Text(
-  //               FormatUtil.formatSringToMoney(tdTotal) + ' ' + localCcy,
-  //               style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   //活期列表
   Container _ddListView(int index) {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 0, 15, 18),
       color: Colors.white,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Text(
-            ddList[index].cardNo,
-            style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-          ),
-          Text(
-            FormatUtil.formatSringToMoney(
-                    ddList[index].currBal, ddList[index].ccy) +
-                ' ' +
-                ddList[index].ccy,
-            style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
-          )
+          _getRowW(S.current.account_number, ddList[index].cardNo),
+          _getRowW(S.current.currency, ddList[index].ccy),
+          _getRowW(S.of(context).overview_account_currBal,
+              FormatUtil.formatSringToMoney(ddList[index].currBal)),
+          _getRowW(S.of(context).available_balance,
+              FormatUtil.formatSringToMoney(ddList[index].avaBal))
         ],
       ),
     );
   }
 
-  // Column _ddTotalColumn() {
-  //   return Column(
-  //     children: [
-  //       Container(height: 0.5, color: HsgColors.divider),
-  //       Container(
-  //         color: Colors.white,
-  //         padding: EdgeInsets.fromLTRB(15, 15, 15, 16),
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             Text(
-  //               S.current.total,
-  //               style: TextStyle(fontSize: 15, color: Color(0xFF8D8D8D)),
-  //             ),
-  //             Text(
-  //               FormatUtil.formatSringToMoney(ddTotal) + ' ' + ddCcy,
-  //               style: TextStyle(fontSize: 15, color: Color(0xFF262626)),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
+  Widget _getRowW(String leftStr, String rightStr) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          leftStr,
+          //Color(0xFF8D8D8D)
+          style: TextStyle(fontSize: 15, color: HsgColors.secondDegreeText),
+        ),
+        Text(
+          rightStr,
+          //Color(0xFF262626)
+          style: TextStyle(fontSize: 15, color: HsgColors.secondDegreeText),
+        )
+      ],
+    );
+  }
 
   Column _accountOverviewColumn() {
     Color colorOne;
@@ -668,22 +419,6 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
       ],
     );
   }
-
-  // Column _totalLiability() {
-  //   return Column(
-  //     children: [
-  //       Text(
-  //         S.current.total_liability,
-  //         style: TextStyle(fontSize: 14, color: Colors.white54),
-  //       ),
-  //       Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
-  //       Text(
-  //         localCcy + ' ' + FormatUtil.formatSringToMoney(totalLiabilities),
-  //         style: TextStyle(fontSize: 14, color: Colors.white),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Container _totalHeader(
     String title,
@@ -938,88 +673,6 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
     );
   }
 
-  // Future<void> _getCardList() async {
-  //   // CardDataRepository()
-  //   // setState(() {
-  //   //   _isLoading = true;
-  //   // });
-  //   ApiClientAccount().getCardList(GetCardListReq()).then((data) {
-  //     if (data.cardList != null) {
-  //       // if (mounted) {
-  //       //   setState(() {
-  //       data.cardList.forEach((item) {
-  //         cardNoList.add(item.cardNo);
-  //       });
-  //       // });
-  //       // }
-  //       _getAccountOverviewInfo();
-  //     }
-  //   }).catchError((e) {
-  //     HSProgressHUD.showToast(e);
-  //   });
-  // }
-
-  // _getAccountOverviewInfo() async {
-  //   _isLoading = true;
-  //   final prefs = await SharedPreferences.getInstance();
-  //   String custID = prefs.getString(ConfigKey.CUST_ID);
-
-  //   // setState(() {
-  //   localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
-  //   // });
-  //   // 一个接口拿活期，定期总额
-  //   // DepositDataRepository()
-  //   ApiClientBill()
-  //       .getCardListBalByUser(
-  //     GetCardListBalByUserReq(
-  //       '',
-  //       custID,
-  //     ),
-  //   )
-  //       .then((data) {
-  //     if (data.cardListBal != null) {
-  //       if (mounted) {
-  //         setState(() {
-  //           //总资产
-  //           netAssets = data.totalAmt;
-  //           //活期列表
-  //           ddList = data.cardListBal;
-  //           if (data.ddTotalAmt != '0') {
-  //             //活期合计
-  //             ddTotal = data.ddTotalAmt;
-  //           }
-  //           //定期列表
-  //           tdList = data.tedpListBal;
-  //           if (data.tdTotalAmt != '0') {
-  //             //定期合计
-  //             tdTotal = data.tdTotalAmt;
-  //           }
-  //           //总负债
-  //           lnTotal = data.lnTotalAmt;
-  //           //贷款列表
-  //           lnList = data.lnListBal;
-
-  //           ddCcy = data.defaultCcy == null ? localCcy : data.defaultCcy;
-  //           //净资产
-  //           var netAssetCompute = double.parse(netAssets);
-  //           var lnTotalCompute = double.parse(lnTotal);
-  //           //判断是否为负数
-  //           if (lnTotalCompute > netAssetCompute) {
-  //             _isNegative = true;
-  //           }
-  //           double totalAssetsCompute = netAssetCompute - lnTotalCompute;
-  //           print('totalAssetsCompute=$totalAssetsCompute');
-  //           totalAssets = totalAssetsCompute.toStringAsFixed(2);
-  //           _isLoading = false;
-  //         });
-  //       }
-  //     }
-  //   }).catchError((e) {
-  //     _isLoading = false;
-  //     HSProgressHUD.showToast(e);
-  //   });
-  // }
-
   void changeShowJudge(int showIndex) {
     if (isTotalAsset) {
       isShowDD = false;
@@ -1068,8 +721,8 @@ class _AccountOverviewNewPageState extends State<AccountOverviewNewPage> {
 
   Future<void> _loadAssets() async {
     final prefs = await SharedPreferences.getInstance();
-    String custID = prefs.getString(ConfigKey.CUST_ID);
-    localCcy = prefs.getString(ConfigKey.LOCAL_CCY);
+    String custID = prefs.getString(ConfigKey.CUST_ID) ?? '';
+    localCcy = prefs.getString(ConfigKey.LOCAL_CCY) ?? '';
 
     try {
       GetTotalAssetsResp resp =
