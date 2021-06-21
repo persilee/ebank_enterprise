@@ -62,8 +62,10 @@ class _RepaymentPlanInputState extends State<RepaymentPlanInputPage> {
 
   //获取放款以及还款帐号列表
   Future<void> _loadTotalAccountData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID);
     HSProgressHUD.show();
-    ApiClientAccount().getCardList(GetCardListReq()).then(
+    ApiClientAccount().getCardList(GetCardListReq(custID)).then(
       (data) {
         HSProgressHUD.dismiss();
         if (data.cardList != null) {
@@ -93,7 +95,7 @@ class _RepaymentPlanInputState extends State<RepaymentPlanInputPage> {
         custID, //客户号
         widget.loanDetail.osAmt, //贷款余额
         widget.loanDetail.loanAmt, //贷款本金
-        widget.loanDetail.loanAmt, //还本金额
+        widget.loanDetail.osAmt, //还本金额
         widget.loanDetail.prodTyp, //产品类型
         widget.loanDetail.repaymentMethod, //还息方式
         widget.loanDetail.disbDate //生效日期

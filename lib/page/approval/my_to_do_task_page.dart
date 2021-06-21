@@ -263,8 +263,8 @@ class _MyToDoTaskPageState extends State<MyToDoTaskPage>
             //发起人
             _rowInformation(
                 intl.S.current.sponsor, approvalTask?.applicantName ?? ''),
-            //客户号
-            _rowInformation(intl.S.current.approve_account,
+            //客户号 业务参考编号
+            _rowInformation(intl.S.current.approvel_bussiness_id,
                 approvalTask?.businessKey ?? ''),
             //金额
             _rowInformation(

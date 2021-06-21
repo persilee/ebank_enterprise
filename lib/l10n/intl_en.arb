@@ -796,6 +796,7 @@
   "login_relevance_account_tip": "Select company",
   "transfer_inline_account_tip": "Incorrect account or name",
   "login_company_name_none": "No",
+  "approvel_bussiness_id": "Reference No.",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "Data is abnormal, no data is returned!",

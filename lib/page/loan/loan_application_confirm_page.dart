@@ -135,6 +135,9 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
           //联系人
           _textFieldCommonFunc(S.current.contact, _reviewMap['contact']),
           _addLinne(),
+          //区号
+          _textFieldCommonFunc(S.current.state_area, _requstMap['areaCode']),
+          _addLinne(),
           //联系人手机号码
           _textFieldCommonFunc(
               S.current.contact_phone_num, _reviewMap['phone']),
@@ -215,6 +218,7 @@ class _LoanConfirmStatePage extends State<LoanConfirmApplicationList> {
         _requstMap['repaymentAcNo'], //还款帐号
         _requstMap['payAcNo'], //收款账号
         _requstMap['loanRate'], //利率
+        _requstMap['areaCode'], //区号
       ),
     )
         .then((data) async {

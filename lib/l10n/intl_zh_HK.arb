@@ -796,6 +796,7 @@
   "login_relevance_account_tip": "選擇公司",
   "transfer_inline_account_tip": "賬號或名稱有誤",
   "login_company_name_none": "無",
+  "approvel_bussiness_id": "業務參考編號",
   "longzhenqi_end": "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<龙振旗国际化结尾<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",
   "error_tip_start": ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>错误提示>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",
   "error_tip_noDataError": "數據異常，未返回數據！",

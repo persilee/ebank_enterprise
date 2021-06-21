@@ -60,26 +60,29 @@ class LoanApplicationReq extends Object {
   //利率
   @JsonKey(name: 'loanRate')
   String loanRate;
+  //手机区号
+  @JsonKey(name: 'areaCode')
+  String areaCode;
 
   LoanApplicationReq(
-    this.ccy,
-    this.ciNo,
-    this.contact,
-    this.intentAmt,
-    this.loanPurpose,
-    this.phone,
-    this.prdtCode,
-    this.remark,
-    this.repaymentMethod,
-    this.termUnit,
-    this.termValue,
-    this.userAccount,
-    this.userId,
-    this.userType,
-    this.repaymentAcNo,
-    this.payAcNo,
-    this.loanRate,
-  );
+      this.ccy,
+      this.ciNo,
+      this.contact,
+      this.intentAmt,
+      this.loanPurpose,
+      this.phone,
+      this.prdtCode,
+      this.remark,
+      this.repaymentMethod,
+      this.termUnit,
+      this.termValue,
+      this.userAccount,
+      this.userId,
+      this.userType,
+      this.repaymentAcNo,
+      this.payAcNo,
+      this.loanRate,
+      this.areaCode);
 
   factory LoanApplicationReq.fromJson(Map<String, dynamic> srcJson) =>
       _$LoanApplicationReqFromJson(srcJson);

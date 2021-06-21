@@ -3,6 +3,7 @@ import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/account/get_single_card_bal.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/page/approval/widget/not_data_container_widget.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/custom_refresh.dart';
 import 'package:ebank_mobile/widget/hsg_loading.dart';
 
@@ -18,6 +19,7 @@ import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// @auther zhanggenha
 /// @date 2020-12-05
@@ -255,7 +257,7 @@ class _CardListPageState extends State<CardListPage> {
         .moveTo(widgetOffset.dy, duration: Duration(milliseconds: 200));
   }
 
-  _loadData() {
+  _loadData() async {
     if (_cardsLength == 0) {
       if (this.mounted) {
         setState(() {
@@ -263,8 +265,10 @@ class _CardListPageState extends State<CardListPage> {
         });
       }
     }
-    // CardDataRepository()
-    ApiClientAccount().getCardList(GetCardListReq()).then((data) {
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID);
+
+    ApiClientAccount().getCardList(GetCardListReq(custID)).then((data) {
       if (data.cardList != null) {
         if (this.mounted) {
           setState(() {

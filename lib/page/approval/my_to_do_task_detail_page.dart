@@ -746,6 +746,8 @@ class _MyToDoTaskDetailPageState extends State<MyToDoTaskDetailPage> {
                 ? fj.format(double.parse(data?.debitAmount ?? '0'))
                 : f.format(double.parse(data?.debitAmount ?? '0')) ?? ''));
         _internationalList.add(_buildContentItem(
+            S.current.approve_poundage, data?.feeAmount ?? ''));
+        _internationalList.add(_buildContentItem(
             S.current.loan_detail_available_amount,
             data?.debitCurrency == 'JPY'
                 ? fj.format(double.parse(_avaBal)) ?? ''

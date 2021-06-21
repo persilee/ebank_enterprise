@@ -15,12 +15,14 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_bill.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_transfer.dart';
 import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/hsg_general_widget.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ForexTradingPage extends StatefulWidget {
   @override
@@ -333,8 +335,11 @@ class _ForexTradingPageState extends State<ForexTradingPage> {
     }
   }
 
-  _getCardList() {
-    ApiClientAccount().getCardList(GetCardListReq()).then((data) {
+  _getCardList() async {
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID);
+
+    ApiClientAccount().getCardList(GetCardListReq(custID)).then((data) {
       if (data.cardList != null) {
         if (this.mounted) {
           setState(() {

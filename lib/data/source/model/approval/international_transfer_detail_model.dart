@@ -265,6 +265,7 @@ class OperateEndValue {
   String _creditAmount;
   String _payPassword;
   String _payeeBankName1;
+  String _feeAmount;
 
   dynamic get payeeAddress4 => _payeeAddress4;
   String get debitCurrency => _debitCurrency;
@@ -294,6 +295,7 @@ class OperateEndValue {
   String get creditAmount => _creditAmount;
   String get payPassword => _payPassword;
   String get payeeBankName1 => _payeeBankName1;
+  String get feeAmount => _feeAmount;
 
   OperateEndValue(
       {dynamic payeeAddress4,
@@ -323,7 +325,8 @@ class OperateEndValue {
       String creditCurrency,
       String creditAmount,
       String payPassword,
-      String payeeBankName1}) {
+      String payeeBankName1,
+      String feeAmount}) {
     _payeeAddress4 = payeeAddress4;
     _debitCurrency = debitCurrency;
     _payeeName4 = payeeName4;
@@ -352,6 +355,7 @@ class OperateEndValue {
     _creditAmount = creditAmount;
     _payPassword = payPassword;
     _payeeBankName1 = payeeBankName1;
+    _feeAmount = feeAmount;
   }
 
   OperateEndValue.fromJson(dynamic json) {
@@ -383,6 +387,7 @@ class OperateEndValue {
     _creditAmount = json["creditAmount"];
     _payPassword = json["payPassword"];
     _payeeBankName1 = json["payeeBankName1"];
+    _feeAmount = json["feeAmount"];
   }
 
   Map<String, dynamic> toJson() {
@@ -415,6 +420,8 @@ class OperateEndValue {
     map["creditAmount"] = _creditAmount;
     map["payPassword"] = _payPassword;
     map["payeeBankName1"] = _payeeBankName1;
+    map["feeAmount"] = _feeAmount;
+
     return map;
   }
 }

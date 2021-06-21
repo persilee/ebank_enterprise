@@ -3,6 +3,7 @@ import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/get_card_list.dart';
 import 'package:ebank_mobile/data/source/model/account/get_user_info.dart';
 import 'package:ebank_mobile/data/source/model/loan/loan_product_list.dart';
+import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/data/source/model/other/get_public_parameters.dart';
 import 'package:ebank_mobile/data/source/model/verify_trade_password.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -76,6 +77,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
   String _loanProductName = ""; //贷款产品名称
   String _loanProductID = ""; //贷款产品ID
   int _indexPro = 0; //贷款产品对应的几个月
+
+  String _areaCode = ""; //国家地区
 
   get w500 => null; //还款方式
 
@@ -158,8 +161,11 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
 
   //获取放款以及还款帐号列表
   Future<void> _loadTotalAccountData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID);
+
     HSProgressHUD.show();
-    ApiClientAccount().getCardList(GetCardListReq()).then(
+    ApiClientAccount().getCardList(GetCardListReq(custID)).then(
       (data) {
         HSProgressHUD.dismiss();
         if (data.cardList != null) {
@@ -408,24 +414,6 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
                   _reimburseTypeLists, 2);
             },
           ),
-          // Container(
-          //   height: 45,
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       Text(
-          //         S.current.loan_Interest_Rate_column,
-          //         style: TextStyle(),
-          //         textAlign: TextAlign.start,
-          //       ),
-          //       Text(
-          //         '1%',
-          //         style: TextStyle(),
-          //         textAlign: TextAlign.end,
-          //       ),
-          //     ],
-          //   ),
-          // ),
         ],
       ),
     );
@@ -441,6 +429,15 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
           //联系人
           _textFieldCommonFunc(S.current.contact, _inputs, TextInputType.text,
               _contactsController, _checkloanIsClick, 30),
+          //手机区号
+          SelectInkWell(
+            title: S.current.state_area,
+            item: _areaCode,
+            onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+              _selectAreaCode();
+            },
+          ),
           //联系人手机号码
           _textFieldCommonFunc(S.current.contact_phone_num, _inputs,
               TextInputType.number, _phoneController, _checkloanIsClick, 16),
@@ -450,6 +447,16 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         ],
       ),
     );
+  }
+
+//选择国家区号
+  _selectAreaCode() {
+    Navigator.pushNamed(context, countryOrRegionSelectPage).then((value) {
+      setState(() {
+        _areaCode = (value as CountryRegionNewModel).areaCode;
+        _checkloanIsClick();
+      });
+    });
   }
 
   Widget _textFieldCommonFunc(
@@ -490,6 +497,7 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
     _requestDataMap["contact"] = _contactsController.text; //联系人
     _requestDataMap["phone"] = _phoneController.text; //联系方式
     _requestDataMap["intentAmt"] = _moneyController.text; //金额
+    _requestDataMap["areaCode"] = _areaCode; //国家区号
 
     Map dataList = {'reviewList': _listDataMap, 'requestList': _requestDataMap};
 
@@ -727,7 +735,8 @@ class _LoanNewApplicationState extends State<LoanNewApplicationPage> {
         _loanProductName != '' &&
         _loanAccount != '' &&
         _repayAccount != '' &&
-        _reimburseStr != '') {
+        _reimburseStr != '' &&
+        _areaCode != '') {
       return setState(() {
         _isButton = true;
       });

@@ -4,7 +4,10 @@ part 'get_card_list.g.dart';
 
 @JsonSerializable()
 class GetCardListReq extends Object {
-  GetCardListReq();
+  @JsonKey(name: 'custId')
+  String custId;
+
+  GetCardListReq(this.custId);
 
   factory GetCardListReq.fromJson(Map<String, dynamic> srcJson) =>
       _$GetCardListReqFromJson(srcJson);

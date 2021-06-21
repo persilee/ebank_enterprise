@@ -62,8 +62,10 @@ class _RepayInputPageState extends State<RepayInputPage> {
 
   //获取放款以及还款帐号列表
   Future<void> _loadTotalAccountData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID);
     HSProgressHUD.show();
-    ApiClientAccount().getCardList(GetCardListReq()).then(
+    ApiClientAccount().getCardList(GetCardListReq(custID)).then(
       (data) {
         HSProgressHUD.dismiss();
         if (data.cardList != null) {
@@ -178,7 +180,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
 
   //提前还款初始值进行赋值
   _parameterSetValue() {
-    acNo = this.loanDetail.acNo; //贷款账号
+    acNo = this.loanDetail.contactNo; //贷款合约号
     currency = this.loanDetail.ccy; //币种
     instalNo = this.loanDetail.loanAmt; //贷款本金
     isInterestCharge = this.loanDetail.osAmt; //贷款余额
@@ -199,7 +201,7 @@ class _RepayInputPageState extends State<RepayInputPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           //贷款账号
-          _contentColumn(S.of(context).loan_account, acNo),
+          _contentColumn(S.of(context).contract_number, acNo),
           //币种
           _contentColumn(S.of(context).currency, currency), //ccy
           //贷款本金

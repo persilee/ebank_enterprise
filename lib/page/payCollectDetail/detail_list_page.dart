@@ -963,9 +963,11 @@ class _DetailListPageState extends State<DetailListPage> {
   }
 
   //获取账号
-  _getCardList() {
-    // CardDataRepository()
-    ApiClientAccount().getCardList(GetCardListReq()).then((data) {
+  _getCardList() async {
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID);
+
+    ApiClientAccount().getCardList(GetCardListReq(custID)).then((data) {
       if (mounted) {
         setState(() {
           if (data.cardList != null) {

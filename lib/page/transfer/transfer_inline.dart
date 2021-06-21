@@ -729,8 +729,10 @@ class _TransferInlinePageState extends State<TransferInlinePage> {
 
   //默认初始卡号
   _loadTransferData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String custID = prefs.getString(ConfigKey.CUST_ID);
     GetCardListResp _data =
-        await ApiClientAccount().getCardList(GetCardListReq());
+        await ApiClientAccount().getCardList(GetCardListReq(custID));
 
     setState(() {
       //付款方卡号
