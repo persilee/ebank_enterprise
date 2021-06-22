@@ -72,7 +72,9 @@ class _loanMyApplicationListSate extends State<LoanMyApplicationListPage> {
 //还款方式
   Future _getLoanRepayTypeList() async {
     // PublicParametersRepository()
-    ApiClientOpenAccount().getIdType(GetIdTypeReq("REPAY_TYPE")).then((data) {
+    ApiClientOpenAccount()
+        .getIdType(GetIdTypeReq("REPAY_TYPE_LN"))
+        .then((data) {
       print('还款方式');
       if (data.publicCodeGetRedisRspDtoList != null) {
         _reimburseTypeLists.clear();
