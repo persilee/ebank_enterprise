@@ -132,6 +132,25 @@ class HsgShowTip {
     });
   }
 
+  ///董事法人需要阅读并同意的协议弹窗
+  static void needAgreementTip({
+    BuildContext context,
+    Function(dynamic value) click,
+  }) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return HsgAlertAgreementlog(
+            title: S.of(context).warm_prompt,
+            message: S.of(context).face_sign_NotBusiness_content,
+            positiveButton: S.current.confirm,
+            negativeButton: S.current.cancel,
+          );
+        }).then((value) {
+      click(value);
+    });
+  }
+
   /// 登录密码错误次数提示
   static void loginPasswordErrorTip(
     BuildContext context,

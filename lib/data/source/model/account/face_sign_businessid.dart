@@ -34,8 +34,13 @@ class FaceSignIDRespons extends Object {
   @JsonKey(name: 'businessId')
   String businessId;
 
+  //是否命中董事法人，董事法人需要签署协议
+  @JsonKey(name: 'is_legShare')
+  bool is_legShare;
+
   FaceSignIDRespons(
     this.businessId,
+    this.is_legShare,
   );
 
   factory FaceSignIDRespons.fromJson(Map<String, dynamic> srcJson) =>

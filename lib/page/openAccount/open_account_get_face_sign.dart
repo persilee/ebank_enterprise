@@ -155,18 +155,24 @@ class _OpenAccountGetFaceSignPageState
           .getFaceSignBusiness(
               FaceSignIDReq(userPhone, areaCode, _codeSignTextF.text, userID))
           .then(
-        (value) {
+        (data) {
           HSProgressHUD.dismiss();
-          if (value.businessId != '' && value.businessId != null) {
-            //跳转证件选择界面
-            Navigator.pushNamed(
-              context,
-              pageOpenAccountSelectDocumentType,
-              arguments: {
-                'businessId': value.businessId,
-                'isQuick': false,
-              },
-            );
+          if (data.businessId != '' && data.businessId != null) {
+            if (data.is_legShare) {
+              HsgShowTip.needAgreementTip(
+                //弹窗提示
+                context: context,
+                click: (value) {
+                  if (value == true) {
+                    //跳转证件选择界面
+                    _pushOpenAccountSelectDocument(data.businessId);
+                  }
+                },
+              );
+            } else {
+              //跳转证件选择界面
+              _pushOpenAccountSelectDocument(data.businessId);
+            }
           } else {
             HsgShowTip.notFaceSignBusinessTip(
               //弹窗提示
@@ -181,5 +187,17 @@ class _OpenAccountGetFaceSignPageState
         HSProgressHUD.showToast(e);
       });
     }
+  }
+
+  void _pushOpenAccountSelectDocument(String businessId) {
+    //跳转证件选择界面
+    Navigator.pushNamed(
+      context,
+      pageOpenAccountSelectDocumentType,
+      arguments: {
+        'businessId': businessId,
+        'isQuick': false,
+      },
+    );
   }
 }
