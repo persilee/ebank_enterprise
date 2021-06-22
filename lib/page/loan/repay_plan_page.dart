@@ -220,12 +220,18 @@ class _RepayPlanState extends State<RepayPlanPage> {
     double currentInterestAmt =
         double.parse(lnSchedule.payInt) - double.parse(lnSchedule.recInt); //利息
 
-    double currentAmorIntAmt =
-        (double.parse(lnSchedule.payPen) + double.parse(lnSchedule.payCom)) -
-            (double.parse(lnSchedule.recPen) +
-                double.parse(lnSchedule.recCom)); //利息罚息
+    //本金罚息-已还本金罚息 = 本金罚息；
+    double principalPenalty =
+        double.parse(lnSchedule.payPen) - double.parse(lnSchedule.recPen);
 
-    double currentAmt = currentPenAmt + currentInterestAmt + currentAmorIntAmt;
+    // 利息罚息 - 已还利息罚息 = 利息罚息
+    double currentAmorIntAmt = double.parse(lnSchedule.payCom) -
+        double.parse(lnSchedule.recCom); //利息罚息
+
+    double currentAmt = currentPenAmt +
+        currentInterestAmt +
+        currentAmorIntAmt +
+        principalPenalty;
 
     var instalOutstAmt =
         FormatUtil.formatSringToMoney(currentAmt.toString()); //归还金额合计
@@ -233,12 +239,9 @@ class _RepayPlanState extends State<RepayPlanPage> {
         currentPenAmt.toString()); //本金金额 lnSchedule.recPrin
     var interestAmt = FormatUtil.formatSringToMoney(
         currentInterestAmt.toString()); //利息lnSchedule.interestAmt
-    var amorIntAmt = ''; //罚息 lnSchedule.amorIntAmt
-    // if (lnSchedule.amorIntAmt == null) {
-    //   amorIntAmt = '0.00';
-    // } else {
-    amorIntAmt = currentAmorIntAmt.toString();
-    // }
+
+    var amorIntAmt = currentAmorIntAmt.toString(); //利息罚息
+    var principal = principalPenalty.toString(); //本金罚息
 
     var leftCont = Container(
       width: 66,
@@ -349,7 +352,7 @@ class _RepayPlanState extends State<RepayPlanPage> {
                     ' ' +
                     S.of(context).loan_plan_principal_penalty +
                     " " +
-                    lnSchedule.payPen +
+                    principal +
                     ' ' +
                     S.of(context).loan_plan_interest_payment +
                     " " +
