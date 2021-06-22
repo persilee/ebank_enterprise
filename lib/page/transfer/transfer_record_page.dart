@@ -69,7 +69,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     super.initState();
     _refreshController = RefreshController();
     _actualNameReqData();
-    _loadData();
+    // _loadData();
     _getCardList();
 
     //滚动监听
@@ -780,7 +780,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
     );
   }
 
-  //银行卡弹窗
+  //账户银行卡弹窗
   _chooseBankCard() async {
     final result = await showHsgBottomSheet(
       context: context,
@@ -803,9 +803,14 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
       setState(() {
         _position = result;
         _card = _cradLists[result];
-        paymentCardNos = [];
         _transferHistoryList.clear();
-        // paymentCardNos.add(_card);
+        paymentCardNos.clear();
+        //需要判断是全部账户还是某一个账户
+        if (result == 0) {
+          paymentCardNos.addAll(_cradLists); //第一次进来需要查询所有的卡数据。所以不能为空
+        } else {
+          paymentCardNos.add(_card);
+        }
       });
       _loadData();
     }
@@ -939,6 +944,7 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
 
   //获取银行卡
   _getCardList() async {
+    _isLoading = true;
     final prefs = await SharedPreferences.getInstance();
     String custID = prefs.getString(ConfigKey.CUST_ID) ?? '';
     ApiClientAccount().getCardList(GetCardListReq(custID)).then((data) {
@@ -952,8 +958,10 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
             data.cardList.forEach((e) {
               _cradLists.add(e.cardNo);
               _imageUrl.add(e.imageUrl);
+              paymentCardNos.add(e.cardNo); //第一次进来需要查询所有的卡数据。所以不能为空
             });
             _cradLists = _cradLists.toSet().toList();
+            _loadData();
           });
         }
       }

@@ -5,6 +5,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/account/get_user_info.dart';
+import 'package:ebank_mobile/data/source/model/approval/my_approval_data.dart';
 import 'package:ebank_mobile/data/source/model/login_register/login.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
@@ -29,6 +30,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sp_util/sp_util.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../util/encrypt_util.dart';
 import '../../widget/progressHUD.dart';
@@ -87,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
         break;
       default:
     }
-
+    //更新弹窗
     AppUpdateCheck(context);
 
     HSProgressHUD.dismiss();
@@ -101,6 +103,35 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     _getUserConfig();
+
+    // WidgetsBinding.instance.addPostFrameCallback((mag) {
+    //   print("  页面渲染完毕");
+    //   _updateVersion(context);
+    // });
+  }
+
+  //版本更新弹窗
+  _updateVersion(BuildContext context) {
+    setState(() {
+      HsgShowTip.versionUpdateTip(
+        context: context,
+        showTipStr: '版本更新',
+        barrierDismissible: true,
+        click: (value) async {
+          print('<><><>');
+          if (value == true) {
+            // openUrl();
+            if (await canLaunch('https://www.pgyer.com/rww7')) {
+              await launch('https://www.pgyer.com/rww7',
+                  forceSafariVC: true, forceWebView: false);
+              closeWebView();
+            } else {
+              throw 'Could not launch https://www.pgyer.com/rww7';
+            }
+          }
+        },
+      );
+    });
   }
 
   @override
@@ -302,8 +333,6 @@ class _LoginPageState extends State<LoginPage> {
 
   ///登录操作
   _login(BuildContext context) async {
-    // _loadData(context, '852871871056576512', '801000000498');
-
     // // 触摸收起键盘
     FocusScope.of(context).requestFocus(FocusNode());
     final prefs = await SharedPreferences.getInstance();
@@ -340,6 +369,9 @@ class _LoginPageState extends State<LoginPage> {
           },
         );
       } else {
+        setState(() {
+          _isLoading = false;
+        });
         // 判断是否有多种客户号
         if (value.userInfoList != null && value.userInfoList.length > 0) {
           //有多个就需要弹窗进行展示
@@ -422,7 +454,6 @@ class _LoginPageState extends State<LoginPage> {
       }
       nameList.add(compList);
     }
-//HsgSingleChoiceDialog
     final result = await showDialog(
       context: context,
       builder: (context) {
@@ -465,17 +496,20 @@ class _LoginPageState extends State<LoginPage> {
 
   //获取用户信息
   _loadData(BuildContext context, String userID, String custID) {
+    HSProgressHUD.show();
     ApiClientPackaging()
         .getUserInfo(
       GetUserInfoReq(userID, custId: custID),
     )
         .then((data) {
+      HSProgressHUD.dismiss();
       if (this.mounted) {
         setState(() {
           _showMainPage(context);
         });
       }
     }).catchError((e) {
+      HSProgressHUD.dismiss();
       setState(() {
         _isLoading = false;
       });
