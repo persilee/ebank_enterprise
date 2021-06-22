@@ -4,9 +4,12 @@
 /// Date: 2020-11-30
 
 import 'package:ebank_mobile/config/hsg_colors.dart';
+import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/loan/loan_trial_rate.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
+import 'package:ebank_mobile/page_route.dart';
 import 'package:ebank_mobile/util/format_util.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 const ShapeBorder _dialogShape = RoundedRectangleBorder(
@@ -1180,141 +1183,208 @@ class HsgLoginAccountSelectAlert extends StatelessWidget {
   }
 }
 
-// /// 提示对话框
-// class HsgAlertAgreementlog extends StatelessWidget {
-//   final String title;
-//   final String message;
-//   final String positiveButton;
-//   final String negativeButton;
+/// 提示对话框
+class HsgAlertAgreementlog extends StatefulWidget {
+  final String title;
+  final String message;
+  final String positiveButton;
+  final String negativeButton;
 
-//   const HsgAlertAgreementlog({
-//     Key key,
-//     this.title,
-//     this.message,
-//     this.positiveButton,
-//     this.negativeButton,
-//   }) : super(key: key);
+  const HsgAlertAgreementlog({
+    Key key,
+    this.title,
+    this.message,
+    this.positiveButton,
+    this.negativeButton,
+  }) : super(key: key);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     Widget titleWidget;
-//     Widget contentWidget;
-//     Widget actionsWidget;
-//     if (title != null) {
-//       titleWidget = _titleWidget(title);
-//     }
+  @override
+  _HsgAlertAgreementlogState createState() => _HsgAlertAgreementlogState();
+}
 
-//     if (message != null) {
-//       final EdgeInsets contentPadding = EdgeInsets.fromLTRB(20, 0, 20, 20);
-//       contentWidget = Padding(
-//         padding: contentPadding,
-//         child: Text(
-//           message,
-//           textAlign: TextAlign.center,
-//           style: TextStyle(
-//             color: HsgColors.firstDegreeText,
-//             fontSize: 15,
-//           ),
-//         ),
-//       );
-//     }
+class _HsgAlertAgreementlogState extends State<HsgAlertAgreementlog> {
+  bool _checkBoxValue = false; //复选框默认值
+  bool _determineBtnE = false; //复选框默认值
 
-//     var hasActions = false;
-//     if (positiveButton != null || negativeButton != null) {
-//       hasActions = true;
-//       actionsWidget = _actionsWidget(
-//         positiveButton,
-//         negativeButton,
-//         context,
-//         () {
-//           Navigator.of(context).pop(true);
-//         },
-//       );
-//     }
+  //圆形复选框
+  Widget _roundCheckBox() {
+    return IconButton(
+      icon: Container(
+        // padding: EdgeInsets.all(15),
+        child: _checkBoxValue
+            ? _ckeckBoxImge("images/common/check_btn_common_checked.png")
+            : _ckeckBoxImge("images/common/check_btn_common_no_check.png"),
+      ),
+      onPressed: () {
+        setState(() {
+          _checkBoxValue = !_checkBoxValue;
+          _determineBtnE = !_determineBtnE;
+        });
+        //_submit();
+      },
+    );
+  }
 
-//     List<Widget> columnChildren = <Widget>[
-//       if (title != null) titleWidget,
-//       if (message != null)
-//         Flexible(
-//           child: SingleChildScrollView(
-//             child: contentWidget,
-//           ),
-//         ),
-//       if (hasActions)
-//         Divider(
-//           height: 1,
-//         ),
-//       if (hasActions) actionsWidget,
-//     ];
+//圆形复选框是否选中图片
+  Widget _ckeckBoxImge(String imgurl) {
+    return Image.asset(
+      imgurl,
+      height: 18,
+      width: 18,
+    );
+  }
 
-//     final dialogChild = IntrinsicWidth(
-//       child: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         crossAxisAlignment: CrossAxisAlignment.stretch,
-//         children: columnChildren,
-//       ),
-//     );
+//协议文本内容
+  Widget _textContent() {
+    return Expanded(
+      child: RichText(
+        text: TextSpan(
+          children: <TextSpan>[
+            TextSpan(
+              text: S.current.loan_application_agreement1,
+              style: AGREEMENT_TEXT_STYLE,
+            ),
+            _conetentJump(S.current.loan_application_agreement2,
+                'licenseAgreement'), //98822 企业用户服务协议
+          ],
+        ),
+      ),
+    );
+  }
 
-//     return Dialog(
-//       child: dialogChild,
-//       shape: _dialogShape,
-//     );
-//   }
-// }
+//协议文本跳转内容
+  _conetentJump(String text, String arguments) {
+    return TextSpan(
+      text: text,
+      style: AGREEMENT_JUMP_TEXT_STYLE,
+      recognizer: TapGestureRecognizer()
+        ..onTap = () {
+          FocusScope.of(context).requestFocus(FocusNode());
+          Navigator.pushNamed(context, pageUserAgreement, arguments: arguments);
+        },
+    );
+  }
 
-// Widget _titleWidget(
-//   String title, {
-//   EdgeInsets titlePadding = const EdgeInsets.all(20.0),
-//   TextStyle style = const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-// }) {
-//   return Padding(
-//     padding: titlePadding,
-//     child: Center(
-//       child: Text(
-//         title,
-//         style: style,
-//         textAlign: TextAlign.center,
-//       ),
-//     ),
-//   );
-// }
+  Widget _titleAlertAgreementWidget(
+    String title, {
+    EdgeInsets titlePadding = const EdgeInsets.all(20.0),
+    TextStyle style =
+        const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+  }) {
+    return Padding(
+      padding: titlePadding,
+      child: Center(
+        child: Text(
+          title,
+          style: style,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
 
-// Widget _actionsWidget(String positiveButton, String negativeButton,
-//     BuildContext context, Function positiveClick) {
-//   final hasPositiveButton = positiveButton != null;
-//   final hasNegativeButton = negativeButton != null;
-//   final actionsButton = [
-//     if (hasNegativeButton)
-//       Expanded(
-//         child: FlatButton(
-//           height: 48,
-//           onPressed: () {
-//             Navigator.of(context).pop(false);
-//           },
-//           child: Text(
-//             negativeButton,
-//             style: TextStyle(fontSize: 16),
-//           ),
-//         ),
-//       ),
-//     if (hasPositiveButton)
-//       Expanded(
-//         child: FlatButton(
-//           height: 48,
-//           onPressed: positiveClick,
-//           child: Text(
-//             positiveButton,
-//             style: TextStyle(fontSize: 16, color: HsgColors.accent),
-//           ),
-//         ),
-//       ),
-//   ];
+  Widget _actionsAlertAgreementWidget(String positiveButton,
+      String negativeButton, BuildContext context, Function positiveClick) {
+    final hasPositiveButton = positiveButton != null;
+    final hasNegativeButton = negativeButton != null;
+    final actionsButton = [
+      if (hasNegativeButton)
+        Expanded(
+          child: FlatButton(
+            height: 48,
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: Text(
+              negativeButton,
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        ),
+      if (hasPositiveButton)
+        Expanded(
+          child: FlatButton(
+            height: 48,
+            onPressed: _determineBtnE ? positiveClick : null,
+            child: Text(
+              positiveButton,
+              style: TextStyle(
+                  fontSize: 16,
+                  color: _determineBtnE
+                      ? HsgColors.accent
+                      : HsgColors.notSelectedBtn),
+            ),
+          ),
+        ),
+    ];
 
-//   return Padding(
-//     padding: EdgeInsets.only(bottom: 1),
-//     child: Row(
-//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//       children: actionsButton,
-//     ),
-//   );
-// }
+    return Padding(
+      padding: EdgeInsets.only(bottom: 1),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: actionsButton,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget titleWidget;
+    Widget contentWidget;
+    Widget actionsWidget;
+    if (widget.title != null) {
+      titleWidget = _titleAlertAgreementWidget(widget.title);
+    }
+
+    if (widget.message != null) {
+      final EdgeInsets contentPadding = EdgeInsets.fromLTRB(20, 0, 20, 20);
+      contentWidget = Padding(
+        padding: contentPadding,
+        child: Row(
+          children: [_roundCheckBox(), _textContent()],
+        ),
+      );
+    }
+
+    var hasActions = false;
+    if (widget.positiveButton != null || widget.negativeButton != null) {
+      hasActions = true;
+      actionsWidget = _actionsAlertAgreementWidget(
+        widget.positiveButton,
+        widget.negativeButton,
+        context,
+        () {
+          Navigator.of(context).pop(true);
+        },
+      );
+    }
+
+    List<Widget> columnChildren = <Widget>[
+      if (widget.title != null) titleWidget,
+      if (widget.message != null)
+        Flexible(
+          child: SingleChildScrollView(
+            child: contentWidget,
+          ),
+        ),
+      if (hasActions)
+        Divider(
+          height: 1,
+        ),
+      if (hasActions) actionsWidget,
+    ];
+
+    final dialogChild = IntrinsicWidth(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: columnChildren,
+      ),
+    );
+
+    return Dialog(
+      child: dialogChild,
+      shape: _dialogShape,
+    );
+  }
+}

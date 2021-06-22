@@ -140,7 +140,7 @@ class HsgShowTip {
     showDialog(
         context: context,
         builder: (context) {
-          return HsgAlertDialog(
+          return HsgAlertAgreementlog(
             title: S.of(context).warm_prompt,
             message: S.of(context).face_sign_NotBusiness_content,
             positiveButton: S.current.confirm,
