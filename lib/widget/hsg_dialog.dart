@@ -1179,3 +1179,142 @@ class HsgLoginAccountSelectAlert extends StatelessWidget {
     );
   }
 }
+
+// /// 提示对话框
+// class HsgAlertAgreementlog extends StatelessWidget {
+//   final String title;
+//   final String message;
+//   final String positiveButton;
+//   final String negativeButton;
+
+//   const HsgAlertAgreementlog({
+//     Key key,
+//     this.title,
+//     this.message,
+//     this.positiveButton,
+//     this.negativeButton,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     Widget titleWidget;
+//     Widget contentWidget;
+//     Widget actionsWidget;
+//     if (title != null) {
+//       titleWidget = _titleWidget(title);
+//     }
+
+//     if (message != null) {
+//       final EdgeInsets contentPadding = EdgeInsets.fromLTRB(20, 0, 20, 20);
+//       contentWidget = Padding(
+//         padding: contentPadding,
+//         child: Text(
+//           message,
+//           textAlign: TextAlign.center,
+//           style: TextStyle(
+//             color: HsgColors.firstDegreeText,
+//             fontSize: 15,
+//           ),
+//         ),
+//       );
+//     }
+
+//     var hasActions = false;
+//     if (positiveButton != null || negativeButton != null) {
+//       hasActions = true;
+//       actionsWidget = _actionsWidget(
+//         positiveButton,
+//         negativeButton,
+//         context,
+//         () {
+//           Navigator.of(context).pop(true);
+//         },
+//       );
+//     }
+
+//     List<Widget> columnChildren = <Widget>[
+//       if (title != null) titleWidget,
+//       if (message != null)
+//         Flexible(
+//           child: SingleChildScrollView(
+//             child: contentWidget,
+//           ),
+//         ),
+//       if (hasActions)
+//         Divider(
+//           height: 1,
+//         ),
+//       if (hasActions) actionsWidget,
+//     ];
+
+//     final dialogChild = IntrinsicWidth(
+//       child: Column(
+//         mainAxisSize: MainAxisSize.min,
+//         crossAxisAlignment: CrossAxisAlignment.stretch,
+//         children: columnChildren,
+//       ),
+//     );
+
+//     return Dialog(
+//       child: dialogChild,
+//       shape: _dialogShape,
+//     );
+//   }
+// }
+
+// Widget _titleWidget(
+//   String title, {
+//   EdgeInsets titlePadding = const EdgeInsets.all(20.0),
+//   TextStyle style = const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+// }) {
+//   return Padding(
+//     padding: titlePadding,
+//     child: Center(
+//       child: Text(
+//         title,
+//         style: style,
+//         textAlign: TextAlign.center,
+//       ),
+//     ),
+//   );
+// }
+
+// Widget _actionsWidget(String positiveButton, String negativeButton,
+//     BuildContext context, Function positiveClick) {
+//   final hasPositiveButton = positiveButton != null;
+//   final hasNegativeButton = negativeButton != null;
+//   final actionsButton = [
+//     if (hasNegativeButton)
+//       Expanded(
+//         child: FlatButton(
+//           height: 48,
+//           onPressed: () {
+//             Navigator.of(context).pop(false);
+//           },
+//           child: Text(
+//             negativeButton,
+//             style: TextStyle(fontSize: 16),
+//           ),
+//         ),
+//       ),
+//     if (hasPositiveButton)
+//       Expanded(
+//         child: FlatButton(
+//           height: 48,
+//           onPressed: positiveClick,
+//           child: Text(
+//             positiveButton,
+//             style: TextStyle(fontSize: 16, color: HsgColors.accent),
+//           ),
+//         ),
+//       ),
+//   ];
+
+//   return Padding(
+//     padding: EdgeInsets.only(bottom: 1),
+//     child: Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//       children: actionsButton,
+//     ),
+//   );
+// }

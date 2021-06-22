@@ -13,6 +13,7 @@ import 'package:ebank_mobile/util/small_data_store.dart';
 import 'package:ebank_mobile/widget/hsg_button.dart';
 import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -50,6 +51,8 @@ class _RelatedIndividualsDataPageState
 
   /// 下一步按钮是否能点击
   bool _nextBtnEnabled = false;
+
+  bool _checkBoxValue = false; //复选框默认值
 
   ///登记证件号码输入监听
   TextEditingController _documentNumberTEC = TextEditingController();
@@ -109,6 +112,13 @@ class _RelatedIndividualsDataPageState
           child: ListView(
             children: [
               _inputViewWidget(context),
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                padding: CONTENT_PADDING,
+                child: Row(
+                  children: [_roundCheckBox(), _textContent()],
+                ),
+              ),
               _nextBtnWidget(context),
             ],
           ),
@@ -157,6 +167,9 @@ class _RelatedIndividualsDataPageState
     //   return false;
     // }
     if (_nationalityText == null || _nationalityText == '') {
+      return false;
+    }
+    if (!_checkBoxValue) {
       return false;
     }
     return true;
@@ -639,6 +652,66 @@ class _RelatedIndividualsDataPageState
         .savePreCust(OpenAccountSaveDataReq(josnString))
         .then((data) {})
         .catchError((e) {});
+  }
+
+  //圆形复选框
+  Widget _roundCheckBox() {
+    return IconButton(
+      icon: Container(
+        // padding: EdgeInsets.all(15),
+        child: _checkBoxValue
+            ? _ckeckBoxImge("images/common/check_btn_common_checked.png")
+            : _ckeckBoxImge("images/common/check_btn_common_no_check.png"),
+      ),
+      onPressed: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+        setState(() {
+          _checkBoxValue = !_checkBoxValue;
+          _nextBtnEnabled = _judgeButtonIsEnabled();
+        });
+        //_submit();
+      },
+    );
+  }
+
+  //圆形复选框是否选中图片
+  Widget _ckeckBoxImge(String imgurl) {
+    return Image.asset(
+      imgurl,
+      height: 18,
+      width: 18,
+    );
+  }
+
+  //协议文本内容
+  Widget _textContent() {
+    return Expanded(
+      child: RichText(
+        text: TextSpan(
+          children: <TextSpan>[
+            TextSpan(
+              text: S.current.loan_application_agreement1,
+              style: AGREEMENT_TEXT_STYLE,
+            ),
+            _conetentJump(S.current.loan_application_agreement2,
+                'licenseAgreement'), //98822 企业用户服务协议
+          ],
+        ),
+      ),
+    );
+  }
+
+  //协议文本跳转内容
+  _conetentJump(String text, String arguments) {
+    return TextSpan(
+      text: text,
+      style: AGREEMENT_JUMP_TEXT_STYLE,
+      recognizer: TapGestureRecognizer()
+        ..onTap = () {
+          FocusScope.of(context).requestFocus(FocusNode());
+          Navigator.pushNamed(context, pageUserAgreement, arguments: arguments);
+        },
+    );
   }
 
   void _changeShowData() {

@@ -158,6 +158,8 @@ class _OpenAccountGetFaceSignPageState
         (value) {
           HSProgressHUD.dismiss();
           if (value.businessId != '' && value.businessId != null) {
+            // if (value.is_legShare) {
+            // } else {
             //跳转证件选择界面
             Navigator.pushNamed(
               context,
@@ -167,6 +169,7 @@ class _OpenAccountGetFaceSignPageState
                 'isQuick': false,
               },
             );
+            // }
           } else {
             HsgShowTip.notFaceSignBusinessTip(
               //弹窗提示

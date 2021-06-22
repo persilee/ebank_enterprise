@@ -423,27 +423,21 @@ class _RegisterPageState extends State<RegisterPage> {
 
 //圆形复选框
   Widget _roundCheckBox() {
-    return GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-          setState(() {
-            _checkBoxValue = !_checkBoxValue;
-          });
-          //_submit();
-        },
-        child: Container(
-          padding: EdgeInsets.all(15),
-          child: _checkBoxValue
-              ? _ckeckBoxImge("images/common/check_btn_common_checked.png")
-              : _ckeckBoxImge("images/common/check_btn_common_no_check.png"),
-        )
-        // Padding(
-        //   padding: EdgeInsets.fromLTRB(15, 10, 10, 25),
-        //   child: _checkBoxValue
-        //       ? _ckeckBoxImge("images/common/check_btn_common_checked.png")
-        //       : _ckeckBoxImge("images/common/check_btn_common_no_check.png"),
-        // ),
-        );
+    return IconButton(
+      icon: Container(
+        // padding: EdgeInsets.all(15),
+        child: _checkBoxValue
+            ? _ckeckBoxImge("images/common/check_btn_common_checked.png")
+            : _ckeckBoxImge("images/common/check_btn_common_no_check.png"),
+      ),
+      onPressed: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+        setState(() {
+          _checkBoxValue = !_checkBoxValue;
+        });
+        //_submit();
+      },
+    );
   }
 
   //圆形复选框是否选中图片
