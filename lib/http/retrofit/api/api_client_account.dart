@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:ebank_mobile/data/source/model/account/account_find_info.dart';
 import 'package:ebank_mobile/data/source/model/account/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/account/check_sms.dart';
 import 'package:ebank_mobile/data/source/model/account/get_bank_info_by_card_no.dart';
@@ -122,4 +123,9 @@ abstract class ApiClientAccount {
   @POST('/tdep/timeDeposit/getTdInfoByConNo')
   Future<TimeDepositWithdrawResp> regularNumberWithdrawals(
       @Body() TimeDepositWithdrawReq req);
+
+  ///忘记用户名接口提交CheckFindAccountReq
+  @POST('/cust/user/findUserListByPhoneNo')
+  Future<CheckFindAccountResp> forgetAccountFindIntereface(
+      @Body() CheckFindAccountReq req);
 }

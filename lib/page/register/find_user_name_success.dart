@@ -18,9 +18,10 @@ class FindUserNameSuccess extends StatefulWidget {
 
 class _FindUserNameSuccessState extends State<FindUserNameSuccess> {
   String _userName;
+  List userList = [];
   @override
   Widget build(BuildContext context) {
-    _userName = ModalRoute.of(context).settings.arguments;
+    userList = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
         appBar: AppBar(
