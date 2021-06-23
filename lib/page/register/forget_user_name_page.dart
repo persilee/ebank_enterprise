@@ -349,7 +349,6 @@ class _ForgetUserNameState extends State<ForgetUserName> {
           title: S.of(context).account_lsit,
           items: nameList,
           positiveButton: S.of(context).confirm,
-          // negativeButton: '',
         );
       },
     );

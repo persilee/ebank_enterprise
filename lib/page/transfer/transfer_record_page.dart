@@ -245,13 +245,15 @@ class _TrsnsferRecordPageState extends State<TrsnsferRecordPage> {
               padding: EdgeInsets.fromLTRB(19.5, 10, 19.5, 10),
               child: DottedLine(),
             ),
-            //转账记录金额、时间、状态
-            _transferAmount(
-                intl.S.of(context).transfer_amount,
-                FormatUtil.formatSringToMoney(_transferHistory.debitAmount),
-                _transferHistory.status),
+            //转账记录时间、金额、状态
             _rowContent(intl.S.of(context).transfer_time,
                 _transferHistory.transactionTime),
+            _transferAmount(
+                intl.S.of(context).transfer_amount,
+                _transferHistory.debitCurrency +
+                    ' ' +
+                    FormatUtil.formatSringToMoney(_transferHistory.debitAmount),
+                _transferHistory.status),
             _rowContent(
                 intl.S.current.transfer_type_with_value,
                 _transferHistory.transferType == '0'

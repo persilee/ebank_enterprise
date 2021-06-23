@@ -1283,9 +1283,6 @@ class HsgforgetAccountAlert extends StatelessWidget {
                 ),
               ),
             ),
-            Divider(
-              height: 1,
-            ),
             Expanded(
               child: Text(
                 items[position],
