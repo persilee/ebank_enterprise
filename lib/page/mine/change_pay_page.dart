@@ -225,8 +225,15 @@ class _ChangePayPageState extends State<ChangePayPage> {
       String phone = prefs.getString(ConfigKey.USER_PHONE);
 
       ApiClientPassword()
-          .modifyLoginPassword(ModifyPasswordReq(newPwd, oldPwd, _sms.text,
-              userID, account, phone, 'transactionPwd'))
+          .modifyLoginPassword(ModifyPasswordReq(
+        newPassword: newPwd,
+        password: oldPwd,
+        smsCode: _sms.text,
+        userId: userID,
+        userAccount: account,
+        userPhone: phone,
+        modifyPwdType: 'transactionPwd',
+      ))
           .then((data) {
         HSProgressHUD.showToastTip(
           S.current.operate_success,

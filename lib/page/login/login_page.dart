@@ -587,7 +587,7 @@ class _LoginPageState extends State<LoginPage> {
       'DEV_OLD',
       'SIT',
       'UAT',
-      'PROD',
+      // 'PROD',
     ];
     final result = await showHsgBottomSheet(
         context: context,

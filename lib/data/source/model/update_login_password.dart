@@ -25,8 +25,15 @@ class ModifyPasswordReq {
       name: 'modifyPwdType') //修改密码类型:modifyPwd-修改登录密码，transactionPwd-修改支付密码
   String modifyPwdType;
 
-  ModifyPasswordReq(this.newPassword, this.password, this.smsCode, this.userId,
-      this.userAccount, this.userPhone, this.modifyPwdType);
+  ModifyPasswordReq({
+    this.newPassword,
+    this.password,
+    this.smsCode,
+    this.userId,
+    this.userAccount,
+    this.userPhone,
+    this.modifyPwdType,
+  });
 
   @override
   String toString() {

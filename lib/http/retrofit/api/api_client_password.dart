@@ -48,13 +48,13 @@ abstract class ApiClientPassword {
   Future<ModifyPasswordResp> modifyLoginPassword(@Body() ModifyPasswordReq req);
 
   /// 根据手机短信修改密码
-  @POST('/cust/user/modifyPwdBySmsCode')
+  @POST('/cust/user/resetForgetPassword')
   Future<ModifyPwdBySmsResp> modifyPwdBySms(@Body() ModifyPwdBySmsReq req);
 
-  /// 忘记密码找回密码
-  @POST('/cust/user/resetForgetPassword')
-  Future<ResetForgetPasswordResp> resetForgetPassword(
-      @Body() ResetForgetPassword req);
+  // /// 忘记密码找回密码
+  // @POST('/cust/user/resetForgetPassword')
+  // Future<ResetForgetPasswordResp> resetForgetPassword(
+  //     @Body() ResetForgetPassword req);
 
   /// 修改交易密码
   @POST('cust/user/updateTransPassword')

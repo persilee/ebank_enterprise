@@ -228,25 +228,29 @@ class _OpenAccountIdentifyResultsSuccessfulPageState
         _headerImgUrl = response['incompleteUrl'] ?? '';
       }
       if (_valueData.positiveImage != null && _valueData.positiveImage != '') {
-        String positiveImageBase64 =
-            _valueData.positiveImage.replaceAll('\n', '');
-        positiveImageBase64 = positiveImageBase64.replaceAll('\\n', '');
-        Uint8List _bytes = base64Decode(
-          positiveImageBase64,
-        );
-        Map response =
-            await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
-        _positiveImageUrl = response['incompleteUrl'] ?? '';
+        Future.delayed(const Duration(milliseconds: 500), () async {
+          String positiveImageBase64 =
+              _valueData.positiveImage.replaceAll('\n', '');
+          positiveImageBase64 = positiveImageBase64.replaceAll('\\n', '');
+          Uint8List _bytes = base64Decode(
+            positiveImageBase64,
+          );
+          Map response =
+              await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
+          _positiveImageUrl = response['incompleteUrl'] ?? '';
+        });
       }
       if (_valueData.backImage != null && _valueData.backImage != '') {
-        String backImageBase64 = _valueData.backImage.replaceAll('\n', '');
-        backImageBase64 = backImageBase64.replaceAll('\\n', '');
-        Uint8List _bytes = base64Decode(
-          backImageBase64,
-        );
-        Map response =
-            await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
-        _backImageUrl = response['incompleteUrl'] ?? '';
+        Future.delayed(const Duration(milliseconds: 500), () async {
+          String backImageBase64 = _valueData.backImage.replaceAll('\n', '');
+          backImageBase64 = backImageBase64.replaceAll('\\n', '');
+          Uint8List _bytes = base64Decode(
+            backImageBase64,
+          );
+          Map response =
+              await ApiClient().uploadBankIcon(BaseBody(body: {}), _bytes);
+          _backImageUrl = response['incompleteUrl'] ?? '';
+        });
       }
       HSProgressHUD.dismiss();
 
