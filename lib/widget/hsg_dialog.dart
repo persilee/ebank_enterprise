@@ -1183,6 +1183,139 @@ class HsgLoginAccountSelectAlert extends StatelessWidget {
   }
 }
 
+///忘记账户名弹窗
+class HsgforgetAccountAlert extends StatelessWidget {
+  final String title;
+  final List<String> items; //账户与公司名称
+  final String positiveButton;
+  final String negativeButton;
+  // final lastSelectedPosition; //最后选中的标记
+
+  HsgforgetAccountAlert({
+    Key key,
+    this.title,
+    this.items,
+    this.positiveButton,
+    this.negativeButton,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Widget titleWidget;
+    Widget contentWidget;
+    Widget actionsWidget;
+    if (title != null) {
+      titleWidget = _titleWidget(title);
+    }
+
+    if (items != null && items.length > 0) {
+      final EdgeInsets contentPadding = EdgeInsets.fromLTRB(0, 0, 0, 20);
+      contentWidget = Padding(
+        padding: contentPadding,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: items.length,
+          itemBuilder: (BuildContext context, int position) {
+            return _getItemRow(position, context, _selectedPosition);
+          },
+        ),
+      );
+    }
+
+    var hasActions = false;
+    if (positiveButton != null || negativeButton != null) {
+      hasActions = true;
+      actionsWidget = _actionsWidget(
+        positiveButton,
+        negativeButton,
+        context,
+        () {
+          if (items.length > 0) {
+            Navigator.of(context).pop(_selectedPosition);
+          } else {
+            Navigator.pop(context);
+          }
+        },
+      );
+    }
+
+    List<Widget> columnChildren = <Widget>[
+      if (title != null) titleWidget,
+      if (items != null && items.length > 0)
+        Flexible(
+          child: contentWidget,
+        ),
+      if (hasActions)
+        Divider(
+          height: 1,
+        ),
+      if (hasActions) actionsWidget,
+    ];
+
+    final dialogChild = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: columnChildren,
+    );
+
+    return Dialog(
+      child: dialogChild,
+      shape: _dialogShape,
+    );
+  }
+
+  Widget _getItemRow(int position, BuildContext context, int selectedPosition) {
+    List<Widget> rowChildren = [
+      Expanded(
+          child: Container(
+        height: 35,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center, //纵轴使用cross， 横轴使用main对应
+          children: [
+            Expanded(
+              child: Text(
+                S.current.approve_name_account + " :",
+                maxLines: 1,
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  color: HsgColors.firstDegreeText,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            Divider(
+              height: 1,
+            ),
+            Expanded(
+              child: Text(
+                items[position],
+                maxLines: 1,
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  color: HsgColors.firstDegreeText,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+          ],
+        ),
+      )),
+    ];
+    return InkWell(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
+        child: Row(
+          children: rowChildren,
+        ),
+      ),
+      onTap: () {
+        // _selectedPosition = position;
+        // (context as Element).markNeedsBuild();
+      },
+    );
+  }
+}
+
 /// 提示对话框
 class HsgAlertAgreementlog extends StatefulWidget {
   final String title;

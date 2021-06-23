@@ -5,8 +5,10 @@ import 'dart:async';
 /// Author: pengyikang
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
+import 'package:ebank_mobile/data/source/model/account/account_find_info.dart';
 import 'package:ebank_mobile/data/source/model/account/check_phone.dart';
 import 'package:ebank_mobile/data/source/model/account/check_sms.dart';
+import 'package:ebank_mobile/data/source/model/approval/my_approval_data.dart';
 import 'package:ebank_mobile/data/source/model/mine/get_verificationByPhone_code.dart';
 import 'package:ebank_mobile/data/source/model/openAccount/country_region_new_model.dart';
 import 'package:ebank_mobile/generated/l10n.dart';
@@ -15,6 +17,7 @@ import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/page/register/component/register_86.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
+import 'package:ebank_mobile/widget/hsg_dialog.dart';
 import 'package:ebank_mobile/widget/progressHUD.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,7 +43,7 @@ class _ForgetUserNameState extends State<ForgetUserName> {
   String _smsCode = '';
 
   /// 区号
-  String _officeAreaCodeText = '';
+  String _officeAreaCodeText = '86';
 
   @override
   // ignore: must_call_super
@@ -309,8 +312,8 @@ class _ForgetUserNameState extends State<ForgetUserName> {
             );
           } //跳转至下一页面
           else {
-            Navigator.popAndPushNamed(context, pageFindUserNameSuccess,
-                arguments: _accountName);
+            //查询账户数据
+            _findUserAccount();
             HSProgressHUD.dismiss();
           }
         });
@@ -318,6 +321,41 @@ class _ForgetUserNameState extends State<ForgetUserName> {
     }).catchError((e) {
       HSProgressHUD.showToast(e);
     });
+  }
+
+  _findUserAccount() {
+    CheckFindAccountReq req =
+        CheckFindAccountReq(_officeAreaCodeText, _phoneNum.text, _smsListen);
+    ApiClientAccount().forgetAccountFindIntereface(req).then((data) {
+      if (this.mounted) {
+        print(data.userAccountList);
+        _payerCcyDialog(data.userAccountList, context);
+        // Navigator.popAndPushNamed(context, pageFindUserNameSuccess,
+        //     arguments: data.userInfoList);
+      }
+    });
+  }
+
+  _payerCcyDialog(List userList, BuildContext context) async {
+    List<String> nameList = [];
+    for (int i = 0; i < userList.length; i++) {
+      UserAccountList user = userList[i];
+      nameList.add(user.userAccount);
+    }
+    final result = await showDialog(
+      context: context,
+      builder: (context) {
+        return HsgforgetAccountAlert(
+          title: S.of(context).account_lsit,
+          items: nameList,
+          positiveButton: S.of(context).confirm,
+          // negativeButton: '',
+        );
+      },
+    );
+    if (result != null) {
+      Navigator.of(context).pop();
+    }
   }
 
   //倒计时方法

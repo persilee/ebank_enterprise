@@ -154,7 +154,6 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     //从忘记用户名界面拿到名字
-
     var _userName = ModalRoute.of(context).settings.arguments;
 
     setState(() {
