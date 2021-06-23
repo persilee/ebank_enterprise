@@ -48,11 +48,9 @@ class HeaderInterceptor extends Interceptor {
       case 6: //东方 Dev1
         baseUrl = "http://192.168.200.102:5040/";
         break;
-      case 98: //生产企业
-        baseUrl = "https://copro.brillinkbank.com/api-gateway/";
+      case 98: //生产 PROD
+        baseUrl = "https://corpo.brillinkbank.com/api-gateway/";
         break;
-      case 99: //生产个人
-        baseUrl = "https://indiv.brillinkbank.com/api-gateway/";
         break;
       default:
     }
