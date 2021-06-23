@@ -4,17 +4,20 @@ part 'modify_pwd_by_sms.g.dart';
 
 @JsonSerializable()
 class ModifyPwdBySmsReq extends Object {
-  String password;
+  String newPassword;
 
   String smsCode;
 
   String userAccount;
 
-  ModifyPwdBySmsReq(
-    this.password,
+  String userPhone;
+
+  ModifyPwdBySmsReq({
+    this.newPassword,
     this.smsCode,
     this.userAccount,
-  );
+    this.userPhone,
+  });
 
   factory ModifyPwdBySmsReq.fromJson(Map<String, dynamic> srcJson) =>
       _$ModifyPwdBySmsReqFromJson(srcJson);

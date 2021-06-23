@@ -1,6 +1,7 @@
 import 'package:ebank_mobile/config/hsg_colors.dart';
 import 'package:ebank_mobile/config/hsg_text_style.dart';
 import 'package:ebank_mobile/data/source/model/set_transaction_password.dart';
+import 'package:ebank_mobile/data/source/model/update_login_password.dart';
 /**
   @desc   设置交易密码
   @author hlx
@@ -208,7 +209,19 @@ class _SetPayPageState extends State<SetPayPage> {
       payPassword: password,
       smsCode: (_smsCode ?? ''),
     );
+
+    // ModifyPasswordReq req = ModifyPasswordReq(
+    //   userId: _userId,
+    //   // idNo: (_certificateNo ?? '1'),
+    //   // idType: (_certificateType ?? '1'),
+    //   userPhone: (_phoneNumber ?? '1'),
+    //   newPassword: password,
+    //   smsCode: (_smsCode ?? ''),
+    //   modifyPwdType: 'transactionPwd',
+    // );
+
     ApiClientPassword().setTransactionPassword(req).then((data) {
+      // ApiClientPassword().modifyLoginPassword(req).then((data) {
       HSProgressHUD.dismiss();
       prefs.setBool(ConfigKey.USER_PASSWORDENABLED, true);
       // Navigator.of(context)..pop()..pop(); //..pop();

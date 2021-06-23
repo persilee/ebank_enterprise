@@ -326,7 +326,14 @@ class _ChangeLoPSState extends State<ChangeLoPS> {
 
       ApiClientPassword()
           .modifyLoginPassword(ModifyPasswordReq(
-              newPwd, oldPwd, _sms.text, userID, account, phone, 'modifyPwd'))
+        newPassword: newPwd,
+        password: oldPwd,
+        smsCode: _sms.text,
+        userId: userID,
+        userAccount: account,
+        userPhone: phone,
+        modifyPwdType: 'modifyPwd',
+      ))
           .then((data) {
         HSProgressHUD.showToastTip(
           S.current.operate_success,

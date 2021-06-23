@@ -196,16 +196,16 @@ class _ResetPasswordNoAccountState extends State<ResetPasswordNoAccount> {
 
   //修改密码接口
   _updateLoginPassword() async {
-    final prefs = await SharedPreferences.getInstance();
-    String userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
+    // final prefs = await SharedPreferences.getInstance();
+    // String userAccount = prefs.getString(ConfigKey.USER_ACCOUNT);
     String confirmPassword = EncryptUtil.aesEncode(_confirmPasswordListen);
-    print('');
     HSProgressHUD.show();
     ApiClientPassword()
         .modifyPwdBySms(ModifyPwdBySmsReq(
-      confirmPassword,
-      _sms,
-      _accountName,
+      newPassword: confirmPassword,
+      smsCode: _sms,
+      userAccount: _accountName,
+      userPhone: _phone,
     ))
         .then((data) {
       HSProgressHUD.showToastTip(

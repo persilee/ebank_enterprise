@@ -12,6 +12,7 @@ import 'package:ebank_mobile/generated/l10n.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_account.dart';
 import 'package:ebank_mobile/http/retrofit/api/api_client_password.dart';
 import 'package:ebank_mobile/page/register/component/register_86.dart';
+import 'package:ebank_mobile/page/register/component/register_row.dart';
 import 'package:ebank_mobile/page/register/component/register_title.dart';
 import 'package:ebank_mobile/page_route.dart';
 
@@ -36,9 +37,10 @@ GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   TextEditingController _phoneNum = TextEditingController();
-  TextEditingController _newPwd = TextEditingController();
-  TextEditingController _confimPwd = TextEditingController();
+  // TextEditingController _newPwd = TextEditingController();
+  // TextEditingController _confimPwd = TextEditingController();
   TextEditingController _sms = TextEditingController();
+  TextEditingController _userName = TextEditingController();
   String _phoneNumListen;
   String _smsListen;
   Timer _timer;
@@ -65,6 +67,11 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       _sms.addListener(() {
         setState(() {
           _smsListen = _sms.text;
+        });
+      });
+      _userName.addListener(() {
+        setState(() {
+          _userAccount = _userName.text;
         });
       });
     });
@@ -101,6 +108,17 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                 //手机号
                 getRegisterRegion(
                     context, _phoneNum, _officeAreaCodeText, _selectRegionCode),
+                //输入用户名
+                getRegisterRow(
+                  S.current.please_input_username,
+                  _userName,
+                  false,
+                  <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                        RegExp("[a-zA-Z0-9]")), //只可输入大小写字母及数字
+                    LengthLimitingTextInputFormatter(16),
+                  ],
+                ),
                 //获取验证码
                 Container(
                   height: MediaQuery.of(context).size.height / 15,
@@ -246,7 +264,10 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   }
 
   bool _submit() {
-    if (_phoneNum.text != '' && _sms.text.length > 5 && _isInput) {
+    if (_phoneNum.text != '' &&
+        _sms.text.length > 5 &&
+        _isInput &&
+        _userName.text != '') {
       return true;
     } else {
       return false;
@@ -263,7 +284,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       if (mounted) {
         setState(() {
           _isRegister = data.register;
-          _userAccount = data.userAccount;
+          // _userAccount = data.userAccount;
           if (!_isRegister) {
             HSProgressHUD.showToastTip(
               S.current.num_not_is_register,
